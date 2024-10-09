@@ -1,93 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 388D2CF0429
-	for <buildroot@archiver.kernel.org>; Tue,  8 Oct 2024 22:27:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8999CCF042D
+	for <buildroot@archiver.kernel.org>; Wed,  9 Oct 2024 00:14:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3F46404A6;
-	Tue,  8 Oct 2024 22:27:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3185480584;
+	Wed,  9 Oct 2024 00:14:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UsLLGGERUw37; Tue,  8 Oct 2024 22:27:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kGj_mthj-CBu; Wed,  9 Oct 2024 00:14:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 324C840526
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3F7580A9F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 324C840526;
-	Tue,  8 Oct 2024 22:27:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 479BB1BF48B
- for <buildroot@lists.busybox.net>; Tue,  8 Oct 2024 22:27:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E3F7580A9F;
+	Wed,  9 Oct 2024 00:14:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DF111BF47F
+ for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 00:14:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3568640526
- for <buildroot@lists.busybox.net>; Tue,  8 Oct 2024 22:27:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 49EF080584
+ for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 00:14:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aaHuFrvv9FGe for <buildroot@lists.busybox.net>;
- Tue,  8 Oct 2024 22:27:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id isuSWHRRhWwe for <buildroot@lists.busybox.net>;
+ Wed,  9 Oct 2024 00:14:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d35; helo=mail-io1-xd35.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F06BE404A6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F06BE404A6
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F06BE404A6
- for <buildroot@buildroot.org>; Tue,  8 Oct 2024 22:27:29 +0000 (UTC)
-Received: by mail-io1-xd35.google.com with SMTP id
- ca18e2360f4ac-8353b41369fso18106439f.3
- for <buildroot@buildroot.org>; Tue, 08 Oct 2024 15:27:29 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
+ envelope-from=andrew.2.622266@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D4DA2804E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4DA2804E5
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D4DA2804E5
+ for <buildroot@buildroot.org>; Wed,  9 Oct 2024 00:14:42 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-a9951fba3b4so423589766b.1
+ for <buildroot@buildroot.org>; Tue, 08 Oct 2024 17:14:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728426448; x=1729031248;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1728432881; x=1729037681;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=iEFdUhxtxKnxRHcrEToEEdfSukLMJ60nc/WROdu/c5w=;
- b=Q4TZDvDcNSUYB1zgvUIMhC3dQwT85iasgCnU4iw7E/xslfkM4afWW4hL5l0dpMJ2Zp
- 6R/iAzmK8td0kpvlUoKDJzRmdH9vw5YRGNv2FrDLXZlN+//OVzQIrJTFX3FiDlqUg4KD
- BkARpotHxs1O0MqSkKLDgaT/AHa5uSWTrlu7esUvdfoQZY+rA6RjfGGK4oeMnfGm4Wd0
- 0G5rn1XWJ+rpjpRlNTe3c6zkzjWPApWwHJmcoOX1OYd5cPZYb0MUOyig9A2ZaSE8xcd0
- dZeigt2EHbvrWt4ljp6ASzEClKTRzE2C92JBkd8/rusY69s1H1ITRwlR+5stcT4sO5uf
- zetw==
-X-Gm-Message-State: AOJu0Yz4Fb6ZWmcpGp1D3keR1meOnWoTQoQy+4/lu4b+3gRkZQvw0kEY
- mHJHCxw4mygXKvhO4V1+FqhnWIKojFnJzsUT0BK8dTo5Bb7jGg+lFc9EiJ86
-X-Google-Smtp-Source: AGHT+IHxVm8H76Dp36LqwSttxUr7AOF6X/zGkM+Qx3ZgJB4mxvT3o2+KIhVNUvevr/tq9lD9tv50QA==
-X-Received: by 2002:a05:6602:13c5:b0:82c:fd75:813a with SMTP id
- ca18e2360f4ac-8353d376a3dmr56495139f.1.1728426448498; 
- Tue, 08 Oct 2024 15:27:28 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-149-81.hlrn.qwest.net.
- [71.33.149.81]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-83503aac0casm192336239f.25.2024.10.08.15.27.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 08 Oct 2024 15:27:28 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  8 Oct 2024 16:27:24 -0600
-Message-Id: <20241008222724.3766564-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ bh=zZ80TpUoqnWILbxxyrOqpzP4pMPGW7XLEM/7Ik65KNo=;
+ b=nV2qyAcMc7e3OBLZb/icbYLFwC/yRD+UcZ2mQhJ4/nqKquagZl9//Cm8ipar6n3lti
+ 2KhrDx3k8LeAUyGIn6XJrDLCoE9H6Ga3UTnuzGN4li255F7crnuEX+Na3g+zfh6lL7yO
+ kq8eVbTUA5f/KpNw8wfHJQE+W00Dz1EVdFjD4JKBg6B7ZVR/ZawEOqbRszj937I0uW8h
+ OhEaoYvM78eLXkvMpzuBYjJ2LWqY+eOA8aesVkeHe5wxSYmW72dEcyvNPFseloAqV89+
+ Y0ZJttNqjP/Ukob3Wf9hR5y+5ltPGDRC8k3LutPQ7OYXwwkUQ78Dbio061YrvVjw7Gk6
+ JS5w==
+X-Gm-Message-State: AOJu0YwmHg/+2o3kn7wUfkz9GCBMfQQfkAJto514zbcsIUrR48n6EUhl
+ qLdz6P67mGV00X7INHsGWmBIs8kCn+TqX/3Uhj3LaDJripmtNsv2CP1ug14m3gF2yU8ADuJHdme
+ HhMKfpQYqYUM2ls6zYR3z9Igbs4mW+Q==
+X-Google-Smtp-Source: AGHT+IHDn7QiuiDGc9ekZLGdOxu+d7IYed+BSeNedDJPHfCod+VV+FPoBRM8kQEZp332+YLAZlxF9C6qCvRqkKtS2qE=
+X-Received: by 2002:a17:906:bc1d:b0:a99:55e7:9721 with SMTP id
+ a640c23a62f3a-a998d313b4emr42276366b.46.1728432880262; Tue, 08 Oct 2024
+ 17:14:40 -0700 (PDT)
 MIME-Version: 1.0
+References: <mailman.4865.1728357518.52868.buildroot@buildroot.org>
+ <7912d41040377bdd1c1da93e511c9694@umbiko.net>
+In-Reply-To: <7912d41040377bdd1c1da93e511c9694@umbiko.net>
+From: Andrew McCann <andrew.2.622266@gmail.com>
+Date: Tue, 8 Oct 2024 20:14:28 -0400
+Message-ID: <CAPKzRz9JUw_HsATU6jxqxC7eVsDZeQCm_Ru53hPTubFwFjTpWQ@mail.gmail.com>
+To: Andreas Ziegler <br015@umbiko.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1728426448; x=1729031248; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=iEFdUhxtxKnxRHcrEToEEdfSukLMJ60nc/WROdu/c5w=;
- b=cuA+A29NiHksP3o1w1vYl/f+3+ow9xsCzx3eDi+c6jy/GcQVy4O3dfY32Cd3OV0QeD
- D+A63ESqg9//2dvc8rWhMXlRTNel+RdylWdbHGSY0/rqjpRv/bKf7VCf/TlTyV4reKmr
- PSzU1qfs0UShqVvhJ8piTgnz54eYdI8cc34HhAI9ENvqd1ZBxdkRk+w5Zuk8WZRSlINw
- 3HTQGAPE98yx+Cz5Mt8EZwVC0N1IyyOrduHmoQqiZKLLajbogZDWPX07Pd+kSJrYpY3T
- 4pPSSBB4LS+pZtawj4Ug/iuF9FQf3QVAzeyJaDEhJ/u56kfa4T8PrVZYgrUpO005mwp/
- e1fw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1728432881; x=1729037681; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=zZ80TpUoqnWILbxxyrOqpzP4pMPGW7XLEM/7Ik65KNo=;
+ b=AgpnPjjDTTN5nLOzXOKffrL79F7C89YTA133k9ltsGp68Z8QumY92kl69kpd3rEejB
+ fpIqTbyGMipXa67ipA9ndpr7LBwHrRM6WnE0QyAbEcWbNPYf2t8pMN3meT11BQshPVjn
+ ZyD5BUgn7VBDcUIaRnbvhh/t7eUBogccedMYYVm/BEquz9toL5GXrRWA2eM03wjW3nJ1
+ lWjAtxWl7+wNsbZA7KvEDwR8VUYsd+ETr2Rz1WDsey9rswdeWn+6CaUiFGP74tfrWwcI
+ zdco7s3DX229mhSbdfzZel25jd65xcHdWl9dmXj3Elmmsi4ySHt1DGjSNKKevral8uFl
+ WmLg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=cuA+A29N
-Subject: [Buildroot] [PATCH 1/1] package/pkg-python.mk: add hatch setup type
+ header.a=rsa-sha256 header.s=20230601 header.b=AgpnPjjD
+Subject: Re: [Buildroot] Ethernet Connection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,140 +97,196 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============1629303970657033291=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As we have many python packages using the hatch(hatchling) build
-system we should add a setup type for it so that we don't have to
-manually specify the host-python-hatchling dependency.
+--===============1629303970657033291==
+Content-Type: multipart/alternative; boundary="000000000000d8a5040624002356"
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- docs/manual/adding-packages-directory.adoc |  6 ++---
- docs/manual/adding-packages-python.adoc    | 14 +++++-----
- package/pkg-python.mk                      | 31 ++++++++++++++++++++--
- utils/scanpypi                             |  2 ++
- 4 files changed, 41 insertions(+), 12 deletions(-)
+--000000000000d8a5040624002356
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/docs/manual/adding-packages-directory.adoc b/docs/manual/adding-packages-directory.adoc
-index 4ca11507e1..cb19f3bac9 100644
---- a/docs/manual/adding-packages-directory.adoc
-+++ b/docs/manual/adding-packages-directory.adoc
-@@ -429,9 +429,9 @@ different way, using different infrastructures:
-    and xref:cmake-package-reference[reference].
- 
- * *Makefiles for Python modules*: We have a dedicated infrastructure
--   for Python modules that use the +flit+, +pep517+, +setuptools+,
--   +setuptools-rust+ or +maturin+ mechanisms. We cover them through a
--   xref:python-package-tutorial[tutorial] and a
-+   for Python modules that use the +flit+, +hatch+, +pep517+,
-+   +setuptools+, +setuptools-rust+ or +maturin+ mechanisms. We cover
-+   them through a xref:python-package-tutorial[tutorial] and a
-    xref:python-package-reference[reference].
- 
- * *Makefiles for Lua modules*: We have a dedicated infrastructure for
-diff --git a/docs/manual/adding-packages-python.adoc b/docs/manual/adding-packages-python.adoc
-index f33770f95c..790e2899cf 100644
---- a/docs/manual/adding-packages-python.adoc
-+++ b/docs/manual/adding-packages-python.adoc
-@@ -51,9 +51,9 @@ On line 13, we declare our dependencies, so that they are built
- before the build process of our package starts.
- 
- On line 14, we declare the specific Python build system being used. In
--this case the +setuptools+ Python build system is used. The five
--supported ones are +flit+, +pep517+, +setuptools+, +setuptools-rust+
--and +maturin+.
-+this case the +setuptools+ Python build system is used. The six
-+supported ones are +flit+, +hatch+, +pep517+, +setuptools+,
-++setuptools-rust+ and +maturin+.
- 
- Finally, on line 16, we invoke the +python-package+ macro that
- generates all the Makefile rules that actually allow the package to be
-@@ -96,10 +96,10 @@ Note that:
- One variable specific to the Python infrastructure is mandatory:
- 
- * +PYTHON_FOO_SETUP_TYPE+, to define which Python build system is used
--  by the package. The five supported values are +flit+, +pep517+ and
--  +setuptools+, +setuptools-rust+ and +maturin+. If you don't know
--  which one is used in your package, look at the +setup.py+ or
--  +pyproject.toml+ file in your package source code, and see whether
-+  by the package. The five supported values are +flit+, +hatch+,
-+  +pep517+ and +setuptools+, +setuptools-rust+ and +maturin+. If you
-+  don't know which one is used in your package, look at the +setup.py+
-+  or +pyproject.toml+ file in your package source code, and see whether
-   it imports things from the +flit+ module or the +setuptools+
-   module. If the package is using a +pyproject.toml+ file without any
-   build-system requires and with a local in-tree backend-path one
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index dea4f39ca0..3c607b5277 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -200,6 +200,33 @@ HOST_PKG_PYTHON_FLIT_BOOTSTRAP_BUILD_CMD = \
- HOST_PKG_PYTHON_FLIT_BOOTSTRAP_INSTALL_CMD = \
- 	$(HOST_PKG_PYTHON_PEP517_INSTALL_CMD)
- 
-+# Target hatch packages
-+PKG_PYTHON_HATCH_ENV = \
-+	$(PKG_PYTHON_PEP517_ENV)
-+
-+PKG_PYTHON_HATCH_BUILD_CMD = \
-+	$(PKG_PYTHON_PEP517_BUILD_CMD)
-+
-+PKG_PYTHON_HATCH_INSTALL_TARGET_CMD = \
-+	$(PKG_PYTHON_PEP517_INSTALL_TARGET_CMD)
-+
-+PKG_PYTHON_HATCH_INSTALL_STAGING_CMD = \
-+	$(PKG_PYTHON_PEP517_INSTALL_STAGING_CMD)
-+
-+PKG_PYTHON_HATCH_DEPENDENCIES = \
-+	$(PKG_PYTHON_PEP517_DEPENDENCIES) \
-+	host-python-hatchling
-+
-+# Host hatch packages
-+HOST_PKG_PYTHON_HATCH_ENV = \
-+	$(HOST_PKG_PYTHON_PEP517_ENV)
-+
-+HOST_PKG_PYTHON_HATCH_BUILD_CMD = \
-+	$(HOST_PKG_PYTHON_PEP517_BUILD_CMD)
-+
-+HOST_PKG_PYTHON_HATCH_INSTALL_CMD = \
-+	$(HOST_PKG_PYTHON_PEP517_INSTALL_CMD)
-+
- # Target maturin packages
- PKG_PYTHON_MATURIN_ENV = \
- 	$(PKG_PYTHON_PEP517_ENV) \
-@@ -257,8 +284,8 @@ endif
- 
- $(2)_SETUP_TYPE_UPPER = $$(call UPPERCASE,$$($(2)_SETUP_TYPE))
- 
--ifneq ($$(filter-out setuptools setuptools-rust pep517 flit flit-bootstrap maturin,$$($(2)_SETUP_TYPE)),)
--$$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'maturin', 'setuptools', 'setuptools-rust', 'pep517' or 'flit'.")
-+ifneq ($$(filter-out setuptools setuptools-rust pep517 flit flit-bootstrap hatch maturin,$$($(2)_SETUP_TYPE)),)
-+$$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'maturin', 'setuptools', 'setuptools-rust', 'pep517', 'flit' or 'hatch'.")
- endif
- ifeq ($(4)-$$($(2)_SETUP_TYPE),target-flit-bootstrap)
- $$(error flit-bootstrap setup type only supported for host packages)
-diff --git a/utils/scanpypi b/utils/scanpypi
-index b6a2a92219..5871d97021 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -417,6 +417,8 @@ class BuildrootPackage():
-                 self.build_backend = build_backend
-                 if build_backend == 'flit_core.buildapi':
-                     self.setup_metadata['method'] = 'flit'
-+                elif build_backend == 'hatchling.build':
-+                    self.setup_metadata['method'] = 'hatch'
-                 elif build_backend == 'setuptools.build_meta':
-                     self.setup_metadata['method'] = 'setuptools'
-                 else:
--- 
-2.34.1
+HI Andreas
+Thanks for your detailed reply and for the sources. I will try your
+recommendations and see if I can get this to work.
+Regards
+Andy
+
+On Tue, Oct 8, 2024 at 5:01=E2=80=AFAM Andreas Ziegler <br015@umbiko.net> w=
+rote:
+
+> Hi Andy,
+>
+> On 2024-10-07 20:39, Andrew McCann wrote:
+> >
+> > Can anyone comment on whether you expect the default rpi3b+
+> > configuration
+> > to connect to LAN?
+> > Regards
+> > Andy
+>
+> It should work. I use a custom configuration, but it was derived from
+> the Buildroot standard originally.
+>
+> > On Wed, Oct 2, 2024 at 5:24?PM Andrew McCann
+> > <andrew.2.622266@gmail.com>
+> > wrote:
+> >
+> >> Hi All
+> >>
+> >> I'm trying to get basic networking working with a Rpi-3b+.  I note
+> >> that
+> >> with the default config, raspberrypi3_64_defconfig, eth0 is setup as
+> >> the
+> >> network interface to configure through DHCP.  Also
+> >> BR2_PACKAGE_IFUPDOWN_SCRIPTS are enabled by default.
+>
+> Don't you use a bespoke kernel? Check if the necessary modules are
+> enabled.
+>
+> ifupdown-scripts provides an init.d script and generates
+> network/interfaces. Check if the latter matches your system.
+>
+> Run '/etc/init.d/S40network restart' and follow up on any error
+> messages.
+>
+> >> However, when I boot the system with sdcard.img, the pi does not
+> >> connect
+> >> to my network. Are there are things that I need to enable that are not
+> >> part
+> >> of the default configuration?
+> >>
+> >> My longer term goal is to ssh (using dropbear) into my pi via the LAN,
+> >> and
+> >> use iwctl to configure iwd for wireless connectivity.  But first I
+> >> need to
+> >> establish the LAN connection.  Please let me know any advice that you
+> >> have,
+> >> or any documentation that you can recommend.
+>
+> I relied on linux-from-scratch [1] and linux-wireless [2] while setting
+> up wireless networking, but you might succeed just by adding
+> wpa_supplicant and supplying the necessary configuration details.
+>
+> The Buildroot package handles wpa_supplicant via an ifup/down script; if
+> you use a (custom, via skeleton) init.d script instead, you need to
+> adapt network/interfaces.
+>
+> Kind regards,
+> Andreas
+>
+> >> Regards
+> >> Andy
+>
+> [1] https://www.linuxfromscratch.org/
+> [2] https://wireless.wiki.kernel.org/
+>
+
+--000000000000d8a5040624002356
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>HI Andreas</div><div>Thanks for your detailed reply a=
+nd for the sources. I will try your recommendations and see if I can get th=
+is to work.</div><div>Regards</div><div>Andy<br></div></div><br><div class=
+=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Tue, Oct 8, 2024 =
+at 5:01=E2=80=AFAM Andreas Ziegler &lt;<a href=3D"mailto:br015@umbiko.net">=
+br015@umbiko.net</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" =
+style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pa=
+dding-left:1ex">Hi Andy,<br>
+<br>
+On 2024-10-07 20:39, Andrew McCann wrote:<br>
+&gt; <br>
+&gt; Can anyone comment on whether you expect the default rpi3b+ <br>
+&gt; configuration<br>
+&gt; to connect to LAN?<br>
+&gt; Regards<br>
+&gt; Andy<br>
+<br>
+It should work. I use a custom configuration, but it was derived from <br>
+the Buildroot standard originally.<br>
+<br>
+&gt; On Wed, Oct 2, 2024 at 5:24?PM Andrew McCann <br>
+&gt; &lt;<a href=3D"mailto:andrew.2.622266@gmail.com" target=3D"_blank">and=
+rew.2.622266@gmail.com</a>&gt;<br>
+&gt; wrote:<br>
+&gt; <br>
+&gt;&gt; Hi All<br>
+&gt;&gt; <br>
+&gt;&gt; I&#39;m trying to get basic networking working with a Rpi-3b+.=C2=
+=A0 I note <br>
+&gt;&gt; that<br>
+&gt;&gt; with the default config, raspberrypi3_64_defconfig, eth0 is setup =
+as <br>
+&gt;&gt; the<br>
+&gt;&gt; network interface to configure through DHCP.=C2=A0 Also<br>
+&gt;&gt; BR2_PACKAGE_IFUPDOWN_SCRIPTS are enabled by default.<br>
+<br>
+Don&#39;t you use a bespoke kernel? Check if the necessary modules are <br>
+enabled.<br>
+<br>
+ifupdown-scripts provides an init.d script and generates <br>
+network/interfaces. Check if the latter matches your system.<br>
+<br>
+Run &#39;/etc/init.d/S40network restart&#39; and follow up on any error <br=
+>
+messages.<br>
+<br>
+&gt;&gt; However, when I boot the system with sdcard.img, the pi does not <=
+br>
+&gt;&gt; connect<br>
+&gt;&gt; to my network. Are there are things that I need to enable that are=
+ not <br>
+&gt;&gt; part<br>
+&gt;&gt; of the default configuration?<br>
+&gt;&gt; <br>
+&gt;&gt; My longer term goal is to ssh (using dropbear) into my pi via the =
+LAN, <br>
+&gt;&gt; and<br>
+&gt;&gt; use iwctl to configure iwd for wireless connectivity.=C2=A0 But fi=
+rst I <br>
+&gt;&gt; need to<br>
+&gt;&gt; establish the LAN connection.=C2=A0 Please let me know any advice =
+that you <br>
+&gt;&gt; have,<br>
+&gt;&gt; or any documentation that you can recommend.<br>
+<br>
+I relied on linux-from-scratch [1] and linux-wireless [2] while setting <br=
+>
+up wireless networking, but you might succeed just by adding <br>
+wpa_supplicant and supplying the necessary configuration details.<br>
+<br>
+The Buildroot package handles wpa_supplicant via an ifup/down script; if <b=
+r>
+you use a (custom, via skeleton) init.d script instead, you need to <br>
+adapt network/interfaces.<br>
+<br>
+Kind regards,<br>
+Andreas<br>
+<br>
+&gt;&gt; Regards<br>
+&gt;&gt; Andy<br>
+<br>
+[1] <a href=3D"https://www.linuxfromscratch.org/" rel=3D"noreferrer" target=
+=3D"_blank">https://www.linuxfromscratch.org/</a><br>
+[2] <a href=3D"https://wireless.wiki.kernel.org/" rel=3D"noreferrer" target=
+=3D"_blank">https://wireless.wiki.kernel.org/</a><br>
+</blockquote></div>
+
+--000000000000d8a5040624002356--
+
+--===============1629303970657033291==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1629303970657033291==--
