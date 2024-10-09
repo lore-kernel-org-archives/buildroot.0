@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B23FECEE322
-	for <buildroot@archiver.kernel.org>; Wed,  9 Oct 2024 15:50:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2397CEE322
+	for <buildroot@archiver.kernel.org>; Wed,  9 Oct 2024 15:52:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59A4340450;
-	Wed,  9 Oct 2024 15:50:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57AB440450;
+	Wed,  9 Oct 2024 15:52:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kt13auhG3LqQ; Wed,  9 Oct 2024 15:50:50 +0000 (UTC)
+ id 5iw2OKTyL8l8; Wed,  9 Oct 2024 15:52:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 256F440684
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 106FA40684
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 256F440684;
-	Wed,  9 Oct 2024 15:50:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2C3A41BF396
- for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 15:50:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 106FA40684;
+	Wed,  9 Oct 2024 15:52:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DBD281BF396
+ for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 15:52:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A70540684
- for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 15:50:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB10481080
+ for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 15:52:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uH4vmZyBfgHe for <buildroot@lists.busybox.net>;
- Wed,  9 Oct 2024 15:50:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Z1AvAAsfi_jK for <buildroot@lists.busybox.net>;
+ Wed,  9 Oct 2024 15:52:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d34; helo=mail-io1-xd34.google.com;
+ client-ip=2607:f8b0:4864:20::131; helo=mail-il1-x131.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F238A40450
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F238A40450
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
- [IPv6:2607:f8b0:4864:20::d34])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F238A40450
- for <buildroot@buildroot.org>; Wed,  9 Oct 2024 15:50:46 +0000 (UTC)
-Received: by mail-io1-xd34.google.com with SMTP id
- ca18e2360f4ac-8354599fd8aso21479139f.1
- for <buildroot@buildroot.org>; Wed, 09 Oct 2024 08:50:46 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CD78581062
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD78581062
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
+ [IPv6:2607:f8b0:4864:20::131])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CD78581062
+ for <buildroot@buildroot.org>; Wed,  9 Oct 2024 15:52:31 +0000 (UTC)
+Received: by mail-il1-x131.google.com with SMTP id
+ e9e14a558f8ab-3a3a3a9e4ffso1112735ab.0
+ for <buildroot@buildroot.org>; Wed, 09 Oct 2024 08:52:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728489046; x=1729093846;
+ d=1e100.net; s=20230601; t=1728489150; x=1729093950;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=bY2HIkjrPtcB3b6A3lD9kLI6qog8Iw/UCv1T+XG3V4Y=;
- b=CTLnsz/M1cnab61TWSFdvo674Fey9cQzhrEJXNq50zZRD5WuU/4DLMuAqQNG5FyLxd
- Cew+sdO/VTxBTO0tvrJKL42Eq8I3oy6NU/vBw+lZCWHHUhwmQa7wVktlbwOyMCy2ByQ0
- 64rPLd/pqSg5f8VR0m6TtVRPkF+yFELOcf+oKHUJilsHU/FXfCWchw1lunuqWAuLhbHO
- AvRfAqKS4M3RL3HRQZo4z+3+Lusu0rwYwrRRi2K+oioxk1jCyEXhPjQwGaAvZeFRUTcE
- GOYvf0ezD8stQ6WLNTXr6htKWolfQWhn3sn+ti1fU1FNOReVffA4isA/q8q953ldrW1l
- fdJw==
-X-Gm-Message-State: AOJu0Yw5bI0JaCGGE9PFej8g4iHk/D2wJM6UHZVyfhEHTh451Fs+p+gm
- 83DFZywwMrDc2ZGSboppcH2PxEzKKlRI4tJnVBqnV0l6EdA8DnLuABb2+PYd
-X-Google-Smtp-Source: AGHT+IFeqayfsAuiBqOqJnzSTZBRFY6ltO6ZcUMP8nseMH6ig2VYUlDxoyXyPQZZBEmVWFE9MxsFLQ==
-X-Received: by 2002:a05:6602:2dc2:b0:835:45f9:c2ee with SMTP id
- ca18e2360f4ac-83545fa002emr141301539f.4.1728489045649; 
- Wed, 09 Oct 2024 08:50:45 -0700 (PDT)
+ bh=8wNlhpn/IGuK/dLpvWcOadT+3eWnCzcB+D0EQfek0Bk=;
+ b=VI2wXNOEp60F4D02od+fjimN17dAXQBHXc+5odcT20mEzR+bPtw9UwX2AlsAYa6S+y
+ 4YPxsfdKWGhAbZ1Uob+tkvRQPwcjbFwk8FkqJo9y4a3x0XzdAGTdwMhi+Qp6zHsZXikV
+ Sk/mEO+ErXmLpYBvynsODz/7EIiXKlzXypy2SHc2ozXSIo21jMfQ+8UPkR+NrxG4myuC
+ zi1yT2nP1MdtLximdqM+KsuAmeLFBLmpc0Z2xt/ppdQNMzbvbzM1UP8HDnSLVfiRUZA3
+ fPKkFQvpbDPaFLa8ldoMF7zLe0B8Vyh0+M6lrypkEqniTGGLnT3D6XAJS5O3H6P9GS6T
+ j+tA==
+X-Gm-Message-State: AOJu0YzFJeDYUwmarES6sHm4/z5mujcwc5D5bl86Wo2/nHvX37PiS6aR
+ OcJQWky9Z8Uq2uMkthOHEJRT6/KRiYTvUwCX0FacveuxKpPlaNHIFGDfSzRx
+X-Google-Smtp-Source: AGHT+IGrgBY3U3Zc4Vw7bK5yU4OKstk6xy5izVvFKb4IGaCWHb5tFG41HiVXZTHAe7jEUtUsMnfW6A==
+X-Received: by 2002:a05:6e02:12c1:b0:3a3:637f:1012 with SMTP id
+ e9e14a558f8ab-3a3a71e0cc3mr190505ab.12.1728489150539; 
+ Wed, 09 Oct 2024 08:52:30 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-149-81.hlrn.qwest.net.
  [71.33.149.81]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-83503aaa142sm219543139f.23.2024.10.09.08.50.44
+ 8926c6da1cb9f-4db6eb357d5sm2127419173.12.2024.10.09.08.52.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 09 Oct 2024 08:50:44 -0700 (PDT)
+ Wed, 09 Oct 2024 08:52:30 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  9 Oct 2024 09:50:37 -0600
-Message-Id: <20241009155037.3779101-1-james.hilliard1@gmail.com>
+Date: Wed,  9 Oct 2024 09:52:28 -0600
+Message-Id: <20241009155228.3787275-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1728489046; x=1729093846; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1728489150; x=1729093950; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=bY2HIkjrPtcB3b6A3lD9kLI6qog8Iw/UCv1T+XG3V4Y=;
- b=Nuef8qAgIE98BxZOX+LLrGVyKb59Ye6PpA2GZsUcHBzfAZG3rgjmRtp4NNH8GjzgfA
- APa49HO6uUEIoCDtmpc5AjLNx95J+8Hp7l15veVCTKsVzQTTDFCsRBWpU+pAvbnbCD2l
- EElBbfr2I5iUahbT8pDtbheeX1l2tlqFNPR+g44sR6TtcYaQdWFIZ1ik6XEMbh20k+gK
- hvXkgNEDnVeymHO2gyr6iSu0JiBT7S/L+kc2VmZGPQna0ZjHp47XH7g7KGH1uVyCMCMs
- Dqeme3qemacIXB2x33fT0tUUooPhXIGEuU7CHytH01G5fytrQhflWjcPZ6LlE0C974Rz
- XpmQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=8wNlhpn/IGuK/dLpvWcOadT+3eWnCzcB+D0EQfek0Bk=;
+ b=FQtMUW7i8FpK07/t56VR4T4uWCpgRS7ceMhJc2hGHOrGp/qqKc578lzd4VIldOVpLF
+ 1qzVSIgpwufd5LEw/a8h216f0MwWtpBDtOEWDJLYXP2qNm3hb9FnnVCadh2U9qoe5PpG
+ TNFxz5GSY5g7N6jzYEeCeRXODgAVe/Pm8+NQjyT5E+dPcsRuhp9i42rHSZAxanuGLfW7
+ vHhl4zDRGcEN2O4RXHcRzHqg8R0R+P0QSD0XaYdb6uW1bVaYhSAMvtwQlbrDEIZwVJpp
+ CQY4Rsgmf4whG/j2w5/ncLEK3RL4iiRRCtvczkl1eR++gfT0st3iX4OaCjs14+PVot/d
+ 6zxQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Nuef8qAg
-Subject: [Buildroot] [PATCH 1/1] package/python-boto3: bump to version
+ header.a=rsa-sha256 header.s=20230601 header.b=FQtMUW7i
+Subject: [Buildroot] [PATCH 1/1] package/python-botocore: bump to version
  1.35.36
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -110,38 +110,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-boto3/python-boto3.hash | 4 ++--
- package/python-boto3/python-boto3.mk   | 4 ++--
+ package/python-botocore/python-botocore.hash | 4 ++--
+ package/python-botocore/python-botocore.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-boto3/python-boto3.hash b/package/python-boto3/python-boto3.hash
-index 747c38967f..18282e4b44 100644
---- a/package/python-boto3/python-boto3.hash
-+++ b/package/python-boto3/python-boto3.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/boto3/json
--md5  8856feaba5930bea34efe6ab74b185cb  boto3-1.35.27.tar.gz
--sha256  10d0fe15670b83a3f26572ab20d9152a064cee4c54b5ea9a1eeb1f0c3b807a7b  boto3-1.35.27.tar.gz
-+md5  8533d8838eed90ea6cef60acc924e4a7  boto3-1.35.36.tar.gz
-+sha256  586524b623e4fbbebe28b604c6205eb12f263cc4746bccb011562d07e217a4cb  boto3-1.35.36.tar.gz
+diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
+index 4abd9ca4ea..5dc348fc30 100644
+--- a/package/python-botocore/python-botocore.hash
++++ b/package/python-botocore/python-botocore.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/botocore/json
+-md5  36c20cc947094f913c16c1109b13fdd3  botocore-1.35.27.tar.gz
+-sha256  f68875c26cd57a9d22c0f7a981ecb1636d7ce4d0e35797e04765b53e7bfed3e7  botocore-1.35.27.tar.gz
++md5  5742162ec6e63e7d7ea7ccc7d1f8c0b0  botocore-1.35.36.tar.gz
++sha256  354ec1b766f0029b5d6ff0c45d1a0f9e5007b7d2f3ec89bcdd755b208c5bc797  botocore-1.35.36.tar.gz
  # Locally computed sha256 checksums
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/python-boto3/python-boto3.mk b/package/python-boto3/python-boto3.mk
-index 95a3fbe602..a7acc88380 100644
---- a/package/python-boto3/python-boto3.mk
-+++ b/package/python-boto3/python-boto3.mk
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  tests/unit/auth/aws4_testsuite/LICENSE
+diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
+index cc7b9949a2..84a8d43705 100644
+--- a/package/python-botocore/python-botocore.mk
++++ b/package/python-botocore/python-botocore.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BOTO3_VERSION = 1.35.27
-+PYTHON_BOTO3_VERSION = 1.35.36
- PYTHON_BOTO3_SOURCE = boto3-$(PYTHON_BOTO3_VERSION).tar.gz
--PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/01/0b/068d62d2ace3f34a5771c37817c55de2ee74f73c696d4c815b271b66cf12
-+PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/33/9f/17536f9a1ab4c6ee454c782f27c9f0160558f70502fc55da62e456c47229
- PYTHON_BOTO3_SETUP_TYPE = setuptools
- PYTHON_BOTO3_LICENSE = Apache-2.0
- PYTHON_BOTO3_LICENSE_FILES = LICENSE
+-PYTHON_BOTOCORE_VERSION = 1.35.27
++PYTHON_BOTOCORE_VERSION = 1.35.36
+ PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
+-PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/7d/b8/ffe0d717da12ff6028466b28d79b0d8f53d64ad7ddd33326fd55860d29ee
++PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/8d/4f/11d2d314f0bdbe7ff975737d125e1a5357115afe28fcc64f13e68b05ba61
+ PYTHON_BOTOCORE_SETUP_TYPE = setuptools
+ PYTHON_BOTOCORE_LICENSE = Apache-2.0
+ PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt tests/unit/auth/aws4_testsuite/LICENSE
 -- 
 2.34.1
 
