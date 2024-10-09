@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C36C8CEE34F
-	for <buildroot@archiver.kernel.org>; Wed,  9 Oct 2024 21:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52F86CEE34F
+	for <buildroot@archiver.kernel.org>; Wed,  9 Oct 2024 21:26:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 837B6812FE;
-	Wed,  9 Oct 2024 21:26:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A512781351;
+	Wed,  9 Oct 2024 21:26:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 27mVHrW-jgGG; Wed,  9 Oct 2024 21:26:37 +0000 (UTC)
+ id xeCYFNS8dGxB; Wed,  9 Oct 2024 21:26:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8013481351
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1AB881371
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8013481351;
-	Wed,  9 Oct 2024 21:26:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 89C0E1BF3D4
- for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 21:26:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1AB881371;
+	Wed,  9 Oct 2024 21:26:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ED3E61BF3D4
+ for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 21:26:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 78E8281351
- for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 21:26:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBAAD407E4
+ for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 21:26:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gHTrCGAjYq8f for <buildroot@lists.busybox.net>;
- Wed,  9 Oct 2024 21:26:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dnHIT9EcYPwc for <buildroot@lists.busybox.net>;
+ Wed,  9 Oct 2024 21:26:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A063C812FE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A063C812FE
- for <buildroot@buildroot.org>; Wed,  9 Oct 2024 21:26:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9692285C36; Wed,  9 Oct 2024 21:26:35 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 9 Oct 2024 23:23:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c4f22abb934c3ba3de92d468b36d719057755a4f
-X-Git-Newrev: 800ec5dd7f8087622fdd5ea0294c0cfad58ebb6f
-X-Patchwork-Hint: ignore
-Message-Id: <20241009212635.9692285C36@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/go: bump version to go1.22.8
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 67C69407E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67C69407E2
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 67C69407E2
+ for <buildroot@buildroot.org>; Wed,  9 Oct 2024 21:26:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 69A00FF802;
+ Wed,  9 Oct 2024 21:26:36 +0000 (UTC)
+Date: Wed, 9 Oct 2024 23:26:35 +0200
+To: Christian Stewart via buildroot <buildroot@buildroot.org>
+Message-ID: <20241009232635.5d812022@windsurf>
+In-Reply-To: <20241009041852.75988-1-christian@aperture.us>
+References: <20241009041852.75988-1-christian@aperture.us>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1728509196;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=HHf9TWvMDSlKnG0WAKRuWZNXVi1fK+5Oc3Hoy2r7oqs=;
+ b=eGdOf04lJIDSsTIHuWGBYgmWGyrf0JXE5LxQcUAlC2FzYF+23azeS0y9OTusHIzAyywe4q
+ zqh9HHWa8hAM932AJsnE/ZIb8mmpdcGTwGnZh6cyS54Ymb4fVYc/Qr+3OdyDc/lc5V8yN3
+ k095oncL1f1nx43/JAC12uWUYHYvrOUMdhmIWdcKRv5Lu7q5qXG23yIWKbk/8Lf4wDjqOY
+ k5Wb64u0JaGEvQ0rwbiZlWvECCumGibvXMmPnXGDPwZiyjv+faaLz+4S6jjMyjy3vwvMDa
+ zfBAHfdMLKg9KnbwdjG+CJbGYnpjTN7cbciuO0J6siO98sL8JuxM5yYaiuaGvQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=eGdOf04l
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/go: bump version to go1.22.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,70 +82,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Christian Stewart <christian@aperture.us>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=800ec5dd7f8087622fdd5ea0294c0cfad58ebb6f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  8 Oct 2024 21:18:52 -0700
+Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
 
-go1.22.8 (released 2024-10-01) includes fixes to cgo, maps, and syscall.
+> go1.22.8 (released 2024-10-01) includes fixes to cgo, maps, and syscall.
+> 
+> https://go.dev/doc/devel/release#go1.22.8
+> 
+> Signed-off-by: Christian Stewart <christian@aperture.us>
+> ---
+>  package/go/go-bin/go-bin.hash | 14 +++++++-------
+>  package/go/go-src/go-src.hash |  2 +-
+>  package/go/go.mk              |  2 +-
+>  3 files changed, 9 insertions(+), 9 deletions(-)
 
-https://go.dev/doc/devel/release#go1.22.8
+Applied to master, thanks.
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/go/go-bin/go-bin.hash | 14 +++++++-------
- package/go/go-src/go-src.hash |  2 +-
- package/go/go.mk              |  2 +-
- 3 files changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/package/go/go-bin/go-bin.hash b/package/go/go-bin/go-bin.hash
-index d979bada11..4d18e0cd2e 100644
---- a/package/go/go-bin/go-bin.hash
-+++ b/package/go/go-bin/go-bin.hash
-@@ -1,9 +1,9 @@
- # sha256 checksum from https://go.dev/dl/
--sha256  66432d87d85e0cfac3edffe637d5930fc4ddf5793313fe11e4a0f333023c879f  go1.22.7.src.tar.gz
--sha256  810e4d9f3f2f03b2f11471a9c7a32302968fc09d51f666cecacedb1055f2f873  go1.22.7.linux-386.tar.gz
--sha256  fc5d49b7a5035f1f1b265c17aa86e9819e6dc9af8260ad61430ee7fbe27881bb  go1.22.7.linux-amd64.tar.gz
--sha256  ed695684438facbd7e0f286c30b7bc2411cfc605516d8127dc25c62fe5b03885  go1.22.7.linux-arm64.tar.gz
--sha256  0fd55519819922f51d13503f2c9b1294730be7ffa0ead8dd36c0e540c2a27508  go1.22.7.linux-armv6l.tar.gz
--sha256  a6441d5da40a961039ec22b0aadbc8b513f52b31bb8919c359a7e2c3c5bcf26a  go1.22.7.linux-ppc64le.tar.gz
--sha256  08dc28de0dafb175501b9d1623c9b11a9b734eb4b3a35c9c658cc91d4dfce3f3  go1.22.7.linux-s390x.tar.gz
-+sha256  df12c23ebf19dea0f4bf46a22cbeda4a3eca6f474f318390ce774974278440b8  go1.22.8.src.tar.gz
-+sha256  0c8e9f824bf443f51e06ac017b9ae402ea066d761b309d880dbb2ca5793db8a2  go1.22.8.linux-386.tar.gz
-+sha256  5f467d29fc67c7ae6468cb6ad5b047a274bae8180cac5e0b7ddbfeba3e47e18f  go1.22.8.linux-amd64.tar.gz
-+sha256  5c616b32dab04bb8c4c8700478381daea0174dc70083e4026321163879278a4a  go1.22.8.linux-arm64.tar.gz
-+sha256  5191e87a51a85d88edddc028ab30dfbfa2d7c37cf35d536655e7a063bfb2c9d2  go1.22.8.linux-armv6l.tar.gz
-+sha256  c546f27866510bf8e54e86fe6f58c705af0e894341e5572c91f197a734152c27  go1.22.8.linux-ppc64le.tar.gz
-+sha256  fabb3adc241474e28ae151a00e1421983deb35184d31cc76e90025b1b389f6bf  go1.22.8.linux-s390x.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go-src/go-src.hash b/package/go/go-src/go-src.hash
-index f5727390f7..40cb5c801a 100644
---- a/package/go/go-src/go-src.hash
-+++ b/package/go/go-src/go-src.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  66432d87d85e0cfac3edffe637d5930fc4ddf5793313fe11e4a0f333023c879f  go1.22.7.src.tar.gz
-+sha256  df12c23ebf19dea0f4bf46a22cbeda4a3eca6f474f318390ce774974278440b8  go1.22.8.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 215c5fe965..68fd359ed0 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.22.7
-+GO_VERSION = 1.22.8
- 
- HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
- HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
