@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 543DDCEE330
-	for <buildroot@archiver.kernel.org>; Wed,  9 Oct 2024 17:19:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56A6BCEE337
+	for <buildroot@archiver.kernel.org>; Wed,  9 Oct 2024 17:25:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F040940232;
-	Wed,  9 Oct 2024 17:19:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21A55402A5;
+	Wed,  9 Oct 2024 17:25:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xYqKJSlTAntx; Wed,  9 Oct 2024 17:19:31 +0000 (UTC)
+ id rWtjnkilxrxO; Wed,  9 Oct 2024 17:25:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A832B40243
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D33D0402EA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A832B40243;
-	Wed,  9 Oct 2024 17:19:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9C2821BF3E8
- for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 17:19:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D33D0402EA;
+	Wed,  9 Oct 2024 17:25:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E6B61BF3E8
+ for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 17:25:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8AE1E40243
- for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 17:19:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2AE918102F
+ for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 17:25:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YRgeiMDjra3G for <buildroot@lists.busybox.net>;
- Wed,  9 Oct 2024 17:19:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HUpnq-D3H0Ib for <buildroot@lists.busybox.net>;
+ Wed,  9 Oct 2024 17:25:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::130; helo=mail-il1-x130.google.com;
+ client-ip=2607:f8b0:4864:20::d2e; helo=mail-io1-xd2e.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4CAA240232
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CAA240232
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4CAA240232
- for <buildroot@buildroot.org>; Wed,  9 Oct 2024 17:19:29 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id
- e9e14a558f8ab-3a3a213efc2so391485ab.3
- for <buildroot@buildroot.org>; Wed, 09 Oct 2024 10:19:29 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 381EC81027
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 381EC81027
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 381EC81027
+ for <buildroot@buildroot.org>; Wed,  9 Oct 2024 17:25:20 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id
+ ca18e2360f4ac-832525e7449so836139f.2
+ for <buildroot@buildroot.org>; Wed, 09 Oct 2024 10:25:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728494368; x=1729099168;
+ d=1e100.net; s=20230601; t=1728494719; x=1729099519;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=qWesfnfqaOcPUIePdYTV6NSXKxYDm5H2Yw5+yIwBxEA=;
- b=v9p6GxK+J+g6BXW/SmEP8a0ksoyh6T2CoxCtvFxgki9As26EcaOEuyPWvZN2ezYTUk
- RbzJK7TUWtu4V1eeMffudq4ZpOqu2sFAJLw2xFuoezfdhxZojKnmQxyV3bsqDqWIgHXP
- vKfrlfdCqciKktsFvRU6oE3zd8r7hD+i0p1c1gcopuJ7ZoZxcdx59VlyKkKdudCQC3/w
- N7CMkTSAkfqV+R0vqFY7JkQR9oa26BpTz2KdWYyi3MxLM+4MGRVbsgPL74GZPLGZeXlO
- sBqMjayr/p4AOYj6ZYuzHR2lVGxLc22IbMurRt/xZjNYOEcFIm0XLX/zwhG3uEN3Waq8
- GFjQ==
-X-Gm-Message-State: AOJu0YyD/veKR6KqOr6pr7LksJcw+LZDujm9+tSIMemZtxgK2id/Ykl2
- Q9N96vMc27ACLWWxFKY86vCR+gGCatDg808lnXTQ2NBTvUlX5lqcUVt1RCuH
-X-Google-Smtp-Source: AGHT+IGx+PjDVnl4MvynEh8fLT3PAKzfoktO3ikIs9ODLXn1eW2gW5hFBtSER/qSpH33X39FSSLJnA==
-X-Received: by 2002:a05:6e02:16c6:b0:3a0:a80a:997c with SMTP id
- e9e14a558f8ab-3a397d10ad2mr34142135ab.19.1728494367934; 
- Wed, 09 Oct 2024 10:19:27 -0700 (PDT)
+ bh=K/c+ACwgQ+G+oUcbVzd+5XxxOb0sfSl1acPTxEib3tg=;
+ b=JKlv1mMsP5/oucCfwOeGMtInfK1X8jeJIrN2oqDeuDZ8W0lAOosWdxExR2x8vWS1b0
+ R3UYGMR6VY0Cny+HnKxD/mj7l80GdXhKEZKmKt726sevCgHyF7RSDSgwZ8AMa0LwxbIs
+ NOwWk8BBSncN2bPhF1HcPWf2r1qXHXLcVgerpeQ58m545PDt8g9Yh19zXwCXiQTYN6Ej
+ mYZfrQRnXQZqyY1tCghiX4ji5/OQzukmmGDi3COdblDLq6l9ph1oVbKiIIwJCZ5ZyMnG
+ S+TS8dtr8J/aOto612hFDLvClmMyZWluobDsyyp0bD4gt0cuqO4Mm3AdQmBQeyht1gts
+ 3yZA==
+X-Gm-Message-State: AOJu0YxD8NJzQW7g1HiT10lyPuKtGwXmzpnNG87K1tOLMtJKCIsK/7cO
+ CV+HV9S54/DDBP7XW5zL3IaI+PNvuQ4dUNxJdfXvwFMEeHPLBHrmV3Rufx5D
+X-Google-Smtp-Source: AGHT+IFYLBQqE6HMiQU4iz+fc5pOkCMKtiFyry5HlLEbwB9wk0BTOl1NReyOIFl6CJqO5j8wdTL/HQ==
+X-Received: by 2002:a05:6602:27d2:b0:82d:38d:1362 with SMTP id
+ ca18e2360f4ac-8353c07a5admr431688039f.0.1728494718893; 
+ Wed, 09 Oct 2024 10:25:18 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-149-81.hlrn.qwest.net.
  [71.33.149.81]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a3a38de67bsm1443545ab.19.2024.10.09.10.19.26
+ 8926c6da1cb9f-4db6ec7279bsm2131333173.172.2024.10.09.10.25.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 09 Oct 2024 10:19:27 -0700 (PDT)
+ Wed, 09 Oct 2024 10:25:18 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  9 Oct 2024 11:19:25 -0600
-Message-Id: <20241009171925.3841884-1-james.hilliard1@gmail.com>
+Date: Wed,  9 Oct 2024 11:25:17 -0600
+Message-Id: <20241009172517.3844255-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1728494368; x=1729099168; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1728494719; x=1729099519; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=qWesfnfqaOcPUIePdYTV6NSXKxYDm5H2Yw5+yIwBxEA=;
- b=d5yt6Xe7YT18zFxG8DaOMqzbmkCn621o4CdpIo4VSbCNR/BK/jwYJh8cOHa7Ygptb6
- 5FneVbNTjKxFu1/yBJ6AI30EAiz8aOUuPJ9iwFRVCuKqRFUwrcDOfpU5UuZ2m+gK68vP
- 6cZXMEtRKTCDyXMfCEZsfDF72IjSV4nz2b5y9SpnC4hvipLS4rsZQneLQ8+J+0IkmMzg
- byEAg25ywdutwLhifPdpVl9ne+f7feJDuV2JSQxOp5v0xJh7jmlr7XO6as+WXD8b+nuP
- voCfjGRq/0kngwApEi0vG1Lz98xVOM2HLLPLcLiZ4Qr5fHo5vmxvg9lecxTqB+0XmOJW
- e2gw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=K/c+ACwgQ+G+oUcbVzd+5XxxOb0sfSl1acPTxEib3tg=;
+ b=YlrIlAreZm3uc5Z9qlwgTNMN7Tsf+QfV8293E5N4x6GhHba4BXQWTb5QozjW3f6Vdo
+ bFNeYYRuSsXIsdQoYVvc+5Gr6bqWqtrEUcGmQgs8fgktvEAi4tJz0fE54VjR6v9ltaBn
+ KUgDIompD3AV060c3jjytW3n6qtYVTCWvHU3sBYk82jbuQ8qACzmAnHrLw1cCoa/ScVG
+ JvNHlgytNWwjoCUo6dmrdYYnm93fT58Pz9U1LSmesh/FxkrrCzEqAYuMQ85MFXc7IlJ9
+ BhGgXxxsKIleOHynQ3ByPDDZZjkYRH0yl6e2ZiQpk4JTDLm0njp06IOH6PP/Vn4+p4C5
+ 8oRg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=d5yt6Xe7
-Subject: [Buildroot] [PATCH 1/1] package/python-pypika-tortoise: bump to
- version 0.2.1
+ header.a=rsa-sha256 header.s=20230601 header.b=YlrIlAre
+Subject: [Buildroot] [PATCH 1/1] package/python-pyproject-hooks: bump to
+ version 1.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,39 +108,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pypika-tortoise/python-pypika-tortoise.hash | 4 ++--
- package/python-pypika-tortoise/python-pypika-tortoise.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pyproject-hooks/python-pyproject-hooks.hash | 4 ++--
+ package/python-pyproject-hooks/python-pyproject-hooks.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pypika-tortoise/python-pypika-tortoise.hash b/package/python-pypika-tortoise/python-pypika-tortoise.hash
-index 629762f4f7..5c78509af2 100644
---- a/package/python-pypika-tortoise/python-pypika-tortoise.hash
-+++ b/package/python-pypika-tortoise/python-pypika-tortoise.hash
+diff --git a/package/python-pyproject-hooks/python-pyproject-hooks.hash b/package/python-pyproject-hooks/python-pyproject-hooks.hash
+index 9fdcd33596..fdbcb9816b 100644
+--- a/package/python-pyproject-hooks/python-pyproject-hooks.hash
++++ b/package/python-pyproject-hooks/python-pyproject-hooks.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pypika-tortoise/json
--md5  98c9677516f06f61f211f834d51949a6  pypika-tortoise-0.1.6.tar.gz
--sha256  d802868f479a708e3263724c7b5719a26ad79399b2a70cea065f4a4cadbebf36  pypika-tortoise-0.1.6.tar.gz
-+md5  69e74ea7ee7236de921c662a3b0940bc  pypika_tortoise-0.2.1.tar.gz
-+sha256  979bbb9d60fe9f6e4129a25c44ee008aab4a4e97b296350be9983dcaa2766354  pypika_tortoise-0.2.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pyproject_hooks/json
+-md5  69b0b6de189bc04c3f9e304281765741  pyproject_hooks-1.0.0.tar.gz
+-sha256  f271b298b97f5955d53fb12b72c1fb1948c22c1a6b70b315c54cedaca0264ef5  pyproject_hooks-1.0.0.tar.gz
++md5  ed3dd1b984339e83e35f676d7169c192  pyproject_hooks-1.2.0.tar.gz
++sha256  1e859bd5c40fae9448642dd871adf459e5e2084186e8d2c2a79a824c970da1f8  pyproject_hooks-1.2.0.tar.gz
  # Locally computed sha256 checksums
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-pypika-tortoise/python-pypika-tortoise.mk b/package/python-pypika-tortoise/python-pypika-tortoise.mk
-index 84aa19cfbb..751c7ad6da 100644
---- a/package/python-pypika-tortoise/python-pypika-tortoise.mk
-+++ b/package/python-pypika-tortoise/python-pypika-tortoise.mk
+ sha256  1b22b049b5267d6dfc23a67bf4a84d8ec04b9fdfb1a51d360e42b4342c8b4154  LICENSE
+diff --git a/package/python-pyproject-hooks/python-pyproject-hooks.mk b/package/python-pyproject-hooks/python-pyproject-hooks.mk
+index a42dbb0ab1..7edbd64294 100644
+--- a/package/python-pyproject-hooks/python-pyproject-hooks.mk
++++ b/package/python-pyproject-hooks/python-pyproject-hooks.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYPIKA_TORTOISE_VERSION = 0.1.6
--PYTHON_PYPIKA_TORTOISE_SOURCE = pypika-tortoise-$(PYTHON_PYPIKA_TORTOISE_VERSION).tar.gz
--PYTHON_PYPIKA_TORTOISE_SITE = https://files.pythonhosted.org/packages/86/55/1bfd4150f664d2e07b36c8f442178cc1f717bb9ae6cae20f21e851c208c6
-+PYTHON_PYPIKA_TORTOISE_VERSION = 0.2.1
-+PYTHON_PYPIKA_TORTOISE_SOURCE = pypika_tortoise-$(PYTHON_PYPIKA_TORTOISE_VERSION).tar.gz
-+PYTHON_PYPIKA_TORTOISE_SITE = https://files.pythonhosted.org/packages/30/af/b4a6035611cf6f3990879385cf6d077013c1bdf7ea294d6ceebfa14c8d08
- PYTHON_PYPIKA_TORTOISE_SETUP_TYPE = pep517
- PYTHON_PYPIKA_TORTOISE_LICENSE = Apache-2.0
- PYTHON_PYPIKA_TORTOISE_LICENSE_FILES = LICENSE
+-PYTHON_PYPROJECT_HOOKS_VERSION = 1.0.0
++PYTHON_PYPROJECT_HOOKS_VERSION = 1.2.0
+ PYTHON_PYPROJECT_HOOKS_SOURCE = pyproject_hooks-$(PYTHON_PYPROJECT_HOOKS_VERSION).tar.gz
+-PYTHON_PYPROJECT_HOOKS_SITE = https://files.pythonhosted.org/packages/25/c1/374304b8407d3818f7025457b7366c8e07768377ce12edfe2aa58aa0f64c
++PYTHON_PYPROJECT_HOOKS_SITE = https://files.pythonhosted.org/packages/e7/82/28175b2414effca1cdac8dc99f76d660e7a4fb0ceefa4b4ab8f5f6742925
+ PYTHON_PYPROJECT_HOOKS_SETUP_TYPE = flit-bootstrap
+ PYTHON_PYPROJECT_HOOKS_LICENSE = MIT
+ PYTHON_PYPROJECT_HOOKS_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
