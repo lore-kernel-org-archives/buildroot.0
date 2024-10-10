@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFE1DD24454
-	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:30:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20CCDD24455
+	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:30:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8EDD1412ED;
-	Thu, 10 Oct 2024 21:30:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D7780412F6;
+	Thu, 10 Oct 2024 21:30:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n6deS-Qfo69s; Thu, 10 Oct 2024 21:30:45 +0000 (UTC)
+ id 1O8RdqpaJ7eH; Thu, 10 Oct 2024 21:30:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83DB0412E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81DDA412EB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 83DB0412E5;
-	Thu, 10 Oct 2024 21:30:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5480B1BF3C3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 81DDA412EB;
+	Thu, 10 Oct 2024 21:30:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 583B51BF98E
  for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 43D4560BDD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 53DD0410A3
  for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xAtsZQjbu-QH for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Be1RvQUv2CTq for <buildroot@lists.busybox.net>;
  Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DB11605ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BC7B410A0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6DB11605ED
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5BC7B410A0
  for <buildroot@buildroot.org>; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 691A285C67; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
+ id 4765585C8A; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Oct 2024 23:17:24 +0200
+Date: Thu, 10 Oct 2024 23:17:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1d57b584eb1330ebaf37ca782e84db6a94b3e3e0
-X-Git-Newrev: 0b37c25627992befbe471edabd020a56c12d62fd
+X-Git-Oldrev: 8df1f9005f9eaff590fe14211132e2360b70a5b9
+X-Git-Newrev: 74764683f52c7cd4cea22f31b2ba138c275cab32
 X-Patchwork-Hint: ignore
-Message-Id: <20241010213042.691A285C67@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-django: bump to version
- 5.1.2
+Message-Id: <20241010213042.4765585C8A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/scanpypi: add missing setuptools
+ fallback
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,45 +66,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b37c25627992befbe471edabd020a56c12d62fd
+commit: https://git.buildroot.net/buildroot/commit/?id=74764683f52c7cd4cea22f31b2ba138c275cab32
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Some projects use pyproject.toml without setting a build backend, per
+pep517 we should simply fallback to using setuptools when no build
+backend is specified.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ utils/scanpypi | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index d39bf4d081..2d0b0d46fd 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  8024c23d7efe9e7acb04496ae22739c7  Django-5.1.1.tar.gz
--sha256  021ffb7fdab3d2d388bc8c7c2434eb9c1f6f4d09e6119010bbb1694dda286bc2  Django-5.1.1.tar.gz
-+md5  bdd601132b94080200e71137a20d0d6a  Django-5.1.2.tar.gz
-+sha256  bd7376f90c99f96b643722eee676498706c9fd7dc759f55ebfaf2c08ebcdf4f0  Django-5.1.2.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index cfe23ab16b..8fc95c8417 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 5.1.1
-+PYTHON_DJANGO_VERSION = 5.1.2
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/88/6f/8f57ed6dc88656edd4fcb35c50dd963f3cd79303bd711fb0160fc7fd6ab7
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/9c/e5/a06e20c963b280af4aa9432bc694fbdeb1c8df9e28c2ffd5fbb71c4b1bec
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+diff --git a/utils/scanpypi b/utils/scanpypi
+index b6a2a92219..f47150ceb6 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -424,6 +424,9 @@ class BuildrootPackage():
+                         self.setup_metadata['method'] = 'pep517'
+                     else:
+                         self.setup_metadata['method'] = 'unknown'
++            else:
++                self.build_backend = 'setuptools.build_meta'
++                self.setup_metadata = {'method': 'setuptools'}
+         except FileNotFoundError:
+             self.build_backend = 'setuptools.build_meta'
+             self.setup_metadata = {'method': 'setuptools'}
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
