@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92CDBD2444F
-	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:31:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D831D24455
+	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:31:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15A8F412E2;
-	Thu, 10 Oct 2024 21:31:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5F5594138F;
+	Thu, 10 Oct 2024 21:31:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6YkYhDelAmDM; Thu, 10 Oct 2024 21:31:29 +0000 (UTC)
+ id UoeJa11frnhO; Thu, 10 Oct 2024 21:31:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A00E8413A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31780413A1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A00E8413A5;
-	Thu, 10 Oct 2024 21:31:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F3DDC1BF3C3
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 31780413A1;
+	Thu, 10 Oct 2024 21:31:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F0A21BF98E
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0059160BD4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 796C8412DE
  for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZaHAivjcA6Ao for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QRfFC7-28sb5 for <buildroot@lists.busybox.net>;
  Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FAC860BD6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3C3F40AD8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0FAC860BD6
- for <buildroot@buildroot.org>; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E3C3F40AD8
+ for <buildroot@buildroot.org>; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C65385C59; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
+ id D60BA85C67; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Oct 2024 23:18:01 +0200
+Date: Thu, 10 Oct 2024 23:17:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 21f58c0e1c8987dfa039d096862d88aa57c200c6
-X-Git-Newrev: f4a3890ba9a2d1d50a98876de1ee4968de66b04a
+X-Git-Oldrev: c5c80812d3219a62a3745c5297bd6614eb262bfd
+X-Git-Newrev: 0e3787ee20228f64b6e5e468a0718480ae51ef7e
 X-Patchwork-Hint: ignore
-Message-Id: <20241010213043.0C65385C59@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyproject-hooks: bump to
- version 1.2.0
+Message-Id: <20241010213042.D60BA85C67@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-magic-wormhole: bump to
+ version 0.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4a3890ba9a2d1d50a98876de1ee4968de66b04a
+commit: https://git.buildroot.net/buildroot/commit/?id=0e3787ee20228f64b6e5e468a0718480ae51ef7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyproject-hooks/python-pyproject-hooks.hash | 4 ++--
- package/python-pyproject-hooks/python-pyproject-hooks.mk   | 4 ++--
+ package/python-magic-wormhole/python-magic-wormhole.hash | 4 ++--
+ package/python-magic-wormhole/python-magic-wormhole.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyproject-hooks/python-pyproject-hooks.hash b/package/python-pyproject-hooks/python-pyproject-hooks.hash
-index 9fdcd33596..fdbcb9816b 100644
---- a/package/python-pyproject-hooks/python-pyproject-hooks.hash
-+++ b/package/python-pyproject-hooks/python-pyproject-hooks.hash
+diff --git a/package/python-magic-wormhole/python-magic-wormhole.hash b/package/python-magic-wormhole/python-magic-wormhole.hash
+index 53ce709541..fae8e189ec 100644
+--- a/package/python-magic-wormhole/python-magic-wormhole.hash
++++ b/package/python-magic-wormhole/python-magic-wormhole.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyproject_hooks/json
--md5  69b0b6de189bc04c3f9e304281765741  pyproject_hooks-1.0.0.tar.gz
--sha256  f271b298b97f5955d53fb12b72c1fb1948c22c1a6b70b315c54cedaca0264ef5  pyproject_hooks-1.0.0.tar.gz
-+md5  ed3dd1b984339e83e35f676d7169c192  pyproject_hooks-1.2.0.tar.gz
-+sha256  1e859bd5c40fae9448642dd871adf459e5e2084186e8d2c2a79a824c970da1f8  pyproject_hooks-1.2.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/magic-wormhole/json
+-md5  1cbb945daa46aa801686603b353f7246  magic-wormhole-0.15.0.tar.gz
+-sha256  be2563b5c5547ba333bc6608f048004c8f36d556139bf2ffe3d9f41da2797006  magic-wormhole-0.15.0.tar.gz
++md5  a90c49d375a014cff1b1fc0f4fdba833  magic-wormhole-0.16.0.tar.gz
++sha256  14e6c146898dbda7a6d190262623a69419955363e7e434d64aad2d233d6d94c9  magic-wormhole-0.16.0.tar.gz
  # Locally computed sha256 checksums
- sha256  1b22b049b5267d6dfc23a67bf4a84d8ec04b9fdfb1a51d360e42b4342c8b4154  LICENSE
-diff --git a/package/python-pyproject-hooks/python-pyproject-hooks.mk b/package/python-pyproject-hooks/python-pyproject-hooks.mk
-index a42dbb0ab1..7edbd64294 100644
---- a/package/python-pyproject-hooks/python-pyproject-hooks.mk
-+++ b/package/python-pyproject-hooks/python-pyproject-hooks.mk
+ sha256  4a9cc2415c52cef591b6822eee68fed36d7e6d80284b09638cff61d762d99060  LICENSE
+diff --git a/package/python-magic-wormhole/python-magic-wormhole.mk b/package/python-magic-wormhole/python-magic-wormhole.mk
+index 680108d84b..1c55a7000a 100644
+--- a/package/python-magic-wormhole/python-magic-wormhole.mk
++++ b/package/python-magic-wormhole/python-magic-wormhole.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYPROJECT_HOOKS_VERSION = 1.0.0
-+PYTHON_PYPROJECT_HOOKS_VERSION = 1.2.0
- PYTHON_PYPROJECT_HOOKS_SOURCE = pyproject_hooks-$(PYTHON_PYPROJECT_HOOKS_VERSION).tar.gz
--PYTHON_PYPROJECT_HOOKS_SITE = https://files.pythonhosted.org/packages/25/c1/374304b8407d3818f7025457b7366c8e07768377ce12edfe2aa58aa0f64c
-+PYTHON_PYPROJECT_HOOKS_SITE = https://files.pythonhosted.org/packages/e7/82/28175b2414effca1cdac8dc99f76d660e7a4fb0ceefa4b4ab8f5f6742925
- PYTHON_PYPROJECT_HOOKS_SETUP_TYPE = flit-bootstrap
- PYTHON_PYPROJECT_HOOKS_LICENSE = MIT
- PYTHON_PYPROJECT_HOOKS_LICENSE_FILES = LICENSE
+-PYTHON_MAGIC_WORMHOLE_VERSION = 0.15.0
++PYTHON_MAGIC_WORMHOLE_VERSION = 0.16.0
+ PYTHON_MAGIC_WORMHOLE_SOURCE = magic-wormhole-$(PYTHON_MAGIC_WORMHOLE_VERSION).tar.gz
+-PYTHON_MAGIC_WORMHOLE_SITE = https://files.pythonhosted.org/packages/9d/7b/9320062c8b11e58dccd079dd62e3525bf1dac7f2b441c885d64a7ca7f045
++PYTHON_MAGIC_WORMHOLE_SITE = https://files.pythonhosted.org/packages/1a/55/b82ace1c0c090bc6f629a93f3fb1ed60436731b166de2454d1585532c86f
+ PYTHON_MAGIC_WORMHOLE_SETUP_TYPE = setuptools
+ PYTHON_MAGIC_WORMHOLE_LICENSE = MIT
+ PYTHON_MAGIC_WORMHOLE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
