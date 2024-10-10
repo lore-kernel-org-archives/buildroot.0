@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D831D24455
-	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:31:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67E81D24455
+	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:31:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5F5594138F;
-	Thu, 10 Oct 2024 21:31:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 37F86413CB;
+	Thu, 10 Oct 2024 21:31:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UoeJa11frnhO; Thu, 10 Oct 2024 21:31:32 +0000 (UTC)
+ id M6O2VMZFLdXS; Thu, 10 Oct 2024 21:31:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31780413A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C43B8413A1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 31780413A1;
-	Thu, 10 Oct 2024 21:31:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1F0A21BF98E
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C43B8413A1;
+	Thu, 10 Oct 2024 21:31:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 042DA1BF3C3
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 796C8412DE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1442F60BD6
  for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QRfFC7-28sb5 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jcmYWX8HIkcy for <buildroot@lists.busybox.net>;
  Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3C3F40AD8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E60160BDC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E3C3F40AD8
- for <buildroot@buildroot.org>; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2E60160BDC
+ for <buildroot@buildroot.org>; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D60BA85C67; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
+ id 2B5A485C59; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Oct 2024 23:17:50 +0200
+Date: Thu, 10 Oct 2024 23:18:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c5c80812d3219a62a3745c5297bd6614eb262bfd
-X-Git-Newrev: 0e3787ee20228f64b6e5e468a0718480ae51ef7e
+X-Git-Oldrev: 154a914fd06f03f982b38a87138d90fca5912ea1
+X-Git-Newrev: 949eec50e1cda1853ef34dadd00d92d9ebe0a163
 X-Patchwork-Hint: ignore
-Message-Id: <20241010213042.D60BA85C67@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-magic-wormhole: bump to
- version 0.16.0
+Message-Id: <20241010213043.2B5A485C59@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-redis: bump to version 5.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e3787ee20228f64b6e5e468a0718480ae51ef7e
+commit: https://git.buildroot.net/buildroot/commit/?id=949eec50e1cda1853ef34dadd00d92d9ebe0a163
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-magic-wormhole/python-magic-wormhole.hash | 4 ++--
- package/python-magic-wormhole/python-magic-wormhole.mk   | 4 ++--
+ package/python-redis/python-redis.hash | 4 ++--
+ package/python-redis/python-redis.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-magic-wormhole/python-magic-wormhole.hash b/package/python-magic-wormhole/python-magic-wormhole.hash
-index 53ce709541..fae8e189ec 100644
---- a/package/python-magic-wormhole/python-magic-wormhole.hash
-+++ b/package/python-magic-wormhole/python-magic-wormhole.hash
+diff --git a/package/python-redis/python-redis.hash b/package/python-redis/python-redis.hash
+index 0f53479790..989cfd39f2 100644
+--- a/package/python-redis/python-redis.hash
++++ b/package/python-redis/python-redis.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/magic-wormhole/json
--md5  1cbb945daa46aa801686603b353f7246  magic-wormhole-0.15.0.tar.gz
--sha256  be2563b5c5547ba333bc6608f048004c8f36d556139bf2ffe3d9f41da2797006  magic-wormhole-0.15.0.tar.gz
-+md5  a90c49d375a014cff1b1fc0f4fdba833  magic-wormhole-0.16.0.tar.gz
-+sha256  14e6c146898dbda7a6d190262623a69419955363e7e434d64aad2d233d6d94c9  magic-wormhole-0.16.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/redis/json
+-md5  e5de12682a1bd96e36a58137db72ee37  redis-5.0.8.tar.gz
+-sha256  0c5b10d387568dfe0698c6fad6615750c24170e548ca2deac10c649d463e9870  redis-5.0.8.tar.gz
++md5  54db97ec8f7445c107d61829095ed915  redis-5.1.1.tar.gz
++sha256  f6c997521fedbae53387307c5d0bf784d9acc28d9f1d058abeac566ec4dbed72  redis-5.1.1.tar.gz
  # Locally computed sha256 checksums
- sha256  4a9cc2415c52cef591b6822eee68fed36d7e6d80284b09638cff61d762d99060  LICENSE
-diff --git a/package/python-magic-wormhole/python-magic-wormhole.mk b/package/python-magic-wormhole/python-magic-wormhole.mk
-index 680108d84b..1c55a7000a 100644
---- a/package/python-magic-wormhole/python-magic-wormhole.mk
-+++ b/package/python-magic-wormhole/python-magic-wormhole.mk
+ sha256  a57b250a5bf03d7afe55b74063313f2adb7b00d546c0ab149a89398333fe3cc8  LICENSE
+diff --git a/package/python-redis/python-redis.mk b/package/python-redis/python-redis.mk
+index 6fbfe5feec..a8123f225a 100644
+--- a/package/python-redis/python-redis.mk
++++ b/package/python-redis/python-redis.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MAGIC_WORMHOLE_VERSION = 0.15.0
-+PYTHON_MAGIC_WORMHOLE_VERSION = 0.16.0
- PYTHON_MAGIC_WORMHOLE_SOURCE = magic-wormhole-$(PYTHON_MAGIC_WORMHOLE_VERSION).tar.gz
--PYTHON_MAGIC_WORMHOLE_SITE = https://files.pythonhosted.org/packages/9d/7b/9320062c8b11e58dccd079dd62e3525bf1dac7f2b441c885d64a7ca7f045
-+PYTHON_MAGIC_WORMHOLE_SITE = https://files.pythonhosted.org/packages/1a/55/b82ace1c0c090bc6f629a93f3fb1ed60436731b166de2454d1585532c86f
- PYTHON_MAGIC_WORMHOLE_SETUP_TYPE = setuptools
- PYTHON_MAGIC_WORMHOLE_LICENSE = MIT
- PYTHON_MAGIC_WORMHOLE_LICENSE_FILES = LICENSE
+-PYTHON_REDIS_VERSION = 5.0.8
++PYTHON_REDIS_VERSION = 5.1.1
+ PYTHON_REDIS_SOURCE = redis-$(PYTHON_REDIS_VERSION).tar.gz
+-PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/48/10/defc227d65ea9c2ff5244645870859865cba34da7373477c8376629746ec
++PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/e0/58/dcf97c3c09d429c3bb830d6075322256da3dba42df25359bd1c82b442d20
+ PYTHON_REDIS_SETUP_TYPE = setuptools
+ PYTHON_REDIS_LICENSE = MIT
+ PYTHON_REDIS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
