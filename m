@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EFFBD24455
-	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:32:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5853D2444F
+	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:32:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E153412FA;
-	Thu, 10 Oct 2024 21:32:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 745E14154D;
+	Thu, 10 Oct 2024 21:32:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f_tQrp-s0lrh; Thu, 10 Oct 2024 21:32:19 +0000 (UTC)
+ id oH2MrdrEeuwQ; Thu, 10 Oct 2024 21:32:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E52AA41324
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B64484154E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E52AA41324;
-	Thu, 10 Oct 2024 21:32:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E46231BF3C3
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B64484154E;
+	Thu, 10 Oct 2024 21:32:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1466C1BF3C3
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 97C8081F71
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8894F4116F
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q1xU_zWdCTK2 for <buildroot@lists.busybox.net>;
- Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Dcvlcsg2t7Us for <buildroot@lists.busybox.net>;
+ Thu, 10 Oct 2024 21:30:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE9D981F6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9879E412E4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CE9D981F6C
- for <buildroot@buildroot.org>; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9879E412E4
+ for <buildroot@buildroot.org>; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CB27985C8A; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
+ id 933A484553; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Oct 2024 23:17:48 +0200
+Date: Thu, 10 Oct 2024 23:18:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dbf247c6bd1281d36f0c5e3634558346efc1cc08
-X-Git-Newrev: c5c80812d3219a62a3745c5297bd6614eb262bfd
+X-Git-Oldrev: dbed106d636fb1ceb4bc4f59c850b18e165d3aad
+X-Git-Newrev: ace041182c979dc4b0d25eb7925e7f224f76296b
 X-Patchwork-Hint: ignore
-Message-Id: <20241010213042.CB27985C8A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-jsonschema-specifications:
- bump to version 2024.10.1
+Message-Id: <20241010213043.933A484553@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-watchdog: bump to version
+ 5.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +66,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5c80812d3219a62a3745c5297bd6614eb262bfd
+commit: https://git.buildroot.net/buildroot/commit/?id=ace041182c979dc4b0d25eb7925e7f224f76296b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../python-jsonschema-specifications.hash                             | 4 ++--
- .../python-jsonschema-specifications.mk                               | 4 ++--
+ package/python-watchdog/python-watchdog.hash | 4 ++--
+ package/python-watchdog/python-watchdog.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-jsonschema-specifications/python-jsonschema-specifications.hash b/package/python-jsonschema-specifications/python-jsonschema-specifications.hash
-index aa919681ac..f68e57cd5a 100644
---- a/package/python-jsonschema-specifications/python-jsonschema-specifications.hash
-+++ b/package/python-jsonschema-specifications/python-jsonschema-specifications.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jsonschema-specifications/json
--md5  de730f6937d1e3660a2d835c4f93f31b  jsonschema_specifications-2023.12.1.tar.gz
--sha256  48a76787b3e70f5ed53f1160d2b81f586e4ca6d1548c5de7085d1682674764cc  jsonschema_specifications-2023.12.1.tar.gz
-+md5  e8f726a5b9647031d9ee8b922cf9b56f  jsonschema_specifications-2024.10.1.tar.gz
-+sha256  0f38b83639958ce1152d02a7f062902c41c8fd20d558b0c34344292d417ae272  jsonschema_specifications-2024.10.1.tar.gz
+diff --git a/package/python-watchdog/python-watchdog.hash b/package/python-watchdog/python-watchdog.hash
+index 0d6047e21b..4377871db2 100644
+--- a/package/python-watchdog/python-watchdog.hash
++++ b/package/python-watchdog/python-watchdog.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/watchdog/json
+-md5  7e4eff2cd9a3e62f0dccd55801d5b0c0  watchdog-5.0.2.tar.gz
+-sha256  dcebf7e475001d2cdeb020be630dc5b687e9acdd60d16fea6bb4508e7b94cf76  watchdog-5.0.2.tar.gz
++md5  83499e8a193ba23bb68436fbdc249589  watchdog-5.0.3.tar.gz
++sha256  108f42a7f0345042a854d4d0ad0834b741d421330d5f575b81cb27b883500176  watchdog-5.0.3.tar.gz
  # Locally computed sha256 checksums
- sha256  42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c  COPYING
-diff --git a/package/python-jsonschema-specifications/python-jsonschema-specifications.mk b/package/python-jsonschema-specifications/python-jsonschema-specifications.mk
-index 653c839bb4..5abf236cbd 100644
---- a/package/python-jsonschema-specifications/python-jsonschema-specifications.mk
-+++ b/package/python-jsonschema-specifications/python-jsonschema-specifications.mk
+ sha256  39f081828db6f94c70123fa4fb30c1bce3e215a8fdece53a49991fe076a69c08  COPYING
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-watchdog/python-watchdog.mk b/package/python-watchdog/python-watchdog.mk
+index 2a2b80b04b..f5ef770fcf 100644
+--- a/package/python-watchdog/python-watchdog.mk
++++ b/package/python-watchdog/python-watchdog.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_JSONSCHEMA_SPECIFICATIONS_VERSION = 2023.12.1
-+PYTHON_JSONSCHEMA_SPECIFICATIONS_VERSION = 2024.10.1
- PYTHON_JSONSCHEMA_SPECIFICATIONS_SOURCE = jsonschema_specifications-$(PYTHON_JSONSCHEMA_SPECIFICATIONS_VERSION).tar.gz
--PYTHON_JSONSCHEMA_SPECIFICATIONS_SITE = https://files.pythonhosted.org/packages/f8/b9/cc0cc592e7c195fb8a650c1d5990b10175cf13b4c97465c72ec841de9e4b
-+PYTHON_JSONSCHEMA_SPECIFICATIONS_SITE = https://files.pythonhosted.org/packages/10/db/58f950c996c793472e336ff3655b13fbcf1e3b359dcf52dcf3ed3b52c352
- PYTHON_JSONSCHEMA_SPECIFICATIONS_SETUP_TYPE = pep517
- PYTHON_JSONSCHEMA_SPECIFICATIONS_LICENSE = MIT
- PYTHON_JSONSCHEMA_SPECIFICATIONS_LICENSE_FILES = COPYING
+-PYTHON_WATCHDOG_VERSION = 5.0.2
++PYTHON_WATCHDOG_VERSION = 5.0.3
+ PYTHON_WATCHDOG_SOURCE = watchdog-$(PYTHON_WATCHDOG_VERSION).tar.gz
+-PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/cd/5e/95dcd86d8339fcf76385f7fad5e49cbfd989b6c6199127121c9587febc65
++PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/a2/48/a86139aaeab2db0a2482676f64798d8ac4d2dbb457523f50ab37bf02ce2c
+ PYTHON_WATCHDOG_SETUP_TYPE = setuptools
+ PYTHON_WATCHDOG_LICENSE = Apache-2.0
+ PYTHON_WATCHDOG_LICENSE_FILES = LICENSE COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
