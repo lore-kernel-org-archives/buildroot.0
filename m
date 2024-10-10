@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 565D0D2444F
-	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:32:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D342D24455
+	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:32:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1305C410E4;
-	Thu, 10 Oct 2024 21:32:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F8C2413C4;
+	Thu, 10 Oct 2024 21:32:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kg_tj8OvUtFE; Thu, 10 Oct 2024 21:32:10 +0000 (UTC)
+ id ShAtOs6pFyrl; Thu, 10 Oct 2024 21:32:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D54A41442
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA84F41324
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D54A41442;
-	Thu, 10 Oct 2024 21:32:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 338C81BF3C3
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA84F41324;
+	Thu, 10 Oct 2024 21:32:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E16E11BF3C3
  for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 79F6760BDD
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 66E2D81771
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kOnlHZOfO86L for <buildroot@lists.busybox.net>;
- Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZO4Mmau21Z4n for <buildroot@lists.busybox.net>;
+ Thu, 10 Oct 2024 21:30:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF4CC60AB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65E6081F78
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF4CC60AB2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 65E6081F78
  for <buildroot@buildroot.org>; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB1C785C67; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
+ id 5F14885C8A; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Oct 2024 23:18:40 +0200
+Date: Thu, 10 Oct 2024 23:18:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5d2e126decfb6be0af46630d203f71845428a14e
-X-Git-Newrev: 581297cb08bf7d5553fd69bcf3234f27dacd5ca1
+X-Git-Oldrev: 3064d3d007cbd20a823733cfa1426e3795a95229
+X-Git-Newrev: 908ebf2f68e4c3bfc0590c627cd0c11d472d005c
 X-Patchwork-Hint: ignore
-Message-Id: <20241010213043.AB1C785C67@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-webob: bump to version 1.8.8
+Message-Id: <20241010213043.5F14885C8A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tomli-w: bump to version
+ 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=581297cb08bf7d5553fd69bcf3234f27dacd5ca1
+commit: https://git.buildroot.net/buildroot/commit/?id=908ebf2f68e4c3bfc0590c627cd0c11d472d005c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-webob/python-webob.hash | 4 ++--
- package/python-webob/python-webob.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-tomli-w/python-tomli-w.hash | 4 ++--
+ package/python-tomli-w/python-tomli-w.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-webob/python-webob.hash b/package/python-webob/python-webob.hash
-index a46c1dbc94..065a878d41 100644
---- a/package/python-webob/python-webob.hash
-+++ b/package/python-webob/python-webob.hash
+diff --git a/package/python-tomli-w/python-tomli-w.hash b/package/python-tomli-w/python-tomli-w.hash
+index 778c22583a..1d0bbf881e 100644
+--- a/package/python-tomli-w/python-tomli-w.hash
++++ b/package/python-tomli-w/python-tomli-w.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/webob/json
--md5  10191c69fa5a2c00f3b9abfb8937b415  WebOb-1.8.7.tar.gz
--sha256  b64ef5141be559cfade448f044fa45c2260351edcb6a8ef6b7e00c7dcef0c323  WebOb-1.8.7.tar.gz
-+md5  2372b45cf0e0a3970daaa901fc9d0f64  webob-1.8.8.tar.gz
-+sha256  2abc1555e118fc251e705fc6dc66c7f5353bb9fbfab6d20e22f1c02b4b71bcee  webob-1.8.8.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/tomli-w/json
+-md5  2c050134d4842b449ec4129c97d51e62  tomli_w-1.0.0.tar.gz
+-sha256  f463434305e0336248cac9c2dc8076b707d8a12d019dd349f5c1e382dd1ae1b9  tomli_w-1.0.0.tar.gz
++md5  8a074845fdcbb1fb6855bec753f0f94e  tomli_w-1.1.0.tar.gz
++sha256  49e847a3a304d516a169a601184932ef0f6b61623fe680f836a2aa7128ed0d33  tomli_w-1.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  27bc4919e7e9e6b6cda40644517ca74d32203e32fba89ef832aba1ed93e457b3  docs/license.txt
-diff --git a/package/python-webob/python-webob.mk b/package/python-webob/python-webob.mk
-index 11ba104476..0240d3a456 100644
---- a/package/python-webob/python-webob.mk
-+++ b/package/python-webob/python-webob.mk
+ sha256  b80816b0d530b8accb4c2211783790984a6e3b61922c2b5ee92f3372ab2742fe  LICENSE
+diff --git a/package/python-tomli-w/python-tomli-w.mk b/package/python-tomli-w/python-tomli-w.mk
+index d5d7ab9f2c..a6ca0cfbbc 100644
+--- a/package/python-tomli-w/python-tomli-w.mk
++++ b/package/python-tomli-w/python-tomli-w.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WEBOB_VERSION = 1.8.7
--PYTHON_WEBOB_SOURCE = WebOb-$(PYTHON_WEBOB_VERSION).tar.gz
--PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/c7/45/ee5f034fb4ebe3236fa49e5a4fcbc54444dd22ecf33079cf56f9606d479d
-+PYTHON_WEBOB_VERSION = 1.8.8
-+PYTHON_WEBOB_SOURCE = webob-$(PYTHON_WEBOB_VERSION).tar.gz
-+PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/a2/7a/ac5b1ab5636cc3bfc9bab1ed54ff4e8fdeb6367edd911f7337be2248b8ab
- PYTHON_WEBOB_SETUP_TYPE = setuptools
- PYTHON_WEBOB_LICENSE = MIT
- PYTHON_WEBOB_LICENSE_FILES = docs/license.txt
+-PYTHON_TOMLI_W_VERSION = 1.0.0
++PYTHON_TOMLI_W_VERSION = 1.1.0
+ PYTHON_TOMLI_W_SOURCE = tomli_w-$(PYTHON_TOMLI_W_VERSION).tar.gz
+-PYTHON_TOMLI_W_SITE = https://files.pythonhosted.org/packages/49/05/6bf21838623186b91aedbda06248ad18f03487dc56fbc20e4db384abde6c
++PYTHON_TOMLI_W_SITE = https://files.pythonhosted.org/packages/d4/19/b65f1a088ee23e37cdea415b357843eca8b1422a7b11a9eee6e35d4ec273
+ PYTHON_TOMLI_W_SETUP_TYPE = flit
+ PYTHON_TOMLI_W_LICENSE = MIT
+ PYTHON_TOMLI_W_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
