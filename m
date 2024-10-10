@@ -4,91 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8776ECF11F8
-	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 14:37:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D88DCF11FA
+	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 15:05:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 868F260B36;
-	Thu, 10 Oct 2024 14:37:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B497E60A3E;
+	Thu, 10 Oct 2024 15:05:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HtMX2_GWHvz5; Thu, 10 Oct 2024 14:37:13 +0000 (UTC)
+ id 0MKIXZtsMmix; Thu, 10 Oct 2024 15:05:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 599E760B63
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86E4560B43
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 599E760B63;
-	Thu, 10 Oct 2024 14:37:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A8EE91BF4E3
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 14:37:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86E4560B43;
+	Thu, 10 Oct 2024 15:05:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B908E1BF3D9
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 15:05:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 987C381E8A
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 14:37:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A479F40CEF
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 15:05:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id unYIa85H1Vbg for <buildroot@lists.busybox.net>;
- Thu, 10 Oct 2024 14:37:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 314C981E7A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 314C981E7A
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 314C981E7A
- for <buildroot@buildroot.org>; Thu, 10 Oct 2024 14:37:04 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-a99422c796eso163958266b.3
- for <buildroot@buildroot.org>; Thu, 10 Oct 2024 07:37:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728571023; x=1729175823;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=FeWdXv10taD45Ph4X5tP/R58qwqdQ1uqXTPuXTtjMPg=;
- b=Bad7fQYLWVkCmy3jUXRlIX4QIppmc/0YyLUC6b8M2ZKnsII65qizR8Y6l5J7uTZ+io
- CJ7ZlcIGKaAx4G7WV3vSU5ITmmnsb88R5IokW+QppP6YvcY0QVrQPjjwBgeaEBVwiew0
- 6Tiw9DumwD88G1cmMYwXxEKaRqSbAK9jKAGLCZJA6VHO0Ims8yPERM976atXydhz3Ok8
- CwcdCD8WYjHmcLisSANgl7V68PoRpj/dYBMmQclreyhVb/kY0Horg/JWzhEPvLbFKWpu
- f0zU32bDxVjSpp3n6OumUZi7Xo6Cbag+DOiu/hsvvujdT4ipOjO5FYt+29YhdR1pQOhj
- 8DMA==
-X-Gm-Message-State: AOJu0YzvBRxON9hcV7asQMoVLuBH1PFR2TwzschZ1F/3JAc4gLH6t2TE
- Y00oFLlk+UetO+WTscJRyJe6lHTAE/I+aRuTaakPAn2FSr58oP0bN/IzrbNOi7tiKnniVINdt83
- UAbA=
-X-Google-Smtp-Source: AGHT+IElsGPnC2W0y04pjXSWPupCjHa+iNZQscl36/F+uimLViT8kSDwiz5Qmyf9DXMQB4UlwxOMSA==
-X-Received: by 2002:a17:906:dc8e:b0:a99:6363:8a12 with SMTP id
- a640c23a62f3a-a999e6280fcmr437814166b.9.1728571022715; 
- Thu, 10 Oct 2024 07:37:02 -0700 (PDT)
-Received: from localhost.localdomain ([2001:b07:6474:ebbf:a293:3a9f:6dc0:1d29])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a99a7ec4d14sm97019666b.38.2024.10.10.07.37.01
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 10 Oct 2024 07:37:02 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Thu, 10 Oct 2024 16:36:58 +0200
-Message-ID: <20241010143659.2844375-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d0NqAKtuiM2s for <buildroot@lists.busybox.net>;
+ Thu, 10 Oct 2024 15:04:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.141;
+ helo=fllv0015.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 336C340C97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 336C340C97
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 336C340C97
+ for <buildroot@buildroot.org>; Thu, 10 Oct 2024 15:04:58 +0000 (UTC)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+ by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 49AF4uCU024608;
+ Thu, 10 Oct 2024 10:04:56 -0500
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+ by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 49AF4u7p005049
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Thu, 10 Oct 2024 10:04:56 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 10
+ Oct 2024 10:04:56 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 10 Oct 2024 10:04:56 -0500
+Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
+ by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 49AF4usv029726;
+ Thu, 10 Oct 2024 10:04:56 -0500
+Date: Thu, 10 Oct 2024 10:04:56 -0500
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20241010150456.u2jj5oikowm4ar7r@bryanbrattlof.com>
+X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+References: <20241009062631.895124-1-dario.binacchi@amarulasolutions.com>
+ <20241009150040.mxnktvztmjzwasyw@bryanbrattlof.com>
+ <CABGWkvqAVxoYRPm3=LJsM6QhGF_BOFP=FXiKYtuF4R-RgEyavg@mail.gmail.com>
+ <20241009190945.r6ye6anm2cxj7jsv@bryanbrattlof.com>
+ <CABGWkvo88Ce6GxPb5ZsFi5ZEwGaCLuURCO=MurCb0MKoDesQ1Q@mail.gmail.com>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <CABGWkvo88Ce6GxPb5ZsFi5ZEwGaCLuURCO=MurCb0MKoDesQ1Q@mail.gmail.com>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1728571023; x=1729175823;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FeWdXv10taD45Ph4X5tP/R58qwqdQ1uqXTPuXTtjMPg=;
- b=EdEajGPWEGGjW/3fq4ROxFVIWY3hfvFKbzF2YeU8YG14H9Xjw3qXvRreM3lkJgKXO6
- lqM/Mk07SYj9O161v/0ebHgnKoaCTfsNMmaQSZ+/fzRLoEQqXUPgKp0K53eQGGIrzeld
- m4Kj9DuQ0AH+Ln0phLiCCyrEAd5exfLg0F0B8=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=ti.com; s=ti-com-17Q1; t=1728572696;
+ bh=NaMsxgQAkVyVYhxuh0EIHLydBws5LQNicxCFEMd4Itw=;
+ h=Date:From:To:CC:Subject:References:In-Reply-To;
+ b=P7Hbs6BfjfYzP/BATMnUC2BrV7UAyf1185EEnDIKiSBFpKKkpNams5ZsjS+KnFV1C
+ Fhjmi+PobEmEBGSmEDx1APW/LsU5JKwDMA4+iq8Md+ZRhp0/eepX6v17FvJGqIExHw
+ KEocDfN8F1tDTUtFErF1TUrgyAS+Cd7mhkQGos6A=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=ti.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=EdEajGPW
-Subject: [Buildroot] [PATCH v3 1/2] boot/arm-trusted-firmware: v2.11: fix
- the ld autodetection for gnu-gcc
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=P7Hbs6Bf
+Subject: Re: [Buildroot] [PATCH 1/1] configs/ti_am62x_sk: bump Linux to
+ 6.10.13 and U-Boot to 2024.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,97 +94,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marleen Vos <marleen.vos@mind.be>, Sergey Matyukevich <geomatsi@gmail.com>,
- Bartosz Bilas <b.bilas@grinn-global.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
+Reply-To: Bryan Brattlof <bb@ti.com>
+Cc: Xuanhao Shi <X15000177@gmail.com>, Anand Gadiyar <gadiyar@ti.com>,
+ linux-amarula@amarulasolutions.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Before applying this patch, the compiler was used instead of the linker
-as shown by the following error raised by the compilation of TF-A for
-the STM32MP157C-DK2 discovery board:
-
-'buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-gcc' -o buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/tf-a-stm32mp157c-dk2.elf -Wl,--hash-style=gnu -Wl,--as-needed -nostartfiles -Wl,-Map=buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/tf-a-stm32mp157c-dk2.map -Wl,-dT buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/stm32mp1.ld buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/stm32mp1-stm32mp157c-dk2.o
-buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/13.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/tf-a-stm32mp157c-dk2.elf: error: PHDR segment not covered by LOAD segment
-collect2: error: ld returned 1 exit status
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
-- No changes since v2
-
-- Added in v2
-
- ...-build-Set-guess-gnu-gcc-ld-properly.patch | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 boot/arm-trusted-firmware/v2.11/0001-fix-build-Set-guess-gnu-gcc-ld-properly.patch
-
-diff --git a/boot/arm-trusted-firmware/v2.11/0001-fix-build-Set-guess-gnu-gcc-ld-properly.patch b/boot/arm-trusted-firmware/v2.11/0001-fix-build-Set-guess-gnu-gcc-ld-properly.patch
-new file mode 100644
-index 000000000000..a6731aa08853
---- /dev/null
-+++ b/boot/arm-trusted-firmware/v2.11/0001-fix-build-Set-guess-gnu-gcc-ld-properly.patch
-@@ -0,0 +1,53 @@
-+From 7988f1afe1324486e473874b22ed009c0d6d6806 Mon Sep 17 00:00:00 2001
-+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Date: Wed, 9 Oct 2024 18:29:00 +0200
-+Subject: [PATCH] fix(build): Set guess-gnu-gcc-ld properly
-+
-+With the commit 291e718229e7f ("build: skip toolchain detection for some
-+targets"), the compiler was used instead of the linker:
-+
-++        guess-gnu-gcc-cpp = $(1)
-++        guess-gnu-gcc-as = $(1)
-++        guess-gnu-gcc-ld = $(1)
-+
-+This patch correctly references the linker for gnu-gcc.
-+
-+The patch was tested on the STM32MP157C-DK2 board.
-+
-+This is the error raised during the compilation of ARM Trusted Firmware
-+v2.11 before applying the patch
-+
-+'buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-gcc' -o buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/tf-a-stm32mp157c-dk2.elf -Wl,--hash-style=gnu -Wl,--as-needed -nostartfiles -Wl,-Map=buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/tf-a-stm32mp157c-dk2.map -Wl,-dT buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/stm32mp1.ld buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/stm32mp1-stm32mp157c-dk2.o
-+buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/13.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/tf-a-stm32mp157c-dk2.elf: error: PHDR segment not covered by LOAD segment
-+collect2: error: ld returned 1 exit status
-+
-+Below, after applying the patch:
-+
-+'buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/13.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld' -o buildroot/output/build/arm-trusted-firmware-v2.11/build/stm32mp1/release/tf-a-stm32mp157c-dk2.elf --hash-style=gnu --as-needed -Map=buildroot/output/build/arm-trusted-firmware-v2.11/build/stm32mp1/release/tf-a-stm32mp157c-dk2.map --script buildroot/output/build/arm-trusted-firmware-v2.11/build/stm32mp1/release/stm32mp1.ld buildroot/output/build/arm-trusted-firmware-v2.11/build/stm32mp1/release/stm32mp1-stm32mp157c-dk2.o
-+'buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/13.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/objcopy' -O binary buildroot/output/build/arm-trusted-firmware-v2.11/build/stm32mp1/release/tf-a-stm32mp157c-dk2.elf buildroot/output/build/arm-trusted-firmware-v2.11/build/stm32mp1/release/tf-a-stm32mp157c-dk2.bin
-+
-+Built /home/dario/projects/buildroot-10/output/build/arm-trusted-firmware-v2.11/build/stm32mp1/release/tf-a-stm32mp157c-dk2.bin successfully
-+
-+Fixes: 291e718229e7f ("build: skip toolchain detection for some targets")
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: backport from upstream https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/31746
-+---
-+ make_helpers/toolchain.mk | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/make_helpers/toolchain.mk b/make_helpers/toolchain.mk
-+index 96e43a8b94cb..a81be3751d86 100644
-+--- a/make_helpers/toolchain.mk
-++++ b/make_helpers/toolchain.mk
-+@@ -286,7 +286,7 @@ ifndef toolchain-mk
-+ 
-+         guess-gnu-gcc-cpp = $(1)
-+         guess-gnu-gcc-as = $(1)
-+-        guess-gnu-gcc-ld = $(1)
-++        guess-gnu-gcc-ld = $(shell $(1) --print-prog-name ld 2>$(nul))
-+         guess-gnu-gcc-oc = $(shell $(1) --print-prog-name objcopy 2>$(nul))
-+         guess-gnu-gcc-od = $(shell $(1) --print-prog-name objdump 2>$(nul))
-+         guess-gnu-gcc-ar = $(call which,$(call decompat-path,$(patsubst %$(call file-name,$(1)),%$(subst gcc,gcc-ar,$(call file-name,$(1))),$(call compat-path,$(1)))))
-+-- 
-+2.43.0
-+
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gT2N0b2JlciAxMCwgMjAyNCB0aHVzIHNheWV0aCBEYXJpbyBCaW5hY2NoaToKPiBIaSBCcnlh
+bgo+IAo+IE9uIFdlZCwgT2N0IDksIDIwMjQgYXQgOTowOeKAr1BNIEJyeWFuIEJyYXR0bG9mIDxi
+YkB0aS5jb20+IHdyb3RlOgo+ID4KPiA+IE9uIE9jdG9iZXIgIDksIDIwMjQgdGh1cyBzYXlldGgg
+RGFyaW8gQmluYWNjaGk6Cj4gPiA+IEhpIEJyeWFuLAo+ID4gPgo+ID4gPiBPbiBXZWQsIE9jdCA5
+LCAyMDI0IGF0IDU6MDDigK9QTSBCcnlhbiBCcmF0dGxvZiA8YmJAdGkuY29tPiB3cm90ZToKPiA+
+ID4gPgo+ID4gPiA+IEhpIERhcmlvIQo+ID4gPiA+Cj4gPiA+ID4gT24gT2N0b2JlciAgOSwgMjAy
+NCB0aHVzIHNheWV0aCBEYXJpbyBCaW5hY2NoaToKPiA+ID4gPiA+IFRoZSBwYXRjaCBidW1wcyB0
+aGUgTGludXgga2VybmVsIHRvIHZlcnNpb24gNi4xMC4xMyBhbmQgVS1Cb290IHRvCj4gPiA+ID4g
+PiB2ZXJzaW9uIDIwMjQuMTAuIEFybSB0cnVzdGVkIGZpcm13YXJlIGlzIGFscmVhZHkgdXAgdG8g
+ZGF0ZS4KPiA+ID4gPiA+Cj4gPiA+ID4gPiBTaWduZWQtb2ZmLWJ5OiBEYXJpbyBCaW5hY2NoaSA8
+ZGFyaW8uYmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4gPiA+ID4gPiAtLS0KPiA+ID4g
+PiA+ICBib2FyZC90aS9hbTYyeC1zay9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2ggfCAyICstCj4g
+PiA+ID4gPiAgYm9hcmQvdGkvYW02Mngtc2svcGF0Y2hlcy91Ym9vdC91Ym9vdC5oYXNoIHwgMiAr
+LQo+ID4gPiA+ID4gIGNvbmZpZ3MvdGlfYW02Mnhfc2tfZGVmY29uZmlnICAgICAgICAgICAgICB8
+IDYgKysrLS0tCj4gPiA+ID4gPiAgMyBmaWxlcyBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDUg
+ZGVsZXRpb25zKC0pCj4gPiA+ID4gPgo+ID4gPiA+ID4gZGlmZiAtLWdpdCBhL2JvYXJkL3RpL2Ft
+NjJ4LXNrL3BhdGNoZXMvbGludXgvbGludXguaGFzaCBiL2JvYXJkL3RpL2FtNjJ4LXNrL3BhdGNo
+ZXMvbGludXgvbGludXguaGFzaAo+ID4gPiA+ID4gaW5kZXggNTNlYjE0Mzg5NDViLi43MDZkZGI4
+ZGJiZDQgMTAwNjQ0Cj4gPiA+ID4gPiAtLS0gYS9ib2FyZC90aS9hbTYyeC1zay9wYXRjaGVzL2xp
+bnV4L2xpbnV4Lmhhc2gKPiA+ID4gPiA+ICsrKyBiL2JvYXJkL3RpL2FtNjJ4LXNrL3BhdGNoZXMv
+bGludXgvbGludXguaGFzaAo+ID4gPiA+ID4gQEAgLTEsMiArMSwyIEBACj4gPiA+ID4gPiAgIyBM
+b2NhbGx5IGNhbGN1bGF0ZWQKPiA+ID4gPiA+IC1zaGEyNTYgIDc3NDY5ODQyMmVlNTRjNWYxZTcw
+NDQ1NmYzN2M2NWMwNmI1MWI0ZTlhOGIwODY2ZjM0NTgwZDg2ZmVmOGUyMjYgIGxpbnV4LTYuMTAu
+dGFyLnh6Cj4gPiA+ID4gPiArc2hhMjU2ICA1ZmZjZWIyMzUwZGIxNTQ3ZTY5MjMxYTYzZGYyZDNi
+ZWVkMDE1YTMxM2Q3ZDdhZGY4YjVjYjcxZGVkYWViMTZhICBsaW51eC02LjEwLjEzLnRhci54ego+
+ID4gPiA+ID4gZGlmZiAtLWdpdCBhL2JvYXJkL3RpL2FtNjJ4LXNrL3BhdGNoZXMvdWJvb3QvdWJv
+b3QuaGFzaCBiL2JvYXJkL3RpL2FtNjJ4LXNrL3BhdGNoZXMvdWJvb3QvdWJvb3QuaGFzaAo+ID4g
+PiA+ID4gaW5kZXggZmU5YjRmNTNkYzYzLi45MDRmYTU2YzAyYTMgMTAwNjQ0Cj4gPiA+ID4gPiAt
+LS0gYS9ib2FyZC90aS9hbTYyeC1zay9wYXRjaGVzL3Vib290L3Vib290Lmhhc2gKPiA+ID4gPiA+
+ICsrKyBiL2JvYXJkL3RpL2FtNjJ4LXNrL3BhdGNoZXMvdWJvb3QvdWJvb3QuaGFzaAo+ID4gPiA+
+ID4gQEAgLTEsMiArMSwyIEBACj4gPiA+ID4gPiAgIyBMb2NhbGx5IGNhbGN1bGF0ZWQKPiA+ID4g
+PiA+IC1zaGEyNTYgIGY1OTFkYTlhYjkwZWYzZDZiM2QxNzM3NjZkMGRkZmY5MGM0ZWQ3MzMwNjgw
+ODk3NDg2MTE3ZGYzOTBkODNjOGYgIHUtYm9vdC0yMDI0LjA3LnRhci5iejIKPiA+ID4gPiA+ICtz
+aGEyNTYgIGIyOGRhZjRhYzE3ZTQzMTU2MzYzMDc4YmY1MTAyOTc1ODQxMzdmNmRmNTBmY2VkOWIx
+MmRmMzRmNjFhOTJmYjAgIHUtYm9vdC0yMDI0LjEwLnRhci5iejIKPiA+ID4gPiA+IGRpZmYgLS1n
+aXQgYS9jb25maWdzL3RpX2FtNjJ4X3NrX2RlZmNvbmZpZyBiL2NvbmZpZ3MvdGlfYW02Mnhfc2tf
+ZGVmY29uZmlnCj4gPiA+ID4gPiBpbmRleCBlMTFiODAzYjczZTQuLjZkMDcxYjRjYzE0OCAxMDA2
+NDQKPiA+ID4gPiA+IC0tLSBhL2NvbmZpZ3MvdGlfYW02Mnhfc2tfZGVmY29uZmlnCj4gPiA+ID4g
+PiArKysgYi9jb25maWdzL3RpX2FtNjJ4X3NrX2RlZmNvbmZpZwo+ID4gPiA+ID4gQEAgLTgsNyAr
+OCw3IEBAIEJSMl9ST09URlNfUE9TVF9CVUlMRF9TQ1JJUFRfQVJHUz0iLWMgdHR5UzIsMTE1MjAw
+bjggLWQgazMtYW02MjUtc2suZHRiIC1sIGFtNjJ4Cj4gPiA+ID4gPiAgQlIyX1JPT1RGU19QT1NU
+X0lNQUdFX1NDUklQVF9BUkdTPSItYyBib2FyZC90aS9hbTYyeC1zay9nZW5pbWFnZS5jZmciCj4g
+PiA+ID4gPiAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gPiA+ID4gPiAgQlIyX0xJTlVYX0tFUk5FTF9D
+VVNUT01fVkVSU0lPTj15Cj4gPiA+ID4gPiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lP
+Tl9WQUxVRT0iNi4xMCIKPiA+ID4gPiA+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9O
+X1ZBTFVFPSI2LjEwLjEzIgo+ID4gPiA+Cj4gPiA+ID4gSSd2ZSBub3RpY2VkIHlvdSd2ZSBiZWVu
+IHBpY2tpbmcgc3RhYmxlIHRhZ3MgYW5kIHdhcyBjdXJpb3VzIGlmIHlvdQo+ID4gPiA+IHByZWZl
+ciB0byBzdGF5IG9uIHN0YWJsZSB0YWdzPwo+ID4gPgo+ID4gPiBBcyBmYXIgYXMgSSBrbm93LCBp
+dCBpcyBnb29kIHByYWN0aWNlLgo+ID4gPgo+ID4KPiA+IEFsbCBnb29kLiBJdCdzIGp1c3QgcHJl
+ZmVyZW5jZS4gSSB0cnkgdG8gcnVuIHRoZSBsYXRlc3Qga2VybmVsIHRvIHRyeSBvdXQKPiA+IGFs
+bCB0aGUgbGF0ZXN0IGZlYXR1cmVzIGFuZCBmaXhlcyBiZWZvcmUgdGhleSBuZWVkIHRvIGJlIGJh
+Y2stcG9ydGVkIGFueXdoZXJlCj4gPgo+ID4gPgo+ID4gPiA+IEkgaGF2ZSBwbGFucyB0byBtb3Zl
+IGV2ZXJ5dGhpbmcgdG8gdjYuMTEKPiA+ID4gPiBidXQgSSBjb3VsZCBjaG9vc2UgdGhlIHN0YWJs
+ZSB2ZXJzaW9uICh2Ni4xMS4yKSBpZiB0aGF0IGhlbHBzIHlvdS4KPiA+ID4KPiA+ID4gPgo+ID4g
+PiA+ID4gIEJSMl9MSU5VWF9LRVJORUxfVVNFX0FSQ0hfREVGQVVMVF9DT05GSUc9eQo+ID4gPiA+
+ID4gIEJSMl9MSU5VWF9LRVJORUxfRFRTX1NVUFBPUlQ9eQo+ID4gPiA+ID4gIEJSMl9MSU5VWF9L
+RVJORUxfSU5UUkVFX0RUU19OQU1FPSJ0aS9rMy1hbTYyNS1zayIKPiA+ID4gPiA+IEBAIC0yNywx
+MiArMjcsMTIgQEAgQlIyX1RBUkdFVF9PUFRFRV9PUz15Cj4gPiA+ID4gPiAgQlIyX1RBUkdFVF9P
+UFRFRV9PU19QTEFURk9STT0iazMtYW02MngiCj4gPiA+ID4gPiAgQlIyX1RBUkdFVF9USV9LM19S
+NV9MT0FERVI9eQo+ID4gPiA+ID4gIEJSMl9UQVJHRVRfVElfSzNfUjVfTE9BREVSX0NVU1RPTV9W
+RVJTSU9OPXkKPiA+ID4gPiA+IC1CUjJfVEFSR0VUX1RJX0szX1I1X0xPQURFUl9DVVNUT01fVkVS
+U0lPTl9WQUxVRT0iMjAyNC4wNyIKPiA+ID4gPiA+ICtCUjJfVEFSR0VUX1RJX0szX1I1X0xPQURF
+Ul9DVVNUT01fVkVSU0lPTl9WQUxVRT0iMjAyNC4xMCIKPiA+ID4gPiA+ICBCUjJfVEFSR0VUX1RJ
+X0szX1I1X0xPQURFUl9CT0FSRF9ERUZDT05GSUc9ImFtNjJ4X2V2bV9yNSIKPiA+ID4gPiA+ICBC
+UjJfVEFSR0VUX1VCT09UPXkKPiA+ID4gPiA+ICBCUjJfVEFSR0VUX1VCT09UX0JVSUxEX1NZU1RF
+TV9LQ09ORklHPXkKPiA+ID4gPiA+ICBCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OPXkK
+PiA+ID4gPiA+IC1CUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSIyMDI0LjA3
+Igo+ID4gPiA+ID4gK0JSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjIwMjQu
+MTAiCj4gPiA+ID4KPiA+ID4gPiBPbmUgb2YgdGhlIG1vcmUgaW50ZXJlc3RpbmcgdGhpbmdzIHdl
+J3ZlIGJlZW4gd29ya2luZyBvbiBsYXRlbHkgaXMgRUZJCj4gPiA+ID4gQ2Fwc3VsZSBzdXBwb3J0
+IHdoaWNoIGRlcGVuZHMgb24gR251VExTLiBXZSdsbCBuZWVkIHRvIGNoZWNrCj4gPiA+ID4gQlIy
+X1RBUkdFVF9VQk9PVF9ORUVEU19HTlVUTFMgd2hlbiBtb3ZpbmcgdG8gdGhpcyB2ZXJzaW9uLiA6
+KQo+ID4gPgo+ID4gPiBEbyBJIGhhdmUgdG8gZW5hYmxlIHRoaXMgb3B0aW9uPyBXaGVuIEkgdGVz
+dGVkLCBJIGRpZG4ndCBub3RpY2UgYW55dGhpbmcgdW51c3VhbAo+ID4gPiBPciBpcyB0aGVyZSBz
+b21ldGhpbmcgSSdtIG1pc3Npbmc/Cj4gPiA+Cj4gPgo+ID4gSXQncyBvbiBteSB0b2RvIGxpc3Qg
+dG8gc3RhcnQgYnJlYWtpbmcgdXAgdGhlIFUtQm9vdCBkZWZjb25maWcgaW50bwo+ID4gdmFyaW91
+cyBmZWF0dXJlIGZyYWdtZW50cyB0byBzdWl0IGEgbnVtYmVyIG9mIHVzZWNhc2VzIG91ciBTSyBi
+b2FyZHMKPiA+IGhhdmUuIFNhZGx5IHRoaXMgb25lWzBdIGlzIG1hbmRhdG9yeSBpZiB3ZSBtb3Zl
+IHRvIHRoZSB2MjAyNC4xMCB0YWcgb3IKPiA+IHRoZSBidWlsZCB3aWxsIGNvbXBsYWluIGFib3V0
+IG1pc3NpbmcgbGlicmFyaWVzLgo+ID4KPiA+ICAgICB0b29scy9ta2VmaWNhcHN1bGUuYzoyMTox
+MDogZmF0YWwgZXJyb3I6IGdudXRscy9nbnV0bHMuaDogTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9y
+eQo+ID4gICAgICAgIDIxIHwgI2luY2x1ZGUgPGdudXRscy9nbnV0bHMuaD4KPiA+ICAgICAgICAg
+ICB8ICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+Cj4gPiAgICAgY29tcGlsYXRpb24gdGVybWlu
+YXRlZC4KPiA+ICAgICBtYWtlWzNdOiAqKiogW3NjcmlwdHMvTWFrZWZpbGUuaG9zdDo5NTogdG9v
+bHMvbWtlZmljYXBzdWxlXSBFcnJvciAxCj4gPiAgICAgbWFrZVszXTogKioqIFdhaXRpbmcgZm9y
+IHVuZmluaXNoZWQgam9icy4uLi4KPiA+ICAgICBtYWtlWzJdOiAqKiogW01ha2VmaWxlOjE4OTU6
+IHRvb2xzXSBFcnJvciAyCj4gPiAgICAgbWFrZVsxXTogKioqIFtwYWNrYWdlL3BrZy1nZW5lcmlj
+Lm1rOjI4OTogL2hvbWUvbWUvc3JjL2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvdWJvb3QtMjAyNC4x
+MC8uc3RhbXBfYnVpbHRdIEVycm9yIDIKPiA+ICAgICBtYWtlOiAqKiogW01ha2VmaWxlOjgzOiBf
+YWxsXSBFcnJvciAyCj4gCj4gSSBkaWRuJ3QgZ2V0IHRoZSBlcnJvciBiZWNhdXNlIG15IGxhcHRv
+cCAvdXNyL2luY2x1ZGUvZ251dGxzL2dudXRscy5oCj4gaXMgaW5zdGFsbGVkLiBCdXQgYWZ0ZXIg
+dGVtcG9yYXJpbHkgcmVuYW1pbmcgaXQgZm9yCj4gdGVzdGluZyB0aGUgcGF0Y2ggSSBnb3QgdGhl
+IGNvbXBpbGluZyBlcnJvci4gU28gdGhhbmsgeW91IGZvciB0aGUgaW5mby4KPiBEbyBJIG5lZWQg
+aW4gdmVyc2lvbiAyIG1vdmUgdGhlIExpbnV4IGJ1bXAgdG8gdjYuMTEgdG9vLCBvciBvbmx5Cj4g
+ZW5hYmxlIEJSMl9UQVJHRVRfVUJPT1RfTkVFRFNfR05VVExTCj4gZm9yIFUtQm9vdD8KCmlmIHlv
+dSBkb24ndCBtaW5kLiBJJ2xsIGhhdmUgc29tZSBwYXRjaGVzIHRvIGJ1bXAgYWxsIHRoZSB2ZXJz
+aW9ucyBvZiAKVEkncyByZWZlcmVuY2UgYm9hcmRzIGFuZCBhIGZldyBiZWFnbGUgYm9hcmRzIGJ5
+IHRoZSBlbmQgb2YgdGhlIGRheS4gClRoYXQgd2F5IGV2ZXJ5b25lIHN0YXlzIG9uIHRoZSBzYW1l
+IGJhc2VsaW5lIGZvciBteSBzYW5pdHkgOykKCn5CcnlhbgpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
+bmZvL2J1aWxkcm9vdAo=
