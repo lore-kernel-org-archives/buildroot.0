@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB398D2444F
-	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:31:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81FA2D2444F
+	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:31:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7C15741396;
-	Thu, 10 Oct 2024 21:31:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4A67C412FA;
+	Thu, 10 Oct 2024 21:31:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lXchspwNYcq4; Thu, 10 Oct 2024 21:31:19 +0000 (UTC)
+ id v-c-cDnsMuMp; Thu, 10 Oct 2024 21:31:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2F0A41318
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 041744138D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E2F0A41318;
-	Thu, 10 Oct 2024 21:31:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E3D6A1BF3C3
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 041744138D;
+	Thu, 10 Oct 2024 21:31:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 23BCD1BF3C3
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5FDB60BE1
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B25FD81771
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yzUwOV6EKm_5 for <buildroot@lists.busybox.net>;
- Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XD-lGLWLUOOU for <buildroot@lists.busybox.net>;
+ Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAF4760BD4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8921981F6A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EAF4760BD4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8921981F6A
  for <buildroot@buildroot.org>; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E106385C59; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
+ id 7334685C8B; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Oct 2024 23:17:53 +0200
+Date: Thu, 10 Oct 2024 23:17:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0e3787ee20228f64b6e5e468a0718480ae51ef7e
-X-Git-Newrev: 5f036cf902c916031b6b0834d80bb74c147dcf8a
+X-Git-Oldrev: 0b37c25627992befbe471edabd020a56c12d62fd
+X-Git-Newrev: 6992257cc8ae6ad203829f74903c66f7c5a9ee80
 X-Patchwork-Hint: ignore
-Message-Id: <20241010213042.E106385C59@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-markupsafe: bump to version
- 3.0.1
+Message-Id: <20241010213042.7334685C8B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-dnspython: bump to version
+ 2.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,52 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f036cf902c916031b6b0834d80bb74c147dcf8a
+commit: https://git.buildroot.net/buildroot/commit/?id=6992257cc8ae6ad203829f74903c66f7c5a9ee80
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License file renamed without changing content.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-markupsafe/python-markupsafe.hash | 6 +++---
- package/python-markupsafe/python-markupsafe.mk   | 8 ++++----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-dnspython/python-dnspython.hash | 4 ++--
+ package/python-dnspython/python-dnspython.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-markupsafe/python-markupsafe.hash b/package/python-markupsafe/python-markupsafe.hash
-index c6f9cd4702..8902d3d0ec 100644
---- a/package/python-markupsafe/python-markupsafe.hash
-+++ b/package/python-markupsafe/python-markupsafe.hash
+diff --git a/package/python-dnspython/python-dnspython.hash b/package/python-dnspython/python-dnspython.hash
+index acab710d5a..4ed5a04270 100644
+--- a/package/python-dnspython/python-dnspython.hash
++++ b/package/python-dnspython/python-dnspython.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/markupsafe/json
--md5  8fe7227653f2fb9b1ffe7f9f2058998a  MarkupSafe-2.1.5.tar.gz
--sha256  d283d37a890ba4c1ae73ffadf8046435c76e7bc2247bbb63c00bd1a709c6544b  MarkupSafe-2.1.5.tar.gz
-+md5  202a35d8c8309cd6e70f8b03c5eb7b61  markupsafe-3.0.1.tar.gz
-+sha256  3e683ee4f5d0fa2dde4db77ed8dd8a876686e3fc417655c2ece9a90576905344  markupsafe-3.0.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/dnspython/json
+-md5  ad29d0392621fb107e0eac4beed79ce5  dnspython-2.6.1.tar.gz
+-sha256  e8f0f9c23a7b7cb99ded64e6c3a6f3e701d78f50c55e002b839dea7225cff7cc  dnspython-2.6.1.tar.gz
++md5  7a8f6f15038a116598744517931420d0  dnspython-2.7.0.tar.gz
++sha256  ce9c432eda0dc91cf618a5cedf1a4e142651196bbcd2c80e89ed5a907e5cfaf1  dnspython-2.7.0.tar.gz
  # Locally computed sha256 checksums
--sha256  489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.rst
-+sha256  489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.txt
-diff --git a/package/python-markupsafe/python-markupsafe.mk b/package/python-markupsafe/python-markupsafe.mk
-index b54a77365f..c96207d14b 100644
---- a/package/python-markupsafe/python-markupsafe.mk
-+++ b/package/python-markupsafe/python-markupsafe.mk
-@@ -4,12 +4,12 @@
+ sha256  c3ea3ff5654b329c19d3bc5f7481af623c3dded4a6145585499f843ad3d741cd  LICENSE
+diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
+index 01fad58c1d..700c75de25 100644
+--- a/package/python-dnspython/python-dnspython.mk
++++ b/package/python-dnspython/python-dnspython.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MARKUPSAFE_VERSION = 2.1.5
--PYTHON_MARKUPSAFE_SOURCE = MarkupSafe-$(PYTHON_MARKUPSAFE_VERSION).tar.gz
--PYTHON_MARKUPSAFE_SITE = https://files.pythonhosted.org/packages/87/5b/aae44c6655f3801e81aa3eef09dbbf012431987ba564d7231722f68df02d
-+PYTHON_MARKUPSAFE_VERSION = 3.0.1
-+PYTHON_MARKUPSAFE_SOURCE = markupsafe-$(PYTHON_MARKUPSAFE_VERSION).tar.gz
-+PYTHON_MARKUPSAFE_SITE = https://files.pythonhosted.org/packages/b4/d2/38ff920762f2247c3af5cbbbbc40756f575d9692d381d7c520f45deb9b8f
- PYTHON_MARKUPSAFE_SETUP_TYPE = setuptools
- PYTHON_MARKUPSAFE_LICENSE = BSD-3-Clause
--PYTHON_MARKUPSAFE_LICENSE_FILES = LICENSE.rst
-+PYTHON_MARKUPSAFE_LICENSE_FILES = LICENSE.txt
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
+-PYTHON_DNSPYTHON_VERSION = 2.6.1
++PYTHON_DNSPYTHON_VERSION = 2.7.0
+ PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).tar.gz
+-PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/37/7d/c871f55054e403fdfd6b8f65fd6d1c4e147ed100d3e9f9ba1fe695403939
++PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/b5/4a/263763cb2ba3816dd94b08ad3a33d5fdae34ecb856678773cc40a3605829
+ PYTHON_DNSPYTHON_LICENSE = ISC
+ PYTHON_DNSPYTHON_LICENSE_FILES = LICENSE
+ PYTHON_DNSPYTHON_SETUP_TYPE = pep517
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
