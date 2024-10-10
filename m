@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D64B8D24454
-	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B81E6D24454
+	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:31:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A0CCC4136A;
-	Thu, 10 Oct 2024 21:31:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 81C94412E6;
+	Thu, 10 Oct 2024 21:31:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ee58Pwv6qL-P; Thu, 10 Oct 2024 21:31:06 +0000 (UTC)
+ id FweCcaLV-gJ1; Thu, 10 Oct 2024 21:31:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B83C41329
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E44441380
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4B83C41329;
-	Thu, 10 Oct 2024 21:31:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D29DC1BF3C3
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1E44441380;
+	Thu, 10 Oct 2024 21:31:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 13CBC1BF3C3
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8B2D460A48
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 14CF6404F0
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eCq8l8z5p30e for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QdGNAu2CL1Yz for <buildroot@lists.busybox.net>;
  Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB80760AB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2A94411A1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB80760AB2
+ by smtp2.osuosl.org (Postfix) with ESMTP id B2A94411A1
  for <buildroot@buildroot.org>; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B5A9A85C67; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
+ id A99E185C59; Thu, 10 Oct 2024 21:30:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Oct 2024 23:17:43 +0200
+Date: Thu, 10 Oct 2024 23:17:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9300e6a73ee96500a046cce449d14a7a159e17da
-X-Git-Newrev: 1e74f7c0f6f375c3e66f2c82186010247c20ac34
+X-Git-Oldrev: c7d8d2ef92f078af8769ad3a0c707efa4faa7f93
+X-Git-Newrev: 9300e6a73ee96500a046cce449d14a7a159e17da
 X-Patchwork-Hint: ignore
-Message-Id: <20241010213042.B5A9A85C67@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-humanize: bump to version
- 4.11.0
+Message-Id: <20241010213042.A99E185C59@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-httpcore: bump to version
+ 1.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e74f7c0f6f375c3e66f2c82186010247c20ac34
+commit: https://git.buildroot.net/buildroot/commit/?id=9300e6a73ee96500a046cce449d14a7a159e17da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-humanize/python-humanize.hash | 4 ++--
- package/python-humanize/python-humanize.mk   | 4 ++--
+ package/python-httpcore/python-httpcore.hash | 4 ++--
+ package/python-httpcore/python-httpcore.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-humanize/python-humanize.hash b/package/python-humanize/python-humanize.hash
-index 98ea691e0e..ea30ca5c22 100644
---- a/package/python-humanize/python-humanize.hash
-+++ b/package/python-humanize/python-humanize.hash
+diff --git a/package/python-httpcore/python-httpcore.hash b/package/python-httpcore/python-httpcore.hash
+index e773374c05..68c0450f94 100644
+--- a/package/python-httpcore/python-httpcore.hash
++++ b/package/python-httpcore/python-httpcore.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/humanize/json
--md5  1c0f59ba335b32c06e121e5577ed1548  humanize-4.10.0.tar.gz
--sha256  06b6eb0293e4b85e8d385397c5868926820db32b9b654b932f57fa41c23c9978  humanize-4.10.0.tar.gz
-+md5  c37298e6bc6604b54aeb0e158c7c0512  humanize-4.11.0.tar.gz
-+sha256  e66f36020a2d5a974c504bd2555cf770621dbdbb6d82f94a6857c0b1ea2608be  humanize-4.11.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/httpcore/json
+-md5  17916ce84db1c0705af60a61bbec9061  httpcore-1.0.5.tar.gz
+-sha256  34a38e2f9291467ee3b44e89dd52615370e152954ba21721378a87b2960f7a61  httpcore-1.0.5.tar.gz
++md5  458f9b56367cf547425bf2347bffd784  httpcore-1.0.6.tar.gz
++sha256  73f6dbd6eb8c21bbf7ef8efad555481853f5f6acdeaff1edb0694289269ee17f  httpcore-1.0.6.tar.gz
  # Locally computed sha256 checksums
- sha256  8ba6c18112a431400ad3c743f70670079b302545d98884fc2f28a91c383a0380  LICENCE
-diff --git a/package/python-humanize/python-humanize.mk b/package/python-humanize/python-humanize.mk
-index ff87f6a18d..196645a28f 100644
---- a/package/python-humanize/python-humanize.mk
-+++ b/package/python-humanize/python-humanize.mk
+ sha256  fdcb59154c74cbaba16a11242f7740bea9f23d6feb5547917d8c5f94a80392a5  LICENSE.md
+diff --git a/package/python-httpcore/python-httpcore.mk b/package/python-httpcore/python-httpcore.mk
+index ae29d8dc8a..19edf18c97 100644
+--- a/package/python-httpcore/python-httpcore.mk
++++ b/package/python-httpcore/python-httpcore.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_HUMANIZE_VERSION = 4.10.0
-+PYTHON_HUMANIZE_VERSION = 4.11.0
- PYTHON_HUMANIZE_SOURCE = humanize-$(PYTHON_HUMANIZE_VERSION).tar.gz
--PYTHON_HUMANIZE_SITE = https://files.pythonhosted.org/packages/5d/b1/c8f05d5dc8f64030d8cc71e91307c1daadf6ec0d70bcd6eabdfd9b6f153f
-+PYTHON_HUMANIZE_SITE = https://files.pythonhosted.org/packages/6a/40/64a912b9330786df25e58127194d4a5a7441f818b400b155e748a270f924
- PYTHON_HUMANIZE_SETUP_TYPE = pep517
- PYTHON_HUMANIZE_LICENSE = MIT
- PYTHON_HUMANIZE_LICENSE_FILES = LICENCE
+-PYTHON_HTTPCORE_VERSION = 1.0.5
++PYTHON_HTTPCORE_VERSION = 1.0.6
+ PYTHON_HTTPCORE_SOURCE = httpcore-$(PYTHON_HTTPCORE_VERSION).tar.gz
+-PYTHON_HTTPCORE_SITE = https://files.pythonhosted.org/packages/17/b0/5e8b8674f8d203335a62fdfcfa0d11ebe09e23613c3391033cbba35f7926
++PYTHON_HTTPCORE_SITE = https://files.pythonhosted.org/packages/b6/44/ed0fa6a17845fb033bd885c03e842f08c1b9406c86a2e60ac1ae1b9206a6
+ PYTHON_HTTPCORE_SETUP_TYPE = pep517
+ PYTHON_HTTPCORE_LICENSE = BSD-3-Clause
+ PYTHON_HTTPCORE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
