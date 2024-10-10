@@ -4,90 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A12ECFC5E2
-	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 16:14:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B5CBCFC5E2
+	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 16:32:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57D3480ACD;
-	Thu, 10 Oct 2024 16:14:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1632981EB9;
+	Thu, 10 Oct 2024 16:32:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NHs9SwQ6-R9V; Thu, 10 Oct 2024 16:14:25 +0000 (UTC)
+ id E3f8lgVT8i8i; Thu, 10 Oct 2024 16:32:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D08D81EA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21B4A81EBA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D08D81EA1;
-	Thu, 10 Oct 2024 16:14:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1256A1BF4D6
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 16:14:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 21B4A81EBA;
+	Thu, 10 Oct 2024 16:32:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C572A1BF4D6
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 16:32:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 01D9560ACD
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 16:14:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B4A9B81EBA
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 16:32:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qe7AKVBlErAP for <buildroot@lists.busybox.net>;
- Thu, 10 Oct 2024 16:14:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eWm97_3am--0 for <buildroot@lists.busybox.net>;
+ Thu, 10 Oct 2024 16:32:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52a; helo=mail-ed1-x52a.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D059160A5C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D059160A5C
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
- [IPv6:2a00:1450:4864:20::52a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D059160A5C
- for <buildroot@buildroot.org>; Thu, 10 Oct 2024 16:14:22 +0000 (UTC)
-Received: by mail-ed1-x52a.google.com with SMTP id
- 4fb4d7f45d1cf-5c8784e3bc8so1449605a12.1
- for <buildroot@buildroot.org>; Thu, 10 Oct 2024 09:14:22 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 98AAC81EB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98AAC81EB9
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 98AAC81EB9
+ for <buildroot@busybox.net>; Thu, 10 Oct 2024 16:32:37 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-43115887867so7784955e9.0
+ for <buildroot@busybox.net>; Thu, 10 Oct 2024 09:32:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728576861; x=1729181661;
+ d=1e100.net; s=20230601; t=1728577955; x=1729182755;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=WUaym54IcjC0slLJj7vKP2n0+6iO4uePffrapvniNzU=;
- b=TkrTu+n12czOH/djwl5IDAUx3dyvj3Xe0MXwP2xmWEJrFx9gdRak/iDFgOZV7oYmY4
- 2wDR6nXkGbVB+oATuC6Xmh6CZXOgGyaKcn/qHaXetLzPYJX9B5qbDoR5TUMxhHWZ0Tgq
- RBLdYFnvfv/7/jOjCfeVYKORuqtPYwd3hfYwzQbPN7I4jk5xW9XrqO09sWabTIRcl5bD
- CuWpmqty/Njbac+58yn6q3+wirdlYMTqNn+hNMPgjHLcMokfBYlQEEALGqG1R4At9Tvr
- HKz+zt/xLKQvkvmwOhyPJLEfp2fSQR9LgZhEbVy2JUqR9Kgn3/E7Vv/OkwepuossPz1i
- xmZA==
-X-Gm-Message-State: AOJu0YyiiebxzmBYVuqw4WYv+Fh/a5tVP61B8IBG4PVlSWS9+oq8kD1u
- GCs4yddy5ATYFgG1asLEI27GnuQdAYNH3ey1ADjY+tpMzKou9E4O2kni2sygbq2nL+/nFAWNlol
- OFVU=
-X-Google-Smtp-Source: AGHT+IHT2+uXELbIAzOld7GGYpK8OSMakB0fjpORuDYSBWC29JPGR0Kewb5lZPOIu6JuaCRlTc/AAg==
-X-Received: by 2002:a05:6402:34c2:b0:5c5:cd86:4967 with SMTP id
- 4fb4d7f45d1cf-5c931f41662mr3168946a12.0.1728576860693; 
- Thu, 10 Oct 2024 09:14:20 -0700 (PDT)
-Received: from localhost.localdomain ([2001:b07:6474:ebbf:a293:3a9f:6dc0:1d29])
+ bh=/hUhWVEbIhZrHc+RfxW0hLoKwmjQS/fg0VCKLLBALqE=;
+ b=oYZrN1oQAuh2nlDmGTP5c7s/JmILRJARjufrOPCR2a9u70Rd3emrfLW7TE0vqDk1vU
+ wXCCbiAdcIWuAAUBf2bpytKh2ghKdmb5sFhCt0EV0JsNH8Z93uIBsKMQfnFxOcHMMkqv
+ PykWO44bhrMQMTRVschxItyGpkCl3iKCEU7Ys6z/Rcs6VpslJJilb8NesYbNnszp3lEI
+ +JOVy7mSihdUXf/DaaY5PYx6NSKnn3J82fOWEBLxNJX7zUiDemWaOUiWvdauQXJ4GkpM
+ Ej03K89MlMq4+oMhTsfWQXGGGiHc2oO6BiyVLjsUQBNjDabhnWSTdlcVc8m38UDd2TpH
+ wcfw==
+X-Gm-Message-State: AOJu0YyBqUs0otb7L4LIgrN6KUPfi482Dkj2e1SOuSYMQ/fWLnTJRf6B
+ 39hafrtWWJb+SpM64ldkU7ez2mX0YcTTLQ9HUSm1rBdnOH9O92eQIjh179PSmHqbsqXylAhOxKH
+ KFA==
+X-Google-Smtp-Source: AGHT+IGQHlNpnB4W1IF0IhYJWw8Cg5KmUkVSiQwFcI2TGS4xwtLQYM7VmyBjiOsaHP0TEVdm0HktIg==
+X-Received: by 2002:a05:600c:3106:b0:431:136b:8bef with SMTP id
+ 5b1f17b1804b1-43115aa52a6mr35765755e9.7.1728577955309; 
+ Thu, 10 Oct 2024 09:32:35 -0700 (PDT)
+Received: from vm-2404.. (206.34.66.37.rev.sfr.net. [37.66.34.206])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5c9372608f4sm946018a12.70.2024.10.10.09.14.19
+ ffacd0b85a97d-37d4b6a8a5asm1940259f8f.12.2024.10.10.09.32.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 10 Oct 2024 09:14:20 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Thu, 10 Oct 2024 18:14:18 +0200
-Message-ID: <20241010161418.3597104-1-dario.binacchi@amarulasolutions.com>
+ Thu, 10 Oct 2024 09:32:34 -0700 (PDT)
+From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Thu, 10 Oct 2024 18:31:59 +0200
+Message-ID: <20241010163200.249090-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1728576861; x=1729181661;
- darn=buildroot.org; 
+ d=gadz.org; s=google; t=1728577955; x=1729182755; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=WUaym54IcjC0slLJj7vKP2n0+6iO4uePffrapvniNzU=;
- b=GSWm7c6iXwqGN6l1XkkIapH9WWluoTTzxEsfWKZpd8ugIY4DOgQcH0CEL0g0qnUwI/
- oDK0ciR8YeRVIfMiNZY9QM/ugQMFirnqu2GGY01Ne4WDXVuj1HBsYxbNqPxA556lXB6Z
- zZakHXCKT02XcIN3GrpA7fyYPLQRjitMEmW8Q=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=/hUhWVEbIhZrHc+RfxW0hLoKwmjQS/fg0VCKLLBALqE=;
+ b=e6BvssoXyA76tIO3qnSNWxXqrhm1ivGJJEyzWxK6ytFkXY/oAG7rWmww10JpB6PSJe
+ GC3ek55qYvqEedNt4sBLYhT5rAbjWgSDMUiWzfcMMkRI5O3ULqsuwK6nf1eksPNlezK8
+ ybIhAYLPHFPMV5ucRTM8gPRZbdtm7gyVjWrrI2f5ZIWHroI4P8To4y/c7d8Fc9GEcl7J
+ wRzroJnoW0jJDzSuxqU/eaEKUUPaT95ENvE29QRH1L7OnWt42ObEFVTK7HgpYhxbMnaj
+ GxjMzbqO072amuF7lNHHqvIeikmqnN2YrKpddk9S20LlYxzosz/I2g+MUN5C6wAw9Ee3
+ LI6w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=GSWm7c6i
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: bump to version 2024.10
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=e6BvssoX
+Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump Linux
+ and U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,59 +102,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- boot/uboot/Config.in  | 6 +++---
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+now, U-Boot needs gnutls (mkeficapsule)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index dd8069361488..bfe61cd167d6 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -41,7 +41,7 @@ choice
- 	  Select the specific U-Boot version you want to use
- 
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2024.07"
-+	bool "2024.10"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -85,7 +85,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2024.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2024.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-@@ -315,7 +315,7 @@ config BR2_TARGET_UBOOT_USE_BINMAN
- 	help
- 	  Use binman tool for generation and signing of boot images.
- 
--	  https://docs.u-boot.org/en/v2024.07/develop/package/binman.html
-+	  https://docs.u-boot.org/en/v2024.10/develop/package/binman.html
- 
- menu "U-Boot binary format"
- 
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index 0811ed58c46c..af025a583e44 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ board/olimex/a20_olinuxino/patches/linux/linux.hash | 2 +-
+ board/olimex/a20_olinuxino/patches/uboot/uboot.hash | 2 +-
+ configs/olimex_a20_olinuxino_lime2_defconfig        | 5 +++--
+ configs/olimex_a20_olinuxino_lime_defconfig         | 5 +++--
+ 4 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/board/olimex/a20_olinuxino/patches/linux/linux.hash b/board/olimex/a20_olinuxino/patches/linux/linux.hash
+index 8ffd3e4fbc..4769129ac1 100644
+--- a/board/olimex/a20_olinuxino/patches/linux/linux.hash
++++ b/board/olimex/a20_olinuxino/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  b9676828b737e8fb8eaa5198303d35d35e8df019550be153c8a42c99afe0cdd5  linux-6.6.36.tar.xz
++sha256  5fae869d6a24055c16ffc2d92669e3fb2b258e34d36c850bb8cf9def417ecfa0  linux-6.6.54.tar.xz
+diff --git a/board/olimex/a20_olinuxino/patches/uboot/uboot.hash b/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
+index 7269980104..8491435683 100644
+--- a/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
++++ b/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
 -sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
 +sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index 765504d1fa..98879e327a 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -27,7 +27,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.36"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.54"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
+@@ -49,12 +49,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 27cd87d9a1..57caa74a63 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -27,7 +27,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.36"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.54"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
+@@ -49,12 +49,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
 -- 
 2.43.0
 
