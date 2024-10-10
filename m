@@ -1,96 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B5CBCFC5E2
-	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 16:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4802ACFC5EB
+	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 18:25:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1632981EB9;
-	Thu, 10 Oct 2024 16:32:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 06DA74108D;
+	Thu, 10 Oct 2024 18:25:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E3f8lgVT8i8i; Thu, 10 Oct 2024 16:32:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1n6F_h9NfT_y; Thu, 10 Oct 2024 18:25:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21B4A81EBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC68E4027C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21B4A81EBA;
-	Thu, 10 Oct 2024 16:32:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AC68E4027C;
+	Thu, 10 Oct 2024 18:25:16 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C572A1BF4D6
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 16:32:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1C3091BF3CA
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 18:25:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B4A9B81EBA
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 16:32:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0BF5181B8A
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 18:25:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eWm97_3am--0 for <buildroot@lists.busybox.net>;
- Thu, 10 Oct 2024 16:32:38 +0000 (UTC)
+ id Y5c6CJBGXXdc for <buildroot@lists.busybox.net>;
+ Thu, 10 Oct 2024 18:25:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
- envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 98AAC81EB9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98AAC81EB9
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 98AAC81EB9
- for <buildroot@busybox.net>; Thu, 10 Oct 2024 16:32:37 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-43115887867so7784955e9.0
- for <buildroot@busybox.net>; Thu, 10 Oct 2024 09:32:37 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::32f; helo=mail-ot1-x32f.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 12BFA81B83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12BFA81B83
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com
+ [IPv6:2607:f8b0:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 12BFA81B83
+ for <buildroot@buildroot.org>; Thu, 10 Oct 2024 18:25:13 +0000 (UTC)
+Received: by mail-ot1-x32f.google.com with SMTP id
+ 46e09a7af769-716a5c58506so341626a34.2
+ for <buildroot@buildroot.org>; Thu, 10 Oct 2024 11:25:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728577955; x=1729182755;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1728584713; x=1729189513;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=/hUhWVEbIhZrHc+RfxW0hLoKwmjQS/fg0VCKLLBALqE=;
- b=oYZrN1oQAuh2nlDmGTP5c7s/JmILRJARjufrOPCR2a9u70Rd3emrfLW7TE0vqDk1vU
- wXCCbiAdcIWuAAUBf2bpytKh2ghKdmb5sFhCt0EV0JsNH8Z93uIBsKMQfnFxOcHMMkqv
- PykWO44bhrMQMTRVschxItyGpkCl3iKCEU7Ys6z/Rcs6VpslJJilb8NesYbNnszp3lEI
- +JOVy7mSihdUXf/DaaY5PYx6NSKnn3J82fOWEBLxNJX7zUiDemWaOUiWvdauQXJ4GkpM
- Ej03K89MlMq4+oMhTsfWQXGGGiHc2oO6BiyVLjsUQBNjDabhnWSTdlcVc8m38UDd2TpH
- wcfw==
-X-Gm-Message-State: AOJu0YyBqUs0otb7L4LIgrN6KUPfi482Dkj2e1SOuSYMQ/fWLnTJRf6B
- 39hafrtWWJb+SpM64ldkU7ez2mX0YcTTLQ9HUSm1rBdnOH9O92eQIjh179PSmHqbsqXylAhOxKH
- KFA==
-X-Google-Smtp-Source: AGHT+IGQHlNpnB4W1IF0IhYJWw8Cg5KmUkVSiQwFcI2TGS4xwtLQYM7VmyBjiOsaHP0TEVdm0HktIg==
-X-Received: by 2002:a05:600c:3106:b0:431:136b:8bef with SMTP id
- 5b1f17b1804b1-43115aa52a6mr35765755e9.7.1728577955309; 
- Thu, 10 Oct 2024 09:32:35 -0700 (PDT)
-Received: from vm-2404.. (206.34.66.37.rev.sfr.net. [37.66.34.206])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-37d4b6a8a5asm1940259f8f.12.2024.10.10.09.32.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 10 Oct 2024 09:32:34 -0700 (PDT)
-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Thu, 10 Oct 2024 18:31:59 +0200
-Message-ID: <20241010163200.249090-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.43.0
+ bh=pZfg3RgaqTLU5cmOa66kgQMwUo2ffWKc69M9dyFZMzQ=;
+ b=r2BMWPK5zLODasxsasHbWEmHiTYwNakzIzt+2o0R+erUE79me9XyPHY2oAxS1t4B8E
+ VSvB/m4g8xyJrlS1lBa6CgO1hJhfyHWTD2WIZIrYGTvVSzeibauL6Et10f4gfIHKzOn/
+ Ic1SeVcdY983/fzc+oIzOz4UCvCNCnStMZju+ZBmCwrvAGLYrGMKypWfsiVprnd0op4C
+ ODsO/XTbeaeKUs1kcSUS/v0wXoauD8Rwo6Z2IKSgggbkNvJXhKxdEPoq6Z00sCkFDXF0
+ ott2aJVsWi76joBu6zlxd848NJvG9J7IEXZzCqwh9LNaehFa555XRHLi5LLtk6ucryYg
+ poDQ==
+X-Gm-Message-State: AOJu0YxwSlH9JGIbQ5ASGoJg0Zkanu52XCyvhpwlK6SiC8OtSkCMZtaP
+ 3xOoBydP3B51p/dbWuorlmP7+TDTwLJeG2McbZDxLcj+MTjLy3CrJyGFIklBdbFoI+gV2PVi795
+ a
+X-Google-Smtp-Source: AGHT+IEhdJP4niEP/NaeT8TqCXvfO4vxih3zbuMdop5VpjZLcUW02AWXsaZOpzqZy2PPDIoALLs95A==
+X-Received: by 2002:a05:6830:3152:b0:715:4e38:a1ac with SMTP id
+ 46e09a7af769-717d6487bf5mr43049a34.23.1728584712722; 
+ Thu, 10 Oct 2024 11:25:12 -0700 (PDT)
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com.
+ [209.85.160.44]) by smtp.gmail.com with ESMTPSA id
+ 46e09a7af769-717cfee0bd4sm278032a34.5.2024.10.10.11.25.12
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 10 Oct 2024 11:25:12 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id
+ 586e51a60fabf-287278ec282so422194fac.2
+ for <buildroot@buildroot.org>; Thu, 10 Oct 2024 11:25:12 -0700 (PDT)
+X-Received: by 2002:a05:6870:4514:b0:261:e19:458d with SMTP id
+ 586e51a60fabf-2886dcf7206mr7072fac.4.1728584711779; Thu, 10 Oct 2024 11:25:11
+ -0700 (PDT)
 MIME-Version: 1.0
+References: <20241010132912.3061663-1-fiona.klute@gmx.de>
+In-Reply-To: <20241010132912.3061663-1-fiona.klute@gmx.de>
+Date: Thu, 10 Oct 2024 11:25:01 -0700
+X-Gmail-Original-Message-ID: <CA+h8R2o-RVvZToT597+Fsag3YO2PEiD35_9u7fcpdmu=L0dDdw@mail.gmail.com>
+Message-ID: <CA+h8R2o-RVvZToT597+Fsag3YO2PEiD35_9u7fcpdmu=L0dDdw@mail.gmail.com>
+To: Fiona Klute <fiona.klute@gmx.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1728577955; x=1729182755; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=/hUhWVEbIhZrHc+RfxW0hLoKwmjQS/fg0VCKLLBALqE=;
- b=e6BvssoXyA76tIO3qnSNWxXqrhm1ivGJJEyzWxK6ytFkXY/oAG7rWmww10JpB6PSJe
- GC3ek55qYvqEedNt4sBLYhT5rAbjWgSDMUiWzfcMMkRI5O3ULqsuwK6nf1eksPNlezK8
- ybIhAYLPHFPMV5ucRTM8gPRZbdtm7gyVjWrrI2f5ZIWHroI4P8To4y/c7d8Fc9GEcl7J
- wRzroJnoW0jJDzSuxqU/eaEKUUPaT95ENvE29QRH1L7OnWt42ObEFVTK7HgpYhxbMnaj
- GxjMzbqO072amuF7lNHHqvIeikmqnN2YrKpddk9S20LlYxzosz/I2g+MUN5C6wAw9Ee3
- LI6w==
+ d=aperture.us; s=google; t=1728584713; x=1729189513; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=pZfg3RgaqTLU5cmOa66kgQMwUo2ffWKc69M9dyFZMzQ=;
+ b=dYPUCAYbs3kPgzRg9BrZv56Mv+TS2zOhJnFDDydj+en8G4I77YQqD+E9g3ReyR48g0
+ dSdl1ujzyUCoeyZ/yUEfA8UW3ILI4YnM0nq//jwpeAqibtggwK/J54OwJvPiiaXJsSKA
+ ZFdCk6lcxpjcpDTPhjymzwdPJUK/GueDXUYjL+Y5YPp4ynPCRF8N8v9aa7erL0pAs1Eh
+ jdJzH7r8AqUQ1olxyaHdzX8a6yHVl9DdJoqNDilLpUuPwsKiTXxR36vvQiJXgCZmblT6
+ Mie3GPEkKEuIN1/cvL5DdQtET3Hg6WvgURIslwTqzKxsSIrnK+2APPVd+w1RI9PuRgSd
+ LEHw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gadz.org
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
- header.s=google header.b=e6BvssoX
-Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump Linux
- and U-Boot
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=dYPUCAYb
+Subject: Re: [Buildroot] [PATCH 1/2] package/tini: restore use as docker-init
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,97 +109,134 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============1740663110700277623=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-now, U-Boot needs gnutls (mkeficapsule)
+--===============1740663110700277623==
+Content-Type: multipart/alternative; boundary="000000000000b5d2e60624237d9c"
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- board/olimex/a20_olinuxino/patches/linux/linux.hash | 2 +-
- board/olimex/a20_olinuxino/patches/uboot/uboot.hash | 2 +-
- configs/olimex_a20_olinuxino_lime2_defconfig        | 5 +++--
- configs/olimex_a20_olinuxino_lime_defconfig         | 5 +++--
- 4 files changed, 8 insertions(+), 6 deletions(-)
+--000000000000b5d2e60624237d9c
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/board/olimex/a20_olinuxino/patches/linux/linux.hash b/board/olimex/a20_olinuxino/patches/linux/linux.hash
-index 8ffd3e4fbc..4769129ac1 100644
---- a/board/olimex/a20_olinuxino/patches/linux/linux.hash
-+++ b/board/olimex/a20_olinuxino/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  b9676828b737e8fb8eaa5198303d35d35e8df019550be153c8a42c99afe0cdd5  linux-6.6.36.tar.xz
-+sha256  5fae869d6a24055c16ffc2d92669e3fb2b258e34d36c850bb8cf9def417ecfa0  linux-6.6.54.tar.xz
-diff --git a/board/olimex/a20_olinuxino/patches/uboot/uboot.hash b/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
-index 7269980104..8491435683 100644
---- a/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
-+++ b/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
-+sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index 765504d1fa..98879e327a 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -27,7 +27,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.36"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.54"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
-@@ -49,12 +49,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 27cd87d9a1..57caa74a63 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -27,7 +27,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.36"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.54"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
-@@ -49,12 +49,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
--- 
-2.43.0
+Hi all,
+
+On Thu, Oct 10, 2024, 6:29=E2=80=AFAM Fiona Klute <fiona.klute@gmx.de> wrot=
+e:
+
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+>
+> Commit 24cac9c4e6a36fd14b263a8eecf7ae7d58ab5a59 "system: add tini as
+> init system" made BR2_PACKAGE_TINI depend on BR2_INIT_TINI. This is
+> incorrect: tini is not only needed when building a container image
+> using Buildroot, but also to run Docker containers on Buildroot
+> systems using another another init system, if Docker is configured to
+> provide an init process for the container (e.g. with "docker run
+> --init"). The tini package already provides the "docker-init" symlink
+> required for that.
+>
+> Example error without tini installed:
+>
+> $ docker run --rm -ti --init alpine
+> docker: Error response from daemon: exec: "docker-init": executable file
+> not found in $PATH.
+>
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+> ---
+>  package/tini/Config.in | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/package/tini/Config.in b/package/tini/Config.in
+> index bca8ad8e96..719e1e1f22 100644
+> --- a/package/tini/Config.in
+> +++ b/package/tini/Config.in
+> @@ -1,7 +1,6 @@
+>  config BR2_PACKAGE_TINI
+>         bool "tini"
+>         depends on BR2_USE_MMU # fork()
+> -       depends on BR2_INIT_TINI
+>         help
+>           tini is a simple but valid init binary to
+>           act as PID 1 for containers.
+>
+
+Agreed
+
+Reviewed-by: Christian Stewart <christian@aperture.us>
+
+Best regards,
+Christian
+
+--000000000000b5d2e60624237d9c
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto"><div>Hi all,<br><br><div class=3D"gmail_quote"><div dir=
+=3D"ltr" class=3D"gmail_attr">On Thu, Oct 10, 2024, 6:29=E2=80=AFAM Fiona K=
+lute &lt;<a href=3D"mailto:fiona.klute@gmx.de">fiona.klute@gmx.de</a>&gt; w=
+rote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex=
+;border-left:1px #ccc solid;padding-left:1ex">From: &quot;Fiona Klute (WIWA=
+)&quot; &lt;<a href=3D"mailto:fiona.klute@gmx.de" target=3D"_blank" rel=3D"=
+noreferrer">fiona.klute@gmx.de</a>&gt;<br>
+<br>
+Commit 24cac9c4e6a36fd14b263a8eecf7ae7d58ab5a59 &quot;system: add tini as<b=
+r>
+init system&quot; made BR2_PACKAGE_TINI depend on BR2_INIT_TINI. This is<br=
+>
+incorrect: tini is not only needed when building a container image<br>
+using Buildroot, but also to run Docker containers on Buildroot<br>
+systems using another another init system, if Docker is configured to<br>
+provide an init process for the container (e.g. with &quot;docker run<br>
+--init&quot;). The tini package already provides the &quot;docker-init&quot=
+; symlink<br>
+required for that.<br>
+<br>
+Example error without tini installed:<br>
+<br>
+$ docker run --rm -ti --init alpine<br>
+docker: Error response from daemon: exec: &quot;docker-init&quot;: executab=
+le file not found in $PATH.<br>
+<br>
+Signed-off-by: Fiona Klute (WIWA) &lt;<a href=3D"mailto:fiona.klute@gmx.de"=
+ target=3D"_blank" rel=3D"noreferrer">fiona.klute@gmx.de</a>&gt;<br>
+---<br>
+=C2=A0package/tini/Config.in | 1 -<br>
+=C2=A01 file changed, 1 deletion(-)<br>
+<br>
+diff --git a/package/tini/Config.in b/package/tini/Config.in<br>
+index bca8ad8e96..719e1e1f22 100644<br>
+--- a/package/tini/Config.in<br>
++++ b/package/tini/Config.in<br>
+@@ -1,7 +1,6 @@<br>
+=C2=A0config BR2_PACKAGE_TINI<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 bool &quot;tini&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 depends on BR2_USE_MMU # fork()<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_INIT_TINI<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 help<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 tini is a simple but valid init binary t=
+o<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 act as PID 1 for containers.<br></blockq=
+uote></div></div><div dir=3D"auto"><br></div><div dir=3D"auto">Agreed</div>=
+<div dir=3D"auto"><br></div><div dir=3D"auto">Reviewed-by: Christian Stewar=
+t &lt;<a href=3D"mailto:christian@aperture.us">christian@aperture.us</a>&gt=
+;</div><div dir=3D"auto"><br></div><div dir=3D"auto">Best regards,</div><di=
+v dir=3D"auto">Christian</div></div>
+
+--000000000000b5d2e60624237d9c--
+
+--===============1740663110700277623==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1740663110700277623==--
