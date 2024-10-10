@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0334D24454
-	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:32:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02635D24454
+	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 21:32:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE2F24136B;
-	Thu, 10 Oct 2024 21:32:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C55C6413A2;
+	Thu, 10 Oct 2024 21:32:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UNAD0ykjHqia; Thu, 10 Oct 2024 21:32:35 +0000 (UTC)
+ id ARCQb5ThC2m4; Thu, 10 Oct 2024 21:32:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79CDA41588
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F8E4412E2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 79CDA41588;
-	Thu, 10 Oct 2024 21:32:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0F8E4412E2;
+	Thu, 10 Oct 2024 21:32:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0870D1BF3C3
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0640C1BF3C3
+ for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5FB2F404F0
+ by smtp2.osuosl.org (Postfix) with ESMTP id B7D51412E1
  for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 21:30:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Do_udPXzp_1Z for <buildroot@lists.busybox.net>;
+ id JH8FgDZi5gYA for <buildroot@lists.busybox.net>;
  Thu, 10 Oct 2024 21:30:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A681A412E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A10C412E2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A681A412E6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7A10C412E2
  for <buildroot@buildroot.org>; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A076285C59; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
+ id 744F585C59; Thu, 10 Oct 2024 21:30:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Oct 2024 23:18:38 +0200
+Date: Thu, 10 Oct 2024 23:18:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ace041182c979dc4b0d25eb7925e7f224f76296b
-X-Git-Newrev: 5d2e126decfb6be0af46630d203f71845428a14e
+X-Git-Oldrev: 42f12ec0775333ef9e033de7e89963ee9fe8f8dc
+X-Git-Newrev: 3d210e30c3a9f52065e2d614aea1e820558f253f
 X-Patchwork-Hint: ignore
-Message-Id: <20241010213043.A076285C59@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-webargs: bump to version
- 8.6.0
+Message-Id: <20241010213043.744F585C59@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-types-python-dateutil: bump
+ to version 2.9.0.20241003
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,52 +66,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d2e126decfb6be0af46630d203f71845428a14e
+commit: https://git.buildroot.net/buildroot/commit/?id=3d210e30c3a9f52065e2d614aea1e820558f253f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Migrate from setuptools to flit build backend.
-
-License hash changed due to year removal:
-https://github.com/marshmallow-code/webargs/commit/0917b88a60385cb12a9fa543ca5b7f6a0d6bb336
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-webargs/python-webargs.hash | 6 +++---
- package/python-webargs/python-webargs.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../python-types-python-dateutil/python-types-python-dateutil.hash    | 4 ++--
+ package/python-types-python-dateutil/python-types-python-dateutil.mk  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-webargs/python-webargs.hash b/package/python-webargs/python-webargs.hash
-index 10bb3651f0..3416a441dd 100644
---- a/package/python-webargs/python-webargs.hash
-+++ b/package/python-webargs/python-webargs.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/webargs/json
--md5  9fff29294a5db748eca791da2b93e370  webargs-8.2.0.tar.gz
--sha256  99d68940c452e07726485a15fef43f12f8ae6c0c5b391bcba76065d4527fb85d  webargs-8.2.0.tar.gz
-+md5  bb65a1f2964f24f77650b8a14ddfbdb1  webargs-8.6.0.tar.gz
-+sha256  b8d098ab92bd74c659eca705afa31d681475f218cb15c1e57271fa2103c0547a  webargs-8.6.0.tar.gz
- # Locally computed sha256 checksums
--sha256  5973e5dcc20b65e4eb4b4acdf273bb78a18522914ab626f496f1b070f7e6294d  LICENSE
-+sha256  906b5d9051e426144cb173ad911667b8ebd05a9c584c2c26c135b32a3ed12001  LICENSE
-diff --git a/package/python-webargs/python-webargs.mk b/package/python-webargs/python-webargs.mk
-index ce270842c1..9edca07a15 100644
---- a/package/python-webargs/python-webargs.mk
-+++ b/package/python-webargs/python-webargs.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/python-types-python-dateutil/python-types-python-dateutil.hash b/package/python-types-python-dateutil/python-types-python-dateutil.hash
+index 4a2dcec502..6143f7bb2d 100644
+--- a/package/python-types-python-dateutil/python-types-python-dateutil.hash
++++ b/package/python-types-python-dateutil/python-types-python-dateutil.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/types-python-dateutil/json
+-md5  0d91422e92000e77d633a8adff3039e7  types-python-dateutil-2.9.0.20240906.tar.gz
+-sha256  9706c3b68284c25adffc47319ecc7947e5bb86b3773f843c73906fd598bc176e  types-python-dateutil-2.9.0.20240906.tar.gz
++md5  986aa3f3706c4b38dfcd141572a4f515  types-python-dateutil-2.9.0.20241003.tar.gz
++sha256  58cb85449b2a56d6684e41aeefb4c4280631246a0da1a719bdbe6f3fb0317446  types-python-dateutil-2.9.0.20241003.tar.gz
+diff --git a/package/python-types-python-dateutil/python-types-python-dateutil.mk b/package/python-types-python-dateutil/python-types-python-dateutil.mk
+index c210d71b0c..53d16de74c 100644
+--- a/package/python-types-python-dateutil/python-types-python-dateutil.mk
++++ b/package/python-types-python-dateutil/python-types-python-dateutil.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WEBARGS_VERSION = 8.2.0
-+PYTHON_WEBARGS_VERSION = 8.6.0
- PYTHON_WEBARGS_SOURCE = webargs-$(PYTHON_WEBARGS_VERSION).tar.gz
--PYTHON_WEBARGS_SITE = https://files.pythonhosted.org/packages/4b/7d/fece8e6547b3edde8953b1c84a63da02e1a88efcb9d7d485e4d1b25d9c47
--PYTHON_WEBARGS_SETUP_TYPE = setuptools
-+PYTHON_WEBARGS_SITE = https://files.pythonhosted.org/packages/8c/51/e9ee5d8315864adf65e92f858f826514538e30db542d4782dd94c2418464
-+PYTHON_WEBARGS_SETUP_TYPE = flit
- PYTHON_WEBARGS_LICENSE = MIT
- PYTHON_WEBARGS_LICENSE_FILES = LICENSE
- PYTHON_WEBARGS_CPE_ID_VENDOR = webargs_project
+-PYTHON_TYPES_PYTHON_DATEUTIL_VERSION = 2.9.0.20240906
++PYTHON_TYPES_PYTHON_DATEUTIL_VERSION = 2.9.0.20241003
+ PYTHON_TYPES_PYTHON_DATEUTIL_SOURCE = types-python-dateutil-$(PYTHON_TYPES_PYTHON_DATEUTIL_VERSION).tar.gz
+-PYTHON_TYPES_PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/3e/d9/9c9ec2d870af7aa9b722ce4fd5890bb55b1d18898df7f1d069cab194bb2a
++PYTHON_TYPES_PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/31/f8/f6ee4c803a7beccffee21bb29a71573b39f7037c224843eff53e5308c16e
+ PYTHON_TYPES_PYTHON_DATEUTIL_SETUP_TYPE = setuptools
+ PYTHON_TYPES_PYTHON_DATEUTIL_LICENSE = Apache-2.0
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
