@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0B3CD0D78D
-	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 13:07:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11EDFD0D78D
+	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 13:07:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 662326119C;
-	Fri, 11 Oct 2024 13:07:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D2D2561189;
+	Fri, 11 Oct 2024 13:07:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gsafe3fT3iMi; Fri, 11 Oct 2024 13:07:24 +0000 (UTC)
+ id nyWsSk5HCbb2; Fri, 11 Oct 2024 13:07:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BC0C611A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AD8061187
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BC0C611A1;
-	Fri, 11 Oct 2024 13:07:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8E3DF1BF859
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3AD8061187;
+	Fri, 11 Oct 2024 13:07:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A3ACA1BF997
  for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 13:07:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8A9D86117E
+ by smtp2.osuosl.org (Postfix) with ESMTP id A04F9404FE
  for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 13:07:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vUMQ3Hk9P8s6 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Sm9FahLK2zzX for <buildroot@lists.busybox.net>;
  Fri, 11 Oct 2024 13:07:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABCB860D77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E61B400D1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABCB860D77
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E61B400D1
  for <buildroot@buildroot.org>; Fri, 11 Oct 2024 13:07:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 98DB185D60; Fri, 11 Oct 2024 13:07:19 +0000 (UTC)
+ id 5749F85D62; Fri, 11 Oct 2024 13:07:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Oct 2024 15:00:51 +0200
+Date: Fri, 11 Oct 2024 14:52:21 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: e4990b58c94ef6262b00c33f7f071d594c3d7dd3
-X-Git-Newrev: 15e4ee06c3d56bceb961ac4800c67301827bc170
+X-Git-Oldrev: 11d52d7e4d65704c87c6e85b31341ed2a6320f73
+X-Git-Newrev: d8210fd0eb28124409acef80f1b2333876660b71
 X-Patchwork-Hint: ignore
-Message-Id: <20241011130719.98DB185D60@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] utils/check-package:
- require exactly 1 TAB and 2 SP on help text 1st line
+Message-Id: <20241011130719.5749F85D62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/ffmpeg: fix build
+ error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,54 +65,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15e4ee06c3d56bceb961ac4800c67301827bc170
+commit: https://git.buildroot.net/buildroot/commit/?id=d8210fd0eb28124409acef80f1b2333876660b71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Test that the first line starts exactly with one TAB and exactly two
-spaces before the text.
+ffmpeg builds with `--enable-vaapi` opt made GCC v14 and 32 bit target
+will throw an 'Wincompatible-pointer-types' error.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+This is a downport of an upstreamed commit but not yet present in any
+ffmpeg version that fix the pointer type.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f5f/f5f2d16226ad9500ecf046779d5282ee071a54d3/
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f9e6d39e8e0615d3a71ea1aef9d0d1e206f4c42c)
+(cherry picked from commit 24fc2f9d177b897f0c204f2c6611e6a3ed306a3d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/checkpackagelib/lib_config.py | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ ...util-hwcontext-vaapi-use-the-correct-type.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index f26ca0d898..bf975d7a3b 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -154,6 +154,7 @@ class CommentsMenusPackagesOrder(_CheckFunction):
- 
- class HelpText(_CheckFunction):
-     HELP_TEXT_FORMAT = re.compile(r"^\t  .{,62}$")
-+    HELP_TEXT_FORMAT_1 = re.compile(r"^\t  \S.{,61}$")
-     URL_ONLY = re.compile(r"^(http|https|git)://\S*$")
- 
-     def before(self):
-@@ -170,12 +171,18 @@ class HelpText(_CheckFunction):
-             return
-         if text.strip() == "help":
-             self.help_text = True
-+            self.help_first_line = True
-             return
- 
-         if not self.help_text:
-             return
- 
--        if self.HELP_TEXT_FORMAT.match(text.rstrip()):
-+        if self.help_first_line:
-+            help_text_match = self.HELP_TEXT_FORMAT_1
-+            self.help_first_line = False
-+        else:
-+            help_text_match = self.HELP_TEXT_FORMAT
-+        if help_text_match.match(text.rstrip()):
-             return
-         if self.URL_ONLY.match(text.strip()):
-             return
+diff --git a/package/ffmpeg/0007-avutil-hwcontext-vaapi-use-the-correct-type.patch b/package/ffmpeg/0007-avutil-hwcontext-vaapi-use-the-correct-type.patch
+new file mode 100644
+index 0000000000..177b4f1885
+--- /dev/null
++++ b/package/ffmpeg/0007-avutil-hwcontext-vaapi-use-the-correct-type.patch
+@@ -0,0 +1,28 @@
++From 6f8e365a2af2b6b21701d41eed3b2e3f8a436eeb Mon Sep 17 00:00:00 2001
++From: James Almer <jamrial@gmail.com>
++Date: Wed, 31 Jul 2024 10:00:54 -0300
++Subject: [PATCH] avutil/hwcontext_vaapi: use the correct type for
++ VASurfaceAttribExternalBuffers.buffers
++
++Should fix ticket #11115.
++
++Signed-off-by: James Almer <jamrial@gmail.com>
++Upstream: https://git.ffmpeg.org/gitweb/ffmpeg.git/commit/6f8e365a2af2b6b21701d41eed3b2e3f8a436eeb
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ libavutil/hwcontext_vaapi.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libavutil/hwcontext_vaapi.c b/libavutil/hwcontext_vaapi.c
++index 4cb25dd03212e..15fd84aa40679 100644
++--- a/libavutil/hwcontext_vaapi.c
+++++ b/libavutil/hwcontext_vaapi.c
++@@ -1225,7 +1225,7 @@ static int vaapi_map_from_drm(AVHWFramesContext *src_fc, AVFrame *dst,
++ 
++     if (!use_prime2 || vas != VA_STATUS_SUCCESS) {
++         int k;
++-        unsigned long buffer_handle;
+++        uintptr_t buffer_handle;
++         VASurfaceAttribExternalBuffers buffer_desc;
++         VASurfaceAttrib buffer_attrs[2] = {
++             {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
