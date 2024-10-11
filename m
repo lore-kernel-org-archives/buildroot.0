@@ -4,92 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 400AED0EE19
-	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 17:39:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2A96D24470
+	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 17:43:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ECEB460A83;
-	Fri, 11 Oct 2024 17:39:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6C1C60A83;
+	Fri, 11 Oct 2024 17:43:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R6ZYpou2wpGb; Fri, 11 Oct 2024 17:39:18 +0000 (UTC)
+ id qmnWGyN3UIkb; Fri, 11 Oct 2024 17:43:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC12F60A88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF43B607CA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC12F60A88;
-	Fri, 11 Oct 2024 17:39:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4E6821BF37C
- for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 17:39:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF43B607CA;
+	Fri, 11 Oct 2024 17:43:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E6D21BF37C
+ for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 17:43:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 49B0140721
- for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 17:39:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D7C7607CA
+ for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 17:43:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Edb8COjOfDii for <buildroot@lists.busybox.net>;
- Fri, 11 Oct 2024 17:39:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id utbWbMKGg_AE for <buildroot@lists.busybox.net>;
+ Fri, 11 Oct 2024 17:43:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12c; helo=mail-il1-x12c.google.com;
+ client-ip=2607:f8b0:4864:20::d2c; helo=mail-io1-xd2c.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0A44340712
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A44340712
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
- [IPv6:2607:f8b0:4864:20::12c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0A44340712
- for <buildroot@buildroot.org>; Fri, 11 Oct 2024 17:39:14 +0000 (UTC)
-Received: by mail-il1-x12c.google.com with SMTP id
- e9e14a558f8ab-3a3b463e9b0so4440815ab.3
- for <buildroot@buildroot.org>; Fri, 11 Oct 2024 10:39:14 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2112260590
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2112260590
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
+ [IPv6:2607:f8b0:4864:20::d2c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2112260590
+ for <buildroot@buildroot.org>; Fri, 11 Oct 2024 17:43:34 +0000 (UTC)
+Received: by mail-io1-xd2c.google.com with SMTP id
+ ca18e2360f4ac-8323b555a6aso127794339f.3
+ for <buildroot@buildroot.org>; Fri, 11 Oct 2024 10:43:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728668353; x=1729273153;
+ d=1e100.net; s=20230601; t=1728668614; x=1729273414;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=zFI5hVfvB+dFWOvIGQnOyErD3B1d9cmfyebJjQindgc=;
- b=LVKN0cERYjAcLgxBg/1RXHoxC7jfEIcXOJBovhivb2JTcoMey6asvUzxNVFrQCjO1L
- 0zCr5qty706+Nz9Qt1qOZkskAcOHkEz4QlG4hJfJQtbA9BgxXm6rgdwBs2Jq15hiXsro
- P8F1st06P2HUoWSa2tuYr2hUa965UK3fzFR2Fh1q8zwg0NO5j/F7UcS7SkV42JMXEP+Q
- 0MEGpA1cp2Aa7s1WncvjmPgNCN8xG592mxdlv3nW4sLvcZ/b9BCVtrcXPoujgNeoxcQA
- DjkDxm0HmsH4nMkF5vh228Zq0Y8LTvpvOgHibppzv28ANKdmPyrVflboI82ClfZF84De
- DMbw==
-X-Gm-Message-State: AOJu0YwoQPAbwqDU9EeOapsOzfx1UnDFejW6hWoxXeMIJCqqA6uXb4O+
- VhLxfLoywqd7f7JIDW8OmlG82jgTuXAWYnYBO2RYLCbsEwGDgdxzClnaSx2N
-X-Google-Smtp-Source: AGHT+IHjNSbdBxNBeSBzgdniHAYGh4KbGUtpkdg3gphPEP/9h2BVbHrD23SU2oS0/oHHCfms0QA6qA==
-X-Received: by 2002:a05:6e02:1d83:b0:3a3:b45b:a8cc with SMTP id
- e9e14a558f8ab-3a3b5f8060cmr24959225ab.15.1728668353037; 
- Fri, 11 Oct 2024 10:39:13 -0700 (PDT)
+ bh=BSe1UO5KkFgBSHYt5aXKsGT0yt9Pi8uIcc8ks2Bf53M=;
+ b=lEh4g53eyBtlqlZQ/qkmErKeoJPDMs7CFmTBa4RJ9+Jr2chRzQ1bYL3aUD7RsRUuuz
+ 96ci/I/NKVRLraB2V8590t9bzNRuTcYgnYQkqA6TZxbLnI1tOfR3KkxsBibUm6ReYHVT
+ dthKeonjllFFeT9M2iQc+pijFITMuKa9d45oAJha5pr6/sdOV0N2dvRgJl/cnxoV0w/O
+ rHPKYVaDva2q9k+B5+vJK25rrDI8ixvfPbxv75ykgTnc90HFz6Pvgcgsiv80XOlgp9SD
+ xsu3CkxREtuf+BSwqO289jaJ/4KcrbBwweSDVuzR9HvTL1w+pXdiO3LVHF2Kf+PnqzaW
+ PkDQ==
+X-Gm-Message-State: AOJu0YwsbCHq2G2G1ZsfFeEuFwZZwSCkVM21U40pFaz4L39w1lp+50ax
+ opMkepdWNZwK4StxW+PaRBjQS1XSg3q54x/jb9JaJ7wic4KNSVe2aXTOVy4I
+X-Google-Smtp-Source: AGHT+IFM/so2ag0NDCtXwQqoKEpUlunTPKv02KwG4E/stZb+GuppsCoVY2CDjz3Ky+bp6Xh58kzl/g==
+X-Received: by 2002:a05:6602:1489:b0:835:4d07:9d46 with SMTP id
+ ca18e2360f4ac-8379531e3f3mr365365639f.15.1728668613691; 
+ Fri, 11 Oct 2024 10:43:33 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-159-223.hlrn.qwest.net.
  [71.33.159.223]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4dbadaeb4b7sm710283173.170.2024.10.11.10.39.12
+ 8926c6da1cb9f-4dbad8d713csm731762173.0.2024.10.11.10.43.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Oct 2024 10:39:12 -0700 (PDT)
+ Fri, 11 Oct 2024 10:43:33 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Oct 2024 11:39:10 -0600
-Message-Id: <20241011173910.2761227-1-james.hilliard1@gmail.com>
+Date: Fri, 11 Oct 2024 11:43:31 -0600
+Message-Id: <20241011174331.2762999-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1728668353; x=1729273153; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1728668614; x=1729273414; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zFI5hVfvB+dFWOvIGQnOyErD3B1d9cmfyebJjQindgc=;
- b=DQlnpqxlyewq3qM0GCq+g4eZmUFx/bI0s4KBzT35XlFqsTPvObqdskQBGnv6FxNwnf
- fA4ZS/mGxOmGU0H6ZuBr+btcqh//w+u/tVdY38yEexPMta9PtpLM1qHazUo7EGfWFiCO
- Mlky7GAYdH/EynNxfNaTTyyua8AC4UBKzda5BaOR9kukWFwCkb9sVAWmkhWm0QADXzRA
- PVx1ar3cf9Li0OQUJn4biTRoNmbq7SmkjpkFg5lfT4946lFLO4uehjPwQ8vz3ynH0/Z/
- o/KYNpUmuRx759qYPksixq+x92pRXr/HNsCG1uYZZfDbQ6io2o1wxYmcIJf97+/qRgGc
- 8LLg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=BSe1UO5KkFgBSHYt5aXKsGT0yt9Pi8uIcc8ks2Bf53M=;
+ b=mvYRH8DcgTW2vT5p7jO/+XOHZi8vfT3Ne+gEGBhS1Q5UKXzCLdl3UB+TzH2GlLuyZd
+ a6IBYVAWt9ALea1YrRh+CKqzCKevQLV5Jyp9lX+FJBc5arJn40e/zA/hKyytXNztooN6
+ 6zSbIcZtBrlGIu5NtPrmQ0yC0/1U5CO3xAUjBJff7JgPiHf6YdKe6GLZYvZGAVOKNKSv
+ sSGDkktMMqDxJAVxBqdf24ReX4uH2Q6dTvC52idyCyFSuIu3lyJR+xrKJLF870msGY1N
+ VgJ2IX1svlhnnPOR/9xuEY5ymJLtxWS4MLaRoYncnhdz8QMWrXBiKkUSXbLnkTK8286D
+ bTYQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=DQlnpqxl
-Subject: [Buildroot] [PATCH 1/1] package/python-bitarray: bump to version
- 2.9.3
+ header.s=20230601 header.b=mvYRH8Dc
+Subject: [Buildroot] [PATCH 1/1] package/python-bleak: bump to version 0.22.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,7 +100,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -109,38 +109,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-bitarray/python-bitarray.hash | 4 ++--
- package/python-bitarray/python-bitarray.mk   | 4 ++--
+ package/python-bleak/python-bleak.hash | 4 ++--
+ package/python-bleak/python-bleak.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-bitarray/python-bitarray.hash b/package/python-bitarray/python-bitarray.hash
-index d91a28af20..d5141ec728 100644
---- a/package/python-bitarray/python-bitarray.hash
-+++ b/package/python-bitarray/python-bitarray.hash
+diff --git a/package/python-bleak/python-bleak.hash b/package/python-bleak/python-bleak.hash
+index 577811b60a..2213ec2f70 100644
+--- a/package/python-bleak/python-bleak.hash
++++ b/package/python-bleak/python-bleak.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/bitarray/json
--md5  024324a82314e9e68ecdcdefdc69071f  bitarray-2.9.2.tar.gz
--sha256  a8f286a51a32323715d77755ed959f94bef13972e9a2fe71b609e40e6d27957e  bitarray-2.9.2.tar.gz
-+md5  476b9153ce4842182a5fed2ee0f83280  bitarray-2.9.3.tar.gz
-+sha256  9eff55cf189b0c37ba97156a00d640eb7392db58a8049be6f26ff2712b93fa89  bitarray-2.9.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/bleak/json
+-md5  521fbbba851f4b6e9507ea27d06dc08b  bleak-0.22.2.tar.gz
+-sha256  09010c0f4bd843e7dcaa1652e1bfb2450ce690da08d4c6163f0723aaa986e9fe  bleak-0.22.2.tar.gz
++md5  261eb442ba16707ed00a21265cd337fc  bleak-0.22.3.tar.gz
++sha256  3149c3c19657e457727aa53d9d6aeb89658495822cd240afd8aeca4dd09c045c  bleak-0.22.3.tar.gz
  # Locally computed sha256 checksums
- sha256  6b5e04f6e0462e1b97be833f9d65e66cd5eceb3283f4a6f532261087d0ab1233  LICENSE
-diff --git a/package/python-bitarray/python-bitarray.mk b/package/python-bitarray/python-bitarray.mk
-index f86320c112..a15de6774c 100644
---- a/package/python-bitarray/python-bitarray.mk
-+++ b/package/python-bitarray/python-bitarray.mk
+ sha256  c4029a2b63b3824ab68be841f414addbdde20cb79cdbe272fa80c0b2abe65374  LICENSE
+diff --git a/package/python-bleak/python-bleak.mk b/package/python-bleak/python-bleak.mk
+index 4eabd3df75..5cb42aa2a5 100644
+--- a/package/python-bleak/python-bleak.mk
++++ b/package/python-bleak/python-bleak.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BITARRAY_VERSION = 2.9.2
-+PYTHON_BITARRAY_VERSION = 2.9.3
- PYTHON_BITARRAY_SOURCE = bitarray-$(PYTHON_BITARRAY_VERSION).tar.gz
--PYTHON_BITARRAY_SITE = https://files.pythonhosted.org/packages/c7/bf/25cf92a83e1fe4948d7935ae3c02f4c9ff9cb9c13e977fba8af11a5f642c
-+PYTHON_BITARRAY_SITE = https://files.pythonhosted.org/packages/0d/c7/a85f206e6b2fddb93964efe53685ad8da7d856e6975b005ed6a88f25b010
- PYTHON_BITARRAY_SETUP_TYPE = setuptools
- PYTHON_BITARRAY_LICENSE = Python-2.0
- PYTHON_BITARRAY_LICENSE_FILES = LICENSE
+-PYTHON_BLEAK_VERSION = 0.22.2
++PYTHON_BLEAK_VERSION = 0.22.3
+ PYTHON_BLEAK_SOURCE = bleak-$(PYTHON_BLEAK_VERSION).tar.gz
+-PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/03/76/733131e2935f4fcdc7a0dd47cbc5090e12d578297804fb0482575db43f3c
++PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/fb/96/15750b50c0018338e2cce30de939130971ebfdf4f9d6d56c960f5657daad
+ PYTHON_BLEAK_SETUP_TYPE = pep517
+ PYTHON_BLEAK_LICENSE = MIT
+ PYTHON_BLEAK_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
