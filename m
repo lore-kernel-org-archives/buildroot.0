@@ -4,73 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E05D1D2447B
-	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 06:34:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EDA7D2447F
+	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 06:39:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A536581EAA;
-	Fri, 11 Oct 2024 06:34:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E26C982049;
+	Fri, 11 Oct 2024 06:39:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zO6_hgjycQwP; Fri, 11 Oct 2024 06:34:57 +0000 (UTC)
+ id r_Ej0mSpn0km; Fri, 11 Oct 2024 06:39:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9895881EAB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 614F282044
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9895881EAB;
-	Fri, 11 Oct 2024 06:34:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 61A251BF385
- for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 06:34:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 614F282044;
+	Fri, 11 Oct 2024 06:39:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8DEE21BF385
+ for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 06:39:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F8EF41521
- for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 06:34:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7D4A082044
+ for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 06:39:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DNabhYKEk_WB for <buildroot@lists.busybox.net>;
- Fri, 11 Oct 2024 06:34:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b8FkiApuvbXU for <buildroot@lists.busybox.net>;
+ Fri, 11 Oct 2024 06:39:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9131840150
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9131840150
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9131840150
- for <buildroot@buildroot.org>; Fri, 11 Oct 2024 06:34:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8DA746000C;
- Fri, 11 Oct 2024 06:34:51 +0000 (UTC)
-Date: Fri, 11 Oct 2024 08:34:50 +0200
-To: Ludwig Kormann <ludwig.kormann@ict42.de>
-Message-ID: <20241011083450.50b5e81c@windsurf>
-In-Reply-To: <20241010091531.1943185-2-ludwig.kormann@ict42.de>
-References: <20241010091531.1943185-1-ludwig.kormann@ict42.de>
- <20241010091531.1943185-2-ludwig.kormann@ict42.de>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 78CF182042
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78CF182042
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 78CF182042
+ for <buildroot@busybox.net>; Fri, 11 Oct 2024 06:39:12 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D77AA1C0005;
+ Fri, 11 Oct 2024 06:39:08 +0000 (UTC)
+Date: Fri, 11 Oct 2024 08:39:07 +0200
+To: Francois Perrad <francois.perrad@gadz.org>
+Message-ID: <20241011083907.089ec1fa@windsurf>
+In-Reply-To: <20241010163200.249090-1-francois.perrad@gadz.org>
+References: <20241010163200.249090-1-francois.perrad@gadz.org>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1728628491;
+ d=bootlin.com; s=gm1; t=1728628749;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=200dn9ILVfknRFTM4A18movRn9Ggn3AUALtV2n7hNA4=;
- b=RSqJAE/fBMf6brs7OLirurq6uSssW+STEypS08YJ5b6TSd7yjc7abE6ZvvJAjyv5W1TJos
- ak5oS/Yo4p9X5npx/8JT5Qn3+8aznWFfAbsKTr1Nj799L5suXkqeMrrJKUh+jCVHxR91y0
- lyTop2OLmER8l9uI2h7WzhIbDU0ZY/TCpoaXMJtdPVL3xAzLVVNJ8tUagLtKA1QBHTTQhO
- PEvLbFG5VY2+m1fE0FP6mu+pRMqfQJ2xhJuKNXvBFcvbPKbjL4NYuCH94P+za9qfUe7Vya
- DD5D5VMLP5JHarBNhEWxiIvjvQ+5SHmhceIEuvgEHPmLXxM56RzOtuXUOSK3eg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=65OxtqUltRwJrAkde2QCfs/85AqH5XBiD+Mw1KS0SRk=;
+ b=DcDGXt0/+ASkz+HvpkZrNjs65NeRHI+AcssyP3Dl9CCQwkmBKMOfBLBX3CpkB9dwcU6PJP
+ r7mQm55JAkYZmobiP3g1JTxZdGcLgOaZMoVQ6zAwB26xtz9ZC3LE3MEs0rpD7exXUaLixP
+ yBBLFdlc5/HbLBDQSVDlLwKKce3GAmsh+8iW9UrrRcjy5n43hGmRDGuYAYZozUsT8hxvAJ
+ 55BfVy3GOjDna51uYvQmLdLTiLoaocNvCbCMf9AkvfCFnkgK4UKsyBPlTaJiHOXu5Xtaiy
+ mojc3U8F0v3fmXAnypLKex11d77SLdgXd85JjFwkNSLhF+KDosCcbs6dKnT8EQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=RSqJAE/f
-Subject: Re: [Buildroot] [PATCH 2/2] configs/icnova-a20-adb4006: add uboot
- patch for reliable bootclk
+ header.s=gm1 header.b=DcDGXt0/
+Subject: Re: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump
+ Linux and U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,85 +83,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Ludwig,
-
-On Thu, 10 Oct 2024 11:15:31 +0200
-Ludwig Kormann <ludwig.kormann@ict42.de> wrote:
-
-> Up until now cpu clock gets initialized at 384 MHz, which is
-> the highest supported cpu clock.
-> 
-> Recent A20 batches show an increased percentage of modules
-> reacting very sensitive to operating conditions outside the
-> specifications.
-> 
-> The cpu dies very shortly after PLLs, core frequency or cpu
-> voltage are missconfigured. E.g.:
-> - uboot SPL selects 384 MHz as cpu clock which requires a cpu
->   voltage of at least 1.1 V.
-> - Linux CPU Frequency scaling with most sun7i dts will reduce
->   cpu voltage down to 1.0 V.
-> - When intiating a reboot or reset from linux the cpu voltage
->   may keep the 1.0 V configuration and the cpu dies during SPL
->   initialization.
-> 
-> Therefore reduce cpu clock at uboot SPL initialization down
-> to 144 MHz from 384 MHz.
-> 
-> Use patch until KConfig option in uboot becomes available.
-> 
-> Signed-off-by: Ludwig Kormann <ludwig.kormann@ict42.de>
-
-Thanks as well for your patch! Some comments below.
-
-> ---
->  .../uboot-sun7i-a20-reliable-bootclk.patch            | 11 +++++++++++
->  configs/icnova-a20-adb4006_defconfig                  |  1 +
->  2 files changed, 12 insertions(+)
->  create mode 100644 board/in-circuit/icnova-a20-adb4006/uboot-patches/uboot-sun7i-a20-reliable-bootclk.patch
-> 
-> diff --git a/board/in-circuit/icnova-a20-adb4006/uboot-patches/uboot-sun7i-a20-reliable-bootclk.patch b/board/in-circuit/icnova-a20-adb4006/uboot-patches/uboot-sun7i-a20-reliable-bootclk.patch
-> new file mode 100644
-> index 0000000000..ce83f59e4b
-> --- /dev/null
-> +++ b/board/in-circuit/icnova-a20-adb4006/uboot-patches/uboot-sun7i-a20-reliable-bootclk.patch
-> @@ -0,0 +1,11 @@
-> +--- uboot/arch/arm/include/asm/arch-sunxi/clock_sun4i.h	2024-10-10 09:34:01.346401734 +0200
-> ++++ uboot/arch/arm/include/asm/arch-sunxi/clock_sun4i.h.modified	2024-10-10 09:33:55.146402528 +0200
-
-We require all patches to have a description, a Signed-off-by: line and
-an Upstream: tag. Also, since U-Boot is using Git upstream, we strongly
-prefer a patch generated by "git format-patch".
-
-> diff --git a/configs/icnova-a20-adb4006_defconfig b/configs/icnova-a20-adb4006_defconfig
-> index 948b054d83..4cf7826346 100644
-> --- a/configs/icnova-a20-adb4006_defconfig
-> +++ b/configs/icnova-a20-adb4006_defconfig
-> @@ -38,6 +38,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
->  BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="icnova-a20-adb4006"
-> +BR2_TARGET_UBOOT_PATCH="board/in-circuit/icnova-a20-adb4006/uboot-patches"
-
-Instead of this, could you use BR2_GLOBAL_PATCH_DIRECTORIES? It allows
-to patch all packages, not just u-boot, and is anyway going to be
-needed to provide the hashes, as I suggested in my review of your PATCH
-1/2.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gVGh1LCAxMCBPY3QgMjAyNCAxODozMTo1OSArMDIwMApGcmFuY29pcyBQZXJyYWQgPGZyYW5j
+b2lzLnBlcnJhZEBnYWR6Lm9yZz4gd3JvdGU6Cgo+IG5vdywgVS1Cb290IG5lZWRzIGdudXRscyAo
+bWtlZmljYXBzdWxlKQo+IAo+IFNpZ25lZC1vZmYtYnk6IEZyYW5jb2lzIFBlcnJhZCA8ZnJhbmNv
+aXMucGVycmFkQGdhZHoub3JnPgo+IC0tLQo+ICBib2FyZC9vbGltZXgvYTIwX29saW51eGluby9w
+YXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2ggfCAyICstCj4gIGJvYXJkL29saW1leC9hMjBfb2xpbnV4
+aW5vL3BhdGNoZXMvdWJvb3QvdWJvb3QuaGFzaCB8IDIgKy0KPiAgY29uZmlncy9vbGltZXhfYTIw
+X29saW51eGlub19saW1lMl9kZWZjb25maWcgICAgICAgIHwgNSArKystLQo+ICBjb25maWdzL29s
+aW1leF9hMjBfb2xpbnV4aW5vX2xpbWVfZGVmY29uZmlnICAgICAgICAgfCA1ICsrKy0tCj4gIDQg
+ZmlsZXMgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQoKVGhhbmtzIEZy
+YW7Dp29pcyBmb3IgdGhlIHBhdGNoLiBIb3dldmVyIGl0IGRvZXNuJ3QgYXBwbHkgb24gdGhlIGxh
+dGVzdAptYXN0ZXIsIGFzIHRoZSBkZWZjb25maWdzIGhhdmUgYmVlbiBtb2RpZmllZCBpbiBtYXN0
+ZXIuIENvdWxkIHlvdQpyZWJhc2Ugb24gdGhlIGxhdGVzdCBtYXN0ZXIgYW5kIHJlc2VuZD8KClRo
+YW5rcyBhIGxvdCEKClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBCb290bGluCkVt
+YmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGluLmNvbQpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
