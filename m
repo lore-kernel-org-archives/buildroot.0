@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C3A1D0D78F
-	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 13:06:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B76BDD0D791
+	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 13:06:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE498611C9;
-	Fri, 11 Oct 2024 13:06:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 245B2614D1;
+	Fri, 11 Oct 2024 13:06:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b7AEO82p_54L; Fri, 11 Oct 2024 13:06:18 +0000 (UTC)
+ id cXcR0d2SCKID; Fri, 11 Oct 2024 13:06:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 110B361192
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E802E611A9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 110B361192;
-	Fri, 11 Oct 2024 13:06:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 194DE1BF859
+	by smtp3.osuosl.org (Postfix) with ESMTP id E802E611A9;
+	Fri, 11 Oct 2024 13:06:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 26FD11BF997
  for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 13:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 080034249D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 22F724045A
  for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 13:06:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fy3ViJdZfwxc for <buildroot@lists.busybox.net>;
- Fri, 11 Oct 2024 13:06:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hGZdFjSCh4bV for <buildroot@lists.busybox.net>;
+ Fri, 11 Oct 2024 13:06:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3CCE42498
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2EF8401CC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F3CCE42498
+ by smtp2.osuosl.org (Postfix) with ESMTP id D2EF8401CC
  for <buildroot@buildroot.org>; Fri, 11 Oct 2024 13:06:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE60F85D4D; Fri, 11 Oct 2024 13:06:13 +0000 (UTC)
+ id BA6C485D48; Fri, 11 Oct 2024 13:06:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Oct 2024 15:00:44 +0200
+Date: Fri, 11 Oct 2024 14:47:23 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: df7308ffefecc2871a36a8d6cb3532423d45505a
-X-Git-Newrev: 939e1df1d071f3d2aa8b093c99adae856ee71724
+X-Git-Oldrev: d523f2b10c78d05548197fe5dbb9d4fb80c5fcb9
+X-Git-Newrev: 2bfd0ffdfae30d751c825e6a10690f609fd79073
 X-Patchwork-Hint: ignore
-Message-Id: <20241011130613.DE60F85D4D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] utils/check-package:
- require exactly 1 TAB and 2 SP on help text 1st line
+Message-Id: <20241011130613.BA6C485D48@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/procps-ng: link
+ the w command with systemd or elogin libs.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,54 +65,97 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=939e1df1d071f3d2aa8b093c99adae856ee71724
+commit: https://git.buildroot.net/buildroot/commit/?id=2bfd0ffdfae30d751c825e6a10690f609fd79073
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Test that the first line starts exactly with one TAB and exactly two
-spaces before the text.
+The build of procps-ng was broken when systemd was enabled.  Applying
+commit ca004d46 of procps-ng upstream to explictly link the 'w'
+command to libsystemd or elogind even though libproc2 is linked to it.
 
+This was (likely) broken since the upgrade to procps-ng v4.0.4 with
+commit d79f40dbbe98983bc657d4c82d46b38b8283351b.
+
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/issues/28
+Fixes: http://autobuild.buildroot.org/results/e8b/e8bae7bfd7d6a7987f3afa199d8d944429144817/build-end.log
+
+Signed-off-by: Hugo Cornelis <hugo.cornelis@essensium.com>
+[yann.morin.1998@free.fr: don't number patch 1/1; add fixes tag]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f9e6d39e8e0615d3a71ea1aef9d0d1e206f4c42c)
+(cherry picked from commit 3b870057c646a6b7abc822d3ce2ea0f41683420b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/checkpackagelib/lib_config.py | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ .../0001-build-sys-Add-systemd-elogind-to-w.patch  | 48 ++++++++++++++++++++++
+ package/procps-ng/procps-ng.mk                     |  3 ++
+ 2 files changed, 51 insertions(+)
 
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index f26ca0d898..bf975d7a3b 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -154,6 +154,7 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+diff --git a/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch b/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch
+new file mode 100644
+index 0000000000..4a8b2a6a8b
+--- /dev/null
++++ b/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch
+@@ -0,0 +1,48 @@
++From 788248ee631b3b5f82073c36320fc3f4a3c8f9ba Mon Sep 17 00:00:00 2001
++From: Craig Small <csmall@dropbear.xyz>
++Date: Thu, 31 Aug 2023 22:24:23 +1000
++Subject: [PATCH] build-sys: Add systemd/elogind to w
++
++Depending on the compiler flags, w needs to be explictly linked
++to libsystemd or elogind even though libproc2 is linked to it.
++
++Signed-off-by: Craig Small <csmall@dropbear.xyz>
++Upstream: https://gitlab.com/procps-ng/procps/-/commit/ca004d4657d5e8b468a4552ede429be53193a3a9
++Signed-off-by: Hugo Cornelis <hugo.cornelis@essensium.com>
++---
++ Makefile.am | 7 +++++++
++ NEWS        | 3 +++
++ 2 files changed, 10 insertions(+)
++
++diff --git a/Makefile.am b/Makefile.am
++index f70c8fb1..ddfc0141 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -149,6 +149,13 @@ endif
++ 
++ dist_man_MANS += man/w.1
++ src_w_SOURCES = src/w.c local/fileutils.c
+++src_w_LDADD = $(LDADD)
+++if WITH_SYSTEMD
+++src_w_LDADD += @SYSTEMD_LIBS@
+++endif
+++if WITH_ELOGIND
+++src_w_LDADD += @ELOGIND_LIBS@
+++endif
++ else
++   EXTRA_DIST += man/w.1
++ endif
++diff --git a/NEWS b/NEWS
++index 3f2158d4..4ad9f74e 100644
++--- a/NEWS
+++++ b/NEWS
++@@ -1,3 +1,6 @@
+++procps-ng-NEXT
+++---------------
+++
++ procps-ng-4.0.4
++ ---------------
++   * library (API & ABI unchanged)
++-- 
++2.34.1
++
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index c5675e2ee6..c30de4cb4a 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -14,6 +14,9 @@ PROCPS_NG_INSTALL_STAGING = YES
+ PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
  
- class HelpText(_CheckFunction):
-     HELP_TEXT_FORMAT = re.compile(r"^\t  .{,62}$")
-+    HELP_TEXT_FORMAT_1 = re.compile(r"^\t  \S.{,61}$")
-     URL_ONLY = re.compile(r"^(http|https|git)://\S*$")
- 
-     def before(self):
-@@ -170,12 +171,18 @@ class HelpText(_CheckFunction):
-             return
-         if text.strip() == "help":
-             self.help_text = True
-+            self.help_first_line = True
-             return
- 
-         if not self.help_text:
-             return
- 
--        if self.HELP_TEXT_FORMAT.match(text.rstrip()):
-+        if self.help_first_line:
-+            help_text_match = self.HELP_TEXT_FORMAT_1
-+            self.help_first_line = False
-+        else:
-+            help_text_match = self.HELP_TEXT_FORMAT
-+        if help_text_match.match(text.rstrip()):
-             return
-         if self.URL_ONLY.match(text.strip()):
-             return
++# Applying 0001-build-sys-Add-systemd-elogind-to-w.patch touches Makefile.am
++PROCPS_NG_AUTORECONF = YES
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ PROCPS_NG_DEPENDENCIES += systemd
+ PROCPS_NG_CONF_OPTS += --with-systemd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
