@@ -4,57 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC241D0D786
-	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 12:45:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D367DD0D785
+	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 12:50:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4311A61148;
-	Fri, 11 Oct 2024 12:45:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 96A5861151;
+	Fri, 11 Oct 2024 12:50:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oaO1qgW4nTdu; Fri, 11 Oct 2024 12:45:57 +0000 (UTC)
+ id MzOHP8LOuxwQ; Fri, 11 Oct 2024 12:50:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C5586114A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7AFF61165
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C5586114A;
-	Fri, 11 Oct 2024 12:45:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C62451BF267
- for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 12:45:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B7AFF61165;
+	Fri, 11 Oct 2024 12:50:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 699FB1BF267
+ for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 12:50:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BF365424A5
- for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 12:45:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6584840420
+ for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 12:50:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iYk7M9RG2nUF for <buildroot@lists.busybox.net>;
- Fri, 11 Oct 2024 12:45:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xjqjrQiu1x7N for <buildroot@lists.busybox.net>;
+ Fri, 11 Oct 2024 12:50:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 036AC4249D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 036AC4249D
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 036AC4249D
- for <buildroot@buildroot.org>; Fri, 11 Oct 2024 12:45:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EC63D24000B;
- Fri, 11 Oct 2024 12:45:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7532E400D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7532E400D1
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7532E400D1
+ for <buildroot@buildroot.org>; Fri, 11 Oct 2024 12:50:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 25BE060009;
+ Fri, 11 Oct 2024 12:50:09 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1szF1g-00A3Jb-0k;
- Fri, 11 Oct 2024 14:45:48 +0200
+ (envelope-from <peter@korsgaard.com>) id 1szF5t-00A47z-1c;
+ Fri, 11 Oct 2024 14:50:09 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 11 Oct 2024 14:45:44 +0200
-Message-Id: <20241011124545.2395991-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+To: Hugo Cornelis via buildroot <buildroot@buildroot.org>
+References: <c7a62004-10ab-4351-a3f5-7fd3ab157551@mind.be>
+ <20240914172710.2917184-1-hugo.cornelis@essensium.com>
+Date: Fri, 11 Oct 2024 14:50:09 +0200
+In-Reply-To: <20240914172710.2917184-1-hugo.cornelis@essensium.com> (Hugo
+ Cornelis via buildroot's message of "Sat, 14 Sep 2024 19:27:10 +0200")
+Message-ID: <87r08mhkhq.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/zabbix: correct license info after
- 7.0.3 bump
+Subject: Re: [Buildroot] [PATCH 1/1] package/procps-ng: link the w command
+ with systemd or elogin libs.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,54 +70,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexey Lukyanchuk <skif@skif-web.ru>
+Cc: Hugo Cornelis <hugo.cornelis@essensium.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit b315dc5fbf40eb0a (package/zabbix: bump version to 7.0.3) updated
-zabix but forgot to check the license info, leading to legal-info failures.
+>>>>> "Hugo" == Hugo Cornelis via buildroot <buildroot@buildroot.org> writes:
 
-Both files have changed - COPYING now specifies AGPL 3.0, so adjust hash and
-license identifier.  README is now just a oneliner stating 'Please refer to
-README.md' (which also does not have any license clarifications), so just
-drop it.
+ > The build of procps-ng was broken when systemd was enabled.  Applying
+ > commit ca004d46 of procps-ng upstream to explictly link the 'w'
+ > command to libsystemd or elogind even though libproc2 is linked to it.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/zabbix/zabbix.hash | 3 +--
- package/zabbix/zabbix.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ > This was (likely) broken since the upgrade to procps-ng v4.0.4 with
+ > commit d79f40dbbe98983bc657d4c82d46b38b8283351b.
 
-diff --git a/package/zabbix/zabbix.hash b/package/zabbix/zabbix.hash
-index 4648ed8b71..843dc445d6 100644
---- a/package/zabbix/zabbix.hash
-+++ b/package/zabbix/zabbix.hash
-@@ -1,4 +1,3 @@
- # Locally computed
- sha256  173059f57f11716146da79345e5a6bc52eceee6a5c4410664b8500a955598b2a  zabbix-7.0.3.tar.gz
--sha256  f8fc3fd12521b60d53d8c5d48a883eb3c9c5ddec9de986a273e1b77f69d811db  README
--sha256  444fe54aecc95ac0f3314289c300afc73b3946a4dc9fbd7e022709b3e0924dd0  COPYING
-+sha256  0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0  COPYING
-diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
-index 07d92d0abd..dda60ef161 100644
---- a/package/zabbix/zabbix.mk
-+++ b/package/zabbix/zabbix.mk
-@@ -8,8 +8,8 @@ ZABBIX_VERSION_MAJOR = 7.0
- ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).3
- ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/stable/$(ZABBIX_VERSION_MAJOR)
- ZABBIX_SELINUX_MODULES = zabbix
--ZABBIX_LICENSE = GPL-2.0+
--ZABBIX_LICENSE_FILES = README COPYING
-+ZABBIX_LICENSE = AGPL-3.0
-+ZABBIX_LICENSE_FILES = COPYING
- ZABBIX_CPE_ID_VENDOR = zabbix
- # We're patching m4/netsnmp.m4
- ZABBIX_AUTORECONF = YES
+ > Fixes: http://autobuild.buildroot.org/results/e8b/e8bae7bfd7d6a7987f3afa199d8d944429144817/build-end.log
+ > Signed-off-by: Hugo Cornelis <hugo.cornelis@essensium.com>
+
+Committed to 2024.02.x and 2024.08.x, thanks.
+
 -- 
-2.39.5
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
