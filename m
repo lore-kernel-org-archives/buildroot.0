@@ -4,93 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7626BD24461
-	for <buildroot@archiver.kernel.org>; Thu, 10 Oct 2024 23:39:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E3E5D2444F
+	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 00:13:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 416CF81A30;
-	Thu, 10 Oct 2024 23:39:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CAE581FC5;
+	Fri, 11 Oct 2024 00:13:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R5HL7aSpCAJN; Thu, 10 Oct 2024 23:39:42 +0000 (UTC)
+ id DWnWfT4XVVu6; Fri, 11 Oct 2024 00:13:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B419881FC8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10A5B81FB8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B419881FC8;
-	Thu, 10 Oct 2024 23:39:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C35F71BF5B5
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 23:39:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10A5B81FB8;
+	Fri, 11 Oct 2024 00:13:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E98C1BF861
+ for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 00:13:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B21F441E03
- for <buildroot@lists.busybox.net>; Thu, 10 Oct 2024 23:39:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3D3B340257
+ for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 00:13:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R1QvgpLVtL3e for <buildroot@lists.busybox.net>;
- Thu, 10 Oct 2024 23:39:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.249;
- helo=lelv0142.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A285841DF5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A285841DF5
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A285841DF5
- for <buildroot@buildroot.org>; Thu, 10 Oct 2024 23:39:30 +0000 (UTC)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
- by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 49ANdTvX117740;
- Thu, 10 Oct 2024 18:39:29 -0500
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
- by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 49ANdTEj121398;
- Thu, 10 Oct 2024 18:39:29 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 10
- Oct 2024 18:39:29 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 10 Oct 2024 18:39:29 -0500
-Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
- by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 49ANdTvp070678;
- Thu, 10 Oct 2024 18:39:29 -0500
-Date: Thu, 10 Oct 2024 18:39:23 -0500
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nL888wBVn7q7 for <buildroot@lists.busybox.net>;
+ Fri, 11 Oct 2024 00:13:14 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=2001:8b0:10b:1236::1;
+ helo=casper.infradead.org; envelope-from=geoff@infradead.org;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A647D400C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A647D400C5
+Received: from casper.infradead.org (casper.infradead.org
+ [IPv6:2001:8b0:10b:1236::1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A647D400C5
+ for <buildroot@buildroot.org>; Fri, 11 Oct 2024 00:13:12 +0000 (UTC)
+Received: from fpd2fa7e2a.ap.nuro.jp ([210.250.126.42] helo=[192.168.1.8])
+ by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+ id 1sz3HE-00000009Ek9-3Gfq; Fri, 11 Oct 2024 00:13:05 +0000
+Message-ID: <069f33b1-3f9d-41a4-b664-29b399d78f44@infradead.org>
+Date: Fri, 11 Oct 2024 09:12:59 +0900
 MIME-Version: 1.0
-Message-ID: <20241010-uboot-bump-v1-2-287ffa07e49e@ti.com>
-References: <20241010-uboot-bump-v1-0-287ffa07e49e@ti.com>
-In-Reply-To: <20241010-uboot-bump-v1-0-287ffa07e49e@ti.com>
-To: <buildroot@buildroot.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1617; i=bb@ti.com;
- h=from:subject:message-id; bh=P7T31y1tLtXUZATk9sj//BambVL04HIJFo9DpgR0YFw=;
- b=owNCWmg5MUFZJlNZPfr9JAAAZ3///v5d/nt83iuX4Mtv/5efx72v+7/evd992un7277z/NSwA
- RmYHamgAANABoDQAAPUND0EAAAaANAA0GgAGQDajTQNqPUZG0mhoaaeTKeUOQ0GIaGRpppoADIN
- AYCaAD1DJowhoeoaaAMmTTIxGjJ6gAabU0BoAA000yAGUHoTammmRoYmhp6Q0NNGmIGgGjQ0DQN
- NAZABoaDQ0A9RoDIGjQMhoGmmjRpkMQBBECRBC70EfXq4QaARSkzZGPawfKYGr5fkVtbQBBEFiY
- FIONYfcBJ7IkDlmjlZdlpXQhuZPk+b8ZTB2UTjCZ5wIPiurw2kMWs+HhP81OZvUh7ON3pdfkg9z
- /bwcUCHpAHG99qIm2hFXeAwfZbGwDzanolQ7zIGreRKo/A3WU33nMnyvVbuk2K4QCsTpquDkK1U
- Er7je7wjXGYyCc8GI/YC/BRvnnq5PUe0pJa0u4BuQHf3imwsJU65kqNnAw7bylvURElhRQqhcCs
- DGbyFRpStODCiMTF5WBdZbCyOrwzmOWACkGaIDagKpFkk3tOuB9UwVtVxD5jVhLzatGJSj9RM/w
- RaLJmyoR2VjmAp9dD2bLItABvtU4BhFEPsdaOtz+0fIQnTxd+AKkbEExyYOPLrzxOcsMkJX+mog
- IsswCmeMFSaZf4u5IpwoSB79fpI
-X-Developer-Key: i=bb@ti.com; a=openpgp;
- fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1728603569;
- bh=KFkwrBZF389kBu1IZNA2xjHARHWlzNeKV7PWFmSAfuQ=;
- h=From:Date:Subject:References:In-Reply-To:To:CC;
- b=l706QfDGvmeTsYW99p+BEzz/TIha7PPO8GSkxKN48cDIk87Cty0bHHaqePLbV/lEb
- +zRQXeZ+Nc2LhJCdoU+shGqSK1tTpivcxdsz59NNLN7Vka6Myj8zzpw21+7yp58tDa
- 3llNJU6fE/YwpITLrwON+2nn/XjxXgnblYAWuNLY=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=l706QfDG
-Subject: [Buildroot] [PATCH 2/3] boot/ti-k3-r5-loader: add option to include
- GnuTLS
+User-Agent: Mozilla Thunderbird
+From: Geoff Levand <geoff@infradead.org>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Peter Korsgaard <peter@korsgaard.com>, Arnout Vandecappelle
+ <arnout@mind.be>, buildroot@buildroot.org
+Content-Language: en-US
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; 
+ d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+ To:Subject:From:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:Content-ID:
+ Content-Description:In-Reply-To:References;
+ bh=DhnXuanV5ec7gMyAM0ogbj073s4UNeVFd4EKLMu1kYs=; b=pCaSpBdtHL+5qh6I9gmsVaH3Fm
+ IdVYpF1/Yj7wQv6eAWzPuxQ1/Y1ZEh8fmv2QtubyCwOrC55JB1RibVJQzvgOtka7Tzp4nY0TTP5Gw
+ 0eGhEUuq+4EOG1SK50AD8VAG3X3b4ULzdY/DMKMLppEhjmhDlCVfD1AazJzJJ6fLtzKrT9oBK2cri
+ Q3+gDHnvlomFCJuCs5Fs7c8cwxLoZhMLku5PiQgPOM5w1O4PWh+syoMlKRYPUx5vMX7Kgf0OlwDnF
+ FP1Yju63V/MlGblID85OQfcgHGPi4xDbSjVEpmXWUPPE4I2FekjjLW9u3mwW5DuyQI86vDmd3tOU7
+ djLG5CQw==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=infradead.org
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=infradead.org header.i=@infradead.org
+ header.a=rsa-sha256 header.s=casper.20170209 header.b=pCaSpBdt
+Subject: [Buildroot] package/flannel: bump to version 0.25.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,59 +80,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
-Reply-To: Bryan Brattlof <bb@ti.com>
-Cc: Xuanhao Shi <X15000177@gmail.com>, Bryan Brattlof <bb@ti.com>,
- Anand Gadiyar <gadiyar@ti.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Newer versions of U-Boot may require the GnuTLS library to be installed
-on the host machine before building. Add in an option to select GnuTLS
-as a dependency to the ti-k3-r5-loader package
-
-Signed-off-by: Bryan Brattlof <bb@ti.com>
+Signed-off-by: Geoff Levand <geoff@infradead.org>
 ---
- boot/ti-k3-r5-loader/Config.in          | 7 +++++++
- boot/ti-k3-r5-loader/ti-k3-r5-loader.mk | 4 ++++
- 2 files changed, 11 insertions(+)
+ package/flannel/flannel.hash | 2 +-
+ package/flannel/flannel.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
-index c276528fad50d..4d1661dfeda77 100644
---- a/boot/ti-k3-r5-loader/Config.in
-+++ b/boot/ti-k3-r5-loader/Config.in
-@@ -144,4 +144,11 @@ config BR2_TARGET_TI_K3_R5_LOADER_SYSFW_ITB
- 	  If unsure, use the default sysfw.itb (symlink) generated by
- 	  binman.
+diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
+index b57ac3f6d6..f18948e55f 100644
+--- a/package/flannel/flannel.hash
++++ b/package/flannel/flannel.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  4eea610dbcf26f3e37faa48c347931ba36411421d3adad2b08aff450531563db  flannel-0.25.6-go2.tar.gz
++sha256  9941bfb958b8583c080d61cf0664207f311f2e2500db2ae5c3413ff2dbdf2195  flannel-0.25.7-go2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
+index e09319494a..c23c3ae9bd 100644
+--- a/package/flannel/flannel.mk
++++ b/package/flannel/flannel.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_TARGET_TI_K3_R5_LOADER_NEEDS_GNUTLS
-+	bool "ti-k3-r5-loader needs GnuTLS"
-+	help
-+	  Some newer versions of U-Boot require the GnuTLS library
-+	  on the host machine. This is typically the case when the
-+	  board configuration has CONFIG_TOOLS_MKEFICAPSULE enabled.
-+
- endif
-diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-index e426f039e021d..07f5f7b33f668 100644
---- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-+++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-@@ -56,6 +56,10 @@ TI_K3_R5_LOADER_DEPENDENCIES = \
- 	host-python-yamllint \
- 	ti-k3-boot-firmware
+-FLANNEL_VERSION = 0.25.6
++FLANNEL_VERSION = 0.25.7
+ FLANNEL_SITE = $(call github,flannel-io,flannel,v$(FLANNEL_VERSION))
  
-+ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_NEEDS_GNUTLS),y)
-+TI_K3_R5_LOADER_DEPENDENCIES += host-gnutls
-+endif
-+
- TI_K3_R5_LOADER_MAKE = $(BR2_MAKE)
- TI_K3_R5_LOADER_MAKE_ENV = $(TARGET_MAKE_ENV)
- TI_K3_R5_LOADER_KCONFIG_DEPENDENCIES = \
-
+ FLANNEL_LICENSE = Apache-2.0
 -- 
-2.46.0
+2.34.1
+
 
 _______________________________________________
 buildroot mailing list
