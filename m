@@ -4,90 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12FC5D0EE19
-	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 17:59:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48263D0EE1E
+	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 18:08:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD44460A88;
-	Fri, 11 Oct 2024 17:59:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA62460624;
+	Fri, 11 Oct 2024 18:07:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KZ1dGegzI3AW; Fri, 11 Oct 2024 17:59:05 +0000 (UTC)
+ id AhiNWJOMPqBH; Fri, 11 Oct 2024 18:07:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C82A4608D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBE50608D6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C82A4608D6;
-	Fri, 11 Oct 2024 17:59:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBE50608D6;
+	Fri, 11 Oct 2024 18:07:58 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AC4C71BF239
- for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 17:59:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4C8DD1BF57F
+ for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 18:07:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A489384353
- for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 17:59:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 48EA684353
+ for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 18:07:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M-Xtu7dLn5eA for <buildroot@lists.busybox.net>;
- Fri, 11 Oct 2024 17:59:02 +0000 (UTC)
+ id uZeeWFLtP7DV for <buildroot@lists.busybox.net>;
+ Fri, 11 Oct 2024 18:07:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2f; helo=mail-io1-xd2f.google.com;
+ client-ip=2607:f8b0:4864:20::12a; helo=mail-il1-x12a.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B155D84347
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B155D84347
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B155D84347
- for <buildroot@buildroot.org>; Fri, 11 Oct 2024 17:59:02 +0000 (UTC)
-Received: by mail-io1-xd2f.google.com with SMTP id
- ca18e2360f4ac-8369b14fb91so64670039f.3
- for <buildroot@buildroot.org>; Fri, 11 Oct 2024 10:59:02 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4A54284347
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A54284347
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
+ [IPv6:2607:f8b0:4864:20::12a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4A54284347
+ for <buildroot@buildroot.org>; Fri, 11 Oct 2024 18:07:56 +0000 (UTC)
+Received: by mail-il1-x12a.google.com with SMTP id
+ e9e14a558f8ab-3a3a03399fbso11530325ab.0
+ for <buildroot@buildroot.org>; Fri, 11 Oct 2024 11:07:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728669541; x=1729274341;
+ d=1e100.net; s=20230601; t=1728670075; x=1729274875;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=KliTPnR3o3Pvai4Ds2GfnEFYzoAG21uVO2GEbYVm2UQ=;
- b=pwXIIIEsNVZS7/y3rMN+z+AyxUWDmpFdyzV5FGYmwUy6ZAZRR9JMOQm8UcVQmWd5p/
- uyiUPqspP6cFHC9gX9xs0o1ZjqXhyWh+Zr33f4PlPG5zzfz2EOAazXE+KT8a/v+mmfV7
- npSrDj61FaudppTj2pmHMKu1mXQygsrUWWoIaJEyJ2Ldx63vkThJEM8QXGJKJhWtI6Jo
- ISIRgHmpoz5L7J1Rj+zGdc8ZiSYneOx+JGc8V74KejYNfX5958DP8Nj/V5uSq7kWNCUu
- R3UqngwdtN/Z+KmzFsQATkCIwmQRfvl81CGfnrUC5r6kdxTUqgr6lwy1hE8vXWKFmSvX
- SOpw==
-X-Gm-Message-State: AOJu0Yz0mpahYSmZasGZWpcVl661uq3FNSr9NlT30QreTXJi0iJwlTBq
- 52hT3GEH2V0/gb6oLX/5QnWl8VtSGTH1blht4EWyqPmRwvsY9MsoLPEt5bnC
-X-Google-Smtp-Source: AGHT+IGz+yRq3BdBTH/jFjBt0aLfSin5qo4A98te6js9yAmImHgRnJ1Al6ZxnWvjRoKWLbGL3pjoGw==
-X-Received: by 2002:a05:6e02:2146:b0:3a0:9244:191d with SMTP id
- e9e14a558f8ab-3a3b5fb0529mr25361055ab.16.1728669541368; 
- Fri, 11 Oct 2024 10:59:01 -0700 (PDT)
+ bh=IUXa/vHLvk+8U39WqdW1zTomMstswPEgWzrdxt3yUe0=;
+ b=PkBIrH6573LErePZEVlXHiCaNZSqy6b1C4pGfeh211VOL5FI+DVXEfqn7Yl2xU+sTm
+ smvt0fb9j6XiWV7fItgHATM5R1YKgbbwu6bNblU2b8JMnTt27agPO33SzLF2Gt+2h16/
+ FZLsX/2qYqaFWXAYWQUWdizjq1OrVqeiEGVg0Z7ztJ7YpDo7rcTBFpBwbumyHxAn/nnF
+ LUH1LGQbPghuuoAJcKMff4LmH1lRnwPSgqjJ/qDbr/zBndsNG1c2bM6rvptncwI553ex
+ bLN7NPoNTTZzYyf6Ntwh5MvHQKcDAV9K4sWgjXs6Vnv7B8kY34KINDNp0WyQzR5KBeEW
+ 6Cjg==
+X-Gm-Message-State: AOJu0Yxl2Blg28VuyntJk2FTLlFMQsq3FwmMSWtU1lZOfywZNjavlyaB
+ 1iopP3rmVtmYaf55c5iHqaLAW/kcIA3U1S8x6WSOH1ES7Wg3XfZhTiv5Qz6t
+X-Google-Smtp-Source: AGHT+IHxOZcOf13z7nacSVewwurlVC8ZjpZj9Tt7BvWtIFI0oYV2t5dL0Zw4rLJDtOdh8poi/sQXHg==
+X-Received: by 2002:a05:6e02:1885:b0:39d:2939:3076 with SMTP id
+ e9e14a558f8ab-3a3bce159bbmr2876185ab.25.1728670075040; 
+ Fri, 11 Oct 2024 11:07:55 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-159-223.hlrn.qwest.net.
  [71.33.159.223]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a3afdae1besm8135815ab.14.2024.10.11.10.59.00
+ 8926c6da1cb9f-4dbad9b1078sm735606173.27.2024.10.11.11.07.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Oct 2024 10:59:00 -0700 (PDT)
+ Fri, 11 Oct 2024 11:07:54 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Oct 2024 11:58:59 -0600
-Message-Id: <20241011175859.2767194-1-james.hilliard1@gmail.com>
+Date: Fri, 11 Oct 2024 12:07:52 -0600
+Message-Id: <20241011180752.2769273-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1728669541; x=1729274341; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1728670075; x=1729274875; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=KliTPnR3o3Pvai4Ds2GfnEFYzoAG21uVO2GEbYVm2UQ=;
- b=EFrqhxF8rrXZxstHAy3PqdgW94MVbPYKMiGK5i6XLoRok5qf0mYkTK6Ju9AmfkVZjI
- EGfmBLMJzx6n6Vb3f6VUKZDrtgNvG8NEzvpvbiKXnM9BSrnXHiQDKjPKOEbq/bV+5NN6
- XFDoiB9Nz6ri7XrLwjwDcva6z8nanoYeYD19UWuQo2P1zkBH7r7eAgFtXBYAcyWILEwc
- j494nZUhQUeKiftH3FoRgAWNjuQpCgYaUPUltk7DEueaCDiqpxSFbzR0V6HXH+cCeZrz
- 0/vF0lXVkfvvXctgjUzcAvLwYcgDfRfe4RU5wODzwMCYUBs8pkWtph64mQSCZu5cv2K6
- 4fVg==
+ bh=IUXa/vHLvk+8U39WqdW1zTomMstswPEgWzrdxt3yUe0=;
+ b=IicGjosUZbz/I6szAmGL3ABUJD2axyVr+0bFndOudYl40bYwcHDj48pEr7Wvii8+yu
+ sTmD/wRpYqDRpFDYm9BrSBO9ILJWjsMQsl2xDer4W+F0qmTSAHCNofs6seCpxay5ErN3
+ 2zcqozqyxp9TdbpvSDG2F2u+FXi3tkfeEtfwNuEQR1JRyRDeGR7U5PjvlqdO0nEkrb7m
+ Okr/D9oRMcnJCy9UISkC8QFcVNRoFRsPlnT38LfBPaXpetmRU413RHZlL62M+GlR3J94
+ O+03KtthSFzGA8SqJzZSBfekn47YnwFgh1nfu5MkH7jhRkiEbZdSZY54pFBZowJWqH55
+ oT4g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=EFrqhxF8
-Subject: [Buildroot] [PATCH 1/1] package/python-cbor2: bump to version 5.6.5
+ header.a=rsa-sha256 header.s=20230601 header.b=IicGjosU
+Subject: [Buildroot] [PATCH 1/1] package/python-charset-normalizer: bump to
+ version 3.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,38 +108,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-cbor2/python-cbor2.hash | 4 ++--
- package/python-cbor2/python-cbor2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../python-charset-normalizer.hash                          | 4 ++--
+ .../python-charset-normalizer/python-charset-normalizer.mk  | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-cbor2/python-cbor2.hash b/package/python-cbor2/python-cbor2.hash
-index 7831f36118..8c30bced20 100644
---- a/package/python-cbor2/python-cbor2.hash
-+++ b/package/python-cbor2/python-cbor2.hash
+diff --git a/package/python-charset-normalizer/python-charset-normalizer.hash b/package/python-charset-normalizer/python-charset-normalizer.hash
+index 8ef0e3fed0..ebed9d19d7 100644
+--- a/package/python-charset-normalizer/python-charset-normalizer.hash
++++ b/package/python-charset-normalizer/python-charset-normalizer.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cbor2/json
--md5  a6e5932eb719e0e429792faf326023b1  cbor2-5.6.4.tar.gz
--sha256  1c533c50dde86bef1c6950602054a0ffa3c376e8b0e20c7b8f5b108793f6983e  cbor2-5.6.4.tar.gz
-+md5  0804f5be872bcdbed12fb1314615b461  cbor2-5.6.5.tar.gz
-+sha256  b682820677ee1dbba45f7da11898d2720f92e06be36acec290867d5ebf3d7e09  cbor2-5.6.5.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/charset-normalizer/json
+-md5  0a4019908d9e50ff13138e8a794d9e2b  charset-normalizer-3.3.2.tar.gz
+-sha256  f30c3cb33b24454a82faecaf01b19c18562b1e89558fb6c56de4d9118a032fd5  charset-normalizer-3.3.2.tar.gz
++md5  8e0d0f33219087c2cd2d01b1d6ff11b6  charset_normalizer-3.4.0.tar.gz
++sha256  223217c3d4f82c3ac5e29032b3f1c2eb0fb591b72161f86d93f5719079dae93e  charset_normalizer-3.4.0.tar.gz
  # Locally computed sha256 checksums
- sha256  a6afd126d8f545a15166a22f25fadff4b9fb4978bbdd17e97d97d950b66d2fef  LICENSE.txt
-diff --git a/package/python-cbor2/python-cbor2.mk b/package/python-cbor2/python-cbor2.mk
-index 36e7197164..9e410376fb 100644
---- a/package/python-cbor2/python-cbor2.mk
-+++ b/package/python-cbor2/python-cbor2.mk
+ sha256  eb31a0c5a4fb09b8a4e32055d25c1e5f9c358a2752fef3cd720213d1ccfee241  LICENSE
+diff --git a/package/python-charset-normalizer/python-charset-normalizer.mk b/package/python-charset-normalizer/python-charset-normalizer.mk
+index 914b96eb69..ee04bf8968 100644
+--- a/package/python-charset-normalizer/python-charset-normalizer.mk
++++ b/package/python-charset-normalizer/python-charset-normalizer.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CBOR2_VERSION = 5.6.4
-+PYTHON_CBOR2_VERSION = 5.6.5
- PYTHON_CBOR2_SOURCE = cbor2-$(PYTHON_CBOR2_VERSION).tar.gz
--PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/fe/da/6e62e701797c627e8d8cb3d5cc0cdcb6f4a876083386ee1b1a35321fdac7
-+PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/e4/aa/ba55b47d51d27911981a18743b4d3cebfabccbb0598c09801b734cec4184
- PYTHON_CBOR2_SETUP_TYPE = setuptools
- PYTHON_CBOR2_LICENSE = MIT
- PYTHON_CBOR2_LICENSE_FILES = LICENSE.txt
+-PYTHON_CHARSET_NORMALIZER_VERSION = 3.3.2
+-PYTHON_CHARSET_NORMALIZER_SOURCE = charset-normalizer-$(PYTHON_CHARSET_NORMALIZER_VERSION).tar.gz
+-PYTHON_CHARSET_NORMALIZER_SITE = https://files.pythonhosted.org/packages/63/09/c1bc53dab74b1816a00d8d030de5bf98f724c52c1635e07681d312f20be8
++PYTHON_CHARSET_NORMALIZER_VERSION = 3.4.0
++PYTHON_CHARSET_NORMALIZER_SOURCE = charset_normalizer-$(PYTHON_CHARSET_NORMALIZER_VERSION).tar.gz
++PYTHON_CHARSET_NORMALIZER_SITE = https://files.pythonhosted.org/packages/f2/4f/e1808dc01273379acc506d18f1504eb2d299bd4131743b9fc54d7be4df1e
+ PYTHON_CHARSET_NORMALIZER_SETUP_TYPE = setuptools
+ PYTHON_CHARSET_NORMALIZER_LICENSE = MIT
+ PYTHON_CHARSET_NORMALIZER_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
