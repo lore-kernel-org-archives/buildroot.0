@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 995D8D0D786
-	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 13:02:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 220FDD0D78D
+	for <buildroot@archiver.kernel.org>; Fri, 11 Oct 2024 13:06:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48F2561116;
-	Fri, 11 Oct 2024 13:02:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4CDD60D77;
+	Fri, 11 Oct 2024 13:06:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HoJ1IqM7Yoyg; Fri, 11 Oct 2024 13:02:16 +0000 (UTC)
+ id ZKr1dyUEMJTa; Fri, 11 Oct 2024 13:06:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 524D561176
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D44BC6116F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 524D561176;
-	Fri, 11 Oct 2024 13:02:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 73D3C1BF267
- for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 13:02:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D44BC6116F;
+	Fri, 11 Oct 2024 13:06:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B51D81BF859
+ for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 13:06:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7030740852
- for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 13:02:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B1DC5840F8
+ for <buildroot@lists.busybox.net>; Fri, 11 Oct 2024 13:06:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kUVbl6j98m6v for <buildroot@lists.busybox.net>;
- Fri, 11 Oct 2024 13:02:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PjOU1ttKcvMi for <buildroot@lists.busybox.net>;
+ Fri, 11 Oct 2024 13:06:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7A72540848
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A72540848
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7A72540848
- for <buildroot@buildroot.org>; Fri, 11 Oct 2024 13:02:13 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A1AF2C0005;
- Fri, 11 Oct 2024 13:02:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1szFHV-00A5ty-2S;
- Fri, 11 Oct 2024 15:02:09 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D99AB82038
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D99AB82038
+ for <buildroot@buildroot.org>; Fri, 11 Oct 2024 13:06:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C668385D4B; Fri, 11 Oct 2024 13:06:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20240907173123.649023-1-yann.morin.1998@free.fr>
-Date: Fri, 11 Oct 2024 15:02:09 +0200
-In-Reply-To: <20240907173123.649023-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 7 Sep 2024 19:31:23 +0200")
-Message-ID: <87a5fahjxq.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] utils/check-package: require exactly 1 TAB
- and 2 SP on help text 1st line
+To: buildroot@buildroot.org
+Date: Fri, 11 Oct 2024 14:54:04 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 2bfd0ffdfae30d751c825e6a10690f609fd79073
+X-Git-Newrev: e055e7cf2c297d37c0d38bf5780e5be0f90a1608
+X-Patchwork-Hint: ignore
+Message-Id: <20241011130613.C668385D4B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/cryptsetup: bump
+ version to 2.7.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,27 +59,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e055e7cf2c297d37c0d38bf5780e5be0f90a1608
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > Test that the first line starts exactly with one TAB and exactly two
- > spaces before the text.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 9b9ac7f6c0437ec86a912871d61eef038d6b1657)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Florian Fainelli <f.fainelli@gmail.com>
- > Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-
-Committed to 2024.02.x and 2024.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index e0cb65642d..e46cfbdf29 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.7/sha256sums.asc
+-sha256  dce29903a58f7b774fe61191e7e6de955de0f40d9e27b0028ffcf3438c0e9480  cryptsetup-2.7.4.tar.xz
++sha256  d2be4395b8f503b0ebf4b2d81db90c35a97050a358ee21fe62a0dfb66e5d5522  cryptsetup-2.7.5.tar.xz
+ sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 15cadb2840..52f79e177f 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CRYPTSETUP_VERSION_MAJOR = 2.7
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).5
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
