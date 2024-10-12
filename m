@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C5BECF2566
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:04:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43D2CCF2568
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:04:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DD63140A49;
-	Sat, 12 Oct 2024 14:04:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF0BE415CF;
+	Sat, 12 Oct 2024 14:04:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vv7mCfDvbc_p; Sat, 12 Oct 2024 14:04:09 +0000 (UTC)
+ id ZpzFDYJFOxun; Sat, 12 Oct 2024 14:04:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE13041325
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F5DC41379
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DE13041325;
-	Sat, 12 Oct 2024 14:04:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3F76C1BF5DF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F5DC41379;
+	Sat, 12 Oct 2024 14:04:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 516D71BF8A8
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:03:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DCA3F40580
+ by smtp4.osuosl.org (Postfix) with ESMTP id C487A4085A
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:03:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vCJehtiPThRQ for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7z1yYQN3A4Yr for <buildroot@lists.busybox.net>;
  Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60D9C404BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50D4C40865
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 60D9C404BC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50D4C40865
  for <buildroot@buildroot.org>; Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D5768192F; Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
+ id 468557FF6D; Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 15:57:19 +0200
+Date: Sat, 12 Oct 2024 15:57:17 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: e3f20ee84672726b05c8cd94282ce608f4e931fa
-X-Git-Newrev: 7ecfb67c996d154ced1f2bd7d5d4f3900e15e293
+X-Git-Oldrev: ff29338fb8907f4d1cf289f95ce60e5fc5fb3aeb
+X-Git-Newrev: 4c97da549896da028c8bbf353445f98949ab46db
 X-Patchwork-Hint: ignore
-Message-Id: <20241012140334.5D5768192F@busybox.osuosl.org>
+Message-Id: <20241012140334.468557FF6D@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2024.02.x]
- support/testing/tests/init/test_systemd.py: fix 'on top' typo
+ support/scripts/graph-build-time: fix 'auxiliary' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ecfb67c996d154ced1f2bd7d5d4f3900e15e293
+commit: https://git.buildroot.net/buildroot/commit/?id=4c97da549896da028c8bbf353445f98949ab46db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c89a111f06c2584b3f9994b8ead7c5a9caad7295)
+(cherry picked from commit 9c9aa7ffba7336086c07fd79a0e9c0b2873605dc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/init/test_systemd.py | 2 +-
+ support/scripts/graph-build-time | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
-index 7bbc112a56..05a65223b3 100644
---- a/support/testing/tests/init/test_systemd.py
-+++ b/support/testing/tests/init/test_systemd.py
-@@ -198,7 +198,7 @@ class TestInitSystemSystemdRwFull(InitSystemSystemdBase):
+diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
+index 1edc3b3c00..abbbb26151 100755
+--- a/support/scripts/graph-build-time
++++ b/support/scripts/graph-build-time
+@@ -311,7 +311,7 @@ def read_data(input_file):
+     reader = csv.reader(input_file, delimiter=':')
+     pkgs = []
  
- 
- # The following tests are all about read-only rootfs, and exercise either
--# using an un-populated factory for /var, or an overlaysfs ontop of a
-+# using an un-populated factory for /var, or an overlaysfs on top of a
- # pre-populated /var. They all specialise the TestInitSystemSystemdRo*
- # test cases above.
- 
+-    # Auxilliary function to find a package by name in the list.
++    # Auxiliary function to find a package by name in the list.
+     def getpkg(name):
+         for p in pkgs:
+             if p.name == name:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
