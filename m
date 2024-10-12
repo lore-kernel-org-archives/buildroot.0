@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 153E8CF2568
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:05:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D523ECF2568
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:05:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D89EC417D5;
-	Sat, 12 Oct 2024 14:04:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 97FA2405C5;
+	Sat, 12 Oct 2024 14:05:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nIuqNlsCcYL4; Sat, 12 Oct 2024 14:04:59 +0000 (UTC)
+ id YLOizo5Rh6vN; Sat, 12 Oct 2024 14:05:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41682417C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 457B5417CF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 41682417C6;
-	Sat, 12 Oct 2024 14:04:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8753C1BF5DF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 457B5417CF;
+	Sat, 12 Oct 2024 14:05:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C13E61BF5DF
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:03:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C77540874
- for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:03:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 95B5860623
+ for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:03:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VCfhfnTkDfEH for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kO6Kw5VGq0sx for <buildroot@lists.busybox.net>;
  Sat, 12 Oct 2024 14:03:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2287A40887
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03C3860639
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2287A40887
+ by smtp3.osuosl.org (Postfix) with ESMTP id 03C3860639
  for <buildroot@buildroot.org>; Sat, 12 Oct 2024 14:03:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1D3EB813DA; Sat, 12 Oct 2024 14:03:35 +0000 (UTC)
+ id 004EE813DA; Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 15:57:31 +0200
+Date: Sat, 12 Oct 2024 15:57:29 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: b6db1c24a845758244778c735846cf01084eb4ec
-X-Git-Newrev: 920e7f06df2646a0f8b60876d3dbab284c01f479
+X-Git-Oldrev: 7424e08a780f58d076e1ff8cee6b9e16fb8668a6
+X-Git-Newrev: c891c02ef9f6ea725192ee486316e69534d4f4e1
 X-Patchwork-Hint: ignore
-Message-Id: <20241012140335.1D3EB813DA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] boot/shim/shim.mk: fix
- 'deactivate' typo
+Message-Id: <20241012140335.004EE813DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] boot/grub2/Config.in: fix
+ 'targeting' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,84 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=920e7f06df2646a0f8b60876d3dbab284c01f479
+commit: https://git.buildroot.net/buildroot/commit/?id=c891c02ef9f6ea725192ee486316e69534d4f4e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6dc6a747fd44ab908f430c0895e6f6cbd03412e5)
+(cherry picked from commit 0fa6bd5a964e8b8cd9d3728b0bb72d088d380a71)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/shim/shim.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ boot/grub2/Config.in | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/boot/shim/shim.mk b/boot/shim/shim.mk
-index ae57677320..f5b3d1cee6 100644
---- a/boot/shim/shim.mk
-+++ b/boot/shim/shim.mk
-@@ -22,7 +22,7 @@ SHIM_MAKE_OPTS = \
+diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
+index 7c235e96f7..e1f2fc105e 100644
+--- a/boot/grub2/Config.in
++++ b/boot/grub2/Config.in
+@@ -53,7 +53,7 @@ config BR2_TARGET_GRUB2_I386_PC
+ 	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
+ 	help
+-	  Select this option if the platform you're targetting is a
++	  Select this option if the platform you're targeting is a
+ 	  x86 or x86-64 legacy BIOS based platform.
  
- # shim has some assembly function that is not present in Thumb mode:
- # Error: selected processor does not support `mrc p15,0,r2,c9,c13,0' in Thumb mode
--# so, we desactivate Thumb mode
-+# so, we deactivate Thumb mode
- ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
- SHIM_CFLAGS += -marm
- endif
+ config BR2_TARGET_GRUB2_I386_EFI
+@@ -62,7 +62,7 @@ config BR2_TARGET_GRUB2_I386_EFI
+ 	select BR2_TARGET_GRUB2_HAS_PTF
+ 	select BR2_TARGET_GRUB2_HAS_EFI_BOOT
+ 	help
+-	  Select this option if the platform you're targetting has a
++	  Select this option if the platform you're targeting has a
+ 	  32 bits EFI BIOS. Note that some x86-64 platforms use a 32
+ 	  bits EFI BIOS, and this option should be used in this case.
+ 
+@@ -72,7 +72,7 @@ config BR2_TARGET_GRUB2_X86_64_EFI
+ 	select BR2_TARGET_GRUB2_HAS_PTF
+ 	select BR2_TARGET_GRUB2_HAS_EFI_BOOT
+ 	help
+-	  Select this option if the platform you're targetting has a
++	  Select this option if the platform you're targeting has a
+ 	  64 bits EFI BIOS.
+ 
+ config BR2_TARGET_GRUB2_ARM_UBOOT
+@@ -80,7 +80,7 @@ config BR2_TARGET_GRUB2_ARM_UBOOT
+ 	depends on BR2_arm
+ 	select BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
+ 	help
+-	  Select this option if the platform you're targetting is an
++	  Select this option if the platform you're targeting is an
+ 	  ARM u-boot platform, and you want to boot Grub 2 as an u-boot
+ 	  compatible image.
+ 
+@@ -90,7 +90,7 @@ config BR2_TARGET_GRUB2_ARM_EFI
+ 	select BR2_TARGET_GRUB2_HAS_PTF
+ 	select BR2_TARGET_GRUB2_HAS_EFI_BOOT
+ 	help
+-	  Select this option if the platform you're targetting is an
++	  Select this option if the platform you're targeting is an
+ 	  ARM platform and you want to boot Grub 2 as an EFI
+ 	  application.
+ 
+@@ -99,7 +99,7 @@ config BR2_TARGET_GRUB2_ARM64_EFI
+ 	depends on BR2_aarch64
+ 	select BR2_TARGET_GRUB2_HAS_EFI_BOOT
+ 	help
+-	  Select this option if the platform you're targetting is an
++	  Select this option if the platform you're targeting is an
+ 	  Aarch64 platform and you want to boot Grub 2 as an EFI
+ 	  application.
+ 
+@@ -108,7 +108,7 @@ config BR2_TARGET_GRUB2_RISCV64_EFI
+ 	depends on BR2_RISCV_64
+ 	select BR2_TARGET_GRUB2_HAS_EFI_BOOT
+ 	help
+-	  Select this option if the platform you're targetting is a
++	  Select this option if the platform you're targeting is a
+ 	  64bit RISC-V platform and you want to boot Grub 2 as an EFI
+ 	  application.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
