@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21A6CCF2568
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:04:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 153E8CF2568
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:05:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E2AB6417B4;
-	Sat, 12 Oct 2024 14:04:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D89EC417D5;
+	Sat, 12 Oct 2024 14:04:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DD-1pFK4UocJ; Sat, 12 Oct 2024 14:04:55 +0000 (UTC)
+ id nIuqNlsCcYL4; Sat, 12 Oct 2024 14:04:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 486B3417BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41682417C6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 486B3417BD;
-	Sat, 12 Oct 2024 14:04:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0566A1BF5DF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 41682417C6;
+	Sat, 12 Oct 2024 14:04:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8753C1BF5DF
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:03:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C432A404B5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5C77540874
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:03:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CJgw7ESK6ndU for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VCfhfnTkDfEH for <buildroot@lists.busybox.net>;
  Sat, 12 Oct 2024 14:03:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1AA14059B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2287A40887
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C1AA14059B
- for <buildroot@buildroot.org>; Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2287A40887
+ for <buildroot@buildroot.org>; Sat, 12 Oct 2024 14:03:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BDFAA8192F; Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
+ id 1D3EB813DA; Sat, 12 Oct 2024 14:03:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 15:57:26 +0200
+Date: Sat, 12 Oct 2024 15:57:31 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 066e72d2dde8c89981964a8254ad6025471a4816
-X-Git-Newrev: ece45f77a651cd06f05362061e39826829a12e8f
+X-Git-Oldrev: b6db1c24a845758244778c735846cf01084eb4ec
+X-Git-Newrev: 920e7f06df2646a0f8b60876d3dbab284c01f479
 X-Patchwork-Hint: ignore
-Message-Id: <20241012140334.BDFAA8192F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
- support/testing/tests/package/test_weston/overlay/etc/weston.ini: fix
- 'independent' typo
+Message-Id: <20241012140335.1D3EB813DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] boot/shim/shim.mk: fix
+ 'deactivate' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,28 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ece45f77a651cd06f05362061e39826829a12e8f
+commit: https://git.buildroot.net/buildroot/commit/?id=920e7f06df2646a0f8b60876d3dbab284c01f479
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0ab62e5d257bd36ca8fe5f570d18f6619fa11fbe)
+(cherry picked from commit 6dc6a747fd44ab908f430c0895e6f6cbd03412e5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_weston/overlay/etc/weston.ini | 2 +-
+ boot/shim/shim.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_weston/overlay/etc/weston.ini b/support/testing/tests/package/test_weston/overlay/etc/weston.ini
-index 534b5c1f4a..1d710ca727 100644
---- a/support/testing/tests/package/test_weston/overlay/etc/weston.ini
-+++ b/support/testing/tests/package/test_weston/overlay/etc/weston.ini
-@@ -1,5 +1,5 @@
- # The shell "clock-format" is set to "none", in order to have stable
--#  display output, independant from the time. The display output can
-+#  display output, independent from the time. The display output can
- # then be reliably checked with VKMS CRC.
- # "startup-animation" and "close-animation" are set to "none" for
- # faster transitions (fade animations with a software GLES
+diff --git a/boot/shim/shim.mk b/boot/shim/shim.mk
+index ae57677320..f5b3d1cee6 100644
+--- a/boot/shim/shim.mk
++++ b/boot/shim/shim.mk
+@@ -22,7 +22,7 @@ SHIM_MAKE_OPTS = \
+ 
+ # shim has some assembly function that is not present in Thumb mode:
+ # Error: selected processor does not support `mrc p15,0,r2,c9,c13,0' in Thumb mode
+-# so, we desactivate Thumb mode
++# so, we deactivate Thumb mode
+ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ SHIM_CFLAGS += -marm
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
