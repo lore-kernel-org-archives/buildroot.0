@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85634CF256B
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 15:04:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7ED1CF256B
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 15:04:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5398C606DC;
-	Sat, 12 Oct 2024 15:04:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8486960668;
+	Sat, 12 Oct 2024 15:04:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mq6oF95uyzAH; Sat, 12 Oct 2024 15:04:07 +0000 (UTC)
+ id m006nViGsoy6; Sat, 12 Oct 2024 15:04:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D68760730
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B266B60BE5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D68760730;
-	Sat, 12 Oct 2024 15:04:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 198361BF8A8
- for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:02:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B266B60BE5;
+	Sat, 12 Oct 2024 15:04:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 13B241BF47E
+ for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:02:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CF8C660638
- for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:02:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 08F3F81EE2
+ for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:02:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CZ8DW1ct6cp6 for <buildroot@lists.busybox.net>;
- Sat, 12 Oct 2024 15:02:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VSA2wP2WHzR2 for <buildroot@lists.busybox.net>;
+ Sat, 12 Oct 2024 15:02:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 052226067C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B534C81EA5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 052226067C
- for <buildroot@buildroot.org>; Sat, 12 Oct 2024 15:02:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B534C81EA5
+ for <buildroot@buildroot.org>; Sat, 12 Oct 2024 15:02:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 010EF85C84; Sat, 12 Oct 2024 15:02:53 +0000 (UTC)
+ id A07F085E1E; Sat, 12 Oct 2024 15:02:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 17:00:11 +0200
+Date: Sat, 12 Oct 2024 16:56:09 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 606d7566298c583d3201e53d767cf37884d82126
-X-Git-Newrev: 8a66521a6cf19a0f7f9bbdc038a3c6057dc07f93
+X-Git-Oldrev: 4f96c2851d45e903b8c1fb2f2e5e37bf43f401d8
+X-Git-Newrev: 8f83cdaaff5a5867726c9f73092abe847ccb4532
 X-Patchwork-Hint: ignore
-Message-Id: <20241012150253.010EF85C84@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/smcroute: fix
- 'assume' typo
+Message-Id: <20241012150251.A07F085E1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/libpcap: security
+ bump version to 1.10.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a66521a6cf19a0f7f9bbdc038a3c6057dc07f93
+commit: https://git.buildroot.net/buildroot/commit/?id=8f83cdaaff5a5867726c9f73092abe847ccb4532
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit d6f90873eb5d526ae07d976e0ba3063c79cdf346)
+Fixes the following security issues:
+
+CVE-2023-7256: Clean up sock_initaddress() and its callers to avoid
+  double frees in some cases.
+CVE-2024-8006: Fix pcap_findalldevs_ex() not to crash if passed a
+  file:// URL with a path to a directory that cannot be opened.
+
+Changelog: https://github.com/the-tcpdump-group/libpcap/blob/bbcbc9174df3298a854daee2b3e666a4b6e5383a/CHANGES
+
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 0982498c6735a2d90b5540370d17e48c31c962bc)
+[Peter: mark as security bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/smcroute/smcroute.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libpcap/libpcap.hash | 4 ++--
+ package/libpcap/libpcap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/smcroute/smcroute.mk b/package/smcroute/smcroute.mk
-index f7476f1100..f8866f6672 100644
---- a/package/smcroute/smcroute.mk
-+++ b/package/smcroute/smcroute.mk
-@@ -30,7 +30,7 @@ endef
+diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
+index 34339c1261..7f53b99b8c 100644
+--- a/package/libpcap/libpcap.hash
++++ b/package/libpcap/libpcap.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.tcpdump.org/release/libpcap-1.10.4.tar.gz.sig
+-sha256  ed19a0383fad72e3ad435fd239d7cd80d64916b87269550159d20e47160ebe5f  libpcap-1.10.4.tar.gz
++# https://www.tcpdump.org/release/libpcap-1.10.5.tar.gz.sig
++sha256  37ced90a19a302a7f32e458224a00c365c117905c2cd35ac544b6880a81488f0  libpcap-1.10.5.tar.gz
  
- SMCROUTE_POST_INSTALL_TARGET_HOOKS += SMCROUTE_PRUNE_COMPAT_SCRIPT
+ # Hash for license file:
+ sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 3d05590da3..67adb0a978 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# We will asume that CONFIG_NET and CONFIG_INET are already
-+# We will assume that CONFIG_NET and CONFIG_INET are already
- # set in the kernel configuration provided by the user.
- define SMCROUTE_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_MULTICAST)
+-LIBPCAP_VERSION = 1.10.4
++LIBPCAP_VERSION = 1.10.5
+ LIBPCAP_SITE = https://www.tcpdump.org/release
+ LIBPCAP_LICENSE = BSD-3-Clause
+ LIBPCAP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
