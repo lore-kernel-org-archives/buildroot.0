@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E63D2CF256B
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 15:04:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA986CF256B
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 15:04:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B685B61511;
-	Sat, 12 Oct 2024 15:04:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9830360B9B;
+	Sat, 12 Oct 2024 15:04:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yYerfJVZ9KyY; Sat, 12 Oct 2024 15:04:48 +0000 (UTC)
+ id e-VMWo7bKOca; Sat, 12 Oct 2024 15:04:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A964C6150E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4867B61505
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A964C6150E;
-	Sat, 12 Oct 2024 15:04:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4867B61505;
+	Sat, 12 Oct 2024 15:04:50 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 68C911BF47E
- for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:03:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 788DE1BF47E
+ for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:03:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 19EF981EF3
+ by smtp1.osuosl.org (Postfix) with ESMTP id F0C9881ED0
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:02:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q7_-BEbw8mzQ for <buildroot@lists.busybox.net>;
- Sat, 12 Oct 2024 15:02:53 +0000 (UTC)
+ id KN6pvK9fD2T8 for <buildroot@lists.busybox.net>;
+ Sat, 12 Oct 2024 15:02:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 160DD81ED0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5200B81ED6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 160DD81ED0
- for <buildroot@buildroot.org>; Sat, 12 Oct 2024 15:02:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5200B81ED6
+ for <buildroot@buildroot.org>; Sat, 12 Oct 2024 15:02:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 11F7185E1E; Sat, 12 Oct 2024 15:02:53 +0000 (UTC)
+ id 3C21785E1E; Sat, 12 Oct 2024 15:02:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 17:00:12 +0200
+Date: Sat, 12 Oct 2024 17:00:04 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 8a66521a6cf19a0f7f9bbdc038a3c6057dc07f93
-X-Git-Newrev: b5df684e0727b403b16bfb6bd4610dd2f17de5b3
+X-Git-Oldrev: 5ab1fb461e90d06ad46d3d5867235851f9aba2f1
+X-Git-Newrev: c13d79854db10bda6341d2a001d1f507c836ca7d
 X-Patchwork-Hint: ignore
-Message-Id: <20241012150253.11F7185E1E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/socat: fix
- 'incompatible' typo in comment
+Message-Id: <20241012150252.3C21785E1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x]
+ package/qt5virtualkeyboard: fix 'Portuguese' typo in help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5df684e0727b403b16bfb6bd4610dd2f17de5b3
+commit: https://git.buildroot.net/buildroot/commit/?id=c13d79854db10bda6341d2a001d1f507c836ca7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 4c5d82ea058edd74a5423f621543f9cffb162179)
+(cherry picked from commit e23e49e5d586755bbaa2c9ea73073433472102b9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/socat/socat.mk | 2 +-
+ package/qt5/qt5virtualkeyboard/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-index 1e2880c028..7f634c28f0 100644
---- a/package/socat/socat.mk
-+++ b/package/socat/socat.mk
-@@ -36,7 +36,7 @@ endif
- # automake, so we can't use the normal autoreconf logic.
- 
- SOCAT_DEPENDENCIES = host-autoconf
--# incompatibile license (GPL-3.0+)
-+# incompatible license (GPL-3.0+)
- SOCAT_CONF_OPTS = --disable-readline
- 
- ifeq ($(BR2_PACKAGE_LIBOPENSSL):$(BR2_STATIC_LIBS),y:)
+diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
+index 4cac6fd275..efe837e5f9 100644
+--- a/package/qt5/qt5virtualkeyboard/Config.in
++++ b/package/qt5/qt5virtualkeyboard/Config.in
+@@ -31,7 +31,7 @@ config BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS
+ 	  - Norwegian (nb_NO)
+ 	  - Persian/Farsi (fa_FA)
+ 	  - Polish (pl_PL)
+-	  - Portugese (pt_PT)
++	  - Portuguese (pt_PT)
+ 	  - Romanian (ro_RO)
+ 	  - Russian (ru_RU)
+ 	  - Simplified Chinese (zh_CN)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
