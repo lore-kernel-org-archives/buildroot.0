@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03D72CF2568
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5831FCF2568
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:06:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BD75B41ABD;
-	Sat, 12 Oct 2024 14:06:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 28D84416EB;
+	Sat, 12 Oct 2024 14:06:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cYtiUFGaWNDU; Sat, 12 Oct 2024 14:06:47 +0000 (UTC)
+ id QMTF5DNWfv2A; Sat, 12 Oct 2024 14:06:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6578341AA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D2CB41AC4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6578341AA1;
-	Sat, 12 Oct 2024 14:06:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7A94E1BF3DA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0D2CB41AC4;
+	Sat, 12 Oct 2024 14:06:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BC9091BF3DA
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:05:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B665C820D2
- for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:05:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 08E0A40874
+ for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:05:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d_m1EPBT00e1 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kk0wwh6lVfCq for <buildroot@lists.busybox.net>;
  Sat, 12 Oct 2024 14:05:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9EEC81D16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BC1340884
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E9EEC81D16
- for <buildroot@buildroot.org>; Sat, 12 Oct 2024 14:05:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2BC1340884
+ for <buildroot@buildroot.org>; Sat, 12 Oct 2024 14:05:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E701180E1D; Sat, 12 Oct 2024 14:05:30 +0000 (UTC)
+ id 262A885087; Sat, 12 Oct 2024 14:05:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 15:59:18 +0200
+Date: Sat, 12 Oct 2024 15:59:20 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: b4cae331e84ae63462706849e82a1177c1ee86c9
-X-Git-Newrev: ade2368faee0b237e934357f8a218218224434fc
+X-Git-Oldrev: 557d2e0e56af42ad479deac523287a380002d09d
+X-Git-Newrev: 07222174fdf4bdd078d8221ee60d848ce4c9a649
 X-Patchwork-Hint: ignore
-Message-Id: <20241012140530.E701180E1D@busybox.osuosl.org>
+Message-Id: <20241012140531.262A885087@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2024.08.x]
- support/testing/tests/package/test_acpica.py: fix typos in comments
+ support/testing/tests/package/test_cryptsetup.py: fix 'encrypted' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,36 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ade2368faee0b237e934357f8a218218224434fc
+commit: https://git.buildroot.net/buildroot/commit/?id=07222174fdf4bdd078d8221ee60d848ce4c9a649
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 670f6a4bf5a457eaa95340a68a976fb94b89306f)
+(cherry picked from commit 28c56bc26f2c8b4cbeb8124178b349b1bf5b6f57)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_acpica.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ support/testing/tests/package/test_cryptsetup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_acpica.py b/support/testing/tests/package/test_acpica.py
-index f7dd64d7f0..adfb93d504 100644
---- a/support/testing/tests/package/test_acpica.py
-+++ b/support/testing/tests/package/test_acpica.py
-@@ -43,12 +43,12 @@ class TestAcpica(infra.basetest.BRTest):
-         cmd += " | grep -F '\"Hello Buildroot!\"'"
-         self.assertRunOk(cmd)
+diff --git a/support/testing/tests/package/test_cryptsetup.py b/support/testing/tests/package/test_cryptsetup.py
+index 759dfd7c5f..e409ea93e6 100644
+--- a/support/testing/tests/package/test_cryptsetup.py
++++ b/support/testing/tests/package/test_cryptsetup.py
+@@ -109,7 +109,7 @@ class TestCryptSetup(infra.basetest.BRTest):
+         self.assertRunOk(f"cryptsetup close {dm_name}")
  
--        # INT1 is exepcted to be 12345678
-+        # INT1 is expected to be 12345678
-         cmd = "acpiexec -b 'evaluate INT1' dsdt.aml"
-         cmd += " | grep -F 12345678"
-         self.assertRunOk(cmd)
+         # We are NOT supposed to find our plain text message on the
+-        # crypted storage device.
++        # encrypted storage device.
+         _, ret = self.emulator.run(f"grep -Fq '{msg}' {dev}", timeout=10)
+         self.assertNotEqual(ret, 0)
  
--        # Evalute the TEST method which prints its argument
-+        # Evaluate the TEST method which prints its argument
-         cmd = "acpiexec -b 'evaluate TST2 \"Hello World\"' dsdt.aml"
-         cmd += " | grep -F 'Arg0=Hello World'"
-         self.assertRunOk(cmd)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
