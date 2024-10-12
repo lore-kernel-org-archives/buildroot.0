@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6928CF2568
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1B89CF2568
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:05:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6963F419DD;
-	Sat, 12 Oct 2024 14:05:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 745144171F;
+	Sat, 12 Oct 2024 14:05:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2fkgdis_dWwS; Sat, 12 Oct 2024 14:05:16 +0000 (UTC)
+ id FMjGnIH9yA_Q; Sat, 12 Oct 2024 14:05:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C994415B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27FCC419E2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0C994415B5;
-	Sat, 12 Oct 2024 14:05:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9B2611BF5DF
- for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:03:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 27FCC419E2;
+	Sat, 12 Oct 2024 14:05:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 100F51BF5DF
+ for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:03:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4881C40860
- for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:03:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 43679402D0
+ for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:03:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HyFpA-oy8A_1 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t4TpbuxHHSCV for <buildroot@lists.busybox.net>;
  Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6ED684086C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8013F4055A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6ED684086C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8013F4055A
  for <buildroot@buildroot.org>; Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 681AF7FF6D; Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
+ id 7CC978192F; Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 15:57:20 +0200
+Date: Sat, 12 Oct 2024 15:57:21 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 7ecfb67c996d154ced1f2bd7d5d4f3900e15e293
-X-Git-Newrev: 933c693f5a3106e9c8783fa58d753475ae9ea6ee
+X-Git-Oldrev: 8d760c3d102f8cc92e8f195d3bbe74e580e774f2
+X-Git-Newrev: 5fc5e54df9081e92fa67b6bba2d49a73c718b2c3
 X-Patchwork-Hint: ignore
-Message-Id: <20241012140334.681AF7FF6D@busybox.osuosl.org>
+Message-Id: <20241012140334.7CC978192F@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2024.02.x]
- support/testing/tests/package/test_acpica.py: fix typos in comments
+ support/testing/tests/package/test_compressor_base.py: fix 'extension' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,36 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=933c693f5a3106e9c8783fa58d753475ae9ea6ee
+commit: https://git.buildroot.net/buildroot/commit/?id=5fc5e54df9081e92fa67b6bba2d49a73c718b2c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 670f6a4bf5a457eaa95340a68a976fb94b89306f)
+(cherry picked from commit 68316831e478417066ff7515774ef0aeda2bb6a3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_acpica.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ support/testing/tests/package/test_compressor_base.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_acpica.py b/support/testing/tests/package/test_acpica.py
-index f7dd64d7f0..adfb93d504 100644
---- a/support/testing/tests/package/test_acpica.py
-+++ b/support/testing/tests/package/test_acpica.py
-@@ -43,12 +43,12 @@ class TestAcpica(infra.basetest.BRTest):
-         cmd += " | grep -F '\"Hello Buildroot!\"'"
-         self.assertRunOk(cmd)
- 
--        # INT1 is exepcted to be 12345678
-+        # INT1 is expected to be 12345678
-         cmd = "acpiexec -b 'evaluate INT1' dsdt.aml"
-         cmd += " | grep -F 12345678"
-         self.assertRunOk(cmd)
- 
--        # Evalute the TEST method which prints its argument
-+        # Evaluate the TEST method which prints its argument
-         cmd = "acpiexec -b 'evaluate TST2 \"Hello World\"' dsdt.aml"
-         cmd += " | grep -F 'Arg0=Hello World'"
-         self.assertRunOk(cmd)
+diff --git a/support/testing/tests/package/test_compressor_base.py b/support/testing/tests/package/test_compressor_base.py
+index 6555584c10..e822c21139 100644
+--- a/support/testing/tests/package/test_compressor_base.py
++++ b/support/testing/tests/package/test_compressor_base.py
+@@ -24,7 +24,7 @@ class TestCompressorBase(infra.basetest.BRTest):
+                        in unset, the default value is "compress_cmd" appended
+                        with " -t".
+     compressed_file_ext
+-                     - the file extention of compressed files created by the
++                     - the file extension of compressed files created by the
+                        compress command. (ex: ".gz")
+                        if unset, the default value is a dot "." appended with
+                        the value of "compress_cmd".
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
