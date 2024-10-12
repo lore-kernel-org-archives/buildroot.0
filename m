@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EF4ECF2566
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:04:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CE3ACF2568
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:04:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EBCEB416EA;
-	Sat, 12 Oct 2024 14:04:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 577A1416EE;
+	Sat, 12 Oct 2024 14:04:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZieGqpa0YUyJ; Sat, 12 Oct 2024 14:04:27 +0000 (UTC)
+ id kkKbN2IMwigT; Sat, 12 Oct 2024 14:04:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF9A2416EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3908041707
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF9A2416EE;
-	Sat, 12 Oct 2024 14:04:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0859B1BF5DF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3908041707;
+	Sat, 12 Oct 2024 14:04:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 63F1C1BF5DF
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:03:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 13B0A40578
- for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:03:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EFF9C40871
+ for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:03:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 20QjH2ug4PME for <buildroot@lists.busybox.net>;
- Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A-xwZ5OduWN5 for <buildroot@lists.busybox.net>;
+ Sat, 12 Oct 2024 14:03:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A29304057B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE10840858
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A29304057B
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE10840858
  for <buildroot@buildroot.org>; Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9D5908192F; Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
+ id EAF46814C9; Sat, 12 Oct 2024 14:03:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 15:57:24 +0200
+Date: Sat, 12 Oct 2024 15:57:29 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: d298259f93ae0d3977d0c9158b5fe297ca256b1d
-X-Git-Newrev: 11b95072404553dc21f263100a40de27fcc9fc7c
+X-Git-Oldrev: a698a408387e3946b9325d5e725603f7eb73e078
+X-Git-Newrev: 7424e08a780f58d076e1ff8cee6b9e16fb8668a6
 X-Patchwork-Hint: ignore
-Message-Id: <20241012140334.9D5908192F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
- support/testing/tests/package/test_iptables.py: fix 'OUTPUT' typo
+Message-Id: <20241012140334.EAF46814C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] boot/edk2/edk2.mk: fix
+ 'release' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11b95072404553dc21f263100a40de27fcc9fc7c
+commit: https://git.buildroot.net/buildroot/commit/?id=7424e08a780f58d076e1ff8cee6b9e16fb8668a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1772ad2f5f34e28bf845c45ce355e888cdea9f63)
+(cherry picked from commit a52fd38060f092edbb7f558217770e136899d19f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_iptables.py | 2 +-
+ boot/edk2/edk2.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_iptables.py b/support/testing/tests/package/test_iptables.py
-index ee57b31558..924a483ddb 100644
---- a/support/testing/tests/package/test_iptables.py
-+++ b/support/testing/tests/package/test_iptables.py
-@@ -40,7 +40,7 @@ class TestIptables(infra.basetest.BRTest):
-         self.assertRunOk("iptables --version")
+diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
+index 87ac80c88f..e5816b353a 100644
+--- a/boot/edk2/edk2.mk
++++ b/boot/edk2/edk2.mk
+@@ -24,7 +24,7 @@ endif
+ else
+ EDK2_BUILD_TYPE = RELEASE
+ # DEBUG_ON_SERIAL_PORT is only valid in debug builds, so useless to set
+-# it (enabled or disabled) on a relase build.
++# it (enabled or disabled) on a release build.
+ endif
  
-         # We delete all rules in all chains. We also set default
--        # policies to ACCEPT for INPUT and OUPUT chains. This should
-+        # policies to ACCEPT for INPUT and OUTPUT chains. This should
-         # already be the case (default Kernel config). This makes sure
-         # this test starts from a known state and also those common
-         # command invocations works.
+ # Build system notes.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
