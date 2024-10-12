@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEB1BCF2568
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:07:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 899C5CF2566
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:07:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F87541AFA;
-	Sat, 12 Oct 2024 14:07:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 589F241377;
+	Sat, 12 Oct 2024 14:07:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9kdamZDmfaHm; Sat, 12 Oct 2024 14:07:08 +0000 (UTC)
+ id GnwLlBZyYxJT; Sat, 12 Oct 2024 14:07:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A3FB41AFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3583041AFE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8A3FB41AFE;
-	Sat, 12 Oct 2024 14:07:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 82DFD1BF3DA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3583041AFE;
+	Sat, 12 Oct 2024 14:07:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F0A101BF3DA
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:05:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 75F1140871
+ by smtp1.osuosl.org (Postfix) with ESMTP id 52583820A6
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:05:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3AAReOxIDF3w for <buildroot@lists.busybox.net>;
- Sat, 12 Oct 2024 14:05:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jv9UFee9SnhO for <buildroot@lists.busybox.net>;
+ Sat, 12 Oct 2024 14:05:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 460E940860
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87F65820CF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 460E940860
- for <buildroot@buildroot.org>; Sat, 12 Oct 2024 14:05:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 87F65820CF
+ for <buildroot@buildroot.org>; Sat, 12 Oct 2024 14:05:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3CC908452E; Sat, 12 Oct 2024 14:05:30 +0000 (UTC)
+ id 7F54680162; Sat, 12 Oct 2024 14:05:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 15:59:09 +0200
+Date: Sat, 12 Oct 2024 15:59:24 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 5c75ee937a1ad0d72e8d11b88301f79ac88859a1
-X-Git-Newrev: 246c103203faa558164223188eb6d3decd28afd4
+X-Git-Oldrev: c6c872f4949cf1e955a981694f19e400fbf6dbf9
+X-Git-Newrev: c0a0849e7221dde08e77e7cc8db4a1e12ee9b36d
 X-Patchwork-Hint: ignore
-Message-Id: <20241012140530.3CC908452E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] utils/update-rust: fix
- 'following' typo
+Message-Id: <20241012140531.7F54680162@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x]
+ support/testing/tests/package/test_weston/overlay/etc/weston.ini: fix
+ 'independent' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +66,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=246c103203faa558164223188eb6d3decd28afd4
+commit: https://git.buildroot.net/buildroot/commit/?id=c0a0849e7221dde08e77e7cc8db4a1e12ee9b36d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f1ceb3687f16634ee0f41de278d875280f96bdc0)
+(cherry picked from commit 0ab62e5d257bd36ca8fe5f570d18f6619fa11fbe)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/update-rust | 2 +-
+ support/testing/tests/package/test_weston/overlay/etc/weston.ini | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/utils/update-rust b/utils/update-rust
-index 3301434d70..0f40f2e2b6 100755
---- a/utils/update-rust
-+++ b/utils/update-rust
-@@ -27,7 +27,7 @@ RUST_HOSTS = [
- #       BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_PLATFORMS
- # - package/rustc/rustc.mk:
- #       RUSTC_TARGET_NAME
--# and check whether one of the follwoing needs updating:
-+# and check whether one of the following needs updating:
- # - package/rustc/Config.in.host:
- #       BR2_PACKAGE_HOST_RUSTC_ARCH
- #       BR2_PACKAGE_HOST_RUSTC_ABI
+diff --git a/support/testing/tests/package/test_weston/overlay/etc/weston.ini b/support/testing/tests/package/test_weston/overlay/etc/weston.ini
+index 534b5c1f4a..1d710ca727 100644
+--- a/support/testing/tests/package/test_weston/overlay/etc/weston.ini
++++ b/support/testing/tests/package/test_weston/overlay/etc/weston.ini
+@@ -1,5 +1,5 @@
+ # The shell "clock-format" is set to "none", in order to have stable
+-#  display output, independant from the time. The display output can
++#  display output, independent from the time. The display output can
+ # then be reliably checked with VKMS CRC.
+ # "startup-animation" and "close-animation" are set to "none" for
+ # faster transitions (fade animations with a software GLES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
