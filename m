@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04D5BCF2568
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 15:04:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 528C9CF2568
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 15:04:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA77360F71;
-	Sat, 12 Oct 2024 15:04:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2017E61114;
+	Sat, 12 Oct 2024 15:04:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fdevS6CORdgm; Sat, 12 Oct 2024 15:04:20 +0000 (UTC)
+ id tLQoRZFqh5dt; Sat, 12 Oct 2024 15:04:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE87E60D76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C795C606CE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE87E60D76;
-	Sat, 12 Oct 2024 15:04:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 211211BF8A8
- for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:02:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C795C606CE;
+	Sat, 12 Oct 2024 15:04:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 265AC1BF47E
+ for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:03:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2962F6067E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4ED9881EFB
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:02:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0HOuQmtl2Wbc for <buildroot@lists.busybox.net>;
- Sat, 12 Oct 2024 15:02:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Hvb0EwzNMIi7 for <buildroot@lists.busybox.net>;
+ Sat, 12 Oct 2024 15:02:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A507460678
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 385BD80EEE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A507460678
- for <buildroot@buildroot.org>; Sat, 12 Oct 2024 15:02:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 385BD80EEE
+ for <buildroot@buildroot.org>; Sat, 12 Oct 2024 15:02:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 52A6F85E20; Sat, 12 Oct 2024 15:02:52 +0000 (UTC)
+ id 333ED85E1E; Sat, 12 Oct 2024 15:02:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 17:00:05 +0200
+Date: Sat, 12 Oct 2024 17:00:13 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: c13d79854db10bda6341d2a001d1f507c836ca7d
-X-Git-Newrev: 8e241ea84ffe11cac6e8470f3da1123cdd270d2c
+X-Git-Oldrev: 70f8b08042a505fd767a26a4c16afa5b504277b1
+X-Git-Newrev: 972e56bdafeff0770ccf7d5a25417863d40afdce
 X-Patchwork-Hint: ignore
-Message-Id: <20241012150252.52A6F85E20@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/rapidxml: fix
- 'compilation' typo in patch description
+Message-Id: <20241012150253.333ED85E1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/sqlite: fix
+ 'access' typo in help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e241ea84ffe11cac6e8470f3da1123cdd270d2c
+commit: https://git.buildroot.net/buildroot/commit/?id=972e56bdafeff0770ccf7d5a25417863d40afdce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit f301c007c70a2bfe26f0098a55f56a19ea61c299)
+(cherry picked from commit 930663032b94bf5a26ca5e0efc582b9ab57cc677)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-ensure-internal-print-operations-are-declared-before.patch     | 2 +-
+ package/sqlite/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rapidxml/0001-ensure-internal-print-operations-are-declared-before.patch b/package/rapidxml/0001-ensure-internal-print-operations-are-declared-before.patch
-index fcf1b3cce6..18c42415e1 100644
---- a/package/rapidxml/0001-ensure-internal-print-operations-are-declared-before.patch
-+++ b/package/rapidxml/0001-ensure-internal-print-operations-are-declared-before.patch
-@@ -2,7 +2,7 @@
+diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
+index 0ae9878d7b..ce1e369b20 100644
+--- a/package/sqlite/Config.in
++++ b/package/sqlite/Config.in
+@@ -20,7 +20,7 @@ config BR2_PACKAGE_SQLITE_ENABLE_COLUMN_METADATA
+ 	bool "Enable convenient access to meta-data about tables and queries"
+ 	help
+ 	  When this option is defined there are some additional APIs
+-	  enabled to acces meta-data about tables and queries (see
++	  enabled to access meta-data about tables and queries (see
+ 	  https://sqlite.org/compile.html).
  
- Stock rapidxml-1.13 does not allow implementers of the
- `rapidxml_print.hpp` header to build under GCC 4.7 (or newer) due to
--compliation issues. This is a result of "Name lookup changes" introduced
-+compilation issues. This is a result of "Name lookup changes" introduced
- in GCC 4.7 [1]. The following adds forward declarations required to
- compile with GCC 4.7+.
- 
+ config BR2_PACKAGE_SQLITE_ENABLE_FTS3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
