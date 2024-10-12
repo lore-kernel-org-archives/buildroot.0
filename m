@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65FB1CF2568
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 15:04:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04D5BCF2568
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 15:04:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27D786078F;
-	Sat, 12 Oct 2024 15:04:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA77360F71;
+	Sat, 12 Oct 2024 15:04:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xt4sywnGryC2; Sat, 12 Oct 2024 15:04:16 +0000 (UTC)
+ id fdevS6CORdgm; Sat, 12 Oct 2024 15:04:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17B9860BF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE87E60D76
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 17B9860BF4;
-	Sat, 12 Oct 2024 15:04:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 167691BF47E
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE87E60D76;
+	Sat, 12 Oct 2024 15:04:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 211211BF8A8
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:02:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F3C481EEC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2962F6067E
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:02:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MPYh84pUOOoB for <buildroot@lists.busybox.net>;
- Sat, 12 Oct 2024 15:02:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0HOuQmtl2Wbc for <buildroot@lists.busybox.net>;
+ Sat, 12 Oct 2024 15:02:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E7BD81E9E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A507460678
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E7BD81E9E
- for <buildroot@buildroot.org>; Sat, 12 Oct 2024 15:02:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A507460678
+ for <buildroot@buildroot.org>; Sat, 12 Oct 2024 15:02:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 89F2485E20; Sat, 12 Oct 2024 15:02:51 +0000 (UTC)
+ id 52A6F85E20; Sat, 12 Oct 2024 15:02:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 16:53:07 +0200
+Date: Sat, 12 Oct 2024 17:00:05 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: e5874289eb66e5880eaa95203f37874cb4afe6a0
-X-Git-Newrev: 4f96c2851d45e903b8c1fb2f2e5e37bf43f401d8
+X-Git-Oldrev: c13d79854db10bda6341d2a001d1f507c836ca7d
+X-Git-Newrev: 8e241ea84ffe11cac6e8470f3da1123cdd270d2c
 X-Patchwork-Hint: ignore
-Message-Id: <20241012150251.89F2485E20@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/busybox: patch to
- fix tc build on 6.8+ kernels
+Message-Id: <20241012150252.52A6F85E20@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/rapidxml: fix
+ 'compilation' typo in patch description
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,98 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f96c2851d45e903b8c1fb2f2e5e37bf43f401d8
+commit: https://git.buildroot.net/buildroot/commit/?id=8e241ea84ffe11cac6e8470f3da1123cdd270d2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Fixes a build error introduced by bumping the linux kernel headers to
-6.8 with buildroot commit 807a44925697b9567d5bd9872a334a073b3dcf55.
-
-No autobuilder failures were recorded with this problem.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d28d24dbc543cf8365a11582bdf1b8aa0e39bc89)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit f301c007c70a2bfe26f0098a55f56a19ea61c299)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...rc1-removed-the-definitions-related-to-CB.patch | 70 ++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
+ .../0001-ensure-internal-print-operations-are-declared-before.patch     | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/busybox/0010-Linux-v6.8-rc1-removed-the-definitions-related-to-CB.patch b/package/busybox/0010-Linux-v6.8-rc1-removed-the-definitions-related-to-CB.patch
-new file mode 100644
-index 0000000000..d997f00e82
---- /dev/null
-+++ b/package/busybox/0010-Linux-v6.8-rc1-removed-the-definitions-related-to-CB.patch
-@@ -0,0 +1,70 @@
-+From c4f93565acf3718111cdbaea15e1a8aacf2f44cf Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-+Date: Mon, 23 Sep 2024 18:56:00 +0200
-+Subject: [PATCH] tc: Fix compilation with Linux v6.8-rc1
-+
-+Linux v6.8-rc1 removed the definitions related to CBQ:
-+https://github.com/torvalds/linux/commit/33241dca486264193ed68167c8eeae1fb197f3df
-+making tc fail to build.
-+Add some #ifdefs to handle this missing support.
-+
-+Upstream: http://lists.busybox.net/pipermail/busybox/2024-March/090678.html
-+Bug report: https://bugs.busybox.net/show_bug.cgi?id=15931
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ networking/tc.c | 12 ++++++++++++
-+ 1 file changed, 12 insertions(+)
-+
-+diff --git a/networking/tc.c b/networking/tc.c
-+index 3a79fd2d9..d08fd1359 100644
-+--- a/networking/tc.c
-++++ b/networking/tc.c
-+@@ -231,6 +231,13 @@ static int cbq_parse_opt(int argc, char **argv, struct nlmsghdr *n)
-+ 	return 0;
-+ }
-+ #endif
-++
-++#ifndef TCA_CBQ_MAX
-++/*
-++ * Linux v6.8-rc1~131^2~60^2^2 removed the uapi definitions for CBQ.
-++ * See https://git.kernel.org/linus/33241dca48626
-++ */
-++#else
-+ static int cbq_print_opt(struct rtattr *opt)
-+ {
-+ 	struct rtattr *tb[TCA_CBQ_MAX+1];
-+@@ -322,6 +329,7 @@ static int cbq_print_opt(struct rtattr *opt)
-+  done:
-+ 	return 0;
-+ }
-++#endif
-+ 
-+ static FAST_FUNC int print_qdisc(
-+ 		const struct sockaddr_nl *who UNUSED_PARAM,
-+@@ -372,8 +380,10 @@ static FAST_FUNC int print_qdisc(
-+ 		int qqq = index_in_strings(_q_, name);
-+ 		if (qqq == 0) { /* pfifo_fast aka prio */
-+ 			prio_print_opt(tb[TCA_OPTIONS]);
-++#ifdef TCA_CBQ_MAX
-+ 		} else if (qqq == 1) { /* class based queuing */
-+ 			cbq_print_opt(tb[TCA_OPTIONS]);
-++#endif
-+ 		} else {
-+ 			/* don't know how to print options for this qdisc */
-+ 			printf("(options for %s)", name);
-+@@ -442,9 +452,11 @@ static FAST_FUNC int print_class(
-+ 		int qqq = index_in_strings(_q_, name);
-+ 		if (qqq == 0) { /* pfifo_fast aka prio */
-+ 			/* nothing. */ /*prio_print_opt(tb[TCA_OPTIONS]);*/
-++#ifdef TCA_CBQ_MAX
-+ 		} else if (qqq == 1) { /* class based queuing */
-+ 			/* cbq_print_copt() is identical to cbq_print_opt(). */
-+ 			cbq_print_opt(tb[TCA_OPTIONS]);
-++#endif
-+ 		} else {
-+ 			/* don't know how to print options for this class */
-+ 			printf("(options for %s)", name);
-+-- 
-+2.39.5
-+
+diff --git a/package/rapidxml/0001-ensure-internal-print-operations-are-declared-before.patch b/package/rapidxml/0001-ensure-internal-print-operations-are-declared-before.patch
+index fcf1b3cce6..18c42415e1 100644
+--- a/package/rapidxml/0001-ensure-internal-print-operations-are-declared-before.patch
++++ b/package/rapidxml/0001-ensure-internal-print-operations-are-declared-before.patch
+@@ -2,7 +2,7 @@
+ 
+ Stock rapidxml-1.13 does not allow implementers of the
+ `rapidxml_print.hpp` header to build under GCC 4.7 (or newer) due to
+-compliation issues. This is a result of "Name lookup changes" introduced
++compilation issues. This is a result of "Name lookup changes" introduced
+ in GCC 4.7 [1]. The following adds forward declarations required to
+ compile with GCC 4.7+.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
