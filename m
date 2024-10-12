@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64635CF2566
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:07:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0E0BCF2568
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:07:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 25F00405E3;
-	Sat, 12 Oct 2024 14:07:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AF69541B16;
+	Sat, 12 Oct 2024 14:07:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IPNAdSuOAZTe; Sat, 12 Oct 2024 14:07:17 +0000 (UTC)
+ id lKpCken_Twy9; Sat, 12 Oct 2024 14:07:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58C3241B16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 606E3416F1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 58C3241B16;
-	Sat, 12 Oct 2024 14:07:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 606E3416F1;
+	Sat, 12 Oct 2024 14:07:19 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 85F0C1BF3DA
- for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:05:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8CCA51BF3DA
+ for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:05:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AA45D40860
+ by smtp4.osuosl.org (Postfix) with ESMTP id B2C8F40858
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:05:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WlmOYH6jsMyB for <buildroot@lists.busybox.net>;
- Sat, 12 Oct 2024 14:05:32 +0000 (UTC)
+ id 6q9LGXVRLNaL for <buildroot@lists.busybox.net>;
+ Sat, 12 Oct 2024 14:05:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3C6B40858
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C537740865
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E3C6B40858
+ by smtp4.osuosl.org (Postfix) with ESMTP id C537740865
  for <buildroot@buildroot.org>; Sat, 12 Oct 2024 14:05:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF6528285E; Sat, 12 Oct 2024 14:05:31 +0000 (UTC)
+ id BBD0E8285E; Sat, 12 Oct 2024 14:05:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 15:59:28 +0200
+Date: Sat, 12 Oct 2024 15:59:27 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 206c6f0acd9329580f11f5da5620129a4ac9d671
-X-Git-Newrev: 0243bc0795f8ca5014fc8dc4b16d3e6db71d8857
+X-Git-Oldrev: efd28be743c72fd178f219f2e526dfdfa8fca2bd
+X-Git-Newrev: e877a047b37ca20ff19b037ad550cdded563c540
 X-Patchwork-Hint: ignore
-Message-Id: <20241012140531.DF6528285E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x]
- boot/optee-os/optee-os.mk: fix 'PLATFORM' typo
+Message-Id: <20241012140531.BBD0E8285E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] boot/edk2/edk2.mk: fix
+ 'release' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0243bc0795f8ca5014fc8dc4b16d3e6db71d8857
+commit: https://git.buildroot.net/buildroot/commit/?id=e877a047b37ca20ff19b037ad550cdded563c540
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7bd00d5506e8572f316a9b742b78039e0743d86b)
+(cherry picked from commit a52fd38060f092edbb7f558217770e136899d19f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/optee-os/optee-os.mk | 2 +-
+ boot/edk2/edk2.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
-index 6b04a0f5e1..c6de49c151 100644
---- a/boot/optee-os/optee-os.mk
-+++ b/boot/optee-os/optee-os.mk
-@@ -65,7 +65,7 @@ OPTEE_OS_MAKE_OPTS += \
- 	CFG_ARM32_core=y
+diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
+index 87ac80c88f..e5816b353a 100644
+--- a/boot/edk2/edk2.mk
++++ b/boot/edk2/edk2.mk
+@@ -24,7 +24,7 @@ endif
+ else
+ EDK2_BUILD_TYPE = RELEASE
+ # DEBUG_ON_SERIAL_PORT is only valid in debug builds, so useless to set
+-# it (enabled or disabled) on a relase build.
++# it (enabled or disabled) on a release build.
  endif
  
--# Get mandatory PLAFORM and optional PLATFORM_FLAVOR and additional
-+# Get mandatory PLATFORM and optional PLATFORM_FLAVOR and additional
- # variables
- OPTEE_OS_MAKE_OPTS += PLATFORM=$(call qstrip,$(BR2_TARGET_OPTEE_OS_PLATFORM))
- ifneq ($(call qstrip,$(BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR)),)
+ # Build system notes.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
