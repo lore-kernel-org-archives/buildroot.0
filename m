@@ -4,50 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 839C9CF256B
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 15:20:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53005CF2568
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 15:23:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46A9D60679;
-	Sat, 12 Oct 2024 15:20:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 200F960035;
+	Sat, 12 Oct 2024 15:23:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YWAFyeftvRu7; Sat, 12 Oct 2024 15:20:49 +0000 (UTC)
+ id w4ghgFRVFYVB; Sat, 12 Oct 2024 15:23:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7B7D60AEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 381F3605EB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B7B7D60AEF;
-	Sat, 12 Oct 2024 15:20:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4BD9A1BF8A8
- for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:20:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 381F3605EB;
+	Sat, 12 Oct 2024 15:23:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4FAD51BF3F3
+ for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:23:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 47C8D4077E
- for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:20:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 38C0681D5C
+ for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:23:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B_DFQEO_YAKU for <buildroot@lists.busybox.net>;
- Sat, 12 Oct 2024 15:20:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 39yN11gb43PL for <buildroot@lists.busybox.net>;
+ Sat, 12 Oct 2024 15:23:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
+ helo=mslow1.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2054F406B9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2054F406B9
- for <buildroot@buildroot.org>; Sat, 12 Oct 2024 15:20:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1ACC585EEE; Sat, 12 Oct 2024 15:20:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2DA9381D46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DA9381D46
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2DA9381D46
+ for <buildroot@busybox.net>; Sat, 12 Oct 2024 15:23:44 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::221])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 3B40EC273A
+ for <buildroot@busybox.net>; Sat, 12 Oct 2024 15:15:33 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E2F7C240003;
+ Sat, 12 Oct 2024 15:15:27 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1szdq3-00E2Y5-1D;
+ Sat, 12 Oct 2024 17:15:27 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 17:16:12 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 5b2e036af9a42eda6c08bf7919bb83c76c6335d1
-X-Git-Newrev: 846af98bd13ca72542adc7795de0c100455b6bcf
-X-Patchwork-Hint: ignore
-Message-Id: <20241012152044.1ACC585EEE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/expat: security
- bump version to 2.6.3
+To: Michael Fischer <mf@go-sys.de>
+References: <20241001075301.28132-1-mf@go-sys.de>
+Date: Sat, 12 Oct 2024 17:15:27 +0200
+In-Reply-To: <20241001075301.28132-1-mf@go-sys.de> (Michael Fischer's message
+ of "Tue, 1 Oct 2024 09:53:01 +0200")
+Message-ID: <87bjzpe4j4.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/pure-ftpd: bump version to 1.0.52
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,71 +70,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=846af98bd13ca72542adc7795de0c100455b6bcf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+>>>>> "Michael" == Michael Fischer <mf@go-sys.de> writes:
 
-Changelog:
-https://github.com/libexpat/libexpat/blob/R_2_6_3/expat/Changes
+ > This version fixes an out-of-bound reads in the MLSD command, so upgrading is recommended.
+ > It also improves compatibility with various systems.
 
-Fixes CVE-2024-45490, CVE-2024-45491 & CVE-2024-45492.
+ > Update the COPYING hash because of a change in copyright year
 
-Follow upstream switch of project repository to github:
-https://sourceforge.net/p/expat/news/2022/01/project-moved-to-github/
+ > Signed-off-by: Michael Fischer <mf@go-sys.de>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0509885d8dc221978fd332f9768b427ed2775942)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/expat/Config.in  | 2 +-
- package/expat/expat.hash | 6 +-----
- package/expat/expat.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 8 deletions(-)
+Committed to 2024.02.x and 2024.08.x, thanks.
 
-diff --git a/package/expat/Config.in b/package/expat/Config.in
-index 758fb7d516..c227912b03 100644
---- a/package/expat/Config.in
-+++ b/package/expat/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_EXPAT
- 	help
- 	  The Expat XML Parser.
- 
--	  http://expat.sourceforge.net
-+	  https://libexpat.github.io/
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 63890b54df..e40b250ba0 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,3 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.6.2/
--md5  0cb75c8feb842c0794ba89666b762a2d  expat-2.6.1.tar.xz
--sha1  d9e5f953dcacda3c9e69b4886382c3d8847b81bd  expat-2.6.1.tar.xz
--
- # Locally calculated
--sha256  ee14b4c5d8908b1bec37ad937607eab183d4d9806a08adee472c3c3121d27364  expat-2.6.2.tar.xz
-+sha256  274db254a6979bde5aad404763a704956940e465843f2a9bd9ed7af22e2c0efc  expat-2.6.3.tar.xz
- sha256  122f2c27000472a201d337b9b31f7eb2b52d091b02857061a8880371612d9534  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index c6b7fc8b44..f5c6175f28 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.6.2
--EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
-+EXPAT_VERSION = 2.6.3
-+EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
- EXPAT_LICENSE = MIT
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
