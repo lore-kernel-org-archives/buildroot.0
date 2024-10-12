@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99022CF2568
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:05:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03494CF2568
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:05:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 586384064A;
-	Sat, 12 Oct 2024 14:05:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BBC8C419F3;
+	Sat, 12 Oct 2024 14:05:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E5C22Klz6sJU; Sat, 12 Oct 2024 14:05:36 +0000 (UTC)
+ id mwvcWw2eYklO; Sat, 12 Oct 2024 14:05:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98C1040AB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C273419EF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 98C1040AB8;
-	Sat, 12 Oct 2024 14:05:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B6EF11BF8A8
- for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:05:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4C273419EF;
+	Sat, 12 Oct 2024 14:05:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1DE521BF3DA
+ for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:05:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFC9D40874
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6542A405C7
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:05:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ftNLMYJ7eiWr for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tykqc3mOtQyX for <buildroot@lists.busybox.net>;
  Sat, 12 Oct 2024 14:05:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A72284084B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68B3F40614
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A72284084B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68B3F40614
  for <buildroot@buildroot.org>; Sat, 12 Oct 2024 14:05:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 94BB184EF5; Sat, 12 Oct 2024 14:05:29 +0000 (UTC)
+ id 5303284EF5; Sat, 12 Oct 2024 14:05:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 15:50:00 +0200
+Date: Sat, 12 Oct 2024 15:36:42 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 6b0b1682a8a4f8b4d18385671fecce6de5435d8c
-X-Git-Newrev: e7074c3efbbb27a9eff6b4e6b33affcd5411202a
+X-Git-Oldrev: 6cb4e004270f019a44335883470bb60763ce534b
+X-Git-Newrev: 9c5e04561b45114eb04ab4df25c3aec32dfaf906
 X-Patchwork-Hint: ignore
-Message-Id: <20241012140529.94BB184EF5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/sysklogd: bump to
- v2.6.2
+Message-Id: <20241012140529.5303284EF5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] docs/manual/manual.adoc:
+ unbreak BR2_VERSION logic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,56 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7074c3efbbb27a9eff6b4e6b33affcd5411202a
+commit: https://git.buildroot.net/buildroot/commit/?id=9c5e04561b45114eb04ab4df25c3aec32dfaf906
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-From https://github.com/troglobit/sysklogd/releases/tag/v2.6.2:
+The behaviour of asciidoc on my laptop (Debian 10.2.0-1) changed at the end
+of last year, causing the BR2_VERSION logic to no longer work:
 
- - syslog.conf: misplaced continuation character in example
- - Add facility aliases for RFC5424 compliance: LOG_CRON2 and LOG_AUDIT,
-   including facilitynames[] = cron2, audit.  Used by the native logger
-   tool (and any clients linking to libsyslog)
- - Fix data corruption using the listen directive, introduced in 2.6.0
- - Fix IPv6 addresses in listen directive, introduced in 2.6.0
- - Fix logging to remote IPv6 address, add support for parsing
-   [fdd5::6979:c0ff:ee87:8f92]:123 style addresses
- - Fix initial delay for unresolvable remote target.  When a DNS name
-   cannot be resolved, e.g., critically at boot, syslogd blocked with
-   default resolver timeout (5 * 2 sec)
+grep 'manual generated' buildroot-2023.02.*/docs/manual/manual.text
+buildroot-2023.02.6/docs/manual/manual.text:Buildroot 2023.02.6 manual generated on 2023-10-16 08:41:26 UTC from
+buildroot-2023.02.7/docs/manual/manual.text:Buildroot ${BR2_VERSION%%-git*} manual generated on 2023-11-14
+buildroot-2023.02.8/docs/manual/manual.text:Buildroot ${BR2_VERSION%%-git*} manual generated on 2023-12-04
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+We don't really NEED to strip the -git suffix; indeed, for a git tag, there
+would be not -git suffix, while for any other commit there will be one
+and we want to see it (e.g. in the nightly manual, or on a development
+branch locally).
+
+So just drop that to unbreak the version output.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[yann.morin.1998@free.fr: explain why wew don't want to drop it]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 91afa8c8ccdfa668b59e00dc566585c6b450dc87)
+(cherry picked from commit ec270a08150980e37e36eeb43f4471ed8f7d662e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sysklogd/sysklogd.hash | 2 +-
- package/sysklogd/sysklogd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/manual.adoc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
-index 0a5790a1a5..8b1cd63a73 100644
---- a/package/sysklogd/sysklogd.hash
-+++ b/package/sysklogd/sysklogd.hash
-@@ -1,5 +1,5 @@
- # Upstream .sha256 from GitHub
--sha256  e35d5c5f55019976302ac9818890bd6b6858db257506f0e9afaa718a8dee9cc3  sysklogd-2.6.1.tar.gz
-+sha256  40a3bb593d7507e49a4379f48ae8a9bc4b68dcc583efcdbf3b9056128442c92a  sysklogd-2.6.2.tar.gz
- 
- # Locally calculated
- sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index 86bd4ef168..eeb3a3748d 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
+diff --git a/docs/manual/manual.adoc b/docs/manual/manual.adoc
+index 31d5f80bae..cfcc3e52a9 100644
+--- a/docs/manual/manual.adoc
++++ b/docs/manual/manual.adoc
 @@ -4,7 +4,7 @@
- #
- ################################################################################
+ = The Buildroot user manual
+ :toc:
  
--SYSKLOGD_VERSION = 2.6.1
-+SYSKLOGD_VERSION = 2.6.2
- SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
- SYSKLOGD_LICENSE = BSD-3-Clause
- SYSKLOGD_LICENSE_FILES = LICENSE
+-Buildroot {sys:echo $\{BR2_VERSION%%-git*\}} manual generated on {localdate}
++Buildroot {sys:echo $BR2_VERSION} manual generated on {localdate}
+ {localtime} from git revision {sys:git rev-parse --short HEAD}
+ 
+ The Buildroot manual is written by the Buildroot developers.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
