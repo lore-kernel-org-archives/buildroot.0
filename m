@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6520CCF256B
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 15:03:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A6F1CF256B
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 15:03:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BB04606D5;
-	Sat, 12 Oct 2024 15:03:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2927B60678;
+	Sat, 12 Oct 2024 15:03:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QwvUIKjpccXb; Sat, 12 Oct 2024 15:03:37 +0000 (UTC)
+ id ZHZXJ1m-YcxU; Sat, 12 Oct 2024 15:03:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5782460701
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B553B6071A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5782460701;
-	Sat, 12 Oct 2024 15:03:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0FB3D1BF47E
+	by smtp3.osuosl.org (Postfix) with ESMTP id B553B6071A;
+	Sat, 12 Oct 2024 15:03:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 146561BF8A8
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:02:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB83B60628
+ by smtp1.osuosl.org (Postfix) with ESMTP id EA0DA81EDD
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 15:02:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5uimV3E6lnaC for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zUHDAQs6QBrg for <buildroot@lists.busybox.net>;
  Sat, 12 Oct 2024 15:02:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2C7160638
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1310081ED0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F2C7160638
- for <buildroot@buildroot.org>; Sat, 12 Oct 2024 15:02:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1310081ED0
+ for <buildroot@buildroot.org>; Sat, 12 Oct 2024 15:02:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ED1FB85E1F; Sat, 12 Oct 2024 15:02:51 +0000 (UTC)
+ id 0E89885E1E; Sat, 12 Oct 2024 15:02:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
 Date: Sat, 12 Oct 2024 17:00:02 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: e0467347ed39b01c09cee6cd405bd8e24e21b7f5
-X-Git-Newrev: d1b3a69a87dd8749bd00d4fe76aa2bfa85fd1229
+X-Git-Oldrev: d1b3a69a87dd8749bd00d4fe76aa2bfa85fd1229
+X-Git-Newrev: 842eb8b54fdcc77b1655b386dcb0af80cb4b778b
 X-Patchwork-Hint: ignore
-Message-Id: <20241012150251.ED1FB85E1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/qt5base: fix
- 'from' typo in patch description
+Message-Id: <20241012150252.0E89885E1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/qt5enginio: fix
+ 'versioning' typo in comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1b3a69a87dd8749bd00d4fe76aa2bfa85fd1229
+commit: https://git.buildroot.net/buildroot/commit/?id=842eb8b54fdcc77b1655b386dcb0af80cb4b778b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 53e265522ff758f45839b43d6685e54693b3c91c)
+(cherry picked from commit 7426aaddeea3da229aa42310cb890cec56e4fbdb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...id-breaking-compilation-for-obscure-EGLNativeDisplayType-types.patch | 2 +-
+ package/qt5/qt5enginio/qt5enginio.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/0005-eglfs-avoid-breaking-compilation-for-obscure-EGLNativeDisplayType-types.patch b/package/qt5/qt5base/0005-eglfs-avoid-breaking-compilation-for-obscure-EGLNativeDisplayType-types.patch
-index 3621cdb2d3..9e89d8a5cf 100644
---- a/package/qt5/qt5base/0005-eglfs-avoid-breaking-compilation-for-obscure-EGLNativeDisplayType-types.patch
-+++ b/package/qt5/qt5base/0005-eglfs-avoid-breaking-compilation-for-obscure-EGLNativeDisplayType-types.patch
-@@ -27,7 +27,7 @@ It is to be noted, though, that in some ABIs (like x32), the size of a
- nativeDisplay that is not already a pointer, might be bigger than that
- of a pointer. There is not much we can do here anyway, since there would
- be no way to fit that in a void* to begin with, and the build will still
--fail for those situations. Those types of ABIs are far frome being
-+fail for those situations. Those types of ABIs are far from being
- widespread, the most prominent one, x32, even being retired...
+diff --git a/package/qt5/qt5enginio/qt5enginio.mk b/package/qt5/qt5enginio/qt5enginio.mk
+index a9572db28b..b74775f298 100644
+--- a/package/qt5/qt5enginio/qt5enginio.mk
++++ b/package/qt5/qt5enginio/qt5enginio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- To be noted further: a more usual solution (as suggested in QTBUG-72567
+-# Qt5Enginio does not follow Qt versionning
++# Qt5Enginio does not follow Qt versioning
+ # see https://bugreports.qt.io/browse/QTBUG-50111
+ QT5ENGINIO_VERSION = 1.6.3
+ QT5ENGINIO_SITE = https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
