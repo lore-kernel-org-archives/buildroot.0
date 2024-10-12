@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B8C7CF2566
-	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:05:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99022CF2568
+	for <buildroot@archiver.kernel.org>; Sat, 12 Oct 2024 14:05:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D3963405C7;
-	Sat, 12 Oct 2024 14:05:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 586384064A;
+	Sat, 12 Oct 2024 14:05:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lu0CLMNPcefl; Sat, 12 Oct 2024 14:05:32 +0000 (UTC)
+ id E5C22Klz6sJU; Sat, 12 Oct 2024 14:05:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F007405E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98C1040AB8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7F007405E2;
-	Sat, 12 Oct 2024 14:05:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B0AD91BF3DA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 98C1040AB8;
+	Sat, 12 Oct 2024 14:05:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B6EF11BF8A8
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:05:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AD35D60623
+ by smtp4.osuosl.org (Postfix) with ESMTP id AFC9D40874
  for <buildroot@lists.busybox.net>; Sat, 12 Oct 2024 14:05:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FxBx6yt_6moE for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ftNLMYJ7eiWr for <buildroot@lists.busybox.net>;
  Sat, 12 Oct 2024 14:05:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA4F760612
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A72284084B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA4F760612
+ by smtp4.osuosl.org (Postfix) with ESMTP id A72284084B
  for <buildroot@buildroot.org>; Sat, 12 Oct 2024 14:05:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B80BE85C3B; Sat, 12 Oct 2024 14:05:29 +0000 (UTC)
+ id 94BB184EF5; Sat, 12 Oct 2024 14:05:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Oct 2024 15:54:35 +0200
+Date: Sat, 12 Oct 2024 15:50:00 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 52f9df9222e705402db234d84c977ab1bee68f6f
-X-Git-Newrev: 3b15f7defba72b427e9d4b4eb0730d9f7359b585
+X-Git-Oldrev: 6b0b1682a8a4f8b4d18385671fecce6de5435d8c
+X-Git-Newrev: e7074c3efbbb27a9eff6b4e6b33affcd5411202a
 X-Patchwork-Hint: ignore
-Message-Id: <20241012140529.B80BE85C3B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] support/scripts: fix
- RPATH fixups
+Message-Id: <20241012140529.94BB184EF5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/sysklogd: bump to
+ v2.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,80 +60,62 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7902492989014670896=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7902492989014670896==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=3b15f7defba72b427e9d4b4eb0730d9f7359b585
+commit: https://git.buildroot.net/buildroot/commit/?id=e7074c3efbbb27a9eff6b4e6b33affcd5411202a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Commit a87abcf6da65 (Makefile: run PPD and RPATH fixup in host-fialize)
-(sic) moved the fixups peviously done in prepare-sdk, to host-finalize.
+From https://github.com/troglobit/sysklogd/releases/tag/v2.6.2:
 
-This exposed a bug in fix-rpath, when RPATH contains multiple entries,
-like:  /PPD/host-foo/host/lib:/PPD/host-foo/host/lib/foo
+ - syslog.conf: misplaced continuation character in example
+ - Add facility aliases for RFC5424 compliance: LOG_CRON2 and LOG_AUDIT,
+   including facilitynames[] = cron2, audit.  Used by the native logger
+   tool (and any clients linking to libsyslog)
+ - Fix data corruption using the listen directive, introduced in 2.6.0
+ - Fix IPv6 addresses in listen directive, introduced in 2.6.0
+ - Fix logging to remote IPv6 address, add support for parsing
+   [fdd5::6979:c0ff:ee87:8f92]:123 style addresses
+ - Fix initial delay for unresolvable remote target.  When a DNS name
+   cannot be resolved, e.g., critically at boot, syslogd blocked with
+   default resolver timeout (5 * 2 sec)
 
-In that situation, we want to get rid of /PPD/host-foo and replace it
-with the finale HOST_DIR, so we mangle the RPATH with a sed expression.
-
-However, that sed expression only ever replaces the first match, as it
-is missing the 'g' option. Thus, the second (and following) parts of
-RPATH are still referring to the PPD, and thus patchelf does not find it
-relative to the final HOST_DIR, amd rops it. This eventually lead to a
-final RPATH set as $ORIGIN/../lib instead of the expected
-$ORIGIN/../lib:$ORIGIN/../lib/foo
-
-This is the case for host-systemd, which installs some of its libraries
-in $PREFIX/lib/systemd/ and adds an RPATH set appropriately to
-/PPD/host-systemd/host/lib:/PPD/host-systemd/host/lib/systemd and that
-gets incorrectly mangled.
-
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/issues/39
-
-Also fix a typo in the comment just above.
-
-Reported-by: José Luis Salvador Rufo @jlsalvador
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Tested-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
-Reviewed-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
-Tested-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Reviewed-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2100a76d9ef620d9749352fb85f83720412598ec)
+(cherry picked from commit 91afa8c8ccdfa668b59e00dc566585c6b450dc87)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/fix-rpath | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/sysklogd/sysklogd.hash | 2 +-
+ package/sysklogd/sysklogd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-index 1e58646cea..d3421504a5 100755
---- a/support/scripts/fix-rpath
-+++ b/support/scripts/fix-rpath
-@@ -84,9 +84,9 @@ patch_file() {
-     # work with the --make-rpath-relative ${rootdir} invocation as
-     # the per-package host directory is not within ${rootdir}. So,
-     # we rewrite all RPATHs pointing to per-package directories so
--    # that they point to the global host directry.
-+    # that they point to the global host directory.
-     # shellcheck disable=SC2001 # ${var//search/replace} hard when search or replace have / in them
--    changed_rpath="$(echo "${rpath}" | sed "s@${PER_PACKAGE_DIR}/[^/]\+/host@${HOST_DIR}@")"
-+    changed_rpath="$(echo "${rpath}" | sed "s@${PER_PACKAGE_DIR}/[^/]\+/host@${HOST_DIR}@g")"
-     if test "${rpath}" != "${changed_rpath}" ; then
-         "${PATCHELF}" --set-rpath "${changed_rpath}" "${file}"
-     fi
-
---===============7902492989014670896==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
+index 0a5790a1a5..8b1cd63a73 100644
+--- a/package/sysklogd/sysklogd.hash
++++ b/package/sysklogd/sysklogd.hash
+@@ -1,5 +1,5 @@
+ # Upstream .sha256 from GitHub
+-sha256  e35d5c5f55019976302ac9818890bd6b6858db257506f0e9afaa718a8dee9cc3  sysklogd-2.6.1.tar.gz
++sha256  40a3bb593d7507e49a4379f48ae8a9bc4b68dcc583efcdbf3b9056128442c92a  sysklogd-2.6.2.tar.gz
+ 
+ # Locally calculated
+ sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index 86bd4ef168..eeb3a3748d 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSKLOGD_VERSION = 2.6.1
++SYSKLOGD_VERSION = 2.6.2
+ SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
+ SYSKLOGD_LICENSE = BSD-3-Clause
+ SYSKLOGD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7902492989014670896==--
