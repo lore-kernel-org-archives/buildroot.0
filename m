@@ -4,66 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A832ACF2579
-	for <buildroot@archiver.kernel.org>; Sun, 13 Oct 2024 16:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F050CF2579
+	for <buildroot@archiver.kernel.org>; Sun, 13 Oct 2024 16:48:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E70CA8109E;
-	Sun, 13 Oct 2024 16:48:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D895681027;
+	Sun, 13 Oct 2024 16:48:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZyuHAgJLHajF; Sun, 13 Oct 2024 16:48:20 +0000 (UTC)
+ id dpfGSnWqhkBE; Sun, 13 Oct 2024 16:48:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E90A080FFB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F20FB81120
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E90A080FFB;
-	Sun, 13 Oct 2024 16:48:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D7CD71BF3AF
- for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 16:48:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F20FB81120;
+	Sun, 13 Oct 2024 16:48:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ACB8F1BF3AF
+ for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 16:48:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C3CEA40177
- for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 16:48:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A940180FFB
+ for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 16:48:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6trOl_odb_ZA for <buildroot@lists.busybox.net>;
- Sun, 13 Oct 2024 16:48:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5YoqNeRA6W1x for <buildroot@lists.busybox.net>;
+ Sun, 13 Oct 2024 16:48:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 49A71400A6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49A71400A6
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 49A71400A6
- for <buildroot@buildroot.org>; Sun, 13 Oct 2024 16:48:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8547C81027
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8547C81027
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8547C81027
+ for <buildroot@buildroot.org>; Sun, 13 Oct 2024 16:48:25 +0000 (UTC)
 Received: from home.juju.sh (unknown
  [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id CB305B0051B;
- Sun, 13 Oct 2024 18:48:05 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id D91C7B00535;
+ Sun, 13 Oct 2024 18:48:17 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 13 Oct 2024 18:47:58 +0200
-Message-ID: <20241013164759.3729983-1-ju.o@free.fr>
+Date: Sun, 13 Oct 2024 18:47:59 +0200
+Message-ID: <20241013164759.3729983-2-ju.o@free.fr>
 X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241013164759.3729983-1-ju.o@free.fr>
+References: <20241013164759.3729983-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1728838093;
- bh=O9C8Ofn0Zne1grrNTsmu5slsxfZiT3eK4nUJzAnZKis=;
- h=From:To:Cc:Subject:Date:From;
- b=DbKrwxXWUO2dNfFeJx1KSDnqfmI01XhgmSe1OtGLUSace9nKn73GW8/tHIeYE/jxy
- yS1slGAOuGvMjCkgltKq+I8j60v8+jHq0BIvp/aW/8P6YsC7YLQuDOVBRB/S+XuZ7S
- G+1XOLkpb44b15SvwZbhLwhlHpjR8zdTVqisQW0fkF47KXPI9hVihp6OJDy3lUVEyH
- LbV9HsvNz9rgoRoGgni0iH1b9UJ77hHKt4Kvj3mLTCMPr2UdB8V8MUgCH48NPc5PHL
- SgUuPeQvOiMPts0iH4PCDPjpFjgwyEk9rgcDB8UpZQSPuNccmT5wDi+TKGh3OCI/eg
- aK6HXWZIIGrfA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1728838103;
+ bh=b3lXCSO6fLLd2oOf0MtkTvfCpU1AEpo9+F+gQlvUY5g=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=siV8JtIZIzXzoeVvLZosqa3mqgBkDpFp7HXwnU+HEiZxlbfayhWC2rNM5IH14EImG
+ DDqXD5bKf7hun9VEewqH6uBvEQ+0TjkXmC//KSiG0yNyECQ0mlbXL3l+qvFTthtY6A
+ uNfoRT9F2lUKZC9AdQRgoxal+M/AFjeqzkM+JhGL2/FD8jii71Jmo4vaJKV8APaIjL
+ +gMFklCG7518qykho1mj/opUZp2kNzXquxtE57lKTa62esbD0GEQ9GPfHlYF5DVg/m
+ yZohQGTE8dDT8a4IRb8tq2ghgC1gfBV1kGkvXjWbXwkGLAMaipDsfVzeHzQAG21Qge
+ /1GQTdChy+seg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=DbKrwxXW
-Subject: [Buildroot] [PATCH 1/2] package/bitcoin: bump to version 28.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=siV8JtIZ
+Subject: [Buildroot] [PATCH 2/2] support/testing: package: bitcoin: fix test
+ by increasing timeouts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,82 +85,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since 26.2, see:
-https://bitcoincore.org/en/releases/27.0/
-https://bitcoincore.org/en/releases/27.1/
-https://bitcoincore.org/en/releases/28.0/
+Generating Bitcoins to an address can take longer than the current
+timeout, on slow runners. This commit fixes this issue by increasing
+the timeout on specific commands. This issue was also observed more
+frequently on newer bitcoin-core version 28.0.
 
-A notable change in version 28.0 is that bitcoin code now needs
-gcc >= 11.1. This change is reflected in the package Kconfig
-Config.in file.
-
-License file hash changed, due to year update in upstream commit:
-https://github.com/bitcoin/bitcoin/commit/1f8450f066724dfbb5c5bc4060843e2f3340ed88
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/7782083081
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/8072857206
----
- package/bitcoin/Config.in    | 6 +++---
- package/bitcoin/bitcoin.hash | 8 ++++----
- package/bitcoin/bitcoin.mk   | 2 +-
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ support/testing/tests/package/test_bitcoin.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
-index 060cae24f5..425e99ce8b 100644
---- a/package/bitcoin/Config.in
-+++ b/package/bitcoin/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_BITCOIN
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread, boost-filesystem
- 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_BOOST
-@@ -46,9 +46,9 @@ config BR2_PACKAGE_BITCOIN_WALLET
+diff --git a/support/testing/tests/package/test_bitcoin.py b/support/testing/tests/package/test_bitcoin.py
+index 93aa9383ab..1f00345a12 100644
+--- a/support/testing/tests/package/test_bitcoin.py
++++ b/support/testing/tests/package/test_bitcoin.py
+@@ -130,7 +130,7 @@ class TestBitcoin(infra.basetest.BRTest):
+         # #1. We should receive the 50 BTC reward at this address.
+         cmd = self.cli_cmd
+         cmd += f" generatetoaddress {req_blk_count} {btc_addr1}"
+-        self.assertRunOk(cmd)
++        self.assertRunOk(cmd, timeout=30)
  
- endif
+         # We should now see the previously created blocks.
+         cur_blk_cnt = self.get_block_count()
+@@ -169,7 +169,7 @@ class TestBitcoin(infra.basetest.BRTest):
+         # the previous transaction (but this will not give the 50 BTC
+         # reward).
+         cmd = f"{self.cli_cmd} generatetoaddress 1 {btc_addr2}"
+-        self.assertRunOk(cmd)
++        self.assertRunOk(cmd, timeout=30)
  
--comment "bitcoin needs a toolchain w/ C++, threads, wchar, gcc >= 9"
-+comment "bitcoin needs a toolchain w/ C++, threads, wchar, gcc >= 11"
- 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_9
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_11
-diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
-index 9bd0843085..c7dad34d0a 100644
---- a/package/bitcoin/bitcoin.hash
-+++ b/package/bitcoin/bitcoin.hash
-@@ -1,7 +1,7 @@
--# Hash from: https://bitcoincore.org/bin/bitcoin-core-26.2/SHA256SUMS
-+# Hash from: https://bitcoincore.org/bin/bitcoin-core-28.0/SHA256SUMS
- # After checking pgp signature from:
--# https://bitcoincore.org/bin/bitcoin-core-26.2/SHA256SUMS.asc
--sha256  78d59418741f45cbdaa9bf20ebc49a5e95ff9f7172f72fc78d14307eaf341b3c  bitcoin-26.2.tar.gz
-+# https://bitcoincore.org/bin/bitcoin-core-28.0/SHA256SUMS.asc
-+sha256  700ae2d1e204602eb07f2779a6e6669893bc96c0dca290593f80ff8e102ff37f  bitcoin-28.0.tar.gz
- 
- # Hash for license file
--sha256  a6331cd1f889397adfc0c3b0535682a20950c6cf8e5c712e9997a15ce98324e1  COPYING
-+sha256  779d9beab4eef2340bb1e86e91f8f55dea9b0985a2d03fbcbb52bd713e091e1b  COPYING
-diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
-index 9ca29092ad..9a5f4d6494 100644
---- a/package/bitcoin/bitcoin.mk
-+++ b/package/bitcoin/bitcoin.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BITCOIN_VERSION = 26.2
-+BITCOIN_VERSION = 28.0
- BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
- BITCOIN_AUTORECONF = YES
- BITCOIN_LICENSE = MIT
+         # We should see one more block.
+         cur_blk_cnt = self.get_block_count()
 -- 
 2.47.0
 
