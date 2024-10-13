@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 992E2CF2579
-	for <buildroot@archiver.kernel.org>; Sun, 13 Oct 2024 18:42:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0AC4CF2579
+	for <buildroot@archiver.kernel.org>; Sun, 13 Oct 2024 18:48:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EB57810EA;
-	Sun, 13 Oct 2024 18:42:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8517780B49;
+	Sun, 13 Oct 2024 18:48:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lt-NMzKIsRGI; Sun, 13 Oct 2024 18:42:43 +0000 (UTC)
+ id H_i-GraXmo3Y; Sun, 13 Oct 2024 18:48:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 246ED810EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9122980B4F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 246ED810EC;
-	Sun, 13 Oct 2024 18:42:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 373061BF3DF
- for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 18:42:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9122980B4F;
+	Sun, 13 Oct 2024 18:48:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B7BE1BF3DF
+ for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 18:48:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 32E4C60621
- for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 18:42:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3B03A80B4F
+ for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 18:48:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9WFEkdxosxvE for <buildroot@lists.busybox.net>;
- Sun, 13 Oct 2024 18:42:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8KwvTVmxNRo8 for <buildroot@lists.busybox.net>;
+ Sun, 13 Oct 2024 18:48:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::132; helo=mail-il1-x132.google.com;
+ client-ip=2607:f8b0:4864:20::d32; helo=mail-io1-xd32.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3845760603
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3845760603
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
- [IPv6:2607:f8b0:4864:20::132])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3845760603
- for <buildroot@buildroot.org>; Sun, 13 Oct 2024 18:42:40 +0000 (UTC)
-Received: by mail-il1-x132.google.com with SMTP id
- e9e14a558f8ab-3a3b7d95a11so12629935ab.2
- for <buildroot@buildroot.org>; Sun, 13 Oct 2024 11:42:40 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4F71D80B49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F71D80B49
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4F71D80B49
+ for <buildroot@buildroot.org>; Sun, 13 Oct 2024 18:48:12 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id
+ ca18e2360f4ac-83542d9d7c1so159809439f.2
+ for <buildroot@buildroot.org>; Sun, 13 Oct 2024 11:48:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728844959; x=1729449759;
+ d=1e100.net; s=20230601; t=1728845291; x=1729450091;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=W5JyaAviiqazZgR8HpWT3wBukzvHIQ0FqNdsW6Ltb9o=;
- b=exFgykbCAeu0/pZR7y73r944/TbTiwhCx28yirFFU4t4gpBNpgKrUES5A2RgQQkWkm
- oReFh4Uu1OOjE/EM1ax/UzeVyaWZMN0wTpyBGlyimtF+t53zMvPYmRVtNF9TMSyj6zxa
- 7CwuQS0uL9vtDg0h4igD9y2QBsv53DeHlqOMkkc0g+mRJrlN9KRqF9LxLePfyRHqvefE
- cWyPpsZ2vfNjnNIum7u78Axjq/OHBSCr/BjidHjBy+Lx1UNoPqzYulyz979RkXUL0/Nv
- KGsgLahaf8smJjoMm3s6+zcGVFwPj64loRxJTPirWGMR4veGLWMDufgjH6FSERvmrpxF
- UEFA==
-X-Gm-Message-State: AOJu0Yy8xLPOEPczzD+HJptd8CUvzEWCOr9Q3NJf8jzGTW2cS3/JgzNW
- 7QhvXw+1avOdV4jMZ2SZkv4qFtzwvbs1gwdCYTHN7bjdjprU6bADg5ry6w==
-X-Google-Smtp-Source: AGHT+IEm2SeynhxcQe7am90cagzizy4sDGFPoBOhREGAinQW4ib7IU+tNCPtnDLeg1roP2MsXX7UlQ==
-X-Received: by 2002:a05:6e02:168e:b0:39f:5d96:1fde with SMTP id
- e9e14a558f8ab-3a3b5f7a6c2mr58552475ab.3.1728844958938; 
- Sun, 13 Oct 2024 11:42:38 -0700 (PDT)
+ bh=CFQXxTnUjKk13xrctQmHiXAzbfUZE2TAwORTqMseRf4=;
+ b=jz87EJaGw5H0Pj5UUq/r0dwf2VmdvFFLZcS8nsFgl0xVnyYR1YGDuMUpVI5IPt5PN6
+ WfjpecOUmRMCpQcPXB2ge3l1oHo+ALwbXU8XwTrcLj+/iEftA7x4ntYmxQhJRymnQHP3
+ Yzv1rYKF9yJjybD/EINp8AjXRpypITXBt8mqun+jbNWBuF+yW9Fs+uxWhE5O6N3MDT2M
+ JpjJbGJbRgJp7QrSAAHpFVwRan6Hnso0gzMlf3QRLw9lLmw9nStLcfJ2jjIvYPRzt55D
+ H79SeevB2sHKhau0bcgSwzjCf/EFRpzjfJevkGltA7kpSGsSTMB70IxnR4bPuY+/dQoS
+ EVMg==
+X-Gm-Message-State: AOJu0YyfocsuipHT9D7BQjy+koOP3dZFGO9IuYcOu+FaMP4zE4nKZOvZ
+ E8MczbD6/2Io/qwzqaEuPpRFzYd7kGyY0L2X1r3l+z3yx1mu9apNNIyRXg==
+X-Google-Smtp-Source: AGHT+IF2mtqtz4GsaljmuSgRJkmgklhhRkNh088ETqzow2Xzj/dlGS0/hgzgHbjG47wu66cJUja3iw==
+X-Received: by 2002:a05:6602:6c18:b0:835:359c:3f03 with SMTP id
+ ca18e2360f4ac-83794d44c60mr735588639f.15.1728845291044; 
+ Sun, 13 Oct 2024 11:48:11 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-159-223.hlrn.qwest.net.
  [71.33.159.223]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4dbc395e4afsm847228173.136.2024.10.13.11.42.38
+ ca18e2360f4ac-8354b90716bsm164539839f.18.2024.10.13.11.48.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 13 Oct 2024 11:42:38 -0700 (PDT)
+ Sun, 13 Oct 2024 11:48:10 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Oct 2024 12:42:36 -0600
-Message-Id: <20241013184236.2789089-1-james.hilliard1@gmail.com>
+Date: Sun, 13 Oct 2024 12:48:07 -0600
+Message-Id: <20241013184807.2793442-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1728844959; x=1729449759; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1728845291; x=1729450091; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=W5JyaAviiqazZgR8HpWT3wBukzvHIQ0FqNdsW6Ltb9o=;
- b=A/mWhRl7m7G70PBvo3iGn8GqqdTXgMv2zYmhnxfAyw6fZdzgTEQezCRI8eUSfGYF+C
- Pk8EMCT5k+zHdZOxB61th8YFoA3gAbI2qvze1Qi6eDXOz+Ajk9miMJQPdUyW1tQhmSyG
- kAbhqzh3XUFx1K753vKgIPgIbJxPGeocRMP1c037/feVGHrAh1pYCGjQJoJBTYQHN/ve
- BRwx2gca5UpXP7ewFdEl3GPzAT8X2zXEanyZPjVrQQ/kzCnahCVtCBfA28SR6amaawNT
- HF6tA2qb+bQ+721old88IAxJYtCgzD2Qu5WAvNotaWsh39MXOSNF0+OxmWc1HI7kR9hK
- gh1w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=CFQXxTnUjKk13xrctQmHiXAzbfUZE2TAwORTqMseRf4=;
+ b=nOLeX4DCzBHycGm5//HNS7e9Tj5QPWkzMgm39gvca8rHnCd3l6WXpXjaE9N/Zjyv54
+ 9kRHybgIAZfCMJf/UG2+/B1u9NBELKXAIC675cES8pjSWmyPtRxL+51On08+q5mZigS1
+ 5pKMPSS/5y8fD2xfT4512DchLd6ogra12Ug8oBc5D5DLv81hySmfg+m1W1zYAWItnuib
+ D6N4d/bWdA8uHMaXFSv+9EplsaRQJEeUKz/G7uwBkj1GxzOnI86K42CUecRk16VbT7EJ
+ 33EpsZOS1+6YvV5GmsuzrATSWIOeV65tFdb3FR64NcHsqbVl7MbEN655BLz1QCaGVGiO
+ uOSQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=A/mWhRl7
-Subject: [Buildroot] [PATCH 1/1] package/python-markdown2: bump to version
- 2.5.1
+ header.a=rsa-sha256 header.s=20230601 header.b=nOLeX4DC
+Subject: [Buildroot] [PATCH 1/1] package/python-networkx: bump to version
+ 3.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,38 +108,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-markdown2/python-markdown2.hash | 4 ++--
- package/python-markdown2/python-markdown2.mk   | 4 ++--
+ package/python-networkx/python-networkx.hash | 4 ++--
+ package/python-networkx/python-networkx.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-markdown2/python-markdown2.hash b/package/python-markdown2/python-markdown2.hash
-index cef737c2e3..f5c2adb0e1 100644
---- a/package/python-markdown2/python-markdown2.hash
-+++ b/package/python-markdown2/python-markdown2.hash
+diff --git a/package/python-networkx/python-networkx.hash b/package/python-networkx/python-networkx.hash
+index 3b6f4c6fba..77d2fbfdef 100644
+--- a/package/python-networkx/python-networkx.hash
++++ b/package/python-networkx/python-networkx.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/markdown2/json
--md5  4f9f633a30dd452fa4bb764f39fb0d3c  markdown2-2.5.0.tar.gz
--sha256  9bff02911f8b617b61eb269c4c1a5f9b2087d7ff051604f66a61b63cab30adc2  markdown2-2.5.0.tar.gz
-+md5  1b6f79fa3baea447e6b4dda5132e2fbc  markdown2-2.5.1.tar.gz
-+sha256  12fc04ea5a87f7bb4b65acf5bf3af1183b20838cc7d543b74c92ec7eea4bbc74  markdown2-2.5.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/networkx/json
+-md5  c307f8c790cf3f18954ae7458b16c843  networkx-3.3.tar.gz
+-sha256  0c127d8b2f4865f59ae9cb8aafcd60b5c70f3241ebd66f7defad7c4ab90126c9  networkx-3.3.tar.gz
++md5  4980849a13f8174a8f6aeb5a9d59e77b  networkx-3.4.1.tar.gz
++sha256  f9df45e85b78f5bd010993e897b4f1fdb242c11e015b101bd951e5c0e29982d8  networkx-3.4.1.tar.gz
  # Locally computed sha256 checksums
- sha256  f8c7c4d554409cf621b8d653dbfffb719745fd36f5c49b8305258649b403ef9c  LICENSE.txt
-diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
-index b3d30cacde..228c5d0eff 100644
---- a/package/python-markdown2/python-markdown2.mk
-+++ b/package/python-markdown2/python-markdown2.mk
+ sha256  5b433b90f755eb9bbd06feff1d1a4f5f232c5208a185694199e45fa95d762792  LICENSE.txt
+diff --git a/package/python-networkx/python-networkx.mk b/package/python-networkx/python-networkx.mk
+index ef51003047..9ac5f857e9 100644
+--- a/package/python-networkx/python-networkx.mk
++++ b/package/python-networkx/python-networkx.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MARKDOWN2_VERSION = 2.5.0
-+PYTHON_MARKDOWN2_VERSION = 2.5.1
- PYTHON_MARKDOWN2_SOURCE = markdown2-$(PYTHON_MARKDOWN2_VERSION).tar.gz
--PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/da/00/3c708de5bffa0494daf894d2e8e2b6165f866ef3ae7939546fae039b5f0e
-+PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/05/92/22e3645e352562ea9bfc89aeaeb9a76feb79e20907b18bc25d5ca340b50f
- PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
- PYTHON_MARKDOWN2_LICENSE = MIT
- PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
+-PYTHON_NETWORKX_VERSION = 3.3
++PYTHON_NETWORKX_VERSION = 3.4.1
+ PYTHON_NETWORKX_SOURCE = networkx-$(PYTHON_NETWORKX_VERSION).tar.gz
+-PYTHON_NETWORKX_SITE = https://files.pythonhosted.org/packages/04/e6/b164f94c869d6b2c605b5128b7b0cfe912795a87fc90e78533920001f3ec
++PYTHON_NETWORKX_SITE = https://files.pythonhosted.org/packages/36/2b/20ad9eecdda3f1b0dc63fb8f82d2ea99163dbca08bfa392594fc2ed81869
+ PYTHON_NETWORKX_LICENSE = BSD-3-Clause
+ PYTHON_NETWORKX_LICENSE_FILES = LICENSE.txt
+ PYTHON_NETWORKX_CPE_ID_VENDOR = python
 -- 
 2.34.1
 
