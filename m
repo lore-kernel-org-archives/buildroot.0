@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83F7FCF2579
-	for <buildroot@archiver.kernel.org>; Sun, 13 Oct 2024 10:46:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 483CACF2579
+	for <buildroot@archiver.kernel.org>; Sun, 13 Oct 2024 10:46:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3351240973;
-	Sun, 13 Oct 2024 10:46:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0BA8A4099C;
+	Sun, 13 Oct 2024 10:46:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b74JRKMWJZNT; Sun, 13 Oct 2024 10:46:36 +0000 (UTC)
+ id A60IHq9S2iS6; Sun, 13 Oct 2024 10:46:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C85FA4096B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A3BC40976
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C85FA4096B;
-	Sun, 13 Oct 2024 10:46:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 371EA1BF951
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A3BC40976;
+	Sun, 13 Oct 2024 10:46:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 733A51BF35D
  for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 10:46:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA76F60759
- for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 10:46:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D054403AE
+ for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 10:46:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oLEEq58jDhXR for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QA4itwi3Uq0S for <buildroot@lists.busybox.net>;
  Sun, 13 Oct 2024 10:46:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F36DB607F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C188400B9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F36DB607F3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5C188400B9
  for <buildroot@buildroot.org>; Sun, 13 Oct 2024 10:46:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E9F2082931; Sun, 13 Oct 2024 10:46:24 +0000 (UTC)
+ id CBBA285F82; Sun, 13 Oct 2024 10:46:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 13 Oct 2024 12:40:25 +0200
+Date: Sun, 13 Oct 2024 12:40:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 662805df7d91d045f795653901b52506aa8a1d0e
-X-Git-Newrev: c07ac7a7046da9a004f57c66cf0933fe14cc28dc
+X-Git-Oldrev: 048cf34aecf071051324e07aed40b63ad3286484
+X-Git-Newrev: d766073ba12af6b50882b0185fb8cd9bdab392c3
 X-Patchwork-Hint: ignore
-Message-Id: <20241013104624.E9F2082931@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-distlib: bump to version
- 0.3.9
+Message-Id: <20241013104624.CBBA285F82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cbor2: bump to version 5.6.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c07ac7a7046da9a004f57c66cf0933fe14cc28dc
+commit: https://git.buildroot.net/buildroot/commit/?id=d766073ba12af6b50882b0185fb8cd9bdab392c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-distlib/python-distlib.hash | 4 ++--
- package/python-distlib/python-distlib.mk   | 4 ++--
+ package/python-cbor2/python-cbor2.hash | 4 ++--
+ package/python-cbor2/python-cbor2.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-distlib/python-distlib.hash b/package/python-distlib/python-distlib.hash
-index 1a14e6ba77..6cf3715865 100644
---- a/package/python-distlib/python-distlib.hash
-+++ b/package/python-distlib/python-distlib.hash
+diff --git a/package/python-cbor2/python-cbor2.hash b/package/python-cbor2/python-cbor2.hash
+index 7831f36118..8c30bced20 100644
+--- a/package/python-cbor2/python-cbor2.hash
++++ b/package/python-cbor2/python-cbor2.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/distlib/json
--md5  c4df5794463d3710bae3d162bf953ba6  distlib-0.3.8.tar.gz
--sha256  1530ea13e350031b6312d8580ddb6b27a104275a31106523b8f123787f494f64  distlib-0.3.8.tar.gz
-+md5  958df85785458fa326a07af4f9c1c328  distlib-0.3.9.tar.gz
-+sha256  a60f20dea646b8a33f3e7772f74dc0b2d0772d2837ee1342a00645c81edf9403  distlib-0.3.9.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cbor2/json
+-md5  a6e5932eb719e0e429792faf326023b1  cbor2-5.6.4.tar.gz
+-sha256  1c533c50dde86bef1c6950602054a0ffa3c376e8b0e20c7b8f5b108793f6983e  cbor2-5.6.4.tar.gz
++md5  0804f5be872bcdbed12fb1314615b461  cbor2-5.6.5.tar.gz
++sha256  b682820677ee1dbba45f7da11898d2720f92e06be36acec290867d5ebf3d7e09  cbor2-5.6.5.tar.gz
  # Locally computed sha256 checksums
- sha256  808e10c8a6ab8deb149ff9b3fb19f447a808094606d712a9ca57fead3552599d  LICENSE.txt
-diff --git a/package/python-distlib/python-distlib.mk b/package/python-distlib/python-distlib.mk
-index 2eba3ae64f..e95c28c518 100644
---- a/package/python-distlib/python-distlib.mk
-+++ b/package/python-distlib/python-distlib.mk
+ sha256  a6afd126d8f545a15166a22f25fadff4b9fb4978bbdd17e97d97d950b66d2fef  LICENSE.txt
+diff --git a/package/python-cbor2/python-cbor2.mk b/package/python-cbor2/python-cbor2.mk
+index 36e7197164..9e410376fb 100644
+--- a/package/python-cbor2/python-cbor2.mk
++++ b/package/python-cbor2/python-cbor2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DISTLIB_VERSION = 0.3.8
-+PYTHON_DISTLIB_VERSION = 0.3.9
- PYTHON_DISTLIB_SOURCE = distlib-$(PYTHON_DISTLIB_VERSION).tar.gz
--PYTHON_DISTLIB_SITE = https://files.pythonhosted.org/packages/c4/91/e2df406fb4efacdf46871c25cde65d3c6ee5e173b7e5a4547a47bae91920
-+PYTHON_DISTLIB_SITE = https://files.pythonhosted.org/packages/0d/dd/1bec4c5ddb504ca60fc29472f3d27e8d4da1257a854e1d96742f15c1d02d
- PYTHON_DISTLIB_SETUP_TYPE = setuptools
- PYTHON_DISTLIB_LICENSE = PSF-2.0
- PYTHON_DISTLIB_LICENSE_FILES = LICENSE.txt
+-PYTHON_CBOR2_VERSION = 5.6.4
++PYTHON_CBOR2_VERSION = 5.6.5
+ PYTHON_CBOR2_SOURCE = cbor2-$(PYTHON_CBOR2_VERSION).tar.gz
+-PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/fe/da/6e62e701797c627e8d8cb3d5cc0cdcb6f4a876083386ee1b1a35321fdac7
++PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/e4/aa/ba55b47d51d27911981a18743b4d3cebfabccbb0598c09801b734cec4184
+ PYTHON_CBOR2_SETUP_TYPE = setuptools
+ PYTHON_CBOR2_LICENSE = MIT
+ PYTHON_CBOR2_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
