@@ -4,92 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB37ACF2576
-	for <buildroot@archiver.kernel.org>; Sun, 13 Oct 2024 19:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E871CF2576
+	for <buildroot@archiver.kernel.org>; Sun, 13 Oct 2024 20:02:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8CBB24029B;
-	Sun, 13 Oct 2024 19:50:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1CAFC40102;
+	Sun, 13 Oct 2024 20:02:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ObJGkg061pWR; Sun, 13 Oct 2024 19:50:30 +0000 (UTC)
+ id vrUtFhB3qA-K; Sun, 13 Oct 2024 20:02:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41F5940185
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C573E4024E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 41F5940185;
-	Sun, 13 Oct 2024 19:50:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6CE7E1BF3BE
- for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 19:50:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C573E4024E;
+	Sun, 13 Oct 2024 20:02:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 980241BF3BE
+ for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 20:02:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C0CC60625
- for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 19:50:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8777880C9D
+ for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 20:02:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S4vgnFXBUr_M for <buildroot@lists.busybox.net>;
- Sun, 13 Oct 2024 19:50:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7clc2wibbWQP for <buildroot@lists.busybox.net>;
+ Sun, 13 Oct 2024 20:02:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2c; helo=mail-io1-xd2c.google.com;
+ client-ip=2607:f8b0:4864:20::12a; helo=mail-il1-x12a.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5644A60610
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5644A60610
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5644A60610
- for <buildroot@buildroot.org>; Sun, 13 Oct 2024 19:50:27 +0000 (UTC)
-Received: by mail-io1-xd2c.google.com with SMTP id
- ca18e2360f4ac-835453714e5so163560939f.0
- for <buildroot@buildroot.org>; Sun, 13 Oct 2024 12:50:27 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 81C8D808AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81C8D808AE
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
+ [IPv6:2607:f8b0:4864:20::12a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 81C8D808AE
+ for <buildroot@buildroot.org>; Sun, 13 Oct 2024 20:02:45 +0000 (UTC)
+Received: by mail-il1-x12a.google.com with SMTP id
+ e9e14a558f8ab-3a39cabb9b8so10257305ab.1
+ for <buildroot@buildroot.org>; Sun, 13 Oct 2024 13:02:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728849026; x=1729453826;
+ d=1e100.net; s=20230601; t=1728849764; x=1729454564;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=DGCHNY45n23ZT/0vITzDemZwJ7uzjpZEdbrp/RaRP0s=;
- b=dPFfGHZMDdUIzgS2T8cmUHnb+ghYX1q7kwSLoSbGg9MJRByLavGubugGfAY0NtU9fm
- dhyjzRPQTxCiIrRZStyVMWE4mdcgBRQcZKIozoQaZU5x3HCooH17wpdfXh2Y+1XfTAp3
- /lUvJKnB2b81GgXJ1ZaTfmkvAz049zFX1bOV4VyO+IkfLq6F2x0wN6q3T4V9aMoB6akT
- hdqxbKxlRL5dXs25SuwEVdbNjRlYXWDhgBox2nPR+NrquQR/qsEQS/aT0qwnXFcUpmOK
- Jlmj0fXIO4/WZtA9E2WPcNQQ8k2OMn62G/v/TyBh8ymkGun5tmNI+Dib8hgBDUExUP3J
- Czow==
-X-Gm-Message-State: AOJu0YxuOU5HHRFzK8hS9siyBb43wUpEc3kztn9qwulj5G1hvqRQYLNI
- puwGud8TsvmGKpDot6S2mQk5hgpfvF7I8y4QgsJtkWUqYpkiP64kJsYeOA==
-X-Google-Smtp-Source: AGHT+IFlnVXFNZWUSYiwB38KbbvF4aA1TtyCsF5ad4Q/TY+Uu0abNQ/zFGyTI8s1ighOrXn3lbQdMA==
-X-Received: by 2002:a05:6602:641d:b0:834:f34d:859 with SMTP id
- ca18e2360f4ac-8379231994dmr863689839f.3.1728849026022; 
- Sun, 13 Oct 2024 12:50:26 -0700 (PDT)
+ bh=4IwBhi3d++bOs4O+tmR6xlceSdh6AmPkgHnAAaxm5iY=;
+ b=ClXBKAh5/4cVNNELmRAAAd9ASnWnCNp8UNTqsiUx5/jXb+bwRKHPn89FGoG4wOU3Cu
+ Unr3t4is9ED4huFhoSIMKCb3nJZJ6QojSoNN5nfklloOcg30GimgdKzjzdNilHWmrfpt
+ vkbB5+62kimrHkNDeanFa+JUzjjPxQ8QOu3ZLZ2/Ml8bFgfmapfA94cqCPSsBMsEx3si
+ VLgk78QwBn3hnGguYvQdQ5xDSrMNaaRexNT1H9erUAkOi2W4tk9oZKODCMGGS0Hlhnmw
+ VOAIEPvUsYXlU3ry8/71wrDBkHBVt39YTvTK3sjh40ljptwBEq0oBOOMmrn7UiRDXxTp
+ csdg==
+X-Gm-Message-State: AOJu0YzTiJ8odcHQ6aR3FZIaJ8QlAT8L1jA8686ZfjrtJTPipK30mgYN
+ SXSp1hH4ZDoP4Ym6BnolkHxQrkrNu6r5BbwDM/bUIHu1hQ7K+Spn5EEBsw==
+X-Google-Smtp-Source: AGHT+IH8jDeK1P0S+6za1aALxizEesPHUAfO2uVY9P4VgKyUwVkKvnkVnFAl915dLKHZprm/uI0czw==
+X-Received: by 2002:a05:6e02:168e:b0:3a3:9337:4cf4 with SMTP id
+ e9e14a558f8ab-3a3b5f21b3cmr61599705ab.4.1728849764116; 
+ Sun, 13 Oct 2024 13:02:44 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-159-223.hlrn.qwest.net.
  [71.33.159.223]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-8354ba257besm173154939f.41.2024.10.13.12.50.25
+ 8926c6da1cb9f-4dbc3de4e53sm870180173.15.2024.10.13.13.02.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 13 Oct 2024 12:50:25 -0700 (PDT)
+ Sun, 13 Oct 2024 13:02:43 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 13 Oct 2024 13:50:23 -0600
-Message-Id: <20241013195023.2813141-1-james.hilliard1@gmail.com>
+Date: Sun, 13 Oct 2024 14:02:39 -0600
+Message-Id: <20241013200239.2816650-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1728849026; x=1729453826; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1728849764; x=1729454564; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=DGCHNY45n23ZT/0vITzDemZwJ7uzjpZEdbrp/RaRP0s=;
- b=ABwgAWlbv61DaRMEvkfkFZCZ49Snaw4XkRxbVvU6pBdICYvolCGGdMzmDARrh0cXAF
- 5dBGTylAnnflXuTCVTs/9eEN1Z57ky4W1N2GW0YV7v/9Yq7kchbqBMI+J7UioDeIURFD
- Munh35HUh4Gxqln2Xafe0ax2Qjt+d4B0XJdUnsHjQtsaFsj+U5t0kfIIiS93uoiE48eU
- OJ1PleN/Rk4wRtS/MSORCSOf/9cdM3mZSm1czfacezlg29lkVVn3ewrnV9ivkZtY/D82
- UvZ9IJwFczdhGvEP+VbBcbsbNVwgcHnynlDSrkZol4ZC0tNEnUDLJxFb91QnnZI0rPwT
- /qPw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=4IwBhi3d++bOs4O+tmR6xlceSdh6AmPkgHnAAaxm5iY=;
+ b=BlfQ3aZYAhZaVgOl+yT6oXuV19R5HJUuCYqKHUMXd8JO10TQUPUKZYyg6g+YgJS+wA
+ 63Jkrzr3o2MsGe9RdnJPI0jEYxCMm30iZsYXMt9hO1ynrPeXPTeC1w6NJUlQahtNL4Cc
+ dN0j11gfJe1SU4AvJQ5yLJyigPAdBFBMLMX9PvceMfz81Fw0K/4H7OuxkcdM/yU1RDuy
+ 9UE8QgGDP1pw9Yf/NYlFTCELLfnCA2jccaNmOtetiJpUTs+alObLvM6QnYiJC1rV/3Xl
+ I5r9durkK0eeI/Dm8cgbMLUl9qhwT/JPdluoEm8DQR3I/JtfxnF8omHCDBncEw/TvVi3
+ q+Jg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=ABwgAWlb
-Subject: [Buildroot] [PATCH 1/1] package/python-xmltodict: bump to version
- 0.14.1
+ header.s=20230601 header.b=BlfQ3aZY
+Subject: [Buildroot] [PATCH 1/1] package/python-zope-interface: bump to
+ version 7.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,40 +107,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+We need to pass the --skip-dependency-check build option since
+python-zope-interface uneccesarially restricts the maximum
+setuptools version.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-xmltodict/python-xmltodict.hash | 4 ++--
- package/python-xmltodict/python-xmltodict.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-zope-interface/python-zope-interface.hash | 4 ++--
+ package/python-zope-interface/python-zope-interface.mk   | 7 ++++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-xmltodict/python-xmltodict.hash b/package/python-xmltodict/python-xmltodict.hash
-index 48fb5265f6..712f94a08b 100644
---- a/package/python-xmltodict/python-xmltodict.hash
-+++ b/package/python-xmltodict/python-xmltodict.hash
+diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
+index 940ee595d5..149e8ad675 100644
+--- a/package/python-zope-interface/python-zope-interface.hash
++++ b/package/python-zope-interface/python-zope-interface.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/xmltodict/json
--md5  1ece0a5bbd494bac414058405606475e  xmltodict-0.13.0.tar.gz
--sha256  341595a488e3e01a85a9d8911d8912fd922ede5fecc4dce437eb4b6c8d037e56  xmltodict-0.13.0.tar.gz
-+md5  9b98d656bb655aa7c7561a2ab811c83f  xmltodict-0.14.1.tar.gz
-+sha256  338c8431e4fc554517651972d62f06958718f6262b04316917008e8fd677a6b0  xmltodict-0.14.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/zope-interface/json
+-md5  fd1cadffe80b9a1702636826c30136f0  zope.interface-7.0.3.tar.gz
+-sha256  cd2690d4b08ec9eaf47a85914fe513062b20da78d10d6d789a792c0b20307fb1  zope.interface-7.0.3.tar.gz
++md5  4d644f1167c8a6b19b3690d301641820  zope_interface-7.1.0.tar.gz
++sha256  3f005869a1a05e368965adb2075f97f8ee9a26c61898a9e52a9764d93774f237  zope_interface-7.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  d66d5eb8f83a0ba21d3dd04318b8817588e8764daabea852d1035e3f07ffda55  LICENSE
-diff --git a/package/python-xmltodict/python-xmltodict.mk b/package/python-xmltodict/python-xmltodict.mk
-index 9201bc1507..b151f28823 100644
---- a/package/python-xmltodict/python-xmltodict.mk
-+++ b/package/python-xmltodict/python-xmltodict.mk
-@@ -4,9 +4,9 @@
+ sha256  3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
+diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
+index 60cde26122..7eafa80460 100644
+--- a/package/python-zope-interface/python-zope-interface.mk
++++ b/package/python-zope-interface/python-zope-interface.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--PYTHON_XMLTODICT_VERSION = 0.13.0
-+PYTHON_XMLTODICT_VERSION = 0.14.1
- PYTHON_XMLTODICT_SOURCE = xmltodict-$(PYTHON_XMLTODICT_VERSION).tar.gz
--PYTHON_XMLTODICT_SITE = https://files.pythonhosted.org/packages/39/0d/40df5be1e684bbaecdb9d1e0e40d5d482465de6b00cbb92b84ee5d243c7f
-+PYTHON_XMLTODICT_SITE = https://files.pythonhosted.org/packages/98/f7/d29b8cdc9d8d075673be0f800013c1161e2fd4234546a140855a1bcc9eb4
- PYTHON_XMLTODICT_SETUP_TYPE = setuptools
- PYTHON_XMLTODICT_LICENSE = MIT
- PYTHON_XMLTODICT_LICENSE_FILES = LICENSE
+-PYTHON_ZOPE_INTERFACE_VERSION = 7.0.3
+-PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
+-PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/c8/83/7de03efae7fc9a4ec64301d86e29a324f32fe395022e3a5b1a79e376668e
++PYTHON_ZOPE_INTERFACE_VERSION = 7.1.0
++PYTHON_ZOPE_INTERFACE_SOURCE = zope_interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
++PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/e4/1f/8bb0739aba9a8909bcfa2e12dc20443ebd5bd773b6796603f1a126211e18
+ PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
+ PYTHON_ZOPE_INTERFACE_LICENSE = ZPL-2.1
+ PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
++PYTHON_ZOPE_INTERFACE_BUILD_OPTS = --skip-dependency-check
+ 
+ $(eval $(python-package))
 -- 
 2.34.1
 
