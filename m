@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E983CF2579
-	for <buildroot@archiver.kernel.org>; Sun, 13 Oct 2024 10:46:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0722CF2579
+	for <buildroot@archiver.kernel.org>; Sun, 13 Oct 2024 10:46:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4566D409ED;
-	Sun, 13 Oct 2024 10:46:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 856A54096B;
+	Sun, 13 Oct 2024 10:46:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2mmgSwwHZyxw; Sun, 13 Oct 2024 10:46:49 +0000 (UTC)
+ id PBi4UObWt8iU; Sun, 13 Oct 2024 10:46:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9283409D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43C38409D9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D9283409D9;
-	Sun, 13 Oct 2024 10:46:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 43C38409D9;
+	Sun, 13 Oct 2024 10:46:52 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2A0591BF35D
- for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 10:46:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A2BBC1BF35D
+ for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 10:46:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D06060759
- for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 10:46:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1504A607C9
+ for <buildroot@lists.busybox.net>; Sun, 13 Oct 2024 10:46:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wCPK9dv1kBqW for <buildroot@lists.busybox.net>;
- Sun, 13 Oct 2024 10:46:25 +0000 (UTC)
+ id Z82kOhJ_QfX9 for <buildroot@lists.busybox.net>;
+ Sun, 13 Oct 2024 10:46:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21ADA60841
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7CAF607BE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 21ADA60841
- for <buildroot@buildroot.org>; Sun, 13 Oct 2024 10:46:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B7CAF607BE
+ for <buildroot@buildroot.org>; Sun, 13 Oct 2024 10:46:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C96E85F84; Sun, 13 Oct 2024 10:46:25 +0000 (UTC)
+ id B081B85F86; Sun, 13 Oct 2024 10:46:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 13 Oct 2024 12:40:33 +0200
+Date: Sun, 13 Oct 2024 12:40:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8e6c6c01d9c72bcd789d5251e41435b6c461796b
-X-Git-Newrev: 7bf8be92edeb5415062de619dec1f4744a041130
+X-Git-Oldrev: 2c751df554f14b276c8c3eb43b691f41f15ba41a
+X-Git-Newrev: 05aa00255a5848a0ea5f93024b31504e6b9f851d
 X-Patchwork-Hint: ignore
-Message-Id: <20241013104625.1C96E85F84@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-wsaccel: bump to version
- 0.6.7
+Message-Id: <20241013104624.B081B85F86@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-bleak: bump to version
+ 0.22.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bf8be92edeb5415062de619dec1f4744a041130
+commit: https://git.buildroot.net/buildroot/commit/?id=05aa00255a5848a0ea5f93024b31504e6b9f851d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-wsaccel/python-wsaccel.hash | 4 ++--
- package/python-wsaccel/python-wsaccel.mk   | 4 ++--
+ package/python-bleak/python-bleak.hash | 4 ++--
+ package/python-bleak/python-bleak.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-wsaccel/python-wsaccel.hash b/package/python-wsaccel/python-wsaccel.hash
-index 9991f8f454..5aaf95c957 100644
---- a/package/python-wsaccel/python-wsaccel.hash
-+++ b/package/python-wsaccel/python-wsaccel.hash
+diff --git a/package/python-bleak/python-bleak.hash b/package/python-bleak/python-bleak.hash
+index 577811b60a..2213ec2f70 100644
+--- a/package/python-bleak/python-bleak.hash
++++ b/package/python-bleak/python-bleak.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/wsaccel/json
--md5  b05eecfac9cb19326bfc3b538de495ac  wsaccel-0.6.6.tar.gz
--sha256  18efec0a7182587ba97102b4cd8df7b4f665f45d7ca36f19783f5f081ea114ea  wsaccel-0.6.6.tar.gz
-+md5  e710fa8736ce37e4269e711d0aeec4a7  wsaccel-0.6.7.tar.gz
-+sha256  aea79ba46b1a3792dbd1fe364aeb8a10128659c67057770c5c320d1f58588a8c  wsaccel-0.6.7.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/bleak/json
+-md5  521fbbba851f4b6e9507ea27d06dc08b  bleak-0.22.2.tar.gz
+-sha256  09010c0f4bd843e7dcaa1652e1bfb2450ce690da08d4c6163f0723aaa986e9fe  bleak-0.22.2.tar.gz
++md5  261eb442ba16707ed00a21265cd337fc  bleak-0.22.3.tar.gz
++sha256  3149c3c19657e457727aa53d9d6aeb89658495822cd240afd8aeca4dd09c045c  bleak-0.22.3.tar.gz
  # Locally computed sha256 checksums
- sha256  b6982974cb838b985b54b663d1780d280735086249c2e28015f25dd455df25da  LICENSE
-diff --git a/package/python-wsaccel/python-wsaccel.mk b/package/python-wsaccel/python-wsaccel.mk
-index 7ccb033256..0f942bb5e4 100644
---- a/package/python-wsaccel/python-wsaccel.mk
-+++ b/package/python-wsaccel/python-wsaccel.mk
+ sha256  c4029a2b63b3824ab68be841f414addbdde20cb79cdbe272fa80c0b2abe65374  LICENSE
+diff --git a/package/python-bleak/python-bleak.mk b/package/python-bleak/python-bleak.mk
+index 4eabd3df75..5cb42aa2a5 100644
+--- a/package/python-bleak/python-bleak.mk
++++ b/package/python-bleak/python-bleak.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WSACCEL_VERSION = 0.6.6
-+PYTHON_WSACCEL_VERSION = 0.6.7
- PYTHON_WSACCEL_SOURCE = wsaccel-$(PYTHON_WSACCEL_VERSION).tar.gz
--PYTHON_WSACCEL_SITE = https://files.pythonhosted.org/packages/94/28/41c0e711b538f6031a247ab4ec5352267f12ed416e3a638b8d55fc33f609
-+PYTHON_WSACCEL_SITE = https://files.pythonhosted.org/packages/8b/06/e8f0450952ed1fb4aa2033a30ae5afb59632f5a35d441bcc6801a3aaca47
- PYTHON_WSACCEL_LICENSE = Apache-2.0
- PYTHON_WSACCEL_LICENSE_FILES = LICENSE
- PYTHON_WSACCEL_SETUP_TYPE = setuptools
+-PYTHON_BLEAK_VERSION = 0.22.2
++PYTHON_BLEAK_VERSION = 0.22.3
+ PYTHON_BLEAK_SOURCE = bleak-$(PYTHON_BLEAK_VERSION).tar.gz
+-PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/03/76/733131e2935f4fcdc7a0dd47cbc5090e12d578297804fb0482575db43f3c
++PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/fb/96/15750b50c0018338e2cce30de939130971ebfdf4f9d6d56c960f5657daad
+ PYTHON_BLEAK_SETUP_TYPE = pep517
+ PYTHON_BLEAK_LICENSE = MIT
+ PYTHON_BLEAK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
