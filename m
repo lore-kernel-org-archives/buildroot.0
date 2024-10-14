@@ -4,73 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34EE9D16279
-	for <buildroot@archiver.kernel.org>; Mon, 14 Oct 2024 14:39:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D302DD18129
+	for <buildroot@archiver.kernel.org>; Mon, 14 Oct 2024 15:38:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC32B80C06;
-	Mon, 14 Oct 2024 14:39:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A8ED80DB4;
+	Mon, 14 Oct 2024 15:38:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RKfF4ojnvf2U; Mon, 14 Oct 2024 14:39:45 +0000 (UTC)
+ id UtZVSpfLOc7C; Mon, 14 Oct 2024 15:38:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CB3580BDF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DBEC80DDB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5CB3580BDF;
-	Mon, 14 Oct 2024 14:39:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5C2E61BF2BA
- for <buildroot@lists.busybox.net>; Mon, 14 Oct 2024 14:39:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9DBEC80DDB;
+	Mon, 14 Oct 2024 15:38:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 044C81BF363
+ for <buildroot@lists.busybox.net>; Mon, 14 Oct 2024 15:38:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B275607DB
- for <buildroot@lists.busybox.net>; Mon, 14 Oct 2024 14:39:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E726040438
+ for <buildroot@lists.busybox.net>; Mon, 14 Oct 2024 15:38:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rv50aarCv5U7 for <buildroot@lists.busybox.net>;
- Mon, 14 Oct 2024 14:39:42 +0000 (UTC)
-X-Greylist: delayed 609 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 14 Oct 2024 14:39:42 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4097E607D3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4097E607D3
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=kory.maincent@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KUVrgyj6P1K2 for <buildroot@lists.busybox.net>;
+ Mon, 14 Oct 2024 15:38:27 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=198.175.65.20;
+ helo=mgamail.intel.com; envelope-from=andriy.shevchenko@linux.intel.com;
  receiver=<UNKNOWN> 
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4097E607D3
- for <buildroot@buildroot.org>; Mon, 14 Oct 2024 14:39:42 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E0FE240006;
- Mon, 14 Oct 2024 14:39:40 +0000 (UTC)
-Date: Mon, 14 Oct 2024 16:39:39 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 393B4403F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 393B4403F4
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 393B4403F4
+ for <buildroot@buildroot.org>; Mon, 14 Oct 2024 15:38:26 +0000 (UTC)
+X-CSE-ConnectionGUID: uaiBZVu1Q/2CucnfA6sHIw==
+X-CSE-MsgGUID: Gc9FEjaiTN+nwUIa7Iwftw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28071407"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; d="scan'208";a="28071407"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+ by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 14 Oct 2024 08:38:26 -0700
+X-CSE-ConnectionGUID: v6AY2DzKRiu/yHRZ/rP+AQ==
+X-CSE-MsgGUID: Kgn4Y1JZQ4OKhDBRWwbgGA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,203,1725346800"; d="scan'208";a="82230639"
+Received: from smile.fi.intel.com ([10.237.72.154])
+ by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 14 Oct 2024 08:38:24 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+ (envelope-from <andriy.shevchenko@linux.intel.com>)
+ id 1t0N9K-00000002xGK-1d54; Mon, 14 Oct 2024 18:38:22 +0300
+Date: Mon, 14 Oct 2024 18:38:22 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: buildroot@buildroot.org
-Message-ID: <20241014163939.1a743bd7@kmaincent-XPS-13-7390>
-In-Reply-To: <20241014142923.246809-1-kory.maincent@bootlin.com>
-References: <20241014142923.246809-1-kory.maincent@bootlin.com>
-Organization: bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Message-ID: <Zw067nX__jWPkt2d@smile.fi.intel.com>
+References: <20240927183553.2866682-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-X-GND-Sasl: kory.maincent@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1728916780;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=YLJM7Uuawf3ZZhsczX2Pvcy1w3G5GMxofq3rNK6/zrY=;
- b=O5HnKMfywFnohQTf3+gt5/9aHRfdLRiQPtRrzsReLNLurPWYLmN506UaBifpNIDxgLiCf0
- ltBAjJTDPrn+JAObJUv2coR+i+B3LdcZ1uNMp1ZyrRyf4vFYHFowQUkBxez38nXbGrk+/b
- GQwJqK7kjTneTawoev/kOEAgbkfI8k5qqCg0ATHgdjR0O5ZiDUVbUwMXbmaVCyUuVR7aIa
- kzJs04XpxWRMfV7cfg9Uq0K5yQ7PjuZArEzTWP0OW4HSpfDlKPHKFoa489Fkr8nBPwusTz
- w8vMdtseJNOLZlYGdouiDrPn8FprkRcAdOAaCU5Oh+LBbLLUiP2iGMKB5zV+Uw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <20240927183553.2866682-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+ t=1728920307; x=1760456307;
+ h=date:from:to:cc:subject:message-id:references:
+ mime-version:in-reply-to;
+ bh=gmeBw/81h7VPFbQdudupH9Z8EByhKGuIjLh+MJRzs4s=;
+ b=LzqGO24MZN9FZJeBRoutt8hPPQ77WozCKq5gaEHtIwGCmCT+9AGLtRMk
+ QAtUi2kh1oMvGXVFOS497cM4V/513sEPW7Y9o4S0kOE++HtHoh6nE4Dek
+ kCTF+aM7peJjegkAVrFNaMAI4yeUdIZaH2EOR5I37ZAmkA+w/Y7kdwe+D
+ DJwhCjoB6cGKgUNRCFdMA5bA3dBF5I4kIHXKW7MA3qcx+g3nEwWJsWMlN
+ 4bK/vcgH3goy2zWifS5amyd1mBvC5UMdVospAahL498kKlc0DHlfnR0g2
+ ihOQ3OGMCgKVZ6InSsbpU62I/bAvbHWshmzubPlev2XW7CCCzMvZUIodt
+ g==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=linux.intel.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=O5HnKMfy
-Subject: Re: [Buildroot] [PATCH v6 0/3] Adds support for TrustedFirmware-M
+ unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256
+ header.s=Intel header.b=LzqGO24M
+Subject: Re: [Buildroot] [PATCH v2 1/1] package: Add iotools package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,33 +95,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kory Maincent via buildroot <buildroot@buildroot.org>
-Reply-To: Kory Maincent <kory.maincent@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>, thomas.petazzoni@bootlin.com,
- Mauro Condarelli <mc5686@mclink.it>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Andy Yan <andyshrk@163.com>, Andy Yan <andyshrk@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCAxNCBPY3QgMjAyNCAxNDoyOToxOSArMDAwMApLb3J5IE1haW5jZW50IDxrb3J5Lm1h
-aW5jZW50QGJvb3RsaW4uY29tPiB3cm90ZToKCj4gVGhpcyBzZXJpZXMgYWRkcyBzdXBwb3J0IGZv
-ciBUcnVzdGVkRmlybXdhcmUtTSAoVEYtTSkuCj4gaHR0cHM6Ly90cnVzdGVkZmlybXdhcmUtbS5y
-ZWFkdGhlZG9jcy5pbwo+IGh0dHBzOi8vZ2l0LnRydXN0ZWRmaXJtd2FyZS5vcmcvVEYtTS90cnVz
-dGVkLWZpcm13YXJlLW0uZ2l0Cj4gCj4gVHJ1c3RlZCBGaXJtd2FyZS1NIGltcGxlbWVudHMgdGhl
-IFNlY3VyZSBQcm9jZXNzaW5nIEVudmlyb25tZW50IChTUEUpCj4gZm9yIEFybXY4LU0sIEFybXY4
-LjEtTSBhcmNoaXRlY3R1cmVzIChlLmcuIHRoZSBDb3J0ZXgtTTMzLCBDb3J0ZXgtTTIzLAo+IENv
-cnRleC1NNTUsIENvcnRleC1NODUgcHJvY2Vzc29ycykgb3IgZHVhbC1jb3JlIHBsYXRmb3Jtcy4K
-PiAKPiBQYXRjaGVzIDEtMjogQWRkcmVzcyBob3N0IFB5dGhvbiBwYWNrYWdlIGRlcGVuZGVuY2ll
-cy4KPiBQYXRjaCAzOiBBZGQgc3VwcG9ydCBmb3IgVEYtTS4KPiAKPiBDaGFuZ2VzIGluIHY1Ogo+
-IC0gUmVtb3ZlIHB5dGhvbi1jYm9yMiBob3N0IHN1cHBvcnQgZGVwZW5kZW5jeSB3aGljaCBpcyBh
-bHJlYWR5IG1lcmdlZAo+ICAgbWFpbmxpbmUuCj4gLSBVc2UgRVhUUkFfRE9XTkxPQUQgaW5zdGVh
-ZCBvZiBzdWJwYWNrYWdlcyBmb3IgM3JkIHBhcnRpZXMuCj4gLSBSZW1vdmUgVEYtTSB0ZXN0cyAz
-cmQgcGFydGllcy4KPiAtIE1hZGUgZmV3IEtjb25maWcsIGFuZCBjbWFrZSBjaGFuZ2VzLgoKT29w
-cywgc21hbGwgbWlzdGFrZSwgSSB1c2VkIHY2IGluIHRoZSBzdWJqZWN0IGluc3RlYWQgb2YgdjUu
-CgpSZWdhcmRzLAotLSAKS8O2cnkgTWFpbmNlbnQsIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5k
-IGtlcm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+On Fri, Sep 27, 2024 at 09:34:59PM +0300, Andy Shevchenko wrote:
+> The iotools package provides a set of simple command line tools which
+> allow access to hardware device registers. Supported register interfaces
+> include PCI, IO, memory mapped IO, SMBus, CPUID, and MSR. Also included
+> are some utilities which allow for simple arithmetic, logical, and other
+> operations.
+> 
+> If you ever have to debug hardware, you could probably use these tools.
+
+Can this be pulled eventually? Or is there any comment I have to address?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
