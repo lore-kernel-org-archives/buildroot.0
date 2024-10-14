@@ -4,95 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B927CFC538
-	for <buildroot@archiver.kernel.org>; Mon, 14 Oct 2024 10:21:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05FABCFC53E
+	for <buildroot@archiver.kernel.org>; Mon, 14 Oct 2024 10:21:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 66002607E3;
-	Mon, 14 Oct 2024 10:21:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C728D60759;
+	Mon, 14 Oct 2024 10:21:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id drRgdKCIpP2X; Mon, 14 Oct 2024 10:21:44 +0000 (UTC)
+ id VcnWgr6zBTjQ; Mon, 14 Oct 2024 10:21:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA9D2607FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7819E60818
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA9D2607FF;
-	Mon, 14 Oct 2024 10:21:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1E20B1BF2F0
- for <buildroot@lists.busybox.net>; Mon, 14 Oct 2024 10:21:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7819E60818;
+	Mon, 14 Oct 2024 10:21:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 18FBC1BF2F0
+ for <buildroot@lists.busybox.net>; Mon, 14 Oct 2024 10:21:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0C3CE6078D
- for <buildroot@lists.busybox.net>; Mon, 14 Oct 2024 10:21:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 02A2080EFA
+ for <buildroot@lists.busybox.net>; Mon, 14 Oct 2024 10:21:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GMcXNuLt06Em for <buildroot@lists.busybox.net>;
- Mon, 14 Oct 2024 10:21:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AVp2txOBJvuw for <buildroot@lists.busybox.net>;
+ Mon, 14 Oct 2024 10:21:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0A57460619
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A57460619
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0A57460619
- for <buildroot@buildroot.org>; Mon, 14 Oct 2024 10:21:34 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-430549e65a4so4756645e9.0
- for <buildroot@buildroot.org>; Mon, 14 Oct 2024 03:21:34 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A3EAD80ECA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3EAD80ECA
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A3EAD80ECA
+ for <buildroot@buildroot.org>; Mon, 14 Oct 2024 10:21:36 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-43111bdd54cso6692115e9.1
+ for <buildroot@buildroot.org>; Mon, 14 Oct 2024 03:21:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728901292; x=1729506092;
+ d=1e100.net; s=20230601; t=1728901294; x=1729506094;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=Z1mavsrIjvfLoG+tApnNzLr59J36j13o2wctDfMrxVo=;
- b=MqFFRN/nQPy6r3yjgxOdjw6COehHUlAWcixAR4Ww1M6q/d02EBlGqtrcOF52B4T1Pg
- 8q2Lf40jMAI+L1dGn7fKqCjJh6zWjQijyBt+vNPhXTBlljvT4wjEHbMKirV3o/amIxCV
- gnbnK5zR2exSF2d6BoUYnebUL2kpmMqUmYrpOHqtoCQ4n3yUejr7zrynVt7J9WTfXnpg
- mjRp4ULPj3kwWbt+38eXO34GNfdRififBisQ6nEqMyPLEAQVkNxiZHyjS9eEJUkkb7u+
- xfitt7zu7tboEVXBkOAeExKytFWI87rJx/Upz4RWS3LqJK57kjSirGEczsG+Ox5CXU6t
- gzkw==
-X-Gm-Message-State: AOJu0YwEynINlgFECOWwJO5USwUVLpaKWhEVpxN6LJ8xCAcw2tQEvhgH
- GanSYJ3mAz4ERiZBnF740ITr77rn1mUIgKkU9RbOKgtS3RSkwtCZ8D0QaByj6Eet2/BdOJqPWBj
- YBSc=
-X-Google-Smtp-Source: AGHT+IG0F39qQhRZGbdbFOjLyZNWEKBYr77xpz26PmeIBOoGRV77Kdahgv8LO/7gmOutHP7kFbCyKQ==
-X-Received: by 2002:a05:600c:1c29:b0:42c:bab1:b8cc with SMTP id
- 5b1f17b1804b1-4311df39d6dmr43622985e9.4.1728901292054; 
- Mon, 14 Oct 2024 03:21:32 -0700 (PDT)
+ bh=KSw8h5zolL2TbJWfRpBUJv4t6++13NTgC4v/EaTHO70=;
+ b=xMxZG5dlcZWhTPh/s+XQNaP0LL83bu5ryocZT4Dt9eKbagRl1jcfZpsQz+hWSzoBOW
+ aNLvfPd7lwf3+vD37K4pVoZpVpbZsBSWZcczszGT0EblBObAKnvhP9KEfPyWEPtPu4Cb
+ kCY8xx6i6roVHAgTuft+AQ2IvsajtNZbazP6es5rZsMw40woqC/VhRXgLyD+ARLVRhQo
+ isfzz28xOK2BbNdgtavDxcRq/6/iyqrsrbjgO+5AOPnUHXK8UZjh4kURul+A9KSbp+zg
+ OmpQfOqDzZQps8BqeELyRt7FgYQVJjw0I58zeAjjGVgY9Wc313NqLzIsE7rRWjgQttlH
+ OjGA==
+X-Gm-Message-State: AOJu0YyumhXALUQmnog8RpSJjpyofpuMsr/mbWgC8e7NiOl1Yl4UXZCT
+ wPrGXIkUOCFu3bUmAplI/b3bx6FmGu23vI33D3MBHthcP2EtxmVt0Tscl/YvfTcLX6bA+thZFqk
+ vKgY=
+X-Google-Smtp-Source: AGHT+IG62jJ04bx1y1gPxj2KcskAwQiirX6ISKhW/aQzIQSt1YC1jbVb05uDswe8UE2lY5Nyqx/qAw==
+X-Received: by 2002:a05:600c:4a27:b0:42c:ba6c:d9b1 with SMTP id
+ 5b1f17b1804b1-4311df5641cmr40852685e9.4.1728901293844; 
+ Mon, 14 Oct 2024 03:21:33 -0700 (PDT)
 Received: from adam-laptop.amarulasolutions.com
  ([2001:b07:6467:4426:e642:fe3c:c003:b424])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-431182d7ca3sm116402605e9.2.2024.10.14.03.21.31
+ 5b1f17b1804b1-431182d7ca3sm116402605e9.2.2024.10.14.03.21.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 14 Oct 2024 03:21:31 -0700 (PDT)
+ Mon, 14 Oct 2024 03:21:33 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon, 14 Oct 2024 12:21:21 +0200
-Message-ID: <20241014102123.3727883-5-adam.duskett@amarulasolutions.com>
+Date: Mon, 14 Oct 2024 12:21:22 +0200
+Message-ID: <20241014102123.3727883-6-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241014102123.3727883-1-adam.duskett@amarulasolutions.com>
 References: <20241014102123.3727883-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1728901292; x=1729506092;
+ d=amarulasolutions.com; s=google; t=1728901294; x=1729506094;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Z1mavsrIjvfLoG+tApnNzLr59J36j13o2wctDfMrxVo=;
- b=dmjYfeXuCqR4xjoL9wADQoY2JBuwgCS6/XMP/MPsTfQbW2Y6mb/jvxjEsQznRlGUaX
- C/Pu+M4vMgzdSDQKWow1OwMJoBD5es0Oepndf9O+RZQJS1TjI0KR785Gf8r1VvkLS1hD
- DY+BznfKuX8DS7yotylDlSUvROXFSzN2RV5RQ=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=KSw8h5zolL2TbJWfRpBUJv4t6++13NTgC4v/EaTHO70=;
+ b=jFqL3ztsAuCzTrHrIdL6/aV5k12qidCBK4xX0xns9rRuA1Bw23ICEYM8RZ9CwZao7m
+ kuW5f9mp8HHhKH9hZUxyOzlM/Tp52LMpevoGLKcjnLu228MxvJIB8KvvtiEIN8fHtITA
+ R7tiDKPmeohI4fC65lCaW7FkHOTjr3ixbAoyI=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=dmjYfeXu
-Subject: [Buildroot] [PATCH 4/6]
- support/testing/tests/package/test_mender.py: Add a systemd test
+ header.a=rsa-sha256 header.s=google header.b=jFqL3zts
+Subject: [Buildroot] [PATCH 5/6] package/mender/readme.txt: update readme
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,61 +110,103 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  - Move the check for /var/run/mender.pid to before self.run_mender_test()
-    for the two tests using sysvinit.
-
-  - Instead of checking for /var/run/mender.pid during the systemd test,
-    check to ensure "systemctl is-active mender-client" returns "active"
+ - Add missing packages to the mender package list.
+ - Update broken URL links.
+ - Remove the example mender artifact post-image script in favor of directing
+   the user to the board/mender/x86_64/post-image-efi.sh script.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- support/testing/tests/package/test_mender.py | 21 ++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+ package/mender/readme.txt | 56 +++++++++++----------------------------
+ 1 file changed, 15 insertions(+), 41 deletions(-)
 
-diff --git a/support/testing/tests/package/test_mender.py b/support/testing/tests/package/test_mender.py
-index 0938cb77e1..7f606eb729 100644
---- a/support/testing/tests/package/test_mender.py
-+++ b/support/testing/tests/package/test_mender.py
-@@ -20,8 +20,6 @@ class TestMenderInfra(infra.basetest.BRTest):
-         self.emulator.login()
+diff --git a/package/mender/readme.txt b/package/mender/readme.txt
+index c884524a1b..d78623aec9 100644
+--- a/package/mender/readme.txt
++++ b/package/mender/readme.txt
+@@ -28,13 +28,23 @@ In Buildroot the following packages are provided:
+     - This will install the client on target rootfs
+ - BR2_PACKAGE_HOST_MENDER_ARTIFACT
+     - This will install the 'mender-artifact' tool in host rootfs.
++- BR2_PACKAGE_MENDER_CONNECT
++    - This installs a client that allows for remote terminal access
++      to mender clients registered on a mender server.
++- BR2_PACKAGE_MENDER_GRUBENV
++    - This package provides boot scripts to integrate mender into grub.
++      Mender recommends every client to use this package, including boards
++      using uboot as the primary bootloader.
  
-     def run_mender_test(self):
--        # Check if the Daemon is running
--        self.assertRunOk("ls /var/run/mender.pid")
-         self.assertRunOk("ps aux | egrep [m]ender")
+ To fully utilize atomic image-based deployments using the A/B update
+ strategy, additional integration is required in the bootloader. This
+ integration is board specific.
  
-         # Check if a simple Mender command is correctly executed
-@@ -35,6 +33,9 @@ class TestMenderInfra(infra.basetest.BRTest):
- class TestMenderRW(TestMenderInfra):
-     def test_run(self):
-         TestMenderInfra.base_test_run(self)
+-Currently supported bootloaders are GRUB and U-boot, and for reference
+-integrations please visit:
++Currently supported bootloaders are GRUB and U-boot. Buildroot provides
++a reference integration at board/mender/x86_64/ using the
++mender_x86_64_efi_defconfig file.
 +
-+        # Check if the Daemon is running
-+        self.assertRunOk("ls /var/run/mender.pid")
-         self.run_mender_test()
++Additional support and integrations are found at:
  
+     https://github.com/mendersoftware/buildroot-mender
  
-@@ -47,4 +48,20 @@ class TestMenderRO(TestMenderInfra):
+@@ -46,12 +56,7 @@ files that need your attention:
  
-     def test_run(self):
-         TestMenderInfra.base_test_run(self)
-+
-+        # Check if the Daemon is running
-+        self.assertRunOk("ls /var/run/mender.pid")
-+        self.run_mender_test()
-+
-+class TestMenderSystemd(TestMenderInfra):
-+    config = \
-+        """
-+        {}
-+        BR2_INIT_SYSTEMD=y
-+        """.format(TestMenderInfra.config)
-+
-+    def test_run(self):
-+        TestMenderInfra.base_test_run(self)
-+        output, _ = self.emulator.run("systemctl is-active mender-client")
-+        self.assertEqual(output[0], "active")
-         self.run_mender_test()
+ - /etc/mender/mender.conf
+     - main configuration file for the Mender client
+-    - https://docs.mender.io/client-configuration/configuration-file/configuration-options
+-
+-- /etc/mender/artifact_info
+-    - The name of the image or update that will be built. This is what the
+-      device will report that it is running, and different updates must have
+-      different names
++    - https://docs.mender.io/client-installation/configuration/configuration-options
+ 
+ - /var/lib/mender/device_type
+     - A string that defines the type of device
+@@ -110,40 +115,9 @@ Creating Mender Artifacts
+ To create Mender Artifacts based on Buildroot build output you must
+ include BR2_PACKAGE_HOST_MENDER_ARTIFACT in your configuration, and
+ then you would typically create the Mender Artifact in a post image
+-script (BR2_ROOTFS_POST_IMAGE_SCRIPT). Below is an example of such a
+-script:
+-
+-    #!/bin/sh
+-
+-    set -e
+-    set -x
+-
+-    device_type=$(cat ${TARGET_DIR}/var/lib/mender/device_type | sed 's/[^=]*=//')
+-    artifact_name=$(cat ${TARGET_DIR}/etc/mender/artifact_info | sed 's/[^=]*=//')
+-
+-    if [ -z "${device_type}" ] || [ -z "${artifact_name}" ]; then
+-        echo "missing files required by Mender"
+-        exit 1
+-    fi
+-
+-    ${HOST_DIR}/usr/bin/mender-artifact write rootfs-image \
+-        --update ${BINARIES_DIR}/rootfs.ext4 \
+-        --output-path ${BINARIES_DIR}/${artifact_name}.mender \
+-        --artifact-name ${artifact_name} \
+-        --device-type ${device_type}
+-
+-As you can see some properties are extracted from target rootfs, and
+-this is because these values are used for compatibility checks,
+-meaning that the information must be present in both rootfs and in
+-Mender Artifact meta data.
+-
+-- device_type - must be an exact match between rootfs and Mender
+-                Artifact meta-data to apply update. You can set an
+-                array of devices here as well, e.g if your image is
+-                compatible with multiple hardware revisions
++script (BR2_ROOTFS_POST_IMAGE_SCRIPT). See the generate_mender_image
++method in board/mender/x86_64/post-image-efi.sh for a working example.
+ 
+-- artifact_name - must be an exact match between rootfs and Mender
+-                  Artifact meta-data to apply update.
+ 
+ Configuring Mender with certificates
+ ------------------------------------
 -- 
 2.47.0
 
