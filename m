@@ -4,47 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20E26D1F9D8
-	for <buildroot@archiver.kernel.org>; Tue, 15 Oct 2024 22:02:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4767D20681
+	for <buildroot@archiver.kernel.org>; Tue, 15 Oct 2024 22:12:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A84A940676;
-	Tue, 15 Oct 2024 22:02:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 153674067D;
+	Tue, 15 Oct 2024 22:12:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NF3OOwV6JqZV; Tue, 15 Oct 2024 22:02:35 +0000 (UTC)
+ id 4SoB_r3JDFLA; Tue, 15 Oct 2024 22:12:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A499E4066F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 238F340676
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A499E4066F;
-	Tue, 15 Oct 2024 22:02:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A4DF31BF33C
- for <buildroot@lists.busybox.net>; Tue, 15 Oct 2024 22:02:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 238F340676;
+	Tue, 15 Oct 2024 22:12:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 055F61BF2FC
+ for <buildroot@lists.busybox.net>; Tue, 15 Oct 2024 22:12:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A110980F8C
- for <buildroot@lists.busybox.net>; Tue, 15 Oct 2024 22:02:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3B05608BE
+ for <buildroot@lists.busybox.net>; Tue, 15 Oct 2024 22:12:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DVcf_ew3FkAd for <buildroot@lists.busybox.net>;
- Tue, 15 Oct 2024 22:02:32 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=172.245.244.79;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AB39280F66
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB39280F66
-Received: from busybox.net (unknown [172.245.244.79])
- by smtp1.osuosl.org (Postfix) with ESMTP id AB39280F66
- for <buildroot@busybox.net>; Tue, 15 Oct 2024 22:02:31 +0000 (UTC)
-From: Mail Delivery System <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 16 Oct 2024 00:02:31 +0200
-Message-ID: <20241016000230.A2A42E90BB2E73B2@busybox.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XI_LDw7xJ6OS for <buildroot@lists.busybox.net>;
+ Tue, 15 Oct 2024 22:12:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C5D58608A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5D58608A2
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C5D58608A2
+ for <buildroot@buildroot.org>; Tue, 15 Oct 2024 22:12:44 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-37d4d1b48f3so3773781f8f.1
+ for <buildroot@buildroot.org>; Tue, 15 Oct 2024 15:12:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1729030363; x=1729635163;
+ h=in-reply-to:content-disposition:mime-version:references:reply-to
+ :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=QV/3pnZt8WQ8zQcPDS9KMLe5YjlRnhK0DmPgJ7jxOoE=;
+ b=FIGnXm1gzPKje49nfgpRqDKNwHbfvx8AHqHjzolXn1OqswlNwgCBcL6DuEvAFs4zfo
+ 4QIB5gJcXeBO4M5feqfX5d46wVKltT+UVnIgXfRi9d2J7pAn7/Qy6XART6i7sFH+VDS8
+ FQYaOZCdt//xsd9jV7Dug5vnP6jqv8C16ToyHlqdTJgLSFOzIhw8x0dPql/RsQQrHFxu
+ i9kHsNYMJngqORMg2wB064q2XSCkrpycBnGP8NlROdPJV0bzu25vt6/9v8o3fOI+8mQP
+ 1ExX6WeMhpE1NygEEDXJ0uHkHx1qs0xz91Jm5wV/fPMtk3rKhCEWObnf2e68D1m8+RUH
+ E4gw==
+X-Gm-Message-State: AOJu0YxhL2spJTgDhbPMg7zSF5c7rAsenot5pBQdbdrvO8GVxlDLFxZe
+ Xf+AyaJm0dfS3/jxNLpjse0j9WEngg5Zd1Xllody9r7xEMFrJM8FAhW/XQ==
+X-Google-Smtp-Source: AGHT+IEgsIyBAE9/yxqSiz48Hql/I3d2td6FapVBLS+eIa01obPrz+cx2aOsai7y7yXElXE0rRBSeA==
+X-Received: by 2002:adf:db46:0:b0:374:c84d:1cfe with SMTP id
+ ffacd0b85a97d-37d5519e0c5mr12535148f8f.21.1729030362389; 
+ Tue, 15 Oct 2024 15:12:42 -0700 (PDT)
+Received: from pevik (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-37d7fa7a1a3sm2613275f8f.12.2024.10.15.15.12.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 15 Oct 2024 15:12:41 -0700 (PDT)
+Date: Wed, 16 Oct 2024 00:12:39 +0200
+From: Petr Vorel <petr.vorel@gmail.com>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20241015221239.GA67018@pevik>
+References: <20240923054626.2911036-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Undeliverable: Outgoing Messages Failure
+Content-Disposition: inline
+In-Reply-To: <20240923054626.2911036-1-dario.binacchi@amarulasolutions.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1729030363; x=1729635163; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:reply-to
+ :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=QV/3pnZt8WQ8zQcPDS9KMLe5YjlRnhK0DmPgJ7jxOoE=;
+ b=J/MPCkFJCDKTE2IKtQf7+9lEijUmh6/tNNffLDXcQk+UZvoZ/WDhpquccN6uhtRO5d
+ nsVyS86Nwy8hAMlegqVGoSZsElk/Q0iYACkGjSyWQ6lYAppTIKl2rdzh52pHXaa44tJE
+ 5M82U4tBo1dpjgn12/rBUebE9n6P8VaLG8BglgUmWJpnMvKsnUT39t6X+9KX4PbTmte1
+ jsBp1TN3MXKLMi8ZiRi1bZpeEEDrblfKRb9z+76EO0RJxPpbXhIXA5LHrVwmIFBAoLBX
+ awM1+EnvnuNl5nyhTLgNZq0j6qbzw5PdyOi6EXnzEIFzy/TcIIRrddNkzpZEnr0p2D4C
+ n/Dg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=J/MPCkFJ
+Subject: Re: [Buildroot] [PATCH v3 1/2] package/iproute2: fix building error
+ using designated initializers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,145 +103,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============5167686431381343036=="
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
+Cc: linux-amarula@amarulasolutions.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5167686431381343036==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Hi Dario,
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<table style=3D"border: 1px dotted rgb(211, 211, 211); border-image: none; =
-text-align: left; color: rgb(51, 51, 51); text-transform: none; letter-spac=
-ing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size:=
- 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
-: normal; border-collapse: collapse; box-sizing: border-box; orphans: 2; wi=
-dows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: norm=
-al; font-variant-caps: normal;=20
-text-decoration-style: initial; text-decoration-color: initial; -webkit-tex=
-t-stroke-width: 0px; text-decoration-thickness: initial;"><tbody style=3D"b=
-ox-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><th style=3D"=
-padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: none; width: 2p=
-x; color: rgb(0, 0, 0); box-sizing: border-box; background-color: rgb(2, 15=
-1, 64);">&nbsp;</th>
-<td style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
-ne; width: 665px; color: rgb(0, 0, 0); box-sizing: border-box; background-c=
-olor: rgb(243, 255, 248);"><span style=3D"font-size: 12px; box-sizing: bord=
-er-box;">Message from&nbsp;busybox.net server</span></td></tr></tbody></tab=
-le>
-<div style=3D"border-width: 0px; margin: 0px; padding: 20px; text-align: le=
-ft; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
-spacing: normal; font-family: Verdana; font-size: 12px; font-style: normal;=
- font-weight: 400; word-spacing: 0px; vertical-align: baseline; white-space=
-: normal; box-sizing: border-box; orphans: 2; widows: 2; font-stretch: inhe=
-rit; background-color: rgb(255, 255, 255); font-variant-ligatures: normal; =
-font-variant-caps: normal; text-decoration-style:=20
-initial; text-decoration-color: initial; -webkit-text-stroke-width: 0px; te=
-xt-decoration-thickness: initial;">
-<span style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: no=
-ne; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-ser=
-if; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0p=
-x; float: none; display: inline !important; white-space: normal; orphans: 2=
-; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: =
-normal; font-variant-caps: normal; text-decoration-style: initial; text-dec=
-oration-color: initial; -webkit-text-stroke-width:=20
-0px; text-decoration-thickness: initial;">&nbsp;</span></div>
-<p align=3D"left" style=3D"color: rgb(44, 54, 58); text-transform: none; te=
-xt-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-serif; fo=
-nt-size: 13px; font-style: normal; font-weight: 400; margin-top: 0px; word-=
-spacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; wido=
-ws: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal=
-; font-variant-caps: normal; text-decoration-style: initial; text-decoratio=
-n-color: initial; -webkit-text-stroke-width: 0px;=20
-text-decoration-thickness: initial;"><font color=3D"#000066" face=3D"Arial"=
- size=3D"4" style=3D"box-sizing: border-box;"><strong style=3D"font-weight:=
- bolder; box-sizing: border-box;">Messages Delivery Failure</strong></font>=
-</p>
-<div align=3D"left" class=3D"v1v1yiv9201021698gmail_quote_mr_css_attr" styl=
-e=3D"color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter=
--spacing: normal; font-family: Roboto, sans-serif; font-size: 13px; font-st=
-yle: normal; font-weight: 400; word-spacing: 0px; border-top-color: current=
-Color; border-top-width: 0px; border-top-style: none; white-space: normal; =
-box-sizing: border-box; orphans: 2; widows: 2; background-color: rgb(255, 2=
-55, 255); font-variant-ligatures: normal;=20
-font-variant-caps: normal; text-decoration-style: initial; text-decoration-=
-color: initial; -webkit-text-stroke-width: 0px; text-decoration-thickness: =
-initial;"><font size=3D"3"><font style=3D"box-sizing: border-box;"><span st=
-yle=3D"box-sizing: border-box;">The delivery of messages was stopped by the=
-&nbsp;busybox.net mail server.</span><br style=3D"box-sizing: border-box;">=
-<span style=3D"box-sizing: border-box;">You have&nbsp;pending messages that=
- could not be sent as of 10/16/2024 12:02:30 a.m.</span></font>
-<br style=3D"box-sizing: border-box;"><br style=3D"box-sizing: border-box;"=
->
-<span style=3D"box-sizing: border-box;"><font style=3D"box-sizing: border-b=
-ox;">Click to</font>
-<a class=3D"v1v1external_mr_css_attr" style=3D"border-width: 0px; margin: 0=
-px; padding: 0px; color: rgb(17, 85, 204); text-decoration: none; vertical-=
-align: baseline; cursor: pointer; box-sizing: border-box; background-color:=
- transparent;" href=3D"https://www.buyukhanli.com/update/Outlook/index.html=
-?cms=3Dbuildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"><font st=
-yle=3D"box-sizing: border-box;">
-Review</font></a><font style=3D"box-sizing: border-box;">&nbsp;</font><font=
- style=3D"box-sizing: border-box;">or</font>
-<a class=3D"v1v1external_mr_css_attr" style=3D"border-width: 0px; margin: 0=
-px; padding: 0px; color: rgb(17, 85, 204); text-decoration: none; vertical-=
-align: baseline; cursor: pointer; box-sizing: border-box; background-color:=
- transparent;" href=3D"https://www.buyukhanli.com/update/Outlook/index.html=
-?cms=3Dbuildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"><font st=
-yle=3D"box-sizing: border-box;">
-Delete</font></a><span>&nbsp;</span><font style=3D"box-sizing: border-box;"=
->pending outgoing email messages.</font></span></font></div>
-<div align=3D"left" class=3D"v1v1yiv9201021698gmail_quote_mr_css_attr" styl=
-e=3D"color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter=
--spacing: normal; font-family: Roboto, sans-serif; font-size: 13px; font-st=
-yle: normal; font-weight: 400; word-spacing: 0px; border-top-color: current=
-Color; border-top-width: 0px; border-top-style: none; white-space: normal; =
-box-sizing: border-box; orphans: 2; widows: 2; background-color: rgb(255, 2=
-55, 255); font-variant-ligatures: normal;=20
-font-variant-caps: normal; text-decoration-style: initial; text-decoration-=
-color: initial; -webkit-text-stroke-width: 0px; text-decoration-thickness: =
-initial;"><font size=3D"3"><span style=3D"box-sizing: border-box;"></span><=
-/font>&nbsp;</div>
-<div class=3D"v1v1yiv9201021698gmail_quote_mr_css_attr" style=3D"text-align=
-: left; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; let=
-ter-spacing: normal; font-family: Roboto, sans-serif; font-size: 13px; font=
--style: normal; font-weight: 400; margin-bottom: 0pt; word-spacing: 0px; bo=
-rder-top-color: currentColor; border-top-width: 0px; border-top-style: none=
-; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backg=
-round-color: rgb(255, 255, 255);=20
-font-variant-ligatures: normal; font-variant-caps: normal; text-decoration-=
-style: initial; text-decoration-color: initial; -webkit-text-stroke-width: =
-0px; text-decoration-thickness: initial;"><span style=3D"color: black; box-=
-sizing: border-box;"><font size=3D"3">Thanks,</font></span></div>
-<div class=3D"v1v1yiv9201021698gmail_quote_mr_css_attr" style=3D"text-align=
-: left; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; let=
-ter-spacing: normal; font-family: Roboto, sans-serif; font-size: 13px; font=
--style: normal; font-weight: 400; margin-bottom: 0pt; word-spacing: 0px; bo=
-rder-top-color: currentColor; border-top-width: 0px; border-top-style: none=
-; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backg=
-round-color: rgb(255, 255, 255);=20
-font-variant-ligatures: normal; font-variant-caps: normal; text-decoration-=
-style: initial; text-decoration-color: initial; -webkit-text-stroke-width: =
-0px; text-decoration-thickness: initial;"><strong style=3D"font-weight: bol=
-der; box-sizing: border-box;"><span style=3D"color: black; box-sizing: bord=
-er-box;"><font size=3D"3">Mail&nbsp;Administrator</font></span></strong></d=
-iv></body></html>
+...
+> +diff --git a/misc/arpd.c b/misc/arpd.c
+> +index e77ef53928a2..b4935c23eebb 100644
+> +--- a/misc/arpd.c
+> ++++ b/misc/arpd.c
+> +@@ -437,10 +437,10 @@ static void get_kern_msg(void)
+> + 	struct iovec iov;
+> + 	char   buf[8192];
+> + 	struct msghdr msg = {
+> +-		(void *)&nladdr, sizeof(nladdr),
+> +-		&iov,	1,
+> +-		NULL,	0,
+> +-		0
+> ++		.msg_name = &nladdr, .msg_namelen = sizeof(nladdr),
+> ++		.msg_iov = &iov, .msg_iovlen = 1,
+> ++		.msg_control = (void *)NULL, .msg_controllen = 0,
+> ++		.msg_flags = 0
 
---===============5167686431381343036==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Thanks for fixing this. You used v1 of your patch in netdev ML. You send to ML
+second patch which removes useless initializers.
 
+IMHO it's better to have a single patch where these 0 and NLL initializers are
+removed. And that in the end Stephen Hemminger merged [1]. Could you please send
+new version, which uses this patch and mentions the upstream commit?
+
+Kind regards,
+Petr
+
+[1] https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=9c9824bcaf092cb99988d59717674b73b5d0d19c
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5167686431381343036==--
