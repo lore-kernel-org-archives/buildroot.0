@@ -4,58 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE1D7D1AD53
-	for <buildroot@archiver.kernel.org>; Wed, 16 Oct 2024 12:45:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 829B2D1AD53
+	for <buildroot@archiver.kernel.org>; Wed, 16 Oct 2024 12:45:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5073E8087D;
-	Wed, 16 Oct 2024 12:45:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C11D880D52;
+	Wed, 16 Oct 2024 12:45:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BGVMVTJ53QwA; Wed, 16 Oct 2024 12:45:46 +0000 (UTC)
+ id uga6yRpTcP2z; Wed, 16 Oct 2024 12:45:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62E6280D52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 935BA80D76
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 62E6280D52;
-	Wed, 16 Oct 2024 12:45:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 86A101BF2CF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 935BA80D76;
+	Wed, 16 Oct 2024 12:45:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B9F491BF2CF
  for <buildroot@lists.busybox.net>; Wed, 16 Oct 2024 12:45:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7481B40235
+ by smtp2.osuosl.org (Postfix) with ESMTP id B598940291
  for <buildroot@lists.busybox.net>; Wed, 16 Oct 2024 12:45:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Rf8zgcbuN7m for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bm8Ofp0DS5Ot for <buildroot@lists.busybox.net>;
  Wed, 16 Oct 2024 12:45:44 +0000 (UTC)
 Received-SPF: Pass (sender SPF authorized) identity=helo;
- client-ip=81.169.146.217; helo=mo4-p00-ob.smtp.rzone.de;
+ client-ip=81.169.146.160; helo=mo4-p00-ob.smtp.rzone.de;
  envelope-from=ludwig.kormann@ict42.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 10C0640223
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10C0640223
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 33C7840198
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33C7840198
 Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de
- [81.169.146.217])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 10C0640223
+ [81.169.146.160])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 33C7840198
  for <buildroot@buildroot.org>; Wed, 16 Oct 2024 12:45:43 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; t=1729082741; cv=none;
  d=strato.com; s=strato-dkim-0002;
- b=fGX3ilgUvnzM6v+eaH/BbUVOdtA5gU4la/yLuwcBKELczLo0Ev/xMPmAdN4Dyxzt3G
- MFGfjlf1A6FDodz/wr94fS2dVNFSDiHPp3/2NQnxmH5NkyS5REH8cJhUD73A6nA3AGpn
- VPKMIS+os3e273hSQyG5/FYr/cloBE/T+VQuCopfvlESMR+LWL0C1PxtNHXpkpZ/TxiQ
- wBH7re5ZFormOkbjfv2cPe2QO7h2+r/gqbyi/3hL0KrQeaP0elfonE/V2B9GNlBLW9lU
- e6z+86yjmBoxKCqqwPqo0IRWSnYGrxmEoJ47+sWZhi6NcqUfo7k/+uqe2IazjvUFq4Eo
- qdfw==
+ b=HwHauq2EJ7N1Ttj4SIKOz7xWjfV6gIck6h8itN1ZLG9odVOyM5ueX+8Js0LJXi19dy
+ kaXoHkAoWkcraEyUHenOLiEJIJA/6OvQyJa0F7S7HfbNGg1FyeNp+dh++xPP+k4IBmrr
+ v1a6wLnVMR3gC2OE68K1ueIRA8WSIjOPgc0DYg/rHfBfitsopRRl0mMvAvvp8phlqdGp
+ XLcGQYppPvZ6ja9hsiiMa5HpgU7olh7muxclseM3qEBx9ME5j8L3vW0vcF0QaXPRldlb
+ ERmoctAidqS92+q3TObvoEyZu8QU9hgfghQrXWrwsjSam4063Upq2EWL5MOqTwrtLYWw
+ aZIA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1729082741;
  s=strato-dkim-0002; d=strato.com;
- h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
- bh=cJzeSa7Etny/qXNUopNchLszqbcq72qdjLuAqWDSsVY=;
- b=E79Gkv9tTsELp2C8p7PnQV8ewMqWtWD+hdP6GexzsnDRMhtKi7kaqdieqU5N+fWrrP
- Sr2eydDAYBCUU3ZCA9ARUWp3vSExduF1j1ABHENpaocOfEPRykKOwPNoJxlBfjBwoZjy
- 5CFShIaXBjQoqu3Z0lIaCh8lr5rA7X8t8TC06qqfemCYjpRrcxtSZ+VZI/bPphgry2nc
- HsZUEmK0LznEHbCrjIRUsKpR5RhTP7t9ADYEwiDQxSlaBAMgtqxq7+BaWucavxmyQ15E
- O0hZYEJTu8Sr1na+EirC4S7CDasgqgNy5HsltjKxO2pfObCVlOrchGUMq9Yo5eY3U6S/
- wlKg==
+ h=References:In-Reply-To:Message-Id:Date:Subject:To:From:Cc:Date:From:
+ Subject:Sender;
+ bh=pK+PgJvWkI+jrZc/bQA6zySNWb3iF7NmwNWtdIs8Jb0=;
+ b=opEGWNx/bubyRMoBjccQZl/zsGdQNQJr+0CsF+TacjQy6vl9tMhFiEHE9zY5bNTXWi
+ 0O/V/7LZPt1P18d+8F03Ew9e+6VG9sSmDMLH3Cv2Aor2philyCZBC0PfnXRkn7aFsw30
+ s3gbxEJhehZHvfmxVf1NSCupg9qKKg+0FvDUdM8wFHoiGD81p2N3dtNWXF7peF0RJH+W
+ 9C2yhcy2tJvJ0ycT8BAKSs7fxAV8OyAvO4RhqKqNjAGCCHRqPEwCDK6m7Kolwu3o/4Zu
+ kehwpdLMar2oTq++A2MmiasBa5urJv0vJieOCq8H/Lb6Sabhq0RUgxeGjZRAdXGHF8pH
+ Y/2Q==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
@@ -63,44 +64,48 @@ X-RZG-CLASS-ID: mo00
 X-RZG-AUTH: ":IHkAYkmvNfSwjg/qSc4u8zZOVaURsoXe3UH2mQA0KgllCYtN8WqJZ5aMuoQuCdrfzui0vA=="
 Received: from debian-test.local.in-circuit.de
  by smtp.strato.de (RZmta 51.2.11 DYNA|AUTH)
- with ESMTPSA id ja045c09GCjf7fT
+ with ESMTPSA id ja045c09GCjf7fV
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
  (Client did not present a certificate) for <buildroot@buildroot.org>;
  Wed, 16 Oct 2024 14:45:41 +0200 (CEST)
 From: Ludwig Kormann <ludwig.kormann@ict42.de>
 To: buildroot@buildroot.org
-Date: Wed, 16 Oct 2024 14:45:35 +0200
-Message-Id: <20241016124537.2645119-1-ludwig.kormann@ict42.de>
+Date: Wed, 16 Oct 2024 14:45:37 +0200
+Message-Id: <20241016124537.2645119-3-ludwig.kormann@ict42.de>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20241016124537.2645119-1-ludwig.kormann@ict42.de>
+References: <20241016124537.2645119-1-ludwig.kormann@ict42.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  t=1729082741; 
  s=strato-dkim-0002; d=ict42.de;
- h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
- bh=cJzeSa7Etny/qXNUopNchLszqbcq72qdjLuAqWDSsVY=;
- b=KH6wS2QgJN1q8MmBgwzZQeQYtW4y3w2eyxFdR5uoWmZ2699qnvbe5ucKRow8N7mIe3
- k9gCaW9++SxNF+RKyrnpqQXD9DGL9kZ0tYHxgjcj8zl+WtoKSy0Lvk1ETnFl8ltseoRP
- lb6Zzk8OrHuWr12It3wsPBwPykNi7IFjmg11Iio+qE0G7+PR77kgIa/D+S92OU99J1y9
- /HflJPFfyAmYYPje2BgpFRKNcQJSQEhXXU//Nk6huPx0MsthFnLaHxaTDvfbwp3DycHo
- P3wEsXmJ59PFvAkxUbU2UyuCChQ/xg11jSDL3hCUC2p1tkbYVt7UNQ6AtjDWJt6g0Kuz
- rGVQ==
+ h=References:In-Reply-To:Message-Id:Date:Subject:To:From:Cc:Date:From:
+ Subject:Sender;
+ bh=pK+PgJvWkI+jrZc/bQA6zySNWb3iF7NmwNWtdIs8Jb0=;
+ b=o5o5ny521WMym4IYh9g+8zkIL4wWQHJWt4LGZ8lZOzOFcH8WOoOViNxQHb0wmC2GBH
+ yT2jXh/X/CF1qVafNvbHr0oGqg64f68shw4eayGy1dwOSJ36sZNTnyCi+G6ZMw5jNxpj
+ DzPRgqBo3/lbQB71TFuvJqw073gDsb7XSCoU3Ta1HKIhRy4e/dA3ooSDGtAEEBLdTpW+
+ JM4suOZdU1d2ZshumgIDTCqQ+NVvhuM1vrKwMcn2Dr2uFvN6HQePBWqoMrXgbQFArIAW
+ 2yh21lhmZqyJPPKKvDsdBKprDqUosQSOx4mdSZbp/qsHhKezoJA3H4Box/MNEkMrZLqL
+ w8Hw==
 X-Mailman-Original-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
  t=1729082741; 
  s=strato-dkim-0003; d=ict42.de;
- h=Message-Id:Date:Subject:To:From:Cc:Date:From:Subject:Sender;
- bh=cJzeSa7Etny/qXNUopNchLszqbcq72qdjLuAqWDSsVY=;
- b=C7p7QvPi4QEQRxZpTvfQgutVFLPxG4j2nxREb/8sY2yf5pxaEulIeSRGIsqRd7LROA
- z7xII1saEElFeaAsiwCA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=References:In-Reply-To:Message-Id:Date:Subject:To:From:Cc:Date:From:
+ Subject:Sender;
+ bh=pK+PgJvWkI+jrZc/bQA6zySNWb3iF7NmwNWtdIs8Jb0=;
+ b=ebb3nvU1f17+tQv2pYaqSSiTV+isfo0bXSz6Vzi5Tp4sPNrGnCLMbDe0pwcAIO0rzB
+ NxkBcuweFaWtcXmSKkCw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=ict42.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key, unprotected) header.d=ict42.de header.i=@ict42.de
- header.a=rsa-sha256 header.s=strato-dkim-0002 header.b=KH6wS2Qg; 
+ header.a=rsa-sha256 header.s=strato-dkim-0002 header.b=o5o5ny52; 
  dkim=pass header.d=ict42.de header.i=@ict42.de header.a=ed25519-sha256
- header.s=strato-dkim-0003 header.b=C7p7QvPi
-Subject: [Buildroot] [PATCH v2 1/3] configs/icnova-a20-adb4006: Bump Linux
- to 6.6.56, U-Boot to 2024.10
+ header.s=strato-dkim-0003 header.b=ebb3nvU1
+Subject: [Buildroot] [PATCH v2 3/3] configs/icnova-a20-adb4006: add uboot
+ patch for reliable bootclk
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -117,38 +122,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Up until now cpu clock gets initialized at 384 MHz, which is
+the highest supported cpu clock.
+
+Recent A20 batches show an increased percentage of modules
+reacting very sensitive to operating conditions outside the
+specifications.
+
+The cpu dies very shortly after PLLs, core frequency or cpu
+voltage are missconfigured. E.g.:
+- uboot SPL selects 384 MHz as cpu clock which requires a cpu
+  voltage of at least 1.1 V.
+- Linux CPU Frequency scaling with most sun7i dts will reduce
+  cpu voltage down to 1.0 V.
+- When intiating a reboot or reset from linux the cpu voltage
+  may keep the 1.0 V configuration and the cpu dies during SPL
+  initialization.
+
+Therefore reduce cpu clock at uboot SPL initialization down
+to 144 MHz from 384 MHz.
+
+Use patch until KConfig option in uboot becomes available.
+
 Signed-off-by: Ludwig Kormann <ludwig.kormann@ict42.de>
 ---
- configs/icnova-a20-adb4006_defconfig | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ ...ce-cpu-clock-at-SPL-initialization-t.patch | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 board/in-circuit/icnova-a20-adb4006/patches/uboot/0001-sunxi-sun4i-Reduce-cpu-clock-at-SPL-initialization-t.patch
 
-diff --git a/configs/icnova-a20-adb4006_defconfig b/configs/icnova-a20-adb4006_defconfig
-index ba529c8db5..7eac9b429d 100644
---- a/configs/icnova-a20-adb4006_defconfig
-+++ b/configs/icnova-a20-adb4006_defconfig
-@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.14"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.56"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/in-circuit/icnova-a20-adb4006/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -36,11 +36,12 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="icnova-a20-adb4006"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/board/in-circuit/icnova-a20-adb4006/patches/uboot/0001-sunxi-sun4i-Reduce-cpu-clock-at-SPL-initialization-t.patch b/board/in-circuit/icnova-a20-adb4006/patches/uboot/0001-sunxi-sun4i-Reduce-cpu-clock-at-SPL-initialization-t.patch
+new file mode 100644
+index 0000000000..edaa47ac4e
+--- /dev/null
++++ b/board/in-circuit/icnova-a20-adb4006/patches/uboot/0001-sunxi-sun4i-Reduce-cpu-clock-at-SPL-initialization-t.patch
+@@ -0,0 +1,48 @@
++From 3cdf8aa3ff45e35a237285c107785bc3d2c6976a Mon Sep 17 00:00:00 2001
++From: Ludwig Kormann <ludwig.kormann@ict42.de>
++Date: Wed, 31 Jan 2024 11:28:19 +0100
++Subject: [PATCH] sunxi: sun4i: Reduce cpu clock at SPL initialization to 144
++ MHz
++
++Up until now cpu clock gets initialized at 384 MHz, which is
++the highest supported cpu clock.
++
++Recent A20 batches show an increased percentage of modules
++reacting very sensitive to operating conditions outside the
++specifications.
++
++The cpu dies very shortly after PLLs, core frequency or cpu
++voltage are missconfigured. E.g.:
++- uboot SPL selects 384 MHz as cpu clock which requires a cpu
++  voltage of at least 1.1 V.
++- Linux CPU Frequency scaling with most sun7i dts will reduce
++  cpu voltage down to 1.0 V.
++- When intiating a reboot or reset from linux the cpu voltage
++  may keep the 1.0 V configuration and the cpu dies during SPL
++  initialization.
++
++Therefore reduce cpu clock at uboot SPL initialization down
++to 144 MHz from 384 MHz.
++
++Signed-off-by: Ludwig Kormann <ludwig.kormann@ict42.de>
++Upstream: Not Applicable
++---
++ arch/arm/include/asm/arch-sunxi/clock_sun4i.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/arch/arm/include/asm/arch-sunxi/clock_sun4i.h b/arch/arm/include/asm/arch-sunxi/clock_sun4i.h
++index 2cec91cb20..252c4c693e 100644
++--- a/arch/arm/include/asm/arch-sunxi/clock_sun4i.h
+++++ b/arch/arm/include/asm/arch-sunxi/clock_sun4i.h
++@@ -141,7 +141,7 @@ struct sunxi_ccm_reg {
++ #define CCM_PLL1_CFG_SIG_DELT_PAT_EN_SHIFT	2
++ #define CCM_PLL1_CFG_FACTOR_M_SHIFT		0
++ 
++-#define PLL1_CFG_DEFAULT	0xa1005000
+++#define PLL1_CFG_DEFAULT	0xa1004c01
++ 
++ #if defined CONFIG_OLD_SUNXI_KERNEL_COMPAT && defined CONFIG_MACH_SUN5I
++ /*
++-- 
++2.39.2
++
 -- 
 2.39.2
 
