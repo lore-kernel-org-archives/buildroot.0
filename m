@@ -4,91 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4B27D2FFF8
-	for <buildroot@archiver.kernel.org>; Fri, 18 Oct 2024 11:54:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72D08D30000
+	for <buildroot@archiver.kernel.org>; Fri, 18 Oct 2024 12:33:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 888D3605EB;
-	Fri, 18 Oct 2024 11:54:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16F85605E3;
+	Fri, 18 Oct 2024 12:33:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bugc4CfyMC_A; Fri, 18 Oct 2024 11:54:52 +0000 (UTC)
+ id DRgIUOSUlz-b; Fri, 18 Oct 2024 12:33:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6851D605F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45225605FE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6851D605F9;
-	Fri, 18 Oct 2024 11:54:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45225605FE;
+	Fri, 18 Oct 2024 12:33:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A9BA12804
- for <buildroot@buildroot.org>; Fri, 18 Oct 2024 11:54:50 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A14782072
+ for <buildroot@buildroot.org>; Fri, 18 Oct 2024 12:33:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8B91480A99
- for <buildroot@buildroot.org>; Fri, 18 Oct 2024 11:54:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8F352817B1
+ for <buildroot@buildroot.org>; Fri, 18 Oct 2024 12:33:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gauzhZ7XAJLX for <buildroot@buildroot.org>;
- Fri, 18 Oct 2024 11:54:49 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom; client-ip=198.175.65.16;
- helo=mgamail.intel.com; envelope-from=andriy.shevchenko@linux.intel.com;
+ id WRT8zhOoncfX for <buildroot@buildroot.org>;
+ Fri, 18 Oct 2024 12:33:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.152.184;
+ helo=mx0b-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8731680A98
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8731680A98
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8731680A98
- for <buildroot@buildroot.org>; Fri, 18 Oct 2024 11:54:49 +0000 (UTC)
-X-CSE-ConnectionGUID: OoGBaC34THG+kLAKRZvWng==
-X-CSE-MsgGUID: idl5BmoITSOv0QUFyZdw0Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28885994"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; d="scan'208";a="28885994"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
- by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 18 Oct 2024 04:54:49 -0700
-X-CSE-ConnectionGUID: C8Op6P1BQfq6IXLRzbmvHQ==
-X-CSE-MsgGUID: 8fAcYGnJSwKJSjwKeqKwiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,213,1725346800"; d="scan'208";a="78450996"
-Received: from smile.fi.intel.com ([10.237.72.154])
- by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 18 Oct 2024 04:54:47 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
- (envelope-from <andriy.shevchenko@linux.intel.com>)
- id 1t1lZ6-00000004Rv5-38Lj; Fri, 18 Oct 2024 14:54:44 +0300
-Date: Fri, 18 Oct 2024 14:54:44 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Aaron Sierra <aaron@bubbl-tek.com>
-Cc: Vincent Fazio <vfazio@xes-inc.com>, Andy Yan <andyshrk@163.com>,
- buildroot <buildroot@buildroot.org>, Andy Yan <andyshrk@gmail.com>
-Message-ID: <ZxJMhHEJmfHd5dyt@smile.fi.intel.com>
-References: <PH1P110MB1603BAEB621A821D82C0A2C19F44A@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
- <Zw_FDy5XWpeQ78sG@smile.fi.intel.com>
- <1929b27b55e.1242e8abc627480.7414881916261699452@bubbl-tek.com>
- <ZxJL9O0KM7WP7b-d@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <ZxJL9O0KM7WP7b-d@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
- t=1729252490; x=1760788490;
- h=date:from:to:cc:subject:message-id:references:
- mime-version:in-reply-to;
- bh=ycm19sdaqhM9kiiqcjY+PMzzu6NxIxjFRr3UzyioQns=;
- b=Wlc+dpkzXCtstp5V1JK1wXvf6pkQHRcRSSiI5coWrq0BbSmCJ34p+jjZ
- MlVU7hsxmIFKLQHem6muuvE0zEy7mXTEz9DXZ5l6sO1CUK+edfxJCSIU5
- r/fN7tI2zKKPtMKVnz6d+o67if8t27WCtldepQTzYl36Gn7K1IuLWNX7d
- TYgHtcQdu7xgMGYOtv+7IAPaaie5kT8kgODTlEC6DELsgD81Qz8q3G1Lj
- d7Qbjo73E5m4c8B1/vmJQb18k5n6cZN3+4Vvb2sILjnZT+nkjskqiwzZR
- suaiWKyh+gYyspcWrgQF8sr1HPMFsfG8HxgLuovgf8/8QW55EqL2sytlc
- g==;
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B4C7B817AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4C7B817AF
+Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
+ [67.231.152.184])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B4C7B817AF
+ for <buildroot@buildroot.org>; Fri, 18 Oct 2024 12:33:25 +0000 (UTC)
+Received: from pps.filterd (m0346903.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49I59AO7001313;
+ Fri, 18 Oct 2024 12:33:22 GMT
+Received: from xusxph004rp050.rtx.com (xusxph004rp050.rtx.com [128.13.120.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 42b3vrvmqx-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Fri, 18 Oct 2024 12:33:22 +0000
+Received: from xusxph004rp020.corp.ray.com ([128.13.120.135])
+ by xusxph004rp050.rtx.com (8.18.1.2/8.18.1.2) with ESMTPS id 49ICXLrk032383
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Fri, 18 Oct 2024 12:33:21 GMT
+Received: from dtulimr02.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph004rp020.corp.ray.com (8.18.1.2/8.18.1.2) with ESMTPS id
+ 49ICXKSD009892
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Fri, 18 Oct 2024 12:33:21 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by dtulimr02.rockwellcollins.com (Postfix) with ESMTP id B46603026D7A;
+ Fri, 18 Oct 2024 07:33:20 -0500 (CDT)
+Mime-Version: 1.0
+Date: Fri, 18 Oct 2024 12:33:20 +0000
+Message-Id: <D4YXO0EB2YTF.3Q4E8FN1YH9PB@collins.com>
+To: "Bagas Sanjaya" <bagasdotme@gmail.com>, "Buildroot development"
+ <buildroot@buildroot.org>
+Cc: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+X-Mailer: aerc 0.17.0-0-g6ea74eb30457
+References: <20241018043437.28475-2-bagasdotme@gmail.com>
+In-Reply-To: <20241018043437.28475-2-bagasdotme@gmail.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-18_08,2024-10-17_01,2024-09-30_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-18_08,2024-10-17_01,2024-09-30_01
+X-MHapp-Spam-Details: rule=notspam policy=default score=0 phishscore=0
+ mlxlogscore=999
+ adultscore=0 bulkscore=0 malwarescore=0 mlxscore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2409260000 definitions=main-2410180079
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
+ spamscore=0 adultscore=0
+ phishscore=0 bulkscore=0 suspectscore=0 mlxlogscore=999 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2410180078
+X-Proofpoint-GUID: vcpW2j66k5IRmP1s8bVpi6Mj-8RnL_Mz
+X-Proofpoint-ORIG-GUID: vcpW2j66k5IRmP1s8bVpi6Mj-8RnL_Mz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-18_08,2024-10-17_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0 spamscore=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 suspectscore=0
+ lowpriorityscore=0 impostorscore=0 adultscore=0 phishscore=0 mlxscore=0
+ clxscore=1011 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2409260000 definitions=main-2410180079
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : in-reply-to :
+ message-id : mime-version : references : subject : to; s=POD051818;
+ bh=9puE78EvdCkTX35BAxzh0UJx0wTtWUdty08AvXebIN8=;
+ b=gtQKY1UOwRRuLb6ymu8wjSshT++AgbCtPcH/vWmJUzXXv9RrYEifftfV7BxsohSmIo2M
+ 6WmPzTO/8oH5sgvtviTUgqAGwRHii4xP00HrFOTU45qpHsvCRCLT5cefuRM1m5YBFc0g
+ +kis2IHhNEsIHmff85PwsCAaL/k74PnYYZ3Qg5H/RI09aFnH4ATJ71aoOshrBL1qs+Ob
+ KrjN/YG05EHe1j9TZeNpd9Ujokd2i9gsvJsWvHXObIZiZzN8O9D2oS/HjRV9WVNEx6eA
+ DBCXhCUxA9Vscb2DONLZtL0E52PAT2BrD8X4h6sTduHomV4c5gkDFeOqdxuxdA3HYr2v aA== 
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=linux.intel.com
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256
- header.s=Intel header.b=Wlc+dpkz
-Subject: Re: [Buildroot] [PATCH v2 1/1] package: Add iotools package
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=gtQKY1UO
+Subject: Re: [Buildroot] [PATCH] package/git: require wchar support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,101 +123,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, Oct 18, 2024 at 02:52:20PM +0300, Andy Shevchenko wrote:
-> On Thu, Oct 17, 2024 at 10:45:23AM -0500, Aaron Sierra wrote:
-> >  > On Mon, Oct 14, 2024 at 05:55:46PM +0000, Vincent Fazio wrote: 
-> >  > > Aaron, Andy, 
-> >  > > > From: buildroot buildroot-bounces@buildroot.org> On Behalf Of Aaron 
-> >  > > > Sierra 
-> >  > > > Sent: Monday, October 14, 2024 12:01 PM 
-> >  > > > ---- On Mon, 14 Oct 2024 10:38:22 -0500 Andy Shevchenko  wrote --- 
+Hi Bagas,
 
-...
+On Fri Oct 18, 2024 at 4:34 AM UTC, Bagas Sanjaya wrote:
+> Git version 2.47.0 fails to build on systems without wide characters support
+> (e.g. uClibc-ng without BR2_TOOLCHAIN_BUILDROOT_WCHAR selected):
+>
+> ```
+>     CC t/unit-tests/unit-test.o
+> t/unit-tests/clar/clar.c: In function 'clar__assert_equal':
+> t/unit-tests/clar/clar.c:767:23: error: unknown type name 'wchar_t'
+>   767 |                 const wchar_t *wcs1 = va_arg(args, const wchar_t *);
+>       |                       ^~~~~~~
+> In file included from t/unit-tests/clar/clar.c:13:
+> t/unit-tests/clar/clar.c:767:58: error: unknown type name 'wchar_t'
+>   767 |                 const wchar_t *wcs1 = va_arg(args, const wchar_t *);
+>       |                                                          ^~~~~~~
+> t/unit-tests/clar/clar.c:768:23: error: unknown type name 'wchar_t'
+>   768 |                 const wchar_t *wcs2 = va_arg(args, const wchar_t *);
+>       |                       ^~~~~~~
+> t/unit-tests/clar/clar.c:768:58: error: unknown type name 'wchar_t'
+>   768 |                 const wchar_t *wcs2 = va_arg(args, const wchar_t *);
+>       |                                                          ^~~~~~~
+> t/unit-tests/clar/clar.c:769:65: warning: implicit declaration of function 'wcscmp' [-Wimplicit-function-declaration]
+>   769 |                 is_equal = (!wcs1 || !wcs2) ? (wcs1 == wcs2) : !wcscmp(wcs1, wcs2);
+>       |                                                                 ^~~~~~
+> t/unit-tests/clar/clar.c:784:23: error: unknown type name 'wchar_t'
+>   784 |                 const wchar_t *wcs1 = va_arg(args, const wchar_t *);
+>       |                       ^~~~~~~
+> t/unit-tests/clar/clar.c:784:58: error: unknown type name 'wchar_t'
+>   784 |                 const wchar_t *wcs1 = va_arg(args, const wchar_t *);
+>       |                                                          ^~~~~~~
+> t/unit-tests/clar/clar.c:785:23: error: unknown type name 'wchar_t'
+>   785 |                 const wchar_t *wcs2 = va_arg(args, const wchar_t *);
+>       |                       ^~~~~~~
+> t/unit-tests/clar/clar.c:785:58: error: unknown type name 'wchar_t'
+>   785 |                 const wchar_t *wcs2 = va_arg(args, const wchar_t *);
+>       |                                                          ^~~~~~~
+> t/unit-tests/clar/clar.c:787:65: warning: implicit declaration of function 'wcsncmp' [-Wimplicit-function-declaration]
+>   787 |                 is_equal = (!wcs1 || !wcs2) ? (wcs1 == wcs2) : !wcsncmp(wcs1, wcs2, len);
+>       |                                                                 ^~~~~~~
+> make[1]: *** [Makefile:2795: t/unit-tests/clar/clar.o] Error 1
+> ```
+>
+> This is because git now imports clar unit testing framework since
+> upstream commit 9b7caa2809cb (t: import the clar unit testing framework,
+> 2024-09-04).
+>
+> From upstream discussion [1], git requires toolchains with full ISO C99
+> support (including wchar). As such, depend the package on toolchain's
+> wchar support (BR2_USE_WCHAR).
+>
+> [1]: https://lore.kernel.org/git/ZxCJqe4-rsRo1yHg@archie.me/t/#u
 
-> >  > > > 2. It would be nice if the package populated command symlinks in the target 
-> >  > > > filesystem. That could be done in a number of way, like using an explicit list of 
-> >  > > > commands maintained in the package Makefile (iotools.mk) or adding a host- 
-> >  > > > build dependency and leveraging the --list-cmds output to get the list of 
-> >  > > > embedded commands for linking. 
-> >  > > 
-> >  > > Caveat lector, I have not reviewed your patch or the sources in a while. 
-> >  > > 
-> >  > > WRT to this comment, I have this note from when we ported it: 
-> >  > > 
-> >  > > # we can't run make install because the symlink installation executes the binary 
-> >  > > # which isn't guaranteed to work in cross-compile scenarios 
-> >  > > define IOTOOLS_INSTALL_TARGET_CMDS 
-> >  > >     $(INSTALL) -D -m 0755 $(@D)/iotools $(TARGET_DIR)/usr/sbin/ 
-> >  > > 
-> >  > >     for link in $( IOTOOLS_LINKS); do \ 
-> >  > >         ln -sf iotools $(TARGET_DIR)/usr/sbin/$link; \ 
-> >  > >     done 
-> >  > > endef 
-> >  > > 
-> >  > > We then earlier in the mk file define the tools per platform, akin to: 
-> >  >  
-> >  > I deliberately won't populate those links. The naming is so generic 
-> >  > that it's a real chance to get a collision with all pain of splitting it 
-> >  > in the configuration what links we create and what not and what to do 
-> >  > with those that may collide. 
-> >  >  
-> >  > TL;DR: no, I don't think it's a good idea. 
-> > 
-> > For the benefit of the uninitiated, iotools operates similarly to Busybox,
-> > expressing behavior either by:
-> >     1. taking the command name from argv[0] (i.e. symlinks named for internal commands)
-> >        * This is the mechanism encouraged by the project's make install (i.e.
-> >          iotools --make-links)
-> >     2. taking the command name from argv[1] (i.e. iotools [[command] [arguments]])
-> 
-> There is a little nuance between two. When the Busybox is the *main(
-> shell/coreutils/util-linux/etc provider it must populate the links, many of
-> them (naming wise) are standardized by POSIX. In full opposition to the iotools
-> with unpredictable consequences of the potential name clashing (esp. those that
-> are called or/xor/and/etc.).
+I sent a patch last week that did this same change! Thomas Petazzoni
+reviewed it and had some comments I haven't had time to address. If you
+want to address those in your patch, I'd be happy to drop mine.
 
-Worth to add that when Busybox is supplied *in the addition to* the main shell
-it must NOT populate the links (for the very same reasoning: POSIX standardization).
+Thomas comments were:
 
-> > I proposed populating the symlinks in the target filesystem to ensure the
-> > subcommands are ready-to-use for people already familiar with the tool. It sounds
-> > like you're advocating for #2 ("iotools_fallback") to be the primary mode of
-> > operation for Buildroot users.
-> 
-> Yes, I highly suggest not to go this way.
-> 
-> > Can you point to documentation that Buildroot users can use to _know_ that the
-> > second mode of operation is available and encouraged? I do not see any in the
-> > help output or in the project README. Here is the current help output:
-> > 
-> > $ ./iotools --help
-> > usage: ./iotools COMMAND
-> >   COMMANDS:
-> >     --make-links
-> >     --clean-links
-> >     --list-cmds
-> >     -v --version
-> 
-> Is it full output? Because to me it shows two screens of the listed commands.
-> I do not see an issue here.
-> 
-> > For the sake of usability, I think it's important to either improve utility and/or
-> > project documentation or reconsider your stated position on symlink population.
-> 
-> I am against populating the links.
-> 
-> > Feel free to ask for help with either direction you choose.
+  You need to look at reverse dependencies that "select BR2_PACKAGE_GIT"
+  and propagate this wchar dependency. For example package/git-crypt/
+  will need it. And also the reverse dependencies of the reverse
+  dependencies, if any;
 
--- 
-With Best Regards,
-Andy Shevchenko
+  Did you look at a way of disabling building the test suite? I very
+  quickly glanced through the git Makefile, and it didn't seem like
+  there was such a possibility. But if there was such a possibility, it
+  would be an alternative solution to the addition of the wchar
+  dependency.
 
+My patch: https://patchwork.ozlabs.org/project/buildroot/patch/20241009-git-2-47-0-wchar-v1-1-23c261a5fdc7@gmail.com/
 
+Thanks!
+Brandon Maier
+
+>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  package/git/Config.in | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/package/git/Config.in b/package/git/Config.in
+> index d53921d7d5..a8ae5f59bf 100644
+> --- a/package/git/Config.in
+> +++ b/package/git/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_GIT
+>  	bool "git"
+>  	depends on BR2_USE_MMU # uses fork()
+> +	depends on BR2_USE_WCHAR # clar unit test
+>  	select BR2_PACKAGE_ZLIB
+>  	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+>  	help
+> @@ -9,3 +10,7 @@ config BR2_PACKAGE_GIT
+>  	  projects.
+>
+>  	  http://git-scm.com
+> +
+> +comment "git needs a toolchain w/ wchar"
+> +	depends on BR2_USE_MMU
+> +	depends on !BR2_USE_WCHAR
+>
+> base-commit: 0ad7035fce67cbe91db9dea7d81e6a4bc0691ad1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
