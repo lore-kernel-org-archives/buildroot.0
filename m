@@ -1,80 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98E7CD30004
-	for <buildroot@archiver.kernel.org>; Fri, 18 Oct 2024 12:59:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F004DD30007
+	for <buildroot@archiver.kernel.org>; Fri, 18 Oct 2024 13:35:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49BBF606C2;
-	Fri, 18 Oct 2024 12:59:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2_R8669ufZvp; Fri, 18 Oct 2024 12:59:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D20B6066B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D20B6066B;
-	Fri, 18 Oct 2024 12:59:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3C0772804
- for <buildroot@buildroot.org>; Fri, 18 Oct 2024 12:59:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1CF9580CA5
- for <buildroot@buildroot.org>; Fri, 18 Oct 2024 12:59:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 865E980D3A;
+	Fri, 18 Oct 2024 13:35:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hNIcNo27lxhn for <buildroot@buildroot.org>;
- Fri, 18 Oct 2024 12:59:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
- helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 46ECE80BF6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46ECE80BF6
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [147.173.1.68])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 46ECE80BF6
- for <buildroot@buildroot.org>; Fri, 18 Oct 2024 12:59:52 +0000 (UTC)
-Received: from [147.173.65.159] (unknown [147.173.65.159])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 5DB8BC2954;
- Fri, 18 Oct 2024 14:59:49 +0200 (CEST)
-Message-ID: <f517190c-6fcd-4101-afa6-f6ea521feb9e@grenoble.cnrs.fr>
-Date: Fri, 18 Oct 2024 14:59:48 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+ id LQKQga8EFeUa; Fri, 18 Oct 2024 13:35:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9809280D54
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9809280D54;
+	Fri, 18 Oct 2024 13:35:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D0BD427DD
+ for <buildroot@buildroot.org>; Fri, 18 Oct 2024 13:35:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BDB2540E85
+ for <buildroot@buildroot.org>; Fri, 18 Oct 2024 13:35:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BcjK8fTRIOsS for <buildroot@buildroot.org>;
+ Fri, 18 Oct 2024 13:35:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::632; helo=mail-pl1-x632.google.com;
+ envelope-from=bagasdotme@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A1767400D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1767400D8
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
+ [IPv6:2607:f8b0:4864:20::632])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A1767400D8
+ for <buildroot@buildroot.org>; Fri, 18 Oct 2024 13:35:19 +0000 (UTC)
+Received: by mail-pl1-x632.google.com with SMTP id
+ d9443c01a7336-20cdb889222so21953715ad.3
+ for <buildroot@buildroot.org>; Fri, 18 Oct 2024 06:35:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1729258519; x=1729863319;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=P10x0GBhVw5S96WOq9VjcYB8KqUG/nbKx6K1rGc8GDU=;
+ b=tV5gKzbcWGCZWijfwrseUOSrorfnXen3E7LswVNA6bEcIpqrQY1lHCt71ZZ821UsaM
+ dtwCzSybl8Ijw03BxgwdqV5YAJfltUDdXbwSACYqeuQ8YzGklRYw/rA7DDFW1IYGkhdq
+ HrXN66+59gvzA2Hd4NOGfEzMgI8fiUpYGxSnZmhBbTmJeQtQOJ7LZ2i+Ebf/yB/HzBDb
+ 6fOaUUNaBcUdZG9tI76L/j4T+GllflmuvrpyMkNIt9ZVG1qnmzlzEO4/6eHO1WbWJ4SE
+ +voozpvzGCH7tkms/FMw6N1/MvHTeC/qbZOum/Cx0+WPp5h/+Ctrmf7lTxZwWkqEvR4O
+ LJqw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWR4UpAAvtiyfqTDntvpsegDphgFh/vVM4sg2nUoDB3vqMJUBk1II4eR7NsuF0uFRhTX7q/VG1bWUU=@buildroot.org
+X-Gm-Message-State: AOJu0Yz+a7osLvNoaaIWQuQF42oYnu3K0bElmnAGMw8a8xLS1/iZI7Kg
+ p/tAQhAxwx9Z9EPOFnoGwi8XoXOpmkebYowar5uf7eFr8axKBYP8
+X-Google-Smtp-Source: AGHT+IHgRgE0+bqe7d/12XlzbWzoUACnYzPWJ8kAoa+VQpgJTcSMRmzIWvfHL7qyIgdQ8XCFugzlbw==
+X-Received: by 2002:a17:902:dac9:b0:20c:a055:9f07 with SMTP id
+ d9443c01a7336-20e5a795a98mr30014945ad.26.1729258518676; 
+ Fri, 18 Oct 2024 06:35:18 -0700 (PDT)
+Received: from archie.me ([103.124.138.155]) by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-20e5a8d63c2sm12527435ad.170.2024.10.18.06.35.16
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 18 Oct 2024 06:35:17 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+ id 1DEE444F5EF6; Fri, 18 Oct 2024 20:35:12 +0700 (WIB)
+Date: Fri, 18 Oct 2024 20:35:11 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
 To: Brandon Maier <brandon.maier@collins.com>,
- Bagas Sanjaya <bagasdotme@gmail.com>,
  Buildroot development <buildroot@buildroot.org>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <ZxJkD8b3ay_dUF0b@archie.me>
 References: <20241018043437.28475-2-bagasdotme@gmail.com>
  <D4YXO0EB2YTF.3Q4E8FN1YH9PB@collins.com>
-Content-Language: en-US
-From: Edgar Bonet <bonet@grenoble.cnrs.fr>
+MIME-Version: 1.0
 In-Reply-To: <D4YXO0EB2YTF.3Q4E8FN1YH9PB@collins.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1729256389;
- bh=0j8PTdUPKLBzweO/rVRRAAEq+nNKxB1xT78H19Xd/HA=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
- b=qXfimIQiyMvDA5KpbHBO5nEOFByGXfigRcP4+G2+S5mBOAYpNv1Qvfee19nRBglrx
- A0JRZ3pY0N3SFq3219AqIeC2zf92kNladdSylSFjZiM29IQYLE9/apURCf81LrXwPr
- XMiofBubiVHTznAFqjxnfxMeOzYZBUmm6MDI5g3+qghatMAm056IunXH4rNmDY7dGv
- 7xKyulz4yOAjJB22p1uk5xb17rkvPA0oe8aq6dnTBrI8FTYV1tcReyh6jl7SQahxzO
- 7zMZyVde9XjrU0ah/RziDFT5p0pibPImYYOe9Eax00GSibhE5abjfrhtfjUtXKkdmZ
- +bdKulGDShEFA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=grenoble.cnrs.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=qXfimIQi
+ d=gmail.com; s=20230601; t=1729258519; x=1729863319; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+ bh=P10x0GBhVw5S96WOq9VjcYB8KqUG/nbKx6K1rGc8GDU=;
+ b=CzLImxwpLdCyxnw6mN0t7wx8rKb/Udynic/FUBeTxJOCfLZNbbe4pjwDE+98eeCmqB
+ F2ST/IWCpFzE+Dd2JqnzjT+Gb/WcPAHCOos8M275v3E+WL/Lm3G46Whnp7t6awUmqM+v
+ oTfYthvaIDuaIItRiBDFbaEwqcYUc9SHk8OKvUxxPlz/T+nZQyJwKcksMREHSdkkUpsn
+ JiJjh5nGDkQjARh19UbBXWx/H0hwN8jYoig1klpu+WEThBB4jMa2xk5rz0NRVm7/dZoV
+ 4H3N+p/mWDjKxlil0SWbLAw/Niuf63qcGEc6aXNZAYZwzc0eQCMaP5UOo8OeTR64QD2C
+ vR8w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=CzLImxwp
 Subject: Re: [Buildroot] [PATCH] package/git: require wchar support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -87,87 +106,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7402843759457471190=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello!
 
-Bagas Sanjaya wrote:
-> Git version 2.47.0 fails to build on systems without wide characters
-> support (e.g. uClibc-ng without BR2_TOOLCHAIN_BUILDROOT_WCHAR
-> selected): [...] From upstream discussion [1], git requires toolchains
-> with full ISO C99 support (including wchar). As such, depend the
-> package on toolchain's wchar support (BR2_USE_WCHAR).
->
-> [1] https://lore.kernel.org/git/ZxCJqe4-rsRo1yHg@archie.me/t/#u
+--===============7402843759457471190==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="NolyrOmNJ9lYTeoV"
+Content-Disposition: inline
 
-Brandon Maier replied:
+
+--NolyrOmNJ9lYTeoV
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Oct 18, 2024 at 12:33:20PM +0000, Brandon Maier wrote:
 > I sent a patch last week that did this same change! Thomas Petazzoni
-> reviewed it and had some comments I haven't had time to address. [...]
+> reviewed it and had some comments I haven't had time to address. If you
+> want to address those in your patch, I'd be happy to drop mine.
+>=20
+> Thomas comments were:
+>=20
+>   You need to look at reverse dependencies that "select BR2_PACKAGE_GIT"
+>   and propagate this wchar dependency. For example package/git-crypt/
+>   will need it. And also the reverse dependencies of the reverse
+>   dependencies, if any;
+>=20
+>   Did you look at a way of disabling building the test suite? I very
+>   quickly glanced through the git Makefile, and it didn't seem like
+>   there was such a possibility. But if there was such a possibility, it
+>   would be an alternative solution to the addition of the wchar
+>   dependency.
+>=20
+> My patch: https://patchwork.ozlabs.org/project/buildroot/patch/20241009-g=
+it-2-47-0-wchar-v1-1-23c261a5fdc7@gmail.com/
 
-I took a look at the issue, and here is what I found:
+Oops! I didn't see that.
 
- 1. There is no obvious way to disable building the git test suite.
+Thanks anyway.
 
- 2. uClibc always installs wchar.h in sysroot, although this file is a
-    stub if wchar support is disabled.
+--=20
+An old man doll... just what I always wanted! - Clara
 
- 3. Patrick Steinhardt proposed a patch in the git mailing list[1] that
-    would make git compatible with wchar-less uClibc. This patch,
-    however, won't work for us for a couple of reasons:
+--NolyrOmNJ9lYTeoV
+Content-Type: application/pgp-signature; name="signature.asc"
 
-      * It doesn't apply on 2.47.0.
+-----BEGIN PGP SIGNATURE-----
 
-      * It assumes that, when using uClibc, __UCLIBC__ should be defined
-        *before* the first #include, which is not the case.
+iHUEABYKAB0WIQRbrR26Mw290jZcYHIVJRcAOONI5wUCZxJkCgAKCRAVJRcAOONI
+55m3AQD/ZESdGuknZ6sDqTlUbgAo0HBqwa8nlT9lA8i35o9AnAEAwMz5hzuKjbeV
+4xKaUZ/Adq2uoZp7TV21QeBtPo0MRAY=
+=pBIz
+-----END PGP SIGNATURE-----
 
-Below is a version of Patrick Steinhardt's patch that seems to work on
-Buildroot/master.
+--NolyrOmNJ9lYTeoV--
 
-Regards,
+--===============7402843759457471190==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Edgar.
-
-[1] https://lore.kernel.org/git/ZxEXFI80i4Q_4NJT@pks.im/
-
------------------------------------------------------------------- >8 --
-diff --git a/t/unit-tests/clar/clar.c b/t/unit-tests/clar/clar.c
-index cef0f023c2..6de0b415b1 100644
---- a/t/unit-tests/clar/clar.c
-+++ b/t/unit-tests/clar/clar.c
-@@ -18,6 +18,13 @@
- #include <sys/types.h>
- #include <sys/stat.h>
- 
-+#if defined(__UCLIBC__) && ! defined(__UCLIBC_HAS_WCHAR__)
-+   /* uClibc can be built without wchar support, in which case the
-+      installed <wchar.h> is a stub that does not define wchar_t. */
-+#else
-+#  define HAVE_WCHAR
-+#endif
-+
- #ifdef _WIN32
- #	define WIN32_LEAN_AND_MEAN
- #	include <windows.h>
-@@ -763,6 +770,7 @@ void clar__assert_equal(
- 			}
- 		}
- 	}
-+#ifdef HAVE_WCHAR
- 	else if (!strcmp("%ls", fmt)) {
- 		const wchar_t *wcs1 = va_arg(args, const wchar_t *);
- 		const wchar_t *wcs2 = va_arg(args, const wchar_t *);
-@@ -798,6 +806,7 @@ void clar__assert_equal(
- 			}
- 		}
- 	}
-+#endif // HAVE_WCHAR
- 	else if (!strcmp("%"PRIuZ, fmt) || !strcmp("%"PRIxZ, fmt)) {
- 		size_t sz1 = va_arg(args, size_t), sz2 = va_arg(args, size_t);
- 		is_equal = (sz1 == sz2);
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7402843759457471190==--
