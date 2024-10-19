@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 749E1D3C92D
-	for <buildroot@archiver.kernel.org>; Sat, 19 Oct 2024 20:18:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13F15D3C92D
+	for <buildroot@archiver.kernel.org>; Sat, 19 Oct 2024 20:18:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 352C0406CA;
-	Sat, 19 Oct 2024 20:18:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B134D406FB;
+	Sat, 19 Oct 2024 20:18:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 53Gs8egP9g8N; Sat, 19 Oct 2024 20:18:00 +0000 (UTC)
+ id ffjgXd8HfRE2; Sat, 19 Oct 2024 20:18:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9F3B406BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC3074078B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9F3B406BC;
-	Sat, 19 Oct 2024 20:17:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC3074078B;
+	Sat, 19 Oct 2024 20:18:03 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5F31527D7
- for <buildroot@buildroot.org>; Sat, 19 Oct 2024 20:17:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7865F3A23
+ for <buildroot@buildroot.org>; Sat, 19 Oct 2024 20:17:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D72B6063A
- for <buildroot@buildroot.org>; Sat, 19 Oct 2024 20:17:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 409816065A
+ for <buildroot@buildroot.org>; Sat, 19 Oct 2024 20:17:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YTaFiGTTWTn9 for <buildroot@buildroot.org>;
+ id QrLU3tGIFdkh for <buildroot@buildroot.org>;
  Sat, 19 Oct 2024 20:17:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F5176066D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DF5E60666
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F5176066D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8DF5E60666
  for <buildroot@buildroot.org>; Sat, 19 Oct 2024 20:17:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8A5C7860A3; Sat, 19 Oct 2024 20:17:49 +0000 (UTC)
+ id 7C8B5860A7; Sat, 19 Oct 2024 20:17:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 19 Oct 2024 22:10:11 +0200
+Date: Sat, 19 Oct 2024 22:08:13 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 3d2d84b09061bd7c914f31340f0cb5621a6abbf5
-X-Git-Newrev: 3877c0bfe2b79e319a32c2492f61de14c7398597
+X-Git-Oldrev: ad57e625736bafff04b452b6b87f18e4218b36be
+X-Git-Newrev: 3d2d84b09061bd7c914f31340f0cb5621a6abbf5
 X-Patchwork-Hint: ignore
-Message-Id: <20241019201749.8A5C7860A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add new
- test for dtc
+Message-Id: <20241019201749.7C8B5860A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/linux-pam: remove
+ flex dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,127 +60,64 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4948119622456333553=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3877c0bfe2b79e319a32c2492f61de14c7398597
+--===============4948119622456333553==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=3d2d84b09061bd7c914f31340f0cb5621a6abbf5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Add a test that runs the dtc commandline tools. To test devicetree
-compilation, we use an example devicetree from the dtc project. The
-example source is GPL-2.0+ licensed.
+linux-pam 1.2.0 removed the use of yywrap, so the flex dependency is not
+needed now (host-flex is still needed).
 
-Signed-off-by: Brandon Maier <brandon.maier@gmail.com>
+Fixes: #47
+Signed-off-by: Damien Thébault <damien.thebault@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 9b690341602388b54c596c4510d770f58f4ad227)
+(cherry picked from commit 600e273487baf76d4469bca43d42bd2c4b364db8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_dtc.py          | 39 ++++++++++++++++++
- .../package/test_dtc/rootfs-overlay/test_tree1.dts | 48 ++++++++++++++++++++++
- 2 files changed, 87 insertions(+)
+ package/linux-pam/Config.in    | 1 -
+ package/linux-pam/linux-pam.mk | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_dtc.py b/support/testing/tests/package/test_dtc.py
-new file mode 100644
-index 0000000000..47a1d75916
---- /dev/null
-+++ b/support/testing/tests/package/test_dtc.py
-@@ -0,0 +1,39 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestDtc(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_DTC=y
-+        BR2_PACKAGE_DTC_PROGRAMS=y
-+        BR2_ROOTFS_OVERLAY="{}"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        """.format(
-+           # overlay to add a bats test suite
-+           infra.filepath("tests/package/test_dtc/rootfs-overlay"))
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+
-+        self.emulator.login()
-+
-+        # Test 'dtc'
-+        self.assertRunOk("dtc -I dts -O dtb -o /tmp/test_tree1.dtb /test_tree1.dts")
-+
-+        # Test 'fdtdump'
-+        self.assertRunOk("fdtdump /tmp/test_tree1.dtb")
-+
-+        # Test 'fdtget'
-+        out, exit_code = self.emulator.run("fdtget -t s /tmp/test_tree1.dtb / compatible")
-+        self.assertEqual(out[0].strip(), "test_tree1")
-+
-+        # Test 'fdtput'
-+        self.assertRunOk("fdtput -t s /tmp/test_tree1.dtb / compatible 'test set compatible'")
-+        out, exit_code = self.emulator.run("fdtget -t s /tmp/test_tree1.dtb / compatible")
-+        self.assertEqual(out[0].strip(), "test set compatible")
-diff --git a/support/testing/tests/package/test_dtc/rootfs-overlay/test_tree1.dts b/support/testing/tests/package/test_dtc/rootfs-overlay/test_tree1.dts
-new file mode 100644
-index 0000000000..6649e7cc0f
---- /dev/null
-+++ b/support/testing/tests/package/test_dtc/rootfs-overlay/test_tree1.dts
-@@ -0,0 +1,48 @@
-+/* From https://git.kernel.org/pub/scm/utils/dtc/dtc.git/tree/tests/test_tree1.dts?id=99031e3a4a6e479466ae795790b44727434ca27d */
-+
-+/dts-v1/;
-+
-+/memreserve/ 0xdeadbeef00000000 0x100000;
-+/memreserve/ 123456789 010000;
-+
-+/ {
-+	compatible = "test_tree1";
-+	prop-int = <0xdeadbeef>;
-+	prop-int64 = /bits/ 64 <0xdeadbeef01abcdef>;
-+	prop-str = "hello world";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	subnode@1 {
-+		compatible = "subnode1";
-+		reg = <1>;
-+		prop-int = [deadbeef];
-+
-+		subsubnode {
-+			compatible = "subsubnode1", "subsubnode";
-+			placeholder = "this is a placeholder string", "string2";
-+			prop-int = <0xdeadbeef>;
-+		};
-+
-+		ss1 {
-+		};
-+	};
-+
-+	subnode@2 {
-+		reg = <2>;
-+		linux,phandle = <0x2000>;
-+		prop-int = <123456789>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		ssn0: subsubnode@0 {
-+			reg = <0>;
-+			phandle = <0x2001>;
-+			compatible = "subsubnode2", "subsubnode";
-+			prop-int = <0726746425>;
-+		};
-+
-+		ss2 {
-+		};
-+	};
-+};
+diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
+index b17716f2f7..e508d79b7e 100644
+--- a/package/linux-pam/Config.in
++++ b/package/linux-pam/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_LINUX_PAM
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+-	select BR2_PACKAGE_FLEX
+ 	help
+ 	  A Security Framework that Provides Authentication for
+ 	  Applications
+diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
+index a205d67c54..f8a9e7df22 100644
+--- a/package/linux-pam/linux-pam.mk
++++ b/package/linux-pam/linux-pam.mk
+@@ -16,7 +16,7 @@ LINUX_PAM_CONF_OPTS = \
+ 	--disable-regenerate-docu \
+ 	--enable-securedir=/lib/security \
+ 	--libdir=/lib
+-LINUX_PAM_DEPENDENCIES = flex host-flex host-pkgconf \
++LINUX_PAM_DEPENDENCIES = host-flex host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt) \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ LINUX_PAM_LICENSE = BSD-3-Clause
+
+--===============4948119622456333553==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4948119622456333553==--
