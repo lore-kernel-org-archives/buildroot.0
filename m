@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98B56D3C92D
-	for <buildroot@archiver.kernel.org>; Sat, 19 Oct 2024 20:17:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A23FD3C92D
+	for <buildroot@archiver.kernel.org>; Sat, 19 Oct 2024 20:17:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59E094051E;
-	Sat, 19 Oct 2024 20:17:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04BC84054D;
+	Sat, 19 Oct 2024 20:17:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CpuC840pI1Aj; Sat, 19 Oct 2024 20:17:52 +0000 (UTC)
+ id nWziFN6Khiup; Sat, 19 Oct 2024 20:17:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2107640524
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 825C940543
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2107640524;
-	Sat, 19 Oct 2024 20:17:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 64CEC27D7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 825C940543;
+	Sat, 19 Oct 2024 20:17:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7A5BE4961
  for <buildroot@buildroot.org>; Sat, 19 Oct 2024 20:17:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 536A180D5D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5C4896065A
  for <buildroot@buildroot.org>; Sat, 19 Oct 2024 20:17:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j1F5u_nQNbzw for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LbUCu1hkOsuz for <buildroot@buildroot.org>;
  Sat, 19 Oct 2024 20:17:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 744C880D78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7395F6063A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 744C880D78
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7395F6063A
  for <buildroot@buildroot.org>; Sat, 19 Oct 2024 20:17:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 62235860A3; Sat, 19 Oct 2024 20:17:49 +0000 (UTC)
+ id 6F364860A6; Sat, 19 Oct 2024 20:17:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 19 Oct 2024 21:20:25 +0200
+Date: Sat, 19 Oct 2024 22:04:09 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 729b66dcbbf0d1cc9366734bb70934818bbee748
-X-Git-Newrev: 6ee34a96bb812a164391623f17cc822420fdd482
+X-Git-Oldrev: 6ee34a96bb812a164391623f17cc822420fdd482
+X-Git-Newrev: ad57e625736bafff04b452b6b87f18e4218b36be
 X-Patchwork-Hint: ignore
-Message-Id: <20241019201749.62235860A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libilbc: switch
- to github
+Message-Id: <20241019201749.6F364860A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] boot/grub2: replace
+ host-python3 with BR2_PYTHON3_HOST_DEPENDENCY
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,57 +65,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ee34a96bb812a164391623f17cc822420fdd482
+commit: https://git.buildroot.net/buildroot/commit/?id=ad57e625736bafff04b452b6b87f18e4218b36be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-The previous repo is not available anymore.
+Commit 86bb1b236 "boot/grub2: needs host-python3" [1] introduced a
+dependency on host-python3.
 
-Fixes:
-https://autobuild.buildroot.org/results/8c8b073ce163131763fca978b400e596fcf39e62
+Since grub does not have any specific requirements on host Python
+modules, or recent host Python version, this commit replaces the
+host-python3 dependency with BR2_PYTHON3_HOST_DEPENDENCY. This will
+skip the host-python3 compilation if a sufficient version (3.4 or
+greater at the time of this commit) is already present on host. This
+will save build time.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4e5fd24c8b7438672c475d0559200ff72c4b1cc7)
+This optimization was suggested by Peter, in [2].
+
+Note 1: this commit was checked to ensure that grub is building with
+Python 3.4.
+
+Note 2: BR2_PYTHON3_HOST_DEPENDENCY was introduced in commit b60729784
+"support/dependencies: add a check for python3" [3].
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/86bb1b2360bdaed069cd087541f4edad1d5ce925
+[2] https://lists.buildroot.org/pipermail/buildroot/2024-September/763967.html
+[3] https://gitlab.com/buildroot.org/buildroot/-/commit/b60729784ab1c2f75dca30f924f4dd3176713ae8
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8a71fda371c1785f9e4364f05ab0a632e1946c53)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libilbc/Config.in    | 2 +-
- package/libilbc/libilbc.hash | 2 +-
- package/libilbc/libilbc.mk   | 3 +--
- 3 files changed, 3 insertions(+), 4 deletions(-)
+ boot/grub2/grub2.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/libilbc/Config.in b/package/libilbc/Config.in
-index 89d5db2fd6..db3486c1cb 100644
---- a/package/libilbc/Config.in
-+++ b/package/libilbc/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_LIBILBC
- 	  iLBC (internet Low Bitrate Codec) is a FREE speech codec
- 	  suitable for robust voice communication over IP.
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 7c95adc739..4df12774a3 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -9,8 +9,10 @@ GRUB2_SITE = http://ftp.gnu.org/gnu/grub
+ GRUB2_SOURCE = grub-$(GRUB2_VERSION).tar.xz
+ GRUB2_LICENSE = GPL-3.0+
+ GRUB2_LICENSE_FILES = COPYING
+-GRUB2_DEPENDENCIES = host-bison host-flex host-gawk host-grub2 host-python3
+-HOST_GRUB2_DEPENDENCIES = host-bison host-flex host-gawk host-python3
++GRUB2_DEPENDENCIES = host-bison host-flex host-gawk host-grub2 \
++	$(BR2_PYTHON3_HOST_DEPENDENCY)
++HOST_GRUB2_DEPENDENCIES = host-bison host-flex host-gawk \
++	$(BR2_PYTHON3_HOST_DEPENDENCY)
+ GRUB2_INSTALL_IMAGES = YES
  
--	  http://www.webrtc.org/license-rights/ilbc-freeware
-+	  https://github.com/freeswitch/libilbc
-diff --git a/package/libilbc/libilbc.hash b/package/libilbc/libilbc.hash
-index 5f41a99ced..be88d6f9c3 100644
---- a/package/libilbc/libilbc.hash
-+++ b/package/libilbc/libilbc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f97d8284776c95b31ed5d5441f13b519b8c7966b77a26aa06c29bb77e02cfe16  libilbc-829b08c7902ceb87a261279fabb36b6d523c6e07-br1.tar.gz
-+sha256  fe4827a548e96f0549dd8f30eb6a48c6c55fd4535de6c8e9c6e4f38bea6190bf  libilbc-829b08c7902ceb87a261279fabb36b6d523c6e07.tar.gz
- sha256  b7f4cbb4a12cd11a3d1aeda9bd17c99f59b054de4b3ee53045531cd2fa74dd2a  gips_iLBClicense.pdf
-diff --git a/package/libilbc/libilbc.mk b/package/libilbc/libilbc.mk
-index 06d94eb36d..d8139ba205 100644
---- a/package/libilbc/libilbc.mk
-+++ b/package/libilbc/libilbc.mk
-@@ -5,8 +5,7 @@
- ################################################################################
- 
- LIBILBC_VERSION = 829b08c7902ceb87a261279fabb36b6d523c6e07
--LIBILBC_SITE = https://freeswitch.org/stash/scm/sd/libilbc.git
--LIBILBC_SITE_METHOD = git
-+LIBILBC_SITE = $(call github,freeswitch,libilbc,$(LIBILBC_VERSION))
- LIBILBC_LICENSE = Global IP Sound iLBC Public License v2.0
- LIBILBC_LICENSE_FILES = gips_iLBClicense.pdf
- LIBILBC_AUTORECONF = YES
+ # CVE-2019-14865 is about a flaw in the grub2-set-bootflag tool, which
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
