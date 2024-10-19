@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA68BD3C923
-	for <buildroot@archiver.kernel.org>; Sat, 19 Oct 2024 17:48:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64B66D3C923
+	for <buildroot@archiver.kernel.org>; Sat, 19 Oct 2024 17:55:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 937A140269;
-	Sat, 19 Oct 2024 17:48:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB2EF40493;
+	Sat, 19 Oct 2024 17:55:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4NWUjczMrWm1; Sat, 19 Oct 2024 17:48:19 +0000 (UTC)
+ id wTwWHnoSuO1p; Sat, 19 Oct 2024 17:55:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EBCB40277
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E06040403
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5EBCB40277;
-	Sat, 19 Oct 2024 17:48:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 42DA53A23
- for <buildroot@buildroot.org>; Sat, 19 Oct 2024 17:48:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E06040403;
+	Sat, 19 Oct 2024 17:55:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2E83C27D7
+ for <buildroot@buildroot.org>; Sat, 19 Oct 2024 17:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2409B80C38
- for <buildroot@buildroot.org>; Sat, 19 Oct 2024 17:48:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0EE28400E0
+ for <buildroot@buildroot.org>; Sat, 19 Oct 2024 17:55:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IkNhoNkaBkQA for <buildroot@buildroot.org>;
- Sat, 19 Oct 2024 17:48:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VK_zGgq1qRm2 for <buildroot@buildroot.org>;
+ Sat, 19 Oct 2024 17:55:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EE53280C37
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE53280C37
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EE53280C37
- for <buildroot@buildroot.org>; Sat, 19 Oct 2024 17:48:15 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4770AFF803;
- Sat, 19 Oct 2024 17:48:12 +0000 (UTC)
-Date: Sat, 19 Oct 2024 19:48:11 +0200
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-Message-ID: <20241019194811.56173670@windsurf>
-In-Reply-To: <ac44157e8218a87e38494d4dfc5cf0fb8ebde35b.1727155451.git.baruch@tkos.co.il>
-References: <ac44157e8218a87e38494d4dfc5cf0fb8ebde35b.1727155451.git.baruch@tkos.co.il>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729360093;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=2tAg4z/bv0VWjAPmfnckXVMttmNgOMyXZgEobQyFGw4=;
- b=BtD4mR7gQACqZ0aarRyACFexFOSNVbPJ/2ybed2Q3tw44eaHNobDpgS8sJ450Cmkqx5gRw
- XNU117e3xJLQsuILbmPztMvWKYmJCqYWIiiwiAADg01+pXryL9hv2P8MnPqZXjjkNV9HDH
- PI2J9KsPxC7hegZPGo/1tQiy7Sw5CFJr7Vf1frhiVTM2LLgjMwhRmwRDMLLXNANKyEz/kR
- 2lyPK6oqeXLCJ0yTZILpDxRmYF3JDjy0m9iDqeRX5DPrKMcJZEYm12o9CCrKk47viGLFLM
- ppacbzX8GyJoTpgFqPCvnApI720rKwxvmUhVSN2tBKoNSaKPExWj8pSNzEVLMQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=BtD4mR7g
-Subject: Re: [Buildroot] [PATCH] package/libcurl: fix build failure with
- verbose disabled
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07A7A400AF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 07A7A400AF
+ for <buildroot@buildroot.org>; Sat, 19 Oct 2024 17:55:19 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E62FA85F92; Sat, 19 Oct 2024 17:55:18 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 19 Oct 2024 19:50:40 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 16ce77ad7d3a05addc1962b455242199a93f3811
+X-Git-Newrev: d6e78796d2f35e3b753465f9250689a1cd0d8a4b
+X-Patchwork-Hint: ignore
+Message-Id: <20241019175518.E62FA85F92@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/luajit: bump to version
+ 97813fb924edf822455f91a5fbbdfdb349e5984f
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,32 +60,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 24 Sep 2024 08:24:11 +0300
-Baruch Siach via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d6e78796d2f35e3b753465f9250689a1cd0d8a4b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Add patch to fix build failure introduced in bump to version 8.10.0.
-> 
-> Fixes:
-> https://autobuild.buildroot.org/results/2d553687a32651f81813c82d7bbf9bb11fd3eca5/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...build-with-verbose-messages-disabled.patch | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 package/libcurl/0001-curl_trc-fix-build-with-verbose-messages-disabled.patch
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/luajit/0002-install-inc.patch | 2 +-
+ package/luajit/luajit.hash            | 2 +-
+ package/luajit/luajit.mk              | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/luajit/0002-install-inc.patch b/package/luajit/0002-install-inc.patch
+index 163a5d36fc..eec77a5f82 100644
+--- a/package/luajit/0002-install-inc.patch
++++ b/package/luajit/0002-install-inc.patch
+@@ -14,4 +14,4 @@ Index: b/Makefile
+ +INSTALL_DEFINC= $(DPREFIX)/include
+  INSTALL_INC=   $(INSTALL_DEFINC)
+  
+- INSTALL_LJLIBD= $(INSTALL_SHARE)/luajit-$(MMVERSION)
++ export INSTALL_LJLIBD= $(INSTALL_SHARE)/luajit-$(MMVERSION)
+diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
+index 54ae3f9931..eddd2a2419 100644
+--- a/package/luajit/luajit.hash
++++ b/package/luajit/luajit.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  346b028d9ba85e04b7e23a43cc51ec076574d2efc0d271d4355141b0145cd6e0  luajit-04dca7911ea255f37be799c18d74c305b921c1a6.tar.gz
++sha256  cbf1647acbd340c62b9c342dae43290762efa1b26d8bf8457f143fabf8ed86c7  luajit-97813fb924edf822455f91a5fbbdfdb349e5984f.tar.gz
+ 
+ # Locally calculated
+ sha256  1130331ac861a4b4520e9c8ad0814efdc6f1e79ea55ea9c460c73733d13ccb5f  COPYRIGHT
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 951206b83f..301973db7e 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUAJIT_VERSION = 04dca7911ea255f37be799c18d74c305b921c1a6
++LUAJIT_VERSION = 97813fb924edf822455f91a5fbbdfdb349e5984f
+ LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
+ LUAJIT_LICENSE = MIT
+ LUAJIT_LICENSE_FILES = COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
