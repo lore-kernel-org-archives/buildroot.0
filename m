@@ -4,50 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30681D3C92D
-	for <buildroot@archiver.kernel.org>; Sat, 19 Oct 2024 19:18:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F231DD3C92C
+	for <buildroot@archiver.kernel.org>; Sat, 19 Oct 2024 19:46:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AADA980D02;
-	Sat, 19 Oct 2024 19:18:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A39C480A4E;
+	Sat, 19 Oct 2024 19:46:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gnL63ZI74gTv; Sat, 19 Oct 2024 19:18:23 +0000 (UTC)
+ id T8UFPi---5Dm; Sat, 19 Oct 2024 19:46:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D68080AA9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEAE580A5E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D68080AA9;
-	Sat, 19 Oct 2024 19:18:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 00C3B3F2C
- for <buildroot@buildroot.org>; Sat, 19 Oct 2024 19:18:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CEAE580A5E;
+	Sat, 19 Oct 2024 19:46:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9CBDF1183
+ for <buildroot@buildroot.org>; Sat, 19 Oct 2024 19:46:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D42D960607
- for <buildroot@buildroot.org>; Sat, 19 Oct 2024 19:18:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6AB9780A5E
+ for <buildroot@buildroot.org>; Sat, 19 Oct 2024 19:46:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VHJ2sM5UDvxQ for <buildroot@buildroot.org>;
- Sat, 19 Oct 2024 19:18:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8Gb8c62Odg7O for <buildroot@buildroot.org>;
+ Sat, 19 Oct 2024 19:46:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3E0360619
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3E0360619
- for <buildroot@buildroot.org>; Sat, 19 Oct 2024 19:18:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D30BB8603B; Sat, 19 Oct 2024 19:18:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0D42B80A4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D42B80A4E
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0D42B80A4E
+ for <buildroot@buildroot.org>; Sat, 19 Oct 2024 19:46:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2278CFF803;
+ Sat, 19 Oct 2024 19:46:15 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1t2FOx-00Bhb3-1n;
+ Sat, 19 Oct 2024 21:46:15 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 19 Oct 2024 21:13:39 +0200
-X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: cc54944e20e0b0ca1e238f9097581208cd0df13c
-X-Git-Newrev: 8e8285236f39f6d926bb2d81ee5f6cbb8e5e171b
-X-Patchwork-Hint: ignore
-Message-Id: <20241019191817.D30BB8603B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/libarchive:
- security bump to version 3.7.6
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+References: <20240926061512.13021-1-bernd@kuhls.net>
+Date: Sat, 19 Oct 2024 21:46:15 +0200
+In-Reply-To: <20240926061512.13021-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Thu, 26 Sep 2024 08:15:11 +0200")
+Message-ID: <87y12jc1vc.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/2] package/libilbc: switch to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,95 +69,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e8285236f39f6d926bb2d81ee5f6cbb8e5e171b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-3.7.5 fixed a number of security issues:
+ > The previous repo is not available anymore.
+ > Fixes:
+ > https://autobuild.buildroot.org/results/8c8b073ce163131763fca978b400e596fcf39e62
 
-    fix multiple vulnerabilities identified by SAST (#2251, #2256)
-    cpio: ignore out-of-range gid/uid/size/ino and harden AFIO parsing (#2258)
-    lzop: prevent integer overflow (#2174)
-    rar4: protect copy_from_lzss_window_to_unp() (#2172, CVE-2024-20696)
-    rar4: fix CVE-2024-26256 (#2269, CVS-2024-26256)
-    rar4: fix OOB in delta and audio filter (#2148, #2149)
-    rar4: fix out of boundary access with large files (#2179)
-    rar4: add boundary checks to rgb filter (#2210)
-    rar4: fix OOB access with unicode filenames (#2203)
-    rar5: clear 'data ready' cache on window buffer reallocs (#2265)
-    rpm: calculate huge header sizes correctly (#2158)
-    unzip: unify EOF handling (#2175)
-    util: fix out of boundary access in mktemp functions (#2160)
-    uu: stop processing if lines are too long (#2168)
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ > ---
+ > This patch is suitable to be backported to LTS releases.
 
-And 3.7.6 fixed a tar regression introduced in 3.7.5
+Committed to 2024.02.x and 2024.08.x, thanks.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ab3c84e5e2391a7832f6baa2f20b28661f55dd2c)
-[Peter: mark as security bump]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch     | 2 +-
- .../0002-autotools-do-not-add-iconv-for-Requires.private.patch          | 2 +-
- package/libarchive/libarchive.hash                                      | 2 +-
- package/libarchive/libarchive.mk                                        | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/libarchive/0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch b/package/libarchive/0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch
-index a4dd7dad5c..e630c51fef 100644
---- a/package/libarchive/0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch
-+++ b/package/libarchive/0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch
-@@ -15,7 +15,7 @@ diff --git a/configure.ac b/configure.ac
- index 93f7af94..204a4e69 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -434,9 +434,7 @@ if test "x$with_iconv" != "xno"; then
-+@@ -449,9 +449,7 @@ if test "x$with_iconv" != "xno"; then
-      AC_CHECK_HEADERS([localcharset.h])
-      am_save_LIBS="$LIBS"
-      LIBS="${LIBS} ${LIBICONV}"
-diff --git a/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch b/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch
-index 3cbd304109..aca2dab9db 100644
---- a/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch
-+++ b/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch
-@@ -17,7 +17,7 @@ diff --git a/configure.ac b/configure.ac
- index 99bff20d1..f245d0c55 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -434,7 +434,6 @@ if test "x$with_iconv" != "xno"; then
-+@@ -449,7 +449,6 @@ if test "x$with_iconv" != "xno"; then
-      AC_CHECK_HEADERS([localcharset.h])
-      am_save_LIBS="$LIBS"
-      LIBS="${LIBS} ${LIBICONV}"
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index a2c6488731..08920b61c5 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,4 +1,4 @@
- # From https://www.libarchive.de/downloads/sha256sums
--sha256  f887755c434a736a609cbd28d87ddbfbe9d6a3bb5b703c22c02f6af80a802735  libarchive-3.7.4.tar.xz
-+sha256  0a2efdcb185da2eb1e7cd8421434cb9a6119f72417a13335cca378d476fd3ba0  libarchive-3.7.6.tar.xz
- # Locally computed:
- sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 7d58b5c69f..d3a447552e 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBARCHIVE_VERSION = 3.7.4
-+LIBARCHIVE_VERSION = 3.7.6
- LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
