@@ -1,65 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 551F1D3C92C
-	for <buildroot@archiver.kernel.org>; Sat, 19 Oct 2024 19:16:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E6C2D3C92D
+	for <buildroot@archiver.kernel.org>; Sat, 19 Oct 2024 19:17:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0EDE580A48;
-	Sat, 19 Oct 2024 19:16:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4309B60689;
+	Sat, 19 Oct 2024 19:17:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yNmhpICUruiN; Sat, 19 Oct 2024 19:16:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vS6x-e3i8ydi; Sat, 19 Oct 2024 19:17:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 315E880C45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E9486069B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 315E880C45;
-	Sat, 19 Oct 2024 19:16:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 39FB33F2C
- for <buildroot@buildroot.org>; Sat, 19 Oct 2024 19:16:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E9486069B;
+	Sat, 19 Oct 2024 19:17:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DDF863F2C
+ for <buildroot@buildroot.org>; Sat, 19 Oct 2024 19:17:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1BBE580C45
- for <buildroot@buildroot.org>; Sat, 19 Oct 2024 19:16:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BEF6480CFD
+ for <buildroot@buildroot.org>; Sat, 19 Oct 2024 19:17:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lNsyGIQTyhvp for <buildroot@buildroot.org>;
- Sat, 19 Oct 2024 19:16:38 +0000 (UTC)
-X-Greylist: delayed 373 seconds by postgrey-1.37 at util1.osuosl.org;
- Sat, 19 Oct 2024 19:16:37 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0C9F980A48
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C9F980A48
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id 58kWWQMGV4Vr for <buildroot@buildroot.org>;
+ Sat, 19 Oct 2024 19:17:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0C9F980A48
- for <buildroot@busybox.net>; Sat, 19 Oct 2024 19:16:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 43C44FF802;
- Sat, 19 Oct 2024 19:16:35 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1t2EwE-00B4b3-26;
- Sat, 19 Oct 2024 21:16:34 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A51180C93
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8A51180C93
+ for <buildroot@buildroot.org>; Sat, 19 Oct 2024 19:17:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7FF2286031; Sat, 19 Oct 2024 19:17:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Francois Perrad <francois.perrad@gadz.org>
-Cc: buildroot@busybox.net
-References: <20240925133735.3899867-1-francois.perrad@gadz.org>
-Date: Sat, 19 Oct 2024 21:16:34 +0200
-In-Reply-To: <20240925133735.3899867-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Wed, 25 Sep 2024 15:37:34 +0200")
-Message-ID: <8734krdht9.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/libarchive: bump to version 3.7.6
+To: buildroot@buildroot.org
+Date: Sat, 19 Oct 2024 21:10:07 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: a9c7f1f50e5420ba5e5f250c4ab8acaf2837d99f
+X-Git-Newrev: 3ade4d0bb1b87ecf41765eb975620c1c5b276f63
+X-Patchwork-Hint: ignore
+Message-Id: <20241019191709.7FF2286031@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/gnutls: bump to
+ version 3.8.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,44 +59,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Francois" == Francois Perrad <francois.perrad@gadz.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3ade4d0bb1b87ecf41765eb975620c1c5b276f63
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 1bf483665d825007ac1a2853310841ff3d935bdc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Looking at https://github.com/libarchive/libarchive/releases I see that
-this fixes a number of security issues, so it should be marked as a
-security bump:
-
-Security fixes:
-
-    fix multiple vulnerabilities identified by SAST (#2251, #2256)
-    cpio: ignore out-of-range gid/uid/size/ino and harden AFIO parsing (#2258)
-    lzop: prevent integer overflow (#2174)
-    rar4: protect copy_from_lzss_window_to_unp() (#2172, CVE-2024-20696)
-    rar4: fix CVE-2024-26256 (#2269, CVS-2024-26256)
-    rar4: fix OOB in delta and audio filter (#2148, #2149)
-    rar4: fix out of boundary access with large files (#2179)
-    rar4: add boundary checks to rgb filter (#2210)
-    rar4: fix OOB access with unicode filenames (#2203)
-    rar5: clear 'data ready' cache on window buffer reallocs (#2265)
-    rpm: calculate huge header sizes correctly (#2158)
-    unzip: unify EOF handling (#2175)
-    util: fix out of boundary access in mktemp functions (#2160)
-    uu: stop processing if lines are too long (#2168)
-
-In addition, 3.7.7 has been released with more security fixes - Care to
-send a patch?
-
-Committed to 2024.02.x and 2024.08.x after marking as a security bump,
-thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index d9f830ec92..35e842546e 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.6.tar.xz.sig
+-sha256  2e1588aae53cb32d43937f1f4eca28febd9c0c7aa1734fc5dd61a7e81e0ebcdd  gnutls-3.8.6.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.7.tar.xz.sig
++sha256  fe302f2b6ad5a564bcb3678eb61616413ed5277aaf8e7bf7cdb9a95a18d9f477  gnutls-3.8.7.tar.xz
+ # Locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  doc/COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 7b754e215a..bb6c0dc1f9 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -6,7 +6,7 @@
+ 
+ # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
+ GNUTLS_VERSION_MAJOR = 3.8
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).6
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
