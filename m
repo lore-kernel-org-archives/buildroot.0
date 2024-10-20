@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F071D3C92D
-	for <buildroot@archiver.kernel.org>; Sun, 20 Oct 2024 12:13:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 961A7D3C92D
+	for <buildroot@archiver.kernel.org>; Sun, 20 Oct 2024 12:14:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B070940322;
-	Sun, 20 Oct 2024 12:13:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47F67605FE;
+	Sun, 20 Oct 2024 12:14:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dnVWxaiTaVsz; Sun, 20 Oct 2024 12:13:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4q8yBgov5fpe; Sun, 20 Oct 2024 12:14:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45D5F40335
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5402C60603
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45D5F40335;
-	Sun, 20 Oct 2024 12:13:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5B7B81183
- for <buildroot@buildroot.org>; Sun, 20 Oct 2024 12:13:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5402C60603;
+	Sun, 20 Oct 2024 12:14:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DCD74AF2
+ for <buildroot@buildroot.org>; Sun, 20 Oct 2024 12:14:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3C5354013F
- for <buildroot@buildroot.org>; Sun, 20 Oct 2024 12:13:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BDD75605FE
+ for <buildroot@buildroot.org>; Sun, 20 Oct 2024 12:14:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0yOa9YLR4IeH for <buildroot@buildroot.org>;
- Sun, 20 Oct 2024 12:13:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OfVEH0RCBQ4J for <buildroot@buildroot.org>;
+ Sun, 20 Oct 2024 12:14:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DCEB40096
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7389060603
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1DCEB40096
- for <buildroot@buildroot.org>; Sun, 20 Oct 2024 12:13:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7389060603
+ for <buildroot@buildroot.org>; Sun, 20 Oct 2024 12:14:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 083DA85FC3; Sun, 20 Oct 2024 12:13:01 +0000 (UTC)
+ id 6EADD812B3; Sun, 20 Oct 2024 12:14:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Oct 2024 14:12:39 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: ee31fb1242fe22fb71013cfd5371557ddc25e84b
-X-Git-Newrev: bff622d02e1e41ad19b8a630cf9499e1794bf493
+Date: Sun, 20 Oct 2024 14:12:32 +0200
+X-Git-Refname: refs/heads/2024.08.x
+X-Git-Oldrev: b85c174ab0be361ca45848e40e40e086a27d54fc
+X-Git-Newrev: 9c2d88fd4e831c73e025ffa33a4a6b071d976dc9
 X-Patchwork-Hint: ignore
-Message-Id: <20241020121301.083DA85FC3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libcurl: fix
+Message-Id: <20241020121413.6EADD812B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/libcurl: fix
  build failure with verbose disabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bff622d02e1e41ad19b8a630cf9499e1794bf493
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9c2d88fd4e831c73e025ffa33a4a6b071d976dc9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Add patch to fix build failure introduced in bump to version 8.10.0.
 
