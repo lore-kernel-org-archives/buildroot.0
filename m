@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D8BAD3DEA1
-	for <buildroot@archiver.kernel.org>; Mon, 21 Oct 2024 06:41:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB859D3C937
+	for <buildroot@archiver.kernel.org>; Mon, 21 Oct 2024 07:10:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 673C74009A;
-	Mon, 21 Oct 2024 06:41:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 348DF80C7A;
+	Mon, 21 Oct 2024 07:09:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MsC7SKpdSQJZ; Mon, 21 Oct 2024 06:41:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fx_KeLIgJVeZ; Mon, 21 Oct 2024 07:09:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 100E64029A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B19FB80C67
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 100E64029A;
-	Mon, 21 Oct 2024 06:41:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A98D27D7
- for <buildroot@buildroot.org>; Mon, 21 Oct 2024 06:41:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B19FB80C67;
+	Mon, 21 Oct 2024 07:09:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 38EA027D7
+ for <buildroot@buildroot.org>; Mon, 21 Oct 2024 07:09:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 39060600B8
- for <buildroot@buildroot.org>; Mon, 21 Oct 2024 06:41:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 14C7140272
+ for <buildroot@buildroot.org>; Mon, 21 Oct 2024 07:09:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oABEH9Ee3GLA for <buildroot@buildroot.org>;
- Mon, 21 Oct 2024 06:41:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2G_3FVFP2rp1 for <buildroot@buildroot.org>;
+ Mon, 21 Oct 2024 07:09:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7241E60633
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F221C400D7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7241E60633
- for <buildroot@buildroot.org>; Mon, 21 Oct 2024 06:41:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F221C400D7
+ for <buildroot@buildroot.org>; Mon, 21 Oct 2024 07:09:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 211E3860F7; Mon, 21 Oct 2024 06:41:13 +0000 (UTC)
+ id DBBD186101; Mon, 21 Oct 2024 07:09:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 21 Oct 2024 08:40:24 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 639423f4db5953c7bffb73773f2b5332b6852b5e
-X-Git-Newrev: 0b71467930a73815d5f1c5cf539203616352a712
+Date: Mon, 21 Oct 2024 09:09:10 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: bff622d02e1e41ad19b8a630cf9499e1794bf493
+X-Git-Newrev: 8824652187e4b80ac314b448c2e60e5c6fdebf1b
 X-Patchwork-Hint: ignore
-Message-Id: <20241021064113.211E3860F7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: Update for 2024.08.1
+Message-Id: <20241021070953.DBBD186101@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] Update for 2024.02.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,96 +64,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b71467930a73815d5f1c5cf539203616352a712
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=8824652187e4b80ac314b448c2e60e5c6fdebf1b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES                  | 39 +++++++++++++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 42 insertions(+), 3 deletions(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 664c13717e..46a867990e 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2024.08</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2024.08.1</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2024.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2024.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2024.08.tar.gz">buildroot-2024.08.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2024.08.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2024.08.1.tar.gz">buildroot-2024.08.1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2024.08.1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2024.08.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.08.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2024.08.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.08.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2024.08.tar.xz">buildroot-2024.08.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2024.08.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2024.08.1.tar.xz">buildroot-2024.08.1.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2024.08.1.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 32a19af69d..0811c98fa9 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2024.08.1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>20 October 2024</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2024.08.1 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2024.08 release. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2024.08.1/CHANGES">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/87o73ealex.fsf@dell.be.48ers.dk/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2024.08.1.tar.xz">2024.08.1 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
+diff --git a/CHANGES b/CHANGES
+index 059c4ba4ee..61fb82fcc2 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,42 @@
++2024.02.7, released October 21th, 2024
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Per-package-directories fixes for the .gdbinit file and RPATH
++	fixups for SDK.
++
++	utils/check-package: Also check for correct indentation of
++	help lines.
++
++	A large number of typo fixes.
++
++	Updated/fixed packages: aer-inject, armadillo, asterisk,
++	aumix, babeld, bind, botan, cache-calibrator, clamav,
++	comix-cursors, cryptsetup, cups, dovecot, dovecot-pigeonhole,
++	expat, fbset, genpart, glibc, gnu-efi, gnutls, go, grub2,
++	libarchive, libcuefile, libcurl, libglob, libgpg-error,
++	libilbc, libkcapi, libopenssl, libpcap, libuecc, linux-pam,
++	mosquitto, nginx, ntpsec, p910nd, php, postgresql, proftpd,
++	pure-ftpd, python-django, python-huepy, python-sqlparse,
++	python-unittest-xml-reporting, python3, qt6base, qt6svg,
++	rp-pppoe, sofia-sip, strongswan, szip, tllist, unbound,
++	wpebackend-fdo, wpewebkit, x264, xenomai, xserver_xorg-server,
++	zabbix
++
++	New packages: go-bootstrap-stage3
++
++	Issues resolved:
++	- procps-ng: build failure when linking to systemd
++	  https://gitlab.com/buildroot.org/buildroot/-/issues/28
++	- orange pi 2w does not boot
++	  https://gitlab.com/buildroot.org/buildroot/-/issues/36
++	- glibc configure fails on aarch64 with mathvec SVE ACLE error
++	  https://gitlab.com/buildroot.org/buildroot/-/issues/40
++	- Kernel Build from Custom Git Repo fails with hash-error
++	  https://gitlab.com/buildroot.org/buildroot/-/issues/46
++	- package/linux-pam: Remove unneeded flex dependency
++	  https://gitlab.com/buildroot.org/buildroot/-/issues/47
++
+ 2024.02.6, released September 9th, 2024
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index ae47e178c9..7373f6432f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -90,9 +90,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2024.02.6
++export BR2_VERSION := 2024.02.7
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1725892000
++BR2_VERSION_EPOCH = 1729494000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 4017089779..20b22d45e8 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2024.02.6'
++RELEASE='2024.02.7'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
