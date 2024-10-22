@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91F62CDD0CB
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 19:17:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA9A9CDD0CB
+	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 19:17:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59240607CB;
-	Tue, 22 Oct 2024 19:17:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 768A36081C;
+	Tue, 22 Oct 2024 19:17:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y6rtSsIq8C8i; Tue, 22 Oct 2024 19:17:14 +0000 (UTC)
+ id 8fvbt25YTYyp; Tue, 22 Oct 2024 19:17:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63CE1606F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0C3960813
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63CE1606F2;
-	Tue, 22 Oct 2024 19:17:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0C3960813;
+	Tue, 22 Oct 2024 19:17:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 151562072
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:16:57 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 61550963
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:16:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7617140192
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC34D40210
  for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:16:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wtZh0zWqeDhk for <buildroot@buildroot.org>;
+ id FAXmzuHsQp6r for <buildroot@buildroot.org>;
  Tue, 22 Oct 2024 19:16:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45A81403A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6060401FE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 45A81403A5
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:16:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D6060401FE
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:16:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 41B1982DC6; Tue, 22 Oct 2024 19:16:54 +0000 (UTC)
+ id C00B2861A4; Tue, 22 Oct 2024 19:16:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 22 Oct 2024 21:11:24 +0200
+Date: Tue, 22 Oct 2024 21:11:07 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d4a1c5d35ca2cea7f9e212c2b9ed0064585fb282
-X-Git-Newrev: 09f125c416a6bf5b3aef6419d75c200aa4cdedbb
+X-Git-Oldrev: 00f24f24163446b3be6c018d61fe12eb4355044d
+X-Git-Newrev: f6ed00c66d3ebb5aa1f97fcdb371b289cf983925
 X-Patchwork-Hint: ignore
-Message-Id: <20241022191654.41B1982DC6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-zope-interface: bump to
- version 7.1.0
+Message-Id: <20241022191653.C00B2861A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-networkx: bump to version
+ 3.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,52 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09f125c416a6bf5b3aef6419d75c200aa4cdedbb
+commit: https://git.buildroot.net/buildroot/commit/?id=f6ed00c66d3ebb5aa1f97fcdb371b289cf983925
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We need to pass the --skip-dependency-check build option since
-python-zope-interface uneccesarially restricts the maximum
-setuptools version.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-zope-interface/python-zope-interface.hash | 4 ++--
- package/python-zope-interface/python-zope-interface.mk   | 7 ++++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-networkx/python-networkx.hash | 4 ++--
+ package/python-networkx/python-networkx.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
-index 940ee595d5..149e8ad675 100644
---- a/package/python-zope-interface/python-zope-interface.hash
-+++ b/package/python-zope-interface/python-zope-interface.hash
+diff --git a/package/python-networkx/python-networkx.hash b/package/python-networkx/python-networkx.hash
+index 3b6f4c6fba..77d2fbfdef 100644
+--- a/package/python-networkx/python-networkx.hash
++++ b/package/python-networkx/python-networkx.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/zope-interface/json
--md5  fd1cadffe80b9a1702636826c30136f0  zope.interface-7.0.3.tar.gz
--sha256  cd2690d4b08ec9eaf47a85914fe513062b20da78d10d6d789a792c0b20307fb1  zope.interface-7.0.3.tar.gz
-+md5  4d644f1167c8a6b19b3690d301641820  zope_interface-7.1.0.tar.gz
-+sha256  3f005869a1a05e368965adb2075f97f8ee9a26c61898a9e52a9764d93774f237  zope_interface-7.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/networkx/json
+-md5  c307f8c790cf3f18954ae7458b16c843  networkx-3.3.tar.gz
+-sha256  0c127d8b2f4865f59ae9cb8aafcd60b5c70f3241ebd66f7defad7c4ab90126c9  networkx-3.3.tar.gz
++md5  4980849a13f8174a8f6aeb5a9d59e77b  networkx-3.4.1.tar.gz
++sha256  f9df45e85b78f5bd010993e897b4f1fdb242c11e015b101bd951e5c0e29982d8  networkx-3.4.1.tar.gz
  # Locally computed sha256 checksums
- sha256  3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
-diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
-index 60cde26122..7eafa80460 100644
---- a/package/python-zope-interface/python-zope-interface.mk
-+++ b/package/python-zope-interface/python-zope-interface.mk
-@@ -4,11 +4,12 @@
+ sha256  5b433b90f755eb9bbd06feff1d1a4f5f232c5208a185694199e45fa95d762792  LICENSE.txt
+diff --git a/package/python-networkx/python-networkx.mk b/package/python-networkx/python-networkx.mk
+index ef51003047..9ac5f857e9 100644
+--- a/package/python-networkx/python-networkx.mk
++++ b/package/python-networkx/python-networkx.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ZOPE_INTERFACE_VERSION = 7.0.3
--PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
--PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/c8/83/7de03efae7fc9a4ec64301d86e29a324f32fe395022e3a5b1a79e376668e
-+PYTHON_ZOPE_INTERFACE_VERSION = 7.1.0
-+PYTHON_ZOPE_INTERFACE_SOURCE = zope_interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
-+PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/e4/1f/8bb0739aba9a8909bcfa2e12dc20443ebd5bd773b6796603f1a126211e18
- PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
- PYTHON_ZOPE_INTERFACE_LICENSE = ZPL-2.1
- PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
-+PYTHON_ZOPE_INTERFACE_BUILD_OPTS = --skip-dependency-check
- 
- $(eval $(python-package))
+-PYTHON_NETWORKX_VERSION = 3.3
++PYTHON_NETWORKX_VERSION = 3.4.1
+ PYTHON_NETWORKX_SOURCE = networkx-$(PYTHON_NETWORKX_VERSION).tar.gz
+-PYTHON_NETWORKX_SITE = https://files.pythonhosted.org/packages/04/e6/b164f94c869d6b2c605b5128b7b0cfe912795a87fc90e78533920001f3ec
++PYTHON_NETWORKX_SITE = https://files.pythonhosted.org/packages/36/2b/20ad9eecdda3f1b0dc63fb8f82d2ea99163dbca08bfa392594fc2ed81869
+ PYTHON_NETWORKX_LICENSE = BSD-3-Clause
+ PYTHON_NETWORKX_LICENSE_FILES = LICENSE.txt
+ PYTHON_NETWORKX_CPE_ID_VENDOR = python
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
