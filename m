@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 384C3CDD0F4
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 21:17:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C55FCCDD0F4
+	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 21:17:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0241A6084A;
-	Tue, 22 Oct 2024 21:17:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 875E96087F;
+	Tue, 22 Oct 2024 21:17:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tV8TO85Z8-8u; Tue, 22 Oct 2024 21:17:10 +0000 (UTC)
+ id mytleXe0esRU; Tue, 22 Oct 2024 21:17:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE3F16084E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C11ED60882
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE3F16084E;
-	Tue, 22 Oct 2024 21:17:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F65759F5
+	by smtp3.osuosl.org (Postfix) with ESMTP id C11ED60882;
+	Tue, 22 Oct 2024 21:17:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E1EE659F4
  for <buildroot@buildroot.org>; Tue, 22 Oct 2024 21:16:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E4FC7401AF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9633860841
  for <buildroot@buildroot.org>; Tue, 22 Oct 2024 21:16:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k4evFghzCk9B for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TtDb44fa0HFe for <buildroot@buildroot.org>;
  Tue, 22 Oct 2024 21:16:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B352740187
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE9AE60847
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B352740187
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE9AE60847
  for <buildroot@buildroot.org>; Tue, 22 Oct 2024 21:16:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FE4086315; Tue, 22 Oct 2024 21:16:56 +0000 (UTC)
+ id ABDD386313; Tue, 22 Oct 2024 21:16:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 22 Oct 2024 23:16:14 +0200
+Date: Tue, 22 Oct 2024 23:16:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 55d0c9a9a6f89ed5c4d2e0d25cf499f180a99ee1
-X-Git-Newrev: 2a8d5040ea6ac992c193ba8b7d3b3329282a3271
+X-Git-Oldrev: 2a8d5040ea6ac992c193ba8b7d3b3329282a3271
+X-Git-Newrev: 2a74b3b7c490d051a5ab8efddecfe0716fb17fc3
 X-Patchwork-Hint: ignore
-Message-Id: <20241022211656.9FE4086315@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libunistring: bump to version 1.3
+Message-Id: <20241022211656.ABDD386313@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mosquitto: bump to version 2.0.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,42 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a8d5040ea6ac992c193ba8b7d3b3329282a3271
+commit: https://git.buildroot.net/buildroot/commit/?id=2a74b3b7c490d051a5ab8efddecfe0716fb17fc3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libunistring/libunistring.hash | 4 ++--
- package/libunistring/libunistring.mk   | 2 +-
+ package/mosquitto/mosquitto.hash | 4 ++--
+ package/mosquitto/mosquitto.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
-index 256fb651d5..e7fbc85414 100644
---- a/package/libunistring/libunistring.hash
-+++ b/package/libunistring/libunistring.hash
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index 34f50906c1..f644f688b9 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
 @@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/libunistring/libunistring-1.2.tar.xz.sig
--sha256  632bd65ed74a881ca8a0309a1001c428bd1cbd5cd7ddbf8cedcd2e65f4dcdc44  libunistring-1.2.tar.xz
-+# https://ftp.gnu.org/gnu/libunistring/libunistring-1.3.tar.xz.sig
-+sha256  f245786c831d25150f3dfb4317cda1acc5e3f79a5da4ad073ddca58886569527  libunistring-1.3.tar.xz
- # Locally calculated
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LIB
-diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
-index 05bdec71b5..fc785c28a5 100644
---- a/package/libunistring/libunistring.mk
-+++ b/package/libunistring/libunistring.mk
+ # Locally calculated after checking gpg signature
+-# from https://mosquitto.org/files/source/mosquitto-2.0.19.tar.gz.asc
+-sha256  33af3637f119a61c509c01d2f8f6cc3d8be76f49e850132f2860af142abf82a9  mosquitto-2.0.19.tar.gz
++# from https://mosquitto.org/files/source/mosquitto-2.0.20.tar.gz.asc
++sha256  ebd07d89d2a446a7f74100ad51272e4a8bf300b61634a7812e19f068f2759de8  mosquitto-2.0.20.tar.gz
+ 
+ # License files
+ sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index b54535b9d9..727dd4ff4c 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUNISTRING_VERSION = 1.2
-+LIBUNISTRING_VERSION = 1.3
- LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
- LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
- LIBUNISTRING_INSTALL_STAGING = YES
+-MOSQUITTO_VERSION = 2.0.19
++MOSQUITTO_VERSION = 2.0.20
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
