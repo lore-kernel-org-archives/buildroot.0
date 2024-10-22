@@ -1,51 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9CABCDD0F4
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 20:46:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC301CDD0EA
+	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 20:46:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A21FE60681;
-	Tue, 22 Oct 2024 20:46:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B1B3B40226;
+	Tue, 22 Oct 2024 20:46:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oYy1kwowl16A; Tue, 22 Oct 2024 20:46:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TQn39zGto8US; Tue, 22 Oct 2024 20:46:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C342260604
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 787234037A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C342260604;
-	Tue, 22 Oct 2024 20:46:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4F8B559F4
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:46:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 787234037A;
+	Tue, 22 Oct 2024 20:46:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 222432072
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:46:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3162880BD9
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:46:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F164B4030A
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:46:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ro0wYEv96N4r for <buildroot@buildroot.org>;
- Tue, 22 Oct 2024 20:46:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wwpRE2na11jp for <buildroot@buildroot.org>;
+ Tue, 22 Oct 2024 20:46:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78EE080BC6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 78EE080BC6
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:46:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6510A861B2; Tue, 22 Oct 2024 20:46:34 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 22 Oct 2024 22:46:22 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bbeca6d13f3a68da57c202b6f03faefe6ab135f6
-X-Git-Newrev: e087f183408283c1deb05ffb5dab8348980a8b6a
-X-Patchwork-Hint: ignore
-Message-Id: <20241022204634.6510A861B2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/rock5b: update to uboot 2024.10
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7E54540219
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E54540219
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7E54540219
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:46:39 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6B07E1BF203;
+ Tue, 22 Oct 2024 20:46:36 +0000 (UTC)
+Date: Tue, 22 Oct 2024 22:46:35 +0200
+To: Niklas Cassel via buildroot <buildroot@buildroot.org>
+Cc: Niklas Cassel <niklas.cassel@wdc.com>, Niklas Cassel
+ <cassel@kernel.org>, Damien Le Moal <dlemoal@kernel.org>, Kilian Zinnecker
+ <kilian.zinnecker@mail.de>
+Message-ID: <20241022224635.654ad847@windsurf>
+In-Reply-To: <20241016132443.3859149-3-niklas.cassel@wdc.com>
+References: <20241016132443.3859149-1-niklas.cassel@wdc.com>
+ <20241016132443.3859149-3-niklas.cassel@wdc.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1729629996;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=LC2INfarSjfB3KLzNmsHE1I8Hg6+x/AsNiJREJNT3sk=;
+ b=AcXVCIU7lGKXadLN+K0mLP3O49+vqZzHV0etAUN8KjJJNiQ2zVWHZ2wR2QSV32yC/pyPZi
+ rVy3gSG/1bXeYTZYxulTpDXGWpoBkgwrXcnrHOYqb/cfBxRzq5x4/BSGjYJV0Hv8OrUDPJ
+ 1TSbxMzwjVC5IU34DAL6Y+30aOSKlsLFIB/udzicvrW2cJFs0SteMYXU0JvotFoKDMU9uA
+ DuTTZV8Gu1zO+rR/dSuXtaPUbx1EM/jH19jgG8If76ngUo+5TG14JYZi5c60EF/+HwLCSV
+ iAgOn5W8Prh3sYAUGM5zGJjlYyuy3G7fkCrv4YL2KyV/wUuY9T5sig64wkPcJQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=AcXVCIU7
+Subject: Re: [Buildroot] [PATCH v3 2/4] configs/rock5b: update to uboot
+ 2024.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,55 +87,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e087f183408283c1deb05ffb5dab8348980a8b6a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 16 Oct 2024 15:24:41 +0200
+Niklas Cassel via buildroot <buildroot@buildroot.org> wrote:
 
-Newer uboot versions contain commit ebb0ad4eef0a ("arch: arm:
-mach-rockchip: Kconfig: Enable BOOTSTD_FULL for RK3399 and RK3588"),
-which enables BOOTSTD_FULL for RK3588, making it easier to figure
-out issues with the bootflow, if any.
+> From: Niklas Cassel <cassel@kernel.org>
+> 
+> Newer uboot versions contain commit ebb0ad4eef0a ("arch: arm:
+> mach-rockchip: Kconfig: Enable BOOTSTD_FULL for RK3399 and RK3588"),
+> which enables BOOTSTD_FULL for RK3588, making it easier to figure
+> out issues with the bootflow, if any.
+> 
+> Also add the GnuTLS dependency which is needed for uboot 2024.10.
+> 
+> Signed-off-by: Niklas Cassel <cassel@kernel.org>
+> ---
+>  board/radxa/rock5b/patches/uboot/uboot.hash | 2 +-
+>  configs/rock5b_defconfig                    | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
-Also add the GnuTLS dependency which is needed for uboot 2024.10.
+Applied to master, thanks.
 
-Signed-off-by: Niklas Cassel <cassel@kernel.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/radxa/rock5b/patches/uboot/uboot.hash | 2 +-
- configs/rock5b_defconfig                    | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/board/radxa/rock5b/patches/uboot/uboot.hash b/board/radxa/rock5b/patches/uboot/uboot.hash
-index bc999536af..904fa56c02 100644
---- a/board/radxa/rock5b/patches/uboot/uboot.hash
-+++ b/board/radxa/rock5b/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
-+sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-index bc7b73d652..d75ad585fb 100644
---- a/configs/rock5b_defconfig
-+++ b/configs/rock5b_defconfig
-@@ -32,11 +32,12 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock5b-rk3588"
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_DTC=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
