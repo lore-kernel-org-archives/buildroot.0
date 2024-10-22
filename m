@@ -4,74 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34E20CDD0CB
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 19:28:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B40B4CDD0D7
+	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 19:31:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 016AD6081F;
-	Tue, 22 Oct 2024 19:28:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67E3760671;
+	Tue, 22 Oct 2024 19:31:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WsiVIJ0jI7cB; Tue, 22 Oct 2024 19:28:08 +0000 (UTC)
+ id TgKQfm977LqJ; Tue, 22 Oct 2024 19:31:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F0E260815
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3333F60855
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F0E260815;
-	Tue, 22 Oct 2024 19:28:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 759D12072
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:28:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3333F60855;
+	Tue, 22 Oct 2024 19:31:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2D0CB963
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:31:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5684260812
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:28:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 732F0404F6
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:31:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SWbbrE9vivpV for <buildroot@buildroot.org>;
- Tue, 22 Oct 2024 19:28:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yW01vyse420A for <buildroot@buildroot.org>;
+ Tue, 22 Oct 2024 19:31:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ECDE860815
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECDE860815
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ECDE860815
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:28:04 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8C3FE40007;
- Tue, 22 Oct 2024 19:28:02 +0000 (UTC)
-Date: Tue, 22 Oct 2024 21:28:00 +0200
-To: bryce@raspberrywood.com
-Cc: buildroot@buildroot.org, Bryce Johnson <bryce@redpinelabs.com>, Suniel
- Mahesh <sunil@amarulasolutions.com>
-Message-ID: <20241022212800.570cbcfc@windsurf>
-In-Reply-To: <20241022180542.224972-1-bryce@redpinelabs.com>
-References: <20241022180542.224972-1-bryce@redpinelabs.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729625283;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=mKfwTMRTJ9W+NEfFTC6o4aotd+z24+mZ6E0wPA222VY=;
- b=TMunGCN2Befz5dsGXIkxmSf8J58BNLE+DEjeVkcdXXut1mtnG2CyCyL05ilXw0krz0g4Pa
- 8g3DclRGQjmkrL9wLsbhDxbJVRvm1PSu5r+KkVr8q+5OKX5qJNu30nsMOMqXJ1LExxVriw
- 5XVNEJ0T0X00tmhtn2nCiJf7Ad+VaM2Cncn/xV3J2LZQCtJteiJFnyFObHs7xHDpwpqVph
- 4tP6LREst/o5RmFzydkaCJtaqF4EOr6QUbpUvnSJriQ6feKfvCgmOXHjS0ekeZXbqJpgrj
- 489dmQZWLAEyEmtqxMToiXLV0kiZFBk1sMndCuIGDWDiUXYy6yK96EhlUHkF8Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=TMunGCN2
-Subject: Re: [Buildroot] [PATCH] package/arm-gnu-toolchain: Add $(HOSTARCH)
- so it can be built with aarch64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 030B84049A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 030B84049A
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:31:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DED65861B3; Tue, 22 Oct 2024 19:31:26 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 22 Oct 2024 21:30:55 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f1492be219546f6ea01e59f78e3531a03399ec85
+X-Git-Newrev: aa86d33929540c5d0a07240f7dcdacc1d22a4053
+X-Patchwork-Hint: ignore
+Message-Id: <20241022193126.DED65861B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add pppd runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,70 +59,175 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bryce!
+commit: https://git.buildroot.net/buildroot/commit/?id=aa86d33929540c5d0a07240f7dcdacc1d22a4053
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for your patch. Some comments/questions below.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                         |   2 +
+ support/testing/tests/package/test_pppd.py         | 125 +++++++++++++++++++++
+ .../tests/package/test_pppd/linux-ppp.fragment     |   2 +
+ 3 files changed, 129 insertions(+)
 
-On Tue, 22 Oct 2024 12:05:40 -0600
-bryce@raspberrywood.com wrote:
-
-> From: Bryce Johnson <bryce@redpinelabs.com>
-> 
-> Was testing building with arm64 build server and failed because it was downloading the x86_64 version. Use $(HOSTARCH) instead so it can also downloaded
-
-Minor nit: commit messages should have line wrapped at ~80 columns.
-
-> 
-> Tested with building configs/ti_am62x_sk_defconfig on arm64. That it uses to build the 32bit R5 MCU.
-
-More important nit: we need you to add your Signed-off-by: line at the
-end of the commit log to allow us to apply your patch.
-
-> diff --git a/package/arm-gnu-toolchain/arm-gnu-toolchain.hash b/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
-> index 0800fa2168..110ec40c09 100644
-> --- a/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
-> +++ b/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
-> @@ -1,2 +1,4 @@
->  # taken from https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz.sha256asc
->  sha256  6cd1bbc1d9ae57312bcd169ae283153a9572bd6a8e4eeae2fedfbc33b115fdbb  arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz
-> +# taken from https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-aarch64-arm-none-eabi.tar.xz.sha256asc
-> +sha256  8fd8b4a0a8d44ab2e195ccfbeef42223dfb3ede29d80f14dcf2183c34b8d199a  arm-gnu-toolchain-13.2.rel1-aarch64-arm-none-eabi.tar.xz
-> diff --git a/package/arm-gnu-toolchain/arm-gnu-toolchain.mk b/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
-> index 03bb4dc5da..fce80f2f3a 100644
-> --- a/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
-> +++ b/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
-> @@ -6,7 +6,7 @@
->  
->  ARM_GNU_TOOLCHAIN_VERSION = 13.2.rel1
->  ARM_GNU_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(ARM_GNU_TOOLCHAIN_VERSION)/binrel
-> -ARM_GNU_TOOLCHAIN_SOURCE = arm-gnu-toolchain-$(ARM_GNU_TOOLCHAIN_VERSION)-x86_64-arm-none-eabi.tar.xz
-> +ARM_GNU_TOOLCHAIN_SOURCE = arm-gnu-toolchain-$(ARM_GNU_TOOLCHAIN_VERSION)-$(HOSTARCH)-arm-none-eabi.tar.xz
-
-The change looks correct as-is of course, as it doesn't make anything
-worse. However, I believe to make things cleaner, we should perhaps
-introduce a package/arm-gnu-toolchain/Config.in.host file, with a blind
-option BR2_HOST_PACKAGE_ARM_GNU_TOOLCHAIN, that has a "depends on" the
-host architectures that are supported. And the packages that use
-host-arm-gnu-toolchain would have to be careful to propagate those
-depends on, so that we do not allow using host-arm-gnu-toolchain on
-configurations that do not allow using the host-arm-gnu-toolchain
-package. However this can be done as a separate patch, as again your
-change is not making things any worse than they already are :)
-
-Could you send a v2 of your patch with the proposed changes?
-
-Thanks again!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2d9bcc2c87..c649d3d6f2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1968,6 +1968,8 @@ F:	support/testing/tests/package/test_pciutils.py
+ F:	support/testing/tests/package/test_perftest.py
+ F:	support/testing/tests/package/test_pigz.py
+ F:	support/testing/tests/package/test_postgresql.py
++F:	support/testing/tests/package/test_pppd.py
++F:	support/testing/tests/package/test_pppd/
+ F:	support/testing/tests/package/test_pv.py
+ F:	support/testing/tests/package/test_python_distro.py
+ F:	support/testing/tests/package/test_python_gnupg.py
+diff --git a/support/testing/tests/package/test_pppd.py b/support/testing/tests/package/test_pppd.py
+new file mode 100644
+index 0000000000..015f10f02d
+--- /dev/null
++++ b/support/testing/tests/package/test_pppd.py
+@@ -0,0 +1,125 @@
++import os
++import time
++
++import infra.basetest
++
++
++class TestPppd(infra.basetest.BRTest):
++    # This test needs a Kernel with ppp support.
++    kern_frag = \
++        infra.filepath("tests/package/test_pppd/linux-ppp.fragment")
++    # Our test config also enables socat and iproute2 used as
++    # supporting tools for this test.
++    config = \
++        f"""
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.57"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_IPROUTE2=y
++        BR2_PACKAGE_PPPD=y
++        BR2_PACKAGE_SOCAT=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "256M", "-initrd", img])
++        self.emulator.login()
++
++        # We define our socat output log file.
++        socat_log = "/tmp/socat.log"
++
++        # We define two PTY names we will use for this test.
++        pty0 = "/dev/ttyppp0"
++        pty1 = "/dev/ttyppp1"
++
++        # We define two IP addresses.
++        local_ip = "192.168.12.34"
++        remote_ip = "10.20.30.40"
++
++        # We define few parameters for our ping.
++        ping_count = 3
++        ping_size = 32
++        ping_payload = "aa"
++
++        # We check the program can execute.
++        self.assertRunOk("pppd --version")
++
++        # We create two PTYs connected to each other with socat. We
++        # will connect a pppd on each one to create connection end
++        # points. We also enable some debugging to print the content
++        # of packets forwarded by socat. We will use that to later
++        # validate data actually passed through this channel. Note: we
++        # start the command in a subshell to suppress the job control
++        # message, when this background process will be killed later
++        # in this test.
++        cmd = "( socat -d2 -x -lu"
++        cmd += f" PTY,link={pty0},rawer,b115200 PTY,link={pty1},rawer,b115200"
++        cmd += f" > {socat_log} 2>&1 & )"
++        self.assertRunOk(cmd)
++
++        # We create a network namespace. We will use it to isolate one
++        # of the two pppd instances (our fake remote). We do so to
++        # make sure our network test will not use the default routes
++        # (or local loopback). This will make sure our communication
++        # data will go through our PPP link.
++        namespace = "remote-ppp"
++        self.assertRunOk(f"ip netns add {namespace}")
++
++        # We start our (fake) remote pppd instance, in our netns.
++        cmd = f"ip netns exec {namespace} "
++        cmd += f"pppd noauth ifname ppp1 {pty1} {remote_ip}:{local_ip}"
++        self.assertRunOk(cmd)
++
++        # We wait a bit for the pppd to settle...
++        time.sleep(3)
++
++        # We start out local pppd instance, this time in the default
++        # network namespace.
++        cmd = f"pppd noauth ifname ppp0 {pty0} {local_ip}:{remote_ip}"
++        self.assertRunOk(cmd)
++
++        # We wait again...
++        time.sleep(3)
++
++        # We check we can ping our two IPs. The local IP is expected
++        # to go through the interface loopback (and not go through our
++        # PPP link). Only the remote IP ping is expected to go through
++        # our socat PTYs.
++        for ip in local_ip, remote_ip:
++            cmd = f"ping -c {ping_count} -s {ping_size} -p {ping_payload} {ip}"
++            self.assertRunOk(cmd)
++
++        # We stop our pppd and socat processes.
++        self.assertRunOk("killall pppd")
++        self.assertRunOk("killall socat")
++
++        # For debugging this test, it can be useful to print the socat
++        # log on the console. Uncomment this line, if needed.
++        # self.assertRunOk(f"cat {socat_log}")
++
++        # The actual ping payload set with our payload_data is
++        # slightly smaller as the ping packet size, due other data
++        # written by the ping command. This is why we subtract 4 bytes
++        # to the size.
++        pattern = " ".join([ping_payload] * (ping_size - 4))
++        # We count the number of packets with this payload transmitted
++        # through socat...
++        out, ret = self.emulator.run(f"grep -Fc '{pattern}' {socat_log}")
++        self.assertEqual(ret, 0)
++        # We check we have exactly twice our requested ping count (one
++        # for ICMP ECHO, one for the REPLY).
++        self.assertEqual(int(out[0]), ping_count * 2)
+diff --git a/support/testing/tests/package/test_pppd/linux-ppp.fragment b/support/testing/tests/package/test_pppd/linux-ppp.fragment
+new file mode 100644
+index 0000000000..18bedc2831
+--- /dev/null
++++ b/support/testing/tests/package/test_pppd/linux-ppp.fragment
+@@ -0,0 +1,2 @@
++CONFIG_PPP=y
++CONFIG_PPP_ASYNC=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
