@@ -1,81 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 176A2D2C57C
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 22:55:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01F72CDD0FF
+	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 22:55:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFFCC605D4;
-	Tue, 22 Oct 2024 22:55:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B6E4280BAB;
+	Tue, 22 Oct 2024 22:55:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G8lnDgRJ71w4; Tue, 22 Oct 2024 22:55:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J82WX2flQ9Bu; Tue, 22 Oct 2024 22:55:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEFD5605FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B25CD80C0B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CEFD5605FA;
-	Tue, 22 Oct 2024 22:55:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id AEFE74C2A
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 22:55:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B25CD80C0B;
+	Tue, 22 Oct 2024 22:55:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5AC282072
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 22:55:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F0AF605FA
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 22:55:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 48F3C40318
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 22:55:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 01LXrnuK4Scu for <buildroot@buildroot.org>;
- Tue, 22 Oct 2024 22:55:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.166.180;
- helo=mail-il1-f180.google.com; envelope-from=bryce.d.johnson@gmail.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aaJuO831D057 for <buildroot@buildroot.org>;
+ Tue, 22 Oct 2024 22:55:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.166.46;
+ helo=mail-io1-f46.google.com; envelope-from=bryce.d.johnson@gmail.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E0B9E605D4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0B9E605D4
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com
- [209.85.166.180])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E0B9E605D4
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 22:55:11 +0000 (UTC)
-Received: by mail-il1-f180.google.com with SMTP id
- e9e14a558f8ab-3a39cabb9faso21238805ab.3
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 15:55:11 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6E58E40187
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E58E40187
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com
+ [209.85.166.46])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6E58E40187
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 22:55:13 +0000 (UTC)
+Received: by mail-io1-f46.google.com with SMTP id
+ ca18e2360f4ac-8323b555a6aso364008739f.3
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 15:55:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1729637710; x=1730242510;
+ d=1e100.net; s=20230601; t=1729637712; x=1730242512;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=AcmEPr/2CFIg9nBhA+v2J9IFwvkx+8o6gnM7C1WRnEM=;
- b=d/uOMWyIdGiPoShpSisiWd9bC4cIW6UFlW1ODeCYxTAaEF53jB1Fz8rUMX/0mO4AqQ
- m6X54Zxz3msy9urcusoxswyHu59NEkOQsjFu2Fba3m9PDy7KCDcDIpiHKAUxqpCWTjJX
- FqRnHQ1qxETz4EAzPUXeY4lK4MVMKSMdZN9poT/n4E1tXCdF2+PRXbheuKkHAAxyI4I9
- 9Z+CLvn5vAax9Co6Ze6M4c/ugeS/gRXT/O6M4iH3MldTO2V0atGiUol33BQYGGifJjWC
- mZcmuOzlMFh2HbBmMLzc71kNqPHh2V1hd/S+obvjaLLFzxJNxYdHk1TmS8JJ15VxA1Kk
- AkGA==
-X-Gm-Message-State: AOJu0YzR6OemqGXaBD7PaQX5RB3AjpnFQQFc2a9hU+6oImXJoHPB2oM/
- PmMSKdRrpP7jK/7zClUK2I80XCH2sv4zNqsOmusFiVvcLCR+8K2KGWQHGA==
-X-Google-Smtp-Source: AGHT+IFfoV6E1WQl+KG9ILhTEdBIzEJOOgMBCavb9UouMCu8UkkfHQJBwo0t4+yzZb3hPgB5CkrSuw==
-X-Received: by 2002:a05:6e02:170f:b0:3a3:b143:98 with SMTP id
- e9e14a558f8ab-3a4d597c876mr6534945ab.15.1729637710540; 
- Tue, 22 Oct 2024 15:55:10 -0700 (PDT)
+ bh=8Qi6ZeX4rNeQdVCSqK3mtmeyv0rUEeWVEishfYq+dLY=;
+ b=U6W0QTAm0xNgLLkJHT3FmELHXjiiBEcIV9j+im9tSB+vOdt+UAjugMpGpPq5AhCwwF
+ JBg3IIZlvQcXqO0V5KgAQ8C66gnHioViNdraPQGREqFjY1qyhEPgp8XEhbZtslVzfx6G
+ C71e/1cTYbmzyIi4y6A0WIbmrmmh5ZRX46w7n43XJRpyZboEOx3FXHJhNSWbERG5P+cz
+ m0aJWPQkFjDOxmDbjMqwtfU03A8+6jqmKuUIZWaBXXNTjN0azMrIWQI6m7OI4UGVOq8H
+ kG6wxzGAxHS6Bd5/YrHHpa26DRArECdTwIimYsOLRaAnz4qypzk6a8mmRvG93xaEdnwi
+ ttXg==
+X-Gm-Message-State: AOJu0YzDrz4tEW/d6/z1OJ+q5cYM85cjXaVQNVgWfnkAKDfyEywyX94t
+ TqB2wS5htCtAWA/HZpaMgCawITjpdRKePXm4vYMh4ENXDsAskVY6p6yDOw==
+X-Google-Smtp-Source: AGHT+IFmiR7OiQq154vywoJNfT4fzQ4MoDvGTDtAasi1wNUqCusyrn7+4DH9P+WsB5irvO80wbhASA==
+X-Received: by 2002:a05:6e02:1a67:b0:3a0:b384:219b with SMTP id
+ e9e14a558f8ab-3a4d59ff663mr6268215ab.26.1729637711997; 
+ Tue, 22 Oct 2024 15:55:11 -0700 (PDT)
 Received: from USATL1PC00222.am.bm.net ([149.106.100.80])
  by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4dc2a63063fsm1785186173.124.2024.10.22.15.55.09
+ 8926c6da1cb9f-4dc2a63063fsm1785186173.124.2024.10.22.15.55.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 22 Oct 2024 15:55:10 -0700 (PDT)
+ Tue, 22 Oct 2024 15:55:11 -0700 (PDT)
 From: Bryce Johnson <bryce@redpinelabs.com>
 To: buildroot@buildroot.org
-Date: Tue, 22 Oct 2024 16:54:55 -0600
-Message-Id: <20241022225457.568323-2-bryce@redpinelabs.com>
+Cc: Bryce Johnson <bryce@redpinelabs.com>, Xuanhao Shi <X15000177@gmail.com>,
+ Anand Gadiyar <gadiyar@ti.com>, Bryan Brattlof <bb@ti.com>
+Date: Tue, 22 Oct 2024 16:54:56 -0600
+Message-Id: <20241022225457.568323-3-bryce@redpinelabs.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241022225457.568323-1-bryce@redpinelabs.com>
 References: <20241022225457.568323-1-bryce@redpinelabs.com>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=redpinelabs.com
-Subject: [Buildroot] [PATCH 2/3] boot/arm-trusted-firmware: use
+Subject: [Buildroot] [PATCH 3/3] boot/ti-k3-r5-loader: use
  HOST_ARM_GNU_TOOLCHAIN_SUPPORTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -88,8 +90,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>,
- Bryce Johnson <bryce@redpinelabs.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -99,22 +99,21 @@ To check for valid x86_64 or aarch64 configuration for arm32 toolchain
 
 Signed-off-by: Bryce Johnson <bryce@redpinelabs.com>
 ---
- boot/arm-trusted-firmware/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ boot/ti-k3-r5-loader/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index 5ba4e08370..4a5c7dc89c 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -249,7 +249,7 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN
- 	bool "Needs arm-none-eabi toolchain"
+diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
+index 8c7898ebf6..fe429bb8b4 100644
+--- a/boot/ti-k3-r5-loader/Config.in
++++ b/boot/ti-k3-r5-loader/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_TARGET_TI_K3_R5_LOADER
+ 	bool "ti-k3-r5-loader"
  	depends on BR2_aarch64
--	depends on BR2_HOSTARCH = "x86_64"
 +	depends on BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_SUPPORTS
+ 	select BR2_TARGET_TI_K3_BOOT_FIRMWARE # binman
  	help
- 	  Select this option if your ATF board configuration requires
- 	  an ARM32 bare metal toolchain to be available.
+ 	  Separate U-Boot SPL build for R5 core on TI's K3 processors.
 -- 
 2.34.1
 
