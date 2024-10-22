@@ -4,68 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D4FBCDD0CB
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 19:16:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B4D9CDD0CB
+	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 19:16:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F0EC7606F2;
-	Tue, 22 Oct 2024 19:16:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 612F7606F5;
+	Tue, 22 Oct 2024 19:16:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VW4aCKhMfs79; Tue, 22 Oct 2024 19:16:44 +0000 (UTC)
+ id loGvsfAEScFx; Tue, 22 Oct 2024 19:16:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A866606F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 624E8607A1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A866606F5;
-	Tue, 22 Oct 2024 19:16:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 521EF2072
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:16:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 624E8607A1;
+	Tue, 22 Oct 2024 19:16:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B76DF2072
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:16:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4025B80D2F
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:16:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 95AD5607A9
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:16:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iJ5-qPTZLL5E for <buildroot@buildroot.org>;
- Tue, 22 Oct 2024 19:16:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EVYOGBz22B_X for <buildroot@buildroot.org>;
+ Tue, 22 Oct 2024 19:16:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1350C80CFF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1350C80CFF
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1350C80CFF
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:16:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 71AC91BF205
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:16:37 +0000 (UTC)
-Date: Tue, 22 Oct 2024 21:16:35 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE795607A1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE795607A1
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:16:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A8C0A861A1; Tue, 22 Oct 2024 19:16:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Message-ID: <20241022211635.36d035fe@windsurf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729624597;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=lNS/Dq5pTmzevxHqxJSqYFe84W1vLXH5byGHsoTm5ws=;
- b=M/er+Ql0IyMY+YmhAA5vOjDsmZgV3udg5CGlm6KQlkay6ZgnFTcD92oH+QrnQqURmIUpwN
- xcQHAkRomgRXH6DM6G3C3ssTBh7PBEsn3t/LDw6DpxOuyrCs7xW3RmCVuiiWTNp4dt4Was
- DvlKbXnYCa2YO2J25ydYcj4tS7pSnvvOG5h7niuHqsFQGMmhrQLa3bcIiIv5CKXFkqFV2I
- SF6GX7wJawDbWG2+L2+l5rcOchQ+eZOB4xip/9K/VXkWo7xSFIRE0NlRdEQBgdkXKGndb7
- pjDgKecYGuCGFFjTawpXuLAoMwuFDdF6gpfm2YdHxDo2ul5FYjVkYRFRANPfUw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=M/er+Ql0
-Subject: [Buildroot] Welcome to Julien Olivain as Buildroot maintainer
+Date: Tue, 22 Oct 2024 21:10:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7880f89a6ad3216cd3c4dbd8cd30e76a554fa881
+X-Git-Newrev: 3243ed0b22fe1d6c66c47d1312dcc514c3aaae01
+X-Patchwork-Hint: ignore
+Message-Id: <20241022191653.A8C0A861A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-poetry-core: bump to
+ version 1.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,32 +60,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello all,
+commit: https://git.buildroot.net/buildroot/commit/?id=3243ed0b22fe1d6c66c47d1312dcc514c3aaae01
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We're happy to announce that we've just added Julien Olivain as a
-new member of the Buildroot maintainer's team. This has been in
-discussion way before Yann decided to retire from the maintainer's
-team, so it is unrelated to Yann's decision, but obviously will be
-useful to help handle the amount of contributions we receive.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-poetry-core/python-poetry-core.hash | 4 ++--
+ package/python-poetry-core/python-poetry-core.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Julien has been making for a few years very positive contributions to
-Buildroot, and we believe he will help the project in a similarly
-positive way as a maintainer.
-
-Once again, welcome Julien!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/python-poetry-core/python-poetry-core.hash b/package/python-poetry-core/python-poetry-core.hash
+index 2dc1198a76..eaed4dc728 100644
+--- a/package/python-poetry-core/python-poetry-core.hash
++++ b/package/python-poetry-core/python-poetry-core.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/poetry-core/json
+-md5  eb8730e30aec5f644754b29587b47122  poetry_core-1.9.0.tar.gz
+-sha256  fa7a4001eae8aa572ee84f35feb510b321bd652e5cf9293249d62853e1f935a2  poetry_core-1.9.0.tar.gz
++md5  64e2c60933b5647f274151ebb1c968f0  poetry_core-1.9.1.tar.gz
++sha256  7a2d49214bf58b4f17f99d6891d947a9836c9899a67a5069f52d7b67217f61b8  poetry_core-1.9.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  f1978133782b90f4733bc308ddb19267c3fe04797c88d9ed3bc219032495a982  LICENSE
+diff --git a/package/python-poetry-core/python-poetry-core.mk b/package/python-poetry-core/python-poetry-core.mk
+index 5b9b8a15d5..107ad1bebb 100644
+--- a/package/python-poetry-core/python-poetry-core.mk
++++ b/package/python-poetry-core/python-poetry-core.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_POETRY_CORE_VERSION = 1.9.0
++PYTHON_POETRY_CORE_VERSION = 1.9.1
+ PYTHON_POETRY_CORE_SOURCE = poetry_core-$(PYTHON_POETRY_CORE_VERSION).tar.gz
+-PYTHON_POETRY_CORE_SITE = https://files.pythonhosted.org/packages/f2/db/20a9f9cae3f3c213a8c406deb4395698459fd96962cea8f2ccb230b1943c
++PYTHON_POETRY_CORE_SITE = https://files.pythonhosted.org/packages/c7/5c/3609519b7d890ced542fe327ea26a7c8ea55ef298c323c46cca2a011c1cb
+ PYTHON_POETRY_CORE_SETUP_TYPE = pep517
+ PYTHON_POETRY_CORE_LICENSE = MIT
+ PYTHON_POETRY_CORE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
