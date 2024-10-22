@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93199CDD0EA
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 20:46:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9CABCDD0F4
+	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 20:46:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33C3A401B1;
-	Tue, 22 Oct 2024 20:46:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A21FE60681;
+	Tue, 22 Oct 2024 20:46:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WqX0JJgwGP95; Tue, 22 Oct 2024 20:46:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oYy1kwowl16A; Tue, 22 Oct 2024 20:46:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E35ED401F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C342260604
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E35ED401F3;
-	Tue, 22 Oct 2024 20:46:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A9A922072
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:46:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C342260604;
+	Tue, 22 Oct 2024 20:46:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F8B559F4
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:46:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 82EF8401F3
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:46:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3162880BD9
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:46:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dz9-tMJIBbG1 for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ro0wYEv96N4r for <buildroot@buildroot.org>;
  Tue, 22 Oct 2024 20:46:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73637401B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78EE080BC6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 73637401B1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 78EE080BC6
  for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:46:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 59ECA86201; Tue, 22 Oct 2024 20:46:34 +0000 (UTC)
+ id 6510A861B2; Tue, 22 Oct 2024 20:46:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 22 Oct 2024 22:46:19 +0200
+Date: Tue, 22 Oct 2024 22:46:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1f2eb4a4685da9dd63665dc5ad68c6dfd8919e3b
-X-Git-Newrev: bbeca6d13f3a68da57c202b6f03faefe6ab135f6
+X-Git-Oldrev: bbeca6d13f3a68da57c202b6f03faefe6ab135f6
+X-Git-Newrev: e087f183408283c1deb05ffb5dab8348980a8b6a
 X-Patchwork-Hint: ignore
-Message-Id: <20241022204634.59ECA86201@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/rock5b: update to linux 6.11.3
+Message-Id: <20241022204634.6510A861B2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/rock5b: update to uboot 2024.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,64 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbeca6d13f3a68da57c202b6f03faefe6ab135f6
+commit: https://git.buildroot.net/buildroot/commit/?id=e087f183408283c1deb05ffb5dab8348980a8b6a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A bunch of new hardware has been enabled for rock5b in linux 6.11,
-most notably USB3 host controller support, GPU support, cpufreq
-support, and PCIe endpoint mode support.
+Newer uboot versions contain commit ebb0ad4eef0a ("arch: arm:
+mach-rockchip: Kconfig: Enable BOOTSTD_FULL for RK3399 and RK3588"),
+which enables BOOTSTD_FULL for RK3588, making it easier to figure
+out issues with the bootflow, if any.
 
-Add the dependency on host python3 that is new since linux 6.10.
-
-Also add the missing dependency on openssl (which has been needed for
-a long time, since we are using arm64 defconfig, but only shows up as
-an error if the host system doesn't have extract-cert installed.)
+Also add the GnuTLS dependency which is needed for uboot 2024.10.
 
 Signed-off-by: Niklas Cassel <cassel@kernel.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/radxa/rock5b/patches/linux/linux.hash | 4 ++--
- configs/rock5b_defconfig                    | 6 ++++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ board/radxa/rock5b/patches/uboot/uboot.hash | 2 +-
+ configs/rock5b_defconfig                    | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/board/radxa/rock5b/patches/linux/linux.hash b/board/radxa/rock5b/patches/linux/linux.hash
-index ba90c84f54..005667b1f1 100644
---- a/board/radxa/rock5b/patches/linux/linux.hash
-+++ b/board/radxa/rock5b/patches/linux/linux.hash
+diff --git a/board/radxa/rock5b/patches/uboot/uboot.hash b/board/radxa/rock5b/patches/uboot/uboot.hash
+index bc999536af..904fa56c02 100644
+--- a/board/radxa/rock5b/patches/uboot/uboot.hash
++++ b/board/radxa/rock5b/patches/uboot/uboot.hash
 @@ -1,2 +1,2 @@
--# Locally calculated
--sha256  f68d9f5ffc0a24f850699b86c8aea8b8687de7384158d5ed3bede37de098d60c  linux-6.7.4.tar.xz
-+# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  057263d0afc17d5253794afd3d239ba4da4aa734b22fa36c1665f41b95449b73  linux-6.11.3.tar.xz
+ # Locally calculated
+-sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
++sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
 diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-index 4d5e7ca583..bc7b73d652 100644
+index bc7b73d652..d75ad585fb 100644
 --- a/configs/rock5b_defconfig
 +++ b/configs/rock5b_defconfig
-@@ -1,6 +1,6 @@
- BR2_aarch64=y
- BR2_cortex_a76_a55=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_7=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
- BR2_GLOBAL_PATCH_DIR="board/radxa/rock5b/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_HOSTNAME="rock5b"
-@@ -12,13 +12,15 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rock5b/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.7.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.3"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/radxa/rock5b/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3588-rock-5b"
- BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
- BR2_PACKAGE_LINUX_FIRMWARE=y
- BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
- BR2_PACKAGE_ROCKCHIP_RKBIN=y
+@@ -32,11 +32,12 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock5b-rk3588"
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_DTC=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
