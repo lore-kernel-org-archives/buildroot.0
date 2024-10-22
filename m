@@ -1,100 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E159D2CE12
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 18:05:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F7C7CDD0C6
+	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 19:01:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2695A606F2;
-	Tue, 22 Oct 2024 18:05:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3368080D4D;
+	Tue, 22 Oct 2024 19:01:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6o4-xaZJpjlJ; Tue, 22 Oct 2024 19:01:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EB7F80D4F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1EB7F80D4F;
+	Tue, 22 Oct 2024 19:01:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3DF70963
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:01:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 39A7460604
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:01:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TS1sGaTU9ZNi; Tue, 22 Oct 2024 18:05:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C49B6064B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C49B6064B;
-	Tue, 22 Oct 2024 18:05:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B9EF6963
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 18:05:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8481403BE
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 18:05:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FYvEIo4JASih for <buildroot@buildroot.org>;
- Tue, 22 Oct 2024 18:05:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2c; helo=mail-io1-xd2c.google.com;
- envelope-from=bryce@raspberrywood.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 74B34403B8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74B34403B8
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 74B34403B8
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 18:05:54 +0000 (UTC)
-Received: by mail-io1-xd2c.google.com with SMTP id
- ca18e2360f4ac-83a9cd37a11so252447139f.3
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 11:05:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1729620353; x=1730225153;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Xtg80pBzjeeIY3BoSVkBA0bmN3CFMiC+1DBmgeG+Z0w=;
- b=Ulc2Qm0jVnrr8c7zrTlkr14sVdnwJmgYqcatq9Mo2ZfPEqfMswrndxAlgeBHxFeFAp
- mfj+WiokZyVuYDoj23INLbZBQzDPQYDs/UuDPRobOmHH9QRtj0cEWgrkKREa+4Kff8f/
- S3JCNkEjbMYL/oUmgQiS4gkPtqmcjsCYoTfL9Xkpw0dwEu6VEp9UanMOadePX8lYwZV1
- X3ZBKza4mwlhdGS77JWGU9GvRsWYHDWem7lueP++8S1wWBRot3wyFfFG77h/cECjBsjU
- q5+z3RvPgdWTVbQbiW+lHjis9iM0ksMWpUuVanKJH4pR3oGtoJ7RyXzHYQhKWFqaxOpY
- kNnw==
-X-Gm-Message-State: AOJu0YztZPYQf3X6pykqKd69MifCHB+veAy1SEnESa/UuHw8hLah+rk3
- D5j3MhtfAQo6I8j1MUTSV4ix8PzElD5BRUMXScUkr1Af1rW5gyTBxpKgpGkzPagZQHUptCiiGcZ
- N
-X-Google-Smtp-Source: AGHT+IG+iEnaEnb+AUrlwJ1cwAdGzX1lF8spieOs0b70wtIAa3U5tsoFL59lTqSVmQvM1/LrapahvA==
-X-Received: by 2002:a05:6602:3f86:b0:83a:c296:f5b0 with SMTP id
- ca18e2360f4ac-83af61a6b2bmr4415639f.9.1729620352961; 
- Tue, 22 Oct 2024 11:05:52 -0700 (PDT)
-Received: from USATL1PC00222.am.bm.net ([149.106.100.80])
- by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4dc2a52fcaasm1643378173.32.2024.10.22.11.05.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 22 Oct 2024 11:05:52 -0700 (PDT)
-From: bryce@raspberrywood.com
-X-Google-Original-From: bryce@redpinelabs.com
+ id v730BITGvg-V for <buildroot@buildroot.org>;
+ Tue, 22 Oct 2024 19:01:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A24C60671
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A24C60671
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:01:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 21B6B8613F; Tue, 22 Oct 2024 19:01:51 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Bryce Johnson <bryce@redpinelabs.com>,
- Suniel Mahesh <sunil@amarulasolutions.com>
-Date: Tue, 22 Oct 2024 12:05:40 -0600
-Message-Id: <20241022180542.224972-1-bryce@redpinelabs.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=raspberrywood-com.20230601.gappssmtp.com; s=20230601; t=1729620353;
- x=1730225153; darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Xtg80pBzjeeIY3BoSVkBA0bmN3CFMiC+1DBmgeG+Z0w=;
- b=lQ60NXr4nWKcYOfWwACDoCb2nCwMRP4k7pbSaUWjjC7p2BLRRyGn5UjWDKeijetC0y
- V/R+4F8yHwkpSo3KWFeW8o2wYr1BD8I1r0Mqj/4fiPwTpqjHMkbhoAuTeG+F4AI9tZJx
- 76T0FNX6z4aCw6jk0lJmPrxfgZ5PDUW20xxpO5KsZTUwhbcXoylquB233xIK/UPU5B1c
- gtULMa3/Ekp3pwXV3Pv2pXCOh3qsIcyKOAOuehEumeXUuSTp8J8gLYneTfgAuDEPbjJw
- Ni6fha60f+lvUvOtzB0P/Yve8BqsHe3woKY9WzkF/amNm7YqyIr8p8GAzrnwcbQMlm+q
- DfqQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=raspberrywood.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=raspberrywood-com.20230601.gappssmtp.com
- header.i=@raspberrywood-com.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=lQ60NXr4
-Subject: [Buildroot] [PATCH] package/arm-gnu-toolchain: Add $(HOSTARCH) so
- it can be built with aarch64
+Date: Tue, 22 Oct 2024 20:58:43 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 848c86a7cecb2123e7ae3e7379fc6baf4bfd115d
+X-Git-Newrev: 7880f89a6ad3216cd3c4dbd8cd30e76a554fa881
+X-Patchwork-Hint: ignore
+Message-Id: <20241022190151.21B6B8613F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/aarch64_efi: bump Linux to 6.10.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,47 +58,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1851708716852705713=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Bryce Johnson <bryce@redpinelabs.com>
+--===============1851708716852705713==
+Content-Type: text/plain
 
-Was testing building with arm64 build server and failed because it was downloading the x86_64 version. Use $(HOSTARCH) instead so it can also downloaded
+commit: https://git.buildroot.net/buildroot/commit/?id=7880f89a6ad3216cd3c4dbd8cd30e76a554fa881
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tested with building configs/ti_am62x_sk_defconfig on arm64. That it uses to build the 32bit R5 MCU.
+While at it:
+- Turn on hashes verification and add a hash for the Linux kernel.
+- Linux kernel needs host-python3; add it.
+- Convert to `make savedefconfig' format.
+- Fix shellcheck warnings in our post-image script and update
+  .checkpackageignore.
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Erico Nunes <nunes.erico@gmail.com>
+Cc: Dick Olsson <hi@senzilla.io>
+Cc: Julien Olivain <ju.o@free.fr>
+Reviewed-by: Julien Olivain <ju.o@free.fr>
+[Julien: rebased the patch to resolve conflicts with commit
+  edc0a6b1a "configs: regenerate all defconfigs"]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/arm-gnu-toolchain/arm-gnu-toolchain.hash | 2 ++
- package/arm-gnu-toolchain/arm-gnu-toolchain.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ .checkpackageignore                                        | 2 --
+ board/aarch64-efi/patches/linux-headers/linux-headers.hash | 1 +
+ board/aarch64-efi/patches/linux/linux.hash                 | 2 ++
+ board/aarch64-efi/post-image.sh                            | 4 ++--
+ configs/aarch64_efi_defconfig                              | 7 +++++--
+ 5 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/package/arm-gnu-toolchain/arm-gnu-toolchain.hash b/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
-index 0800fa2168..110ec40c09 100644
---- a/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
-+++ b/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
-@@ -1,2 +1,4 @@
- # taken from https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz.sha256asc
- sha256  6cd1bbc1d9ae57312bcd169ae283153a9572bd6a8e4eeae2fedfbc33b115fdbb  arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz
-+# taken from https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-aarch64-arm-none-eabi.tar.xz.sha256asc
-+sha256  8fd8b4a0a8d44ab2e195ccfbeef42223dfb3ede29d80f14dcf2183c34b8d199a  arm-gnu-toolchain-13.2.rel1-aarch64-arm-none-eabi.tar.xz
-diff --git a/package/arm-gnu-toolchain/arm-gnu-toolchain.mk b/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
-index 03bb4dc5da..fce80f2f3a 100644
---- a/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
-+++ b/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
-@@ -6,7 +6,7 @@
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 207d72fd20..f38b900735 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1,4 +1,3 @@
+-board/aarch64-efi/post-image.sh Shellcheck
+ board/amarula/vyasa/post-build.sh Shellcheck
+ board/andes/ae350/patches/uboot/0001-mmc-ftsdc010_mci-Support-DTS-of-ftsdc010-driver-for-.patch lib_patch.Upstream
+ board/andes/ae350/patches/uboot/0002-spl-Align-device-tree-blob-address-at-8-byte-boundar.patch lib_patch.Upstream
+@@ -104,7 +103,6 @@ boot/syslinux/0013-Fix-build-with-gnu-efi-version-3.0.9.patch lib_patch.Upstream
+ boot/syslinux/0014-Fix-build-with-binutils-note-gnu-property-section.patch lib_patch.Upstream
+ boot/syslinux/0016-Workaround-multiple-definition-of-symbol-errors.patch lib_patch.Upstream
+ boot/syslinux/0017-Replace-builtin-strlen-that-appears-to-get-optimized.patch lib_patch.Upstream
+-configs/aarch64_efi_defconfig lib_defconfig.ForceCheckHash
+ configs/am574x_idk_defconfig lib_defconfig.ForceCheckHash
+ configs/andes_ae350_45_defconfig lib_defconfig.ForceCheckHash
+ configs/arcturus_ucls1012a_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/aarch64-efi/patches/linux-headers/linux-headers.hash b/board/aarch64-efi/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/aarch64-efi/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/aarch64-efi/patches/linux/linux.hash b/board/aarch64-efi/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..20941a269b
+--- /dev/null
++++ b/board/aarch64-efi/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  524858852f5869a9ef17de8b1e6e7faf05bcb2c462bc96b3c24dbf82ede373cf  linux-6.10.12.tar.xz
+diff --git a/board/aarch64-efi/post-image.sh b/board/aarch64-efi/post-image.sh
+index f0214dc866..1aef15ef6f 100755
+--- a/board/aarch64-efi/post-image.sh
++++ b/board/aarch64-efi/post-image.sh
+@@ -1,5 +1,5 @@
+ #!/bin/sh
  
- ARM_GNU_TOOLCHAIN_VERSION = 13.2.rel1
- ARM_GNU_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(ARM_GNU_TOOLCHAIN_VERSION)/binrel
--ARM_GNU_TOOLCHAIN_SOURCE = arm-gnu-toolchain-$(ARM_GNU_TOOLCHAIN_VERSION)-x86_64-arm-none-eabi.tar.xz
-+ARM_GNU_TOOLCHAIN_SOURCE = arm-gnu-toolchain-$(ARM_GNU_TOOLCHAIN_VERSION)-$(HOSTARCH)-arm-none-eabi.tar.xz
- ARM_GNU_TOOLCHAIN_LICENSE = GPL-3.0+
+-BOARD_DIR="$(dirname $0)"
++BOARD_DIR=$(dirname "$0")
  
- HOST_ARM_GNU_TOOLCHAIN_INSTALL_DIR = $(HOST_DIR)/opt/gcc-arm-none-eabi
--- 
-2.34.1
+-cp -f ${BOARD_DIR}/grub.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
++cp -f "${BOARD_DIR}/grub.cfg" "${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg"
+diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
+index f322f04c66..9f284ff74b 100644
+--- a/configs/aarch64_efi_defconfig
++++ b/configs/aarch64_efi_defconfig
+@@ -1,13 +1,16 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
++BR2_GLOBAL_PATCH_DIR="board/aarch64-efi/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/aarch64-efi/post-image.sh support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/aarch64-efi/genimage-efi.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10.12"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
+
+--===============1851708716852705713==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1851708716852705713==--
