@@ -4,72 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED115CDD0D7
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 19:24:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34E20CDD0CB
+	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 19:28:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A9112606F2;
-	Tue, 22 Oct 2024 19:24:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 016AD6081F;
+	Tue, 22 Oct 2024 19:28:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oPRhRGBy30We; Tue, 22 Oct 2024 19:24:28 +0000 (UTC)
+ id WsiVIJ0jI7cB; Tue, 22 Oct 2024 19:28:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEB1B607A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F0E260815
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEB1B607A1;
-	Tue, 22 Oct 2024 19:24:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A3EDF2072
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:24:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F0E260815;
+	Tue, 22 Oct 2024 19:28:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 759D12072
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:28:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8501880EE2
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:24:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5684260812
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:28:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6-B58oRsHOli for <buildroot@buildroot.org>;
- Tue, 22 Oct 2024 19:24:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SWbbrE9vivpV for <buildroot@buildroot.org>;
+ Tue, 22 Oct 2024 19:28:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3726680EE1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3726680EE1
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3726680EE1
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:24:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7505EC0003;
- Tue, 22 Oct 2024 19:24:22 +0000 (UTC)
-Date: Tue, 22 Oct 2024 21:24:20 +0200
-To: "Michaelis, Adam J Collins via buildroot" <buildroot@buildroot.org>
-Message-ID: <20241022212420.4e850e1c@windsurf>
-In-Reply-To: <BN2P110MB1160FC5A43AA27C6195B68A1974CA@BN2P110MB1160.NAMP110.PROD.OUTLOOK.COM>
-References: <BN2P110MB1160FC5A43AA27C6195B68A1974CA@BN2P110MB1160.NAMP110.PROD.OUTLOOK.COM>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ECDE860815
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECDE860815
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ECDE860815
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 19:28:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8C3FE40007;
+ Tue, 22 Oct 2024 19:28:02 +0000 (UTC)
+Date: Tue, 22 Oct 2024 21:28:00 +0200
+To: bryce@raspberrywood.com
+Cc: buildroot@buildroot.org, Bryce Johnson <bryce@redpinelabs.com>, Suniel
+ Mahesh <sunil@amarulasolutions.com>
+Message-ID: <20241022212800.570cbcfc@windsurf>
+In-Reply-To: <20241022180542.224972-1-bryce@redpinelabs.com>
+References: <20241022180542.224972-1-bryce@redpinelabs.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729625063;
+ d=bootlin.com; s=gm1; t=1729625283;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=2PImBtIgxP6g0jHyGTdUyJbmx+h2qmNhbtP1EuXTj9k=;
- b=HokJL72U2RuRsNciQO6K4CN0olRnEO374i+Yig/SGjN9G8462A/I5+NRjbw4xhl49SJiH3
- PLDGpHqS5kUKq/lvPFMzrdnCODGsoEh2MwOr0AB5W3fD5m/K231NDf9bi5Fz/HPxrlQiT1
- UadGxXi0dUUAc89MYLqfuVOCM/UFKaGs7Lp8+hdhkHMkvd2L6GhurNEDS3QhjWVcQ9upkZ
- NqC5UB3szav3tuxocwxKoFKz/DtiPU+jfDnQ290h1d41VqSg6Aqj6VgLHXCVLir4LTyBt1
- LbXCC5GLFaZWlaDZNYJbymAXKeB4iOcYuvcvaS/eVw+XH94TEREKz0USiUIriQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=mKfwTMRTJ9W+NEfFTC6o4aotd+z24+mZ6E0wPA222VY=;
+ b=TMunGCN2Befz5dsGXIkxmSf8J58BNLE+DEjeVkcdXXut1mtnG2CyCyL05ilXw0krz0g4Pa
+ 8g3DclRGQjmkrL9wLsbhDxbJVRvm1PSu5r+KkVr8q+5OKX5qJNu30nsMOMqXJ1LExxVriw
+ 5XVNEJ0T0X00tmhtn2nCiJf7Ad+VaM2Cncn/xV3J2LZQCtJteiJFnyFObHs7xHDpwpqVph
+ 4tP6LREst/o5RmFzydkaCJtaqF4EOr6QUbpUvnSJriQ6feKfvCgmOXHjS0ekeZXbqJpgrj
+ 489dmQZWLAEyEmtqxMToiXLV0kiZFBk1sMndCuIGDWDiUXYy6yK96EhlUHkF8Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HokJL72U
-Subject: Re: [Buildroot] [PATCH v2 1/1] linux: Install artifacts to staging
- for kmod build
+ header.s=gm1 header.b=TMunGCN2
+Subject: Re: [Buildroot] [PATCH] package/arm-gnu-toolchain: Add $(HOSTARCH)
+ so it can be built with aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,66 +85,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Michaelis, Adam J Collins" <adam.michaelis@collins.com>, "Buchmeyer,
- Neal Collins" <Neal.Buchmeyer@collins.com>, "Maier, 
- Brandon L                            Collins" <Brandon.Maier@collins.com>,
- Julien Olivain <ju.o@free.fr>, Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adam,
+Hello Bryce!
 
-Thanks a lot for your patch. See below some feedback.
+Thanks for your patch. Some comments/questions below.
 
-On Tue, 22 Oct 2024 16:06:27 +0000
-"Michaelis, Adam J Collins via buildroot" <buildroot@buildroot.org> wrote:
+On Tue, 22 Oct 2024 12:05:40 -0600
+bryce@raspberrywood.com wrote:
 
-> From 45b18a0b5af619fd90194634530cc75f995ea57a Mon Sep 17 00:00:00 2001
-> From: Adam Michaelis <adam.michaelis@collins.com>
-> Date: Wed, 16 Oct 2024 09:06:14 -0500
-> Subject: [PATCH v2 1/1] linux: Install artifacts to staging for kmod build
+> From: Bryce Johnson <bryce@redpinelabs.com>
+> 
+> Was testing building with arm64 build server and failed because it was downloading the x86_64 version. Use $(HOSTARCH) instead so it can also downloaded
 
-Please use git send-email to send your patches, instead of sending the
-result of "git format-patch" directly in an e-mail. Indeed, otherwise
-we have two times the From:, Date:, Subject:, etc. headers.
+Minor nit: commit messages should have line wrapped at ~80 columns.
 
-> Installing kernel build artifacts to staging so that the user could use
-> the exported SDK to build out-of-tree kernel modules.
+> 
+> Tested with building configs/ti_am62x_sk_defconfig on arm64. That it uses to build the 32bit R5 MCU.
 
-I think this could be worded a bit better. "This commit adds an option
-that allows to install to the staging directory the necessary
-files/artefacts that are needed to build out of tree kernel modules.
-This is relevant when one wants to build out of tree kernel modules
-using the Buildroot-generated SDK".
+More important nit: we need you to add your Signed-off-by: line at the
+end of the commit log to allow us to apply your patch.
 
-> +config BR2_LINUX_KERNEL_INSTALL_STAGING
-> +       bool "Install kmod build files to staging"
-> +       help
-> +         Select this option to have the kernel files required for
-> +         out-of-tree module building installed to staging. This will
-> +         then enable module building from an exported SDK without
-> +         the full Linux build and Buildroot.
+> diff --git a/package/arm-gnu-toolchain/arm-gnu-toolchain.hash b/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
+> index 0800fa2168..110ec40c09 100644
+> --- a/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
+> +++ b/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
+> @@ -1,2 +1,4 @@
+>  # taken from https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz.sha256asc
+>  sha256  6cd1bbc1d9ae57312bcd169ae283153a9572bd6a8e4eeae2fedfbc33b115fdbb  arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz
+> +# taken from https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-aarch64-arm-none-eabi.tar.xz.sha256asc
+> +sha256  8fd8b4a0a8d44ab2e195ccfbeef42223dfb3ede29d80f14dcf2183c34b8d199a  arm-gnu-toolchain-13.2.rel1-aarch64-arm-none-eabi.tar.xz
+> diff --git a/package/arm-gnu-toolchain/arm-gnu-toolchain.mk b/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
+> index 03bb4dc5da..fce80f2f3a 100644
+> --- a/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
+> +++ b/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
+> @@ -6,7 +6,7 @@
+>  
+>  ARM_GNU_TOOLCHAIN_VERSION = 13.2.rel1
+>  ARM_GNU_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(ARM_GNU_TOOLCHAIN_VERSION)/binrel
+> -ARM_GNU_TOOLCHAIN_SOURCE = arm-gnu-toolchain-$(ARM_GNU_TOOLCHAIN_VERSION)-x86_64-arm-none-eabi.tar.xz
+> +ARM_GNU_TOOLCHAIN_SOURCE = arm-gnu-toolchain-$(ARM_GNU_TOOLCHAIN_VERSION)-$(HOSTARCH)-arm-none-eabi.tar.xz
 
-I am actually wondering whether this should be an option. We don't have
-any similar option for any other package.
+The change looks correct as-is of course, as it doesn't make anything
+worse. However, I believe to make things cleaner, we should perhaps
+introduce a package/arm-gnu-toolchain/Config.in.host file, with a blind
+option BR2_HOST_PACKAGE_ARM_GNU_TOOLCHAIN, that has a "depends on" the
+host architectures that are supported. And the packages that use
+host-arm-gnu-toolchain would have to be careful to propagate those
+depends on, so that we do not allow using host-arm-gnu-toolchain on
+configurations that do not allow using the host-arm-gnu-toolchain
+package. However this can be done as a separate patch, as again your
+change is not making things any worse than they already are :)
 
-> +define LINUX_INSTALL_STAGING_CMDS
-> +       # Install artifacts needed for module builds into staging for SDK use
-> +       if grep -q "CONFIG_MODULES=y" $(@D)/.config; then \
-> +               install -d "$(STAGING_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build/arch" && \
-> +               rsync --exclude "*.o" -a "$(@D)/arch/$(KERNEL_ARCH)" \
-> +                       "$(STAGING_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build/arch/" && \
-> +               rsync --exclude "*.o" --exclude "*.a" -a "$(@D)/include" \
-> +                       "$(@D)/scripts" "$(@D)/certs" "$(@D)/Makefile" \
-> +                       "$(@D)/Module.symvers" "$(@D)/.config" \
-> +                       "$(STAGING_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build/" ;\
+Could you send a v2 of your patch with the proposed changes?
 
-This feels a bit "crappy", these manual rsyncs. Doesn't the kernel has
-some relevant make target that do the right thing?
-
-Thanks a lot!
+Thanks again!
 
 Thomas
 -- 
