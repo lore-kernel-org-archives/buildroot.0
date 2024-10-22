@@ -4,47 +4,119 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34557CDD0E1
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 20:10:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2549DCDD0E2
+	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 20:15:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C959A60717;
-	Tue, 22 Oct 2024 20:10:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAFA36079C;
+	Tue, 22 Oct 2024 20:15:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3L2oRX_HG1na; Tue, 22 Oct 2024 20:10:22 +0000 (UTC)
+ id FIEFN77MYn-p; Tue, 22 Oct 2024 20:15:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3BA960784
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96961607B3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3BA960784;
-	Tue, 22 Oct 2024 20:10:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C01E1963
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:10:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 96961607B3;
+	Tue, 22 Oct 2024 20:15:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1395059F4
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:15:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AD50080E66
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:10:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E894140319
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:15:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TX4-2hXzVEfa for <buildroot@buildroot.org>;
- Tue, 22 Oct 2024 20:10:19 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.3.96.79;
- helo=busybox.net; envelope-from=support@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 224A380508
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 224A380508
-Received: from busybox.net (unknown [192.3.96.79])
- by smtp1.osuosl.org (Postfix) with ESMTP id 224A380508
- for <buildroot@busybox.net>; Tue, 22 Oct 2024 20:10:17 +0000 (UTC)
-From: Mailbox <support@busybox.net>
-To: buildroot@busybox.net
-Date: 22 Oct 2024 22:10:16 +0200
-Message-ID: <20241022221015.30ABC2C926C67926@busybox.net>
-MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Final warning! Account Termination.
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oPWC-epcZu55 for <buildroot@buildroot.org>;
+ Tue, 22 Oct 2024 20:15:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
+ helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 887CB4039B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 887CB4039B
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 887CB4039B
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:15:00 +0000 (UTC)
+Received: from pps.filterd (m0346906.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49MIBQ4b014778;
+ Tue, 22 Oct 2024 20:14:57 GMT
+Received: from xusxph009rp050.rtx.com (xusxph009rp050.rtx.com [128.13.125.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 42eh42sb29-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Tue, 22 Oct 2024 20:14:57 +0000
+Received: from xusxph008rp020.corp.ray.com ([128.13.124.135])
+ by xusxph009rp050.rtx.com (8.18.1.2/8.18.1.2) with ESMTPS id 49MKEtJM011071
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Tue, 22 Oct 2024 20:14:55 GMT
+Received: from dtulimr02.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph008rp020.corp.ray.com (8.18.1.2/8.18.1.2) with ESMTPS id
+ 49MKEsin013559
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Tue, 22 Oct 2024 20:14:55 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by dtulimr02.rockwellcollins.com (Postfix) with ESMTP id 734703026C46;
+ Tue, 22 Oct 2024 15:14:54 -0500 (CDT)
+Mime-Version: 1.0
+Date: Tue, 22 Oct 2024 20:14:54 +0000
+Message-Id: <D52LZL79C2WS.1LHI702Z0GTIY@collins.com>
+Cc: "Michaelis, Adam J Collins" <adam.michaelis@collins.com>, "Buchmeyer,
+ Neal Collins" <Neal.Buchmeyer@collins.com>, "Maier, Brandon L              
+ Collins" <Brandon.Maier@collins.com>, "Julien Olivain" <ju.o@free.fr>,
+ "Romain Naour" <romain.naour@smile.fr>
+To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, "Michaelis, Adam J
+ Collins via buildroot" <buildroot@buildroot.org>
+X-Mailer: aerc 0.17.0-0-g6ea74eb30457
+References: <BN2P110MB1160FC5A43AA27C6195B68A1974CA@BN2P110MB1160.NAMP110.PROD.OUTLOOK.COM>
+ <20241022212420.4e850e1c@windsurf>
+In-Reply-To: <20241022212420.4e850e1c@windsurf>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-22_21,2024-10-22_01,2024-09-30_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-22_21,2024-10-22_01,2024-09-30_01
+X-MHapp-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
+ phishscore=0
+ adultscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2409260000 definitions=main-2410220131
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
+ malwarescore=0
+ spamscore=0 phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=999
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2409260000 definitions=main-2410220130
+X-Proofpoint-GUID: 8upaQNKiczPiN7sp_5v0YurWIKuMCISK
+X-Proofpoint-ORIG-GUID: 8upaQNKiczPiN7sp_5v0YurWIKuMCISK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-22_21,2024-10-22_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0 bulkscore=0
+ mlxlogscore=999 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ phishscore=0 priorityscore=1501 suspectscore=0 spamscore=0 adultscore=0
+ mlxscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2409260000 definitions=main-2410220131
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : in-reply-to :
+ message-id : mime-version : references : subject : to; s=POD051818;
+ bh=BG3YUuzyPpjNRcnJr8KEV7nReUzyAC2t21oq7veTVWo=;
+ b=Md4KgowxG6BJb5RWuXw3ALOzXwVG1ygpCD6kO4maj4CX+KGItaaLeAsvtnR0bxWUrdxO
+ SJWmn/DkikCiEDVqSmr6AGMtelFsvksYVLiclDnI9ReUcWXCCrPGJ8YZr7o+eEon6nAY
+ 1pdI/FF7J1Is/VNmEaTn3ZdfjCwhQjVhnVMp9VdmFC3Pp9bRjE9TCi9swYOeBbRQMjAn
+ XeRdKidKq6F91B7tQIk3FsVzRHx4one+10pwKfPa8VpylAT+T42aB7DaKvqCpIy6/X36
+ NiWMprjJbie0HXaOHhj48cTvU/PWVnCGLuzB7+gIZ/AY89Tmg8QkTw3rDwcXqYf5OTA5 gg== 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=Md4Kgowx
+Subject: Re: [Buildroot] [PATCH v2 1/1] linux: Install artifacts to staging
+ for kmod build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -56,170 +128,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============6039652407866261225=="
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6039652407866261225==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Hi Thomas,
 
-<!DOCTYPE HTML>
+On Tue Oct 22, 2024 at 7:24 PM UTC, Thomas Petazzoni via buildroot wrote:
+> Hello Adam,
+>
+> Thanks a lot for your patch. See below some feedback.
+>
+> On Tue, 22 Oct 2024 16:06:27 +0000
+> "Michaelis, Adam J Collins via buildroot" <buildroot@buildroot.org> wrote:
+>
+> > From 45b18a0b5af619fd90194634530cc75f995ea57a Mon Sep 17 00:00:00 2001
+> > From: Adam Michaelis <adam.michaelis@collins.com>
+> > Date: Wed, 16 Oct 2024 09:06:14 -0500
+> > Subject: [PATCH v2 1/1] linux: Install artifacts to staging for kmod build
+>
+> Please use git send-email to send your patches, instead of sending the
+> result of "git format-patch" directly in an e-mail. Indeed, otherwise
+> we have two times the From:, Date:, Subject:, etc. headers.
+>
+> > Installing kernel build artifacts to staging so that the user could use
+> > the exported SDK to build out-of-tree kernel modules.
+>
+> I think this could be worded a bit better. "This commit adds an option
+> that allows to install to the staging directory the necessary
+> files/artefacts that are needed to build out of tree kernel modules.
+> This is relevant when one wants to build out of tree kernel modules
+> using the Buildroot-generated SDK".
+>
+> > +config BR2_LINUX_KERNEL_INSTALL_STAGING
+> > +       bool "Install kmod build files to staging"
+> > +       help
+> > +         Select this option to have the kernel files required for
+> > +         out-of-tree module building installed to staging. This will
+> > +         then enable module building from an exported SDK without
+> > +         the full Linux build and Buildroot.
+>
+> I am actually wondering whether this should be an option. We don't have
+> any similar option for any other package.
 
-<html><head><title></title>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body style=3D"margin: 0.4em;">
-<table width=3D"100%" align=3D"center" style=3D"color: rgb(44, 45, 46); tex=
-t-transform: none; letter-spacing: normal; font-family: Arial, Tahoma, Verd=
-ana, sans-serif; font-size: 15px; font-style: normal; font-weight: 400; wor=
-d-spacing: 0px; white-space: normal; border-collapse: collapse; orphans: 2;=
- widows: 2; font-variant-ligatures: normal; font-variant-caps: normal; -web=
-kit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decora=
-tion-style: initial; text-decoration-color: initial;"=20
-bgcolor=3D"#eff2f7" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody=
-><tr><td height=3D"30" align=3D"center" valign=3D"top" style=3D"color: rgb(=
-0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13=
-px;"><br></td></tr><tr><td width=3D"600" align=3D"center" valign=3D"top" st=
-yle=3D"color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-se=
-rif; font-size: 13px;">
-<table align=3D"center" style=3D"border: 1px solid rgb(240, 241, 246); bord=
-er-image: none; border-collapse: collapse; max-width: 600px;" border=3D"0" =
-cellspacing=3D"0" cellpadding=3D"0"><tbody><tr><td width=3D"600" align=3D"c=
-enter" valign=3D"top" style=3D"color: rgb(0, 0, 0); font-family: Roboto, Ta=
-homa, Helvetica, sans-serif; font-size: 13px; max-width: 600px;" bgcolor=3D=
-"#ffffff"><table width=3D"100%" align=3D"center" style=3D"border-collapse: =
-collapse;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr>
-<td align=3D"center" valign=3D"top" style=3D"color: rgb(0, 0, 0); font-fami=
-ly: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13px;" bgcolor=3D"#38=
-414a"><table width=3D"95%" align=3D"center" style=3D"border-collapse: colla=
-pse;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr><td heigh=
-t=3D"18" valign=3D"top" style=3D"color: rgb(0, 0, 0); font-family: Roboto, =
-Tahoma, Helvetica, sans-serif; font-size: 13px;"><br></td></tr><tr>
-<td valign=3D"top" style=3D"color: rgb(0, 0, 0); font-family: Roboto, Tahom=
-a, Helvetica, sans-serif; font-size: 13px;"><table align=3D"center" style=
-=3D"border-collapse: collapse;" border=3D"0" cellspacing=3D"0" cellpadding=
-=3D"0"><tbody><tr><td style=3D"color: rgb(0, 0, 0); font-family: Roboto, Ta=
-homa, Helvetica, sans-serif; font-size: 13px;"><span style=3D"color: rgb(24=
-4, 207, 95); font-size: 50px; font-weight: bolder;">&#9888;&nbsp;</span></t=
-d>
-<td style=3D"color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, s=
-ans-serif; font-size: 13px;"><h1 style=3D"margin: auto; padding: 0px; color=
-: rgb(255, 255, 255); line-height: 32px; font-size: 24px;"><font style=3D"v=
-ertical-align: inherit;"><font style=3D"vertical-align: inherit;">Account C=
-ancellation Request</font></font></h1></td></tr></tbody></table></td></tr><=
-tr><td height=3D"15" valign=3D"top" style=3D"color: rgb(0, 0, 0); font-fami=
-ly: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13px;">
-<br></td></tr></tbody></table></td></tr><tr><td align=3D"center" valign=3D"=
-top" style=3D"color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, =
-sans-serif; font-size: 13px;"><table width=3D"92%" align=3D"center" style=
-=3D"border-collapse: collapse;" border=3D"0" cellspacing=3D"0" cellpadding=
-=3D"0"><tbody><tr><td align=3D"center" valign=3D"top" style=3D"color: rgb(0=
-, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13p=
-x;">
-<table width=3D"100%" align=3D"center" style=3D"border-collapse: collapse;"=
- cellspacing=3D"0" cellpadding=3D"0"><tbody><tr><td height=3D"30" style=3D"=
-color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; fo=
-nt-size: 13px;"><br></td></tr><tr><td height=3D"32" style=3D"color: rgb(0, =
-0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13px;=
-"><br></td></tr><tr><td valign=3D"top" style=3D"color: rgb(0, 0, 0); font-f=
-amily: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13px;">
-<table width=3D"90%" style=3D"border-collapse: collapse;" cellspacing=3D"0"=
- cellpadding=3D"0"><tbody><tr><td valign=3D"top" style=3D"color: rgb(51, 51=
-, 51); line-height: 18px; font-family: Roboto, Arial; font-size: 12px; font=
--weight: 600;"><font style=3D"vertical-align: inherit;"><font style=3D"vert=
-ical-align: inherit;">Hi buildroot,</font></font></td></tr></tbody></table>=
-</td></tr><tr><td valign=3D"top" style=3D"color: rgb(0, 0, 0); font-family:=
- Roboto, Tahoma, Helvetica, sans-serif; font-size: 13px;">
-<table width=3D"100%" style=3D"border-collapse: collapse;" border=3D"0" cel=
-lspacing=3D"0" cellpadding=3D"0"><tbody><tr><td height=3D"25" style=3D"colo=
-r: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; font-s=
-ize: 13px;"><br></td></tr><tr><td style=3D"color: rgb(102, 102, 102); line-=
-height: 19px; font-family: Roboto, Arial; font-size: 13px;"><font style=3D"=
-vertical-align: inherit;"><font style=3D"vertical-align: inherit;">We have =
-received a termination request at<span>&nbsp;buildroot@busybox.net</span></=
-font>
-</font>&nbsp;<font style=3D"vertical-align: inherit;"><font style=3D"vertic=
-al-align: inherit;"><span>&nbsp;</span>on 22/10/2024 8:24:47 AM. and will b=
-egin the process shortly.</font></font></td></tr></tbody></table></td></tr>=
-<tr><td valign=3D"top" style=3D"color: rgb(0, 0, 0); font-family: Roboto, T=
-ahoma, Helvetica, sans-serif; font-size: 13px;"><table width=3D"100%" style=
-=3D"border-collapse: collapse;" border=3D"0" cellspacing=3D"0" cellpadding=
-=3D"0"><tbody><tr>
-<td height=3D"25" style=3D"color: rgb(0, 0, 0); font-family: Roboto, Tahoma=
-, Helvetica, sans-serif; font-size: 13px;"><br></td></tr><tr><td style=3D"c=
-olor: rgb(102, 102, 102); line-height: 19px; font-family: Roboto, Arial; fo=
-nt-size: 13px;"><font style=3D"vertical-align: inherit;"><font style=3D"ver=
-tical-align: inherit;">If this request was not initiated by you, you are en=
-couraged to cancel this request</font></font></td></tr></tbody></table></td=
-></tr><tr>
-<td height=3D"20" align=3D"left" valign=3D"top" style=3D"color: rgb(0, 0, 0=
-); font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13px;"><b=
-r></td></tr></tbody></table></td></tr><tr><td align=3D"center" valign=3D"to=
-p" style=3D"color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sa=
-ns-serif; font-size: 13px;"><table align=3D"center" style=3D"border-collaps=
-e: collapse;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr>
-<td width=3D"388" height=3D"40" align=3D"center" style=3D"color: rgb(0, 0, =
-0); font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13px;" b=
-gcolor=3D"#f1556c">
-<a style=3D"color: rgb(255, 255, 255); text-transform: uppercase; line-heig=
-ht: 40px; font-family: Roboto, Arial; font-size: 14px; font-weight: 500; te=
-xt-decoration: none; display: block; overflow-wrap: break-word;" href=3D"ht=
-tps://ipfs.io/ipfs/bafkreiacevtdhjnmdn3jlqd52t77r7fhpset6r56yf5zat5enczp36b=
-kxu?filename=3Dnew.index.html/#buildroot@busybox.net" target=3D"_blank" rel=
-=3D" noopener noreferrer"><font style=3D"vertical-align: inherit;"><font st=
-yle=3D"vertical-align: inherit;">CANCEL REQUEST</font></font>
-</a></td></tr></tbody></table></td></tr><tr><td valign=3D"top" style=3D"col=
-or: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; font-=
-size: 13px;"><table width=3D"100%" style=3D"border-collapse: collapse;" bor=
-der=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr><td height=3D"25" =
-style=3D"color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-=
-serif; font-size: 13px;"><br></td></tr><tr>
-<td style=3D"color: rgb(51, 51, 51); line-height: 19px; font-family: Roboto=
-, Arial; font-size: 13px; font-weight: bolder;"><font style=3D"vertical-ali=
-gn: inherit;"><font style=3D"vertical-align: inherit;">However, if you do n=
-ot cancel this request, your<span>&nbsp;buildroot@busybox.net</span></font>=
-</font>&nbsp;<font style=3D"vertical-align: inherit;"><font style=3D"vertic=
-al-align: inherit;"><span>&nbsp;</span>will be permanently deleted from&nbs=
-p;buildroot@busybox.net sever.</font></font></td></tr></tbody></table></td>=
-</tr>
-<tr><td height=3D"25" style=3D"color: rgb(0, 0, 0); font-family: Roboto, Ta=
-homa, Helvetica, sans-serif; font-size: 13px; border-bottom-color: rgb(238,=
- 238, 238); border-bottom-width: 1px; border-bottom-style: solid;"><br></td=
-></tr><tr><td valign=3D"top" style=3D"color: rgb(0, 0, 0); font-family: Rob=
-oto, Tahoma, Helvetica, sans-serif; font-size: 13px;"><table width=3D"90%" =
-style=3D"border-collapse: collapse;" cellspacing=3D"0" cellpadding=3D"0"><t=
-body><tr>
-<td valign=3D"top" style=3D"color: rgb(51, 51, 51); line-height: 18px; font=
--family: Roboto, Arial; font-size: 12px; font-weight: 600;"><br><font style=
-=3D"vertical-align: inherit;"><font style=3D"vertical-align: inherit;">&cop=
-y; WebAdmin support - busybox.net</font></font></td></tr></tbody></table></=
-td></tr><tr><td height=3D"32" style=3D"color: rgb(0, 0, 0); font-family: Ro=
-boto, Tahoma, Helvetica, sans-serif; font-size: 13px;">
-<br style=3D"color: rgb(0, 0, 0); text-transform: none; text-indent: 0px; l=
-etter-spacing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; =
-font-size: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; w=
-hite-space: normal; orphans: 2; widows: 2; background-color: rgb(255, 255, =
-255); font-variant-ligatures: normal; font-variant-caps: normal; -webkit-te=
-xt-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-s=
-tyle: initial; text-decoration-color: initial;">
-</td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></tab=
-le></td></tr></tbody></table><p>
-</p>
+I think the main advantage to being an option is to keep the size of the
+SDK down. This installs a large amount of the kernel source code which
+appears to be hundreds of MBs.
 
+>
+> > +define LINUX_INSTALL_STAGING_CMDS
+> > +       # Install artifacts needed for module builds into staging for SDK use
+> > +       if grep -q "CONFIG_MODULES=y" $(@D)/.config; then \
+> > +               install -d "$(STAGING_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build/arch" && \
+> > +               rsync --exclude "*.o" -a "$(@D)/arch/$(KERNEL_ARCH)" \
+> > +                       "$(STAGING_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build/arch/" && \
+> > +               rsync --exclude "*.o" --exclude "*.a" -a "$(@D)/include" \
+> > +                       "$(@D)/scripts" "$(@D)/certs" "$(@D)/Makefile" \
+> > +                       "$(@D)/Module.symvers" "$(@D)/.config" \
+> > +                       "$(STAGING_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build/" ;\
+>
+> This feels a bit "crappy", these manual rsyncs. Doesn't the kernel has
+> some relevant make target that do the right thing?
 
-</body></html>
+I looked around a bit in the kernel and couldn't find anything.
 
---===============6039652407866261225==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+I checked a few distro packages and they all seem to be variants of
+this. See the following
 
+Arch: https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/blob/main/PKGBUILD?ref_type=heads#L133
+Fedora: https://src.fedoraproject.org/rpms/kernel/blob/rawhide/f/kernel.spec#_3507
+Yocto: https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-kernel/linux/kernel-devsrc.bb#L37
+
+I would guess the rsync copy is including far more stuff then is
+actually necessary, as most of those are significantly more complicated.
+
+Thanks,
+Brandon
+
+>
+> Thanks a lot!
+>
+> Thomas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6039652407866261225==--
