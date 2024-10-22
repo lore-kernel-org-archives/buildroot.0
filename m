@@ -1,51 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B831ACDD0EA
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 20:56:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AB60CDD0F8
+	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 20:56:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33B054037A;
-	Tue, 22 Oct 2024 20:56:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF36760640;
+	Tue, 22 Oct 2024 20:56:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0hDRr0tKhLjR; Tue, 22 Oct 2024 20:56:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ioCbseQz-xbs; Tue, 22 Oct 2024 20:56:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D3D9403BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 102DA60664
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D3D9403BE;
-	Tue, 22 Oct 2024 20:56:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0428E2072
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:56:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 102DA60664;
+	Tue, 22 Oct 2024 20:56:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7FD1C59F4
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:56:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D84EC40226
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:56:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E5424060E
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:56:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HqTZwHMdJbDP for <buildroot@buildroot.org>;
- Tue, 22 Oct 2024 20:56:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0Ji4rlwJDlqm for <buildroot@buildroot.org>;
+ Tue, 22 Oct 2024 20:56:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9568E40222
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9568E40222
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:56:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8BA1886238; Tue, 22 Oct 2024 20:56:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 22 Oct 2024 22:56:15 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 06a1cf485434decd9ac0627b3c739e1b66b3163a
-X-Git-Newrev: 908ba9d637975b820eaf1299d1adbdeb0daf9c6f
-X-Patchwork-Hint: ignore
-Message-Id: <20241022205647.8BA1886238@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/rockpro64: bump Linux kernel,
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 28666404E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28666404E2
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 28666404E2
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:56:51 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 76093C0006;
+ Tue, 22 Oct 2024 20:56:48 +0000 (UTC)
+Date: Tue, 22 Oct 2024 22:56:47 +0200
+To: Vincent =?UTF-8?B?U3RlaGzDqQ==?= <vincent.stehle@arm.com>
+Cc: buildroot@buildroot.org, Giulio Benetti
+ <giulio.benetti@benettiengineering.com>, Jagan Teki
+ <jagan@amarulasolutions.com>, Suniel Mahesh <sunil@amarulasolutions.com>
+Message-ID: <20241022225647.0a920dd0@windsurf>
+In-Reply-To: <20241014180507.811832-1-vincent.stehle@arm.com>
+References: <20241014180507.811832-1-vincent.stehle@arm.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1729630609;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=QuqMMJm2C2ipdNBeSe8wwpRBkfek6HMjIKdRmk/MBAQ=;
+ b=L+D1PvoiXj1PObb0XQLx2kNApbpXovhmct8mye31NKjtFC8qhPhYqFMM3W998nj2IFI180
+ ZHsJTb5idFdaK9K+A/8jsC/gN+H5BJSOSWDR1oQOKjtpk/OnqK0iKP9c2IafRmXi5o2W4t
+ dbv+5PNkyVBnj1gytR1ysdHUhJ41ckKrlgjK+c31FrG1RBbWqNkcFcBRYKkV340qHgbum2
+ phgIGlORdIOLMYyrMcU7wPZl17Yh+IYpDs7wjHwwbCisluPAofOr8L6j2r4Ukcbhk9S7Xl
+ K16C8Nak5Hz7RToNnz46pH5hTB5Riyq49JuRbCX5Ui18X+JPWftxpBUGnr1oxw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=L+D1Pvoi
+Subject: Re: [Buildroot] [PATCH] configs/rockpro64: bump Linux kernel,
  U-Boot and TF-A
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,157 +86,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2449062979443696283=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2449062979443696283==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=908ba9d637975b820eaf1299d1adbdeb0daf9c6f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- Bump Linux kernel to v6.10.14 and add the dependency on host python3.
-- Bump U-Boot to v2024.10 and add the dependency on GnuTLS and
-  util-linux (for uuid).
-- Bump TF-A to v2.11.
-- Turn on hashes verification and add hashes for the Linux kernel and
-  U-Boot.
-- Fix shellcheck warnings in the post-build script.
-- Remove the related exceptions in .checkpackageignore.
-
-Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
-Cc: Jagan Teki <jagan@amarulasolutions.com>
-Cc: Suniel Mahesh <sunil@amarulasolutions.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                                         |  2 --
- .../rockpro64/patches/linux-headers/linux-headers.hash      |  1 +
- board/pine64/rockpro64/patches/linux/linux.hash             |  2 ++
- board/pine64/rockpro64/patches/uboot/uboot.hash             |  2 ++
- board/pine64/rockpro64/post-build.sh                        |  4 ++--
- configs/rockpro64_defconfig                                 | 13 +++++++++----
- 6 files changed, 16 insertions(+), 8 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index f38b900735..fbebf404d6 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -63,7 +63,6 @@ board/orangepi/orangepi-zero/patches/linux/0003-ARM-dts-orange-pi-zero-enable-sp
- board/orangepi/orangepi-zero/patches/linux/0004-ARM-dts-orange-pi-zero-enable-uart.patch lib_patch.Upstream
- board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch lib_patch.Upstream
- board/pine64/rock64/post-build.sh Shellcheck
--board/pine64/rockpro64/post-build.sh Shellcheck
- board/qemu/aarch64-sbsa/assemble-flash-images Shellcheck
- board/qemu/x86/post-build.sh Shellcheck
- board/qemu/x86_64/post-build.sh Shellcheck
-@@ -226,7 +225,6 @@ configs/riotboard_defconfig lib_defconfig.ForceCheckHash
- configs/roc_pc_rk3399_defconfig lib_defconfig.ForceCheckHash
- configs/rock64_defconfig lib_defconfig.ForceCheckHash
- configs/rock_pi_n8_defconfig lib_defconfig.ForceCheckHash
--configs/rockpro64_defconfig lib_defconfig.ForceCheckHash
- configs/roseapplepi_defconfig lib_defconfig.ForceCheckHash
- configs/s6lx9_microboard_defconfig lib_defconfig.ForceCheckHash
- configs/sipeed_lichee_rv_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/pine64/rockpro64/patches/linux-headers/linux-headers.hash b/board/pine64/rockpro64/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/pine64/rockpro64/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/pine64/rockpro64/patches/linux/linux.hash b/board/pine64/rockpro64/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..396c18dd5c
---- /dev/null
-+++ b/board/pine64/rockpro64/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  55e5bcbc68d66776fc46896291f0a24844beb57817345a854d65e3d055fa423e  linux-6.10.14.tar.xz
-diff --git a/board/pine64/rockpro64/patches/uboot/uboot.hash b/board/pine64/rockpro64/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..904fa56c02
---- /dev/null
-+++ b/board/pine64/rockpro64/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-diff --git a/board/pine64/rockpro64/post-build.sh b/board/pine64/rockpro64/post-build.sh
-index ba29375c05..e947745488 100755
---- a/board/pine64/rockpro64/post-build.sh
-+++ b/board/pine64/rockpro64/post-build.sh
-@@ -1,5 +1,5 @@
- #!/bin/sh
- 
--BOARD_DIR="$(dirname $0)"
-+BOARD_DIR=$(dirname "$0")
- 
--install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-+install -m 0644 -D "$BOARD_DIR/extlinux.conf" "$BINARIES_DIR/extlinux/extlinux.conf"
-diff --git a/configs/rockpro64_defconfig b/configs/rockpro64_defconfig
-index d70fd83c03..d6c217e946 100644
---- a/configs/rockpro64_defconfig
-+++ b/configs/rockpro64_defconfig
-@@ -1,6 +1,8 @@
- BR2_aarch64=y
- BR2_cortex_a72_a53=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_5=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
-+BR2_GLOBAL_PATCH_DIR="board/pine64/rockpro64/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_HOSTNAME="rockpro64"
- BR2_TARGET_GENERIC_ISSUE="Welcome to ROCKPRO64"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/pine64/rockpro64/post-build.sh"
-@@ -8,30 +10,33 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/rockpro64/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.5.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10.14"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/pine64/rockpro64/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-rockpro64"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9.0"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.11"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rockpro64-rk3399"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
-+BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-
---===============2449062979443696283==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2449062979443696283==--
+T24gTW9uLCAxNCBPY3QgMjAyNCAyMDowNTowNyArMDIwMApWaW5jZW50IFN0ZWhsw6kgPHZpbmNl
+bnQuc3RlaGxlQGFybS5jb20+IHdyb3RlOgoKPiAtIEJ1bXAgTGludXgga2VybmVsIHRvIHY2LjEw
+LjE0IGFuZCBhZGQgdGhlIGRlcGVuZGVuY3kgb24gaG9zdCBweXRob24zLgo+IC0gQnVtcCBVLUJv
+b3QgdG8gdjIwMjQuMTAgYW5kIGFkZCB0aGUgZGVwZW5kZW5jeSBvbiBHbnVUTFMgYW5kCj4gICB1
+dGlsLWxpbnV4IChmb3IgdXVpZCkuCj4gLSBCdW1wIFRGLUEgdG8gdjIuMTEuCj4gLSBUdXJuIG9u
+IGhhc2hlcyB2ZXJpZmljYXRpb24gYW5kIGFkZCBoYXNoZXMgZm9yIHRoZSBMaW51eCBrZXJuZWwg
+YW5kCj4gICBVLUJvb3QuCj4gLSBGaXggc2hlbGxjaGVjayB3YXJuaW5ncyBpbiB0aGUgcG9zdC1i
+dWlsZCBzY3JpcHQuCj4gLSBSZW1vdmUgdGhlIHJlbGF0ZWQgZXhjZXB0aW9ucyBpbiAuY2hlY2tw
+YWNrYWdlaWdub3JlLgo+IAo+IFNpZ25lZC1vZmYtYnk6IFZpbmNlbnQgU3RlaGzDqSA8dmluY2Vu
+dC5zdGVobGVAYXJtLmNvbT4KPiBDYzogSmFnYW4gVGVraSA8amFnYW5AYW1hcnVsYXNvbHV0aW9u
+cy5jb20+Cj4gQ2M6IFN1bmllbCBNYWhlc2ggPHN1bmlsQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+
+IENjOiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNv
+bT4KPiAtLS0KPiAgLmNoZWNrcGFja2FnZWlnbm9yZSAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIHwgIDIgLS0KPiAgLi4uL3BhdGNoZXMvbGludXgtaGVhZGVycy9saW51eC1oZWFkZXJz
+Lmhhc2ggICAgICAgIHwgIDEgKwo+ICBib2FyZC9waW5lNjQvcm9ja3BybzY0L3BhdGNoZXMvbGlu
+dXgvbGludXguaGFzaCAgICAgfCAgMiArKwo+ICBib2FyZC9waW5lNjQvcm9ja3BybzY0L3BhdGNo
+ZXMvdWJvb3QvdWJvb3QuaGFzaCAgICAgfCAgMiArKwo+ICBib2FyZC9waW5lNjQvcm9ja3BybzY0
+L3Bvc3QtYnVpbGQuc2ggICAgICAgICAgICAgICAgfCAgNCArKy0tCj4gIGNvbmZpZ3Mvcm9ja3By
+bzY0X2RlZmNvbmZpZyAgICAgICAgICAgICAgICAgICAgICAgICB8IDEzICsrKysrKysrKy0tLS0K
+PiAgNiBmaWxlcyBjaGFuZ2VkLCAxNiBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9ucygtKQo+ICBj
+cmVhdGUgbW9kZSAxMjAwMDAgYm9hcmQvcGluZTY0L3JvY2twcm82NC9wYXRjaGVzL2xpbnV4LWhl
+YWRlcnMvbGludXgtaGVhZGVycy5oYXNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9waW5l
+NjQvcm9ja3BybzY0L3BhdGNoZXMvbGludXgvbGludXguaGFzaAo+ICBjcmVhdGUgbW9kZSAxMDA2
+NDQgYm9hcmQvcGluZTY0L3JvY2twcm82NC9wYXRjaGVzL3Vib290L3Vib290Lmhhc2gKCkFwcGxp
+ZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIENUTywg
+Qm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9v
+dGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
