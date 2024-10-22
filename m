@@ -1,235 +1,193 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16345CDD0F4
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 21:08:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E762CDD0F8
+	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 21:08:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFFAA60807;
-	Tue, 22 Oct 2024 21:08:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A7CB80F8F;
+	Tue, 22 Oct 2024 21:08:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WJMluuGkJKod; Tue, 22 Oct 2024 21:08:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CuaMLs_Gynho; Tue, 22 Oct 2024 21:08:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8758660809
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DCA380FA1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8758660809;
-	Tue, 22 Oct 2024 21:08:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9B06B59F4
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 21:08:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5DCA380FA1;
+	Tue, 22 Oct 2024 21:08:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B16752072
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 21:08:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7AEA5606F5
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 21:08:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 911A340620
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 21:08:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WgHrXYRCfYgh for <buildroot@buildroot.org>;
- Tue, 22 Oct 2024 21:08:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
- helo=mx0a-00105401.pphosted.com; envelope-from=adam.michaelis@collins.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ktsYjE39b5jj for <buildroot@buildroot.org>;
+ Tue, 22 Oct 2024 21:08:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=216.71.153.144;
+ helo=esa5.hgst.iphmx.com; envelope-from=prvs=018cbd283=niklas.cassel@wdc.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0E5636078B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E5636078B
-Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
- [67.231.144.184])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0E5636078B
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 21:08:12 +0000 (UTC)
-Received: from pps.filterd (m0346906.ppops.net [127.0.0.1])
- by mx0a-00105401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49MIBVQW014886;
- Tue, 22 Oct 2024 21:08:09 GMT
-Received: from xusxph005rp040.rtx.com (xusxph005rp040.rtx.com [128.13.121.146])
- by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 42eh42st3t-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Tue, 22 Oct 2024 21:08:09 +0000
-Received: from xusxph005rp010.corp.ray.com ([128.13.121.135])
- by xusxph005rp040.rtx.com (8.18.1.2/8.18.1.2) with ESMTPS id 49ML88Ns012708
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Tue, 22 Oct 2024 21:08:08 GMT
-Received: from UUSTOE26.utcmail.com (uustoe26.utcmail.com [10.221.63.40])
- by xusxph005rp010.corp.ray.com (8.18.1.2/8.18.1.2) with ESMTPS id
- 49ML881I025039
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Tue, 22 Oct 2024 21:08:08 GMT
-Received: from uustoe1y.utcmail.com (10.221.63.22) by UUSTOE26.utcmail.com
- (10.221.63.40) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 22 Oct
- 2024 17:08:08 -0400
-Received: from UUSTOE20.utcmail.com (10.221.63.20) by uustoe1y.utcmail.com
- (10.221.63.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 22 Oct
- 2024 16:08:07 -0500
-Received: from USG02-BN3-obe.outbound.protection.office365.us (23.103.199.145)
- by UUSTOE20.utcmail.com (10.221.63.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4
- via Frontend Transport; Tue, 22 Oct 2024 17:08:07 -0400
-Received: from BN2P110MB1160.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:17a::20)
- by BN2P110MB1541.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:17b::6) with
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 12BCB40611
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12BCB40611
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 12BCB40611
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 21:08:17 +0000 (UTC)
+X-CSE-ConnectionGUID: 5melR4DWRPuJ4rU/9wdzTw==
+X-CSE-MsgGUID: wJo+cxcGSIG/8O7IdYh3fg==
+X-IronPort-AV: E=Sophos;i="6.11,223,1725292800"; d="scan'208";a="30729492"
+Received: from mail-eastusazlp17010000.outbound.protection.outlook.com (HELO
+ BL2PR02CU003.outbound.protection.outlook.com) ([40.93.11.0])
+ by ob1.hgst.iphmx.com with ESMTP; 23 Oct 2024 05:08:15 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=CgKqvz5jbEu4knPLQCiNHc9NmLxYEmlrTMtZXGu58mHp0RYDDqCCy3bOHqBRiW/8FmuJguRA6gh9tQGLPTdBBd69czBWFOkFSFQm6TXsYNVqVOi0VDenfPYoWewi0qjP/U2zTDmHPEDZdiWSxWgrGkupOK0TrPs0sTKW2a8kQLeODsDQrg9NcgjEP/VA28Ru4D2He8jA0Cl5OtamyfqR6pF9+1pLb+wXpO2LE231xv5Ms9smNJ8lTEu7Fia+ZHRKitSAkfpvnAcsoXF7QL2JqxePo1qggy0pn/MOFMs1ALz7UDwQmrWNW1w1BjuWQH8+1LmutyVBFLk1VF8vedLPqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eNbfcgX0TNJHoa7XptAH7vZmntQDmR2+YEdnpoHXq8o=;
+ b=Pt44KZNvMgyNfwr079J+FCjJkAUi83wt9GAVoOG5Q7GZrQhnUnvXuhPy85rDI+IgX5X8vwQ9Zbg5Cyylbk2q7ahyGoORydu42XobHzKG+BXzdcdU1gDm5i6zpnKH+ztMQlvvAHfyqQKU9AAJyybfmT++X0ekZnuk3LrhfVR1RPvMNK+NEO9CL9DQ5y5bSr3bTYshQuRKt7cQbBrqYnu5NBN+XRdQg8j4Xtblgc/CiJGSIuPx0Vmb46WnZFL087oi9ZvlNOe1uOLYt3EHePv7VqqoRi5PeJncSzhtm/FHZ/wH26eMOvazjdXkZdsKdcUSp2YwGycenbZrLCuBCX5RFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+Received: from SJ0PR04MB8326.namprd04.prod.outlook.com (2603:10b6:a03:3db::16)
+ by DS0PR04MB8666.namprd04.prod.outlook.com (2603:10b6:8:117::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.27; Tue, 22 Oct
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.16; Tue, 22 Oct
  2024 21:08:14 +0000
-Received: from BN2P110MB1160.NAMP110.PROD.OUTLOOK.COM
- ([fe80::67f3:4412:7c64:f452]) by BN2P110MB1160.NAMP110.PROD.OUTLOOK.COM
- ([fe80::67f3:4412:7c64:f452%6]) with mapi id 15.20.8069.024; Tue, 22 Oct 2024
+Received: from SJ0PR04MB8326.namprd04.prod.outlook.com
+ ([fe80::5088:5f08:45a0:9a8]) by SJ0PR04MB8326.namprd04.prod.outlook.com
+ ([fe80::5088:5f08:45a0:9a8%5]) with mapi id 15.20.8069.016; Tue, 22 Oct 2024
  21:08:14 +0000
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, "Maier, Brandon L
- Collins" <Brandon.Maier@collins.com>
-CC: "Michaelis, Adam J Collins via buildroot" <buildroot@buildroot.org>,
- "Buchmeyer, Neal                            Collins"
- <Neal.Buchmeyer@collins.com>, Julien Olivain <ju.o@free.fr>, Romain Naour
- <romain.naour@smile.fr>
-Thread-Topic: [External] Re: [Buildroot] [PATCH v2 1/1] linux: Install
- artifacts to staging for kmod build
-Thread-Index: AQHbJL8n0TrdaTmTiUuGOMqERbi9g7KTNuyAgAAIu7A=
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+CC: Niklas Cassel via buildroot <buildroot@buildroot.org>, Niklas Cassel
+ <cassel@kernel.org>, Damien Le Moal <dlemoal@kernel.org>, Kilian Zinnecker
+ <kilian.zinnecker@mail.de>
+Thread-Topic: [Buildroot] [PATCH v3 1/4] configs/rock5b: update to linux 6.11.3
+Thread-Index: AQHbH87TgI17C4b5N0+SChXLoBJvcbKTR1SAgAAGDwA=
 Date: Tue, 22 Oct 2024 21:08:14 +0000
-Message-ID: <BN2P110MB1160A3840A5AA192F99F24C6974CA@BN2P110MB1160.NAMP110.PROD.OUTLOOK.COM>
-References: <BN2P110MB1160FC5A43AA27C6195B68A1974CA@BN2P110MB1160.NAMP110.PROD.OUTLOOK.COM>
- <20241022212420.4e850e1c@windsurf>	<D52LZL79C2WS.1LHI702Z0GTIY@collins.com>
- <20241022222309.06d64ebe@windsurf>
-In-Reply-To: <20241022222309.06d64ebe@windsurf>
+Message-ID: <ZxgUPHsMJYIf8S-p@ryzen>
+References: <20241016132443.3859149-1-niklas.cassel@wdc.com>
+ <20241016132443.3859149-2-niklas.cassel@wdc.com>
+ <20241022224631.3adcf661@windsurf>
+In-Reply-To: <20241022224631.3adcf661@windsurf>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN2P110MB1160:EE_|BN2P110MB1541:EE_
-x-ms-office365-filtering-correlation-id: cba53bc1-323a-4254-0e3e-08dcf2dda479
+x-ms-traffictypediagnostic: SJ0PR04MB8326:EE_|DS0PR04MB8666:EE_
+x-ms-office365-filtering-correlation-id: 1bc3b1f3-bbd4-451b-0304-08dcf2dda493
+wdcipoutbound: EOP-TRUE
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
- ARA:13230040|1800799024|366016|38070700018|15866825006|41080700001; 
-x-microsoft-antispam-message-info: =?us-ascii?Q?G4RrNoVSstKdVZqIHRZ7Xh7vCWjaKl6B+c9pcJj5LZ2U2qKRTTkj4dYlPcXr?=
- =?us-ascii?Q?jS47PSELj6rnzu7jLF7qMgrqYjbEjcNz7mzJOh+uX+GyDHCviDYbstCG8s+B?=
- =?us-ascii?Q?ewCLTujqKlnADKoXjvdSRki32r7XUKPxldiTsAcBIw18taRVpXL8i8dC0bGw?=
- =?us-ascii?Q?C+QOrl0O1gN0ZNg7TUMVBR8oSA4tsMTCQKmfprFCc5DtAgijGx4BKHV6YWTG?=
- =?us-ascii?Q?nptlE7/aXVa03PqXdqonMvEygIZLxzjnGMQme25B9TsQxfyHRyi6I3Pr1Lzo?=
- =?us-ascii?Q?VCTZaQNl2/5o4bG4y+Ztpo2DuzN2uGVjreFaFC07nSSYb7wr/MQjjl6/kIHG?=
- =?us-ascii?Q?Zz+ZFaRG3s0bloY4rUEB/JpUZQq9P+skzRDyURaTo3ATxLK1UL96KuxoU50C?=
- =?us-ascii?Q?06jwtzzLFxbAJSS0PoWF19JnEKmh710GeOIoEeCLmzWpw6LRZAI8v4IWXMZb?=
- =?us-ascii?Q?stWqlhoKGaIlSp0mAd+TX+Uo3EMrb0xfWXBflPDqbXjcJ7tck/fPhqdI8pqr?=
- =?us-ascii?Q?iSbZmYqGlJzOlyGJ9xvxmNnDQJ5xdaAfEAWHXw/xv4FFNVHM6WB0tQQwZkeO?=
- =?us-ascii?Q?aUqqN9ea7le48POcTrtvxEnlI3iXEcjKqtjl0T8XJ7/mrlauqUr4uxtuhtXg?=
- =?us-ascii?Q?XMHqRploet93G+Z5rzabwltt00oVQ28KLefuVA0iHaKcx0mNBCoNfdT+uAkX?=
- =?us-ascii?Q?+T5IsHsGaTPTwQdOGu968IMmoXA7xuR8mhOWlHyNsMhJGuvk4zADeqEffPZj?=
- =?us-ascii?Q?V+DFRrdYdL9mAG1Gv9JAZTLIY5Xb/d4eBDifqA9y9xjWGbHG0z8TF5WDfiqK?=
- =?us-ascii?Q?UwVH31Dx491KvT0LErhcRfH5DeGHW9v0U81W3YE1L1CiueZXdUzjdzsTbbfS?=
- =?us-ascii?Q?6CNp66AwCyykk9e/JBjRyeaz8kaTmOOgVvmlQjHc3FN/QXLr3IgQVq/s1eWl?=
- =?us-ascii?Q?xqm/5NUoJfLdNWNjArsy7arDSdmMo0U3BKOqvvwDRx23HUv5T10RbFfDYm5s?=
- =?us-ascii?Q?yqStMAdFW4Aiz7ACC/lf0rgs5ZZdvTeA7qHIBrRAdpJtM8YI57wU5Bp8usTj?=
- =?us-ascii?Q?bDK9EFRRwbzaQSNULeOUHIyu+KhWmIuOY9HV2dNsdPWBa2s5BjoveklUQwbR?=
- =?us-ascii?Q?KHDe7mHip83MUdxWsvhj9oy8ohX7fGKzLquwEFQMzrsv9Clv3rXzJdzHrMrk?=
- =?us-ascii?Q?oDkaflxEppk1q8RY4FHcawOuX6UlnL1aNjaIWKx3gYeT6/zpvotBOL4z+qJb?=
- =?us-ascii?Q?5LbEHWpzKgk4gueEpoNlAuUmFUmmhbY/nucN2o5c5qfoYOulssVhcA8LI4sF?=
- =?us-ascii?Q?d6PicRy20/gKDvS2cXx7EtyAa5DtGX98TYtLYCgxu7rw34ufxIDewVGjmNzM?=
- =?us-ascii?Q?lMj1e/2Xe+0A3GVrtqyc+tVK1RG2?=
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0; ARA:13230040|366016|376014|1800799024|38070700018;
+x-microsoft-antispam-message-info: =?us-ascii?Q?Or6p1L7subJMNbE2xnEveiHcyHfUSRg/j0f5ojwK8TieuEymRb2kXUm09pGA?=
+ =?us-ascii?Q?SYPVuqo8LANUd3Nb3de1r3EaXNqQUthwaCuyq+o01ttNI0c63B6YSj80CEK5?=
+ =?us-ascii?Q?7hujoKdppRiRI2Oq5t375+trK+Dmch1ytePDVVXpRZAqrfIj51Akg8DMlXN7?=
+ =?us-ascii?Q?2nPMYDy1IGsg/c8EMwXFJdDa1iNDt1bn7K+T7U6V5Y5m3ovw2i93teLie9Bl?=
+ =?us-ascii?Q?Kyj8P8rhXv+J6udMwtMtUvC2wSD2Q/HLMuzhBgzcqF4xa1EzIkbRgdudXjNv?=
+ =?us-ascii?Q?WXoPsvRglIJ7vjyHsw7ikMl4Res7dquU/0HgbPzR7FPNTdIXP407zMtC7HVx?=
+ =?us-ascii?Q?AED2FHr9n27dnf21KyHNnSqt2HykdnHyXDnRBczyvRHxzA71jOKwPKGGZvY/?=
+ =?us-ascii?Q?/FPoXNS1VPhSAlTSx/9otQIZtJgvCsn8DqVagV9b7HhrON2BPy2LVEs7TPhm?=
+ =?us-ascii?Q?frS+uHAwLC/0ZjYUXeziEg4CCnc9x1ZL12OiWugRH6UNEIycsshEN8Uorks+?=
+ =?us-ascii?Q?dQ9iTL74Ivq+A0AVnXmCE/unqB+sZmLlYF8dJVKFeaN3U1rkbb6z21FIk5rS?=
+ =?us-ascii?Q?6CKwCavfDrOFHULgptU9JionorJ3RDMM9FX9a4DTA6sSRHOTBGmbyJJ18fhJ?=
+ =?us-ascii?Q?QeW+Tp42GRtkEpazTlvkDJSXZU26ASks5i3Tq1KuHeHDJ4T5I71o1Vwm4Z/s?=
+ =?us-ascii?Q?qvJ6TpyMKtE8eOROwPNxkgZfraHcraZ/dZTVA4UpEyPhAVcd2kdOrg3ZOJwt?=
+ =?us-ascii?Q?4W5n8tJ1ePvzjU/MpmzJhcwc8ivdo2mIiAbS3fO9SRAGCF1ic0SD9PF92kEA?=
+ =?us-ascii?Q?F/oJjvaFxmzwLz+zMH73RWpdyO+cb1mPJrlk1EpFGlkmpL2qEHH/CtoWPBxm?=
+ =?us-ascii?Q?fuHtyUeCaFQ1UACfOkOk1Z2pm/ZoVsPisEntx7zKAAiWayfSpNi0AHcoCusW?=
+ =?us-ascii?Q?rcwMW20FG3lm23vyL+Sx7ObCQgMbFDEjVhdZD+8rtjZx9cyO8HGf8z341JYR?=
+ =?us-ascii?Q?jCL5gSWZ/6U+0vYgHvmjGEM9ueJnvT9Esg+wZlC4IuzCjBHkddIvFFEWHQKv?=
+ =?us-ascii?Q?Ri6DdESCH9jTRtIp7S0srHe8yspqP5HT726DhQrDz5l7M+6tODGMhmGDWq/y?=
+ =?us-ascii?Q?pxcNKo1ty2P0gIFfn2B67sAE+pV9Q++nPk2T0Q5JDm+rbb1Q7+ISTGxhWdq5?=
+ =?us-ascii?Q?jdjUxLJzD3UZUmnknq+4BzCpWVcrsFN/mVEV5tcCW+aasPtBVsfZ+le0Jf9M?=
+ =?us-ascii?Q?GHY1GQiZdda+T8TY8TRmpVK4ZW2dseRR5IZ0KYaNCN5gCHISJw8DXqcvyrQl?=
+ =?us-ascii?Q?qCKsEeru4Ex9Bae9+3kK2aVADR4c6DqRZovUu+1uexgi4goyTRhhiXXD/2d+?=
+ =?us-ascii?Q?nRbRgF6np8E4VYzLVX/MdMWgSq79?=
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:BN2P110MB1160.NAMP110.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(1800799024)(366016)(38070700018)(15866825006)(41080700001);
- DIR:OUT; SFP:1101; 
+ IPV:NLI; SFV:NSPM; H:SJ0PR04MB8326.namprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(366016)(376014)(1800799024)(38070700018); DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1/2xcoV8I5htt55A699MBq1Zp+x/5zxq9CBOSv3YVmCDKaCMaJ77yMxoJyG0?=
- =?us-ascii?Q?kv1ZmF+6G2K0A6UvkilChd0zqykb3SFJ4qLkqhJkL5ByW3cB/x1yxr26yRkt?=
- =?us-ascii?Q?ubzguHWblrJ2t08TcZyIb4JauCzFyHgM0PzGY51PM3HxhgGQWMuYzNnNb17P?=
- =?us-ascii?Q?cghsoMyXVCp3Ai5ug/DcY5qpVIkYwazL0dCxu/p6+RouDU5gxZWEAAEkTaDX?=
- =?us-ascii?Q?RQLvxWWnOcrGn0ITQtoiTWOeuYUtmJc8Aso/r9S1xAfzy/iP0jsg+rDO9DK9?=
- =?us-ascii?Q?r3pQOpWZcgXg5DV3nlAfm+i7DFu82QunbO+xk/eCh67JP5Qczey/krVESbN0?=
- =?us-ascii?Q?whtszDrYW9ygK2mYQDV9FIs2cBEeBudZ5CaflH70QepHE3FP/s+aIjLsFoq2?=
- =?us-ascii?Q?Nxhui1T0J4Dm7LQbiuTCmCcwcAJI6CQZXFH8dec7K/XRpko12qeOOBMK1gne?=
- =?us-ascii?Q?k5DssA2uqMa5PaZRPBTscMe7/bvgNVUuFX2j3ANpKkTCCsRn8wQfxzIUUcKN?=
- =?us-ascii?Q?czU5KsentxLGyy8cZnOifD+HrjPVeZHqGEh+zC5D5lEaTA97FRO8TVunM51G?=
- =?us-ascii?Q?pKGQBuN4XfDCO9vmURHVlpkatOI3f2wF/Zk8cin0T/HfpNdtcHqmQ3qzOTg8?=
- =?us-ascii?Q?/SBtcesDSfbyuj+OBpG415sBkV8K5IauouGR0kL9prx0QpvwKiUizvItV4ps?=
- =?us-ascii?Q?ZTzw05K1CQqCVX0WOxKEfSF4cO+fc/C4JzIa7MnZr2WoGTN+nELDzwuxf40d?=
- =?us-ascii?Q?JgqgR3WZ7z23NK9HX9P5ml4qaphA8fPqnyhEDRY+bdGfxupb7pTI78aV29iC?=
- =?us-ascii?Q?0LYCWqSt1yOyIlEBNzAGWgfU3PiKyTTcjWeTH7r4Op1tSjDGIjhPOou7fLv/?=
- =?us-ascii?Q?eQbQO3TAycu1uvFbAF0Qmp7/EWbEuVXS82SK2CMrmxiV6jFsXyE/7LPfV4v/?=
- =?us-ascii?Q?o63Xh6SuklBOW6OJUMrt0p1Ps2QBxAAtt2wDRfEwsnSbWgGsHJqDJSauVAg7?=
- =?us-ascii?Q?1Xlzd/8sEkJr0BYG3zcEQ4XD85v3sgAyyyHWi1gFPzaXvWAJcEU5+ua4yV0h?=
- =?us-ascii?Q?f2Iq9GvrgRz2F+Kaz4250gCcB7oXwv9evt0t71El+yXJByEozMIy/nNtNSqi?=
- =?us-ascii?Q?E0OcoGwB2ZQFyxNBKfkirzlYIED12nZ1yWdb8rwfFetypqWDMcWiysEfWIc2?=
- =?us-ascii?Q?AwbankXhwjRag1qcvpoU5Z/X2izgB00z5upd3ey54FWmtjA0WQtnCLfOApNL?=
- =?us-ascii?Q?+kPOFaUYCH9Q+qvBT3VVugW8L+hNLi9vNJEQQq0jsD6IGoAf09U91IS756HI?=
- =?us-ascii?Q?cncvhv6yYcBHrWoAncdwdlNzWtm4MC11k9MWG+pqFX25joBadekY8ru0K5cb?=
- =?us-ascii?Q?EHkZraXLP42HD5tofzU7XC86gpFeXchlQ8aYRfW9xbgK+PrT0sEObyLfjFQ7?=
- =?us-ascii?Q?arHSBuSPmBH2D4RlcTexVQcPpTrKNV4O5TJsEUHS1pva6MSvwpFZar1q0f2b?=
- =?us-ascii?Q?E6BsF5SH5gu9M2s=3D?=
-arc-seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
- b=HDsc4Rxjx8qmzob2aNGSoF0sNjZVQrERDnizIi99a5BBwvF0MmoavAkMMw53m2geoMmNayOdssmuFjc9BhOxwYbnned6qnoDp2CRW+cfo8UQU+em9Vhs37w8ZBSma+Py+2oQMR3Gq+Ph+UlwKFQXnlfltwYIlbLjuJXteG1NgTLIwKp0PM7ODkcM2DqpwNWM5TwaYVOUXNrcMeiMIyHX2I3rPvINZJWOFhpHN7zTWBRkva2CyNZMP/QGFdCpvDwr140lgfgDbna+PxqN4careQHjVZZFPL2xmj/wFyZwPwCCGGpHOoL0XuWtRNUX38wVD676j9YBoQTHGjonRq4acQ==
-arc-message-signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector5401;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NkEFj042qssZne2sWtiiQlE4POtVAmi0fEJ1eKlmKNY=;
- b=khWr0dbdDMWa38CyGuIuJe9OM336H2MRKvgN35tjDKxiqBXGJZMweLCXBJq3/RoBuxbYVNwkMNzdGwqSKvjOQRneAHB2yH1dVmJ2Nc2u6wp2Iznl6QAbTcAQmyiwDFZE00eJZaWRB7i4MjER1vb5H7zI6J/9oM+nEk3PW28+Qtb0DN+IzxRo2+EeumnS1bV3H8s5Gq0E6dvJRzYmk2R8iDA1OujDW4OhBgmYr4/IESRR/l/K6AgNip0bTXFaSX7MsscbD2vGx5LXESftRM1IGKbvsUZYPWPcFKSKIt6+/lPC9G0aViT5GjOi5amYuqjWK/hHOCwPnhotjGNYTYZORQ==
-arc-authentication-results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=collins.com; dmarc=pass action=none header.from=collins.com;
- dkim=pass header.d=collins.com; arc=none
-x-ms-exchange-crosstenant-authas: Internal
-x-ms-exchange-crosstenant-authsource: BN2P110MB1160.NAMP110.PROD.OUTLOOK.COM
-x-ms-exchange-crosstenant-network-message-id: cba53bc1-323a-4254-0e3e-08dcf2dda479
-x-ms-exchange-crosstenant-originalarrivaltime: 22 Oct 2024 21:08:14.0728 (UTC)
-x-ms-exchange-crosstenant-fromentityheader: Hosted
-x-ms-exchange-crosstenant-id: 7a18110d-ef9b-4274-acef-e62ab0fe28ed
-x-ms-exchange-transport-crosstenantheadersstamped: BN2P110MB1541
-x-passedthroughonpremises: Yes
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?B+P7AVOJ+BzYQDDbS3HF+UNr4/K4TV/6nyYeVn4q38kJcGPPFg6D1OnjhYlt?=
+ =?us-ascii?Q?UOTWx1+fWAXlZFKkCFau75MykYijurf6w9ZN2Du6z5KdxpdxVtWhSVVa3M5e?=
+ =?us-ascii?Q?oVQlouMTjIUh0Z1gM+g1QvYnSNg5Ah4tE8eYaIM8zQuqlPQSZQ0exLhu2Xj2?=
+ =?us-ascii?Q?w4zS3MGKvVvnUnE0afc5lPTpSCQF/srUJ8hXFphBB3p2BEs7euyGdYxQMxDJ?=
+ =?us-ascii?Q?chXl2PdIdwTPErpBVdskytMCF3unMnlyuBbegLivEPkCoAym0BGMwlRz61Gu?=
+ =?us-ascii?Q?tFdlNn7vvD9L80FbKMXYrGtGKXm/RELmYq4tN8D1vQIh3I9+9S/R/VsIjhIx?=
+ =?us-ascii?Q?cJcIWuS9G4VOi68HT8EDuLPDRRusCW5jk87bUDtS10rcds2wuo4QjSZjIyfq?=
+ =?us-ascii?Q?hLJdybF2tYkdVnl0RmiJAPVlZkETSKU6CmkqutcOTB6PSCKvL/ODnLA0NGV2?=
+ =?us-ascii?Q?X+pVigvOxA6cjYUyqtF8MXel3c4TR2a4Ja6kO+KJCZENV3qbM+O9WbiMSwsi?=
+ =?us-ascii?Q?QtX4gCsBYVJtfmnG2Kg4w5PpYfSjrUw4+iIkSVrRnn8y4h4d031M/fcfkfgN?=
+ =?us-ascii?Q?abLhO3nm6U/kk5uZuwKyiCZf22n59dF8rVPJILEl+X6G52GBGGfygrWv/dZv?=
+ =?us-ascii?Q?+gBxNuZKTrjOD4hy2sAnvdi25AjnL0NsiEMkZWeG5UncVadFAAw0owYDukoe?=
+ =?us-ascii?Q?/6KtfN/xkAW+XK953Uz3FEC2dj8a33XuiWagZw8fM8xJ0YauN5HBhDbMEGO3?=
+ =?us-ascii?Q?RrpckfMBErt6KOSSA1RtNtl/rVzGMVuA3WrJf+OelNxqkc2qnpWtoij0Lf2+?=
+ =?us-ascii?Q?aTQTAts/XjjI8FeqleUv/wTBFkOYQpLRjB8FM68pIascgRgpPLkfUrv5ZCQf?=
+ =?us-ascii?Q?syK0TNp/nfJdS4NnEJ2d/754lzb/9EDhLgOqEHLS0q2B9GQ6Gi/mRIfWqE+f?=
+ =?us-ascii?Q?jwd8l7ve41Xm5GhGYsxbe2SwWdMR6lvnfX0epjJjHLNZ5sWbBu3Slm+BWN7u?=
+ =?us-ascii?Q?3kaJLNdiXxS+NGB5IryesqBEr9n9ReZxNFZPznIrGi3Lj5LxjZrXXMXI0FI4?=
+ =?us-ascii?Q?Adzhsk/15vaYLuHgRhwObdisAjiz49XYL7ShCrfVBdcwGzHArUOVXIYTQWmb?=
+ =?us-ascii?Q?dwpmrf5fF7KFqRsjOvubw2ZIrjJENAB5EYVHaETvLbNNAQIEyaqFmJxksR75?=
+ =?us-ascii?Q?f6/g9pQuBafYcdr8UuzmlC3xCnM3NLbnf5jSUY3UUxz5xhAG3rfe1L0AqIiI?=
+ =?us-ascii?Q?8AJocLrSFeivEugw+BN3ricksXweAMW7sDp/ZjvAEBrvuku0rf+5JrRimPOi?=
+ =?us-ascii?Q?BNN+nzQqpXkpWT4hwyn2Snk+mctk0odjgvxJu3FmJHBHKTX6L07vzNS7UOPr?=
+ =?us-ascii?Q?HUVUH2a8rwf/iqwyL2opk5IX6K3+S++rux+PmJP4WV5KNIJ4ZAK+LBH3FAqP?=
+ =?us-ascii?Q?LI3kJV4TJVY7yAaaXSbn9fhp7Hzsl184aoE6qHmWuhl/bB+/KGQHF1O01Nai?=
+ =?us-ascii?Q?Lq5paLd647Q6+2zYAjbJpgCm1ywZDcV8IPswMCx5FAZjWA8A3SroZ3xkJjvT?=
+ =?us-ascii?Q?n7Dj7RndlRXw2Yh9p6PuBKlwWmngmatuGcKVap+zu+xILXKL4bC0Hh1vELev?=
+ =?us-ascii?Q?Zw=3D=3D?=
+Content-ID: <11259F9D8E49074E99ADBB51290169FF@namprd04.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Collins.com
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-22_23,2024-10-22_01,2024-09-30_01
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-22_23,2024-10-22_01,2024-09-30_01
-X-MHuser-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- suspectscore=0
- malwarescore=0 mlxlogscore=999 adultscore=0 spamscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2409260000 definitions=main-2410220137
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
- mlxscore=0 phishscore=0
- bulkscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
- definitions=main-2410220137
-X-Proofpoint-GUID: Dfw0t_syWdHyCVB5MhX6eqaZJUKjCR6N
-X-Proofpoint-ORIG-GUID: Dfw0t_syWdHyCVB5MhX6eqaZJUKjCR6N
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-22_23,2024-10-22_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0 bulkscore=0
- mlxlogscore=999 impostorscore=0 lowpriorityscore=0 malwarescore=0
- phishscore=0 priorityscore=1501 suspectscore=0 spamscore=0 adultscore=0
- mlxscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2409260000 definitions=main-2410220137
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: OldRfxfM38EzYzDrggQrtb3a53nnwciduBQKnizlv5K3eRSwI1eSZKXrjgpm2IzawTHCcGeZMs063RrcbMTuDGtFHDHlXdM4MsgBsR8Rza/RNzqY92SLCzG8sZK8b74Gom0qBqz8qiTuAZ7yqSUZLeW/d1E3ziQpYi4g70/LcWNgUxFi+SFx+ElUzNEzbtfo5oaM9AK4C3OR1t+ViZccfs6sh7kCcPf6R5kqMMRHv/3f1ubz9DF7QEaZNc5zjfppC22uWgksn4csIsSTF8Wrvc4hgqWCM0p/QMlzNYtelfmZwVBVTFm4saR/9MxG5n0mvoiN/KgJz/rvsubACiIlKDKladZERLNJbhUrPStfqa3u+z17xSUUD/yeVJEXAa1z3iS0IwkxW052qcQkD7Ir8zccMsu4XPwxwRfIxLAJqtRM3gUNvbbgasgrurWzoe8+CMMKeZaFhbBpbsD6Cc0Emk7bS5RT/AlyqdT8ASsrekeb2HNHnXlzPUFE9kfxKtPQjwsigQOHh4/ybd7kUJvGS8lZ523dOWQwyL5VP+SJn0DIOyWdZGPphTgBTSXoz8RlhNold6+AelVkqzDNOHeqqvjoYMBHoyu8iYhRG8iAqmu3VtbXagg3cyuILzrGe6tb
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR04MB8326.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1bc3b1f3-bbd4-451b-0304-08dcf2dda493
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Oct 2024 21:08:14.1961 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fpPJBr6eQ2nC3SWAo9busUU0eOhWsfK6aUNtk9Vb3p6V4xXjUJYrO70Vh7CXlvLHhOIv3DF4OsbMo6ZCJpXKLg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR04MB8666
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+ t=1729631297; x=1761167297;
+ h=from:to:cc:subject:date:message-id:references:
+ in-reply-to:content-id:content-transfer-encoding:
+ mime-version;
+ bh=yyAWHMPTPC6Ybf6YjdvSOM3byaP5FzpPzAiSyEVSJjY=;
+ b=AwDUydZydSiVAua0J904ti2OiL+At/vYx74t2hm4QEajxDlMRdBGk6G8
+ EFYMEi8F+JYEUtXQm1/GtSS83WibawHq2XM3B1HGD9GWRSE/rW6pRJdZo
+ pQJA5JJHYYAnw/fhk7uZlgBwtj8barnV5/ZU15xvMjmf+UP/nu1riIxTq
+ 7Xz/SftNo6KQwZaFgb0Qp2usdJKBv63cVpB5SCvYfRveyYNkebB1G96iw
+ iufFh78nsBTbuMJ0tYxg4bw7otAyzSxnqbIhQl/8VqUzYawBnfT+WBqsF
+ RWnJLhIWDKGAZSBKvWjDUxT3hYBD6pKDPTWhZeMadRynNdRFabJbGTDqS
+ w==;
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=collins.com; h=cc :
- content-transfer-encoding : content-type : date : from : in-reply-to :
- message-id : mime-version : references : subject : to; s=POD051818;
- bh=LEnxZqwSP1ZJlq9rF7D39TpiHwXcasv2ajU7TyH28hU=;
- b=ALVaUSVxxoJCGXoyRf4NdEGjioE59fqc9JVwH2EKM93KcbEbA3Tf6fQYYNoIbhSyQoHa
- rantNzmx/c8pKX755v1v7zQt+HzOOEuTGL2unZQcggH9cNZt7MpfEXE6E1gDLRvIERxG
- W2x+PpaDR+PhHoJEzjXr3No2xPuunNbk1uskJClRFtUbznP3paYN8t35hCoJ61amr6ei
- zUFJj1Y/adVFuB+FaZy+szzDOx8zjT1obSHFJ0H2hgYCNWmTb8rgf8fbBdpRaWja4Nw5
- poWcN/tdJATT7RH1ILqCZTcKgKQ9cWL98MTTG7yOmctW0PPUNNT7Mkwf2HvLRWlDkYZD Mg== 
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rtxusers.onmicrosoft.us; s=selector1-rtxusers-onmicrosoft-us;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NkEFj042qssZne2sWtiiQlE4POtVAmi0fEJ1eKlmKNY=;
- b=3mgUUIr2XuzBa7/Wc52at9a/U3PNbe3APRmmDqpIweRLY3g7MbFKsG8QOkKZ91sawjJvJrCbaS1vJMhifqaltrBvu9FuES/eZg9PGItZYNnsUJ6ui1RhLxhTVVHzDbuyEGW0m+CPX+tElvuzljqviDt8YGpOSiA7qwyGk+o7WEg=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=collins.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=collins.com
- header.i=@collins.com header.a=rsa-sha256 header.s=POD051818
- header.b=ALVaUSVx; 
- dkim=fail reason="signature verification failed" (1024-bit key,
- unprotected) header.d=rtxusers.onmicrosoft.us
- header.i=@rtxusers.onmicrosoft.us header.a=rsa-sha256
- header.s=selector1-rtxusers-onmicrosoft-us header.b=3mgUUIr2
-Subject: Re: [Buildroot] [External] Re: [PATCH v2 1/1] linux: Install
- artifacts to staging for kmod build
+ bh=eNbfcgX0TNJHoa7XptAH7vZmntQDmR2+YEdnpoHXq8o=;
+ b=lGCMviCJ4WGqW5pDo61qZFtNXPfDdLzkp5BT/5QPGt5TgYUsLXe/IIu2q6YCPgG5BTqCU7Di1pQXFY5ny18DUoNIP+55e24JkC6oaRwa1cPS7lb9D9D3Q1Do5MHwHdOM0VrO9B6bmsAJuB42FvYcinZiTBW8QaHF74bPRfu7jPw=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=wdc.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key, unprotected) header.d=wdc.com header.i=@wdc.com
+ header.a=rsa-sha256 header.s=dkim.wdc.com header.b=AwDUydZy; 
+ dkim=pass (1024-bit key,
+ unprotected) header.d=sharedspace.onmicrosoft.com
+ header.i=@sharedspace.onmicrosoft.com header.a=rsa-sha256
+ header.s=selector2-sharedspace-onmicrosoft-com header.b=lGCMviCJ
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+Subject: Re: [Buildroot] [PATCH v3 1/4] configs/rock5b: update to linux
+ 6.11.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -241,89 +199,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Michaelis, Adam J Collins via buildroot" <buildroot@buildroot.org>
-Reply-To: "Michaelis, Adam J Collins" <adam.michaelis@collins.com>
+From: Niklas Cassel via buildroot <buildroot@buildroot.org>
+Reply-To: Niklas Cassel <Niklas.Cassel@wdc.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-> -----Original Message-----
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Sent: Tuesday, October 22, 2024 3:23 PM
-> To: Maier, Brandon L Collins <Brandon.Maier@collins.com>
-> Cc: Michaelis, Adam J Collins via buildroot <buildroot@buildroot.org>;
-> Michaelis, Adam J Collins <adam.michaelis@collins.com>; Buchmeyer, Neal
-> Collins <Neal.Buchmeyer@collins.com>; Julien Olivain <ju.o@free.fr>; Romain
-> Naour <romain.naour@smile.fr>
-> Subject: [External] Re: [Buildroot] [PATCH v2 1/1] linux: Install artifacts to
-> staging for kmod build
->
-> On Tue, 22 Oct 2024 20:14:54 +0000
-> "Brandon Maier" <brandon.maier@collins.com> wrote:
->
-> > > I am actually wondering whether this should be an option. We don't
-> > > have any similar option for any other package.
-> >
-> > I think the main advantage to being an option is to keep the size of
-> > the SDK down. This installs a large amount of the kernel source code
-> > which appears to be hundreds of MBs.
->
-> Then probably there is too much stuff getting copied. I think "all"
-> what's needed are the configured headers + some bits of the build system.
->
+On Tue, Oct 22, 2024 at 10:46:31PM +0200, Thomas Petazzoni wrote:
+> On Wed, 16 Oct 2024 15:24:40 +0200
+> Niklas Cassel via buildroot <buildroot@buildroot.org> wrote:
+> 
+> > From: Niklas Cassel <cassel@kernel.org>
+> > 
+> > A bunch of new hardware has been enabled for rock5b in linux 6.11,
+> > most notably USB3 host controller support, GPU support, cpufreq
+> > support, and PCIe endpoint mode support.
+> > 
+> > Add the dependency on host python3 that is new since linux 6.10.
+> > 
+> > Also add the missing dependency on openssl (which has been needed for
+> > a long time, since we are using arm64 defconfig, but only shows up as
+> > an error if the host system doesn't have extract-cert installed.)
+> > 
+> > Signed-off-by: Niklas Cassel <cassel@kernel.org>
+> > ---
+> >  board/radxa/rock5b/patches/linux/linux.hash | 4 ++--
+> >  configs/rock5b_defconfig                    | 6 ++++--
+> >  2 files changed, 6 insertions(+), 4 deletions(-)
+> 
+> Applied to master, thanks.
 
-I based the INSTALL_STAGING option on the INSTALL_TARGET option, though it is a different concept.
+Hello Thomas,
 
-I grabbed those folders initially based on a StackOverflow answer (https://stackoverflow.com/questions/37581687/is-there-a-minimal-set-of-files-to-keep-from-a-linux-kernel-compile-for-compilin), but am exploring some additional pruning (without going as overboard as Yocto's script). My current method adds 123 MB to staging/ for the kernel build folder...
+It appears that you missed the cover letter for this series, which stated:
+"""
+This series depends on:
+https://lore.kernel.org/buildroot/20241013103341.78501-1-bernd@kuhls.net/
+which adds support for linux 6.11.x.
+"""
 
-> > I looked around a bit in the kernel and couldn't find anything.
-> >
-> > I checked a few distro packages and they all seem to be variants of
-> > this. See the following
-> >
-> > Arch:
-> > https://urldefense.com/v3/__https://gitlab.archlinux.org/archlinux/pac
-> > kaging/packages/linux/-
-> /blob/main/PKGBUILD?ref_type=heads*L133__;Iw!!M
-> >
-> vWE!AYDJenGCr2mpiuIQtk9XA0ITnz2nHcWDrxsAjOBjAe7A9NM_fXovl1xdYQ
-> poDGmbHn
-> > Pvdqe7KDsjWat48yMmCdzCibdP0fK2$
-> > Fedora:
-> > https://urldefense.com/v3/__https://src.fedoraproject.org/rpms/kernel/
-> >
-> blob/rawhide/f/kernel.spec*_3507__;Iw!!MvWE!AYDJenGCr2mpiuIQtk9XA0I
-> Tnz
-> >
-> 2nHcWDrxsAjOBjAe7A9NM_fXovl1xdYQpoDGmbHnPvdqe7KDsjWat48yMm
-> CdzCiQhmYc71
-> > $
-> > Yocto:
-> >
-> https://urldefense.com/v3/__https://github.com/openembedded/openemb
-> edd
-> > ed-core/blob/master/meta/recipes-kernel/linux/kernel-devsrc.bb*L37__;I
-> >
-> w!!MvWE!AYDJenGCr2mpiuIQtk9XA0ITnz2nHcWDrxsAjOBjAe7A9NM_fXovl1
-> xdYQpoDG
-> > mbHnPvdqe7KDsjWat48yMmCdzCiX3vqMxD$
->
-> Wargh, I just looked at the Yocto one, and it's awful.
->
-> What's your use case for wanting to build out of tree modules with the SDK ?
-> :-)
+I do not see this dependency on master yet.
 
-The general use case is having our BSP team build most of the system (kernel, rootfs, bootloader) then generate an SDK tar.gz that we can hand-off to application software (already works). But, we now have some frameworks that require a kernel module that varies and would like to enable the application software teams to build that using the SDK without having to do a full BSP Buildroot build.
+So I think you need to also apply the series that adds support for linux 6.11.
 
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin Embedded Linux and Kernel
-> engineering and training
-> https://urldefense.com/v3/__https://bootlin.com__;!!MvWE!AYDJenGCr2mp
-> iuIQtk9XA0ITnz2nHcWDrxsAjOBjAe7A9NM_fXovl1xdYQpoDGmbHnPvdqe7K
-> DsjWat48yMmCdzCiYZVErDC$
+I don't see a reason why it hasn't been merged yet.
+Bernd's first patch series that added support for 6.11 was sent in September
+(2024-09-17), the series that I link to above is his V2 (even though he didn't
+mark it as V2) which he sent in October (2024-10-13).
+
+
+Kind regards,
+Niklas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
