@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 161C8CDD0E6
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 20:25:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91318CDD0E1
+	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 20:25:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4F7F403C3;
-	Tue, 22 Oct 2024 20:25:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1510403D9;
+	Tue, 22 Oct 2024 20:25:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t2hiZjlcKwmI; Tue, 22 Oct 2024 20:25:00 +0000 (UTC)
+ id NYtcBuLmzjCj; Tue, 22 Oct 2024 20:25:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85337403D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DA07404E1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85337403D8;
-	Tue, 22 Oct 2024 20:25:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E7A4C2072
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:24:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0DA07404E1;
+	Tue, 22 Oct 2024 20:25:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A2B1659F4
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:24:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C8D5A403B8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9CE6680ECF
  for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:24:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tmY5oMxzdW3o for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cWobcKFevVUT for <buildroot@buildroot.org>;
  Tue, 22 Oct 2024 20:24:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C002E403C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAFBE80EBD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C002E403C3
+ by smtp1.osuosl.org (Postfix) with ESMTP id CAFBE80EBD
  for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:24:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AAC63861D3; Tue, 22 Oct 2024 20:24:55 +0000 (UTC)
+ id B76D7861D6; Tue, 22 Oct 2024 20:24:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 22 Oct 2024 21:32:10 +0200
+Date: Tue, 22 Oct 2024 21:32:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 945647fc886cb63e657537d38c169650c9546a56
-X-Git-Newrev: 43421b8c02d3a30ae1b366dd3e3d6d4f1ec4de17
+X-Git-Oldrev: 43421b8c02d3a30ae1b366dd3e3d6d4f1ec4de17
+X-Git-Newrev: 1a063dfafddfad8ce5812f9a9fe3ef0227b4d4bd
 X-Patchwork-Hint: ignore
-Message-Id: <20241022202455.AAC63861D3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libzenoh-pico: bump version to
- 1.0.0
+Message-Id: <20241022202455.B76D7861D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libzenoh-c: bump to version 1.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,30 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43421b8c02d3a30ae1b366dd3e3d6d4f1ec4de17
+commit: https://git.buildroot.net/buildroot/commit/?id=1a063dfafddfad8ce5812f9a9fe3ef0227b4d4bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/eclipse-zenoh/zenoh-pico/releases/tag/1.0.0
+https://github.com/eclipse-zenoh/zenoh-c/releases/tag/1.0.0
 Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libzenoh-pico/libzenoh-pico.hash | 2 +-
- package/libzenoh-pico/libzenoh-pico.mk   | 6 +++---
+ package/libzenoh-c/libzenoh-c.hash | 2 +-
+ package/libzenoh-c/libzenoh-c.mk   | 6 +++---
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libzenoh-pico/libzenoh-pico.hash b/package/libzenoh-pico/libzenoh-pico.hash
-index 3e017b79c8..66f5285cfd 100644
---- a/package/libzenoh-pico/libzenoh-pico.hash
-+++ b/package/libzenoh-pico/libzenoh-pico.hash
+diff --git a/package/libzenoh-c/libzenoh-c.hash b/package/libzenoh-c/libzenoh-c.hash
+index 66bb5282f4..3472494355 100644
+--- a/package/libzenoh-c/libzenoh-c.hash
++++ b/package/libzenoh-c/libzenoh-c.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  db1eca9d84ca581731cf1f3f88aca785d58fb2b1972f2f07d09a0cf022ee02f9  libzenoh-pico-0.11.0.tar.gz
-+sha256  f489e0fdd3ae07be1a6483bd47113727ae931749968379d823e957cbdde9e8dc  libzenoh-pico-1.0.0.tar.gz
- sha256  d386df32cf327bbb25abe894277d3d7e0f447bafc59f4ad362615b0136f30db5  LICENSE
-diff --git a/package/libzenoh-pico/libzenoh-pico.mk b/package/libzenoh-pico/libzenoh-pico.mk
-index 9f91926f0e..6009b7d8bb 100644
---- a/package/libzenoh-pico/libzenoh-pico.mk
-+++ b/package/libzenoh-pico/libzenoh-pico.mk
+-sha256  cf8ca9382a17564ceedadf8fe574cd7c73440cd298d2adfbe88fa452427f8526  libzenoh-c-0.11.0-cargo2.tar.gz
++sha256  80e3144ebd82bdbfb43ff10e7f22047826adbbe0d0ed0081b215924a6c1bdb6c  libzenoh-c-1.0.0-cargo2.tar.gz
+ sha256  01a44774f7b1a453595c7c6d7f7308284ba6a1059dc49e14dad6647e1d44a338  LICENSE
+diff --git a/package/libzenoh-c/libzenoh-c.mk b/package/libzenoh-c/libzenoh-c.mk
+index f07206f4f7..c474d98b07 100644
+--- a/package/libzenoh-c/libzenoh-c.mk
++++ b/package/libzenoh-c/libzenoh-c.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
@@ -99,11 +98,11 @@ index 9f91926f0e..6009b7d8bb 100644
 +# This 1.0.0 version is really newer than 1.0.0.12, so please don't
 +# update 1.0.0 even if release-monitoring.org claims it's a newer
  # version.
--LIBZENOH_PICO_VERSION = 0.11.0
-+LIBZENOH_PICO_VERSION = 1.0.0
- LIBZENOH_PICO_SITE = $(call github,eclipse-zenoh,zenoh-pico,$(LIBZENOH_PICO_VERSION))
- LIBZENOH_PICO_LICENSE = Apache-2.0 or EPL-2.0
- LIBZENOH_PICO_LICENSE_FILES = LICENSE
+-LIBZENOH_C_VERSION = 0.11.0
++LIBZENOH_C_VERSION = 1.0.0
+ LIBZENOH_C_SITE = $(call github,eclipse-zenoh,zenoh-c,$(LIBZENOH_C_VERSION))
+ LIBZENOH_C_LICENSE = Apache-2.0 or EPL-2.0
+ LIBZENOH_C_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
