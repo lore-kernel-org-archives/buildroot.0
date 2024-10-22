@@ -4,75 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AB60CDD0F8
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 20:56:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FE44CDD0EA
+	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 21:02:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF36760640;
-	Tue, 22 Oct 2024 20:56:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5C1F607A5;
+	Tue, 22 Oct 2024 21:02:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ioCbseQz-xbs; Tue, 22 Oct 2024 20:56:54 +0000 (UTC)
+ id bLj6fdhe-RVB; Tue, 22 Oct 2024 21:02:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 102DA60664
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96EE160681
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 102DA60664;
-	Tue, 22 Oct 2024 20:56:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7FD1C59F4
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:56:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 96EE160681;
+	Tue, 22 Oct 2024 21:02:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BBC2A2072
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 21:02:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6E5424060E
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:56:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A93B780573
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 21:02:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Ji4rlwJDlqm for <buildroot@buildroot.org>;
- Tue, 22 Oct 2024 20:56:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id imbL2q00VLNu for <buildroot@buildroot.org>;
+ Tue, 22 Oct 2024 21:02:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 28666404E2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28666404E2
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 28666404E2
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 20:56:51 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 76093C0006;
- Tue, 22 Oct 2024 20:56:48 +0000 (UTC)
-Date: Tue, 22 Oct 2024 22:56:47 +0200
-To: Vincent =?UTF-8?B?U3RlaGzDqQ==?= <vincent.stehle@arm.com>
-Cc: buildroot@buildroot.org, Giulio Benetti
- <giulio.benetti@benettiengineering.com>, Jagan Teki
- <jagan@amarulasolutions.com>, Suniel Mahesh <sunil@amarulasolutions.com>
-Message-ID: <20241022225647.0a920dd0@windsurf>
-In-Reply-To: <20241014180507.811832-1-vincent.stehle@arm.com>
-References: <20241014180507.811832-1-vincent.stehle@arm.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729630609;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=QuqMMJm2C2ipdNBeSe8wwpRBkfek6HMjIKdRmk/MBAQ=;
- b=L+D1PvoiXj1PObb0XQLx2kNApbpXovhmct8mye31NKjtFC8qhPhYqFMM3W998nj2IFI180
- ZHsJTb5idFdaK9K+A/8jsC/gN+H5BJSOSWDR1oQOKjtpk/OnqK0iKP9c2IafRmXi5o2W4t
- dbv+5PNkyVBnj1gytR1ysdHUhJ41ckKrlgjK+c31FrG1RBbWqNkcFcBRYKkV340qHgbum2
- phgIGlORdIOLMYyrMcU7wPZl17Yh+IYpDs7wjHwwbCisluPAofOr8L6j2r4Ukcbhk9S7Xl
- K16C8Nak5Hz7RToNnz46pH5hTB5Riyq49JuRbCX5Ui18X+JPWftxpBUGnr1oxw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=L+D1Pvoi
-Subject: Re: [Buildroot] [PATCH] configs/rockpro64: bump Linux kernel,
- U-Boot and TF-A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FA9080530
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9FA9080530
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 21:02:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 89E4086242; Tue, 22 Oct 2024 21:02:42 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 22 Oct 2024 22:57:54 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 908ba9d637975b820eaf1299d1adbdeb0daf9c6f
+X-Git-Newrev: 05277a55c1e8bcf6eb1e2f4c631881c99d038226
+X-Patchwork-Hint: ignore
+Message-Id: <20241022210242.89E4086242@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/babeltrace2: bump to version 2.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,37 +59,120 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCAxNCBPY3QgMjAyNCAyMDowNTowNyArMDIwMApWaW5jZW50IFN0ZWhsw6kgPHZpbmNl
-bnQuc3RlaGxlQGFybS5jb20+IHdyb3RlOgoKPiAtIEJ1bXAgTGludXgga2VybmVsIHRvIHY2LjEw
-LjE0IGFuZCBhZGQgdGhlIGRlcGVuZGVuY3kgb24gaG9zdCBweXRob24zLgo+IC0gQnVtcCBVLUJv
-b3QgdG8gdjIwMjQuMTAgYW5kIGFkZCB0aGUgZGVwZW5kZW5jeSBvbiBHbnVUTFMgYW5kCj4gICB1
-dGlsLWxpbnV4IChmb3IgdXVpZCkuCj4gLSBCdW1wIFRGLUEgdG8gdjIuMTEuCj4gLSBUdXJuIG9u
-IGhhc2hlcyB2ZXJpZmljYXRpb24gYW5kIGFkZCBoYXNoZXMgZm9yIHRoZSBMaW51eCBrZXJuZWwg
-YW5kCj4gICBVLUJvb3QuCj4gLSBGaXggc2hlbGxjaGVjayB3YXJuaW5ncyBpbiB0aGUgcG9zdC1i
-dWlsZCBzY3JpcHQuCj4gLSBSZW1vdmUgdGhlIHJlbGF0ZWQgZXhjZXB0aW9ucyBpbiAuY2hlY2tw
-YWNrYWdlaWdub3JlLgo+IAo+IFNpZ25lZC1vZmYtYnk6IFZpbmNlbnQgU3RlaGzDqSA8dmluY2Vu
-dC5zdGVobGVAYXJtLmNvbT4KPiBDYzogSmFnYW4gVGVraSA8amFnYW5AYW1hcnVsYXNvbHV0aW9u
-cy5jb20+Cj4gQ2M6IFN1bmllbCBNYWhlc2ggPHN1bmlsQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+
-IENjOiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNv
-bT4KPiAtLS0KPiAgLmNoZWNrcGFja2FnZWlnbm9yZSAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIHwgIDIgLS0KPiAgLi4uL3BhdGNoZXMvbGludXgtaGVhZGVycy9saW51eC1oZWFkZXJz
-Lmhhc2ggICAgICAgIHwgIDEgKwo+ICBib2FyZC9waW5lNjQvcm9ja3BybzY0L3BhdGNoZXMvbGlu
-dXgvbGludXguaGFzaCAgICAgfCAgMiArKwo+ICBib2FyZC9waW5lNjQvcm9ja3BybzY0L3BhdGNo
-ZXMvdWJvb3QvdWJvb3QuaGFzaCAgICAgfCAgMiArKwo+ICBib2FyZC9waW5lNjQvcm9ja3BybzY0
-L3Bvc3QtYnVpbGQuc2ggICAgICAgICAgICAgICAgfCAgNCArKy0tCj4gIGNvbmZpZ3Mvcm9ja3By
-bzY0X2RlZmNvbmZpZyAgICAgICAgICAgICAgICAgICAgICAgICB8IDEzICsrKysrKysrKy0tLS0K
-PiAgNiBmaWxlcyBjaGFuZ2VkLCAxNiBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9ucygtKQo+ICBj
-cmVhdGUgbW9kZSAxMjAwMDAgYm9hcmQvcGluZTY0L3JvY2twcm82NC9wYXRjaGVzL2xpbnV4LWhl
-YWRlcnMvbGludXgtaGVhZGVycy5oYXNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9waW5l
-NjQvcm9ja3BybzY0L3BhdGNoZXMvbGludXgvbGludXguaGFzaAo+ICBjcmVhdGUgbW9kZSAxMDA2
-NDQgYm9hcmQvcGluZTY0L3JvY2twcm82NC9wYXRjaGVzL3Vib290L3Vib290Lmhhc2gKCkFwcGxp
-ZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIENUTywg
-Qm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9v
-dGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=05277a55c1e8bcf6eb1e2f4c631881c99d038226
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+2024-03-28 Babeltrace 2.0.6 (Respect Your Cat Day)
+	* bt2: disable some warnings for `native_bt.c`
+	* bt2: compile `native_bt.c` with `-Wno-undef`
+	* Fix: src.ctf.lttng-live: expect NEW_STREAM/METADATA for inactive streams
+	* Fix: `babeltrace2 convert`: don't consider the `--plugin-path` opt.
+	* include/babeltrace2/plugin/plugin-dev.h: "define" -> "definition
+	* Fix: doc: escape double quote in bt_p alias
+	* Fix: bt2: pass _TraceClassConst to destruction listeners
+	* fix: 'load_module()' deprecated in Python 3.12
+	* tests: retry os.rename on PermissionError failure in lttng_live_server.py
+	* doc: fix uptream -> upstream typos
+	* fix: test_message_iterator.py hangs on Python 3.12
+	* plugin-dev: mark symbols meant to be public with __attribute__((visibility("default")))
+	* Silence -Wunused-but-set-variable error with clang
+	* Fix: Windows DLL path lookup with Python >= 3.8
+	* doc/man: make default values of boolean init. params. clearer
+	* RFC: docs: fix: Match stated automake requirement
+	* fix: make flake8 6.x happy
+	* fix: running black on python 3.11
+	* bt_query_executor_create_with_method_data(): fix docs note
+	* Fix: ctf-writer: null dereference in bt_ctf_trace_common_add_stream_class
+	* Update working version to Babeltrace v2.0.6
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-configure-simplify-warning-flags-detection.patch  | 14 ++++++++------
+ package/babeltrace2/babeltrace2.hash                       |  2 +-
+ package/babeltrace2/babeltrace2.mk                         |  2 +-
+ 3 files changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch b/package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch
+index ec7ea83ffd..bd61843acf 100644
+--- a/package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch
++++ b/package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch
+@@ -40,6 +40,8 @@ Reviewed-by: Michael Jeanson <mjeanson@efficios.com>
+ [Retrieved from:
+ https://github.com/efficios/babeltrace/commit/28ba44ad9ca14153e96c94a9100423ea224c1af3]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Dario: adapt to 2.0.6]
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ ---
+  configure.ac                    |  74 +++++++++------
+  m4/ax_compiler_flags.m4         | 158 -------------------------------
+@@ -56,7 +58,7 @@ diff --git a/configure.ac b/configure.ac
+ index 055fba101..7ebcf2ad4 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -660,25 +660,35 @@ target.
++@@ -694,25 +694,35 @@
+  CFLAGS=${save_CFLAGS}
+  
+  # Detect C and LD warning flags supported by the compiler.
+@@ -110,14 +112,11 @@ index 055fba101..7ebcf2ad4 100644
+  		dnl
+  		dnl Some versions of SWIG (like 3.0.12) generate code that produces
+  		dnl -Wcast-function-type warnings.  This warning is present in gcc >= 8.  This
+-@@ -692,24 +702,32 @@ AX_COMPILER_FLAGS(
+- 		dnl
++@@ -727,24 +737,32 @@
+  		dnl Ref: https://github.com/swig/swig/issues/1259
+  		-Wno-cast-function-type dnl
++ 		-Wno-suggest-attribute=format dnl
+ -	])
+--
+--# CFLAGS from AX_COMPILER_FLAGS.
+--AM_CFLAGS="${AM_CFLAGS} ${WARN_CFLAGS}"
+ +		-Wno-missing-field-initializers dnl
+ +	],
+ +	[WARN_CFLAGS],
+@@ -131,6 +130,9 @@ index 055fba101..7ebcf2ad4 100644
+ +	[WARN_CFLAGS="${WARN_CFLAGS} -Werror"]
+ +)
+  
++-# CFLAGS from AX_COMPILER_FLAGS.
++-AM_CFLAGS="${AM_CFLAGS} ${WARN_CFLAGS}"
++-
+ -# The test used in AX_COMPILER_FLAGS, generated using AC_LANG_PROGRAM, is
+ +# The test used in AX_APPEND_COMPILE_FLAGS, generated using AC_LANG_PROGRAM, is
+  # written in such a way that it triggers a -Wold-style-definition warning.  So
+diff --git a/package/babeltrace2/babeltrace2.hash b/package/babeltrace2/babeltrace2.hash
+index 164e65cded..3caf52a792 100644
+--- a/package/babeltrace2/babeltrace2.hash
++++ b/package/babeltrace2/babeltrace2.hash
+@@ -1,5 +1,5 @@
+ # From https://www.efficios.com/files/babeltrace/babeltrace2-2.0.4.tar.bz2.sha256
+-sha256  774f116685dab5db9c51577dde43c8c1df482aae6bb78a089b1e9e7c8b489bca  babeltrace2-2.0.4.tar.bz2
++sha256  a01c7e75e642de0b5b91f32cc706234c99eb556fcd52c9959045dc23a9ec52c9  babeltrace2-2.0.6.tar.bz2
+ 
+ # Hash for license files
+ sha256  d919c6347409efde6dea63c6f349fb06bc060a2b721fc3df07b5f720b5f1d60e  LICENSE
+diff --git a/package/babeltrace2/babeltrace2.mk b/package/babeltrace2/babeltrace2.mk
+index 2b2ab7db40..f3f1543c0e 100644
+--- a/package/babeltrace2/babeltrace2.mk
++++ b/package/babeltrace2/babeltrace2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ BABELTRACE2_SITE = https://www.efficios.com/files/babeltrace
+-BABELTRACE2_VERSION = 2.0.4
++BABELTRACE2_VERSION = 2.0.6
+ BABELTRACE2_SOURCE = babeltrace2-$(BABELTRACE2_VERSION).tar.bz2
+ BABELTRACE2_LICENSE = MIT, LGPL-2.1 (src/common/list.h), GPL-2.0 (test code)
+ BABELTRACE2_LICENSE_FILES = mit-license.txt lgpl-2.1.txt gpl-2.0.txt LICENSE
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
