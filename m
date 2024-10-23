@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B7FDCFA474
-	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 21:12:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00E9ECFA478
+	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 21:13:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 594AA605AA;
-	Wed, 23 Oct 2024 21:12:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jZmen5RT_VzB; Wed, 23 Oct 2024 21:12:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B97660837
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B97660837;
-	Wed, 23 Oct 2024 21:12:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4946B972
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:12:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 27E6840287
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:12:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BCA9B402D6;
+	Wed, 23 Oct 2024 21:13:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gMR9bTL2rBv0 for <buildroot@buildroot.org>;
- Wed, 23 Oct 2024 21:12:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id voLkw4lp7ggY; Wed, 23 Oct 2024 21:13:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B375A402B7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B375A402B7;
+	Wed, 23 Oct 2024 21:13:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 68720972
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:13:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 56E5E40A6C
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:13:03 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AbpJ5cEkCNNh for <buildroot@buildroot.org>;
+ Wed, 23 Oct 2024 21:13:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E298440256
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E298440256
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:12:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C99A28643C; Wed, 23 Oct 2024 21:12:51 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 23 Oct 2024 23:01:46 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1459c0a6f06caf5340fd8c54d160ca4e96306669
-X-Git-Newrev: acdc6eba5ed8def2ba56ecce948d15b643240eba
-X-Patchwork-Hint: ignore
-Message-Id: <20241023211251.C99A28643C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-psygnal: new package
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3867B40294
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3867B40294
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3867B40294
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:13:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 02C71E0003;
+ Wed, 23 Oct 2024 21:12:59 +0000 (UTC)
+Date: Wed, 23 Oct 2024 23:12:58 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Asaf Kahlon <asafka7@gmail.com>
+Message-ID: <20241023231258.149d7818@windsurf>
+In-Reply-To: <20241008215815.3762594-1-james.hilliard1@gmail.com>
+References: <20241008215815.3762594-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1729717980;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=JZlpeJayPHgclweNmL9/dVq2EtQcwSKS8ZvwY4BQUb4=;
+ b=LpMf9wOf2+vNaW1iG3ARHrffqLLqQMMJ5nlRgZv06lGdIQUyjiH3IaiM9vjwmT/ppnFaHE
+ rtv9iSRAOjiuQzrASfP8ZIwkqtLltK1xqIhwpQI4e9GAaHkIPWxemNmsiv+mZgb8lFYrKB
+ nZtwz399HV7Qvh0mJrFXghxx5dvYDNJnMqzDXhjq16M8fHr4r1VXJ3JRbzOzyDfIsRwlKX
+ kcaWQ4SChy0gr8+sVqGKhjFioUzKjDml8HeVoWGH7hmq1b80+x00V6XvoAgYvT+7ANA0zY
+ S8Pdp39EcmeeNZN/XRkb4PvJpxE5EGouI6KsK613hccINhQPXrCYguTEUhA5Kw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LpMf9wOf
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-psygnal: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,80 +83,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acdc6eba5ed8def2ba56ecce948d15b643240eba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  8 Oct 2024 15:58:15 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in                          |  1 +
- package/python-psygnal/Config.in           |  6 ++++++
- package/python-psygnal/python-psygnal.hash |  5 +++++
- package/python-psygnal/python-psygnal.mk   | 15 +++++++++++++++
- 4 files changed, 27 insertions(+)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/Config.in                          |  1 +
+>  package/python-psygnal/Config.in           |  6 ++++++
+>  package/python-psygnal/python-psygnal.hash |  5 +++++
+>  package/python-psygnal/python-psygnal.mk   | 15 +++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/python-psygnal/Config.in
+>  create mode 100644 package/python-psygnal/python-psygnal.hash
+>  create mode 100644 package/python-psygnal/python-psygnal.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 6c4f9640c1..b43e11b806 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1269,6 +1269,7 @@ menu "External python modules"
- 	source "package/python-protobuf/Config.in"
- 	source "package/python-psutil/Config.in"
- 	source "package/python-psycopg2/Config.in"
-+	source "package/python-psygnal/Config.in"
- 	source "package/python-ptyprocess/Config.in"
- 	source "package/python-pudb/Config.in"
- 	source "package/python-pure-eval/Config.in"
-diff --git a/package/python-psygnal/Config.in b/package/python-psygnal/Config.in
-new file mode 100644
-index 0000000000..d6fbcbcd6a
---- /dev/null
-+++ b/package/python-psygnal/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_PSYGNAL
-+	bool "python-psygnal"
-+	help
-+	  Python observer pattern (callback/event system).
-+
-+	  https://github.com/pyapp-kit/psygnal
-diff --git a/package/python-psygnal/python-psygnal.hash b/package/python-psygnal/python-psygnal.hash
-new file mode 100644
-index 0000000000..f378861063
---- /dev/null
-+++ b/package/python-psygnal/python-psygnal.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/psygnal/json
-+md5  13955249103622604d4022e7d5ef94e0  psygnal-0.11.1.tar.gz
-+sha256  f9b02ca246ab0adb108c4010b4a486e464f940543201074591e50370cd7b0cc0  psygnal-0.11.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  50169b145e35e6ae11a1e05cebdaa7052a58a8a2325dd5c394f8a68199c78415  LICENSE
-diff --git a/package/python-psygnal/python-psygnal.mk b/package/python-psygnal/python-psygnal.mk
-new file mode 100644
-index 0000000000..57ba442e6c
---- /dev/null
-+++ b/package/python-psygnal/python-psygnal.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-psygnal
-+#
-+################################################################################
-+
-+PYTHON_PSYGNAL_VERSION = 0.11.1
-+PYTHON_PSYGNAL_SOURCE = psygnal-$(PYTHON_PSYGNAL_VERSION).tar.gz
-+PYTHON_PSYGNAL_SITE = https://files.pythonhosted.org/packages/bc/b0/194cfbcb76dbf9c4a1c4271ccc825b38406d20fb7f95fd18320c28708800
-+PYTHON_PSYGNAL_SETUP_TYPE = pep517
-+PYTHON_PSYGNAL_LICENSE = BSD-3-Clause
-+PYTHON_PSYGNAL_LICENSE_FILES = LICENSE
-+PYTHON_PSYGNAL_DEPENDENCIES = host-python-hatchling host-python-hatch-vcs
-+
-+$(eval $(python-package))
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
