@@ -4,108 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 396F3D0BB41
-	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 21:51:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73FEFD0BB41
+	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 22:09:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D324740155;
-	Wed, 23 Oct 2024 21:51:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D36294062F;
+	Wed, 23 Oct 2024 22:09:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wUduBd_Y6qlV; Wed, 23 Oct 2024 21:51:20 +0000 (UTC)
+ id 5OieWSoCJpxE; Wed, 23 Oct 2024 22:09:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70D454011B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D90840277
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70D454011B;
-	Wed, 23 Oct 2024 21:51:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 815B32073
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:51:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D90840277;
+	Wed, 23 Oct 2024 22:09:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E2AC52073
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 22:09:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6FADC608CB
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:51:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AEF21804FD
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 22:09:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oZrDuXaT42_c for <buildroot@buildroot.org>;
- Wed, 23 Oct 2024 21:51:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kAxkTxE-o0Hy for <buildroot@buildroot.org>;
+ Wed, 23 Oct 2024 22:09:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::e2a; helo=mail-vs1-xe2a.google.com;
+ client-ip=2607:f8b0:4864:20::12d; helo=mail-il1-x12d.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2CD7E608CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CD7E608CA
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com
- [IPv6:2607:f8b0:4864:20::e2a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2CD7E608CA
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:51:17 +0000 (UTC)
-Received: by mail-vs1-xe2a.google.com with SMTP id
- ada2fe7eead31-4a47d1a62bdso79722137.0
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 14:51:16 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DD5A6811B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD5A6811B1
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
+ [IPv6:2607:f8b0:4864:20::12d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DD5A6811B1
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 22:09:36 +0000 (UTC)
+Received: by mail-il1-x12d.google.com with SMTP id
+ e9e14a558f8ab-3a3bd422b52so1363915ab.0
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 15:09:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1729720276; x=1730325076;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=AISlXEHbxAyBtJ0ot29EdL99J3xzac2Px1+fzs3DHFw=;
- b=Sweg/feVQiAkBnHhxXbqk4m7QOeUHHP3olj3FHbFCwtZNbhEzeym1zP8ESyU2b7Dmb
- +OvDnpzA1luvE8ds9b5EiIIvg5aLkDvl0yPZFBvzL4wo714Q+OwOe7WwxLD9iJY29Yye
- YyMzq98MoWGkJePMWak9rHJdB1fiw1JSbaRAyDcS8RlQsZvZrr6XQVXA3MgRBhQYhnOB
- j4U5A5+xBL5fmQBBfNbOoMc2Nmi99cP08RtCo2x1onRyM/0ox5YI/73h16Q+ZZOSiFLo
- qqL+h5rkZrUuLTxhwNEM2Sslo/qiUyGw/BiZDRDR0JIyJJ+T6qJ7531ypDEkyRWphfhU
- UGdg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVYkGg0NmNk5aWeS/FMxKzuhtbmZg8AUvl7k7f+zHU2dGgzd+Wtgp9rKPlFss7JiB/024lmlINb7gg=@buildroot.org
-X-Gm-Message-State: AOJu0Ywb1yOJ/Lr6IWQmqA0MBMEh9Zt5jKHPppBIWlODZmhseIOeyEYM
- reOWJL1m6RFYI0Uav3JFcAsTVncplcvN+zTWT/ghwDjuEAxB05FGq49ZlbyNVFHmSHbBcha5m7J
- MizvRTyWIe+jDCBZeanbrlATkOXQ=
-X-Google-Smtp-Source: AGHT+IFmzUzeqg0dDRibBkEVr8PXzqkdWBI6UWarkc0MAebHRPKzzfnLMeLNkeu2YbvsffIgIj+Cl9/AXVEm+oXwdBg=
-X-Received: by 2002:a05:6102:dd1:b0:4a5:6f41:211d with SMTP id
- ada2fe7eead31-4a751cbed1bmr4534837137.24.1729720275745; Wed, 23 Oct 2024
- 14:51:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20240805163133.4126564-1-james.hilliard1@gmail.com>
- <CA+h8R2oQGKFFH-vMX27WUO1uEAGyt4cz9MCwn9Cofwyujx1xDA@mail.gmail.com>
- <20240805223152.09ed915b@windsurf>
- <CADvTj4o_CnzCth+QqoxhVovBRinvYfbMf7r+SWnnY0tfVbKgbw@mail.gmail.com>
- <CA+h8R2obsR-CzMhWDpQ-A0oeEPaG-P=aCwF7BS4J-3eShmHJgg@mail.gmail.com>
- <20240806165050.234235b4@windsurf>
- <CADvTj4pOK8-2YXy0POUg1qOKa1MrjsxbnS-r1F7YMk_YXFmEAQ@mail.gmail.com>
- <CA+h8R2reErtSWPO1hGpX7tT5Xejb_SNqiuSCnXvJZKHwhzdcZg@mail.gmail.com>
- <20240806185731.372f8f3e@windsurf>
- <CA+h8R2rnNhM0nKyZm4_y6ZFrNyn7YzFa7BHeH57cLif38FSrxA@mail.gmail.com>
- <CADvTj4p2heLayPzF7uTK0TLzbbo4C_305vTg9=3W3aCQbAoQGw@mail.gmail.com>
- <CA+h8R2o--yr=J8bmo6R=rBStYLxwOW+fvEKQ3zfLuKrdZznCCA@mail.gmail.com>
- <20241023212545.28838fc1@windsurf>
- <CADvTj4p6EOBciNjy03REWUTkwA6VRYqVYRiYbeDueNC1gbSS_A@mail.gmail.com>
- <CA+h8R2r0e97u77C9QzSYr_jczF=2zC0+Hz=Y73HUpVh7NGgJUw@mail.gmail.com>
-In-Reply-To: <CA+h8R2r0e97u77C9QzSYr_jczF=2zC0+Hz=Y73HUpVh7NGgJUw@mail.gmail.com>
+ d=1e100.net; s=20230601; t=1729721375; x=1730326175;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=BEJVIZ1D+J0/q7o/bGO/8BENyKWRnkwn9UW87JU7JHk=;
+ b=ONO/SQ0hkuZhH736mnadGPyQBpoBNaHuPSREYBzQGHgmJ+LdDvaXFMfq4bxNWfDDoW
+ CxQTkIoFMXUTHtJgCNPCXNmgcLycA4xPAOYUCw0Mqh6/pRGc38XN+d1O/CTLG0s3/yPA
+ zgBQ/tpHVd/AFRYrZqDjI97zRvHNpzsLqegFHqCuaPY6JX0XOyJUx5UrhptdA5tTv/D6
+ scSQKl+DWu7X3fw66qMjrT6H0qMcSESKkPpQ6UiEcrJ1kM4d+5XyfaaXJaNbwL2ZEIp8
+ bA3mkLVX9Mmkxz6oUgVn2+qtXVWYC0RvCKQhLLU2l2tBFTIxQUMgenvuGX+Lx/BRQ+gh
+ ukVA==
+X-Gm-Message-State: AOJu0Yx6m+aqAsPityOeciQQpQtFrlOcGKq80+zl5uBX0iRZTZPx97R9
+ yE2w2snP7ViAMmCVt7AiYAu77T/zV5oFE7XNjKiOjz25HPub6VeFOT1gDw==
+X-Google-Smtp-Source: AGHT+IFgUsex4QB3iplrnGt0Fz8jFmFFxoAVpXQIPq+hMtXCQxNHfgMiM+m5vzqgulUgP+E5nVC9BQ==
+X-Received: by 2002:a05:6e02:1569:b0:3a0:a070:b81 with SMTP id
+ e9e14a558f8ab-3a4d59df6c9mr50632865ab.23.1729721375552; 
+ Wed, 23 Oct 2024 15:09:35 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
+ [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4dc2a6618bbsm2381188173.169.2024.10.23.15.09.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 23 Oct 2024 15:09:35 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 23 Oct 2024 15:51:04 -0600
-Message-ID: <CADvTj4q=7j1RrPnk3syOKz8sqR=GWCVxGx+m8vuAO1cEOyDTWg@mail.gmail.com>
-To: Christian Stewart <christian@aperture.us>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Christian Stewart via buildroot <buildroot@buildroot.org>,
- Anisse Astier <anisse@astier.eu>
+To: buildroot@buildroot.org
+Date: Wed, 23 Oct 2024 16:09:33 -0600
+Message-Id: <20241023220933.3325504-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1729720276; x=1730325076; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=AISlXEHbxAyBtJ0ot29EdL99J3xzac2Px1+fzs3DHFw=;
- b=J5NYg6fL4mqSRFcnSWmmbDS/Fn2nJdaMQ6yg75hB3ZteixKk29d5yuUacRQndtExs9
- yp5eNZCgQiPaAGJ65lx295qVjp2FcmDXdcUVgOn9wi9bJwq4g3IPuFYpTc3PAJY8RYh4
- 7cfXMZVvIHg4vui6qo9NdEijDU5Qdzbfx6rzh+iH28GmIkzOhZmx3t6Wz8msCan6bjlh
- GD+Q5iasTzVJgzrwihrrK/GSmZrXSvBYFMXz8kOCWVzQTNNOx6cWfZdLK9Nom4vj4Ilm
- An0HIsSsg4VC2slFZ+6fMoa+41Obz/KlQRj7U/dxPkCQLu0DJ3WDQ92VNNPcE/s/QafT
- twRQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1729721375; x=1730326175; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=BEJVIZ1D+J0/q7o/bGO/8BENyKWRnkwn9UW87JU7JHk=;
+ b=gvsU3ZBf3dUAFtT3sSFanlx66yPf5/rrxNGde6X/XnKdBF68c6p4zjxAjwN93+Vcle
+ kjTHtyi4lKr4E5tum5GPV2LxuJwFEgJdRLOHYFyGpqVkW7FE5CEbiO2jlWpzdNtJMJ6A
+ VtiaJ7frY7L9YG+2h3BRQ3twhBN930h+Xaz9wLw+AqN0yStIIjHOKlBp34JtGd7hhFO4
+ DEgmha13E4zbfy5QcfDTJ0ErTAN73luEoiDTZwzm0eSrrF1I3Khmca/yeg5B6lpyL1Ae
+ gDvwPkGFZMTh64wzeb5zg03FqZt2XkzNKt9wn5tdU+yhmI6aF88i5VhjBTdBB4OhXNZn
+ qHpg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=J5NYg6fL
-Subject: Re: [Buildroot] [PATCH v4 1/2] package/pkg-golang.mk: allow
- packages to override download GOPROXY
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=gvsU3ZBf
+Subject: [Buildroot] [PATCH 1/1] package/pkg-python.mk: add poetry setup type
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,80 +100,142 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gV2VkLCBPY3QgMjMsIDIwMjQgYXQgMjozN+KAr1BNIENocmlzdGlhbiBTdGV3YXJ0IDxjaHJp
-c3RpYW5AYXBlcnR1cmUudXM+IHdyb3RlOgo+Cj4gSmFtZXMsCj4KPiBPbiBXZWQsIE9jdCAyMywg
-MjAyNCwgMTI6NDnigK9QTSBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdtYWlsLmNv
-bT4gd3JvdGU6Cj4+Cj4+IE9uIFdlZCwgT2N0IDIzLCAyMDI0IGF0IDE6MjXigK9QTSBUaG9tYXMg
-UGV0YXp6b25pCj4+IDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPiB3cm90ZToKPj4gPgo+
-PiA+IEhlbGxvLAo+PiA+Cj4+ID4gT24gV2VkLCAyMyBPY3QgMjAyNCAwOTozNToxNiAtMDcwMAo+
-PiA+IENocmlzdGlhbiBTdGV3YXJ0IHZpYSBidWlsZHJvb3QgPGJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnPiB3cm90ZToKPj4gPgo+PiA+ID4gSXQgaXMgYSBwcm94eSwgbm90IGEgZG93bmxvYWQgVVJM
-LiBUaGUgaW50ZW50IG9mIHRoZSBlbnRpcmUgR28gbW9kdWxlCj4+ID4gPiBzeXN0ZW0gaXMgdG8g
-YmUgYmFzZWQgb24gc291cmNlIGNvbnRyb2wgdW5kZXIgdGhlIGhvb2QuIFdlIHNob3VsZCBiZSBh
-YmxlCj4+ID4gPiB0byBjaGVjayBvdXQgdGhlIGdpdCByZXBvc2l0b3JpZXMgb2YgdGhlIHVuZGVy
-bHlpbmcgc291cmNlIHdpdGhvdXQgaGF2aW5nCj4+ID4gPiB0byB1c2UgdGhlIEdvb2dsZSBwcm94
-eS4KPj4gPiA+Cj4+ID4gPiBJZiB3ZSBtYWtlIGEgaGFiaXQgb2YgaWdub3JpbmcgdGhlc2UgaGFz
-aCBtaXNtYXRjaGVzIGl0IHdpbGwgYmVjb21lIHZlcnkKPj4gPiA+IGVhc3kgZm9yIHBlb3BsZSB0
-byBzdHVmZiBjb2RlIGludG8gYSByZWxlYXNlIG9uIEdpdEh1YiBhbmQgdGhlbiBjaGFuZ2UgdGhl
-Cj4+ID4gPiB0YWcgdG8gc29tZXRoaW5nIGVsc2UgbGF0ZXIsIGxlYXZpbmcgYmVoaW5kIHRoZSBv
-bGQgcmVjb3JkIGluIEdPUFJPWFkgYW5kCj4+ID4gPiB0cmlja2luZyBtYWludGFpbmVycyBpbnRv
-IHJldmlld2luZyB0aGUgd3JvbmcgY29kZSBvbiB0aGUgbW9kaWZpZWQgR2l0SHViCj4+ID4gPiB0
-YWcuCj4+ID4gPgo+PiA+ID4gVGhlcmUgbXVzdCBiZSBzb21lIHJlYXNvbiB3aHkgeW91ciBwYWNr
-YWdlIGlzIGhhdmluZyB0aGlzIGlzc3VlLiBXaXRoCj4+ID4gPiBhbmNob3JlIHF1aWxsIHBhY2th
-Z2Ugd2UgZm91bmQgdGhhdCBpdCB3YXMgZ2l0IGxmcyB3aXRoIHRlc3QgZmlsZXMgY2F1c2luZwo+
-PiA+ID4gdGhlIHByb2JsZW0uCj4+ID4KPj4gPiBJIGNvbnRpbnVlIHRvIGFncmVlIHdpdGggQ2hy
-aXN0aWFuLiBJZiB1c2luZyBjYWNoaW5nIHByb3hpZXMgaXMgbmVlZGVkCj4+ID4gdG8gYXZvaWQg
-ZG93bmxvYWRpbmcgdGhlICJyZWFsIiB1cHN0cmVhbSBiZWNhdXNlIHRoZSByZWFsIHVwc3RyZWFt
-IGhhcwo+PiA+IGNoYW5nZWQvaXMgYnJva2VuLCB0aGluZ3MgYXJlIHNldmVyZWx5IHdyb25nLgo+
-Pgo+PiBUaGlzIGlzIG9ubHkgZm9yIGRlcGVuZGVuY2llcyBvZiB0aGUgcHJvamVjdCwgdGhlIGlz
-c3VlIGlzIHRoZXkgY2FuIG9mdGVuCj4+IHBvaW50IHRvIHVuc3RhYmxlIGRlcGVuZGVuY3kgcmVw
-b3NpdG9yaWVzIEFGQUlVIGFuZCB1cHN0cmVhbXMganVzdAo+PiB0ZW5kIHRvIHJlbHkgb24gdGhp
-cyBjYWNoaW5nIHByb3h5Lgo+Cj4KPiBUaGF0IHJlYWxseSBkb2Vzbid0IG1ha2UgYW55IHNlbnNl
-IGJlY2F1c2UgR28gbW9kdWxlcyB2ZXJzaW9ucyBhbmQgZ28uc3VtIHBvaW50IHRvIG5vdCBvbmx5
-IGEgc3BlY2lmaWMgcmVsZWFzZSB0YWcsIGJ1dCBhIHNwZWNpZmljIGhhc2ggb2YgdGhhdCB0YWcs
-IGFzIHdlbGwgYXMgKGlmIG5vdCB1c2luZyBhIHJlbGVhc2UpIGEgY29tbWl0IGhhc2ggYW5kIGRh
-dGUuCj4KPiBUaGF0IHN5c3RlbSBpcyBkZXNpZ25lZCB0byBlbnN1cmUgaW50ZWdyaXR5LgoKV2hp
-Y2ggbWFrZXMgaG93IHdlIGdldCB0aGUgZGVwZW5kZW5jaWVzIGxhcmdlbHkgdW5pbXBvcnRhbnQg
-YXMgbG9uZwphcyB0aGV5IHBhc3MgdGhlIGludGVncml0eSBjaGVja3MgQUZBSVUuCgpJdCBzZWVt
-cyBhbm90aGVyIGFkdmFudGFnZSB0byB1c2luZyBodHRwczovL3Byb3h5LmdvbGFuZy5vcmcgaXMg
-dGhhdCBpdApzaWduaWZpY2FudGx5IHNwZWVkcyB1cCBkb3dubG9hZHMuCgo+Cj4gVGhlIHJlcG9z
-aXRvcnkgYmVpbmcgInVuc3RhYmxlIGRlcGVuZGVuY2llcyIgZG9lc24ndCBnaXZlIGFueSBleHBs
-YW5hdGlvbiBmb3Igd2h5IHRoZSBjaGVja3N1bXMgYXJlIGZhaWxpbmcuCj4KPgo+PiA+Cj4+ID4g
-SW5zdGVhZCwgSSB3b3VsZCByZWNvbW1lbmQgdG8gcGF0Y2ggbmV0YmlyZCB0byByZXNvbHZlIHRo
-aXMgaXNzdWUuIEkKPj4gPiBrbm93IHRoaXMgcmVxdWlyZXMgcGF0Y2hlcyB0byBiZSBhcHBsaWVk
-ICpiZWZvcmUqIHRoZSB2ZW5kb3Jpbmcgc3RlcCwKPj4gPiBidXQgdGhhdCBpdCBzb21ldGhpbmcg
-dGhhdCBhbnl3YXkgd291bGQgYmUgdXNlZnVsIHRvIGhhdmUuIFNvIEkgd291bGQKPj4gPiBzdWdn
-ZXN0IHRvIGZpbmQgYSB3YXkgdG8gZG8gdGhhdC4gUGVyaGFwcyBzb21lIHNwZWNpYWwgcGF0Y2gg
-ZXh0ZW5zaW9uLAo+PiA+IGxpa2UgcGFja2FnZS88Zm9vPi8qLnZlbmRvcmluZy1wYXRjaCBvciBz
-b21lIG90aGVyIGJldHRlciBuYW1lLCB0aGF0Cj4+ID4gd291bGQgYmUgYXBwbGllZCBiZWZvcmUg
-dGhlIHZlbmRvcmluZyBzdGVwIHRha2VzIHBsYWNlPwo+Pgo+PiBJJ20gbm90IGFjdHVhbGx5IHRy
-eWluZyB0byBtb2RpZnkgdGhlIGRlcGVuZGVuY2llcyBzcGVjaWZpZWQgYXQgYWxsLCBpZgo+PiB0
-aGUgb25seSBkb3dubG9hZCBsb2NhdGlvbiBmb3IgYSBzcGVjaWZpZWQgZGVwZW5kZW5jeSBJIG5l
-ZWQgaXMgb24KPj4gaHR0cHM6Ly9wcm94eS5nb2xhbmcub3JnIHRoZW4gSSdtIG5vdCBzdXJlIGhv
-dyBJIHdvdWxkIHBhdGNoIHRoZQo+PiBwYWNrYWdlIHRvIHVzZSB0aGF0IGluc3RlYWQuCj4KPgo+
-IFlvdSBzaG91bGQgcmVwb3J0IHRoZSBpc3N1ZSB0byB0aGUgdXBzdHJlYW0gcmVwb3NpdG9yeSBs
-aWtlIEkgZGlkIHdpdGggdGFpbHNjYWxlLCB0aGV5IHdpbGwgdXBkYXRlIHRoZSBkZXBlbmRlbmN5
-IHRvIGEgbmV3ZXIgdmVyc2lvbiB0aGF0IGRvZXNuJ3QgaGF2ZSB0aGUgY2hlY2tzdW1zIG1pc21h
-dGNoCgpXaGljaCBpcyB0cmlja3kgaW4gdGhpcyBjYXNlIHNpbmNlIEknbSBub3QgdXNpbmcgdGhl
-IGxhdGVzdCByZWxlYXNlIGR1ZSB0bwppdCByZXF1aXJpbmcgZ29sYW5nIDEuMjMuMCB3aGlsZSB3
-ZSBvbmx5IGhhdmUgMS4yMi44LgoKPgo+IE9yIGZlZWwgZnJlZSB0byBwb3N0IHRoZSBpc3N1ZSBo
-ZXJlIGFuZCB3ZSBjYW4gdHJ5IHRvIGZpZ3VyZSBvdXQgd2h5IHRoZSBjaGVja3N1bXMgYXJlIGZh
-aWxpbmcuCgpUaGlzIGlzIHRoZSBlcnJvcjoKZ286IGd2aXNvci5kZXYvZ3Zpc29yQHYwLjAuMC0y
-MDIzMDkyNzAwNDM1MC1jYmQ4NjI4NWQyNTk6IGludmFsaWQKdmVyc2lvbjogdW5rbm93biByZXZp
-c2lvbiBjYmQ4NjI4NWQyNTkKCj4KPgo+PiBBbHNvIHRoZW4gd2hhdCBkbyB3ZSBkbyB3aGVuIGEg
-cGFja2FnZSBkZXBlbmRlbmN5IGluZXZpdGFibHkKPj4gYnJlYWtzIGFnYWluIGR1ZSB0byB0aGUg
-ZG93bmxvYWQgbG9jYXRpb24gYmVjb21pbmcgYnJva2VuLCBkbwo+PiB3ZSBqdXN0IGtlZXAgcGF0
-Y2hpbmcgdGhlIHBhY2thZ2Ugb3ZlciBhbmQgb3ZlciBhZ2FpbiBldmVyeSB0aW1lCj4+IG9uZSBv
-ZiBpdHMgZGVwZW5kZW5jaWVzIGJyZWFrcz8KPgo+Cj4gV2h5IGlzIHRoZSBsb2NhdGlvbiBicmVh
-a2luZyBhdCBhbGw/Li4uCj4KPiBGb3IgdGhpcyBwdXJwb3NlIHdlIG1pcnJvciB0byB0aGUgYnVp
-bGRyb290IG1pcnJvciB3aXRoIGFsbCB0aGUgZGVwZW5kZW5jaWVzIHZlbmRvcmVkLgoKWWVzLi4u
-aG93ZXZlciB3ZSB0cnkgbm90IHRvIHJlbHkgb24gdGhhdCBhcyBhIGZhaWxpbmcgZG93bmxvYWQg
-Y291bGQKQUZBSVUgdHJpZ2dlciBhdXRvYnVpbGRlciBmYWlsdXJlcy4KCj4KPiBCZXN0IHJlZ2Fy
-ZHMsCj4gQ2hyaXN0aWFuCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+As we have many python packages using the poetry(poetry-core) build
+system we should add a setup type for it so that we don't have to
+manually specify the host-python-poetry-core dependency.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ docs/manual/adding-packages-directory.adoc |  2 +-
+ docs/manual/adding-packages-python.adoc    | 20 +++++++-------
+ package/pkg-python.mk                      | 31 ++++++++++++++++++++--
+ utils/scanpypi                             |  2 ++
+ 4 files changed, 42 insertions(+), 13 deletions(-)
+
+diff --git a/docs/manual/adding-packages-directory.adoc b/docs/manual/adding-packages-directory.adoc
+index cb19f3bac9..348c065798 100644
+--- a/docs/manual/adding-packages-directory.adoc
++++ b/docs/manual/adding-packages-directory.adoc
+@@ -429,7 +429,7 @@ different way, using different infrastructures:
+    and xref:cmake-package-reference[reference].
+ 
+ * *Makefiles for Python modules*: We have a dedicated infrastructure
+-   for Python modules that use the +flit+, +hatch+, +pep517+,
++   for Python modules that use the +flit+, +hatch+, +pep517+, +poetry+
+    +setuptools+, +setuptools-rust+ or +maturin+ mechanisms. We cover
+    them through a xref:python-package-tutorial[tutorial] and a
+    xref:python-package-reference[reference].
+diff --git a/docs/manual/adding-packages-python.adoc b/docs/manual/adding-packages-python.adoc
+index 790e2899cf..b42c06e54c 100644
+--- a/docs/manual/adding-packages-python.adoc
++++ b/docs/manual/adding-packages-python.adoc
+@@ -51,8 +51,8 @@ On line 13, we declare our dependencies, so that they are built
+ before the build process of our package starts.
+ 
+ On line 14, we declare the specific Python build system being used. In
+-this case the +setuptools+ Python build system is used. The six
+-supported ones are +flit+, +hatch+, +pep517+, +setuptools+,
++this case the +setuptools+ Python build system is used. The seven
++supported ones are +flit+, +hatch+, +pep517+, +poetry+, +setuptools+,
+ +setuptools-rust+ and +maturin+.
+ 
+ Finally, on line 16, we invoke the +python-package+ macro that
+@@ -96,14 +96,14 @@ Note that:
+ One variable specific to the Python infrastructure is mandatory:
+ 
+ * +PYTHON_FOO_SETUP_TYPE+, to define which Python build system is used
+-  by the package. The five supported values are +flit+, +hatch+,
+-  +pep517+ and +setuptools+, +setuptools-rust+ and +maturin+. If you
+-  don't know which one is used in your package, look at the +setup.py+
+-  or +pyproject.toml+ file in your package source code, and see whether
+-  it imports things from the +flit+ module or the +setuptools+
+-  module. If the package is using a +pyproject.toml+ file without any
+-  build-system requires and with a local in-tree backend-path one
+-  should use +pep517+.
++  by the package. The seven supported values are +flit+, +hatch+,
++  +pep517+, +poetry+, +setuptools+, +setuptools-rust+ and +maturin+.
++  If you don't know which one is used in your package, look at the
++  +setup.py+ or +pyproject.toml+ file in your package source code,
++  and see whether it imports things from the +flit+ module or the
++  +setuptools+ module. If the package is using a +pyproject.toml+
++  file without any build-system requires and with a local in-tree
++  backend-path one should use +pep517+.
+ 
+ A few additional variables, specific to the Python infrastructure, can
+ optionally be defined, depending on the package's needs. Many of them
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 3c607b5277..32ace4aac1 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -258,6 +258,33 @@ HOST_PKG_PYTHON_MATURIN_BUILD_CMD = \
+ HOST_PKG_PYTHON_MATURIN_INSTALL_CMD = \
+ 	$(HOST_PKG_PYTHON_PEP517_INSTALL_CMD)
+ 
++# Target poetry packages
++PKG_PYTHON_POETRY_ENV = \
++	$(PKG_PYTHON_PEP517_ENV)
++
++PKG_PYTHON_POETRY_BUILD_CMD = \
++	$(PKG_PYTHON_PEP517_BUILD_CMD)
++
++PKG_PYTHON_POETRY_INSTALL_TARGET_CMD = \
++	$(PKG_PYTHON_PEP517_INSTALL_TARGET_CMD)
++
++PKG_PYTHON_POETRY_INSTALL_STAGING_CMD = \
++	$(PKG_PYTHON_PEP517_INSTALL_STAGING_CMD)
++
++PKG_PYTHON_POETRY_DEPENDENCIES = \
++	$(PKG_PYTHON_PEP517_DEPENDENCIES) \
++	host-python-poetry-core
++
++# Host poetry packages
++HOST_PKG_PYTHON_POETRY_ENV = \
++	$(HOST_PKG_PYTHON_PEP517_ENV)
++
++HOST_PKG_PYTHON_POETRY_BUILD_CMD = \
++	$(HOST_PKG_PYTHON_PEP517_BUILD_CMD)
++
++HOST_PKG_PYTHON_POETRY_INSTALL_CMD = \
++	$(HOST_PKG_PYTHON_PEP517_INSTALL_CMD)
++
+ ################################################################################
+ # inner-python-package -- defines how the configuration, compilation
+ # and installation of a Python package should be done, implements a
+@@ -284,8 +311,8 @@ endif
+ 
+ $(2)_SETUP_TYPE_UPPER = $$(call UPPERCASE,$$($(2)_SETUP_TYPE))
+ 
+-ifneq ($$(filter-out setuptools setuptools-rust pep517 flit flit-bootstrap hatch maturin,$$($(2)_SETUP_TYPE)),)
+-$$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'maturin', 'setuptools', 'setuptools-rust', 'pep517', 'flit' or 'hatch'.")
++ifneq ($$(filter-out setuptools setuptools-rust pep517 flit flit-bootstrap hatch maturin poetry,$$($(2)_SETUP_TYPE)),)
++$$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'maturin', 'setuptools', 'setuptools-rust', 'pep517', 'flit', 'hatch' or 'poetry'.")
+ endif
+ ifeq ($(4)-$$($(2)_SETUP_TYPE),target-flit-bootstrap)
+ $$(error flit-bootstrap setup type only supported for host packages)
+diff --git a/utils/scanpypi b/utils/scanpypi
+index f832d5cab0..af62c01632 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -419,6 +419,8 @@ class BuildrootPackage():
+                     self.setup_metadata['method'] = 'flit'
+                 elif build_backend == 'hatchling.build':
+                     self.setup_metadata['method'] = 'hatch'
++                elif build_backend == 'poetry.core.masonry.api':
++                    self.setup_metadata['method'] = 'poetry'
+                 elif build_backend == 'setuptools.build_meta':
+                     self.setup_metadata['method'] = 'setuptools'
+                 else:
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
