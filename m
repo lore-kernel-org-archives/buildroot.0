@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FEDED0BB43
-	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 22:22:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5655DD0BB44
+	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 22:27:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E9274065F;
-	Wed, 23 Oct 2024 22:22:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE53640327;
+	Wed, 23 Oct 2024 22:27:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Bh8JVVj8hd8; Wed, 23 Oct 2024 22:22:23 +0000 (UTC)
+ id pjbhwcFe2zRf; Wed, 23 Oct 2024 22:27:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DABF0406EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFAE34031E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DABF0406EE;
-	Wed, 23 Oct 2024 22:22:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D1EB972
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 22:22:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFAE34031E;
+	Wed, 23 Oct 2024 22:27:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3825D972
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 22:27:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA07E406EE
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 22:22:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 18B804031E
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 22:27:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uWoWltsZJego for <buildroot@buildroot.org>;
- Wed, 23 Oct 2024 22:22:20 +0000 (UTC)
+ id JxIpnQEqatbw for <buildroot@buildroot.org>;
+ Wed, 23 Oct 2024 22:27:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d30; helo=mail-io1-xd30.google.com;
+ client-ip=2607:f8b0:4864:20::d35; helo=mail-io1-xd35.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C60EF4065F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C60EF4065F
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
- [IPv6:2607:f8b0:4864:20::d30])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C60EF4065F
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 22:22:19 +0000 (UTC)
-Received: by mail-io1-xd30.google.com with SMTP id
- ca18e2360f4ac-83abe4524ccso11952939f.1
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 15:22:19 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9ED164030A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9ED164030A
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
+ [IPv6:2607:f8b0:4864:20::d35])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9ED164030A
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 22:27:09 +0000 (UTC)
+Received: by mail-io1-xd35.google.com with SMTP id
+ ca18e2360f4ac-83ab21c269eso9332339f.2
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 15:27:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1729722138; x=1730326938;
+ d=1e100.net; s=20230601; t=1729722428; x=1730327228;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=LYElX56dtAbn1qlhVBERoE6IhKaufR++2i9ZW6sVfRM=;
- b=vjyUiQeglCShSV5f3rU8JDazbTBr+62NU7yRA3KlbUxAgDLkZzghnrhsUrVnEWzJhD
- OojCmJWAyeFsLgs2kKBBzRzBPOBomGr5G/fK4kfiumlcJVUBK901+zWDNFPj5yzmAbBZ
- X8CzQ/U2Fn3iod9JlC1kq5S24el7Ma4iEmNGMMnPmgr/HikIe4NS/bHBERzvOKP8POoy
- 3OSv+vCWNttswbY/sDgz/GjSOoPXKRs2ETk5QaERugqMKYDOHPLCeBeUH6nUkzjM/2L2
- MNmwdxFLwkHH6T2Ady9z6VQQotRVWJfPhhs8q9s2NMit7GFPMspsblNQ688a7wTbBrqE
- csqw==
-X-Gm-Message-State: AOJu0YzHPalhdqYW08qRdbZhfG7CbxJ90DIDWP9n/fytT0Gj9e51Eu7h
- pEz8Nq/bAV4Ozzn+fsvpj7PceyWIbXc6JRmWBxuDs61eN067uLJiXYAqgw==
-X-Google-Smtp-Source: AGHT+IFXxyipVsbaphEWL8t0G6RweOZ8vJ4gecmKZwRtDYRnpkrU1G/kXTZlFIMei+4pQE+X/e4eJQ==
-X-Received: by 2002:a05:6602:2b93:b0:82c:ed57:ebd9 with SMTP id
- ca18e2360f4ac-83af61e4fa7mr546379839f.10.1729722138431; 
- Wed, 23 Oct 2024 15:22:18 -0700 (PDT)
+ bh=YIC706HPMQ1e3JD6ozT1WVEdDHrrcMf0uxht+zM1qLY=;
+ b=N9nfG41V6WeV4NfU3D83yIln5xzfFiEpCzNjK07ZncStDGQinHdvWTg5T7patUOA6K
+ dFOEdB0QMIWgQzhxS8asKjuVxQjHIfqFLObrurkb6FELoIoSrom/0CxRQUfT04nJyP2i
+ SA9fROk4m0xQXrSfvOl73u5e928Ak71Th8RgXxidV4Js5mq6hyZR6WI7V7NVMiNGJDKS
+ o3LB0YxBPGYtLPF+DwoOd+M/p2FEz5MTCK5WyQEfToHLNKMuEQYG6wcVHW/PuiFj/O4n
+ sw05Caua8qBD2ZZTo9up7OUaaN0KN8aB5gsyB+/MXu30ryQAecxp9aWDUOkQ6zhRjSRF
+ JoSw==
+X-Gm-Message-State: AOJu0Ywwwaut6ngvC60JY1hFmI6z7f3dYcm3HTy9QTp3CBTtFIExljC/
+ T4JN0isQaNtCljG+npvsv13+wuZ9KlEaz5hNUXdaaxXQooZOuVFsx7nLwQ==
+X-Google-Smtp-Source: AGHT+IHpNAtjMctnX4dXLbHqq8MUXfViag5O0Mz1aBUGgSEE+a4QddzfUt6WED0XNjWdoYseVrY1Mw==
+X-Received: by 2002:a05:6e02:1649:b0:3a3:97b6:74fe with SMTP id
+ e9e14a558f8ab-3a4d597b734mr42678095ab.11.1729722428369; 
+ Wed, 23 Oct 2024 15:27:08 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
  [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4dc2a52fbc0sm2434468173.10.2024.10.23.15.22.17
+ 8926c6da1cb9f-4dc2a5880d4sm2433701173.80.2024.10.23.15.27.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 23 Oct 2024 15:22:18 -0700 (PDT)
+ Wed, 23 Oct 2024 15:27:07 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Oct 2024 16:22:16 -0600
-Message-Id: <20241023222216.3333274-1-james.hilliard1@gmail.com>
+Date: Wed, 23 Oct 2024 16:27:06 -0600
+Message-Id: <20241023222706.3347120-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1729722138; x=1730326938; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1729722428; x=1730327228; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=LYElX56dtAbn1qlhVBERoE6IhKaufR++2i9ZW6sVfRM=;
- b=c35erNIwh5QSukGsuLF94Hn7pWJs8b68WMMharOwu1mZqc0ljLmasDlQyPYXIOj/Zr
- wgd/IpItm8WcsUbfW06NEnOvroG8vismn0Uh7MO90VpLVNeTUknVRlwBBR7gGKys9pR0
- pEZdHeQXUbhbf2RIyYS3EqgtlVfZsxgXDK17uA/frC/WeKsG9uJi9GvL4BGHVMX6rIkQ
- Z59NS3sMuQ+wcC0T/DGSBUFcz/OrpGXCZwva1ahJlK6zWUpNvA0f/+9naMrLmDnTeJCM
- n9ZOSCywUInENe7FnAP1w5IPkVyD9DFZNNI+BGBxEF4yX4ugm+jvs9rY6frxq9/mhgFC
- VHfw==
+ bh=YIC706HPMQ1e3JD6ozT1WVEdDHrrcMf0uxht+zM1qLY=;
+ b=DolgT0eTTR939CdoPVNPZd/LH9+dKbS3Tj7O9gfKHFlD5dPRT5uTZVxpHA4FhyBY7G
+ CM0FKM1B24a2QrVkjj3FQ+vgGaJ5AoxnqWx5+lUc+9HeieHylEfJR8GHw6Xtg3oYf7EI
+ qCN2Tj03i3ySWlNutYK1LGwCaXAgTRSucNtjYyMGctScmLVETJdvRtWXjebzU9rPLEdp
+ 94nKV1vRk7DGknYGLbG/3f+BVuPtLYlKNwtBE8+uhNcc/xj/5H1ceFN/jTqqcYWRccPC
+ LNVcuGC/sRCnTazfOdtl8hRWJGQVIRaWt5ns92/YsPSm2ML73FxUoreAlrcIiH7bOCs8
+ Rw0A==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=c35erNIw
-Subject: [Buildroot] [PATCH 1/1] package/python-pydantic: use hatch setup
+ header.a=rsa-sha256 header.s=20230601 header.b=DolgT0eT
+Subject: [Buildroot] [PATCH 1/1] package/python-jsonschema: use hatch setup
  type
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -111,29 +111,31 @@ host-python-hatchling dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pydantic/python-pydantic.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/python-jsonschema/python-jsonschema.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
-index ab0cd601c1..2b9cd6c38a 100644
---- a/package/python-pydantic/python-pydantic.mk
-+++ b/package/python-pydantic/python-pydantic.mk
-@@ -7,13 +7,11 @@
- PYTHON_PYDANTIC_VERSION = 2.9.2
- PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
- PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/a9/b7/d9e3f12af310e1120c21603644a1cd86f59060e040ec5c3a80b8f05fae30
--PYTHON_PYDANTIC_SETUP_TYPE = pep517
-+PYTHON_PYDANTIC_SETUP_TYPE = hatch
- PYTHON_PYDANTIC_LICENSE = MIT
- PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
- PYTHON_PYDANTIC_CPE_ID_VENDOR = pydantic_project
- PYTHON_PYDANTIC_CPE_ID_PRODUCT = pydantic
--PYTHON_PYDANTIC_DEPENDENCIES = \
+diff --git a/package/python-jsonschema/python-jsonschema.mk b/package/python-jsonschema/python-jsonschema.mk
+index 21e4adab48..9f99628b5d 100644
+--- a/package/python-jsonschema/python-jsonschema.mk
++++ b/package/python-jsonschema/python-jsonschema.mk
+@@ -7,16 +7,14 @@
+ PYTHON_JSONSCHEMA_VERSION = 4.23.0
+ PYTHON_JSONSCHEMA_SOURCE = jsonschema-$(PYTHON_JSONSCHEMA_VERSION).tar.gz
+ PYTHON_JSONSCHEMA_SITE = https://files.pythonhosted.org/packages/38/2e/03362ee4034a4c917f697890ccd4aec0800ccf9ded7f511971c75451deec
+-PYTHON_JSONSCHEMA_SETUP_TYPE = pep517
++PYTHON_JSONSCHEMA_SETUP_TYPE = hatch
+ PYTHON_JSONSCHEMA_LICENSE = MIT
+ PYTHON_JSONSCHEMA_LICENSE_FILES = COPYING json/LICENSE
+ PYTHON_JSONSCHEMA_DEPENDENCIES = \
 -	host-python-hatchling \
--	host-python-hatch-fancy-pypi-readme
-+PYTHON_PYDANTIC_DEPENDENCIES = host-python-hatch-fancy-pypi-readme
+ 	host-python-hatch-fancy-pypi-readme \
+ 	host-python-hatch-vcs
  
- $(eval $(python-package))
+ HOST_PYTHON_JSONSCHEMA_DEPENDENCIES = \
+-	host-python-hatchling \
+ 	host-python-hatch-fancy-pypi-readme \
+ 	host-python-hatch-vcs
+ 
 -- 
 2.34.1
 
