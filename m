@@ -1,94 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 452F8CF5365
-	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 12:22:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46A10CF5386
+	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 13:09:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E25B3810E6;
-	Wed, 23 Oct 2024 12:22:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC30C60657;
+	Wed, 23 Oct 2024 13:09:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CnDq-sxueeCp; Wed, 23 Oct 2024 12:22:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G0ySWmch3rtu; Wed, 23 Oct 2024 13:09:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01CB1810ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1D3360675
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 01CB1810ED;
-	Wed, 23 Oct 2024 12:22:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3BCAE59B4
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 12:22:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D1D3360675;
+	Wed, 23 Oct 2024 13:09:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CE9BE2072
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 13:09:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C31D810E8
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 12:22:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BCB0360675
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 13:09:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1raFejd8jWKK for <buildroot@buildroot.org>;
- Wed, 23 Oct 2024 12:22:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5BE56810E6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BE56810E6
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5BE56810E6
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 12:22:39 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-37d50fad249so5249198f8f.1
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 05:22:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1729686157; x=1730290957;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=3drfzHgYM4l2kx/YTybrq5GI9+b3xzxj63VonJhrRP4=;
- b=lIhJfanYc3+7NhnV9X6emhhuC1bvplI7aqgsvSG6/6ZoD4kHNGNwren8Z980hwKt/W
- dst1b+YXvrDZ4NykIizm2Dm42OZ15ptVoGauFfylB605zGde3TOo7C7So1dhdpITDGt/
- al4eDXn+yo5Dgag2/iGgaAnkdgW/vOC1sSqzwqhzQLH7lJMgRizjrFZWkDE8fCuqNSVT
- qpuModeGEh8ITrrkskRyJlHdABIbv16kSPONXg1wWD6j9sBb7BJ/iPneYFwSCPayV4pp
- lP4cJmExGDexKFJT6kjWdfeUNjwEzj7YXNK8c7s5Pnh/MIUokxKvIVxUNNVpngIobfDP
- ESdA==
-X-Gm-Message-State: AOJu0YyPGsWp5xAzI2nUzW6H7MMBgOzFdj4Bi2EiZM1UtD0bCpeMR8QV
- siuCCmHVnhJBbcf9C36U+7VlNMLPvm5RLvcn5yi/JEn+lmf/pObfD4qZ/buMTTEi4RAWeKx4Mi7
- c
-X-Google-Smtp-Source: AGHT+IFNtX8DB9GorNmf6v3aYVAv7VPiCxwrJixtvOImUaTS4eP4GkRZfZdtrElH4wfBlLDvyBudDQ==
-X-Received: by 2002:a5d:6251:0:b0:37d:4ebe:163e with SMTP id
- ffacd0b85a97d-37efcf93223mr1540526f8f.53.1729686157354; 
- Wed, 23 Oct 2024 05:22:37 -0700 (PDT)
-Received: from arnoutx1.. (d5152f88d.static.telenet.be. [81.82.248.141])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-37ee0a5b7afsm8790291f8f.59.2024.10.23.05.22.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 23 Oct 2024 05:22:36 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZkVGZgRGNpU5 for <buildroot@buildroot.org>;
+ Wed, 23 Oct 2024 13:09:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2A4B460657
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A4B460657
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2A4B460657
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 13:09:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0147740006;
+ Wed, 23 Oct 2024 13:09:25 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1t3b77-0043Ls-1d;
+ Wed, 23 Oct 2024 15:09:25 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Oct 2024 14:22:34 +0200
-Message-ID: <20241023122234.478798-1-arnout@mind.be>
-X-Mailer: git-send-email 2.47.0
+Date: Wed, 23 Oct 2024 15:09:11 +0200
+Message-Id: <20241023130912.966121-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1729686157; x=1730290957; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3drfzHgYM4l2kx/YTybrq5GI9+b3xzxj63VonJhrRP4=;
- b=I5WMf8yuledg/GSSpB0Jj1+aI/xnEnGOPBvuJhkpY9rSnSLJfhOhh4L0yhZ3atXR9q
- QDYRuKVxFaJ3PWorPjz1r2J0f5eYh4lnKW0XJ22axyvTwHXp8Mw2tXlVReQJ1F7aJ+Pc
- p2eGzkO6v5O3IXSgo6q3KxTUYizE4Ku6jVUyY1Py/M4SUvXqvVLb6lw9p54Die/qmZba
- YhCxrML7rKxT14fckrfbBj+ogoAXtv6LhFwJEHXq/oENtSCRRRNJ0uVpO0XqzjxdgQKc
- An0ZlR+jv5VAAEuv+sJLrRFKqjNLjLzu7NN9YqAVEJB8rVzRAnMZ40mDYkWjYUu8HK1P
- UGnA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=I5WMf8yu
-Subject: [Buildroot] [PATCH] utils/brmake: add option to run in docker
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH-2024.02.x] package/bootgen: add patch to fix
+ crash with -verify
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,72 +66,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Neal Frager <neal.frager@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-At the moment, it is difficult to combine brmake with docker-run.
-`docker-run brmake ...` doesn't work because our docker image doesn't
-have unbuffer. In addition, inside the container the timezone is UTC,
-but you probably want the timestamps added by brmake to be in local
-time. Therefore, it's better to have the call to docker-run nested
-inside brmake.
+The 2023.2 version forgets to populate the iHT structure before accessing
+it, leading to a segfault. Add a patch submitted upstream to fix that.
 
-Currently, brmake doesn't have any way to pass parameters, all of "$@"
-is passed unchanged to the `make` invocation. Thus, there is no
-established way to pass in the option whether or not to use docker. We
-choose to use an environment variable to pass in the option. The
-convention is that such a buildroot-specific environment variable should
-start with BR2_, so we choose BR2_DOCKER.
+Notice that this is fixed in the 2024.1 version as there ReadBinaryFile()
+now calls ReadHeaderTableDetails():
 
-Run make inside docker-run if the BR2_DOCKER environment variable is
-set. Update utils/readme.txt (the only existing documentation of brmake)
-with this information.
+https://github.com/Xilinx/bootgen/commit/3a0f879c611d67072aad3461f1c72d1a284cd5fc#diff-404aa20e03f1035b725ac1ea6e64c28477bb65c1663da67f64ffdb1a60552cee
 
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/brmake     | 8 +++++++-
- utils/readme.txt | 3 +++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ ...segmentation-fault-that-occurs-durin.patch | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/bootgen/0001-verifyimage-Fix-segmentation-fault-that-occurs-durin.patch
 
-diff --git a/utils/brmake b/utils/brmake
-index 70dfb6cdc8..4756016a0c 100755
---- a/utils/brmake
-+++ b/utils/brmake
-@@ -12,7 +12,13 @@ main() {
- 
-     start=${SECONDS}
- 
--    ( exec 2>&1; unbuffer make "${@}"; ) \
-+    if [ -n "$BR2_DOCKER" ]; then
-+        docker=("${0%/*}/docker-run")
-+    else
-+        docker=()
-+    fi
+diff --git a/package/bootgen/0001-verifyimage-Fix-segmentation-fault-that-occurs-durin.patch b/package/bootgen/0001-verifyimage-Fix-segmentation-fault-that-occurs-durin.patch
+new file mode 100644
+index 0000000000..096dbac27e
+--- /dev/null
++++ b/package/bootgen/0001-verifyimage-Fix-segmentation-fault-that-occurs-durin.patch
+@@ -0,0 +1,50 @@
++From f7825edbd1c85380cfb5ef0cf2c16c910954f57c Mon Sep 17 00:00:00 2001
++From: Charlie Johnston <charlie.johnston@loftorbital.com>
++Date: Mon, 5 Aug 2024 13:07:25 -0700
++Subject: [PATCH] verifyimage: Fix segmentation fault that occurs during
++ verifyimage.
 +
-+    ( exec 2>&1; unbuffer "${docker[@]}" make "${@}"; ) \
-     > >( while read -r line; do
-              printf "%(%Y-%m-%dT%H:%M:%S)T %s\n" -1 "${line}"
-          done \
-diff --git a/utils/readme.txt b/utils/readme.txt
-index b5862f1fb9..abff659d4f 100644
---- a/utils/readme.txt
-+++ b/utils/readme.txt
-@@ -7,6 +7,9 @@ brmake
-     front of each line, redirects all of the build output to a file
-     ("'br.log' in the current directory), and just outputs the Buildroot
-     messages (those lines starting with >>>) on stdout.
-+    To run this within a container using docker-run (see below), set
-+    BR2_DOCKER=y in the environment, i.e. call it as
-+    `BR2_DOCKER=y utils/brmake`.
-     Do not run this script for interactive configuration (e.g. menuconfig)
-     or on an unconfigured directory. The output is redirected so you will see
-     nothing.
++In commit d02322b, the behavior of ReadBinaryFile was changed such
++that it no longer populated iHT. This caused VerifyAuthentication
++to access a null iHT value resulting a segmentation fault.
++
++This fix changes VerifyAuthentication to call ReadHeaderTableDetails
++instead, where the old functionality of ReadBinaryFile now lives.
++
++Signed-off-by: Charlie Johnston <charlie.johnston@loftorbital.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++Upstream: https://github.com/Xilinx/bootgen/pull/36
++---
++ verifyimage-versal.cpp | 2 +-
++ verifyimage-zynqmp.cpp | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/verifyimage-versal.cpp b/verifyimage-versal.cpp
++index 5490663..5656e50 100755
++--- a/verifyimage-versal.cpp
+++++ b/verifyimage-versal.cpp
++@@ -34,7 +34,7 @@
++ /*******************************************************************************/
++ void VersalReadImage::VerifyAuthentication(bool verifyImageOption)
++ {
++-    ReadBinaryFile();
+++    ReadHeaderTableDetails();
++ 
++     if (iHT->headerAuthCertificateWordOffset != 0)
++     {
++diff --git a/verifyimage-zynqmp.cpp b/verifyimage-zynqmp.cpp
++index d4812e6..d73272c 100755
++--- a/verifyimage-zynqmp.cpp
+++++ b/verifyimage-zynqmp.cpp
++@@ -50,7 +50,7 @@ static void RearrangeEndianess(uint8_t *array, uint32_t size)
++ /*******************************************************************************/
++ void ZynqMpReadImage::VerifyAuthentication(bool verifyImageOption)
++ {
++-    ReadBinaryFile();
+++    ReadHeaderTableDetails();
++ 
++     if (iHT->headerAuthCertificateWordOffset != 0)
++     {
++-- 
++2.39.5
++
 -- 
-2.47.0
+2.39.5
 
 _______________________________________________
 buildroot mailing list
