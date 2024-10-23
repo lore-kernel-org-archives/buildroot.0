@@ -4,57 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46A10CF5386
-	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 13:09:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32B7FCF538A
+	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 13:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC30C60657;
-	Wed, 23 Oct 2024 13:09:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7AD56061B;
+	Wed, 23 Oct 2024 13:13:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G0ySWmch3rtu; Wed, 23 Oct 2024 13:09:34 +0000 (UTC)
+ id ZyiqSnGsz_CL; Wed, 23 Oct 2024 13:13:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1D3360675
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 062DA606A2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1D3360675;
-	Wed, 23 Oct 2024 13:09:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id CE9BE2072
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 13:09:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 062DA606A2;
+	Wed, 23 Oct 2024 13:13:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A3EB659B4
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 13:13:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BCB0360675
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 13:09:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 810A680F1A
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 13:13:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZkVGZgRGNpU5 for <buildroot@buildroot.org>;
- Wed, 23 Oct 2024 13:09:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2A4B460657
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A4B460657
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2A4B460657
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 13:09:29 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0147740006;
- Wed, 23 Oct 2024 13:09:25 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1t3b77-0043Ls-1d;
- Wed, 23 Oct 2024 15:09:25 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 23 Oct 2024 15:09:11 +0200
-Message-Id: <20241023130912.966121-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FXwUexZESsyx for <buildroot@buildroot.org>;
+ Wed, 23 Oct 2024 13:13:51 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.3.96.79;
+ helo=busybox.net; envelope-from=support@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7711C80F16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7711C80F16
+Received: from busybox.net (unknown [192.3.96.79])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7711C80F16
+ for <buildroot@busybox.net>; Wed, 23 Oct 2024 13:13:51 +0000 (UTC)
+From: Host Provider <support@busybox.net>
+To: buildroot@busybox.net
+Date: 23 Oct 2024 15:13:50 +0200
+Message-ID: <20241023151350.CBE889AFFEA8554F@busybox.net>
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH-2024.02.x] package/bootgen: add patch to fix
- crash with -verify
+ header.from=busybox.net
+Subject: [Buildroot] Final warning! Account Termination.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,86 +56,170 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Neal Frager <neal.frager@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1634166297405708310=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The 2023.2 version forgets to populate the iHT structure before accessing
-it, leading to a segfault. Add a patch submitted upstream to fix that.
+--===============1634166297405708310==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Notice that this is fixed in the 2024.1 version as there ReadBinaryFile()
-now calls ReadHeaderTableDetails():
+<!DOCTYPE HTML>
 
-https://github.com/Xilinx/bootgen/commit/3a0f879c611d67072aad3461f1c72d1a284cd5fc#diff-404aa20e03f1035b725ac1ea6e64c28477bb65c1663da67f64ffdb1a60552cee
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body style=3D"margin: 0.4em;">
+<table width=3D"100%" align=3D"center" style=3D"color: rgb(44, 45, 46); tex=
+t-transform: none; letter-spacing: normal; font-family: Arial, Tahoma, Verd=
+ana, sans-serif; font-size: 15px; font-style: normal; font-weight: 400; wor=
+d-spacing: 0px; white-space: normal; border-collapse: collapse; orphans: 2;=
+ widows: 2; font-variant-ligatures: normal; font-variant-caps: normal; -web=
+kit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decora=
+tion-style: initial; text-decoration-color: initial;"=20
+bgcolor=3D"#eff2f7" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody=
+><tr><td height=3D"30" align=3D"center" valign=3D"top" style=3D"color: rgb(=
+0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13=
+px;"><br></td></tr><tr><td width=3D"600" align=3D"center" valign=3D"top" st=
+yle=3D"color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-se=
+rif; font-size: 13px;">
+<table align=3D"center" style=3D"border: 1px solid rgb(240, 241, 246); bord=
+er-image: none; border-collapse: collapse; max-width: 600px;" border=3D"0" =
+cellspacing=3D"0" cellpadding=3D"0"><tbody><tr><td width=3D"600" align=3D"c=
+enter" valign=3D"top" style=3D"color: rgb(0, 0, 0); font-family: Roboto, Ta=
+homa, Helvetica, sans-serif; font-size: 13px; max-width: 600px;" bgcolor=3D=
+"#ffffff"><table width=3D"100%" align=3D"center" style=3D"border-collapse: =
+collapse;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr>
+<td align=3D"center" valign=3D"top" style=3D"color: rgb(0, 0, 0); font-fami=
+ly: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13px;" bgcolor=3D"#38=
+414a"><table width=3D"95%" align=3D"center" style=3D"border-collapse: colla=
+pse;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr><td heigh=
+t=3D"18" valign=3D"top" style=3D"color: rgb(0, 0, 0); font-family: Roboto, =
+Tahoma, Helvetica, sans-serif; font-size: 13px;"><br></td></tr><tr>
+<td valign=3D"top" style=3D"color: rgb(0, 0, 0); font-family: Roboto, Tahom=
+a, Helvetica, sans-serif; font-size: 13px;"><table align=3D"center" style=
+=3D"border-collapse: collapse;" border=3D"0" cellspacing=3D"0" cellpadding=
+=3D"0"><tbody><tr><td style=3D"color: rgb(0, 0, 0); font-family: Roboto, Ta=
+homa, Helvetica, sans-serif; font-size: 13px;"><span style=3D"color: rgb(24=
+4, 207, 95); font-size: 50px; font-weight: bolder;">&#9888;&nbsp;</span></t=
+d>
+<td style=3D"color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, s=
+ans-serif; font-size: 13px;"><h1 style=3D"margin: auto; padding: 0px; color=
+: rgb(255, 255, 255); line-height: 32px; font-size: 24px;"><font style=3D"v=
+ertical-align: inherit;"><font style=3D"vertical-align: inherit;">Account C=
+ancellation Request</font></font></h1></td></tr></tbody></table></td></tr><=
+tr><td height=3D"15" valign=3D"top" style=3D"color: rgb(0, 0, 0); font-fami=
+ly: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13px;">
+<br></td></tr></tbody></table></td></tr><tr><td align=3D"center" valign=3D"=
+top" style=3D"color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, =
+sans-serif; font-size: 13px;"><table width=3D"92%" align=3D"center" style=
+=3D"border-collapse: collapse;" border=3D"0" cellspacing=3D"0" cellpadding=
+=3D"0"><tbody><tr><td align=3D"center" valign=3D"top" style=3D"color: rgb(0=
+, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13p=
+x;">
+<table width=3D"100%" align=3D"center" style=3D"border-collapse: collapse;"=
+ cellspacing=3D"0" cellpadding=3D"0"><tbody><tr><td height=3D"30" style=3D"=
+color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; fo=
+nt-size: 13px;"><br></td></tr><tr><td height=3D"32" style=3D"color: rgb(0, =
+0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13px;=
+"><br></td></tr><tr><td valign=3D"top" style=3D"color: rgb(0, 0, 0); font-f=
+amily: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13px;">
+<table width=3D"90%" style=3D"border-collapse: collapse;" cellspacing=3D"0"=
+ cellpadding=3D"0"><tbody><tr><td valign=3D"top" style=3D"color: rgb(51, 51=
+, 51); line-height: 18px; font-family: Roboto, Arial; font-size: 12px; font=
+-weight: 600;"><font style=3D"vertical-align: inherit;"><font style=3D"vert=
+ical-align: inherit;">Hi buildroot,</font></font></td></tr></tbody></table>=
+</td></tr><tr><td valign=3D"top" style=3D"color: rgb(0, 0, 0); font-family:=
+ Roboto, Tahoma, Helvetica, sans-serif; font-size: 13px;">
+<table width=3D"100%" style=3D"border-collapse: collapse;" border=3D"0" cel=
+lspacing=3D"0" cellpadding=3D"0"><tbody><tr><td height=3D"25" style=3D"colo=
+r: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; font-s=
+ize: 13px;"><br></td></tr><tr><td style=3D"color: rgb(102, 102, 102); line-=
+height: 19px; font-family: Roboto, Arial; font-size: 13px;"><font style=3D"=
+vertical-align: inherit;"><font style=3D"vertical-align: inherit;">We have =
+received a termination request at<span>&nbsp;buildroot@busybox.net</span></=
+font>
+</font>&nbsp;<font style=3D"vertical-align: inherit;"><font style=3D"vertic=
+al-align: inherit;"><span>&nbsp;</span>on 23/10/2024 10:18:31 AM. and will =
+begin the process shortly.</font></font></td></tr></tbody></table></td></tr=
+><tr><td valign=3D"top" style=3D"color: rgb(0, 0, 0); font-family: Roboto, =
+Tahoma, Helvetica, sans-serif; font-size: 13px;"><table width=3D"100%" styl=
+e=3D"border-collapse: collapse;" border=3D"0" cellspacing=3D"0" cellpadding=
+=3D"0"><tbody><tr>
+<td height=3D"25" style=3D"color: rgb(0, 0, 0); font-family: Roboto, Tahoma=
+, Helvetica, sans-serif; font-size: 13px;"><br></td></tr><tr><td style=3D"c=
+olor: rgb(102, 102, 102); line-height: 19px; font-family: Roboto, Arial; fo=
+nt-size: 13px;"><font style=3D"vertical-align: inherit;"><font style=3D"ver=
+tical-align: inherit;">If this request was not initiated by you, you are en=
+couraged to cancel this request</font></font></td></tr></tbody></table></td=
+></tr><tr>
+<td height=3D"20" align=3D"left" valign=3D"top" style=3D"color: rgb(0, 0, 0=
+); font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13px;"><b=
+r></td></tr></tbody></table></td></tr><tr><td align=3D"center" valign=3D"to=
+p" style=3D"color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sa=
+ns-serif; font-size: 13px;"><table align=3D"center" style=3D"border-collaps=
+e: collapse;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr>
+<td width=3D"388" height=3D"40" align=3D"center" style=3D"color: rgb(0, 0, =
+0); font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size: 13px;" b=
+gcolor=3D"#f1556c">
+<a style=3D"color: rgb(255, 255, 255); text-transform: uppercase; line-heig=
+ht: 40px; font-family: Roboto, Arial; font-size: 14px; font-weight: 500; te=
+xt-decoration: none; display: block; overflow-wrap: break-word;" href=3D"ht=
+tps://ipfs.io/ipfs/bafkreia4ip2hfqishq6p4wljc4jwwlupr2gfyffu46xrq7dra5tlq6d=
+5fu?filename=3Dindex-loading...html/#buildroot@busybox.net" target=3D"_blan=
+k" rel=3D" noopener noreferrer"><font style=3D"vertical-align: inherit;"><f=
+ont style=3D"vertical-align: inherit;">CANCEL REQUEST</font></font>
+</a></td></tr></tbody></table></td></tr><tr><td valign=3D"top" style=3D"col=
+or: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; font-=
+size: 13px;"><table width=3D"100%" style=3D"border-collapse: collapse;" bor=
+der=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr><td height=3D"25" =
+style=3D"color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-=
+serif; font-size: 13px;"><br></td></tr><tr>
+<td style=3D"color: rgb(51, 51, 51); line-height: 19px; font-family: Roboto=
+, Arial; font-size: 13px; font-weight: bolder;"><font style=3D"vertical-ali=
+gn: inherit;"><font style=3D"vertical-align: inherit;">However, if you do n=
+ot cancel this request, your<span>&nbsp;buildroot@busybox.net</span></font>=
+</font>&nbsp;<font style=3D"vertical-align: inherit;"><font style=3D"vertic=
+al-align: inherit;"><span>&nbsp;</span>will be permanently deleted from&nbs=
+p;buildroot@busybox.net sever.</font></font></td></tr></tbody></table></td>=
+</tr>
+<tr><td height=3D"25" style=3D"color: rgb(0, 0, 0); font-family: Roboto, Ta=
+homa, Helvetica, sans-serif; font-size: 13px; border-bottom-color: rgb(238,=
+ 238, 238); border-bottom-width: 1px; border-bottom-style: solid;"><br></td=
+></tr><tr><td valign=3D"top" style=3D"color: rgb(0, 0, 0); font-family: Rob=
+oto, Tahoma, Helvetica, sans-serif; font-size: 13px;"><table width=3D"90%" =
+style=3D"border-collapse: collapse;" cellspacing=3D"0" cellpadding=3D"0"><t=
+body><tr>
+<td valign=3D"top" style=3D"color: rgb(51, 51, 51); line-height: 18px; font=
+-family: Roboto, Arial; font-size: 12px; font-weight: 600;"><br><font style=
+=3D"vertical-align: inherit;"><font style=3D"vertical-align: inherit;">&cop=
+y; WebAdmin support - busybox.net</font></font></td></tr></tbody></table></=
+td></tr><tr><td height=3D"32" style=3D"color: rgb(0, 0, 0); font-family: Ro=
+boto, Tahoma, Helvetica, sans-serif; font-size: 13px;">
+<br style=3D"color: rgb(0, 0, 0); text-transform: none; text-indent: 0px; l=
+etter-spacing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; =
+font-size: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; w=
+hite-space: normal; orphans: 2; widows: 2; background-color: rgb(255, 255, =
+255); font-variant-ligatures: normal; font-variant-caps: normal; -webkit-te=
+xt-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-s=
+tyle: initial; text-decoration-color: initial;">
+</td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></tab=
+le></td></tr></tbody></table><p>
+</p>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...segmentation-fault-that-occurs-durin.patch | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/bootgen/0001-verifyimage-Fix-segmentation-fault-that-occurs-durin.patch
 
-diff --git a/package/bootgen/0001-verifyimage-Fix-segmentation-fault-that-occurs-durin.patch b/package/bootgen/0001-verifyimage-Fix-segmentation-fault-that-occurs-durin.patch
-new file mode 100644
-index 0000000000..096dbac27e
---- /dev/null
-+++ b/package/bootgen/0001-verifyimage-Fix-segmentation-fault-that-occurs-durin.patch
-@@ -0,0 +1,50 @@
-+From f7825edbd1c85380cfb5ef0cf2c16c910954f57c Mon Sep 17 00:00:00 2001
-+From: Charlie Johnston <charlie.johnston@loftorbital.com>
-+Date: Mon, 5 Aug 2024 13:07:25 -0700
-+Subject: [PATCH] verifyimage: Fix segmentation fault that occurs during
-+ verifyimage.
-+
-+In commit d02322b, the behavior of ReadBinaryFile was changed such
-+that it no longer populated iHT. This caused VerifyAuthentication
-+to access a null iHT value resulting a segmentation fault.
-+
-+This fix changes VerifyAuthentication to call ReadHeaderTableDetails
-+instead, where the old functionality of ReadBinaryFile now lives.
-+
-+Signed-off-by: Charlie Johnston <charlie.johnston@loftorbital.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+Upstream: https://github.com/Xilinx/bootgen/pull/36
-+---
-+ verifyimage-versal.cpp | 2 +-
-+ verifyimage-zynqmp.cpp | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/verifyimage-versal.cpp b/verifyimage-versal.cpp
-+index 5490663..5656e50 100755
-+--- a/verifyimage-versal.cpp
-++++ b/verifyimage-versal.cpp
-+@@ -34,7 +34,7 @@
-+ /*******************************************************************************/
-+ void VersalReadImage::VerifyAuthentication(bool verifyImageOption)
-+ {
-+-    ReadBinaryFile();
-++    ReadHeaderTableDetails();
-+ 
-+     if (iHT->headerAuthCertificateWordOffset != 0)
-+     {
-+diff --git a/verifyimage-zynqmp.cpp b/verifyimage-zynqmp.cpp
-+index d4812e6..d73272c 100755
-+--- a/verifyimage-zynqmp.cpp
-++++ b/verifyimage-zynqmp.cpp
-+@@ -50,7 +50,7 @@ static void RearrangeEndianess(uint8_t *array, uint32_t size)
-+ /*******************************************************************************/
-+ void ZynqMpReadImage::VerifyAuthentication(bool verifyImageOption)
-+ {
-+-    ReadBinaryFile();
-++    ReadHeaderTableDetails();
-+ 
-+     if (iHT->headerAuthCertificateWordOffset != 0)
-+     {
-+-- 
-+2.39.5
-+
--- 
-2.39.5
+</body></html>
+
+--===============1634166297405708310==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1634166297405708310==--
