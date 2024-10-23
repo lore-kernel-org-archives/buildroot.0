@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF519CFA464
-	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 20:15:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58623CFA464
+	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 20:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86F0F81270;
-	Wed, 23 Oct 2024 20:15:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 143BB4067F;
+	Wed, 23 Oct 2024 20:22:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bdJhFhg8Ydoy; Wed, 23 Oct 2024 20:15:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IZKhIApK2Rju; Wed, 23 Oct 2024 20:22:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83B3281271
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E32E040733
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83B3281271;
-	Wed, 23 Oct 2024 20:15:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 670074960
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 20:15:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E32E040733;
+	Wed, 23 Oct 2024 20:22:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 965A84960
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 20:22:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 486D481274
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 20:15:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 76A71810EA
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 20:22:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hFYYBBSM1aHR for <buildroot@buildroot.org>;
- Wed, 23 Oct 2024 20:15:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id bGZWI76iBYKT for <buildroot@buildroot.org>;
+ Wed, 23 Oct 2024 20:22:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7781B81270
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7781B81270
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 20:15:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 641098640F; Wed, 23 Oct 2024 20:15:12 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 23 Oct 2024 22:13:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 09509a604571bd1c0df607eadff4e81c485f6d24
-X-Git-Newrev: eda78597eb4edef4f8cd842bbe3eb110fb2fb1b0
-X-Patchwork-Hint: ignore
-Message-Id: <20241023201512.641098640F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add iputils runtime test
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 13527810A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13527810A5
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 13527810A5
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 20:22:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6A038E0002;
+ Wed, 23 Oct 2024 20:22:14 +0000 (UTC)
+Date: Wed, 23 Oct 2024 22:22:13 +0200
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+Message-ID: <20241023222213.5af68df6@windsurf>
+In-Reply-To: <20241020162225.449121-1-ju.o@free.fr>
+References: <20241020162225.449121-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1729714935;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=1gJPq+WU3r3e1SxCnLFZhG6cjkfrY45SpwiENVBGvho=;
+ b=UtZ/cALUsn9TLh+EGeKMS6m8zrLJxow3rJKQ0eEb6ySkDkoFnQEoDLjI6Q2+NePawiSt9T
+ hxlDy9zdCcTQvja8OQsc1nq2U014VjSlRWOWtmQoQFGafzI+10wvLBxKGv8h2igSMnLOCo
+ eZHavvsIZfLtpeU6MJsqe3Jo5cWk4TOs0oy3dwn6C6hfZTH3MJcoNhcDbp6fDldMYq7Y6G
+ rUYz14HylS4ASgt1E4YjaBICek/+4Ojb4jcWAbYatlR9lNEJsq6BMLAjW7EQLYzOheDoVA
+ Oo2O/gbNgnf64oclHudmu8Iy92nHoELJR5sbJR7EbbYZ0Yzdj8tbpVTIMQ3uaA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=UtZ/cALU
+Subject: Re: [Buildroot] [PATCH 1/1] package/rdma-core: bump to version v54.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,88 +83,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eda78597eb4edef4f8cd842bbe3eb110fb2fb1b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 20 Oct 2024 18:22:24 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                    |  1 +
- support/testing/tests/package/test_iputils.py | 48 +++++++++++++++++++++++++++
- 2 files changed, 49 insertions(+)
+> For change log since v53.0, see:
+> https://github.com/linux-rdma/rdma-core/releases/tag/v54.0
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+> Patch tested in:
+> https://gitlab.com/jolivain/buildroot/-/jobs/8134295893
+> ---
+>  package/rdma-core/rdma-core.hash | 2 +-
+>  package/rdma-core/rdma-core.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 136b82ce14..386b4ef38f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1911,6 +1911,7 @@ F:	support/testing/tests/package/test_iperf.py
- F:	support/testing/tests/package/test_iperf3.py
- F:	support/testing/tests/package/test_iproute2.py
- F:	support/testing/tests/package/test_iptables.py
-+F:	support/testing/tests/package/test_iputils.py
- F:	support/testing/tests/package/test_jailhouse.py
- F:	support/testing/tests/package/test_jq.py
- F:	support/testing/tests/package/test_jq/
-diff --git a/support/testing/tests/package/test_iputils.py b/support/testing/tests/package/test_iputils.py
-new file mode 100644
-index 0000000000..5f4ba9873b
---- /dev/null
-+++ b/support/testing/tests/package/test_iputils.py
-@@ -0,0 +1,48 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestIputils(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_IPUTILS=y
-+        BR2_SYSTEM_DHCP="eth0"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # We check all the main programs of iputils can execute and
-+        # report their version. Note the "-V" option is not accepted
-+        # and fails if the "ping" applet of BusyBox is used instead.
-+        iputils_progs = ["arping", "clockdiff", "ping", "tracepath"]
-+        for prog in iputils_progs:
-+            self.assertRunOk(f"{prog} -V")
-+
-+        # Qemu host IP, See:
-+        # https://wiki.qemu.org/Documentation/Networking#User_Networking_(SLIRP)
-+        qemu_host = "10.0.2.2"
-+
-+        # We test the "arping" program, with 3 pings.
-+        self.assertRunOk(f"arping -c 3 {qemu_host}", timeout=10)
-+
-+        # We test the "ping" program. We use the option "-D" which
-+        # shows a timestamp and is also not supported by the "ping"
-+        # BusyBox applet.
-+        self.assertRunOk(f"ping -D -c 3 {qemu_host}", timeout=10)
-+
-+        # We test the "tracepath" program. We set the max hops to 2,
-+        # since there is no intermediate routers.
-+        self.assertRunOk(f"tracepath -m 2 {qemu_host}", timeout=10)
-+
-+        # We test the "clockdiff" program. We cannot use the Qemu host
-+        # IP for this program as the ICMP TIMESTAMP is used and is not
-+        # responded. We use the local host instead.
-+        self.assertRunOk("clockdiff 127.0.0.1", timeout=10)
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
