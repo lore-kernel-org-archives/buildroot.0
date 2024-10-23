@@ -4,48 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F910CFA472
-	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 21:01:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C98A5CFA474
+	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 21:01:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC13240180;
-	Wed, 23 Oct 2024 21:01:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FC7A40152;
+	Wed, 23 Oct 2024 21:01:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sd9c8BTpZgiA; Wed, 23 Oct 2024 21:01:17 +0000 (UTC)
+ id HpSclY8HzaH0; Wed, 23 Oct 2024 21:01:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4105940152
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45F194016F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4105940152;
-	Wed, 23 Oct 2024 21:01:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0BDDF972
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:01:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45F194016F;
+	Wed, 23 Oct 2024 21:01:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6A614972
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:01:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DFA5540152
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:01:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 58E1660841
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:01:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4SxxepzO-r9j for <buildroot@buildroot.org>;
- Wed, 23 Oct 2024 21:01:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZNH8C4hdA_j1 for <buildroot@buildroot.org>;
+ Wed, 23 Oct 2024 21:01:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BCCA40149
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8BCCA40149
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:01:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 76EEE86431; Wed, 23 Oct 2024 21:01:14 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 23 Oct 2024 23:00:03 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7e739d49b235c1692edbb51dcc23671eaa79fd4f
-X-Git-Newrev: 1459c0a6f06caf5340fd8c54d160ca4e96306669
-X-Patchwork-Hint: ignore
-Message-Id: <20241023210114.76EEE86431@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-python.mk: add hatch setup type
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 51E8F6075A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51E8F6075A
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 51E8F6075A
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:01:22 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 404021BF204;
+ Wed, 23 Oct 2024 21:01:19 +0000 (UTC)
+Date: Wed, 23 Oct 2024 23:01:17 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+Message-ID: <20241023230117.5ba6eb11@windsurf>
+In-Reply-To: <20241008222724.3766564-1-james.hilliard1@gmail.com>
+References: <20241008222724.3766564-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1729717279;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=qARrlClN27u6PsI6eeLu+1YEkbaMxCW6w9h4/ORxAMI=;
+ b=Yl+b1MGSDKYwg0SXZR5IwlPQjUjYAOudFRsSPdLIYrADTBEE2YTNNFv1eMyDbTkBk2yzaf
+ iHyUiRLZktnW8k0b9OvEfetFehz465SxI4fQeixeUxW4LOx9rB4s1dod0gbk33efumizbl
+ ewcNfVkP2YUfx8kTiB7UJrkx9qI7WyGG/GwW6wHvopaAN2ksXlyzKksmCMOidsaP8OGhtL
+ aELHtYiL0ZPxcmAKzk9U1y7EdrEYGgcxkLOhLu9kGKhCzOdXzH+IkvylkP28GTRxxQLOMO
+ z66k/fMN6lQJaYNpuwfxjUpCSF2elblvkGO/R6+I0rcZPF8KF7Vnqpc3PxKIxg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Yl+b1MGS
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-python.mk: add hatch setup
+ type
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,139 +84,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1459c0a6f06caf5340fd8c54d160ca4e96306669
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  8 Oct 2024 16:27:24 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-As we have many python packages using the hatch(hatchling) build
-system we should add a setup type for it so that we don't have to
-manually specify the host-python-hatchling dependency.
+> As we have many python packages using the hatch(hatchling) build
+> system we should add a setup type for it so that we don't have to
+> manually specify the host-python-hatchling dependency.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  docs/manual/adding-packages-directory.adoc |  6 ++---
+>  docs/manual/adding-packages-python.adoc    | 14 +++++-----
+>  package/pkg-python.mk                      | 31 ++++++++++++++++++++--
+>  utils/scanpypi                             |  2 ++
+>  4 files changed, 41 insertions(+), 12 deletions(-)
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- docs/manual/adding-packages-directory.adoc |  6 +++---
- docs/manual/adding-packages-python.adoc    | 14 +++++++-------
- package/pkg-python.mk                      | 31 ++++++++++++++++++++++++++++--
- utils/scanpypi                             |  2 ++
- 4 files changed, 41 insertions(+), 12 deletions(-)
+Applied to master, thanks.
 
-diff --git a/docs/manual/adding-packages-directory.adoc b/docs/manual/adding-packages-directory.adoc
-index 4ca11507e1..cb19f3bac9 100644
---- a/docs/manual/adding-packages-directory.adoc
-+++ b/docs/manual/adding-packages-directory.adoc
-@@ -429,9 +429,9 @@ different way, using different infrastructures:
-    and xref:cmake-package-reference[reference].
- 
- * *Makefiles for Python modules*: We have a dedicated infrastructure
--   for Python modules that use the +flit+, +pep517+, +setuptools+,
--   +setuptools-rust+ or +maturin+ mechanisms. We cover them through a
--   xref:python-package-tutorial[tutorial] and a
-+   for Python modules that use the +flit+, +hatch+, +pep517+,
-+   +setuptools+, +setuptools-rust+ or +maturin+ mechanisms. We cover
-+   them through a xref:python-package-tutorial[tutorial] and a
-    xref:python-package-reference[reference].
- 
- * *Makefiles for Lua modules*: We have a dedicated infrastructure for
-diff --git a/docs/manual/adding-packages-python.adoc b/docs/manual/adding-packages-python.adoc
-index f33770f95c..790e2899cf 100644
---- a/docs/manual/adding-packages-python.adoc
-+++ b/docs/manual/adding-packages-python.adoc
-@@ -51,9 +51,9 @@ On line 13, we declare our dependencies, so that they are built
- before the build process of our package starts.
- 
- On line 14, we declare the specific Python build system being used. In
--this case the +setuptools+ Python build system is used. The five
--supported ones are +flit+, +pep517+, +setuptools+, +setuptools-rust+
--and +maturin+.
-+this case the +setuptools+ Python build system is used. The six
-+supported ones are +flit+, +hatch+, +pep517+, +setuptools+,
-++setuptools-rust+ and +maturin+.
- 
- Finally, on line 16, we invoke the +python-package+ macro that
- generates all the Makefile rules that actually allow the package to be
-@@ -96,10 +96,10 @@ Note that:
- One variable specific to the Python infrastructure is mandatory:
- 
- * +PYTHON_FOO_SETUP_TYPE+, to define which Python build system is used
--  by the package. The five supported values are +flit+, +pep517+ and
--  +setuptools+, +setuptools-rust+ and +maturin+. If you don't know
--  which one is used in your package, look at the +setup.py+ or
--  +pyproject.toml+ file in your package source code, and see whether
-+  by the package. The five supported values are +flit+, +hatch+,
-+  +pep517+ and +setuptools+, +setuptools-rust+ and +maturin+. If you
-+  don't know which one is used in your package, look at the +setup.py+
-+  or +pyproject.toml+ file in your package source code, and see whether
-   it imports things from the +flit+ module or the +setuptools+
-   module. If the package is using a +pyproject.toml+ file without any
-   build-system requires and with a local in-tree backend-path one
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index dea4f39ca0..3c607b5277 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -200,6 +200,33 @@ HOST_PKG_PYTHON_FLIT_BOOTSTRAP_BUILD_CMD = \
- HOST_PKG_PYTHON_FLIT_BOOTSTRAP_INSTALL_CMD = \
- 	$(HOST_PKG_PYTHON_PEP517_INSTALL_CMD)
- 
-+# Target hatch packages
-+PKG_PYTHON_HATCH_ENV = \
-+	$(PKG_PYTHON_PEP517_ENV)
-+
-+PKG_PYTHON_HATCH_BUILD_CMD = \
-+	$(PKG_PYTHON_PEP517_BUILD_CMD)
-+
-+PKG_PYTHON_HATCH_INSTALL_TARGET_CMD = \
-+	$(PKG_PYTHON_PEP517_INSTALL_TARGET_CMD)
-+
-+PKG_PYTHON_HATCH_INSTALL_STAGING_CMD = \
-+	$(PKG_PYTHON_PEP517_INSTALL_STAGING_CMD)
-+
-+PKG_PYTHON_HATCH_DEPENDENCIES = \
-+	$(PKG_PYTHON_PEP517_DEPENDENCIES) \
-+	host-python-hatchling
-+
-+# Host hatch packages
-+HOST_PKG_PYTHON_HATCH_ENV = \
-+	$(HOST_PKG_PYTHON_PEP517_ENV)
-+
-+HOST_PKG_PYTHON_HATCH_BUILD_CMD = \
-+	$(HOST_PKG_PYTHON_PEP517_BUILD_CMD)
-+
-+HOST_PKG_PYTHON_HATCH_INSTALL_CMD = \
-+	$(HOST_PKG_PYTHON_PEP517_INSTALL_CMD)
-+
- # Target maturin packages
- PKG_PYTHON_MATURIN_ENV = \
- 	$(PKG_PYTHON_PEP517_ENV) \
-@@ -257,8 +284,8 @@ endif
- 
- $(2)_SETUP_TYPE_UPPER = $$(call UPPERCASE,$$($(2)_SETUP_TYPE))
- 
--ifneq ($$(filter-out setuptools setuptools-rust pep517 flit flit-bootstrap maturin,$$($(2)_SETUP_TYPE)),)
--$$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'maturin', 'setuptools', 'setuptools-rust', 'pep517' or 'flit'.")
-+ifneq ($$(filter-out setuptools setuptools-rust pep517 flit flit-bootstrap hatch maturin,$$($(2)_SETUP_TYPE)),)
-+$$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'maturin', 'setuptools', 'setuptools-rust', 'pep517', 'flit' or 'hatch'.")
- endif
- ifeq ($(4)-$$($(2)_SETUP_TYPE),target-flit-bootstrap)
- $$(error flit-bootstrap setup type only supported for host packages)
-diff --git a/utils/scanpypi b/utils/scanpypi
-index f47150ceb6..f832d5cab0 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -417,6 +417,8 @@ class BuildrootPackage():
-                 self.build_backend = build_backend
-                 if build_backend == 'flit_core.buildapi':
-                     self.setup_metadata['method'] = 'flit'
-+                elif build_backend == 'hatchling.build':
-+                    self.setup_metadata['method'] = 'hatch'
-                 elif build_backend == 'setuptools.build_meta':
-                     self.setup_metadata['method'] = 'setuptools'
-                 else:
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
