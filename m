@@ -1,52 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 792B7CFA463
-	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 20:08:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0052BCFA462
+	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 20:10:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B74440B26;
-	Wed, 23 Oct 2024 20:08:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD3CA812E5;
+	Wed, 23 Oct 2024 20:10:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GH-0FbH5ki8A; Wed, 23 Oct 2024 20:08:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7Kc6TE7mPfXW; Wed, 23 Oct 2024 20:10:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0709240B3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1121812E8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0709240B3B;
-	Wed, 23 Oct 2024 20:08:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 413624960
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 20:08:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1121812E8;
+	Wed, 23 Oct 2024 20:10:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 93CEE4960
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 20:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3CFFA40B3B
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 20:08:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 74A1840A7C
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 20:10:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j47Jwb2dJCZs for <buildroot@buildroot.org>;
- Wed, 23 Oct 2024 20:08:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h9jgo_snpVSP for <buildroot@buildroot.org>;
+ Wed, 23 Oct 2024 20:10:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F3F740B26
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F3F740B26
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 20:08:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 185C7863F0; Wed, 23 Oct 2024 20:08:15 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Wed, 23 Oct 2024 22:05:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 93487f1566974d17630a432e2cc3db38b29c888d
-X-Git-Newrev: 119fe4a3c0c3a98b7390d53ac517041bf7edb853
-X-Patchwork-Hint: ignore
-Message-Id: <20241023200815.185C7863F0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iputils: bump version to 20240905
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 40AE440A78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40AE440A78
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 40AE440A78
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 20:10:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2947340005;
+ Wed, 23 Oct 2024 20:10:10 +0000 (UTC)
+Date: Wed, 23 Oct 2024 22:10:09 +0200
+To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Message-ID: <20241023221009.31cd52da@windsurf>
+In-Reply-To: <20241023122234.478798-1-arnout@mind.be>
+References: <20241023122234.478798-1-arnout@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1729714210;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=pKx4UqD2vLRK6F5DG/tkto+ppNskNGJgZDGCGsll8QE=;
+ b=dFSaro+0ZbZiCiF4t6u0bkr1Rmd0gjlyKQNOFlwe/OPdlw63dWgZIzig6y85RH4HbCZpSc
+ DYLCox5W4ATTKcKOleGQQRZ9afyKTC3FkHYJ/V8BhyWXQIspte9uY7lIhHRK3wmOta8HGn
+ jE2zGhacbbHwapSoYmBaPX53lBwSJog79N4tKUShu704+txFER0JJqRZZ5Gcc6RAtMKnD0
+ yh1v2/xcvMNUvyoh1S0IbGLIDhkMLXU+tJTLsiKOD18axwBv5G/zwtJHFYuLByJZF9OnVL
+ IXZWwrkGQEOVf2xVuBGdG5/DVnxAtHVJSpxswa2j/LFX9ttE8qKVHglRyk2dwQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=dFSaro+0
+Subject: Re: [Buildroot] [PATCH] utils/brmake: add option to run in docker
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,57 +80,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=119fe4a3c0c3a98b7390d53ac517041bf7edb853
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 23 Oct 2024 14:22:34 +0200
+Arnout Vandecappelle via buildroot <buildroot@buildroot.org> wrote:
 
-Update comment. This release includes pre-generated man pages & HTML
-docs in dist tarballs [1], but we don't install them anyway (Buildroot
-does not ship package docs).
+> At the moment, it is difficult to combine brmake with docker-run.
+> `docker-run brmake ...` doesn't work because our docker image doesn't
+> have unbuffer. In addition, inside the container the timezone is UTC,
+> but you probably want the timestamps added by brmake to be in local
+> time. Therefore, it's better to have the call to docker-run nested
+> inside brmake.
+> 
+> Currently, brmake doesn't have any way to pass parameters, all of "$@"
+> is passed unchanged to the `make` invocation. Thus, there is no
+> established way to pass in the option whether or not to use docker. We
+> choose to use an environment variable to pass in the option. The
+> convention is that such a buildroot-specific environment variable should
+> start with BR2_, so we choose BR2_DOCKER.
+> 
+> Run make inside docker-run if the BR2_DOCKER environment variable is
+> set. Update utils/readme.txt (the only existing documentation of brmake)
+> with this information.
+> 
+> Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  utils/brmake     | 8 +++++++-
+>  utils/readme.txt | 3 +++
+>  2 files changed, 10 insertions(+), 1 deletion(-)
 
-For change log, see [2].
+Applied to master, thanks.
 
-[1] https://github.com/iputils/iputils/commit/535f6de25909a63ea35750c8a37408e49c0d235c
-[2] https://github.com/iputils/iputils/releases/tag/20240905
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-[Julien: add link to change log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/iputils/iputils.hash | 4 ++--
- package/iputils/iputils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-index a3e48d60a9..6baf433dcb 100644
---- a/package/iputils/iputils.hash
-+++ b/package/iputils/iputils.hash
-@@ -1,5 +1,5 @@
--# https://github.com/iputils/iputils/releases/download/20240117/sha256sums.asc
--sha256  7ed46e876e4157e1d20c40ec945e1ce0f3af3b10b5f6373e423135c6f22cd116  iputils-20240117.tar.gz
-+# https://github.com/iputils/iputils/releases/download/20240905/sha256sums.asc
-+sha256  599cda8e3f5f7ce4c612456ab1101369da8f79aa0f83c8e877290a1c7bb56010  iputils-20240905.tar.gz
- # Locally computed
- sha256  2c9f29d982c48665c30b3adaf400c048988fd256eb91c691e351eb3b6a8b2036  LICENSE
- sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 08d849e69d..ec8c24e4e0 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPUTILS_VERSION = 20240117
-+IPUTILS_VERSION = 20240905
- IPUTILS_SITE = https://github.com/iputils/iputils/releases/download/$(IPUTILS_VERSION)
- IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
- IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
