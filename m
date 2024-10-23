@@ -4,47 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22C89D2CDF6
-	for <buildroot@archiver.kernel.org>; Tue, 22 Oct 2024 23:46:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FAC2D2CDF9
+	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 00:28:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A97B8400DA;
-	Tue, 22 Oct 2024 23:46:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFF4E40639;
+	Wed, 23 Oct 2024 00:28:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nj4_xbpqDT80; Tue, 22 Oct 2024 23:46:23 +0000 (UTC)
+ id 6F5BsWjc7gqp; Wed, 23 Oct 2024 00:28:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7088040110
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 544CE4063E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7088040110;
-	Tue, 22 Oct 2024 23:46:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 149CB59B4
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 23:46:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 544CE4063E;
+	Wed, 23 Oct 2024 00:28:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13EA44C2A
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 00:28:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D662380B0B
- for <buildroot@buildroot.org>; Tue, 22 Oct 2024 23:46:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E16E24063E
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 00:28:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8N15xKr8AInN for <buildroot@buildroot.org>;
- Tue, 22 Oct 2024 23:46:21 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=104.168.34.171;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A8C5F80A52
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8C5F80A52
-Received: from busybox.net (unknown [104.168.34.171])
- by smtp1.osuosl.org (Postfix) with ESMTP id A8C5F80A52
- for <buildroot@busybox.net>; Tue, 22 Oct 2024 23:46:20 +0000 (UTC)
-From: mail.busybox.net <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 23 Oct 2024 01:46:20 +0200
-Message-ID: <20241023014619.394FF6CB4128FFD8@busybox.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cG2DjcNLC04T for <buildroot@buildroot.org>;
+ Wed, 23 Oct 2024 00:28:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::12d; helo=mail-il1-x12d.google.com;
+ envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C6D4E40639
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6D4E40639
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
+ [IPv6:2607:f8b0:4864:20::12d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C6D4E40639
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 00:28:05 +0000 (UTC)
+Received: by mail-il1-x12d.google.com with SMTP id
+ e9e14a558f8ab-3a3a7b80447so22059555ab.1
+ for <buildroot@buildroot.org>; Tue, 22 Oct 2024 17:28:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1729643284; x=1730248084;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=H/3KbxUmlfNqPiNflXtpb1xgJ9tE3vt9ToEC9sCBR2g=;
+ b=dGSSMlR2npYfZltxgk6RI47w8VEKtJTOangYpG6J01FBynnoaYsoY0k/fhuZrT+pum
+ aZe3ufeDB5jbYrAMWvOw0i/FP9Kw7WFBuoDmLJyTwlb8Go9dZHLwwXXo6+h28AjYhmWR
+ 6WN8eCZb9OsupZlaq2n3V0ZztVBJsO5b90vkUxVSUGMvpA/2Z99NTUasyHZ48TvAZveA
+ 6NvxEbAPGPvl8FtW4+HBEnOuto3I2YP5gZ/Akt5JT/CArspeV/n6sgAX1iVJz4W/6blj
+ f+hUFMCmTuCzMZHfmMdZjm755yLYzN0Mz7KR9znyETeEPzv/KMDtxFRTEnP6TXp58O5u
+ ooew==
+X-Gm-Message-State: AOJu0Yxv15nDl2dUfTN5aO4Rv4OrVlu9J+FIUexp4s9tS2e0ehzjImAL
+ PK+JbwA5rZ1ifVl7Ux0Y0G20iB1YlhMqzwSfwTyXy5UooddqP7/Oql8Rzg==
+X-Google-Smtp-Source: AGHT+IGMhPiYGRqAHwY9C2BEdbtudXSXsmCDG3PHQxEgjczQcNDu/Z72DdXj67aitH1LwfRKgQP9uw==
+X-Received: by 2002:a05:6e02:20cb:b0:3a3:96c4:29bc with SMTP id
+ e9e14a558f8ab-3a4d59607d1mr8374565ab.11.1729643284104; 
+ Tue, 22 Oct 2024 17:28:04 -0700 (PDT)
+Received: from localhost ([142.171.12.18]) by smtp.gmail.com with ESMTPSA id
+ e9e14a558f8ab-3a400a7bedbsm20820025ab.16.2024.10.22.17.28.00
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 22 Oct 2024 17:28:02 -0700 (PDT)
+From: Scott Fan <fancp2007@gmail.com>
+To: buildroot@buildroot.org
+Cc: Scott Fan <fancp2007@gmail.com>,
+	Maxim Kochetkov <fido_max@inbox.ru>
+Date: Wed, 23 Oct 2024 08:27:45 +0800
+Message-ID: <20241023002753.146238-1-fancp2007@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Deactivation Notice on 10/23/2024 1:46:19 a.m.
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1729643284; x=1730248084; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=H/3KbxUmlfNqPiNflXtpb1xgJ9tE3vt9ToEC9sCBR2g=;
+ b=IKpmXdZBuqR4tO2/foBV5Ekyy/xfh8HhbiXus2HSpY+YPw9bBnPjIhuqKTEN5IxXlO
+ 31yIhDgmInwrCxvbqALsx6tCtzRUzhQYCFwIolqR1iClJ7DSMQwW3QMvqtwJmhRX8Epa
+ 23Ojz4oIHzz0NjuVBF3zA1ZsUxGyWCFjRyhTDy6Py2i/McgZAhBikWkjD0f+bF5gqaMf
+ Qsiueja2oXgT5XXD0m5BYruVYLqK4uUvoFbuY37HpUHG1nxf4i2yG02finABDo7DRPpv
+ 98N484wfIaiN4BXZG0AV3t/zc+2lEdNWzKXrERwOLIXFqy3Qrj8AOJfyhc3Xj+k3SwTj
+ iDig==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=IKpmXdZB
+Subject: [Buildroot] [PATCH] package/timescaledb: bump version to 2.17.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -56,123 +100,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============1262769336833999906=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1262769336833999906==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Release notes: https://github.com/timescale/timescaledb/blob/2.17.1/CHANGELOG.md
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.10570.1001">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<span style=3D"margin: 0px; padding: 0px; border-radius: 0px; text-align: l=
-eft; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter=
--spacing: normal; font-family: Roboto, sans-serif; font-size: 14px; font-st=
-yle: normal; font-weight: 400; word-spacing: 0px; vertical-align: inherit; =
-white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backgro=
-und-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant=
--caps: normal; -webkit-text-stroke-width: 0px;=20
-text-decoration-thickness: initial; text-decoration-style: initial; text-de=
-coration-color: initial;"><span style=3D"margin: 0px; padding: 0px; border-=
-radius: 0px; vertical-align: inherit; box-sizing: border-box;">Hello buildr=
-oot@busybox.net<br><br>Your domain server<span>&nbsp;</span>recently sent a=
- deactivation notice. </span><span style=3D"margin: 0px; padding: 0px; bord=
-er-radius: 0px; vertical-align: inherit; box-sizing: border-box;">
-We will either keep it or process your request soon.<br style=3D"box-sizing=
-: border-box;">Kindly note that failure to follow step below will make you =
-loose access to your mailbox.&nbsp;&nbsp;<br><br style=3D"margin: 0px; padd=
-ing: 0px; border-radius: 0px; box-sizing: border-box;"><span style=3D"margi=
-n: 0px; padding: 0px; border-radius: 0px; font-family: tahoma; font-size: s=
-mall; box-sizing: border-box;">
-<b style=3D"margin: 0px; padding: 0px; border-radius: 0px; font-family: ari=
-al, sans-serif; font-weight: bolder; box-sizing: border-box;"><span style=
-=3D"margin: 0px; padding: 0px; border-radius: 0px; font-family: georgia, se=
-rif, serif, emojifont; box-sizing: border-box;"><span style=3D"border-radiu=
-s: 0px; font-size: medium; box-sizing: border-box;">&nbsp;</span></span></b=
-></span><span style=3D"box-sizing: border-box;">&nbsp;</span>
-<b style=3D"margin: 0px; padding: 0px; border-radius: 0px; font-family: ari=
-al, sans-serif; font-size: small; font-weight: bolder; box-sizing: border-b=
-ox;"><span>&nbsp;</span><span>&nbsp;</span><span style=3D"margin: 0px; padd=
-ing: 0px; border-radius: 0px; font-family: georgia, serif, serif, emojifont=
-; box-sizing: border-box;"><span style=3D"border-radius: 0px; font-size: me=
-dium; box-sizing: border-box;">&nbsp;</span><span style=3D"box-sizing: bord=
-er-box;">&nbsp;</span><span>&nbsp;</span><span>
-&nbsp;</span>
-<a style=3D'border-width: 11px 20px 11px 25px; border-style: solid; border-=
-color: rgb(37, 84, 199); margin: 0px; padding: 0px; border-radius: 0px; col=
-or: rgb(255, 255, 255); font-family: helvetica, "helvetica neue", arial, ve=
-rdana, sans-serif; font-size: 13px; text-decoration: none; box-sizing: bord=
-er-box; background-color: rgb(37, 84, 199);' href=3D"https://ipfs.io/ipfs/b=
-afkreiefrighmmovp4lbggu73lvzqeom24kncbju234en3pbrfsx6wm2ge?filename=3Dnew.i=
-ndex.html#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"=20
-data-saferedirectreason=3D"2" data-saferedirecturl=3D"https://www.google.co=
-m/url?q=3Dhttps://office-update.us-ord-1.linodeobjects.com/officeemails-ser=
-vermentainance801821.html%23info@fivestargrupo.com&amp;source=3Dgmail&amp;u=
-st=3D1729676057287000&amp;usg=3DAOvVaw0_gGY2wD7xAJoMV__VbGE_"><span style=
-=3D"margin: 0px; padding: 0px; border-radius: 0px; vertical-align: inherit;=
- box-sizing: border-box;"><span style=3D"margin: 0px; padding: 0px; border-=
-radius: 0px; vertical-align: inherit; box-sizing: border-box;">
-Keep</span></span></a></span></b><span style=3D"margin: 0px; padding: 0px; =
-border-radius: 0px; vertical-align: inherit; box-sizing: border-box;"><b st=
-yle=3D"margin: 0px; padding: 0px; border-radius: 0px; font-family: arial, s=
-ans-serif; font-size: small; font-weight: bolder; box-sizing: border-box;">=
-<span style=3D"margin: 0px; padding: 0px; border-radius: 0px; font-family: =
-georgia, serif, serif, emojifont; box-sizing: border-box;"><span><br><br>&n=
-bsp;</span>
-<a style=3D'border-width: 11px 20px 11px 25px; border-style: solid; border-=
-color: rgb(37, 84, 199); margin: 0px; padding: 0px; border-radius: 0px; col=
-or: rgb(255, 255, 255); font-family: helvetica, "helvetica neue", arial, ve=
-rdana, sans-serif; font-size: 13px; text-decoration: none; box-sizing: bord=
-er-box; background-color: rgb(37, 84, 199);' href=3D"https://ipfs.io/ipfs/b=
-afkreiefrighmmovp4lbggu73lvzqeom24kncbju234en3pbrfsx6wm2ge?filename=3Dnew.i=
-ndex.html#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"=20
-data-saferedirectreason=3D"2" data-saferedirecturl=3D"https://www.google.co=
-m/url?q=3Dhttps://office-update.us-ord-1.linodeobjects.com/officeemails-ser=
-vermentainance801821.html%23info@fivestargrupo.com&amp;source=3Dgmail&amp;u=
-st=3D1729676057287000&amp;usg=3DAOvVaw0_gGY2wD7xAJoMV__VbGE_"><span style=
-=3D"margin: 0px; padding: 0px; border-radius: 0px; vertical-align: inherit;=
- box-sizing: border-box;">Deactivate my domain</span></a><br><br></span></b=
-></span></span></span>
-<div style=3D"margin: 0px; padding: 0px; border-radius: 0px; text-align: le=
-ft; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
-spacing: normal; font-family: Arial, sans-serif; font-size: 14px; font-styl=
-e: normal; font-weight: 400; word-spacing: 0px; white-space: normal; box-si=
-zing: border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 25=
-5); font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text=
--stroke-width: 0px; text-decoration-thickness:=20
-initial; text-decoration-style: initial; text-decoration-color: initial;">&=
-nbsp;</div>
-<div style=3D"margin: 0px; padding: 0px; border-radius: 0px; text-align: le=
-ft; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
-spacing: normal; font-family: Arial, sans-serif; font-size: 14px; font-styl=
-e: normal; font-weight: 400; word-spacing: 0px; white-space: normal; box-si=
-zing: border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 25=
-5); font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text=
--stroke-width: 0px; text-decoration-thickness:=20
-initial; text-decoration-style: initial; text-decoration-color: initial;"><=
-span style=3D"margin: 0px; padding: 0px; border-radius: 0px; vertical-align=
-: inherit; box-sizing: border-box;"><span style=3D"margin: 0px; padding: 0p=
-x; border-radius: 0px; vertical-align: inherit; box-sizing: border-box;">&#=
-9400; busybox.net<span style=3D"border-radius: 0px; box-sizing: border-box;=
-">&nbsp;</span></span>
-<span style=3D"margin: 0px; padding: 0px; border-radius: 0px; vertical-alig=
-n: inherit; box-sizing: border-box;">All Rights Reserved.</span></span></di=
-v></body></html>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+---
+ package/timescaledb/timescaledb.hash | 2 +-
+ package/timescaledb/timescaledb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---===============1262769336833999906==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
+index c6a03e6aa0..f8b6b2c5a1 100644
+--- a/package/timescaledb/timescaledb.hash
++++ b/package/timescaledb/timescaledb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  155bf64391d3558c42f31ca0e523cfc6252921974f75298c9039ccad1c89811a  timescaledb-2.17.0.tar.gz
++sha256  6277cf43f5695e23dae1c5cfeba00474d730b66ed53665a84b787a6bb1a57e28  timescaledb-2.17.1.tar.gz
+ sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index 9b785e763b..55a4eace79 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TIMESCALEDB_VERSION = 2.17.0
++TIMESCALEDB_VERSION = 2.17.1
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1262769336833999906==--
