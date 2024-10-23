@@ -4,103 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80FC7CDDE7D
-	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 15:21:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC270CFA449
+	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 16:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 241CD400E1;
-	Wed, 23 Oct 2024 15:21:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5112E40538;
+	Wed, 23 Oct 2024 16:00:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NOgB1aNi9z6a; Wed, 23 Oct 2024 15:21:35 +0000 (UTC)
+ id rsJhZ9XeBabt; Wed, 23 Oct 2024 16:00:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0180740101
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0183140637
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0180740101;
-	Wed, 23 Oct 2024 15:21:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id F12B72072
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 15:21:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0183140637;
+	Wed, 23 Oct 2024 16:00:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5750D59B4
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 16:00:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EC9B760612
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 15:21:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4510F810ED
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 16:00:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hW6Mg9QzeySp for <buildroot@buildroot.org>;
- Wed, 23 Oct 2024 15:21:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q0eRKvrvSStP for <buildroot@buildroot.org>;
+ Wed, 23 Oct 2024 16:00:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::22b; helo=mail-oi1-x22b.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 17DAC60623
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17DAC60623
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
- [IPv6:2607:f8b0:4864:20::22b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 17DAC60623
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 15:21:32 +0000 (UTC)
-Received: by mail-oi1-x22b.google.com with SMTP id
- 5614622812f47-3e6005781c0so3166981b6e.3
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 08:21:32 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1B3C0810EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B3C0810EA
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1B3C0810EA
+ for <buildroot@busybox.net>; Wed, 23 Oct 2024 16:00:24 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-37d447de11dso5500952f8f.1
+ for <buildroot@busybox.net>; Wed, 23 Oct 2024 09:00:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1729696892; x=1730301692;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=mOGj/q7nuVSYo12rLkXpyxDTq9m/63ZF1ObfQD78YJ4=;
- b=jCzv1ewAxDmuGu5tjadDWhTZVuZKvlvHjw/BbFLpi5n1iwHr2oWtndFglCPcss80rl
- /cxL/5RLU6h31a9ioyCIMU6MCaYJarAjOboIsBJVPCc9N+zE9aZ5wgecSJsb48aViym2
- TFlcI85oM7GBuT9CoBjL34zRqL8h/2+E4A9Mb9hAwCrJKkMqV4R5PTZfkObwi6pVOmCm
- RCsbzuaXgeCP3a8EVWomQslVJv9piKEeLX9BXhv6iAciOlGco6wO5g1IdtkUld3YLaNZ
- 8cjqF9I103MBBiLoOCsW7olBPoHUPYLZKfuhbxC3RAmdjTNDt0/UEMwK3XIdgtTApwek
- E8+A==
-X-Forwarded-Encrypted: i=1;
- AJvYcCV8yI59tj5DbvofIu52xPS81BTf8y5UqyfS7QUGZMQuP71r3tI53qwZhoj4PQXy7XDU6W/y2Iir3oE=@buildroot.org
-X-Gm-Message-State: AOJu0Yx3UVcZfiEofXk9ekElNkwMV7MwTgiUUNb+86ck/1O7B6Gtggom
- K2NEJ6rUr8Q7PLADjuBf8qgPJTG1aG3ityB07vcPsTy7dmHskzV1cjI4KKAD12O2mNfpFZNZu+m
- lrs1wC4qjZ1lGHOpcAPYIpS3lQsY=
-X-Google-Smtp-Source: AGHT+IFVrIEUYVB76V4wc1DJsNysSYWuM3tEmwdI7BMVHAeezsV+hssVSzGZ0fxOq//ii3xuukKVirUpE8gRoI9FeDw=
-X-Received: by 2002:a05:6808:2dc9:b0:3e6:44c:70ee with SMTP id
- 5614622812f47-3e6244eeb27mr3148084b6e.7.1729696891993; Wed, 23 Oct 2024
- 08:21:31 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1729699223; x=1730304023;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=j/H1H4Pr6PWT9lYlgeeTJFoJNaKCwE2VFPj2K6d4Ep0=;
+ b=npwGQaAYZUZlaBJiRp7RCppc5HM02ILB5KO1XrEMvNmG/1bovXLi31pfniCh8iJTIE
+ 1JBTU5xUrWvcRSCSJJiH8AcLeSsp3damqJ80NhfTmsWHekNg7rWuoj+iU2z0CMMkXdq9
+ 2fHPO5NJQSxCeKI1jFTHBUJdFCn5Q3v4I6yCx8+BQBixSPpDvUZ1fsICibEtvz+YKyqE
+ FRZndtFguC7OsYFvdt51vDcsni7lad1+A+rzle2Qkf+QeuBOvCZwMLnPWWBO/pHvIhoM
+ hmGMbdhHDqgqV92Qv+mu0UznfLIpDEmDKZimZRDrSbugJ2cI2SjvMEnxUWZo6Lb8oo7t
+ UHpA==
+X-Gm-Message-State: AOJu0Ywu2rwEcXXi4ap/SYs2I0PzRCVeUgu6o/uIiiACu/g8BBMKm7a6
+ xBeN7PJF9QnAwnxklwxI6KPI0aI5zIR+DF32rrbWHc/V7sfxdX7l2RJQc9/Dmrv9Tv1Adn6kDF9
+ Yrw==
+X-Google-Smtp-Source: AGHT+IH2sMJBjt4KhyojCP5nob8Eo1MfTlELNs1aRqj7EBO59VE/1W0gniq5+9SZQiEeBIDv+5AF7w==
+X-Received: by 2002:a5d:6803:0:b0:37d:518f:995d with SMTP id
+ ffacd0b85a97d-37efcf8bebemr1888229f8f.56.1729699222720; 
+ Wed, 23 Oct 2024 09:00:22 -0700 (PDT)
+Received: from vm-2404.. (206.34.66.37.rev.sfr.net. [37.66.34.206])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-37ee0b94356sm9214111f8f.67.2024.10.23.09.00.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 23 Oct 2024 09:00:22 -0700 (PDT)
+From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Wed, 23 Oct 2024 18:00:08 +0200
+Message-ID: <20241023160014.568872-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-References: <20240805163133.4126564-1-james.hilliard1@gmail.com>
- <CA+h8R2oQGKFFH-vMX27WUO1uEAGyt4cz9MCwn9Cofwyujx1xDA@mail.gmail.com>
- <20240805223152.09ed915b@windsurf>
- <CADvTj4o_CnzCth+QqoxhVovBRinvYfbMf7r+SWnnY0tfVbKgbw@mail.gmail.com>
- <CA+h8R2obsR-CzMhWDpQ-A0oeEPaG-P=aCwF7BS4J-3eShmHJgg@mail.gmail.com>
- <20240806165050.234235b4@windsurf>
- <CADvTj4pOK8-2YXy0POUg1qOKa1MrjsxbnS-r1F7YMk_YXFmEAQ@mail.gmail.com>
- <CA+h8R2reErtSWPO1hGpX7tT5Xejb_SNqiuSCnXvJZKHwhzdcZg@mail.gmail.com>
- <20240806185731.372f8f3e@windsurf>
- <CA+h8R2rnNhM0nKyZm4_y6ZFrNyn7YzFa7BHeH57cLif38FSrxA@mail.gmail.com>
-In-Reply-To: <CA+h8R2rnNhM0nKyZm4_y6ZFrNyn7YzFa7BHeH57cLif38FSrxA@mail.gmail.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 23 Oct 2024 09:21:20 -0600
-Message-ID: <CADvTj4p2heLayPzF7uTK0TLzbbo4C_305vTg9=3W3aCQbAoQGw@mail.gmail.com>
-To: Christian Stewart <christian@aperture.us>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Christian Stewart via buildroot <buildroot@buildroot.org>,
- Anisse Astier <anisse@astier.eu>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1729696892; x=1730301692; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=mOGj/q7nuVSYo12rLkXpyxDTq9m/63ZF1ObfQD78YJ4=;
- b=Z2JfZGsCPZYMRpAPQubBzZLTM0HI8I4yptgLj9qsTiqFvd4BXbaRPxRERubsVQN4ap
- Wkjq8qy+OTx43/v4FJSWkw6R0ZRtaXeIPd7Ln1ZJCmvS5RIHg85WNWdknsEIa+magkYc
- lDM6EKMN5MZo45Bk/dxAtu5k/5AVxNcnzKMSgzNuhuygWo6ii2AldWT9pMz8sJJjDMXN
- NbJ87i9TW7LLWEv2/q5Dl7huUhR/4mpB0CFaN0h66aAusxw4xclTIoLbAmVEGNYYmVO+
- 54NzRGTjPDcg0Nwu2Vl7cU95hSP9aASDdeqM9mK/xHid2s+AkXaBlKBRmIt+NV/Nup9A
- GLgA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gadz.org; s=google; t=1729699223; x=1730304023; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=j/H1H4Pr6PWT9lYlgeeTJFoJNaKCwE2VFPj2K6d4Ep0=;
+ b=DOQIJQp/9glAajAmxMMLMqih5EjKfh64pZbcjtld6ykFqL/4HxtZXri5HlUYCxihgj
+ hn6kE8rjgz5XVRTrWYLaGgG0ZJlDe0Tml8MHVw5Oc+04/8nIznjBoyi7+ECtnnsQd+BU
+ JSUM7mwiKbFphYIklhAvPmkR87Stfy9v3L/sqB5CKDIpWgdgxxRYwbg0Re51PNtIOw4c
+ UV2usU2FdfLH2ZUjr/VlUOpuIHSEN+FkE8u8bpfP7+W1wJ8hQKJs+LwnfjetPF83JzW8
+ UWsJePigwt9LlAdU+Jrut7ILnRvm7yT7+loQg659Dv2rCaFiqkT3NU0wSrOVdA8wATh3
+ AddQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Z2JfZGsC
-Subject: Re: [Buildroot] [PATCH v4 1/2] package/pkg-golang.mk: allow
- packages to override download GOPROXY
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=DOQIJQp/
+Subject: [Buildroot] [PATCH 1/7] package/perl-digest-hmac: bump to version
+ 1.05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,40 +102,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCBBdWcgNiwgMjAyNCBhdCAxMjo1M+KAr1BNIENocmlzdGlhbiBTdGV3YXJ0IDxjaHJp
-c3RpYW5AYXBlcnR1cmUudXM+IHdyb3RlOgo+Cj4gVGhvbWFzLAo+Cj4gT24gVHVlLCBBdWcgNiwg
-MjAyNCwgOTo1N+KAr0FNIFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxp
-bi5jb20+IHdyb3RlOgo+Pgo+PiA+IEZvciBub3cgd2UgY2FuIGp1c3QgaW5jbHVkZSB0aGUgbGF0
-ZXN0IGNvbW1pdCBoYXNoIG9mIHRhaWxzY2FsZSB1bnRpbCB0aGV5Cj4+ID4gbWFrZSBhIG5ldyBy
-ZWxlYXNlIGFuZCBub3RoaW5nIGVsc2UgbmVlZHMgdG8gYmUgY2hhbmdlZC4KPj4KPj4gRG9uJ3Qg
-dW5kZXJzdGFuZCB0aGlzIGxhc3QgcGFydC4gV2hhdCBpcyB5b3VyIHByb3Bvc2FsIHRvIGZpeCB0
-aGUKPj4gdGFpbHNjYWxlIHNpdHVhdGlvbj8KPgo+Cj4gVGhleSBmaXhlZCB0aGUgaXNzdWUgdXBz
-dHJlYW0gYW5kIG5vdyB0aGUgbWFpbiBicmFuY2ggb2YgdGFpbHNjYWxlIHdvcmtzIGZpbmUgd2l0
-aCBHT1BST1hZPWRpcmVjdC4gU2VlOgoKSSB0aGluayB0cnlpbmcgdG8gZ2V0IHBhY2thZ2VzIHRv
-IG1ha2UgR09QUk9YWT1kaXJlY3Qgd29yayBpcyBnZXR0aW5nCnJhdGhlciBhbm5veWluZywgd2hp
-bGUgdHJ5aW5nIHRvIGFkZCBhbm90aGVyIHBhY2thZ2UobmV0YmlyZCkgSSBvbmNlIGFnYWluCnJh
-biBpbnRvIHRoaXMgZXhhY3Qgc2FtZSBpc3N1ZS4KCj4KPiBodHRwczovL2dpdGh1Yi5jb20vdGFp
-bHNjYWxlL3RhaWxzY2FsZS9pc3N1ZXMvMTI4NTkjaXNzdWVjb21tZW50LTIyMzkxNTc1NjMKPgo+
-IEl0IGlzIGZpbmUgdG8gdXNlIHRoZSBtYWluIGJyYW5jaCBvZiB0YWlsc2NhbGUgaGVyZSBldmVu
-IGlmIGl0J3MgYW4gZXh0ZXJuYWwgc2VydmljZSBhcyB0YWlsc2NhbGUga2VlcHMgY29tcGF0aWJp
-bGl0eSBiZXR3ZWVuIHJlbGVhc2VzIC0gSSBldmVuIGhhdmUgbWFueSBtYWNoaW5lcyBydW5uaW5n
-IHF1aXRlIG91dCBvZiBkYXRlIHRhaWxzY2FsZSBjbGllbnRzIHdoaWNoIHN0aWxsIGNvbm5lY3Qg
-YW5kIHJ1biBwZXJmZWN0bHkuIFRoZSBzYW1lIGNhbiBiZSBzYWlkIGZvciBmb3J3YXJkcyBjb21w
-YXRpYmlsaXR5Lgo+Cj4gQWxsIHRoYXQgSSBhc2sgd2l0aCByZWdhcmRzIHRvIEdPUFJPWFkgaXMg
-dGhhdDoKPgo+IC0gd2UgZG8gbm90IG92ZXJyaWRlIGl0IHBlciBwYWNrYWdlLAoKSSdtIGEgYml0
-IGNvbmZ1c2VkIHdoeSB3ZSB3b3VsZCBub3Qgd2FudCB0byBvdmVycmlkZSBpdCBwZXIgcGFja2Fn
-ZSBpZgp0aGUgYnJlYWthZ2UgaXMgcGVyIHBhY2thZ2UuCgo+IC0gaWYgd2UgZG8gZGVjaWRlIHRv
-IGNoYW5nZSB0aGUgZGVmYXVsdCB0byB1c2UgR29vZ2xlLCBwbGVhc2UgbWFrZSBpdCBhIGNvbmZp
-Z3VyYWJsZSBvcHRpb24gKGxpa2UgQlIyX01JUlJPUikgc28gdGhhdCBJIChhbmQgb3RoZXIgdXNl
-cnMpIGNhbiBvdmVycmlkZSBpdCBiYWNrIHRvIGJlIGRpcmVjdC4KCklmIGEgcGFja2FnZSBpcyBr
-bm93biB0byBub3QgYnVpbGQgd2l0aCBHT1BST1hZPWRpcmVjdCB0aGVuIHdoeSB3b3VsZApvbmUg
-d2FudCB0byBvdmVycmlkZSB0aGUgZGVmYXVsdCBHT1BST1hZIHJhdGhlciB0aGFuIGEgcGFja2Fn
-ZSBzcGVjaWZpYwpHT1BST1hZPwoKPgo+IEJlc3QgcmVnYXJkcywKPiBDaHJpc3RpYW4gU3Rld2Fy
-dApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
-b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
-bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+diff LICENSE: use "The Perl Artistic License 1.0" and update millesime
+    see https://metacpan.org/release/ARODLAND/Digest-HMAC-1.05/diff/ARODLAND/Digest-HMAC-1.04#LICENSE
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl-digest-hmac/perl-digest-hmac.hash | 8 ++++----
+ package/perl-digest-hmac/perl-digest-hmac.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/perl-digest-hmac/perl-digest-hmac.hash b/package/perl-digest-hmac/perl-digest-hmac.hash
+index 5e7da14f3..4a4b8e5f0 100644
+--- a/package/perl-digest-hmac/perl-digest-hmac.hash
++++ b/package/perl-digest-hmac/perl-digest-hmac.hash
+@@ -1,6 +1,6 @@
+-# retrieved by scancpan from http://cpan.metacpan.org/
+-md5  746a5edffd1485d7500e005730c271c8  Digest-HMAC-1.04.tar.gz
+-sha256  d6bc8156aa275c44d794b7c18f44cdac4a58140245c959e6b19b2c3838b08ed4  Digest-HMAC-1.04.tar.gz
++# retrieved by scancpan from https://cpan.metacpan.org/
++md5  cbeca4ad4c21c241080cd6ee47bdca6e  Digest-HMAC-1.05.tar.gz
++sha256  215cb59cba610745cfb2d4b3f8ef756d590e57e3ad7986a992e87c4969fcdc7a  Digest-HMAC-1.05.tar.gz
+ 
+ # computed by scancpan
+-sha256  cb9ff694d1769f450dd5c400204aa921d2fb3db90fcb21674a39f3725c4255c1  LICENSE
++sha256  c10e8c1b7e9e524e361cc87244c74e3abeae5652f246bcc050327f53ba85cba1  LICENSE
+diff --git a/package/perl-digest-hmac/perl-digest-hmac.mk b/package/perl-digest-hmac/perl-digest-hmac.mk
+index bc080703d..0fa4adf77 100644
+--- a/package/perl-digest-hmac/perl-digest-hmac.mk
++++ b/package/perl-digest-hmac/perl-digest-hmac.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_DIGEST_HMAC_VERSION = 1.04
++PERL_DIGEST_HMAC_VERSION = 1.05
+ PERL_DIGEST_HMAC_SOURCE = Digest-HMAC-$(PERL_DIGEST_HMAC_VERSION).tar.gz
+ PERL_DIGEST_HMAC_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AR/ARODLAND
+ PERL_DIGEST_HMAC_LICENSE = Artistic or GPL-1.0+
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
