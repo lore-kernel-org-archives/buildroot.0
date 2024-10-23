@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7B62CFA462
-	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 19:54:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCA61CFA462
+	for <buildroot@archiver.kernel.org>; Wed, 23 Oct 2024 19:59:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A7314080E;
-	Wed, 23 Oct 2024 19:54:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6562811E4;
+	Wed, 23 Oct 2024 19:59:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yv2B767TKUmF; Wed, 23 Oct 2024 19:54:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8uolp6PMVRKe; Wed, 23 Oct 2024 19:59:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4206C40838
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD1B7811E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4206C40838;
-	Wed, 23 Oct 2024 19:54:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7034B4960
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 19:54:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD1B7811E6;
+	Wed, 23 Oct 2024 19:59:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1AFB74960
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 19:59:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B6096072B
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 19:54:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 082D140462
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 19:59:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nY_tCf2bcd97 for <buildroot@buildroot.org>;
- Wed, 23 Oct 2024 19:54:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7byZMPl1a0IT for <buildroot@buildroot.org>;
+ Wed, 23 Oct 2024 19:59:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9573E6062A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9573E6062A
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 19:54:29 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8256F863EA; Wed, 23 Oct 2024 19:54:29 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 23 Oct 2024 21:53:15 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6b4bd2696235dd1949c3bed63187b3017ea71e9f
-X-Git-Newrev: 93487f1566974d17630a432e2cc3db38b29c888d
-X-Patchwork-Hint: ignore
-Message-Id: <20241023195429.8256F863EA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/rock5b: enable uboot-env on the SD
- card
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BFF854017B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFF854017B
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BFF854017B
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 19:59:19 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B809560004;
+ Wed, 23 Oct 2024 19:59:16 +0000 (UTC)
+Date: Wed, 23 Oct 2024 21:59:15 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org, Maxime Chevallier
+ <maxime.chevallier@bootlin.com>, Pierre Floury <pierre.floury@gmail.com>
+Message-ID: <20241023215915.7c23d3fa@windsurf>
+In-Reply-To: <20241023170447.778547-1-giulio.benetti@benettiengineering.com>
+References: <20241023170447.778547-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1729713557;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=SXVAoDkVJiwEsK5SMtOBS1pGWspKKtKY+ssrZsRMx6Q=;
+ b=FYkLYHX+YUixfj47arNLrUY/hdWCHnNDrQ12uQAJ2vDOqQAk/Huol8iauhPFAGl92VN/9N
+ xtMv4vyQSG1fl4B3H+rJZgLXJqDUDszWR2PsRDx/YcYuk5d32FyosYGz+CSiBGvkVBuNIV
+ EDMo4xwpfBoGzCUFZGh7TGEHi6We/fnWe5RXVTfhzv0gNK2hI9HIZ2QqvGSbZTQUzkZrlA
+ QeEJo5gn2VkNqpcowWY5T87r3OCJQDsCsmaGXilTSdKYmxzqBQwBKgjuPvyk4ffYg98BJx
+ mSjPKtSHbEVEWSueszawfYxauM9TABpnAml2swvmlOErpNQj5cL75LtMpvtUPg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=FYkLYHX+
+Subject: Re: [Buildroot] [PATCH] package/libtraceevent: bump to version 1.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,80 +84,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93487f1566974d17630a432e2cc3db38b29c888d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 23 Oct 2024 19:04:46 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Having the uboot environment defined on the SD card allows the user to
-use the uboot setenv and saveenv commands to make persistent changes
-(e.g. to change the boot order, or to set a server IP for PXE boot).
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/libtraceevent/libtraceevent.hash | 2 +-
+>  package/libtraceevent/libtraceevent.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Set the uboot-env partition type GUID to "U-Boot environment", see:
-https://github.com/u-boot/u-boot/blob/v2024.10/doc/README.gpt#L288
-https://en.wikipedia.org/wiki/GUID_Partition_Table#Partition_type_GUIDs
-and enable CONFIG_PARTITION_TYPE_GUID such that uboot will automatically
-find the SD card partition to store/load the uboot environment to.
+I wanted to apply this series, but at least today, it seems like
+git.kernel.org has an issue:
 
-We need to mark the root partition as bootable, otherwise uboot will no
-longer be able to boot the partition by default. (Most likely because
-the root partition is now no longer the first partition on the device.)
+wget -nd -t 3 -O '/home/thomas/projets/buildroot/output/build/.libtraceevent-1.8.4.tar.gz.ApJr7e/output' 'https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot/libtraceevent-1.8.4.tar.gz' 
+--2024-10-23 21:57:02--  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot/libtraceevent-1.8.4.tar.gz
+Resolving git.kernel.org (git.kernel.org)... 2604:1380:45d1:ec00::3, 147.75.193.91
+Connecting to git.kernel.org (git.kernel.org)|2604:1380:45d1:ec00::3|:443... connected.
+HTTP request sent, awaiting response... Read error (The request is invalid.) in headers.
+Retrying.
 
-Signed-off-by: Niklas Cassel <cassel@kernel.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/radxa/rock5b/genimage.cfg    | 7 +++++++
- board/radxa/rock5b/u-boot.fragment | 5 +++++
- configs/rock5b_defconfig           | 1 +
- 3 files changed, 13 insertions(+)
-
-diff --git a/board/radxa/rock5b/genimage.cfg b/board/radxa/rock5b/genimage.cfg
-index 43bb65bdd9..070cc03dc2 100644
---- a/board/radxa/rock5b/genimage.cfg
-+++ b/board/radxa/rock5b/genimage.cfg
-@@ -11,8 +11,15 @@ image sdcard.img {
- 		offset = 32K
- 	}
- 
-+	partition uboot-env {
-+		partition-type-uuid = 3de21764-95bd-54bd-a5c3-4abe786f38a8
-+		offset = 16M
-+		size = 64K
-+	}
-+
- 	partition rootfs {
- 		partition-type-uuid = L
- 		image = "rootfs.ext2"
-+		bootable = true
- 	}
- }
-diff --git a/board/radxa/rock5b/u-boot.fragment b/board/radxa/rock5b/u-boot.fragment
-new file mode 100644
-index 0000000000..ceba8d609a
---- /dev/null
-+++ b/board/radxa/rock5b/u-boot.fragment
-@@ -0,0 +1,5 @@
-+CONFIG_ENV_SIZE=0x10000
-+CONFIG_PARTITION_TYPE_GUID=y
-+# CONFIG_ENV_IS_NOWHERE is not set
-+CONFIG_ENV_IS_IN_MMC=y
-+CONFIG_SYS_MMC_ENV_DEV=1
-diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-index d75ad585fb..af748a5d25 100644
---- a/configs/rock5b_defconfig
-+++ b/configs/rock5b_defconfig
-@@ -34,6 +34,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock5b-rk3588"
-+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/radxa/rock5b/u-boot.fragment"
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
