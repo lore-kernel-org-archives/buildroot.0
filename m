@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BD47D10376
-	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 21:09:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D87AD10380
+	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 21:09:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C989B811FF;
-	Thu, 24 Oct 2024 21:09:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D9E560A9D;
+	Thu, 24 Oct 2024 21:09:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZUv80Mv00Ylj; Thu, 24 Oct 2024 21:09:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZcvDkADC_Jq7; Thu, 24 Oct 2024 21:09:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A117A81497
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31CC360DB2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A117A81497;
-	Thu, 24 Oct 2024 21:09:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 24A5D2316
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:09:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 31CC360DB2;
+	Thu, 24 Oct 2024 21:09:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9685D4960
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:09:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 09521404D8
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:09:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 83EBA40C39
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:09:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CNUf3r_PCkNG for <buildroot@buildroot.org>;
- Thu, 24 Oct 2024 21:09:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oB4nUsNzc5mQ for <buildroot@buildroot.org>;
+ Thu, 24 Oct 2024 21:09:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E50D7404E9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E50D7404E9
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:09:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D032483774; Thu, 24 Oct 2024 21:09:18 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 24 Oct 2024 23:08:32 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39f5e3adf8763981eeedb5bf8deb0b58344c16e8
-X-Git-Newrev: d49813e762a4ac6a4cf4e219f9d7fbeb4aa93a85
-X-Patchwork-Hint: ignore
-Message-Id: <20241024210918.D032483774@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pysnmp: bump to version
- 7.1.4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BF27D40C49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF27D40C49
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BF27D40C49
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:09:43 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E25D440002;
+ Thu, 24 Oct 2024 21:09:41 +0000 (UTC)
+Date: Thu, 24 Oct 2024 23:09:40 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Asaf Kahlon <asafka7@gmail.com>
+Message-ID: <20241024230940.1c02425a@windsurf>
+In-Reply-To: <20240930223928.1204689-1-james.hilliard1@gmail.com>
+References: <20240930223928.1204689-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1729804182;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=nxMNeoFiARD6j9tnCX3tXqjTv7OSKlQXPmrh0AetJq0=;
+ b=Yr/IHHvr/WWaT0RqVPDohmocPN/cnFv/fpTdcfrw6DF+mr5rNXXO6TJwTfDjlJw96Y2pwd
+ umjEHAx2MaCor/unL+E1ARiG4JfvfOf/3YFnAOOjtEa8INc8+jF0yX17ziuCzrnWK0da5W
+ MQVv5yFyWpxyOzHDglcUEQDwHhJSM2GTZWxumRLej2ReO/qWFfdp0vb6ipfHoYLkVLUDhP
+ tKR0vEBtRxGbiA8fd540slujJS7TKyQ2LCyUBCNrOM4U//yfJK8qwMBabtyJWnpqa9xmzi
+ 70JehRmGm0Vxf+WlcEnzxBGBMq0qLbJkeEHN+HOaB3TwKPUnFcZwjnOo/qhOrA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Yr/IHHvr
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-jaraco-functools: bump
+ to version 4.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,67 +84,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d49813e762a4ac6a4cf4e219f9d7fbeb4aa93a85
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 30 Sep 2024 16:39:28 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Drop no longer required python-pysnmpcrypto runtime dependency.
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-jaraco-functools/python-jaraco-functools.hash | 4 ++--
+>  package/python-jaraco-functools/python-jaraco-functools.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-pysnmp/Config.in          | 2 --
- package/python-pysnmp/python-pysnmp.hash | 4 ++--
- package/python-pysnmp/python-pysnmp.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 6 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/python-pysnmp/Config.in b/package/python-pysnmp/Config.in
-index 0840a464e3..0c63b57931 100644
---- a/package/python-pysnmp/Config.in
-+++ b/package/python-pysnmp/Config.in
-@@ -1,9 +1,7 @@
- config BR2_PACKAGE_PYTHON_PYSNMP
- 	bool "python-pysnmp"
--	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pysnmpcrypto
- 	select BR2_PACKAGE_PYTHON_PYASN1 # runtime
- 	select BR2_PACKAGE_PYTHON_PYSMI # runtime
--	select BR2_PACKAGE_PYTHON_PYSNMPCRYPTO # runtime
- 	help
- 	  PySNMP is a cross-platform, pure-Python SNMP engine
- 	  implementation.
-diff --git a/package/python-pysnmp/python-pysnmp.hash b/package/python-pysnmp/python-pysnmp.hash
-index 9136d23a14..4e1df1e4ed 100644
---- a/package/python-pysnmp/python-pysnmp.hash
-+++ b/package/python-pysnmp/python-pysnmp.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pysnmp/json
--md5  527c09f53ea7c28963e55b4c4b483ec2  pysnmp-7.1.3.tar.gz
--sha256  29853e4daca82992ae8b1932a4e32e1ec9df8234905b6d594d43773bdc72c4b4  pysnmp-7.1.3.tar.gz
-+md5  9d1ba65a734a613e68d616f3f4c24b6f  pysnmp-7.1.4.tar.gz
-+sha256  4ec7fd78cb7437ad64644108dea603cad8e49f065da3dd3e0539dda68bad320c  pysnmp-7.1.4.tar.gz
- # Locally computed sha256 checksums
- sha256  4954453957449b5e6f797d070f4d91024dceb3e056c99d72350795b71db0fc70  LICENSE.rst
-diff --git a/package/python-pysnmp/python-pysnmp.mk b/package/python-pysnmp/python-pysnmp.mk
-index 5db86bc976..78f9eeb930 100644
---- a/package/python-pysnmp/python-pysnmp.mk
-+++ b/package/python-pysnmp/python-pysnmp.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYSNMP_VERSION = 7.1.3
-+PYTHON_PYSNMP_VERSION = 7.1.4
- PYTHON_PYSNMP_SOURCE = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
--PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/f3/0c/bb2ccb587b5e79036dd83aa5fe835c2bc460a3098c4060461e9d324c6670
-+PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/43/71/18a9d8c00efba166b66408040028f25a8ea20d2acc9cd89bd780369544b1
- PYTHON_PYSNMP_SETUP_TYPE = pep517
- PYTHON_PYSNMP_LICENSE = BSD-2-Clause
- PYTHON_PYSNMP_LICENSE_FILES = LICENSE.rst
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
