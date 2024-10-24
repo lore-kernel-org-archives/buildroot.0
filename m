@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60619D0BB6A
-	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 07:31:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77E2CD0BB6B
+	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 07:31:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 218068055A;
-	Thu, 24 Oct 2024 07:31:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4317D40136;
+	Thu, 24 Oct 2024 07:31:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8eZWeK0xKaOo; Thu, 24 Oct 2024 07:31:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V6j__rdSvn_a; Thu, 24 Oct 2024 07:31:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 317AB812D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E24E9406F5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 317AB812D3;
-	Thu, 24 Oct 2024 07:31:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F1B127ED
+	by smtp4.osuosl.org (Postfix) with ESMTP id E24E9406F5;
+	Thu, 24 Oct 2024 07:31:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4767C972
  for <buildroot@buildroot.org>; Thu, 24 Oct 2024 07:31:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D3B1140B0D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2F0CB406DE
  for <buildroot@buildroot.org>; Thu, 24 Oct 2024 07:31:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sh41WaFslvRl for <buildroot@buildroot.org>;
- Thu, 24 Oct 2024 07:31:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SoJCZxBGHTjo for <buildroot@buildroot.org>;
+ Thu, 24 Oct 2024 07:31:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE1AA40B07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3081840649
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE1AA40B07
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3081840649
  for <buildroot@buildroot.org>; Thu, 24 Oct 2024 07:31:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D90F98645B; Thu, 24 Oct 2024 07:31:11 +0000 (UTC)
+ id 1DA4881152; Thu, 24 Oct 2024 07:31:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 24 Oct 2024 09:27:54 +0200
+Date: Thu, 24 Oct 2024 09:27:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c1ff2041681bb98c6428440cfe1f182d6af1d9e5
-X-Git-Newrev: 5711fda823703d6d7d58ed96d27d527ea4cc34e4
+X-Git-Oldrev: 8f35c55bfb642b817d336111f9e0b23c98774d66
+X-Git-Newrev: 3e4b1a3031c0a848bf7dd28c0f423651171062dc
 X-Patchwork-Hint: ignore
-Message-Id: <20241024073111.D90F98645B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dnspython: use hatch setup
- type
+Message-Id: <20241024073111.1DA4881152@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-argon2-cffi: use hatch
+ setup type
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,7 +66,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5711fda823703d6d7d58ed96d27d527ea4cc34e4
+commit: https://git.buildroot.net/buildroot/commit/?id=3e4b1a3031c0a848bf7dd28c0f423651171062dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Use the new hatch setup type which automatically pulls in the
@@ -75,24 +75,26 @@ host-python-hatchling dependency.
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-dnspython/python-dnspython.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/python-argon2-cffi/python-argon2-cffi.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
-index 700c75de25..2d3622110c 100644
---- a/package/python-dnspython/python-dnspython.mk
-+++ b/package/python-dnspython/python-dnspython.mk
-@@ -9,9 +9,7 @@ PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).tar.gz
- PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/b5/4a/263763cb2ba3816dd94b08ad3a33d5fdae34ecb856678773cc40a3605829
- PYTHON_DNSPYTHON_LICENSE = ISC
- PYTHON_DNSPYTHON_LICENSE_FILES = LICENSE
--PYTHON_DNSPYTHON_SETUP_TYPE = pep517
--PYTHON_DNSPYTHON_DEPENDENCIES = host-python-hatchling
--HOST_PYTHON_DNSPYTHON_DEPENDENCIES = host-python-hatchling
-+PYTHON_DNSPYTHON_SETUP_TYPE = hatch
+diff --git a/package/python-argon2-cffi/python-argon2-cffi.mk b/package/python-argon2-cffi/python-argon2-cffi.mk
+index 238271f5f7..13559075b2 100644
+--- a/package/python-argon2-cffi/python-argon2-cffi.mk
++++ b/package/python-argon2-cffi/python-argon2-cffi.mk
+@@ -7,11 +7,10 @@
+ PYTHON_ARGON2_CFFI_VERSION = 23.1.0
+ PYTHON_ARGON2_CFFI_SOURCE = argon2_cffi-$(PYTHON_ARGON2_CFFI_VERSION).tar.gz
+ PYTHON_ARGON2_CFFI_SITE = https://files.pythonhosted.org/packages/31/fa/57ec2c6d16ecd2ba0cf15f3c7d1c3c2e7b5fcb83555ff56d7ab10888ec8f
+-PYTHON_ARGON2_CFFI_SETUP_TYPE = pep517
++PYTHON_ARGON2_CFFI_SETUP_TYPE = hatch
+ PYTHON_ARGON2_CFFI_LICENSE = MIT
+ PYTHON_ARGON2_CFFI_LICENSE_FILES = LICENSE
+ PYTHON_ARGON2_CFFI_DEPENDENCIES = \
+-	host-python-hatchling \
+ 	host-python-hatch-fancy-pypi-readme \
+ 	host-python-hatch-vcs
  
- $(eval $(python-package))
- $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
