@@ -1,75 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11412D10376
-	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 21:04:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57FA7D10380
+	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 21:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2F2960D55;
-	Thu, 24 Oct 2024 21:04:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1EFC88109E;
+	Thu, 24 Oct 2024 21:04:43 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r-WHquMA-Gox; Thu, 24 Oct 2024 21:04:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 278CB8134D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 278CB8134D;
+	Thu, 24 Oct 2024 21:04:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1FD4859BD
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:04:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F10B60D77
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:04:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FO0fOSQpExEt; Thu, 24 Oct 2024 21:04:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A41760D5A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A41760D5A;
-	Thu, 24 Oct 2024 21:04:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C383E497A
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:04:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A51B8412EC
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:04:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VzjpVLidoOWx for <buildroot@buildroot.org>;
- Thu, 24 Oct 2024 21:04:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id aujteV0QO07i for <buildroot@buildroot.org>;
+ Thu, 24 Oct 2024 21:04:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6974B412C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6974B412C4
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6974B412C4
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:04:30 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 85C0660003;
- Thu, 24 Oct 2024 21:04:27 +0000 (UTC)
-Date: Thu, 24 Oct 2024 23:04:26 +0200
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20241024230426.70e5c503@windsurf>
-In-Reply-To: <20241002191900.2906349-1-thomas.petazzoni@bootlin.com>
-References: <20241002191900.2906349-1-thomas.petazzoni@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729803867;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=f3dKcl/kCz284aUb9vZWNSose9bYGcxxZuUcsMA7d7A=;
- b=VPWthhxEdBlUstAxVFFkWRgsxWajKYi+qEvd7/K/b5qYRBd+ruNFqzLUgR/X7A2fgsQKRg
- 36thfwxVcAJwGKRHuYfZ/E2xQ3RA6lETXBi5Aiehkq1eaIt3o2ViaVN7H6t7UlVKKi4Ogq
- 782ChvTe9RxjfH0Qcc94Aigpn3fREAiEjcsKxeZouHh0RJ1FOXYtmgfGv+OtPMO/gQeCAC
- 2QTUrXSAyLBVg8N8e6XaoUtKqZXpHYb2vm1g/xRTU8C8YICqxif3BNk0vjFR6/GeSpXGb7
- DyzX2g/DT5agcRslluT4UfbKe6lqTfNIWs78hiyrz2CFpwnMN6qWw6zALXZndw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VPWthhxE
-Subject: Re: [Buildroot] [PATCH] docs/website/news.html: announce Buildroot
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E01460E25
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E01460E25
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:04:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6C36B83695; Thu, 24 Oct 2024 21:04:39 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 24 Oct 2024 23:04:22 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 13813027aee94b4e0a8e2a4a195e96fad9b557ef
+X-Git-Newrev: bcd0e6f4c208b1697dd783add6ed5a02181de5d2
+X-Patchwork-Hint: ignore
+Message-Id: <20241024210439.6C36B83695@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website/news.html: announce Buildroot
  Developers Meeting 2025
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -84,26 +60,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  2 Oct 2024 21:18:59 +0200
-Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bcd0e6f4c208b1697dd783add6ed5a02181de5d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  docs/website/news.html | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/website/news.html | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 0ba48cd93b..74ea4a2167 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">Buildroot Developers Meeting 2025</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>2 October 2024</small></p>
++      </div>
++      <div class="timeline-body">
++	The Buildroot community is organizing a 3-day <i>Buildroot
++	Developers Meeting</i> on Feb 3-5, 2025, in Brussels (Belgium)
++	right after the <a href="https://fosdem.org/2025/">FOSDEM</a>
++	conference. Buildroot developers and contributors are invited
++	to join to meet together, review and merge pending patches,
++	learn how to contribute, discuss on-going topics and work on
++	specific ideas or
++	issues. See <a href="https://elinux.org/Buildroot:DeveloperDaysFOSDEM2025">the
++	dedicated event page</a> for more details and registration.
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
