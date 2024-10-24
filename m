@@ -4,65 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5930CE8E67
-	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 12:19:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82FC4CE8E7A
+	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 14:13:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8AB4D8134A;
-	Thu, 24 Oct 2024 12:19:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 241918116D;
+	Thu, 24 Oct 2024 14:13:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1sLpytNtD2Gd; Thu, 24 Oct 2024 12:19:48 +0000 (UTC)
+ id tMnTOSuxx9k7; Thu, 24 Oct 2024 14:13:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89F4981351
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A6CF81136
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 89F4981351;
-	Thu, 24 Oct 2024 12:19:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 61AF25A5B
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 12:19:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A6CF81136;
+	Thu, 24 Oct 2024 14:13:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 63A2D4960
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 14:13:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4E16181350
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 12:19:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5CF0B608B6
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 14:13:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rbsGZHfO6_RV for <buildroot@buildroot.org>;
- Thu, 24 Oct 2024 12:19:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 456AC8134E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 456AC8134E
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 456AC8134E
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 12:19:46 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id EB15E352067A; Thu, 24 Oct 2024 14:19:43 +0200 (CEST)
-Date: Thu, 24 Oct 2024 14:19:43 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <Zxo7X1XBQ/c7ow3w@waldemar-brodkorb.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w22OTKg9xWuV for <buildroot@buildroot.org>;
+ Thu, 24 Oct 2024 14:13:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2391B6066B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2391B6066B
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2391B6066B
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 14:13:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 433061BF204;
+ Thu, 24 Oct 2024 14:13:26 +0000 (UTC)
+Date: Thu, 24 Oct 2024 16:13:24 +0200
+To: Ayrton Leyssens <aleyssens@idtech.be>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Message-ID: <20241024161324.086d8f3b@windsurf>
+In-Reply-To: <VI1PR06MB89264486CFDAE541386E7431AD4E2@VI1PR06MB8926.eurprd06.prod.outlook.com>
+References: <VI1PR06MB89260BFEC656834C6E385BFCAD432@VI1PR06MB8926.eurprd06.prod.outlook.com>
+ <20241023223046.448ff10a@windsurf>
+ <VI1PR06MB89264486CFDAE541386E7431AD4E2@VI1PR06MB8926.eurprd06.prod.outlook.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-32-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1729772384; bh=+sysfi8zXeTIinh+taogDtmQZENRMxEAbQARSlwxakw=;
- h=Date:From:To:Subject:From;
- b=lnXx4vEi90xcihbBN0+F0SuvYGLDnzGIJGNcW3a4OXx0A12+fjX6yhyV02njpd4ua
- h/Z4m2JatVAzCh/xg6vumzU3F8/G6GVmfjlKKdOIDdSaFp/ttY8MfWrVskNNB+ZhgR
- 58+8SsBIep1njmfTd71iMA5YBkUd4bTXDkH8F97Oe7JLPAG+1vDHrHbSZkFYYd5Xjn
- fPDTVTSL2r2l402K/CEbb7LCqtgXcHiqxK85LpKHNJdkG33DD1ILHhKp5NdJtljmvS
- rPrXeN5PgCRWZHa1+7A48AW72L+f0iIy5o6qwx2b+FUxZ7QbW5ZA7Wmq4D7ITdfEFs
- nYSSd6oTZQAgg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1729779206;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=J0+Ztauf5fB9wCJOmf6YUxBrj9vZVRZlkSMR/w8vwBs=;
+ b=FesEqAj0sVY1lg+9SlwKdYmb6dyKrwABL0Dvee/bqKn80aWwUyJFS1/2L9KXRD45FDM5xH
+ Nke218Zgbwaav2k7ACphH739HWcCMDTM3f1zyQKnKb2H+V+vLq0d6W8AGt2QXXytmlM0Tn
+ rjC7aXjSkK6gh2MwgEzF4/UeJ1DoyaVRg24t6zIcRTZW+D6oWptMzkJhw9HNBaoLzGEkAw
+ +2MwcYZ2QifUtdUBi4IILkjlp4vImKtNqgJWGWvJb4gG3pggNOfMQ+F/fvga7M07pBJkD/
+ S6Qkg+/s64mYXadNNbmRbnHrYtdIxh9l1AtYcL57egsdsVb56hvsM+xDWTa3+Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=lnXx4vEi
-Subject: [Buildroot] [PATCH] package/bind: update to 9.18.31
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=FesEqAj0
+Subject: Re: [Buildroot] [PATCH 1/1] package/libtevent: add libtevent package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,47 +83,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here for a changelog:
-https://downloads.isc.org/isc/bind9/9.18.31/doc/arm/html/notes.html#notes-for-bind-9-18-31
+Hello Ayrton,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+(Thanks for your feedback. A good practice is to strip the parts of the
+e-mail you're not replying to. See below how I did it. Also your e-mail
+client doesn't seem to wrap lines properly.)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index dbffff05ea..abcbf0a938 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.18.30/bind-9.18.30.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.18.31/bind-9.18.31.tar.xz.asc
- # with key 706B6C28620E76F91D11F7DF510A642A06C52CEC
--sha256  9f6817640970267317e5aa143ecf70531040f2155636b1a63ea45379aa09034a  bind-9.18.30.tar.xz
-+sha256  51b258969275c5206ef745a5aac03dbe98f1c8031fefed378d53597e7987b1b3  bind-9.18.31.tar.xz
- sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 81e608380d..52b1e56c40 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.18.30
-+BIND_VERSION = 9.18.31
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
+On Thu, 24 Oct 2024 09:04:27 +0000
+Ayrton Leyssens <aleyssens@idtech.be> wrote:
+
+> > This whole file looks exactly identical to libtalloc. Is everything
+> > exactly identical, and needed for libtevent as well, or did you
+> > just copy/paste? :-)  
+>
+> Indeed, mostly copy paste.
+> Since both use the waf-package system and the sources come from
+> samba, they are quite identical.
+
+Quite identical, or fully identical? Basically, I'd like to make sure
+libtevent.mk is not more complicated than it needs to be. Is everything
+you've added in libtevent.mk actually needed to allow building
+libtevent?
+
+Thanks!
+
+Thomas
 -- 
-2.39.5
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
