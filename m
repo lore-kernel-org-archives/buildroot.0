@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25A40D0BB49
-	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 04:34:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD9BED0BB49
+	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 04:37:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB044608A1;
-	Thu, 24 Oct 2024 04:34:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8552F608A0;
+	Thu, 24 Oct 2024 04:37:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8OOHgU6fV6fJ; Thu, 24 Oct 2024 04:34:29 +0000 (UTC)
+ id 7fxFiZWC1w5m; Thu, 24 Oct 2024 04:37:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5BCD608A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98FBE608A7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5BCD608A4;
-	Thu, 24 Oct 2024 04:34:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 82DC82073
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 04:34:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98FBE608A7;
+	Thu, 24 Oct 2024 04:37:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 80CDD972
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 04:37:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5564C608A7
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 04:34:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 620798122D
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 04:37:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0suS4-GfgYRn for <buildroot@buildroot.org>;
- Thu, 24 Oct 2024 04:34:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0CMKFjANWjcJ for <buildroot@buildroot.org>;
+ Thu, 24 Oct 2024 04:37:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12c; helo=mail-il1-x12c.google.com;
+ client-ip=2607:f8b0:4864:20::d35; helo=mail-io1-xd35.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6258A608A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6258A608A1
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
- [IPv6:2607:f8b0:4864:20::12c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6258A608A1
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 04:34:26 +0000 (UTC)
-Received: by mail-il1-x12c.google.com with SMTP id
- e9e14a558f8ab-3a3b463e9b0so1993005ab.3
- for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:34:26 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5F36F8122B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F36F8122B
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
+ [IPv6:2607:f8b0:4864:20::d35])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5F36F8122B
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 04:37:54 +0000 (UTC)
+Received: by mail-io1-xd35.google.com with SMTP id
+ ca18e2360f4ac-83ab694ebe5so19606239f.0
+ for <buildroot@buildroot.org>; Wed, 23 Oct 2024 21:37:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1729744465; x=1730349265;
+ d=1e100.net; s=20230601; t=1729744673; x=1730349473;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=hvZj84bXo5KUg942CdnktV6ogTBiB8JEcJqwECb3BKA=;
- b=AIFz8qtGTHXADovGykcEiz+hr/+MpsPz6YWHUMj98eJdMKlKrI2trexYJDubdq6Ti+
- DIp5/FbhR9v7c8LoH7PsS9HkhHOksjslDN1KCdWvrSs0lA4RfSLqpjkITxmWHcoRmhVf
- f39D4j2pqaUw5g1FNwM/Qqj/zy4isM4Kg1paWc3v5md/yJJYRrb5vx3yCpvwqYrweaRd
- UlnVnaAkF8FjzKQy+gqjNowicgrkgLvIGlppGP+J7/clzd0ysmG2Xcs1pgynp3/jzZNU
- ock1kId9m7WZWZmdKfHCAAktc4/WUA0ioll1TIuWB7WhTWCEgP9VHeS0o2NyuiIYe3UV
- Et1w==
-X-Gm-Message-State: AOJu0YwAoLgTVvV62oCQXItsOfEsJW1GEKL2ZqwS/5/bhaMCNsNE7GWc
- qn498I76ojbkWvMZHphq13MSQAVS4wWuDzR/+UxDV4UDGzVbJzDx7Rm4SA==
-X-Google-Smtp-Source: AGHT+IG/NnM5vNkY+wH5FNPSsgyzT3ZdZnpNknkRmKUQ3UU2pbCBwPAYk1LAQLs517xd2+RDJx/CZg==
-X-Received: by 2002:a05:6e02:1c4b:b0:3a2:6cd7:3250 with SMTP id
- e9e14a558f8ab-3a4de79cf7emr8054905ab.10.1729744465052; 
- Wed, 23 Oct 2024 21:34:25 -0700 (PDT)
+ bh=hTBFLNWtcageujjNITWLob3+ZK4UJrXLG7F8MDwFs/0=;
+ b=XS3jpR7Lm4+XpjBwO5cHq7JCn0FkjVrvR8ze8jehkLzdgwhn/QuKoyjByjgDR7HWGe
+ gCGYznpw0E5suITmTIu1UnP7bK4binhgQMWtmUzjEueOySDBTLKgT/4IMIQ4NXueHiAE
+ pk9vDV7/Mp7oqOnGhtYgeqeU9DPcYStWddITVYYRrCnYSdQjjbTphMmHP40g29j6OtZQ
+ r/dHWu4XIKUOpWaTJqWwPjBnHHTlV8RpN6gs2GZ5vMtYniaQFc9nm/2PdT3HZvY5lFVs
+ DCmSMXYIwbAWOC5j5GNpUGaOjq9iCKsflvv8BnQ6jIsIGQu1pC1hxDEb+OGUukS/l3Xk
+ JxeQ==
+X-Gm-Message-State: AOJu0YyvBDJhvvhzBLlub7pPfLnBX2M0xjSIlfkrgzh96znGhzrPVvDq
+ SSocRreTuVyV9G7kWkzxD2/9aDHnYK/jC9P5suZaPKcZ4H4z2dFLgXDMpQ==
+X-Google-Smtp-Source: AGHT+IFVCJnaGXozXRJwI/6WvUkW859nVLpLxKjV9xpGvvS/eI7oTjNk3E4s+XQ7porivF+eTWtfUQ==
+X-Received: by 2002:a05:6602:14c6:b0:82a:2a67:9429 with SMTP id
+ ca18e2360f4ac-83b0401bc85mr94020239f.5.1729744673077; 
+ Wed, 23 Oct 2024 21:37:53 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
  [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a4dc8997b4sm4230195ab.28.2024.10.23.21.34.24
+ 8926c6da1cb9f-4dc2a60947bsm2485345173.116.2024.10.23.21.37.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 23 Oct 2024 21:34:24 -0700 (PDT)
+ Wed, 23 Oct 2024 21:37:52 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Oct 2024 22:34:13 -0600
-Message-Id: <20241024043413.3364494-1-james.hilliard1@gmail.com>
+Date: Wed, 23 Oct 2024 22:37:46 -0600
+Message-Id: <20241024043746.3367067-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1729744465; x=1730349265; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1729744673; x=1730349473; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=hvZj84bXo5KUg942CdnktV6ogTBiB8JEcJqwECb3BKA=;
- b=nWU3te4zyM9hG6fHvs/6TYqg6Vq/yrOiitEKJztvYw9obv1xoepX01WRKEG+/LatBS
- OpBaNTkFC8WHp+htFhE+gUbTbSe/DIBO5dcO3fhxGCKscrY3Psmafod1s4S2pT7ZFhws
- WiWWid5IfpGHaaGg8cm/9pENgt4FUiOIw3UPdMs6vj/QI1upb8weQPg7voAe3A60X6t1
- Wmdu/bafhaMJMjOul/bo1qlm+Ko/JLPdhh6WVRWjEuMZK5mteQsCxxpR0Fk6FyFkYB0o
- Ei8aR9PZlezYK+6sDe0c4bZq1ZGec2fjN7bvcCfGQmJdDPS0heg3Ab6S+jNIKMWBfP8R
- EQZQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=hTBFLNWtcageujjNITWLob3+ZK4UJrXLG7F8MDwFs/0=;
+ b=iDLQ2bdi3t26p3vVUeDr4NMspKoXU00i3gCNOvZZqwhbF570aVHq8Xx+ExKl3Py1nU
+ yIrEPgvcPRMQkckQTQijgMqBYUkUSvI/bf7x9DgOl8PAXR0Dd3N2pZsySGl9PQ56N6IN
+ EUgLx8ixy8HEbmkUNaEVi7Yn2yM5S0b47WtmSX5SGkBh8d1POBbc5hcfUF5qSrjAV1aU
+ YJ0w38FyNi1XSdgefDR9XzFbdzRqD7DlLjL5JKi+H3zBN4akNmvftgxHOMnSFyZt5fXc
+ ZPy+XvCegCNW0AqZG4lAA94bZ/TsNfvrQKWAQ2mWdpM7U6nH9bFKe6rEVWStbyHs7cOh
+ lX8Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=nWU3te4z
-Subject: [Buildroot] [PATCH 1/1] package/python-expandvars: use hatch setup
+ header.s=20230601 header.b=iDLQ2bdi
+Subject: [Buildroot] [PATCH 1/1] package/python-dnspython: use hatch setup
  type
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -101,7 +101,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Louis Aussedat <aussedat.louis@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -112,23 +113,23 @@ host-python-hatchling dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-expandvars/python-expandvars.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/python-dnspython/python-dnspython.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/python-expandvars/python-expandvars.mk b/package/python-expandvars/python-expandvars.mk
-index 5c9a7249b3..0a72601b5a 100644
---- a/package/python-expandvars/python-expandvars.mk
-+++ b/package/python-expandvars/python-expandvars.mk
-@@ -7,9 +7,8 @@
- PYTHON_EXPANDVARS_VERSION = 0.12.0
- PYTHON_EXPANDVARS_SOURCE = expandvars-$(PYTHON_EXPANDVARS_VERSION).tar.gz
- PYTHON_EXPANDVARS_SITE = https://files.pythonhosted.org/packages/2b/a5/46d1f58edcae1d632fafdfee313e378240e002ae45d26502bac938bd8751
--PYTHON_EXPANDVARS_SETUP_TYPE = pep517
-+PYTHON_EXPANDVARS_SETUP_TYPE = hatch
- PYTHON_EXPANDVARS_LICENSE = MIT
- PYTHON_EXPANDVARS_LICENSE_FILES = LICENSE
--HOST_PYTHON_EXPANDVARS_DEPENDENCIES = host-python-hatchling
+diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
+index 700c75de25..2d3622110c 100644
+--- a/package/python-dnspython/python-dnspython.mk
++++ b/package/python-dnspython/python-dnspython.mk
+@@ -9,9 +9,7 @@ PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).tar.gz
+ PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/b5/4a/263763cb2ba3816dd94b08ad3a33d5fdae34ecb856678773cc40a3605829
+ PYTHON_DNSPYTHON_LICENSE = ISC
+ PYTHON_DNSPYTHON_LICENSE_FILES = LICENSE
+-PYTHON_DNSPYTHON_SETUP_TYPE = pep517
+-PYTHON_DNSPYTHON_DEPENDENCIES = host-python-hatchling
+-HOST_PYTHON_DNSPYTHON_DEPENDENCIES = host-python-hatchling
++PYTHON_DNSPYTHON_SETUP_TYPE = hatch
  
+ $(eval $(python-package))
  $(eval $(host-python-package))
 -- 
 2.34.1
