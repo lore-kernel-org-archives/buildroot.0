@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 881BBD10380
-	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 21:09:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BD47D10376
+	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 21:09:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9470E60D73;
-	Thu, 24 Oct 2024 21:09:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C989B811FF;
+	Thu, 24 Oct 2024 21:09:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LOgmjWitfadY; Thu, 24 Oct 2024 21:09:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZUv80Mv00Ylj; Thu, 24 Oct 2024 21:09:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B54560D93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A117A81497
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B54560D93;
-	Thu, 24 Oct 2024 21:09:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 18D7159BD
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:09:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A117A81497;
+	Thu, 24 Oct 2024 21:09:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 24A5D2316
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:09:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EBD4540AB8
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:09:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 09521404D8
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:09:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tWlhUjXbNHf4 for <buildroot@buildroot.org>;
- Thu, 24 Oct 2024 21:09:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CNUf3r_PCkNG for <buildroot@buildroot.org>;
+ Thu, 24 Oct 2024 21:09:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2EE94012A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E50D7404E9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D2EE94012A
+ by smtp4.osuosl.org (Postfix) with ESMTP id E50D7404E9
  for <buildroot@buildroot.org>; Thu, 24 Oct 2024 21:09:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BC1A48376F; Thu, 24 Oct 2024 21:09:18 +0000 (UTC)
+ id D032483774; Thu, 24 Oct 2024 21:09:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 24 Oct 2024 23:07:28 +0200
+Date: Thu, 24 Oct 2024 23:08:32 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d37bad00401a6565553d5243129860eab4c69874
-X-Git-Newrev: 95eb49a5d9d9100b3e0b6d7a7e00b5a2a7d94fed
+X-Git-Oldrev: 39f5e3adf8763981eeedb5bf8deb0b58344c16e8
+X-Git-Newrev: d49813e762a4ac6a4cf4e219f9d7fbeb4aa93a85
 X-Patchwork-Hint: ignore
-Message-Id: <20241024210918.BC1A48376F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-jaraco-functools: bump to
- version 4.1.0
+Message-Id: <20241024210918.D032483774@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pysnmp: bump to version
+ 7.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95eb49a5d9d9100b3e0b6d7a7e00b5a2a7d94fed
+commit: https://git.buildroot.net/buildroot/commit/?id=d49813e762a4ac6a4cf4e219f9d7fbeb4aa93a85
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Drop no longer required python-pysnmpcrypto runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-jaraco-functools/python-jaraco-functools.hash | 4 ++--
- package/python-jaraco-functools/python-jaraco-functools.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pysnmp/Config.in          | 2 --
+ package/python-pysnmp/python-pysnmp.hash | 4 ++--
+ package/python-pysnmp/python-pysnmp.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-jaraco-functools/python-jaraco-functools.hash b/package/python-jaraco-functools/python-jaraco-functools.hash
-index d99e1aa537..69edc2384b 100644
---- a/package/python-jaraco-functools/python-jaraco-functools.hash
-+++ b/package/python-jaraco-functools/python-jaraco-functools.hash
+diff --git a/package/python-pysnmp/Config.in b/package/python-pysnmp/Config.in
+index 0840a464e3..0c63b57931 100644
+--- a/package/python-pysnmp/Config.in
++++ b/package/python-pysnmp/Config.in
+@@ -1,9 +1,7 @@
+ config BR2_PACKAGE_PYTHON_PYSNMP
+ 	bool "python-pysnmp"
+-	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pysnmpcrypto
+ 	select BR2_PACKAGE_PYTHON_PYASN1 # runtime
+ 	select BR2_PACKAGE_PYTHON_PYSMI # runtime
+-	select BR2_PACKAGE_PYTHON_PYSNMPCRYPTO # runtime
+ 	help
+ 	  PySNMP is a cross-platform, pure-Python SNMP engine
+ 	  implementation.
+diff --git a/package/python-pysnmp/python-pysnmp.hash b/package/python-pysnmp/python-pysnmp.hash
+index 9136d23a14..4e1df1e4ed 100644
+--- a/package/python-pysnmp/python-pysnmp.hash
++++ b/package/python-pysnmp/python-pysnmp.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jaraco.functools/json
--md5  70deb206d55e5d003e008e1385e80b5d  jaraco_functools-4.0.2.tar.gz
--sha256  3460c74cd0d32bf82b9576bbb3527c4364d5b27a21f5158a62aed6c4b42e23f5  jaraco_functools-4.0.2.tar.gz
-+md5  b8a8d165da986efa1966abd91c45348e  jaraco_functools-4.1.0.tar.gz
-+sha256  70f7e0e2ae076498e212562325e805204fc092d7b4c17e0e86c959e249701a9d  jaraco_functools-4.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pysnmp/json
+-md5  527c09f53ea7c28963e55b4c4b483ec2  pysnmp-7.1.3.tar.gz
+-sha256  29853e4daca82992ae8b1932a4e32e1ec9df8234905b6d594d43773bdc72c4b4  pysnmp-7.1.3.tar.gz
++md5  9d1ba65a734a613e68d616f3f4c24b6f  pysnmp-7.1.4.tar.gz
++sha256  4ec7fd78cb7437ad64644108dea603cad8e49f065da3dd3e0539dda68bad320c  pysnmp-7.1.4.tar.gz
  # Locally computed sha256 checksums
- sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
-diff --git a/package/python-jaraco-functools/python-jaraco-functools.mk b/package/python-jaraco-functools/python-jaraco-functools.mk
-index 65a273a16f..e72a062fa8 100644
---- a/package/python-jaraco-functools/python-jaraco-functools.mk
-+++ b/package/python-jaraco-functools/python-jaraco-functools.mk
+ sha256  4954453957449b5e6f797d070f4d91024dceb3e056c99d72350795b71db0fc70  LICENSE.rst
+diff --git a/package/python-pysnmp/python-pysnmp.mk b/package/python-pysnmp/python-pysnmp.mk
+index 5db86bc976..78f9eeb930 100644
+--- a/package/python-pysnmp/python-pysnmp.mk
++++ b/package/python-pysnmp/python-pysnmp.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_JARACO_FUNCTOOLS_VERSION = 4.0.2
-+PYTHON_JARACO_FUNCTOOLS_VERSION = 4.1.0
- PYTHON_JARACO_FUNCTOOLS_SOURCE = jaraco_functools-$(PYTHON_JARACO_FUNCTOOLS_VERSION).tar.gz
--PYTHON_JARACO_FUNCTOOLS_SITE = https://files.pythonhosted.org/packages/03/b1/6ca3c2052e584e9908a2c146f00378939b3c51b839304ab8ef4de067f042
-+PYTHON_JARACO_FUNCTOOLS_SITE = https://files.pythonhosted.org/packages/ab/23/9894b3df5d0a6eb44611c36aec777823fc2e07740dabbd0b810e19594013
- PYTHON_JARACO_FUNCTOOLS_LICENSE = MIT
- PYTHON_JARACO_FUNCTOOLS_LICENSE_FILES = LICENSE
- PYTHON_JARACO_FUNCTOOLS_SETUP_TYPE = setuptools
+-PYTHON_PYSNMP_VERSION = 7.1.3
++PYTHON_PYSNMP_VERSION = 7.1.4
+ PYTHON_PYSNMP_SOURCE = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
+-PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/f3/0c/bb2ccb587b5e79036dd83aa5fe835c2bc460a3098c4060461e9d324c6670
++PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/43/71/18a9d8c00efba166b66408040028f25a8ea20d2acc9cd89bd780369544b1
+ PYTHON_PYSNMP_SETUP_TYPE = pep517
+ PYTHON_PYSNMP_LICENSE = BSD-2-Clause
+ PYTHON_PYSNMP_LICENSE_FILES = LICENSE.rst
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
