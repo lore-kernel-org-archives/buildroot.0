@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56FB5D0E3F7
-	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 19:29:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95C31D0E3F7
+	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 19:29:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBAB3608B6;
-	Thu, 24 Oct 2024 19:29:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58A3060A80;
+	Thu, 24 Oct 2024 19:29:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8k1M3dJffQi1; Thu, 24 Oct 2024 19:29:17 +0000 (UTC)
+ id ABD3rb3wyrR2; Thu, 24 Oct 2024 19:29:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8C94607D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 578E4607AA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C8C94607D9;
-	Thu, 24 Oct 2024 19:29:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C78A559B4
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 19:29:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 578E4607AA;
+	Thu, 24 Oct 2024 19:29:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 28C9A2316
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 19:29:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9FAFC400B5
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 19:29:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0640360641
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 19:29:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5XOu_mzh8wcD for <buildroot@buildroot.org>;
- Thu, 24 Oct 2024 19:29:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fGw5UX251MCk for <buildroot@buildroot.org>;
+ Thu, 24 Oct 2024 19:29:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A31524044B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A31524044B
- for <buildroot@buildroot.org>; Thu, 24 Oct 2024 19:29:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F2A882B5B; Thu, 24 Oct 2024 19:29:12 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 24 Oct 2024 21:28:20 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 43fb08c7b18b0a0403b9cd793c9ff51f71ff6ab0
-X-Git-Newrev: 54c88416e85136ae3da1808ce17bf9641666ae1d
-X-Patchwork-Hint: ignore
-Message-Id: <20241024192912.8F2A882B5B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtraceevent: bump to version
- 1.8.4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 57E9460A80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57E9460A80
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 57E9460A80
+ for <buildroot@buildroot.org>; Thu, 24 Oct 2024 19:29:21 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A6692E0004;
+ Thu, 24 Oct 2024 19:29:17 +0000 (UTC)
+Date: Thu, 24 Oct 2024 21:29:16 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org, Maxime Chevallier
+ <maxime.chevallier@bootlin.com>, Pierre Floury <pierre.floury@gmail.com>
+Message-ID: <20241024212916.2486fc9d@windsurf>
+In-Reply-To: <20241023170447.778547-1-giulio.benetti@benettiengineering.com>
+References: <20241023170447.778547-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1729798158;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=IQNrra7KDqTOuYWPMOOBvW0YZibVOiTaZ9HlgTljSNU=;
+ b=XPp7kzTPt5pf+IULA4vDFpWuz5GbRmaIbEB0ANu+PUkOrmWLzP9TuVbcXtVpAfCrcVM/9l
+ wIEW8eQzi4d8v/LamPBvIQ8Uy7/GjaJAhzghaDezHazCfjwJTAN75T2hEIlnFKkORvJ8wO
+ g6TNucyPOh/PtVLI+u3FA2EgKLr4mrXn8YZWTBLeaVCNRCUDOsBUd0fJ9FOgNW9Lbqw2MJ
+ OpeNdBe5A1go3NifsUWGcxuNeiGnFmAJJEtvV3upFfWVBjyK9QLczuSzKyvoIglDqiT872
+ mlv5j/MMG2y8GipIZnx0WncZnPu3zBG7Y2YeHUUCmBfbwBLYQ+6YsACBjcBPCQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=XPp7kzTP
+Subject: Re: [Buildroot] [PATCH] package/libtraceevent: bump to version 1.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,45 +84,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54c88416e85136ae3da1808ce17bf9641666ae1d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 23 Oct 2024 19:04:46 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libtraceevent/libtraceevent.hash | 2 +-
- package/libtraceevent/libtraceevent.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/libtraceevent/libtraceevent.hash | 2 +-
+>  package/libtraceevent/libtraceevent.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libtraceevent/libtraceevent.hash b/package/libtraceevent/libtraceevent.hash
-index d59e0a9188..c0738de4e7 100644
---- a/package/libtraceevent/libtraceevent.hash
-+++ b/package/libtraceevent/libtraceevent.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  233d88adf5bae6b4511980f0f6314f348326b55fdb3dc9c4212c810e1ab06789  libtraceevent-1.8.3.tar.gz
-+sha256  dc456d4d2bf4b4cd4d0c737d3374a8093f9e5ca18c1d7fc2279a4bf41e613121  libtraceevent-1.8.4.tar.gz
- sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
- sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSES/LGPL-2.1
-diff --git a/package/libtraceevent/libtraceevent.mk b/package/libtraceevent/libtraceevent.mk
-index 35e1152d37..8c3514f265 100644
---- a/package/libtraceevent/libtraceevent.mk
-+++ b/package/libtraceevent/libtraceevent.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTRACEEVENT_VERSION = 1.8.3
-+LIBTRACEEVENT_VERSION = 1.8.4
- LIBTRACEEVENT_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot
- LIBTRACEEVENT_LICENSE = GPL-2.0, LGPL-2.1
- LIBTRACEEVENT_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
