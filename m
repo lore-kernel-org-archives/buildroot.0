@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39FB7D0E3F7
-	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 19:32:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C41E2D0E3F7
+	for <buildroot@archiver.kernel.org>; Thu, 24 Oct 2024 19:32:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 006406079D;
-	Thu, 24 Oct 2024 19:32:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BCA46065D;
+	Thu, 24 Oct 2024 19:32:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q5s-oJi-i98U; Thu, 24 Oct 2024 19:32:21 +0000 (UTC)
+ id gL21GLO0e2JH; Thu, 24 Oct 2024 19:32:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED567607C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AE42607AA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED567607C6;
-	Thu, 24 Oct 2024 19:32:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6A0E459B4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2AE42607AA;
+	Thu, 24 Oct 2024 19:32:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 821D65A5A
  for <buildroot@buildroot.org>; Thu, 24 Oct 2024 19:32:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58E7A8134D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7011D607D9
  for <buildroot@buildroot.org>; Thu, 24 Oct 2024 19:32:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tei0r6w3U_nf for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Z98Qj4QcM0Ss for <buildroot@buildroot.org>;
  Thu, 24 Oct 2024 19:32:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9013A8134B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A25386065D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9013A8134B
+ by smtp3.osuosl.org (Postfix) with ESMTP id A25386065D
  for <buildroot@buildroot.org>; Thu, 24 Oct 2024 19:32:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 86A7482D9C; Thu, 24 Oct 2024 19:32:19 +0000 (UTC)
+ id 9BEE482D9F; Thu, 24 Oct 2024 19:32:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 24 Oct 2024 21:29:36 +0200
+Date: Thu, 24 Oct 2024 21:29:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 54c88416e85136ae3da1808ce17bf9641666ae1d
-X-Git-Newrev: 9208ee8467f48d55adf91eba86ba8374c30556ed
+X-Git-Oldrev: 7db81b12677b1c083291c73d7005a6de434e5693
+X-Git-Newrev: 5ed6aa0fe30319e250fbe700895cfcd603c495ff
 X-Patchwork-Hint: ignore
-Message-Id: <20241024193219.86A7482D9C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ruby: update to 3.3.5
+Message-Id: <20241024193219.9BEE482D9F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/asterisk: update to 20.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9208ee8467f48d55adf91eba86ba8374c30556ed
+commit: https://git.buildroot.net/buildroot/commit/?id=5ed6aa0fe30319e250fbe700895cfcd603c495ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+See here for a changelog:
+https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-20.10.0.md
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 3831e701fb..d6622909e5 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index fe3e3642a4..61686d9fe4 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
 @@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2024/07/09/ruby-3-3-4-released/
--sha512  b26461a13ff82a08a282f10108028bb2a2e4a28da6182a291062fc54089c6655d79c22cc69d59156f9b11cb10a17fe8c69d489343fbae123a45f03361b95c9eb  ruby-3.3.4.tar.xz
-+# https://www.ruby-lang.org/en/news/2024/09/03/3-3-5-released/
-+sha512  dd5c6a7f74854e143e0ca46b9d7c0d1983fc4886f5f733cd108345dbf4b21f61ad978ad6806e05a57b7af28fd9216dd38d7145808188bbb3695a7f3a4eda3883  ruby-3.3.5.tar.xz
+ # Locally computed
+-sha256  a15099a5c776045e96b0da2534606c8dbd13bc1ffcbe325f7cfd74dc1d29decb  asterisk-20.9.3.tar.gz
++sha256  a8162085b7d16f10d5cd16fc2e2cb8399dbe42bd1c321b14eec229fc0ed12570  asterisk-20.10.0.tar.gz
  
- # License files, Locally calculated
- sha256  e849b28d324423e636a3e6bc5d583cdaf4bd046c2b20872c53886b612d01a4a1  LEGAL
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 08ecbf5941..2e04cb3e92 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index c7b97a1ad4..e27aa2f760 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 3.3
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).4
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).5
- RUBY_VERSION_EXT = 3.3.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-ASTERISK_VERSION = 20.9.3
++ASTERISK_VERSION = 20.10.0
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
