@@ -4,92 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F950D149D9
-	for <buildroot@archiver.kernel.org>; Fri, 25 Oct 2024 17:57:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BAD9D149D9
+	for <buildroot@archiver.kernel.org>; Fri, 25 Oct 2024 18:00:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4995781EAD;
-	Fri, 25 Oct 2024 17:57:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E13381EE1;
+	Fri, 25 Oct 2024 18:00:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id arxDh3Ttc7JZ; Fri, 25 Oct 2024 17:57:45 +0000 (UTC)
+ id T5o4tpX43w6D; Fri, 25 Oct 2024 18:00:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 622D181EB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F71E81EE2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 622D181EB1;
-	Fri, 25 Oct 2024 17:57:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A7CAA2316
- for <buildroot@buildroot.org>; Fri, 25 Oct 2024 17:57:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F71E81EE2;
+	Fri, 25 Oct 2024 18:00:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3D881281F
+ for <buildroot@buildroot.org>; Fri, 25 Oct 2024 18:00:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 86DAC81ED1
- for <buildroot@buildroot.org>; Fri, 25 Oct 2024 17:57:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C4D340E8C
+ for <buildroot@buildroot.org>; Fri, 25 Oct 2024 18:00:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mFomeCvcdZYV for <buildroot@buildroot.org>;
- Fri, 25 Oct 2024 17:57:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::130; helo=mail-il1-x130.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8A62681ECF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A62681ECF
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8A62681ECF
- for <buildroot@buildroot.org>; Fri, 25 Oct 2024 17:57:42 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id
- e9e14a558f8ab-3a3a6abcbf1so9198585ab.2
- for <buildroot@buildroot.org>; Fri, 25 Oct 2024 10:57:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1729879060; x=1730483860;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=hV964E2+I1dBRrSAzpi0bDEMgWG+uU08+J5xl7NQkq0=;
- b=S7Twe9X0aN6PjZ1P4mtseutcHUpfNxw5PYiQEHFNah2+vey2g2+ZP05ohtO3JGQC1M
- hjoVNl411szDOZMg3nVFKNHd7WRlNID8c9LZWwEcMUSd0dgOEr+Uvg0o2ExcKedWpVHg
- t9R2rovIQ/EVEoeJa6UZxJL23li/bQy5n7a4pGpI/ouTCsIxu65ON8KAGR9MhlRdmESc
- 1uUWv6/060PJmh39yqJmkQKLtCZtc8CXAYUdkM3y0BOnbCNkr/s6EE25x0UlqzSlkazq
- 9VYeY/wHXvV/Xu3JtwmPPqb4JYRWTPY8GxdsY+lj4FJX6u9dSCidQn6gwrd6QgQJBKOR
- ouSA==
-X-Gm-Message-State: AOJu0YwzsL8fqpPvT2NWJDPOdyZQKF/78f7VpHobybuWyzyFHzqWVqOn
- mN/aS+qTNWXRxY4e2O/fTOqWvLTE1It0kfhzPyKkPuy/VvXQH6VoRfpCUA==
-X-Google-Smtp-Source: AGHT+IFQL8wI/9Huz9nnU4X+Asbs+XAS0qC5CAA6yx+XubiOM8enib07i+wFQS+UL5eLZskCgr8oxg==
-X-Received: by 2002:a05:6e02:1c01:b0:3a3:4175:79da with SMTP id
- e9e14a558f8ab-3a4ed2b0af4mr1029865ab.13.1729879060405; 
- Fri, 25 Oct 2024 10:57:40 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
- [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4dc7275073dsm358086173.88.2024.10.25.10.57.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 25 Oct 2024 10:57:39 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mfJcTrXCUyPe for <buildroot@buildroot.org>;
+ Fri, 25 Oct 2024 18:00:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A728A40159
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A728A40159
+ for <buildroot@buildroot.org>; Fri, 25 Oct 2024 18:00:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 90098837A0; Fri, 25 Oct 2024 18:00:41 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 25 Oct 2024 11:57:38 -0600
-Message-Id: <20241025175738.3590724-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1729879060; x=1730483860; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=hV964E2+I1dBRrSAzpi0bDEMgWG+uU08+J5xl7NQkq0=;
- b=jCFbtiQimVDMFXne7UKLjohGQzejAH0pGZtBtypxu6PTESDy0r4uBOJrSxk/x7Jq+d
- fibtcB2J2+O0u3mPKH3G2toVnWIWf5HPAQl2N7A1f1Nt2YAFiffQbq16amwnpPFyHfqH
- zDX1Hn9NDQojEfW+TbuLF4m4K0jUre9kkXK2O4qLy9aFWT29HgZR9CT5sii1VFHDy6PH
- 2jIM6q6qCYf0zgnxnr8rOYIEtdX851zC8Mnei5aEMJsBHJveHFsPKVBsKy8O1t2kcl3f
- CrQwX97Sat2GVlsrqja45qaCv1H9x1KQEUZLpKdHzV4c8GBWM8FZSt5k2Su2rrFhPhc6
- 053Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=jCFbtiQi
-Subject: [Buildroot] [PATCH 1/1] package/python-grpcio-reflection: bump to
- version 1.67.0
+Date: Fri, 25 Oct 2024 19:53:52 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f634043b29c7009cca02516e181d55bb589045c4
+X-Git-Newrev: b6784a1f1f67439ce24e7961851d3c5670df4e83
+X-Patchwork-Hint: ignore
+Message-Id: <20241025180041.90098837A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lrzsz: fix build with GCC >= 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,50 +58,185 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1122090020393127822=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- .../python-grpcio-reflection/python-grpcio-reflection.hash    | 4 ++--
- package/python-grpcio-reflection/python-grpcio-reflection.mk  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+--===============1122090020393127822==
+Content-Type: text/plain
 
-diff --git a/package/python-grpcio-reflection/python-grpcio-reflection.hash b/package/python-grpcio-reflection/python-grpcio-reflection.hash
-index 6fce5c954f..516434e1d1 100644
---- a/package/python-grpcio-reflection/python-grpcio-reflection.hash
-+++ b/package/python-grpcio-reflection/python-grpcio-reflection.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/grpcio-reflection/json
--md5  549455c15bdfce71667ec0d918465236  grpcio_reflection-1.66.2.tar.gz
--sha256  add827e2deb56e96803c82ace1d4e77fa0c8ec3747d6398e9951f739d71067d4  grpcio_reflection-1.66.2.tar.gz
-+md5  ae7a26702153311fc7fa5bd4ee232ac4  grpcio_reflection-1.67.0.tar.gz
-+sha256  c47143738b1897b6ce4af5e0e338c85c9aee5fdcbb3355d368a8dcae46d8933c  grpcio_reflection-1.67.0.tar.gz
- # Locally computed sha256 checksums
- sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
-diff --git a/package/python-grpcio-reflection/python-grpcio-reflection.mk b/package/python-grpcio-reflection/python-grpcio-reflection.mk
-index b336ebd945..d211fd18df 100644
---- a/package/python-grpcio-reflection/python-grpcio-reflection.mk
-+++ b/package/python-grpcio-reflection/python-grpcio-reflection.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_GRPCIO_REFLECTION_VERSION = 1.66.2
-+PYTHON_GRPCIO_REFLECTION_VERSION = 1.67.0
- PYTHON_GRPCIO_REFLECTION_SOURCE = grpcio_reflection-$(PYTHON_GRPCIO_REFLECTION_VERSION).tar.gz
--PYTHON_GRPCIO_REFLECTION_SITE = https://files.pythonhosted.org/packages/58/3f/85a801dda6357b01060ec743aa3831da77d222230f86f872b77cc7af002f
-+PYTHON_GRPCIO_REFLECTION_SITE = https://files.pythonhosted.org/packages/fe/69/08a7c3c3524e3af650d22bd8e0015e35bc284eae919fbb38bc2702809d07
- PYTHON_GRPCIO_REFLECTION_SETUP_TYPE = setuptools
- PYTHON_GRPCIO_REFLECTION_LICENSE = Apache-2.0
- PYTHON_GRPCIO_REFLECTION_LICENSE_FILES = LICENSE
--- 
-2.34.1
+commit: https://git.buildroot.net/buildroot/commit/?id=b6784a1f1f67439ce24e7961851d3c5670df4e83
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The lrzsz package currently fails to build with GCC >= 14.x. In [1],
+Fabrice had proposed to update the package to what's available on a
+Github repository from the upstream maintainer at [2], but in this
+very repository (not updated since 4 years), the maintainer writes:
+
+  NOTE:
+
+  Do not use the repository until further notice.
+  It contains work in progress and at least one change i am unhappy with.
+
+  Use either http://ohse.de/uwe/testing/lrzsz-0.12.21rc.tar.gz (over
+  20 years in rc state, so it's good enough), or 0.12.20 from
+  https://ohse.de/uwe/software/lrzsz.html (do not expect me to update
+  that old site ever again).
+
+So, let's stick to the 0.12.20 version we have, and add a few patches.
+
+Patch 0001 is patching the configure script, which we obviously don't
+normally like. However, the configure.in script is very old and no
+longer autoreconfs properly with modern autoconf. Since the patch is
+trivial, and upstream seems almost dead, we take the route of patching
+the configure script.
+
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20240726092042.1273023-1-fontaine.fabrice@gmail.com/
+[2] https://github.com/UweOhse/lrzsz
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/3eb94eac3e0e1a04d41c618ed9ea2e4e398ea48a/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../lrzsz/0001-configure-fix-main-prototype.patch  | 32 ++++++++++++++++
+ .../0002-lib-long-options.c-include-stdlib.h.patch | 44 ++++++++++++++++++++++
+ .../0003-include-stdio.h-to-remove-warning.patch   | 26 +++++++++++++
+ 3 files changed, 102 insertions(+)
+
+diff --git a/package/lrzsz/0001-configure-fix-main-prototype.patch b/package/lrzsz/0001-configure-fix-main-prototype.patch
+new file mode 100644
+index 0000000000..46b7aade00
+--- /dev/null
++++ b/package/lrzsz/0001-configure-fix-main-prototype.patch
+@@ -0,0 +1,32 @@
++From 43b2b711fedd3a28d497b3a5c0e9054fa203ef3d Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 15 Sep 2024 15:12:07 +0200
++Subject: [PATCH] configure: fix main() prototype
++
++The pre-generated configure script has a check that doesn't work with
++GCC >= 14.x due to a partial main() prototype. Doing AUTORECONF = YES
++doesn't work as the configure.in is very old, so let's fix the
++configure script directly.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream: N/A, patching generated file
++---
++ configure | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure b/configure
++index db26726..d160e27 100755
++--- a/configure
+++++ b/configure
++@@ -1008,7 +1008,7 @@ cross_compiling=$ac_cv_prog_cc_cross
++ cat > conftest.$ac_ext <<EOF
++ #line 1010 "configure"
++ #include "confdefs.h"
++-main(){return(0);}
+++int main(){return(0);}
++ EOF
++ if { (eval echo configure:1014: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
++   ac_cv_prog_cc_works=yes
++-- 
++2.46.0
++
+diff --git a/package/lrzsz/0002-lib-long-options.c-include-stdlib.h.patch b/package/lrzsz/0002-lib-long-options.c-include-stdlib.h.patch
+new file mode 100644
+index 0000000000..6229114e0a
+--- /dev/null
++++ b/package/lrzsz/0002-lib-long-options.c-include-stdlib.h.patch
+@@ -0,0 +1,44 @@
++From aa6779c2846f13bf58575486b374ef06b2844fe8 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Tue, 21 May 2024 11:13:17 +0200
++Subject: [PATCH] lib/long-options.c: include stdlib.h
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes the following error (compiled with GCC 14.x):
++
++long-options.c:70:11: error: implicit declaration of function ‘exit’
++[-Wimplicit-function-declaration]
++   70 |           exit (0);
++      |           ^~~~
++
++Upstream: https://github.com/UweOhse/lrzsz/pull/4
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ lib/long-options.c | 9 +++++++++
++ 1 file changed, 9 insertions(+)
++
++diff --git a/lib/long-options.c b/lib/long-options.c
++index 76b9796..19c84e0 100644
++--- a/lib/long-options.c
+++++ b/lib/long-options.c
++@@ -22,6 +22,15 @@
++ #endif
++ 
++ #include <stdio.h>
+++
+++/* This needs to come after some library #include
+++   to get __GNU_LIBRARY__ defined.  */
+++#ifdef	__GNU_LIBRARY__
+++/* Don't include stdlib.h for non-GNU C libraries because some of them
+++   contain conflicting prototypes for getopt.  */
+++#include <stdlib.h>
+++#endif	/* GNU C library.  */
+++
++ #include <getopt.h>
++ #include "long-options.h"
++ 
++-- 
++2.46.0
++
+diff --git a/package/lrzsz/0003-include-stdio.h-to-remove-warning.patch b/package/lrzsz/0003-include-stdio.h-to-remove-warning.patch
+new file mode 100644
+index 0000000000..e4a958cdfa
+--- /dev/null
++++ b/package/lrzsz/0003-include-stdio.h-to-remove-warning.patch
+@@ -0,0 +1,26 @@
++From e164c9cd3207321e162f054357fcd37b06cb0b8a Mon Sep 17 00:00:00 2001
++From: Uwe Ohse <uwe@ohse.de>
++Date: Mon, 2 Mar 2020 22:38:16 +0000
++Subject: [PATCH] include stdio.h to remove warning
++
++Upstream: https://github.com/UweOhse/lrzsz/commit/937a2ff696fb600672eb0e8fab87f75d5e4fbc25
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/lsyslog.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/lsyslog.c b/src/lsyslog.c
++index 6baf4a2..d21ab35 100644
++--- a/src/lsyslog.c
+++++ b/src/lsyslog.c
++@@ -24,6 +24,7 @@
++ #include <pwd.h>
++ #include <stdlib.h>
++ #include <string.h>
+++#include <stdio.h>
++ #endif
++ 
++ #if __STDC__
++-- 
++2.46.0
++
+
+--===============1122090020393127822==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1122090020393127822==--
