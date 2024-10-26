@@ -1,74 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18BE5D10C07
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 21:32:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71BB7D0C604
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 21:36:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3E434011B;
-	Sat, 26 Oct 2024 21:32:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 362A180DA4;
+	Sat, 26 Oct 2024 21:36:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mSDMAHq7KwLE; Sat, 26 Oct 2024 21:32:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s8sv4QlyGuXK; Sat, 26 Oct 2024 21:36:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1642401D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D6B380E92
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1642401D1;
-	Sat, 26 Oct 2024 21:32:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E9D75C53
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 21:32:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D6B380E92;
+	Sat, 26 Oct 2024 21:36:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 905DD5C24
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 21:36:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1BEA7401D1
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 21:32:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7F35B60617
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 21:36:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sbyPemJmCQZV for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 21:32:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RkJQFshAQ0ER for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 21:36:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 025D24011B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 025D24011B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C9C91605EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9C91605EA
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 025D24011B
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 21:32:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C9C91605EA
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 21:36:37 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b313.dip0.t-ipconnect.de [84.161.179.19])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 1CC04A4C037F
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 23:32:26 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:49152)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 02755A4C059A;
+ Sat, 26 Oct 2024 23:36:36 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40272)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1t4oOX-00000000181-1gNN
- for buildroot@buildroot.org; Sat, 26 Oct 2024 21:32:25 +0000
+ (envelope-from <bernd@kuhls.net>) id 1t4oSZ-000000001jg-0zf4;
+ Sat, 26 Oct 2024 21:36:35 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 23:32:25 +0200
-Message-Id: <20241026213225.2761207-1-bernd@kuhls.net>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Date: Sat, 26 Oct 2024 23:36:35 +0200
+Message-Id: <20241026213635.2793641-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: ++++++
+X-Spam: Yes
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202406071026; t=1729978346;
- bh=gYRoq+bEC698QP3nRugQjWLPHDyAdaWYQFvs2sWJZ3w=;
- h=From:To:Subject:Date:From;
- b=Os/ZOb2EmY3OBp6fx4b/SoQXwCjj9tY1NdufdAGkJQ6DTW/yHBQU8QYyKrsh9X6Ol
- sMGt7BUxhHid2mXZrho4ClSm5UwbExRrJkA8Y8fEuilH3sVyXeaaMQ6jmHAltyWXZS
- HuyNYNrRWBcTyiKIwO1Qmlp1AIW2u+Jk58ulLMKUEE2nNf2mCoQU3LiTN54whpG54H
- jsX+Gnff9/jApRdRqr1o9KXIK2wv8o12DplLGtMX3FnCZUXf2WkKzx1rD0GQzkIPjK
- AV8+B1SmDsdjCnqOGun2ay8YdNwgNNcBg7xio5Xq8UuJu6Z9fwDkGGWcz0G+3vYYkV
- ku3IeiGaoGXZQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ s=kas202406071026; t=1729978596;
+ bh=RH3Gj7bvCsv7BElrk07JtP2+pMRbo5Cpfa/wT1m6Vvc=;
+ h=From:To:Cc:Subject:Date:From;
+ b=cqNm1FjFmKqRRIO9deP7qUHwUa1klgPd/NHD+cXWESbw0bPX+D74sOTbxr8nxbcyV
+ QDAIt8+aMREaNEXeNUPbJnRdI5rClaQzYQ6dJkM8FUugWRqpN1l+mdUcDRM/6zCz+g
+ e5t8vpMPYS+C8tQINla4/qvN9cJxlM4uVUKGq7hMkhhail4nx1UzHveoaHou4MtT8/
+ ZIOXT0w+urO1AuKAzI7RDUNnz5QXjHUJlT0umnesao/WelguFRtNBI4qIunFf2waPD
+ VBJ7UxSkLs8o0ZtFhFhlaM0QlUyULHcrGPZtVNGY2NRv0W2mBZGg6TIvIf7T9hzXQL
+ p6ZlRpeJBgDoA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202406071026 header.b=Os/ZOb2E
-Subject: [Buildroot] [PATCH v2 1/1] package/heimdal: Fix build with
- autoconf-2.72
+ header.a=rsa-sha256 header.s=kas202406071026 header.b=cqNm1FjF
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,51 +86,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/175/175fb65f0151866cd2d83c91c23b453d8c4489f7/
-https://bugs.busybox.net/show_bug.cgi?id=15991
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-v2: updated patch description with upstream commit URL
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- ...file.m4-Fix-build-with-autoconf-2.72.patch | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/heimdal/0002-cf-largefile.m4-Fix-build-with-autoconf-2.72.patch
-
-diff --git a/package/heimdal/0002-cf-largefile.m4-Fix-build-with-autoconf-2.72.patch b/package/heimdal/0002-cf-largefile.m4-Fix-build-with-autoconf-2.72.patch
-new file mode 100644
-index 0000000000..5b36c5a784
---- /dev/null
-+++ b/package/heimdal/0002-cf-largefile.m4-Fix-build-with-autoconf-2.72.patch
-@@ -0,0 +1,27 @@
-+From 1b57b62d82a478c1fade350f0fb1d57031a8734e Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 10 Feb 2024 09:33:48 +0100
-+Subject: [PATCH] cf/largefile.m4: Fix build with autoconf-2.72
-+
-+Fixes https://github.com/heimdal/heimdal/issues/1201
-+
-+Upstream: https://github.com/heimdal/heimdal/commit/1b57b62d82a478c1fade350f0fb1d57031a8734e
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ cf/largefile.m4 | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/cf/largefile.m4 b/cf/largefile.m4
-+index 5c54897be4..cdbbc55431 100644
-+--- a/cf/largefile.m4
-++++ b/cf/largefile.m4
-+@@ -10,7 +10,7 @@ dnl with generated code, such as lex
-+ if test "$enable_largefile" != no -a "$ac_cv_sys_large_files" != no; then
-+ 	CPPFLAGS="$CPPFLAGS -D_LARGE_FILES=$ac_cv_sys_large_files"
-+ fi
-+-if test "$enable_largefile" != no -a "$ac_cv_sys_file_offset_bits" != no; then
-++if test "$enable_largefile" != no -a "$ac_cv_sys_file_offset_bits" != no && test -n "$ac_cv_sys_file_offset_bits"; then
-+ 	CPPFLAGS="$CPPFLAGS -D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
-+ fi
-+ ])
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 871fc9ca01..3f86b3ff3b 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  192cf8d181eb03cbf18e4fd4beb16edf89ef34aa25bc1c73c891bc904342aade  tvheadend-078a822cf548b37bc474475fa57e48e9604090ee.tar.gz
++sha256  f31cf06dcc40313e9b77331827201e74ed75c4d18156394581ca1a4ae55aa888  tvheadend-26ec161fb3c903f8b0d0be8b54d1b67c596fb829.tar.gz
+ sha256  16aaf037a2d00e6e7804de64619887fc7539f1ede99e3282c86dfbc61c2af63e  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index ee82ecb1e6..812ab4e9ab 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 078a822cf548b37bc474475fa57e48e9604090ee
++TVHEADEND_VERSION = 26ec161fb3c903f8b0d0be8b54d1b67c596fb829
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 -- 
 2.39.5
 
