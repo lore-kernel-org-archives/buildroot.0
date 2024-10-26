@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE669D10BE8
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 08:47:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DD6CD10BEC
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 08:47:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E49F81B72;
-	Sat, 26 Oct 2024 08:47:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 042EB60BEF;
+	Sat, 26 Oct 2024 08:47:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d2P6Im0wiYfg; Sat, 26 Oct 2024 08:47:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KARH04x2nuB4; Sat, 26 Oct 2024 08:47:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C0E481BC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B919F60AFA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C0E481BC5;
-	Sat, 26 Oct 2024 08:47:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id EADAB5C24
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 08:47:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B919F60AFA;
+	Sat, 26 Oct 2024 08:47:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 353525C24
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 08:47:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CBDF4405F9
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 08:47:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 153E4403A1
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 08:47:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id znVMGgVv4PKQ for <buildroot@buildroot.org>;
+ id skw5loJKjLbS for <buildroot@buildroot.org>;
  Sat, 26 Oct 2024 08:47:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AD92403A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B751F403B0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9AD92403A1
+ by smtp4.osuosl.org (Postfix) with ESMTP id B751F403B0
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 08:47:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8D72B83680; Sat, 26 Oct 2024 08:47:08 +0000 (UTC)
+ id A2D1683683; Sat, 26 Oct 2024 08:47:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 10:46:16 +0200
+Date: Sat, 26 Oct 2024 10:46:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9cd7d929a1a8444c66b168c97202319d84d8d929
-X-Git-Newrev: 70359eaa0dfdb79f7566fdaf9b0adc81c27bfe1d
+X-Git-Oldrev: 57d94b293b0b0826a17784d326c46f0bdc02f685
+X-Git-Newrev: 0748d96940db9904f9f6eeac96649df2a1c15091
 X-Patchwork-Hint: ignore
-Message-Id: <20241026084708.8D72B83680@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 5.{10,
- 15}.x / 6.{1, 6, 11}.x series
+Message-Id: <20241026084708.A2D1683683@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iproute2: bump to version 6.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,71 +65,186 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70359eaa0dfdb79f7566fdaf9b0adc81c27bfe1d
+commit: https://git.buildroot.net/buildroot/commit/?id=0748d96940db9904f9f6eeac96649df2a1c15091
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+The building test using musl as the C library for the cross-compilation
+toolchain raised errors that required the application of two additional
+patches.
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ .../0004-bridge-mst-fix-a-musl-build-issue.patch   | 73 ++++++++++++++++++++++
+ ...bridge-mst-fix-a-further-musl-build-issue.patch | 56 +++++++++++++++++
+ package/iproute2/iproute2.hash                     |  2 +-
+ package/iproute2/iproute2.mk                       |  2 +-
+ 4 files changed, 131 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 497b507945..1734477069 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -134,7 +134,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+diff --git a/package/iproute2/0004-bridge-mst-fix-a-musl-build-issue.patch b/package/iproute2/0004-bridge-mst-fix-a-musl-build-issue.patch
+new file mode 100644
+index 0000000000..3deb42ae95
+--- /dev/null
++++ b/package/iproute2/0004-bridge-mst-fix-a-musl-build-issue.patch
+@@ -0,0 +1,73 @@
++From 0359ee6dc57ee8aa21a3f0f7404422c0f9372d3a Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Date: Sun, 22 Sep 2024 14:00:42 +0200
++Subject: [PATCH] bridge: mst: fix a musl build issue
++
++This patch fixes a compilation error raised by the bump to version 6.11.0
++in Buildroot using musl as the C library for the cross-compilation
++toolchain.
++
++After setting the CFLGAS
++
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++IPROUTE2_CFLAGS += -D__UAPI_DEF_IN6_ADDR=0 -D__UAPI_DEF_SOCKADDR_IN6=0 \
++			-D__UAPI_DEF_IPV6_MREQ=0
++endif
++
++to fix the following errors:
++
++In file included from ../../../host/mips64-buildroot-linux-musl/sysroot/usr/include/arpa/inet.h:9,
++                 from ../include/libnetlink.h:14,
++                 from mst.c:10:
++../../../host/mips64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:23:8: error: redefinition of 'struct in6_addr'
++   23 | struct in6_addr {
++      |        ^~~~~~~~
++In file included from ../include/uapi/linux/if_bridge.h:19,
++                 from mst.c:7:
++../include/uapi/linux/in6.h:33:8: note: originally defined here
++   33 | struct in6_addr {
++      |        ^~~~~~~~
++../../../host/mips64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:34:8: error: redefinition of 'struct sockaddr_in6'
++   34 | struct sockaddr_in6 {
++      |        ^~~~~~~~~~~~
++../include/uapi/linux/in6.h:50:8: note: originally defined here
++   50 | struct sockaddr_in6 {
++      |        ^~~~~~~~~~~~
++../../../host/mips64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:42:8: error: redefinition of 'struct ipv6_mreq'
++   42 | struct ipv6_mreq {
++      |        ^~~~~~~~~
++../include/uapi/linux/in6.h:60:8: note: originally defined here
++   60 | struct ipv6_mreq {
++
++I got this further errors
++
++../include/uapi/linux/in6.h:72:25: error: field 'flr_dst' has incomplete type
++   72 |         struct in6_addr flr_dst;
++      |                         ^~~~~~~
++../include/uapi/linux/if_bridge.h:711:41: error: field 'ip6' has incomplete type
++  711 |                         struct in6_addr ip6;
++      |                                         ^~~
++
++fixed by including the netinet/in.h header.
++
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=6a77abab92516e65f07f8657fc4e384c4541ce0e
++---
++ bridge/mst.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/bridge/mst.c b/bridge/mst.c
++index 873ca5369fd6..c8f7e6606c3c 100644
++--- a/bridge/mst.c
+++++ b/bridge/mst.c
++@@ -4,6 +4,7 @@
++  */
++ 
++ #include <stdio.h>
+++#include <netinet/in.h>
++ #include <linux/if_bridge.h>
++ #include <net/if.h>
++ 
++-- 
++2.43.0
++
+diff --git a/package/iproute2/0005-bridge-mst-fix-a-further-musl-build-issue.patch b/package/iproute2/0005-bridge-mst-fix-a-further-musl-build-issue.patch
+new file mode 100644
+index 0000000000..d1981f74e2
+--- /dev/null
++++ b/package/iproute2/0005-bridge-mst-fix-a-further-musl-build-issue.patch
+@@ -0,0 +1,56 @@
++From 62c4dfff5ff596984ece7960fba49b05d69f37a7 Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Date: Sun, 22 Sep 2024 14:11:18 +0200
++Subject: [PATCH] bridge: mst: fix a further musl build issue
++
++This patch fixes the following build errors:
++
++In file included from mst.c:11:
++../include/json_print.h:80:30: warning: 'struct timeval' declared inside parameter list will not be visible outside of this definition or declaration
++   80 | _PRINT_FUNC(tv, const struct timeval *)
++      |                              ^~~~~~~
++../include/json_print.h:50:37: note: in definition of macro '_PRINT_FUNC'
++   50 |                                     type value);                        \
++      |                                     ^~~~
++../include/json_print.h:80:30: warning: 'struct timeval' declared inside parameter list will not be visible outside of this definition or declaration
++   80 | _PRINT_FUNC(tv, const struct timeval *)
++      |                              ^~~~~~~
++../include/json_print.h:55:45: note: in definition of macro '_PRINT_FUNC'
++   55 |                                             type value)                 \
++      |                                             ^~~~
++../include/json_print.h: In function 'print_tv':
++../include/json_print.h:58:48: error: passing argument 5 of 'print_color_tv' from incompatible pointer type [-Wincompatible-pointer-types]
++   58 |                                                value);                  \
++      |                                                ^~~~~
++      |                                                |
++      |                                                const struct timeval *
++../include/json_print.h:80:1: note: in expansion of macro '_PRINT_FUNC'
++   80 | _PRINT_FUNC(tv, const struct timeval *)
++      | ^~~~~~~~~~~
++../include/json_print.h:50:42: note: expected 'const struct timeval *' but argument is of type 'const struct timeval *'
++   50 |                                     type value);                        \
++      |                                          ^
++../include/json_print.h:80:1: note: in expansion of macro '_PRINT_FUNC'
++   80 | _PRINT_FUNC(tv, const struct timeval *)
++
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=043ef90e2fa94397eb5c85330889ca4146a6d58a
++---
++ bridge/mst.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/bridge/mst.c b/bridge/mst.c
++index c8f7e6606c3c..fccb7fd68140 100644
++--- a/bridge/mst.c
+++++ b/bridge/mst.c
++@@ -4,6 +4,7 @@
++  */
++ 
++ #include <stdio.h>
+++#include <sys/time.h>
++ #include <netinet/in.h>
++ #include <linux/if_bridge.h>
++ #include <net/if.h>
++-- 
++2.43.0
++
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 0760183b9e..028a324396 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256  91a62f82737b44905a00fa803369c447d549e914e9a2a4018fdd75b1d54e8dce  iproute2-6.10.0.tar.xz
++sha256  1f795398a04aeaacd06a8f6ace2cfd913c33fa5953ca99daae83bb5c534611c3  iproute2-6.11.0.tar.xz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 08b890b331..c452b64cde 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.11.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.11.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 5233de2b0b..21b553b8ce 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,10 +1,10 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  057263d0afc17d5253794afd3d239ba4da4aa734b22fa36c1665f41b95449b73  linux-6.11.3.tar.xz
--sha256  f74812f78e88992c416434cb107639e13a551dbaff36bb90d6346ab16ab71a95  linux-6.6.56.tar.xz
--sha256  8bd8de3562fb006653e550a934e66ed9f80b7576258a03e2caa2e3ce1c1f9f24  linux-6.1.112.tar.xz
-+sha256  471485b3b7f2fb637bd8fe3d00944c4c135c7d8ee02f357f33690baab0752a07  linux-6.11.5.tar.xz
-+sha256  e7df81e588d70fab5ec3ec3bb04ac53d51f0860fc3b1ec45e0a4167a026899db  linux-6.6.58.tar.xz
-+sha256  2286e4a02ea2fbe65023dbf779f20aa994ba2b8d37ed559049378089451aa256  linux-6.1.114.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  b1751f18ece3df08d502dd87a9ab1a317dc0f9486355bf8ee62ba6af0b35da30  linux-5.15.167.tar.xz
--sha256  f6a19a64785965b9fcac0bcb6fd2412b45ca449495bb03592d46f9a50be51ca6  linux-5.10.226.tar.xz
-+sha256  e618c6d845fd1bc89477508e8d084bbe791fc88bf7623adee2deb6ecb2275370  linux-5.15.169.tar.xz
-+sha256  76cc8d7f1528f87902e38697229661d0617a7d6ab86166be9f3ef9a613b17b72  linux-5.10.228.tar.xz
- sha256  77221ab9aebeac746915c755ec3b7d320f85cd219c63d9c501820fbca1e3b32b  linux-5.4.284.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256  4e27cdf999359876a0ff489bff6ece7ba5798ff37c2289db0c9e9422a9014162  linux-4.19.322.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7c1611699c..32cd7a464e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -430,11 +430,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.19.322"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.4.284"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.226"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.167"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.112"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.56"	if BR2_KERNEL_HEADERS_6_6
--	default "6.11.3"	if BR2_KERNEL_HEADERS_6_11
-+	default "5.10.228"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.169"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.114"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.58"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.11.5"	if BR2_KERNEL_HEADERS_6_11
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-IPROUTE2_VERSION = 6.10.0
++IPROUTE2_VERSION = 6.11.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
