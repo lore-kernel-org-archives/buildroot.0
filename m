@@ -1,76 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEE06D10BFF
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 16:44:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7CAFD10BFF
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 16:46:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D4A740C4F;
-	Sat, 26 Oct 2024 16:44:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92CD780C98;
+	Sat, 26 Oct 2024 16:46:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cIAsOlvgkrSz; Sat, 26 Oct 2024 16:44:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kcjFq__dhjbq; Sat, 26 Oct 2024 16:46:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74A9540C8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9475280CB3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74A9540C8F;
-	Sat, 26 Oct 2024 16:44:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4EF655C1E
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 16:44:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9475280CB3;
+	Sat, 26 Oct 2024 16:46:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9723A2318
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 16:46:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D5B840C8F
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 16:44:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 85AF4605DA
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 16:46:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tVC2P6sF-Ky5 for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 16:44:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WtWCmyXBAMNL for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 16:46:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
  helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EEC2240C4F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEC2240C4F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 76892605E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76892605E1
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EEC2240C4F
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 16:44:16 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 219FD20003;
- Sat, 26 Oct 2024 16:44:15 +0000 (UTC)
-Date: Sat, 26 Oct 2024 18:44:14 +0200
-To: <yann.morin@orange.com>
-Cc: <buildroot@buildroot.org>, Vincent Fazio <vfazio@gmail.com>, Christian
- Stewart <christian@aperture.us>
-Message-ID: <20241026184414.5924bc56@windsurf>
-In-Reply-To: <cover.1699547993.git.yann.morin@orange.com>
-References: <cover.1699547993.git.yann.morin@orange.com>
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 76892605E1
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 16:46:03 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 91F6320002;
+ Sat, 26 Oct 2024 16:46:01 +0000 (UTC)
+Date: Sat, 26 Oct 2024 18:46:00 +0200
+To: Brandon Maier via buildroot <buildroot@buildroot.org>
+Cc: Brandon Maier <brandon.maier@collins.com>, Kalpesh Panchal
+ <kalpesh.panchal2@collins.com>
+Message-ID: <20241026184600.291039c3@windsurf>
+In-Reply-To: <20231031230336.51110-1-brandon.maier@collins.com>
+References: <20231031230336.51110-1-brandon.maier@collins.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729961055;
+ d=bootlin.com; s=gm1; t=1729961161;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=xZD7QR44S6K5MtVGMcFloYP/FBUvp+jy0YbXgU9a5sg=;
- b=bS2AvMZ6KQaTs4AFCC0WnG7JUeuuXiLAL6dYxSWU9bwf6tosVA4WtZbw0sc8vqBnpOza7I
- UTctkU69CPNVhGVWuinB3ixwtEnuvKwHmsKUtByUI4cAcbI0vZLynpxQInVlA2ewbP1xMA
- Mg1eA2211WUjcf9TrVofZt2/ul4LJvieLxy21e7lBOGzjNRI2R6BvBIc1MxOdjovLDem6o
- WayM9vtn4tw2iMXcq5q0W8ET3c4D4TLv4harfpEp6KSpS+gD2S7Kp2HlasSROfmtWYRfSq
- ZHqTmuwrYfZcs5v3ctKoHQzdiV5cO0G/36S2XpInmjGlPTaLd7+DD8jM47YQSw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=1tOuz5FnAWShtGRqYAonsjzHZPxbkUkbEGiUGBpY1YY=;
+ b=VOalQWLVkxxgCrwZiGt1uXPE5oXoy5zSKcoiSv5EyJLePWqFc/9M/sAXjJLMV458MPoMy7
+ w7oditzNwOpZQooXp/Bxo0dYsb9B8QDizlzSovBqYIHYIoAXXxR9yJOSEnlcepJDghRwCw
+ 4LmahVnD/fIPvRQsuHiKz6K6E+oavoNDgOBIx8IBWbu/wOtBZ7xYKuTBY/y6b41Wz9C+Cl
+ emqlm9/DZJgXZWsv738qxTYKFHojUtEpKkdNe/vCGdGF72wrskBdQyrYnS1sN/34eA+9q0
+ EzUiLb7kdOMaIeKq20LfkoJ//sPqKVAvI5skHTGhBbTPzuk7/NCGj6JAh35Qqg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=bS2AvMZ6
-Subject: Re: [Buildroot] [PATCH 0/2] package/filebeat: new package
+ header.s=gm1 header.b=VOalQWLV
+Subject: Re: [Buildroot] [PATCH 1/1] aufs-util: fix build error for missing
+ linux header
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,22 +90,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+On Tue, 31 Oct 2023 23:03:36 +0000
+Brandon Maier via buildroot <buildroot@buildroot.org> wrote:
 
-+Cc Christian Steward.
-
-On Thu, 9 Nov 2023 17:39:54 +0100
-<yann.morin@orange.com> wrote:
-
-> This two-patch series introduces filebeat, an ElasticSearch-related tool
-> to grab local log files and send them to a remote ElasticSearch server.
+> From: Kalpesh Panchal <kalpesh.panchal2@collins.com>
 > 
-> It is a bit convoluted (see commit log), and requires a little extension
-> in our golang-package infrastructure, which we introduce as the first
-> patch in the series.
+> added missing linux header path to fix below build error:
+> 
+> - $(LINUX_DIR)/include/uapi/linux/stddef.h:5:10:fatal error: linux/compiler_types.h: No such file or directory
+> 
+> Signed-off-by: Kalpesh Panchal <kalpesh.panchal2@collins.com>
+> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 
-Christian, could you review this patch series, and especially PATCH
-1/2, which touches the golang-package infrastructure?
+Could you document a bit more your commit log?
+
+Which defconfig exhibits the issue?
+
+Since when this problem started occurring?
+
+We have no autobuilder issues for this, and you don't explain why this
+used to work, but doesn't work anymore.
+
+Could you do a bit more research, and provide a more
+exhaustive/documented explanation?
 
 Thanks a lot!
 
