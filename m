@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAFC0D10BEC
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 08:58:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EC7BD10BEC
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 08:58:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A809560AD6;
-	Sat, 26 Oct 2024 08:58:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1AC7C60BFC;
+	Sat, 26 Oct 2024 08:58:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IzOvYhi79AO2; Sat, 26 Oct 2024 08:57:59 +0000 (UTC)
+ id HpFK7qynpDD2; Sat, 26 Oct 2024 08:58:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B59D60B46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2ADA160C13
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B59D60B46;
-	Sat, 26 Oct 2024 08:57:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F9F15C1E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2ADA160C13;
+	Sat, 26 Oct 2024 08:58:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 015705C1E
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 08:57:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1490240656
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 08:57:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E20DD6062C
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 08:57:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7i9_NkSS8iri for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HGo3C5Ih3GJM for <buildroot@buildroot.org>;
  Sat, 26 Oct 2024 08:57:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 095B6405B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C456F6067E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 095B6405B7
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 08:57:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C456F6067E
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 08:57:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF61A83911; Sat, 26 Oct 2024 08:57:46 +0000 (UTC)
+ id B2D40838F5; Sat, 26 Oct 2024 08:57:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 10:49:47 +0200
+Date: Sat, 26 Oct 2024 10:49:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d5da934fc02df127f63bfbb2e8e73c03fbf4aa98
-X-Git-Newrev: 3322c565c6fa4fd5ea36a18bbb678bc6b1d49d49
+X-Git-Oldrev: 94714171753578cc32c99453a2bfb7a19ba278da
+X-Git-Newrev: d679028e1d721c7b111b4c4f67914a70e8c21bbe
 X-Patchwork-Hint: ignore
-Message-Id: <20241026085746.EF61A83911@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-flask-smorest: bump to
- version 0.45.0
+Message-Id: <20241026085746.B2D40838F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cryptography: bump to
+ version 43.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,53 +66,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3322c565c6fa4fd5ea36a18bbb678bc6b1d49d49
+commit: https://git.buildroot.net/buildroot/commit/?id=d679028e1d721c7b111b4c4f67914a70e8c21bbe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Migrate from setuptools to flit build backend.
+Add new host-python-setuptools build dependency.
 
-License hash changed due to year removal:
-https://github.com/marshmallow-code/flask-smorest/commit/d813c73f84f624c32ccf9495c292b9f3e8e719a1
+Set --skip-dependency-check build option to bypass overly strict
+setuptools version requirement.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-flask-smorest/python-flask-smorest.hash | 6 +++---
- package/python-flask-smorest/python-flask-smorest.mk   | 8 ++++----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-cryptography/python-cryptography.hash |  2 +-
+ package/python-cryptography/python-cryptography.mk   | 16 ++++++++++++----
+ 2 files changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-flask-smorest/python-flask-smorest.hash b/package/python-flask-smorest/python-flask-smorest.hash
-index 70349bebff..685464c7e4 100644
---- a/package/python-flask-smorest/python-flask-smorest.hash
-+++ b/package/python-flask-smorest/python-flask-smorest.hash
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index bde94ab7ce..61d9ca598e 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/flask-smorest/json
--md5  33ffe61fd1e4661503b3ae10fbbe3a78  flask-smorest-0.44.0.tar.gz
--sha256  13f6e39d807c8847a56dc40656c2bbc0a2b2a430d8a4bb4a21836046757f7cef  flask-smorest-0.44.0.tar.gz
-+md5  98b3b197fcfb944954d768f6d84416ee  flask_smorest-0.45.0.tar.gz
-+sha256  1490291a59e572be5c02e0a769589584180eceba65bc1949456760856b3e990b  flask_smorest-0.45.0.tar.gz
+ # Locally calculated after vendoring
+-sha256  c57ae743b2adfb29a3fc005b6f39bf1378e20d10529a859b6e2e425845bff8f3  python-cryptography-43.0.1-cargo2.tar.gz
++sha256  72c5686ee70cf37075e2fdea332066e4e2351fab8beaa4a22268983f092bca4e  python-cryptography-43.0.3-cargo2.tar.gz
  # Locally computed sha256 checksums
--sha256  40999ea1d9c1b8202fa44f8e6849a557e22df892481e067abf999879064b9521  LICENSE
-+sha256  c8a48548bbb732a0bbd6a0dc2c556cfa1e6e5fe35d888cdf6a1974d69e0e312a  LICENSE
-diff --git a/package/python-flask-smorest/python-flask-smorest.mk b/package/python-flask-smorest/python-flask-smorest.mk
-index bd4114880a..323d1ec191 100644
---- a/package/python-flask-smorest/python-flask-smorest.mk
-+++ b/package/python-flask-smorest/python-flask-smorest.mk
-@@ -4,10 +4,10 @@
+ sha256  3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb  LICENSE
+ sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 1f3b4564d3..7feb4076cd 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FLASK_SMOREST_VERSION = 0.44.0
--PYTHON_FLASK_SMOREST_SOURCE = flask-smorest-$(PYTHON_FLASK_SMOREST_VERSION).tar.gz
--PYTHON_FLASK_SMOREST_SITE = https://files.pythonhosted.org/packages/e7/4f/901bf249e7e19cdfd496247379f58c4ef2f1136c3df0bb542ca0d26a88bd
--PYTHON_FLASK_SMOREST_SETUP_TYPE = setuptools
-+PYTHON_FLASK_SMOREST_VERSION = 0.45.0
-+PYTHON_FLASK_SMOREST_SOURCE = flask_smorest-$(PYTHON_FLASK_SMOREST_VERSION).tar.gz
-+PYTHON_FLASK_SMOREST_SITE = https://files.pythonhosted.org/packages/29/cc/ad32be9d2a2148000c4c845d234f12cee10d6ec9cc3724fe7a3ff9e93f99
-+PYTHON_FLASK_SMOREST_SETUP_TYPE = flit
- PYTHON_FLASK_SMOREST_LICENSE = MIT
- PYTHON_FLASK_SMOREST_LICENSE_FILES = LICENSE
+-PYTHON_CRYPTOGRAPHY_VERSION = 43.0.1
++PYTHON_CRYPTOGRAPHY_VERSION = 43.0.3
+ PYTHON_CRYPTOGRAPHY_SOURCE_PYPI = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE_PYPI = https://files.pythonhosted.org/packages/de/ba/0664727028b37e249e73879348cc46d45c5c1a2a2e81e8166462953c5755
++PYTHON_CRYPTOGRAPHY_SITE_PYPI = https://files.pythonhosted.org/packages/0d/05/07b55d1fa21ac18c3a8c79f764e2514e6f6a9698f1be44994f5adf0d29db
+ PYTHON_CRYPTOGRAPHY_SITE = $(PYTHON_CRYPTOGRAPHY_SITE_PYPI)/$(PYTHON_CRYPTOGRAPHY_SOURCE_PYPI)?buildroot-path=filename
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = maturin
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+@@ -14,8 +14,16 @@ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+ PYTHON_CRYPTOGRAPHY_CPE_ID_VENDOR = cryptography_project
+ PYTHON_CRYPTOGRAPHY_CPE_ID_PRODUCT = cryptography
+ PYTHON_CRYPTOGRAPHY_CARGO_MANIFEST_PATH = src/rust/Cargo.toml
+-PYTHON_CRYPTOGRAPHY_DEPENDENCIES = host-python-cffi openssl
+-HOST_PYTHON_CRYPTOGRAPHY_DEPENDENCIES = host-python-cffi host-openssl
++PYTHON_CRYPTOGRAPHY_DEPENDENCIES = \
++	host-python-cffi \
++	host-python-setuptools \
++	openssl
++HOST_PYTHON_CRYPTOGRAPHY_DEPENDENCIES = \
++	host-python-cffi \
++	host-python-setuptools \
++	host-openssl
++PYTHON_CRYPTOGRAPHY_BUILD_OPTS = --skip-dependency-check
++HOST_PYTHON_CRYPTOGRAPHY_BUILD_OPTS = --skip-dependency-check
  
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
