@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A7CDD0C604
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 20:56:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07447D10C07
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 20:56:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC230605DA;
-	Sat, 26 Oct 2024 20:56:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B130D402C5;
+	Sat, 26 Oct 2024 20:56:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5m0zbq-CdpHY; Sat, 26 Oct 2024 20:56:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FT49NANrsOuo; Sat, 26 Oct 2024 20:56:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4D56605DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AF5040174
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4D56605DB;
-	Sat, 26 Oct 2024 20:56:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 21E455C1E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9AF5040174;
+	Sat, 26 Oct 2024 20:56:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C8EBD5C24
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:56:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0EFC940003
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:56:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id ABA6380F65
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:56:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qi0s6f0ibOtj for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4cfVyyGTtN97 for <buildroot@buildroot.org>;
  Sat, 26 Oct 2024 20:56:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F187D40166
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1C9F80DA6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F187D40166
+ by smtp1.osuosl.org (Postfix) with ESMTP id E1C9F80DA6
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:56:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E916B8424E; Sat, 26 Oct 2024 20:56:47 +0000 (UTC)
+ id CB6FF8424A; Sat, 26 Oct 2024 20:56:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 22:53:27 +0200
+Date: Sat, 26 Oct 2024 22:53:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1aadfc32cfe8298013a4fb9a5d8c725d3a4a5245
-X-Git-Newrev: de5d167df20c33892c5c5048d26361c7793d8111
+X-Git-Oldrev: 2bcf0a963159eb6beba80dce1b901d8ad7ec5bbc
+X-Git-Newrev: 4ed9f14ac8cd787a138f107f62339f5c39f8add2
 X-Patchwork-Hint: ignore
-Message-Id: <20241026205647.E916B8424E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-mako: bump to version 1.3.6
+Message-Id: <20241026205647.CB6FF8424A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-grpcio: bump to version
+ 1.67.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,45 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de5d167df20c33892c5c5048d26361c7793d8111
+commit: https://git.buildroot.net/buildroot/commit/?id=4ed9f14ac8cd787a138f107f62339f5c39f8add2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-mako/python-mako.hash | 4 ++--
- package/python-mako/python-mako.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-grpcio/python-grpcio.hash | 4 ++--
+ package/python-grpcio/python-grpcio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
-index 07caaf8f75..0a39db7db9 100644
---- a/package/python-mako/python-mako.hash
-+++ b/package/python-mako/python-mako.hash
+diff --git a/package/python-grpcio/python-grpcio.hash b/package/python-grpcio/python-grpcio.hash
+index c470f97e78..e47f73f694 100644
+--- a/package/python-grpcio/python-grpcio.hash
++++ b/package/python-grpcio/python-grpcio.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mako/json
--md5  0cf9ef37c1f8ffd453ef2b2a3a5573b3  Mako-1.3.5.tar.gz
--sha256  48dbc20568c1d276a2698b36d968fa76161bf127194907ea6fc594fa81f943bc  Mako-1.3.5.tar.gz
-+md5  ca119a43eb3eff532bd5d55d585d1caa  mako-1.3.6.tar.gz
-+sha256  9ec3a1583713479fae654f83ed9fa8c9a4c16b7bb0daba0e6bbebff50c0d983d  mako-1.3.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/grpcio/json
+-md5  e8adaa7345b99791542c7ca4245f30c0  grpcio-1.66.2.tar.gz
+-sha256  563588c587b75c34b928bc428548e5b00ea38c46972181a4d8b75ba7e3f24231  grpcio-1.66.2.tar.gz
++md5  7f03599b67e1959d616b16a29f79a30d  grpcio-1.67.0.tar.gz
++sha256  e090b2553e0da1c875449c8e75073dd4415dd71c9bde6a406240fdf4c0ee467c  grpcio-1.67.0.tar.gz
  # Locally computed sha256 checksums
- sha256  15627b36b38d0729cdd686df9abf606503d99d624b2f5ec5cb254a75d5afa891  LICENSE
-diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
-index 258b2db014..68cfc98bc2 100644
---- a/package/python-mako/python-mako.mk
-+++ b/package/python-mako/python-mako.mk
+ sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
+diff --git a/package/python-grpcio/python-grpcio.mk b/package/python-grpcio/python-grpcio.mk
+index 70af9b5c3a..6aad3445b5 100644
+--- a/package/python-grpcio/python-grpcio.mk
++++ b/package/python-grpcio/python-grpcio.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MAKO_VERSION = 1.3.5
--PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
--PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/67/03/fb5ba97ff65ce64f6d35b582aacffc26b693a98053fa831ab43a437cbddb
-+PYTHON_MAKO_VERSION = 1.3.6
-+PYTHON_MAKO_SOURCE = mako-$(PYTHON_MAKO_VERSION).tar.gz
-+PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/fa/0b/29bc5a230948bf209d3ed3165006d257e547c02c3c2a96f6286320dfe8dc
- PYTHON_MAKO_SETUP_TYPE = setuptools
- PYTHON_MAKO_LICENSE = MIT
- PYTHON_MAKO_LICENSE_FILES = LICENSE
+-PYTHON_GRPCIO_VERSION = 1.66.2
++PYTHON_GRPCIO_VERSION = 1.67.0
+ PYTHON_GRPCIO_SOURCE = grpcio-$(PYTHON_GRPCIO_VERSION).tar.gz
+-PYTHON_GRPCIO_SITE = https://files.pythonhosted.org/packages/71/d1/49a96df4eb1d805cf546247df40636515416d2d5c66665e5129c8b4162a8
++PYTHON_GRPCIO_SITE = https://files.pythonhosted.org/packages/ec/ae/3c47d71ab4abd4bd60a7e2806071fe0a4b6937b9eabe522291787087ea1f
+ PYTHON_GRPCIO_SETUP_TYPE = setuptools
+ PYTHON_GRPCIO_LICENSE = Apache-2.0
+ PYTHON_GRPCIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
