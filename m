@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27362D0C604
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 20:13:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8F2BD0C604
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 20:14:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91B44401ED;
-	Sat, 26 Oct 2024 20:13:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7DF1C401CA;
+	Sat, 26 Oct 2024 20:14:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X_gt0ck1LED1; Sat, 26 Oct 2024 20:13:54 +0000 (UTC)
+ id skgJDTk6LjWd; Sat, 26 Oct 2024 20:14:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35FCD40111
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42F744039B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35FCD40111;
-	Sat, 26 Oct 2024 20:13:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7B4C95C53
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:13:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42F744039B;
+	Sat, 26 Oct 2024 20:14:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 297845C1E
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:14:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 694934012D
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:13:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 17CF460619
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:14:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zLWt2fai5NF9 for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 20:13:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gX8jvagsEKd2 for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 20:14:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C0D6840111
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0D6840111
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C0D6840111
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:13:50 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F14BA240003;
- Sat, 26 Oct 2024 20:13:48 +0000 (UTC)
-Date: Sat, 26 Oct 2024 22:13:47 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org, Petr Vorel <petr.vorel@gmail.com>
-Message-ID: <20241026221347.22f27cad@windsurf>
-In-Reply-To: <20240924090756.735949-1-giulio.benetti@benettiengineering.com>
-References: <20240924090756.735949-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729973629;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=5pxAGWjw3wi7r4YCbtgs5zYjtvgetzSsp466VsLgWiU=;
- b=NiYFieOLgjbE8hQWTuAyy5Xsxu/tmdexGorUAx8eDeT15oA29LzWipXTvk7vO+4AIzM6dJ
- XzSgEkEWEl8wsWA136GZoIP1eu1TQ7FgpK7lWWAKDedPFZEeu1ywKBbVoSAAczttueIm5e
- +XlCUE/dDZ2sMykemHqdFaq4UgQnPFZ7gPwmUydcsyAsXH83fkS7KriCSsrrGR6bstI6Yt
- WpNJk+FBetJcxsTCBGYHuyaDOvIN40n13uXwpegptgJDz/ZWmDt5O6BiObyiT2DuDAjMD5
- +BSiFKbd34Ta/vQm6CSiHbvUXQjvtsRjHnXWTt88qXcurDW+LI1oxyqLR0OZwA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NiYFieOL
-Subject: Re: [Buildroot] [PATCH] package/nfs-utils: bump version to 2.7.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5655E6061C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5655E6061C
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:14:03 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4CD8E8412D; Sat, 26 Oct 2024 20:14:03 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 26 Oct 2024 22:06:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bcde59be440e315c02296183fd916f720d02cbab
+X-Git-Newrev: 02ccc0d6f17a77b93a82c7cec81aebf923947426
+X-Patchwork-Hint: ignore
+Message-Id: <20241026201403.4CD8E8412D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cloudflared: bump to version
+ 2024.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,53 +60,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Giulio,
+commit: https://git.buildroot.net/buildroot/commit/?id=02ccc0d6f17a77b93a82c7cec81aebf923947426
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 24 Sep 2024 11:07:56 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cloudflared/cloudflared.hash | 2 +-
+ package/cloudflared/cloudflared.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> * add libxml2 dependency that is now mandatory
-> * drop 2 local patches that have been committed.
-> * add 2 patches committed upstream to fix musl build failure.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  ...-reexport-.c-Re-add-missing-includes.patch | 44 ----------------
->  ...de-junction.h-Define-macros-for-musl.patch | 51 +++++++++++++++++++
->  ...d_sqlite.c-Add-missing-sys-syscall.h.patch | 31 -----------
->  ...rt-junction-path.c-Fix-buld-for-musl.patch | 40 +++++++++++++++
->  package/nfs-utils/Config.in                   |  1 +
->  package/nfs-utils/nfs-utils.hash              |  4 +-
->  package/nfs-utils/nfs-utils.mk                |  6 +--
->  7 files changed, 97 insertions(+), 80 deletions(-)
->  delete mode 100644 package/nfs-utils/0001-reexport-fsidd-reexport-.c-Re-add-missing-includes.patch
->  create mode 100644 package/nfs-utils/0001-support-include-junction.h-Define-macros-for-musl.patch
->  delete mode 100644 package/nfs-utils/0002-support-backend_sqlite.c-Add-missing-sys-syscall.h.patch
->  create mode 100644 package/nfs-utils/0002-support-junction-path.c-Fix-buld-for-musl.patch
-
-Thanks for your patch. However, as far as I can see, libxml2 is not a
-mandatory dependency, you only need it when --enable-junctions (which
-is now the default). But I believe we should keep it optional in
-Buildroot for the target package (which a sub-option in Config.in), and
-simply disable junctions for the host package.
-
-Also, your patches have PATCH 1/2 and PATCH 2/2, so they will cause
-some check-package warnings.
-
-Could you rework/adjust?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/cloudflared/cloudflared.hash b/package/cloudflared/cloudflared.hash
+index 1aa959f8b0..e924d12481 100644
+--- a/package/cloudflared/cloudflared.hash
++++ b/package/cloudflared/cloudflared.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c61ef286962c3bb9c5edb580b89dbf8293083fa09a8f0f59379fe8ec2d04cada  cloudflared-2024.6.1-go2.tar.gz
++sha256  f96b703ea848bc538322eb957749b0b2395e0cf83213cf310cbde0a3f598eac4  cloudflared-2024.9.1-go2.tar.gz
+ sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
+diff --git a/package/cloudflared/cloudflared.mk b/package/cloudflared/cloudflared.mk
+index a243686441..68849e9b82 100644
+--- a/package/cloudflared/cloudflared.mk
++++ b/package/cloudflared/cloudflared.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CLOUDFLARED_VERSION = 2024.6.1
++CLOUDFLARED_VERSION = 2024.9.1
+ CLOUDFLARED_SITE = $(call github,cloudflare,cloudflared,$(CLOUDFLARED_VERSION))
+ CLOUDFLARED_LICENSE = Apache-2.0
+ CLOUDFLARED_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
