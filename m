@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A7EBD10C02
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 19:00:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06F85D0C604
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 19:01:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A06DB405C1;
-	Sat, 26 Oct 2024 19:00:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C30CE810E6;
+	Sat, 26 Oct 2024 19:01:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ki_WxIdqI84B; Sat, 26 Oct 2024 19:01:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D63E1810E7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D63E1810E7;
+	Sat, 26 Oct 2024 19:01:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 42E235C24
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 19:01:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 22E9B4012D
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 19:01:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dR0IoLfrncc1; Sat, 26 Oct 2024 19:00:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B351405DB
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B351405DB;
-	Sat, 26 Oct 2024 19:00:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 84CB55C1E
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 19:00:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EDDD640197
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 19:00:32 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6_wy8bf9PH7f for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 19:00:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id K_zAQdVlVJoP for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 19:01:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8F7E40254
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D8F7E40254
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 19:00:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C402084042; Sat, 26 Oct 2024 19:00:31 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 21:00:02 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4ca8f0ea762061ad04016d065f37e0c351d578f1
-X-Git-Newrev: 122af7e193dce9781c41a5f79727823bac859fd7
-X-Patchwork-Hint: ignore
-Message-Id: <20241026190031.C402084042@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/icnova-a20-adb4006: add uboot
- patch for reliable bootclk
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B4D5E40125
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4D5E40125
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B4D5E40125
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 19:01:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C56F3240005;
+ Sat, 26 Oct 2024 19:01:26 +0000 (UTC)
+Date: Sat, 26 Oct 2024 21:01:25 +0200
+To: Ludwig Kormann <ludwig.kormann@ict42.de>
+Cc: buildroot@buildroot.org
+Message-ID: <20241026210125.45ef52cd@windsurf>
+In-Reply-To: <20241016124537.2645119-1-ludwig.kormann@ict42.de>
+References: <20241016124537.2645119-1-ludwig.kormann@ict42.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1729969287;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=a/DT2hvRYl+SRPuZeh1Q1K6CpjM82hLUuoohmYI9/oI=;
+ b=ahDWgdrYC16qoRVeCQPFd6b6W/xrfOmNka3fCowQV214gZy+hLjcNWsCRftdnxZOwSyQhX
+ KSqMDX8aYNAJ8uUqzgU/bmSJv2Hkul5iiu2EEoG8KDB4Fa4HRx5FqOngYTn+Yc2iB2Zx3P
+ PpBq7IAtgYd556tUS357Y0ZTT7bD7+fyigX6DOHMf1Cbs18oxcoFJIQuU3eZE0kj18NZwh
+ oMksnMJBMsytStJwDzpJ4162dpyj/69f9XFM1HQQvM4eUfTHbFGJfiDVraHPp+ev6gt8jH
+ vSv/WBXRBd8mSGvipc+ilMBsqDqeUmH0PJkDbGsGaORPEiKUibjXJOYg6IBONQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ahDWgdrY
+Subject: Re: [Buildroot] [PATCH v2 1/3] configs/icnova-a20-adb4006: Bump
+ Linux to 6.6.56, U-Boot to 2024.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,97 +84,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=122af7e193dce9781c41a5f79727823bac859fd7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 16 Oct 2024 14:45:35 +0200
+Ludwig Kormann <ludwig.kormann@ict42.de> wrote:
 
-Up until now cpu clock gets initialized at 384 MHz, which is
-the highest supported cpu clock.
+> Signed-off-by: Ludwig Kormann <ludwig.kormann@ict42.de>
+> ---
+>  configs/icnova-a20-adb4006_defconfig | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-Recent A20 batches show an increased percentage of modules
-reacting very sensitive to operating conditions outside the
-specifications.
+I have applied the entire series. It would be good to add a readme file
+in board/in-circuit/icnova-a20-adb4006/ like we have for other boards.
+You can look at other readme.txt files for other boards for examples.
 
-The cpu dies very shortly after PLLs, core frequency or cpu
-voltage are missconfigured. E.g.:
-- uboot SPL selects 384 MHz as cpu clock which requires a cpu
-  voltage of at least 1.1 V.
-- Linux CPU Frequency scaling with most sun7i dts will reduce
-  cpu voltage down to 1.0 V.
-- When intiating a reboot or reset from linux the cpu voltage
-  may keep the 1.0 V configuration and the cpu dies during SPL
-  initialization.
+Thanks!
 
-Therefore reduce cpu clock at uboot SPL initialization down
-to 144 MHz from 384 MHz.
-
-Use patch until KConfig option in uboot becomes available.
-
-Signed-off-by: Ludwig Kormann <ludwig.kormann@ict42.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...-Reduce-cpu-clock-at-SPL-initialization-t.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
-
-diff --git a/board/in-circuit/icnova-a20-adb4006/patches/uboot/0001-sunxi-sun4i-Reduce-cpu-clock-at-SPL-initialization-t.patch b/board/in-circuit/icnova-a20-adb4006/patches/uboot/0001-sunxi-sun4i-Reduce-cpu-clock-at-SPL-initialization-t.patch
-new file mode 100644
-index 0000000000..edaa47ac4e
---- /dev/null
-+++ b/board/in-circuit/icnova-a20-adb4006/patches/uboot/0001-sunxi-sun4i-Reduce-cpu-clock-at-SPL-initialization-t.patch
-@@ -0,0 +1,48 @@
-+From 3cdf8aa3ff45e35a237285c107785bc3d2c6976a Mon Sep 17 00:00:00 2001
-+From: Ludwig Kormann <ludwig.kormann@ict42.de>
-+Date: Wed, 31 Jan 2024 11:28:19 +0100
-+Subject: [PATCH] sunxi: sun4i: Reduce cpu clock at SPL initialization to 144
-+ MHz
-+
-+Up until now cpu clock gets initialized at 384 MHz, which is
-+the highest supported cpu clock.
-+
-+Recent A20 batches show an increased percentage of modules
-+reacting very sensitive to operating conditions outside the
-+specifications.
-+
-+The cpu dies very shortly after PLLs, core frequency or cpu
-+voltage are missconfigured. E.g.:
-+- uboot SPL selects 384 MHz as cpu clock which requires a cpu
-+  voltage of at least 1.1 V.
-+- Linux CPU Frequency scaling with most sun7i dts will reduce
-+  cpu voltage down to 1.0 V.
-+- When intiating a reboot or reset from linux the cpu voltage
-+  may keep the 1.0 V configuration and the cpu dies during SPL
-+  initialization.
-+
-+Therefore reduce cpu clock at uboot SPL initialization down
-+to 144 MHz from 384 MHz.
-+
-+Signed-off-by: Ludwig Kormann <ludwig.kormann@ict42.de>
-+Upstream: Not Applicable
-+---
-+ arch/arm/include/asm/arch-sunxi/clock_sun4i.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/arch/arm/include/asm/arch-sunxi/clock_sun4i.h b/arch/arm/include/asm/arch-sunxi/clock_sun4i.h
-+index 2cec91cb20..252c4c693e 100644
-+--- a/arch/arm/include/asm/arch-sunxi/clock_sun4i.h
-++++ b/arch/arm/include/asm/arch-sunxi/clock_sun4i.h
-+@@ -141,7 +141,7 @@ struct sunxi_ccm_reg {
-+ #define CCM_PLL1_CFG_SIG_DELT_PAT_EN_SHIFT	2
-+ #define CCM_PLL1_CFG_FACTOR_M_SHIFT		0
-+ 
-+-#define PLL1_CFG_DEFAULT	0xa1005000
-++#define PLL1_CFG_DEFAULT	0xa1004c01
-+ 
-+ #if defined CONFIG_OLD_SUNXI_KERNEL_COMPAT && defined CONFIG_MACH_SUN5I
-+ /*
-+-- 
-+2.39.2
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
