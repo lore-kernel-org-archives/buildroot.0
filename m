@@ -1,93 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2059D10BF0
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 11:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4150D10BF5
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 11:01:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C0B5810CE;
-	Sat, 26 Oct 2024 11:01:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D57640B40;
+	Sat, 26 Oct 2024 11:01:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WcRkzrJSdXEc; Sat, 26 Oct 2024 11:01:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jbT9YX5jl7j8; Sat, 26 Oct 2024 11:01:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2635780F23
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19CC1408A7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2635780F23;
-	Sat, 26 Oct 2024 11:01:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9CEF55C24
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19CC1408A7;
+	Sat, 26 Oct 2024 11:01:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CAB5E5C53
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:01:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9871480F23
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9E88C40768
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:01:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d5fwWdrHZJsX for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iBSTuj6cwJoz for <buildroot@buildroot.org>;
  Sat, 26 Oct 2024 11:01:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E41CA80E16
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E41CA80E16
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E41CA80E16
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:01:05 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-43155abaf0bso28519225e9.0
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 04:01:05 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5DDD04065C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DDD04065C
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5DDD04065C
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:01:06 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-431548bd1b4so27140825e9.3
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 04:01:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1729940464; x=1730545264;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=VBr+Zyn6s90mkeVpub2U/H/xWOLW/grUGC4nexnEQR4=;
- b=I+hXXjKzTBqKtv8wrGjCx433THm8EJKFjLAcYdcW4XKIZFL2rp9/VARDCX6YlnUmgP
- t6dn78MWhGtXRscACQNaeJo9z8LFicrrAuiw86Ad8bfMRcGd/IA+EIGPXehP8wEK85Kv
- sY+yzmg3keZMEgJxziDk/lBjv1lGo3iCeEVlPidHzJtOOvIkAqnxsfrB5Ck3QCBKneGa
- vgbzCln6PzGRdOpHwJwQXzTlJ65cjU1tsomL/4euPmRsBW6wVDDzCM5Ixy7qixXYxVD3
- LsXy+b3af6fLNeoXWQedSCZ1mT2DdHHsiVG5p6LVFSadFuIspcbZBapBrNR7GheH7YZc
- IJzg==
-X-Gm-Message-State: AOJu0YzmojqG8HTyAHrbwvOdgdenqgr9yq1kjKzw2Qyzznr95BhPeQkf
- ayxkCvKjkmS39fZ3ylOAXb3uyhAITK7dSpkXc6McHWID/88WnBcRw5FWRBo375OHR4Ks1G6bLs2
- c
-X-Google-Smtp-Source: AGHT+IFe6S/LmJiJbm38NPGMZn2pafYHwsa842Bs9ZNJ+opCtt8iX1BZTpYLWPrfTc2WpjPYxQateg==
-X-Received: by 2002:a05:600c:3b86:b0:431:9397:9ace with SMTP id
- 5b1f17b1804b1-4319ac95708mr18854065e9.10.1729940463737; 
- Sat, 26 Oct 2024 04:01:03 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=xxW7+3UTvPz27IX/rSzWInOpgiWd/zQJgcS9egAgLFg=;
+ b=doaxZ0V1cg6eepRQa9RgCLGqHzWC2dP+IN4tYg0Bv8Zv+4o6ZH8opI8ixhceTl8bZg
+ UGKNhZmiN55zbyrhXpeGQhzUTF8GNvlBmjW70DfF11/X/dWUGV9SeOexXVi00tJWZe4/
+ 0QgjigO6BPOWvrZ6QbeYfh9VoXSE5Q6G21NIuz9Gjfyfk3iDJYX6zMXR8S3udkczcdAx
+ poAoSmKMG0I4GbN/VYEV0SYRe7Zk4EVxuPWBdQCgAO0OVYlQELfe6/+8LpbnZYIOVxmK
+ pLbVa3NXv2359d0afIgsjsceZsa5AzJ85svsNxe0ILVpkPJoUhXypkelmbP4hsXyWtCn
+ C0JQ==
+X-Gm-Message-State: AOJu0YxBTmYNLu/b4ftbPKQeCY0RnKLdjvzVCdx0bFr9wivcxzDS1jKe
+ Fqfn/d4IyNqQr6qIT0lpGx1ChAmo6WKWa3cn9BCuJxvBWNcM9slkbb89Kcd72ENN70gFt36PWCO
+ N
+X-Google-Smtp-Source: AGHT+IEbldNtDybiolP3b63n2E6c6yD0GBpGqZX63YTBf6RCRaCHQBjw0drJfCNqWtG6nQGwsop5Ug==
+X-Received: by 2002:a05:600c:1d22:b0:42f:7ed4:4c25 with SMTP id
+ 5b1f17b1804b1-4319acb1739mr19782835e9.14.1729940464276; 
+ Sat, 26 Oct 2024 04:01:04 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-43193573cf8sm44846235e9.7.2024.10.26.04.01.02
+ 5b1f17b1804b1-43193573cf8sm44846235e9.7.2024.10.26.04.01.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 26 Oct 2024 04:01:03 -0700 (PDT)
+ Sat, 26 Oct 2024 04:01:04 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 13:00:55 +0200
-Message-ID: <20241026110059.3204413-1-romain.naour@smile.fr>
+Date: Sat, 26 Oct 2024 13:00:56 +0200
+Message-ID: <20241026110059.3204413-2-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.45.0
+In-Reply-To: <20241026110059.3204413-1-romain.naour@smile.fr>
+References: <20241026110059.3204413-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=smile.fr; s=google; t=1729940464; x=1730545264; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=VBr+Zyn6s90mkeVpub2U/H/xWOLW/grUGC4nexnEQR4=;
- b=U8Rt1mj2cQ+jfarr90eZK4WMEbXpbc6eIQqDzaa46+P9fAbu2xy+XM5rJm5gC4aQuh
- MCODryBsNDunvHE80D+Aa1l/7MNou8loF7jU7nVRtB9WlRCAvFSPlgrKaa9SNPyoJsHC
- x8Rqgm26/v31YU+k4SBOGyD8NB+Nbd2sEPs9Y=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=xxW7+3UTvPz27IX/rSzWInOpgiWd/zQJgcS9egAgLFg=;
+ b=vvGKjO9Uc8ebtXLwWAcQ9Oy4Xse85VIoq2585KGTShtA/a+5y4BqKB0/GWPTnWcHW0
+ 6PLgt+gBIIVYUUtjnTCb4RBQ6/LILuOHeOx0bQbnUEdleLvFswyzmpityPjgyAImUGAt
+ d9m+2psir03ExbhzRE9Ww031FICuTTKyju88o=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=U8Rt1mj2
-Subject: [Buildroot] [PATCH v3 1/5] board/qemu/riscv{32,
- 64}-virt: do not use the default bus implicitly
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=vvGKjO9U
+Subject: [Buildroot] [PATCH v3 2/5] configs/qemu_nios2_10m50: delete config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,76 +112,63 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Waldemar Brodkorb <wbx@openadk.org>
 
-Qemu 9.1 recently fixed the RISC-V virt target by adding the missing
-default type for block devices [1].
+Qemu 9.1.0 removed support for NIOS2 emulation, so we can't
+no longer test it when updating Qemu zo 9.1.0.
+Furthermore it seems that NIOS2 architecture will be soon
+deprecated in the toolchain support.
 
-But the qemu command line we use for RISC-V virt is slightly incorrect:
-
-  -drive file=rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0
-
-With Qemu 9.1, this command line now rejected since it conflict with
-the new default bus:
-
-  qemu-system-riscv64: -drive file=rootfs.ext2,format=raw,id=hd0: Drive 'hd0' is already in use because it has been automatically connected to another device (did you need 'if=none' in the drive options?)
-
-Since we are currently still using Qemu 9.0, apply the suggested change by
-adding 'if=none'.
-
-Note: '-drive file=rootfs.ext2,format=raw,id=hd0' can be removed
-in a followup patch after the qemu version bump 9.1 is merged.
-
-[1] https://gitlab.com/qemu-project/qemu/-/commit/4406ba2b5efce6af64905f827ca244f699db8170
-
-[Romain: rework the commit log]
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- board/qemu/riscv32-virt/readme.txt     | 4 ++--
- board/qemu/riscv64-virt-efi/readme.txt | 2 +-
- board/qemu/riscv64-virt/readme.txt     | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ board/qemu/nios2-10m50/linux.fragment |  3 ---
+ board/qemu/nios2-10m50/readme.txt     |  5 -----
+ configs/qemu_nios2_10m50_defconfig    | 15 ---------------
+ 3 files changed, 23 deletions(-)
+ delete mode 100644 board/qemu/nios2-10m50/linux.fragment
+ delete mode 100644 board/qemu/nios2-10m50/readme.txt
+ delete mode 100644 configs/qemu_nios2_10m50_defconfig
 
-diff --git a/board/qemu/riscv32-virt/readme.txt b/board/qemu/riscv32-virt/readme.txt
-index 555924f949..048306cd54 100644
---- a/board/qemu/riscv32-virt/readme.txt
-+++ b/board/qemu/riscv32-virt/readme.txt
-@@ -1,7 +1,7 @@
- Run Linux in emulation with:
- 
--  qemu-system-riscv32 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv32_virt_defconfig
-+  qemu-system-riscv32 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0,if=none -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv32_virt_defconfig
- 
--  qemu-system-riscv32 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -nographic -cpu rv32,mmu=off -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 # qemu_riscv32_nommu_virt_defconfig
-+  qemu-system-riscv32 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0,if=none -device virtio-blk-device,drive=hd0 -nographic -cpu rv32,mmu=off -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 # qemu_riscv32_nommu_virt_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
-diff --git a/board/qemu/riscv64-virt-efi/readme.txt b/board/qemu/riscv64-virt-efi/readme.txt
-index 6b9651a011..c7b3177af1 100644
---- a/board/qemu/riscv64-virt-efi/readme.txt
-+++ b/board/qemu/riscv64-virt-efi/readme.txt
-@@ -22,7 +22,7 @@ Run the emulation with:
-         -blockdev node-name=pflash0,driver=file,read-only=on,filename=output/images/RISCV_VIRT_CODE.fd \
-         -blockdev node-name=pflash1,driver=file,filename=output/images/RISCV_VIRT_VARS.fd \
-         \
--        -drive file=output/images/disk.img,format=raw,id=hd0 \
-+        -drive file=output/images/disk.img,format=raw,id=hd0,if=none \
-         -device virtio-blk-device,drive=hd0 \
-         \
-         -netdev user,id=net0 \
-diff --git a/board/qemu/riscv64-virt/readme.txt b/board/qemu/riscv64-virt/readme.txt
-index f1c7bf41b5..5b3bb85b4b 100644
---- a/board/qemu/riscv64-virt/readme.txt
-+++ b/board/qemu/riscv64-virt/readme.txt
-@@ -1,7 +1,7 @@
- Run Linux in emulation with:
- 
--  qemu-system-riscv64 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv64_virt_defconfig
-+  qemu-system-riscv64 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0,if=none -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv64_virt_defconfig
- 
--  qemu-system-riscv64 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -nographic -cpu rv64,mmu=off -netdev user,id=net0 -device virtio-net-device,netdev=net0 # qemu_riscv64_nommu_virt_defconfig
-+  qemu-system-riscv64 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0,if=none -device virtio-blk-device,drive=hd0 -nographic -cpu rv64,mmu=off -netdev user,id=net0 -device virtio-net-device,netdev=net0 # qemu_riscv64_nommu_virt_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
+diff --git a/board/qemu/nios2-10m50/linux.fragment b/board/qemu/nios2-10m50/linux.fragment
+deleted file mode 100644
+index c7647cee8a..0000000000
+--- a/board/qemu/nios2-10m50/linux.fragment
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Embed the DTB in the kernel image
+-CONFIG_NIOS2_DTB_SOURCE_BOOL=y
+-CONFIG_NIOS2_DTB_SOURCE="10m50_devboard.dts"
+diff --git a/board/qemu/nios2-10m50/readme.txt b/board/qemu/nios2-10m50/readme.txt
+deleted file mode 100644
+index f8f8f3b3a5..0000000000
+--- a/board/qemu/nios2-10m50/readme.txt
++++ /dev/null
+@@ -1,5 +0,0 @@
+-Run the emulation with:
+-
+-  qemu-system-nios2 -kernel output/images/vmlinux -nographic # qemu_nios2_10m50_defconfig
+-
+-The login prompt will appear in the terminal that started Qemu.
+diff --git a/configs/qemu_nios2_10m50_defconfig b/configs/qemu_nios2_10m50_defconfig
+deleted file mode 100644
+index 8b8b4524bd..0000000000
+--- a/configs/qemu_nios2_10m50_defconfig
++++ /dev/null
+@@ -1,15 +0,0 @@
+-BR2_nios2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+-BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
+-BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
+-BR2_LINUX_KERNEL_DEFCONFIG="10m50"
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/nios2-10m50/linux.fragment"
+-BR2_TARGET_ROOTFS_INITRAMFS=y
+-BR2_PACKAGE_HOST_QEMU=y
+-BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
 2.45.0
 
