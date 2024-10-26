@@ -4,73 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68264D10BFD
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 14:48:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A459ED10BFC
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 14:51:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39035606A2;
-	Sat, 26 Oct 2024 14:48:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55BD56069D;
+	Sat, 26 Oct 2024 14:51:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Jv0tzJe93K2; Sat, 26 Oct 2024 14:48:52 +0000 (UTC)
+ id XSfLGWtSj2iU; Sat, 26 Oct 2024 14:51:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67C7260732
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C4786066F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 67C7260732;
-	Sat, 26 Oct 2024 14:48:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9B9E25C1E
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:48:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C4786066F;
+	Sat, 26 Oct 2024 14:51:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3D4FA2318
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:51:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9621860716
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:48:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A6CC40361
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:51:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hmnYf6YGpHj0 for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 14:48:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jxWnxts5OZ5o for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 14:51:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7472060BA6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7472060BA6
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7472060BA6
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:48:49 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9AA5AFF804;
- Sat, 26 Oct 2024 14:48:46 +0000 (UTC)
-Date: Sat, 26 Oct 2024 16:48:45 +0200
-To: Brandon Maier via buildroot <buildroot@buildroot.org>
-Cc: Brandon Maier <brandon.maier@collins.com>
-Message-ID: <20241026164845.21f7ac49@windsurf>
-In-Reply-To: <20240918-ls1046a-frwy-linux-6-6-v1-0-941f6224e052@collins.com>
-References: <20240918-ls1046a-frwy-linux-6-6-v1-0-941f6224e052@collins.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729954126;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=U0t4utLfHQByvi9wDHkGWbHfWbMElUZ5bgybYoHLGdQ=;
- b=nj/x0ZNbXhcoA/3+hknyRc7mIQPVDOAX/5ecPqvCZl5khfop+DvdG3wfqJw67mkOobjEo9
- 7RB6qMqrpUf+xiV/2MTOKzKEUJXgFa36ugvxSvoAq96egkc9snj9VU0/Zj6p/pRUOZEKpt
- Y06xL7PgeeqTooV1diu2cYXjyH7PHy/wgHv3+cAP4On0hiayyxbisT5CPSIJXGooiXY6Xx
- gX2cR9fORF2auzFVPkdnp3jGF4OAnNrENvkuc/7syLQv0CjO+5Um/Q8QJa2ReNBCd7mRBK
- TltxUX2V21Td1PGaFe5rgYKABgVBrwiXP16GY1NWGC6ABtebODhIA/EXXjkTqA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nj/x0ZNb
-Subject: Re: [Buildroot] [PATCH 0/5] configs/ls10*: update ls1046 and ls1028
- to Linux 6.6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9944E40287
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9944E40287
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:51:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 81F2383CDA; Sat, 26 Oct 2024 14:51:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 26 Oct 2024 16:51:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 72a30e20860e051d0ef0218e133cfeeb5bd1452a
+X-Git-Newrev: 2b89c72679e07981ca3fb692e3d8150d731ee854
+X-Patchwork-Hint: ignore
+Message-Id: <20241026145137.81F2383CDA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/popperjs: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,30 +59,118 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Brandon,
+commit: https://git.buildroot.net/buildroot/commit/?id=2b89c72679e07981ca3fb692e3d8150d731ee854
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Sep 2024 20:12:34 +0000
-Brandon Maier via buildroot <buildroot@buildroot.org> wrote:
+PopperJS project is now called floating-ui and is hosted on
+https://github.com/floating-ui/floating-ui this caused legacy
+source code archives to be repackaged with difference directory
+name which broke the sha256 hash and made the autobuild fail.
 
-> Brandon Maier (5):
->       configs/ls1046a-frwy: add hashes
->       configs/ls1046a-frwy: update to Linux 6.6
->       configs/ls1028ardb: update to Linux 6.6
->       package/qoriq-fm-ucode: bump to version lf-6.6.23-2.0.0
->       package/qoriq-rcw: bump to version lf-6.6.23-2.0.0
+Given the package has never been bumped since its introduction the
+support for that package should probably be dropped.
 
-Thanks, series applied!
+This package used to be maintained by Thomas De Schampheleire, who no
+longer contributes to Buildroot, and removed himself from the
+DEVELOPERS file in March 2024.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Fixes:
+
+  https://autobuild.buildroot.org/results/ab62afa6252ad986a900fbfc8b805038edc5d1d6/
+  https://autobuild.buildroot.org/results/d1a5b56b987aa178b2ca3fa0855a5bd3da896bcb/
+  https://autobuild.buildroot.org/results/9629da94be61a906fd113e77f0120cade521a715/
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in.legacy               |  6 ++++++
+ package/Config.in              |  1 -
+ package/popperjs/Config.in     |  6 ------
+ package/popperjs/popperjs.hash |  3 ---
+ package/popperjs/popperjs.mk   | 19 -------------------
+ 5 files changed, 6 insertions(+), 29 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 4a47a2dda1..9a1693dd76 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2024.11"
+ 
++config BR2_PACKAGE_POPPERJS
++	bool "popperjs has been removed"
++	select BR2_LEGACY
++	help
++	  The project has been renamed to floating-ui.
++
+ config BR2_KERNEL_HEADERS_6_10
+ 	bool "kernel headers version 6.10.x are no longer supported"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 2d72ffb104..6aceef9e7f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1888,7 +1888,6 @@ endif
+ 	source "package/json-javascript/Config.in"
+ 	source "package/jszip/Config.in"
+ 	source "package/openlayers/Config.in"
+-	source "package/popperjs/Config.in"
+ 	source "package/vis-network/Config.in"
+ 	source "package/vuejs/Config.in"
+ if BR2_PACKAGE_VUEJS
+diff --git a/package/popperjs/Config.in b/package/popperjs/Config.in
+deleted file mode 100644
+index eae963100e..0000000000
+--- a/package/popperjs/Config.in
++++ /dev/null
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_POPPERJS
+-	bool "popperjs"
+-	help
+-	  Popper.js, a JavaScript Tooltip & Popover Positioning Engine.
+-
+-	  https://popper.js.org
+diff --git a/package/popperjs/popperjs.hash b/package/popperjs/popperjs.hash
+deleted file mode 100644
+index a2388f5b7a..0000000000
+--- a/package/popperjs/popperjs.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed:
+-sha256  83eecef51d10826faca2cd5cabb344e0bef6d4127d7e728db9e4d8308b7b15d1  popperjs-1.16.0.tar.gz
+-sha256  2961310ed05cd9373a08b8191c071425a7fede0ca5d807ca38fa5f5f61c5b834  LICENSE.md
+diff --git a/package/popperjs/popperjs.mk b/package/popperjs/popperjs.mk
+deleted file mode 100644
+index c5df302eb2..0000000000
+--- a/package/popperjs/popperjs.mk
++++ /dev/null
+@@ -1,19 +0,0 @@
+-################################################################################
+-#
+-# popperjs
+-#
+-################################################################################
+-
+-POPPERJS_VERSION = 1.16.0
+-POPPERJS_SITE = $(call github,popperjs,popper-core,v$(POPPERJS_VERSION))
+-POPPERJS_LICENSE = MIT
+-POPPERJS_LICENSE_FILES = LICENSE.md
+-
+-define POPPERJS_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0644 -D $(@D)/dist/umd/popper.min.js \
+-		$(TARGET_DIR)/var/www/popperjs/js/popper.min.js
+-	$(INSTALL) -m 0644 -D $(@D)/dist/umd/popper-utils.min.js \
+-		$(TARGET_DIR)/var/www/popperjs/js/popper-utils.min.js
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
