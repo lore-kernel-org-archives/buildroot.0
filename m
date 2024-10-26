@@ -1,75 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADFD5D10C07
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 20:53:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C73F7D10C06
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 20:54:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74E1B605CF;
-	Sat, 26 Oct 2024 20:53:06 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0_snCR-20GxW; Sat, 26 Oct 2024 20:53:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 678F8605D1
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 678F8605D1;
-	Sat, 26 Oct 2024 20:53:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 78AA05C1E
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:53:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58F3540227
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:53:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79E4F40227;
+	Sat, 26 Oct 2024 20:54:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1DtPDaOeIBP5 for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 20:53:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AF5DD4021F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF5DD4021F
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AF5DD4021F
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:53:01 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CB06260003;
- Sat, 26 Oct 2024 20:52:58 +0000 (UTC)
-Date: Sat, 26 Oct 2024 22:52:57 +0200
-To: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
-Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Message-ID: <20241026225257.37df6834@windsurf>
-In-Reply-To: <20240926124131.930145-1-aleksandr.o.makarov@gmail.com>
-References: <20240926124131.930145-1-aleksandr.o.makarov@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ id DBqFBI9X663D; Sat, 26 Oct 2024 20:54:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29691402A5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29691402A5;
+	Sat, 26 Oct 2024 20:54:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E421E5C1E
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:54:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D25378116D
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:54:36 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Vano2z_k2Zux for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 20:54:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::d34; helo=mail-io1-xd34.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DAF3A8119F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAF3A8119F
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DAF3A8119F
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:54:35 +0000 (UTC)
+Received: by mail-io1-xd34.google.com with SMTP id
+ ca18e2360f4ac-83a9be2c0e6so119853139f.2
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:54:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1729976074; x=1730580874;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=gJN1tJK2ztaC2Lf6suV5xMxL5U4dr+jP5fHIox0N6co=;
+ b=aqVCuQeNEvyf37EFzzErBayRz7qeLk0zpskndzoKqfAQa9vv7yzQBf/Z9SHAZMJNno
+ SsS4MHTo8WbzeITs5tSaHNJRJJ3Heua0/f1UT/cM7Sl1oWOhfQX4vsNGcDlvpGr/NpjF
+ ckYnqW74QxKidXaplPtl4jclw9ZvejjeRD32uWPM3IMQtdoKAQKMzVfLau3aHwiRHX3U
+ 3r21nmxGehSypaAN0lXURWQR1NvSTEzNfy9mW6Sn7EUV1CxhpSzEELdmyCT+oWhGJJhv
+ wjpkr+dhBINlFqjl+wARpWuVZGMXBoMMEUi9L1xJg35bl5saqPr792nTCwYU00w1vEXo
+ gNsg==
+X-Gm-Message-State: AOJu0YzY+AOfkVahTG0n2gf/5gSoFQ8bmgtGDVasX5TDzBnprVvgh6RA
+ kA8MzKDBRAS+eD083v0H8XnouIN5pC+Ho+2a7EKXUw3MY7P+3TnrE2dFig==
+X-Google-Smtp-Source: AGHT+IFVXE0Kx4huqKv32yn6LHUaIai+A1qKJk175kKpXGg05bUlcsMDwq/z7v3cVkrw1IshLvtinA==
+X-Received: by 2002:a92:ca4a:0:b0:3a4:e308:2f5 with SMTP id
+ e9e14a558f8ab-3a4ed1ba8camr30392805ab.0.1729976074627; 
+ Sat, 26 Oct 2024 13:54:34 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
+ [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
+ e9e14a558f8ab-3a4e6de0aecsm8728205ab.29.2024.10.26.13.54.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 26 Oct 2024 13:54:34 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 26 Oct 2024 14:54:12 -0600
+Message-Id: <20241026205412.3625809-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729975979;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=3IsGDH9oPvE8835gcPEMkzaG6vo4FSC6zlKeGALI2IM=;
- b=fCed7TbgLh2V1oNpoxDpEpA5hv9DrXqcJJbQsav+cvpcC+y8ozEqdTsMZ+Dip1AhkCcnwx
- XTKVIo2MiEmWdsyvlnSvOK7lbQ6Ig0W1thXWTfOsKKtK/Vk0TVw3fpuhhBaf49+o32NIEc
- OyjDjFb2qy6Z20weZvRm6HHo/vvHjhNYRoudRgNWLAEYBNokdpf5Jnfd+f2RDJd1NNHJ1Y
- xtSDTaXRvAknk83MFE/p1xloBlsLDJGwH5Mt1PpIgvEzm8jXHlAU+fAlxpUXMq+pHquShk
- 9f+0OF2AazmMui+bdOvxQSY2crkiIGhU5Bp5PkMe6Yub69U7qUSlr7he3jMjTg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=fCed7Tbg
-Subject: Re: [Buildroot] [PATCH 1/1] package/cpp-httplib: new package
+ d=gmail.com; s=20230601; t=1729976074; x=1730580874; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=gJN1tJK2ztaC2Lf6suV5xMxL5U4dr+jP5fHIox0N6co=;
+ b=mVoIzCg7VXXYI+Fql6TSXhXagOk94X9lsJq1gDXY7ipYW+W+DhjLVFB+rg3xYejLiy
+ Is2qFwfH2XSS8e+fjpR6q3CEjbiWsj7oUwcGCwH7HP4/e3uk1+NokN4+92QIAmIMxsqm
+ bMaXV+truoiz+ijnRFkw8czzWV1n0+UvQ1nwVUNKVZHruzS3WT6TJ7qLg6tLbmmNUA39
+ a4asDE6tmDaL08c/ZAIvDkjDQSqyhw/HJYo09XKz5b+myjO9U4OiRyTZ6oLpTxY+PJwq
+ LPP+Ds01J+RHy1Sd5nrdH2SLxRXGke0E+Ben+N9sM6xRreJZDp7fHI6YPUi62jiXchuv
+ SDpw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=mVoIzCg7
+Subject: [Buildroot] [PATCH 1/1] package/python-marshmallow: bump to version
+ 3.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,119 +100,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Aleksandr,
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-marshmallow/python-marshmallow.hash | 4 ++--
+ package/python-marshmallow/python-marshmallow.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Thu, 26 Sep 2024 15:41:31 +0300
-Aleksandr Makarov <aleksandr.o.makarov@gmail.com> wrote:
-
-> Signed-off-by: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
-
-Thanks, I have applied your patch after doing a few tweaks.
-
-> ---
->  package/Config.in                    |  1 +
->  package/cpp-httplib/Config.in        | 21 +++++++++++++
->  package/cpp-httplib/cpp-httplib.hash |  3 ++
->  package/cpp-httplib/cpp-httplib.mk   | 44 ++++++++++++++++++++++++++++
->  4 files changed, 69 insertions(+)
-
-An entry in the DEVELOPERS should be added, so I did that.
-
-
-> diff --git a/package/cpp-httplib/Config.in b/package/cpp-httplib/Config.in
-> new file mode 100644
-> index 0000000000..ee24adff81
-> --- /dev/null
-> +++ b/package/cpp-httplib/Config.in
-> @@ -0,0 +1,21 @@
-> +comment "cpp-httplib needs a toolchain w/ C++, wchar, threads"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +config BR2_PACKAGE_CPP_HTTPLIB
-> +	bool "cpp-httplib"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_USE_WCHAR
-> +	help
-> +	  A C++ header-only HTTP/HTTPS server and client library.
-> +
-> +	  https://github.com/yhirose/cpp-httplib
-> +
-> +if BR2_PACKAGE_CPP_HTTPLIB
-> +config BR2_PACKAGE_CPP_HTTPLIB_COMPILE
-> +	bool "compile"
-
-"compile" was a bit short, so I changed to:
-
-+       bool "compile as a shared library"
-> diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
-> new file mode 100644
-> index 0000000000..9b66114851
-> --- /dev/null
-> +++ b/package/cpp-httplib/cpp-httplib.mk
-> @@ -0,0 +1,44 @@
-> +################################################################################
-> +#
-> +# cpp-httplib
-> +#
-> +################################################################################
-> +
-> +CPP_HTTPLIB_VERSION = 0.18.0
-> +CPP_HTTPLIB_SITE = $(call github,yhirose,cpp-httplib,v$(CPP_HTTPLIB_VERSION))
-> +CPP_HTTPLIB_LICENSE = MIT
-> +CPP_HTTPLIB_LICENSE_FILES = LICENSE
-> +CPP_HTTPLIB_CONF_OPTS = \
-> +	-Dcpp-httplib_test=false
-> +
-> +
-
-One two many lines.
-
-> +ifeq ($(BR2_PACKAGE_CPP_HTTPLIB_COMPILE),y)
-> +CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_compile=true
-> +CPP_HTTPLIB_DEPENDENCIES += host-python3
-> +else
-> +CPP_HTTPLIB_INSTALL_STAGING = YES
-
-You tried to do the right thing, but this wasn't the correct thing. In
-fact, what was needed is:
-
-CPP_HTTPLIB_INSTALL_STAGING = YES
-
-unconditionally.
-
-And
-
-CPP_HTTPLIB_INSTALL_TARGET = NO when BR2_PACKAGE_CPP_HTTPLIB_COMPILE is
-disabled.
-
-Indeed, when BR2_PACKAGE_CPP_HTTPLIB_COMPILE is disabled, it's a header
-only library. The header is needed in staging but not in tgarget.
-
-When BR2_PACKAGE_CPP_HTTPLIB_COMPILE is enabled, you have a shared
-library, it's needed both in the target and staging.
-
-> +$(eval $(meson-package))
-> +
-
-Final empty line not needed.
-
-Once again: I fixed those issues when applying.
-
-Thanks!
-
-Thomas
+diff --git a/package/python-marshmallow/python-marshmallow.hash b/package/python-marshmallow/python-marshmallow.hash
+index e71425d958..3a7a9dc2a7 100644
+--- a/package/python-marshmallow/python-marshmallow.hash
++++ b/package/python-marshmallow/python-marshmallow.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/marshmallow/json
+-md5  55bc9b09b8557d53541521b723232133  marshmallow-3.22.0.tar.gz
+-sha256  4972f529104a220bb8637d595aa4c9762afbe7f7a77d82dc58c1615d70c5823e  marshmallow-3.22.0.tar.gz
++md5  f7b800ad13a5948d208e04973e75aafa  marshmallow-3.23.0.tar.gz
++sha256  98d8827a9f10c03d44ead298d2e99c6aea8197df18ccfad360dae7f89a50da2e  marshmallow-3.23.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  906b5d9051e426144cb173ad911667b8ebd05a9c584c2c26c135b32a3ed12001  LICENSE
+ sha256  f982e6fd97ba00973e94605b972ff04894b22c4fa937b868828b32ae8f0a7c2e  docs/license.rst
+diff --git a/package/python-marshmallow/python-marshmallow.mk b/package/python-marshmallow/python-marshmallow.mk
+index 811e532155..49558583a8 100644
+--- a/package/python-marshmallow/python-marshmallow.mk
++++ b/package/python-marshmallow/python-marshmallow.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MARSHMALLOW_VERSION = 3.22.0
++PYTHON_MARSHMALLOW_VERSION = 3.23.0
+ PYTHON_MARSHMALLOW_SOURCE = marshmallow-$(PYTHON_MARSHMALLOW_VERSION).tar.gz
+-PYTHON_MARSHMALLOW_SITE = https://files.pythonhosted.org/packages/70/40/faa10dc4500bca85f41ca9d8cefab282dd23d0fcc7a9b5fab40691e72e76
++PYTHON_MARSHMALLOW_SITE = https://files.pythonhosted.org/packages/b7/41/05580fed5798ba8032341e7e330b866adc88dfca3bc3ec86c04e4ffdc427
+ PYTHON_MARSHMALLOW_SETUP_TYPE = flit
+ PYTHON_MARSHMALLOW_LICENSE = MIT
+ PYTHON_MARSHMALLOW_LICENSE_FILES = LICENSE docs/license.rst
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
