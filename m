@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E243D10C03
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 19:14:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 008C9D0C604
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 19:14:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA9A44027E;
-	Sat, 26 Oct 2024 19:14:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3446640293;
+	Sat, 26 Oct 2024 19:14:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PEdODHkdHwS9; Sat, 26 Oct 2024 19:14:43 +0000 (UTC)
+ id oHA6M7y5OsI1; Sat, 26 Oct 2024 19:14:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B218640293
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F664403A8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B218640293;
-	Sat, 26 Oct 2024 19:14:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 57DF22318
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F664403A8;
+	Sat, 26 Oct 2024 19:14:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A26115C1E
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 19:14:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 52C9340288
+ by smtp4.osuosl.org (Postfix) with ESMTP id 822624026F
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 19:14:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id svwwcqdCSGex for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gOQW7WSPQ5HR for <buildroot@buildroot.org>;
  Sat, 26 Oct 2024 19:14:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C668400D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82F174027E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6C668400D7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 82F174027E
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 19:14:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 56430840F1; Sat, 26 Oct 2024 19:14:37 +0000 (UTC)
+ id 6B3A984108; Sat, 26 Oct 2024 19:14:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 21:13:17 +0200
+Date: Sat, 26 Oct 2024 21:14:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ee9d6414d1a27eaf6a5909e746190239c2982740
-X-Git-Newrev: 202566ec145ad838d438137f5cf11fb4f8fdd190
+X-Git-Oldrev: 04892eca6369dbc20e96a18a560c9bcf68687c23
+X-Git-Newrev: a51a55262d53a839fe53f546b1f854f81da49b33
 X-Patchwork-Hint: ignore
-Message-Id: <20241026191437.56430840F1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/andes_ae350_45: enable
- host-andes-spi-burn
+Message-Id: <20241026191437.6B3A984108@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/andes/ae350/readme.txt: add
+ bootloader/DT flashing instructions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,31 +66,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=202566ec145ad838d438137f5cf11fb4f8fdd190
+commit: https://git.buildroot.net/buildroot/commit/?id=a51a55262d53a839fe53f546b1f854f81da49b33
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Enable Andes SPI_burn tool for updating buildroot generated
-bootloader and device-tree blob onto flash memory.
+Add a section to document how to update bootloader on AE350 platforms
+with SPI_burn tool.
 
 Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
 Reviewed-by: Leo Yu-Chi Liang <ycliang@andestech.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/andes_ae350_45_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ board/andes/ae350/readme.txt | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/configs/andes_ae350_45_defconfig b/configs/andes_ae350_45_defconfig
-index fd8b7db0e7..7b5a6f73c6 100644
---- a/configs/andes_ae350_45_defconfig
-+++ b/configs/andes_ae350_45_defconfig
-@@ -34,6 +34,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
- BR2_TARGET_UBOOT_SPL=y
-+BR2_PACKAGE_HOST_ANDES_SPI_BURN=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/board/andes/ae350/readme.txt b/board/andes/ae350/readme.txt
+index 4de4cb3894..36561fc777 100644
+--- a/board/andes/ae350/readme.txt
++++ b/board/andes/ae350/readme.txt
+@@ -41,6 +41,49 @@ After building, you should obtain the following files:
+   |-- u-boot-spl.bin
+   `-- u-boot.itb
+ 
++How to update the bootloader and device-tree
++============================================
++
++To update the bootloader and device tree, make sure you have
++an ICEman (Andes OpenOCD [1]) and AICE [2] connection set up
++as below:
++
++  Local Host                 Local/Remote Host
++ .-----------------.          .--------------.
++ | buildroot images|          |              |
++ |                 |         ICEman host <IP:PORT>
++ | .----------.    |          |  .--------.  |
++ | | SPI_burn |<---+--socket--+->| ICEman |  |
++ | '----------'    |          |  '--.-----'  |
++ '-----------------'          '-----|--------'
++                                    |
++                                    USB
++   .--------------.                 |
++   | target       |           .-----v-----.
++   | board        <----JTAG---| AICE      |
++   |              |           '-----------'
++   '--------------'
++
++[1] https://github.com/andestech/ICEman
++[2] https://www.andestech.com/en/products-solutions/andeshape-platforms/aice-micro/
++
++The Andes SPI_burn tool will be located in output/host/bin. Use
++the following commands to update the bootloader and device tree:
++
++  $ SPI_burn --host $ICE_IP --port $ICE_BURNER_PORT --addr 0x0     -i u-boot-spl.bin
++  $ SPI_burn --host $ICE_IP --port $ICE_BURNER_PORT --addr 0x10000 -i u-boot.itb
++  $ SPI_burn --host $ICE_IP --port $ICE_BURNER_PORT --addr 0xf0000 -i ae350_ax45mp.dtb
++
++Note that the --addr option specifies the offset starting from
++the flash base address 0x80000000 and set by U-Boot configurations.
++e.g.
++u-boot-spl.bin  : CONFIG_SPL_TEXT_BASE=0x80000000
++u-boot.itb      : CONFIG_SPL_LOAD_FIT_ADDRESS=0x80010000
++ae350_ax45mp.dtb: CONFIG_SYS_FDT_BASE=0x800f0000
++
++How to write the SD card
++========================
++
+ Copy the sdcard.img to a SD card with "dd":
+ 
+   $ sudo dd if=sdcard.img of=/dev/sdX bs=4096
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
