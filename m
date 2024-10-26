@@ -1,81 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01219D10BFC
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 14:28:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABCCFD10BFC
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 14:29:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 866FD405EF;
-	Sat, 26 Oct 2024 14:28:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 71400605EF;
+	Sat, 26 Oct 2024 14:29:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fDoBh-92AI5E; Sat, 26 Oct 2024 14:28:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k2C0Cqbm2d31; Sat, 26 Oct 2024 14:28:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6BA940538
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DF3A605E1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A6BA940538;
-	Sat, 26 Oct 2024 14:28:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 61A4E5C1E
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:28:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DF3A605E1;
+	Sat, 26 Oct 2024 14:28:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 17B335C1E
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:28:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4334F81551
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:28:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 06437605EF
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:28:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tHnVzxBgIuCi for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 14:28:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wREsoTko2ksy for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 14:28:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 039C7814C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 039C7814C9
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 039C7814C9
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:28:02 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A6F1B1C0005;
- Sat, 26 Oct 2024 14:28:00 +0000 (UTC)
-Date: Sat, 26 Oct 2024 16:27:59 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org, Marcus Folkesson <marcus.folkesson@gmail.com>,
- Kamel Bouhara <kamel.bouhara@gmail.com>, Marcin Niestroj
- <m.niestroj@grinn-global.com>, Asaf Kahlon <asafka7@gmail.com>, Julien
- Olivain <ju.o@free.fr>, Woodrow Douglass <wdouglass@carnegierobotics.com>,
- Christian Stewart <christian@aperture.us>, Robert Rose
- <robertroyrose@gmail.com>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20241026162759.0100482f@windsurf>
-In-Reply-To: <20240924023919.1502635-1-james.hilliard1@gmail.com>
-References: <20240924023919.1502635-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729952881;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=uUm0GEwrdKYmHZS3T9hcNX9S4MrkGCZc3jMllfZB7H8=;
- b=R1W4PIy3DhNNUEl6jkwj/S4rsuyWl6rDj9sCjWQANu79mSKlIwcvNNjq4iEdH7eS672NPc
- G/CtQrVTJ7aFnpxQUSe2uVjODHR9SGPQLCY2ojeVoMxyv/E5fzMWqyYGwe+Z/r6Q4oAElO
- Olf6wCJfznwPEaPEKmRD2x7JONtjmHcqV0uXmwk5f0KjyPnGLn3YhgKmVzGn2jgd6zhs4q
- c19yT84QctaybMdXLLUCEH+iytK04coDnl3Br2+V2kZ+o68E5Zd/x4RKasv+JtEBpZU6mZ
- 7rIhb17PIXL6PBFpNF2ajWjcYQBUZjN/b6cCwHW2Wja8tSexxqo5KGT3RSWmXw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=R1W4PIy3
-Subject: Re: [Buildroot] [PATCH v2 1/3] package/{python-}protobuf: bump to
- version 28.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 441DE605E1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 441DE605E1
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:28:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2F32883BD9; Sat, 26 Oct 2024 14:28:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 26 Oct 2024 16:28:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a06fd96543b98b27ea437f9a0afa88e7a6525f23
+X-Git-Newrev: 0d40b47866753340b214e811af53e6a95216bbb3
+X-Patchwork-Hint: ignore
+Message-Id: <20241026142857.2F32883BD9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libabseil-cpp: bump to version
+ 20240722.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,59 +60,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCAyMyBTZXAgMjAyNCAyMDozOToxNyAtMDYwMApKYW1lcyBIaWxsaWFyZCA8amFtZXMu
-aGlsbGlhcmQxQGdtYWlsLmNvbT4gd3JvdGU6Cgo+IE1pZ3JhdGUgcHJvdG9idWYgYnVpbGQgZnJv
-bSBhdXRvdG9vbHMgdG8gY21ha2UuCj4gCj4gTWlncmF0ZSBwcm90b2J1Zi1weXRob24gdG8gdXNl
-IHB5cGkgc291cmNlcyB3aGljaCBhcmUgbm93IHJlcXVpcmVkCj4gZm9yIHNldHVwLnB5IGJ1aWxk
-czoKPiBodHRwczovL2dpdGh1Yi5jb20vcHJvdG9jb2xidWZmZXJzL3Byb3RvYnVmL3RyZWUvdjI4
-LjEvcHl0aG9uI2J1aWxkaW5nLWZyb20tc2V0dXBweQo+IAo+IFNpZ25lZC1vZmYtYnk6IEphbWVz
-IEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPgoKSGVyZSwgdGhpcyBicmVha3Mg
-dGhlIGJ1aWxkIG9mIGhvc3QtcHJvdG9idWYtYywgYXMgc3VjaDoKCj4+PiBob3N0LXByb3RvYnVm
-LWMgMS41LjAgQnVpbGRpbmcKR0lUX0RJUj0uIFBBVEg9Ii9ob21lL3Rob21hcy9wcm9qZXRzL2J1
-aWxkcm9vdC9vdXRwdXQvaG9zdC9iaW46L2hvbWUvdGhvbWFzL3Byb2pldHMvYnVpbGRyb290L291
-dHB1dC9ob3N0L3NiaW46L2hvbWUvdGhvbWFzL3N5cy9iaW46L2hvbWUvdGhvbWFzLy5nZW0vcnVi
-eS8yLjEuMC9iaW46L3Vzci9sb2NhbC9iaW46L3Vzci9sb2NhbC9zYmluOi91c3IvYmluOi91c3Iv
-c2JpbjovaG9tZS90aG9tYXMvLnJ2bS9iaW46L2hvbWUvdGhvbWFzLy5sb2NhbC9iaW46L2hvbWUv
-dGhvbWFzL3Byb2pldHMvZ2l0LXdyYXBwZXJzOi9ob21lL3Rob21hcy9ib290bGluL2dpdC9iaW4v
-IiBQS0dfQ09ORklHPSIvaG9tZS90aG9tYXMvcHJvamV0cy9idWlsZHJvb3Qvb3V0cHV0L2hvc3Qv
-YmluL3BrZy1jb25maWciIFBLR19DT05GSUdfU1lTUk9PVF9ESVI9Ii8iIFBLR19DT05GSUdfQUxM
-T1dfU1lTVEVNX0NGTEFHUz0xIFBLR19DT05GSUdfQUxMT1dfU1lTVEVNX0xJQlM9MSBQS0dfQ09O
-RklHX0xJQkRJUj0iL2hvbWUvdGhvbWFzL3Byb2pldHMvYnVpbGRyb290L291dHB1dC9ob3N0L2xp
-Yi9wa2djb25maWc6L2hvbWUvdGhvbWFzL3Byb2pldHMvYnVpbGRyb290L291dHB1dC9ob3N0L3No
-YXJlL3BrZ2NvbmZpZyIgIC91c3IvYmluL21ha2UgLWoxICAgLUMgL2hvbWUvdGhvbWFzL3Byb2pl
-dHMvYnVpbGRyb290L291dHB1dC9idWlsZC9ob3N0LXByb3RvYnVmLWMtMS41LjAvCm1ha2VbMV06
-IEVudGVyaW5nIGRpcmVjdG9yeSAnL2hvbWUvdGhvbWFzL3Byb2pldHMvYnVpbGRyb290L291dHB1
-dC9idWlsZC9ob3N0LXByb3RvYnVmLWMtMS41LjAnCiAgR0VOICAgICAgcHJvdG9idWYtYy9wcm90
-b2J1Zi1jLnBiLmNjCiAgQ1hYICAgICAgcHJvdG9jLWMvcHJvdG9jX2dlbl9jLWNfYnl0ZXNfZmll
-bGQubwpJbiBmaWxlIGluY2x1ZGVkIGZyb20gcHJvdG9jLWMvY19ieXRlc19maWVsZC5jYzo2NDoK
-Li9wcm90b2MtYy9jX2hlbHBlcnMuaDogSW4gZnVuY3Rpb24g4oCYaW50IGdvb2dsZTo6cHJvdG9i
-dWY6OmNvbXBpbGVyOjpjOjpGaWVsZFN5bnRheChjb25zdCBnb29nbGU6OnByb3RvYnVmOjpGaWVs
-ZERlc2NyaXB0b3IqKeKAmToKLi9wcm90b2MtYy9jX2hlbHBlcnMuaDoxNzk6NDY6IGVycm9yOiDi
-gJhjbGFzcyBnb29nbGU6OnByb3RvYnVmOjpGaWxlRGVzY3JpcHRvckxlZ2FjeeKAmSBoYXMgbm8g
-bWVtYmVyIG5hbWVkIOKAmHN5bnRheOKAmQogIDE3OSB8ICAgcmV0dXJuIEZpbGVEZXNjcmlwdG9y
-TGVnYWN5KGZpZWxkLT5maWxlKCkpLnN5bnRheCgpID09IEZpbGVEZXNjcmlwdG9yTGVnYWN5OjpT
-WU5UQVhfUFJPVE8zID8gMyA6IDI7CiAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgXn5+fn5+Ci4vcHJvdG9jLWMvY19oZWxwZXJzLmg6MTc5OjgwOiBl
-cnJvcjog4oCYU1lOVEFYX1BST1RPM+KAmSBpcyBub3QgYSBtZW1iZXIgb2Yg4oCYZ29vZ2xlOjpw
-cm90b2J1Zjo6RmlsZURlc2NyaXB0b3JMZWdhY3nigJkKICAxNzkgfCAgIHJldHVybiBGaWxlRGVz
-Y3JpcHRvckxlZ2FjeShmaWVsZC0+ZmlsZSgpKS5zeW50YXgoKSA9PSBGaWxlRGVzY3JpcHRvckxl
-Z2FjeTo6U1lOVEFYX1BST1RPMyA/IDMgOiAyOwogICAgICB8ICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBefn5+fn5+fn5+fn5+Cm1ha2VbMV06ICoqKiBbTWFrZWZpbGU6MTU2NzogcHJvdG9jLWMvcHJv
-dG9jX2dlbl9jLWNfYnl0ZXNfZmllbGQub10gRXJyb3IgMQptYWtlWzFdOiBMZWF2aW5nIGRpcmVj
-dG9yeSAnL2hvbWUvdGhvbWFzL3Byb2pldHMvYnVpbGRyb290L291dHB1dC9idWlsZC9ob3N0LXBy
-b3RvYnVmLWMtMS41LjAnCm1ha2U6ICoqKiBbcGFja2FnZS9wa2ctZ2VuZXJpYy5tazoyODk6IC9o
-b21lL3Rob21hcy9wcm9qZXRzL2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvaG9zdC1wcm90b2J1Zi1j
-LTEuNS4wLy5zdGFtcF9idWlsdF0gRXJyb3IgMgoKVGhpcyBpcyBvbiBhIEZlZG9yYSAzOSBzeXN0
-ZW0sIGdjYyAxMy54LgoKQ291bGQgeW91IGhhdmUgYSBsb29rPyBBbHNvIE1pY2hhZWwgTm9zdGhv
-ZmYgcmVwb3J0ZWQgYSBzZXBhcmF0ZQood2VpcmQpIHBrZy1jb25maWcgaXNzdWUuCgpUaGFua3Mh
-CgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIENUTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51
-eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=0d40b47866753340b214e811af53e6a95216bbb3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libabseil-cpp/libabseil-cpp.hash | 2 +-
+ package/libabseil-cpp/libabseil-cpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
+index c3fc0d85e1..76f1bd0f32 100644
+--- a/package/libabseil-cpp/libabseil-cpp.hash
++++ b/package/libabseil-cpp/libabseil-cpp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  987ce98f02eefbaf930d6e38ab16aa05737234d7afbab2d5c4ea7adbe50c28ed  libabseil-cpp-20230802.1.tar.gz
++sha256  f50e5ac311a81382da7fa75b97310e4b9006474f9560ac46f54a9967f07d4ae3  libabseil-cpp-20240722.0.tar.gz
+ sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
+diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
+index a5dfc8eb19..a27d013476 100644
+--- a/package/libabseil-cpp/libabseil-cpp.mk
++++ b/package/libabseil-cpp/libabseil-cpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBABSEIL_CPP_VERSION = 20230802.1
++LIBABSEIL_CPP_VERSION = 20240722.0
+ LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
+ LIBABSEIL_CPP_LICENSE = Apache-2.0
+ LIBABSEIL_CPP_LICENSE_FILES = LICENSE
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
