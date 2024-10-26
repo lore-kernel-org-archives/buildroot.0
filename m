@@ -4,75 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35822D10BF6
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 11:44:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CBF2D10BF6
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 11:50:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE15A4088E;
-	Sat, 26 Oct 2024 11:44:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 045654094C;
+	Sat, 26 Oct 2024 11:50:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TABNYFb2yjOj; Sat, 26 Oct 2024 11:44:08 +0000 (UTC)
+ id vs9O2pDfXpcR; Sat, 26 Oct 2024 11:50:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB3FF40891
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B686F4098C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB3FF40891;
-	Sat, 26 Oct 2024 11:44:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E95C5C1E
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:44:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B686F4098C;
+	Sat, 26 Oct 2024 11:50:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 139CC5C24
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:50:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F4FE60634
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:44:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E997F81F74
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:50:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tY4TeW_P6QXr for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 11:44:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Llq__kiqhyR6 for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 11:50:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6409D605FD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6409D605FD
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6409D605FD
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:44:06 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 648DD1C0003;
- Sat, 26 Oct 2024 11:44:01 +0000 (UTC)
-Date: Sat, 26 Oct 2024 13:44:00 +0200
-To: Brandon Maier via buildroot <buildroot@buildroot.org>
-Cc: Brandon Maier <brandon.maier@collins.com>, Ricardo Martincoski
- <ricardo.martincoski@datacom.com.br>
-Message-ID: <20241026134400.3621f46b@windsurf>
-In-Reply-To: <20241009-check-package-requirements-v2-3-df3e7b79788b@collins.com>
-References: <20241009-check-package-requirements-v2-0-df3e7b79788b@collins.com>
- <20241009-check-package-requirements-v2-3-df3e7b79788b@collins.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729943043;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=enhIXtC0YR+YjXoygOZJc7XH8erslOE/RRdyX9lQeog=;
- b=WPos0wOeR2syx495Pntv06b+kyjtAIwaPMOEsqD8RGl4GLr/olykY3/gdJPOMwQbALf4g0
- Gf+6LjNvmk98RIvoO31Yf+5Hv20wNbNQvbbTVToqBIFAEfzKXlp1pSkqTaSO9Xf65YzWjF
- Ftobcpd64pE9EJ2TKajWym6GCqirnjbuBu5kAR1ZBcdtBd5giJ+6V7EJ+HqNz9sOOkpFw9
- uoawib0WbCecWV68SM0v07FDWRtwt0K5aN1iBQXYnxlqo0TIJqCaqsHY41WnVS8ZQbHenw
- E7V2jXCT03DSGWa7k/XVv5OprFcSdF4cC01Uj7TU8krhnsL1XEAm5jqkltRKGA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WPos0wOe
-Subject: Re: [Buildroot] [PATCH v2 3/3] docs/manual/adding-packages-tips:
- mention uv
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 103F981F8A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 103F981F8A
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:49:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id ADD4581775; Sat, 26 Oct 2024 11:49:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 26 Oct 2024 13:45:05 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8e3ab0ab8852783ccb5f6251156da2044cb4972a
+X-Git-Newrev: 6fdaff237669eea5576ee8cd452661898ee7a846
+X-Patchwork-Hint: ignore
+Message-Id: <20241026114959.ADD4581775@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sysprof: bump to version 47.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,20 +59,90 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gV2VkLCAwOSBPY3QgMjAyNCAxNDoxNDo1OCArMDAwMApCcmFuZG9uIE1haWVyIHZpYSBidWls
-ZHJvb3QgPGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPiB3cm90ZToKCj4gKy0tLS0KPiArJCB1diBy
-dW4gLXMgLi91dGlscy9jaGVjay1wYWNrYWdlCj4gKy0tLS0KCi1zIGRvZXNuJ3QgZXhpc3QgaGVy
-ZToKCvCfkKcg7oKwIHV2IHJ1biAtcyAuL3V0aWxzL2NoZWNrLXBhY2thZ2UgCmVycm9yOiB1bmV4
-cGVjdGVkIGFyZ3VtZW50ICctcycgZm91bmQKClVzYWdlOiB1diBydW4gW09QVElPTlNdIDxDT01N
-QU5EPgoKRm9yIG1vcmUgaW5mb3JtYXRpb24sIHRyeSAnLS1oZWxwJy4KCkkgaGF2ZToKCvCfkKcg
-7oKwIHV2IC0tdmVyc2lvbgp1diAwLjQuMTAKClRoYW5rcywKClRob21hcwotLSAKVGhvbWFzIFBl
-dGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2Vy
-bmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=6fdaff237669eea5576ee8cd452661898ee7a846
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Include an upstream patch that allows building with older versions
+of GLib, to avoid needing to update its package.
+
+https://gitlab.gnome.org/GNOME/sysprof/-/blob/47.0/NEWS
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-build-reduce-GLib-requirement.patch       | 30 ++++++++++++++++++++++
+ package/sysprof/sysprof.hash                       |  4 +--
+ package/sysprof/sysprof.mk                         |  2 +-
+ 3 files changed, 33 insertions(+), 3 deletions(-)
+
+diff --git a/package/sysprof/0001-build-reduce-GLib-requirement.patch b/package/sysprof/0001-build-reduce-GLib-requirement.patch
+new file mode 100644
+index 0000000000..fb83e210fe
+--- /dev/null
++++ b/package/sysprof/0001-build-reduce-GLib-requirement.patch
+@@ -0,0 +1,30 @@
++From c34fba6fe5c3ecd2028461a4317bd2916e2a09d7 Mon Sep 17 00:00:00 2001
++From: Christian Hergert <chergert@redhat.com>
++Date: Mon, 16 Sep 2024 09:48:15 -0700
++Subject: [PATCH] build: reduce GLib requirement
++
++This is kept lower so that you can build without GTK on older systems.
++
++Related: https://gitlab.gnome.org/GNOME/sysprof/-/commit/530b4a9d121c8659148c36ce67f2ce415443baa5#note_2223853
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++Upstream: https://gitlab.gnome.org/GNOME/sysprof/-/commit/e5382d1b8cae4d829751938ce39c2e5fbc419064
++---
++ meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 63a31894..696b87be 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -45,7 +45,7 @@ need_libsysprof = (need_gtk or
++                    get_option('tests'))
++ 
++ dex_req = '0.6'
++-glib_req = '2.80.0'
+++glib_req = '2.76.0'
++ gtk_req = '4.15'
++ polkit_req = '0.105'
++ 
++-- 
++2.46.2
++
+diff --git a/package/sysprof/sysprof.hash b/package/sysprof/sysprof.hash
+index f21e7621e1..ca025674a7 100644
+--- a/package/sysprof/sysprof.hash
++++ b/package/sysprof/sysprof.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/sysprof/46/sysprof-46.0.sha256sum
+-sha256  73aa7e75ebab3e4e0946a05a723df7e6ee4249e3b9e884dba35500aba2a1d176  sysprof-46.0.tar.xz
++# From https://download.gnome.org/sources/sysprof/47/sysprof-47.0.sha256sum
++sha256  7424c629434660654288c04248998c357d1ce87ee1559fd44df1980992ef5df5  sysprof-47.0.tar.xz
+ 
+ # License files
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/sysprof/sysprof.mk b/package/sysprof/sysprof.mk
+index 8e69a7044e..81c0a4a6ee 100644
+--- a/package/sysprof/sysprof.mk
++++ b/package/sysprof/sysprof.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSPROF_VERSION_MAJOR = 46
++SYSPROF_VERSION_MAJOR = 47
+ SYSPROF_VERSION = $(SYSPROF_VERSION_MAJOR).0
+ SYSPROF_SOURCE = sysprof-$(SYSPROF_VERSION).tar.xz
+ SYSPROF_SITE = https://download.gnome.org/sources/sysprof/$(SYSPROF_VERSION_MAJOR)
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
