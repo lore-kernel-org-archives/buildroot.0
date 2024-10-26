@@ -4,91 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29C28D0C604
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 21:22:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C817D10C07
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 21:23:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D57F280EBE;
-	Sat, 26 Oct 2024 21:22:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1246C81353;
+	Sat, 26 Oct 2024 21:23:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U66MU2R4Ovlt; Sat, 26 Oct 2024 21:22:46 +0000 (UTC)
+ id CNuuTAjdsWm8; Sat, 26 Oct 2024 21:23:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4B0E812E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DF2081378
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E4B0E812E7;
-	Sat, 26 Oct 2024 21:22:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B969D5C1E
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 21:22:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DF2081378;
+	Sat, 26 Oct 2024 21:23:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E5F15C24
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 21:23:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B4AD260824
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 21:22:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F39B881378
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 21:23:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kcmDlUrzfme0 for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 21:22:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::135; helo=mail-il1-x135.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B8315607EC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8315607EC
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
- [IPv6:2607:f8b0:4864:20::135])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B8315607EC
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 21:22:42 +0000 (UTC)
-Received: by mail-il1-x135.google.com with SMTP id
- e9e14a558f8ab-3a4d1bb4605so11297175ab.2
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:22:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1729977761; x=1730582561;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=rDJueGlTR325E3o63tZ/C8Vit0UzT3y1nVKi30WowKU=;
- b=XMpz1SmdDiPByvrCfkEtyKQUi2Ae66YjPz3TqBhGKfnUwzAczFje1GwRaPc8PcLfzA
- pT1d6UYqfZKQ4bWIDxgVE+3hqvEwnZqHsQEPklrRBUdR7TGnB0g1tDca7VuSk5JSnd0D
- itRdVljfm+fIf5tzzjNTBOtx++bt97aq8BfuDy1eP+f/JptDzivNDbpVD++Z9OGyAePx
- Py6pfTCrbRkzVfQ38AUTRLar3Ttv0q6ix6k9L6Z34RSJwfDcz3UnydsKySxXBQjkQpiG
- 5eAby2+hhIlGydQf/FSMiKCMX5+zUAW84qp0D0filiQfCjyxHuUGtD8IdwJneaMrsCYI
- +1fg==
-X-Gm-Message-State: AOJu0YyBWacn0qXoVJO/ktop6m3fdnFUfiLnAvqqvLa4OM2Ou/hdw6aX
- Lbuk/Mo5Z0H99gcpU2UJ0ABmbZu3X7z/1zDUxBASc1IRy5csuhHh2M7JBA==
-X-Google-Smtp-Source: AGHT+IHzCYuO1uzpgCc/A7YRWd9jaUfwEhgRBT9SCqnbJFCk/39N0HEzC/7Wzifw3eSVze2tMTdSJw==
-X-Received: by 2002:a05:6e02:1d01:b0:3a0:9829:100b with SMTP id
- e9e14a558f8ab-3a4ed2fcbc6mr26067105ab.21.1729977761465; 
- Sat, 26 Oct 2024 14:22:41 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
- [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a4e6dfc9c2sm8722885ab.48.2024.10.26.14.22.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 26 Oct 2024 14:22:40 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9SQj8qOPHEXB for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 21:23:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D527B81353
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D527B81353
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D527B81353
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 21:23:11 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b313.dip0.t-ipconnect.de [84.161.179.19])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 03C81A4C07A4;
+ Sat, 26 Oct 2024 23:23:10 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46538)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98)
+ (envelope-from <bernd@kuhls.net>) id 1t4oFZ-000000008Co-17Fu;
+ Sat, 26 Oct 2024 21:23:09 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 15:22:39 -0600
-Message-Id: <20241026212239.3729635-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 26 Oct 2024 23:23:09 +0200
+Message-Id: <20241026212309.2693492-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1729977761; x=1730582561; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=rDJueGlTR325E3o63tZ/C8Vit0UzT3y1nVKi30WowKU=;
- b=erv4V7+DYKda99YXoPq5MjWRwM2VPUjKvSTjLGLkgkgZIRChrCnwAeUkYmSHu8GuNN
- a7aqFMG+okeCbAKStCeEKvRVV06uHFj3C4gWSQX7sh4TqpPyU70NSPP2XjfTYiBuPa7I
- hU0HqIZcuyjb7wYwXb3SRUYwWsBJE9Shopx01d6A9qd5mIUAFgIcVjnlZZYMBJkdxPdM
- l/NfIfpQPVx8LWJis6NjYiM8yJrghozcFmaVLNrrpzMQVuxMReF0ArQD17At6xsjnPoC
- 39J6zrFgq7spxoN5+TeY/rebmGe8HcWmntubUPdh1stAAhP0BNEnOGrsG95GOIjTKsAx
- qy4w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=kuhls.net; 
+ s=kas202406071026; t=1729977790;
+ bh=dSHs0HDbSFOPuIdWJ/jJJqD8yoYil/a6htOwDImIgeE=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ux1hcgUB6Ai32r1JC5lAnNgaeHa5thL4LNhAmnhLR/wxHHJOgCTaHqJd04Dt6uhLl
+ 4esUgkb4K79Y/y26a81OtNavv+JcZ7fedx0jTXpgmAYQfTUS8CVSFGdUFbVWk02OJj
+ HJSWa+8MTI4IDcmsKOMcRBJ5JpvtMRG+W+4zCBHmWOBBR1Q/CwYE6qcEoNaC+0OuaG
+ p5cmezMJQxtjWdECqWHreMoP3JVJBqt/lgjVVVMATm2Vk1o94GAnv7l3ECEYus5GF6
+ Rs2PWWtIJ5o2rBLe7ZbmnJDpnwWdF/Fc8qHqJyX8RwQeF34vf7NKjy4Cmqn1yRiFDn
+ YymIKxUstmTrw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=erv4V7+D
-Subject: [Buildroot] [PATCH 1/1] package/python-orjson: bump to version
- 3.10.10
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202406071026 header.b=ux1hcgUB
+Subject: [Buildroot] [PATCH 1/1] package/procps-ng: Fix ncurses.h include
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,67 +80,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Graeme Smecher <gsmecher@threespeedlogic.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop no longer required python-cffi dependency.
+Fixes:
+http://autobuild.buildroot.net/results/7f1/7f1e0b3d99db07ea46c9cd1f51b320b461623c8d/
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-orjson/Config.in          | 1 -
- package/python-orjson/python-orjson.hash | 2 +-
- package/python-orjson/python-orjson.mk   | 5 ++---
- 3 files changed, 3 insertions(+), 5 deletions(-)
+ .../0002-fix-ncurses-h-include.patch          | 55 +++++++++++++++++++
+ package/procps-ng/procps-ng.mk                |  1 +
+ 2 files changed, 56 insertions(+)
+ create mode 100644 package/procps-ng/0002-fix-ncurses-h-include.patch
 
-diff --git a/package/python-orjson/Config.in b/package/python-orjson/Config.in
-index 420e023b0a..258024032d 100644
---- a/package/python-orjson/Config.in
-+++ b/package/python-orjson/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PYTHON_ORJSON
- 	bool "python-orjson"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
--	select BR2_PACKAGE_PYTHON_CFFI # runtime
- 	help
- 	  orjson is a fast, correct JSON library for Python. It
- 	  benchmarks as the fastest Python library for JSON and is more
-diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
-index 4ef98beaa0..b48eec080d 100644
---- a/package/python-orjson/python-orjson.hash
-+++ b/package/python-orjson/python-orjson.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  cb462f63497889632807345b609fda0562888b0432b0764eeb1215901ae9f3d6  python-orjson-3.10.7-cargo2.tar.gz
-+sha256  48e12af76f92259e429af9d830bb222d1262e8cddedc07aa5208b589b314fae9  python-orjson-3.10.10-cargo2.tar.gz
- # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
-index 4e1b1e9629..60e6078132 100644
---- a/package/python-orjson/python-orjson.mk
-+++ b/package/python-orjson/python-orjson.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
+diff --git a/package/procps-ng/0002-fix-ncurses-h-include.patch b/package/procps-ng/0002-fix-ncurses-h-include.patch
+new file mode 100644
+index 0000000000..619126b863
+--- /dev/null
++++ b/package/procps-ng/0002-fix-ncurses-h-include.patch
+@@ -0,0 +1,55 @@
++From 263fe04f9ed6f3f40fdb7ce249221e03dc926c9b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 24 Jul 2024 09:51:00 +0200
++Subject: [PATCH] fix ncurses.h include
++
++Commit 58559a5b64a3634460536d6397ca382a54b599f0 was not backported from
++3.3.17 to 4.0.0 resulting in the following build failure when ncursesw
++headers are not installed in ../usr/include/ncursesw/..:
++
++src/watch.c:56:11: fatal error: ncursesw/ncurses.h: No such file or directory
++   56 | # include <ncursesw/ncurses.h>
++      |           ^~~~~~~~~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/b7573be2e78f3d224f48cb3f52087e3d227d58e3
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++Upstream: https://gitlab.com/procps-ng/procps/-/commit/263fe04f9ed6f3f40fdb7ce249221e03dc926c9b
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[Bernd: backported to version 4.0.4]
++---
++ configure.ac | 2 +-
++ src/watch.c  | 5 ++++-
++ 2 files changed, 5 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index d433901f..38350aaf 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -64,7 +64,7 @@ PROCPS_PROG_PO4A
++ 
++ # Checks for header files.
++ AC_HEADER_MAJOR
++-AC_CHECK_HEADERS([arpa/inet.h fcntl.h float.h langinfo.h libintl.h limits.h locale.h stdint.h stdio_ext.h stdlib.h string.h sys/file.h sys/ioctl.h sys/param.h sys/time.h termios.h unistd.h utmp.h utmpx.h values.h wchar.h wctype.h])
+++AC_CHECK_HEADERS([arpa/inet.h fcntl.h float.h langinfo.h libintl.h limits.h locale.h ncursesw/ncurses.h stdint.h stdio_ext.h stdlib.h string.h sys/file.h sys/ioctl.h sys/param.h sys/time.h termios.h unistd.h utmp.h utmpx.h values.h wchar.h wctype.h])
++ 
++ # Checks for typedefs, structures, and compiler characteristics.
++ AC_CHECK_HEADER_STDBOOL
++diff --git a/src/watch.c b/src/watch.c
++index ef638e00..7ec634b6 100644
++--- a/src/watch.c
+++++ b/src/watch.c
++@@ -53,6 +53,8 @@
++ # define _XOPEN_SOURCE_EXTENDED 1
++ # include <wchar.h>
++ # include <wctype.h>
+++#endif
+++#ifdef HAVE_NCURSESW_NCURSES_H
++ # include <ncursesw/ncurses.h>
++ #else
++ # include <ncurses.h>
++-- 
++GitLab
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 1002d6340f..4ac82cf6f9 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -15,6 +15,7 @@ PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
  
--PYTHON_ORJSON_VERSION = 3.10.7
-+PYTHON_ORJSON_VERSION = 3.10.10
- PYTHON_ORJSON_SOURCE_PYPI = orjson-$(PYTHON_ORJSON_VERSION).tar.gz
--PYTHON_ORJSON_SITE_PYPI = https://files.pythonhosted.org/packages/9e/03/821c8197d0515e46ea19439f5c5d5fd9a9889f76800613cfac947b5d7845
-+PYTHON_ORJSON_SITE_PYPI = https://files.pythonhosted.org/packages/80/44/d36e86b33fc84f224b5f2cdf525adf3b8f9f475753e721c402b1ddef731e
- PYTHON_ORJSON_SITE = $(PYTHON_ORJSON_SITE_PYPI)/$(PYTHON_ORJSON_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_ORJSON_SETUP_TYPE = maturin
- PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
- PYTHON_ORJSON_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
--PYTHON_ORJSON_DEPENDENCIES = host-python-cffi
+ # Applying 0001-build-sys-Add-systemd-elogind-to-w.patch touches Makefile.am
++# Applying 0002-fix-ncurses-h-include.patch touches configure.ac
+ PROCPS_NG_AUTORECONF = YES
  
- $(eval $(python-package))
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
 -- 
-2.34.1
+2.39.5
 
 _______________________________________________
 buildroot mailing list
