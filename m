@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D5E1D10BE9
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 13:58:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D81ABD10BF7
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 13:58:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 23D1740A7A;
-	Sat, 26 Oct 2024 13:58:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K8-FqyDIrQay; Sat, 26 Oct 2024 13:58:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0503E40C53
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0503E40C53;
-	Sat, 26 Oct 2024 13:58:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8E2A45C1E
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:58:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 28B26605BB
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:58:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A8B94606A2;
+	Sat, 26 Oct 2024 13:58:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jBjvq8E5fRz7 for <buildroot@buildroot.org>;
+ id VVhaUiXdTxU0; Sat, 26 Oct 2024 13:58:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 431366066F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 431366066F;
+	Sat, 26 Oct 2024 13:58:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A09A55C52
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:58:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 21DD081E7B
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:58:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fwT0xktZy63t for <buildroot@buildroot.org>;
  Sat, 26 Oct 2024 13:58:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62F05605F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FA0C81E7D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 62F05605F9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6FA0C81E7D
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:58:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5155483BBD; Sat, 26 Oct 2024 13:58:33 +0000 (UTC)
+ id 5C16B83BBF; Sat, 26 Oct 2024 13:58:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 15:33:39 +0200
+Date: Sat, 26 Oct 2024 15:33:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 534a28186fc89bbd74ba8189bc4506a938b5ee08
-X-Git-Newrev: 5c9e9164c5a9d1757356e86ec64722fdaaef6fb0
+X-Git-Oldrev: 5c9e9164c5a9d1757356e86ec64722fdaaef6fb0
+X-Git-Newrev: ec525c0c583f88d1440cb592c012b59161f5421c
 X-Patchwork-Hint: ignore
-Message-Id: <20241026135833.5155483BBD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/containerd: bump version to v1.7.23
+Message-Id: <20241026135833.5C16B83BBF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-compose: bump version to
+ v2.29.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,42 +66,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c9e9164c5a9d1757356e86ec64722fdaaef6fb0
+commit: https://git.buildroot.net/buildroot/commit/?id=ec525c0c583f88d1440cb592c012b59161f5421c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Latest minor release.
-
-https://github.com/containerd/containerd/releases/tag/v1.7.23
+https://github.com/docker/compose/releases/tag/v2.29.7
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 2 +-
+ package/docker-compose/docker-compose.hash | 2 +-
+ package/docker-compose/docker-compose.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index 02c19945b0..e3f8434192 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
+diff --git a/package/docker-compose/docker-compose.hash b/package/docker-compose/docker-compose.hash
+index 2896eee40c..0fb9767305 100644
+--- a/package/docker-compose/docker-compose.hash
++++ b/package/docker-compose/docker-compose.hash
 @@ -1,3 +1,3 @@
- # Computed locally
--sha256  c4268561e514a2e8322bc8cdd39113d5e164fb31c2cef76f479d683395ea9bd6  containerd-1.7.20-go2.tar.gz
-+sha256  393bfde8ca1766a0bca3441e18eddc3f5a5c8d97ef676bde0d6c9903e1b0ec0c  containerd-1.7.23-go2.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index afd03d7d3f..88b53caf51 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
+ # Locally computed
+-sha256  7ca8746c86ba25491f5bbdc44c41d5cf7f64defa69f4015c601e1a562f7f64fb  docker-compose-2.27.1-go2.tar.gz
++sha256  100a1c1522fc58658ce08ed4a6213ffb22f0bf5a728718e6e2b1181a127d321f  docker-compose-2.29.7-go2.tar.gz
+ sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
+diff --git a/package/docker-compose/docker-compose.mk b/package/docker-compose/docker-compose.mk
+index 44e27787ab..26d90d303f 100644
+--- a/package/docker-compose/docker-compose.mk
++++ b/package/docker-compose/docker-compose.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CONTAINERD_VERSION = 1.7.20
-+CONTAINERD_VERSION = 1.7.23
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
+-DOCKER_COMPOSE_VERSION = 2.27.1
++DOCKER_COMPOSE_VERSION = 2.29.7
+ DOCKER_COMPOSE_SITE = $(call github,docker,compose,v$(DOCKER_COMPOSE_VERSION))
+ DOCKER_COMPOSE_LICENSE = Apache-2.0
+ DOCKER_COMPOSE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
