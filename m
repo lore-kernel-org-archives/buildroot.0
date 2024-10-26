@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B985D0C604
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 16:07:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB236D0C604
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 16:07:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF199407A5;
-	Sat, 26 Oct 2024 16:07:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 723AE81568;
+	Sat, 26 Oct 2024 16:07:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZE6mjhnUPMGa; Sat, 26 Oct 2024 16:07:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PSOSQZPFEfkl; Sat, 26 Oct 2024 16:07:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B016740703
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45CE482035
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B016740703;
-	Sat, 26 Oct 2024 16:07:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id CA1025C1E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45CE482035;
+	Sat, 26 Oct 2024 16:07:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CCF725C24
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 16:07:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABE726061F
+ by smtp2.osuosl.org (Postfix) with ESMTP id B9B17400D7
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 16:07:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1Zc6V106fO9V for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 16:07:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TPAVG-x8qrjV for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 16:07:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 270E26063F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE34740198
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 270E26063F
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE34740198
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 16:07:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD87683E6B; Sat, 26 Oct 2024 16:07:08 +0000 (UTC)
+ id A0F0283E6B; Sat, 26 Oct 2024 16:07:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 17:59:36 +0200
+Date: Sat, 26 Oct 2024 17:59:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f2ba690762cc012fdfe2caffa9dde6bb3e692f96
-X-Git-Newrev: b41c2550df40b77b9338d3854d129788dbc8f582
+X-Git-Oldrev: 2952d5d28a523a907f97df5196f662372b5cc174
+X-Git-Newrev: a582ae4f8b85255ea0e3e47073f3778ca5aa56ab
 X-Patchwork-Hint: ignore
-Message-Id: <20241026160708.CD87683E6B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/restorecond: bump version to 3.7
+Message-Id: <20241026160708.A0F0283E6B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libselinux: bump version to 3.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,40 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b41c2550df40b77b9338d3854d129788dbc8f582
+commit: https://git.buildroot.net/buildroot/commit/?id=a582ae4f8b85255ea0e3e47073f3778ca5aa56ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/restorecond/restorecond.hash | 2 +-
- package/restorecond/restorecond.mk   | 2 +-
+ package/libselinux/libselinux.hash | 2 +-
+ package/libselinux/libselinux.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/restorecond/restorecond.hash b/package/restorecond/restorecond.hash
-index 5b86afdcc0..34847f28f1 100644
---- a/package/restorecond/restorecond.hash
-+++ b/package/restorecond/restorecond.hash
+diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
+index 4e0a2ca317..fac9d3cef2 100644
+--- a/package/libselinux/libselinux.hash
++++ b/package/libselinux/libselinux.hash
 @@ -1,5 +1,5 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256  8f8aa2c6c66bcc6d91c6edd63913e5d738de6428928f27d1019d89c31cf347b1  restorecond-3.6.tar.gz
-+sha256  4192595c08c775ff540f5ab850885ce11b132a4a4e29b65f20e751dd0a69d31f  restorecond-3.7.tar.gz
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  ba4e0ef34b270e7672a5e5f1b523fe2beab3a40bb33d9389f4ad3a8728f21b52  libselinux-3.6.tar.gz
++sha256  ea03f42d13a4f95757997dba8cf0b26321fac5d2f164418b4cc856a92d2b17bd  libselinux-3.7.tar.gz
  
  # Hash for license file
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
-diff --git a/package/restorecond/restorecond.mk b/package/restorecond/restorecond.mk
-index 93495d8b7f..4624b9204d 100644
---- a/package/restorecond/restorecond.mk
-+++ b/package/restorecond/restorecond.mk
+ sha256  86657b4c0fe868d7cbd977cb04c63b6c667e08fa51595a7bc846ad4bed8fc364  LICENSE
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index f07498d739..360ab063ca 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RESTORECOND_VERSION = 3.6
-+RESTORECOND_VERSION = 3.7
- RESTORECOND_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(RESTORECOND_VERSION)
- RESTORECOND_LICENSE = GPL-2.0
- RESTORECOND_LICENSE_FILES = LICENSE
+-LIBSELINUX_VERSION = 3.6
++LIBSELINUX_VERSION = 3.7
+ LIBSELINUX_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSELINUX_VERSION)
+ LIBSELINUX_LICENSE = Public Domain
+ LIBSELINUX_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
