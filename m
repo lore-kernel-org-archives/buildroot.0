@@ -4,74 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EE9BD10BFC
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 14:52:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74B71D10BFC
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 15:20:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3DF6A6067E;
-	Sat, 26 Oct 2024 14:52:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 334EC60DB7;
+	Sat, 26 Oct 2024 15:20:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e9BROpZPWGFE; Sat, 26 Oct 2024 14:52:57 +0000 (UTC)
+ id rZOKpka52-By; Sat, 26 Oct 2024 15:20:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50F366069B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3814B60DC6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 50F366069B;
-	Sat, 26 Oct 2024 14:52:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B8F505C1E
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:52:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3814B60DC6;
+	Sat, 26 Oct 2024 15:20:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 921E25C1E
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 15:20:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A42640542
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:52:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 72FBC40FA9
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 15:20:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BaKHLEGQ_3qz for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 14:52:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mZfVnvaor5sN for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 15:20:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5743B40538
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5743B40538
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5743B40538
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:52:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A27BBFF804;
- Sat, 26 Oct 2024 14:52:52 +0000 (UTC)
-Date: Sat, 26 Oct 2024 16:52:51 +0200
-To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Cc: Thomas Perale <thomas.perale@mind.be>, Joeri Barbarien
- <joeri.barbarien@nokia.com>
-Message-ID: <20241026165251.437c67bb@windsurf>
-In-Reply-To: <20240918151043.907458-1-thomas.perale@mind.be>
-References: <20240918151043.907458-1-thomas.perale@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729954372;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=NX3MpTpRzu1HgH1e85ocxwMZrfjkzNIVybHV040xuWo=;
- b=MP2OSBxlUNVIP7d/000uNHYpc532CImTp6WxySWPljhQGKu+ZyJGTpz27SS49xtddWwh/g
- CRQo+Qt5dvmCisxPw18e4cu8S5iSrkgap8tLu8gcdzYBQ59SXEfgDB/K5HiWLXFhi0R5dJ
- pWz+id+UgGhBNcQTt8Iaq2ApmThYlbCfgxRIF3r1nwYs2cudQB/LLKOBX/838dL0+Fub84
- GO80bgTb+DXnKTxNV5UjsFVb2NwI5YdSwJb3SgywVzY9YxkGLHvaz1SqoGjHCkqsRYwn7h
- CCcpwTUcRBsmT1HuHHz3M5M92cqwUpLlgqBQnpTEEPxFOupuX7zTOfS3c/+W2Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MP2OSBxl
-Subject: Re: [Buildroot] [PATCH 1/1] package/popperjs: remove PopperJS
- package
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E01F40FA7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E01F40FA7
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 15:20:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 60F9883CE6; Sat, 26 Oct 2024 15:20:24 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 26 Oct 2024 16:53:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2b89c72679e07981ca3fb692e3d8150d731ee854
+X-Git-Newrev: 61a34ff71590b09de3854667d6e6312c9444307e
+X-Patchwork-Hint: ignore
+Message-Id: <20241026152024.60F9883CE6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/espflash: bump v3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,53 +59,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=61a34ff71590b09de3854667d6e6312c9444307e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I have applied, after doing some small tweaks.
+Fix the following error:
 
-First, commit title:
+error[E0282]: type annotations needed for `Box<_>`
 
-	package/popperjs: remove package
+The issue came from the `time` library depedency of espflash
+(see https://github.com/time-rs/time/issues/693).
+The `time` library has been bumped in the following commit
+https://github.com/esp-rs/espflash/commit/233490736646ca7bc29463a98df98d7ccf53439d
 
-(no need to repeat the package name)
+Fixes:
+  - https://autobuild.buildroot.org/results/321/321598baef543b84ce82c09a88e51ad745a15dfd/
 
-On Wed, 18 Sep 2024 17:10:43 +0200
-Thomas Perale via buildroot <buildroot@buildroot.org> wrote:
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/espflash/espflash.hash | 2 +-
+ package/espflash/espflash.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> PopperJS project is now called floating-ui and is hosted on
-> https://github.com/floating-ui/floating-ui this caused legacy
-> source code archives to be repackaged with difference directory
-> name which broke the sha256 hash and made the autobuild fail.
-> 
-> Given the package has never been bumped since its introduction the
-> support for that package should probably be dropped.
-
-I added here an indication that the person who contributed/maintained
-this package dropped himself from the DEVELOPERS file in March 2024.
-Which means the package was basically orphan since then.
-
-
-> +config BR2_PACKAGE_POPPERJS
-> +	string "PopperJS has been removed"
-
-This should have been a "bool", not a "string".
-
-And it should have had:
-
-	select BR2_LEGACY
-
-Applied with those fixes. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/espflash/espflash.hash b/package/espflash/espflash.hash
+index ebe24ef51f..0b1e160a47 100644
+--- a/package/espflash/espflash.hash
++++ b/package/espflash/espflash.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  8e5da5e90d03135a1b2af6c0b551e4f2504ad64e659b0e88e8a4ecd98cc6a6b6  espflash-3.1.0-cargo2.tar.gz
++sha256  f91a3e33e874bac0d7687d87c3cd692a54325c0dceaf35c983bd3d94519dee25  espflash-3.1.1-cargo2.tar.gz
+ sha256  0886cf791a43c02d71c105b4835b53293704ec407a72f84a87f73e20cb2d3251  LICENSE-APACHE
+ sha256  a75018ab59a13738ed2024a0090ae8f91b7693ae84568aa0e52c3dff99e6748d  LICENSE-MIT
+diff --git a/package/espflash/espflash.mk b/package/espflash/espflash.mk
+index ad2294e1bf..bcb343fc58 100644
+--- a/package/espflash/espflash.mk
++++ b/package/espflash/espflash.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ESPFLASH_VERSION = 3.1.0
++ESPFLASH_VERSION = 3.1.1
+ ESPFLASH_SITE = $(call github,esp-rs,espflash,v$(ESPFLASH_VERSION))
+ ESPFLASH_SUBDIR = espflash
+ ESPFLASH_LICENSE = Apache-2.0 or MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
