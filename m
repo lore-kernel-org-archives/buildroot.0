@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFC9CD10BE9
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 13:58:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0C25D10BE9
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 13:58:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64847408AE;
-	Sat, 26 Oct 2024 13:58:36 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5eNoOvxqWAvT; Sat, 26 Oct 2024 13:58:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17CA34070A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17CA34070A;
-	Sat, 26 Oct 2024 13:58:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B1EB5C24
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:58:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 091FB60634
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:58:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 56B9260667;
+	Sat, 26 Oct 2024 13:58:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mN1D7W4yfQNN for <buildroot@buildroot.org>;
+ id pYNVIAodpis4; Sat, 26 Oct 2024 13:58:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F1B16063E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F1B16063E;
+	Sat, 26 Oct 2024 13:58:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2BC9B5C52
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:58:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0C23A81E74
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:58:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gG0sHCYSLkNv for <buildroot@buildroot.org>;
  Sat, 26 Oct 2024 13:58:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42642605BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 370BE81E7B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 42642605BB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 370BE81E7B
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:58:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E2F883BBF; Sat, 26 Oct 2024 13:58:33 +0000 (UTC)
+ id 22C8783BBD; Sat, 26 Oct 2024 13:58:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 15:33:33 +0200
+Date: Sat, 26 Oct 2024 15:33:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 33015ce954dce6bd3b35f10fa66fb252695b410d
-X-Git-Newrev: 0f64958d66bfc98a8bb732d9f771693044dd60c9
+X-Git-Oldrev: 8af46be29e97c67870dbae33e0355606db991011
+X-Git-Newrev: 33015ce954dce6bd3b35f10fa66fb252695b410d
 X-Patchwork-Hint: ignore
-Message-Id: <20241026135833.2E2F883BBF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/docker-engine: bump version to
- v27.3.1
+Message-Id: <20241026135833.22C8783BBD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/go: bump version to go1.23.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,42 +65,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f64958d66bfc98a8bb732d9f771693044dd60c9
+commit: https://git.buildroot.net/buildroot/commit/?id=33015ce954dce6bd3b35f10fa66fb252695b410d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a major version bump to v27.
+Go 1.23.0 is a major release of Go.
 
-https://github.com/moby/moby/releases/tag/v27.3.1
+Most of its changes are in the implementation of the toolchain, runtime, and libraries.
+
+https://go.dev/doc/go1.23
+https://go.dev/doc/devel/release#go1.23.2
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/go/go-bin/go-bin.hash | 14 +++++++-------
+ package/go/go-src/go-src.hash |  2 +-
+ package/go/go.mk              |  2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index b72b37223b..2fe19b61d5 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
+diff --git a/package/go/go-bin/go-bin.hash b/package/go/go-bin/go-bin.hash
+index 4d18e0cd2e..cc87cac3a6 100644
+--- a/package/go/go-bin/go-bin.hash
++++ b/package/go/go-bin/go-bin.hash
+@@ -1,9 +1,9 @@
+ # sha256 checksum from https://go.dev/dl/
+-sha256  df12c23ebf19dea0f4bf46a22cbeda4a3eca6f474f318390ce774974278440b8  go1.22.8.src.tar.gz
+-sha256  0c8e9f824bf443f51e06ac017b9ae402ea066d761b309d880dbb2ca5793db8a2  go1.22.8.linux-386.tar.gz
+-sha256  5f467d29fc67c7ae6468cb6ad5b047a274bae8180cac5e0b7ddbfeba3e47e18f  go1.22.8.linux-amd64.tar.gz
+-sha256  5c616b32dab04bb8c4c8700478381daea0174dc70083e4026321163879278a4a  go1.22.8.linux-arm64.tar.gz
+-sha256  5191e87a51a85d88edddc028ab30dfbfa2d7c37cf35d536655e7a063bfb2c9d2  go1.22.8.linux-armv6l.tar.gz
+-sha256  c546f27866510bf8e54e86fe6f58c705af0e894341e5572c91f197a734152c27  go1.22.8.linux-ppc64le.tar.gz
+-sha256  fabb3adc241474e28ae151a00e1421983deb35184d31cc76e90025b1b389f6bf  go1.22.8.linux-s390x.tar.gz
++sha256  36930162a93df417d90bd22c6e14daff4705baac2b02418edda671cdfa9cd07f  go1.23.2.src.tar.gz
++sha256  cb1ed4410f68d8be1156cee0a74fcfbdcd9bca377c83db3a9e1b07eebc6d71ef  go1.23.2.linux-386.tar.gz
++sha256  542d3c1705f1c6a1c5a80d5dc62e2e45171af291e755d591c5e6531ef63b454e  go1.23.2.linux-amd64.tar.gz
++sha256  f626cdd92fc21a88b31c1251f419c17782933a42903db87a174ce74eeecc66a9  go1.23.2.linux-arm64.tar.gz
++sha256  e3286bdde186077e65e961cbe18874d42a461e5b9c472c26572b8d4a98d15c40  go1.23.2.linux-armv6l.tar.gz
++sha256  c164ce7d894b10fd861d7d7b96f1dbea3f993663d9f0c30bc4f8ae3915db8b0c  go1.23.2.linux-ppc64le.tar.gz
++sha256  de1f94d7dd3548ba3036de1ea97eb8243881c22a88fcc04cc08c704ded769e02  go1.23.2.linux-s390x.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go-src/go-src.hash b/package/go/go-src/go-src.hash
+index 40cb5c801a..b475ec4a46 100644
+--- a/package/go/go-src/go-src.hash
++++ b/package/go/go-src/go-src.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  db02d9b5d98e85284538d6ead43b549c025acf937e98c09d18395bb331c1e607  docker-engine-27.0.3-go2.tar.gz
-+sha256  d18208d9e0b6421307342cdef266193984c97c87177b9262b1113e6e9e7e020e  docker-engine-27.3.1-go2.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 268b851520..e3db31a279 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
+ # From https://go.dev/dl
+-sha256  df12c23ebf19dea0f4bf46a22cbeda4a3eca6f474f318390ce774974278440b8  go1.22.8.src.tar.gz
++sha256  36930162a93df417d90bd22c6e14daff4705baac2b02418edda671cdfa9cd07f  go1.23.2.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 68fd359ed0..33dc681358 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = 27.0.3
-+DOCKER_ENGINE_VERSION = 27.3.1
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+-GO_VERSION = 1.22.8
++GO_VERSION = 1.23.2
  
- DOCKER_ENGINE_LICENSE = Apache-2.0
+ HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+ HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
