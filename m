@@ -1,75 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F5D2D10BF7
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 11:55:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E77FD10BF7
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 12:45:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BFCB81F7E;
-	Sat, 26 Oct 2024 11:55:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0737F60AAF;
+	Sat, 26 Oct 2024 12:45:35 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dGUJizgeDwuM; Sat, 26 Oct 2024 12:45:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F65C60BF9
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F65C60BF9;
+	Sat, 26 Oct 2024 12:45:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 96B442318
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 12:45:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 81782820FC
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 12:45:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mzow8uXZVgnw; Sat, 26 Oct 2024 11:55:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8739481F8D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8739481F8D;
-	Sat, 26 Oct 2024 11:55:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id CE39A2318
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:55:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AEC814018E
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:55:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tWSCjGm8xIbo for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 11:55:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id JKhyNSbAYa4G for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 12:45:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 59D424019A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59D424019A
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 59D424019A
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:55:42 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B00340003;
- Sat, 26 Oct 2024 11:55:40 +0000 (UTC)
-Date: Sat, 26 Oct 2024 13:55:39 +0200
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, Gilles Talis <gilles.talis@gmail.com>
-Message-ID: <20241026135539.5fdd6f6a@windsurf>
-In-Reply-To: <20241005225808.903365-1-ju.o@free.fr>
-References: <20241005225808.903365-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729943740;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=yE1dlbJH+9EzS9qJ1tu49rMoxhgM6JXXdx5bjcYH60Q=;
- b=WP9FP0/cmitjScsiaRrQWK3oeWbr0Ut1+vB4VqN82upReu8yBc19I4GRzOHEUkNzF7sUzG
- OVTlcTnp9E2Z3QbtsUKOlwwmR2rDLhUAEq+FhD7QA8hHJehvUAMiyjMUBUIh4FmGGfxQoZ
- u91ZfRYDP3KY9yNakSvKrz3RJ2IrNRJ3XJKhN0AhifSjPfq/7lViokTNoh4IioN8m8sj5j
- A4QsZl3oohbX4rkeR39T2/+yq7sSvZUS859otnw3JbqJObuFne4Pa1MOZUFPZA+XXKmRO7
- OMzg8qySK3UmApX0/c816y5KRAqgzAfHoYh4n4SZ+hGa84eJsxPmJ6avUzZ6gw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WP9FP0/c
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/oath-toolkit: new package
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0A04820FB
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A0A04820FB
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 12:45:31 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8AE7883A17; Sat, 26 Oct 2024 12:45:31 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 26 Oct 2024 14:43:39 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8851a2583e09fcd3b9c3c84c9245cdfb68ddd958
+X-Git-Newrev: aa7217276d0da805229739b1ede8eb3a1fe365aa
+X-Patchwork-Hint: ignore
+Message-Id: <20241026124531.8AE7883A17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iotools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,40 +59,121 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  6 Oct 2024 00:58:07 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=aa7217276d0da805229739b1ede8eb3a1fe365aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> OATH Toolkit provide components to build one-time password
-> authentication systems. It contains shared C libraries,
-> command line tools and a PAM module. Supported technologies
-> include the event-based HOTP algorithm (RFC 4226), the
-> time-based TOTP algorithm (RFC 6238), and Portable Symmetric
-> Key Container (PSKC, RFC 6030) to manage secret key
-> data. OATH stands for Open AuTHentication, which is the
-> organization that specify the algorithms.
-> 
-> https://www.nongnu.org/oath-toolkit/
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-> Changes v1 -> v2:
-> - Included all changes recommended by Gilles:
->  - bump to 2.6.12 to include recent security fix
->  - add _INSTALL_STAGING = YES
->  - Fix PSKC typo
+The iotools package provides a set of simple command line tools which
+allow access to hardware device registers. Supported register interfaces
+include PCI, IO, memory mapped IO, SMBus, CPUID, and MSR. Also included
+are some utilities which allow for simple arithmetic, logical, and other
+operations.
 
-Series applied, thanks!
+If you ever have to debug hardware, you could probably use these tools.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/iotools/Config.in    | 14 ++++++++++++++
+ package/iotools/iotools.hash |  3 +++
+ package/iotools/iotools.mk   | 29 +++++++++++++++++++++++++++++
+ 5 files changed, 48 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fc3e4bdf25..a369c15311 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -239,6 +239,7 @@ F:	package/sysdig/
+ 
+ N:	Andy Shevchenko <andy.shevchenko@gmail.com>
+ F:	package/fb-test-app/
++F:	package/iotools/
+ 
+ N:	Anthony Viallard <viallard@syscom-instruments.com>
+ F:	package/gnuplot/
+diff --git a/package/Config.in b/package/Config.in
+index fa010e231f..5caa82e34c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -535,6 +535,7 @@ endmenu
+ 	source "package/i7z/Config.in"
+ 	source "package/input-event-daemon/Config.in"
+ 	source "package/intel-microcode/Config.in"
++	source "package/iotools/Config.in"
+ 	source "package/ipmitool/Config.in"
+ 	source "package/ipmiutil/Config.in"
+ 	source "package/irda-utils/Config.in"
+diff --git a/package/iotools/Config.in b/package/iotools/Config.in
+new file mode 100644
+index 0000000000..ffa1a36667
+--- /dev/null
++++ b/package/iotools/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_IOTOOLS
++	bool "iotools"
++	help
++	  Tools for poking all types of IO, supported are:
++	  - CMOS NVRAM (via /dev/nvram)
++	  - CPU ID (x86)
++	  - IO port (x86, PowerPC)
++	  - MMIO
++	  - MSR (x86)
++	  - PCI configuration space
++	  - SCOM (PowerPC)
++	  - SMBus
++
++	  https://github.com/andy-shev/iotools
+diff --git a/package/iotools/iotools.hash b/package/iotools/iotools.hash
+new file mode 100644
+index 0000000000..6b1ef3d47d
+--- /dev/null
++++ b/package/iotools/iotools.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  13b8b87c7d1f22b8d8f50c499af09f9414a0879d69c22393f1051ed4bf28f378  iotools-1.7.tar.gz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/iotools/iotools.mk b/package/iotools/iotools.mk
+new file mode 100644
+index 0000000000..5c5a657cab
+--- /dev/null
++++ b/package/iotools/iotools.mk
+@@ -0,0 +1,29 @@
++################################################################################
++#
++# iotools
++#
++################################################################################
++
++IOTOOLS_VERSION = 1.7
++IOTOOLS_SITE = $(call github,andy-shev,iotools,v$(IOTOOLS_VERSION))
++IOTOOLS_LICENSE = GPL-2.0+
++IOTOOLS_LICENSE_FILES = COPYING
++
++IOTOOLS_MAKE_OPTS = \
++	CROSS_COMPILE=$(TARGET_CROSS)
++
++ifeq ($(BR2_STATIC_LIBS),y)
++IOTOOLS_MAKE_OPTS += STATIC=1
++else
++IOTOOLS_MAKE_OPTS += STATIC=0
++endif
++
++define IOTOOLS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(IOTOOLS_MAKE_OPTS) all
++endef
++
++define IOTOOLS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/iotools $(TARGET_DIR)/usr/bin/iotools
++endef
++
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
