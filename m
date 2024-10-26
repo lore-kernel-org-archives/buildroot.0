@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BB24D10BF0
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 10:21:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0A17D10BF0
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 10:48:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7043401E2;
-	Sat, 26 Oct 2024 10:21:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9102D40643;
+	Sat, 26 Oct 2024 10:48:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hn-pVMUq0pyj; Sat, 26 Oct 2024 10:21:28 +0000 (UTC)
+ id h3ao3seaLjmY; Sat, 26 Oct 2024 10:48:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E547401D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C808405F8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E547401D8;
-	Sat, 26 Oct 2024 10:21:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C833D5C24
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 10:21:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C808405F8;
+	Sat, 26 Oct 2024 10:48:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DEAEC5C24
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 10:48:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B763F80AA8
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 10:21:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC6C5605E1
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 10:48:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z_qWaqSn6oYO for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 10:21:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sAPW-DnUr4ab for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 10:48:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9E5E680A93
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E5E680A93
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9E5E680A93
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 10:21:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B14A2C0003;
- Sat, 26 Oct 2024 10:21:22 +0000 (UTC)
-Date: Sat, 26 Oct 2024 12:21:21 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org, Asaf Kahlon <asafka7@gmail.com>
-Message-ID: <20241026122121.5640d01d@windsurf>
-In-Reply-To: <20241025165529.3523312-1-james.hilliard1@gmail.com>
-References: <20241025165529.3523312-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729938083;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=O0YXwy6iolZx9PwcVoI7tkBo5pCSzPstEsGK9xgn420=;
- b=XXHIiRmFKW+RYrKxKeVf5cJXHFF0WF1J0YC57cpnAvDVzg6A0eRzx1gfGyCIr8YTdZjvku
- QlygbL4w40nWIJcn86+ipK11nq03CcZoCDCI+KaLVl/60yDxyULqeor8ret4lj68ZVsGh6
- G4UCjMiIQrO96JPxhdJf8Hy4S5DbkpyCJAwqvEQGEbiduFh76bSKwne/OHnMq47R5LDQM2
- /kYlcv5I/sZYXpfrzNOEKT0xlON7C3JKGX8Az+hCyDW1pvZNKvurv8SqtvZaHHdnpDIXvu
- mOq3nbFyjF9NCOYYRa7MKwrRQcFvVI2v9W0TKQJY4axTWQMvHPNZ0eg/MBDAsQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XXHIiRmF
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-anyio: bump to version
- 4.6.2.post1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E06096060E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E06096060E
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 10:48:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C7A4B83915; Sat, 26 Oct 2024 10:48:23 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 26 Oct 2024 12:45:13 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 10d25d98edbc75d47f6a8838d91d39e48b12c895
+X-Git-Newrev: 4cf0fd8e9e3f05ec2e2841ef496abb89573d41f8
+X-Patchwork-Hint: ignore
+Message-Id: <20241026104823.C7A4B83915@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/coreutils: fix build with uClibc-ng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,32 +58,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 25 Oct 2024 10:55:29 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4cf0fd8e9e3f05ec2e2841ef496abb89573d41f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-anyio/python-anyio.hash | 4 ++--
->  package/python-anyio/python-anyio.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+When compiling coreutils with uClibc-ng, build is failing with error:
 
-Applied, as well as all your other Python patches in this sequence, up
-to python-grpcio-reflection.
+    In file included from lib/mcel.c:3:
+    lib/mcel.h: In function 'mcel_scan':
+    lib/mcel.h:226:21: error: 'mbstate_t' has no member named '__count'
+      226 |   mbstate_t mbs; mbs.__count = 0;
+          |                     ^
 
-Thanks!
+The problem was reported by Waldemar Brodkorb in:
+https://lists.gnu.org/r/bug-gnulib/2024-08/msg00130.html
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This commit adds a package patch that modifies mcel_scan to avoid
+treating uClibc-ng as if it were glibc, resolving compatibility
+issues.
+
+Specifically, uClibc-ng was incorrectly treated like glibc in the code,
+which led to incorrect assumptions about the mbstate_t initialization.
+
+Fixes:
+- https://autobuild.buildroot.org/results/34f4e23e325a03ab37fd5a0a564780b9e0d631cd/
+
+Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+[Julien:
+  - slightly reworded the commit log
+  - fixed package patch encoding
+  - add the Upstream: tag in package patch
+  - add the Fixes: link in commit log
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../0001-coreutils-mcel-port-to-uClibc-ng.patch    | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/package/coreutils/0001-coreutils-mcel-port-to-uClibc-ng.patch b/package/coreutils/0001-coreutils-mcel-port-to-uClibc-ng.patch
+new file mode 100644
+index 0000000000..7639509ff2
+--- /dev/null
++++ b/package/coreutils/0001-coreutils-mcel-port-to-uClibc-ng.patch
+@@ -0,0 +1,35 @@
++From c4e923a98f34fe5f5ec3b49543e90716ec2a45fc Mon Sep 17 00:00:00 2001
++From: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
++Date: Tue, 24 Sep 2024 18:08:31 +0200
++Subject: [PATCH] coreutils: mcel: port to uClibc-ng
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Problem reported by Waldemar Brodkorb in:
++https://lists.gnu.org/r/bug-gnulib/2024-08/msg00130.html
++* lib/mcel.h (mcel_scan): Don't treat uClibc-ng like glibc.
++
++Upstream: https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=9765bc796b3e6ceaa7a10ba07c9c2f1e272a4249
++Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
++---
++ lib/mcel.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/lib/mcel.h b/lib/mcel.h
++index f6f006c..dca4d08 100644
++--- a/lib/mcel.h
+++++ b/lib/mcel.h
++@@ -221,7 +221,8 @@ mcel_scan (char const *p, char const *lim)
++ 
++   /* An initial mbstate_t; initialization optimized for some platforms.
++      For details about these and other platforms, see wchar.in.h.  */
++-#if defined __GLIBC__ && 2 < __GLIBC__ + (2 <= __GLIBC_MINOR__)
+++#if (defined __GLIBC__ && 2 < __GLIBC__ + (2 <= __GLIBC_MINOR__) \
+++	&& !defined __UCLIBC__)
++   /* Although only a trivial optimization, it's worth it for GNU.  */
++   mbstate_t mbs; mbs.__count = 0;
++ #elif (defined __FreeBSD__ || defined __DragonFly__ || defined __OpenBSD__ \
++-- 
++2.39.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
