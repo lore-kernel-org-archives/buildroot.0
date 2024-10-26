@@ -4,48 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DC1ED0C604
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 17:01:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DAD2D10BFF
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 17:05:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 081D44023D;
-	Sat, 26 Oct 2024 17:01:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB26A40356;
+	Sat, 26 Oct 2024 17:05:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sa7os7dZyaz9; Sat, 26 Oct 2024 17:01:56 +0000 (UTC)
+ id cT1UdGBFPro2; Sat, 26 Oct 2024 17:05:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CD194023E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83CA040292
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CD194023E;
-	Sat, 26 Oct 2024 17:01:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 302B92318
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 17:01:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83CA040292;
+	Sat, 26 Oct 2024 17:05:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5BA8C5C1E
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 17:05:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F32AE400D7
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 17:01:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37D7A40324
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 17:05:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gpo85LMTvdAS for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 17:01:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iSgofz9dpfxf for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 17:05:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C936640207
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C936640207
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 17:01:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B2C1983FAE; Sat, 26 Oct 2024 17:01:53 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 18:59:41 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 04c91340ffefbfd7d4293e6e0b5e40a0e10c48b8
-X-Git-Newrev: 859bd545821a838454577c4c1c9106837cda51cb
-X-Patchwork-Hint: ignore
-Message-Id: <20241026170153.B2C1983FAE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ltrace: mark as unavailable on musl
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BC84840292
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC84840292
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BC84840292
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 17:05:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 034DAFF803;
+ Sat, 26 Oct 2024 17:05:42 +0000 (UTC)
+Date: Sat, 26 Oct 2024 19:05:41 +0200
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>, Fabrice
+ Fontaine <fontaine.fabrice@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20241026190541.6be5629c@windsurf>
+In-Reply-To: <20231104184142.24723c2d@windsurf>
+References: <20231104155857.110364-1-fontaine.fabrice@gmail.com>
+ <20231104184142.24723c2d@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1729962343;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=+0KwtDhUB1XbJ8esHHREZJadmGAS+so74XVbGsb/otk=;
+ b=EBjvXsWIi5vwrdleGFyIYM+X8Z3qhs/paoxh1PmZNCExQKMBVd+jFHWWsPfuYVnE7w2yCi
+ EesO0Q3uNftdU08B1asoGrTcJHbuwXd08K5TZxBHlkR1YWqyeWLz/59plyY+Iw4NEJ1CkK
+ 5oeci8MGrj/9XfdPQZ542cX+TZoHSZuXxKg9+vAN4Dqb4dcVg036ZMG5xRU/CG5YG2N5YC
+ Mt9akrHBp+3RtBxpsNJnVkzfJUlS6a/IGJIs3BkYvMuUb4aMizLzux2zfITaEpdtyIu0w0
+ AujfkonRx/7uyy1XJGDobJpy4x0EbosYwjOdNP9b94SzmaUy1/seaUsW2AVtFg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=EBjvXsWI
+Subject: Re: [Buildroot] [PATCH 1/1] package/ltrace: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,59 +85,59 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=859bd545821a838454577c4c1c9106837cda51cb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Fabrice,
 
-Commit bf9583a50276f52edbc37d9f85df5f2cc7fdb5dc enabled elfutils on
-musl, as well as all its reverse dependencies, including ltrace. Turns
-out that even with elfutils fixed, ltrace doesn't build on musl.
+On Sat, 4 Nov 2023 18:41:42 +0100
+Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
 
-Fabrice proposed a patch to fix it, at:
+> Doesn't that defeat the purpose of the Upstream: flag entirely? Isn't
+> the idea precisely to strongly encourage (not to say "require") that
+> patches be sent upstream?
 
-  https://patchwork.ozlabs.org/project/buildroot/patch/20231104155857.110364-1-fontaine.fabrice@gmail.com/
+There has still been no feedback from you on this, so I looked into
+this a bit more, and it's messy.
 
-but ltrace has no active upstream, and some aspects of the patch don't
-look correct. So err on the safe side and make ltrace unavailable for
-musl configurations.
+ltrace.org points to https://gitlab.com/cespedes/ltrace as being the
+Git repo, and this Git repo has changes from a year ago, but absolutely
+no tags.
 
-Fixes:
+On the other side, Buildroot uses https://github.com/dkogan/ltrace/tree/master
+as the upstream... which hasn't seen any commit for the last 8 years.
+Though this one has tags, including a 0.7.3 tag, which it the latest
+version according to ltrace.org.
 
-  http://autobuild.buildroot.org/results/a3a5c46e8562d3f091a9b4b205322168fbf9d16b
+And when trying to figure if one if a fork from the other... it's not
+clear.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ltrace/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Regarding your patch, you made the inclusion of <error.h> conditional
+on __GLIBC__, but what if the code is using functions from <error.h>?
+If it builds without <error.h>, then presumably it means the code is no
+longer using any function from <error.h>, and those includes can be
+dropped?
 
-diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
-index 21d381db70..2dc969c4f1 100644
---- a/package/ltrace/Config.in
-+++ b/package/ltrace/Config.in
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_LTRACE
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_PACKAGE_LTRACE_ARCH_SUPPORTS
- 	select BR2_PACKAGE_ELFUTILS
- 	help
-@@ -25,7 +26,8 @@ config BR2_PACKAGE_LTRACE
- 
- 	  http://ltrace.org
- 
--comment "ltrace needs a toolchain w/ wchar, dynamic library, threads"
-+comment "ltrace needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
- 	depends on BR2_PACKAGE_LTRACE_ARCH_SUPPORTS
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_HAS_THREADS
-+		|| !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+Alpine had a different patch, that adds a configure.ac check for
+<error.h>: https://git.alpinelinux.org/aports/plain/main/ltrace/musl.patch
+
+However, their patch is for 0.7.3, while we use the "latest" commit
+from master.
+
+So overall, quite messy stuff, so I decided to mark ltrace as
+unavailable for musl:
+
+  https://gitlab.com/buildroot.org/buildroot/-/commit/859bd545821a838454577c4c1c9106837cda51cb
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
