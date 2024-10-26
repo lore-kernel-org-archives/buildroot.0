@@ -1,52 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A087ED10C06
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 20:57:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5DF1D0C604
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 20:58:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7120640346;
-	Sat, 26 Oct 2024 20:57:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F5C3605EC;
+	Sat, 26 Oct 2024 20:58:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NhDrMmCWnGlM; Sat, 26 Oct 2024 20:57:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OsjhkiUNmPpu; Sat, 26 Oct 2024 20:58:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA53540333
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5550E605DB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA53540333;
-	Sat, 26 Oct 2024 20:56:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 40D195C1E
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:56:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5550E605DB;
+	Sat, 26 Oct 2024 20:58:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 212BA5C24
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:58:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1821240166
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:56:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 01C2340003
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:58:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xBssyM34e5nt for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 20:56:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 059DF40254
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 059DF40254
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:56:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F39768424F; Sat, 26 Oct 2024 20:56:47 +0000 (UTC)
+ id o9urWkp7_KtA for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 20:58:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 857224010F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 857224010F
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 857224010F
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:57:59 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b313.dip0.t-ipconnect.de [84.161.179.19])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9B6A0A4C0CE0
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 22:57:56 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60512)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98)
+ (envelope-from <bernd@kuhls.net>) id 1t4nr9-000000004NT-2bVs
+ for buildroot@buildroot.org; Sat, 26 Oct 2024 20:57:56 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 22:53:30 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: de5d167df20c33892c5c5048d26361c7793d8111
-X-Git-Newrev: 06958532f9ea2c4c87f4affec1bb296da024418d
-X-Patchwork-Hint: ignore
-Message-Id: <20241026205647.F39768424F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-markupsafe: bump to version
- 3.0.2
+Date: Sat, 26 Oct 2024 22:57:55 +0200
+Message-Id: <20241026205755.2664552-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
+MIME-Version: 1.0
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202406071026; t=1729976276;
+ bh=z6VEmx02su5tIxtsT6uGaeh7yCEW4WMUWpWlbA/QhWk=;
+ h=From:To:Subject:Date:From;
+ b=epjHFcFjUZcSWCKa3lEglL9rJLhKItOUJtx9xWHc3///x9aaTOJ8yaMxZ7RA9KsYQ
+ azcIZuWcnxHSSQHZ4EFltFF72i54X/2Olcuubm/MDO1Vlm/TLbujtsByYnrc1zj+xC
+ zhXh96zIlKWGA0SNxtAmMDJjtJcjkmVBJrEneyj+KKy/UwNu5haaQlbkZ5Fi8RbgLz
+ B9PWOk36RGHnN99GMUAi636/P9Xaka961g5hxm2ua20v5PjUmdud+kKqqFaL+GVTEJ
+ phPxQP92KYN2naKF3DIl6ZWv1nZPsaf6MpUOtYwH+9KonKz/RfZt9anguWdEpmd7x8
+ oA61S9dU2vrRQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202406071026 header.b=epjHFcFj
+Subject: [Buildroot] [PATCH 1/1] package/stellarium: bump version to 24.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,52 +80,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06958532f9ea2c4c87f4affec1bb296da024418d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Release notes:
+http://stellarium.org/release/2024/09/22/stellarium-24.3.html
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-markupsafe/python-markupsafe.hash | 4 ++--
- package/python-markupsafe/python-markupsafe.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/stellarium/stellarium.hash | 2 +-
+ package/stellarium/stellarium.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-markupsafe/python-markupsafe.hash b/package/python-markupsafe/python-markupsafe.hash
-index 8902d3d0ec..c5ba015592 100644
---- a/package/python-markupsafe/python-markupsafe.hash
-+++ b/package/python-markupsafe/python-markupsafe.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/markupsafe/json
--md5  202a35d8c8309cd6e70f8b03c5eb7b61  markupsafe-3.0.1.tar.gz
--sha256  3e683ee4f5d0fa2dde4db77ed8dd8a876686e3fc417655c2ece9a90576905344  markupsafe-3.0.1.tar.gz
-+md5  cb0071711b573b155cc8f86e1de72167  markupsafe-3.0.2.tar.gz
-+sha256  ee55d3edf80167e48ea11a923c7386f4669df67d7994554387f84e7d8b0a2bf0  markupsafe-3.0.2.tar.gz
- # Locally computed sha256 checksums
- sha256  489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.txt
-diff --git a/package/python-markupsafe/python-markupsafe.mk b/package/python-markupsafe/python-markupsafe.mk
-index c96207d14b..11e8708270 100644
---- a/package/python-markupsafe/python-markupsafe.mk
-+++ b/package/python-markupsafe/python-markupsafe.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
+index 6f831f2919..4c1e0c18a1 100644
+--- a/package/stellarium/stellarium.hash
++++ b/package/stellarium/stellarium.hash
+@@ -1,4 +1,4 @@
+ # From https://github.com/Stellarium/stellarium/releases
+-sha256  f9e8e114e34265194ffff0c2a2806a6fdc998449192749c4ef60b0a5302101af  stellarium-24.2.tar.xz
++sha256  03dad30f4031bdc2d200146e7c587249ea75dbdb88c8ae13632829aac5540b08  stellarium-24.3.tar.xz
+ # Locally computed
+ sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
+diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
+index abbfe72aad..51b1688742 100644
+--- a/package/stellarium/stellarium.mk
++++ b/package/stellarium/stellarium.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_MARKUPSAFE_VERSION = 3.0.1
-+PYTHON_MARKUPSAFE_VERSION = 3.0.2
- PYTHON_MARKUPSAFE_SOURCE = markupsafe-$(PYTHON_MARKUPSAFE_VERSION).tar.gz
--PYTHON_MARKUPSAFE_SITE = https://files.pythonhosted.org/packages/b4/d2/38ff920762f2247c3af5cbbbbc40756f575d9692d381d7c520f45deb9b8f
-+PYTHON_MARKUPSAFE_SITE = https://files.pythonhosted.org/packages/b2/97/5d42485e71dfc078108a86d6de8fa46db44a1a9295e89c5d6d4a06e23a62
- PYTHON_MARKUPSAFE_SETUP_TYPE = setuptools
- PYTHON_MARKUPSAFE_LICENSE = BSD-3-Clause
- PYTHON_MARKUPSAFE_LICENSE_FILES = LICENSE.txt
+-STELLARIUM_VERSION = 24.2
++STELLARIUM_VERSION = 24.3
+ STELLARIUM_SOURCE = stellarium-$(STELLARIUM_VERSION).tar.xz
+ STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
+ STELLARIUM_LICENSE = GPL-2.0+
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
