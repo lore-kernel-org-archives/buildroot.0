@@ -4,107 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06BA6D0C604
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 17:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBCBDD10C02
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 18:25:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B0F3A408B2;
-	Sat, 26 Oct 2024 17:37:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53AEB40305;
+	Sat, 26 Oct 2024 18:25:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cJtHdrYR9ilI; Sat, 26 Oct 2024 17:37:18 +0000 (UTC)
+ id gNoi9qGgNg8T; Sat, 26 Oct 2024 18:25:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 572F0408A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3A01402FE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 572F0408A7;
-	Sat, 26 Oct 2024 17:37:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A9A825C1E
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 17:37:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3A01402FE;
+	Sat, 26 Oct 2024 18:25:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 00D1F5C1E
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 18:25:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8AAA64088A
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 17:37:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F05B6605CA
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 18:25:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bCDT6PEy3ydF for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 17:37:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::c36; helo=mail-oo1-xc36.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1787740800
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1787740800
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com
- [IPv6:2607:f8b0:4864:20::c36])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1787740800
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 17:37:14 +0000 (UTC)
-Received: by mail-oo1-xc36.google.com with SMTP id
- 006d021491bc7-5ebc5b4190eso1662865eaf.3
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 10:37:14 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fMeX3y_RxVx2 for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 18:25:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.167.52;
+ helo=mail-lf1-f52.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C908A605C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C908A605C6
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com
+ [209.85.167.52])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C908A605C6
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 18:25:41 +0000 (UTC)
+Received: by mail-lf1-f52.google.com with SMTP id
+ 2adb3069b0e04-539f72c913aso3901883e87.1
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:25:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1729964234; x=1730569034;
+ d=1e100.net; s=20230601; t=1729967139; x=1730571939;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=6G6fbq9+DFOuHsolKPdy0VlXupLXbSmuWC8vwQzednQ=;
- b=UUboMGNtxQIdn4V1rgldN4ak8ewX+ygII3lshxn1v/SS25CN7JFGazEPWXQIF+Fr9u
- udkeaSV4lGsRyBVJDyCfhNSjMx58CAzty6ed/HKgcSunI+XQe9ontOUvDFKTxJsUqsig
- L5JUsfR+nP4laBMUOdtMDwghvS0qUZb32LWd3tqJYftcluhH/Rewn5beO9wQhGfqZzxc
- 9TRb9f2qhRV8jGzy9gwO2tQ7AnfaofmHjAwiTQYFIijArHuwofchAp09WYX0TORf8hTo
- 3fRwTfV2tYdqyQxjp71QetcsX+WxD1J7Y9jSPub+L6lWfZdXkTusg5+XYbh/FSzfxsWb
- FzYg==
+ bh=8dJ2LoEnUa5r/kAUfXGNOqvZvQ2v/+i8S6hbXsvK/aQ=;
+ b=K8g3V53+Hc2sfaZyXCwJpyL+RaZmyxCb6HkTQSGM1vQKCFLu/WHRTZ1XJDg+3ZvB3c
+ f2wKlh6Se0jhyz3T08j7ycG7rwbmF3aHKaPQRyJPLjg0bBRzTb37B/bu11MuQwDDQZqz
+ 2TmQOy9cMI6FMEzPI7VtP0L25jtNgg0fXnLUGlYi5K22TdikJ7svKF4nCEdiZudI5TqZ
+ 6DXCdIqaVt4tO2GDBh4JONzrNTxiNgie04dutUg2tCxPP3MHbOwkACTJSzDbCoqGTMRM
+ 9csiqmwx6LY4qp41Y2OSbUroZTltqN8l63BFliXvK0ls8C2tAbxWkHxI+47A35MAHPEz
+ rHrQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCX2SpukWTp2R2ewcCTW1eUTcRQH0a7phGIBmgp7pTfPLaiNP83TVUvMLHwRTg54R/2UMg5c5Ho6+KU=@buildroot.org
-X-Gm-Message-State: AOJu0YwkT0UsoToxXdRlNUKJ0xTDo8Ex+zc//dsZOVmcgQlHwhDp4sG5
- SfZGpyew7+378zBg2Hn5gKgDcGt4JJQ1bncp01lk4+7k2438j7ZSaQgbNZIloWg8fyej20kpRHq
- r/ik=
-X-Google-Smtp-Source: AGHT+IHlhHosS9WNp6o/LOVzwP1zKRqzXdZw6k4KytdI/2DFVzHxuCIRHaEfYsn0/WW1xJs+Lhr12w==
-X-Received: by 2002:a05:6820:16a5:b0:5eb:c72e:e29b with SMTP id
- 006d021491bc7-5ec23a4404fmr1864855eaf.7.1729964233654; 
- Sat, 26 Oct 2024 10:37:13 -0700 (PDT)
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com.
- [209.85.161.42]) by smtp.gmail.com with ESMTPSA id
- 006d021491bc7-5ec186fbffasm796267eaf.31.2024.10.26.10.37.12
+ AJvYcCXrGumL1uksbyeFyH4j5U6ATqZkz+F4nSZ91mlUdVEdtJO8zzZdXQVryGlkoKMQMjqOxiOhVIqKYJY=@buildroot.org
+X-Gm-Message-State: AOJu0Yx2FnWCnWfq3fMf8vCaN7Sl2vEJsN6Nkz+ZooTY5MDIxjAEEXON
+ BIQdeXbIgbKxcEkoUA7DPPqMwy7Fklr8UvVhVhpZhhDWpdSpmxdKUKINqODF
+X-Google-Smtp-Source: AGHT+IH5hp2iZ8CAupz62g8gbZTVzBrvES198VpM3oAKX90BsTG62E052hQohxuZvyqbd4Rfm/8Xrw==
+X-Received: by 2002:a05:6512:3f1c:b0:539:e761:c21a with SMTP id
+ 2adb3069b0e04-53b34a365c7mr1423056e87.48.1729967138707; 
+ Sat, 26 Oct 2024 11:25:38 -0700 (PDT)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com.
+ [209.85.167.45]) by smtp.gmail.com with ESMTPSA id
+ 2adb3069b0e04-53b2e1df2f3sm568382e87.248.2024.10.26.11.25.37
  for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 26 Oct 2024 10:37:13 -0700 (PDT)
-Received: by mail-oo1-f42.google.com with SMTP id
- 006d021491bc7-5ebc5b4190eso1662828eaf.3
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 10:37:12 -0700 (PDT)
+ Sat, 26 Oct 2024 11:25:37 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id
+ 2adb3069b0e04-539fbe22ac0so3317298e87.2
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 11:25:37 -0700 (PDT)
 X-Forwarded-Encrypted: i=1;
- AJvYcCU68X3WP763LGclvUszc+rl+v53QmGnFdBNK3cJsLyoqcAQDi+OjPyUoiMdWPSyCqU8yFvjWlhaTl8=@buildroot.org
-X-Received: by 2002:a05:6870:5686:b0:288:563b:e48d with SMTP id
- 586e51a60fabf-29051ace3famr2544067fac.10.1729964232637; Sat, 26 Oct 2024
- 10:37:12 -0700 (PDT)
+ AJvYcCUTHaK7HVugynoI+1PAlnHPrtZuWInoqiWoJ1KK7TQ0EJp96C3PdTFAqDoalVuoUJKSt+8BqDrb2Lw=@buildroot.org
+X-Received: by 2002:a05:6512:2393:b0:52c:dc97:45d1 with SMTP id
+ 2adb3069b0e04-53b348c3841mr1339945e87.10.1729967137620; Sat, 26 Oct 2024
+ 11:25:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1699547993.git.yann.morin@orange.com>
- <20241026184414.5924bc56@windsurf>
-In-Reply-To: <20241026184414.5924bc56@windsurf>
-Date: Sat, 26 Oct 2024 10:37:01 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2r2TFm67Vb4+uzNx0g52nZqwm4ex4m3L+rnhxOcxVfuWg@mail.gmail.com>
-Message-ID: <CA+h8R2r2TFm67Vb4+uzNx0g52nZqwm4ex4m3L+rnhxOcxVfuWg@mail.gmail.com>
+References: <20240920062014.132862-1-thomas@devoogdt.com>
+ <20240920062014.132862-2-thomas@devoogdt.com>
+ <20241026164305.34881a98@windsurf>
+In-Reply-To: <20241026164305.34881a98@windsurf>
+From: Thomas Devoogdt <thomas@devoogdt.com>
+Date: Sat, 26 Oct 2024 20:25:26 +0200
+X-Gmail-Original-Message-ID: <CACXRmJgoySzrYAu0KCNSfnXAxrFwameDABJR-AXoAiYxSX+2iQ@mail.gmail.com>
+Message-ID: <CACXRmJgoySzrYAu0KCNSfnXAxrFwameDABJR-AXoAiYxSX+2iQ@mail.gmail.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: yann.morin@orange.com, Buildroot Mailing List <buildroot@buildroot.org>, 
- Vincent Fazio <vfazio@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1729964234; x=1730569034; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=6G6fbq9+DFOuHsolKPdy0VlXupLXbSmuWC8vwQzednQ=;
- b=iicaFz5kt7tlDGzRJ5sog/rmgHJ45lCyW5kujeH7+AxJtpjy0W8anUu4jr0CA+fZ7n
- 6lFkd3FQ/dWnW8ReN4dR5ry3QIHg/HhuJHK9zZzzehbvNGJ8r2fYzNjZQt9tWXnYIR7L
- 9q6iIvx056cDeeGuYSsAiOf3Pzzjc/UBpydZIjr3HtUqs6q8AJt4QmNUyQU+e6hbRCCp
- p1p2FtNRmFSwI5F+GX9pkMRa82ap0EUExrjKhjaqU3o0K5fUwQ5p00t6QbXvJ7RzQom/
- TRVD0J+iBfpAame+BmSlm0OcdIxa0jUJ4+OHngjOdUFP94F5UoP5P7I38PD+XP4SV4L0
- b2xQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=iicaFz5k
-Subject: Re: [Buildroot] [PATCH 0/2] package/filebeat: new package
+Cc: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org, 
+ Thomas Devoogdt <thomas.devoogdt@barco.com>,
+ Bart Van Severen <bart.vanseveren@barco.com>
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=devoogdt.com
+Subject: Re: [Buildroot] [PATCH v1 2/2] package/libwebsockets: fix
+ LWS_MAX_SMP when BR2_TOOLCHAIN_HAS_THREADS is set
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,115 +104,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Content-Type: multipart/mixed; boundary="===============1339591314318681732=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1339591314318681732==
-Content-Type: multipart/alternative; boundary="0000000000008f8f04062564af06"
+Hi Thomas
 
---0000000000008f8f04062564af06
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Thomas,
-
-On Sat, Oct 26, 2024, 9:44=E2=80=AFAM Thomas Petazzoni <thomas.petazzoni@bo=
-otlin.com>
-wrote:
-
-> Hello,
+Op za 26 okt 2024 om 16:43 schreef Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
 >
-> +Cc Christian Steward.
+> Hello Thomas/Bart,
 >
-> On Thu, 9 Nov 2023 17:39:54 +0100
-> <yann.morin@orange.com> wrote:
+> On Fri, 20 Sep 2024 08:20:14 +0200
+> Thomas Devoogdt <thomas@devoogdt.com> wrote:
 >
-> > This two-patch series introduces filebeat, an ElasticSearch-related too=
-l
-> > to grab local log files and send them to a remote ElasticSearch server.
+> > From: Bart Van Severen <bart.vanseveren@barco.com>
 > >
-> > It is a bit convoluted (see commit log), and requires a little extensio=
-n
-> > in our golang-package infrastructure, which we introduce as the first
-> > patch in the series.
+> > "If LWS_MAX_SMP=1, then there is no code related to pthreads compiled
+> >  in the library. If unset, LWS_MAX_SMP defaults to 32 and a small
+> >  amount of pthread mutex code is built into the library."
+> >
+> > This is a misconception, when unset, LWS_MAX_SMP is actually set to 1,
+> > so mutexes aren't built in.
+> >
+> > To fix, set it to 32 explicitly when threads are enabled.
+> >
+> > https://libwebsockets.org/lws-api-doc-master/html/md_READMEs_README_8coding.html
+> >
+> > Signed-off-by: Bart Van Severen <bart.vanseveren@barco.com>
+> > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+> > ---
+> >  package/libwebsockets/libwebsockets.mk | 5 ++---
+> >  1 file changed, 2 insertions(+), 3 deletions(-)
 >
-> Christian, could you review this patch series, and especially PATCH
-> 1/2, which touches the golang-package infrastructure?
+> The question is then why 32, and not 8, 16, or 64 ?
+
+The original comment mentioned the number 32, so it makes sense to keep that 32.
+
+Also, see this older manual
+https://libwebsockets.org/lws-api-doc-master/html/md_README.coding.html:
+"You can control the context basic data allocation for multithreading
+from Cmake using -DLWS_MAX_SMP=, if not given it's set to 32."
+
+And this newer manual
+https://libwebsockets.org/lws-api-doc-master/html/md_READMEs_README_8coding.html:
+"You can control the context basic data allocation for multithreading
+from Cmake using -DLWS_MAX_SMP=, if not given it's set to 1. "
+
+So, given that the original manual talks about 32, it makes sense to
+use it, even though it is no longer valid.
+Other values will also work, as long the minimum is 2. But I guess
+that this 32 is a good trade-off.
+
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 >
 
-This one looks good to me:
+Kr,
 
-https://patchwork.ozlabs.org/project/buildroot/patch/876f3a7bb6a2375193fc8f=
-06ab856d2449f83727.1699547993.git.yann.morin@orange.com/
-
-As does the other, but I haven't tested it / built it. It looks fine from
-an initial review.
-
-https://patchwork.ozlabs.org/project/buildroot/patch/46f20e86fa6c17ada33ede=
-672ffe4229d8bf26a3.1699547993.git.yann.morin@orange.com/
-
-Best regards,
-Christian Stewart
-
---0000000000008f8f04062564af06
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto"><div>Hi Thomas,<br><br><div class=3D"gmail_quote"><div di=
-r=3D"ltr" class=3D"gmail_attr">On Sat, Oct 26, 2024, 9:44=E2=80=AFAM Thomas=
- Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.petaz=
-zoni@bootlin.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" =
-style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Hel=
-lo,<br>
-<br>
-+Cc Christian Steward.<br>
-<br>
-On Thu, 9 Nov 2023 17:39:54 +0100<br>
-&lt;<a href=3D"mailto:yann.morin@orange.com" target=3D"_blank" rel=3D"noref=
-errer">yann.morin@orange.com</a>&gt; wrote:<br>
-<br>
-&gt; This two-patch series introduces filebeat, an ElasticSearch-related to=
-ol<br>
-&gt; to grab local log files and send them to a remote ElasticSearch server=
-.<br>
-&gt; <br>
-&gt; It is a bit convoluted (see commit log), and requires a little extensi=
-on<br>
-&gt; in our golang-package infrastructure, which we introduce as the first<=
-br>
-&gt; patch in the series.<br>
-<br>
-Christian, could you review this patch series, and especially PATCH<br>
-1/2, which touches the golang-package infrastructure?<br></blockquote></div=
-></div><div dir=3D"auto"><br></div><div dir=3D"auto">This one looks good to=
- me:</div><div dir=3D"auto"><br></div><div dir=3D"auto"><a href=3D"https://=
-patchwork.ozlabs.org/project/buildroot/patch/876f3a7bb6a2375193fc8f06ab856d=
-2449f83727.1699547993.git.yann.morin@orange.com/">https://patchwork.ozlabs.=
-org/project/buildroot/patch/876f3a7bb6a2375193fc8f06ab856d2449f83727.169954=
-7993.git.yann.morin@orange.com/</a></div><div dir=3D"auto"><br></div><div d=
-ir=3D"auto">As does the other, but I haven&#39;t tested it / built it. It l=
-ooks fine from an initial review.</div><div dir=3D"auto"><br></div><div dir=
-=3D"auto"><a href=3D"https://patchwork.ozlabs.org/project/buildroot/patch/4=
-6f20e86fa6c17ada33ede672ffe4229d8bf26a3.1699547993.git.yann.morin@orange.co=
-m/">https://patchwork.ozlabs.org/project/buildroot/patch/46f20e86fa6c17ada3=
-3ede672ffe4229d8bf26a3.1699547993.git.yann.morin@orange.com/</a></div><div =
-dir=3D"auto"><br></div><div dir=3D"auto">Best regards,</div><div dir=3D"aut=
-o">Christian Stewart=C2=A0</div></div>
-
---0000000000008f8f04062564af06--
-
---===============1339591314318681732==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thomas Devoogdt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1339591314318681732==--
