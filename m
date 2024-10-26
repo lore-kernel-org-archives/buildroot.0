@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D862D10BFC
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 15:29:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7142DD10BFC
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 15:35:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14B3B6075D;
-	Sat, 26 Oct 2024 15:29:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3252180DCF;
+	Sat, 26 Oct 2024 15:35:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id snPbqpviWmmn; Sat, 26 Oct 2024 15:29:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RpXWrOybf1_m; Sat, 26 Oct 2024 15:35:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E12C26067E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06E4180CE5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E12C26067E;
-	Sat, 26 Oct 2024 15:29:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06E4180CE5;
+	Sat, 26 Oct 2024 15:35:10 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A9FF05C24
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 15:29:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 723745C1E
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 15:35:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96A1540361
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 15:29:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 52DAD400D7
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 15:35:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lbf__eDgE-ns for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 15:29:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id Rs5YtkZyB4fD for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 15:35:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 702E340407
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 702E340407
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 15:29:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5496483CF4; Sat, 26 Oct 2024 15:29:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 17:28:52 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 61a34ff71590b09de3854667d6e6312c9444307e
-X-Git-Newrev: 747a41c19c3ab49981beff8166679a9f49acf0d8
-X-Patchwork-Hint: ignore
-Message-Id: <20241026152946.5496483CF4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/postgresql: fix build without
- BR2_TOOLCHAIN_HAS_THREADS_NPTL
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DBB8A40139
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBB8A40139
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DBB8A40139
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 15:35:06 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9562FFF803;
+ Sat, 26 Oct 2024 15:35:03 +0000 (UTC)
+Date: Sat, 26 Oct 2024 17:35:02 +0200
+To: <yann.morin@orange.com>
+Cc: <buildroot@buildroot.org>
+Message-ID: <20241026173502.4f6911a3@windsurf>
+In-Reply-To: <45637d224995588db97c5908d41ea67600e432f3.1726568237.git.yann.morin@orange.com>
+References: <45637d224995588db97c5908d41ea67600e432f3.1726568237.git.yann.morin@orange.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1729956903;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=vHXODAuxcikK6DW7lXXTizJ8otiDCntbEQfvtw2J/pQ=;
+ b=BedOpmUCYZkoH1Dzs2IYkP/qgCw6Al9IAyme4qyGCIiqRJXHB0KR6QnN6KnfU5XUuKjLJm
+ gAyH5kNKQ9caHEmPBNJuNrJCc5d7ullkTShj2qO+YTNqlnXVe66ppezHbtmUTzqq3Qm3ys
+ rhtE8Sm7RVEYPTcBePOww5EL0qL1D8dcWGwzbn0+8/WWCs2mht+Oc2sspXl1avBUF8DSWa
+ ZiZWmje4zoaf2gSWRwD2o75NZ9AnJVA8hTMGFm1lcAJAmHcyWqp6ZZ/ogpDE/UhYdnPPhR
+ mxGN5QVWOuOn479IS0eSAzM4qteqdm1VWufbV2ORHDlDJvOQxhM9yUywhCZYqA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=BedOpmUC
+Subject: Re: [Buildroot] [PATCH] package/skopeo: ignore un-applicable CVE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,133 +83,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=747a41c19c3ab49981beff8166679a9f49acf0d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Yann,
 
-Since commit: https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=52afe563206e753f4c45c014fee2459ad0855826
-postgrsql fails to build with toolchains without threads support:
+On Tue, 17 Sep 2024 12:17:17 +0200
+<yann.morin@orange.com> wrote:
 
-misc.c: In function 'ecpg_gettext':
-misc.c:541:51: error: 'PTHREAD_MUTEX_INITIALIZER' undeclared (first use in this function)
-  541 |         static pthread_mutex_t binddomain_mutex = PTHREAD_MUTEX_INITIALIZER;
-      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
-misc.c:541:51: note: each undeclared identifier is reported only once for each function it appears in
-misc.c:552:24: warning: implicit declaration of function 'pthread_mutex_lock' [-Wimplicit-function-declaration]
-  552 |                 (void) pthread_mutex_lock(&binddomain_mutex);
-      |                        ^~~~~~~~~~~~~~~~~~
-misc.c:569:24: warning: implicit declaration of function 'pthread_mutex_unlock' [-Wimplicit-function-declaration]
-  569 |                 (void) pthread_mutex_unlock(&binddomain_mutex);
-      |                        ^~~~~~~~~~~~~~~~~~~~
+> From: "Yann E. MORIN" <yann.morin@orange.com>
+> 
+> The CVE tracker detects that CVE-2019-10214 impacts skopeo, but this is
+> a false positive. Indeed, that CVE applies to containers/image (which is
+> vendored in skopeo), and is matched for un-versioned skopeo (notice the
+> dash '-' in the CPE ID):
+> 
+>     https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:skopeo_project:skopeo:-:*:*:*:*:*:*:*
+> 
+> and does not apply to any versioned skopeo (1.16.1 and "any version" for
+> example; notice the star '*' or the version instead of the dash, in the
+> CPE ID):
+> 
+>     https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:skopeo_project:skopeo:*:*:*:*:*:*:*:*
+>     https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:skopeo_project:skopeo:1.16.1:*:*:*:*:*:*:*
 
-Option "--disable-thread-safety" will be dropped in PG 17, so
-this patch is needed only for 16.x branch.
+Wow, it took me a while to process the explanation here. Let me
+rephrase what I understood:
 
-Fixes: 73dd1d6b9666 ("package/postgresql: security bump version to 16.3")
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-Fix-compile-without-threads.patch         | 87 ++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
+- The NVD database entry for CVE-2019-10214 indicates that one of the
+  affected CPE IDs is cpe:2.3:a:skopeo_project:skopeo:-:*:*:*:*:*:*:*
 
-diff --git a/package/postgresql/0001-Fix-compile-without-threads.patch b/package/postgresql/0001-Fix-compile-without-threads.patch
-new file mode 100644
-index 0000000000..a280df540f
---- /dev/null
-+++ b/package/postgresql/0001-Fix-compile-without-threads.patch
-@@ -0,0 +1,87 @@
-+From 6c71182dde4d37fd70ee8015f61935254ae6f9a6 Mon Sep 17 00:00:00 2001
-+From: Maxim Kochetkov <fido_max@inbox.ru>
-+Date: Thu, 19 Sep 2024 10:04:05 +0300
-+Subject: [PATCH] Fix compile without threads
-+
-+All mutexes should be wrapped by #ifdef ENABLE_THREAD_SAFETY.
-+
-+Fixes: https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=52afe563206e753f4c45c014fee2459ad0855826
-+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-+Signed-off-by: Maxim Kochetkov <m.kochetkov@yadro.com>
-+Upstream: N/A, as --disable-thread-safety will disappear in PostgreSQL 17.
-+---
-+ src/interfaces/ecpg/ecpglib/misc.c | 6 ++++++
-+ src/interfaces/libpq/fe-misc.c     | 6 ++++++
-+ 2 files changed, 12 insertions(+)
-+
-+diff --git a/src/interfaces/ecpg/ecpglib/misc.c b/src/interfaces/ecpg/ecpglib/misc.c
-+index 4b54322926..5a4d2e847e 100644
-+--- a/src/interfaces/ecpg/ecpglib/misc.c
-++++ b/src/interfaces/ecpg/ecpglib/misc.c
-+@@ -538,7 +538,9 @@ ecpg_gettext(const char *msgid)
-+ 	 * might as well do it the same way everywhere.
-+ 	 */
-+ 	static volatile bool already_bound = false;
-++#ifdef ENABLE_THREAD_SAFETY
-+ 	static pthread_mutex_t binddomain_mutex = PTHREAD_MUTEX_INITIALIZER;
-++#endif
-+ 
-+ 	if (!already_bound)
-+ 	{
-+@@ -549,7 +551,9 @@ ecpg_gettext(const char *msgid)
-+ 		int			save_errno = errno;
-+ #endif
-+ 
-++#ifdef ENABLE_THREAD_SAFETY
-+ 		(void) pthread_mutex_lock(&binddomain_mutex);
-++#endif
-+ 
-+ 		if (!already_bound)
-+ 		{
-+@@ -566,7 +570,9 @@ ecpg_gettext(const char *msgid)
-+ 			already_bound = true;
-+ 		}
-+ 
-++#ifdef ENABLE_THREAD_SAFETY
-+ 		(void) pthread_mutex_unlock(&binddomain_mutex);
-++#endif
-+ 
-+ #ifdef WIN32
-+ 		SetLastError(save_errno);
-+diff --git a/src/interfaces/libpq/fe-misc.c b/src/interfaces/libpq/fe-misc.c
-+index 488f7d6e55..2185e0ba7a 100644
-+--- a/src/interfaces/libpq/fe-misc.c
-++++ b/src/interfaces/libpq/fe-misc.c
-+@@ -1232,7 +1232,9 @@ libpq_binddomain(void)
-+ 	 * might as well do it the same way everywhere.
-+ 	 */
-+ 	static volatile bool already_bound = false;
-++#ifdef ENABLE_THREAD_SAFETY
-+ 	static pthread_mutex_t binddomain_mutex = PTHREAD_MUTEX_INITIALIZER;
-++#endif
-+ 
-+ 	if (!already_bound)
-+ 	{
-+@@ -1243,7 +1245,9 @@ libpq_binddomain(void)
-+ 		int			save_errno = errno;
-+ #endif
-+ 
-++#ifdef ENABLE_THREAD_SAFETY
-+ 		(void) pthread_mutex_lock(&binddomain_mutex);
-++#endif
-+ 
-+ 		if (!already_bound)
-+ 		{
-+@@ -1260,7 +1264,9 @@ libpq_binddomain(void)
-+ 			already_bound = true;
-+ 		}
-+ 
-++#ifdef ENABLE_THREAD_SAFETY
-+ 		(void) pthread_mutex_unlock(&binddomain_mutex);
-++#endif
-+ 
-+ #ifdef WIN32
-+ 		SetLastError(save_errno);
-+-- 
-+2.45.2
-+
+- The CPE ID generated by Buildroot for the skopeo package is
+  cpe:2.3:a:skopeo_project:skopeo:1.16.0:*:*:*:*:*:*:*
+
+- Because pkg-stats handles "-" as "any version is affected", then it
+  causes CVE-2019-10214 to be assumed to affect our version of skopeo
+
+> This was fixed in containers/image in upstream commit a3d69a4a (Use the
+> same HTTP client for contacting the bearer token server and the
+> registry, 2019-08-01) which has been released in containers/image
+> v3.0.0 (2019-08-02), which has been vendored in skopeo since commit
+> bebcb94653cc (vendor github.com/containers/image@v3.0.0) released the
+> same day in skopeo 0.1.38 (2019-02-08).
+
+So I agree, but then the proper course of action we recommend to our
+contributors in this situation, is to contact the NVD people and have
+them update their database entry. In this case, you already have the
+needed information, as you tracked which exact version fixed the issue.
+Could you contact the NVD database maintainers to get this fixed
+upstream?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
