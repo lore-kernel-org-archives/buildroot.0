@@ -1,77 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F385D10BFA
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 14:00:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A72A5D10BF7
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 14:06:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F5CC81E8F;
-	Sat, 26 Oct 2024 14:00:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ltTJrptmmRjO; Sat, 26 Oct 2024 14:00:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D5F081EA1
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D5F081EA1;
-	Sat, 26 Oct 2024 14:00:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id CC75C5C52
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:00:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8189410A9
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:00:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A3B2408C8;
+	Sat, 26 Oct 2024 14:06:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T4BJeq1xDvBa for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 14:00:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id AU-AcRYNge8P; Sat, 26 Oct 2024 14:06:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4795E407B2
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4795E407B2;
+	Sat, 26 Oct 2024 14:06:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E36395C24
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:06:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD9FB40175
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:06:39 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id brBUjpAm4tnI for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 14:06:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5B35C40EC5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B35C40EC5
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5B35C40EC5
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:00:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3CF94FF802;
- Sat, 26 Oct 2024 14:00:16 +0000 (UTC)
-Date: Sat, 26 Oct 2024 16:00:15 +0200
-To: Christian Stewart via buildroot <buildroot@buildroot.org>
-Cc: Christian Stewart <christian@aperture.us>, "Yann E . MORIN"
- <yann.morin.1998@free.fr>
-Message-ID: <20241026160015.53632c93@windsurf>
-In-Reply-To: <20241026052753.59191-1-christian@aperture.us>
-References: <20241026052753.59191-1-christian@aperture.us>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1729951216;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=0CUBkZ7wF8aUlrjrlNIvj34zjUh0QFZ6s9QJYxrvzJQ=;
- b=AvpNe2Qb4KFURc1+JNLnhPo2rinrtyDCMwydZd4pCXJf8BXIeaAEDr6qD6XUHwOE+U+Epe
- 6WCC6R/1iFEtYA7z9TZItpRli85nPl2lm6Fympt9hMnR5GaKU+mU+b0tMjWL1qHwzk+erH
- JPacS0RfZKnu9tzkiZaz8TmaMFwmVp/4/TQKPFAJx4tuz4GxsZvdO9XwufF6ZjilDUjEvb
- qUcfbdK+6wC9aVqqRqjHuZNhUJQsUEV4YBRI3pEBe6B9d8wyOl0Rg2SGkY01USTfB2kL0K
- xMqsVpaYRuwttiGpHDxU8e4Ov20JBtY4gFYX7FaBI6ZllaT+3m+1y5UTdR5cBA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=AvpNe2Qb
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/docker-compose: bump version
- to v2.29.7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6B414018E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C6B414018E
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 14:06:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B05A783BC2; Sat, 26 Oct 2024 14:06:38 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 26 Oct 2024 16:01:29 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ec525c0c583f88d1440cb592c012b59161f5421c
+X-Git-Newrev: 408bb87fbbea6f4f7903b229ec0116b73527096e
+X-Patchwork-Hint: ignore
+Message-Id: <20241026140638.B05A783BC2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: fix build failures
+ to due RTL8723 file changes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,29 +60,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 25 Oct 2024 22:27:53 -0700
-Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=408bb87fbbea6f4f7903b229ec0116b73527096e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> https://github.com/docker/compose/releases/tag/v2.29.7
-> 
-> Signed-off-by: Christian Stewart <christian@aperture.us>
-> ---
->  package/docker-compose/docker-compose.hash | 2 +-
->  package/docker-compose/docker-compose.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fix a build failure due to these changes:
 
-Applied to master, thanks.
+Commit 2bb8fb26599302c9cbc69a5aff329a8559c91e48:
+rename rtl8723bs_config-OBDA8723.bin -> rtl_bt/rtl8723bs_config.bin
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Commit 5a017996c6de64ebd7f7c60e1233a45ba04086ca:
+remove rtl_bt/rtl8723d_config.bin
+
+This has been broken since Buildroot commit
+4c619e6d87be08d8d9214f630bb89076d75d32e3, which updated linux-firmware
+from 20240709 to 20240909.
+
+https://lists.buildroot.org/pipermail/buildroot/2024-October/765934.html
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/8a7f7bac71cfa743ed122b6ca7f6e7389bc2a4ac/
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-firmware/linux-firmware.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index b48bb80713..9ffd52dff5 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -79,8 +79,7 @@ endif
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX_BT),y)
+ LINUX_FIRMWARE_FILES += \
+ 	rtl_bt/rtl8723a_fw.bin rtl_bt/rtl8723b_fw.bin \
+-	rtl_bt/rtl8723bs_config-OBDA8723.bin \
+-	rtl_bt/rtl8723bs_fw.bin rtl_bt/rtl8723d_config.bin \
++	rtl_bt/rtl8723bs_config.bin rtl_bt/rtl8723bs_fw.bin \
+ 	rtl_bt/rtl8723d_fw.bin rtl_bt/rtl8761a_fw.bin \
+ 	rtl_bt/rtl8761b_fw.bin rtl_bt/rtl8761b_config.bin \
+ 	rtl_bt/rtl8761bu_fw.bin rtl_bt/rtl8761bu_config.bin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
