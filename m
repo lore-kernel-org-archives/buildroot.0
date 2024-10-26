@@ -1,95 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07188D0C604
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 20:36:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF9CCD10C06
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 20:41:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE02660778;
-	Sat, 26 Oct 2024 20:36:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88B6F401E2;
+	Sat, 26 Oct 2024 20:41:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y9yl8n6K2rhY; Sat, 26 Oct 2024 20:36:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 69rgB3TdmJSY; Sat, 26 Oct 2024 20:41:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C33D960779
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61A19401F9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C33D960779;
-	Sat, 26 Oct 2024 20:36:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2DF725C1E
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:36:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61A19401F9;
+	Sat, 26 Oct 2024 20:41:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 17B3B5C1E
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:41:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0FF8860777
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:36:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 061AA809EB
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:41:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cPN4fGBiWFGV for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 20:36:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id irSWFMWBmUlg for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 20:41:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12b; helo=mail-il1-x12b.google.com;
+ client-ip=2607:f8b0:4864:20::134; helo=mail-il1-x134.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1182D605F4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1182D605F4
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
- [IPv6:2607:f8b0:4864:20::12b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1182D605F4
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:36:23 +0000 (UTC)
-Received: by mail-il1-x12b.google.com with SMTP id
- e9e14a558f8ab-3a39f73a2c7so12537315ab.0
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:36:23 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 02B4B808A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02B4B808A0
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 02B4B808A0
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 20:41:39 +0000 (UTC)
+Received: by mail-il1-x134.google.com with SMTP id
+ e9e14a558f8ab-3a4e551efdbso6123495ab.3
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:41:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1729974982; x=1730579782;
+ d=1e100.net; s=20230601; t=1729975298; x=1730580098;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=6CkdV1cYm6kRaFA3IyHh9go7G+YciBlQDAJ6T4LRExo=;
- b=FbmSQ++A3xCBDyidX+Uy0YD94W2bPi1ZZkSDMNet4660gObCdD3eWTeQFb/VReQo4J
- M1f5e9Zf3O7PRGh3Zh2PdDvs4j3ng2vGQK5mFdFxg26mDFbojvkz6jcLUE7nT6av55TL
- r3a0X66OTImLAzSEqIufkrZJe1ZmTpBeEP4GpApsXJT/Ky5Kt+fSlIjuNkPgUrTV2i/c
- DtWBfIfWb9Nb76ih/l7NJm9Bso9JSXGSJ24yLfnLMwS/y1ENxVQoybqE1q4XC6kWQOX9
- CZWy4ZD53XURzjwOQqUurgkY7YHA7RDKpxagnkAVQcoavZYTyzM6eCvq6hcb9Je7iToM
- msLA==
-X-Gm-Message-State: AOJu0Yx49D1Y4CY4lrueJcDHLBpmoVEpV+xFXBh/IjTxpwS/tcAcPfss
- bgYOla9MUWVyq+4dJaJMqFmJRTx7/JiZYmeAb79s2wDnJO6AAu/lotDpwg==
-X-Google-Smtp-Source: AGHT+IEf4Ln+7VL8KIoUgfFrFExFrXPVH1VccWdv7Da8pL+WbJun5nIinIsXWn7vL49P7RUG+0ojJg==
-X-Received: by 2002:a05:6e02:1a0a:b0:3a4:eca2:960b with SMTP id
- e9e14a558f8ab-3a4ed29d9f1mr29509995ab.9.1729974982596; 
- Sat, 26 Oct 2024 13:36:22 -0700 (PDT)
+ bh=z2Z3F62rrCuNvo+VaQmwvrNb3MJ6fAVgrOFw5l2Js9E=;
+ b=vBleBdzGtxvM5tQ1yNexyEBuprZecFNVrxL4IKP5GPUBi47EEe2WLeIDoDHuwvHiLZ
+ 4LyPERG8uq8i8SiDn8GYR/YNnCCW9HBQPKBR0M4zKVkrM3iCDzNB3X3G7VG636E+vI9o
+ OYEvo9dOvuINZfca0Q1YSxaDbc1t4FMl7oswSmTyeoYZNHDmrZ4RI51I8meP0yw1VNUn
+ AMleNnSQwAAq27swRCXv1dalgg2gU5/AM4OGQPjXJEsOydtfMdZfcps3UbW3AtArOwxV
+ jpIQ415/xDtmMjBEFw7kNL0T7100Xds6i57hKPyXBMmGWoDN6k3Vl/8AvZeJXYdOVCSa
+ hnjg==
+X-Gm-Message-State: AOJu0Yyf2JONu0jAmYy4I8tWlAkU98w3cKRUYZoE3P0xf+o2gaY+UJwH
+ EHvRc4XEiqy9+3+WLFybjsRiCtG82aBbO1mu/ATM3fUtGnT5DHzfG9vo2g==
+X-Google-Smtp-Source: AGHT+IEzyHf0G6R9Rrax2H7tn1B6xbIjymJTj9Ubad2pTLvp9j/OBrzqP/6nRBnY0kqcMrw1upgt+Q==
+X-Received: by 2002:a05:6e02:16cc:b0:3a4:e771:8874 with SMTP id
+ e9e14a558f8ab-3a4ed2b6332mr33473675ab.13.1729975298430; 
+ Sat, 26 Oct 2024 13:41:38 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
  [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a4e6e56eccsm8734725ab.60.2024.10.26.13.36.21
+ 8926c6da1cb9f-4dc725eb4cesm872447173.6.2024.10.26.13.41.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 26 Oct 2024 13:36:22 -0700 (PDT)
+ Sat, 26 Oct 2024 13:41:37 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 14:36:20 -0600
-Message-Id: <20241026203620.3617544-1-james.hilliard1@gmail.com>
+Date: Sat, 26 Oct 2024 14:41:36 -0600
+Message-Id: <20241026204136.3620109-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1729974982; x=1730579782; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1729975298; x=1730580098; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=6CkdV1cYm6kRaFA3IyHh9go7G+YciBlQDAJ6T4LRExo=;
- b=j6bJfqr3I3vqGtBfa3Zbhb9OtkCghsDsAZHb0+23+DGD1dod7xuFwrabhl+6yEO1bf
- Mo3aPStTzt7tPxXgZOYhQF/ys1tMqEDhSo0UGhXjn5COaB3RHL8p3TXxH/d3tfzNX8Se
- XUf1xPWVSoGoL33R9P8pyt6ybqwho5IZO8OwobTHBNuA7LDwlJgFXIZs9LtXGd2lG9lR
- ke7AhX2WFWnKrmxMeGWR0f65kbKaonYO8+FeDZDBXvvJyMBbvRf+Hg0veeuKaX+vwYN/
- FpXdBeRAzAX2ZKkKb9d02G+Ua1CRf4yAvH0Yj47IACuOsB25t78Pd+DUiXVLkT90X7SF
- FELQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=z2Z3F62rrCuNvo+VaQmwvrNb3MJ6fAVgrOFw5l2Js9E=;
+ b=X31yte+F0gKf0QjwRtgAGjbX1YPHMbaqTgg6pjZ3zuLh5z9A9mqgFG9i35ipPbcLi1
+ 8sde6OkHrkvI7AottGwa8U8Rt5EHenr6gr9uol1zLY13yciRx2peWlOlsEhp5oLspXmT
+ IjoTI0PV5vXEh1c0IF77eBiOrv8x8XK2hMLCV7KNdKYiYWHCrDVvyI5WgiN8yxdZVTd1
+ zTZCaZ8B+m8gXxvZVV2t2ehAfEDyEPZ+kTMQYbUb1ExoDASq+R+mvMDiQfkMBatXZUS/
+ 4JupEFjp9RCsDT1sxzlL+O9DwY7ZqJMXm6T+hC8q9UwrO7h2liw2U37XvDFpktE1ckad
+ 8ifA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=j6bJfqr3
-Subject: [Buildroot] [PATCH 1/1] package/python-ipython: bump to version
- 8.29.0
+ header.s=20230601 header.b=X31yte+F
+Subject: [Buildroot] [PATCH 1/1] package/python-magic-wormhole: bump to
+ version 0.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,8 +101,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Philippe Proulx <eeppeliteloop@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Julien Olivain <ju.o@free.fr>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -110,39 +110,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-ipython/python-ipython.hash | 4 ++--
- package/python-ipython/python-ipython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-magic-wormhole/python-magic-wormhole.hash | 4 ++--
+ package/python-magic-wormhole/python-magic-wormhole.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
-index 77d804f70c..ca2b0ea16c 100644
---- a/package/python-ipython/python-ipython.hash
-+++ b/package/python-ipython/python-ipython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/ipython/json
--md5  2031b37b5054423f1c5009d99da1ca86  ipython-8.28.0.tar.gz
--sha256  0d0d15ca1e01faeb868ef56bc7ee5a0de5bd66885735682e8a322ae289a13d1a  ipython-8.28.0.tar.gz
-+md5  728e73b95f7a3078fcbce50e64396bc3  ipython-8.29.0.tar.gz
-+sha256  40b60e15b22591450eef73e40a027cf77bd652e757523eebc5bd7c7c498290eb  ipython-8.29.0.tar.gz
+diff --git a/package/python-magic-wormhole/python-magic-wormhole.hash b/package/python-magic-wormhole/python-magic-wormhole.hash
+index fae8e189ec..38ac016f0d 100644
+--- a/package/python-magic-wormhole/python-magic-wormhole.hash
++++ b/package/python-magic-wormhole/python-magic-wormhole.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/magic-wormhole/json
+-md5  a90c49d375a014cff1b1fc0f4fdba833  magic-wormhole-0.16.0.tar.gz
+-sha256  14e6c146898dbda7a6d190262623a69419955363e7e434d64aad2d233d6d94c9  magic-wormhole-0.16.0.tar.gz
++md5  61143e1480353de7b502d1b904837fb0  magic_wormhole-0.17.0.tar.gz
++sha256  142c7a271684b0b04470792601848f6b0ade0d8bf54fbcb30c6259d75edd9d06  magic_wormhole-0.17.0.tar.gz
  # Locally computed sha256 checksums
- sha256  341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17  COPYING.rst
- sha256  e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index 9c1afed03a..7e7806b12d 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
+ sha256  4a9cc2415c52cef591b6822eee68fed36d7e6d80284b09638cff61d762d99060  LICENSE
+diff --git a/package/python-magic-wormhole/python-magic-wormhole.mk b/package/python-magic-wormhole/python-magic-wormhole.mk
+index 1c55a7000a..37fddf6c21 100644
+--- a/package/python-magic-wormhole/python-magic-wormhole.mk
++++ b/package/python-magic-wormhole/python-magic-wormhole.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPYTHON_VERSION = 8.28.0
-+PYTHON_IPYTHON_VERSION = 8.29.0
- PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
--PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/f7/21/48db7d9dd622b9692575004c7c98f85f5629428f58596c59606d36c51b58
-+PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/85/e0/a3f36dde97e12121106807d80485423ae4c5b27ce60d40d4ab0bab18a9db
- PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
- PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
+-PYTHON_MAGIC_WORMHOLE_VERSION = 0.16.0
+-PYTHON_MAGIC_WORMHOLE_SOURCE = magic-wormhole-$(PYTHON_MAGIC_WORMHOLE_VERSION).tar.gz
+-PYTHON_MAGIC_WORMHOLE_SITE = https://files.pythonhosted.org/packages/1a/55/b82ace1c0c090bc6f629a93f3fb1ed60436731b166de2454d1585532c86f
++PYTHON_MAGIC_WORMHOLE_VERSION = 0.17.0
++PYTHON_MAGIC_WORMHOLE_SOURCE = magic_wormhole-$(PYTHON_MAGIC_WORMHOLE_VERSION).tar.gz
++PYTHON_MAGIC_WORMHOLE_SITE = https://files.pythonhosted.org/packages/1b/a8/32a54e75643206665f569dac6ab19727aefb508b148882f1d05dff003667
+ PYTHON_MAGIC_WORMHOLE_SETUP_TYPE = setuptools
+ PYTHON_MAGIC_WORMHOLE_LICENSE = MIT
+ PYTHON_MAGIC_WORMHOLE_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
