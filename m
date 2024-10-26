@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BE40D10BF9
-	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 13:21:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C108D10BF7
+	for <buildroot@archiver.kernel.org>; Sat, 26 Oct 2024 13:22:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 00E5540607;
-	Sat, 26 Oct 2024 13:21:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA7664072B;
+	Sat, 26 Oct 2024 13:22:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TcB0TmSZnUBa; Sat, 26 Oct 2024 13:21:57 +0000 (UTC)
+ id mJIdl-J2s2s4; Sat, 26 Oct 2024 13:21:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6E3B406A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4003040799
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6E3B406A1;
-	Sat, 26 Oct 2024 13:21:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E9D65C24
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:21:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4003040799;
+	Sat, 26 Oct 2024 13:21:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0C3DE5C1E
+ for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:21:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 104D46061F
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF32481324
  for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:21:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 81jBX8ZjXn-g for <buildroot@buildroot.org>;
- Sat, 26 Oct 2024 13:21:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wMm8avqB1DWY for <buildroot@buildroot.org>;
+ Sat, 26 Oct 2024 13:21:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51BD760608
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51BD760608
- for <buildroot@buildroot.org>; Sat, 26 Oct 2024 13:21:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3CD8383ABB; Sat, 26 Oct 2024 13:21:55 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 26 Oct 2024 15:18:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d8c2c2cb57b87035908e234c0fc2127a34cfcf0d
-X-Git-Newrev: 852fedc643e50085a9f9c3cbf0bd2a4e23b8c9f4
-X-Patchwork-Hint: ignore
-Message-Id: <20241026132155.3CD8383ABB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libfribidi: bump to version 1.0.16
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D892281312
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D892281312
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D892281312
+ for <buildroot@busybox.net>; Sat, 26 Oct 2024 13:21:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B1D3C40003;
+ Sat, 26 Oct 2024 13:21:53 +0000 (UTC)
+Date: Sat, 26 Oct 2024 15:21:52 +0200
+To: Francois Perrad <francois.perrad@gadz.org>
+Cc: buildroot@busybox.net
+Message-ID: <20241026152152.7c201a18@windsurf>
+In-Reply-To: <20240930190225.3923277-1-francois.perrad@gadz.org>
+References: <20240930190225.3923277-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1729948914;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=fkDrdbbQgUWE9sjc+5VBuUSoGqcXfskS4hNy33vtbVY=;
+ b=e5Tafa2WjXQRbIlYPv/y+oOgTTOc3IbR6WBo2ompwWwDtGWCvaShonHYaurVZCnN5Pq8aV
+ ArZLMxMeSUS/M+eK08Gaqy5i6zq9YZE3SROJ1nXtkt+4UXuyU5ia4n3Ny3QMs8EbvUnXwC
+ 8vODiXA6yz8qRpuhXy5pQ8A1Q0GY63tMI3736cExcmrNN0Q2yeALgedbqwPnZ1KQ48hnrl
+ ZjiN+aUJ9ffwJXSneR+eV5W/JWdWrczegoqInRTX5oLGxibx4e3UoxHD8Dc4plHOUUkY5S
+ Brw5xwSedUqb7aetGygY6/xGBHYgLDGCa8Uy8okyKEdvTtGVOb3UVumxqgZVjw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=e5Tafa2W
+Subject: Re: [Buildroot] [PATCH] package/libfribidi: bump to version 1.0.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,44 +83,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=852fedc643e50085a9f9c3cbf0bd2a4e23b8c9f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 30 Sep 2024 21:02:25 +0200
+Francois Perrad <francois.perrad@gadz.org> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libfribidi/libfribidi.hash | 2 +-
- package/libfribidi/libfribidi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/libfribidi/libfribidi.hash | 2 +-
+>  package/libfribidi/libfribidi.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libfribidi/libfribidi.hash b/package/libfribidi/libfribidi.hash
-index 29948fbba8..9da9281c85 100644
---- a/package/libfribidi/libfribidi.hash
-+++ b/package/libfribidi/libfribidi.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  0bbc7ff633bfa208ae32d7e369cf5a7d20d5d2557a0b067c9aa98bcbf9967587  fribidi-1.0.15.tar.xz
-+sha256  1b1cde5b235d40479e91be2f0e88a309e3214c8ab470ec8a2744d82a5a9ea05c  fribidi-1.0.16.tar.xz
- sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
-diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
-index ab7fe70307..ca0a39ccb4 100644
---- a/package/libfribidi/libfribidi.mk
-+++ b/package/libfribidi/libfribidi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBFRIBIDI_VERSION = 1.0.15
-+LIBFRIBIDI_VERSION = 1.0.16
- LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.xz
- LIBFRIBIDI_SITE = https://github.com/fribidi/fribidi/releases/download/v$(LIBFRIBIDI_VERSION)
- LIBFRIBIDI_LICENSE = LGPL-2.1+
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
