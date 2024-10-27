@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B117ED1358A
-	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 22:56:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED61FD1358A
+	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 22:59:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53C49405BA;
-	Sun, 27 Oct 2024 22:56:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A34D5405DA;
+	Sun, 27 Oct 2024 22:59:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lHihweYxF4Qx; Sun, 27 Oct 2024 22:56:16 +0000 (UTC)
+ id Lg9zS2aCk3NF; Sun, 27 Oct 2024 22:59:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 064ED405B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66B72405BA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 064ED405B1;
-	Sun, 27 Oct 2024 22:56:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E8115971
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 22:56:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 66B72405BA;
+	Sun, 27 Oct 2024 22:59:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3787A971
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 22:59:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D594F404D3
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 22:56:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 25D836076C
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 22:59:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sghM5mDGryNu for <buildroot@buildroot.org>;
- Sun, 27 Oct 2024 22:56:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N2Wos7JFUjyz for <buildroot@buildroot.org>;
+ Sun, 27 Oct 2024 22:59:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2e; helo=mail-io1-xd2e.google.com;
+ client-ip=2607:f8b0:4864:20::132; helo=mail-il1-x132.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A31E240566
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A31E240566
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
- [IPv6:2607:f8b0:4864:20::d2e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A31E240566
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 22:56:13 +0000 (UTC)
-Received: by mail-io1-xd2e.google.com with SMTP id
- ca18e2360f4ac-83aff992087so145215639f.3
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 15:56:13 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2090D605D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2090D605D1
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
+ [IPv6:2607:f8b0:4864:20::132])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2090D605D1
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 22:59:31 +0000 (UTC)
+Received: by mail-il1-x132.google.com with SMTP id
+ e9e14a558f8ab-3a3b8b34be9so14129465ab.2
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 15:59:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730069772; x=1730674572;
+ d=1e100.net; s=20230601; t=1730069971; x=1730674771;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=/rQWjcMIV4oWTOpagiALv6AEpbxRD81uyekPfaWjLIU=;
- b=rkz1bQjkRDDEegOTuRokwfjaT2YPPY5Dtkis/5fjado4wqiyF5s1+U+Ja9hgLQxTwy
- JHZXI4bCBoZMQy/b1Sd+6iWyZ6dUQv2bIV3rTmZGHdVqRHuX45yQAyMLK8fH+ATULGk2
- u6GfzFZ2duWr9CAsMJJlAF0YiAFkO7Wjqb6kbn2zl3g5XoskQ+DiKupvwHuV7OaY6aQZ
- cv5stEMIF9Ymzuz1prz6qIbcSRzDgWJ5ikzGeWJ5jtAiTwXrK1v+d66NJ/mziIYwOiV/
- NudLmojCqfrqdzzrtmeSZJajPqbXb02X8vx1O5dKuMH3E8LAn17pvl3Ysf0fPQXNd0fs
- jO+A==
-X-Gm-Message-State: AOJu0YxE7abOoLBdIU9Bytxv23BOLfJ2DkcXjH5hXEkEns6wgyEAO2OK
- KBQtV7rGjR1SPwn8NLYBNLqkVW4V9NcfVjJKDCM/R+/QIYYKFIEf/2xZ1A==
-X-Google-Smtp-Source: AGHT+IFf2D+QWNhFKoLDEDPP4SYQFMdNikh23jF03swLdD4A2UpS293txGIQqnTKdwvRwsXXHEDSRA==
-X-Received: by 2002:a05:6602:1656:b0:834:d7b6:4fea with SMTP id
- ca18e2360f4ac-83b1c3e9fcemr394677139f.6.1730069772372; 
- Sun, 27 Oct 2024 15:56:12 -0700 (PDT)
+ bh=JHkBDmwqlO2cQO3mcjI1AFClBGJMySRWvWfJaIIz3nc=;
+ b=suyk75Po7jZV/VTrSmuboTDMFYMCwvf2Luqp80D4yNeZ2fr+Ulh6ADn922EIFJaZB3
+ LwsWZIoCsh/RZFWtNy+ZSvfw1cbZ+KowGIolCp5mXI2bYyhBMzy5KyK6hfdCuoy3Icwe
+ z8vCTOY8rWXFVH9i0LD+KYLgqWnjcHY+ilPjh/XsguQBFd5VGyXgIdsfBjiUQzycYlvf
+ +9sYujHQZJ7Jm9DUAN2xEzt2+xZ1wrJxafhpYPHKYZ87JNUG5lcJu5WmEjZAg3TVokuz
+ Qxrf/uK0TA47p0EIkt77fr5B8sFXaIRu7bFXOW3jgP2XP3PnGBF5w4PzdPdAhjFbtE76
+ JpAQ==
+X-Gm-Message-State: AOJu0Yzo6+Ndfto3qQ0RZZ5o7or8+p30pBIjqIvakZLdt+5DTV2B1E4c
+ mEMcRiplIbmA0DlPZpdEBcptSGKPriqSDcF3bpLrKUaI3DG6bV2I9SqUkQ==
+X-Google-Smtp-Source: AGHT+IEweosWyG9CdEDAGFU4ediiAVtS90jp4GDkk2qyktTT/9qQ6Pgqyt7ky/0HVvnLKUEI49Qcrg==
+X-Received: by 2002:a05:6e02:219b:b0:3a0:9b27:7d52 with SMTP id
+ e9e14a558f8ab-3a4ed33de2emr49587615ab.20.1730069970803; 
+ Sun, 27 Oct 2024 15:59:30 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
  [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-83b137c96b6sm124771139f.5.2024.10.27.15.56.11
+ e9e14a558f8ab-3a4e6df57ebsm13691865ab.35.2024.10.27.15.59.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Oct 2024 15:56:11 -0700 (PDT)
+ Sun, 27 Oct 2024 15:59:30 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Oct 2024 16:56:10 -0600
-Message-Id: <20241027225610.3869106-1-james.hilliard1@gmail.com>
+Date: Sun, 27 Oct 2024 16:59:28 -0600
+Message-Id: <20241027225928.3870886-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1730069772; x=1730674572; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1730069971; x=1730674771; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=/rQWjcMIV4oWTOpagiALv6AEpbxRD81uyekPfaWjLIU=;
- b=IZf+9HJDfPSlWGeNdMvyEUX7Hkvs3TYOphbDXMozauYOb7mPzNcALp1R8POSQBoDMv
- MJLO/lhOwMlkX4rHW0TI8GrXI65rdIbxm3FHn+oPx8o1k38xQCTJo1YJUAd0RQUq62XS
- b719QVvN8vFQxWUntUPoQ8E4ncRB7I9OcdJ0YyO5eAmAyXCnB/E8RnB0CODOkIkIZZ+Y
- kZTilz6Rgb47OdW+w91esldR/doRB6N3FFGDPGVLGc7zGJHQxFZTNZV5672hTvqBrGzt
- 1F9GkZzLrm6hM0HG+TeLCpZYT16xajL6ikaAhgktS6PyzQToGdH818s4FDnIPcSdXTHy
- n+gA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=JHkBDmwqlO2cQO3mcjI1AFClBGJMySRWvWfJaIIz3nc=;
+ b=HnxNm9aVp2atcdVRZVp7NFZ/N7DmsVuF4CKCP8LKsBqpBVmZZRHGDUBhsIDw7nygQq
+ ebe99LQC5+T8sN872unkv1hCb2ldocwR0yyM3/4q/JwCaqF/BP0aKhk5pK4djUliQeru
+ qhnz1gzfK0qrVFuU57kqFrhn3hAUKkvDFBnZhjgO0M26ypIeUN+dlOJjR4rHUek9BZWL
+ FfyK/8iGxuJj/vSa3dlsIsZrlzVxf4W9PjY4dIEoSw9tMAWJf/6SuiJr+lFu9G5IGE6Y
+ UWOANHaPsSopUOPi69R0+oFVt5ctEvZsCAj7DIN1v5MYs2QsxhccOl7SKgc45ZQ+OcFQ
+ +l3Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=IZf+9HJD
-Subject: [Buildroot] [PATCH 1/1] package/python-keyring: bump to version
- 25.5.0
+ header.a=rsa-sha256 header.s=20230601 header.b=HnxNm9aV
+Subject: [Buildroot] [PATCH 1/1] package/python-logbook: bump to version
+ 1.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,9 +100,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -110,38 +108,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-keyring/python-keyring.hash | 4 ++--
- package/python-keyring/python-keyring.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-logbook/python-logbook.hash | 4 ++--
+ package/python-logbook/python-logbook.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-keyring/python-keyring.hash b/package/python-keyring/python-keyring.hash
-index e45e108055..ddbe52fb35 100644
---- a/package/python-keyring/python-keyring.hash
-+++ b/package/python-keyring/python-keyring.hash
+diff --git a/package/python-logbook/python-logbook.hash b/package/python-logbook/python-logbook.hash
+index 8761945de6..361ea9921e 100644
+--- a/package/python-logbook/python-logbook.hash
++++ b/package/python-logbook/python-logbook.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/keyring/json
--md5  18421ba10fcf6af96586aa0761cc667d  keyring-25.4.1.tar.gz
--sha256  b07ebc55f3e8ed86ac81dd31ef14e81ace9dd9c3d4b5d77a6e9a2016d0d71a1b  keyring-25.4.1.tar.gz
-+md5  abbca9e5a78bdb506d3ba0bfa3fe3642  keyring-25.5.0.tar.gz
-+sha256  4c753b3ec91717fe713c4edd522d625889d8973a349b0e582622f49766de58e6  keyring-25.5.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/logbook/json
+-md5  cbb7e5fb2d6325f42a323b0000127393  Logbook-1.7.0.post0.tar.gz
+-sha256  a5e8016701ca3beea6a390b0ba1541037f663543ca508ccd36cfdc841639cdd7  Logbook-1.7.0.post0.tar.gz
++md5  d15918a5745349eefab327661454527d  logbook-1.8.0.tar.gz
++sha256  487fa41539787bfa21a51fabd7f3ae8ae7f9e6679bb3e241d0f5f18a2fc37e9c  logbook-1.8.0.tar.gz
  # Locally computed sha256 checksums
- sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
-diff --git a/package/python-keyring/python-keyring.mk b/package/python-keyring/python-keyring.mk
-index dff2d19e0c..1972f5f6de 100644
---- a/package/python-keyring/python-keyring.mk
-+++ b/package/python-keyring/python-keyring.mk
+ sha256  2ca266337cc6947578654ab0dd6438de4d01fa78b2e6eb554b09757df1178f98  LICENSE
+diff --git a/package/python-logbook/python-logbook.mk b/package/python-logbook/python-logbook.mk
+index e47e78d26e..f6ccc1aac6 100644
+--- a/package/python-logbook/python-logbook.mk
++++ b/package/python-logbook/python-logbook.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_KEYRING_VERSION = 25.4.1
-+PYTHON_KEYRING_VERSION = 25.5.0
- PYTHON_KEYRING_SOURCE = keyring-$(PYTHON_KEYRING_VERSION).tar.gz
--PYTHON_KEYRING_SITE = https://files.pythonhosted.org/packages/a5/1c/2bdbcfd5d59dc6274ffb175bc29aa07ecbfab196830e0cfbde7bd861a2ea
-+PYTHON_KEYRING_SITE = https://files.pythonhosted.org/packages/f6/24/64447b13df6a0e2797b586dad715766d756c932ce8ace7f67bd384d76ae0
- PYTHON_KEYRING_SETUP_TYPE = setuptools
- PYTHON_KEYRING_LICENSE = MIT
- PYTHON_KEYRING_LICENSE_FILES = LICENSE
+-PYTHON_LOGBOOK_VERSION = 1.7.0.post0
+-PYTHON_LOGBOOK_SOURCE = Logbook-$(PYTHON_LOGBOOK_VERSION).tar.gz
+-PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/cc/98/c1d93c1d7593f58515333a6217aa4ae647d9ee9c1aa2dfdf77b28b7bb7c7
++PYTHON_LOGBOOK_VERSION = 1.8.0
++PYTHON_LOGBOOK_SOURCE = logbook-$(PYTHON_LOGBOOK_VERSION).tar.gz
++PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/c3/a2/fafcc4ce7bad34093150e14f9ed179aa53e3e60a5c46e840547bdae26674
+ PYTHON_LOGBOOK_SETUP_TYPE = setuptools
+ PYTHON_LOGBOOK_LICENSE = BSD-3-Clause
+ PYTHON_LOGBOOK_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
