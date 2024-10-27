@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 822F5D13588
-	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 20:56:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 514DCD13587
+	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 20:56:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7468C4056D;
-	Sun, 27 Oct 2024 20:56:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1198D401B6;
+	Sun, 27 Oct 2024 20:56:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9cdM6vOrqf5T; Sun, 27 Oct 2024 20:56:15 +0000 (UTC)
+ id 8Gg7qtU3iWJq; Sun, 27 Oct 2024 20:56:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30B5840585
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DED3E40190
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 30B5840585;
-	Sun, 27 Oct 2024 20:56:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 62A01112A
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 20:56:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DED3E40190;
+	Sun, 27 Oct 2024 20:56:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B190E112A
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 20:56:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5149C80C41
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 20:56:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 931C860667
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 20:56:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oA27mRskVZpY for <buildroot@buildroot.org>;
- Sun, 27 Oct 2024 20:56:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3xgMqBAckw3P for <buildroot@buildroot.org>;
+ Sun, 27 Oct 2024 20:56:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 540AC80C2F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 540AC80C2F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 85A556064B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85A556064B
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 540AC80C2F
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 20:56:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 85A556064B
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 20:56:24 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a02c6.dip0.t-ipconnect.de [91.58.2.198])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 72A85A4C0CC4
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 8211DA4C10AC
  for <buildroot@buildroot.org>; Sun, 27 Oct 2024 21:56:10 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:44230)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1t5AIz-000000003Lv-36dh
+ (envelope-from <bernd@kuhls.net>) id 1t5AIz-000000003Lv-3Wj4
  for buildroot@buildroot.org; Sun, 27 Oct 2024 20:56:10 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 27 Oct 2024 21:56:09 +0100
-Message-Id: <20241027205610.3445994-1-bernd@kuhls.net>
+Date: Sun, 27 Oct 2024 21:56:10 +0100
+Message-Id: <20241027205610.3445994-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20241027205610.3445994-1-bernd@kuhls.net>
+References: <20241027205610.3445994-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202406071026; t=1730062570;
- bh=QMAQwClsylNCe0uVoW8hu2ISFQD5b6/Sj8v64i2SEYE=;
- h=From:To:Subject:Date:From;
- b=MDEpGfS8AH/phUhPDdxlruVIcufQOotjUqrxPiW+RN/KOw++3yPDrZbpsCFimHhY+
- J6Jnf62ISjyts3/iGKnjgTZ+WmMNuVd/eWOPcXSwHOjQsRXrslMLHWzR6iVAX40en9
- 3F0AKss0iurhEj27oVqu73KHwGJwWGKMmZ7EXreVK5EXF9H0i9ljnhF3+0HpMYFqJs
- ExQO6Mbt1iTH9kjieVyxuL20KKYjUNpTZIyjKU/OzB706OP9u1eXci0uybn5uBIbBl
- zQVKueFpM1NQ0vZ8vetZ+/uU8tuh2vulJQ02eYzn1McxROjRg1SR/wmItw91qUBxEO
- f7A55ssiG1UuQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=XkVoZyoDepEUe4fwnIKN93/1NbhCSsjtLfxL5hHgk9w=;
+ h=From:To:Subject:Date:In-Reply-To:References:From;
+ b=Bgg6wYVuh+974/389v4MauBzSjv9NS+N3fR3GeZPtFG8jdvs0TsqpkffYK39vrt/E
+ fM06xfFTbohXXN3aEkvj/E1/wwpe1FMVGZlgpNAsZsEYe3QyKgYVSTuM8ZS+QZts01
+ sOhofEJR7nayUopvWHzZqjyI+O8h7PVoX5zxqHO9jA+Om0HYViKXdrh+9E8pF7US/I
+ 3GNVFFkLdVUh+LwhTHHDcAtG9MWB+pbBEZ0w5MuzwUnxRlTFR/714PNrK9RKs4QNph
+ GIthOL2rTUWUlFeOGNwlJwPVVsy8EINk742SyCm8xQkBBaw3E/wc9rJ0cmfrOzt0s5
+ 7cFZ+RFf7wL8Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202406071026 header.b=MDEpGfS8
-Subject: [Buildroot] [PATCH 1/2] package/ell: bump to version 0.69
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202406071026 header.b=Bgg6wYVu
+Subject: [Buildroot] [PATCH 2/2] package/iwd: bump to version 3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,40 +87,38 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Changelog:
-https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog?h=0.69
-
-Needed for bump of iwd to 3.0.
+https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/ChangeLog?h=3.0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/ell/ell.hash | 2 +-
- package/ell/ell.mk   | 2 +-
+ package/iwd/iwd.hash | 2 +-
+ package/iwd/iwd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ell/ell.hash b/package/ell/ell.hash
-index 1bf764b621..4f67cbae21 100644
---- a/package/ell/ell.hash
-+++ b/package/ell/ell.hash
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+index e05bf6fad7..b0a72efd7a 100644
+--- a/package/iwd/iwd.hash
++++ b/package/iwd/iwd.hash
 @@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
--sha256  ddcbf381d758f61a02954bf5d2907c8900462abb7b2dcf45589874978bc10125  ell-0.68.tar.xz
-+sha256  6cfc0888edc94de9f0623798609587b2cc11b92b892945f317e8d199afe7b12e  ell-0.69.tar.xz
+ # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
+-sha256  86827b97cb5b19ddecce36568c59378da2fae8cf37a0e2b9eacd1269f24c6f8e  iwd-2.20.tar.xz
++sha256  bd167ab368b6ba302b6c948a4f41f02d233a12e20d5094b1c0393325309f8a60  iwd-3.0.tar.xz
  
  # License files
  sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/ell/ell.mk b/package/ell/ell.mk
-index 4fe5fa7c56..6d4e8a5ae7 100644
---- a/package/ell/ell.mk
-+++ b/package/ell/ell.mk
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index 47020624ea..3a178795da 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ELL_VERSION = 0.68
-+ELL_VERSION = 0.69
- ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
- ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
- ELL_LICENSE = LGPL-2.1+
+-IWD_VERSION = 2.20
++IWD_VERSION = 3.0
+ IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
+ IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
+ IWD_LICENSE = LGPL-2.1+
 -- 
 2.39.5
 
