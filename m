@@ -4,79 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23B10D10C15
-	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 10:07:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A40B7D10C15
+	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 10:28:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A72BD4028F;
-	Sun, 27 Oct 2024 10:07:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F357403A4;
+	Sun, 27 Oct 2024 10:28:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ytf88uuMxljx; Sun, 27 Oct 2024 10:07:00 +0000 (UTC)
+ id 8M4W6KkIudze; Sun, 27 Oct 2024 10:28:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 546BF4029B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D105240393
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 546BF4029B;
-	Sun, 27 Oct 2024 10:07:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D105240393;
+	Sun, 27 Oct 2024 10:28:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 427B9971
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 10:06:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id EF93B971
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 10:28:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2ED4A80C37
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 10:06:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DD00080591
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 10:28:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4FKkaJJmczF1 for <buildroot@buildroot.org>;
- Sun, 27 Oct 2024 10:06:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 02C4E80C30
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02C4E80C30
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 02C4E80C30
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 10:06:56 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id E67E020039F;
- Sun, 27 Oct 2024 11:06:46 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:45002])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 27 Oct 2024 11:06:46 +0100
+ id p56m5Y3QlbV5 for <buildroot@buildroot.org>;
+ Sun, 27 Oct 2024 10:28:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::434; helo=mail-pf1-x434.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E2F8580B47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2F8580B47
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com
+ [IPv6:2607:f8b0:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E2F8580B47
+ for <buildroot@busybox.net>; Sun, 27 Oct 2024 10:28:19 +0000 (UTC)
+Received: by mail-pf1-x434.google.com with SMTP id
+ d2e1a72fcca58-71e4244fdc6so2414727b3a.0
+ for <buildroot@busybox.net>; Sun, 27 Oct 2024 03:28:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1730024899; x=1730629699;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=bKdIBpXPosz1Mgfmf7akIEWuQnC4i4BHbNdbg6HYfLo=;
+ b=UaagVEuq+sFtKkXq8ho2cpsFnk/Kfai4bq4ICSmNsOYXTzsm9q6ZWvOrHHkhhN6/pI
+ 4BBGhOnUda4Y4iawfya/hai/K2KSDW4oTc/aEdtFCCMVrqbtIXHJ6pk4Y9tJP0nWXJ9g
+ bD7CRjWEqQDCypV8pGP3TC2R9QsYp2KioGqgX3l/xIBC6GBLrMjndksGHo952yRudZIH
+ 0B4DeiR4PymB2qYTEXRguD9A5GWdvdicQhEhfLPCNxeppKUQ122svNVWKdKUzG7NcXav
+ o+nNNLwSdK+xuXXpi4AO7BLvgn13WmOVriI83Uo/weZQWnHMTjrKdD5y5x0YKTLqa6hs
+ 97PA==
+X-Gm-Message-State: AOJu0YyYJBauo9qc4v6LVcBffvmSNEOuMGn6UOyCH0qGKjElu9ILpFqb
+ aeoCD6NlLNwVksW5dPmaLEuFTFhju+nD6gdGHLRnMoUHW19IM+rU/TAImGHdEU75FbatoR1LlUo
+ Z8H3NzHCzUkEWTXJksQ3PCC93pNXvV/8v5BilReL9yX3cIumISkbq
+X-Google-Smtp-Source: AGHT+IE1Xws1xW5NOCGhtJLBzzZ0EgsByXGtFZOubsIPWU8Rrj5sKx8jhBrb+ZYkFOAt71Jjo0mFPajoca7oGmpgwPE=
+X-Received: by 2002:a05:6a00:3929:b0:71d:ee1b:c854 with SMTP id
+ d2e1a72fcca58-72062f83c34mr7818213b3a.9.1730024899004; Sun, 27 Oct 2024
+ 03:28:19 -0700 (PDT)
 MIME-Version: 1.0
-Date: Sun, 27 Oct 2024 11:06:46 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
- buildroot@buildroot.org, Marcus Folkesson <marcus.folkesson@gmail.com>,
- Antoine Tenart <atenart@kernel.org>, Marek Belisko
- <marek.belisko@open-nandra.com>, "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-In-Reply-To: <20241026181808.4cae0be9@windsurf>
-References: <20240916151206.947484-1-adam.duskett@amarulasolutions.com>
- <20240916151206.947484-14-adam.duskett@amarulasolutions.com>
- <20241026181808.4cae0be9@windsurf>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <f9d70f87165b70be92829d43e9addca2@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1730023613;
- bh=80YycEGX5kgig1LqcdsWdtA7UjZDqNKZBwrXyPjdr8k=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=SxHVt8PHGSfdy7Y6Z9u8A+PlXGa7sUi1EKdohaTLxMQiePuY43H04lkoZYPq4FWcx
- NG2zVE3I9U5zmtxJ95xU+Tm1cFuvAl4pt9dFh1VM9UpjdrwdKpQMbfJNYzef7xPn9A
- CS2rFIlYiR7nOJyRR4dEo2OwJXQO6qUd6IxiIUFAstKPMdNxkXO18nYiHs+irXFHxu
- h3sVIBYK7DsoBh5BySrULx9RS3CEvG5ODzSRDCjX9EdKs3HZhdJ7geUGkJaKV3YtcQ
- zgPG0uuImuFhYLo9lxJf3M/zfrYVWFCsmmdtlkm2gCUJxCpDkvLbPNkh2bYnKiosjU
- oxcT++LsE1MgA==
+References: <20240920181212.3572055-1-francois.perrad@gadz.org>
+ <20240920181212.3572055-3-francois.perrad@gadz.org>
+ <20241026231408.1690b774@windsurf>
+In-Reply-To: <20241026231408.1690b774@windsurf>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 27 Oct 2024 11:28:08 +0100
+Message-ID: <CAAE6iEUM4qmw0hU_BTfXRicMU0GHwPVxe-cHpkDW=a1vp_LzTA@mail.gmail.com>
+To: buildroot@busybox.net
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gadz.org; s=google; t=1730024899; x=1730629699; darn=busybox.net;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=bKdIBpXPosz1Mgfmf7akIEWuQnC4i4BHbNdbg6HYfLo=;
+ b=mIsjAiwJ3h+aneECNkQ9CPUbKvh45xENcQG8R0NUL3k8I6ZmhqgHOR939IaeRt2yYK
+ ARvfsDzTb6Q6g4yo1jNjBSbjFQ2zngcfPoxebQeAmRO55KvOdVoPGt+sWNt76CjjnDCu
+ 45F1QV2Rr40fFeUvxKNxOFriZKBE3LrpqlzCs7YGs2C4MKF8FD9fcM/tRNPqQ7Ap4ftt
+ nmKxixmdpDWn8gTtC9wcbnLVFGNYmvUvnJVFayHrM+RJX7ScxkAWBXQSOltJgOmj/kIV
+ VGbrU4DdNbyRyRSdM5Wj7ibyI6KDWpQxlIVhffBhLKcgObmBpOtUse8BNJY/ygunOjyZ
+ KPMw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
+ header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=SxHVt8PH
-Subject: Re: [Buildroot] [PATCH 13/13] package/audit: bump version to 4.0.2
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=mIsjAiwJ
+Subject: Re: [Buildroot] [PATCH v2 2/2] package/lynis: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,71 +100,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: multipart/mixed; boundary="===============3525609705906540894=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas, Adam, all,
+--===============3525609705906540894==
+Content-Type: multipart/alternative; boundary="0000000000008f7a2a062572cf20"
 
-On 26/10/2024 18:18, Thomas Petazzoni wrote:
-> Hello Adam,
-> 
-> Cc Julien for runtime test, Cc Fiona for init script.
-> 
-> On Mon, 16 Sep 2024 17:12:06 +0200
-> Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
-> 
+--0000000000008f7a2a062572cf20
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-[...]
+Le sam. 26 oct. 2024 =C3=A0 23:14, Thomas Petazzoni <thomas.petazzoni@bootl=
+in.com>
+a =C3=A9crit :
 
->> Tested with qemu_x86_64_defconfig and running checking if audit is 
->> running
->> properly.
-> 
-> Would be nice to have an audit test case in support/testing :-)
+> Hello Fran=C3=A7ois,
+>
+> On Fri, 20 Sep 2024 20:12:12 +0200
+> Francois Perrad <francois.perrad@gadz.org> wrote:
+>
+> > diff --git a/package/lynis/Config.in b/package/lynis/Config.in
+> > new file mode 100644
+> > index 000000000..3f64bc2e1
+> > --- /dev/null
+> > +++ b/package/lynis/Config.in
+> > @@ -0,0 +1,11 @@
+> > +config BR2_PACKAGE_LYNIS
+> > +     bool "lynis"
+> > +     select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> > +     select BR2_PACKAGE_COREUTILS  # runtime (stat)
+>
+> The "stat" from Busybox cannot be used?
+>
+>
+You are right.
+I could write something like:
 
-Thanks for suggesting a new runtime test! I added this one on
-my list.
+ifneq ($(BR2_PACKAGE_COREUTILS),y)
+define LYNIS_STAT_BUSYBOX_CONFIG_FIXUPS
+       $(call KCONFIG_ENABLE_OPT,CONFIG_STAT)
+endef
+endif
 
-While I quickly tried to draft something, I've hit the following
-issue. Compiling with a (aarch64) Bootlin external toolchain, the
-build failed with:
 
-     libaudit.c: In function 'audit_rule_fieldpair_data':
-     libaudit.c:1911:22: error: 'AUDIT_SADDR_FAM' undeclared (first use 
-in this function); did you mean 'AUDIT_ADD_RULE'?
-      1911 |                 case AUDIT_SADDR_FAM:
-           |                      ^~~~~~~~~~~~~~~
-           |                      AUDIT_ADD_RULE
+> > +    def test_run(self):
+> > +        self.login()
+> > +        self.assertRunOk("lynis show version", timeout=3D90)
+>
+> Is this a useful enough test? Does it check that runtime dependencies
+> are present and working?
+>
+>
+Lynis has no installation process.
+So, the current goal of the test is to check what the installation of
+various components is correct (see LYNIS_INSTALL_TARGET_CMDS).
 
-This build failure is not happening with audit v3.1.2.
+Fran=C3=A7ois
 
-This is because the toolchain I used included Kernel headers 4.20.
-This AUDIT_SADDR_FAM support was added in Kernel v5.3. See [1].
 
-Also, audit v4.0 removed some definitions in [2]. This commit
-claim to raise the Kernel header requirement to 5.0. Unless I missed
-something, it seems there is a small discrepancy here (v5.0 ~ v5.3).
-There is possibly a bug in the audit code (which should have kept
-this definition). The audit code indeed claim kernel >= 5.0, see [3].
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+>
 
-Anyways, whatever the exact kernel version is needed, I believe audit
-needs a new "depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_x".
+--0000000000008f7a2a062572cf20
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Adam, could you have a look at this?
+<div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=
+=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0sam. 26 oct.=
+ 2024 =C3=A0=C2=A023:14, Thomas Petazzoni &lt;<a href=3D"mailto:thomas.peta=
+zzoni@bootlin.com" target=3D"_blank">thomas.petazzoni@bootlin.com</a>&gt; a=
+ =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"marg=
+in:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1e=
+x">Hello Fran=C3=A7ois,<br>
+<br>
+On Fri, 20 Sep 2024 20:12:12 +0200<br>
+Francois Perrad &lt;<a href=3D"mailto:francois.perrad@gadz.org" target=3D"_=
+blank">francois.perrad@gadz.org</a>&gt; wrote:<br>
+<br>
+&gt; diff --git a/package/lynis/Config.in b/package/lynis/Config.in<br>
+&gt; new file mode 100644<br>
+&gt; index 000000000..3f64bc2e1<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/lynis/Config.in<br>
+&gt; @@ -0,0 +1,11 @@<br>
+&gt; +config BR2_PACKAGE_LYNIS<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;lynis&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_COREUTILS=C2=A0 # runtime (sta=
+t)<br>
+<br>
+The &quot;stat&quot; from Busybox cannot be used?<br>
+<br></blockquote><div><br></div><div>You are right.<br>I could write someth=
+ing like:<br><br>ifneq ($(BR2_PACKAGE_COREUTILS),y)<br>define LYNIS_STAT_BU=
+SYBOX_CONFIG_FIXUPS<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0$(call KCONFIG_ENABLE_OPT=
+,CONFIG_STAT)<br>endef<br>endif<br></div><div>=C2=A0</div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex">
+&gt; +=C2=A0 =C2=A0 def test_run(self):<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 self.login()<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 self.assertRunOk(&quot;lynis show version=
+&quot;, timeout=3D90)<br>
+<br>
+Is this a useful enough test? Does it check that runtime dependencies<br>
+are present and working?<br>
+<br></blockquote><div><br></div><div>Lynis has no installation process.<br>=
+So, the current goal of the test is to check what the installation of vario=
+us components is correct (see LYNIS_INSTALL_TARGET_CMDS).</div><div><br></d=
+iv><div>Fran=C3=A7ois<br></div><div>=C2=A0</div><blockquote class=3D"gmail_=
+quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,=
+204);padding-left:1ex">
+Thanks!<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+</blockquote></div></div>
+</div>
 
-Best regards,
+--0000000000008f7a2a062572cf20--
 
-Julien.
+--===============3525609705906540894==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=bf361231c295d92a28ca283ea713f56e93e55796
-[2] 
-https://github.com/linux-audit/audit-userspace/commit/7e417fd78ae89eef8c512d4f1ded29d58b36f11b
-[3] 
-https://github.com/linux-audit/audit-userspace/blob/v4.0.2/README.md#build-time-dependencies-for-tar-file
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3525609705906540894==--
