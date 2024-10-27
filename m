@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 310D9D13578
-	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 18:42:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13B80D13579
+	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 18:42:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E205440169;
-	Sun, 27 Oct 2024 18:42:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7F6E80C2D;
+	Sun, 27 Oct 2024 18:42:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8TYcwrmjlBaa; Sun, 27 Oct 2024 18:42:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gyBVfSH23nwf; Sun, 27 Oct 2024 18:42:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFEE0403AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E36B080E6A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AFEE0403AF;
-	Sun, 27 Oct 2024 18:42:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E36B080E6A;
+	Sun, 27 Oct 2024 18:42:04 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2027A5124
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:41:22 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 029B5971
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:41:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AFBD0607EE
+ by smtp3.osuosl.org (Postfix) with ESMTP id EDD5F6067D
  for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:41:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0T5wEXvorII3 for <buildroot@buildroot.org>;
- Sun, 27 Oct 2024 18:41:09 +0000 (UTC)
+ id iExJUuU2yC18 for <buildroot@buildroot.org>;
+ Sun, 27 Oct 2024 18:41:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2DF6607DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B7DD6079B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D2DF6607DA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2B7DD6079B
  for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:41:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD73C7FFCC; Sun, 27 Oct 2024 18:41:08 +0000 (UTC)
+ id 234188424E; Sun, 27 Oct 2024 18:41:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 27 Oct 2024 19:14:22 +0100
+Date: Sun, 27 Oct 2024 19:13:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 86f77e8cada2810e4b229a36ab6ae42f078f2aa3
-X-Git-Newrev: d8deb19711c72034f9f8a1844fd4e4ff71005643
+X-Git-Oldrev: 3622321b17a86949d8a6ddc9fda77340ec1f1cd1
+X-Git-Newrev: 68bab0c65872d53b47dba4c15753255a5a2cea07
 X-Patchwork-Hint: ignore
-Message-Id: <20241027184108.CD73C7FFCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pydantic-core: bump to
- version 2.25.0
+Message-Id: <20241027184108.234188424E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dropbear: bump to version 2024.86
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,42 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8deb19711c72034f9f8a1844fd4e4ff71005643
+commit: https://git.buildroot.net/buildroot/commit/?id=68bab0c65872d53b47dba4c15753255a5a2cea07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Changelog: https://matt.ucc.asn.au/dropbear/CHANGES
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pydantic-core/python-pydantic-core.hash | 2 +-
- package/python-pydantic-core/python-pydantic-core.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dropbear/dropbear.hash | 2 +-
+ package/dropbear/dropbear.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
-index 14d5a748ac..8280447a14 100644
---- a/package/python-pydantic-core/python-pydantic-core.hash
-+++ b/package/python-pydantic-core/python-pydantic-core.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  0f8ba0c69bf7a2939dce9219b40187920ef8ab36c822b441a9ba3ab460cb2e4e  python-pydantic-core-2.24.1-cargo2.tar.gz
-+sha256  34fc9b62235ed33320ee6139dff66da88584fc08a7322a808526b95aa3141449  python-pydantic-core-2.25.0-cargo2.tar.gz
- # Locally computed sha256 checksums
- sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
-diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
-index 727632dd52..0ac54265a4 100644
---- a/package/python-pydantic-core/python-pydantic-core.mk
-+++ b/package/python-pydantic-core/python-pydantic-core.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+index a901656e5d..cf2dd18d61 100644
+--- a/package/dropbear/dropbear.hash
++++ b/package/dropbear/dropbear.hash
+@@ -1,5 +1,5 @@
+ # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
+-sha256  86b036c433a69d89ce51ebae335d65c47738ccf90d13e5eb0fea832e556da502  dropbear-2024.85.tar.bz2
++sha256  e78936dffc395f2e0db099321d6be659190966b99712b55c530dd0a1822e0a5e  dropbear-2024.86.tar.bz2
+ 
+ # License file, locally computed
+ sha256  a99ce657d790b761c132ee7e0de18edb437ae6361e536d991c6a12f36e770445  LICENSE
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index d9504c5525..e043893aa1 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYDANTIC_CORE_VERSION = 2.24.1
-+PYTHON_PYDANTIC_CORE_VERSION = 2.25.0
- PYTHON_PYDANTIC_CORE_SOURCE_PYPI = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
--PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/12/75/85049f16024330b2cb7318530e26ab0da24f3aa17f07191b6851aafdd5d1
-+PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/b5/fc/4e4d9ac36c99c2bbb5a87885abc508f7d274706a571e3be253dc570943eb
- PYTHON_PYDANTIC_CORE_SITE = $(PYTHON_PYDANTIC_CORE_SITE_PYPI)/$(PYTHON_PYDANTIC_CORE_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
- PYTHON_PYDANTIC_CORE_LICENSE = MIT
+-DROPBEAR_VERSION = 2024.85
++DROPBEAR_VERSION = 2024.86
+ DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
