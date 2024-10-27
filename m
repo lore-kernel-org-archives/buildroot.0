@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A40B7D10C15
-	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 10:28:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21477D10C16
+	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 10:29:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F357403A4;
-	Sun, 27 Oct 2024 10:28:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D0F31403D9;
+	Sun, 27 Oct 2024 10:29:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8M4W6KkIudze; Sun, 27 Oct 2024 10:28:22 +0000 (UTC)
+ id IFmr6AK1M8Ik; Sun, 27 Oct 2024 10:29:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D105240393
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA554403C4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D105240393;
-	Sun, 27 Oct 2024 10:28:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id EF93B971
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 10:28:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA554403C4;
+	Sun, 27 Oct 2024 10:29:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9F6FB971
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 10:29:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DD00080591
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 10:28:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8061B80B6E
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 10:29:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p56m5Y3QlbV5 for <buildroot@buildroot.org>;
- Sun, 27 Oct 2024 10:28:20 +0000 (UTC)
+ id VNY0VrCj61Rn for <buildroot@buildroot.org>;
+ Sun, 27 Oct 2024 10:29:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::434; helo=mail-pf1-x434.google.com;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
  envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E2F8580B47
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2F8580B47
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com
- [IPv6:2607:f8b0:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E2F8580B47
- for <buildroot@busybox.net>; Sun, 27 Oct 2024 10:28:19 +0000 (UTC)
-Received: by mail-pf1-x434.google.com with SMTP id
- d2e1a72fcca58-71e4244fdc6so2414727b3a.0
- for <buildroot@busybox.net>; Sun, 27 Oct 2024 03:28:19 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4EA2580591
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EA2580591
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4EA2580591
+ for <buildroot@busybox.net>; Sun, 27 Oct 2024 10:29:01 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-43161e7bb25so32907895e9.2
+ for <buildroot@busybox.net>; Sun, 27 Oct 2024 03:29:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730024899; x=1730629699;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1730024939; x=1730629739;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=bKdIBpXPosz1Mgfmf7akIEWuQnC4i4BHbNdbg6HYfLo=;
- b=UaagVEuq+sFtKkXq8ho2cpsFnk/Kfai4bq4ICSmNsOYXTzsm9q6ZWvOrHHkhhN6/pI
- 4BBGhOnUda4Y4iawfya/hai/K2KSDW4oTc/aEdtFCCMVrqbtIXHJ6pk4Y9tJP0nWXJ9g
- bD7CRjWEqQDCypV8pGP3TC2R9QsYp2KioGqgX3l/xIBC6GBLrMjndksGHo952yRudZIH
- 0B4DeiR4PymB2qYTEXRguD9A5GWdvdicQhEhfLPCNxeppKUQ122svNVWKdKUzG7NcXav
- o+nNNLwSdK+xuXXpi4AO7BLvgn13WmOVriI83Uo/weZQWnHMTjrKdD5y5x0YKTLqa6hs
- 97PA==
-X-Gm-Message-State: AOJu0YyYJBauo9qc4v6LVcBffvmSNEOuMGn6UOyCH0qGKjElu9ILpFqb
- aeoCD6NlLNwVksW5dPmaLEuFTFhju+nD6gdGHLRnMoUHW19IM+rU/TAImGHdEU75FbatoR1LlUo
- Z8H3NzHCzUkEWTXJksQ3PCC93pNXvV/8v5BilReL9yX3cIumISkbq
-X-Google-Smtp-Source: AGHT+IE1Xws1xW5NOCGhtJLBzzZ0EgsByXGtFZOubsIPWU8Rrj5sKx8jhBrb+ZYkFOAt71Jjo0mFPajoca7oGmpgwPE=
-X-Received: by 2002:a05:6a00:3929:b0:71d:ee1b:c854 with SMTP id
- d2e1a72fcca58-72062f83c34mr7818213b3a.9.1730024899004; Sun, 27 Oct 2024
- 03:28:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20240920181212.3572055-1-francois.perrad@gadz.org>
- <20240920181212.3572055-3-francois.perrad@gadz.org>
- <20241026231408.1690b774@windsurf>
-In-Reply-To: <20241026231408.1690b774@windsurf>
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 27 Oct 2024 11:28:08 +0100
-Message-ID: <CAAE6iEUM4qmw0hU_BTfXRicMU0GHwPVxe-cHpkDW=a1vp_LzTA@mail.gmail.com>
+ bh=6I4lBtZhERIZLFOffdO0oJg1dHw3loXOKtTkDLDsxio=;
+ b=wXJ0RynYmswoCi/FMK/4b38biE80F0tE8Jz5WyAT35BDFxzAxWqyy5yUA6MPGxm04B
+ XaEzz11y0Un2jSKuncpQdUD1mXKKlaZYYP8BOR763fBY5tz2PFokYJjW37KrPVZrRl5l
+ 613SBUBp+zhVCpl+r/+TgSIFcUX54PS3A3eUhML5aUo2mvYAgHMKrfAWW5Nj6snAtE3D
+ h5CKnbsF1cHImvnhrrPxr58UrO2U1mpX7woOkpvNr4cZurNVSIWv5bhyMHZNKZIvjsqC
+ rlX61UK8yEgOEh4U6Fm/ip0ctUvwRubshvljWjCteAhg3fYTfoW2GtOHCM6bWs/ScLds
+ SRfQ==
+X-Gm-Message-State: AOJu0Yz4R3w56KZ4IITMPUOG+JBLrvgoWQW6yNzC8V7gF2Fgl8e6GCQC
+ jaCdYeZ0wmSlodvCy1fK3tKry75NDqiIvE0v2AsoGdz36NQhGKh4o934pqz1FFIcN3j+lDWP8pb
+ RIA==
+X-Google-Smtp-Source: AGHT+IEzXPmcMCEUDBpIB4FUrtB2kPXROybKXS/+pn2N6sMTFQcMRsd+qLBUg7VPG1La4t+q2SMI0w==
+X-Received: by 2002:a05:600c:4fce:b0:431:58cd:b260 with SMTP id
+ 5b1f17b1804b1-4319ad041a0mr41976205e9.25.1730024939167; 
+ Sun, 27 Oct 2024 03:28:59 -0700 (PDT)
+Received: from vm-2404.. (206.34.66.37.rev.sfr.net. [37.66.34.206])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-38058b1c645sm6455691f8f.17.2024.10.27.03.28.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 27 Oct 2024 03:28:58 -0700 (PDT)
+From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 Oct 2024 11:28:24 +0100
+Message-ID: <20241027102827.899852-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1730024899; x=1730629699; darn=busybox.net;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=bKdIBpXPosz1Mgfmf7akIEWuQnC4i4BHbNdbg6HYfLo=;
- b=mIsjAiwJ3h+aneECNkQ9CPUbKvh45xENcQG8R0NUL3k8I6ZmhqgHOR939IaeRt2yYK
- ARvfsDzTb6Q6g4yo1jNjBSbjFQ2zngcfPoxebQeAmRO55KvOdVoPGt+sWNt76CjjnDCu
- 45F1QV2Rr40fFeUvxKNxOFriZKBE3LrpqlzCs7YGs2C4MKF8FD9fcM/tRNPqQ7Ap4ftt
- nmKxixmdpDWn8gTtC9wcbnLVFGNYmvUvnJVFayHrM+RJX7ScxkAWBXQSOltJgOmj/kIV
- VGbrU4DdNbyRyRSdM5Wj7ibyI6KDWpQxlIVhffBhLKcgObmBpOtUse8BNJY/ygunOjyZ
- KPMw==
+ d=gadz.org; s=google; t=1730024939; x=1730629739; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=6I4lBtZhERIZLFOffdO0oJg1dHw3loXOKtTkDLDsxio=;
+ b=aap5ZHs91G2yhUvkxQQsHsYLgt5CBrOUKVX+dvBF7GbhJuGVaLfdLFnMs0QQ3zwvWJ
+ A22lf4RI3IJEJAMjeF8v4AAw9wbYR3rDzq4qPFxSkAy/Qq2AzbNtfgvVvQsY6w5UZrcJ
+ 3g92muccHaPz8LWt9FCGZjj5hzZ6cRy4FpTedmmPUftLmTyd4N2TXdUnTgmtT+LINarN
+ ehC2ZISHBHMLSE0lBS/twfbfJB/0sIWsrr1J7ey+fwlEjaXM9koha3eEutUdusNB3ILq
+ /MU41bTA4Gft4OD//SIx/PYULzpE4QQCa05iM+UmJyMSuZOEVT6vtfGqb/wI6Ve+nuUr
+ m62Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
- header.s=google header.b=mIsjAiwJ
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/lynis: new package
+ dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
+ header.a=rsa-sha256 header.s=google header.b=aap5ZHs9
+Subject: [Buildroot] [PATCH v3 0/2] lynis
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,144 +100,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============3525609705906540894=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3525609705906540894==
-Content-Type: multipart/alternative; boundary="0000000000008f7a2a062572cf20"
+v2 --> v3:
+- allow `stat` from Busybox or coreutils
+- improve runtime test
+- bump to version 3.1.2
 
---0000000000008f7a2a062572cf20
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+v1 --> v2:
+- refactor with LYNIS_BUSYBOX_CONFIG_FIXUPS
 
-Le sam. 26 oct. 2024 =C3=A0 23:14, Thomas Petazzoni <thomas.petazzoni@bootl=
-in.com>
-a =C3=A9crit :
+note: the patch "package/busybox: handle LIBFOO_BUSYBOX_CONFIG_FIXUPS"
+was previously submitted in another serie,
+see https://patchwork.ozlabs.org/project/buildroot/patch/20240313091412.20865-2-francois.perrad@gadz.org/
 
-> Hello Fran=C3=A7ois,
->
-> On Fri, 20 Sep 2024 20:12:12 +0200
-> Francois Perrad <francois.perrad@gadz.org> wrote:
->
-> > diff --git a/package/lynis/Config.in b/package/lynis/Config.in
-> > new file mode 100644
-> > index 000000000..3f64bc2e1
-> > --- /dev/null
-> > +++ b/package/lynis/Config.in
-> > @@ -0,0 +1,11 @@
-> > +config BR2_PACKAGE_LYNIS
-> > +     bool "lynis"
-> > +     select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> > +     select BR2_PACKAGE_COREUTILS  # runtime (stat)
->
-> The "stat" from Busybox cannot be used?
->
->
-You are right.
-I could write something like:
+note2: at this time, Buildroot is unknown to lynis, see https://github.com/CISOfy/lynis/pull/1551
 
-ifneq ($(BR2_PACKAGE_COREUTILS),y)
-define LYNIS_STAT_BUSYBOX_CONFIG_FIXUPS
-       $(call KCONFIG_ENABLE_OPT,CONFIG_STAT)
-endef
-endif
+Francois Perrad (2):
+  package/busybox: handle LIBFOO_BUSYBOX_CONFIG_FIXUPS
+  package/lynis: new package
 
+ DEVELOPERS                                  |  1 +
+ docs/manual/adding-packages-generic.adoc    |  6 +++
+ package/Config.in                           |  1 +
+ package/busybox/busybox.mk                  |  1 +
+ package/lynis/Config.in                     | 10 +++++
+ package/lynis/lynis.hash                    |  3 ++
+ package/lynis/lynis.mk                      | 48 +++++++++++++++++++++
+ package/pkg-generic.mk                      |  3 ++
+ support/testing/tests/package/test_lynis.py | 26 +++++++++++
+ 9 files changed, 99 insertions(+)
+ create mode 100644 package/lynis/Config.in
+ create mode 100644 package/lynis/lynis.hash
+ create mode 100644 package/lynis/lynis.mk
+ create mode 100644 support/testing/tests/package/test_lynis.py
 
-> > +    def test_run(self):
-> > +        self.login()
-> > +        self.assertRunOk("lynis show version", timeout=3D90)
->
-> Is this a useful enough test? Does it check that runtime dependencies
-> are present and working?
->
->
-Lynis has no installation process.
-So, the current goal of the test is to check what the installation of
-various components is correct (see LYNIS_INSTALL_TARGET_CMDS).
-
-Fran=C3=A7ois
-
-
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
->
-
---0000000000008f7a2a062572cf20
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=
-=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0sam. 26 oct.=
- 2024 =C3=A0=C2=A023:14, Thomas Petazzoni &lt;<a href=3D"mailto:thomas.peta=
-zzoni@bootlin.com" target=3D"_blank">thomas.petazzoni@bootlin.com</a>&gt; a=
- =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"marg=
-in:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1e=
-x">Hello Fran=C3=A7ois,<br>
-<br>
-On Fri, 20 Sep 2024 20:12:12 +0200<br>
-Francois Perrad &lt;<a href=3D"mailto:francois.perrad@gadz.org" target=3D"_=
-blank">francois.perrad@gadz.org</a>&gt; wrote:<br>
-<br>
-&gt; diff --git a/package/lynis/Config.in b/package/lynis/Config.in<br>
-&gt; new file mode 100644<br>
-&gt; index 000000000..3f64bc2e1<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/lynis/Config.in<br>
-&gt; @@ -0,0 +1,11 @@<br>
-&gt; +config BR2_PACKAGE_LYNIS<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;lynis&quot;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_COREUTILS=C2=A0 # runtime (sta=
-t)<br>
-<br>
-The &quot;stat&quot; from Busybox cannot be used?<br>
-<br></blockquote><div><br></div><div>You are right.<br>I could write someth=
-ing like:<br><br>ifneq ($(BR2_PACKAGE_COREUTILS),y)<br>define LYNIS_STAT_BU=
-SYBOX_CONFIG_FIXUPS<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0$(call KCONFIG_ENABLE_OPT=
-,CONFIG_STAT)<br>endef<br>endif<br></div><div>=C2=A0</div><blockquote class=
-=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
-b(204,204,204);padding-left:1ex">
-&gt; +=C2=A0 =C2=A0 def test_run(self):<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 self.login()<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 self.assertRunOk(&quot;lynis show version=
-&quot;, timeout=3D90)<br>
-<br>
-Is this a useful enough test? Does it check that runtime dependencies<br>
-are present and working?<br>
-<br></blockquote><div><br></div><div>Lynis has no installation process.<br>=
-So, the current goal of the test is to check what the installation of vario=
-us components is correct (see LYNIS_INSTALL_TARGET_CMDS).</div><div><br></d=
-iv><div>Fran=C3=A7ois<br></div><div>=C2=A0</div><blockquote class=3D"gmail_=
-quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,=
-204);padding-left:1ex">
-Thanks!<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br>
-</blockquote></div></div>
-</div>
-
---0000000000008f7a2a062572cf20--
-
---===============3525609705906540894==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3525609705906540894==--
