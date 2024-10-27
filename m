@@ -4,94 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 430D7D1357D
-	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 19:43:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C13BD13585
+	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 20:39:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F2AF405E8;
-	Sun, 27 Oct 2024 19:43:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41554404D9;
+	Sun, 27 Oct 2024 20:39:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HbiDJa7jq2Yi; Sun, 27 Oct 2024 19:43:53 +0000 (UTC)
+ id PFxDlVhUk_7c; Sun, 27 Oct 2024 20:39:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7451403C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E71A404CB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7451403C4;
-	Sun, 27 Oct 2024 19:43:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D252D971
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 19:43:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E71A404CB;
+	Sun, 27 Oct 2024 20:39:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 88A5D112A
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 20:39:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CCBA6400E5
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 19:43:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 83AD260750
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 20:39:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZrEJMngTpleT for <buildroot@buildroot.org>;
- Sun, 27 Oct 2024 19:43:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BBEFA4004A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBEFA4004A
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BBEFA4004A
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 19:43:43 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-431548bd1b4so35421085e9.3
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 12:43:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730058221; x=1730663021;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=xMkY1dzeSddZEopw+iJOO/gHjxmzTsUJfxMHUAq0gAA=;
- b=evA5gp2r1TU8RCFQN8gx/H/LHCXlxNnJMQtlgAU6XwBAcfsYEAkCGDbw/ozaoVFwfo
- 2rV+nXQ7LCpeYat9SA94GklF8pEw+NYJe/vVFkh5OCL/yYFKzw4PXilCt4dfd9oIqfws
- wdVlmdvYHojh6hrOGah8Ix+ChMDrNxtt8HIL3cHu/TC7p1altGHDfqb/B3mhVn7wCPM5
- 01zqU9fAIhYM/IjInMDTr2kIaqFZ8ppzOqg2rLpJRBrb7SiPs/qmEBKm+Noprk46baEj
- +TEluk6J/YSKGvgevbjpWChsr/Mk8DM/SLg3bNjPaTBu8M9LN9rTH6dMwZr+szUGj+bH
- 6BxA==
-X-Gm-Message-State: AOJu0YyE8sNTkl9gFWmWx+lzfe2C44PhXu41bFYTdVK866iVvjWddNAY
- 7jOQLAI6rh8QoCmvP/39p9hsEX55b2dxX5QIKuwefDyClSiMCJdLugwL/xtYQ/ZjG0urYh3SpRG
- o
-X-Google-Smtp-Source: AGHT+IFhDVtEDPzGrpEuEKsUUVe+gJX+M1LDwfozo8RfmjsnVPJW7A+6e05BdWqUyy/tiA+URLgDsg==
-X-Received: by 2002:a05:600c:4e8e:b0:431:3b53:105e with SMTP id
- 5b1f17b1804b1-4319aca5995mr48030595e9.9.1730058221454; 
- Sun, 27 Oct 2024 12:43:41 -0700 (PDT)
-Received: from P-NTS-Evian.home
- (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-38058b3bb57sm7495010f8f.38.2024.10.27.12.43.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Oct 2024 12:43:41 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aRA9FXPDq3ZL for <buildroot@buildroot.org>;
+ Sun, 27 Oct 2024 20:39:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5770F6072A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5770F6072A
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5770F6072A
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 20:39:00 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a02c6.dip0.t-ipconnect.de [91.58.2.198])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 01A6EA4C0D00
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 21:38:58 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46816)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98)
+ (envelope-from <bernd@kuhls.net>) id 1t5A2L-000000000oM-0SVb
+ for buildroot@buildroot.org; Sun, 27 Oct 2024 20:38:57 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 27 Oct 2024 20:43:36 +0100
-Message-ID: <20241027194337.2444930-2-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.45.0
-In-Reply-To: <20241027194337.2444930-1-romain.naour@smile.fr>
-References: <20241027194337.2444930-1-romain.naour@smile.fr>
+Date: Sun, 27 Oct 2024 21:38:56 +0100
+Message-Id: <20241027203857.3409990-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
+X-Spamd-Bar: ++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1730058221; x=1730663021; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=xMkY1dzeSddZEopw+iJOO/gHjxmzTsUJfxMHUAq0gAA=;
- b=mNlcAv/xo05NcXaz02h5P+FmsDVvkAexZi91QrxKcAYJk7tCORq/EExt0FOxEmvUcJ
- fexdwyo87De7woQHXwdeEF/qFSBv85MhfBGY/KHXXg2Lk1fb+e2HfWpx+aJS/KyaXW+P
- 2/xflr0TkV8XIr7afPLHEUN5C//eRL4YLxzXs=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=mNlcAv/x
-Subject: [Buildroot] [PATCH v2 2/3] boot/edk2: bump to version
- edk2-stable202405
+ d=kuhls.net; 
+ s=kas202406071026; t=1730061538;
+ bh=ps5fax1mi/Io9KH7awsm7X2zzgTMWbNTyIaXqSv6VfU=;
+ h=From:To:Subject:Date:From;
+ b=BtNAq43vMf2P2m1Dvxsb01ImyRCIc6rbNmahIYva6EaSZVTrEQATbBgbKh3g0ZDZJ
+ oW52yTRX154HDgRKaPLrXQWdlVV2wK5+jOnTYHjmIy7zJ86u4dxptX86LwXjZJNQKS
+ 0dWknmNWnUpUIymIw+kIBk+T6hfDcXd8a1A0phMRIiYBNtZr93iqmzGXYGg4+fcgw3
+ S3A5zrkZ8DBIEw/Phj1pmozL5MoVYEEPkx+9STHTqs8Q6WG91if8ypQ7OPXkeBt0lo
+ igKy6DrNoreCkN/VH+EzkYpO6rc+EaFixQtIjtvVDm6jTY6XOQchn8neRcV1s9ARu7
+ y2Uah2Jn67Zsw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202406071026 header.b=BtNAq43v
+Subject: [Buildroot] [PATCH 1/2] package/libglfw: bump version to 3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,251 +80,281 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Cc: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
+Removed patch 0001 which was applied upstream:
+https://github.com/glfw/glfw/commit/2747e47393cbca2d09db56223e735bd94b21e2eb
 
-  https://github.com/tianocore/edk2/releases/tag/edk2-stable202405
+Removed patch 0002 which is not needed anymore due to the removal of the
+dependency to wayland-protocols:
+https://github.com/glfw/glfw/commit/e8cf53cf708d025a30895dd5671b208f32af2e73
 
-We can't bump to edk2-stable202408 yet due to a runtime issue while
-testing qemu_aarch64_sbsa_defconfig following the switch generic
-ArmPsciResetSystemLib [1]
+Configure option GLFW_USE_WAYLAND was replaced by GLFW_BUILD_WAYLAND
+and the option GLFW_BUILD_X11 was added:
+https://github.com/glfw/glfw/commit/56a4cb0a3a2c7a44a2fd8ab3335adf915e19d30c
 
-  ERROR:   sbsa_sip_smc_handler: unhandled SMC (0xc20000ca) (function id: 202)
-
-Qemu 9.0/9.1 is using a slightly older edk2 firmware based on
-edk2-stable202405 release [2] that contains a commit [3] fixing a
-bootloader crash produced with qemu_aarch64_sbsa_defconfig [4] since
-Qemu 9.0.
-
-From [5]:
-"The version of the sbsa-ref EDK2 firmware we used to use in this test
-had a bug where it might make an unaligned access to the framebuffer,
-which causes a guest crash on newer versions of QEMU where we enforce
-the architectural requirement that unaligned accesses to Device memory
-should take an exception."
-
-This commit [5] is backported to edk2-stable202405.
-
-For the same reason, we have to update edk2-platforms to a specific
-version [6]:
-
-"QemuSbsa: enable WriteCombine for the FrameBuffer
-QEMU no longer permits misaligned access to device memory, which breaks
-QemuVideoDxe on SbsaQemu.
-
-c1d1910be6e04a8b1a73090cf2881fb698947a6e commit in EDK2 fixed it by
-enabling WriteCombine for Framebuffer memory. This change enables that
-fix."
-
-[1] https://github.com/tianocore/edk2-platforms/commit/2d0668d399708fc242336e310cc7e7bec0aec891
-[2] https://gitlab.com/qemu-project/qemu/-/commit/24a7cd6a7c21f82f1ce9bd5ecf6fb54eb7bf4602
-[3] https://github.com/tianocore/edk2/commit/c1d1910be6e04a8b1a73090cf2881fb698947a6e
-[4] https://gitlab.com/buildroot.org/buildroot/-/jobs/7764483764
-[5] https://gitlab.com/qemu-project/qemu/-/commit/6c84daac58f0d75a908626faf89a832fc0532140
-[6] https://github.com/tianocore/edk2-platforms/commit/3f08401365d67e10924c774e6c3f64be56bc15b6
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/7764483764
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...oDxe-add-feature-PCD-to-remap-frameb.patch | 129 ++++++++++++++++++
- boot/edk2/edk2.hash                           |   2 +-
- boot/edk2/edk2.mk                             |   2 +-
- package/edk2-platforms/edk2-platforms.hash    |   2 +-
- package/edk2-platforms/edk2-platforms.mk      |   2 +-
- 5 files changed, 133 insertions(+), 4 deletions(-)
- create mode 100644 boot/edk2/0001-OvmfPkg-QemuVideoDxe-add-feature-PCD-to-remap-frameb.patch
+ .checkpackageignore                           |   1 -
+ ...emove-extra-cmake-modules-dependency.patch | 125 ------------------
+ ...xt-allow-override-of-wayland-pkgdata.patch |  34 -----
+ package/libglfw/Config.in                     |   1 -
+ package/libglfw/libglfw.hash                  |   2 +-
+ package/libglfw/libglfw.mk                    |  14 +-
+ 6 files changed, 9 insertions(+), 168 deletions(-)
+ delete mode 100644 package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch
+ delete mode 100644 package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch
 
-diff --git a/boot/edk2/0001-OvmfPkg-QemuVideoDxe-add-feature-PCD-to-remap-frameb.patch b/boot/edk2/0001-OvmfPkg-QemuVideoDxe-add-feature-PCD-to-remap-frameb.patch
-new file mode 100644
-index 0000000000..5f6ceb289d
---- /dev/null
-+++ b/boot/edk2/0001-OvmfPkg-QemuVideoDxe-add-feature-PCD-to-remap-frameb.patch
-@@ -0,0 +1,129 @@
-+From 921c78f57a16b00debd58899a48e7045015c374b Mon Sep 17 00:00:00 2001
-+From: Ard Biesheuvel <ardb@kernel.org>
-+Date: Mon, 17 Jun 2024 17:07:41 +0200
-+Subject: [PATCH] OvmfPkg/QemuVideoDxe: add feature PCD to remap framebuffer
-+ W/C
-+
-+Some platforms (such as SBSA-QEMU on recent builds of the emulator) only
-+tolerate misaligned accesses to normal memory, and raise alignment
-+faults on such accesses to device memory, which is the default for PCIe
-+MMIO BARs.
-+
-+When emulating a PCIe graphics controller, the framebuffer is typically
-+exposed via a MMIO BAR, while the disposition of the region is closer to
-+memory (no side effects on reads or writes, except for the changing
-+picture on the screen; direct random access to any pixel in the image).
-+
-+In order to permit the use of such controllers on platforms that only
-+tolerate these types of accesses for normal memory, it is necessary to
-+remap the memory. Use the DXE services to set the desired capabilities
-+and attributes.
-+
-+Hide this behavior under a feature PCD so only platforms that really
-+need it can enable it. (OVMF on x86 has no need for this)
-+
-+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-+Upstream: https://github.com/tianocore/edk2/commit/c1d1910be6e04a8b1a73090cf2881fb698947a6e
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ OvmfPkg/OvmfPkg.dec                   |  5 +++++
-+ OvmfPkg/QemuVideoDxe/Gop.c            | 19 +++++++++++++++++++
-+ OvmfPkg/QemuVideoDxe/Qemu.h           |  2 +-
-+ OvmfPkg/QemuVideoDxe/QemuVideoDxe.inf |  4 ++++
-+ 4 files changed, 29 insertions(+), 1 deletion(-)
-+
-+diff --git a/OvmfPkg/OvmfPkg.dec b/OvmfPkg/OvmfPkg.dec
-+index 51be9a5959..2c40de8a13 100644
-+--- a/OvmfPkg/OvmfPkg.dec
-++++ b/OvmfPkg/OvmfPkg.dec
-+@@ -444,3 +444,8 @@
-+ 
-+   ## This feature flag indicates the firmware build supports secure boot.
-+   gUefiOvmfPkgTokenSpaceGuid.PcdSecureBootSupported|FALSE|BOOLEAN|0x6d
-++
-++  ## Whether QemuVideoDxe should perform a EFI_MEMORY_WC remap of the PCI
-++  #  framebuffer. This might be required on platforms that do not tolerate
-++  #  misaligned accesses otherwise.
-++  gUefiOvmfPkgTokenSpaceGuid.PcdRemapFrameBufferWriteCombine|FALSE|BOOLEAN|0x75
-+diff --git a/OvmfPkg/QemuVideoDxe/Gop.c b/OvmfPkg/QemuVideoDxe/Gop.c
-+index b11eed7558..a29c025afd 100644
-+--- a/OvmfPkg/QemuVideoDxe/Gop.c
-++++ b/OvmfPkg/QemuVideoDxe/Gop.c
-+@@ -9,6 +9,8 @@
-+ 
-+ #include "Qemu.h"
-+ 
-++#include <Library/DxeServicesTableLib.h>
-++
-+ STATIC
-+ VOID
-+ QemuVideoCompleteModeInfo (
-+@@ -54,6 +56,7 @@ QemuVideoCompleteModeData (
-+   EFI_GRAPHICS_OUTPUT_MODE_INFORMATION  *Info;
-+   EFI_ACPI_ADDRESS_SPACE_DESCRIPTOR     *FrameBufDesc;
-+   QEMU_VIDEO_MODE_DATA                  *ModeData;
-++  EFI_STATUS                            Status;
-+ 
-+   ModeData = &Private->ModeData[Mode->Mode];
-+   Info     = Mode->Info;
-+@@ -79,6 +82,22 @@ QemuVideoCompleteModeData (
-+     (UINT64)Mode->FrameBufferSize
-+     ));
-+ 
-++  if (FeaturePcdGet (PcdRemapFrameBufferWriteCombine)) {
-++    Status = gDS->SetMemorySpaceCapabilities (
-++                    FrameBufDesc->AddrRangeMin,
-++                    FrameBufDesc->AddrLen,
-++                    EFI_MEMORY_UC | EFI_MEMORY_WC | EFI_MEMORY_XP
-++                    );
-++    ASSERT_EFI_ERROR (Status);
-++
-++    Status = gDS->SetMemorySpaceAttributes (
-++                    FrameBufDesc->AddrRangeMin,
-++                    FrameBufDesc->AddrLen,
-++                    EFI_MEMORY_WC | EFI_MEMORY_XP
-++                    );
-++    ASSERT_EFI_ERROR (Status);
-++  }
-++
-+   FreePool (FrameBufDesc);
-+   return EFI_SUCCESS;
-+ }
-+diff --git a/OvmfPkg/QemuVideoDxe/Qemu.h b/OvmfPkg/QemuVideoDxe/Qemu.h
-+index 57341a0bbf..a3da725fbf 100644
-+--- a/OvmfPkg/QemuVideoDxe/Qemu.h
-++++ b/OvmfPkg/QemuVideoDxe/Qemu.h
-+@@ -13,7 +13,7 @@
-+ #ifndef _QEMU_H_
-+ #define _QEMU_H_
-+ 
-+-#include <Uefi.h>
-++#include <PiDxe.h>
-+ #include <Protocol/GraphicsOutput.h>
-+ #include <Protocol/PciIo.h>
-+ #include <Protocol/DriverSupportedEfiVersion.h>
-+diff --git a/OvmfPkg/QemuVideoDxe/QemuVideoDxe.inf b/OvmfPkg/QemuVideoDxe/QemuVideoDxe.inf
-+index 43a6e07faa..4c0870171b 100644
-+--- a/OvmfPkg/QemuVideoDxe/QemuVideoDxe.inf
-++++ b/OvmfPkg/QemuVideoDxe/QemuVideoDxe.inf
-+@@ -44,6 +44,7 @@
-+ 
-+ [LibraryClasses]
-+   BaseMemoryLib
-++  DxeServicesTableLib
-+   FrameBufferBltLib
-+   DebugLib
-+   DevicePathLib
-+@@ -61,6 +62,9 @@
-+   gEfiDevicePathProtocolGuid                    # PROTOCOL BY_START
-+   gEfiPciIoProtocolGuid                         # PROTOCOL TO_START
-+ 
-++[FeaturePcd]
-++  gUefiOvmfPkgTokenSpaceGuid.PcdRemapFrameBufferWriteCombine
-++
-+ [Pcd]
-+   gUefiOvmfPkgTokenSpaceGuid.PcdOvmfHostBridgePciDevId
-+   gUefiOvmfPkgTokenSpaceGuid.PcdVideoResolutionSource
-+-- 
-+2.45.0
-+
-diff --git a/boot/edk2/edk2.hash b/boot/edk2/edk2.hash
-index f7daa8ddf3..abcf3c6b8e 100644
---- a/boot/edk2/edk2.hash
-+++ b/boot/edk2/edk2.hash
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 4788f97694..babcb813b4 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -682,7 +682,6 @@ package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch
+ package/libfuse/0001-fix-aarch64-build.patch lib_patch.Upstream
+ package/libfuse/0002-util-ulockmgr_server-c-conditionally-define-closefrom-fix-glibc-2-34.patch lib_patch.Upstream
+ package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch lib_patch.Upstream
+-package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch lib_patch.Upstream
+ package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch lib_patch.Upstream
+ package/libgsm/0001-Misc-fixes-from-Archlinux.patch lib_patch.Upstream
+ package/libgtk2/0001-reduce-dependencies.patch lib_patch.Upstream
+diff --git a/package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch b/package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch
+deleted file mode 100644
+index ffa1d13f51..0000000000
+--- a/package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch
++++ /dev/null
+@@ -1,125 +0,0 @@
+-From 8ebf1067390948d03330a5a0c814e5f7f860e678 Mon Sep 17 00:00:00 2001
+-From: Joel Winarske <joel.winarske@gmail.com>
+-Date: Mon, 28 Sep 2020 22:23:02 -0700
+-Subject: [PATCH] Wayland: Remove extra-cmake-modules dependency
+-
+-Fixes #1774.
+-
+-[Retrieved (and backported) from:
+-https://github.com/glfw/glfw/commit/2747e47393cbca2d09db56223e735bd94b21e2eb]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Dario: make the patch to be applied with fuzz factor 0 dropping all Hunks]
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+----
+- CMakeLists.txt     | 16 ++++++------
+- src/CMakeLists.txt | 62 ++++++++++++++++++++++++++++------------------
+- 2 files changed, 45 insertions(+), 33 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 75069161fc36..b315eaa15305 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -249,20 +249,18 @@ endif()
+- # Use Wayland for window creation
+- #--------------------------------------------------------------------
+- if (_GLFW_WAYLAND)
+--    find_package(ECM REQUIRED NO_MODULE)
+--    list(APPEND CMAKE_MODULE_PATH "${ECM_MODULE_PATH}")
+- 
+--    find_package(Wayland REQUIRED Client Cursor Egl)
+--    find_package(WaylandScanner REQUIRED)
+--    find_package(WaylandProtocols 1.15 REQUIRED)
+-+    include(FindPkgConfig)
+-+    pkg_check_modules(Wayland REQUIRED
+-+        wayland-client>=0.2.7
+-+        wayland-cursor>=0.2.7
+-+        wayland-egl>=0.2.7
+-+        xkbcommon)
+- 
+-     list(APPEND glfw_PKG_DEPS "wayland-client")
+- 
+-     list(APPEND glfw_INCLUDE_DIRS "${Wayland_INCLUDE_DIRS}")
+--    list(APPEND glfw_LIBRARIES "${Wayland_LIBRARIES}" "${CMAKE_THREAD_LIBS_INIT}")
+--
+--    find_package(XKBCommon REQUIRED)
+--    list(APPEND glfw_INCLUDE_DIRS "${XKBCOMMON_INCLUDE_DIRS}")
+-+    list(APPEND glfw_LIBRARIES "${Wayland_LINK_LIBRARIES}" "${CMAKE_THREAD_LIBS_INIT}")
+- 
+-     include(CheckIncludeFiles)
+-     include(CheckFunctionExists)
+-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index b6dd86c54512..29be6515ae58 100644
+---- a/src/CMakeLists.txt
+-+++ b/src/CMakeLists.txt
+-@@ -40,30 +40,44 @@ elseif (_GLFW_WAYLAND)
+-                      posix_time.c posix_thread.c xkb_unicode.c
+-                      egl_context.c osmesa_context.c)
+- 
+--    ecm_add_wayland_client_protocol(glfw_SOURCES
+--        PROTOCOL
+--        "${WAYLAND_PROTOCOLS_PKGDATADIR}/stable/xdg-shell/xdg-shell.xml"
+--        BASENAME xdg-shell)
+--    ecm_add_wayland_client_protocol(glfw_SOURCES
+--        PROTOCOL
+--        "${WAYLAND_PROTOCOLS_PKGDATADIR}/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml"
+--        BASENAME xdg-decoration)
+--    ecm_add_wayland_client_protocol(glfw_SOURCES
+--        PROTOCOL
+--        "${WAYLAND_PROTOCOLS_PKGDATADIR}/stable/viewporter/viewporter.xml"
+--        BASENAME viewporter)
+--    ecm_add_wayland_client_protocol(glfw_SOURCES
+--        PROTOCOL
+--        "${WAYLAND_PROTOCOLS_PKGDATADIR}/unstable/relative-pointer/relative-pointer-unstable-v1.xml"
+--        BASENAME relative-pointer-unstable-v1)
+--    ecm_add_wayland_client_protocol(glfw_SOURCES
+--        PROTOCOL
+--        "${WAYLAND_PROTOCOLS_PKGDATADIR}/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml"
+--        BASENAME pointer-constraints-unstable-v1)
+--    ecm_add_wayland_client_protocol(glfw_SOURCES
+--        PROTOCOL
+--        "${WAYLAND_PROTOCOLS_PKGDATADIR}/unstable/idle-inhibit/idle-inhibit-unstable-v1.xml"
+--        BASENAME idle-inhibit-unstable-v1)
+-+    find_program(WAYLAND_SCANNER_EXECUTABLE NAMES wayland-scanner)
+-+    pkg_check_modules(WAYLAND_PROTOCOLS REQUIRED wayland-protocols>=1.15)
+-+    pkg_get_variable(WAYLAND_PROTOCOLS_BASE wayland-protocols pkgdatadir)
+-+
+-+    macro(wayland_generate protocol_file output_file)
+-+          add_custom_command(OUTPUT ${output_file}.h
+-+              COMMAND ${WAYLAND_SCANNER_EXECUTABLE} client-header
+-+              < ${protocol_file} > ${output_file}.h
+-+              DEPENDS ${protocol_file})
+-+          list(APPEND glfw_SOURCES ${output_file}.h)
+-+
+-+          add_custom_command(OUTPUT ${output_file}.c 
+-+              COMMAND ${WAYLAND_SCANNER_EXECUTABLE} private-code
+-+              < ${protocol_file} > ${output_file}.c
+-+              DEPENDS ${protocol_file})
+-+          list(APPEND glfw_SOURCES ${output_file}.c)
+-+    endmacro()
+-+
+-+    set(GLFW_WAYLAND_PROTOCOL_SOURCES)
+-+    wayland_generate(
+-+        ${WAYLAND_PROTOCOLS_BASE}/stable/xdg-shell/xdg-shell.xml
+-+        ${CMAKE_BINARY_DIR}/src/wayland-xdg-shell-client-protocol)
+-+    wayland_generate(
+-+        ${WAYLAND_PROTOCOLS_BASE}/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml
+-+        ${CMAKE_BINARY_DIR}/src/wayland-xdg-decoration-client-protocol)
+-+    wayland_generate(
+-+        ${WAYLAND_PROTOCOLS_BASE}/stable/viewporter/viewporter.xml
+-+        ${CMAKE_BINARY_DIR}/src/wayland-viewporter-client-protocol)
+-+    wayland_generate(
+-+        ${WAYLAND_PROTOCOLS_BASE}/unstable/relative-pointer/relative-pointer-unstable-v1.xml
+-+        ${CMAKE_BINARY_DIR}/src/wayland-relative-pointer-unstable-v1-client-protocol)
+-+    wayland_generate(
+-+        ${WAYLAND_PROTOCOLS_BASE}/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml
+-+        ${CMAKE_BINARY_DIR}/src/wayland-pointer-constraints-unstable-v1-client-protocol)
+-+    wayland_generate(
+-+        ${WAYLAND_PROTOCOLS_BASE}/unstable/idle-inhibit/idle-inhibit-unstable-v1.xml
+-+        ${CMAKE_BINARY_DIR}/src/wayland-idle-inhibit-unstable-v1-client-protocol)
+-+
+- elseif (_GLFW_OSMESA)
+-     set(glfw_HEADERS ${common_HEADERS} null_platform.h null_joystick.h
+-                      posix_time.h posix_thread.h osmesa_context.h)
+--- 
+-2.43.0
+-
+diff --git a/package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch b/package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch
+deleted file mode 100644
+index 268b124851..0000000000
+--- a/package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From a2c88988b6cfe4023fe78f13519b56a8ac9f568b Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 4 Mar 2022 17:59:19 +0100
+-Subject: [PATCH] src/CMakeLists.txt: allow override of wayland pkgdatadir
+-
+-Allow the user to override WAYLAND_{PROTOCOLS_BASE,CLIENT_PKGDATADIR}
+-(needed when cross-compiling)
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/glfw/glfw/pull/2053
+-[Dario: make the patch to be applied with fuzz factor 0]
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+----
+- src/CMakeLists.txt | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index 29be6515ae58..1767b3c8ad8f 100644
+---- a/src/CMakeLists.txt
+-+++ b/src/CMakeLists.txt
+-@@ -42,7 +42,9 @@ elseif (_GLFW_WAYLAND)
+- 
+-     find_program(WAYLAND_SCANNER_EXECUTABLE NAMES wayland-scanner)
+-     pkg_check_modules(WAYLAND_PROTOCOLS REQUIRED wayland-protocols>=1.15)
+--    pkg_get_variable(WAYLAND_PROTOCOLS_BASE wayland-protocols pkgdatadir)
+-+    if (NOT WAYLAND_PROTOCOLS_BASE)
+-+        pkg_get_variable(WAYLAND_PROTOCOLS_BASE wayland-protocols pkgdatadir)
+-+    endif()
+- 
+-     macro(wayland_generate protocol_file output_file)
+-           add_custom_command(OUTPUT ${output_file}.h
+--- 
+-2.43.0
+-
+diff --git a/package/libglfw/Config.in b/package/libglfw/Config.in
+index e5e96036ff..239d5011a3 100644
+--- a/package/libglfw/Config.in
++++ b/package/libglfw/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_LIBGLFW
+ 	depends on BR2_PACKAGE_XORG7 || BR2_PACKAGE_WAYLAND
+ 	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
+-	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXI if BR2_PACKAGE_XORG7
+diff --git a/package/libglfw/libglfw.hash b/package/libglfw/libglfw.hash
+index 9d38946f3c..54b23471a3 100644
+--- a/package/libglfw/libglfw.hash
++++ b/package/libglfw/libglfw.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6bdfdffcc2235a117b3f9d4124da63103f19ff30157673f812e1093b20ebb7ad  edk2-edk2-stable202308-git4.tar.gz
-+sha256  4595b9d9d14c06bd03f575e4b7623574a4a874ef465652ecdc224099a5b14fc7  edk2-edk2-stable202405-git4.tar.gz
- sha256  50ce20c9cfdb0e19ee34fe0a51fc0afe961f743697b068359ab2f862b494df80  License.txt
-diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
-index e5816b353a..145a9a80ae 100644
---- a/boot/edk2/edk2.mk
-+++ b/boot/edk2/edk2.mk
+ # Locally computed
+-sha256  f30f42e05f11e5fc62483e513b0488d5bceeab7d9c5da0ffe2252ad81816c713  libglfw-3.3.8.tar.gz
++sha256  c038d34200234d071fae9345bc455e4a8f2f544ab60150765d7704e08f3dac01  libglfw-3.4.tar.gz
+ sha256  149704059b5d0bf551637e50042dd4de9c2cae921021f6636298911e3a5f9462  LICENSE.md
+diff --git a/package/libglfw/libglfw.mk b/package/libglfw/libglfw.mk
+index f5d254eec3..9586d7f92c 100644
+--- a/package/libglfw/libglfw.mk
++++ b/package/libglfw/libglfw.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EDK2_VERSION = edk2-stable202308
-+EDK2_VERSION = edk2-stable202405
- EDK2_SITE = https://github.com/tianocore/edk2
- EDK2_SITE_METHOD = git
- EDK2_LICENSE = BSD-2-Clause-Patent
-diff --git a/package/edk2-platforms/edk2-platforms.hash b/package/edk2-platforms/edk2-platforms.hash
-index 4c74c7dfb6..0095d4298d 100644
---- a/package/edk2-platforms/edk2-platforms.hash
-+++ b/package/edk2-platforms/edk2-platforms.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c240a8ec7816bc5963d881c84eb18d880e9269c117cfc46a3106b0c5e6e80c66  edk2-platforms-e509ac5a729ebe2a3bc905aed1df23226aca4dc9.tar.gz
-+sha256  41fa720ac644ec0523c576ff28eba5e0308c9649111ce42f7d408b8d8b30eaf5  edk2-platforms-3f08401365d67e10924c774e6c3f64be56bc15b6.tar.gz
- sha256  50ce20c9cfdb0e19ee34fe0a51fc0afe961f743697b068359ab2f862b494df80  License.txt
-diff --git a/package/edk2-platforms/edk2-platforms.mk b/package/edk2-platforms/edk2-platforms.mk
-index 7bd86ff159..23d9221649 100644
---- a/package/edk2-platforms/edk2-platforms.mk
-+++ b/package/edk2-platforms/edk2-platforms.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+-LIBGLFW_VERSION = 3.3.8
++LIBGLFW_VERSION = 3.4
+ LIBGLFW_SITE = $(call github,glfw,glfw,$(LIBGLFW_VERSION))
+ LIBGLFW_INSTALL_STAGING = YES
+ LIBGLFW_LICENSE = Zlib
+@@ -16,8 +16,11 @@ LIBGLFW_CONF_OPTS += \
+ 	-DGLFW_BUILD_DOCS=OFF
  
- # Keep in sync with latest commit as of the release date for boot/edk2
--EDK2_PLATFORMS_VERSION = e509ac5a729ebe2a3bc905aed1df23226aca4dc9
-+EDK2_PLATFORMS_VERSION = 3f08401365d67e10924c774e6c3f64be56bc15b6
- EDK2_PLATFORMS_SITE = $(call github,tianocore,edk2-platforms,$(EDK2_PLATFORMS_VERSION))
- EDK2_PLATFORMS_LICENSE = BSD-2-Clause-Patent
- EDK2_PLATFORMS_LICENSE_FILES = License.txt
+ ifeq ($(BR2_PACKAGE_XORG7),y)
++LIBGLFW_CONF_OPTS += -DGLFW_BUILD_X11=ON
+ LIBGLFW_DEPENDENCIES += xlib_libXcursor xlib_libXext \
+ 	xlib_libXi xlib_libXinerama xlib_libXrandr
++else
++LIBGLFW_CONF_OPTS += -DGLFW_BUILD_X11=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+@@ -29,11 +32,10 @@ LIBGLFW_DEPENDENCIES += libgles
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+-LIBGLFW_DEPENDENCIES += libxkbcommon wayland wayland-protocols
+-# Override pkg-config pkgdatadir variable, it needs the prefix
+-LIBGLFW_CONF_OPTS += \
+-	-DGLFW_USE_WAYLAND=1 \
+-	-DWAYLAND_PROTOCOLS_BASE=$(STAGING_DIR)/usr/share/wayland-protocols
++LIBGLFW_CONF_OPTS += -DGLFW_BUILD_WAYLAND=ON
++LIBGLFW_DEPENDENCIES += libxkbcommon wayland
++else
++LIBGLFW_CONF_OPTS += -DGLFW_BUILD_WAYLAND=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86VM),y)
 -- 
-2.45.0
+2.39.5
 
 _______________________________________________
 buildroot mailing list
