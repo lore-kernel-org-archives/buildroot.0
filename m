@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58579D13572
-	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 18:45:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAF36D13572
+	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 18:46:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27CD26083D;
-	Sun, 27 Oct 2024 18:45:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nl776hn666NX; Sun, 27 Oct 2024 18:45:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A127608FA
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A127608FA;
-	Sun, 27 Oct 2024 18:45:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 22987AEE
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:44:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6A4380D0A
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:44:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 883038057F;
+	Sun, 27 Oct 2024 18:46:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PLCF2h7zBseT for <buildroot@buildroot.org>;
- Sun, 27 Oct 2024 18:44:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id q306-Fk2EtcE; Sun, 27 Oct 2024 18:46:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7384580574
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7384580574;
+	Sun, 27 Oct 2024 18:46:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A4D7971
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:46:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF8EE607DA
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:46:01 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U9gzgJCBPgB6 for <buildroot@buildroot.org>;
+ Sun, 27 Oct 2024 18:46:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7A7D181455
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A7D181455
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7A7D181455
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:44:47 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 739BEFF802;
- Sun, 27 Oct 2024 18:44:46 +0000 (UTC)
-Date: Sun, 27 Oct 2024 19:44:07 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org, Asaf Kahlon <asafka7@gmail.com>
-Message-ID: <20241027194407.1fe33f1e@windsurf>
-In-Reply-To: <20241026224936.3846306-1-james.hilliard1@gmail.com>
-References: <20241026224936.3846306-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1730054686;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Y7gQLS60kHJoF9P3fg8uJdfOJVvPgnkfVORI833RlOc=;
- b=lDd3ojSWEXrTPyZlDWd3D03OLXyISIzjyZZnVsW3ZvB4ZusJE+LJSkNbqII+jx7myl+MAf
- dNd0IwGhvSFBRNYpwA5i1FRTU4Zum3V7abab8yVpcVuBsUcZ7rRLlRBBmEUhWrvDW/IuWV
- K+nvVsmRDA9cJgXPCRceVLhlB+IGsSD4UA4keDIuXAFkLvbfLarQgkdRfBsb5W59jNkAgi
- web5Y5t9Oe6sRMRyfLUmFCQBSUmxIKFeQpeuybbjZJIzYGffK2i/rbJXKmyJRFu4AtoaiW
- ulMNHwE0xAS5gr1UFzRUkUV947emIL5YNr0yOfnL4uLYpib4brDaQ4CkIS5nYA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lDd3ojSW
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-pudb: bump to version
- 2024.1.3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A386607EC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1A386607EC
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:46:01 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 11C838427B; Sun, 27 Oct 2024 18:46:01 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 27 Oct 2024 19:45:09 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d52ba28fbe40e42ccf68c50ec12f04ce9fde7734
+X-Git-Newrev: 2417d0cf81ee54329aa941d1a588baf601711978
+X-Patchwork-Hint: ignore
+Message-Id: <20241027184601.11C838427B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wpa_supplicant: add configuration
+ for WPA3-Entreprise
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,29 +60,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 26 Oct 2024 16:49:36 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2417d0cf81ee54329aa941d1a588baf601711978
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Migrate from setuptools to hatch build backend.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-pudb/python-pudb.hash | 4 ++--
->  package/python-pudb/python-pudb.mk   | 6 +++---
->  2 files changed, 5 insertions(+), 5 deletions(-)
+Extend the set of options enabled when BR2_PACKAGE_WPA_SUPPLICANT_WPA3
+by also enabling:
 
-Applied to master, thanks.
+ - CONFIG_SUITEB: WPA3-Enterprise
+ - CONFIG_SUITEB192: WPA3-Enterprise (SuiteB 192 bits security)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+While at it, document the options that are enabled.
+
+Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wpa_supplicant/wpa_supplicant.mk | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 984959f679..aef8731341 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -126,18 +126,29 @@ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),)
+ WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_WPS
+ endif
+ 
++# WPA3 configurations:
++# - CONFIG_DPP: Easy Connect (Device Provisioning Protocol - DPP R1 & R2)
++# - CONFIG_SAE: Simultaneous Authentication of Equals (SAE), WPA3-Personal
++# - CONFIG_SAE_PK: SAE Public Key, WPA3-Personal
++# - CONFIG_OWE: Opportunistic Wireless Encryption (OWE)
++# - CONFIG_SUITEB: WPA3-Enterprise
++# - CONFIG_SUITEB192: WPA3-Enterprise (SuiteB 192 bits security)
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPA3),y)
+ WPA_SUPPLICANT_CONFIG_ENABLE += \
+ 	CONFIG_DPP \
+ 	CONFIG_SAE \
+ 	CONFIG_SAE_PK \
+-	CONFIG_OWE
++	CONFIG_OWE \
++	CONFIG_SUITEB \
++	CONFIG_SUITEB192
+ else
+ WPA_SUPPLICANT_CONFIG_DISABLE += \
+ 	CONFIG_DPP \
+ 	CONFIG_SAE \
+ 	CONFIG_SAE_PK \
+-	CONFIG_OWE
++	CONFIG_OWE \
++	CONFIG_SUITEB \
++	CONFIG_SUITEB192
+ endif
+ 
+ # Try to use openssl if it's already available
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
