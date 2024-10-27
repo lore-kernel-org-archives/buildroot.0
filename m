@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48DF2D13572
-	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 18:45:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F31AD13578
+	for <buildroot@archiver.kernel.org>; Sun, 27 Oct 2024 18:45:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A87D80BF5;
-	Sun, 27 Oct 2024 18:45:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 619CC814B6;
+	Sun, 27 Oct 2024 18:45:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HK7yo8KVL99y; Sun, 27 Oct 2024 18:45:08 +0000 (UTC)
+ id PoIhWSAb8sxq; Sun, 27 Oct 2024 18:45:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 338AC8148A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C8308169A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 338AC8148A;
-	Sun, 27 Oct 2024 18:45:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B4BECAEE
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:44:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C8308169A;
+	Sun, 27 Oct 2024 18:45:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 533D1AEE
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:44:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9CC7C40260
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:44:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 34DBC80F3B
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:44:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0HQiGY425uny for <buildroot@buildroot.org>;
- Sun, 27 Oct 2024 18:44:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fZoxDS8o42bT for <buildroot@buildroot.org>;
+ Sun, 27 Oct 2024 18:44:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
  helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 665054012F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 665054012F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1FDC980C4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FDC980C4A
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 665054012F
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1FDC980C4A
  for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:44:39 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DEB14FF802;
- Sun, 27 Oct 2024 18:44:37 +0000 (UTC)
-Date: Sun, 27 Oct 2024 19:43:00 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-Message-ID: <20241027194300.7781886f@windsurf>
-In-Reply-To: <20241026210101.2667166-1-bernd@kuhls.net>
-References: <20241026210101.2667166-1-bernd@kuhls.net>
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 882DAFF803;
+ Sun, 27 Oct 2024 18:44:38 +0000 (UTC)
+Date: Sun, 27 Oct 2024 19:44:02 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Asaf Kahlon <asafka7@gmail.com>
+Message-ID: <20241027194402.1673f494@windsurf>
+In-Reply-To: <20241026223854.3789624-1-james.hilliard1@gmail.com>
+References: <20241026223854.3789624-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
@@ -56,20 +56,21 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=buwRWFAhbw3GqUe7+9eG0lyniDMW0bVDY9oSbdI1Q8I=;
- b=D2sHVBXA7wA7piVqtdbKwsaJMQNYLBbzUiVITBullgYbxhUBoMVso4bCheV/wN8pnp3bxN
- JZMz6Vq0d+3AEsZQK4ruMfUVkEy+Ovd4PGmwsajG4wJaAE2ZBme/HOPhY8JDgV3LU+KY1T
- +2AhCJhaqt+GZvrIGPWaOL9qekbP/r+jBv484Jg6kT1O8gTpkiBYWBJiSf13Dq39nktRBm
- DtWxzz2gdRetw+0PUhNtavOki/gTHDDDF/VhUou7i+eFSzFcYpniHD3SN6BPj1aaWmcOaO
- tBLjlbdKlPHgVMmtfnuH8j6AVr5ygi/GWG45hxoErW06Crl0tkSJfKoRNc9QSA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=orBGqgay7iUdZo7JncL73K0H/RJPr0u0NM9X2oqxQg4=;
+ b=OAYyzJL2Rb7EUhKEke4wKNX3DpXTLzvVvLPc9h3tOh01e0EZIgGGHhv/47XznbTN54qP7T
+ C9y4i2GaF3rHdjNAX5XKGlPQuo4ugUPsMudhTg4EsMmNzx0BVh0+hJhmTlKDj3YKocTnRb
+ lL+lWbjHQyv003CeSneFVZpvaEL827xqYOkCBoQ2vlc4kZ8pY8Kzv5XetTJUzqbJQLD5f4
+ wdcKZedb3uWz6GqX3dY4DnYfsin4gLvYXu1U5DC1c7chOtB2CssGdOVpXURDSgPJ/N4djO
+ 7x+n4YqYSQYUzEbq4oErLn9WRCb9qY1sUEd3ab9LuM+iuYmqaVKTn/hOCrwUdQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=D2sHVBXA
-Subject: Re: [Buildroot] [PATCH 1/1] package/libpng: bump version to 1.6.44
+ header.s=gm1 header.b=OAYyzJL2
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-psutil: bump to version
+ 6.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,18 +89,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 26 Oct 2024 23:01:01 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+On Sat, 26 Oct 2024 16:38:54 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Release notes:
-> https://sourceforge.net/p/png-mng/mailman/message/58815959/
-> https://raw.githubusercontent.com/pnggroup/libpng/v1.6.44/ANNOUNCE
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/libpng/libpng.hash | 4 ++--
->  package/libpng/libpng.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/python-psutil/python-psutil.hash | 4 ++--
+>  package/python-psutil/python-psutil.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
