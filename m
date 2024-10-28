@@ -1,78 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D3B7D5B158
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 21:43:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2961D5B154
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 21:45:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D636607CA;
-	Mon, 28 Oct 2024 21:43:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A747A40603;
+	Mon, 28 Oct 2024 21:45:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3EnTcvtlDN0w; Mon, 28 Oct 2024 21:43:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JFJVqjbjbJ6g; Mon, 28 Oct 2024 21:45:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49221607FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 705A840613
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49221607FD;
-	Mon, 28 Oct 2024 21:43:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7F9264EC0
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:43:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 705A840613;
+	Mon, 28 Oct 2024 21:45:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3D2DC4EC0
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E773607FD
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:43:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 194F8400D6
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:44:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PlyX6zDyt31d for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 21:43:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uJwhR28_ucWv for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 21:44:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5F55A607CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F55A607CA
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5F55A607CA
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:43:35 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BE0E51BF205;
- Mon, 28 Oct 2024 21:43:32 +0000 (UTC)
-Date: Mon, 28 Oct 2024 22:43:31 +0100
-To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Cc: buildroot@buildroot.org, Andreas Naumann <ANaumann@ultratronik.de>,
- Christian Hitz <christian@klarinett.li>, Zoltan Gyarmati
- <zgyarmati@zgyarmati.de>, Jesse Van Gavere <jesseevg@gmail.com>
-Message-ID: <20241028224331.4c5e37bc@windsurf>
-In-Reply-To: <20241004210919.3699625-2-roykollensvendsen@gmail.com>
-References: <20241004210919.3699625-1-roykollensvendsen@gmail.com>
- <20241004210919.3699625-2-roykollensvendsen@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1730151813;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ZRDq3obmBEFBhB7CvrfzX1DKzuef/XHAtvNhozixfV4=;
- b=CtfKmML8Wmwcun2C9TzUhzuDrBU1L3MgxaiUI3Imb9HWm3FlnK41l7XN3KKyMZc7iiq6Cs
- mRo/5XmT1MtfaGM8DCDsnyqYL8B1+zAgZXD+7n9/MXym+yqx2XtO+1zCGWDwau6GzErD46
- TvUoWEtHjBpa6WoT4IjZP3ZKNcq2mLfc9gWV2+BjExalA2yOQoyRa4DC/x9BZg1QTQLB9L
- 9kDKbXdW+rVnvfCxKrTWMbp/YEdb8y1dcVoWcfcXxQ3C4ZrgI3Ofvv0r9QySr1N0tr5dwY
- j7TEEX+pjAyYjro7zRbNlOrQqlJfUf5F/totvt16elqmNjLBoVw0eOiBeTKY9g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CtfKmML8
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/qt6/qt6charts: new package
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 114D940015
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 114D940015
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:44:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0A54384607; Mon, 28 Oct 2024 21:44:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 28 Oct 2024 22:44:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 51948983aaad8b430aa817a4d66b62062158c4de
+X-Git-Newrev: 1acb0e5fec2a1d953cbbeb1f9aaeaac3ce65e9c8
+X-Patchwork-Hint: ignore
+Message-Id: <20241028214457.0A54384607@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/pine64/pine64: use offset to specify
+ boot partition alignment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,26 +60,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  4 Oct 2024 23:09:17 +0200
-Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1acb0e5fec2a1d953cbbeb1f9aaeaac3ce65e9c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> +ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA),y)
-> +QT6CHARTS_DEPENDENCIES += qt6multimedia
-> +endif
+Use the 'offset' property in genimage.cfg to align the boot partition on
+1 MiB boundary. It is clearer than fixing the size of the previous
+u-boot partition.
 
-Since we haven't merged qt6multimedia yet, I dropped this part, and
-applied your patch. Thanks!
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Mattia Narducci <mattianarducci1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/pine64/pine64/genimage.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/board/pine64/pine64/genimage.cfg b/board/pine64/pine64/genimage.cfg
+index 3555869036..bd026c33c6 100644
+--- a/board/pine64/pine64/genimage.cfg
++++ b/board/pine64/pine64/genimage.cfg
+@@ -18,13 +18,13 @@ image sdcard.img {
+ 		in-partition-table = "no"
+ 		image = "u-boot-sunxi-with-spl.bin"
+ 		offset = 8K
+-		size = 1016K # 1MB - 8KB
+ 	}
+ 
+ 	partition boot {
+ 		partition-type = 0xC
+ 		bootable = "true"
+ 		image = "boot.vfat"
++		offset = 1M
+ 	}
+ 
+ 	partition rootfs {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
