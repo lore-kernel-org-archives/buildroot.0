@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ECCCD33992
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 14:41:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3627D33990
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 14:41:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3136240448;
-	Mon, 28 Oct 2024 14:41:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A217160632;
+	Mon, 28 Oct 2024 14:41:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AqUVuLuA2ipj; Mon, 28 Oct 2024 14:41:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YffBIeWgsf_p; Mon, 28 Oct 2024 14:41:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B23EE405CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E07960646
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B23EE405CE;
-	Mon, 28 Oct 2024 14:41:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1CBFD5C1E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9E07960646;
+	Mon, 28 Oct 2024 14:41:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 20D575C24
  for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9EC4140992
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9175A605B0
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tkaVx5wsaFwb for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7vD3aqjy6nUi for <buildroot@buildroot.org>;
  Mon, 28 Oct 2024 14:40:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A363408B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 813A8605A8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A363408B7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 813A8605A8
  for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57032842F5; Mon, 28 Oct 2024 14:40:52 +0000 (UTC)
+ id 6BB638430E; Mon, 28 Oct 2024 14:40:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 28 Oct 2024 14:47:46 +0100
+Date: Mon, 28 Oct 2024 14:47:50 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 37edaae849f4a3441722df17aaac328225e469e8
-X-Git-Newrev: 135b4408ebced679f05ef8f79d93475406b6285a
+X-Git-Oldrev: c39971d316155a76ad1495ecc4c19bee7b3f6b21
+X-Git-Newrev: ccb4073736515a984408df27428e082db8b02bc6
 X-Patchwork-Hint: ignore
-Message-Id: <20241028144052.57032842F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pysnmp: bump to version
- 7.1.8
+Message-Id: <20241028144052.6BB638430E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-ruamel-yaml-clib: bump to
+ version 0.2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,59 +66,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=135b4408ebced679f05ef8f79d93475406b6285a
+commit: https://git.buildroot.net/buildroot/commit/?id=ccb4073736515a984408df27428e082db8b02bc6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop no longer required python-pysmi runtime dependency.
+License hash changed due to formatting changes:
+https://sourceforge.net/p/ruamel-yaml-clib/code/ci/9ff72c32e7be55987ee5fb4cd8803b54e28e8a3f/
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pysnmp/Config.in          | 1 -
- package/python-pysnmp/python-pysnmp.hash | 4 ++--
- package/python-pysnmp/python-pysnmp.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.hash | 6 +++---
+ package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pysnmp/Config.in b/package/python-pysnmp/Config.in
-index 0c63b57931..f29eb79a46 100644
---- a/package/python-pysnmp/Config.in
-+++ b/package/python-pysnmp/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYSNMP
- 	bool "python-pysnmp"
- 	select BR2_PACKAGE_PYTHON_PYASN1 # runtime
--	select BR2_PACKAGE_PYTHON_PYSMI # runtime
- 	help
- 	  PySNMP is a cross-platform, pure-Python SNMP engine
- 	  implementation.
-diff --git a/package/python-pysnmp/python-pysnmp.hash b/package/python-pysnmp/python-pysnmp.hash
-index 4e1df1e4ed..050d92b70d 100644
---- a/package/python-pysnmp/python-pysnmp.hash
-+++ b/package/python-pysnmp/python-pysnmp.hash
+diff --git a/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.hash b/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.hash
+index 937afc3df1..2bb726819c 100644
+--- a/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.hash
++++ b/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pysnmp/json
--md5  9d1ba65a734a613e68d616f3f4c24b6f  pysnmp-7.1.4.tar.gz
--sha256  4ec7fd78cb7437ad64644108dea603cad8e49f065da3dd3e0539dda68bad320c  pysnmp-7.1.4.tar.gz
-+md5  801dca4e3d0b58aeece4fa3be83b3cca  pysnmp-7.1.8.tar.gz
-+sha256  03d88f0ba21e0357ad58c9566d369dd6123b5b628840f91001d40c0f5b658933  pysnmp-7.1.8.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/ruamel.yaml.clib/json
+-md5  b72e549363fa1b9c4f9123e98f2b46cc  ruamel.yaml.clib-0.2.8.tar.gz
+-sha256  beb2e0404003de9a4cab9753a8805a8fe9320ee6673136ed7f04255fe60bb512  ruamel.yaml.clib-0.2.8.tar.gz
++md5  53fa5737bbe5a07fac7db3d1a083fee9  ruamel.yaml.clib-0.2.12.tar.gz
++sha256  6c8fbb13ec503f99a91901ab46e0b07ae7941cd527393187039aec586fdfd36f  ruamel.yaml.clib-0.2.12.tar.gz
  # Locally computed sha256 checksums
- sha256  4954453957449b5e6f797d070f4d91024dceb3e056c99d72350795b71db0fc70  LICENSE.rst
-diff --git a/package/python-pysnmp/python-pysnmp.mk b/package/python-pysnmp/python-pysnmp.mk
-index 78f9eeb930..eac01b3169 100644
---- a/package/python-pysnmp/python-pysnmp.mk
-+++ b/package/python-pysnmp/python-pysnmp.mk
+-sha256  5458f90e82366f660f956b3c929ba5f7a0efdb99a99a847e2f51f2020ffbe887  LICENSE
++sha256  99f72489621ceea1254f9f0ea7c6e8a5e8e38b62edd1d983e6e1cb20d533f0a6  LICENSE
+diff --git a/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.mk b/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.mk
+index 25c3b44131..2a4d8a98d1 100644
+--- a/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.mk
++++ b/package/python-ruamel-yaml-clib/python-ruamel-yaml-clib.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYSNMP_VERSION = 7.1.4
-+PYTHON_PYSNMP_VERSION = 7.1.8
- PYTHON_PYSNMP_SOURCE = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
--PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/43/71/18a9d8c00efba166b66408040028f25a8ea20d2acc9cd89bd780369544b1
-+PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/e9/af/f9e379bd9e607fd289b6cef13d633667c4d213f8c1519a86f61eed09731f
- PYTHON_PYSNMP_SETUP_TYPE = pep517
- PYTHON_PYSNMP_LICENSE = BSD-2-Clause
- PYTHON_PYSNMP_LICENSE_FILES = LICENSE.rst
+-PYTHON_RUAMEL_YAML_CLIB_VERSION = 0.2.8
++PYTHON_RUAMEL_YAML_CLIB_VERSION = 0.2.12
+ PYTHON_RUAMEL_YAML_CLIB_SOURCE = ruamel.yaml.clib-$(PYTHON_RUAMEL_YAML_CLIB_VERSION).tar.gz
+-PYTHON_RUAMEL_YAML_CLIB_SITE = https://files.pythonhosted.org/packages/46/ab/bab9eb1566cd16f060b54055dd39cf6a34bfa0240c53a7218c43e974295b
++PYTHON_RUAMEL_YAML_CLIB_SITE = https://files.pythonhosted.org/packages/20/84/80203abff8ea4993a87d823a5f632e4d92831ef75d404c9fc78d0176d2b5
+ PYTHON_RUAMEL_YAML_CLIB_SETUP_TYPE = setuptools
+ PYTHON_RUAMEL_YAML_CLIB_LICENSE = MIT
+ PYTHON_RUAMEL_YAML_CLIB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
