@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72416D5B154
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 21:38:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3C55D5B158
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 21:38:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F5FA405BA;
-	Mon, 28 Oct 2024 21:38:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BD4D607FE;
+	Mon, 28 Oct 2024 21:38:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3IT4fjfztlWB; Mon, 28 Oct 2024 21:38:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PyIkVrLtcOp1; Mon, 28 Oct 2024 21:38:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CEC9405BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81E916080F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CEC9405BB;
-	Mon, 28 Oct 2024 21:38:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3944F4EC0
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:38:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81E916080F;
+	Mon, 28 Oct 2024 21:38:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 38636AEE
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:38:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9553881140
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:38:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFEC36083E
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:38:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wduWvjyuBwU9 for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 21:38:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C6xK3Cf9q--U for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 21:38:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA04B8113F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AA04B8113F
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:38:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 95B6684555; Mon, 28 Oct 2024 21:38:23 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 28 Oct 2024 22:36:25 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0655d9af281fd80f29ded0bbe469acb64935d795
-X-Git-Newrev: dba41736daeaf8065b44427316759e07c35545db
-X-Patchwork-Hint: ignore
-Message-Id: <20241028213823.95B6684555@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/qemu/riscv{32,
- 64}-virt: remove virtio-blk-device, drive=hd0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EC816607F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC816607F7
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EC816607F7
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:38:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 06FFE40002;
+ Mon, 28 Oct 2024 21:38:25 +0000 (UTC)
+Date: Mon, 28 Oct 2024 22:38:25 +0100
+To: Bryan Brattlof via buildroot <buildroot@buildroot.org>
+Cc: Bryan Brattlof <bb@ti.com>
+Message-ID: <20241028223825.4fb946c2@windsurf>
+In-Reply-To: <20241009-am62ax-linux-headers-fix-v1-1-d46a03ce66bc@ti.com>
+References: <20241009-am62ax-linux-headers-fix-v1-1-d46a03ce66bc@ti.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730151506;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=HfUrP9CKmJ06Ex9YVOMCmB5wBwfXAz7e6W24B3VGwdw=;
+ b=ezUn0Ryae/Ry3JLFHuFG3VUN5+6i529dRZC3pvUZxD1ckNoVysL4KcSwT23MbKj6I8QgFw
+ cgyqMCR02YOYELQB28u/CB96NZc76NV8JGhaU0w1ICwGcmfTXKcpyixW0k5sdtHZxV2jVN
+ f6K/H+lg6mKzrR67psE27FXG6PKnjqQyjed3kISAvpcMjiHOVYnAr7TZD9M6U9Zo7WuEMk
+ JTQu/pWi/Xi878MyD1lDKV5sxiD/w8X+88Zz8+IXtp7jqAEt2Kf1U0WN1KaXNMmhVVm6zC
+ 6bL6sOwwKVMo7E2cQC+iuDBNGH+o/ClBOERuGtakahV5Ig2o4eOM3Ykz1gSIsQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ezUn0Rya
+Subject: Re: [Buildroot] [PATCH] configs/ti_am62ax_sk_defconfig: add
+ linux-headers version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,74 +84,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dba41736daeaf8065b44427316759e07c35545db
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 9 Oct 2024 17:02:01 -0500
+Bryan Brattlof via buildroot <buildroot@buildroot.org> wrote:
 
-Qemu 9.1 recently fixed the RISC-V virt target by adding the missing
-default type for block devices [1].
+> When bumping the Linux kernel version I inadvertently removed the pinned
+> linux-headers version from the defconfig which can break the build if
+> the default kernel version is not v6.10. Pin linux-headers to the
+> current am62ax-sk kernel version.
+> 
+> Signed-off-by: Bryan Brattlof <bb@ti.com>
+> ---
+>  configs/ti_am62ax_sk_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 
-We no longer need to specify virtio-blk-device on the qemu command line
-since it's already the default.
+Applied to master, thanks.
 
-[1] https://gitlab.com/qemu-project/qemu/-/commit/4406ba2b5efce6af64905f827ca244f699db8170
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/qemu/riscv32-virt/readme.txt     | 4 ++--
- board/qemu/riscv64-virt-efi/readme.txt | 3 +--
- board/qemu/riscv64-virt/readme.txt     | 4 ++--
- 3 files changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/board/qemu/riscv32-virt/readme.txt b/board/qemu/riscv32-virt/readme.txt
-index 048306cd54..c2ac27121f 100644
---- a/board/qemu/riscv32-virt/readme.txt
-+++ b/board/qemu/riscv32-virt/readme.txt
-@@ -1,7 +1,7 @@
- Run Linux in emulation with:
- 
--  qemu-system-riscv32 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0,if=none -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv32_virt_defconfig
-+  qemu-system-riscv32 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv32_virt_defconfig
- 
--  qemu-system-riscv32 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0,if=none -device virtio-blk-device,drive=hd0 -nographic -cpu rv32,mmu=off -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 # qemu_riscv32_nommu_virt_defconfig
-+  qemu-system-riscv32 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw -nographic -cpu rv32,mmu=off -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 # qemu_riscv32_nommu_virt_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
-diff --git a/board/qemu/riscv64-virt-efi/readme.txt b/board/qemu/riscv64-virt-efi/readme.txt
-index c7b3177af1..10d4ed966f 100644
---- a/board/qemu/riscv64-virt-efi/readme.txt
-+++ b/board/qemu/riscv64-virt-efi/readme.txt
-@@ -22,8 +22,7 @@ Run the emulation with:
-         -blockdev node-name=pflash0,driver=file,read-only=on,filename=output/images/RISCV_VIRT_CODE.fd \
-         -blockdev node-name=pflash1,driver=file,filename=output/images/RISCV_VIRT_VARS.fd \
-         \
--        -drive file=output/images/disk.img,format=raw,id=hd0,if=none \
--        -device virtio-blk-device,drive=hd0 \
-+        -drive file=output/images/disk.img,format=raw \
-         \
-         -netdev user,id=net0 \
-         -device virtio-net-device,netdev=net0 # qemu_riscv64_virt_efi_defconfig
-diff --git a/board/qemu/riscv64-virt/readme.txt b/board/qemu/riscv64-virt/readme.txt
-index 5b3bb85b4b..d7b198842b 100644
---- a/board/qemu/riscv64-virt/readme.txt
-+++ b/board/qemu/riscv64-virt/readme.txt
-@@ -1,7 +1,7 @@
- Run Linux in emulation with:
- 
--  qemu-system-riscv64 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0,if=none -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv64_virt_defconfig
-+  qemu-system-riscv64 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv64_virt_defconfig
- 
--  qemu-system-riscv64 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0,if=none -device virtio-blk-device,drive=hd0 -nographic -cpu rv64,mmu=off -netdev user,id=net0 -device virtio-net-device,netdev=net0 # qemu_riscv64_nommu_virt_defconfig
-+  qemu-system-riscv64 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw -nographic -cpu rv64,mmu=off -netdev user,id=net0 -device virtio-net-device,netdev=net0 # qemu_riscv64_nommu_virt_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
