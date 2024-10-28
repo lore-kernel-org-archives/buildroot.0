@@ -1,64 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFCF9D10C0B
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 12:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F0A9D33980
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 13:46:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F36240029;
-	Mon, 28 Oct 2024 12:44:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RWTAUwV3uRzN; Mon, 28 Oct 2024 12:44:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E7E6404AA
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E7E6404AA;
-	Mon, 28 Oct 2024 12:44:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B35BAEE
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 12:44:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1FFA88128E
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 12:44:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B319A8113A;
+	Mon, 28 Oct 2024 13:46:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oUPuoHURcVvw for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 12:44:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
- helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 148A780D25
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 148A780D25
-Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 148A780D25
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 12:44:44 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 505E11814B9; Mon, 28 Oct 2024 13:44:41 +0100 (CET)
+ id ef4vsKFLO-1I; Mon, 28 Oct 2024 13:46:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C87C810E6
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C87C810E6;
+	Mon, 28 Oct 2024 13:46:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E76C5C1E
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 13:46:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2BB6540199
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 13:46:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w7P3FgpIEuVk for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 13:46:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AAE53400D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAE53400D1
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AAE53400D1
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 13:46:05 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 9B5EE1C0012;
+ Mon, 28 Oct 2024 13:46:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 28 Oct 2024 13:44:13 +0100
-Message-ID: <20241028124423.710867-2-buildroot@heine.tech>
-X-Mailer: git-send-email 2.43.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 28 Oct 2024 14:46:00 +0100
+Message-ID: <20241028134601.1286048-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.46.1
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1730119482; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=ibUT5pwd8QbqcD11+GBVYNTJhzfAc+4EIM/98jLC++M=;
- b=X5v2JH9WFxqXsUkIoFqs0l3oJ15NlWiYHWbe2SwphD+p71ohrmgRWHk+0UGKAYXQoN/D6k
- ygKj7tSNqCExqgDXpyq0Dv/Bi2b2Jh6IVI1Ese056ujb1W+KZdBEp460ctxt4rCTVjhYIW
- RN8X4YJTWIUrnXtyfRL7CYZtJxFS/18=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=heine.tech
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
- header.s=dkim header.b=X5v2JH9W
-Subject: [Buildroot] [PATCH] package/criu: fix comment condition
+ d=bootlin.com; s=gm1; t=1730123162;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=RTbvT0mAXFz+V10oqQKvCrjXCIT0Dru++aBGN7Rpcm0=;
+ b=hq18utz9/qAn9PHGnRxVplKbj9CM9lXIAficFvfP1StoNZGF+yubmUn3XTDtluHjLqSM69
+ Km5hd5+qYiBshI0cgGvAbHiSTB/0GVRrukaEsa7IjhZ8SAYDSh75VO71flP+dMQngp+qCw
+ joqxkkGc25ywDA1d2Q58cCJe+V5jWihehObAnq4ZS+/F5otDav9ts9lde5oxJnt9NEEJ+I
+ Ef/5VFFbC5Y3oVQFflzV6J6tVkut7ADJwNPWQZgcT/jUDuLjJUlPI+LSGTR8Lgm4uHUVB/
+ IUacPr+QsjXkjSpoenk24L+Ci04mpd2S+8+z5uxFwR1TgSQlkJPIzUF7fxa+RA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=hq18utz9
+Subject: [Buildroot] [PATCH] package/musl-compat-headers: fix download of
+ queue.h
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,36 +78,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-in e97fc89e7b a dependency on host-gcc >= 7 was added but
-for the comment the condition was not correctly inverted.
+http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys/queue.h?rev=1.70 now
+returns some HTML soup instead of the plain text version of the file,
+causing the hash check to fail.
 
-Fixes: e97fc89e7b ("package/protobuf-c: bump to version 1.5.0")
+http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys/queue.h?rev=1.70;content-type=text%2Fplain
+returns the correct data, but the ";" in the URL causes some issues
+with the parsing logic in Buildroot.
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+So let's switch to
+https://raw.githubusercontent.com/NetBSD/src/03be82a6b173b3c62116b7a186067fed3004dd44/sys/sys/queue.h
+which delivers exactly the same file, but hopefully will be more
+stable. The file name changed to just queue.h, but the contents is the
+same.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/57c8078f382f74859076512425b2f1c52f44e95a/
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992850 (and many other similar cases)
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/criu/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/musl-compat-headers/musl-compat-headers.hash | 2 +-
+ package/musl-compat-headers/musl-compat-headers.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/criu/Config.in b/package/criu/Config.in
-index 90bb18d355..a56dbe56ff 100644
---- a/package/criu/Config.in
-+++ b/package/criu/Config.in
-@@ -50,4 +50,4 @@ comment "criu needs a glibc or musl toolchain w/ threads, host gcc >= 7, gcc >=
- 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 \
- 		|| BR2_TOOLCHAIN_USES_UCLIBC || !BR2_INSTALL_LIBSTDCPP \
- 		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
--		|| BR2_HOST_GCC_AT_LEAST_7
-+		|| !BR2_HOST_GCC_AT_LEAST_7
+diff --git a/package/musl-compat-headers/musl-compat-headers.hash b/package/musl-compat-headers/musl-compat-headers.hash
+index 626145df34..27e0afb68c 100644
+--- a/package/musl-compat-headers/musl-compat-headers.hash
++++ b/package/musl-compat-headers/musl-compat-headers.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  c13407edd0e33be73cae72514cb234f8612e1c0e54401c9448daffd3a240158b  queue.h?rev=1.70
++sha256  c13407edd0e33be73cae72514cb234f8612e1c0e54401c9448daffd3a240158b  queue.h
+diff --git a/package/musl-compat-headers/musl-compat-headers.mk b/package/musl-compat-headers/musl-compat-headers.mk
+index 1cfa894879..865b0bae43 100644
+--- a/package/musl-compat-headers/musl-compat-headers.mk
++++ b/package/musl-compat-headers/musl-compat-headers.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # No main site, just using extra downloads
+-MUSL_COMPAT_HEADERS_QUEUE_H = http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys/queue.h?rev=1.70
++MUSL_COMPAT_HEADERS_QUEUE_H = https://raw.githubusercontent.com/NetBSD/src/03be82a6b173b3c62116b7a186067fed3004dd44/sys/sys/queue.h
+ 
+ MUSL_COMPAT_HEADERS_EXTRA_DOWNLOADS = $(MUSL_COMPAT_HEADERS_QUEUE_H)
+ 
 -- 
-2.43.0
+2.46.1
 
 _______________________________________________
 buildroot mailing list
