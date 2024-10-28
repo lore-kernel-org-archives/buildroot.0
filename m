@@ -1,70 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57307D5B15A
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 22:14:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FB9FD5B845
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 22:16:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 115A180EF2;
-	Mon, 28 Oct 2024 22:14:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 319C960F1A;
+	Mon, 28 Oct 2024 22:16:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vOme8GJguHap; Mon, 28 Oct 2024 22:14:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ORlaQcuJIpwP; Mon, 28 Oct 2024 22:16:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3F7280EF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3932560F14
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F3F7280EF4;
-	Mon, 28 Oct 2024 22:14:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 720DFAEE
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:14:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3932560F14;
+	Mon, 28 Oct 2024 22:16:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7A8C54EC0
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:16:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 52753400D6
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:14:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6889C40633
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:16:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s47yaIJXMX78 for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 22:14:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0C02D40015
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C02D40015
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0C02D40015
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:14:53 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id DB7A7B00651;
- Mon, 28 Oct 2024 23:14:49 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>
-Date: Mon, 28 Oct 2024 23:14:42 +0100
-Message-ID: <20241028221442.1128450-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.47.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UsVB1vOYKJMb for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 22:16:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 36F6F40630
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36F6F40630
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 36F6F40630
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:15:59 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DEF82FF803;
+ Mon, 28 Oct 2024 22:15:56 +0000 (UTC)
+Date: Mon, 28 Oct 2024 23:15:55 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Thomas Perale <thomas.perale@mind.be>,
+ Christian Stewart <christian@aperture.us>
+Message-ID: <20241028231555.47e73fd0@windsurf>
+In-Reply-To: <20241028221045.3354144-1-james.hilliard1@gmail.com>
+References: <20241028221045.3354144-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1730153691;
- bh=3wva20MuQuu538/tC2zBjKk4WvdIUIxspYcVY+5wXwk=;
- h=From:To:Cc:Subject:Date:From;
- b=sWPo/xmtHhDPk644qS92ZEoVRt7gWlpFXnxgRs4SxB7EM1wkalvdwtMEnXhGYNYA3
- diw7CDrp3xpOdRCZ16F9yCt/9i+Z1kax3vEcSogScaGx7b0tUbvAQfm5XVTQMfju4E
- hhSWZk5J7ZpRb7qwWSwc6PGrxdDR9/xqC3wg49ZsTUFql1JseN45yQpByQDajCmAcl
- ya6974xfVl2QANVT8EuMTLiFL8MtYfmC5bxAnA8GCpH8T/N3MaA2HVJwo9SL++J2WA
- 72Lhd+3EmcMlUvCoxWqpb5+aWNXbw7eVvMUyomNp67mFZBJql6SgAGgUxqbRg4S5z7
- 9lOxx5OPUdAjQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=sWPo/xmt
-Subject: [Buildroot] [PATCH 1/1] package/swipl: bump version to 9.2.8
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730153757;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=eggpaxzNIhU71riNYfwuNc7OcurQbXyyoGfGGeZtCwc=;
+ b=ccdi+kdfjNhgP7jUUgEkO23PCqh/YqA+MnCqdCO4OOySNlIoOtoUfkKXViFk5nZnDNp4i8
+ Crc3352ocyGnmpOKFVUqyaMC4soSnBU3zmy1c+pmN/vMupdBvPiUOs1/FHCtLSbIr1HsBL
+ QKtX0t7w95fdyerYo1xkGM7fLo536KloKxwD5nfZxlMboeEyBpBQ2v9n+h3cP2NYY2i3fR
+ eZ3H62Vqr1WiF/UzFT9WDVgTaRQzWAkIfur7H5GvQMRSeqt9U372a65AI6wB6VelHwA9iP
+ Np5U2WToRZm0wJFoJXHhGGx20b1DOS+HOyAQv8KJyzldfHAs5+FeVsmyTC14Wg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ccdi+kdf
+Subject: Re: [Buildroot] [PATCH 1/2] package/go/go-cf: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,49 +82,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since version 9.2.7, see:
-https://www.swi-prolog.org/ChangeLog?branch=stable&from=9.2.7&to=9.2.8
+On Mon, 28 Oct 2024 16:10:44 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch runtime tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/8209923112
----
- package/swipl/swipl.hash | 2 +-
- package/swipl/swipl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> This is a fork of go needed for cloudflared to work properly.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-diff --git a/package/swipl/swipl.hash b/package/swipl/swipl.hash
-index 36e27cef2d..20278cfb8d 100644
---- a/package/swipl/swipl.hash
-+++ b/package/swipl/swipl.hash
-@@ -1,4 +1,4 @@
- # From https://www.swi-prolog.org/download/stable
--sha256  fd4126f047e0784112741a874e2f7f8c68b5edd6426ded621df355c62d18c96f  swipl-9.2.7.tar.gz
-+sha256  b331637a57c913c49edcfcb10ddcf6c031278ce93d2411d54542778531abb5c7  swipl-9.2.8.tar.gz
- # Locally calculated
- sha256  770594d0f4463b71f1485f00e4bc5cf4b6f667d62ef6bc9bde2fee236541992a  LICENSE
-diff --git a/package/swipl/swipl.mk b/package/swipl/swipl.mk
-index ba33b1b1c3..ef9aedcd2d 100644
---- a/package/swipl/swipl.mk
-+++ b/package/swipl/swipl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SWIPL_VERSION = 9.2.7
-+SWIPL_VERSION = 9.2.8
- SWIPL_SITE = https://www.swi-prolog.org/download/stable/src
- SWIPL_LICENSE = BSD-2-Clause
- SWIPL_LICENSE_FILES = LICENSE
+This is really nuts/crazy. Are we going to have to package a different
+Go compiler for each and every project?
+
+(Note: your commit message needs a lot more explanation on how it
+integrates in Buildroot, what happens if one uses both normal Go and
+go-cf, whether they will conflict, or not, etc.).
+
+Thomas
 -- 
-2.47.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
