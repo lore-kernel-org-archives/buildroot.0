@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CADAD5B14E
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 20:48:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCF84D5B14E
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 20:52:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DA4E60707;
-	Mon, 28 Oct 2024 20:48:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98620607ED;
+	Mon, 28 Oct 2024 20:52:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LcreUr0G4guC; Mon, 28 Oct 2024 20:48:23 +0000 (UTC)
+ id FBwqL1nAILfv; Mon, 28 Oct 2024 20:52:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C36560722
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F78A60707
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C36560722;
-	Mon, 28 Oct 2024 20:48:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8E744112A
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:48:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F78A60707;
+	Mon, 28 Oct 2024 20:52:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9AD014EC0
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:52:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F8E340153
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:48:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7BB1940252
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:52:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1QBEVzCrL_1p for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 20:48:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rlmyvHZGhhxc for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 20:52:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 13A4F400D6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13A4F400D6
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 13A4F400D6
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:48:20 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 60391C0002;
- Mon, 28 Oct 2024 20:48:18 +0000 (UTC)
-Date: Mon, 28 Oct 2024 21:48:16 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-Message-ID: <20241028214816.576c6144@windsurf>
-In-Reply-To: <20241028203457.1221383-1-bernd@kuhls.net>
-References: <20241028203457.1221383-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1730148498;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=wSK2F6xjWL1Bp6qh4q3So3SqmkgShXqb56oieWYbRqk=;
- b=kabyk+7IEZN5mXLMFL8P5S85cj4lHkWZ/7BB+lNBq3ENSInfkrLr7MYnB2yHRAwixciT0C
- yHCW9skutzE/9JC6sQ3EFs1ZG8vuVE8hzDEJ59Azg2r4xPBGrtoogXCtPO5xTGDrulGTrx
- gQ4IeOHPChTjVLswNIusPknJoL8XjQbzcWaZrptgfSYec/TmjmwlbkINa0Z8kSvS6zc3Pz
- rUdACGxMIDdHBDY+11BUOy/qDn8KSzspbkgpWYUhw6E5Uquy9M7cbsLwTuiqhJ1UJ62riA
- GWoe6K906+GPsglyAVCGHlr37gsu5d+ocWR3rZ9mlfadV4s3IIrxGarGZuoGkw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kabyk+7I
-Subject: Re: [Buildroot] [PATCH 1/1] package/ntp: Fix build
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D73C40241
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D73C40241
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:52:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 04C4D84459; Mon, 28 Oct 2024 20:52:40 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 28 Oct 2024 21:51:27 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c808e271e3e487a46f23b144b44ace54f97f3aab
+X-Git-Newrev: 67249a691d2671252d033931b54fd654769ca7ce
+X-Patchwork-Hint: ignore
+Message-Id: <20241028205240.04C4D84459@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual/adding-packages-directory:
+ describe start script details
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,30 +60,168 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 28 Oct 2024 21:34:57 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=67249a691d2671252d033931b54fd654769ca7ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
-> http://autobuild.buildroot.net/results/fb4/fb4a011f14e87d348a53695868bb5f3b69496fc8/
-> 
-> The build errors occured immediately after bumping ntp to 4.2.8p18 with
-> buildroot commit 49bd6bb638ff73eae3b486b207201382d46a6c05.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
+This codifies style elements discussed on the mailing list, most
+importantly PID file handling, and adds detailed considerations for
+writing start scripts.
 
-Applied to master, thanks.
+References:
+https://lore.kernel.org/buildroot/20240712124956.3925574-1-fiona.klute@gmx.de/
+https://lore.kernel.org/buildroot/20240714223645.39adf8c6@windsurf/
+https://lore.kernel.org/buildroot/9ec13ac0-b5b6-4251-98b8-0d8f7adac452@gmx.de/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/adding-packages-directory.adoc | 123 ++++++++++++++++++++++++++---
+ 1 file changed, 110 insertions(+), 13 deletions(-)
+
+diff --git a/docs/manual/adding-packages-directory.adoc b/docs/manual/adding-packages-directory.adoc
+index cb19f3bac9..44852afa04 100644
+--- a/docs/manual/adding-packages-directory.adoc
++++ b/docs/manual/adding-packages-directory.adoc
+@@ -576,23 +576,120 @@ name.  The +NN+ is the start order number which needs to be carefully
+ chosen.  For example, a program that requires networking to be up should
+ not start before +S40network+.  The scripts are started in alphabetical
+ order, so +S01syslogd+ starts before +S01watchdogd+, and +S02sysctl+
+-start thereafter.
++starts thereafter.
+ 
+ [source,sh]
+ ----
+ include::S01syslogd[]
+ ----
+ 
+-*Note:* programs that support reloading their configuration in some
+-fashion (+SIGHUP+) should provide a +reload()+ function similar to
++Scripts should use long form options where possible for clarity.
++
++==== Start script configuration
++
++Both start scripts and unit files can source command line arguments
++from +/etc/default/foo+, where +foo+ is the daemon name as set in the
+++DAEMON+ variable. In general, if such a file does not exist it should
++not block the start of the daemon, unless there is some site specific
++command line argument the daemon requires to start. For start scripts
+++FOO_ARGS="-s -o -m -e -args"+ can be defined to a default value in
++the script, and the user can override this from +/etc/default/foo+.
++
++==== Handling the PID file
++
++A PID file is needed to keep track of what the main process of a
++service is. How to handle it depends on whether the service creates
++its own PID file, and if it deletes it on shutdown.
++
++* If your service doesn't create its own PID file, invoke the daemon
++  in foreground mode, and use +start-stop-daemon --make-pidfile
++  --background+ to let +start-stop-daemon+ create the PID file. See
++  +S01syslogd+ for example:
+++
++[source,sh]
++----
++start-stop-daemon --start --background --make-pidfile \
++	--pidfile "$PIDFILE" --exec "/sbin/$DAEMON" \
++	-- -n $SYSLOGD_ARGS
++----
++
++* If your service creates its own PID file, pass the +--pidfile+
++  option to both +start-stop-daemon+ *and the daemon itself* (or set
++  it appropriately in a configuration file, depending on what the
++  daemon supports) so they agree on where the PID file is. See
++  +S45NetworkManager+ for example:
+++
++[source,sh]
++----
++start-stop-daemon --start --pidfile "$PIDFILE" \
++	--exec "/usr/sbin/$DAEMON" \
++	-- --pid-file="$PIDFILE" $NETWORKMANAGER_ARGS
++----
++
++* If your service removes its PID file on shutdown, use a loop testing
++  that the PID file has disappeared on stop, see +S45NetworkManager+
++  for example:
+++
++[source,sh]
++----
++while [ -f "$PIDFILE" ]; do
++	sleep 0.1
++done
++----
++
++* If your service doesn't remove its PID file on shutdown, use a loop
++  with +start-stop-daemon+ checking if the service is still running,
++  and delete the PID file after the process is gone. See +S01syslogd+
++  for example:
+++
++[source,sh]
++----
++while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
++	--exec "/sbin/$DAEMON"; do
++	sleep 0.1
++done
++rm -f "$PIDFILE"
++----
+++
++Note the +--test+ flag, which tells +start-stop-daemon+ to not
++actually stop the service, but test if it would be possible to, which
++fails if the service is not running.
++
++==== Stopping the service
++
++The stop function should check that the daemon process is actually
++gone before returning, otherwise restart might fail because the new
++instance is started before the old one has actually stopped. How to do
++that depends on how the PID file for the service is handled (see
++above). It is recommended to always append +--exec "/sbin/$DAEMON"+ to
++all +start-stop-daemon+ commands to ensure signals are sent to a PID
++that matches +$DAEMON+.
++
++==== Reloading service configuration
++
++Programs that support reloading their configuration in some fashion
++(e.g. +SIGHUP+) should provide a +reload()+ function similar to
+ +stop()+. The +start-stop-daemon+ command supports +--stop --signal
+-HUP+ for this. It is recommended to always append +--exec
+-"/sbin/$DAEMON"+ to all +start-stop-daemon+ commands to ensure signals
+-are set to a PID that matches +$DAEMON+.
+-
+-Both start scripts and unit files can source command line arguments from
+-+/etc/default/foo+, in general, if such a file does not exist it should
+-not block the start of the daemon, unless there is some site specirfic
+-command line argument the daemon requires to start.  For start scripts a
+-+FOO_ARGS="-s -o -m -e -args"+ can be defined to a default value in and
+-the user can override this from +/etc/default/foo+.
++HUP+ for this. When sending signals this way, whether SIGHUP or
++others, make sure to use the symbolic names and not signal
++numbers. Signal numbers can vary between CPU architectures, and names
++are also easier to read.
++
++==== Return codes
++
++The action functions of the start script should return a success (or
++failure) code, usually the return code of the relevant
++start-stop-daemon action. The last one of those should be the return
++code of the start script as a whole, to allow automatically checking
++for success, e.g. when calling the start script from other
++scripts. Note that without an explicit +return+ the return code of the
++last command in a script or function becomes its return code, so an
++explicit return is not always necessary.
++
++==== Logging
++
++When a service forks to the background, or +start-stop-daemon
++--background+ does that, stdout and stderr are generally closed, and
++anything log messages the service may write there get lost. If
++possible, configure your service to log to syslog (preferably), or a
++dedicated log file.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
