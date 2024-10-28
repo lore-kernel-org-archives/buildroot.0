@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84B11D33990
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 14:42:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A40FDD33993
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 14:42:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 486CF40569;
-	Mon, 28 Oct 2024 14:42:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76A6F60709;
+	Mon, 28 Oct 2024 14:42:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sOH2_8dthBKt; Mon, 28 Oct 2024 14:42:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fY3sJmgCzLBN; Mon, 28 Oct 2024 14:42:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC5FE407AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8675E6083E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC5FE407AF;
-	Mon, 28 Oct 2024 14:42:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8675E6083E;
+	Mon, 28 Oct 2024 14:42:07 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C8145C24
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:41:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 176C2AEE
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:41:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9705240967
+ by smtp2.osuosl.org (Postfix) with ESMTP id D61A7408EC
  for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LXb4T5jftLeS for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 14:40:53 +0000 (UTC)
+ id Tq9zzKd0liOS for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 14:40:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5223408EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C16940960
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A5223408EC
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C16940960
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A0E5A842F5; Mon, 28 Oct 2024 14:40:52 +0000 (UTC)
+ id 17B55842F5; Mon, 28 Oct 2024 14:40:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 28 Oct 2024 14:47:58 +0100
+Date: Mon, 28 Oct 2024 14:48:16 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bba8ad89a07eada3a730dd0027452324bb3faeab
-X-Git-Newrev: c594544bcc3eb97cccde764890086544762a0f11
+X-Git-Oldrev: 8b0ecdcb823010694a113ed56990ada54d879449
+X-Git-Newrev: ecdb002030089deb17ef03031d6e17c693339e86
 X-Patchwork-Hint: ignore
-Message-Id: <20241028144052.A0E5A842F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-starlette: bump to version
- 0.41.2
+Message-Id: <20241028144053.17B55842F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-werkzeug: bump to version
+ 3.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c594544bcc3eb97cccde764890086544762a0f11
+commit: https://git.buildroot.net/buildroot/commit/?id=ecdb002030089deb17ef03031d6e17c693339e86
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-starlette/python-starlette.hash | 4 ++--
- package/python-starlette/python-starlette.mk   | 4 ++--
+ package/python-werkzeug/python-werkzeug.hash | 4 ++--
+ package/python-werkzeug/python-werkzeug.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
-index 22b4f05f7c..f422e6cfe0 100644
---- a/package/python-starlette/python-starlette.hash
-+++ b/package/python-starlette/python-starlette.hash
+diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
+index 31972eacf2..8060e78a35 100644
+--- a/package/python-werkzeug/python-werkzeug.hash
++++ b/package/python-werkzeug/python-werkzeug.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/starlette/json
--md5  c7bea1bc676a8e9adce0214bf632f67b  starlette-0.41.0.tar.gz
--sha256  39cbd8768b107d68bfe1ff1672b38a2c38b49777de46d2a592841d58e3bf7c2a  starlette-0.41.0.tar.gz
-+md5  97321ad76438c1106ddd817baddcda06  starlette-0.41.2.tar.gz
-+sha256  9834fd799d1a87fd346deb76158668cfa0b0d56f85caefe8268e2d97c3468b62  starlette-0.41.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/werkzeug/json
+-md5  c69f88f79e8b84d77abd262558ccd8fa  werkzeug-3.0.4.tar.gz
+-sha256  34f2371506b250df4d4f84bfe7b0921e4762525762bbd936614909fe25cd7306  werkzeug-3.0.4.tar.gz
++md5  0d13f3dbe9b08aecdebe3d9b61cc58aa  werkzeug-3.0.6.tar.gz
++sha256  a8dd59d4de28ca70471a34cba79bed5f7ef2e036a76b3ab0835474246eb41f8d  werkzeug-3.0.6.tar.gz
  # Locally computed sha256 checksums
- sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
-diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
-index 92c9ebb16b..3caa136987 100644
---- a/package/python-starlette/python-starlette.mk
-+++ b/package/python-starlette/python-starlette.mk
+ sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.txt
+diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
+index fa3d3cfd37..1e2567fc64 100644
+--- a/package/python-werkzeug/python-werkzeug.mk
++++ b/package/python-werkzeug/python-werkzeug.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_STARLETTE_VERSION = 0.41.0
-+PYTHON_STARLETTE_VERSION = 0.41.2
- PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
--PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/78/53/c3a36690a923706e7ac841f649c64f5108889ab1ec44218dac45771f252a
-+PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/3e/da/1fb4bdb72ae12b834becd7e1e7e47001d32f91ec0ce8d7bc1b618d9f0bd9
- PYTHON_STARLETTE_SETUP_TYPE = hatch
- PYTHON_STARLETTE_LICENSE = BSD-3-Clause
- PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
+-PYTHON_WERKZEUG_VERSION = 3.0.4
++PYTHON_WERKZEUG_VERSION = 3.0.6
+ PYTHON_WERKZEUG_SOURCE = werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
+-PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/0f/e2/6dbcaab07560909ff8f654d3a2e5a60552d937c909455211b1b36d7101dc
++PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/d4/f9/0ba83eaa0df9b9e9d1efeb2ea351d0677c37d41ee5d0f91e98423c7281c9
+ PYTHON_WERKZEUG_SETUP_TYPE = flit
+ PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
+ PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
