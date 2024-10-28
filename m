@@ -4,94 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3582D13590
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 01:04:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBF83D1358F
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 01:07:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60F0660A82;
-	Mon, 28 Oct 2024 01:04:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 618AE60BF8;
+	Mon, 28 Oct 2024 01:07:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hbWdlnowVJc9; Mon, 28 Oct 2024 01:04:33 +0000 (UTC)
+ id A8OYFG03PdDs; Mon, 28 Oct 2024 01:07:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 610C160AAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E05760BE8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 610C160AAD;
-	Mon, 28 Oct 2024 01:04:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5F29CAEE
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 01:04:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E05760BE8;
+	Mon, 28 Oct 2024 01:07:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 96DA21DAA
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 01:07:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 40ED981858
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 01:04:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 823F560BBD
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 01:07:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6myB56W93KPE for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 01:04:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0ZZoM2TkhTPb for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 01:07:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d35; helo=mail-io1-xd35.google.com;
+ client-ip=2607:f8b0:4864:20::d36; helo=mail-io1-xd36.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4FF298186E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FF298186E
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4FF298186E
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 01:04:31 +0000 (UTC)
-Received: by mail-io1-xd35.google.com with SMTP id
- ca18e2360f4ac-83ab21c269eso147547239f.2
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:04:31 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 93A5060BE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93A5060BE8
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 93A5060BE8
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 01:07:42 +0000 (UTC)
+Received: by mail-io1-xd36.google.com with SMTP id
+ ca18e2360f4ac-83ac05206c9so140830839f.3
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:07:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730077470; x=1730682270;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=3I//zHtCCDXWF7s0v6fJT2xNnaVN25Wgiu2LExKvxLM=;
- b=LPOuHCBtqDB/kAOEszjmcKHnxyj2olPU5yj1hWvOvrvQ4Ha60ag46d2li9hhY/RHKI
- 5mvOU0XQhZ++xMxqpBFyWRJiOXnWstHHf68s+TSNU/Z+leBnMmMuJ2CBsujksYz+wIPs
- 4Vg6HHifTuShuoOSs774oAm+Kzb85sbaydtjoWx+O0xVRMnn9a1cWei8flMkkmQBlvs+
- tfoiPfMBKnUO/To4HYbbdaKVWlDZhX+5YFdH7cUYoEsRn/eZGidzeG6wUhTXWsmrDAGR
- yfvSKYh+Oe7WFmokEo9bxT/fnJs2MmHPlDWCDQKvfuXshJlUso03kcX5aCW2557akoKN
- 6s5g==
-X-Gm-Message-State: AOJu0YzvvxzgJS8NxDvEcJW/Syb29wrwxBqYZNfzQ7Wbz93hCs92/4c+
- Nk71GiEP+4kUvSswBNXpa4+yPf1Th0LDAZ3ttnbRspiEvP39zzp6GO/hjw==
-X-Google-Smtp-Source: AGHT+IEZ/y9Bnd3VYD+GrI67wq9S3hazuPicA5YrqyLY4PXNmaGP9yLeyIkXaNmnP/IAsvO3vlrL4g==
-X-Received: by 2002:a05:6e02:1545:b0:3a3:b497:f951 with SMTP id
- e9e14a558f8ab-3a4ed351c49mr49547995ab.23.1730077470019; 
- Sun, 27 Oct 2024 18:04:30 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1730077661; x=1730682461;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=HWi63md0xnsW2G0qgQWdMSi12bQyxxJ7AIDWVOoVl64=;
+ b=jIMiNOlYDG5vlN2G4e1xeWl6JipvOanKZbMerfnFrkfGn9ANgDV6o7ueLwNb77rsft
+ JUkmfMa5+1WIDow2NojGxcm7L1QtxdiLoPB327PFUa/l+YETxtIwDMiStk0MftsJq4dX
+ 7Z+JO19I+SBPXJ4wTvg5aw8H756mM2T4r6OLUo1cyz6YeYs7r9dGl+Ss2UvnYy7opMCm
+ GR0dQKCIyQy71FMJgcljpcohVNQ101GAl3oTRXKaVmz7BMZbY0uti1s53Q9GI9Kjhgm7
+ pfW6CCeXRf2Nb8OEI+3r2wkBvl2MJEhC4DcrNbGDeo6Y8sbHEAk8bc3H61RYGJMyOtmd
+ jywQ==
+X-Gm-Message-State: AOJu0Yz3zKLD7E8JFR+2tjh12w+LQlcXAfJDftTAZe+5+dKZmlQxkqy9
+ kuMOuiU6j0xsZX47vn0G9FEASgKp0ZJ6kILRE9ofj5uURg9fS3kUeNDrZA==
+X-Google-Smtp-Source: AGHT+IH++1EYDyJfFzBjVK/t0Ucy4w91htglJpybeWz8cFR9qXsK8ivH5DWx0mvEJOLKCGrCFyAIdQ==
+X-Received: by 2002:a05:6602:60c6:b0:83a:a82b:f855 with SMTP id
+ ca18e2360f4ac-83b1c4ba8acmr555407139f.9.1730077661103; 
+ Sun, 27 Oct 2024 18:07:41 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
  [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a4e6e022e2sm13890125ab.51.2024.10.27.18.04.29
+ 8926c6da1cb9f-4dc7277f96asm1381765173.126.2024.10.27.18.07.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Oct 2024 18:04:29 -0700 (PDT)
+ Sun, 27 Oct 2024 18:07:40 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Oct 2024 19:04:24 -0600
-Message-Id: <20241028010424.4123705-2-james.hilliard1@gmail.com>
+Date: Sun, 27 Oct 2024 19:07:39 -0600
+Message-Id: <20241028010739.4125650-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241028010424.4123705-1-james.hilliard1@gmail.com>
-References: <20241028010424.4123705-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1730077470; x=1730682270; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=3I//zHtCCDXWF7s0v6fJT2xNnaVN25Wgiu2LExKvxLM=;
- b=WJft7J0JzcBkQ+ywGMHgeBtRzHlC2Fo8FWy9W4zIaaYPUZPF7ZlYUVh1dXvG+OW22V
- 7BRDSoEYrofOS1/J2Otl9I9rYcEnMN6LhuQF4/Udx74630Roi5M+D58ZwpJ+QmF3wzM4
- 5HoOXNgOKYkS/ZHsepSWPmQ/f49I0piOHEgByy/FxO/1+s8wBqdnIX/cK8myUX0TiJ+h
- b0zaZ3zAUXRs18sh0+e9yhc9RKnQB1zeG5MwJHYj6sMt8D1sRqG/yAGgMzoZME8Dj3nc
- BcOVY+nzHpGwlMdWuOZN2gVQ+lk23WrjFYa1mKaOkJCScziV7RH7GkGDzy+2t5xNv28r
- XaEw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1730077661; x=1730682461; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=HWi63md0xnsW2G0qgQWdMSi12bQyxxJ7AIDWVOoVl64=;
+ b=k5/ORnJ+4vaKpn2iDXhl7MNjti7ucWEdhJfnBS+fl+mFnMN1ZN8PKpg1cQtlgKr/2y
+ xvV6dJ3ZicOQQrs5dGOUl1Hu4qHSW1PuOcpqCvngYf5GHQscvbzuQ5V2tJoECGv6s0WZ
+ VP4GyYyS0Qbb+VMZuhjXjlhBvIyl8L3E1Mr0xrcnVJwhaOVSuf58pTXv7PtvQYcqDfOg
+ JHpMIWA4zWzF00SYBglFfdDzLhQbmoFir0+u3U7HpVSvaLZvCcaNq6n2Y4FHpIDJm4Pg
+ Gf3X+fe5lYyrM2wC8DXQgYyectKAbLvT7pRhZFWiAb+jf5nyeSyYOouBkykzF++EoMlo
+ 8xNQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=WJft7J0J
-Subject: [Buildroot] [PATCH 2/2] package/python-webob: bump to version 1.8.9
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=k5/ORnJ+
+Subject: [Buildroot] [PATCH 1/1] package/python-werkzeug: bump to version
+ 3.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,62 +100,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add new python-legacy-cgi runtime dependency.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-webob/Config.in         | 1 +
- package/python-webob/python-webob.hash | 4 ++--
- package/python-webob/python-webob.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-werkzeug/python-werkzeug.hash | 4 ++--
+ package/python-werkzeug/python-werkzeug.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-webob/Config.in b/package/python-webob/Config.in
-index d3397587a1..d4b24d3d87 100644
---- a/package/python-webob/Config.in
-+++ b/package/python-webob/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_WEBOB
- 	bool "python-webob"
-+	select BR2_PACKAGE_PYTHON_LEGACY_CGI # runtime
- 	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
- 	help
- 	  WSGI request and response object.
-diff --git a/package/python-webob/python-webob.hash b/package/python-webob/python-webob.hash
-index 065a878d41..8f9c7a1fe2 100644
---- a/package/python-webob/python-webob.hash
-+++ b/package/python-webob/python-webob.hash
+diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
+index 31972eacf2..8060e78a35 100644
+--- a/package/python-werkzeug/python-werkzeug.hash
++++ b/package/python-werkzeug/python-werkzeug.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/webob/json
--md5  2372b45cf0e0a3970daaa901fc9d0f64  webob-1.8.8.tar.gz
--sha256  2abc1555e118fc251e705fc6dc66c7f5353bb9fbfab6d20e22f1c02b4b71bcee  webob-1.8.8.tar.gz
-+md5  4167b16880e0d4c22aadee8ec3cc6c26  webob-1.8.9.tar.gz
-+sha256  ad6078e2edb6766d1334ec3dee072ac6a7f95b1e32ce10def8ff7f0f02d56589  webob-1.8.9.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/werkzeug/json
+-md5  c69f88f79e8b84d77abd262558ccd8fa  werkzeug-3.0.4.tar.gz
+-sha256  34f2371506b250df4d4f84bfe7b0921e4762525762bbd936614909fe25cd7306  werkzeug-3.0.4.tar.gz
++md5  0d13f3dbe9b08aecdebe3d9b61cc58aa  werkzeug-3.0.6.tar.gz
++sha256  a8dd59d4de28ca70471a34cba79bed5f7ef2e036a76b3ab0835474246eb41f8d  werkzeug-3.0.6.tar.gz
  # Locally computed sha256 checksums
- sha256  27bc4919e7e9e6b6cda40644517ca74d32203e32fba89ef832aba1ed93e457b3  docs/license.txt
-diff --git a/package/python-webob/python-webob.mk b/package/python-webob/python-webob.mk
-index 0240d3a456..1e58d590d1 100644
---- a/package/python-webob/python-webob.mk
-+++ b/package/python-webob/python-webob.mk
+ sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.txt
+diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
+index fa3d3cfd37..1e2567fc64 100644
+--- a/package/python-werkzeug/python-werkzeug.mk
++++ b/package/python-werkzeug/python-werkzeug.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WEBOB_VERSION = 1.8.8
-+PYTHON_WEBOB_VERSION = 1.8.9
- PYTHON_WEBOB_SOURCE = webob-$(PYTHON_WEBOB_VERSION).tar.gz
--PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/a2/7a/ac5b1ab5636cc3bfc9bab1ed54ff4e8fdeb6367edd911f7337be2248b8ab
-+PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/85/0b/1732085540b01f65e4e7999e15864fe14cd18b12a95731a43fd6fd11b26a
- PYTHON_WEBOB_SETUP_TYPE = setuptools
- PYTHON_WEBOB_LICENSE = MIT
- PYTHON_WEBOB_LICENSE_FILES = docs/license.txt
+-PYTHON_WERKZEUG_VERSION = 3.0.4
++PYTHON_WERKZEUG_VERSION = 3.0.6
+ PYTHON_WERKZEUG_SOURCE = werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
+-PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/0f/e2/6dbcaab07560909ff8f654d3a2e5a60552d937c909455211b1b36d7101dc
++PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/d4/f9/0ba83eaa0df9b9e9d1efeb2ea351d0677c37d41ee5d0f91e98423c7281c9
+ PYTHON_WERKZEUG_SETUP_TYPE = flit
+ PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
+ PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.txt
 -- 
 2.34.1
 
