@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52E48D5B145
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 20:13:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A216D5B144
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 20:14:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A1A080C6C;
-	Mon, 28 Oct 2024 20:13:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 502A68109E;
+	Mon, 28 Oct 2024 20:14:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2e7ByZDPn4DT; Mon, 28 Oct 2024 20:13:12 +0000 (UTC)
+ id JgsDDAq_2R8A; Mon, 28 Oct 2024 20:14:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 073E680C90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C96880DA8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 073E680C90;
-	Mon, 28 Oct 2024 20:13:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A014D112A
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:13:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C96880DA8;
+	Mon, 28 Oct 2024 20:14:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BF57B4EC0
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:14:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 812EE605D9
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:13:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B9B9940257
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:14:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p29YJyR9b35H for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 20:13:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8otSRM5AVOKu for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 20:14:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C6E560073
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9C6E560073
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:13:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8FA78813F8; Mon, 28 Oct 2024 20:13:09 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 28 Oct 2024 21:12:35 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 81e7806b9353ab403e202d3e3d1d2a5818eb390f
-X-Git-Newrev: 2065fecbf30b0b91263fa7f30e5b1786055b968a
-X-Patchwork-Hint: ignore
-Message-Id: <20241028201309.8FA78813F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openssh: fix musl compile issue
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3FD3B4024C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FD3B4024C
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3FD3B4024C
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:14:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 57AEB60003;
+ Mon, 28 Oct 2024 20:14:22 +0000 (UTC)
+Date: Mon, 28 Oct 2024 21:14:22 +0100
+To: Fiona Klute via buildroot <buildroot@buildroot.org>
+Cc: Fiona Klute <fiona.klute@gmx.de>
+Message-ID: <20241028211422.1049398e@windsurf>
+In-Reply-To: <20241028163137.2136109-1-fiona.klute@gmx.de>
+References: <20241028163137.2136109-1-fiona.klute@gmx.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730146464;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=JFOgQHVQMvOeYI9PkmTLEJl4++iO+BjYAAmtwto27co=;
+ b=Q2HyHnzp0nsCZSjQyUpMhOvXrUOp3TNtf4XYhUNo2+IcnFA/TxD2/f1VW3QAc7GomQI9oc
+ TR5WvSzsr5EfXJ/rckPt1J7kvue8K4drZceIv+jS3BVo6XD1IH9iCt87pGcHUYHG9OZYJd
+ wClH86+PvTSo4zpQx5JEOKLc/dHeajptXM53NEb/JH3ADzTtwzpZzJu8QojgscFkdqoNLj
+ 6oLzfYL3StbMdIvBqQnpm7H5N+IAqmbEUnbvuj/IMsGJuokl2MioerTS6oSqqjwkjDDcI9
+ I8G6YNOzpjvvR0116CCsr9QWnDoGpYKr5KqUoHIDK8cYu2meeg/iiUkjr3IbxA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Q2HyHnzp
+Subject: Re: [Buildroot] [PATCH 1/1] package/openssh: fix musl compile issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,75 +83,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2065fecbf30b0b91263fa7f30e5b1786055b968a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 28 Oct 2024 17:31:37 +0100
+Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
 
-Building package/openssh 9.9p1 with musl failed during linking because
-construct_utmp() was referenced due to "use construct_utmp to
-construct btmp records" [1], but not built as utmp is disabled in the
-Buildroot package. The fix comes from upstream and ensures the
-construct_utmp function actually gets built when USE_BTMP is set [2].
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+> 
+> Building package/openssh 9.9p1 with musl failed during linking because
+> construct_utmp() was referenced due to "use construct_utmp to
+> construct btmp records" [1], but not built as utmp is disabled in the
+> Buildroot package. The fix comes from upstream and ensures the
+> construct_utmp function actually gets built when USE_BTMP is set [2].
 
-[1] https://anongit.mindrot.org/openssh.git/commit/?id=671c440786a5a66216922f15d0007b60f1e6733f
-[2] https://anongit.mindrot.org/openssh.git/commit/?id=76a618d2842c34c16cd21a4efc7230e2f459008d
+It would have been nice to include more explicitly since when this
+issue started occurring. I assume it's since the bump of OpenSSH to
+9.9p1, but this should ideally been made explicit. Could you keep this
+in mind for your next fixes?
 
-Fixes:
+I've also added a reference to the autobuilder failure being fixed, and
+applied. Thanks!
 
-  http://autobuild.buildroot.net/results/1e651724373f32e45d122d05fa3a10ac88fe29dc/
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...build-construct_utmp-when-USE_BTMP-is-set.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
-
-diff --git a/package/openssh/0001-build-construct_utmp-when-USE_BTMP-is-set.patch b/package/openssh/0001-build-construct_utmp-when-USE_BTMP-is-set.patch
-new file mode 100644
-index 0000000000..85ad5a538c
---- /dev/null
-+++ b/package/openssh/0001-build-construct_utmp-when-USE_BTMP-is-set.patch
-@@ -0,0 +1,35 @@
-+From 76a618d2842c34c16cd21a4efc7230e2f459008d Mon Sep 17 00:00:00 2001
-+From: Damien Miller <djm@mindrot.org>
-+Date: Wed, 25 Sep 2024 11:13:05 +1000
-+Subject: [PATCH] build construct_utmp() when USE_BTMP is set
-+
-+Fixes compile error on Void Linux/Musl
-+
-+Upstream: https://anongit.mindrot.org/openssh.git/commit/?id=76a618d2842c34c16cd21a4efc7230e2f459008d
-+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-+---
-+ loginrec.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/loginrec.c b/loginrec.c
-+index 45f13dee8b1f..7b1818b86753 100644
-+--- a/loginrec.c
-++++ b/loginrec.c
-+@@ -614,7 +614,7 @@ line_abbrevname(char *dst, const char *src, int dstsize)
-+  ** into account.
-+  **/
-+
-+-#if defined(USE_UTMP) || defined (USE_WTMP) || defined (USE_LOGIN)
-++#if defined(USE_BTMP) || defined(USE_UTMP) || defined (USE_WTMP) || defined (USE_LOGIN)
-+
-+ /* build the utmp structure */
-+ void
-+@@ -698,7 +698,7 @@ construct_utmp(struct logininfo *li,
-+ 	}
-+ # endif
-+ }
-+-#endif /* USE_UTMP || USE_WTMP || USE_LOGIN */
-++#endif /* USE_BTMP || USE_UTMP || USE_WTMP || USE_LOGIN */
-+
-+ /**
-+  ** utmpx utility functions
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
