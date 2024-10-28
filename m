@@ -4,89 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17A2FD13570
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 07:58:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32B62D13588
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 08:05:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D9BF6071B;
-	Mon, 28 Oct 2024 07:58:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C79AC6080B;
+	Mon, 28 Oct 2024 08:05:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PY41E-itvgP7; Mon, 28 Oct 2024 07:58:06 +0000 (UTC)
+ id gYrjtTJizQyc; Mon, 28 Oct 2024 08:05:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3BED60735
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33037607B5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3BED60735;
-	Mon, 28 Oct 2024 07:58:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E4DB3AEE
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 07:58:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33037607B5;
+	Mon, 28 Oct 2024 08:05:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 80455AEE
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 08:05:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CE73340124
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 07:58:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E16840620
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 08:05:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CpRt6Kjun03I for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 07:58:04 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom; client-ip=198.175.65.21;
- helo=mgamail.intel.com; envelope-from=andriy.shevchenko@linux.intel.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 63DEE400AF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63DEE400AF
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 63DEE400AF
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 07:58:02 +0000 (UTC)
-X-CSE-ConnectionGUID: sD6lC99zR3uXcny2Db8naw==
-X-CSE-MsgGUID: l4pOw/QVRU+zpkHHbnmSLg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29650272"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; d="scan'208";a="29650272"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
- by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 28 Oct 2024 00:58:02 -0700
-X-CSE-ConnectionGUID: 9d+1t5GPSduvPjMvHdUUbQ==
-X-CSE-MsgGUID: 4gs0iEWGTm6MQiBotgnUWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,238,1725346800"; d="scan'208";a="81862734"
-Received: from smile.fi.intel.com ([10.237.72.154])
- by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 28 Oct 2024 00:58:00 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
- (envelope-from <andriy.shevchenko@linux.intel.com>)
- id 1t5KdS-00000007re1-1raR; Mon, 28 Oct 2024 09:57:58 +0200
-Date: Mon, 28 Oct 2024 09:57:58 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Andy Yan <andyshrk@163.com>,
- Andy Yan <andyshrk@gmail.com>
-Message-ID: <Zx9EBoth4bf6QpQd@smile.fi.intel.com>
-References: <20240927183553.2866682-1-andriy.shevchenko@linux.intel.com>
- <20241026144748.09d6b892@windsurf>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HIU0VPeg4zRE for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 08:05:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:67c:2050:0:465::201; helo=mout-p-201.mailbox.org;
+ envelope-from=hypnotoad@lindra.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7FDB04062E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FDB04062E
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org
+ [IPv6:2001:67c:2050:0:465::201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7FDB04062E
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 08:05:49 +0000 (UTC)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4XcQtb6l4Pz9sst;
+ Mon, 28 Oct 2024 09:05:43 +0100 (CET)
+Message-ID: <c6cf5656-dbc3-417d-a503-c1075eba0899@lindra.de>
+Date: Mon, 28 Oct 2024 09:05:42 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20241026144748.09d6b892@windsurf>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
- t=1730102284; x=1761638284;
- h=date:from:to:cc:subject:message-id:references:
- mime-version:in-reply-to;
- bh=xDmhhOvEHX1rFouzf1cWnHeBbjrr24SKtr6lGvqRcok=;
- b=Q/UmOmcVA/z7b6zZkHgPArB+rJOpaLRGvyeEc6aPQuPBPa/SzWFIpxBH
- gboAQDtKrhgFE6nJV/BL37QKEhEKMvgsrWfWo6SyCTcTy8py3rhpiQzBc
- TpjA7D9vzg+GUBhi9FIbFGvU7C23mPMszfteFXsYbg52awWt2jykfdMyv
- CwxWlhfE4sXINiW3dbZM+JqmwHXeJ0HTNWBLO0gbaCLzAWazfBkrrhZeP
- 8KzyM8q/HCG9iGEr/V5aT5t3KNaXdT3/oTRJKPyY8M+nwqFTDm3o00xA6
- RF4spW257/j0wLj81beRCZwEkeA3i57ToRyMWME+ca3QW7gJTcPCyURyN
- A==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=linux.intel.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>,
+ Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20241026172741.451347-1-ju.o@free.fr>
+ <20241026220546.2bc2fb22@windsurf>
+Content-Language: en-US, de-DE
+From: Ralf Dragon <hypnotoad@lindra.de>
+In-Reply-To: <20241026220546.2bc2fb22@windsurf>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=lindra.de; s=MBO0001; t=1730102744;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=uvsHxsLsfQ3mD5NlY+HGmbAWpfBxqLypTAVkcXw9pPs=;
+ b=FUe4UEwRIZupML2rJEYZgWwz2kEm4jVrETqHrhhEz6KbPf9KAJHg1h7SeVb+Yj1fQoBuoD
+ BrWgRyB5AL93R+5XmFwDdbyiOvEaAW7Zklvsot8UgCo5YeFyo7LOujXcVHlzef8seOzQ9M
+ q9k8tPC/4gfocZ7ox94IuQzJI/c1AJwfSBOPhdbj6TbOnEJAY2gRjwqKpixo0IN85Y2/5j
+ euDv7NwN1IFfeR+Wo0gQQLQFS3tkYQsFG2+EDFxA9lJGwn3Njp/0KvewY8rmeXurqBq9aW
+ 8p2XVY9uPM41fCPcG0OilFoIxrxe7t16ZEp5S56iIRWh/jKtiLof01uXO/Q2bQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=lindra.de
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256
- header.s=Intel header.b=Q/UmOmcV
-Subject: Re: [Buildroot] [PATCH v2 1/1] package: Add iotools package
+ unprotected) header.d=lindra.de header.i=@lindra.de header.a=rsa-sha256
+ header.s=MBO0001 header.b=FUe4UEwR
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-pyqt5-sip: bump version
+ to 12.15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,41 +88,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, Oct 26, 2024 at 02:47:48PM +0200, Thomas Petazzoni via buildroot wrote:
-> On Fri, 27 Sep 2024 21:34:59 +0300
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> 
-> > The iotools package provides a set of simple command line tools which
-> > allow access to hardware device registers. Supported register interfaces
-> > include PCI, IO, memory mapped IO, SMBus, CPUID, and MSR. Also included
-> > are some utilities which allow for simple arithmetic, logical, and other
-> > operations.
-> > 
-> > If you ever have to debug hardware, you could probably use these tools.
-> 
-> Applied to master after doing some tweaks:
+Thank you for the cleanups and clarifications!
+Ralf
 
-Thank you!
-
-> - Used STATIC=1/STATIC=0 to achieve the proper behavior with regard to
->   BR2_STATIC_LIBS
-> 
-> - Use the canonical $(INSTALL) incantation for the installation step
-> 
-> One thing that isn't super nice is your handling of the DEBUG variable.
-> Ideally in Buildroot we would want neither DEBUG=0 nor DEBUG=1, but
-> "don't do anything and let Buildroot pass the CFLAGS it wants".
-
-Any suggestion how it may be addressed?
-
--- 
-With Best Regards,
-Andy Shevchenko
+Am 26.10.24 um 22:05 schrieb Thomas Petazzoni:
+> On Sat, 26 Oct 2024 19:27:41 +0200
+> Julien Olivain <ju.o@free.fr> wrote:
+>
+>> The versioning scheme of this package is not trivial: the PyQt5-sip
+>> version number does not corresponds to the actual version tag name in
+>> its Python-SIP source repository. For that reason, this commit adds a
+>> comment explaining this peculiar mapping. This comment will help, in
+>> future maintenance tasks.
+>>
+>> To better understand the upstream changes in this package explained in
+>> this commit log, it is worth mentioning that:
+>> - PyQt5-sip 12.13.0 was generated with Python-SIP 6.7.12, and
+>> - PyQt5-sip 12.15.0 was generated with Python-SIP 6.8.6.
+>>
+>> The package license has changed to BSD-2-Clause, in upstream commits:
+>> https://github.com/Python-SIP/sip/commit/0ba3b233ec8ed7f22f2f2f950b64f61b50ddfc00
+>> https://github.com/Python-SIP/sip/commit/4dde1491f7b8ace15833cffb86bee82d60683968
+>> https://github.com/Python-SIP/sip/commit/f32039b07c47280039dcdcd0f8a2b1323fda912e
+>>
+>> This commit updates the _LICENSE and _LICENSE_FILES macro
+>> accordingly. The license hash file is also updated. While at it, this
+>> commit also adds the MD5 hash published upstream.
+>>
+>> This commit also introduces minor improvements to better follow
+>> Buildroot package conventions:
+>> - the .mk file header is changed to lower case,
+>> - hash file comments are updated,
+>> - the locally calculated license file hash is changed from MD5 to
+>>    SHA256.
+>>
+>> Signed-off-by: Julien Olivain <ju.o@free.fr>
+>> ---
+>>   .../python-pyqt5-sip/python-pyqt5-sip.hash    | 11 +++++-----
+>>   package/python-pyqt5-sip/python-pyqt5-sip.mk  | 20 ++++++++++++++-----
+>>   2 files changed, 20 insertions(+), 11 deletions(-)
+> Applied to master, thanks.
+>
+> Thomas
 
 
 _______________________________________________
