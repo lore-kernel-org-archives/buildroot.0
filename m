@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD246D5B154
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 21:07:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A6E4D5B14E
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 21:08:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEFA860678;
-	Mon, 28 Oct 2024 21:07:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C98AF40342;
+	Mon, 28 Oct 2024 21:08:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E3gPQnMeWkpS; Mon, 28 Oct 2024 21:07:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m-0k5uDFofg6; Mon, 28 Oct 2024 21:08:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A229D607F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76A0F403D8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A229D607F7;
-	Mon, 28 Oct 2024 21:07:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A2534EC0
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:07:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76A0F403D8;
+	Mon, 28 Oct 2024 21:08:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B66A112A
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:08:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 413B740015
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:07:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 824E440015
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:08:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2jzlycA1TDZm for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 21:07:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id eUlg78t4vHbk for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 21:08:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A8AC40471
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A8AC40471
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:07:21 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 114BB8449F; Mon, 28 Oct 2024 21:07:21 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 28 Oct 2024 22:05:49 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b98661966c8022bd74ada3c190083966ff391f2f
-X-Git-Newrev: 67e62449304501a5dee2a81bac30e1c2e968046a
-X-Patchwork-Hint: ignore
-Message-Id: <20241028210721.114BB8449F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iwd: bump to version 3.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3AAA2409B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AAA2409B3
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3AAA2409B3
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:08:06 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E3FB9C0004;
+ Mon, 28 Oct 2024 21:08:04 +0000 (UTC)
+Date: Mon, 28 Oct 2024 22:08:04 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+Message-ID: <20241028220804.6842fce4@windsurf>
+In-Reply-To: <20241027204215.3416364-1-bernd@kuhls.net>
+References: <20241027204215.3416364-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730149685;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=fK6L/+jSTAD6fj5Xlqgmw8FcbsC5LS6RdGxfHvi+8Z4=;
+ b=k5lSuAeAaLOUSl4WhSoVDSrfWCjh4mp9/D5mUu3i0KUseZ8gecSDKC8f1Hp10K1GE0ljLf
+ GfbiMo2dco9n6X8REYT6Orf8WNfFpGpSIvx30IChBt77f1v/crWFnDcbwgBez1dG6D7z1G
+ RN2+qA3mfx4bTZqZgZRxz3cdlBecYo3FXBG+5huCqPgT6RWfXd38poLcHIKij/jnNDpdzF
+ vJek+Ym9FkG1b95+878wZzhB8lfLBrVX/3Ncx8RzDYCapSY3sEMg9Q7SInWCxjHQppPVNH
+ JG5ALD3WBcVnt6GVcx+TEXQ5o7BfisGGBg67CME37wmOrR5eUXAU9mIht6VG/w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=k5lSuAeA
+Subject: Re: [Buildroot] [PATCH 1/1] package/xmrig: bump version to 6.22.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,49 +83,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67e62449304501a5dee2a81bac30e1c2e968046a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 27 Oct 2024 21:42:15 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Changelog:
-https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/ChangeLog?h=3.0
+> Changelog: https://github.com/xmrig/xmrig/blob/master/CHANGELOG.md
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/xmrig/xmrig.hash | 2 +-
+>  package/xmrig/xmrig.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/iwd/iwd.hash | 2 +-
- package/iwd/iwd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
-index e05bf6fad7..b0a72efd7a 100644
---- a/package/iwd/iwd.hash
-+++ b/package/iwd/iwd.hash
-@@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
--sha256  86827b97cb5b19ddecce36568c59378da2fae8cf37a0e2b9eacd1269f24c6f8e  iwd-2.20.tar.xz
-+sha256  bd167ab368b6ba302b6c948a4f41f02d233a12e20d5094b1c0393325309f8a60  iwd-3.0.tar.xz
- 
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index 47020624ea..3a178795da 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IWD_VERSION = 2.20
-+IWD_VERSION = 3.0
- IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
- IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
- IWD_LICENSE = LGPL-2.1+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
