@@ -4,71 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61204D5B845
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 22:45:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23553D5B845
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 22:57:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 28E0C6002E;
-	Mon, 28 Oct 2024 22:45:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CAEB2605DD;
+	Mon, 28 Oct 2024 22:57:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MQXcmDzd9ltq; Mon, 28 Oct 2024 22:45:58 +0000 (UTC)
+ id sMFMserA2he0; Mon, 28 Oct 2024 22:57:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30ECE6059D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7A77605D9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30ECE6059D;
-	Mon, 28 Oct 2024 22:45:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B1CBB112A
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:45:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7A77605D9;
+	Mon, 28 Oct 2024 22:56:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0557C112A
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:56:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 92D37810EC
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:45:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D898A6058D
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:56:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lZx2PGT3zO3R for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 22:45:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C697480C36
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C697480C36
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C697480C36
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:45:55 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a02c6.dip0.t-ipconnect.de [91.58.2.198])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E6D19A4C113A
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 23:45:53 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:50090)
- by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1t5YUj-000000007rg-0vi1
- for buildroot@buildroot.org; Mon, 28 Oct 2024 22:45:53 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eJs377_SRnKM for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 22:56:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CBA61605D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBA61605D9
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CBA61605D9
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:56:56 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id E3037B0051B;
+ Mon, 28 Oct 2024 23:56:52 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 28 Oct 2024 23:45:53 +0100
-Message-Id: <20241028224553.2468987-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Mon, 28 Oct 2024 23:56:48 +0100
+Message-ID: <20241028225648.1260830-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202406071026; t=1730155553;
- bh=5P7wQfOdyxSG16y9axECOtIf7jXVp3i9VBvW3GsXof8=;
- h=From:To:Subject:Date:From;
- b=dlZvMX2PH6xsNhalHzhDQnQBb7pEldZBU+m5R5OxtIdBtLBTHOCNx8dE0c/6lsYXT
- QY06pwkdc55f7I/30okhzKXwM0XHZCa+V32TsuLion21KE9T/wnScL6X5en1nke9b8
- J7wGIVekcK7wCNc4F2JsTUtXVdzkSm6+EUQVRCAt7ofGT2c3VwRLXkYjnp5lbbEVUR
- rxLXQL9XqiDNl6dp3DqQlCHvtYj03O0CIq+RJhkWfl49G/aVxTVsk1NXegVkbZPMfX
- YF5K720f+2gmve3ydzyq385smqae93AbgRVcjQOjhTTgZNW2OzgQdCxEDmnJkzynCB
- c1xGqHB2y4axQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1730156214;
+ bh=/TZGowtLt4DP0S6QDtd67g2cZPnknb26WK9sse4p5ck=;
+ h=From:To:Cc:Subject:Date:From;
+ b=vRiMpBoZzLnXb4hDiKzeZtEH2mgtBGxPBgrDPyg8IPco8rpvkvsw2dzh4yuyv7JmH
+ nnL2PfN3w5/OjK8K088jJb+l62bAjk6cO0gIeoGGH85fWlDEZJKY12EXUTY3RXfF5U
+ 2zCTiVMF8YbtWks48IOBGScXzurpZkShIi7UX4xkS74WmQHeP90TbsvWscmj3u2lCX
+ T3Ba2Hj7VFaC9uLD1Cm98QXey5+ihZUvMBKQrshv1zSG4miM0gp8oPAhMyotv3o9o1
+ kVei2XvWtHQsv0xCCY2UJ9lrtTmoRxJSnA+vcn3eqp/p4Rs5eZo9HSm5JvvwGWIv9V
+ 8Rt2N98PfDjvA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202406071026 header.b=dlZvMX2P
-Subject: [Buildroot] [PATCH 1/1] package/kodi-screensaver-asteroids: bump
- version
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=vRiMpBoZ
+Subject: [Buildroot] [PATCH 1/1] package/z3: bump to version 4.13.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,36 +81,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+For change log since 4.13.2, see:
+https://github.com/Z3Prover/z3/blob/z3-4.13.3/RELEASE_NOTES.md#version-4133
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash  | 2 +-
- .../kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk    | 2 +-
+Patch runtime tested in:
+https://gitlab.com/jolivain/buildroot/-/jobs/8209936599
+---
+ package/z3/z3.hash | 2 +-
+ package/z3/z3.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-index a65f11402a..21e1617412 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+diff --git a/package/z3/z3.hash b/package/z3/z3.hash
+index f138f39de6..8514043594 100644
+--- a/package/z3/z3.hash
++++ b/package/z3/z3.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  7644f9ad16e0f2ae9b4796cdc5cdd92761e835b5edb4f114311d2578c0aeffe6  kodi-screensaver-asteroids-9f761cb7d5842e61da9c608c9f58067bcb986d89.tar.gz
-+sha256  41c20f2fec17b60a3baa98edff80ba01053a80ada0ffd056459c2f4ae6588867  kodi-screensaver-asteroids-9cdcb84a4464fee5ae4b6ab3b300e6a3824ec084.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-index f96eb4e830..53c71f73d2 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+ # Locally calculated
+-sha256  fd7dc6dd2633074f0a47670d6378b0e5c28c2c26f2b58aa23e9cd7f0bc9ba0dc  z3-4.13.2.tar.gz
++sha256  f59c9cf600ea57fb64ffeffbffd0f2d2b896854f339e846f48f069d23bc14ba0  z3-4.13.3.tar.gz
+ sha256  e617cad2ab9347e3129c2b171e87909332174e17961c5c3412d0799469111337  LICENSE.txt
+diff --git a/package/z3/z3.mk b/package/z3/z3.mk
+index 4763b1cc78..16db30ac21 100644
+--- a/package/z3/z3.mk
++++ b/package/z3/z3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_ASTEROIDS_VERSION = 9f761cb7d5842e61da9c608c9f58067bcb986d89
-+KODI_SCREENSAVER_ASTEROIDS_VERSION = 9cdcb84a4464fee5ae4b6ab3b300e6a3824ec084
- KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,xbmc,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
- KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = LICENSE.md
+-Z3_VERSION = 4.13.2
++Z3_VERSION = 4.13.3
+ Z3_SITE = $(call github,Z3Prover,z3,z3-$(Z3_VERSION))
+ Z3_LICENSE = MIT
+ Z3_LICENSE_FILES = LICENSE.txt
 -- 
-2.39.5
+2.47.0
 
 _______________________________________________
 buildroot mailing list
