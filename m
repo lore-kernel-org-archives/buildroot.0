@@ -4,93 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9FE0D33998
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 16:29:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9606D3399E
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 16:31:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DCA09406D3;
-	Mon, 28 Oct 2024 16:29:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7180040182;
+	Mon, 28 Oct 2024 16:31:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I0h5rrRHNfIo; Mon, 28 Oct 2024 16:29:36 +0000 (UTC)
+ id frr79ExY4nYZ; Mon, 28 Oct 2024 16:31:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82223406C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3734E401A0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82223406C3;
-	Mon, 28 Oct 2024 16:29:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 03EB9AEE
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 16:29:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3734E401A0;
+	Mon, 28 Oct 2024 16:31:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 61853112A
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 16:31:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D855E409D7
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 16:29:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 42BDE80D6C
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 16:31:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2HzAMG9_cc6q for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 16:29:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d30; helo=mail-io1-xd30.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 924754036A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 924754036A
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
- [IPv6:2607:f8b0:4864:20::d30])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 924754036A
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 16:29:33 +0000 (UTC)
-Received: by mail-io1-xd30.google.com with SMTP id
- ca18e2360f4ac-83ab21c269eso177788039f.2
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 09:29:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730132972; x=1730737772;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=CN1q78WWstjr8cYsjwxDruXC/fx5xEpMOQfiTi5Kfs0=;
- b=R3rgm9JWhramLRL60dGbvzsxEXOvf1yWLVZy3A3mpn+bkgVD/ygE97eKrpumZSbhv+
- ScdXoxKGdEWN6uLkKFX0/Z2qG25Hb4nKESasjl7nfKwaPKdxTwBHbLzGdRomPAsnTb4J
- YrvXzVoP50DeBvMs89VawwvQiK6pmd04ITmSrDzfmFLz0818y1Rtp3Z/4KsR7DZc0kWs
- i4eWWcK9PahJJTjHL9GDARxiZr3IaHpjeC2nkyV4c9+T2kiszy6jzFWQSVF/2LumOANJ
- RfhipyIJMAtWaxr8eF3Ywl1H2RZgjGdOKii/3ZwITn/E3A4EqmYMwJT4qryG/PUlnOw5
- eAkg==
-X-Gm-Message-State: AOJu0YznETDycC7gOX1WcOFCIedeh4+5nYeknf3iDrVhFeLWMkR5G6WA
- VHz2ZGdrWwg56VOqeNTztFa33zykBGq3nh/S5AQ+Pa9HHRiU3E1ZKtHEBw==
-X-Google-Smtp-Source: AGHT+IFgfN8NxZgCuXt3GzdwcGKNgHLqmPSoh5qiXORi1k6WtnYX33dRN9wYhe0sh/Xzdfy1WRaF7g==
-X-Received: by 2002:a05:6602:13d3:b0:83a:c4e1:7d50 with SMTP id
- ca18e2360f4ac-83b1c3b8f77mr777834539f.2.1730132972218; 
- Mon, 28 Oct 2024 09:29:32 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
- [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4dc727502b5sm1791728173.109.2024.10.28.09.29.31
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 28 Oct 2024 09:29:31 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hhUKKvuliT1H for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 16:31:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 577DC80D50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 577DC80D50
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 577DC80D50
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 16:31:46 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.112.46]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N3KTo-1u4PGE2Olm-017qyc; Mon, 28
+ Oct 2024 17:31:44 +0100
 To: buildroot@buildroot.org
-Cc: Anisse Astier <anisse@astier.eu>,
- Christian Stewart <christian@aperture.us>,
- James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 28 Oct 2024 10:29:26 -0600
-Message-Id: <20241028162926.209397-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Cc: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+Date: Mon, 28 Oct 2024 17:31:37 +0100
+Message-ID: <20241028163137.2136109-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
+X-Provags-ID: V03:K1:LiuDebpix+rasgG09BNaU5IDn6fO2CPmKk9CI0eky7YhvW/12ug
+ k9vTS86r4brjA3/rF0DFSrOhTH9VnWIACTASZIrJW7rBcDFkxAwzEK3AeUOgNMqCOIClBdE
+ RrOMVtYXVxu0I+qaIgbBJHFt23MLPLhPSWqmQzLEq4GkKOW59vJ75QTlB5icyqnbF0bqd6d
+ +XtMLxwm1iAKzUbxBfz0Q==
+UI-OutboundReport: notjunk:1;M01:P0:UL4drt3kgK8=;Y3OWsSlC05Gpd0yF8NUuV6yucvU
+ 6pl1CeAYqYl7PmlP3JjGdX8f5AKaE+zyw/XmOdM3076xv8wWOTs2n8njeZzQO0DHqKBjDn5Px
+ SASICVgls+b7wmiz85DhybL1kRb8bwk9n/aWYqKfeCzbBbxj+sXzM6+tLslp5h7W6Jg8lMoDh
+ c0tynZsqaea8LCcDNpOQR11ZEwF2CHrWOUyJ9RWNQXqXRw9Gmb3ZtnG2ZhR6CiXsDqyIx2mpP
+ dJXo8BYiXucfPnPIEZ52WKjDM2t4/KrltBBY/E2ljt9G28t6Z74KPjAhihum8wRz60WZwFNFA
+ BEGppTn6kARO/2E37tWJPESUiDOnTlmnyxwmbgsagu/mqZdjK9dL4VDmg7HO7mNcpYAVJiPAi
+ vCajL/F6E65fjfVJ6O8cTor1AhqzuUHkSRGXWujQf8rUkbGJyvK33EDiLA3T9bcL3iaV6khDN
+ agX4T43Mnv463ESW36CDjCMOYN74gfHT3iO3/p0W6qSC/p2kPBs5D+IKaNR0cYIhAoSh2DRtt
+ V4UWaJzwbcZNzlQFY9XzvbxT9Q13VZK5DXkmiZZAh9a7cnyxlpmKC7bHym7ChQ1HaGRO0AUCg
+ L8KwWfXNnymz5WqS0t9G8Jk/tAOzqWRDd5XoXnEs956tFFucHQldV9NDstbj0+w7YfWDiOe1L
+ CEuT3teH1n8s/3P8M/cc3TEJOOr4pn3bURRGdTy5ToxcVfsVgjVDTH2HR6tFVx45yfna1yXC8
+ NjCgDZfiU8iV+utc///khEhJo1hQIuI/gEUQVAOLG5e1BWlkd8r0NREuKioM+zuQHbb4w/aHX
+ Ud1z/1B95qa18ihCEG4QXX8w==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1730132972; x=1730737772; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=CN1q78WWstjr8cYsjwxDruXC/fx5xEpMOQfiTi5Kfs0=;
- b=drrbgh9KGE/EsdTC746bfF3v9IIN1pmtQYduL2VFS9imPQyYP242yhCXNGe9ZgctFG
- D/i39i7/fMsRgFbqY9g8YSHHCI9uM2Uk0ULDqIAMfSpQ8ZSAuCSPsB6Q11fbhiOrtKZJ
- I8DLDA0q3Xn24IGgSr8qyT0PbG8IyAIdKBeLKCX+H18Lq/TsWJMrJ9upI5P80F2IcCRy
- T0muW6GLnHOqVi71WgCgykRXqGt8hl849OoPUP+9ylzqFReP4tbXA2xWcjz48UKiMiGZ
- LjBXmfBHYJpiW0REfJrcj2oWBid1ZzQStDFYouL80Rr7LMdCniIRFtCaMG9J1YlvzYJW
- v1Mw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=drrbgh9K
-Subject: [Buildroot] [PATCH v6 1/1] package/tailscale: new package
+ d=gmx.de; 
+ s=s31663417; t=1730133104; x=1730737904; i=fiona.klute@gmx.de;
+ bh=I/7OTxzMGZ9wtjdIy6qtSV0zD5klc7n7AQVslZYcwg4=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=KUbDTyGsVGFeFdml09sPTbOcKJAFto+k7hV/NqobGMI/XqzsmD4WwK7rT7j9at9C
+ XiOJVpkEZ1Byu06ACUA5pkntY7/BIy0HBQWk9p5CSROF5oaPB3sg11ApEukrSz0M7
+ RpgHpr7RA5h6ZQCX7Bvg3fc6qo7ieE5hCG66CIwuiF6b4EDdNZtAh1KHjFCYxvDNQ
+ ttlLJnKCXAUyzCPBY0cmHYYBBaAMgVMK/Dcg3v97M2KbGlT+/n0jnxe2EAehlR3YC
+ 2HPVCqfO9XzbKSHtDBHLjBumh12uMKNlSt8IP1Xa2aO/Nkzn9oxfuli3z0qXkuMbB
+ Ovz50nN0dwS14hcmYQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=KUbDTyGs
+Subject: [Buildroot] [PATCH 1/1] package/openssh: fix musl compile issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,112 +95,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v5 -> v6:
-  - bump to version 1.76.1
-Changes v4 -> v5:
-  - bump to version 1.72.0
-  - remove GOPROXY override
-Changes v3 -> v4:
-  - restore GOPROXY override
-Changes v2 -> v3:
-  - set required CONFIG_TUN kernel config option
-Changes v1 -> v2:
-  - don't set GOPROXY
----
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/tailscale/Config.in      |  8 ++++++++
- package/tailscale/tailscale.hash |  3 +++
- package/tailscale/tailscale.mk   | 22 ++++++++++++++++++++++
- 5 files changed, 35 insertions(+)
- create mode 100644 package/tailscale/Config.in
- create mode 100644 package/tailscale/tailscale.hash
- create mode 100644 package/tailscale/tailscale.mk
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d7d0af3543..a02bda2aca 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1503,6 +1503,7 @@ F:	package/serd/
- F:	package/sord/
- F:	package/sratom/
- F:	package/stb/
-+F:	package/tailscale/
- F:	package/zchunk/
- F:	support/testing/tests/package/sample_python_rtoml.py
- F:	support/testing/tests/package/test_python_rtoml.py
-diff --git a/package/Config.in b/package/Config.in
-index f2c63ffb6e..d44886b9db 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2625,6 +2625,7 @@ endif
- 	source "package/stunnel/Config.in"
- 	source "package/suricata/Config.in"
- 	source "package/system-config-printer/Config.in"
-+	source "package/tailscale/Config.in"
- 	source "package/tcpdump/Config.in"
- 	source "package/tcping/Config.in"
- 	source "package/tcpreplay/Config.in"
-diff --git a/package/tailscale/Config.in b/package/tailscale/Config.in
+Building package/openssh 9.9p1 with musl failed during linking because
+construct_utmp() was referenced due to "use construct_utmp to
+construct btmp records" [1], but not built as utmp is disabled in the
+Buildroot package. The fix comes from upstream and ensures the
+construct_utmp function actually gets built when USE_BTMP is set [2].
+
+[1] https://anongit.mindrot.org/openssh.git/commit/?id=671c440786a5a66216922f15d0007b60f1e6733f
+[2] https://anongit.mindrot.org/openssh.git/commit/?id=76a618d2842c34c16cd21a4efc7230e2f459008d
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+---
+ ...-construct_utmp-when-USE_BTMP-is-set.patch | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/openssh/0001-build-construct_utmp-when-USE_BTMP-is-set.patch
+
+diff --git a/package/openssh/0001-build-construct_utmp-when-USE_BTMP-is-set.patch b/package/openssh/0001-build-construct_utmp-when-USE_BTMP-is-set.patch
 new file mode 100644
-index 0000000000..c81a7134ee
+index 0000000000..0805bcdacb
 --- /dev/null
-+++ b/package/tailscale/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_TAILSCALE
-+	bool "tailscale"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_GO
-+	help
-+	  The easiest, most secure way to use WireGuard and 2FA.
++++ b/package/openssh/0001-build-construct_utmp-when-USE_BTMP-is-set.patch
+@@ -0,0 +1,35 @@
++From 76a618d2842c34c16cd21a4efc7230e2f459008d Mon Sep 17 00:00:00 2001
++From: Damien Miller <djm@mindrot.org>
++Date: Wed, 25 Sep 2024 11:13:05 +1000
++Subject: [PATCH] build construct_utmp() when USE_BTMP is set
 +
-+	  https://github.com/tailscale/tailscale
-diff --git a/package/tailscale/tailscale.hash b/package/tailscale/tailscale.hash
-new file mode 100644
-index 0000000000..a5492684a1
---- /dev/null
-+++ b/package/tailscale/tailscale.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  46b68067a8b91f0e32ea8c23c292b9eb6675fac4c7bba5471a1f787bc3ad7412  tailscale-1.76.1-go2.tar.gz
-+sha256  d1ee1c7947d4b2c1963ea214d5324f1d4c89f2f1d0f0224889b4dfb868dad725  LICENSE
-diff --git a/package/tailscale/tailscale.mk b/package/tailscale/tailscale.mk
-new file mode 100644
-index 0000000000..91290ba4a3
---- /dev/null
-+++ b/package/tailscale/tailscale.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# tailscale
-+#
-+################################################################################
++Fixes compile error on Void Linux/Musl
 +
-+TAILSCALE_VERSION = 1.76.1
-+TAILSCALE_SITE = $(call github,tailscale,tailscale,v$(TAILSCALE_VERSION))
-+TAILSCALE_LICENSE = BSD-3-Clause
-+TAILSCALE_LICENSE_FILES = LICENSE
-+TAILSCALE_GOMOD = tailscale.com
-+TAILSCALE_BUILD_TARGETS = cmd/tailscale cmd/tailscaled
-+TAILSCALE_INSTALL_BINS = tailscale tailscaled
-+TAILSCALE_LDFLAGS = \
-+	-X tailscale.com/version.longStamp=$(TAILSCALE_VERSION) \
-+	-X tailscale.com/version.shortStamp=$(TAILSCALE_VERSION)
++Upstream: https://anongit.mindrot.org/openssh.git/commit/?id=76a618d2842c34c16cd21a4efc7230e2f459008d
++Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
++---
++ loginrec.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+define TAILSCALE_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_TUN)
-+endef
++diff --git a/loginrec.c b/loginrec.c
++index 45f13dee8b1f..7b1818b86753 100644
++--- a/loginrec.c
+++++ b/loginrec.c
++@@ -614,7 +614,7 @@ line_abbrevname(char *dst, const char *src, int dstsize)
++  ** into account.
++  **/
 +
-+$(eval $(golang-package))
--- 
-2.34.1
++-#if defined(USE_UTMP) || defined (USE_WTMP) || defined (USE_LOGIN)
+++#if defined(USE_BTMP) || defined(USE_UTMP) || defined (USE_WTMP) || defined (USE_LOGIN)
++
++ /* build the utmp structure */
++ void
++@@ -698,7 +698,7 @@ construct_utmp(struct logininfo *li,
++ 	}
++ # endif
++ }
++-#endif /* USE_UTMP || USE_WTMP || USE_LOGIN */
+++#endif /* USE_BTMP || USE_UTMP || USE_WTMP || USE_LOGIN */
++
++ /**
++  ** utmpx utility functions
+--
+2.45.2
 
 _______________________________________________
 buildroot mailing list
