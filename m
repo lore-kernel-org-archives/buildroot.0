@@ -4,67 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53678D5B144
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 20:09:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F6DED5B145
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 20:09:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DEFDD80DA8;
-	Mon, 28 Oct 2024 20:09:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D657380DD9;
+	Mon, 28 Oct 2024 20:09:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v9pnqkk594Pi; Mon, 28 Oct 2024 20:09:13 +0000 (UTC)
+ id 0NNkGPuCQITa; Mon, 28 Oct 2024 20:09:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3B3680DAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE66080DAA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E3B3680DAA;
-	Mon, 28 Oct 2024 20:09:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 91118AEE
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:09:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE66080DAA;
+	Mon, 28 Oct 2024 20:09:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C49B8112A
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:09:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 707B140153
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:09:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B37484057E
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:09:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hrljuRkwe7t7 for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 20:09:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 53BCE40015
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53BCE40015
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 53BCE40015
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:09:10 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 48E52B00576;
- Mon, 28 Oct 2024 21:09:06 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>
-Date: Mon, 28 Oct 2024 21:09:01 +0100
-Message-ID: <20241028200901.649397-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.47.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C2Sk7Zc8tKMb for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 20:09:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 61876402EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61876402EB
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 61876402EB
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:09:43 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1ADDD240003;
+ Mon, 28 Oct 2024 20:09:40 +0000 (UTC)
+Date: Mon, 28 Oct 2024 21:09:38 +0100
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org, Carlo Caione <carlo.caione@gmail.com>
+Message-ID: <20241028210938.29559f13@windsurf>
+In-Reply-To: <a4eb330bb35e5986f04b8356a4434406@free.fr>
+References: <20241025180523.118939-1-ju.o@free.fr>
+ <20241028164327.3e494f48@windsurf>
+ <a4eb330bb35e5986f04b8356a4434406@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1730146147;
- bh=zhqFFodAjbcGSKKnFx0dKrxwJcSWs6jctooGlhChufk=;
- h=From:To:Cc:Subject:Date:From;
- b=RYYYoTRXQYjcupDwSw1S0HepCMIII9w4J3lFsIhz2yiS9EuL+jj09T9nxcgsw5zjg
- 8eIWQAb17GhF1CoOrBl728WvoFBPWejmbrO2OEi1qu+n/wXURDsj3IuiqvGoKySXS0
- u9Lb6MSqdsacsosor7W1B8UcmSSYQhXt/N5Nmwl8b7w0xbbZFK+O4uwdL0xl7zgJQs
- PAMhxGvBr8YbALK8zp+tlDfUw5nj3b20Zhm9YHHF8urd9mJJ9Xm5qHa25J3ftXvu1p
- qArbyBiLHC8rF7zoTsjwIU0ymHTo47ijZSL8ogQH0J43Mos8GPeN+MVfHRTAQT0+2b
- Fozdky2rVOR5w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=RYYYoTRX
-Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version 2.3.7
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730146180;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=VlhdODtUJsmRK6rfcJpar0noUwI1435PlvRDddXzbY4=;
+ b=UaT3HS6qHK3R6gXXqIEPz91954CN1zVLpZsz2nr9Mdf7Fc8Gf4JondAPsS0yWI/TC5ej7D
+ gtD0ahcXK1raNT12Y4N09TNiFB8L+WNvhfkAUGxVihHoKm3s/uANAosvTnd0QrCFOhWHrQ
+ 7DiO7kpfiJO38KNCcp9pk2mBhu6VMSZAjAvIEJxXnOQc82MndbUsZxVnFpKk7F367+hHNr
+ SSHhJW+1l2/G3A3W1ZSeOS1dxJByuijBNzSJSSwM8EMOnEf9C9H/vdA40DINzu8gz0r/cl
+ 1/bPPtCI1thbOnyjVGVQXUPo92uf3qv651TTpSrItqvPdmgUKmMRLyoiVzCgJw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=UaT3HS6q
+Subject: Re: [Buildroot] [PATCH 1/1] package/jailhouse: fix build when
+ python helper scripts are enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,48 +84,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since v2.3.6, see:
-https://github.com/FluidSynth/fluidsynth/releases/tag/v2.3.7
+Hello,
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch runtime tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/8208922400
----
- package/fluidsynth/fluidsynth.hash | 2 +-
- package/fluidsynth/fluidsynth.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 28 Oct 2024 20:22:09 +0100
+Julien Olivain <ju.o@free.fr> wrote:
 
-diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
-index 0f54ad254e..787e97ce37 100644
---- a/package/fluidsynth/fluidsynth.hash
-+++ b/package/fluidsynth/fluidsynth.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  3340d73286b28fe6e5150fbe12648d4640e86c64c228878b572773bd08cac531  fluidsynth-2.3.6.tar.gz
-+sha256  38d1d910783ab67c07a4d859d1aa95525979ff352b927e25b1ae894c774bb4c4  fluidsynth-2.3.7.tar.gz
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
-index 3105162bda..98b56ba696 100644
---- a/package/fluidsynth/fluidsynth.mk
-+++ b/package/fluidsynth/fluidsynth.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLUIDSYNTH_VERSION = 2.3.6
-+FLUIDSYNTH_VERSION = 2.3.7
- FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
- FLUIDSYNTH_LICENSE = LGPL-2.1+
- FLUIDSYNTH_LICENSE_FILES = LICENSE
+> I agree, the Python error message is somewhat cryptic ;) The hint is
+> "sysconfig.py". A more detailed explanation of the situation would be:
+> 
+> """
+> Jailhouse Python scripts are using setuptools with host-python3 which
+> reads its sysconfig data from the target-python3. See:
+> https://gitlab.com/buildroot.org/buildroot/-/blob/2024.08.1/package/pkg-python.mk?ref_type=tags#L33
+> 
+> If the target python3 is not installed, this get expanded as an empty
+> string, leading to this "ValueError: Empty module name" error.
+> 
+> Pure Python packages which are using the python-package infrastructure
+> usually get this dependency automatically from:
+> https://gitlab.com/buildroot.org/buildroot/-/blob/2024.08.1/package/pkg-python.mk?ref_type=tags#L295
+> 
+> Here, the jailhouse package rather uses the generic-package
+> infrastructure, then installs the Python scripts (if enabled) with
+> dedicated macros. This is why the target python3 is needed.
+> """
+> 
+> Do you want me to send a v2 adding that to the commit log?
+
+Yes, would be nice, thanks a lot!
+
+Thomas
 -- 
-2.47.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
