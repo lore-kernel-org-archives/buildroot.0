@@ -4,71 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE9C6D3E2BB
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 19:26:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37957D3E2BA
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 19:28:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93FCA400F3;
-	Mon, 28 Oct 2024 19:26:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E6E6440874;
+	Mon, 28 Oct 2024 19:28:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rylku-kiuxlL; Mon, 28 Oct 2024 19:26:17 +0000 (UTC)
+ id tMNDMyLcBhfq; Mon, 28 Oct 2024 19:28:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0454040873
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6D5040603
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0454040873;
-	Mon, 28 Oct 2024 19:26:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 16823AEE
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 19:26:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6D5040603;
+	Mon, 28 Oct 2024 19:28:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4E1D112A
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 19:28:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EB39A40821
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 19:26:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 860BF6081F
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 19:28:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aNENmQt3fvth for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 19:26:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7621F40830
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7621F40830
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7621F40830
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 19:26:12 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a02c6.dip0.t-ipconnect.de [91.58.2.198])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 91BD0A4C0AF6
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:26:09 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44626)
- by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1t5VNQ-0000000030d-3avd
- for buildroot@buildroot.org; Mon, 28 Oct 2024 19:26:09 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0E39OOmEYG32 for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 19:28:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7FA2C60782
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FA2C60782
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7FA2C60782
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 19:28:41 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 82F92B00548;
+ Mon, 28 Oct 2024 20:28:38 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 28 Oct 2024 20:26:09 +0100
-Message-Id: <20241028192609.459318-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Mon, 28 Oct 2024 20:28:28 +0100
+Message-ID: <20241028192828.12093-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202406071026; t=1730143569;
- bh=KukMgMTixMnFNJdpYFrjrXxXyHznIO0K8RQnXVrhgdo=;
- h=From:To:Subject:Date:From;
- b=us/xDZkFOPKDmxaeRkLbv82Cf9dUoJEWRpbUAai33w4sn7tAsphpB69sdTKj3hH1V
- 333+fyhTPMvHmwD36pXCa0VpYjYGytR89N8lV1K8m3d2VHjSfnVfMQR+cOgH+BM65Q
- KXvU0vmJwiIAJPzo98mljvJwQgwy3bkh0T26F4xuZwbn/uUNapmgcK5o5Nhxcs4cvj
- v22nNn950uxjVPaXrJ6LqstJjeQvi5bd24/C2Pr2WSTW6YAd9DYc88tNqW5W/XZBcl
- YJftLWAdfSigQNay/B0SDqnZY4p6qf+/Pe9mMwom9TnEjlABtYaLIDSBaOeC9aninI
- QIpVp/Vnzu95w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1730143719;
+ bh=xdmqBborNILO5o5VAGpkT4PmF2PDUwUmwJNFITIcPs4=;
+ h=From:To:Cc:Subject:Date:From;
+ b=aXJtzkgMWzKRVr8bHKMloyPrxBDVxXsHbwbJyNx6NJ7iz3X1IUu6BZq3AeAVG7huv
+ mG9OENXIlmeJQSrwVbaxQZ815TLomK/HdRi5ml9TunNb58nfmApMnARDS2eEk5EicA
+ q2ew/jMv3bgBN3RWMsf2NhhmmwqRb3DyhcWtT4BzdLk3+Vk14o/jR5szEFZAmpK512
+ q/dVkmtXV7MKTdjqkysz1WDCStY0Oqi7zMdg3c1fbHIo2tT6PQWtnctfUVU+QBe4Bb
+ 3ReDrgtCVet27BS3OdoPh4yBzvBUc1QnayXPa5v7fg4PDbdmofuM7gOJh9T6bz+C3u
+ cofpo9/XSal1g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202406071026 header.b=us/xDZkF
-Subject: [Buildroot] [PATCH 1/1] package/apache: fix build
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=aXJtzkgM
+Subject: [Buildroot] [PATCH 1/1] package/oath-toolkit: libpskc needs
+ host-libxml2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,39 +83,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When cross-compiling apache wrongly detects that gettid is usable via
-syscall() due to AC_TRY_RUN being used in configure.in:
-https://github.com/apache/httpd/blob/2.4.62/configure.in#L533
+When compiling oath-toolkit with PSKC support, with:
+BR2_PACKAGE_OATH_TOOLKIT=y
+BR2_PACKAGE_OATH_TOOLKIT_PSKC=y
 
-Add ac_cv_func_gettid=no to fix the problem.
+Build is failing on hosts without libxml2, with output:
+
+    make[5]: Entering directory '/buildroot/instance-0/output-1/build/oath-toolkit-2.6.12/libpskc/schemas'
+    create -noout \
+	    --add "system" "urn:ietf:params:xml:ns:keyprov:pskc" \
+		    "/buildroot/instance-0/output-1/build/oath-toolkit-2.6.12/libpskc/schemas/pskc-schema.xsd" \
+	    --add "system" "http://www.w3.org/TR/2002/REC-xmldsig-core-20020212/xmldsig-core-schema.xsd" \
+		    "/buildroot/instance-0/output-1/build/oath-toolkit-2.6.12/libpskc/schemas/xmldsig-core-schema.xsd" \
+	    --add "system" "http://www.w3.org/TR/2002/REC-xmlenc-core-20021210/xenc-schema.xsd" \
+		    "/buildroot/instance-0/output-1/build/oath-toolkit-2.6.12/libpskc/schemas/xenc-schema.xsd" \
+	    tmp
+    /bin/sh: line 1: create: command not found
+    make[5]: [Makefile:1267: catalog-pskc.xml] Error 127 (ignored)
+
+The build needs the "xmlcatalog" command, provided the host-libxml2
+package. The previous error log does not show the "xmlcatalog" because
+it is not found by autoconf, then substituted by an empty string (we
+only see its arguments).
+
+This commit fixes the issue by adding this missing dependency.
 
 Fixes:
-http://autobuild.buildroot.net/results/2f6/2f6b7bbb4c97e4c91b3abd6bb205e237e57045fa/
-and many more.
+https://autobuild.buildroot.org/results/d22b8d9ba1f8a948125b4f9713720d070e208799/
 
-The bug was introduced by bumping apache to 2.4.59 with buildroot commit
-e0bbfaea0e983c1ce42a9c3085f3ca3dd796852f which includes
-https://github.com/apache/httpd/commit/008e6afcfdae36bce1b5f3fc0cb9519375fd99cf
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/apache/apache.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/oath-toolkit/oath-toolkit.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 0a0a0b3de4..d081bbce89 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -21,6 +21,7 @@ APACHE_DEPENDENCIES = host-pkgconf apr apr-util pcre2
+diff --git a/package/oath-toolkit/oath-toolkit.mk b/package/oath-toolkit/oath-toolkit.mk
+index b36cd47053..5e8fabb05b 100644
+--- a/package/oath-toolkit/oath-toolkit.mk
++++ b/package/oath-toolkit/oath-toolkit.mk
+@@ -29,7 +29,7 @@ endif
  
- APACHE_CONF_ENV= \
- 	ap_cv_void_ptr_lt_long=no \
-+	ac_cv_func_gettid=no \
- 	PCRE_CONFIG=$(STAGING_DIR)/usr/bin/pcre2-config
- 
- ifeq ($(BR2_PACKAGE_APACHE_MPM_EVENT),y)
+ ifeq ($(BR2_PACKAGE_OATH_TOOLKIT_PSKC),y)
+ OATH_TOOLKIT_CONF_OPTS += --enable-pskc
+-OATH_TOOLKIT_DEPENDENCIES += libxml2
++OATH_TOOLKIT_DEPENDENCIES += host-libxml2 libxml2
+ else
+ OATH_TOOLKIT_CONF_OPTS += --disable-pskc
+ endif
 -- 
-2.39.5
+2.47.0
 
 _______________________________________________
 buildroot mailing list
