@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E94CDD5B154
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 22:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4413AD5B158
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 22:02:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 89E1E80FDD;
-	Mon, 28 Oct 2024 22:01:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D84EB40632;
+	Mon, 28 Oct 2024 22:02:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ancHacEvvA9D; Mon, 28 Oct 2024 22:01:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2f4WSJl5Xp5f; Mon, 28 Oct 2024 22:02:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6914680F6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84A7A403A7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6914680F6F;
-	Mon, 28 Oct 2024 22:01:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84A7A403A7;
+	Mon, 28 Oct 2024 22:02:34 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 25D7A4EC0
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:01:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2036D4EC0
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 13C5F40015
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:01:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F411740153
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:02:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WiJKxBdFIgJC for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 22:01:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 8eqawTUdLqyi for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 22:02:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9E307400D6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E307400D6
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9E307400D6
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:01:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D53E6E0004;
- Mon, 28 Oct 2024 22:01:23 +0000 (UTC)
-Date: Mon, 28 Oct 2024 23:01:22 +0100
-To: Hans Ulli Kroll <linux@ulli-kroll.de>
-Message-ID: <20241028230122.16753363@windsurf>
-In-Reply-To: <20240908083636.6401-1-linux@ulli-kroll.de>
-References: <20240908083636.6401-1-linux@ulli-kroll.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1730152884;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ZVCpEkyOXZYga6fbAOwNjY4KSm+bX6PL7/CJTxaMXyo=;
- b=JpQbtqyutct25xIVfSP4XocRHwqcBzwtW/Oq/Jq8F2X989m2OdW3/5U3rxuUARCzGxPGAi
- o0Ezv33eMETxSQ4BIn7pG+2NBicp9uHeAttyEiQSAsS+f5GRkJEUm9ILOTPZQtblaWt9CE
- AlQwNkl9tv1Fd9lqMd4uoHkEX/2/JdbPJlm+shfZpKXQTV8pUKhBZohcz0awwY5PyAf59B
- QX1kvslEEuElVssvRU+UI/9nM/Ur9vpJkyaG0aL5J7emZlI70W6Emb0z43w8Wm9h5CL4t+
- laes6CsyrMf7VoED3W/eO4S1Cp8ozAQujRVdfF0V/p7wPb9a/To8MXhSqMNZFw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JpQbtqyu
-Subject: Re: [Buildroot] [PATCH] package:uclibc-ng:enable gnu hash for non
- mips platforms
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C548740015
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C548740015
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 22:02:31 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AFE9E8461E; Mon, 28 Oct 2024 22:02:31 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 28 Oct 2024 23:01:40 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ebb15953b5ae288787f54f8f1d3b8c7048a80c63
+X-Git-Newrev: 66f8b29377ffe6d331c3916add90ba83dd1186d8
+X-Patchwork-Hint: ignore
+Message-Id: <20241028220231.AFE9E8461E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-uvloop: bump to version
+ 0.21.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,52 +60,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Hans,
+commit: https://git.buildroot.net/buildroot/commit/?id=66f8b29377ffe6d331c3916add90ba83dd1186d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for your patch!
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-uvloop/python-uvloop.hash | 4 ++--
+ package/python-uvloop/python-uvloop.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Sun,  8 Sep 2024 10:36:36 +0200
-Hans Ulli Kroll <linux@ulli-kroll.de> wrote:
-
-> In toolchain-wrapper.mk we use both sysv and gnu hash style for all
-> platforms, except MIPS which uses sysv only.
-
-The logic in toolchain-wrapper.mk regarding --hash-style is about
-building the toolchain-wrapper executable for the host. So I really
-don't see how this can be related to the uClibc library built for the
-target.
-
-> However uClibc-ng has some extra knob to enable gnu hash via Kconfig,
-> which is set by default off.
-> 
-> This leads to wrong symbol resolving on armv5 and output of devices,
-> here on Pogoplug 4 detected with lcpci 3.10.
-
-In principle, I have nothing against your patch, but I must say I don't
-really understand why it solves your problem, and what is the
-impact/consequences.
-
-Hans, do you have more details on the problems you are seeing?
-
-Waldemar, any input?
-
-As far as I can see from a quick look, we default to --hash-style=both,
-as far as I can see in the Busybox binary:
-
-  [ 3] .hash             HASH            00000190 000190 000a10 04   A  5   0  4
-  [ 4] .gnu.hash         GNU_HASH        00000ba0 000ba0 000018 04   A  5   0  4
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
+index 8b522afb90..24111e759b 100644
+--- a/package/python-uvloop/python-uvloop.hash
++++ b/package/python-uvloop/python-uvloop.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/uvloop/json
+-md5  c3395ddc1746e2bf4b2987d88c4707e8  uvloop-0.20.0.tar.gz
+-sha256  4603ca714a754fc8d9b197e325db25b2ea045385e8a3ad05d3463de725fdf469  uvloop-0.20.0.tar.gz
++md5  adedf20cf065ff49a96813b783ec1d29  uvloop-0.21.0.tar.gz
++sha256  3bf12b0fda68447806a7ad847bfa591613177275d35b6724b1ee573faa3704e3  uvloop-0.21.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  377025287798f9dcd819e1f826fa5fc5e2f382528691ab0528c5cf8c8c282c27  LICENSE-APACHE
+ sha256  6dd4c399f26de043d77a2ad7e31db4cb5bf08ea8368b0a42d6e158635cc8ab62  LICENSE-MIT
+diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
+index 3e2a84de39..fbdf74769e 100644
+--- a/package/python-uvloop/python-uvloop.mk
++++ b/package/python-uvloop/python-uvloop.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_UVLOOP_VERSION = 0.20.0
++PYTHON_UVLOOP_VERSION = 0.21.0
+ PYTHON_UVLOOP_SOURCE = uvloop-$(PYTHON_UVLOOP_VERSION).tar.gz
+-PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/bc/f1/dc9577455e011ad43d9379e836ee73f40b4f99c02946849a44f7ae64835e
++PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/af/c0/854216d09d33c543f12a44b393c402e89a920b1a0a7dc634c42de91b9cf6
+ PYTHON_UVLOOP_SETUP_TYPE = setuptools
+ PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
+ PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
