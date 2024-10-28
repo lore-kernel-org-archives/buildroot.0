@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4012DD33993
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 14:41:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B41ED33992
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 14:41:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 00E39402CC;
-	Mon, 28 Oct 2024 14:41:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10C15403A5;
+	Mon, 28 Oct 2024 14:41:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ifGSsm8F3nq1; Mon, 28 Oct 2024 14:41:22 +0000 (UTC)
+ id OWM2KdetWQGh; Mon, 28 Oct 2024 14:41:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA693402EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10A2C4030C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA693402EB;
-	Mon, 28 Oct 2024 14:41:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2179F5C1E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10A2C4030C;
+	Mon, 28 Oct 2024 14:41:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 12B06AEE
  for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1CBEF60596
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 12B69402EB
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9JNZtQibjZhJ for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i6QPwg6Qt8AT for <buildroot@buildroot.org>;
  Mon, 28 Oct 2024 14:40:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02C9A605C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1E8C40226
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 02C9A605C2
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E1E8C40226
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F3EB78430D; Mon, 28 Oct 2024 14:40:52 +0000 (UTC)
+ id DE5528430A; Mon, 28 Oct 2024 14:40:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 28 Oct 2024 14:48:12 +0100
+Date: Mon, 28 Oct 2024 14:48:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 28cf4322eec86845928d6acca6341ae0ecb5e97d
-X-Git-Newrev: 52ed5993486ba0a8a5e165954b789f21b0e2169c
+X-Git-Oldrev: 673524d7d261b75ddce3443bcb41d9207cf99c24
+X-Git-Newrev: 7489c1160fea9083fd19fe6f961ef3f1481fc50d
 X-Patchwork-Hint: ignore
-Message-Id: <20241028144052.F3EB78430D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-legacy-cgi: new package
+Message-Id: <20241028144052.DE5528430A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-trove-classifiers: bump to
+ version 2024.10.21.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,75 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52ed5993486ba0a8a5e165954b789f21b0e2169c
+commit: https://git.buildroot.net/buildroot/commit/?id=7489c1160fea9083fd19fe6f961ef3f1481fc50d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                                |  1 +
- package/python-legacy-cgi/Config.in              |  7 +++++++
- package/python-legacy-cgi/python-legacy-cgi.hash |  5 +++++
- package/python-legacy-cgi/python-legacy-cgi.mk   | 15 +++++++++++++++
- 4 files changed, 28 insertions(+)
+ package/python-trove-classifiers/python-trove-classifiers.hash | 4 ++--
+ package/python-trove-classifiers/python-trove-classifiers.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 0e311ad55c..a4fcc56947 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1193,6 +1193,7 @@ menu "External python modules"
- 	source "package/python-kiwisolver/Config.in"
- 	source "package/python-kmod/Config.in"
- 	source "package/python-lark/Config.in"
-+	source "package/python-legacy-cgi/Config.in"
- 	source "package/python-libconf/Config.in"
- 	source "package/python-libconfig/Config.in"
- 	source "package/python-libevdev/Config.in"
-diff --git a/package/python-legacy-cgi/Config.in b/package/python-legacy-cgi/Config.in
-new file mode 100644
-index 0000000000..f21706ed96
---- /dev/null
-+++ b/package/python-legacy-cgi/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_LEGACY_CGI
-+	bool "python-legacy-cgi"
-+	help
-+	  Fork of the standard library cgi and cgitb modules, being
-+	  deprecated in PEP-594.
-+
-+	  https://github.com/jackrosenthal/legacy-cgi
-diff --git a/package/python-legacy-cgi/python-legacy-cgi.hash b/package/python-legacy-cgi/python-legacy-cgi.hash
-new file mode 100644
-index 0000000000..063483a1e8
---- /dev/null
-+++ b/package/python-legacy-cgi/python-legacy-cgi.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/legacy-cgi/json
-+md5  82a61ea4905ec03f07cf24c586623fa7  legacy_cgi-2.6.1.tar.gz
-+sha256  f2ada99c747c3d72a473a6aaff6259a61f226b06fe9f3106e495ab83fd8f7a42  legacy_cgi-2.6.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  f03e17cd594c2085f66a454e695c7ebe5b4d3c0eff534f4f194abc2fd164621b  LICENSE
-diff --git a/package/python-legacy-cgi/python-legacy-cgi.mk b/package/python-legacy-cgi/python-legacy-cgi.mk
-new file mode 100644
-index 0000000000..63a6b1c971
---- /dev/null
-+++ b/package/python-legacy-cgi/python-legacy-cgi.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-legacy-cgi
-+#
-+################################################################################
-+
-+PYTHON_LEGACY_CGI_VERSION = 2.6.1
-+PYTHON_LEGACY_CGI_SOURCE = legacy_cgi-$(PYTHON_LEGACY_CGI_VERSION).tar.gz
-+PYTHON_LEGACY_CGI_SITE = https://files.pythonhosted.org/packages/48/96/ff14ad0f759f2297a2e61db9c5384d248a6b38c6c1d4452c07d7419676a2
-+PYTHON_LEGACY_CGI_SETUP_TYPE = pep517
-+PYTHON_LEGACY_CGI_LICENSE = PSF-2.0
-+PYTHON_LEGACY_CGI_LICENSE_FILES = LICENSE
-+PYTHON_LEGACY_CGI_DEPENDENCIES = host-python-poetry-core
-+
-+$(eval $(python-package))
+diff --git a/package/python-trove-classifiers/python-trove-classifiers.hash b/package/python-trove-classifiers/python-trove-classifiers.hash
+index 2ed97b541d..02ea021527 100644
+--- a/package/python-trove-classifiers/python-trove-classifiers.hash
++++ b/package/python-trove-classifiers/python-trove-classifiers.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/trove-classifiers/json
+-md5  4560fbc4037de39ccc59121438a14af8  trove_classifiers-2024.10.13.tar.gz
+-sha256  b820fc6f9544543afa15e5d9cfc426cde3b20fc2246dff6f019b835731508cef  trove_classifiers-2024.10.13.tar.gz
++md5  c2820cfbb09e91d84ade85e0e65d87ae  trove_classifiers-2024.10.21.16.tar.gz
++sha256  17cbd055d67d5e9d9de63293a8732943fabc21574e4c7b74edf112b4928cf5f3  trove_classifiers-2024.10.21.16.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/python-trove-classifiers/python-trove-classifiers.mk b/package/python-trove-classifiers/python-trove-classifiers.mk
+index d7426f5a27..ab2421cbe5 100644
+--- a/package/python-trove-classifiers/python-trove-classifiers.mk
++++ b/package/python-trove-classifiers/python-trove-classifiers.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TROVE_CLASSIFIERS_VERSION = 2024.10.13
++PYTHON_TROVE_CLASSIFIERS_VERSION = 2024.10.21.16
+ PYTHON_TROVE_CLASSIFIERS_SOURCE = trove_classifiers-$(PYTHON_TROVE_CLASSIFIERS_VERSION).tar.gz
+-PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/10/51/be10158183105d970d7bfc81401cf6076c13844a5869c24c72889f4bf658
++PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/99/85/92c2667cf221b37648041ce9319427f92fa76cbec634aad844e67e284706
+ PYTHON_TROVE_CLASSIFIERS_SETUP_TYPE = setuptools
+ PYTHON_TROVE_CLASSIFIERS_LICENSE = Apache-2.0
+ PYTHON_TROVE_CLASSIFIERS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
