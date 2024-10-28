@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39321D33993
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 14:41:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEEB7D33990
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 14:41:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F222740561;
-	Mon, 28 Oct 2024 14:41:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA0FB40683;
+	Mon, 28 Oct 2024 14:41:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yj-XQgiyJilv; Mon, 28 Oct 2024 14:41:45 +0000 (UTC)
+ id 7i6s0Du3rb23; Mon, 28 Oct 2024 14:41:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97F4A40683
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B7264068B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 97F4A40683;
-	Mon, 28 Oct 2024 14:41:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B7264068B;
+	Mon, 28 Oct 2024 14:41:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 627CBAEE
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:41:03 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 221F0AEE
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:41:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 57AA540912
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F0C840981
  for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s-yToYTi_slM for <buildroot@buildroot.org>;
+ id 5r-tICRzAK9r for <buildroot@buildroot.org>;
  Mon, 28 Oct 2024 14:40:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24CFC40966
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3989A40968
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 24CFC40966
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3989A40968
  for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 22009813EA; Mon, 28 Oct 2024 14:40:53 +0000 (UTC)
+ id 36625842F5; Mon, 28 Oct 2024 14:40:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 28 Oct 2024 14:48:18 +0100
+Date: Mon, 28 Oct 2024 14:48:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ecdb002030089deb17ef03031d6e17c693339e86
-X-Git-Newrev: a95f22b0d6dd1b060fc77dc9752481a30a1fc121
+X-Git-Oldrev: 0b752ad14b77e8d66db954e2c9aaca14162ccf3f
+X-Git-Newrev: 2fa55b43827b9e8a22638623e5d5615525205e8e
 X-Patchwork-Hint: ignore
-Message-Id: <20241028144053.22009813EA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-wtforms: bump to version
- 3.2.1
+Message-Id: <20241028144053.36625842F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-propcache: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,45 +65,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a95f22b0d6dd1b060fc77dc9752481a30a1fc121
+commit: https://git.buildroot.net/buildroot/commit/?id=2fa55b43827b9e8a22638623e5d5615525205e8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-wtforms/python-wtforms.hash | 4 ++--
- package/python-wtforms/python-wtforms.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                              |  1 +
+ package/python-propcache/Config.in             |  6 ++++++
+ package/python-propcache/python-propcache.hash |  5 +++++
+ package/python-propcache/python-propcache.mk   | 17 +++++++++++++++++
+ 4 files changed, 29 insertions(+)
 
-diff --git a/package/python-wtforms/python-wtforms.hash b/package/python-wtforms/python-wtforms.hash
-index 3a1d932d3d..ba68361055 100644
---- a/package/python-wtforms/python-wtforms.hash
-+++ b/package/python-wtforms/python-wtforms.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/wtforms/json
--md5  722bf234789979ed2ff06e8e9323fa0f  wtforms-3.1.2.tar.gz
--sha256  f8d76180d7239c94c6322f7990ae1216dae3659b7aa1cee94b6318bdffb474b9  wtforms-3.1.2.tar.gz
-+md5  58a16ec4a96043b429c196bfafa5fd96  wtforms-3.2.1.tar.gz
-+sha256  df3e6b70f3192e92623128123ec8dca3067df9cfadd43d59681e210cfb8d4682  wtforms-3.2.1.tar.gz
- # Locally computed sha256 checksums
- sha256  cf40d60ff34f6b2b68a53d220f8b66567b5ac8dd1119b37b62fd15e9518fe59b  LICENSE.rst
- sha256  c9362a7258a11c84a8f7e825ccbbb5c425c6fc02368d3aee6494533fb99ba1f4  docs/license.rst
-diff --git a/package/python-wtforms/python-wtforms.mk b/package/python-wtforms/python-wtforms.mk
-index 4f020151cd..69e051f150 100644
---- a/package/python-wtforms/python-wtforms.mk
-+++ b/package/python-wtforms/python-wtforms.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_WTFORMS_VERSION = 3.1.2
-+PYTHON_WTFORMS_VERSION = 3.2.1
- PYTHON_WTFORMS_SOURCE = wtforms-$(PYTHON_WTFORMS_VERSION).tar.gz
--PYTHON_WTFORMS_SITE = https://files.pythonhosted.org/packages/6a/c7/96d10183c3470f1836846f7b9527d6cb0b6c2226ebca40f36fa29f23de60
-+PYTHON_WTFORMS_SITE = https://files.pythonhosted.org/packages/01/e4/633d080897e769ed5712dcfad626e55dbd6cf45db0ff4d9884315c6a82da
- PYTHON_WTFORMS_SETUP_TYPE = hatch
- PYTHON_WTFORMS_LICENSE = BSD-3-Clause
- PYTHON_WTFORMS_LICENSE_FILES = LICENSE.rst docs/license.rst
+diff --git a/package/Config.in b/package/Config.in
+index a4fcc56947..57a95a6ea8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1269,6 +1269,7 @@ menu "External python modules"
+ 	source "package/python-posix-ipc/Config.in"
+ 	source "package/python-priority/Config.in"
+ 	source "package/python-prompt-toolkit/Config.in"
++	source "package/python-propcache/Config.in"
+ 	source "package/python-proto-plus/Config.in"
+ 	source "package/python-protobuf/Config.in"
+ 	source "package/python-psutil/Config.in"
+diff --git a/package/python-propcache/Config.in b/package/python-propcache/Config.in
+new file mode 100644
+index 0000000000..a387d6520c
+--- /dev/null
++++ b/package/python-propcache/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PROPCACHE
++	bool "python-propcache"
++	help
++	  Accelerated property cache.
++
++	  https://github.com/aio-libs/propcache
+diff --git a/package/python-propcache/python-propcache.hash b/package/python-propcache/python-propcache.hash
+new file mode 100644
+index 0000000000..56a491433f
+--- /dev/null
++++ b/package/python-propcache/python-propcache.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/propcache/json
++md5  70b121a9845a0da06eccfbc42ff74335  propcache-0.2.0.tar.gz
++sha256  df81779732feb9d01e5d513fad0122efb3d53bbc75f61b2a4f29a020bc985e70  propcache-0.2.0.tar.gz
++# Locally computed sha256 checksums
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-propcache/python-propcache.mk b/package/python-propcache/python-propcache.mk
+new file mode 100644
+index 0000000000..37ceec731d
+--- /dev/null
++++ b/package/python-propcache/python-propcache.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# python-propcache
++#
++################################################################################
++
++PYTHON_PROPCACHE_VERSION = 0.2.0
++PYTHON_PROPCACHE_SOURCE = propcache-$(PYTHON_PROPCACHE_VERSION).tar.gz
++PYTHON_PROPCACHE_SITE = https://files.pythonhosted.org/packages/a9/4d/5e5a60b78dbc1d464f8a7bbaeb30957257afdc8512cbb9dfd5659304f5cd
++PYTHON_PROPCACHE_SETUP_TYPE = setuptools
++PYTHON_PROPCACHE_LICENSE = Apache-2.0
++PYTHON_PROPCACHE_LICENSE_FILES = LICENSE
++PYTHON_PROPCACHE_DEPENDENCIES = \
++	host-python-cython \
++	host-python-expandvars
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
