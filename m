@@ -1,51 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93912D5B158
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 21:46:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE4ADD5B15A
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 21:46:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 63E6080AE7;
-	Mon, 28 Oct 2024 21:46:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D1CE405F9;
+	Mon, 28 Oct 2024 21:46:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XGzFbIr5uAxS; Mon, 28 Oct 2024 21:46:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8fFGVhB_ETL1; Mon, 28 Oct 2024 21:46:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47FD380ADA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BDD040604
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47FD380ADA;
-	Mon, 28 Oct 2024 21:46:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 023034EC0
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:46:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BDD040604;
+	Mon, 28 Oct 2024 21:46:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 60BD9AEE
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:46:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F15348113D
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:45:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F42340015
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:46:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YBK5UTyoB80Z for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 21:45:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9QSHRCsXXFJE for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 21:46:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B91280AD9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B91280AD9
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:45:59 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0697584611; Mon, 28 Oct 2024 21:45:59 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 28 Oct 2024 22:45:06 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1acb0e5fec2a1d953cbbeb1f9aaeaac3ce65e9c8
-X-Git-Newrev: ebb15953b5ae288787f54f8f1d3b8c7048a80c63
-X-Patchwork-Hint: ignore
-Message-Id: <20241028214559.0697584611@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qbee-agent: bump version to 2024.36
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 938A6400D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 938A6400D6
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 938A6400D6
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:46:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6399920002;
+ Mon, 28 Oct 2024 21:46:04 +0000 (UTC)
+Date: Mon, 28 Oct 2024 22:46:03 +0100
+To: Jon Henrik =?UTF-8?B?QmrDuHJuc3RhZA==?= via buildroot
+ <buildroot@buildroot.org>
+Cc: Jon Henrik =?UTF-8?B?QmrDuHJuc3RhZA==?= <jonhenrik@qbee.io>
+Message-ID: <20241028224603.7631cfef@windsurf>
+In-Reply-To: <20240906094356.565951-1-jonhenrik@qbee.io>
+References: <20240906094356.565951-1-jonhenrik@qbee.io>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730151964;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=3CVoJDmPeOPjb+MgljIl5B8fm4dpUJHwJE9ZsF8YZFQ=;
+ b=As4BY/LKEJrrFkXnzZFVpLtsm9nxUT+Gej/4AcbK2NoaDD7rsPLI6V9vVsdAELJjhkWiFd
+ fmy3gx1OrT7864On34JgliyzY5z0WDDaL5ML5OfPcExOEv7bwyBWEIGfcIjwk2nwg56G/W
+ ogHq23vZp6hOdqiAyAhJ4XsYWATcc2CsofSjt+FimzJkKmcsTpx7Hs4EM00Z/UxPFLtlnY
+ WkxJxC4nJPRopiv4xQuVINMXfG3lncx1P6yGck5lA2dZEEpVNx6soSsg7uS7nT4JOK6mwi
+ XAZ8/0ZVNOOrRnXSj7ZFvKw3xaWeMOKa+PNNbYar4ZAQtPBev+lbvgDKP0USkQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=As4BY/LK
+Subject: Re: [Buildroot] [PATCH 1/1] package/qbee-agent: bump version to
+ 2024.36
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,62 +85,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6421479957121937863=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6421479957121937863==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=ebb15953b5ae288787f54f8f1d3b8c7048a80c63
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Jon Henrik Bjørnstad <jonhenrik@qbee.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/qbee-agent/qbee-agent.hash | 2 +-
- package/qbee-agent/qbee-agent.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/qbee-agent/qbee-agent.hash b/package/qbee-agent/qbee-agent.hash
-index 9be642ef6f..156f911a6d 100644
---- a/package/qbee-agent/qbee-agent.hash
-+++ b/package/qbee-agent/qbee-agent.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1f77442186f29fa7a0bdf1382334cb05f48af3f1b606e62b316f0a99618b5a9f  qbee-agent-2024.23-go2.tar.gz
-+sha256  6dca3d020bc9f0f80f4c8c5b85c079a65707fb79485b39c85d9bd1cfadafcf9f  qbee-agent-2024.36-go2.tar.gz
- sha256  02d07d96be99eb042b01ba650079a440ce26a78c5e0e1e8060c33a8c9e200404  LICENSE
-diff --git a/package/qbee-agent/qbee-agent.mk b/package/qbee-agent/qbee-agent.mk
-index aba9edb824..1a9653ee7f 100644
---- a/package/qbee-agent/qbee-agent.mk
-+++ b/package/qbee-agent/qbee-agent.mk
-@@ -5,12 +5,12 @@
- ################################################################################
- 
- # keep QBEE_AGENT_COMMIT_ID in sync when updating
--QBEE_AGENT_VERSION = 2024.23
-+QBEE_AGENT_VERSION = 2024.36
- QBEE_AGENT_SITE = $(call github,qbee-io,qbee-agent,$(QBEE_AGENT_VERSION))
- QBEE_AGENT_LICENSE = Apache-2.0
- QBEE_AGENT_LICENSE_FILES = LICENSE
- 
--QBEE_AGENT_COMMIT_ID = 3219c17730eab4c80598494732b4bed4c4c18b51
-+QBEE_AGENT_COMMIT_ID = d52fb5e69b479550636570a2db6cebe06f5f129b
- 
- QBEE_AGENT_GOMOD = go.qbee.io/agent
- 
-
---===============6421479957121937863==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6421479957121937863==--
+T24gRnJpLCAgNiBTZXAgMjAyNCAxMTo0Mzo1NiArMDIwMApKb24gSGVucmlrIEJqw7hybnN0YWQg
+dmlhIGJ1aWxkcm9vdCA8YnVpbGRyb290QGJ1aWxkcm9vdC5vcmc+IHdyb3RlOgoKPiBTaWduZWQt
+b2ZmLWJ5OiBKb24gSGVucmlrIEJqw7hybnN0YWQgPGpvbmhlbnJpa0BxYmVlLmlvPgo+IC0tLQo+
+ICBwYWNrYWdlL3FiZWUtYWdlbnQvcWJlZS1hZ2VudC5oYXNoIHwgMiArLQo+ICBwYWNrYWdlL3Fi
+ZWUtYWdlbnQvcWJlZS1hZ2VudC5tayAgIHwgNCArKy0tCj4gIDIgZmlsZXMgY2hhbmdlZCwgMyBp
+bnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4K
+ClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBCb290bGluCkVtYmVkZGVkIExpbnV4
+IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
