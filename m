@@ -4,72 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A216D5B144
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 20:14:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 000D0D5B144
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 20:21:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 502A68109E;
-	Mon, 28 Oct 2024 20:14:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BBF3380DB3;
+	Mon, 28 Oct 2024 20:21:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JgsDDAq_2R8A; Mon, 28 Oct 2024 20:14:30 +0000 (UTC)
+ id 1Qq2DdeFWBv5; Mon, 28 Oct 2024 20:21:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C96880DA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3DF580DEA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C96880DA8;
-	Mon, 28 Oct 2024 20:14:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BF57B4EC0
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:14:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C3DF580DEA;
+	Mon, 28 Oct 2024 20:21:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E2394EC0
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:21:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B9B9940257
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:14:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FA11608B9
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:21:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8otSRM5AVOKu for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 20:14:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3FD3B4024C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FD3B4024C
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3FD3B4024C
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:14:26 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 57AEB60003;
- Mon, 28 Oct 2024 20:14:22 +0000 (UTC)
-Date: Mon, 28 Oct 2024 21:14:22 +0100
-To: Fiona Klute via buildroot <buildroot@buildroot.org>
-Cc: Fiona Klute <fiona.klute@gmx.de>
-Message-ID: <20241028211422.1049398e@windsurf>
-In-Reply-To: <20241028163137.2136109-1-fiona.klute@gmx.de>
-References: <20241028163137.2136109-1-fiona.klute@gmx.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZhCZ4_v3yO70 for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 20:21:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::a2f; helo=mail-vk1-xa2f.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E585860781
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E585860781
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com
+ [IPv6:2607:f8b0:4864:20::a2f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E585860781
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 20:21:33 +0000 (UTC)
+Received: by mail-vk1-xa2f.google.com with SMTP id
+ 71dfb90a1353d-50d4a333a87so1199991e0c.1
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 13:21:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1730146892; x=1730751692;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=k6P9v1blKKAgDhWfckkEcsE5oPHwuZ95ZkgJvR6oNZI=;
+ b=hSQouc0k5itiVrOKKsK1shwDwSIkvfJkoIT0ePD+8IBXTdhTx06KMHuuh659+/aR1p
+ yibQ4nr6/RBAFAnqDnihAwT7IviGbaORI6/13RqxKwyLcgMmNNHszFd0yI2MlaM2Kc5C
+ FxIdtEkR5su4+hcpoVOtop59aEM4YdV7Ws4NBe/isVckDXrvGwKoz5WpHDMZpSq5pBoU
+ yClAPg025HGbzqGa4ixLiYBTwEmhp6RpfyKU39XV2T9HgcKmfFniXOXJH43ujABoNtpm
+ QAyt64GuMzzfXZZdGt8wd17R1JBzIDX5Qo365nKSJZMjxQ5o4GY+Itzel10pzgopYnhh
+ PYWw==
+X-Gm-Message-State: AOJu0YyjjHhgLtZSJ5KW5oR+gsNtZUQtfwhMC/1klIqcLSrXFrKc386K
+ Sh/u1JmAZIxicV7kmJT3en4jjOKljL6rYAbYVPoICCiNO2o9RX1MawSH91VR64hLxbKfeJOIOgQ
+ LabyuZOeeUxNQ0LvoJoX1NwfJE7E=
+X-Google-Smtp-Source: AGHT+IEHk2jqDzlqm4L40jdnngkscikvdevY+BVkGcrcGwGwpQErITgZLiJfuw8N/3W8CeaaBwuF/Hx9TloaKoET8HI=
+X-Received: by 2002:a05:6122:891:b0:50a:caec:70a2 with SMTP id
+ 71dfb90a1353d-5101501c00bmr6104080e0c.4.1730146892414; Mon, 28 Oct 2024
+ 13:21:32 -0700 (PDT)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+References: <20240924023919.1502635-1-james.hilliard1@gmail.com>
+ <20241026162759.0100482f@windsurf>
+ <CADvTj4poUTwYNeVK63EkZHKyYZ9BWAnVMNv9jOxcd-0guH+wAQ@mail.gmail.com>
+ <20241028211103.67456028@windsurf>
+In-Reply-To: <20241028211103.67456028@windsurf>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 28 Oct 2024 14:21:21 -0600
+Message-ID: <CADvTj4pKGh1-PxmuCvOFcV4Vw2hREChCj4Q3FAgS=kicuHJpHQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org, Marcus Folkesson <marcus.folkesson@gmail.com>, 
+ Kamel Bouhara <kamel.bouhara@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>, 
+ Asaf Kahlon <asafka7@gmail.com>, Julien Olivain <ju.o@free.fr>, 
+ Woodrow Douglass <wdouglass@carnegierobotics.com>,
+ Christian Stewart <christian@aperture.us>, 
+ Robert Rose <robertroyrose@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1730146464;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=JFOgQHVQMvOeYI9PkmTLEJl4++iO+BjYAAmtwto27co=;
- b=Q2HyHnzp0nsCZSjQyUpMhOvXrUOp3TNtf4XYhUNo2+IcnFA/TxD2/f1VW3QAc7GomQI9oc
- TR5WvSzsr5EfXJ/rckPt1J7kvue8K4drZceIv+jS3BVo6XD1IH9iCt87pGcHUYHG9OZYJd
- wClH86+PvTSo4zpQx5JEOKLc/dHeajptXM53NEb/JH3ADzTtwzpZzJu8QojgscFkdqoNLj
- 6oLzfYL3StbMdIvBqQnpm7H5N+IAqmbEUnbvuj/IMsGJuokl2MioerTS6oSqqjwkjDDcI9
- I8G6YNOzpjvvR0116CCsr9QWnDoGpYKr5KqUoHIDK8cYu2meeg/iiUkjr3IbxA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1730146892; x=1730751692; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=k6P9v1blKKAgDhWfckkEcsE5oPHwuZ95ZkgJvR6oNZI=;
+ b=OzYTYmTJzLDPD4X6eYvHFz/b1lvQ9imB0hV56o1w/Mjur/o5sJXF8AR1X8AYygAP+m
+ IMzn0BPCVRjLsvGm8vZJJVNNVEu/uRj3vT1vKc1+mO/jZc+/RhC8wiZfWJMy1KoNrkDe
+ nmGXwiH7cdX0mmS8BHm+OAmCeK1y0XKi/Hr6Mk/tulXf2FfgHqQznzS3/Je6e3sRGefn
+ AA+ltV5nNih//5B0QFpedXW6tNlpBFdcPEmO8FxRQOyKLKTzjCVgs0ggItZMqoO3VMwm
+ ECx+nqXMrdHvtpZbUdBtZ3sOYJArz/b289R8sjIry9FKNympgdvV/SIQzkW2YOrTqGwQ
+ GjyA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Q2HyHnzp
-Subject: Re: [Buildroot] [PATCH 1/1] package/openssh: fix musl compile issue
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=OzYTYmTJ
+Subject: Re: [Buildroot] [PATCH v2 1/3] package/{python-}protobuf: bump to
+ version 28.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,38 +110,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 28 Oct 2024 17:31:37 +0100
-Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
-
-> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-> 
-> Building package/openssh 9.9p1 with musl failed during linking because
-> construct_utmp() was referenced due to "use construct_utmp to
-> construct btmp records" [1], but not built as utmp is disabled in the
-> Buildroot package. The fix comes from upstream and ensures the
-> construct_utmp function actually gets built when USE_BTMP is set [2].
-
-It would have been nice to include more explicitly since when this
-issue started occurring. I assume it's since the bump of OpenSSH to
-9.9p1, but this should ideally been made explicit. Could you keep this
-in mind for your next fixes?
-
-I've also added a reference to the autobuilder failure being fixed, and
-applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gTW9uLCBPY3QgMjgsIDIwMjQgYXQgMjoxMeKAr1BNIFRob21hcyBQZXRhenpvbmkKPHRob21h
+cy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+Cj4gSGVsbG8gSmFtZXMsCj4KPiBPbiBT
+dW4sIDI3IE9jdCAyMDI0IDIwOjU3OjMyIC0wNjAwCj4gSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhp
+bGxpYXJkMUBnbWFpbC5jb20+IHdyb3RlOgo+Cj4gPiA+IG1ha2VbMV06ICoqKiBbTWFrZWZpbGU6
+MTU2NzogcHJvdG9jLWMvcHJvdG9jX2dlbl9jLWNfYnl0ZXNfZmllbGQub10gRXJyb3IgMQo+ID4g
+PiBtYWtlWzFdOiBMZWF2aW5nIGRpcmVjdG9yeSAnL2hvbWUvdGhvbWFzL3Byb2pldHMvYnVpbGRy
+b290L291dHB1dC9idWlsZC9ob3N0LXByb3RvYnVmLWMtMS41LjAnCj4gPiA+IG1ha2U6ICoqKiBb
+cGFja2FnZS9wa2ctZ2VuZXJpYy5tazoyODk6IC9ob21lL3Rob21hcy9wcm9qZXRzL2J1aWxkcm9v
+dC9vdXRwdXQvYnVpbGQvaG9zdC1wcm90b2J1Zi1jLTEuNS4wLy5zdGFtcF9idWlsdF0gRXJyb3Ig
+Mgo+ID4gPgo+ID4gPiBUaGlzIGlzIG9uIGEgRmVkb3JhIDM5IHN5c3RlbSwgZ2NjIDEzLnguCj4g
+PiA+Cj4gPiA+IENvdWxkIHlvdSBoYXZlIGEgbG9vaz8gQWxzbyBNaWNoYWVsIE5vc3Rob2ZmIHJl
+cG9ydGVkIGEgc2VwYXJhdGUKPiA+ID4gKHdlaXJkKSBwa2ctY29uZmlnIGlzc3VlLgo+ID4KPiA+
+IFllYWgsIHRoZXJlJ3MgYSBwZW5kaW5nIFBSIHRoYXQgYXBwZWFyIHRvIGZpeCB0aGlzOgo+ID4g
+aHR0cHM6Ly9naXRodWIuY29tL3Byb3RvYnVmLWMvcHJvdG9idWYtYy9wdWxsLzcxMQo+Cj4gV2hp
+Y2ggb2YgdGhlIHR3byBpc3N1ZXMgaXMgdGhpcyBmaXhpbmc/IEkgd2FzIHJlcG9ydGluZyBhIGJ1
+aWxkCj4gZmFpbHVyZSwgYW5kIE1pY2hhZWwgTm9zdGhvZmYgd2FzIHJlcG9ydGluZyBhIGJ1aWxk
+IGhhbmcgaW4gcGtnLWNvbmZpZy4KClRoaXMgZml4ZXMgdGhlIGJ1aWxkIGZhaWx1cmUgeW91IHJl
+cG9ydGVkLCB1cGRhdGluZyBwa2djb25mIGZpeGVzIHRoZSBidWlsZApoYW5nLgoKPgo+IFRoYW5r
+cyEKPgo+IFRob21hcwo+IC0tCj4gVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywg
+Qm9vdGxpbgo+IEVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWlu
+aW5nCj4gaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
+cm9vdAo=
