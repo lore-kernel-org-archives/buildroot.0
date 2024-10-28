@@ -1,95 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7842D13592
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 02:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C508D13592
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 02:54:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6CCE081350;
-	Mon, 28 Oct 2024 02:54:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 976CB60721;
+	Mon, 28 Oct 2024 02:54:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qI0s2GrcIBrL; Mon, 28 Oct 2024 02:54:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9Hcn0QS4FqGf; Mon, 28 Oct 2024 02:54:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED55681355
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B639D607A7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED55681355;
-	Mon, 28 Oct 2024 02:54:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id CA64C4EC0
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 02:54:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B639D607A7;
+	Mon, 28 Oct 2024 02:54:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE0BD4EC0
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 02:54:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B7FA140261
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 02:54:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9CE7F607A7
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 02:54:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zB171I-0kF7O for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 02:54:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FSL9UoF_Z2oL for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 02:54:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2c; helo=mail-io1-xd2c.google.com;
+ client-ip=2607:f8b0:4864:20::d30; helo=mail-io1-xd30.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 98C7340106
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98C7340106
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 98C7340106
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 02:54:21 +0000 (UTC)
-Received: by mail-io1-xd2c.google.com with SMTP id
- ca18e2360f4ac-83ac4dacaf9so135958439f.2
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 19:54:21 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DA15160721
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA15160721
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DA15160721
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 02:54:22 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id
+ ca18e2360f4ac-83abc039b25so149001339f.0
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 19:54:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730084060; x=1730688860;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=1kpDMIYx9WDfV79uXSPx2C0HT2LL/cgyOOXCVgJBMxc=;
- b=pFKXamgX9rMuW3hnAQWaRZ763rAf8UaJcCnU8q7xAHK947eMR+ne9WmV5gVJQHOOF/
- enWECeDkcEf/2wFwuqZxe24hFmJfBBtuaFLv7lsee91AZ+fMcv2EVNNgsm4/BCf+gyDq
- VH7W4kzyGw0yK1XK63t5qq9093Szpf4RVZlTlZm9nRe5t5da6wZGhIviN0eiZ7nfDXoW
- VRJKV1M8dkHYLRN81WEFo31vP1MBngicnZo3A8yvDNLKXOVLzaHTJrpC7xeG+VIbXmWg
- 5vI/XjyejKm/dC+nC6w3zM3GrOdavYjV8X4w+QHTUwiYDzdc/EDvN67lV/Gya8GLTeG3
- tFpw==
-X-Gm-Message-State: AOJu0YyQUNeazOnufUxLMN/zrEkdFF8wwWFK0DdZvi1Z7OFL9E3kcitE
- f4fnxd7KMDL/05yLuuuAmBgu/Vbc/MzyMZvW7PrxMmvF3LHot9OlC3g2fZfc
-X-Google-Smtp-Source: AGHT+IGdndT+CWVol+geBM8V+4fQIWk5sv4Ce5x5DKeHwWCLPzC2G1z6qTtZxkqfxJdMjUXtmAwSFQ==
-X-Received: by 2002:a05:6602:2b0c:b0:82c:eeaa:b1e0 with SMTP id
- ca18e2360f4ac-83b1c5bebf8mr674816339f.11.1730084060033; 
- Sun, 27 Oct 2024 19:54:20 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1730084061; x=1730688861;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=9KRu+nGd309s+k1+IOZCuvlFA6aqlbZSVFeVBRN0njs=;
+ b=Ms8dqzifPDXItrYZk2w1O8JK6shOg58iPWIkuyqPuCpPoFxFtDANmJdjhdKo0LGJdb
+ zhUc2RIMAqoXjNre1olgJG5aRbCuxEd3uH//txhA7cKixj123tsLcIJiTK0qt3fm7mAS
+ 9HZ6fOMCUOIrifSLPNI21DD6RoTgjWACOuD8CYGkGp4IBV6YriknPnJF2HDtjnD3UkmN
+ nAvn3LZRGqLzk8PvnIhSBnfmV11StpPuWg2GQBlHYGjyeH3mGuMl4jEps73YFkAOlce+
+ 8D6Wd3AboShyr9VflSCog/BN3Tr0svob55c3T230c4/etqEhqdTjrbMjErX8IPdUZgy/
+ cj+Q==
+X-Gm-Message-State: AOJu0YwfhqRkJvdMkFtdDVPZ6zpqpcktIQe9y6dUDd39puGemGseMVYx
+ /bqeGpfjUXjj4C+QDUl5Zba4tZjDAyxgWrNCC/2qtYcSkL5BflFc8Yywt56Q
+X-Google-Smtp-Source: AGHT+IHcEq2ExPxKAF0dtyPvsWrvMVl+cTsIRLdGcZb4fSjTiPmXrSq0uKDWY9r4D1+opd6sg1n80Q==
+X-Received: by 2002:a05:6602:6002:b0:83a:a96b:8825 with SMTP id
+ ca18e2360f4ac-83b1bcefdebmr604934439f.0.1730084061430; 
+ Sun, 27 Oct 2024 19:54:21 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
  [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4dc727ae9cdsm1399218173.158.2024.10.27.19.54.18
+ 8926c6da1cb9f-4dc727ae9cdsm1399218173.158.2024.10.27.19.54.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Oct 2024 19:54:19 -0700 (PDT)
+ Sun, 27 Oct 2024 19:54:20 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Oct 2024 20:54:07 -0600
-Message-Id: <20241028025410.62158-1-james.hilliard1@gmail.com>
+Date: Sun, 27 Oct 2024 20:54:08 -0600
+Message-Id: <20241028025410.62158-2-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241028025410.62158-1-james.hilliard1@gmail.com>
+References: <20241028025410.62158-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1730084060; x=1730688860; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=1kpDMIYx9WDfV79uXSPx2C0HT2LL/cgyOOXCVgJBMxc=;
- b=kG4ZdJAUC/zgn8uRVw91E8D3DPcsLhZ0Dj7phTpVfymYFX0rZC41ndi2EmHLmbsoDi
- VrXa2AB6vKt8LtHbcGkEX1t1hEih891B4A5WH/qTusfOhzQkinAzF8nbiozgwUZTQjHq
- 5eqYOosEisUWpSaZ9/xP+FMATjTbSD5CMUnVhHi1/xLSt7hqJYYcPNuHpA+/tlpEFliS
- Yu7J35oMOH30VC3q1ccsWHJiziZ59hUPIg2aPt6YUe30MznpVtLvJoC96eVNbSTNieQ4
- PkLw3QT5nRr8B6mPgyrkMAAKc80d5z8+otWw3lIVgoSFdo7cXyg+1GkwDLmHDbW8ePoX
- 0ZLw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1730084061; x=1730688861; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=9KRu+nGd309s+k1+IOZCuvlFA6aqlbZSVFeVBRN0njs=;
+ b=knlSJEPMjbwm7eDlklcQ3OijOsCvYtbt8ZCx4LYnfsBcuWBUHp3tDK+ug584xTBOsD
+ 9qGA71WzUb13yURowR1pYLblYnw7lcvuOaZvwGFtR3nP2YnD+iQjhsnAFDx0KBrGzH1S
+ WYM3E9wQttf6bESc4RVTs9TiNtLxqIw1lCl5PFqr6qWzsfS1C4CGSQ2t/yuPfVS1GWAA
+ LKrt5oXLlthbXcCOw/7Sw7TB5hYmtVmm+chxu9My66AF++SjxblmcN1Ud0NoUuMRfTew
+ qyg3na3Hfk/n355FIH3Nu9iJ5Dkk8KEuxmBJpDtURaIVpfgXlsy6R5K2XBYlJZzE7Ye/
+ PaTQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=kG4ZdJAU
-Subject: [Buildroot] [PATCH v3 1/4] package/{python-}protobuf: bump to
- version 28.1
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=knlSJEPM
+Subject: [Buildroot] [PATCH v3 2/4] package/grpc: bump to version 1.66.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,388 +115,466 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Migrate protobuf build from autotools to cmake.
+Add new -DgRPC_BUILD_CODEGEN=OFF config option which is required if
+no plugins are enabled.
 
-Migrate protobuf-python to use pypi sources which are now required
-for setup.py builds:
-https://github.com/protocolbuffers/protobuf/tree/v28.1/python#building-from-setuppy
+Drop no longer relevant add GPR_DISABLE_WRAPPED_MEMCPY patch.
+
+Rebase remaining patches.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/criu/Config.in                       |  2 +-
- package/kismet/Config.in                     | 12 +++--
- package/mosh/Config.in                       |  6 +--
- package/netdata/Config.in                    |  6 +--
- package/ola/Config.in                        |  5 ++-
- package/opencv3/Config.in                    |  6 +--
- package/opencv4/Config.in                    |  9 +++-
- package/protobuf/Config.in                   |  8 ++--
- package/protobuf/protobuf.hash               |  2 +-
- package/protobuf/protobuf.mk                 | 46 ++++++++++++++------
- package/python-protobuf/python-protobuf.hash |  6 ++-
- package/python-protobuf/python-protobuf.mk   |  5 +--
- package/usbguard/Config.in                   |  2 +-
- 13 files changed, 74 insertions(+), 41 deletions(-)
+ .checkpackageignore                           |  3 +-
+ ...the-availability-of-pthread_setname_.patch | 26 ++---
+ ...trict-building-of-host-grpc-to-grpc.patch} | 98 ++++++++-----------
+ ...py.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch | 34 -------
+ ...conditionally-downloading-api-repos.patch} | 21 ++--
+ package/grpc/grpc.hash                        |  2 +-
+ package/grpc/grpc.mk                          |  3 +-
+ 7 files changed, 68 insertions(+), 119 deletions(-)
+ rename package/grpc/{0003-host-grpc-only-cpp-plugin.patch => 0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch} (63%)
+ delete mode 100644 package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch
+ rename package/grpc/{0004-disable-unconditionally-downloading-api-repos.patch => 0003-disable-unconditionally-downloading-api-repos.patch} (62%)
 
-diff --git a/package/criu/Config.in b/package/criu/Config.in
-index 30b131cd30..90bb18d355 100644
---- a/package/criu/Config.in
-+++ b/package/criu/Config.in
-@@ -19,7 +19,7 @@ config BR2_PACKAGE_CRIU
- 	bool "criu"
- 	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
- 	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # -march=armv7-a+fp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # -march=armv7-a+fp, protobuf
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 # rseq.h
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no aio.h
- 	depends on !BR2_STATIC_LIBS # protobuf, libbsd
-diff --git a/package/kismet/Config.in b/package/kismet/Config.in
-index 2e1e0cfbd0..e2a2385f38 100644
---- a/package/kismet/Config.in
-+++ b/package/kismet/Config.in
-@@ -35,6 +35,7 @@ config BR2_PACKAGE_KISMET_PYTHON_TOOLS
- 	bool "Install python tools"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	depends on BR2_PACKAGE_PYTHON3
- 	depends on !BR2_STATIC_LIBS # protobuf
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
-@@ -52,26 +53,29 @@ comment "python tools needs python3"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 4788f97694..3744d003cc 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -560,8 +560,7 @@ package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch lib_patch.
+ package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
+ package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch lib_patch.Upstream
+-package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch lib_patch.Upstream
+-package/grpc/0004-disable-unconditionally-downloading-api-repos.patch lib_patch.Upstream
++package/grpc/0003-disable-unconditionally-downloading-api-repos.patch lib_patch.Upstream
+ package/gstreamer1/gstd/0001-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch lib_patch.Upstream
+ package/guile/0001-calculate-csqrt_manually.patch lib_patch.Upstream
+ package/guile/0002-Makefile.am-fix-build-without-makeinfo.patch lib_patch.Upstream
+diff --git a/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch b/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
+index 92dc5a6c45..e8e211758a 100644
+--- a/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
++++ b/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
+@@ -1,4 +1,4 @@
+-From 0dfb289a3b362b082ac3608d887e42f09dadc0d2 Mon Sep 17 00:00:00 2001
++From dfec50b899c449bc964514f16e94869de7a68896 Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Date: Mon, 31 Dec 2018 16:22:07 +0100
+ Subject: [PATCH] Properly detect the availability of pthread_setname_np()
+@@ -20,15 +20,15 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ ]
+ Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+ ---
+- CMakeLists.txt                            | 6 ++++++
+- include/grpc/impl/codegen/port_platform.h | 2 ++
++ CMakeLists.txt                       | 6 ++++++
++ include/grpc/support/port_platform.h | 2 ++
+  2 files changed, 8 insertions(+)
  
--comment "python tools needs a glibc or musl toolchain w/ dynamic library"
-+comment "python tools needs a glibc or musl toolchain w/ dynamic library, gcc >= 8"
- 	depends on BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- config BR2_PACKAGE_KISMET_SERVER
- 	bool "Install server"
- 	default y
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PROTOBUF
- 
--comment "server needs a toolchain w/ dynamic library, wchar"
-+comment "server needs a toolchain w/ dynamic library, wchar, gcc >= 8"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
--	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- comment "server needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-index 5b90358cac..7ca5259ecb 100644
---- a/package/mosh/Config.in
-+++ b/package/mosh/Config.in
-@@ -1,7 +1,7 @@
--comment "mosh needs a toolchain w/ C++, threads, dynamic library, wchar, gcc >= 4.8"
-+comment "mosh needs a toolchain w/ C++, threads, dynamic library, wchar, gcc >= 8"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
- 		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_MOSH
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_MOSH
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	depends on !BR2_STATIC_LIBS # protobuf
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_PROTOBUF
-diff --git a/package/netdata/Config.in b/package/netdata/Config.in
-index d17b5e89aa..3603eb071c 100644
---- a/package/netdata/Config.in
-+++ b/package/netdata/Config.in
-@@ -23,15 +23,15 @@ config BR2_PACKAGE_NETDATA_PROMETHEUS
- 	bool "prometheus remote write backend"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf, snappy
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	select BR2_PACKAGE_SNAPPY
- 	help
- 	  Enable prometheus remote write backend
- 
--comment "prometheus remote write backend needs a toolchain w/ C++, gcc >= 4.8"
-+comment "prometheus remote write backend needs a toolchain w/ C++, gcc >= 8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 
- endif
-diff --git a/package/ola/Config.in b/package/ola/Config.in
-index dd0be6f35e..1766f5bd76 100644
---- a/package/ola/Config.in
-+++ b/package/ola/Config.in
-@@ -1,7 +1,7 @@
- comment "ola needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 
- menuconfig BR2_PACKAGE_OLA
-@@ -10,7 +10,7 @@ menuconfig BR2_PACKAGE_OLA
- 	depends on !BR2_STATIC_LIBS # protobuf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-@@ -35,6 +35,7 @@ config BR2_PACKAGE_OLA_WEB
- config BR2_PACKAGE_OLA_PYTHON_BINDINGS
- 	bool "python bindings"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_PROTOBUF
- 	help
-diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-index 2ce548f095..a672497108 100644
---- a/package/opencv3/Config.in
-+++ b/package/opencv3/Config.in
-@@ -290,14 +290,14 @@ config BR2_PACKAGE_OPENCV3_WITH_PNG
- config BR2_PACKAGE_OPENCV3_WITH_PROTOBUF
- 	bool "protobuf support"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	help
- 	  Use shared protobuf from the target system.
- 
--comment "protobuf support needs a toolchain w/ gcc >= 4.8"
-+comment "protobuf support needs a toolchain w/ gcc >= 8"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- config BR2_PACKAGE_OPENCV3_WITH_TIFF
- 	bool "tiff support"
-diff --git a/package/opencv4/Config.in b/package/opencv4/Config.in
-index f6976d8fb5..f71ceba2c5 100644
---- a/package/opencv4/Config.in
-+++ b/package/opencv4/Config.in
-@@ -35,14 +35,16 @@ config BR2_PACKAGE_OPENCV4_LIB_DNN
- 	# dnn needs fenv.h which is not provided by uclibc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	select BR2_PACKAGE_OPENCV4_WITH_PROTOBUF
- 	help
- 	  Include opencv_dnn (Deep Neural Networks) module into the
- 	  OpenCV build.
- 
--comment "dnn needs a glibc or musl toolchain"
-+comment "dnn needs a glibc or musl toolchain, gcc >= 8"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
-+		!BR2_HOST_GCC_AT_LEAST_8
- 
- config BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
- 	bool "features2d"
-@@ -155,6 +157,7 @@ config BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
- 	bool "objdetect"
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # dnn support
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # dnn support
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # dnn support
- 	# opencv_core dependency is already enabled
- 	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
- 	select BR2_PACKAGE_OPENCV4_LIB_DNN
-@@ -204,6 +207,7 @@ config BR2_PACKAGE_OPENCV4_LIB_SHAPE
- config BR2_PACKAGE_OPENCV4_LIB_STITCHING
- 	bool "stitching"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # objdetect
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # objdetect
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # objdetect
- 	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
- 	select BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
-@@ -333,6 +337,7 @@ config BR2_PACKAGE_OPENCV4_WITH_PNG
- config BR2_PACKAGE_OPENCV4_WITH_PROTOBUF
- 	bool "protobuf support"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	help
- 	  Use shared protobuf from the target system.
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index 47e987fa2b..633201b38c 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -37,6 +37,7 @@ config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	default y if BR2_sparc64
- 	default y if BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU # fork()
- 
- config BR2_PACKAGE_PROTOBUF
-@@ -44,8 +45,9 @@ config BR2_PACKAGE_PROTOBUF
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBABSEIL_CPP
- 	help
- 	  Protocol buffers are Google's language-neutral,
- 	  platform-neutral, extensible mechanism for serializing
-@@ -53,7 +55,7 @@ config BR2_PACKAGE_PROTOBUF
- 
- 	  https://developers.google.com/protocol-buffers
- 
--comment "protobuf needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
-+comment "protobuf needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index b092c9303f..06f4924394 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  4eab9b524aa5913c6fffb20b2a8abf5ef7f95a80bc0701f3a6dbb4c607f73460  protobuf-cpp-3.21.12.tar.gz
-+sha256  3b8bf6e96499a744bd014c60b58f797715a758093abf859f1d902194b8e1f8c9  protobuf-28.1.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 8cd4e99e06..6c9017b316 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,16 +7,40 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 21.12
--PROTOBUF_SOURCE = protobuf-cpp-3.$(PROTOBUF_VERSION).tar.gz
-+PROTOBUF_VERSION = 28.1
- PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
- PROTOBUF_LICENSE_FILES = LICENSE
- PROTOBUF_CPE_ID_VENDOR = google
- 
- # N.B. Need to use host protoc during cross compilation.
--PROTOBUF_DEPENDENCIES = host-protobuf
--PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/bin/protoc
-+PROTOBUF_DEPENDENCIES = host-protobuf libabseil-cpp
-+PROTOBUF_CONF_OPTS = \
-+	-Dprotobuf_ABSL_PROVIDER=package \
-+	-Dprotobuf_ALLOW_CCACHE=ON \
-+	-Dprotobuf_BUILD_CONFORMANCE=OFF \
-+	-Dprotobuf_BUILD_LIBPROTOC=OFF \
-+	-Dprotobuf_BUILD_LIBUPB=ON \
-+	-Dprotobuf_BUILD_PROTOBUF_BINARIES=ON \
-+	-Dprotobuf_BUILD_PROTOC_BINARIES=OFF \
-+	-Dprotobuf_BUILD_TESTS=OFF \
-+	-Dprotobuf_DISABLE_RTTI=OFF \
-+	-Dprotobuf_INSTALL=ON \
-+	-DWITH_PROTOC=$(HOST_DIR)/bin/protoc
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 45c2fcb..0b2be4f 100644
++index 053b9e3784..2565dc5c84 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -208,6 +208,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
++@@ -291,6 +291,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
+  endif()
+  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+  
+@@ -41,11 +41,11 @@ index 45c2fcb..0b2be4f 100644
+  if(MSVC)
+    include(cmake/msvc_static_runtime.cmake)
+    add_definitions(-D_WIN32_WINNT=0x600 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS)
+-diff --git a/include/grpc/impl/codegen/port_platform.h b/include/grpc/impl/codegen/port_platform.h
+-index 4f213ff..55ecd9d 100644
+---- a/include/grpc/impl/codegen/port_platform.h
+-+++ b/include/grpc/impl/codegen/port_platform.h
+-@@ -186,6 +186,7 @@
++diff --git a/include/grpc/support/port_platform.h b/include/grpc/support/port_platform.h
++index 5fb7426af2..24d438d702 100644
++--- a/include/grpc/support/port_platform.h
+++++ b/include/grpc/support/port_platform.h
++@@ -228,6 +228,7 @@
+  #endif /* _LP64 */
+  #ifdef __GLIBC__
+  #define GPR_POSIX_CRASH_HANDLER 1
+@@ -53,7 +53,7 @@ index 4f213ff..55ecd9d 100644
+  #ifdef __GLIBC_PREREQ
+  #if __GLIBC_PREREQ(2, 12)
+  #define GPR_LINUX_PTHREAD_NAME 1
+-@@ -194,6 +195,7 @@
++@@ -236,6 +237,7 @@
+  // musl libc & others
+  #define GPR_LINUX_PTHREAD_NAME 1
+  #endif
+@@ -61,6 +61,6 @@ index 4f213ff..55ecd9d 100644
+  #include <linux/version.h>
+  #else /* musl libc */
+  #define GPR_MUSL_LIBC_COMPAT 1
+-
+ -- 
+-2.26.63
++2.34.1
 +
-+HOST_PROTOBUF_DEPENDENCIES = host-libabseil-cpp
-+HOST_PROTOBUF_CONF_OPTS = \
-+	-Dprotobuf_ABSL_PROVIDER=package \
-+	-Dprotobuf_ALLOW_CCACHE=ON \
-+	-Dprotobuf_BUILD_CONFORMANCE=OFF \
-+	-Dprotobuf_BUILD_LIBPROTOC=ON \
-+	-Dprotobuf_BUILD_LIBUPB=OFF \
-+	-Dprotobuf_BUILD_PROTOBUF_BINARIES=ON \
-+	-Dprotobuf_BUILD_PROTOC_BINARIES=ON \
-+	-Dprotobuf_BUILD_TESTS=OFF \
-+	-Dprotobuf_DISABLE_RTTI=OFF \
-+	-Dprotobuf_INSTALL=ON \
-+	-Dprotobuf_WITH_ZLIB=OFF
+diff --git a/package/grpc/0003-host-grpc-only-cpp-plugin.patch b/package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
+similarity index 63%
+rename from package/grpc/0003-host-grpc-only-cpp-plugin.patch
+rename to package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
+index bfb8713053..82705d8a1e 100644
+--- a/package/grpc/0003-host-grpc-only-cpp-plugin.patch
++++ b/package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
+@@ -1,4 +1,4 @@
+-From 0f2c73b62bdc612f9d5cdd8e0c765995470d4f8b Mon Sep 17 00:00:00 2001
++From 6aab068a6bd92e215b61eaab61062bf1d97bc065 Mon Sep 17 00:00:00 2001
+ From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ Date: Tue, 25 May 2021 14:55:23 +0200
+ Subject: [PATCH] Add option to restrict building of (host-)grpc to
+@@ -15,17 +15,17 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Updated for 1.48.0:
+ Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+ ---
+- CMakeLists.txt | 39 +++++++++++++++++++++++++++++++++++----
+- 1 file changed, 35 insertions(+), 4 deletions(-)
++ CMakeLists.txt | 36 +++++++++++++++++++++++++++++++-----
++ 1 file changed, 31 insertions(+), 5 deletions(-)
  
- PROTOBUF_CXXFLAGS = $(TARGET_CXXFLAGS)
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 0dcae6b1aee5..57b3963a43b0 100644
++index 2565dc5c84..94f8fd3e93 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -49,12 +49,16 @@ option(gRPC_BUILD_TESTS "Build tests" OFF)
++@@ -50,12 +50,16 @@ set(gRPC_BUILD_MSVC_MP_COUNT 0 CACHE STRING "The maximum number of processes for
++ option(gRPC_BUILD_TESTS "Build tests" OFF)
+  option(gRPC_BUILD_CODEGEN "Build codegen" ON)
+- option(gRPC_BUILD_CSHARP_EXT "Build C# extensions" ON)
+- option(gRPC_BACKWARDS_COMPATIBILITY_MODE "Build libraries that are binary compatible across a larger number of OS and libc versions" OFF)
++ option(gRPC_DOWNLOAD_ARCHIVES "Download archives for empty 3rd party directories" ON)
+ +option(gRPC_BUILD_PLUGIN_SUPPORT_ONLY "Build plugin support only" OFF)
+  
+  set(gRPC_INSTALL_default ON)
+@@ -39,7 +39,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
+  set(gRPC_INSTALL ${gRPC_INSTALL_default} CACHE BOOL
+      "Generate installation target")
+  
+-@@ -563,6 +567,8 @@ add_custom_target(plugins
++@@ -662,6 +666,8 @@ add_custom_target(plugins
+    DEPENDS ${_gRPC_PLUGIN_LIST}
+  )
+  
+@@ -48,7 +48,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
+  add_custom_target(tools_c
+    DEPENDS
+  )
+-@@ -574,6 +580,8 @@ add_custom_target(tools_cxx
++@@ -673,6 +679,8 @@ add_custom_target(tools_cxx
+  add_custom_target(tools
+    DEPENDS tools_c tools_cxx)
+  
+@@ -57,15 +57,16 @@ index 0dcae6b1aee5..57b3963a43b0 100644
+  protobuf_generate_grpc_cpp_with_import_path_correction(
+    src/proto/grpc/channelz/channelz.proto src/proto/grpc/channelz/channelz.proto
+  )
+-@@ -1307,6 +1315,7 @@ if(gRPC_BUILD_TESTS)
++@@ -1660,7 +1668,7 @@ if(gRPC_BUILD_TESTS)
+      DEPENDS buildtests_c buildtests_cxx)
+  endif()
+  
++-
+ +if (NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+  
+  add_library(address_sorting
+    third_party/address_sorting/address_sorting.c
+-@@ -1359,6 +1368,8 @@ if(gRPC_INSTALL)
++@@ -2855,6 +2863,8 @@ if(gRPC_INSTALL)
+    )
+  endif()
+  
+@@ -73,17 +74,17 @@ index 0dcae6b1aee5..57b3963a43b0 100644
+ +
+  if(gRPC_BUILD_TESTS)
+  
+- add_library(end2end_tests
+-@@ -1512,6 +1523,8 @@ target_link_libraries(end2end_tests
++ add_library(grpc_test_util
++@@ -2987,6 +2997,8 @@ endif()
+  
+  endif()
+  
+ +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+ +
+- add_library(gpr
+-   src/core/lib/gpr/alloc.cc
+-   src/core/lib/gpr/atm.cc
+-@@ -2504,6 +2517,8 @@ if(gRPC_INSTALL)
++ add_library(grpc_unsecure
++   src/core/channelz/channel_trace.cc
++   src/core/channelz/channelz.cc
++@@ -3547,6 +3559,8 @@ if(gRPC_INSTALL)
+    )
+  endif()
+  
+@@ -91,17 +92,17 @@ index 0dcae6b1aee5..57b3963a43b0 100644
+ +
+  if(gRPC_BUILD_TESTS)
+  
+- add_library(grpc_test_util
+-@@ -2618,6 +2633,8 @@ endif()
++ add_library(gtest
++@@ -3621,6 +3635,8 @@ target_link_libraries(gtest
+  
+  endif()
+  
+ +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+ +
+- add_library(grpc_unsecure
+-   src/core/ext/filters/census/grpc_context.cc
+-   src/core/ext/filters/channel_idle/channel_idle_filter.cc
+-@@ -3102,6 +3119,8 @@ if(gRPC_INSTALL)
++ add_library(upb_base_lib
++   third_party/upb/upb/base/status.c
++ )
++@@ -4108,6 +4124,8 @@ if(gRPC_INSTALL)
+    )
+  endif()
+  
+@@ -110,7 +111,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
+  if(gRPC_BUILD_TESTS)
+  
+  if(gRPC_BUILD_CODEGEN)
+-@@ -3185,6 +3204,8 @@ endif()
++@@ -4193,6 +4211,8 @@ endif()
+  
+  endif()
+  
+@@ -119,24 +120,24 @@ index 0dcae6b1aee5..57b3963a43b0 100644
+  add_library(grpc++
+    src/core/ext/transport/binder/client/binder_connector.cc
+    src/core/ext/transport/binder/client/channel_create.cc
+-@@ -3635,6 +3656,7 @@ if(gRPC_INSTALL)
++@@ -4684,6 +4704,7 @@ if(gRPC_INSTALL)
+    )
+  endif()
+  
+ +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
+  
+  if(gRPC_BUILD_CODEGEN)
+- add_library(grpc++_reflection
+-@@ -3889,6 +3911,8 @@ target_link_libraries(grpc++_test_util
++ add_library(grpc++_reflection ${_gRPC_STATIC_WIN32}
++@@ -4967,6 +4988,8 @@ target_link_libraries(grpc++_test_util
+  
+  endif()
+  
+ +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+ +
+  add_library(grpc++_unsecure
++   src/cpp/client/call_credentials.cc
+    src/cpp/client/channel_cc.cc
+-   src/cpp/client/client_callback.cc
+-@@ -4181,6 +4205,7 @@ if(gRPC_INSTALL)
++@@ -5707,6 +5730,7 @@ if(gRPC_INSTALL)
+    )
+  endif()
+  
+@@ -144,7 +145,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
+  
+  add_library(grpc_plugin_support
+    src/compiler/cpp_generator.cc
+-@@ -4240,7 +4265,7 @@ foreach(_hdr
++@@ -5769,7 +5793,7 @@ foreach(_hdr
+  endforeach()
+  
+  
+@@ -153,25 +154,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
+    install(TARGETS grpc_plugin_support EXPORT gRPCTargets
+      RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
+      BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
+-@@ -4324,6 +4349,8 @@ endif()
+- 
+- endif()
+- 
+-+if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+-+
+- add_library(upb
+-   third_party/upb/third_party/utf8_range/naive.c
+-   third_party/upb/third_party/utf8_range/range2-neon.c
+-@@ -4393,6 +4420,8 @@ if(gRPC_INSTALL)
+-   )
+- endif()
+- 
+-+endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
+-+
+- 
+- if(gRPC_BUILD_TESTS)
+- 
+-@@ -11085,7 +11114,7 @@ target_link_libraries(grpc_completion_queue_test
++@@ -16520,7 +16544,7 @@ target_link_libraries(grpc_completion_queue_test
+  
+  
+  endif()
+@@ -180,16 +163,16 @@ index 0dcae6b1aee5..57b3963a43b0 100644
+  
+  add_executable(grpc_cpp_plugin
+    src/compiler/cpp_plugin.cc
+-@@ -11115,7 +11144,7 @@ target_link_libraries(grpc_cpp_plugin
++@@ -16548,7 +16572,7 @@ target_link_libraries(grpc_cpp_plugin
+  
+  
+  
+ -if(gRPC_INSTALL)
+ +if(gRPC_INSTALL OR gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+-   install(TARGETS grpc_cpp_plugin EXPORT gRPCTargets
++   install(TARGETS grpc_cpp_plugin EXPORT gRPCPluginTargets
+      RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
+      BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
+-@@ -23128,7 +23157,7 @@ endif()
++@@ -37968,7 +37992,7 @@ endif()
+  
+  
+  
+@@ -198,12 +181,13 @@ index 0dcae6b1aee5..57b3963a43b0 100644
+  
+  if(gRPC_INSTALL)
+    install(EXPORT gRPCTargets
+-@@ -23225,3 +23254,5 @@ generate_pkgconfig(
+-   "-lgrpc++_unsecure"
+-   ""
+-   "grpc++_unsecure.pc")
++@@ -38089,3 +38113,5 @@ generate_pkgconfig(
++   "-lgrpcpp_otel_plugin"
++   "-laddress_sorting -lupb_textformat_lib -lupb_json_lib -lupb_wire_lib -lupb_message_lib -lutf8_range_lib -lupb_mini_descriptor_lib -lupb_mem_lib -lupb_base_lib"
++   "grpcpp_otel_plugin.pc")
+ +
+ +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
++\ No newline at end of file
+ -- 
+-2.43.0
++2.34.1
  
-@@ -38,14 +62,10 @@ PROTOBUF_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- PROTOBUF_DEPENDENCIES += zlib
-+PROTOBUF_CONF_OPTS += -Dprotobuf_WITH_ZLIB=ON
-+else
-+PROTOBUF_CONF_OPTS += -Dprotobuf_WITH_ZLIB=OFF
- endif
- 
--define PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
--	rm -rf $(TARGET_DIR)/usr/bin/protoc
--	rm -rf $(TARGET_DIR)/usr/lib/libprotoc.so*
--endef
+diff --git a/package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch b/package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch
+deleted file mode 100644
+index aac92bab13..0000000000
+--- a/package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From be030314805137cd63b46ea6eaa702b608669910 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 2 Jun 2019 17:45:47 +0200
+-Subject: [PATCH] wrap_memcpy.cc: add GPR_DISABLE_WRAPPED_MEMCPY
 -
--PROTOBUF_POST_INSTALL_TARGET_HOOKS += PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
+-Add GPR_DISABLE_WRAPPED_MEMCPY to allow the user to disable wrapped
+-memcpy. This will fix build on x86_64 on musl/uclibc without changing
+-the cpu behavior.
 -
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index e7af678b97..8ce6039449 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,5 @@
--# Locally calculated
--sha256  e2b976e67d6fcf7078f799143a73f2a4d9cf3126ca68a1a6f1bda30fe5f3585c  protobuf-python-4.21.12.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/protobuf/json
-+md5  44b076f3564d3561067bcc2c455e008a  protobuf-5.28.1.tar.gz
-+sha256  42597e938f83bb7f3e4b35f03aa45208d49ae8d5bcb4bc10b9fc825e0ab5e423  protobuf-5.28.1.tar.gz
-+# Locally computed sha256 checksums
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
-index df90254670..02bf2a1d70 100644
---- a/package/python-protobuf/python-protobuf.mk
-+++ b/package/python-protobuf/python-protobuf.mk
-@@ -5,12 +5,11 @@
+-Fixes:
+- - http://autobuild.buildroot.org/results/20d6f2489a4e291a53bd514da66105eb607e1014
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/grpc/grpc/pull/19207]
+----
+- src/core/lib/gpr/wrap_memcpy.cc | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/core/lib/gpr/wrap_memcpy.cc b/src/core/lib/gpr/wrap_memcpy.cc
+-index 9b8608e056..38b76acf95 100644
+---- a/src/core/lib/gpr/wrap_memcpy.cc
+-+++ b/src/core/lib/gpr/wrap_memcpy.cc
+-@@ -29,7 +29,7 @@
+- extern "C" {
+- #ifdef __linux__
+- #if defined(__x86_64__) && !defined(GPR_MUSL_LIBC_COMPAT) && \
+--    !defined(__ANDROID__)
+-+    !defined(__ANDROID__) && !defined(GPR_DISABLE_WRAPPED_MEMCPY)
+- __asm__(".symver memcpy,memcpy@GLIBC_2.2.5");
+- void* __wrap_memcpy(void* destination, const void* source, size_t num) {
+-   return memcpy(destination, source, num);
+--- 
+-2.20.1
+-
+diff --git a/package/grpc/0004-disable-unconditionally-downloading-api-repos.patch b/package/grpc/0003-disable-unconditionally-downloading-api-repos.patch
+similarity index 62%
+rename from package/grpc/0004-disable-unconditionally-downloading-api-repos.patch
+rename to package/grpc/0003-disable-unconditionally-downloading-api-repos.patch
+index 967bbf6247..0cd5012b26 100644
+--- a/package/grpc/0004-disable-unconditionally-downloading-api-repos.patch
++++ b/package/grpc/0003-disable-unconditionally-downloading-api-repos.patch
+@@ -1,4 +1,4 @@
+-From b0599c3d1b52818c79ea8fa5dfdc40a4ce01e454 Mon Sep 17 00:00:00 2001
++From 2a73f6439b6d745b2cbfff120dc7adc555400247 Mon Sep 17 00:00:00 2001
+ From: Michael Nosthoff <buildroot@heine.tech>
+ Date: Fri, 22 Jul 2022 08:49:48 +0200
+ Subject: [PATCH] disable unconditionally downloading api repos
+@@ -9,31 +9,30 @@ for now.
+ See https://github.com/grpc/grpc/issues/30385
+ 
+ Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+-
+ ---
+  CMakeLists.txt | 2 ++
+  1 file changed, 2 insertions(+)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 11e7ae2b67..a9062fa6ef 100644
++index 94f8fd3e93..df43d2e193 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -327,6 +327,7 @@ include(cmake/xxhash.cmake)
+- include(cmake/zlib.cmake)
+- include(cmake/download_archive.cmake)
++@@ -402,6 +402,7 @@ if(gRPC_BUILD_GRPCPP_OTEL_PLUGIN)
++   include(cmake/opentelemetry-cpp.cmake)
++ endif()
+  
+ +if(FALSE)
+  # Setup external proto library at third_party/envoy-api with 2 download URLs
+- if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/envoy-api)
++ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/envoy-api AND gRPC_DOWNLOAD_ARCHIVES)
+    # Download the archive via HTTP, validate the checksum, and extract to third_party/envoy-api.
+-@@ -403,6 +404,7 @@ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xds)
+-     xds-cb28da3451f158a947dfc45090fe92b07b243bc1
++@@ -478,6 +479,7 @@ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xds AND gRPC_DOWNLOAD_ARC
++     xds-3a472e524827f72d1ad621c4983dd5af54c46776
+    )
+  endif()
+ +endif()
+  
+  if(WIN32)
+-   set(_gRPC_BASELIB_LIBRARIES ws2_32 crypt32)
++   set(_gRPC_ALLTARGETS_LIBRARIES ${_gRPC_ALLTARGETS_LIBRARIES} ws2_32 crypt32)
+ -- 
+-2.25.1
++2.34.1
+ 
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index e6b76dcb5e..08aada1454 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b55696fb249669744de3e71acc54a9382bea0dce7cd5ba379b356b12b82d4229  grpc-1.51.1.tar.gz
++sha256  79ed4ab72fa9589b20f8b0b76c16e353e4cfec1d773d33afad605d97b5682c61  grpc-1.66.1.tar.gz
+ sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 9125b1f9f6..47ebf1997c 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
--PYTHON_PROTOBUF_SOURCE = protobuf-python-4.$(PYTHON_PROTOBUF_VERSION).tar.gz
--PYTHON_PROTOBUF_SITE = $(PROTOBUF_SITE)
-+PYTHON_PROTOBUF_SOURCE = protobuf-5.$(PYTHON_PROTOBUF_VERSION).tar.gz
-+PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/3c/0b/7a997c8939f698d72bdea14d57116e43d3051fffb3b2964c30938c4a08e6
- PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
- PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
- PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
- PYTHON_PROTOBUF_SETUP_TYPE = setuptools
--PYTHON_PROTOBUF_SUBDIR = python
- 
- $(eval $(python-package))
-diff --git a/package/usbguard/Config.in b/package/usbguard/Config.in
-index f207fa6826..254209ff64 100644
---- a/package/usbguard/Config.in
-+++ b/package/usbguard/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_USBGUARD
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libqb, protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf, C++17 filesystem
- 	depends on !BR2_STATIC_LIBS # libqb, protobuf
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
- 	select BR2_PACKAGE_PROTOBUF
+-GRPC_VERSION = 1.51.1
++GRPC_VERSION = 1.66.1
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0, BSD-3-Clause (third_party code), MPL-2.0 (etc/roots.pem)
+ GRPC_LICENSE_FILES = LICENSE
+@@ -29,6 +29,7 @@ GRPC_CONF_OPTS = \
+ 	-DgRPC_RE2_PROVIDER=package \
+ 	-DgRPC_SSL_PROVIDER=package \
+ 	-DgRPC_ZLIB_PROVIDER=package \
++	-DgRPC_BUILD_CODEGEN=OFF \
+ 	-DgRPC_BUILD_GRPC_CPP_PLUGIN=OFF \
+ 	-DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF \
+ 	-DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF \
 -- 
 2.34.1
 
