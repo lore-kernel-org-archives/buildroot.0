@@ -4,92 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BAC3D3E2BA
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 19:19:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC835D3E2BB
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 19:22:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE9954064F;
-	Mon, 28 Oct 2024 19:19:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A6DC406F2;
+	Mon, 28 Oct 2024 19:22:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F0IY86DPLR8i; Mon, 28 Oct 2024 19:19:34 +0000 (UTC)
+ id Qvq4iA8Ac8Kd; Mon, 28 Oct 2024 19:22:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F22E40648
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1BFD406A7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F22E40648;
-	Mon, 28 Oct 2024 19:19:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E63D9112A
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 19:19:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B1BFD406A7;
+	Mon, 28 Oct 2024 19:22:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A899C112A
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 19:22:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D4EA260854
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 19:19:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8A3D3812AB
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 19:22:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kFB0Sp1euoyB for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 19:19:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::a36; helo=mail-vk1-xa36.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B680F607D0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B680F607D0
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com
- [IPv6:2607:f8b0:4864:20::a36])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B680F607D0
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 19:19:30 +0000 (UTC)
-Received: by mail-vk1-xa36.google.com with SMTP id
- 71dfb90a1353d-50d4a333a87so1181196e0c.1
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 12:19:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730143169; x=1730747969;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=KRRg8lgOU53v5p6kBy3L0Gcoz/U8DwpwmEtqxClYhck=;
- b=Vm/VtkBZQNfeMd/lf0PvgXIj0GvoXU2vPAH0jGKKmTo8Xu8DMUPFJR8fRUEiGVwlOg
- hr9aEATj1Zi6B0jccVWjSFM2wavNFqLRq7URXg0n4ONF/VY06jGr+ad/JQ2N+79/smJM
- PxUtWgZjmYzXsLr52l+78YuRCAX7241jAdkLKgJQWCoy+5Cd7VNI2C9PcFJz2XQToqwC
- N2Eb8X2DMdqrCBwUzBDRQtyqwyThbjkWJtofXeyozUUzO3yFTRT9CG0pJbHZ+zHsXUnk
- uoXfiCnYzo+rU35LYUynnddb+4/FR6qWSJ/cmXccqX1kOYE3EUxaLwHcG24Nz/YpGR9O
- 3grg==
-X-Gm-Message-State: AOJu0YwOA7sKcxAImWmBmdXqO+QqIiTYZ+uylYLc8hZ0euuC/H07aB3i
- ORwX57hqJcQFA258HWWwKDiXcBA8Xy+91g1SrNyUe8dlI/vzkuOMR/d6ukvlPKanbe/qXrnqFXp
- /iKlzN3/LxT/iSiK3owI+hNlSNT0=
-X-Google-Smtp-Source: AGHT+IEhrXK0eiiPAmriuHiyvAERoel7hD5hkUThSZGu/aaGHRjWE2ALQnphFpNaCuxIJcquA9MDSSYT+yqwjjV++rI=
-X-Received: by 2002:a05:6122:3090:b0:50d:2769:d757 with SMTP id
- 71dfb90a1353d-5101511c27dmr6668100e0c.11.1730143169313; Mon, 28 Oct 2024
- 12:19:29 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EXG770GcJETD for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 19:22:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7CA26812A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CA26812A9
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7CA26812A9
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 19:22:14 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id C77472003DA;
+ Mon, 28 Oct 2024 20:22:09 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:51404])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 28 Oct 2024 20:22:09 +0100
 MIME-Version: 1.0
-References: <20241028161507.186161-1-james.hilliard1@gmail.com>
- <CA+h8R2qYNcoSOe7-ZwcR3m9A7n+kPGHtFUVWaYCDRyy=WvMvzQ@mail.gmail.com>
-In-Reply-To: <CA+h8R2qYNcoSOe7-ZwcR3m9A7n+kPGHtFUVWaYCDRyy=WvMvzQ@mail.gmail.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 28 Oct 2024 13:19:18 -0600
-Message-ID: <CADvTj4o_e=z+Y5LF_RtF7t36qRjom2OjGLMnmvm=CgGYJQ0hTQ@mail.gmail.com>
-To: Christian Stewart <christian@aperture.us>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1730143169; x=1730747969; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=KRRg8lgOU53v5p6kBy3L0Gcoz/U8DwpwmEtqxClYhck=;
- b=jcigd3YRV4+Ex/t2CNJ3h+Sdi0MjUyvloaSPyV3p0jVfo1e7jJovacau480hDER0FU
- HBxAO8cjkdeo+DPK7kuTkXkJjItK8wQD9jn3OidEMzZnhcEeF9lUS040JuSSy7VHqhuS
- BqL3E1sRT8leqb5wtfxYSpgaJwx7Jl0sxfVvf9qcm5LOj1ORtIq/CUr9oBYg2W2HLp6C
- W8rfY5o/D6VK0dcNGkzfY+u5/HWjqpfOhHaixAkj5RDN0YbXeogzcpQgYP3LBCTEqyfQ
- /7LWNZXhae0PPYNEVBgcWMBx+FyW9ht3j1kJzMv7rWWLkaegVv+uNk9JPWmbw1UHpCSB
- cVYQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+Date: Mon, 28 Oct 2024 20:22:09 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org, Carlo Caione <carlo.caione@gmail.com>
+In-Reply-To: <20241028164327.3e494f48@windsurf>
+References: <20241025180523.118939-1-ju.o@free.fr>
+ <20241028164327.3e494f48@windsurf>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <a4eb330bb35e5986f04b8356a4434406@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1730143332;
+ bh=ECnoSsgoc/0uk9m5rcECGR6+rZkhy72SauFVTn5Nu/Y=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=YKPOzby5CADXCYMuv0lzBcpBc6m4P/hlcx+tOBp9faZCP7omZfmWEVQi8mc7wGMYd
+ ByVJHMNtm/KpuoI3o7DiletEwKaoUxWRbMv0Ka78fL0fLSoTEHapaiMOkxuupcAQ/g
+ HYd/Vr8E5Yde/T4JAWL710l/X19OKiUiwJpftquYs7hTKMIN6tHJ/ZBk3iL8ragBGP
+ sDdWqgc9r9vXIK/CkeZwPyWFlhQ6c3u4kHP28eEpSBEAntyLJQGfrVmHE+S7ZbYiCO
+ 28MMOE4eBUwBVepqxWYAbOFO6d23W8aLjklIeR1G2rxYZ1/HGZfuUU+Rcf5/rI9xo7
+ +86R03o/HoWig==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=jcigd3YR
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/pkg-golang.mk: make GOPROXY
- configurable
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=YKPOzby5
+Subject: Re: [Buildroot] [PATCH 1/1] package/jailhouse: fix build when
+ python helper scripts are enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,61 +85,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCBPY3QgMjgsIDIwMjQgYXQgMTI6NTTigK9QTSBDaHJpc3RpYW4gU3Rld2FydAo8Y2hy
-aXN0aWFuQGFwZXJ0dXJlLnVzPiB3cm90ZToKPgo+IEhpIEphbWVzLAo+Cj4gT24gTW9uLCBPY3Qg
-MjgsIDIwMjQsIDk6MTXigK9BTSBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdtYWls
-LmNvbT4gd3JvdGU6Cj4+Cj4+IFNvbWUgcGFja2FnZXMgbGlrZSB0aGUgdXBjb21pbmcgbmV0Ymly
-ZCBwYWNrYWdlIGRvbid0IHdvcmsKPj4gY29ycmVjdGx5IHdpdGggR09QUk9YWT1kaXJlY3Qgd2hp
-Y2ggaXMgbm90IHRoZSBkZWZhdWx0IHNldHRpbmcKPj4gZm9yIHRoZSBnbyB0b29sY2hhaW4uCj4K
-Pgo+IGh0dHBzOi8vZ2l0aHViLmNvbS9uZXRiaXJkaW8vbmV0YmlyZC9wdWxsLzI3ODkKPgo+IFdo
-aWxlIGl0IGlzIGEgZ29vZCBpZGVhIHRvIGFkZCB0aGlzIG9wdGlvbiwgSSBkb24ndCB0aGluayBt
-ZW50aW9uaW5nIG5ldGJpcmQgaXMgbmVjZXNzYXJ5IHNpbmNlIHRoZSBpbnRlbnQgb2YgdGhpcyBv
-cHRpb24gaXMgbm90IHRvIG1ha2UgcGFja2FnZXMgdGhhdCB3b24ndCB3b3JrIHdpdGggR09QUk9Y
-WSBkaXJlY3Qgd29yay4gSXQncyBqdXN0IGZvciB0aGUgcGVyZm9ybWFuY2UgaW1wcm92ZW1lbnQu
-CgpJTU8gbWFraW5nIHRoZSBidWlsZCB3b3JrIHdoZW4gZGlyZWN0IGRvZXNuJ3QgaXMgb25lIG9m
-IHRoZSB1c2UgY2FzZXMsCm1vc3RseSBkdWUgdG8gdGhlIHBvdGVudGlhbCBmb3IgZGlyZWN0IGRv
-d25sb2FkcyBicmVha2luZyByYW5kb21seS4KCkFzIEdPUFJPWFk9Imh0dHBzOi8vcHJveHkuZ29s
-YW5nLm9yZyxkaXJlY3QiIGlzIHRoZSBnb2xhbmcgZGVmYXVsdCBpdCdzCndoYXQgb25lIHNob3Vs
-ZCBleHBlY3QgdXBzdHJlYW0gcHJvamVjdHMgdG8gYmUgdGVzdGluZyB3aXRoIGFuZCB0aGUKbW9z
-dCBpbXBvcnRhbnQgY29uZmlndXJhdGlvbiB0byBoYXZlIGZ1bmN0aW9uYWwuIEJ1aWxkaW5nIHdp
-dGggb25seSBkaXJlY3QKaXMgSU1PIGEgbm9uLXN0YW5kYXJkIGNvbmZpZ3VyYXRpb24gdGhhdCB3
-aGlsZSBuaWNlIHRvIGhhdmUgd29ya2luZwpzaG91bGRuJ3QgYmxvY2sgdXBkYXRpbmcgcGFja2Fn
-ZXMgYnkgaXRzZWxmLgoKPgo+IFdoZW4gbWVyZ2luZyBwYWNrYWdlcyBJJ2Qgc3RpbGwgZXhwZWN0
-IHVzIHRvIHRlc3QgaXQgd2l0aCBHT1BST1hZIGRpcmVjdCBhcyB3ZWxsLgoKUG9zc2libHksIGhv
-d2V2ZXIgYXMgR09QUk9YWT1kaXJlY3QgaXMgYSBub24tZGVmYXVsdCBjb25maWd1cmF0aW9uCkkg
-dGhpbmsgaXQncyBsZXNzIGltcG9ydGFudCBmb3IgYnVpbGRyb290IGl0c2VsZi4KCj4KPj4gTGV0
-cyBtYWtlIHRoZSBHT1BST1hZIHNldHRpbmcgY29uZmlndXJhYmxlIGFuZCB1c2UgdGhlIGRlZmF1
-bHQKPj4gdG9vbGNoYWluIHNldHRpbmcgd2hpY2ggaXMgbW9zdCBsaWtlbHkgdG8gYmUgd2hhdCBw
-YWNrYWdlcyBlbmQKPj4gdXAgdHlwaWNhbGx5IGJlaW5nIHRlc3RlZCBhZ2FpbnN0Lgo+Pgo+PiBT
-aWduZWQtb2ZmLWJ5OiBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbT4K
-Pj4gLS0tCj4+ICBDb25maWcuaW4gICAgICAgICAgICAgfCAxMSArKysrKysrKysrKwo+PiAgcGFj
-a2FnZS9wa2ctZ29sYW5nLm1rIHwgIDIgKy0KPj4gIDIgZmlsZXMgY2hhbmdlZCwgMTIgaW5zZXJ0
-aW9ucygrKSwgMSBkZWxldGlvbigtKQo+Pgo+PiBkaWZmIC0tZ2l0IGEvQ29uZmlnLmluIGIvQ29u
-ZmlnLmluCj4+IGluZGV4IGRmNDNkYjdlZmYuLmFkNmFjMzg2NTYgMTAwNjQ0Cj4+IC0tLSBhL0Nv
-bmZpZy5pbgo+PiArKysgYi9Db25maWcuaW4KPj4gQEAgLTI1OCw2ICsyNTgsMTcgQEAgY29uZmln
-IEJSMl9QUklNQVJZX1NJVEVfT05MWQo+PiAgICAgICAgICAgdGhlIHByb2plY3QgY2FuIGJlIGJ1
-aWx0IGV2ZW4gaWYgdGhlIHVwc3RyZWFtIHRhcmJhbGwKPj4gICAgICAgICAgIGxvY2F0aW9ucyBk
-aXNhcHBlYXIuCj4+Cj4+ICtjb25maWcgQlIyX0dPUFJPWFlfTElTVAo+PiArICAgICAgIHN0cmlu
-ZyAiR09QUk9YWSBsaXN0Igo+PiArICAgICAgIGRlZmF1bHQgImh0dHBzOi8vcHJveHkuZ29sYW5n
-Lm9yZyxkaXJlY3QiCj4+ICsgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NUX0dPX1RB
-UkdFVF9BUkNIX1NVUFBPUlRTCj4+ICsgICAgICAgaGVscAo+PiArICAgICAgICAgTGlzdCBvZiBt
-b2R1bGUgcHJveHkgVVJMcy4gVGhlIGdvIGNvbW1hbmQgd2lsbCBhdHRlbXB0IHRvCj4+ICsgICAg
-ICAgICBkb3dubG9hZCBtb2R1bGVzIGZyb20gZWFjaCBzZXJ2ZXIgaW4gc2VxdWVuY2UuIFRoZSBr
-ZXl3b3JkCj4+ICsgICAgICAgICBkaXJlY3QgaW5zdHJ1Y3RzIHRoZSBnbyBjb21tYW5kIHRvIGRv
-d25sb2FkIG1vZHVsZXMgZnJvbQo+PiArICAgICAgICAgdmVyc2lvbiBjb250cm9sIHJlcG9zaXRv
-cmllcyB3aGVyZSB0aGV54oCZcmUgZGV2ZWxvcGVkIGluc3RlYWQKPj4gKyAgICAgICAgIG9mIHVz
-aW5nIGEgcHJveHkuCj4KPgo+IFdoeSBkbyB3ZSBwdXQgdGhpcyBoZXJlIGFzIG9wcG9zZWQgdG8K
-Pgo+IEJSMl9QQUNLQUdFX0dPX0dPUFJPWFkKPgo+IEknbSBub3QgYWdhaW5zdCBpdCwgYnV0IGl0
-J3MgYSBxdWVzdGlvbiB0aGF0IGNvbWVzIHRvIG1pbmQuCj4KPiBBbHNvLCB3aHkgR09QUk9YWV9M
-SVNUIGluc3RlYWQgb2YganVzdCBHT1BST1hZPwoKSSBmaWd1cmVkIGl0IHdhcyBhIGJpdCBtb3Jl
-IGRlc2NyaXB0aXZlIHNpbmNlIHRoZSB2YXJpYWJsZSBpcyBhIGxpc3Qgb2YKZ29wcm94aWVzIGVz
-c2VudGlhbGx5LCBkb2Vzbid0IG1hdHRlciBtdWNoIHRvIG1lLgoKPgo+IE90aGVyd2lzZSBsb29r
-cyBnb29kLgo+Cj4gQmVzdCByZWdhcmRzLAo+IENocmlzdGlhbiBTdGV3YXJ0Cl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Hi Thomas,
+
+On 28/10/2024 16:43, Thomas Petazzoni wrote:
+> On Fri, 25 Oct 2024 20:05:23 +0200
+> Julien Olivain <ju.o@free.fr> wrote:
+> 
+>> When compiling jailhouse with BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS=y,
+>> build is failing with error:
+>> 
+>>     Traceback (most recent call last):
+>>       File 
+>> "/buildroot/output/build/jailhouse-e57d1eff6d55aeed5f977fe4e2acfb6ccbdd7560/setup.py", 
+>> line 18, in <module>
+>>         setup(name="pyjailhouse", version=version,
+>>       File 
+>> "/buildroot/output/host/lib/python3.12/site-packages/setuptools/__init__.py", 
+>> line 108, in setup
+>>         return distutils.core.setup(**attrs)
+>>                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>       ...
+>>       File "/buildroot/output/host/lib/python3.12/sysconfig.py", line 
+>> 549, in _init_posix
+>>         _temp = __import__(name, globals(), locals(), 
+>> ['build_time_vars'], 0)
+>>                 
+>> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>     ValueError: Empty module name
+>> 
+>> This is due to a missing dependency on the target python3 package.
+>> 
+>> This commit fixes the issue by adding this missing dependency.
+> 
+> This error message is quite unclear... how is this error message
+> related to having or not having python3 installed on the target?
+
+I agree, the Python error message is somewhat cryptic ;) The hint is
+"sysconfig.py". A more detailed explanation of the situation would be:
+
+"""
+Jailhouse Python scripts are using setuptools with host-python3 which
+reads its sysconfig data from the target-python3. See:
+https://gitlab.com/buildroot.org/buildroot/-/blob/2024.08.1/package/pkg-python.mk?ref_type=tags#L33
+
+If the target python3 is not installed, this get expanded as an empty
+string, leading to this "ValueError: Empty module name" error.
+
+Pure Python packages which are using the python-package infrastructure
+usually get this dependency automatically from:
+https://gitlab.com/buildroot.org/buildroot/-/blob/2024.08.1/package/pkg-python.mk?ref_type=tags#L295
+
+Here, the jailhouse package rather uses the generic-package
+infrastructure, then installs the Python scripts (if enabled) with
+dedicated macros. This is why the target python3 is needed.
+"""
+
+Do you want me to send a v2 adding that to the commit log?
+
+Best regards,
+
+Julien.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
