@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C49BD5B159
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 21:38:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72416D5B154
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 21:38:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 580278113F;
-	Mon, 28 Oct 2024 21:38:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F5FA405BA;
+	Mon, 28 Oct 2024 21:38:40 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3IT4fjfztlWB; Mon, 28 Oct 2024 21:38:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CEC9405BB
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5CEC9405BB;
+	Mon, 28 Oct 2024 21:38:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3944F4EC0
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:38:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9553881140
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:38:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id atKon0EYMsE6; Mon, 28 Oct 2024 21:38:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57DC381140
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57DC381140;
-	Mon, 28 Oct 2024 21:38:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A91F54EC0
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:38:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 79E64607FD
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:38:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sk4TPw7udy_K for <buildroot@buildroot.org>;
+ id wduWvjyuBwU9 for <buildroot@buildroot.org>;
  Mon, 28 Oct 2024 21:38:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B166A607F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA04B8113F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B166A607F7
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA04B8113F
  for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:38:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FFDD84553; Mon, 28 Oct 2024 21:38:23 +0000 (UTC)
+ id 95B6684555; Mon, 28 Oct 2024 21:38:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 28 Oct 2024 22:37:34 +0100
+Date: Mon, 28 Oct 2024 22:36:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dba41736daeaf8065b44427316759e07c35545db
-X-Git-Newrev: e4005d99711cb04718ed3fdca21c1fc83e53e6fd
+X-Git-Oldrev: 0655d9af281fd80f29ded0bbe469acb64935d795
+X-Git-Newrev: dba41736daeaf8065b44427316759e07c35545db
 X-Patchwork-Hint: ignore
-Message-Id: <20241028213823.9FFDD84553@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/ti_am62ax_sk_defconfig: add
- linux-headers version
+Message-Id: <20241028213823.95B6684555@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/qemu/riscv{32,
+ 64}-virt: remove virtio-blk-device, drive=hd0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,30 +66,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4005d99711cb04718ed3fdca21c1fc83e53e6fd
+commit: https://git.buildroot.net/buildroot/commit/?id=dba41736daeaf8065b44427316759e07c35545db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When bumping the Linux kernel version I inadvertently removed the pinned
-linux-headers version from the defconfig which can break the build if
-the default kernel version is not v6.10. Pin linux-headers to the
-current am62ax-sk kernel version.
+Qemu 9.1 recently fixed the RISC-V virt target by adding the missing
+default type for block devices [1].
 
-Signed-off-by: Bryan Brattlof <bb@ti.com>
+We no longer need to specify virtio-blk-device on the qemu command line
+since it's already the default.
+
+[1] https://gitlab.com/qemu-project/qemu/-/commit/4406ba2b5efce6af64905f827ca244f699db8170
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/ti_am62ax_sk_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ board/qemu/riscv32-virt/readme.txt     | 4 ++--
+ board/qemu/riscv64-virt-efi/readme.txt | 3 +--
+ board/qemu/riscv64-virt/readme.txt     | 4 ++--
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/configs/ti_am62ax_sk_defconfig b/configs/ti_am62ax_sk_defconfig
-index 77aa4a88e8..1144577942 100644
---- a/configs/ti_am62ax_sk_defconfig
-+++ b/configs/ti_am62ax_sk_defconfig
-@@ -1,4 +1,5 @@
- BR2_aarch64=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
- BR2_GLOBAL_PATCH_DIR="board/ti/am62ax-sk/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/ti/common/am6xx/post-build.sh"
+diff --git a/board/qemu/riscv32-virt/readme.txt b/board/qemu/riscv32-virt/readme.txt
+index 048306cd54..c2ac27121f 100644
+--- a/board/qemu/riscv32-virt/readme.txt
++++ b/board/qemu/riscv32-virt/readme.txt
+@@ -1,7 +1,7 @@
+ Run Linux in emulation with:
+ 
+-  qemu-system-riscv32 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0,if=none -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv32_virt_defconfig
++  qemu-system-riscv32 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv32_virt_defconfig
+ 
+-  qemu-system-riscv32 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0,if=none -device virtio-blk-device,drive=hd0 -nographic -cpu rv32,mmu=off -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 # qemu_riscv32_nommu_virt_defconfig
++  qemu-system-riscv32 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw -nographic -cpu rv32,mmu=off -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 # qemu_riscv32_nommu_virt_defconfig
+ 
+ The login prompt will appear in the terminal that started Qemu.
+diff --git a/board/qemu/riscv64-virt-efi/readme.txt b/board/qemu/riscv64-virt-efi/readme.txt
+index c7b3177af1..10d4ed966f 100644
+--- a/board/qemu/riscv64-virt-efi/readme.txt
++++ b/board/qemu/riscv64-virt-efi/readme.txt
+@@ -22,8 +22,7 @@ Run the emulation with:
+         -blockdev node-name=pflash0,driver=file,read-only=on,filename=output/images/RISCV_VIRT_CODE.fd \
+         -blockdev node-name=pflash1,driver=file,filename=output/images/RISCV_VIRT_VARS.fd \
+         \
+-        -drive file=output/images/disk.img,format=raw,id=hd0,if=none \
+-        -device virtio-blk-device,drive=hd0 \
++        -drive file=output/images/disk.img,format=raw \
+         \
+         -netdev user,id=net0 \
+         -device virtio-net-device,netdev=net0 # qemu_riscv64_virt_efi_defconfig
+diff --git a/board/qemu/riscv64-virt/readme.txt b/board/qemu/riscv64-virt/readme.txt
+index 5b3bb85b4b..d7b198842b 100644
+--- a/board/qemu/riscv64-virt/readme.txt
++++ b/board/qemu/riscv64-virt/readme.txt
+@@ -1,7 +1,7 @@
+ Run Linux in emulation with:
+ 
+-  qemu-system-riscv64 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0,if=none -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv64_virt_defconfig
++  qemu-system-riscv64 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv64_virt_defconfig
+ 
+-  qemu-system-riscv64 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0,if=none -device virtio-blk-device,drive=hd0 -nographic -cpu rv64,mmu=off -netdev user,id=net0 -device virtio-net-device,netdev=net0 # qemu_riscv64_nommu_virt_defconfig
++  qemu-system-riscv64 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw -nographic -cpu rv64,mmu=off -netdev user,id=net0 -device virtio-net-device,netdev=net0 # qemu_riscv64_nommu_virt_defconfig
+ 
+ The login prompt will appear in the terminal that started Qemu.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
