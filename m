@@ -1,120 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4236AD33980
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 13:53:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF89CD33992
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 14:40:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E75A480CC2;
-	Mon, 28 Oct 2024 13:53:51 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R1KYYYJQhYA3; Mon, 28 Oct 2024 13:53:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 175DB811A9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 175DB811A9;
-	Mon, 28 Oct 2024 13:53:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id DD07F112A
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 13:53:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CAD7D4047E
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 13:53:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D1254029C;
+	Mon, 28 Oct 2024 14:40:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vn1LBTgNaZ5K for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 13:53:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
- helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ id pkFhZhRZ47Sy; Mon, 28 Oct 2024 14:40:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0764B402D7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0764B402D7;
+	Mon, 28 Oct 2024 14:40:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F0E9FAEE
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DBE5880BB5
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1NFPKS0vbxWH for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 14:40:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 04856403E5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04856403E5
-Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
- [67.231.144.184])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 04856403E5
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 13:53:48 +0000 (UTC)
-Received: from pps.filterd (m0346908.ppops.net [127.0.0.1])
- by mx0a-00105401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49SD63VO011399;
- Mon, 28 Oct 2024 13:53:46 GMT
-Received: from xusxph005rp050.rtx.com (xusxph005rp050.rtx.com [128.13.121.147])
- by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 42gre35th6-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Mon, 28 Oct 2024 13:53:46 +0000
-Received: from xusxph009rp020.corp.ray.com ([128.13.125.135])
- by xusxph005rp050.rtx.com (8.18.1.2/8.18.1.2) with ESMTPS id 49SDri1Y026707
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Mon, 28 Oct 2024 13:53:45 GMT
-Received: from dtulimr01.rockwellcollins.com
- (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
- by xusxph009rp020.corp.ray.com (8.18.1.2/8.18.1.2) with ESMTPS id
- 49SDriKJ032468
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
- Mon, 28 Oct 2024 13:53:44 GMT
-X-Received: from localhost (unknown [10.148.204.208])
- by dtulimr01.rockwellcollins.com (Postfix) with ESMTP id 42DEE20054AD;
- Mon, 28 Oct 2024 08:53:44 -0500 (CDT)
-Mime-Version: 1.0
-Date: Mon, 28 Oct 2024 13:53:44 +0000
-Message-Id: <D57HN0FMMQD5.CLENQUA9Q7LB@collins.com>
-Cc: "Ricardo Martincoski" <ricardo.martincoski@datacom.com.br>
-To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, "Brandon Maier via
- buildroot" <buildroot@buildroot.org>
-X-Mailer: aerc 0.17.0-0-g6ea74eb30457
-References: <20241009-check-package-requirements-v2-0-df3e7b79788b@collins.com>
- <20241009-check-package-requirements-v2-3-df3e7b79788b@collins.com>
- <20241026134400.3621f46b@windsurf>
-In-Reply-To: <20241026134400.3621f46b@windsurf>
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-28_04,2024-10-28_02,2024-09-30_01
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-28_04,2024-10-28_02,2024-09-30_01
-X-MHapp-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
- spamscore=0
- mlxlogscore=779 suspectscore=0 adultscore=0 bulkscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2409260000 definitions=main-2410280112
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- malwarescore=0
- suspectscore=0 spamscore=0 mlxscore=0 adultscore=0 phishscore=0
- mlxlogscore=811 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2409260000 definitions=main-2410280111
-X-Proofpoint-GUID: Nsdf0WiyvEK4l1nWIbMKpBtHDCfEGHiq
-X-Proofpoint-ORIG-GUID: Nsdf0WiyvEK4l1nWIbMKpBtHDCfEGHiq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-28_04,2024-10-28_02,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0
- priorityscore=1501 suspectscore=0 impostorscore=0 lowpriorityscore=0
- phishscore=0 mlxlogscore=885 adultscore=0 clxscore=1011 mlxscore=0
- bulkscore=0 spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2409260000 definitions=main-2410280112
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=collins.com; h=cc :
- content-transfer-encoding : content-type : date : from : in-reply-to :
- message-id : mime-version : references : subject : to; s=POD051818;
- bh=K0DDTq6hF2+r/uw6lhKp/S0o4IbpL3dGqlk9cAMSipg=;
- b=dl2RCEBdV4Ct79IeYMS96Sl8q/QZpTFBP3QpOot9cLaM7TvA7fVXbbWK+CzNT5SC+Kqc
- WsnIoBCQljG9fQMD93SJsORKBocxEokreHtCoMBOvPPsgqOJ4lqoVNwiyTHjntbgTyMu
- 71//hMjrikK2PFvBqBGNaNbBYkxWEa15mq52qjp5GGgE/PmLGeJOL+boFi9yl2TwEJNU
- Jgf/QrS1fSK1ZctR6zuIxOBZWaAVVOFjLCL+y5dmtSbsowienWoV8q4rAfSnu5mZvTDy
- DxiuROOJ4nqzfLYG4Mo4tgGUCXyQnNzVMUaM1yM9KeOU8y5qa5mZis0nphlHnmWgMs4/ tA== 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=collins.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
- header.s=POD051818 header.b=dl2RCEBd
-Subject: Re: [Buildroot] [PATCH v2 3/3] docs/manual/adding-packages-tips:
- mention uv
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 079A180B82
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 079A180B82
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 14:40:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F194D842E5; Mon, 28 Oct 2024 14:40:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 28 Oct 2024 14:47:30 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cb4f11a6964902990ce774ff7144b24a1ffd635c
+X-Git-Newrev: 6e189f457c6c5c628b55fb523367c386f4919ceb
+X-Patchwork-Hint: ignore
+Message-Id: <20241028144051.F194D842E5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-asyncssh: bump to version
+ 2.18.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -126,27 +58,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Brandon Maier via buildroot <buildroot@buildroot.org>
-Reply-To: Brandon Maier <brandon.maier@collins.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgVGhvbWFzLAoKT24gU2F0IE9jdCAyNiwgMjAyNCBhdCAxMTo0NCBBTSBVVEMsIFRob21hcyBQ
-ZXRhenpvbmkgdmlhIGJ1aWxkcm9vdCB3cm90ZToKPiBPbiBXZWQsIDA5IE9jdCAyMDI0IDE0OjE0
-OjU4ICswMDAwCj4gQnJhbmRvbiBNYWllciB2aWEgYnVpbGRyb290IDxidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZz4gd3JvdGU6Cj4KPiA+ICstLS0tCj4gPiArJCB1diBydW4gLXMgLi91dGlscy9jaGVj
-ay1wYWNrYWdlCj4gPiArLS0tLQo+Cj4gLXMgZG9lc24ndCBleGlzdCBoZXJlOgo+Cj4g8J+QpyDu
-grAgdXYgcnVuIC1zIC4vdXRpbHMvY2hlY2stcGFja2FnZQo+IGVycm9yOiB1bmV4cGVjdGVkIGFy
-Z3VtZW50ICctcycgZm91bmQKPgo+IFVzYWdlOiB1diBydW4gW09QVElPTlNdIDxDT01NQU5EPgo+
-Cj4gRm9yIG1vcmUgaW5mb3JtYXRpb24sIHRyeSAnLS1oZWxwJy4KPgo+IEkgaGF2ZToKPgo+IPCf
-kKcg7oKwIHV2IC0tdmVyc2lvbgo+IHV2IDAuNC4xMAoKSSBjYWxsIHRoaXMgb3V0IGluIHRoZSBw
-YXRjaCBkb2N1bWVudGF0aW9uLCBgdXZgIHZlcnNpb24gMC40LjE5IG9yIGxhdGVyCmlzIHJlcXVp
-cmVkLiBUaGUgJy1zJyBmbGFnIHdhcyBhZGRlZCBvbmx5IHJlY2VudGx5LgoKVGhlIG90aGVyIG9w
-dGlvbiB3b3VsZCBiZSB0byByZW5hbWUgYC4vdXRpbHMvY2hlY2stcGFja2FnZWAgdG8gaGF2ZSB0
-aGUKJy5weScgZXh0ZW5zaW9uLiBUaGUgJy1zJyBpcyBvbmx5IHJlcXVpcmVkIHRvIHRlbGwgYHV2
-YCBpdCdzIGEgUHl0aG9uCnNjcmlwdC4KClRoYW5rcyBmb3IgcmV2aWV3aW5nIG15IHNlcmllcyEK
-QnJhbmRvbgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
-dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
-dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=6e189f457c6c5c628b55fb523367c386f4919ceb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-asyncssh/python-asyncssh.hash | 4 ++--
+ package/python-asyncssh/python-asyncssh.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-asyncssh/python-asyncssh.hash b/package/python-asyncssh/python-asyncssh.hash
+index 6550b850ba..d3c2f642bd 100644
+--- a/package/python-asyncssh/python-asyncssh.hash
++++ b/package/python-asyncssh/python-asyncssh.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/asyncssh/json
+-md5  baadd6f26ddf3164ae5ae3c09a6b4e18  asyncssh-2.17.0.tar.gz
+-sha256  3b159c105aa388c1e2245c4faf483f540ada8cad99402281119100166e5edb3c  asyncssh-2.17.0.tar.gz
++md5  9c61e713b1630f62aa1a690744573e1b  asyncssh-2.18.0.tar.gz
++sha256  1a322161c01f60b9719dc8f39f80db71e61f3f5e04abbc3420ce503126d87123  asyncssh-2.18.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  LICENSE
+ sha256  68c286b0cf4507bec8922103efe861adb0bd3218003b1ec1b25e2e64bdd76bd3  COPYRIGHT
+diff --git a/package/python-asyncssh/python-asyncssh.mk b/package/python-asyncssh/python-asyncssh.mk
+index b286fc42b2..60a559f0b9 100644
+--- a/package/python-asyncssh/python-asyncssh.mk
++++ b/package/python-asyncssh/python-asyncssh.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ASYNCSSH_VERSION = 2.17.0
++PYTHON_ASYNCSSH_VERSION = 2.18.0
+ PYTHON_ASYNCSSH_SOURCE = asyncssh-$(PYTHON_ASYNCSSH_VERSION).tar.gz
+-PYTHON_ASYNCSSH_SITE = https://files.pythonhosted.org/packages/32/34/007ba4c65dc15ad394ff50d6ce272bcc028a8824ab1658c5fe5c480be515
++PYTHON_ASYNCSSH_SITE = https://files.pythonhosted.org/packages/25/69/8ea398f5aa6ae8fa7d007feb262d83aa9304e4a6a1accf7a104b37fef97e
+ PYTHON_ASYNCSSH_SETUP_TYPE = setuptools
+ PYTHON_ASYNCSSH_LICENSE = EPL-2.0 or GPL-2.0+
+ PYTHON_ASYNCSSH_LICENSE_FILES = LICENSE COPYRIGHT
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
