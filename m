@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 909B2D5B154
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 21:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90C8BD5B154
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 21:11:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 57F67606AE;
-	Mon, 28 Oct 2024 21:11:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C9E4606AE;
+	Mon, 28 Oct 2024 21:11:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4sPUgJ6oUS44; Mon, 28 Oct 2024 21:11:13 +0000 (UTC)
+ id rS1jD79HbW02; Mon, 28 Oct 2024 21:11:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48F27606C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FEF5606C4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48F27606C2;
-	Mon, 28 Oct 2024 21:11:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0131B4EC0
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:11:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FEF5606C4;
+	Mon, 28 Oct 2024 21:11:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8E14B112A
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:11:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E355B400D6
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:11:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C562605AC
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:11:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m2nLKjAsNvaT for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 21:11:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1KCpZUbl9nFR for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 21:11:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FB8C40015
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0FB8C40015
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:11:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EEBFA8449E; Mon, 28 Oct 2024 21:11:08 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 28 Oct 2024 22:09:11 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 67e62449304501a5dee2a81bac30e1c2e968046a
-X-Git-Newrev: 70a777bb666764af476514bc6aa4e29c79abf7cf
-X-Patchwork-Hint: ignore
-Message-Id: <20241028211108.EEBFA8449E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/meson: bump version to 1.6.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5045A606C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5045A606C4
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5045A606C4
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 21:11:33 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D510FF804;
+ Mon, 28 Oct 2024 21:11:31 +0000 (UTC)
+Date: Mon, 28 Oct 2024 22:11:30 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Message-ID: <20241028221130.5421800d@windsurf>
+In-Reply-To: <20241027222559.1295078-1-bernd@kuhls.net>
+References: <20241027222559.1295078-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730149891;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=MA5CgjPcitSAXqjjshUOBculFNAxqT7Xg3/JoCETgtA=;
+ b=MLNKIIpQurD2LAy4OLBjgyjlC/2zGxHuVy27tiqJLQc5/CEFHT3eS3MzL13K/7/dFPyfQs
+ acON/xpcnU1pa5mLLDoxxMgL1lobLSdKNV4l19Fwvr5KqjWfh3VAgt98UzHE0Aaa7EEKD1
+ 1GyNuYNH3fp7clAbgEITI9ejFdO8Eb2N4rv11V1QY551BZ8/FiOzmAyl0ZGLTgPTKNXBoC
+ Fpn1InHFLnQDat7aMxZVaCmTXGV2IbmkVaBSOEm1F28O0uRFF9MecnLo48ufxLue30zNQw
+ nXjT1tQlplMrDfZaQiVHzZa4REXVzj0Og9ITXO+BI/LrE/QP5/tqD71dIX/gBg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=MLNKIIpQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/meson: bump version to 1.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,91 +83,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70a777bb666764af476514bc6aa4e29c79abf7cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 27 Oct 2024 23:25:59 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Updated patch 0001 due to upstream PR
-https://github.com/mesonbuild/meson/pull/13368
+> Updated patch 0001 due to upstream PR
+> https://github.com/mesonbuild/meson/pull/13368
+> 
+> Release notes:
+> https://mesonbuild.com/Release-notes-for-1-4-0.html
+> https://mesonbuild.com/Release-notes-for-1-5-0.html
+> https://mesonbuild.com/Release-notes-for-1-6-0.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+> Let's break some builds ;)
 
-Release notes:
-https://mesonbuild.com/Release-notes-for-1-4-0.html
-https://mesonbuild.com/Release-notes-for-1-5-0.html
-https://mesonbuild.com/Release-notes-for-1-6-0.html
+OK, let's see how it blows up in the autobuilders, applied. Please
+monitor the builders for failures related to this bump. Thanks a lot!
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...r-ext-static-libs-when-default-library-static.patch | 18 ++++++++++++++----
- package/meson/meson.hash                               |  4 ++--
- package/meson/meson.mk                                 |  2 +-
- 3 files changed, 17 insertions(+), 7 deletions(-)
-
-diff --git a/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch b/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
-index 9cedcd0942..55f7512e2e 100644
---- a/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
-+++ b/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
-@@ -24,6 +24,8 @@ http://autobuild.buildroot.net/results/c17/c17bbb12d9deadd64a441b36e324cfbbe8aba
- Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
- [Updated for 0.57.1 - get_builtin_option() vs. get_option(OptionKey())]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+[Bernd: rebased for 1.6.0]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  mesonbuild/compilers/mixins/clike.py | 3 +++
-  1 file changed, 3 insertions(+)
-@@ -32,10 +34,18 @@ diff --git a/mesonbuild/compilers/mixins/clike.py b/mesonbuild/compilers/mixins/
- index 09ad837b1..b7f6b9f22 100644
- --- a/mesonbuild/compilers/mixins/clike.py
- +++ b/mesonbuild/compilers/mixins/clike.py
--@@ -978,6 +978,9 @@ class CLikeCompiler(Compiler):
--         elif env.machines[self.for_machine].is_cygwin():
--             shlibext = ['dll', 'dll.a']
--             prefixes = ['cyg'] + prefixes
-+@@ -27,6 +27,7 @@
-+ from ... import mlog
-+ from ...linkers.linkers import GnuLikeDynamicLinkerMixin, SolarisDynamicLinker, CompCertDynamicLinker
-+ from ...mesonlib import LibType
-++from ...options import OptionKey
-+ from .. import compilers
-+ from ..compilers import CompileCheckMode
-+ from .visualstudio import VisualStudioLikeCompiler
-+@@ -1038,6 +1038,9 @@ class CLikeCompiler(Compiler):
-+             # TI C6000 compiler can use both extensions for static or dynamic libs.
-+             stlibext = ['a', 'lib']
-+             shlibext = ['dll', 'so']
- +        elif env.coredata.get_option(OptionKey('default_library')) == 'static':
- +            # Linux/BSDs
- +            shlibext = ['a']
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 150fd6d1bb..e02d878d79 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/1.3.1/meson-1.3.1.tar.gz.asc
--sha256  6020568bdede1643d4fb41e28215be38eff5d52da28ac7d125457c59e0032ad7  meson-1.3.1.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/1.6.0/meson-1.6.0.tar.gz.asc
-+sha256  999b65f21c03541cf11365489c1fad22e2418bb0c3d50ca61139f2eec09d5496  meson-1.6.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 467569d28b..f36091e584 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESON_VERSION = 1.3.1
-+MESON_VERSION = 1.6.0
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
