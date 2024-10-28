@@ -1,94 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84530D13590
-	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 01:10:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F11B5D1358B
+	for <buildroot@archiver.kernel.org>; Mon, 28 Oct 2024 01:14:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F39840C53;
-	Mon, 28 Oct 2024 01:10:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V_wkJGUk60rQ; Mon, 28 Oct 2024 01:10:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E74C40C57
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E74C40C57;
-	Mon, 28 Oct 2024 01:10:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6FAB11DAA
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 01:10:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 56C0460BF5
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 01:10:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3B94605B0;
+	Mon, 28 Oct 2024 01:14:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dDEOldGj1cwQ for <buildroot@buildroot.org>;
- Mon, 28 Oct 2024 01:10:48 +0000 (UTC)
+ id R2J6U2SgsP_g; Mon, 28 Oct 2024 01:14:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A823760768
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A823760768;
+	Mon, 28 Oct 2024 01:14:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F31111DAA
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 01:14:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD4CE60768
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 01:14:29 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Yv_tbhZ_iO7U for <buildroot@buildroot.org>;
+ Mon, 28 Oct 2024 01:14:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::136; helo=mail-il1-x136.google.com;
+ client-ip=2607:f8b0:4864:20::12e; helo=mail-il1-x12e.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 58FB560BBD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58FB560BBD
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
- [IPv6:2607:f8b0:4864:20::136])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 58FB560BBD
- for <buildroot@buildroot.org>; Mon, 28 Oct 2024 01:10:48 +0000 (UTC)
-Received: by mail-il1-x136.google.com with SMTP id
- e9e14a558f8ab-3a4e40a1d7eso9342465ab.1
- for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:10:48 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E6831605B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6831605B0
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E6831605B0
+ for <buildroot@buildroot.org>; Mon, 28 Oct 2024 01:14:28 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id
+ e9e14a558f8ab-3a4e58e3f9bso8794685ab.1
+ for <buildroot@buildroot.org>; Sun, 27 Oct 2024 18:14:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730077847; x=1730682647;
+ d=1e100.net; s=20230601; t=1730078068; x=1730682868;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=9Z28hb1P5n/I2XlK1P5x3PiLPoDfMpDCG526O1T5zv0=;
- b=e96XMoxKKXa8W6Kx0fiGgDrx4MZ2yn1IPfknqmBWbd26jB/9H+tbc724fFXXWcfR1S
- 9YEE+51Y8MC+2XELNeOLAOzuY+uo1/PG9PJh7/a5+2itF8Kna8PQ/uWXdhreA+Hw+eIq
- gazvDr82nLmwCBc/kkxLjPSy3ApTyicfHiFbikjKMGXQ7SNQDZXxPZVm0w38Z1oLEofb
- GXmjmFvEXM50IG919jz7sjP7CteDR+o92wm1scgMr8zj4zgxWNlDa8jubkChAylH4Tlh
- dpzTf6CP88ul6BGj/+Ic6p83So7kcrDkQuYcq+VYoifCfvJ0axZEEbK/lROkXMAtRnNX
- mKNA==
-X-Gm-Message-State: AOJu0YyrYQIqp75CFL8tweCtH6TrfADgSLyMvbLkcg4SbkjuzetNRQ0U
- e0L+IHxUXWWleIi6Rxbq/k1YVx70bKTALVf6jphbB+joEUGBoXLDxZCrQg==
-X-Google-Smtp-Source: AGHT+IGZtfprjgmFg7uRNdypwoarc3S8Y9tDvPyPq78AEDDye8LFEfZZAohqwayToYXdOVWJAxU0gw==
-X-Received: by 2002:a05:6e02:188a:b0:3a1:a20f:c09c with SMTP id
- e9e14a558f8ab-3a4ed34b940mr64091455ab.22.1730077846969; 
- Sun, 27 Oct 2024 18:10:46 -0700 (PDT)
+ bh=nE0CLf/RdhwiOr3xO9V2zqqF9ZHrCW64WezNMNbhEAo=;
+ b=D/7H327IC4PNvXOWh3V6zJolck3srciJGp51QwwPuAUHcaSUP8dEjZJ779t7Y/6q4j
+ f0EPxxIPK1BGzixcBJWHqHg3Hx5n1cXMrTIQBU+YtlIzPvH3tzTPsVnBg/xDNcA50a4m
+ Vo5u0xv3npOvJWiQetrYuQvb8UUQcHOO+O1PDPJQwj6L/mEb5Vcybf58RH263D4BJvN4
+ nY/vbmxk4WnfEZlW5jmP7XOC3pfjuSOoPqsai0c1vHBkKAB6OVqUmhRZKMiE0E9u5/Se
+ jz1rqMZusYlkcecQ0EcHigcBqjuZbsH9fnjKH+T/hURXlINK8IeZkOE/qdC2PcaYOUSX
+ 4USQ==
+X-Gm-Message-State: AOJu0Yxd+YEdiDAtxAdplidgC8G1EVYSyuJNPqw3njWayXYkczVc2PeB
+ 6KatCDhCarwpQbirWmUZPURUwBGUjlBVro2fsJrRK+j+NT8IDlWrnSD4Rg==
+X-Google-Smtp-Source: AGHT+IFi9sQS6wQMKCFCEcAJUx71soBlzcCnclvEU2VIXxZ1zAg7/Z74MOPMohTEZPSHZGUpCsohDg==
+X-Received: by 2002:a05:6e02:1a0a:b0:3a4:eca2:960b with SMTP id
+ e9e14a558f8ab-3a4ed29d9f1mr54367925ab.9.1730078067675; 
+ Sun, 27 Oct 2024 18:14:27 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
  [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a4e6de0b57sm13859155ab.25.2024.10.27.18.10.46
+ e9e14a558f8ab-3a4e6dcff76sm14028225ab.10.2024.10.27.18.14.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Oct 2024 18:10:46 -0700 (PDT)
+ Sun, 27 Oct 2024 18:14:27 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Oct 2024 19:10:45 -0600
-Message-Id: <20241028011045.4128366-1-james.hilliard1@gmail.com>
+Date: Sun, 27 Oct 2024 19:14:25 -0600
+Message-Id: <20241028011425.4130818-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1730077847; x=1730682647; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1730078068; x=1730682868; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=9Z28hb1P5n/I2XlK1P5x3PiLPoDfMpDCG526O1T5zv0=;
- b=Xe4oh3B0a8hpgzlcPt6SUnCzZ8dQYTj9YUijJFbJcxYCmb843zZ5CHsVIup2+4Hp0+
- Po2LCv9EDxmw6cVgZlIBWiEvW5OOfVAdGpdGM8SzSc4KqVH8tvy7mVfpPbQ8znoWkjzW
- CiEaaDfqE1/uyqMpPIa6rEcgBGhdIfIeDyY13nVfH5GR+AwvGaKHFlK+l2hIAPecpbVG
- 6M+4BQMeGaSG0SIw0H2kLMIB+Bb2VnrYo+CGOEeZh7hOa9EgnnRyK4R99NTgZa9Y4fHr
- lfyjwI8RF2ws0V6tUHqY7AmOyWFhCVpFtfgg+WZ04bC0Fpgbgb9XSqYvA70cOwMn7j6V
- 8YSg==
+ bh=nE0CLf/RdhwiOr3xO9V2zqqF9ZHrCW64WezNMNbhEAo=;
+ b=U4AuxLgTANm2Zwyos5+pKozS/9g33admDjmwMTfeKo5YIYncP3brn1W8W1cRDlah+Y
+ Sew01OAooYuSO2QXZI+7PsUk1WsIOGfvyLJ4Ii3jcObCI1d1IBfhsSRlMss8wOS0/76M
+ +nVA8Kw4oW3vfpoPkZokZkuzwa3FFCNz3mkCkw5FqjHiTuoPcaMtv35RDjW1nhwGx9su
+ p4iiDCcEM6tYgHAJ7bROhRGJ94KndZJNjrERkpLPAHEFPN1MIfrMQRhdFbcLp9DMBO/f
+ 34i1IlW/vX/gp2EAn1alPW6Q5uJYiPrC6aOvKNCL+IofS48HlLvavGqJ7zcTCAIUAxIf
+ 47Gw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Xe4oh3B0
-Subject: [Buildroot] [PATCH 1/1] package/python-wtforms: bump to version
- 3.2.1
+ header.a=rsa-sha256 header.s=20230601 header.b=U4AuxLgT
+Subject: [Buildroot] [PATCH 1/1] package/python-xmltodict: bump to version
+ 0.14.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,8 +100,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Grzegorz Blach <grzegorz@blach.pl>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -109,39 +108,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-wtforms/python-wtforms.hash | 4 ++--
- package/python-wtforms/python-wtforms.mk   | 4 ++--
+ package/python-xmltodict/python-xmltodict.hash | 4 ++--
+ package/python-xmltodict/python-xmltodict.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-wtforms/python-wtforms.hash b/package/python-wtforms/python-wtforms.hash
-index 3a1d932d3d..ba68361055 100644
---- a/package/python-wtforms/python-wtforms.hash
-+++ b/package/python-wtforms/python-wtforms.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/wtforms/json
--md5  722bf234789979ed2ff06e8e9323fa0f  wtforms-3.1.2.tar.gz
--sha256  f8d76180d7239c94c6322f7990ae1216dae3659b7aa1cee94b6318bdffb474b9  wtforms-3.1.2.tar.gz
-+md5  58a16ec4a96043b429c196bfafa5fd96  wtforms-3.2.1.tar.gz
-+sha256  df3e6b70f3192e92623128123ec8dca3067df9cfadd43d59681e210cfb8d4682  wtforms-3.2.1.tar.gz
+diff --git a/package/python-xmltodict/python-xmltodict.hash b/package/python-xmltodict/python-xmltodict.hash
+index 712f94a08b..9bd8ec6878 100644
+--- a/package/python-xmltodict/python-xmltodict.hash
++++ b/package/python-xmltodict/python-xmltodict.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/xmltodict/json
+-md5  9b98d656bb655aa7c7561a2ab811c83f  xmltodict-0.14.1.tar.gz
+-sha256  338c8431e4fc554517651972d62f06958718f6262b04316917008e8fd677a6b0  xmltodict-0.14.1.tar.gz
++md5  6e0d94bf858b3c2ff3daeed487eedc2a  xmltodict-0.14.2.tar.gz
++sha256  201e7c28bb210e374999d1dde6382923ab0ed1a8a5faeece48ab525b7810a553  xmltodict-0.14.2.tar.gz
  # Locally computed sha256 checksums
- sha256  cf40d60ff34f6b2b68a53d220f8b66567b5ac8dd1119b37b62fd15e9518fe59b  LICENSE.rst
- sha256  c9362a7258a11c84a8f7e825ccbbb5c425c6fc02368d3aee6494533fb99ba1f4  docs/license.rst
-diff --git a/package/python-wtforms/python-wtforms.mk b/package/python-wtforms/python-wtforms.mk
-index 4f020151cd..69e051f150 100644
---- a/package/python-wtforms/python-wtforms.mk
-+++ b/package/python-wtforms/python-wtforms.mk
+ sha256  d66d5eb8f83a0ba21d3dd04318b8817588e8764daabea852d1035e3f07ffda55  LICENSE
+diff --git a/package/python-xmltodict/python-xmltodict.mk b/package/python-xmltodict/python-xmltodict.mk
+index b151f28823..1a041e05d4 100644
+--- a/package/python-xmltodict/python-xmltodict.mk
++++ b/package/python-xmltodict/python-xmltodict.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WTFORMS_VERSION = 3.1.2
-+PYTHON_WTFORMS_VERSION = 3.2.1
- PYTHON_WTFORMS_SOURCE = wtforms-$(PYTHON_WTFORMS_VERSION).tar.gz
--PYTHON_WTFORMS_SITE = https://files.pythonhosted.org/packages/6a/c7/96d10183c3470f1836846f7b9527d6cb0b6c2226ebca40f36fa29f23de60
-+PYTHON_WTFORMS_SITE = https://files.pythonhosted.org/packages/01/e4/633d080897e769ed5712dcfad626e55dbd6cf45db0ff4d9884315c6a82da
- PYTHON_WTFORMS_SETUP_TYPE = hatch
- PYTHON_WTFORMS_LICENSE = BSD-3-Clause
- PYTHON_WTFORMS_LICENSE_FILES = LICENSE.rst docs/license.rst
+-PYTHON_XMLTODICT_VERSION = 0.14.1
++PYTHON_XMLTODICT_VERSION = 0.14.2
+ PYTHON_XMLTODICT_SOURCE = xmltodict-$(PYTHON_XMLTODICT_VERSION).tar.gz
+-PYTHON_XMLTODICT_SITE = https://files.pythonhosted.org/packages/98/f7/d29b8cdc9d8d075673be0f800013c1161e2fd4234546a140855a1bcc9eb4
++PYTHON_XMLTODICT_SITE = https://files.pythonhosted.org/packages/50/05/51dcca9a9bf5e1bce52582683ce50980bcadbc4fa5143b9f2b19ab99958f
+ PYTHON_XMLTODICT_SETUP_TYPE = setuptools
+ PYTHON_XMLTODICT_LICENSE = MIT
+ PYTHON_XMLTODICT_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
