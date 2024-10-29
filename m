@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A05BBD3A696
-	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 20:21:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 746A5D3A697
+	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 20:21:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6823780ACD;
-	Tue, 29 Oct 2024 20:21:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 238CC80AC3;
+	Tue, 29 Oct 2024 20:21:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mDqTJDe0e_Dg; Tue, 29 Oct 2024 20:21:27 +0000 (UTC)
+ id NmsHGdM2jROD; Tue, 29 Oct 2024 20:21:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C4BE80B0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E447080ACD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C4BE80B0B;
-	Tue, 29 Oct 2024 20:21:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 074A75E50
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:21:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E447080ACD;
+	Tue, 29 Oct 2024 20:21:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B00EE4EC0
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:21:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DC3B260657
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:21:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9DA624021E
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:21:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IjPHAIT4emfV for <buildroot@buildroot.org>;
- Tue, 29 Oct 2024 20:21:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id toa8aXUNNTcf for <buildroot@buildroot.org>;
+ Tue, 29 Oct 2024 20:21:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1EE7605DD
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1EE7605DD
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:21:19 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C8B0B847AA; Tue, 29 Oct 2024 20:21:19 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 29 Oct 2024 19:51:41 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 98fc3879c734ab88ebea2ee74a8b929dee4ae66b
-X-Git-Newrev: 518902d4be70104a54c685d3b42c3d1b20790eec
-X-Patchwork-Hint: ignore
-Message-Id: <20241029202119.C8B0B847AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc-bare-metal: clean up variable
- names
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4B93940213
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B93940213
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4B93940213
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:21:51 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4782C40005;
+ Tue, 29 Oct 2024 20:21:48 +0000 (UTC)
+Date: Tue, 29 Oct 2024 21:21:47 +0100
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>, Eric Le Bihan
+ <eric.le.bihan.dev@free.fr>
+Message-ID: <20241029212147.739e0603@windsurf>
+In-Reply-To: <20241029151617.3243174-1-buildroot@bubu1.eu>
+References: <20241029151617.3243174-1-buildroot@bubu1.eu>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730233308;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=jYiXQ/qOJvIjQ66ep1ymoDXI25kZ+T/hZBTmdAzjRME=;
+ b=HRnzH0AQu2s+QglDBxP8YezsydospMnkGn1CZT2SZBeVQSYzkS1HAqm8Fg6orwP55VCIHY
+ 9Qs5z/WDN6Roi/TnjDRiJZyqvVuAsj97I7st+7wJEKmbR5caF/u6z2+6lSIKNhgb028kyY
+ czJycHKTmYU03Wln/Iou4FD3+14qtyzNZaCgCDkjqeGpfeo27h5Jj+wKyc5yInd/kpMydh
+ dsf1UboQP5BlKxHmgXVnh8ILIgisMADu2+79roB45lT9mWXSlp5+FiBOd5TW66zr3cDjJx
+ 0wth8aB3hjZpyISvZwid5gbFIl8SrmOwqQITeL8ADm+v2Ek+M3/zA0Zu9JFRUw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=HRnzH0AQ
+Subject: Re: [Buildroot] [PATCH] package/usbutils: bump to version 018
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,66 +84,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=518902d4be70104a54c685d3b42c3d1b20790eec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 29 Oct 2024 16:16:16 +0100
+Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
 
-Removing HOST_ prefix from variables to follow buildroot coding practices.
-Adding HOST_ prefix to GCC_BARE_METAL_CONFIGURE_SYMLINK package variable.
+> Build system has been switched to meson upstream.
+> 
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+> ---
+>  package/usbutils/usbutils.hash | 2 +-
+>  package/usbutils/usbutils.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gcc-bare-metal/gcc-bare-metal.mk | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/gcc-bare-metal/gcc-bare-metal.mk b/package/gcc-bare-metal/gcc-bare-metal.mk
-index 501f12bc33..5bb6baa74a 100644
---- a/package/gcc-bare-metal/gcc-bare-metal.mk
-+++ b/package/gcc-bare-metal/gcc-bare-metal.mk
-@@ -4,15 +4,14 @@
- #
- ################################################################################
- 
--HOST_GCC_BARE_METAL_VERSION = 14.2.0
--HOST_GCC_BARE_METAL_SITE = \
--	https://ftp.gnu.org/gnu/gcc/gcc-$(HOST_GCC_BARE_METAL_VERSION)
--HOST_GCC_BARE_METAL_SOURCE = gcc-$(HOST_GCC_BARE_METAL_VERSION).tar.xz
-+GCC_BARE_METAL_VERSION = 14.2.0
-+GCC_BARE_METAL_SITE = https://ftp.gnu.org/gnu/gcc/gcc-$(GCC_BARE_METAL_VERSION)
-+GCC_BARE_METAL_SOURCE = gcc-$(GCC_BARE_METAL_VERSION).tar.xz
- 
--HOST_GCC_BARE_METAL_LICENSE = GPL-2.0, GPL-3.0, LGPL-2.1, LGPL-3.0
--HOST_GCC_BARE_METAL_LICENSE_FILES = COPYING COPYING3 COPYING.LIB COPYING3.LIB
--HOST_GCC_BARE_METAL_CPE_ID_VENDOR = gnu
--HOST_GCC_BARE_METAL_CPE_ID_PRODUCT = gcc
-+GCC_BARE_METAL_LICENSE = GPL-2.0, GPL-3.0, LGPL-2.1, LGPL-3.0
-+GCC_BARE_METAL_LICENSE_FILES = COPYING COPYING3 COPYING.LIB COPYING3.LIB
-+GCC_BARE_METAL_CPE_ID_VENDOR = gnu
-+GCC_BARE_METAL_CPE_ID_PRODUCT = gcc
- 
- HOST_GCC_BARE_METAL_DEPENDENCIES = \
- 	host-binutils-bare-metal \
-@@ -23,12 +22,12 @@ HOST_GCC_BARE_METAL_DEPENDENCIES = \
- 
- # gcc doesn't support in-tree build, so we create a 'build'
- # subdirectory in the gcc sources, and build from there.
--define GCC_BARE_METAL_CONFIGURE_SYMLINK
-+define HOST_GCC_BARE_METAL_CONFIGURE_SYMLINK
- 	mkdir -p $(@D)/build
- 	ln -sf ../configure $(@D)/build/configure
- endef
- 
--HOST_GCC_BARE_METAL_PRE_CONFIGURE_HOOKS += GCC_BARE_METAL_CONFIGURE_SYMLINK
-+HOST_GCC_BARE_METAL_PRE_CONFIGURE_HOOKS += HOST_GCC_BARE_METAL_CONFIGURE_SYMLINK
- HOST_GCC_BARE_METAL_SUBDIR = build
- 
- HOST_GCC_BARE_METAL_MAKE_OPTS = \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
