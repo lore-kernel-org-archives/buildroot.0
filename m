@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A81A1D3A67B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0044CD3A67C
 	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 18:35:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CCF760A50;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CB1480EEB;
 	Tue, 29 Oct 2024 18:35:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PQlrGXgVbh-O; Tue, 29 Oct 2024 18:35:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id psG2mn2tmsFL; Tue, 29 Oct 2024 18:35:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 809AB60A4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DE8F811B7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 809AB60A4F;
-	Tue, 29 Oct 2024 18:35:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id CC08A4969
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:35:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9DE8F811B7;
+	Tue, 29 Oct 2024 18:35:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 11FB2494E
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:35:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B9D5460A50
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:35:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D71660A50
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:35:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V_4WzPagZ5m4 for <buildroot@buildroot.org>;
- Tue, 29 Oct 2024 18:35:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 36x2ANpkXNQI for <buildroot@buildroot.org>;
+ Tue, 29 Oct 2024 18:35:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8F0C60A4F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D8F0C60A4F
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:35:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C0539846E4; Tue, 29 Oct 2024 18:35:44 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 29 Oct 2024 19:34:34 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 82b2f51015ed47a2cbcc4506e338ceae82b65ee2
-X-Git-Newrev: 7ff8d5abd5b056ea38d83ceab6c5a2c35285b070
-X-Patchwork-Hint: ignore
-Message-Id: <20241029183544.C0539846E4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cmake: bump to 3.30.5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E8F7360A43
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8F7360A43
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E8F7360A43
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:35:42 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F0764C0002;
+ Tue, 29 Oct 2024 18:35:40 +0000 (UTC)
+Date: Tue, 29 Oct 2024 19:35:40 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+Message-ID: <20241029193540.22a4a675@windsurf>
+In-Reply-To: <20241028224132.2463402-1-bernd@kuhls.net>
+References: <20241028224132.2463402-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730226941;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=AZZbMnNf1tY7Z3uOr9xadjRr0wn0Py5GNiD2ovIwQi4=;
+ b=NcJ2V5ZfiSEFU3guQaRgHaq5mB1lJbhNMG9g9VpoRtpjHsGBeNKbl6YRb9fBxsXgnL2eOp
+ LcU0bfI7ZrUv8hrk6twadLOhXzpy/dZg2YGR3nZXzL/nxvbYCUf9Gm8/c3a53OOkDMmvmd
+ xgm7b9nAgoBdCvrZH0UKc/WdBcdp5jlsui88giNatYNAXUxgjBkfqFEPPXacCj11ZIOAkZ
+ f+jOcz7+Km3uaLJpscFliWMheSRbvqEtkR5gYvb/Hec0KoEUYofrKYNm2TDee7MN+cIYRq
+ iXaEMc+ZHKhUUqzAgGhYi+NGS11OSphR1qoyTfGyvOh/iF6nhFCRI+hR5VOQ8w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=NcJ2V5Zf
+Subject: Re: [Buildroot] [PATCH 1/1] package/cmake: bump to 3.30.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +83,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ff8d5abd5b056ea38d83ceab6c5a2c35285b070
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 28 Oct 2024 23:41:32 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Release notes:
-https://cmake.org/cmake/help/v3.30/release/3.30.html#id3
+> Release notes:
+> https://cmake.org/cmake/help/v3.30/release/3.30.html#id3
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/cmake/cmake.hash | 4 ++--
+>  package/cmake/cmake.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/cmake/cmake.hash | 4 ++--
- package/cmake/cmake.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index 1a59c3fe89..f80b942103 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
-@@ -1,5 +1,5 @@
--# From https://cmake.org/files/v3.30/cmake-3.30.2-SHA-256.txt
--sha256  46074c781eccebc433e98f0bbfa265ca3fd4381f245ca3b140e7711531d60db2  cmake-3.30.2.tar.gz
-+# From https://cmake.org/files/v3.30/cmake-3.30.5-SHA-256.txt
-+sha256  9f55e1a40508f2f29b7e065fa08c29f82c402fa0402da839fffe64a25755a86d  cmake-3.30.5.tar.gz
- 
- # Locally calculated
- sha256  0676e30827684487aa0ea8f72f01e9460a6320fa34a2888df0ad1dd3e8a06eb8  Copyright.txt
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index e7d2d86791..0c5d46c23d 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
- CMAKE_VERSION_MAJOR = 3.30
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).5
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3-Clause
- CMAKE_LICENSE_FILES = Copyright.txt
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
