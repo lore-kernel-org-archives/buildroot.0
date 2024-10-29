@@ -1,51 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D299D3A67F
-	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 18:40:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82764D3A67C
+	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 18:40:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6AD5B80CE1;
-	Tue, 29 Oct 2024 18:40:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A5D9606C5;
+	Tue, 29 Oct 2024 18:40:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7fFAD71QlEVD; Tue, 29 Oct 2024 18:40:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u3POn-LwDuFj; Tue, 29 Oct 2024 18:40:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E1F180CDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70431606FA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E1F180CDC;
-	Tue, 29 Oct 2024 18:40:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A6DF35E4F
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:40:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 70431606FA;
+	Tue, 29 Oct 2024 18:40:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7431E4969
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A26A8403B2
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:40:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 519DB403D8
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:40:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WZZ07OECRru3 for <buildroot@buildroot.org>;
- Tue, 29 Oct 2024 18:40:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id xIYEtXCTN6-6 for <buildroot@buildroot.org>;
+ Tue, 29 Oct 2024 18:40:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA863403D7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA863403D7
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:40:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A21FB84711; Tue, 29 Oct 2024 18:40:15 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 29 Oct 2024 19:37:49 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 028d047cebf0cb2089063ee16bc48770ae277c61
-X-Git-Newrev: a100286aa1eff05db57230eceebbb6aa79c63d1a
-X-Patchwork-Hint: ignore
-Message-Id: <20241029184015.A21FB84711@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libpng: fix arm soft-float build
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0967E403DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0967E403DC
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0967E403DC
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:40:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 22A3A240002;
+ Tue, 29 Oct 2024 18:40:15 +0000 (UTC)
+Date: Tue, 29 Oct 2024 19:40:15 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+Message-ID: <20241029194015.00535807@windsurf>
+In-Reply-To: <20241028224553.2468987-1-bernd@kuhls.net>
+References: <20241028224553.2468987-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730227216;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=UltYpbQCSwdgZ/rOh8oZqYhjXNxbB4SlP2yS7EVNfaM=;
+ b=PgIN4HCg3xgwhAYvs4ymVMf/6ew6CkGnNto+N0WH/mCvSzbbx+ybOq7SA8c8Gwy7cTdXs/
+ HLjKRTpDJwvgBbZ3x6Jtk2MWLWCqFNykqyX4h45zPzoxi3sXSi3SYvrNloP1ILrkdshSJV
+ /Kfrl/DAQfBw3P/3yAeVOIieQnGNtEwnvmzwGpsEcLjJ6ha+cmofFaHhafymuR3gY46VzY
+ X6lpPV0JHrFLmMtnTH4cVUkCNtz6O10bMwnt1hHjT65JInOQR8Ou5+dYlb0Kljci1bVlWg
+ vs7E/TF2TUcd0+oGwg0X6ZWlY8ZVikvNe7RJo2/GKm7vMoCZLQAnOI+r6vuuow==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=PgIN4HCg
+Subject: Re: [Buildroot] [PATCH 1/1] package/kodi-screensaver-asteroids:
+ bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,45 +84,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a100286aa1eff05db57230eceebbb6aa79c63d1a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 28 Oct 2024 23:45:53 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Bumping libpng to 1.6.44 with buildroot commit
-583bb434ffe1eec0dbf6887dd719c3f41a6253e9
-causes a build failure on arm because the NEON code is only available
-for softfp and hardfp ABIs, and not soft-float.
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  .../kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash  | 2 +-
+>  .../kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk    | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Fixes:
-http://autobuild.buildroot.net/results/021/02158525203d8c7f16a4a32637d44d6c87b7f333/
+Applied to master, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Co-authored-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libpng/libpng.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 3e7fc42d82..9761993d79 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -17,7 +17,9 @@ HOST_LIBPNG_DEPENDENCIES = host-pkgconf host-zlib
- LIBPNG_CONFIG_SCRIPTS = libpng$(LIBPNG_SERIES)-config libpng-config
- LIBPNG_CONF_OPTS = --disable-tools
- 
--ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_aarch64),y)
-+ifeq ($(BR2_aarch64),y)
-+LIBPNG_CONF_OPTS += --enable-arm-neon
-+else ifeq ($(BR2_ARM_CPU_HAS_NEON):$(BR2_ARM_SOFT_FLOAT),y:)
- LIBPNG_CONF_OPTS += --enable-arm-neon
- else
- LIBPNG_CONF_OPTS += --disable-arm-neon
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
