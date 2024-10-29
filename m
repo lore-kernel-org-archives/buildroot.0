@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D72A7D3A699
-	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 20:34:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A30DDD3A699
+	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 20:34:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9532780E30;
-	Tue, 29 Oct 2024 20:34:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F6D380E3A;
+	Tue, 29 Oct 2024 20:34:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zOAM-o0wQwzO; Tue, 29 Oct 2024 20:33:56 +0000 (UTC)
+ id VZFEJA5xl2vH; Tue, 29 Oct 2024 20:34:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3088680E32
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DF4680DFD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3088680E32;
-	Tue, 29 Oct 2024 20:33:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id ACF184EC0
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:33:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1DF4680DFD;
+	Tue, 29 Oct 2024 20:34:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BD5BB4EC0
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:34:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9A4FD408E8
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:33:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id ABE7F80E00
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:34:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XbTy3Lmf1QfU for <buildroot@buildroot.org>;
- Tue, 29 Oct 2024 20:33:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VcOQR9bVTd0h for <buildroot@buildroot.org>;
+ Tue, 29 Oct 2024 20:34:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DC17405F4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DC17405F4
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:33:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 62B78848D1; Tue, 29 Oct 2024 20:33:53 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 29 Oct 2024 21:30:57 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9682ac24fe4fcb8af37ebc44a0355923b25a3a76
-X-Git-Newrev: 8d1ec57d008e1d4d56293014f9cfbdc77b6fd302
-X-Patchwork-Hint: ignore
-Message-Id: <20241029203353.62B78848D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyaml: new package
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4953E80E36
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4953E80E36
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4953E80E36
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:33:57 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3BE291BF203;
+ Tue, 29 Oct 2024 20:33:55 +0000 (UTC)
+Date: Tue, 29 Oct 2024 21:33:54 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Asaf Kahlon <asafka7@gmail.com>
+Message-ID: <20241029213354.749267df@windsurf>
+In-Reply-To: <20241029161022.441227-1-james.hilliard1@gmail.com>
+References: <20241029161022.441227-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730234035;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ZDhhoia4PS5X0fMHgcrcHv3Y7sYbI8/56Sc8eT3xIvE=;
+ b=onLoALTcsxZmINUdeMSebMIuYG59MFUqNHeLlUI7OjClvQtFY/5FFQKZZjY6qrZNaSRARZ
+ W2ftW/vQxsoNN6+LBwwGt+lpS+/0K61nsvkqazvObVJ92LjxjUIQNKXQfA4vsQzZkPYW+a
+ XHOYi4kd8GNK5vG4o6x5bKzFARUzQduMJkkuBsbyR58XloiQRM+9kZ5IKg1cBepGNw+982
+ HJi8K0glafdrqeHkjWXb6x8u9wjj/qEt00+b7d5vp/gwJG/eVcTMLHRulclX7MZvhfcVw6
+ kZGvagPFJPKXAZibJW7Msx8sOxmGPme2oxnhXyPe/BLbAYaiA/0NswGK3zlLxg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=onLoALTc
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-pyaml: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,81 +83,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d1ec57d008e1d4d56293014f9cfbdc77b6fd302
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 29 Oct 2024 10:10:22 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in                      |  1 +
- package/python-pyaml/Config.in         |  8 ++++++++
- package/python-pyaml/python-pyaml.hash |  5 +++++
- package/python-pyaml/python-pyaml.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/Config.in                      |  1 +
+>  package/python-pyaml/Config.in         |  8 ++++++++
+>  package/python-pyaml/python-pyaml.hash |  5 +++++
+>  package/python-pyaml/python-pyaml.mk   | 14 ++++++++++++++
+>  4 files changed, 28 insertions(+)
+>  create mode 100644 package/python-pyaml/Config.in
+>  create mode 100644 package/python-pyaml/python-pyaml.hash
+>  create mode 100644 package/python-pyaml/python-pyaml.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 72b8d8bdc9..f8d4e4d24c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1281,6 +1281,7 @@ menu "External python modules"
- 	source "package/python-py/Config.in"
- 	source "package/python-pyaes/Config.in"
- 	source "package/python-pyalsa/Config.in"
-+	source "package/python-pyaml/Config.in"
- 	source "package/python-pyasn1/Config.in"
- 	source "package/python-pyasn1-modules/Config.in"
- 	source "package/python-pyasynchat/Config.in"
-diff --git a/package/python-pyaml/Config.in b/package/python-pyaml/Config.in
-new file mode 100644
-index 0000000000..72d00d5c4c
---- /dev/null
-+++ b/package/python-pyaml/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_PYAML
-+	bool "python-pyaml"
-+	select BR2_PACKAGE_PYTHON_PYYAML # runtime
-+	help
-+	  PyYAML-based module to produce a bit more pretty and
-+	  readable YAML-serialized data.
-+
-+	  https://github.com/mk-fg/pretty-yaml
-diff --git a/package/python-pyaml/python-pyaml.hash b/package/python-pyaml/python-pyaml.hash
-new file mode 100644
-index 0000000000..06e99448d0
---- /dev/null
-+++ b/package/python-pyaml/python-pyaml.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pyaml/json
-+md5  1301f53ad68626ac295c2663315b1804  pyaml-24.9.0.tar.gz
-+sha256  e78dee8b0d4fed56bb9fa11a8a7858e6fade1ec70a9a122cee6736efac3e69b5  pyaml-24.9.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  dc1342cc1cb49e24c1c9e8a495acc9625ce2e04146c116279af0ab0949cd829c  COPYING
-diff --git a/package/python-pyaml/python-pyaml.mk b/package/python-pyaml/python-pyaml.mk
-new file mode 100644
-index 0000000000..e908aa089a
---- /dev/null
-+++ b/package/python-pyaml/python-pyaml.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pyaml
-+#
-+################################################################################
-+
-+PYTHON_PYAML_VERSION = 24.9.0
-+PYTHON_PYAML_SOURCE = pyaml-$(PYTHON_PYAML_VERSION).tar.gz
-+PYTHON_PYAML_SITE = https://files.pythonhosted.org/packages/fd/a6/5b51160ff7ce60b0c60ec825359c0e818b0ce4a2504fa3dd1470f42f9b10
-+PYTHON_PYAML_SETUP_TYPE = setuptools
-+PYTHON_PYAML_LICENSE = WTFPL
-+PYTHON_PYAML_LICENSE_FILES = COPYING
-+
-+$(eval $(python-package))
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
