@@ -1,75 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3A05D3A690
-	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 19:01:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91472D3A690
+	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 19:04:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 42D26403C4;
-	Tue, 29 Oct 2024 19:01:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 584FA80D67;
+	Tue, 29 Oct 2024 19:04:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1dzg_lAEbTr5; Tue, 29 Oct 2024 19:00:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PYPXxbCjM85E; Tue, 29 Oct 2024 19:04:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48D454017F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7506D80D54
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48D454017F;
-	Tue, 29 Oct 2024 19:00:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 27156494E
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 19:00:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7506D80D54;
+	Tue, 29 Oct 2024 19:04:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DDD9C494E
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 19:04:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 079A54017F
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 19:00:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BDAE480D5F
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 19:04:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qK4q4YEzYJ-8 for <buildroot@buildroot.org>;
- Tue, 29 Oct 2024 19:00:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AC462400EB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC462400EB
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AC462400EB
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 19:00:55 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a02c6.dip0.t-ipconnect.de [91.58.2.198])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 046CCA4C02CE
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:00:52 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59188)
- by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1t5rSV-000000000es-1LI4
- for buildroot@buildroot.org; Tue, 29 Oct 2024 19:00:51 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TTPkwAjmd5Il for <buildroot@buildroot.org>;
+ Tue, 29 Oct 2024 19:04:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9DACB80D54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DACB80D54
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9DACB80D54
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 19:04:38 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.116.191]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MZTmO-1tKjcQ2SwA-00RH3x; Tue, 29
+ Oct 2024 20:04:36 +0100
 To: buildroot@buildroot.org
-Date: Tue, 29 Oct 2024 20:00:51 +0100
-Message-Id: <20241029190051.74541-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
+Cc: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+Date: Tue, 29 Oct 2024 20:04:20 +0100
+Message-ID: <20241029190420.2381778-2-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241029190420.2381778-1-fiona.klute@gmx.de>
+References: <20241029190420.2381778-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Provags-ID: V03:K1:LRh/T+TmQPQANQDQcu8xCLk1SCIG/ytY9mvjW3MM+M2ODL45LjB
+ gKhTouWsVjCfaSVqywmLIiRnXfkaMnQNdxEvPEkMzQ6fOqgjfCq4Ejpl83ogDTXWk65pbjb
+ hP63i97JlbgRE3f4WVouhahxODSHd/RxrVLEnHwYY1tJ1kJIBThaeEz5E28iQA/i43s6dFC
+ OT8USMlvScJAeAclAxckQ==
+UI-OutboundReport: notjunk:1;M01:P0:A9BQS/t4UV0=;V5x0mkwF/UryHP3+VgMk9vtjECm
+ YcOq3GDPUFPKsydl18mMxotvm0k+qVzEiqbD/585+Jw8//9kOXtBN5plYZcHvwrDE1lYXbPOh
+ 1KWesH58ZqqWYKFz9SHfMOOhH2ApIzl0d0WArPJEODHKS6LNr6ZOy7PbzKNnhp0tLrjKXDb2+
+ cV5ETwpMHAX4g77Vjoyf+xHe6tanksyn2rxwZnaOqqMgnvarsYf4oOQfBCWrrgx8+v/JCFeBb
+ qF+rCVu40hGLnLf3co4Flm9yhksiyBuA8mWxmqBn8RuOb2JVicbswV/i6EgtL6cGNP4Izgavz
+ n8xG2uDPXiBMTeZNeHmGuV82mvULRQBv9tmFQWguFAi5vHwqjB+5bbRl/v7+HCo9JJ5phfBal
+ AqYQntO0RtSwO34hIcsfGPjKziXo0vxAp9/uw3VuWeTme+OVCWCTkLoqfwJ1roWrzLTSP9y+e
+ lgg3vwj11MYsp27RXO/2/SIsyyaAZoKTzP8h7O0xY+8b00r5Gf9j8+tTAdYkfGVdY3AVoV+iB
+ 9fsVqALSlDuvildwvpgfCneN317zDqx5xUf56cjIWxP4Lr74OyNOlL0+YWOLphVbmGRQhewcd
+ 16AvcYjJdjSX5+IPfFWFlVZrvkAqsQ2nSHz/Ox3W2A5FPtJByMuX/eeiW3ipPvx45KzOWbvWm
+ 9B0l+GVfMmTv9Ioou7ZVa2lvbFp0/v4UFdgdu43uvrSiRQ4WirHVzTj0Co+yPdBAK5Vpqy3qO
+ Ad7OYYJkAaCwuNFxB+oZ6PcK3296fj/LJn5t+Pf7HrsTXXV1unEFkxDyy/5Z4Q2HP83erxQZQ
+ gcD8cZJuZFdf0IRSiEHwbK2g==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202406071026; t=1730228452;
- bh=dCAtffoEMDba5uR8cJszcmuXJxOxTAV7AfHtaOtOF6c=;
- h=From:To:Subject:Date:From;
- b=aavl4S3GUP9pEpYzqVNmLC6cBahJT1rgPtwcb4Utv3LkxswJOo+aeQBdDQxy7UZnU
- Mb29O7OUijIRwg6WRoQjTEB8AILZ/ZxVYyQ5hFn0VAkbmyOtA6vyJvbQV/MJk9UyFJ
- tmnZWCDlrVFsyqdZ85NT+/4clm4WVH97mdEJ69tIpOMFvXoJefCIuL+jFI4ijLAtcl
- fRA6djVgvi10wLUUe7h66G1/3T41rYf3wdYnI8A9ka0ZbnrRHdCjQAoiShMEIsk9W+
- GUdxrrWLRDpbsM6NxIh6mAzleMn8X1tSh3+QUqqAHShfj3e6QrtdUzFNsMJcagXJ73
- mTrotP1OUUQCg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202406071026 header.b=aavl4S3G
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-iptvsimple: bump version
- to 21.9.4-Omega
+ d=gmx.de; 
+ s=s31663417; t=1730228676; x=1730833476; i=fiona.klute@gmx.de;
+ bh=RiTGRWxPsIwCutziQNJ5Wofo1fWZR6SX8IsJyJpVrBc=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=rlpzYlgp2rPKRTujXvG58mAbsKYS7gA3m7VEMYoL9phTNymRGVlIwXou4lEqVsrm
+ NQe4mZi5erTA5ipjGlhwh5ZRDXo6HFQ++BgmVbD7uapDrnXusVDyChduuCUmoH0Eh
+ pVcVKkuhvgKsXJn0QVMI/8MnctQ28NyrSKtfcXvt/ZfALqeysXBPa3QdBYynCcTDF
+ FcRkpqAlvjKtvKWGb6wdjFONsQeXd0h4N3hYAiTREVpTgCyvjnoZ/umyc//Awx0do
+ SwWQtOawXD5M40v1+zO+grVfOdJ+GdhKzjH4iauaefG+7cXz33aHmBIQIkWZ/M+gT
+ E7IjTu/K8mtiBsSOAw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=rlpzYlgp
+Subject: [Buildroot] [PATCH 2/2] package/openssh: consistently use $DAEMON
+ in start script output
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,41 +98,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-index 025b15ee78..f11be5f500 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  fd0d4cbcf2d20f85e197d33d7f46e6ab2a4de692a04cfade872aace45bd5b742  kodi-pvr-iptvsimple-21.9.3-Omega.tar.gz
-+sha256  d64e3c2f9c421f6617d56befd3574d4e9a495b68b94ee2b3e0d38781efece7be  kodi-pvr-iptvsimple-21.9.4-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-index 095e44c69c..d961c07929 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_IPTVSIMPLE_VERSION = 21.9.3-Omega
-+KODI_PVR_IPTVSIMPLE_VERSION = 21.9.4-Omega
- KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
- KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
- KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
--- 
-2.39.5
+This was already done in start(), but not in stop() and reload().
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+---
+ package/openssh/S50sshd | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
+index 7e5ccf079d..a5ff385acc 100644
+--- a/package/openssh/S50sshd
++++ b/package/openssh/S50sshd
+@@ -28,7 +28,7 @@ start() {
+ }
+
+ stop() {
+-	printf "Stopping sshd: "
++	printf "Stopping %s: " "$DAEMON"
+ 	start-stop-daemon --stop --pidfile "$PIDFILE" \
+ 		--exec "/usr/sbin/$DAEMON"
+ 	status=$?
+@@ -50,7 +50,7 @@ restart() {
+ }
+
+ reload() {
+-	printf "Reloading sshd config: "
++	printf "Reloading %s config: " "$DAEMON"
+ 	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
+ 		--exec "/usr/sbin/$DAEMON"
+ 	status=$?
+--
+2.45.2
 
 _______________________________________________
 buildroot mailing list
