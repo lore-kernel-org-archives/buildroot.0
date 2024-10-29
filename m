@@ -1,76 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82764D3A67C
-	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 18:40:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC609D3A67B
+	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 18:41:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A5D9606C5;
-	Tue, 29 Oct 2024 18:40:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B62EB80B23;
+	Tue, 29 Oct 2024 18:41:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u3POn-LwDuFj; Tue, 29 Oct 2024 18:40:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZObt7sApp4U3; Tue, 29 Oct 2024 18:41:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70431606FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD10C80B25
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70431606FA;
-	Tue, 29 Oct 2024 18:40:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7431E4969
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:40:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD10C80B25;
+	Tue, 29 Oct 2024 18:41:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DE3AE494E
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:41:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 519DB403D8
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:40:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BFB01400E2
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:41:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xIYEtXCTN6-6 for <buildroot@buildroot.org>;
- Tue, 29 Oct 2024 18:40:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uX05HbuVARRK for <buildroot@buildroot.org>;
+ Tue, 29 Oct 2024 18:41:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0967E403DC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0967E403DC
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0967E403DC
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:40:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 22A3A240002;
- Tue, 29 Oct 2024 18:40:15 +0000 (UTC)
-Date: Tue, 29 Oct 2024 19:40:15 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-Message-ID: <20241029194015.00535807@windsurf>
-In-Reply-To: <20241028224553.2468987-1-bernd@kuhls.net>
-References: <20241028224553.2468987-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1730227216;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=UltYpbQCSwdgZ/rOh8oZqYhjXNxbB4SlP2yS7EVNfaM=;
- b=PgIN4HCg3xgwhAYvs4ymVMf/6ew6CkGnNto+N0WH/mCvSzbbx+ybOq7SA8c8Gwy7cTdXs/
- HLjKRTpDJwvgBbZ3x6Jtk2MWLWCqFNykqyX4h45zPzoxi3sXSi3SYvrNloP1ILrkdshSJV
- /Kfrl/DAQfBw3P/3yAeVOIieQnGNtEwnvmzwGpsEcLjJ6ha+cmofFaHhafymuR3gY46VzY
- X6lpPV0JHrFLmMtnTH4cVUkCNtz6O10bMwnt1hHjT65JInOQR8Ou5+dYlb0Kljci1bVlWg
- vs7E/TF2TUcd0+oGwg0X6ZWlY8ZVikvNe7RJo2/GKm7vMoCZLQAnOI+r6vuuow==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PgIN4HCg
-Subject: Re: [Buildroot] [PATCH 1/1] package/kodi-screensaver-asteroids:
- bump version
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC3A840426
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC3A840426
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 18:41:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A9DA984720; Tue, 29 Oct 2024 18:41:35 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 29 Oct 2024 19:40:40 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a8304094d9e4e05ab28bbbf00ced020f37c02377
+X-Git-Newrev: 3891027582645941e2b289ee565ff356c3ccc568
+X-Patchwork-Hint: ignore
+Message-Id: <20241029184135.A9DA984720@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/z3: bump to version 4.13.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,27 +59,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 28 Oct 2024 23:45:53 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3891027582645941e2b289ee565ff356c3ccc568
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  .../kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash  | 2 +-
->  .../kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk    | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+For change log since 4.13.2, see:
+https://github.com/Z3Prover/z3/blob/z3-4.13.3/RELEASE_NOTES.md#version-4133
 
-Applied to master, thanks.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/z3/z3.hash | 2 +-
+ package/z3/z3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/z3/z3.hash b/package/z3/z3.hash
+index f138f39de6..8514043594 100644
+--- a/package/z3/z3.hash
++++ b/package/z3/z3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fd7dc6dd2633074f0a47670d6378b0e5c28c2c26f2b58aa23e9cd7f0bc9ba0dc  z3-4.13.2.tar.gz
++sha256  f59c9cf600ea57fb64ffeffbffd0f2d2b896854f339e846f48f069d23bc14ba0  z3-4.13.3.tar.gz
+ sha256  e617cad2ab9347e3129c2b171e87909332174e17961c5c3412d0799469111337  LICENSE.txt
+diff --git a/package/z3/z3.mk b/package/z3/z3.mk
+index 4763b1cc78..16db30ac21 100644
+--- a/package/z3/z3.mk
++++ b/package/z3/z3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-Z3_VERSION = 4.13.2
++Z3_VERSION = 4.13.3
+ Z3_SITE = $(call github,Z3Prover,z3,z3-$(Z3_VERSION))
+ Z3_LICENSE = MIT
+ Z3_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
