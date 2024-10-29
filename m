@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 916DBD3A699
-	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 20:30:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D000D3A696
+	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 20:30:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1607C80DBC;
-	Tue, 29 Oct 2024 20:30:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 092AE80AC6;
+	Tue, 29 Oct 2024 20:30:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fbtfDkK-ULol; Tue, 29 Oct 2024 20:30:26 +0000 (UTC)
+ id NE9NYNLbTHCP; Tue, 29 Oct 2024 20:30:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72A2E80B1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E59D80ACD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 72A2E80B1B;
-	Tue, 29 Oct 2024 20:30:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C9DB04EC0
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:30:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E59D80ACD;
+	Tue, 29 Oct 2024 20:30:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 52A044EC0
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:30:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ABFEA809DD
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:30:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 34929606CE
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:30:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CqIRx15bKlq5 for <buildroot@buildroot.org>;
- Tue, 29 Oct 2024 20:30:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QZ5-LSKHtV5Y for <buildroot@buildroot.org>;
+ Tue, 29 Oct 2024 20:30:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FBB580964
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9FBB580964
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:30:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 896C984898; Tue, 29 Oct 2024 20:30:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 29 Oct 2024 21:26:32 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c232a448e1d7e6452882c76ec088388ad7ea0ef2
-X-Git-Newrev: 9682ac24fe4fcb8af37ebc44a0355923b25a3a76
-X-Patchwork-Hint: ignore
-Message-Id: <20241029203020.896C984898@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-twisted: bump to version
- 24.10.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2811D6058D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2811D6058D
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2811D6058D
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:30:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8085E240003;
+ Tue, 29 Oct 2024 20:30:25 +0000 (UTC)
+Date: Tue, 29 Oct 2024 21:30:24 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Asaf Kahlon <asafka7@gmail.com>
+Message-ID: <20241029213024.2111ca0d@windsurf>
+In-Reply-To: <20241029170904.1041681-1-james.hilliard1@gmail.com>
+References: <20241029170904.1041681-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730233825;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=j1rhtBB1d8wXm3tO7bQ7beDxWm5FlUe/4fkK3RiJ5os=;
+ b=nAZ/vOMD4xs9bBb8GBIf5M8Bwy9nwYhSVE0nxw02SSnUK9m4136XAHuYRnpTKQGLuN2rpp
+ REeC+4k+lLCtYg45EtM/0tWI7707w0nz2KKYUICsJbu07GFJu9wcFGpK1Jxcl9jFcrtMJc
+ +yCcDA+gMpIskE5MPE39w4vBqGQUPdrbH0cZl5kUg1sF1UJxp7opPgPvMQpln7z1huWxLx
+ 378pxI96U/hWQPKm72aWBY0WeliueoAIse0KpLSWJE4r5/H592ytCYRllkQQKCfHzV42xM
+ ksXeeGiUx8f+hIo+1l+MUgGNbJgx1OqCmrDBe+jIUuyLrMyasGVNpJr+DZ40gg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=nAZ/vOMD
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-yarl: bump to version
+ 1.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,50 +84,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9682ac24fe4fcb8af37ebc44a0355923b25a3a76
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 29 Oct 2024 11:09:04 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-twisted/python-twisted.hash | 4 ++--
- package/python-twisted/python-twisted.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-yarl/python-yarl.hash | 4 ++--
+>  package/python-yarl/python-yarl.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
-index a414058ca7..03c637c9ed 100644
---- a/package/python-twisted/python-twisted.hash
-+++ b/package/python-twisted/python-twisted.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/twisted/json
--md5  f89c2542ea9cb39c5343472fdefb4a22  twisted-24.7.0.tar.gz
--sha256  5a60147f044187a127ec7da96d170d49bcce50c6fd36f594e60f4587eff4d394  twisted-24.7.0.tar.gz
-+md5  bbe77df51bb6375ac61b9be634ff59f3  twisted-24.10.0.tar.gz
-+sha256  02951299672595fea0f70fa2d5f7b5e3d56836157eda68859a6ad6492d36756e  twisted-24.10.0.tar.gz
- # Locally computed sha256 checksums
- sha256  78d059391dddba18a695c1998ac9dde68160a1df1635f34adcfb3ecba4564802  LICENSE
-diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
-index 01d2dff391..424efdadba 100644
---- a/package/python-twisted/python-twisted.mk
-+++ b/package/python-twisted/python-twisted.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_TWISTED_VERSION = 24.7.0
-+PYTHON_TWISTED_VERSION = 24.10.0
- PYTHON_TWISTED_SOURCE = twisted-$(PYTHON_TWISTED_VERSION).tar.gz
--PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/8b/bf/f30eb89bcd14a21a36b4cd3d96658432d4c590af3c24bbe08ea77fa7bbbb
-+PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/b2/0f/2d0b0dcd52a849db64ff63619aead94ae1091fe4d4d7e100371efe513585
- PYTHON_TWISTED_SETUP_TYPE = hatch
- PYTHON_TWISTED_LICENSE = MIT
- PYTHON_TWISTED_LICENSE_FILES = LICENSE
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
