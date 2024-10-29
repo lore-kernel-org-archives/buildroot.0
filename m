@@ -4,49 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 743E3D3A699
-	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 20:35:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4927AD3A699
+	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 20:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20DDC80E4F;
-	Tue, 29 Oct 2024 20:35:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1AC1C80A99;
+	Tue, 29 Oct 2024 20:35:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VV1z_O4w7Qmv; Tue, 29 Oct 2024 20:35:11 +0000 (UTC)
+ id lWBygsttxBRF; Tue, 29 Oct 2024 20:35:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A36C80E33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 301E080B04
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A36C80E33;
-	Tue, 29 Oct 2024 20:35:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id DD8964969
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:35:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 301E080B04;
+	Tue, 29 Oct 2024 20:35:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2D6484EC0
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:35:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF2EE405F4
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:35:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1BB9B40A86
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:35:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BIDvqnNLTMT9 for <buildroot@buildroot.org>;
- Tue, 29 Oct 2024 20:35:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id phWzYf8ccxur for <buildroot@buildroot.org>;
+ Tue, 29 Oct 2024 20:35:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA660408E8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BA660408E8
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:35:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B144F84924; Tue, 29 Oct 2024 20:35:06 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 29 Oct 2024 21:34:55 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fc31199a92042885490b30eb2362f547863d4f8a
-X-Git-Newrev: 3ee7c891a0173417fbd4726928bd4d4689048b22
-X-Patchwork-Hint: ignore
-Message-Id: <20241029203506.B144F84924@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gobject-introspection: update
- homepage
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D8761405F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8761405F4
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D8761405F4
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:35:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CC47D40003;
+ Tue, 29 Oct 2024 20:35:53 +0000 (UTC)
+Date: Tue, 29 Oct 2024 21:35:53 +0100
+To: Fiona Klute via buildroot <buildroot@buildroot.org>
+Cc: Fiona Klute <fiona.klute@gmx.de>, Eric Le Bihan
+ <eric.le.bihan.dev@free.fr>, Adam Duskett
+ <adam.duskett@amarulasolutions.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, James Hilliard
+ <james.hilliard1@gmail.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20241029213553.4d0ff82e@windsurf>
+In-Reply-To: <20241010135318.3064224-2-fiona.klute@gmx.de>
+References: <20241010135318.3064224-1-fiona.klute@gmx.de>
+ <20241010135318.3064224-2-fiona.klute@gmx.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730234154;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=+Ki/ZPlsiKFN8PHokBxOsVKCxxOhKnYr0sJgo86hasQ=;
+ b=Bgh/bzo7eI2ztN9OC1VQU7tFOKDwjMD8YAL+4ooWGM4+55WW2xbdzwfl7Yslakn1/FjI8j
+ VXK34etgQ0yMGETEwnnwk2wgH4LWdMjfbQRZCBmGMyDfkKgN5XqbejYCtseP/0rQ9IdGRs
+ pPpzE4WsN6alBFEEclaP2iQYUDy1gqCDea7RNhJYM6oNzCmchBGuBDp24vJfqtvWRRKGn9
+ loBQOiauyWkCrBNcEnzn0rwRwimoQiuu7VLPUltscTeK2uoritZqm5jPuU7/D5VH1XzaMB
+ dWnlqsU8bOdBcPin+TOY1fufkhD4QIuFOR8v6SWiJDW1yqtrSAlJWo8cPR4hXA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Bgh/bzo7
+Subject: Re: [Buildroot] [PATCH v5 1/7] package/gobject-introspection: don't
+ depend on cairo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,38 +89,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ee7c891a0173417fbd4726928bd4d4689048b22
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The homepage has moved, the previous one links to the new URL.
+On Thu, 10 Oct 2024 15:53:08 +0200
+Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-[yann.morin.1998@free.fr: split into its own patch]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gobject-introspection/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+> index ad72af22a2..af27781cf7 100644
+> --- a/package/gobject-introspection/gobject-introspection.mk
+> +++ b/package/gobject-introspection/gobject-introspection.mk
+> @@ -47,12 +47,7 @@ GOBJECT_INTROSPECTION_CONF_OPTS = \
+>  	-Dbuild_introspection_data=true \
+>  	-Ddoctool=disabled
+>  
+> -ifeq ($(BR2_PACKAGE_CAIRO),y)
+> -GOBJECT_INTROSPECTION_DEPENDENCIES += cairo
+> -GOBJECT_INTROSPECTION_CONF_OPTS += -Dcairo=enabled
+> -else
+>  GOBJECT_INTROSPECTION_CONF_OPTS += -Dcairo=disabled
 
-diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
-index 42250eb776..345118745f 100644
---- a/package/gobject-introspection/Config.in
-+++ b/package/gobject-introspection/Config.in
-@@ -36,7 +36,7 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
- 	  language bindings can read this metadata and automatically
- 	  provide bindings to call into the C library.
- 
--	  https://wiki.gnome.org/action/show/Projects/GObjectIntrospection
-+	  https://gi.readthedocs.io/
- 
- comment "gobject-introspection needs python3"
- 	depends on !BR2_PACKAGE_PYTHON3
+It didn't really make sense to keep it as a separate
+GOBJECT_INTROSPECTION_CONF_OPTS += assignment, so I folded it into the
+previous GOBJECT_INTROSPECTION_CONF_OPTS = assignment.
+
+Applied with this change. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
