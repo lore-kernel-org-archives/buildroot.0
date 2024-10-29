@@ -1,94 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65B35D7494C
-	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 23:20:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0D7BD7494E
+	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 23:59:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C774F403AF;
-	Tue, 29 Oct 2024 23:20:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B90180D14;
+	Tue, 29 Oct 2024 23:59:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c6qA_4RmlUqY; Tue, 29 Oct 2024 23:20:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p1YZ2u5tZs7u; Tue, 29 Oct 2024 23:59:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA41D4039A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B12C380E80
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA41D4039A;
-	Tue, 29 Oct 2024 23:20:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 65DF64969
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 23:20:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B12C380E80;
+	Tue, 29 Oct 2024 23:59:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C36AB494E
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 23:59:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5023C40398
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 23:20:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B14A280E80
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 23:59:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BkPyWTu5py_p for <buildroot@buildroot.org>;
- Tue, 29 Oct 2024 23:20:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HIc2ywFh2Iuj for <buildroot@buildroot.org>;
+ Tue, 29 Oct 2024 23:59:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
- envelope-from=olteanv@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4950B40354
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4950B40354
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4950B40354
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 23:20:21 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-4315ce4d250so7265485e9.2
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 16:20:21 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::52e; helo=mail-pg1-x52e.google.com;
+ envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B12B280D14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B12B280D14
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com
+ [IPv6:2607:f8b0:4864:20::52e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B12B280D14
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 23:59:40 +0000 (UTC)
+Received: by mail-pg1-x52e.google.com with SMTP id
+ 41be03b00d2f7-7eda47b7343so3890298a12.0
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 16:59:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730244019; x=1730848819;
+ d=1e100.net; s=20230601; t=1730246379; x=1730851179;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=+uQI5mFJquStgvbgONTQ8jTzMOUl9k1VBZAQaHvy1vw=;
- b=nE1ryRslU0WF50zq13akDynoPRc99zhr9VBM26939DYGxkE5xMtekAMJBupgAU7Jg7
- 7pw3q+l8IXyqTK99NKmtj4I7VfU+toDQJFnu+BOFr606O3nrEFIhtWBSox86bLyHcyWN
- J6VEbIp4iWAehle3/rowoxLe04wp9Tlk2GzN8K9GlwlyAvf8+PKkf9HVwRX1NxERvHY9
- hQ23Fv5D0xgCAHBO8eT8HouLzJzR1Ys0ZiBP7vkMjBQLDkOBQ2KWM29GbpEyi5u5gXk1
- 5wUdVSKDh4bxKnr+2P0oex5hkFVr/Z0odUhU8QBSES/IYGbXJxdvAZMncDfOnwpta4Zy
- I5+w==
-X-Gm-Message-State: AOJu0YxjiZ/fw8ZLMxvjfgfiv5yQqauP7GoayUoctMIwhipJ5cNjAXBC
- H36xwK5hkduYY2qQ1R2xYTPiOqimHCXg/9ZbfEB5OzDDPyR1m40zcoux0jbP
-X-Google-Smtp-Source: AGHT+IGqcodQbNx/7KB+9VR5IxLCQBNjYzpkwfvAeqE9yG44LZTSeQPQsEXRCXwJiMwquBw6QH+KOg==
-X-Received: by 2002:a05:600c:4f0c:b0:431:4983:e8fe with SMTP id
- 5b1f17b1804b1-4319ad41c64mr48796085e9.9.1730244018577; 
- Tue, 29 Oct 2024 16:20:18 -0700 (PDT)
-Received: from skbuf.lan ([188.25.134.29]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-431bd9ca8eesm3212305e9.43.2024.10.29.16.20.17
+ bh=VtDJoxqrp9N0D61oolqlqv/Oq+Jd33ApHemKV6/BMHU=;
+ b=RMWuBTKIF6IBDdSZxFoQ+7WKS5AQSTj8OoSxICUm0Yo8nnELdhKvtesKIBlpKFf38M
+ +yVh8kVngU1WwAAe+1TgnR2IgNzhdL+vzvtlf/tBmt1z/iLErGa/VMbPIYc2hNUlNAvq
+ mGjysoUabsyJmQbcGqmpCV/TeByiKp2jwvAdXEoMTcg9rZpfqvhfmXxYaS1gMzet1faU
+ TqOwZD4pmtS+jPnmQIGVpSh6ya1U9ZzTs+gr2H2xtXkOqbf1uR1kFUKp9u2GQtk84zPP
+ csIknpGS6x81PqI6zO4SmpWf/ktc/uT82nvGJ9U+j8YYdM3eGmAkD0S6lwyp9P4Z3Hit
+ LFrQ==
+X-Gm-Message-State: AOJu0YzzBUxaa39WrV7f9pAhzjLErehj4+qvyfOqi2ifsVdoPn8/oYNX
+ 61ge+kPm58DHL5oAvWWlsAzmwRxiPGDZ3Q0Qu9Zj2urIG/RC51RIip4QsqZ6
+X-Google-Smtp-Source: AGHT+IENo/P5+B2dLH7o5MiYKBwOI0xok7aOlx1aZYPAZ6EUL1T6qWfkhJYXJeH99v8XakByKlxRKA==
+X-Received: by 2002:a05:6a21:920d:b0:1d9:275b:4ee2 with SMTP id
+ adf61e73a8af0-1d9a840a30fmr18260380637.24.1730246378928; 
+ Tue, 29 Oct 2024 16:59:38 -0700 (PDT)
+Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
+ 41be03b00d2f7-7edc8a3d1f1sm8179958a12.76.2024.10.29.16.59.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 29 Oct 2024 16:20:18 -0700 (PDT)
-From: Vladimir Oltean <olteanv@gmail.com>
+ Tue, 29 Oct 2024 16:59:38 -0700 (PDT)
+From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 30 Oct 2024 01:19:36 +0200
-Message-ID: <20241029231936.3712769-1-olteanv@gmail.com>
+Cc: Scott Fan <fancp2007@gmail.com>,
+ Julien Boibessot <julien.boibessot@armadeus.com>
+Date: Wed, 30 Oct 2024 07:59:21 +0800
+Message-ID: <20241029235931.37689-1-fancp2007@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1730244019; x=1730848819; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1730246379; x=1730851179; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+uQI5mFJquStgvbgONTQ8jTzMOUl9k1VBZAQaHvy1vw=;
- b=NTKe5vQTdEbgXXYGtylQ9H2s70biB/SbqengHJK0fF3V62mGMYQCL6sXZKTLmsmIif
- MlROT8mtQGG0IjyXiQO6xE2uAVPLGFFN14Lgu3MgQ10m1TdNWERvJqte5/6U/bww6lgC
- j/PgxEc0pbLHj/NaIgL50/T2hmPM1BDAY7KhTIDFBxt8ciyxIa9ktXA/Q6Pjeyj63KFs
- Oz3jZPWMhwJ/bGFk0c7zgFrGJjU+dK4x+znDEhDn5NDaWXCTL8fPkk+o1oOmyStfMXOV
- X0U7lYpGefL5CB/f7l31T1cd3gNm8OfPuOcgN8WPfdNN6X6vBA34B5STtlwGPYuUg+Cd
- BdwQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=VtDJoxqrp9N0D61oolqlqv/Oq+Jd33ApHemKV6/BMHU=;
+ b=Atl6RxxJ7C+FdSvHokOhZ9GCQssBRVlfoQlyJlYkPqFOfbH5opJ3/nyUCbAnWVvSvQ
+ InGVAuLEEJmfNk7UG/woe73p/otlOyCBIFnBHGXbYFGvEkLSSuEwLUbrSdF4GX9IdLw7
+ rD2WoOKRr6pEW3YCGg5+hc/6xWu1Ae8VJaI+jdyB7f8Ah8oN4OzVWxVU3l/fNwXseZea
+ t/zhmW8spWCTp5B4fR5xVnOM5iTdSLsLJgbqHzUiGB0qzbi0OWsb5EpvTL5DTenXaeLp
+ 3FnqjskkwRbEv6cf/cyYV22KK6GtlIpo8BM/eBQMLiUAPvC+ukkRRPymBrnvkZ6FguYO
+ yVwg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=NTKe5vQT
-Subject: [Buildroot] [PATCH] package/sshguard: patch
- /usr/local/sbin/sshguard path in systemd service
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Atl6RxxJ
+Subject: [Buildroot] [PATCH] package/libmodbus: bump to version 3.1.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,41 +106,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The systemd service deployed to the target is derived from an example
-hardcoded for the /usr/local/sbin/ path, but we install sshguard at
-/usr/sbin/. Thus, by default we get this error message:
+Release notes:
+https://github.com/stephane/libmodbus/releases/tag/v3.1.11
 
-$ journalctl -b -u sshguard.service -f
-systemd[1]: Started SSHGuard - blocks brute-force login attempts.
-(sshguard)[612]: sshguard.service: Unable to locate executable '/usr/local/sbin/sshguard': No such file or directory
-(sshguard)[612]: sshguard.service: Failed at step EXEC spawning /usr/local/sbin/sshguard: No such file or directory
-systemd[1]: sshguard.service: Main process exited, code=exited, status=203/EXEC
-systemd[1]: sshguard.service: Failed with result 'exit-code'.
-systemd[1]: sshguard.service: Scheduled restart job, restart counter is at 5.
-systemd[1]: sshguard.service: Start request repeated too quickly.
-systemd[1]: sshguard.service: Failed with result 'exit-code'.
-systemd[1]: Failed to start SSHGuard - blocks brute-force login attempts.
-
-Fix up the path in the service after the $(INSTALL) command has run.
-
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
- package/sshguard/sshguard.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libmodbus/libmodbus.hash | 2 +-
+ package/libmodbus/libmodbus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sshguard/sshguard.mk b/package/sshguard/sshguard.mk
-index 8d036357438d..97cbbb2bdd3a 100644
---- a/package/sshguard/sshguard.mk
-+++ b/package/sshguard/sshguard.mk
-@@ -25,6 +25,8 @@ endef
- define SSHGUARD_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0644 $(@D)/examples/sshguard.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/sshguard.service
-+	$(SED) 's:/usr/local/sbin/sshguard:/usr/sbin/sshguard:g' \
-+		$(TARGET_DIR)/usr/lib/systemd/system/sshguard.service
- endef
+diff --git a/package/libmodbus/libmodbus.hash b/package/libmodbus/libmodbus.hash
+index a7b7e583a8..5c081d9710 100644
+--- a/package/libmodbus/libmodbus.hash
++++ b/package/libmodbus/libmodbus.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  899be4e25ab7fe5799d43f9567510d6f063d2e8f56136dd726b6fd976f9b2253  libmodbus-3.1.10.tar.gz
++sha256  15b4b2e0f68122c2da9b195de5c330489a9c97d40b4a95d2822378dc14d780e7  libmodbus-3.1.11.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
+index 2fffa1e0e9..4902d6257f 100644
+--- a/package/libmodbus/libmodbus.mk
++++ b/package/libmodbus/libmodbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
+-LIBMODBUS_VERSION = 3.1.10
++LIBMODBUS_VERSION = 3.1.11
+ LIBMODBUS_SITE = https://github.com/stephane/libmodbus/releases/download/v$(LIBMODBUS_VERSION)
+ LIBMODBUS_LICENSE = LGPL-2.1+
+ LIBMODBUS_LICENSE_FILES = COPYING.LESSER
 -- 
 2.43.0
 
