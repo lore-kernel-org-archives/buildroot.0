@@ -1,75 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8575ED2AB1F
-	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 11:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE40BD2AB1F
+	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 11:31:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DFBC80C2F;
-	Tue, 29 Oct 2024 11:21:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 875A060869;
+	Tue, 29 Oct 2024 11:31:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3QzwrV2kMGes; Tue, 29 Oct 2024 11:21:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CQYSKIrXUiiE; Tue, 29 Oct 2024 11:31:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E41B80C5A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C70160851
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E41B80C5A;
-	Tue, 29 Oct 2024 11:21:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3817F4EC0
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 11:21:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C70160851;
+	Tue, 29 Oct 2024 11:31:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 79005112A
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 11:30:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 25ED940103
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 11:21:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6717B4064B
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 11:30:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RFZGzkkgrehv for <buildroot@buildroot.org>;
- Tue, 29 Oct 2024 11:21:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KfH45pBRaSu6 for <buildroot@buildroot.org>;
+ Tue, 29 Oct 2024 11:30:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=114.111.35.110;
+ helo=cvsmtppost22.nm.naver.com; envelope-from=dungeonlords789@naver.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 00D7C4010D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00D7C4010D
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 00D7C4010D
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 11:21:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CD5C22000C;
- Tue, 29 Oct 2024 11:21:42 +0000 (UTC)
-Date: Tue, 29 Oct 2024 12:21:41 +0100
-To: Scott Fan <fancp2007@gmail.com>
-Message-ID: <20241029122141.50cd82d3@windsurf>
-In-Reply-To: <20241029044843.703796-1-fancp2007@gmail.com>
-References: <20241029044843.703796-1-fancp2007@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A5EF84064C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5EF84064C
+Received: from cvsmtppost22.nm.naver.com (cvsmtppost22.nm.naver.com
+ [114.111.35.110])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A5EF84064C
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 11:30:57 +0000 (UTC)
+X-Originating-IP: 125.132.232.68
+Received: from cvsendbo030.nm ([10.112.20.49])
+ by cvsmtppost22.nm.naver.com with ESMTP id ChuivQirTPawd26aGwdP0Q
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 11:30:55 -0000
+X-Session-ID: J9WCe1OHTf+VcPynXuJWKw
+X-Originating-IP: 125.132.232.68
+X-Works-Send-Opt: xeYZjAJYjHmlKxu/FoJYKxgXKBwkx0eFjAu=
+X-Works-Smtp-Source: ZqnrKxgqFqJZ+HmdFxgl+6E=
+Received: from Linux.. ([125.132.232.68])
+ by cvnsmtp001.nm.naver.com with ESMTP id J9WCe1OHTf+VcPynXuJWKw
+ for <multiple recipients>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Tue, 29 Oct 2024 11:30:54 -0000
+From: Cherniaev Andrei <dungeonlords789@naver.com>
+To: buildroot@buildroot.org
+Cc: Cherniaev Andrei <dungeonlords789@naver.com>,
+ Petr Vorel <petr.vorel@gmail.com>
+Date: Tue, 29 Oct 2024 20:30:51 +0900
+Message-ID: <20241029113052.1243078-1-dungeonlords789@naver.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1730200903;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=vwvEvx2jVB/bycsVj/TbqES2SN/4HP6bNaRY7WjzQYw=;
- b=PcOb9BONji/X05Ikvr14n6VZtY+drUjqo6k0Fd1omqBU6HQmLo3ZED5pH6ylLRMmS1EgJ0
- /4LYXFDdUOfSBLahoT/y4njM9y3atDIy2ljL5tMOtiQqYOoExan2JHg4It77Ao9C48ojFB
- RguCTIHnZcKLkIKdJx7N0NYq1a7wycptAR1jjX325Tv8WGVapRBQEs2MAUR8+Qwm00lk15
- /3iHvVU9H12OeUvQHca51UWyC0V6ldbRdGJNnf1BAZ7rOan47Vj7DQAyTDfYllPKii9KBN
- zjFrc5lfOheso9cAuusttxKtyRUtQBnrr/yeSgxvzVCGdMMB/7acPUXoXcxgXw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=naver.com; s=s20171208; 
+ t=1730201455; bh=bCCDIzdV18Q/T49d0vc9PG+yTPy3+u+cv0RFwy6157g=;
+ h=From:To:Subject:Date:Message-ID:From:Subject:Feedback-ID:
+ X-Works-Security;
+ b=ugsh/89oXzMrFEr4eWrfCM60SOOmjuNCVMdQMtjpfUKB2TBMC1Wi6zEsive+Q3xeA
+ svc/HnK0vu/UJzIJhu3gPfnOyoG8PNiAy3hZ3IcD7IXewlE+hdRVyq+10ktasQVFvL
+ 4rI0cDmt8TYTp68u7QbCGESlTP39EKyKpeKzcg8TvNncSowbpJkRQMEMtRf40euMSU
+ YZ58tmKgKkg5h/H0TByNU4Sys9cRiR2KoSAlRae3zkRM962b5lw9cHHO+cADhTkwqG
+ H/OvVY9DJ8T2fHhGT+Jf0L7mz54DpCVCvTSPN63M0BcLAy8hr6SzNe1QwuY35neqJb
+ eBME1PnUDTY4w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=naver.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PcOb9BON
-Subject: Re: [Buildroot] [PATCH] package/procps-ng: fix typos in config
- option and help text
+ unprotected) header.d=naver.com header.i=@naver.com header.a=rsa-sha256
+ header.s=s20171208 header.b=ugsh/89o
+Subject: [Buildroot] [PATCH] support/kconfig: fix linux header path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,34 +89,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Julien Olivain <ju.o@free.fr>, Peter Korsgaard <jacmet@uclibc.org>,
- Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Scott,
+Usually you will never have "/usr/src/linux"... For example on my Ubuntu 24 I have "/usr/src/linux-headers-6.8.0-47-generic". My change makes path universal.
+---
+ support/kconfig/README.buildroot | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Tue, 29 Oct 2024 12:48:38 +0800
-Scott Fan <fancp2007@gmail.com> wrote:
-
->  if BR2_PACKAGE_PROCPS_NG
->  
-> -config BR2_PACKAGE_PROCPS_NS_ORIGINAL_TOP
-> +config BR2_PACKAGE_PROCPS_NG_ORIGINAL_TOP
-
-Thanks for spotting this. However, since this option has made its way
-to Buildroot 2024.08, I think we have no choice but to add an entry in
-the Config.in.legacy file for the old option name.
-
-Thomas
+diff --git a/support/kconfig/README.buildroot b/support/kconfig/README.buildroot
+index 76808f85b4..c08970c87e 100644
+--- a/support/kconfig/README.buildroot
++++ b/support/kconfig/README.buildroot
+@@ -2,7 +2,7 @@ This is a copy of the kconfig code in the kernel (currently 4.17-rc2) tweaked
+ to suit Buildroot.
+ 
+ To update:
+-	cp -r /usr/src/linux/scripts/kconfig support/kconfig.new
++	cp -r /usr/src/linux-headers-$(uname -r)/scripts/kconfig support/kconfig.new
+ 	cd support/kconfig.new
+ 	# zconf.lex.c and zconf.tab.c needs to be generated by 'make menuconfig'
+ 	mv zconf.lex.c zconf.lex.c_shipped
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
