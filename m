@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A30DDD3A699
-	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 20:34:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFD2ED3A696
+	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 20:35:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F6D380E3A;
-	Tue, 29 Oct 2024 20:34:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FA1380DE2;
+	Tue, 29 Oct 2024 20:35:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VZFEJA5xl2vH; Tue, 29 Oct 2024 20:34:06 +0000 (UTC)
+ id ClUTqxvvpt_I; Tue, 29 Oct 2024 20:35:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DF4680DFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A31C880E30
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DF4680DFD;
-	Tue, 29 Oct 2024 20:34:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A31C880E30;
+	Tue, 29 Oct 2024 20:35:08 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BD5BB4EC0
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:34:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 830804EC0
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:35:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ABE7F80E00
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:34:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6FC8F80DFD
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:35:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VcOQR9bVTd0h for <buildroot@buildroot.org>;
- Tue, 29 Oct 2024 20:34:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id rgeDg6sYj-Wr for <buildroot@buildroot.org>;
+ Tue, 29 Oct 2024 20:35:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4953E80E36
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4953E80E36
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4953E80E36
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:33:57 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3BE291BF203;
- Tue, 29 Oct 2024 20:33:55 +0000 (UTC)
-Date: Tue, 29 Oct 2024 21:33:54 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org, Asaf Kahlon <asafka7@gmail.com>
-Message-ID: <20241029213354.749267df@windsurf>
-In-Reply-To: <20241029161022.441227-1-james.hilliard1@gmail.com>
-References: <20241029161022.441227-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1730234035;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ZDhhoia4PS5X0fMHgcrcHv3Y7sYbI8/56Sc8eT3xIvE=;
- b=onLoALTcsxZmINUdeMSebMIuYG59MFUqNHeLlUI7OjClvQtFY/5FFQKZZjY6qrZNaSRARZ
- W2ftW/vQxsoNN6+LBwwGt+lpS+/0K61nsvkqazvObVJ92LjxjUIQNKXQfA4vsQzZkPYW+a
- XHOYi4kd8GNK5vG4o6x5bKzFARUzQduMJkkuBsbyR58XloiQRM+9kZ5IKg1cBepGNw+982
- HJi8K0glafdrqeHkjWXb6x8u9wjj/qEt00+b7d5vp/gwJG/eVcTMLHRulclX7MZvhfcVw6
- kZGvagPFJPKXAZibJW7Msx8sOxmGPme2oxnhXyPe/BLbAYaiA/0NswGK3zlLxg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=onLoALTc
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-pyaml: new package
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA35B80DE2
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA35B80DE2
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 20:35:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A4EBF84922; Tue, 29 Oct 2024 20:35:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 29 Oct 2024 21:34:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8d1ec57d008e1d4d56293014f9cfbdc77b6fd302
+X-Git-Newrev: fc31199a92042885490b30eb2362f547863d4f8a
+X-Patchwork-Hint: ignore
+Message-Id: <20241029203506.A4EBF84922@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gobject-introspection: don't
+ depend on cairo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,32 +60,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 29 Oct 2024 10:10:22 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fc31199a92042885490b30eb2362f547863d4f8a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/Config.in                      |  1 +
->  package/python-pyaml/Config.in         |  8 ++++++++
->  package/python-pyaml/python-pyaml.hash |  5 +++++
->  package/python-pyaml/python-pyaml.mk   | 14 ++++++++++++++
->  4 files changed, 28 insertions(+)
->  create mode 100644 package/python-pyaml/Config.in
->  create mode 100644 package/python-pyaml/python-pyaml.hash
->  create mode 100644 package/python-pyaml/python-pyaml.mk
+Currently, goi depends on cairo.
 
-Applied to master, thanks.
+So far, this would not cause any issue, but once we bump libglib2 and
+goi, that would cause a circular dependency chain, where goi would
+depend on cairo, cairo on libglib2, and libglib2 back on goi...
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+However, in goi, cairo is only needed to build some tests, and thus we
+do not need that dependency, even before we update goi+libglib2.
+
+Thanks to Fiona for helping sorting the issue out.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gobject-introspection/gobject-introspection.mk | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+index ad72af22a2..b1b44d0b4f 100644
+--- a/package/gobject-introspection/gobject-introspection.mk
++++ b/package/gobject-introspection/gobject-introspection.mk
+@@ -45,14 +45,8 @@ GOBJECT_INTROSPECTION_CONF_OPTS = \
+ 	-Dgi_cross_binary_wrapper="$(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper" \
+ 	-Dgi_cross_ldd_wrapper="$(STAGING_DIR)/usr/bin/g-ir-scanner-lddwrapper" \
+ 	-Dbuild_introspection_data=true \
+-	-Ddoctool=disabled
+-
+-ifeq ($(BR2_PACKAGE_CAIRO),y)
+-GOBJECT_INTROSPECTION_DEPENDENCIES += cairo
+-GOBJECT_INTROSPECTION_CONF_OPTS += -Dcairo=enabled
+-else
+-GOBJECT_INTROSPECTION_CONF_OPTS += -Dcairo=disabled
+-endif
++	-Ddoctool=disabled \
++	-Dcairo=disabled
+ 
+ # GI_SCANNER_DISABLE_CACHE=1 prevents g-ir-scanner from writing cache data to ${HOME}
+ GOBJECT_INTROSPECTION_CONF_ENV = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
