@@ -1,51 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE51BD74943
-	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 22:09:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6EE0D74941
+	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 22:10:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 68E9C606F6;
-	Tue, 29 Oct 2024 22:09:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E02B80C47;
+	Tue, 29 Oct 2024 22:10:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9PpleHFzQY2R; Tue, 29 Oct 2024 22:09:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Gc8omYdtX-Ws; Tue, 29 Oct 2024 22:10:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A56B606A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EF6180C45
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A56B606A9;
-	Tue, 29 Oct 2024 22:09:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B0A96494E
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 22:09:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6EF6180C45;
+	Tue, 29 Oct 2024 22:10:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 95DC9494E
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 22:10:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F8ED4042E
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 22:09:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8420B80C47
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 22:10:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L2cj4mxR-Ugt for <buildroot@buildroot.org>;
- Tue, 29 Oct 2024 22:09:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id paag7ysyTBrN for <buildroot@buildroot.org>;
+ Tue, 29 Oct 2024 22:10:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D2CF403D0
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D2CF403D0
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 22:09:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 72A4284BD8; Tue, 29 Oct 2024 22:09:27 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 29 Oct 2024 23:09:13 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 489e38fd2c16f9de2a187a4774df29f8c929bc30
-X-Git-Newrev: dd35dd09caf441b273773426ead029ab9eaceabe
-X-Patchwork-Hint: ignore
-Message-Id: <20241029220927.72A4284BD8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/systemd: add separate EFI support
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 09F1380C45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09F1380C45
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 09F1380C45
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 22:10:06 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8A5C5E0002;
+ Tue, 29 Oct 2024 22:10:03 +0000 (UTC)
+Date: Tue, 29 Oct 2024 23:10:02 +0100
+To: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
+Cc: buildroot@buildroot.org, Norbert Lange <nolange79@gmail.com>, Sen
+ Hastings <sen@hastings.org>, "Yann E . MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20241029231002.747985e0@windsurf>
+In-Reply-To: <20240911122010.2922087-1-guillaume.chaye@zeetim.com>
+References: <20240911122010.2922087-1-guillaume.chaye@zeetim.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730239804;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=2yc1pLbt7KV5MHD2+f3f4kfY62Cf+HH6Img/OtlZLOo=;
+ b=V3/SkcARrIhmlWFOQtgLC8INinaq9ycJNSUvVeE6dOgXe4TTRQWgRgJjgznSk3eUYgTsJu
+ txwAtG+Rqw7A06TlLs36ja5UKgtF9weiFnKnGCVF44gNdflympgvFHfhhtHmDb6QC9Dgyc
+ dU5IYWhwtDZBMg7OpUpo345NoruHw609HxD4Z9qbb09Hdp664C7OHg4xP16wl3LbEe5tGw
+ jeL0OJ1Umk54tXZ+MCIcgu5x6G+kWaROqiJbzY0LTfWpLn4VVa3sxP6Yh6tvci6D8ty+mg
+ 03a+furZBjRsvgt9uqhrG4304kwsxe1dHLqLU/YTEsd06SxcoFx9MZXMq0qLtg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=V3/SkcAR
+Subject: Re: [Buildroot] [PATCHv2 1/1] package/systemd: add EFI support
  option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,81 +85,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd35dd09caf441b273773426ead029ab9eaceabe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Guillaume,
 
-In the current systemd package, EFI support is tied to enabling
-systemd-boot, but there are some use cases where EFI support is
-desired, independently of systemd-boot, for example to mount
-automatically efivarfs in /sys/firmware/efi/efivars.
+On Wed, 11 Sep 2024 14:20:10 +0200
+"Guillaume GC. Chaye" <guillaume.chaye@zeetim.com> wrote:
 
-This commit therefore adds a separate option to enable EFI support.
+> We need to compile systemd with -Defi=true flag to mount automatically
+> efivarfs in /sys/firmware/efi/efivars
+> 
+> Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
+> ---
+>  package/systemd/Config.in  |  4 ++++
+>  package/systemd/systemd.mk | 10 ++++++++--
+>  2 files changed, 12 insertions(+), 2 deletions(-)
 
-Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/systemd/Config.in  |  4 ++++
- package/systemd/systemd.mk | 10 ++++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
+Applied to master with a slightly improved commit message. An improved
+commit message would have helped in getting your patch merged faster,
+by providing a clearer explanation of what you're trying to fix, and
+how.
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index d9545e9db0..9a5386c7dc 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -113,6 +113,7 @@ config BR2_PACKAGE_SYSTEMD_BOOT
- 	bool "systemd-boot"
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_PACKAGE_GNU_EFI
-+	select BR2_PACKAGE_SYSTEMD_EFI
- 	help
- 	  systemd-boot is a simple UEFI boot manager which executes
- 	  configured EFI images. The default entry is selected by a
-@@ -161,6 +162,9 @@ config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
- 	default "x64"   if BR2_x86_64
- 	depends on BR2_PACKAGE_SYSTEMD_BOOT
- 
-+config BR2_PACKAGE_SYSTEMD_EFI
-+	bool "enable EFI support"
-+
- config BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE
- 	bool "enable journal remote tools"
- 	select BR2_PACKAGE_LIBCURL
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 5dca8681bc..e2d0bba96e 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -647,7 +647,7 @@ endif
- ifeq ($(BR2_PACKAGE_SYSTEMD_BOOT),y)
- SYSTEMD_INSTALL_IMAGES = YES
- SYSTEMD_DEPENDENCIES += gnu-efi host-python-pyelftools
--SYSTEMD_CONF_OPTS += -Defi=true -Dbootloader=enabled
-+SYSTEMD_CONF_OPTS += -Dbootloader=enabled
- 
- SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
- define SYSTEMD_INSTALL_BOOT_FILES
-@@ -660,9 +660,15 @@ define SYSTEMD_INSTALL_BOOT_FILES
- endef
- 
- else
--SYSTEMD_CONF_OPTS += -Defi=false -Dbootloader=disabled
-+SYSTEMD_CONF_OPTS += -Dbootloader=disabled
- endif # BR2_PACKAGE_SYSTEMD_BOOT == y
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_EFI),y)
-+SYSTEMD_CONF_OPTS += -Defi=true
-+else
-+SYSTEMD_CONF_OPTS += -Defi=false
-+endif
-+
- SYSTEMD_FALLBACK_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
- ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
- SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
+Thanks for your contribution!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
