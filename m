@@ -1,71 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ED86D74947
-	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 22:14:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5FD7D74947
+	for <buildroot@archiver.kernel.org>; Tue, 29 Oct 2024 22:21:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD33B808A1;
-	Tue, 29 Oct 2024 22:14:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E2929606F6;
+	Tue, 29 Oct 2024 22:20:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1i2Mn3L1PlEO; Tue, 29 Oct 2024 22:14:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ScNmVCNkCpJ5; Tue, 29 Oct 2024 22:20:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1037808BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9396B60728
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E1037808BE;
-	Tue, 29 Oct 2024 22:14:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D3556494E
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 22:14:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9396B60728;
+	Tue, 29 Oct 2024 22:20:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 19010494E
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 22:20:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B4918404BE
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 22:14:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E989F4047D
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 22:20:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6ggcYV_FSvg7 for <buildroot@buildroot.org>;
- Tue, 29 Oct 2024 22:14:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:4f8:1c0c:5073::1; helo=mail.heine.tech;
- envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5C37A403ED
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C37A403ED
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5C37A403ED
- for <buildroot@buildroot.org>; Tue, 29 Oct 2024 22:14:48 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPA id 3A7E31814B9; Tue, 29 Oct 2024 23:14:45 +0100 (CET)
-In-Reply-To: <20241029223109.414a2a54@windsurf>
-References: <20241029204526.904130-2-buildroot@heine.tech>
- <20241029223109.414a2a54@windsurf>
-Date: Tue, 29 Oct 2024 23:14:44 +0100
-To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Message-ID: <5a798-67215e80-1-8be02c0@119911138>
-User-Agent: SOGoMail 5.11.0
-X-Last-TLS-Session-Version: None
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1730240085; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=PRiL8dsZFQ1zycu3K2EhSGqfrGxMm2QsuE43b/u1aQ8=;
- b=J4Sx8zrfCW99ymNRYD8+ZbCKk4EMXVToObzXYYbnpCZ9Tu+tH4SVSZj9QoaUiUllSmGBYE
- iIjJlk+Ov2a0eF97r93x329BggWsJpf1uPjZxMMOFF5SFR/8sqEXgEWnlsvwk2QsGAdxu1
- qglarhRUISWKAQrzpGiLkMu3CkX0wgk=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=heine.tech
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
- header.s=dkim header.b=J4Sx8zrf
-Subject: Re: [Buildroot] 
- =?utf-8?q?=5BPATCH=5D_package/boost=3A_update_downlo?=
- =?utf-8?q?ad_url?=
+ id 1OaBgrPHc-oj for <buildroot@buildroot.org>;
+ Tue, 29 Oct 2024 22:20:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 282A14042E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 282A14042E
+ for <buildroot@buildroot.org>; Tue, 29 Oct 2024 22:20:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8DE0384C26; Tue, 29 Oct 2024 22:20:55 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 29 Oct 2024 23:20:35 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dd35dd09caf441b273773426ead029ab9eaceabe
+X-Git-Newrev: c5d6cde7b627f0f09320c0a431e186d78d6f931a
+X-Patchwork-Hint: ignore
+Message-Id: <20241029222055.8DE0384C26@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ebtables: remove
+ KERNEL_64_USERSPACE_32 workaround
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,54 +58,268 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=c5d6cde7b627f0f09320c0a431e186d78d6f931a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tuesday, October 29, 2024 22:31 CET, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+This workaround breaks build with gcc 14.
 
-> Hello Michael,
-> 
-> On Tue, 29 Oct 2024 21:45:25 +0100
-> Michael Nosthoff via buildroot <buildroot@buildroot.org> wrote:
-> 
-> > boost moved it's package hosting from jfrog to their own url
-> > sponsored by the C+++Alliance.
-> > 
-> > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-> > ---
-> >  package/boost/boost.mk | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> Thanks for the patch. Is this fixing a build issue (apparently not)? If
-> not, do you have a link/reference about this change of official
-> location?
+Upstream developers acknowledged[1] the 32/64 compatibility issue more
+than 3 years ago, but no proper fix has been applied. Specifically, for
+aarch64 we don't even enable BR2_KERNEL_64_USERLAND_32, so this
+workaround is not effective there.
 
-Besides changing all download links there isn't any information about this change on boost.org or boost.io
-What I found was this announcement on the Mailinglist: https://lists.boost.org/Archives/boost/2024/05/256914.php
+The least we can do is make ebtables depend on
+!BR2_KERNEL_64_USERLAND_32.
 
-So the important information there is: "JFrog links will continue to function until December 2024."
+[1] https://lore.kernel.org/all/20210518181730.13436-1-patrickdepinguin@gmail.com/
 
-Maybe I should've included this in the commit message...
+Fixes:
+http://autobuild.buildroot.net/results/680674c2b61209b505efa022a8fd9751ddc5fd47/
+http://autobuild.buildroot.net/results/60f8f5f087111ec3f300dc7979363de5a9f64f08/
 
-Regards,
-Michael
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                                |   2 -
+ ...s.h-restore-KERNEL_64_USERSPACE_32-checks.patch | 105 ---------------------
+ ...c-add-option-enable-kernel-64-userland-32.patch |  51 ----------
+ package/ebtables/Config.in                         |   2 +
+ package/ebtables/ebtables.mk                       |   6 --
+ package/libvirt/Config.in                          |   1 +
+ 6 files changed, 3 insertions(+), 164 deletions(-)
 
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index efbb6c39ad..91e31eebc5 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -443,8 +443,6 @@ package/dvdrw-tools/0002-Include-sysmacros.h-to-compile-with-newer-gcc.patch lib
+ package/earlyoom/0001-main.c-fix-build-with-kernel-4.3.patch lib_patch.Upstream
+ package/earlyoom/S02earlyoom Shellcheck lib_sysv.Indent
+ package/ebtables/0001-replace-ebtables-save-perl-script-with-bash.patch lib_patch.Upstream
+-package/ebtables/0002-ebtables.h-restore-KERNEL_64_USERSPACE_32-checks.patch lib_patch.Upstream
+-package/ebtables/0003-configure.ac-add-option-enable-kernel-64-userland-32.patch lib_patch.Upstream
+ package/ecryptfs-utils/0001-musl.patch lib_patch.Upstream
+ package/ecryptfs-utils/0002-openssl110.patch lib_patch.Upstream
+ package/ecryptfs-utils/0003-fix-parallel-build-issue.patch lib_patch.Upstream
+diff --git a/package/ebtables/0002-ebtables.h-restore-KERNEL_64_USERSPACE_32-checks.patch b/package/ebtables/0002-ebtables.h-restore-KERNEL_64_USERSPACE_32-checks.patch
+deleted file mode 100644
+index 84b4d0f392..0000000000
+--- a/package/ebtables/0002-ebtables.h-restore-KERNEL_64_USERSPACE_32-checks.patch
++++ /dev/null
+@@ -1,105 +0,0 @@
+-From 7297a8ef3cab3b0faf1426622ee902a2144e2e89 Mon Sep 17 00:00:00 2001
+-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+-Date: Wed, 24 Mar 2021 11:27:14 +0100
+-Subject: [PATCH] ebtables.h: restore KERNEL_64_USERSPACE_32 checks
+-
+-Commit e6359eedfbf497e52d52451072aea4713ed80a88 replaced the file ebtables.h
+-but removed the usage of KERNEL_64_USERSPACE_32. This breaks boards where
+-such flag is relevant, with following messages:
+-
+-[ 6364.971346] kernel msg: ebtables bug: please report to author: Standard target size too big
+-
+-Unable to update the kernel. Two possible causes:
+-1. Multiple ebtables programs were executing simultaneously. The ebtables
+-   userspace tool doesn't by default support multiple ebtables programs running
+-   concurrently. The ebtables option --concurrent or a tool like flock can be
+-   used to support concurrent scripts that update the ebtables kernel tables.
+-2. The kernel doesn't support a certain ebtables extension, consider
+-   recompiling your kernel or insmod the extension.
+-
+-Analysis shows that the structure 'ebt_replace' passed from userspace
+-ebtables to the kernel, is too small, i.e 80 bytes instead of 120 in case of
+-64-bit kernel.
+-
+-Note that the ebtables build system seems to assume that 'sparc64' is the
+-only case where KERNEL_64_USERSPACE_32 is relevant, but this is not true.
+-This situation can happen on many architectures, especially in embedded
+-systems. For example, an Aarch64 processor with kernel in 64-bit but
+-userland build for 32-bit Arm. Or a 64-bit MIPS Octeon III processor, with
+-userland running in the 'n32' ABI.
+-
+-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+-Upstream-Status: http://patchwork.ozlabs.org/project/netfilter-devel/patch/20210518181730.13436-1-patrickdepinguin@gmail.com/
+----
+- include/linux/netfilter_bridge/ebtables.h | 21 +++++++++++++++++++++
+- 1 file changed, 21 insertions(+)
+-
+-diff --git a/include/linux/netfilter_bridge/ebtables.h b/include/linux/netfilter_bridge/ebtables.h
+-index 5be75f2..3c2b61e 100644
+---- a/include/linux/netfilter_bridge/ebtables.h
+-+++ b/include/linux/netfilter_bridge/ebtables.h
+-@@ -49,12 +49,21 @@ struct ebt_replace {
+- 	/* total size of the entries */
+- 	unsigned int entries_size;
+- 	/* start of the chains */
+-+#ifdef KERNEL_64_USERSPACE_32
+-+	uint64_t hook_entry[NF_BR_NUMHOOKS];
+-+#else
+- 	struct ebt_entries *hook_entry[NF_BR_NUMHOOKS];
+-+#endif
+- 	/* nr of counters userspace expects back */
+- 	unsigned int num_counters;
+- 	/* where the kernel will put the old counters */
+-+#ifdef KERNEL_64_USERSPACE_32
+-+	uint64_t counters;
+-+	uint64_t entries;
+-+#else
+- 	struct ebt_counter *counters;
+- 	char *entries;
+-+#endif
+- };
+- 
+- struct ebt_replace_kernel {
+-@@ -129,6 +138,9 @@ struct ebt_entry_match {
+- 	} u;
+- 	/* size of data */
+- 	unsigned int match_size;
+-+#ifdef KERNEL_64_USERSPACE_32
+-+	unsigned int pad;
+-+#endif
+- 	unsigned char data[0] __attribute__ ((aligned (__alignof__(struct ebt_replace))));
+- };
+- 
+-@@ -142,6 +154,9 @@ struct ebt_entry_watcher {
+- 	} u;
+- 	/* size of data */
+- 	unsigned int watcher_size;
+-+#ifdef KERNEL_64_USERSPACE_32
+-+	unsigned int pad;
+-+#endif
+- 	unsigned char data[0] __attribute__ ((aligned (__alignof__(struct ebt_replace))));
+- };
+- 
+-@@ -155,6 +170,9 @@ struct ebt_entry_target {
+- 	} u;
+- 	/* size of data */
+- 	unsigned int target_size;
+-+#ifdef KERNEL_64_USERSPACE_32
+-+	unsigned int pad;
+-+#endif
+- 	unsigned char data[0] __attribute__ ((aligned (__alignof__(struct ebt_replace))));
+- };
+- 
+-@@ -162,6 +180,9 @@ struct ebt_entry_target {
+- struct ebt_standard_target {
+- 	struct ebt_entry_target target;
+- 	int verdict;
+-+#ifdef KERNEL_64_USERSPACE_32
+-+	unsigned int pad;
+-+#endif
+- };
+- 
+- /* one entry */
+--- 
+-2.26.2
+-
+diff --git a/package/ebtables/0003-configure.ac-add-option-enable-kernel-64-userland-32.patch b/package/ebtables/0003-configure.ac-add-option-enable-kernel-64-userland-32.patch
+deleted file mode 100644
+index cb57b39569..0000000000
+--- a/package/ebtables/0003-configure.ac-add-option-enable-kernel-64-userland-32.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From ebf0236270b977a62c522bc32810bc9f8edc72d1 Mon Sep 17 00:00:00 2001
+-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+-Date: Wed, 24 Mar 2021 13:40:14 +0100
+-Subject: [PATCH] configure.ac: add option --enable-kernel-64-userland-32
+-
+-The ebtables build system seems to assume that 'sparc64' is the
+-only case where KERNEL_64_USERSPACE_32 is relevant, but this is not true.
+-This situation can happen on many architectures, especially in embedded
+-systems. For example, an Aarch64 processor with kernel in 64-bit but
+-userland build for 32-bit Arm. Or a 64-bit MIPS Octeon III processor, with
+-userland running in the 'n32' ABI.
+-
+-While it is possible to set CFLAGS in the environment when calling the
+-configure script, the caller would need to know to not only specify
+-KERNEL_64_USERSPACE_32 but also the EBT_MIN_ALIGN value.
+-
+-Instead, add a configure option. All internal details can then be handled by
+-the configure script.
+-
+-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+-Upstream-Status: http://patchwork.ozlabs.org/project/netfilter-devel/patch/20210518181730.13436-2-patrickdepinguin@gmail.com/
+----
+- configure.ac | 9 ++++++++-
+- 1 file changed, 8 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index c24ede3..3e89c0c 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -15,10 +15,17 @@ AS_IF([test "x$LOCKFILE" = x], [LOCKFILE="/var/lib/ebtables/lock"])
+- 
+- regular_CFLAGS="-Wall -Wunused"
+- regular_CPPFLAGS=""
+-+
+- case "$host" in
+- 	sparc64-*)
+--		regular_CPPFLAGS="$regular_CPPFLAGS -DEBT_MIN_ALIGN=8 -DKERNEL_64_USERSPACE_32";;
+-+		enable_kernel_64_userland_32=yes ;;
+- esac
+-+AC_ARG_ENABLE([kernel-64-userland-32],
+-+    AC_HELP_STRING([--enable-kernel-64-userland-32], [indicate that ebtables will be built as a 32-bit application but run under a 64-bit kernel])
+-+)
+-+AS_IF([test "x$enable_kernel_64_userland_32" = xyes],
+-+    [regular_CPPFLAGS="$regular_CPPFLAGS -DEBT_MIN_ALIGN=8 -DKERNEL_64_USERSPACE_32"]
+-+)
+- 
+- AC_SUBST([regular_CFLAGS])
+- AC_SUBST([regular_CPPFLAGS])
+--- 
+-2.26.2
+-
+diff --git a/package/ebtables/Config.in b/package/ebtables/Config.in
+index 703e55a3c3..ce5f67bc61 100644
+--- a/package/ebtables/Config.in
++++ b/package/ebtables/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_EBTABLES
+ 	bool "ebtables"
+ 	depends on BR2_USE_MMU # fork()
++	# https://lore.kernel.org/all/20210518181730.13436-1-patrickdepinguin@gmail.com/
++	depends on !BR2_KERNEL_64_USERLAND_32
+ 	help
+ 	  Ethernet bridge frame table administration
+ 
+diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+index 46c22dde9b..09a9f4ba7d 100644
+--- a/package/ebtables/ebtables.mk
++++ b/package/ebtables/ebtables.mk
+@@ -11,12 +11,6 @@ EBTABLES_LICENSE_FILES = COPYING
+ EBTABLES_CPE_ID_VENDOR = netfilter
+ EBTABLES_SELINUX_MODULES = iptables
+ 
+-# for 0003-configure.ac-add-option-enable-kernel-64-userland-32.patch
+-EBTABLES_AUTORECONF = YES
+-ifeq ($(BR2_KERNEL_64_USERLAND_32),y)
+-EBTABLES_CONF_OPTS += --enable-kernel-64-userland-32
+-endif
+-
+ ifeq ($(BR2_PACKAGE_EBTABLES_UTILS_SAVE),y)
+ define EBTABLES_INSTALL_TARGET_UTILS_SAVE
+ 	$(INSTALL) -m 0755 -D $(@D)/ebtables-save.sh $(TARGET_DIR)/usr/sbin/ebtables-legacy-save
+diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
+index 3f4fc70e62..6e4de43f73 100644
+--- a/package/libvirt/Config.in
++++ b/package/libvirt/Config.in
+@@ -45,6 +45,7 @@ config BR2_PACKAGE_LIBVIRT_DAEMON
+ 	bool "libvirtd"
+ 	default y
+ 	depends on BR2_INSTALL_LIBSTDCPP # nmap
++	depends on !BR2_KERNEL_64_USERLAND_32 # ebtables
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	select BR2_PACKAGE_DNSMASQ
+ 	select BR2_PACKAGE_EBTABLES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
