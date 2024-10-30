@@ -4,93 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 861B2D6B6C0
-	for <buildroot@archiver.kernel.org>; Wed, 30 Oct 2024 19:00:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4C78D6B6BF
+	for <buildroot@archiver.kernel.org>; Wed, 30 Oct 2024 19:00:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 140CD6090B;
-	Wed, 30 Oct 2024 19:00:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3FD360A5E;
+	Wed, 30 Oct 2024 19:00:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NVMvZgMpSSS6; Wed, 30 Oct 2024 19:00:34 +0000 (UTC)
+ id bNxRSDWmFGtH; Wed, 30 Oct 2024 19:00:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C9B360A3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13CF360A3C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C9B360A3C;
-	Wed, 30 Oct 2024 19:00:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0A2675E4F
- for <buildroot@buildroot.org>; Wed, 30 Oct 2024 19:00:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13CF360A3C;
+	Wed, 30 Oct 2024 19:00:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 787C25E4F
+ for <buildroot@buildroot.org>; Wed, 30 Oct 2024 19:00:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 00EE860900
- for <buildroot@buildroot.org>; Wed, 30 Oct 2024 19:00:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5A3E9811F7
+ for <buildroot@buildroot.org>; Wed, 30 Oct 2024 19:00:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u_6QD3EVGcbR for <buildroot@buildroot.org>;
- Wed, 30 Oct 2024 19:00:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F6x0rKzonjaT for <buildroot@buildroot.org>;
+ Wed, 30 Oct 2024 19:00:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12d; helo=mail-il1-x12d.google.com;
+ client-ip=2607:f8b0:4864:20::12e; helo=mail-il1-x12e.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 483526065F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 483526065F
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
- [IPv6:2607:f8b0:4864:20::12d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 483526065F
- for <buildroot@buildroot.org>; Wed, 30 Oct 2024 19:00:29 +0000 (UTC)
-Received: by mail-il1-x12d.google.com with SMTP id
- e9e14a558f8ab-3a3b463e9b0so582355ab.3
- for <buildroot@buildroot.org>; Wed, 30 Oct 2024 12:00:29 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 19811811F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19811811F0
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 19811811F0
+ for <buildroot@buildroot.org>; Wed, 30 Oct 2024 19:00:31 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id
+ e9e14a558f8ab-3a3b0247d67so578255ab.3
+ for <buildroot@buildroot.org>; Wed, 30 Oct 2024 12:00:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730314828; x=1730919628;
+ d=1e100.net; s=20230601; t=1730314830; x=1730919630;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=lwEXzTSHhY1a7iJPpoUn6G8EhWZHSV2BdrpaBhN0ivg=;
- b=rCQw66UiRqdxSZIOS0QRTPY7P1pzmAf19l80XEzPQEbQ+yxK/zg67DdZkyZbWxhYHk
- vC2U9UBfJqH+hRS0gwbAunN7+XphaJ/xxlY5AISdobdnMHvebnERksSy7wIdT3ppbvv8
- VQ1KmS5EH/IbRSgot9dLWDJRyJYifaa9tOF0w1JHxk5x5lfTucaxDbc0FENPlv3geaHY
- 8SpneAbl+71aq1n2pPWbVnb8HDnV9fJd+zyqlRhT86ESkgnouQ+1jfe0vkIuYn+cD1N1
- 8OIkQlnDWUsm+K7CJZ/nVx5xWN+X1pu+j1Uy7rWb76VLb1mbr2go2WnNaJLCYbu53gF6
- CK7A==
-X-Gm-Message-State: AOJu0YxwpQ01IwII7sLP1rotwNrXM92a41rbL5heJpOWzEbZa3QqfUi0
- 0AOA5FXGg5NPgzSGomXtzadJad6o8T/EI8xaRKXfsJDg0cgNG7eP3IGnHg==
-X-Google-Smtp-Source: AGHT+IEzxdCV8mGZC5339NP5L+HDzeWmamPMHvZnMgJAsNMdMbV/K4XKqy4c6sazG1rBG+3mAsg3qA==
-X-Received: by 2002:a05:6e02:12e8:b0:3a4:ec57:d7c1 with SMTP id
- e9e14a558f8ab-3a4ed2f7184mr166155035ab.17.1730314827159; 
- Wed, 30 Oct 2024 12:00:27 -0700 (PDT)
+ bh=GI36vGPMmz9uTdU8J+53ysOZo6lh2N8gF1hKX8m5fUc=;
+ b=Q12YoqIkJhGYxz+HGTrwVPYTBPsggtzCxXjIEhCO5VjpsqxTr77JmVZyBYlBrYLnGb
+ YyVj7IDBD4nBQd/5mpJJITgqdIJXx+d1h/0pWijb6vDW/iMVN97q2h0/C5YvxhUvj2E/
+ 6EOECOxU/uf/Q3a4Od1URFcr+2pk5lNeGK4jYCaZWq3CwlE4QJ3ub2vRGtoHyUWtxwxz
+ trp5SsaPGLsb2Y7+gQUPv6kdKtWoOSUtrU/c60I90SD4bA+kow47vfi7uMf5ecLQHF5r
+ /6q31R/302tnXJ+GrZstWVFoxxlwHQ2j7pWbzgjp8WLSK3fdwNCOGmlHqeKFJCT53COK
+ s/QA==
+X-Gm-Message-State: AOJu0YwAKSlTH9udT9kgSlW0sC16wcY09wW2JNHAsDgEgt+d40aHG7Rj
+ pPMR+V4z/1/1CrXiUssZZl5Mc234StIWEQZ6WmO7hXsFYUNwAXsTH0PVVg==
+X-Google-Smtp-Source: AGHT+IGtMU4KWC9kIoMbCGyRgPQbtZJt3pCC2vinYhf2tJkYIl6Uccm2Ar/w5oDAXEaCDQxEcmkZ+w==
+X-Received: by 2002:a05:6e02:1886:b0:3a0:8d60:8ba7 with SMTP id
+ e9e14a558f8ab-3a4ed2f666amr154603585ab.14.1730314829565; 
+ Wed, 30 Oct 2024 12:00:29 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
  [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a4e6df3c48sm29881875ab.34.2024.10.30.12.00.25
+ e9e14a558f8ab-3a4e6df3c48sm29881875ab.34.2024.10.30.12.00.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 30 Oct 2024 12:00:26 -0700 (PDT)
+ Wed, 30 Oct 2024 12:00:29 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 30 Oct 2024 13:00:16 -0600
-Message-Id: <20241030190020.1444105-2-james.hilliard1@gmail.com>
+Date: Wed, 30 Oct 2024 13:00:18 -0600
+Message-Id: <20241030190020.1444105-4-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241030190020.1444105-1-james.hilliard1@gmail.com>
 References: <20241030190020.1444105-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1730314828; x=1730919628; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1730314830; x=1730919630; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=lwEXzTSHhY1a7iJPpoUn6G8EhWZHSV2BdrpaBhN0ivg=;
- b=L8eht86oM1hLDz/PnfY8igqJBHGKIXk4U3z0of7RP6+T8FymDysdNlAPEfyKffETEc
- RJylRYYqRc+1yG2zO0Odq4WTy9wMnnljx+eUaiINHFiz/TMPzSpwBtxvrIfdriMzMBJ6
- wJAlqz9N3TV9IRP6EdTE5NH8wNj2t4wLplg9EKoUuAJ6mgsHDlDfRM+fc+psFyfWoqli
- rqKxFWDTu1q8L5w2PMKtbQPJwRLPIg3/tYt0VoplhDNib0NFwl34+l2hfeSZK9C6hSEh
- +8un8rH0wBcHlAeyTjvQFnXs/CJPGrzUdz3q6NYoqjiHMeTRgLaMPltS4i4IYaA76EFn
- jM+A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=GI36vGPMmz9uTdU8J+53ysOZo6lh2N8gF1hKX8m5fUc=;
+ b=X1+5+MAQ1WWwxJ/Su04MtVaNDlOp9jTiSRnB8MkvtfmXSPAQNhohPA1PAnVAjsHbQC
+ U5kArE1tafi0KtZyOOP6GUDbQI9K71VoQoPs761x9dfqrti9lbgpmGpPs81d5qb4ajiZ
+ /aGZb+jSfIZXyIjl8LEenjvYMHaVCKeWRiqPDIb/LdC5BKZdBLb7xz3Vs2oV8HADXruc
+ foyppa7Bo87i+sUFcVbQXtQNhswJci/nPIpEpaKCfuSXasyY32JVFbOSgiufunm1AE9I
+ y4zgYFFSuuY1ayV+R3ViuvkrTKRP1wdRXt6C11jQLb0z7xXFWOfxOutLc1mmhLmQAUgK
+ g4yA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=L8eht86o
-Subject: [Buildroot] [PATCH v4 2/6] package/grpc: bump to version 1.66.1
+ header.a=rsa-sha256 header.s=20230601 header.b=X1+5+MAQ
+Subject: [Buildroot] [PATCH v4 4/6] package/protobuf-c: fix protobuf >= 26.0
+ compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,466 +117,221 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add new -DgRPC_BUILD_CODEGEN=OFF config option which is required if
-no plugins are enabled.
-
-Drop no longer relevant add GPR_DISABLE_WRAPPED_MEMCPY patch.
-
-Rebase remaining patches.
+Add some patches fixing protobuf >= 26.0 compatibility.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- .checkpackageignore                           |  3 +-
- ...the-availability-of-pthread_setname_.patch | 26 ++---
- ...trict-building-of-host-grpc-to-grpc.patch} | 98 ++++++++-----------
- ...py.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch | 34 -------
- ...conditionally-downloading-api-repos.patch} | 21 ++--
- package/grpc/grpc.hash                        |  2 +-
- package/grpc/grpc.mk                          |  3 +-
- 7 files changed, 68 insertions(+), 119 deletions(-)
- rename package/grpc/{0003-host-grpc-only-cpp-plugin.patch => 0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch} (63%)
- delete mode 100644 package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch
- rename package/grpc/{0004-disable-unconditionally-downloading-api-repos.patch => 0003-disable-unconditionally-downloading-api-repos.patch} (62%)
+ ...ct-against-being-invoked-against-edi.patch | 57 +++++++++++++
+ ...dSyntax-to-maximize-compatibility-ac.patch | 84 +++++++++++++++++++
+ ...nerateHeader-Set-min_header_version-.patch | 44 ++++++++++
+ 3 files changed, 185 insertions(+)
+ create mode 100644 package/protobuf-c/0001-CGenerator-Protect-against-being-invoked-against-edi.patch
+ create mode 100644 package/protobuf-c/0002-Reimplement-FieldSyntax-to-maximize-compatibility-ac.patch
+ create mode 100644 package/protobuf-c/0003-FileGenerator-GenerateHeader-Set-min_header_version-.patch
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index efbb6c39ad..8ffdbd4e59 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -560,8 +560,7 @@ package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch lib_patch.
- package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
- package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch lib_patch.Upstream
--package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch lib_patch.Upstream
--package/grpc/0004-disable-unconditionally-downloading-api-repos.patch lib_patch.Upstream
-+package/grpc/0003-disable-unconditionally-downloading-api-repos.patch lib_patch.Upstream
- package/gstreamer1/gstd/0001-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch lib_patch.Upstream
- package/guile/0001-calculate-csqrt_manually.patch lib_patch.Upstream
- package/guile/0002-Makefile.am-fix-build-without-makeinfo.patch lib_patch.Upstream
-diff --git a/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch b/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
-index 92dc5a6c45..e8e211758a 100644
---- a/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
-+++ b/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
-@@ -1,4 +1,4 @@
--From 0dfb289a3b362b082ac3608d887e42f09dadc0d2 Mon Sep 17 00:00:00 2001
-+From dfec50b899c449bc964514f16e94869de7a68896 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Date: Mon, 31 Dec 2018 16:22:07 +0100
- Subject: [PATCH] Properly detect the availability of pthread_setname_np()
-@@ -20,15 +20,15 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- ]
- Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
- ---
-- CMakeLists.txt                            | 6 ++++++
-- include/grpc/impl/codegen/port_platform.h | 2 ++
-+ CMakeLists.txt                       | 6 ++++++
-+ include/grpc/support/port_platform.h | 2 ++
-  2 files changed, 8 insertions(+)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 45c2fcb..0b2be4f 100644
-+index 053b9e3784..2565dc5c84 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -208,6 +208,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
-+@@ -291,6 +291,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
-  endif()
-  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
-  
-@@ -41,11 +41,11 @@ index 45c2fcb..0b2be4f 100644
-  if(MSVC)
-    include(cmake/msvc_static_runtime.cmake)
-    add_definitions(-D_WIN32_WINNT=0x600 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS)
--diff --git a/include/grpc/impl/codegen/port_platform.h b/include/grpc/impl/codegen/port_platform.h
--index 4f213ff..55ecd9d 100644
----- a/include/grpc/impl/codegen/port_platform.h
--+++ b/include/grpc/impl/codegen/port_platform.h
--@@ -186,6 +186,7 @@
-+diff --git a/include/grpc/support/port_platform.h b/include/grpc/support/port_platform.h
-+index 5fb7426af2..24d438d702 100644
-+--- a/include/grpc/support/port_platform.h
-++++ b/include/grpc/support/port_platform.h
-+@@ -228,6 +228,7 @@
-  #endif /* _LP64 */
-  #ifdef __GLIBC__
-  #define GPR_POSIX_CRASH_HANDLER 1
-@@ -53,7 +53,7 @@ index 4f213ff..55ecd9d 100644
-  #ifdef __GLIBC_PREREQ
-  #if __GLIBC_PREREQ(2, 12)
-  #define GPR_LINUX_PTHREAD_NAME 1
--@@ -194,6 +195,7 @@
-+@@ -236,6 +237,7 @@
-  // musl libc & others
-  #define GPR_LINUX_PTHREAD_NAME 1
-  #endif
-@@ -61,6 +61,6 @@ index 4f213ff..55ecd9d 100644
-  #include <linux/version.h>
-  #else /* musl libc */
-  #define GPR_MUSL_LIBC_COMPAT 1
--
- -- 
--2.26.63
+diff --git a/package/protobuf-c/0001-CGenerator-Protect-against-being-invoked-against-edi.patch b/package/protobuf-c/0001-CGenerator-Protect-against-being-invoked-against-edi.patch
+new file mode 100644
+index 0000000000..c674ca2ee1
+--- /dev/null
++++ b/package/protobuf-c/0001-CGenerator-Protect-against-being-invoked-against-edi.patch
+@@ -0,0 +1,57 @@
++From 2480f4d9d2fa97e5511ed0914ee529a344e969a7 Mon Sep 17 00:00:00 2001
++From: Robert Edmonds <edmonds@users.noreply.github.com>
++Date: Wed, 20 Mar 2024 22:43:30 -0400
++Subject: [PATCH] CGenerator: Protect against being invoked against "edition"
++ syntax .proto files
++
++The Google protobuf project is currently experimenting with a new syntax
++for .proto files called "editions". Since protobuf-c is a proto2/proto3
++compiler, after the previous commit reimplementing `FieldSyntax()`, the
++protobuf compiler will abort like this if presented with an "editions"
++syntax .proto file due to the safety check in `FieldSyntax()`:
++
++    $ protoc --experimental_editions --c_out=. test.proto
++    protoc-gen-c: ./protoc-c/c_helpers.h:178: int google::protobuf::compiler::c::FieldSyntax(const google::protobuf::FieldDescriptor*): Assertion `syntax == "proto2" || syntax == "proto3"' failed.
++    --c_out: protoc-gen-c: Plugin killed by signal 6.
++
++On protobuf 26, our `CodeGenerator` can implement certain methods to
++declare that we "support" editions, and then reject any other edition
++except proto2 and proto3, which have apparently been retroactively
++declared to be "editions". Of course this needs to be wrapped in a
++version guard.
++
++With this protection in place, the protobuf compiler cleanly exits with
++a nice error message like this:
++
++    $ protoc --experimental_editions --c_out=. test.proto
++    WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
++    E0000 00:00:1710988958.296200   20022 descriptor.cc:4620] Invalid proto descriptor for file "test.proto":
++    E0000 00:00:1710988958.296239   20022 descriptor.cc:4623]   test.proto: Edition 2023 is later than the maximum supported edition PROTO3
++    --c_out: protoc-gen-c: Plugin failed with status code 1.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://github.com/protobuf-c/protobuf-c/pull/711
++---
++ protoc-c/c_generator.h | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/protoc-c/c_generator.h b/protoc-c/c_generator.h
++index b8b44aa..4aeb579 100644
++--- a/protoc-c/c_generator.h
+++++ b/protoc-c/c_generator.h
++@@ -93,6 +93,12 @@ class PROTOC_C_EXPORT CGenerator : public CodeGenerator {
++                 const std::string& parameter,
++                 OutputDirectory* output_directory,
++                 std::string* error) const;
+++
+++#if GOOGLE_PROTOBUF_VERSION >= 5026000
+++  uint64_t GetSupportedFeatures() const { return CodeGenerator::FEATURE_SUPPORTS_EDITIONS; }
+++  Edition GetMinimumEdition() const { return Edition::EDITION_PROTO2; }
+++  Edition GetMaximumEdition() const { return Edition::EDITION_PROTO3; }
+++#endif
++ };
++ 
++ }  // namespace c
++-- 
 +2.34.1
 +
-diff --git a/package/grpc/0003-host-grpc-only-cpp-plugin.patch b/package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
-similarity index 63%
-rename from package/grpc/0003-host-grpc-only-cpp-plugin.patch
-rename to package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
-index bfb8713053..82705d8a1e 100644
---- a/package/grpc/0003-host-grpc-only-cpp-plugin.patch
-+++ b/package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
-@@ -1,4 +1,4 @@
--From 0f2c73b62bdc612f9d5cdd8e0c765995470d4f8b Mon Sep 17 00:00:00 2001
-+From 6aab068a6bd92e215b61eaab61062bf1d97bc065 Mon Sep 17 00:00:00 2001
- From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- Date: Tue, 25 May 2021 14:55:23 +0200
- Subject: [PATCH] Add option to restrict building of (host-)grpc to
-@@ -15,17 +15,17 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Updated for 1.48.0:
- Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
- ---
-- CMakeLists.txt | 39 +++++++++++++++++++++++++++++++++++----
-- 1 file changed, 35 insertions(+), 4 deletions(-)
-+ CMakeLists.txt | 36 +++++++++++++++++++++++++++++++-----
-+ 1 file changed, 31 insertions(+), 5 deletions(-)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 0dcae6b1aee5..57b3963a43b0 100644
-+index 2565dc5c84..94f8fd3e93 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -49,12 +49,16 @@ option(gRPC_BUILD_TESTS "Build tests" OFF)
-+@@ -50,12 +50,16 @@ set(gRPC_BUILD_MSVC_MP_COUNT 0 CACHE STRING "The maximum number of processes for
-+ option(gRPC_BUILD_TESTS "Build tests" OFF)
-  option(gRPC_BUILD_CODEGEN "Build codegen" ON)
-- option(gRPC_BUILD_CSHARP_EXT "Build C# extensions" ON)
-- option(gRPC_BACKWARDS_COMPATIBILITY_MODE "Build libraries that are binary compatible across a larger number of OS and libc versions" OFF)
-+ option(gRPC_DOWNLOAD_ARCHIVES "Download archives for empty 3rd party directories" ON)
- +option(gRPC_BUILD_PLUGIN_SUPPORT_ONLY "Build plugin support only" OFF)
-  
-  set(gRPC_INSTALL_default ON)
-@@ -39,7 +39,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  set(gRPC_INSTALL ${gRPC_INSTALL_default} CACHE BOOL
-      "Generate installation target")
-  
--@@ -563,6 +567,8 @@ add_custom_target(plugins
-+@@ -662,6 +666,8 @@ add_custom_target(plugins
-    DEPENDS ${_gRPC_PLUGIN_LIST}
-  )
-  
-@@ -48,7 +48,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  add_custom_target(tools_c
-    DEPENDS
-  )
--@@ -574,6 +580,8 @@ add_custom_target(tools_cxx
-+@@ -673,6 +679,8 @@ add_custom_target(tools_cxx
-  add_custom_target(tools
-    DEPENDS tools_c tools_cxx)
-  
-@@ -57,15 +57,16 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  protobuf_generate_grpc_cpp_with_import_path_correction(
-    src/proto/grpc/channelz/channelz.proto src/proto/grpc/channelz/channelz.proto
-  )
--@@ -1307,6 +1315,7 @@ if(gRPC_BUILD_TESTS)
-+@@ -1660,7 +1668,7 @@ if(gRPC_BUILD_TESTS)
-      DEPENDS buildtests_c buildtests_cxx)
-  endif()
-  
+diff --git a/package/protobuf-c/0002-Reimplement-FieldSyntax-to-maximize-compatibility-ac.patch b/package/protobuf-c/0002-Reimplement-FieldSyntax-to-maximize-compatibility-ac.patch
+new file mode 100644
+index 0000000000..e14a9fbc75
+--- /dev/null
++++ b/package/protobuf-c/0002-Reimplement-FieldSyntax-to-maximize-compatibility-ac.patch
+@@ -0,0 +1,84 @@
++From ee3d9e5423c93ee6b828fdda8e7fef13a77634eb Mon Sep 17 00:00:00 2001
++From: Robert Edmonds <edmonds@users.noreply.github.com>
++Date: Wed, 20 Mar 2024 22:25:54 -0400
++Subject: [PATCH] Reimplement FieldSyntax() to maximize compatibility across
++ protobuf versions
++
++Recent versions of Google protobuf have broken the interfaces for
++determining the syntax version of a .proto file. The current protobuf-c
++1.5.0 release does not compile with Google protobuf 26.0 due to the most
++recentage breakage. There is a possible workaround involving the Google
++protobuf `FileDescriptorLegacy` class, which is documented as:
++
++// TODO Remove this deprecated API entirely.
++
++So we probably shouldn't rely on it.
++
++Instead, this commit obtains the `FileDescriptorProto` corresponding
++to the passed in `FieldDescriptor` and interrogates the `syntax` field
++directly. This is a single implementation with no version-specific
++workarounds. Hopefully this won't break in the next Google protobuf
++release.
++
++I tested the `FieldSyntax()` implementation in this commit across a
++number of different Google protobuf releases and found that it worked
++(`make && make check`) on all of them:
++
++- Google protobuf 3.6.1.3 (Ubuntu 20.04)
++- Google protobuf 3.12.4 (Ubuntu 22.04)
++- Google protobuf 3.21.12 (Debian 12 + Debian unstable)
++- Google protobuf 3.25.2 (Debian experimental)
++- Google protobuf 26.1-dev
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://github.com/protobuf-c/protobuf-c/pull/711
++---
++ protoc-c/c_helpers.h | 24 ++++++++++++++----------
++ 1 file changed, 14 insertions(+), 10 deletions(-)
++
++diff --git a/protoc-c/c_helpers.h b/protoc-c/c_helpers.h
++index 062d330..be28b60 100644
++--- a/protoc-c/c_helpers.h
+++++ b/protoc-c/c_helpers.h
++@@ -70,10 +70,6 @@
++ #include <protobuf-c/protobuf-c.pb.h>
++ #include <google/protobuf/io/printer.h>
++ 
++-#if GOOGLE_PROTOBUF_VERSION >= 4023000
++-# include <google/protobuf/descriptor_legacy.h>
++-#endif
 +-
- +if (NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
-  
-  add_library(address_sorting
-    third_party/address_sorting/address_sorting.c
--@@ -1359,6 +1368,8 @@ if(gRPC_INSTALL)
-+@@ -2855,6 +2863,8 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -73,17 +74,17 @@ index 0dcae6b1aee5..57b3963a43b0 100644
- +
-  if(gRPC_BUILD_TESTS)
-  
-- add_library(end2end_tests
--@@ -1512,6 +1523,8 @@ target_link_libraries(end2end_tests
-+ add_library(grpc_test_util
-+@@ -2987,6 +2997,8 @@ endif()
-  
-  endif()
-  
- +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
- +
-- add_library(gpr
--   src/core/lib/gpr/alloc.cc
--   src/core/lib/gpr/atm.cc
--@@ -2504,6 +2517,8 @@ if(gRPC_INSTALL)
-+ add_library(grpc_unsecure
-+   src/core/channelz/channel_trace.cc
-+   src/core/channelz/channelz.cc
-+@@ -3547,6 +3559,8 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -91,17 +92,17 @@ index 0dcae6b1aee5..57b3963a43b0 100644
- +
-  if(gRPC_BUILD_TESTS)
-  
-- add_library(grpc_test_util
--@@ -2618,6 +2633,8 @@ endif()
-+ add_library(gtest
-+@@ -3621,6 +3635,8 @@ target_link_libraries(gtest
-  
-  endif()
-  
- +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
- +
-- add_library(grpc_unsecure
--   src/core/ext/filters/census/grpc_context.cc
--   src/core/ext/filters/channel_idle/channel_idle_filter.cc
--@@ -3102,6 +3119,8 @@ if(gRPC_INSTALL)
-+ add_library(upb_base_lib
-+   third_party/upb/upb/base/status.c
-+ )
-+@@ -4108,6 +4124,8 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -110,7 +111,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  if(gRPC_BUILD_TESTS)
-  
-  if(gRPC_BUILD_CODEGEN)
--@@ -3185,6 +3204,8 @@ endif()
-+@@ -4193,6 +4211,8 @@ endif()
-  
-  endif()
-  
-@@ -119,24 +120,24 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  add_library(grpc++
-    src/core/ext/transport/binder/client/binder_connector.cc
-    src/core/ext/transport/binder/client/channel_create.cc
--@@ -3635,6 +3656,7 @@ if(gRPC_INSTALL)
-+@@ -4684,6 +4704,7 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
- +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
-  
-  if(gRPC_BUILD_CODEGEN)
-- add_library(grpc++_reflection
--@@ -3889,6 +3911,8 @@ target_link_libraries(grpc++_test_util
-+ add_library(grpc++_reflection ${_gRPC_STATIC_WIN32}
-+@@ -4967,6 +4988,8 @@ target_link_libraries(grpc++_test_util
-  
-  endif()
-  
- +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
- +
-  add_library(grpc++_unsecure
-+   src/cpp/client/call_credentials.cc
-    src/cpp/client/channel_cc.cc
--   src/cpp/client/client_callback.cc
--@@ -4181,6 +4205,7 @@ if(gRPC_INSTALL)
-+@@ -5707,6 +5730,7 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -144,7 +145,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  
-  add_library(grpc_plugin_support
-    src/compiler/cpp_generator.cc
--@@ -4240,7 +4265,7 @@ foreach(_hdr
-+@@ -5769,7 +5793,7 @@ foreach(_hdr
-  endforeach()
-  
-  
-@@ -153,25 +154,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-    install(TARGETS grpc_plugin_support EXPORT gRPCTargets
-      RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
-      BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
--@@ -4324,6 +4349,8 @@ endif()
-- 
-- endif()
-- 
--+if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
--+
-- add_library(upb
--   third_party/upb/third_party/utf8_range/naive.c
--   third_party/upb/third_party/utf8_range/range2-neon.c
--@@ -4393,6 +4420,8 @@ if(gRPC_INSTALL)
--   )
-- endif()
-- 
--+endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
--+
-- 
-- if(gRPC_BUILD_TESTS)
-- 
--@@ -11085,7 +11114,7 @@ target_link_libraries(grpc_completion_queue_test
-+@@ -16520,7 +16544,7 @@ target_link_libraries(grpc_completion_queue_test
-  
-  
-  endif()
-@@ -180,16 +163,16 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  
-  add_executable(grpc_cpp_plugin
-    src/compiler/cpp_plugin.cc
--@@ -11115,7 +11144,7 @@ target_link_libraries(grpc_cpp_plugin
-+@@ -16548,7 +16572,7 @@ target_link_libraries(grpc_cpp_plugin
-  
-  
-  
- -if(gRPC_INSTALL)
- +if(gRPC_INSTALL OR gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
--   install(TARGETS grpc_cpp_plugin EXPORT gRPCTargets
-+   install(TARGETS grpc_cpp_plugin EXPORT gRPCPluginTargets
-      RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
-      BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
--@@ -23128,7 +23157,7 @@ endif()
-+@@ -37968,7 +37992,7 @@ endif()
-  
-  
-  
-@@ -198,12 +181,13 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  
-  if(gRPC_INSTALL)
-    install(EXPORT gRPCTargets
--@@ -23225,3 +23254,5 @@ generate_pkgconfig(
--   "-lgrpc++_unsecure"
--   ""
--   "grpc++_unsecure.pc")
-+@@ -38089,3 +38113,5 @@ generate_pkgconfig(
-+   "-lgrpcpp_otel_plugin"
-+   "-laddress_sorting -lupb_textformat_lib -lupb_json_lib -lupb_wire_lib -lupb_message_lib -lutf8_range_lib -lupb_mini_descriptor_lib -lupb_mem_lib -lupb_base_lib"
-+   "grpcpp_otel_plugin.pc")
- +
- +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
-+\ No newline at end of file
- -- 
--2.43.0
++ namespace google {
++ namespace protobuf {
++ namespace compiler {
++@@ -173,13 +169,21 @@ struct NameIndex
++ int compare_name_indices_by_name(const void*, const void*);
++ 
++ // Return the syntax version of the file containing the field.
++-// This wrapper is needed to be able to compile against protobuf2.
++ inline int FieldSyntax(const FieldDescriptor* field) {
++-#if GOOGLE_PROTOBUF_VERSION >= 4023000
++-  return FileDescriptorLegacy(field->file()).syntax() == FileDescriptorLegacy::SYNTAX_PROTO3 ? 3 : 2;
++-#else
++-  return field->file()->syntax() == FileDescriptor::SYNTAX_PROTO3 ? 3 : 2;
++-#endif
+++  auto proto = FileDescriptorProto();
+++  field->file()->CopyTo(&proto);
+++
+++  if (proto.has_syntax()) {
+++    auto syntax = proto.syntax();
+++    assert(syntax == "proto2" || syntax == "proto3");
+++    if (syntax == "proto2") {
+++      return 2;
+++    } else if (syntax == "proto3") {
+++      return 3;
+++    }
+++  }
+++
+++  return 2;
++ }
++ 
++ // Work around changes in protobuf >= 22.x without breaking compilation against
++-- 
 +2.34.1
- 
-diff --git a/package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch b/package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch
-deleted file mode 100644
-index aac92bab13..0000000000
---- a/package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From be030314805137cd63b46ea6eaa702b608669910 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 2 Jun 2019 17:45:47 +0200
--Subject: [PATCH] wrap_memcpy.cc: add GPR_DISABLE_WRAPPED_MEMCPY
--
--Add GPR_DISABLE_WRAPPED_MEMCPY to allow the user to disable wrapped
--memcpy. This will fix build on x86_64 on musl/uclibc without changing
--the cpu behavior.
--
--Fixes:
-- - http://autobuild.buildroot.org/results/20d6f2489a4e291a53bd514da66105eb607e1014
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/grpc/grpc/pull/19207]
-----
-- src/core/lib/gpr/wrap_memcpy.cc | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/core/lib/gpr/wrap_memcpy.cc b/src/core/lib/gpr/wrap_memcpy.cc
--index 9b8608e056..38b76acf95 100644
----- a/src/core/lib/gpr/wrap_memcpy.cc
--+++ b/src/core/lib/gpr/wrap_memcpy.cc
--@@ -29,7 +29,7 @@
-- extern "C" {
-- #ifdef __linux__
-- #if defined(__x86_64__) && !defined(GPR_MUSL_LIBC_COMPAT) && \
---    !defined(__ANDROID__)
--+    !defined(__ANDROID__) && !defined(GPR_DISABLE_WRAPPED_MEMCPY)
-- __asm__(".symver memcpy,memcpy@GLIBC_2.2.5");
-- void* __wrap_memcpy(void* destination, const void* source, size_t num) {
--   return memcpy(destination, source, num);
---- 
--2.20.1
--
-diff --git a/package/grpc/0004-disable-unconditionally-downloading-api-repos.patch b/package/grpc/0003-disable-unconditionally-downloading-api-repos.patch
-similarity index 62%
-rename from package/grpc/0004-disable-unconditionally-downloading-api-repos.patch
-rename to package/grpc/0003-disable-unconditionally-downloading-api-repos.patch
-index 967bbf6247..0cd5012b26 100644
---- a/package/grpc/0004-disable-unconditionally-downloading-api-repos.patch
-+++ b/package/grpc/0003-disable-unconditionally-downloading-api-repos.patch
-@@ -1,4 +1,4 @@
--From b0599c3d1b52818c79ea8fa5dfdc40a4ce01e454 Mon Sep 17 00:00:00 2001
-+From 2a73f6439b6d745b2cbfff120dc7adc555400247 Mon Sep 17 00:00:00 2001
- From: Michael Nosthoff <buildroot@heine.tech>
- Date: Fri, 22 Jul 2022 08:49:48 +0200
- Subject: [PATCH] disable unconditionally downloading api repos
-@@ -9,31 +9,30 @@ for now.
- See https://github.com/grpc/grpc/issues/30385
- 
- Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
--
- ---
-  CMakeLists.txt | 2 ++
-  1 file changed, 2 insertions(+)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 11e7ae2b67..a9062fa6ef 100644
-+index 94f8fd3e93..df43d2e193 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -327,6 +327,7 @@ include(cmake/xxhash.cmake)
-- include(cmake/zlib.cmake)
-- include(cmake/download_archive.cmake)
-+@@ -402,6 +402,7 @@ if(gRPC_BUILD_GRPCPP_OTEL_PLUGIN)
-+   include(cmake/opentelemetry-cpp.cmake)
-+ endif()
-  
- +if(FALSE)
-  # Setup external proto library at third_party/envoy-api with 2 download URLs
-- if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/envoy-api)
-+ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/envoy-api AND gRPC_DOWNLOAD_ARCHIVES)
-    # Download the archive via HTTP, validate the checksum, and extract to third_party/envoy-api.
--@@ -403,6 +404,7 @@ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xds)
--     xds-cb28da3451f158a947dfc45090fe92b07b243bc1
-+@@ -478,6 +479,7 @@ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xds AND gRPC_DOWNLOAD_ARC
-+     xds-3a472e524827f72d1ad621c4983dd5af54c46776
-    )
-  endif()
- +endif()
-  
-  if(WIN32)
--   set(_gRPC_BASELIB_LIBRARIES ws2_32 crypt32)
-+   set(_gRPC_ALLTARGETS_LIBRARIES ${_gRPC_ALLTARGETS_LIBRARIES} ws2_32 crypt32)
- -- 
--2.25.1
++
+diff --git a/package/protobuf-c/0003-FileGenerator-GenerateHeader-Set-min_header_version-.patch b/package/protobuf-c/0003-FileGenerator-GenerateHeader-Set-min_header_version-.patch
+new file mode 100644
+index 0000000000..d7d9cdf845
+--- /dev/null
++++ b/package/protobuf-c/0003-FileGenerator-GenerateHeader-Set-min_header_version-.patch
+@@ -0,0 +1,44 @@
++From a6cf1aa386067e26d582cc1d1e327787595c9f13 Mon Sep 17 00:00:00 2001
++From: Robert Edmonds <edmonds@users.noreply.github.com>
++Date: Wed, 20 Mar 2024 21:48:10 -0400
++Subject: [PATCH] FileGenerator::GenerateHeader(): Set `min_header_version`
++ unconditionally
++
++Previously, we were conditionally trying to set `min_header_version` to
++the lowest possible value, and relying on a "legacy" Google interface to
++determine the file descriptor's syntax version as part of that
++determination.
++
++Instead, simply bump the minimum version to 1003000 (1.3.0). This
++release was almost 7 years ago. In practice protobuf-c users should not
++be shipping pre-compiled .pb-c.c/.pb-c.h files, anyway.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://github.com/protobuf-c/protobuf-c/pull/711
++---
++ protoc-c/c_file.cc | 9 +--------
++ 1 file changed, 1 insertion(+), 8 deletions(-)
++
++diff --git a/protoc-c/c_file.cc b/protoc-c/c_file.cc
++index ca0ad34..c6d8a24 100644
++--- a/protoc-c/c_file.cc
+++++ b/protoc-c/c_file.cc
++@@ -117,14 +117,7 @@ FileGenerator::~FileGenerator() {}
++ void FileGenerator::GenerateHeader(io::Printer* printer) {
++   std::string filename_identifier = FilenameIdentifier(file_->name());
++ 
++-  int min_header_version = 1000000;
++-#if GOOGLE_PROTOBUF_VERSION >= 4023000
++-  if (FileDescriptorLegacy(file_).syntax() == FileDescriptorLegacy::SYNTAX_PROTO3) {
++-#else
++-  if (file_->syntax() == FileDescriptor::SYNTAX_PROTO3) {
++-#endif
++-    min_header_version = 1003000;
++-  }
+++  const int min_header_version = 1003000;
++ 
++   // Generate top of header.
++   printer->Print(
++-- 
 +2.34.1
- 
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index e6b76dcb5e..08aada1454 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b55696fb249669744de3e71acc54a9382bea0dce7cd5ba379b356b12b82d4229  grpc-1.51.1.tar.gz
-+sha256  79ed4ab72fa9589b20f8b0b76c16e353e4cfec1d773d33afad605d97b5682c61  grpc-1.66.1.tar.gz
- sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 9125b1f9f6..47ebf1997c 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GRPC_VERSION = 1.51.1
-+GRPC_VERSION = 1.66.1
- GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0, BSD-3-Clause (third_party code), MPL-2.0 (etc/roots.pem)
- GRPC_LICENSE_FILES = LICENSE
-@@ -29,6 +29,7 @@ GRPC_CONF_OPTS = \
- 	-DgRPC_RE2_PROVIDER=package \
- 	-DgRPC_SSL_PROVIDER=package \
- 	-DgRPC_ZLIB_PROVIDER=package \
-+	-DgRPC_BUILD_CODEGEN=OFF \
- 	-DgRPC_BUILD_GRPC_CPP_PLUGIN=OFF \
- 	-DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF \
- 	-DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF \
++
 -- 
 2.34.1
 
