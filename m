@@ -1,87 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE7E8D6B6DC
-	for <buildroot@archiver.kernel.org>; Wed, 30 Oct 2024 22:09:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B192D6B6DC
+	for <buildroot@archiver.kernel.org>; Wed, 30 Oct 2024 22:11:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 67F4E81260;
-	Wed, 30 Oct 2024 22:09:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC7404078B;
+	Wed, 30 Oct 2024 22:11:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RO1syQNeFEyN; Wed, 30 Oct 2024 22:09:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bp3OGt9oZFuo; Wed, 30 Oct 2024 22:11:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E0A781270
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DB6A407A0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E0A781270;
-	Wed, 30 Oct 2024 22:09:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id F3DC95E4F
- for <buildroot@buildroot.org>; Wed, 30 Oct 2024 22:09:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7DB6A407A0;
+	Wed, 30 Oct 2024 22:11:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B3165E50
+ for <buildroot@buildroot.org>; Wed, 30 Oct 2024 22:11:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D405A81270
- for <buildroot@buildroot.org>; Wed, 30 Oct 2024 22:09:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C21340799
+ for <buildroot@buildroot.org>; Wed, 30 Oct 2024 22:11:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bHrRK9Op7sxb for <buildroot@buildroot.org>;
- Wed, 30 Oct 2024 22:09:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.248;
- helo=lelv0143.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AD64A81260
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD64A81260
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AD64A81260
- for <buildroot@buildroot.org>; Wed, 30 Oct 2024 22:09:03 +0000 (UTC)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
- by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 49UM92bm099302;
- Wed, 30 Oct 2024 17:09:02 -0500
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
- by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 49UM92tR025022
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Wed, 30 Oct 2024 17:09:02 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 30
- Oct 2024 17:09:02 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 30 Oct 2024 17:09:02 -0500
-Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
- by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 49UM92Bw071042;
- Wed, 30 Oct 2024 17:09:02 -0500
-Date: Wed, 30 Oct 2024 17:09:02 -0500
-To: Bryce Johnson <bryce@redpinelabs.com>
-CC: <buildroot@buildroot.org>, Xuanhao Shi <X15000177@gmail.com>, Anand
- Gadiyar <gadiyar@ti.com>
-Message-ID: <20241030220902.yo475pa5avafzo4c@bryanbrattlof.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-References: <20241022225457.568323-1-bryce@redpinelabs.com>
- <20241022225457.568323-3-bryce@redpinelabs.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rMPmBlfPE_1E for <buildroot@buildroot.org>;
+ Wed, 30 Oct 2024 22:11:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8B4BE4078B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B4BE4078B
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8B4BE4078B
+ for <buildroot@buildroot.org>; Wed, 30 Oct 2024 22:11:45 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4314b316495so2589945e9.2
+ for <buildroot@buildroot.org>; Wed, 30 Oct 2024 15:11:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1730326303; x=1730931103;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=nEZ79VKBGNQ/sdtFc5i8yKrSNQO4B6FKkVbxgNA8qRE=;
+ b=Xlx1bnyfN1RWkKCvubbLt9Hbtzo8fPUxjkoWhLWE8kKu0JtTfSskir0Zpt7HmrvcEY
+ eMoaKOIqCpjYQHeTTXNKO1GAq0ZB9HKs5m+aOrCacuwsEeWtLs3phfVzY7XHrj49ueAB
+ 4+BMbg33ypCVyVZcnBLGELOV6Vlqp2kc6s7eXAJ3bIIA+zF+ZfE3e7HLIb8VZGD+vsjC
+ EbJ+7tblXa0nt01/o/GKnGpBuing++V8GwmnoFiorcEmN4bWnst08mGK05K2X3Sc/YIm
+ oRFHZPh3DyXKL/iAvt9/tHNKTxiFDXVQxoqx5t/ruPQ3iOcZgaj/hrev83oagqZIE8TY
+ GF0w==
+X-Gm-Message-State: AOJu0YzROWHOhd4k8NvjnCsFiZWOZef+SJVl91ai4VJLkONCcdLkKRv4
+ XDDVxcNX+Fwe+Qq9Iz/eDK9QNU81L9FupUD+CAA2XpkVMA2PmZ0ez3lfySn9EIZ3gsFIicDacr0
+ 9
+X-Google-Smtp-Source: AGHT+IETpftPbQkEMJpMMqaBQP3hF9+qQr3TB/8MnPMkFlLujyQPghcneucx/JZzQ7apkSiKgURWow==
+X-Received: by 2002:a05:600c:1d28:b0:431:6060:8b16 with SMTP id
+ 5b1f17b1804b1-4327b80055dmr10141445e9.30.1730326303057; 
+ Wed, 30 Oct 2024 15:11:43 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-381c10b7bb7sm214710f8f.3.2024.10.30.15.11.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 30 Oct 2024 15:11:42 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@smile.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 30 Oct 2024 23:11:40 +0100
+Message-ID: <20241030221140.2520388-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.45.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20241022225457.568323-3-bryce@redpinelabs.com>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1730326142;
- bh=G5lM4t0lACO3HxuL3Z/mJqiiS1aXuMxPzLd3mixlp24=;
- h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=pnnyDx5USfjmZnmbi1ZKAU/0R2pIu+1XmPsQwPBgqQknOWiszgR3RjNzCBcP9K1gc
- HW5qpNP+3AFJvbKv3oNVNfCCFwY2FphOnawdbh/n7QBknyk7Kv7uXuJfj/htyFjFGx
- qdJcgGK83hmzI8xp2HRWL0lZhoEiubAIKZAgU6M4=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=smile.fr; s=google; t=1730326303; x=1730931103; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=nEZ79VKBGNQ/sdtFc5i8yKrSNQO4B6FKkVbxgNA8qRE=;
+ b=q7YqoX9j1KAYJ+u2GssJipuqpDVIaF7Pb8ABlUd8H0Pwf5qrAmCqNxtuiWOexXrL5w
+ UpjFraqNsbzvJFveQxK/Jaa6u5sWgweSuR6wL6dFLa+4wqUohQ1AHwHiGt6jZVUuNfvU
+ k8H3x1cat0TMjLRYmQpzakCgRDkc9Ingin+Ko=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=pnnyDx5U
-Subject: Re: [Buildroot] [PATCH 3/3] boot/ti-k3-r5-loader: use
- HOST_ARM_GNU_TOOLCHAIN_SUPPORTS
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=q7YqoX9j
+Subject: [Buildroot] [PATCH] package/python-twisted: add missing
+ python3-zlib dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,37 +102,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
-Reply-To: Bryan Brattlof <bb@ti.com>
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bryce!
+TestPythonTwisted doesn't try to import all python-twisted modules and
+doesn't detect that zlib module is imported at least by
+twisted/web/client.py and twisted/conch.
 
-On October 22, 2024 thus sayeth Bryce Johnson:
-> To check for valid x86_64 or aarch64 configuration for arm32 toolchain
-> 
-> Signed-off-by: Bryce Johnson <bryce@redpinelabs.com>
-> ---
->  boot/ti-k3-r5-loader/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
-> index 8c7898ebf6..fe429bb8b4 100644
-> --- a/boot/ti-k3-r5-loader/Config.in
-> +++ b/boot/ti-k3-r5-loader/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_TARGET_TI_K3_R5_LOADER
->  	bool "ti-k3-r5-loader"
->  	depends on BR2_aarch64
-> +	depends on BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_SUPPORTS
+Add python3-zlib as runtime dependency.
 
-This package is really only here for TI's K3 SoCs. Would it make sense 
-to drop the BR2_aarch64 here for this or to keep BR2_aarch64?
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992687 (TestPythonPy3Txtorcon)
 
-~Bryan
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+---
+It's not clear if all python-twisted modules really requires zlib,
+but add python3-zlib to be on the safe side.
+---
+ package/python-twisted/Config.in                       | 1 +
+ support/testing/tests/package/sample_python_twisted.py | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/package/python-twisted/Config.in b/package/python-twisted/Config.in
+index 84786689b7..2d2bc30972 100644
+--- a/package/python-twisted/Config.in
++++ b/package/python-twisted/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_PYTHON_TWISTED
+ 	select BR2_PACKAGE_PYTHON_HYPERLINK # runtime
+ 	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE # runtime
+ 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
+ 	help
+ 	  Twisted is an event-driven networking engine written in
+ 	  Python.
+diff --git a/support/testing/tests/package/sample_python_twisted.py b/support/testing/tests/package/sample_python_twisted.py
+index 47d6c5debc..b5540522fc 100644
+--- a/support/testing/tests/package/sample_python_twisted.py
++++ b/support/testing/tests/package/sample_python_twisted.py
+@@ -1,4 +1,5 @@
+ from twisted.internet import protocol, reactor, endpoints
++from twisted.web.client import readBody  # noqa: F401
+ 
+ 
+ class F(protocol.Factory):
+-- 
+2.45.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
