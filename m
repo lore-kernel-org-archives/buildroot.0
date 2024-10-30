@@ -4,94 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 993BAD5CCAF
-	for <buildroot@archiver.kernel.org>; Wed, 30 Oct 2024 14:18:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44B07D5CCB3
+	for <buildroot@archiver.kernel.org>; Wed, 30 Oct 2024 14:59:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3BF1860590;
-	Wed, 30 Oct 2024 14:18:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF41460ACB;
+	Wed, 30 Oct 2024 14:59:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FuqzKVmllLld; Wed, 30 Oct 2024 14:18:19 +0000 (UTC)
+ id c_Zx0_1saJkk; Wed, 30 Oct 2024 14:59:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B41C608A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE65060ACC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B41C608A8;
-	Wed, 30 Oct 2024 14:18:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C00A1494E
- for <buildroot@buildroot.org>; Wed, 30 Oct 2024 14:18:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE65060ACC;
+	Wed, 30 Oct 2024 14:59:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DCA1A5E4F
+ for <buildroot@buildroot.org>; Wed, 30 Oct 2024 14:59:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A130540583
- for <buildroot@buildroot.org>; Wed, 30 Oct 2024 14:18:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA14740DF0
+ for <buildroot@buildroot.org>; Wed, 30 Oct 2024 14:59:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7QE5v0nRyNVc for <buildroot@buildroot.org>;
- Wed, 30 Oct 2024 14:18:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8urj-s8TJ6Kb for <buildroot@buildroot.org>;
+ Wed, 30 Oct 2024 14:59:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
- envelope-from=jean-christophe.bauduin@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A81B8404EB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A81B8404EB
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A81B8404EB
- for <buildroot@buildroot.org>; Wed, 30 Oct 2024 14:18:16 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-a9a1be34cc9so73937466b.1
- for <buildroot@buildroot.org>; Wed, 30 Oct 2024 07:18:16 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::102d; helo=mail-pj1-x102d.google.com;
+ envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B3EFC40BC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3EFC40BC9
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com
+ [IPv6:2607:f8b0:4864:20::102d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B3EFC40BC9
+ for <buildroot@buildroot.org>; Wed, 30 Oct 2024 14:59:24 +0000 (UTC)
+Received: by mail-pj1-x102d.google.com with SMTP id
+ 98e67ed59e1d1-2e2e2d09decso794898a91.1
+ for <buildroot@buildroot.org>; Wed, 30 Oct 2024 07:59:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730297894; x=1730902694;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=PIVIor45gu+q32rvi6H+z+3MB2CPQz3xqPQrh0nWc2c=;
- b=deqU/ax++IIa0sRdGzYMnD5cVzQGEdq6aZV2oohs0uiIPko/nHx4zEZrlQwNh6lPPr
- I2pYeYHZI2eFi2KATjS3f600y2NTbra0W2BlcblZI6tzTOfsiadiE2uqD+KqgYxs2kB8
- W6YLlfArmJWViaLCeRn4Z9BpnTszWNYZKA/Db0t0JjBUhJHUxRNo/FrePtd6pvjWMp1J
- CFdIPxjQVSyaZ7Cah9QurjsRmWOSz3JmK3HQ1V7TFdfFo7g8gOOPR+7wcb9r3eoL6N4w
- bfw+4Gs0aBeUjLKYpuKiCOIcWJYIN3CmW7Kqk/Loc6AhfnVcTAJiOVxQ3uPJIcCQ1Hry
- 2EDg==
-X-Gm-Message-State: AOJu0YyoIaPi5adIGgddoR6IRg45tgvdCZkFI7dTCaOawkxsXMMgIva8
- pmSdru5Q0iqJaDScSVuejsRUA3w0wZmI+qjysioNIwPvUHeXogAw6J5DrlNLWHzgddIT2i0Sqwh
- rxBc=
-X-Google-Smtp-Source: AGHT+IHICQDVWdFyQQO9mlKYr2Xm/EGR7r6OUAySK+IMYTtiPCiySlz858c0tE/JekCyMKt0p/YJWw==
-X-Received: by 2002:a17:907:3f28:b0:a9a:4f6:756a with SMTP id
- a640c23a62f3a-a9de5a4e3a8mr576899466b.0.1730297894365; 
- Wed, 30 Oct 2024 07:18:14 -0700 (PDT)
-Received: from localhost.localdomain
- ([2a02:a03f:61ce:9400:6b73:749e:6b4d:b3f6])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a9b2fe2af87sm584535666b.143.2024.10.30.07.18.13
+ d=1e100.net; s=20230601; t=1730300363; x=1730905163;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=TFna2wT81c67sJEKh5tFfgiO+YONnsdkETkdoYhxS78=;
+ b=iVgnySpbBAFiGFYfHY1EEw4g7aNxptqIuAkoKpIENZ5HDEyDt0/aWlDoyaZynBdFKs
+ g5xcvLyosIJIvPGxl7MV+IgKiPSBBScOuUwpkB0UN483CEceyAkm6uoxHcHED03zfoxM
+ 8XkftikER8IUxPbNVX2Kd8qQGC7T29RhLW+I0mez6Bl9DjavMKiSslHN10IMQonghOEX
+ kI/qKyHH4PORM3kVJfWhGsVlW1hVqaMCZ+YUh2zCQtGMERx00nRO9GjE3roV8T3eI2H5
+ QcYjJwEwdoZYIO9XU6EJ5Pdsw+sH4SYFYelB1ShB0uw0Iw0SQBE+3AwmSDh4uUkz3Pg7
+ esng==
+X-Gm-Message-State: AOJu0Yy0AuEp55JHm/W/Gb7tJQwVT7Fgj7FFV6Xtnw1NX+xbIkiEqXUI
+ SyNC3jwp3k7Pn05zMrcl4SnQVzZYsdj4f0iB9bX8vPrnLBJM4AIYu/QgpXtJ
+X-Google-Smtp-Source: AGHT+IFOkPcgg9DCUSQIrgoXS5LZybEbOFN9CL02xzu0+pcU/u8nsZnOyMUNMs5R+y2Xt4reMbsVSg==
+X-Received: by 2002:a17:90b:1810:b0:2e2:bdaa:baad with SMTP id
+ 98e67ed59e1d1-2e92236bdedmr8901665a91.7.1730300363480; 
+ Wed, 30 Oct 2024 07:59:23 -0700 (PDT)
+Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
+ 98e67ed59e1d1-2e92fa3dbd2sm1870237a91.20.2024.10.30.07.59.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 30 Oct 2024 07:18:13 -0700 (PDT)
+ Wed, 30 Oct 2024 07:59:22 -0700 (PDT)
+From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
-Cc: Fabio Estevam <festevam@gmail.com>,
- Jean-Christophe Bauduin <jean-christophe.bauduin@mind.be>
-Date: Wed, 30 Oct 2024 15:18:11 +0100
-Message-ID: <20241030141811.1372499-1-jean-christophe.bauduin@mind.be>
+Date: Wed, 30 Oct 2024 22:59:03 +0800
+Message-ID: <20241030145910.2523465-1-fancp2007@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241030134339.2482614-1-fancp2007@gmail.com>
+References: <20241030134339.2482614-1-fancp2007@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1730297894; x=1730902694; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=PIVIor45gu+q32rvi6H+z+3MB2CPQz3xqPQrh0nWc2c=;
- b=SgUZd0FaeE4RtHUcsTkCedDufJnahSbfAvtE33Q0loV5ek3Qpgp+tWrhdaH31tirre
- +Ys1zqBHSpaC1z6ZUlE9NXgSZgEj/KIi8D6XJXngouu+wVjvufc2/HTtJOXP4X54RPg1
- 40dth4LQCQT4z+vFR/A5Oq1K8W1pUGffPesY/a+iaxp4AF3UDTir0xQCVMULGz9XKho4
- 7PoKrvVSKADSKpW24fLfsL4ILR8XRFTaInrem1K9SfTB9u8iaeAmTO2pdmOtLDTiMteY
- z0FZkqZwU/KWYoXG7LSwkkG1U1sJUwAlUp3ekkToCsaXID8WW/OEe3dNvX6eqiymIBRs
- 6gNg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=SgUZd0Fa
-Subject: [Buildroot] [PATCH 1/1] board/imx7d-sdb: bump linux to 6.6.58 and
- uboot to 2024.10
+ d=gmail.com; s=20230601; t=1730300363; x=1730905163; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=TFna2wT81c67sJEKh5tFfgiO+YONnsdkETkdoYhxS78=;
+ b=PpXSOrvc/CdYuTG5qTmoT1hwArvgfQqWGOlPBi37LwPKbXF18d30pPWCGUVCcaUgf3
+ WZenlq/x9kT/Lk5wbG0u+BS/Jw9XApZFBSIRViDpgaWMr5gA3vjXej/CpdE5t5+fFP+F
+ 362Lf9QD57SWkha/mRT5KARS9vcrQqN91L0XsrZqT0FMC3AALGiitRF5JvkOV7PXrVZj
+ mdUUEXfRHvZ5GEx+9QcRFqql6MfNmPD5dZ0hoNNEXqL++/LBuX9Jej6FEkVf7ZDY9jiP
+ I6v80FBXp/pdoZWfNkO6sW2JzcATSOFRgBjZ78L0B75VBG1TUWENo33KOqBMxPLthBRK
+ 9byw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=PpXSOrvc
+Subject: [Buildroot] [PATCH v5 1/2] package/python-psycopg2: add config
+ dependencies from postgresql
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,44 +103,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Jean-Christophe Bauduin via buildroot <buildroot@buildroot.org>
-Reply-To: Jean-Christophe Bauduin <jean-christophe.bauduin@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Scott Fan <fancp2007@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump the linux version from 6.6.21 to 6.6.58 and uboot from 2021.07 to 2024.10
-Signed-off-by: Jean-Christophe Bauduin <jean-christophe.bauduin@mind.be>
----
- configs/imx7d-sdb_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Also update site url to https://www.psycopg.org/
 
-diff --git a/configs/imx7d-sdb_defconfig b/configs/imx7d-sdb_defconfig
-index 541a689ddc..62f825bcbe 100644
---- a/configs/imx7d-sdb_defconfig
-+++ b/configs/imx7d-sdb_defconfig
-@@ -7,7 +7,7 @@ BR2_ROOTFS_OVERLAY="board/freescale/imx7dsdb/rootfs_overlay"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.21"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.58"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx7d-sdb"
-@@ -18,8 +18,8 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-\ No newline at end of file
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+---
+ package/python-psycopg2/Config.in | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/package/python-psycopg2/Config.in b/package/python-psycopg2/Config.in
+index 4aa86c7690..d70a89a6aa 100644
+--- a/package/python-psycopg2/Config.in
++++ b/package/python-psycopg2/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_PYTHON_PSYCOPG2
+ 	bool "python-psycopg2"
++	depends on BR2_USE_MMU # postgresql
+ 	depends on BR2_USE_WCHAR # postgresql
++	depends on !BR2_STATIC_LIBS # postgresql
+ 	depends on !BR2_OPTIMIZE_FAST # postgresql
+ 	select BR2_PACKAGE_POSTGRESQL
+ 	help
+@@ -21,10 +23,11 @@ config BR2_PACKAGE_PYTHON_PSYCOPG2
+ 	  customized thanks to a flexible objects adaptation system.
+ 	  Psycopg 2 is both Unicode and Python 3 friendly.
+ 
+-	  http://initd.org/psycopg/
++	  https://www.psycopg.org/
+ 
+-comment "python-psycopg2 needs a toolchain w/ wchar"
+-	depends on !BR2_USE_WCHAR
++comment "python-psycopg2 needs a toolchain w/ dynamic library, wchar"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
+ 
+ comment "python-psycopg2 can't be built with Optimize for fast"
+ 	depends on BR2_OPTIMIZE_FAST
 -- 
 2.43.0
 
