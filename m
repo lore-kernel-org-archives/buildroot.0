@@ -1,81 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A1D4E68974
-	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 11:05:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 126B2E68979
+	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 12:01:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C3CAF60AD9;
-	Thu, 31 Oct 2024 11:05:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CA344071D;
+	Thu, 31 Oct 2024 12:01:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zQVmCFTBwO9x; Thu, 31 Oct 2024 11:05:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Sfzam_SAa0_Z; Thu, 31 Oct 2024 12:01:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABC2C60ADE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3E6340554
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABC2C60ADE;
-	Thu, 31 Oct 2024 11:05:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 83F055E50
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 11:05:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E3E6340554;
+	Thu, 31 Oct 2024 12:01:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 51E415E50
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 12:01:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 79F4940DFF
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 11:05:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 403DD80CFD
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 12:01:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OLBBlpCyTEdq for <buildroot@buildroot.org>;
- Thu, 31 Oct 2024 11:05:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=114.111.35.105;
- helo=cvsmtppost14.nm.naver.com; envelope-from=dungeonlords789@naver.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D90D240E10
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D90D240E10
-Received: from cvsmtppost14.nm.naver.com (cvsmtppost14.nm.naver.com
- [114.111.35.105])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D90D240E10
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 11:05:19 +0000 (UTC)
-X-Originating-IP: 125.132.232.68
-Received: from cvsendbo001.nm ([10.112.18.53])
- by cvsmtppost14.nm.naver.com with ESMTP id REIYTzaqTeugfqH4cTA1OQ
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 11:05:17 -0000
-X-Session-ID: 2SxFHGKkQM2jJE0HKMzRGA
-X-Originating-IP: 125.132.232.68
-X-Works-Send-Opt: xeYZjAJYjHmlKxu/FoJYKxgXKBwkx0eFjAu=
-X-Works-Smtp-Source: ZwndKqgqFqJZ+HmrKxKm+6E=
-Received: from Linux.. ([125.132.232.68])
- by cvnsmtp011.nm.naver.com with ESMTP id 2SxFHGKkQM2jJE0HKMzRGA
- for <multiple recipients>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 31 Oct 2024 11:05:16 -0000
-From: Cherniaev Andrei <dungeonlords789@naver.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ad5DY-E0xwiB for <buildroot@buildroot.org>;
+ Thu, 31 Oct 2024 12:01:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BB0AC80AB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB0AC80AB2
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BB0AC80AB2
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 12:01:39 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id CBC2D35206D8; Thu, 31 Oct 2024 13:01:35 +0100 (CET)
+Date: Thu, 31 Oct 2024 13:01:35 +0100
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Thu, 31 Oct 2024 20:04:41 +0900
-Message-ID: <20241031110441.2953443-1-dungeonlords789@naver.com>
-X-Mailer: git-send-email 2.43.0
+Message-ID: <ZyNxnz3raEBsZU7x@waldemar-brodkorb.de>
 MIME-Version: 1.0
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-32-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=naver.com; s=s20171208; 
- t=1730372717; bh=1Q4+f42+2iFB13/PogKx9JYg9wMQR2t2yD9yGi9EUds=;
- h=From:To:Subject:Date:Message-ID:From:Subject:Feedback-ID:
- X-Works-Security;
- b=nRIVp83MH1r165CkpXSulpFUQ71BQ9upsmbJ5/VFAN+76vSK9cJsfstP8I9g4037N
- TxY6PQOCoF/I/SOXmnkXxfdhb0WdaZisIc7GEfObHp5yChRxl9Iclkq1ed7HcuzdGd
- jCQviTD089uS31198pi2tDxw1LyDfo3pxxt6gJ3cfxG79e5n8ZcZqC2Hxo11Srko6k
- oDK+DLtL0LPDU0amizUPGklSgw02CtbgtlNlozRvqGZauP79LilgPFo1hn9+lG1otw
- LpeS/xkHwsufvt/ig4r4UOtUR4IBoLB1lMYvIY47xkVRfSCV7cmdPm7EhGvWUQ0KcX
- qDmfPCw1DIMJg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=naver.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=openadk.org; s=2022; 
+ t=1730376095; bh=hqdf9M1PmNPYXXsV+UDMhpBb1GZIsnY2JNkNz0HytvE=;
+ h=Date:From:To:Subject:From;
+ b=tH/rLQUrBR4BVyQBRdbMTU1stjMhfUQkWFjlTZbP6R0TCHKfgLRSOwa1JLyr5YBH2
+ ZGRgtw4Vz0fIbMxs3yCiUN58FHJItc1pl/xAt/ed048P/pod7s3Xro4zvbYyvgchzl
+ D2p8RD7fIobENSufqiKGceoblDEIcZuf0fi7m1pb7nzvJlltyMiO6koRBZoO3FoOq/
+ S9XwIYoIHOmgpyV8SMt1Nh1D0me3udjFwG5eAi3RQ9X2oCBDoWQCBCUwpGW+XX3Oj9
+ JFw8bdxyjjP/UtNqj2M9CzAYWRze/8Nfi8gXhGYWQcI44o9cj0yCzrFAAgV7FHfe5z
+ k4b2yqmIVLiPw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=naver.com header.i=@naver.com header.a=rsa-sha256
- header.s=s20171208 header.b=nRIVp83M
-Subject: [Buildroot] [PATCH 1/1] configs/pc: fix grub root device in help
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=tH/rLQUr
+Subject: [Buildroot] [PATCH] package/zabbix: update to 7.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,50 +74,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Cherniaev Andrei <dungeonlords789@naver.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Also make docs more user-friendly
+See here for release notes:
+https://www.zabbix.com/rn/rn7.0.5
 
-Signed-off-by: Cherniaev Andrei <dungeonlords789@naver.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- board/pc/grub-bios.cfg | 2 ++
- board/pc/readme.txt    | 7 +++++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ package/zabbix/zabbix.hash | 2 +-
+ package/zabbix/zabbix.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/pc/grub-bios.cfg b/board/pc/grub-bios.cfg
-index bd3e3f0006..02db996dd6 100644
---- a/board/pc/grub-bios.cfg
-+++ b/board/pc/grub-bios.cfg
-@@ -1,3 +1,5 @@
-+# After any change rebuild grub2 and the image:
-+# make grub2-rebuild && make
- set default="0"
- set timeout="5"
+diff --git a/package/zabbix/zabbix.hash b/package/zabbix/zabbix.hash
+index 843dc445d6..b4b71db5c8 100644
+--- a/package/zabbix/zabbix.hash
++++ b/package/zabbix/zabbix.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  173059f57f11716146da79345e5a6bc52eceee6a5c4410664b8500a955598b2a  zabbix-7.0.3.tar.gz
++sha256  215301b6e089a685a2fabcca17fc65e5766d42d2079174b65a1bf28df7679692  zabbix-7.0.5.tar.gz
+ sha256  0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0  COPYING
+diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
+index dda60ef161..318030214c 100644
+--- a/package/zabbix/zabbix.mk
++++ b/package/zabbix/zabbix.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-diff --git a/board/pc/readme.txt b/board/pc/readme.txt
-index 41aec50d36..311add1558 100644
---- a/board/pc/readme.txt
-+++ b/board/pc/readme.txt
-@@ -42,8 +42,11 @@ Emulation in qemu (BIOS)
- 1. Edit grub-bios.cfg
- 
-   Since the driver will show up in the virtual machine as /dev/vda,
--  change board/pc/grub-bios.cfg to use root=/dev/vda2 instead of
--  root=/dev/sda2. Then rebuild grub2 and the image.
-+  change board/pc/grub-bios.cfg to use root=/dev/vda1 instead of
-+  root=/dev/sda1.
-+1.1. Rebuild grub2 and the image:
-+
-+make grub2-rebuild && make
- 
- 2. Run the emulation with:
- 
+ ZABBIX_VERSION_MAJOR = 7.0
+-ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).3
++ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).5
+ ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/stable/$(ZABBIX_VERSION_MAJOR)
+ ZABBIX_SELINUX_MODULES = zabbix
+ ZABBIX_LICENSE = AGPL-3.0
 -- 
-2.43.0
+2.39.5
 
 _______________________________________________
 buildroot mailing list
