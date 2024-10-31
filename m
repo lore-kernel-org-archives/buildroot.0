@@ -1,96 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F612E68960
-	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 08:49:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6AA5E68964
+	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 09:33:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8CE21606CF;
-	Thu, 31 Oct 2024 08:49:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BDB14070A;
+	Thu, 31 Oct 2024 09:33:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c_okgK2oDpDo; Thu, 31 Oct 2024 08:49:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iLWMb1A1hIat; Thu, 31 Oct 2024 09:33:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40C06606C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39E1C40714
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40C06606C8;
-	Thu, 31 Oct 2024 08:49:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39E1C40714;
+	Thu, 31 Oct 2024 09:33:24 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 34BB45E4F
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 08:49:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 24D505E4F
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 09:33:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1434040111
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 08:49:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 10EBA40B11
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 09:33:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LyE4AiVImr5P for <buildroot@buildroot.org>;
- Thu, 31 Oct 2024 08:49:13 +0000 (UTC)
+ id EvxAf8r0iTdf for <buildroot@buildroot.org>;
+ Thu, 31 Oct 2024 09:33:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::134; helo=mail-lf1-x134.google.com;
+ client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2E70E40B1F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E70E40B1F
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2E70E40B1F
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 08:49:13 +0000 (UTC)
-Received: by mail-lf1-x134.google.com with SMTP id
- 2adb3069b0e04-53b13ea6b78so1151290e87.2
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 01:49:12 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 62354400E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62354400E5
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 62354400E5
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 09:33:21 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id
+ a640c23a62f3a-a9a2cdc6f0cso90612066b.2
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 02:33:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730364551; x=1730969351;
+ d=1e100.net; s=20230601; t=1730367199; x=1730971999;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=TtaEPLVGfDlP7FjzRTwJ6c7mpsUQ0t9fq0/3ehv/9uc=;
- b=jzbJpq2RLRvxpiNeYYPi4JFghZ/RLFkoTKxUo6TwcC3CDNQhkQ6k8QzrnZH2XImhaM
- Egs+MRnUDI3qq7mqjf5CxCTN+UDFwz2NVoceeBdM2AxYICaEGu3B/hvirMmIulCuYoUB
- DpnpXbcHjSsLpW5ehwOS4ORC/55NNufLlYKKg1s8thJhRw6P6o1yjV8PFAiBdKTJe5Mb
- dDauQk6tuVruK5Yq7j2tslahREfKbVeKklWC0uG7cR3oLraoRQSXT71Ls2m5l6fA4v2s
- kJ+Kgg1ss4Fs3uFkR7Y9qisI6izqLih7J2IhurBKcGbfYeiAC1Obv0TteAmaXtSzm1T8
- ZujA==
-X-Gm-Message-State: AOJu0Yxes9VX1DPdmJehlcxjmINzYonZnp5CB3kzungY3Jss4IYDHGW5
- TBB5kT4RLyNrPsjVZgYazOdRojxEDVH3+/6k7+DI5V69QG8vz7U6vQJSWKv/x8pb1AZMKwAH7zS
- L
-X-Google-Smtp-Source: AGHT+IF4OIZvzMEXXnJuLqSJJ8bid5QgXeB4yxfnZr1ev9IHo1voRYwRsv//ygFQ6G7zBYhaOX6r6w==
-X-Received: by 2002:a05:6512:a93:b0:535:6925:7a82 with SMTP id
- 2adb3069b0e04-53b3491e2c7mr15671931e87.41.1730364550750; 
- Thu, 31 Oct 2024 01:49:10 -0700 (PDT)
+ bh=r/9xS2lDOoaSBhB27WbbrwYmapPWl5pqBFHxs5uAlHA=;
+ b=BS68b1eAghQa+TrmDzxAK7S1/JRB4WXv3TaOukA/Mgl9+bh+QoOJk/zG7U1C9F5E6F
+ udtz9yLnxJuFw1ONYYWkYOTpLEugmGgwOP2YK08LvNlPW30H6ZmoSaWu4gdeO/iILP9b
+ dG6w2VCXs+VZh3dYuSi5k7PCwJuOU8LukYWByCHJTh+yqZl10tnhrScuxdVX67EM3z5X
+ +ed+Coc1qa8otGpqJWVNHDH8Vvw4bKJYoLuitEtDPnLQYHcMtxDWEZkt32ZBZrBImKSi
+ VnsVvOnNcVBG1tZQ6txCz82U83ebtmuEjJ/MWK45YTF6mtw2t2Ku7JFmZ4x84dOtVKF+
+ UmcA==
+X-Gm-Message-State: AOJu0YzC79FdU6w8xwQdLhwyn5nDsmaW3qCsNglTdarRyQOlgVztLCty
+ adKWau7k74afwdgcNmKUudrEABHZTm8Ev8uU1uLJ3QLxTEIvwez+2NLIMzLp9cummdkZ97WyQcT
+ B
+X-Google-Smtp-Source: AGHT+IHWdQ7aps5a97Ej+EZ8Xokm57LGSYVs2rK7e8t+JPbJHYO/BtE0kcVlr1zNEm/RQIQVMuW9gg==
+X-Received: by 2002:a17:907:6d11:b0:a99:5f16:3539 with SMTP id
+ a640c23a62f3a-a9e505ceefcmr232913066b.0.1730367198962; 
+ Thu, 31 Oct 2024 02:33:18 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.40.36])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a9e565df8f6sm42638666b.140.2024.10.31.01.49.09
+ a640c23a62f3a-a9e564c4e0asm45692466b.46.2024.10.31.02.33.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 31 Oct 2024 01:49:10 -0700 (PDT)
+ Thu, 31 Oct 2024 02:33:18 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: linux-amarula@amarulasolutions.com,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Thu, 31 Oct 2024 09:48:40 +0100
-Message-ID: <20241031084852.634238-1-dario.binacchi@amarulasolutions.com>
+Date: Thu, 31 Oct 2024 10:33:10 +0100
+Message-ID: <20241031093311.636608-1-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1730364551; x=1730969351;
+ d=amarulasolutions.com; s=google; t=1730367199; x=1730971999;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=TtaEPLVGfDlP7FjzRTwJ6c7mpsUQ0t9fq0/3ehv/9uc=;
- b=NYI3Wq27+uXbDOwbLhPNbMWoS4lNBdI4c+e0xa6VU/PRllxVA8peqDCFgcZ+qbxRvY
- NJZX5HL9FgxKHNN5IRTYwcdsv6JyaNesBFe9+qN2B2sJn9D5+Pp2lEwA6gsMZSGDDzXR
- DAeJ/KmrYravmQeWDqP2Kp5klOtorwaK8tD1g=
+ bh=r/9xS2lDOoaSBhB27WbbrwYmapPWl5pqBFHxs5uAlHA=;
+ b=p+JmKh5e1nTc1eaZ5Bt+/C+kxHI7/Gp8sJ8mT8QzRrLwc9PzM+wCsEOU+DzB8Lzp1l
+ fThqB+e3fZIOqneK0xI9CG7c2M5x+dedHST48rloVuOHOfjkava8Ixe+cdKFQYvgzYzf
+ O//ur4LxMmN7KkWBPMOd7IuQQbNGqSBC8Jnjk=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=NYI3Wq27
-Subject: [Buildroot] [PATCH 1/1] package/bsdiff: drop package
+ header.a=rsa-sha256 header.s=google header.b=p+JmKh5e
+Subject: [Buildroot] [PATCH v4 1/2] boot/arm-trusted-firmware: v2.11: fix
+ building ST elf file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,114 +100,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Marleen Vos <marleen.vos@mind.be>, Sergey Matyukevich <geomatsi@gmail.com>,
+ Bartosz Bilas <b.bilas@grinn-global.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QXMgYWR2b2NhdGVkIGJ5IFRob21hcyBQZXRhenpvbmkgWzFdLCBkcm9wIGJzZGlmZiBhcyBpdCBp
-cyBub3QgbWFpbnRhaW5lZAphbnltb3JlLgoKTWVhbndoaWxlLCBhdXRvYnVpbGQgYWxzbyBkZXRl
-Y3RlZCB0aGF0IHRoZSBwYWNrYWdlIHdhcyBubyBsb25nZXIKZG93bmxvYWRhYmxlIGZyb20gdGhl
-IFVSTCwgYW5kIGluZGVlZCwgQ29saW4gUGVyY2l2YWwsIHRoZSBtYWludGFpbmVyLApjb25maXJt
-ZWQgdGhhdCBoZSBpbnRlbnRpb25hbGx5IGRpc2FibGVkIHRoZSBwYWNrYWdlIGRvd25sb2FkIGR1
-ZSB0byB0aGUKcHJlc2VuY2Ugb2Ygc29tZSBzZWN1cml0eSBidWdzIHRoYXQgaGUgZG9lc24ndCBo
-YXZlIHRpbWUgdG8gZml4LgoKWzFdIGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVj
-dC9idWlsZHJvb3QvcGF0Y2gvMjAyNDEwMDQyMTU0NTEuMTE5ODg2MS0yLWRhcmlvLmJpbmFjY2hp
-QGFtYXJ1bGFzb2x1dGlvbnMuY29tLwoKRml4ZXM6Ci0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJv
-b3Qub3JnL3Jlc3VsdHMvMjFiYjgyN2QzZGJmNTUzYzc5ZjQ5ZDdjMTg0MDk5Yzc1ZGYzZDQ1ZAoK
-U3VnZ2VzdGVkLWJ5OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4u
-Y29tPgpTaWduZWQtb2ZmLWJ5OiBEYXJpbyBCaW5hY2NoaSA8ZGFyaW8uYmluYWNjaGlAYW1hcnVs
-YXNvbHV0aW9ucy5jb20+Ci0tLQogLmNoZWNrcGFja2FnZWlnbm9yZSAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIHwgIDEgLQogQ29uZmlnLmluLmxlZ2FjeSAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIHwgIDcgKysrKysKIHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICB8ICAxIC0KIC4uLi8wMDAxLUFkZC1taXNzaW5nLWhlYWRlci1mb3ItdV9jaGFyLnBh
-dGNoICB8IDE3IC0tLS0tLS0tLS0tLQogcGFja2FnZS9ic2RpZmYvQ29uZmlnLmluICAgICAgICAg
-ICAgICAgICAgICAgIHwgIDggLS0tLS0tCiBwYWNrYWdlL2JzZGlmZi9ic2RpZmYuaGFzaCAgICAg
-ICAgICAgICAgICAgICAgfCAgNCAtLS0KIHBhY2thZ2UvYnNkaWZmL2JzZGlmZi5tayAgICAgICAg
-ICAgICAgICAgICAgICB8IDI2IC0tLS0tLS0tLS0tLS0tLS0tLS0KIDcgZmlsZXMgY2hhbmdlZCwg
-NyBpbnNlcnRpb25zKCspLCA1NyBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNr
-YWdlL2JzZGlmZi8wMDAxLUFkZC1taXNzaW5nLWhlYWRlci1mb3ItdV9jaGFyLnBhdGNoCiBkZWxl
-dGUgbW9kZSAxMDA2NDQgcGFja2FnZS9ic2RpZmYvQ29uZmlnLmluCiBkZWxldGUgbW9kZSAxMDA2
-NDQgcGFja2FnZS9ic2RpZmYvYnNkaWZmLmhhc2gKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdl
-L2JzZGlmZi9ic2RpZmYubWsKCmRpZmYgLS1naXQgYS8uY2hlY2twYWNrYWdlaWdub3JlIGIvLmNo
-ZWNrcGFja2FnZWlnbm9yZQppbmRleCA5MWUzMWVlYmM1OGIuLmVjZWVhMjhmMGM1NCAxMDA2NDQK
-LS0tIGEvLmNoZWNrcGFja2FnZWlnbm9yZQorKysgYi8uY2hlY2twYWNrYWdlaWdub3JlCkBAIC0z
-MzUsNyArMzM1LDYgQEAgcGFja2FnZS9icmlja2QvUzcwYnJpY2tkIFNoZWxsY2hlY2sgbGliX3N5
-c3YuSW5kZW50IGxpYl9zeXN2LlZhcmlhYmxlcwogcGFja2FnZS9icmlkZ2UtdXRpbHMvMDAwMS1m
-aXgtYnVpbGQtb24tbXVzbC5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KIHBhY2thZ2UvYnJsdHR5
-LzAwMDEtRml4LWxpbmtpbmctZXJyb3Itb24tbWlwczY0ZWwucGF0Y2ggbGliX3BhdGNoLlVwc3Ry
-ZWFtCiBwYWNrYWdlL2JybHR0eS9TMTBicmx0dHkgU2hlbGxjaGVjayBsaWJfc3lzdi5JbmRlbnQg
-bGliX3N5c3YuVmFyaWFibGVzCi1wYWNrYWdlL2JzZGlmZi8wMDAxLUFkZC1taXNzaW5nLWhlYWRl
-ci1mb3ItdV9jaGFyLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQogcGFja2FnZS9idXN0bGUvMDAw
-MS1NYWtlZmlsZS1maXgtcGNhcC1jb25maWctY2FsbC5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0K
-IHBhY2thZ2UvYnVzeWJveC8wMDAxLW5ldHdvcmtpbmctbGliaXByb3V0ZS11c2UtbGludXgtaWZf
-cGFja2V0LmgtaW5zdGVhZC0ucGF0Y2ggbGliX3BhdGNoLlVwc3RyZWFtCiBwYWNrYWdlL2J1c3li
-b3gvMDAwMi1NYWtlZmlsZS5mbGFncy1zdHJpcC1ub24tbC1hcmd1bWVudHMtcmV0dXJuZWQtYnkt
-cGtnLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQpkaWZmIC0tZ2l0IGEvQ29uZmlnLmluLmxlZ2Fj
-eSBiL0NvbmZpZy5pbi5sZWdhY3kKaW5kZXggMzAxNzlhZGQyMzNiLi42MzM2MGI0MmI4NzggMTAw
-NjQ0Ci0tLSBhL0NvbmZpZy5pbi5sZWdhY3kKKysrIGIvQ29uZmlnLmluLmxlZ2FjeQpAQCAtMTQ2
-LDYgKzE0NiwxMyBAQCBlbmRpZgogCiBjb21tZW50ICJMZWdhY3kgb3B0aW9ucyByZW1vdmVkIGlu
-IDIwMjQuMTEiCiAKK2NvbmZpZyBCUjJfUEFDS0FHRV9CU0RJRkYKKwlib29sICJic2RpZmYgaGFz
-IGJlZW4gcmVtb3ZlZCIKKwlzZWxlY3QgQlIyX0xFR0FDWQorCWhlbHAKKwkgIFRoZSBic2RpZmYg
-cGFja2FnZSB3YXMgcmVtb3ZlZCBhcyBpdCBpcyBub3QgbWFpbnRhaW5lZAorCSAgYW55bW9yZSAo
-bm8gY29tbWl0IHNpbmNlIDIwMTQpLgorCiBjb25maWcgQlIyX1BBQ0tBR0VfUFJPQ1BTX05TX09S
-SUdJTkFMX1RPUAogCWJvb2wgIkJSMl9QQUNLQUdFX1BST0NQU19OU19PUklHSU5BTF9UT1AgaGFz
-IGJlZW4gcmVuYW1lZCIKIAlzZWxlY3QgQlIyX0xFR0FDWQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9D
-b25maWcuaW4gYi9wYWNrYWdlL0NvbmZpZy5pbgppbmRleCBiMWU5OTlhNjNiMTguLjg3NmIzNDBh
-OGE2NyAxMDA2NDQKLS0tIGEvcGFja2FnZS9Db25maWcuaW4KKysrIGIvcGFja2FnZS9Db25maWcu
-aW4KQEAgLTE3Miw3ICsxNzIsNiBAQCBtZW51ICJEZXZlbG9wbWVudCB0b29scyIKIAlzb3VyY2Ug
-InBhY2thZ2UvYmF0cy1jb3JlL0NvbmZpZy5pbiIKIAlzb3VyY2UgInBhY2thZ2UvYmludXRpbHMv
-Q29uZmlnLmluIgogCXNvdXJjZSAicGFja2FnZS9iaXR3aXNlL0NvbmZpZy5pbiIKLQlzb3VyY2Ug
-InBhY2thZ2UvYnNkaWZmL0NvbmZpZy5pbiIKIAlzb3VyY2UgInBhY2thZ2UvYnVzdGxlL0NvbmZp
-Zy5pbiIKIAlzb3VyY2UgInBhY2thZ2UvY2hlY2svQ29uZmlnLmluIgogCXNvdXJjZSAicGFja2Fn
-ZS9jbWFrZS9Db25maWcuaW4iCmRpZmYgLS1naXQgYS9wYWNrYWdlL2JzZGlmZi8wMDAxLUFkZC1t
-aXNzaW5nLWhlYWRlci1mb3ItdV9jaGFyLnBhdGNoIGIvcGFja2FnZS9ic2RpZmYvMDAwMS1BZGQt
-bWlzc2luZy1oZWFkZXItZm9yLXVfY2hhci5wYXRjaApkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQK
-aW5kZXggNTZhZmZiNDEwMmNlLi4wMDAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9ic2RpZmYvMDAw
-MS1BZGQtbWlzc2luZy1oZWFkZXItZm9yLXVfY2hhci5wYXRjaAorKysgL2Rldi9udWxsCkBAIC0x
-LDE3ICswLDAgQEAKLWJzcGF0Y2g6IEZpeCBtaXNzaW5nIGhlYWRlciA8c3lzL3R5cGVzLmg+IGZv
-ciB1X2NoYXIKLQotRml4ZXMgaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMv
-MzFhLzMxYTgzN2NmNmUzNGIwMmRjZTQ5OGYyYjEyZTQwZDZkMTZhNWE4ZTYvCi0KLVNpZ25lZC1v
-ZmYtYnk6IErDtnJnIEtyYXVzZSA8am9lcmcua3JhdXNlQGVtYmVkZGVkLnJvY2tzPgotCi1kaWZm
-IC1wdXJOIGJzZGlmZi00LjMub3JpZy9ic3BhdGNoLmMgYnNkaWZmLTQuMy9ic3BhdGNoLmMKLS0t
-LSBic2RpZmYtNC4zLm9yaWcvYnNwYXRjaC5jCTIwMTUtMDQtMzAgMTM6NDc6MjYuNDg1OTAzMzU5
-ICswMjAwCi0rKysgYnNkaWZmLTQuMy9ic3BhdGNoLmMJMjAxNS0wNC0zMCAxMzo0ODoxNC44MDg5
-MDg2NzIgKzAyMDAKLUBAIC0zNSw2ICszNSw3IEBAIF9fRkJTRElEKCIkRnJlZUJTRDogc3JjL3Vz
-ci5iaW4vYnNkaWZmL2IKLSAjaW5jbHVkZSA8ZXJyLmg+Ci0gI2luY2x1ZGUgPHVuaXN0ZC5oPgot
-ICNpbmNsdWRlIDxmY250bC5oPgotKyNpbmNsdWRlIDxzeXMvdHlwZXMuaD4KLQotIHN0YXRpYyBv
-ZmZfdCBvZmZ0aW4odV9jaGFyICpidWYpCi0gewpkaWZmIC0tZ2l0IGEvcGFja2FnZS9ic2RpZmYv
-Q29uZmlnLmluIGIvcGFja2FnZS9ic2RpZmYvQ29uZmlnLmluCmRlbGV0ZWQgZmlsZSBtb2RlIDEw
-MDY0NAppbmRleCAxMWZkOGI5ZDM1MjMuLjAwMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL2JzZGlm
-Zi9Db25maWcuaW4KKysrIC9kZXYvbnVsbApAQCAtMSw4ICswLDAgQEAKLWNvbmZpZyBCUjJfUEFD
-S0FHRV9CU0RJRkYKLQlib29sICJic2RpZmYiCi0Jc2VsZWN0IEJSMl9QQUNLQUdFX0JaSVAyCi0J
-aGVscAotCSAgQmluYXJ5IHBhdGNoL2RpZmYgbGlrZSB4ZGVsdGEgYnV0IGNyZWF0ZXMgc21hbGxl
-ciBkaWZmcy4KLQkgIE5lZWRzIGJ6aXAyIHN1cHBvcnQuCi0KLQkgIGh0dHA6Ly93d3cuZGFlbW9u
-b2xvZ3kubmV0L2JzZGlmZi8KZGlmZiAtLWdpdCBhL3BhY2thZ2UvYnNkaWZmL2JzZGlmZi5oYXNo
-IGIvcGFja2FnZS9ic2RpZmYvYnNkaWZmLmhhc2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cmlu
-ZGV4IDEwMjA4NmI5ZmMwNC4uMDAwMDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvYnNkaWZmL2JzZGlm
-Zi5oYXNoCisrKyAvZGV2L251bGwKQEAgLTEsNCArMCwwIEBACi0jIEZyb20gaHR0cDovL3d3dy5k
-YWVtb25vbG9neS5uZXQvYnNkaWZmLzoKLW1kNSAgZTZkODEyMzk0ZjBlMGVjYzhkNWRmMjU1YWEx
-ZGIyMmEgIGJzZGlmZi00LjMudGFyLmd6Ci0jIGxvY2FsbHkgY29tcHV0ZWQKLXNoYTI1NiAgZmMw
-YTZlNjM0ZWY3N2RjZjE0YmYzNmM3YjZkMWU1N2JhMWFjNWM0ODA5MDczZGZhYWNiM2I1ZjdhYjI3
-N2ViNyAgYnNkaWZmLmMKZGlmZiAtLWdpdCBhL3BhY2thZ2UvYnNkaWZmL2JzZGlmZi5tayBiL3Bh
-Y2thZ2UvYnNkaWZmL2JzZGlmZi5tawpkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggOTdh
-MWIzOTIxZGY0Li4wMDAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9ic2RpZmYvYnNkaWZmLm1rCisr
-KyAvZGV2L251bGwKQEAgLTEsMjYgKzAsMCBAQAotIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKLSMK
-LSMgYnNkaWZmCi0jCi0jIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwotCi1CU0RJRkZfVkVSU0lPTiA9
-IDQuMwotQlNESUZGX1NJVEUgPSBodHRwOi8vd3d3LmRhZW1vbm9sb2d5Lm5ldC9ic2RpZmYKLUJT
-RElGRl9ERVBFTkRFTkNJRVMgPSBiemlwMgotQlNESUZGX0xJQ0VOU0UgPSBCU0QtMi1DbGF1c2UK
-LUJTRElGRl9MSUNFTlNFX0ZJTEVTID0gYnNkaWZmLmMKLUJTRElGRl9DUEVfSURfVkVORE9SID0g
-ZGFlbW9ub2xvZ3kKLQotZGVmaW5lIEJTRElGRl9CVUlMRF9DTURTCi0JJChUQVJHRVRfTUFLRV9F
-TlYpICQoVEFSR0VUX0NDKSAkKFRBUkdFVF9DRkxBR1MpICQoVEFSR0VUX0xERkxBR1MpIFwKLQkJ
-JChARCkvYnNkaWZmLmMgLWxiejIgLW8gJChARCkvYnNkaWZmCi0JJChUQVJHRVRfTUFLRV9FTlYp
-ICQoVEFSR0VUX0NDKSAkKFRBUkdFVF9DRkxBR1MpICQoVEFSR0VUX0xERkxBR1MpIFwKLQkJJChA
-RCkvYnNwYXRjaC5jIC1sYnoyIC1vICQoQEQpL2JzcGF0Y2gKLWVuZGVmCi0KLWRlZmluZSBCU0RJ
-RkZfSU5TVEFMTF9UQVJHRVRfQ01EUwotCSQoSU5TVEFMTCkgLUQgLW0gNzU1ICQoQEQpL2JzZGlm
-ZiAkKFRBUkdFVF9ESVIpL3Vzci9iaW4vYnNkaWZmCi0JJChJTlNUQUxMKSAtRCAtbSA3NTUgJChA
-RCkvYnNwYXRjaCAkKFRBUkdFVF9ESVIpL3Vzci9iaW4vYnNwYXRjaAotZW5kZWYKLQotJChldmFs
-ICQoZ2VuZXJpYy1wYWNrYWdlKSkKLS0gCjIuNDMuMAoKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+The commit backports a pending, but likely correct, patch that fixes the
+following build error:
+
+'buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-gcc' -o buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/tf-a-stm32mp157c-dk2.elf -Wl,--hash-style=gnu -Wl,--as-needed -nostartfiles -Wl,-Map=buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/tf-a-stm32mp157c-dk2.map -Wl,-dT buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/stm32mp1.ld buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/stm32mp1-stm32mp157c-dk2.o
+buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/13.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: buildroot/output/build/arm-trusted-firmware-custom/build/stm32mp1/release/tf-a-stm32mp157c-dk2.elf: error: PHDR segment not covered by LOAD segment
+collect2: error: ld returned 1 exit status
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+
+Changes v3 -> v4:
+- Replace the fixing patch. The previous patch did not pass the
+  tests because it caused regressions on platforms other than ST.
+  The review process led to a new patch specifically for the ST
+  platform.
+
+No changes since v2
+
+Added in v2
+
+ ...pie-option-when-building-ST-elf-file.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 boot/arm-trusted-firmware/v2.11/0001-fix-st-set-no-pie-option-when-building-ST-elf-file.patch
+
+diff --git a/boot/arm-trusted-firmware/v2.11/0001-fix-st-set-no-pie-option-when-building-ST-elf-file.patch b/boot/arm-trusted-firmware/v2.11/0001-fix-st-set-no-pie-option-when-building-ST-elf-file.patch
+new file mode 100644
+index 000000000000..d2b82e0921f4
+--- /dev/null
++++ b/boot/arm-trusted-firmware/v2.11/0001-fix-st-set-no-pie-option-when-building-ST-elf-file.patch
+@@ -0,0 +1,37 @@
++From fbd050b61652db732f7a7a1ca36450b1bb339298 Mon Sep 17 00:00:00 2001
++From: Yann Gautier <yann.gautier@st.com>
++Date: Tue, 29 Oct 2024 13:42:07 +0100
++Subject: [PATCH] fix(st): set no-pie option when building ST elf file
++
++This elf file is used to build a binary file that concatenates BL2 and
++its device tree blob. It then does not need PIE option, and this avoids
++the following compilation error with some compiler versions:
++  error: PHDR segment not covered by LOAD segment
++
++Change-Id: I7562e8c1890275fe0409f3a23cc66a8e14ea1ee0
++Signed-off-by: Yann Gautier <yann.gautier@st.com>
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: backport from https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/32960
++---
++ plat/st/common/common_rules.mk | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/plat/st/common/common_rules.mk b/plat/st/common/common_rules.mk
++index 212a67d5168c..b9fe3d4d676f 100644
++--- a/plat/st/common/common_rules.mk
+++++ b/plat/st/common/common_rules.mk
++@@ -58,9 +58,9 @@ $(eval $(call MAKE_LD,${STM32_TF_LINKERFILE},$(STM32_LD_FILE),bl2))
++ tf-a-%.elf: $(PLAT)-%.o ${STM32_TF_LINKERFILE}
++ 	@echo "  LDS     $<"
++ ifeq ($($(ARCH)-ld-id),gnu-gcc)
++-	${Q}$($(ARCH)-ld) -o $@ $(subst --,-Wl$(comma)--,${STM32_TF_ELF_LDFLAGS}) -nostartfiles -Wl,-Map=$(@:.elf=.map) -Wl,-dT ${STM32_TF_LINKERFILE} $<
+++	${Q}$($(ARCH)-ld) -o $@ $(subst --,-Wl$(comma)--,${STM32_TF_ELF_LDFLAGS}) -nostartfiles -Wl,-no-pie -Wl,-Map=$(@:.elf=.map) -Wl,-dT ${STM32_TF_LINKERFILE} $<
++ else
++-	${Q}$($(ARCH)-ld) -o $@ ${STM32_TF_ELF_LDFLAGS} -Map=$(@:.elf=.map) --script ${STM32_TF_LINKERFILE} $<
+++	${Q}$($(ARCH)-ld) -o $@ ${STM32_TF_ELF_LDFLAGS} -no-pie -Map=$(@:.elf=.map) --script ${STM32_TF_LINKERFILE} $<
++ endif
++ 
++ tf-a-%.bin: tf-a-%.elf
++-- 
++2.43.0
++
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
