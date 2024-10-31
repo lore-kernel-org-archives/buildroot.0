@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 618F7D767FA
-	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 19:58:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47934D767FA
+	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 19:58:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1CBA0819B4;
-	Thu, 31 Oct 2024 19:58:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0031D60BDD;
+	Thu, 31 Oct 2024 19:58:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id smEzZRSbhEU0; Thu, 31 Oct 2024 19:58:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3DNX4hQVgbbl; Thu, 31 Oct 2024 19:58:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14629819BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1503E60BE8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14629819BC;
-	Thu, 31 Oct 2024 19:58:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3173A5E50
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 19:58:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1503E60BE8;
+	Thu, 31 Oct 2024 19:58:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 430F55E50
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 19:58:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1268F819BC
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 19:58:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 23EEA60BE8
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 19:58:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7UkQ35kbmv-L for <buildroot@buildroot.org>;
- Thu, 31 Oct 2024 19:58:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a7HSOcebYdtG for <buildroot@buildroot.org>;
+ Thu, 31 Oct 2024 19:58:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E43ED819B4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E43ED819B4
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E43ED819B4
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 19:58:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 291A540003;
- Thu, 31 Oct 2024 19:58:35 +0000 (UTC)
-Date: Thu, 31 Oct 2024 20:58:35 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-Message-ID: <20241031205835.13b00d20@windsurf>
-In-Reply-To: <20241031193809.711402-1-bernd@kuhls.net>
-References: <20241031193809.711402-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1730404716;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=uwqyePMGxQ4XjA7cWUSGbre8J86ejNGtd9SkJ4WLRDs=;
- b=B6SdmlsZ0XxZhbQ6oLfROIDtdQkRkhb80XACVJ2kKmhr4q7lCToXQZY65YxejbeUjT4QYl
- xaVFnx+OpmkWW1kWXQ3p4cjDq8GVgKxM40d23TyJ9uexxHDlVDAYGgrSVBupJcpPRLwi+t
- nr3Btpl4/rxc+FXcVjStVkNewV7hL0VCnA0RTVR+D0eg6KckZPEYbUNuLkZ1JR1/Fl+9FG
- 4/ehrLdCWSMIH3lMJtmdTgKWE28ZvcPAHmWGZHm3+EhBXQbRiuiAnTAQP5VMeT5l4PHotK
- 0/279yHStCD/SBQQY6EFi/LWByY/xsIt8LRXAjmwho3vol8UxtNLdNeJu97AYQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=B6SdmlsZ
-Subject: Re: [Buildroot] [PATCH 1/1] package/netstat-nat: bump version to 2a
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 505D660BDD
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 505D660BDD
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 19:58:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 354F18555D; Thu, 31 Oct 2024 19:58:54 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 31 Oct 2024 20:56:34 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5ab8eb3cac0c87c850c800d639004205807faf27
+X-Git-Newrev: 02540771bccf7b10c7daecce5f0e1e41a73c1e07
+X-Patchwork-Hint: ignore
+Message-Id: <20241031195854.354F18555D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/v4l2loopback: bump version to
+ 0.13.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,43 +60,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=02540771bccf7b10c7daecce5f0e1e41a73c1e07
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 31 Oct 2024 20:38:09 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+Changelog:
+https://github.com/umlaeute/v4l2loopback/blob/v0.13.2/ChangeLog
 
-> diff --git a/package/netstat-nat/netstat-nat.mk b/package/netstat-nat/netstat-nat.mk
-> index 0d16579a6a..7e954bb456 100644
-> --- a/package/netstat-nat/netstat-nat.mk
-> +++ b/package/netstat-nat/netstat-nat.mk
-> @@ -4,9 +4,19 @@
->  #
->  ################################################################################
->  
-> -NETSTAT_NAT_VERSION = 1.4.10
-> -NETSTAT_NAT_SITE = http://tweegy.nl/download
-> +NETSTAT_NAT_VERSION = 2a
-> +NETSTAT_NAT_SOURCE = $(NETSTAT_NAT_VERSION).tar.gz
-> +NETSTAT_NAT_SITE = https://git.sr.ht/~nabijaczleweli/netstat-nat-ng/archive
+Fixes:
+http://autobuild.buildroot.net/results/356/356be839ce23154e9f808469b4483e7eaae316e1/
 
-Could you switch to Git download instead? Indeed we're not sure those
-tarballs are stable, and a tarball named 2a.tar.gz isn't exactly nice.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/v4l2loopback/v4l2loopback.hash | 2 +-
+ package/v4l2loopback/v4l2loopback.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> -$(eval $(autotools-package))
-
-So they are switching back from autotools to a hand-written Makefile...
-not really an improvement, but OK.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/v4l2loopback/v4l2loopback.hash b/package/v4l2loopback/v4l2loopback.hash
+index d897fd48ff..c7fb226add 100644
+--- a/package/v4l2loopback/v4l2loopback.hash
++++ b/package/v4l2loopback/v4l2loopback.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e0782b8abe8f2235e2734f725dc1533a0729e674c4b7834921ade43b9f04939b  v4l2loopback-0.12.7.tar.gz
++sha256  1e57e1e382d7451aa2a88d63cc9f146eab1f425b90e76104d4c3d73127e34771  v4l2loopback-0.13.2.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/v4l2loopback/v4l2loopback.mk b/package/v4l2loopback/v4l2loopback.mk
+index 50a168fcab..abc2929d12 100644
+--- a/package/v4l2loopback/v4l2loopback.mk
++++ b/package/v4l2loopback/v4l2loopback.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-V4L2LOOPBACK_VERSION = 0.12.7
++V4L2LOOPBACK_VERSION = 0.13.2
+ V4L2LOOPBACK_SITE = $(call github,umlaeute,v4l2loopback,v$(V4L2LOOPBACK_VERSION))
+ V4L2LOOPBACK_LICENSE = GPL-2.0+
+ V4L2LOOPBACK_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
