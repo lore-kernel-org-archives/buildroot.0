@@ -4,90 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 801FBD767E9
-	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 17:15:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6E9CD767F2
+	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 17:25:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E925E408A6;
-	Thu, 31 Oct 2024 17:15:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6969D408B2;
+	Thu, 31 Oct 2024 17:25:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GHxnxnySuKdJ; Thu, 31 Oct 2024 17:15:47 +0000 (UTC)
+ id 4yUREC4BCxp5; Thu, 31 Oct 2024 17:25:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE05A408AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EC45408AA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE05A408AA;
-	Thu, 31 Oct 2024 17:15:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id DB50A5E4F
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:15:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3EC45408AA;
+	Thu, 31 Oct 2024 17:25:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 679BB5E50
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:25:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C9F55817BD
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:15:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4423F408AA
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:25:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 34l8U84DEwXU for <buildroot@buildroot.org>;
- Thu, 31 Oct 2024 17:15:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52f; helo=mail-ed1-x52f.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AFF6980DBE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFF6980DBE
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AFF6980DBE
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:15:43 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id
- 4fb4d7f45d1cf-5c9150f9ed4so1621189a12.0
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 10:15:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730394941; x=1730999741;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=jjKMh/jkLe6N1c/vF5Xk5b0/c08f0zK+0K9U4Zr8LI8=;
- b=DEQGcq2xOUR8nB0GCiBB/7UEj0pLHyjwHUhjmQGIOv9ryGlMnvCn5FmWHmfhmOF5I2
- xG9GmAuDR4LFlV/BMhkNbTvjZNMZbBxqqVUo75LZp44kSnZRQm0S02cORQ7AliCq0oI3
- cFlNPoLjRSF6U4vBgCrc8VK4H/FBmFNrhLHmQN4LCUOmrnvDurMOVBBRYmKdHwv98tT5
- l8Rid/7wmEdGtFVUa7n8H2ox9B1jJ/e21pnrdoRllMzILmN4jB+FYSyC7YH3QJfJggCS
- ccET1IY3Bc3ENDq2MlFoE55qP9Cgl1CVfnbiNfhKkwJIq/tlcYvi1kuP8qlnTtjp+aFr
- tKTw==
-X-Gm-Message-State: AOJu0Yyinatb7KWcsjeWtjPRiu9x+wf16vjFJluUYDKej+kU8W3A9FwI
- +5PKb1xomc21pfnUNyduzHUXFB22Z/wHJI5kqnLleXjHQTHxSHT8RLm3wiZgsBOUOgify7+MySE
- O
-X-Google-Smtp-Source: AGHT+IEXF4pvRA9j2nWjpOwcQXo2b10hNA71GoFX/e8L4rrF8X6Hwzm0ZB80uqVGW8RVyOOUkZVBKw==
-X-Received: by 2002:a05:6402:270b:b0:5c9:5dff:c059 with SMTP id
- 4fb4d7f45d1cf-5cbbfa7ebb8mr15911600a12.33.1730394941444; 
- Thu, 31 Oct 2024 10:15:41 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.40.36])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5ceac7c8d35sm748882a12.66.2024.10.31.10.15.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 31 Oct 2024 10:15:40 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Thu, 31 Oct 2024 18:15:36 +0100
-Message-ID: <20241031171536.575419-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R9VkNkU5H0rV for <buildroot@buildroot.org>;
+ Thu, 31 Oct 2024 17:25:11 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=192.198.163.17;
+ helo=mgamail.intel.com; envelope-from=andriy.shevchenko@linux.intel.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 068574089A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 068574089A
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 068574089A
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:25:10 +0000 (UTC)
+X-CSE-ConnectionGUID: 0nkcN+rsSYyYlJVLIAQjrg==
+X-CSE-MsgGUID: 2GFfVnVsR6ulpnVL0WF85w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11242"; a="30041538"
+X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; d="scan'208";a="30041538"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+ by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 31 Oct 2024 10:25:05 -0700
+X-CSE-ConnectionGUID: KQ0wMy65T1uWIsl7V1JtNQ==
+X-CSE-MsgGUID: rG4ZEQZlSuq0i5+uvddlPQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; d="scan'208";a="87833404"
+Received: from smile.fi.intel.com ([10.237.72.154])
+ by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 31 Oct 2024 10:25:03 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+ (envelope-from <andriy.shevchenko@linux.intel.com>)
+ id 1t6Yuq-00000009jxb-3huc; Thu, 31 Oct 2024 19:25:00 +0200
+Date: Thu, 31 Oct 2024 19:25:00 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org, Andy Yan <andyshrk@163.com>,
+ Andy Yan <andyshrk@gmail.com>
+Message-ID: <ZyO9bOAks5c_vMrV@smile.fi.intel.com>
+References: <20240927183553.2866682-1-andriy.shevchenko@linux.intel.com>
+ <20241026144748.09d6b892@windsurf>
+ <Zx9EBoth4bf6QpQd@smile.fi.intel.com>
+ <20241028092600.61ee97f7@windsurf>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1730394941; x=1730999741;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=jjKMh/jkLe6N1c/vF5Xk5b0/c08f0zK+0K9U4Zr8LI8=;
- b=biMTiBNHqCwqkgLe90vxrf3NwuxeAoCdMGiM0ihTuNHS53dT9Pb0V0PUrUkwe1W5HE
- cJUxrNznYZl0DqVcuKuJCSOm1rTHnzFka65pGNKNVI4Vs/wVJ7fQDARXUyERwFc/BqV/
- 47ylMxVqmyPQKOWB/Y7LEm5M86aww+v/TgALk=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=biMTiBNH
-Subject: [Buildroot] [PATCH 1/1] configs/beaglebone: bump U-Boot to 2024.10
+Content-Disposition: inline
+In-Reply-To: <20241028092600.61ee97f7@windsurf>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+ t=1730395511; x=1761931511;
+ h=date:from:to:cc:subject:message-id:references:
+ mime-version:in-reply-to;
+ bh=wFwZl1Og1/XgWMnyEew8sI/7emQAfIHxbZdVn7owGyA=;
+ b=cIaK5QrfhljE2hCHPfjUc3XdXiWhPXlq5sb8zaCkZsyAPrF+PgVGxc1Q
+ T0LBaNIMVq+mKGBJXUX/Y9Igg0N5s3trnOQQPB7pJd1tgA2Gkj3qA+Kut
+ paZtDxtPx3ji7TWLzbvBhLDLCyxNJbq64ykr9KWbZJPyAqrs0XudFgyyo
+ szT4aIEmpBLMf3qiIxAyDruAwjQCJLgVIPJpjwHfLTn1FLpBlt0K1Z3hI
+ AV7INw10mKJpim/oMzExdH4S+ev08Je8xCC+XKkqgMwwcMiGhIRibbB6G
+ NFX5njKAMvMICgHuDUrYlKo0stoK5MnHs6o/lr3BYc/K1xKuq+DVSjLk9
+ Q==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=linux.intel.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256
+ header.s=Intel header.b=cIaK5Qrf
+Subject: Re: [Buildroot] [PATCH v2 1/1] package: Add iotools package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,52 +100,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com, Lothar Felten <lothar.felten@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch bumps U-Boot to version 2024.10. The new version has added EFI
-Capsule support, which depends on GnuTLS, thus requiring the activation of
-BR2_TARGET_UBOOT_NEEDS_GNUTLS.
+On Mon, Oct 28, 2024 at 09:26:00AM +0100, Thomas Petazzoni via buildroot wrote:
+> On Mon, 28 Oct 2024 09:57:58 +0200
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-Tested on beaglebone black.
+> > > One thing that isn't super nice is your handling of the DEBUG variable.
+> > > Ideally in Buildroot we would want neither DEBUG=0 nor DEBUG=1, but
+> > > "don't do anything and let Buildroot pass the CFLAGS it wants".  
+> > 
+> > Any suggestion how it may be addressed?
+> 
+> 1. Don't override the CFLAGS passed by the user
+> 
+> 2. Allow a value of DEBUG= that tells your Makefile to not do anything
+>    (i.e neither DEBUG=0 nor DEBUG=1)
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- board/beagleboard/beaglebone/patches/uboot/uboot.hash | 2 +-
- configs/beaglebone_defconfig                          | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Thanks!
 
-diff --git a/board/beagleboard/beaglebone/patches/uboot/uboot.hash b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
-index fe9b4f53dc63..904fa56c02a3 100644
---- a/board/beagleboard/beaglebone/patches/uboot/uboot.hash
-+++ b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
-+sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 8253a8513ee3..cad32e90b1ac 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -24,10 +24,11 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
+Seems Aaron already does a lot to improve this by moving to CMake. I asked him
+for a few changes in his PR and most likely we soon have the updated version in
+Buildroot that satisfies the requirements.
+
+
 -- 
-2.43.0
+With Best Regards,
+Andy Shevchenko
+
 
 _______________________________________________
 buildroot mailing list
