@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB32DD767F2
-	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 17:49:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10807D767F4
+	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 17:49:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD77C411D8;
-	Thu, 31 Oct 2024 17:49:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6FDD600CB;
+	Thu, 31 Oct 2024 17:49:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id maEInekVwmLz; Thu, 31 Oct 2024 17:49:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4AWmd06ujWDZ; Thu, 31 Oct 2024 17:49:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80BA7411E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC4E760610
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80BA7411E4;
-	Thu, 31 Oct 2024 17:49:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id F3EA65E4F
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:49:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC4E760610;
+	Thu, 31 Oct 2024 17:49:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 084A05E50
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D2770411D8
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:49:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DD5434018E
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:49:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Eq3HEPyvyDrl for <buildroot@buildroot.org>;
- Thu, 31 Oct 2024 17:49:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oOh0yiuTlnmo for <buildroot@buildroot.org>;
+ Thu, 31 Oct 2024 17:49:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4F69411E4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C4F69411E4
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:49:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ABA8684F30; Thu, 31 Oct 2024 17:49:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 31 Oct 2024 18:45:48 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9e3d572ff532df945fbc282fed22d10098e5718b
-X-Git-Newrev: 4569909dfd93fc0d396c68760fefa4fcc9383229
-X-Patchwork-Hint: ignore
-Message-Id: <20241031174939.ABA8684F30@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zabbix: update to 7.0.5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9155140158
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9155140158
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9155140158
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:49:43 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 837B61C0006;
+ Thu, 31 Oct 2024 17:49:40 +0000 (UTC)
+Date: Thu, 31 Oct 2024 18:49:39 +0100
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+Message-ID: <20241031184939.1f2fb8fe@windsurf>
+In-Reply-To: <ZyNxnz3raEBsZU7x@waldemar-brodkorb.de>
+References: <ZyNxnz3raEBsZU7x@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730396980;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=X0t+xpZABYwsAw25mMZezq2t0j669mpbVz/H5FgVT3c=;
+ b=MvPW09kn7XDmdadB8Afm3c1kI0cCMsIzuPpfvu5hdf2pngOYvBqLNE81HKPkwSvgmpoKpW
+ SEKOYW30UkNdigb3WgBzZbGaELdmvkagy5LA8eA4Ee4raP/f7OkAyjUpatT/v+lu2xQr+o
+ /jijPVPs8PR392Os39js+s6JwJFxX1Ql4Vt6RywyC1TKnvCV5x4KzwY77dgHmXUOs8FUSU
+ DABAvc8OKU6wm5HxOoEHd2uXvlOkYtoH0T+WzymqiIdbZkBnAHbw/qN6cVu0dCRaa+/Nt6
+ E9K8kAAjVjFMRT0s8EYhLeiMN9UFB+izl1rS7Ld0LT10ngHm9b5NSTPjAF134Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=MvPW09kn
+Subject: Re: [Buildroot] [PATCH] package/zabbix: update to 7.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,47 +83,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4569909dfd93fc0d396c68760fefa4fcc9383229
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 31 Oct 2024 13:01:35 +0100
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-See here for release notes:
-https://www.zabbix.com/rn/rn7.0.5
+> See here for release notes:
+> https://www.zabbix.com/rn/rn7.0.5
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/zabbix/zabbix.hash | 2 +-
+>  package/zabbix/zabbix.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/zabbix/zabbix.hash | 2 +-
- package/zabbix/zabbix.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/zabbix/zabbix.hash b/package/zabbix/zabbix.hash
-index 843dc445d6..b4b71db5c8 100644
---- a/package/zabbix/zabbix.hash
-+++ b/package/zabbix/zabbix.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  173059f57f11716146da79345e5a6bc52eceee6a5c4410664b8500a955598b2a  zabbix-7.0.3.tar.gz
-+sha256  215301b6e089a685a2fabcca17fc65e5766d42d2079174b65a1bf28df7679692  zabbix-7.0.5.tar.gz
- sha256  0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0  COPYING
-diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
-index dda60ef161..318030214c 100644
---- a/package/zabbix/zabbix.mk
-+++ b/package/zabbix/zabbix.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- ZABBIX_VERSION_MAJOR = 7.0
--ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).3
-+ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).5
- ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/stable/$(ZABBIX_VERSION_MAJOR)
- ZABBIX_SELINUX_MODULES = zabbix
- ZABBIX_LICENSE = AGPL-3.0
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
