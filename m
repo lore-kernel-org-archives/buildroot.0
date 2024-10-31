@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF1E0D767F4
-	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 18:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2F0ED767F4
+	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 18:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 884FD403BD;
-	Thu, 31 Oct 2024 18:08:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76B38405AA;
+	Thu, 31 Oct 2024 18:09:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GE-HyOeIUpLA; Thu, 31 Oct 2024 18:08:46 +0000 (UTC)
+ id nWVyYx3Hu1pO; Thu, 31 Oct 2024 18:09:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67728403C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47FDE402F3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67728403C9;
-	Thu, 31 Oct 2024 18:08:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 261DC5E53
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 18:08:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47FDE402F3;
+	Thu, 31 Oct 2024 18:09:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 194E65E50
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 18:09:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 07BE360AEB
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 18:08:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06F474018E
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 18:09:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MIrsjs1KUNnJ for <buildroot@buildroot.org>;
- Thu, 31 Oct 2024 18:08:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n9Gc3pFPfzqB for <buildroot@buildroot.org>;
+ Thu, 31 Oct 2024 18:09:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4660360AE6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4660360AE6
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 18:08:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 33306851A2; Thu, 31 Oct 2024 18:08:41 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 31 Oct 2024 19:08:19 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6820fa3ef794ecb80cf3ca14a551539e16dcf563
-X-Git-Newrev: 964102392b5babc10f2d344be07fd606ca76c0b7
-X-Patchwork-Hint: ignore
-Message-Id: <20241031180841.33306851A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtc-tools: bump to version 2022.02
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A485240141
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A485240141
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A485240141
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 18:09:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CD15B20008;
+ Thu, 31 Oct 2024 18:09:16 +0000 (UTC)
+Date: Thu, 31 Oct 2024 19:09:15 +0100
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: buildroot@buildroot.org
+Message-ID: <20241031190915.499a7170@windsurf>
+In-Reply-To: <20241030133416.505410-2-wsa+renesas@sang-engineering.com>
+References: <20241030133416.505410-2-wsa+renesas@sang-engineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730398157;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=5Pa35SqesaL1zEZLXFZ9OgEzHek69z+LjChEukv0kas=;
+ b=ZwkiY5iw2m97ANkfcsK0iqNiewXSf3JXvf1JNddz/PPSBA9zP3sgmpssqICrQo2IG7gNdw
+ LcufXDDGF7Q6gPLuORVyBRKk2YfeXDlaZltgtCllMcgVBjIjdPF047hOZptMltVEilo9ko
+ dhJ1VC8ZzfIc/cJ4xZkk3466u7kLc1gtevQcegbggmcnPhs3b9ah19beFA6dcK1+orC56v
+ Oj4Q5Ihx3I4xp4bVlHMonsXF+Oyqv2f5ZCQVzJTz5aHJlXbB3i0IE0Z9wWbQaijpUboOHb
+ Iv6B9wo5cyMjVAjq56fpP1i65QBAnZdaVblUD4i3/4MmOFiRerj0AkYwLDgizQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZwkiY5iw
+Subject: Re: [Buildroot] [PATCH] package/rtc-tools: bump to version 2022.02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,44 +83,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=964102392b5babc10f2d344be07fd606ca76c0b7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Wolfram,
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rtc-tools/rtc-tools.hash | 2 +-
- package/rtc-tools/rtc-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Wed, 30 Oct 2024 15:34:15 +0200
+Wolfram Sang <wsa+renesas@sang-engineering.com> wrote:
 
-diff --git a/package/rtc-tools/rtc-tools.hash b/package/rtc-tools/rtc-tools.hash
-index a3f3bdcc11..edf65bf968 100644
---- a/package/rtc-tools/rtc-tools.hash
-+++ b/package/rtc-tools/rtc-tools.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  68b6820aeb8132b3f034fb79cf761c4549373d67641afb05b58641f1d32bb69f  rtc-tools-33ef4aa1c92b0c92a351284d93d1ac5570de9cc7-git4.tar.gz
-+sha256  bc5f025b9d326513f8f0cf3c5afee7d18fa0898b53312881a20f7c099b83f5ae  rtc-tools-2022.02-git4.tar.gz
- sha256  7ae50a5344af14d6231aff6814632a220b3127da4099aea2c6070fd79c407c1a  COPYING
-diff --git a/package/rtc-tools/rtc-tools.mk b/package/rtc-tools/rtc-tools.mk
-index 2882c88575..546c3cd9ea 100644
---- a/package/rtc-tools/rtc-tools.mk
-+++ b/package/rtc-tools/rtc-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTC_TOOLS_VERSION = 33ef4aa1c92b0c92a351284d93d1ac5570de9cc7
-+RTC_TOOLS_VERSION = 2022.02
- RTC_TOOLS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git
- RTC_TOOLS_SITE_METHOD = git
- RTC_TOOLS_LICENSE = GPL-2.0
+> diff --git a/package/rtc-tools/rtc-tools.mk b/package/rtc-tools/rtc-tools.mk
+> index 2882c88575..a2adc82a9b 100644
+> --- a/package/rtc-tools/rtc-tools.mk
+> +++ b/package/rtc-tools/rtc-tools.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -RTC_TOOLS_VERSION = 33ef4aa1c92b0c92a351284d93d1ac5570de9cc7
+> -RTC_TOOLS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git
+> +RTC_TOOLS_VERSION = 2022.02
+> +RTC_TOOLS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git/snapshot
+
+It wasn't clear to me what you change the _SITE variable, as it isn't
+needed. So I dropped this change, and applied the rest of your patch.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
