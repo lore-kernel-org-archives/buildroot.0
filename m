@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37A23E67480
-	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 21:12:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B135E67486
+	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 21:34:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F52C408C7;
-	Thu, 31 Oct 2024 21:12:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEC3E407E2;
+	Thu, 31 Oct 2024 21:34:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sFAF4p05u_st; Thu, 31 Oct 2024 21:12:14 +0000 (UTC)
+ id VJ-__MJRnsIv; Thu, 31 Oct 2024 21:34:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E84F5408A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70EFC407E3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E84F5408A6;
-	Thu, 31 Oct 2024 21:12:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 943BE5E46
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 21:12:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70EFC407E3;
+	Thu, 31 Oct 2024 21:34:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4BBF05B1E
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 21:34:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 81DCB400EF
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 21:12:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2CDFF80EAB
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 21:34:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YiAI7GyGEK_F for <buildroot@buildroot.org>;
- Thu, 31 Oct 2024 21:12:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=194.117.254.33;
- helo=mail.zeus03.de; envelope-from=wsa+renesas@sang-engineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9079E400D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9079E400D7
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9079E400D7
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 21:12:08 +0000 (UTC)
-Received: (qmail 3548613 invoked from network); 31 Oct 2024 22:12:05 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted,
- authenticated); 31 Oct 2024 22:12:05 +0100
-X-UD-Smtp-Session: l3s3148p1@hwA7RcwlbNvDwPty
-Date: Thu, 31 Oct 2024 23:11:59 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Message-ID: <ZyPyn7eBdvkPHFRe@shikoro>
-References: <20241030133416.505410-2-wsa+renesas@sang-engineering.com>
- <20241031190915.499a7170@windsurf>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b9GbCZLsA8Ax for <buildroot@buildroot.org>;
+ Thu, 31 Oct 2024 21:34:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 045038169E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 045038169E
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 045038169E
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 21:34:25 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id AA8EEB0054E;
+ Thu, 31 Oct 2024 22:34:18 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>,
+	Romain Naour <romain.naour@gmail.com>
+Date: Thu, 31 Oct 2024 22:33:40 +0100
+Message-ID: <20241031213348.2057705-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-In-Reply-To: <20241031190915.499a7170@windsurf>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- sang-engineering.com; h=date:from:to:cc:subject:message-id
- :references:mime-version:content-type:in-reply-to; s=k1; bh=zv9g
- kPUzVxeJKBDqGAD1JxhPlYoYvpoS8S3mj4ToFJQ=; b=MgEWv9NUcItDRY4080Wd
- WTLFMEVT/SO6ugUEMRqocNgP0xYNkPwsgn517cbKCSBVaaXy4nX1eeYBQcPtPVJS
- nCeHVdo97rkmMPNYHCnhsQMYeamthNEFCtfP8+/sdjdnc3lQNHsO2C3eA5Y4nRkp
- 7RERYlkbnGFlIBRwPatA2FfpUVCJZY60q04zdjIBRnV6hdZR543SiLXM4B6/A+Mf
- DtskNfAnqwT6pJH2ual8kKuTBtj+KAaqz5G7TOMCXLLWejLjCaOrim588Px0y87P
- q1QewrGGuzXZN2LTBIs/jUX+i+HFw66Qf2rVpvsTOIjObgu/VTM+whk8uiTl+2cb
- CQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=sang-engineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1730410462;
+ bh=vakmMF7HQ2D/Xx7dts9pG/ch23V8US2reS1CznBIOds=;
+ h=From:To:Cc:Subject:Date:From;
+ b=BVdICabg05qxRa0Zjb9h39MskUPl7X3CMtgqm09r/wg8tL88pW/CV3+Kgzcwskwlb
+ EuJHXFpHcftlsQEozx3Z2byRPLZpU/NvmoNZhj7ZrjZs2xfpjxlDvU7AJOHCG85zol
+ hNqPauTf7pcKOqOKZKFq52/JXAzo53SiSiAXB0AD8KN8Bu+CpAJPXUxQgOR9C39Jah
+ xaIdaguHhpSoLLps0/1K8P6m85T44+hSFa5+v86ZBaW9tAQaZki993e0VMjlxLdQsT
+ Cs5FDbsw+LPkc2DY0tt6kqnqVaM/oXZ6+iFSxk1ctE46KysSnCOrWpw+D9ovmIpYPs
+ j879tWJ53qZ8g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=sang-engineering.com header.i=@sang-engineering.com
- header.a=rsa-sha256 header.s=k1 header.b=MgEWv9NU
-Subject: Re: [Buildroot] [PATCH] package/rtc-tools: bump to version 2022.02
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=BVdICabg
+Subject: [Buildroot] [PATCH v3 0/8] *** Fixes for
+ qemu_aarch64_sbsa_defconfig ***
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,63 +79,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============7352668053364399269=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+This v3 of the series extends the v2 posted at:
+https://patchwork.ozlabs.org/project/buildroot/list/?series=430015&state=*
+by addding new patches to fix runtime tests.
 
---===============7352668053364399269==
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="IkgcPtgoNrdPQ+qa"
-Content-Disposition: inline
+I only added comments in the commit log in patch #3 and #4.
+
+Note that the Buildroot mailing list may alter the edk2 package
+patch by converting CR-LF newlines.
+
+This patch series is also available at:
+https://gitlab.com/jolivain/buildroot/-/commits/fix_edk2_tests/
+
+This series was tested with commands:
+
+    make qemu_aarch64_sbsa_defconfig
+    make
+    output/images/start-qemu.sh
+
+    utils/docker-run make check-package
+
+    utils/docker-run support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.boot.test_edk2
+
+    utils/docker-run support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.boot.test_grub.TestGrubAArch64EFI
+
+    utils/docker-run support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.package.test_fwts
 
 
---IkgcPtgoNrdPQ+qa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Julien Olivain (5):
+  support/testing: disable tests using edk2 on aarch64 architecture
+  support/testing/infra/emulator.py: add build host dir to qemu search
+    path
+  support/testing: test_edk2: update and re-enable the test
+  support/testing: test_fwts: update and re-enable the test
+  support/testing: test_grub: update and re-enable the test
 
+Romain Naour (3):
+  configs/qemu_aarch64_sbsa_defconfig: update ATF to v2.11
+  boot/edk2: bump to version edk2-stable202405
+  configs/qemu_aarch64_sbsa_defconfig: switch to neoverse-n1 (armv8.2a)
 
-> It wasn't clear to me what you change the _SITE variable, as it isn't
-> needed. So I dropped this change, and applied the rest of your patch.
+ board/qemu/aarch64-sbsa/readme.txt            |   2 +-
+ .../arm-trusted-firmware.hash                 |   1 +
+ ...oDxe-add-feature-PCD-to-remap-frameb.patch | 129 ++++++++++++++++++
+ boot/edk2/edk2.hash                           |   2 +-
+ boot/edk2/edk2.mk                             |   2 +-
+ configs/qemu_aarch64_sbsa_defconfig           |   7 +-
+ package/edk2-platforms/edk2-platforms.hash    |   2 +-
+ package/edk2-platforms/edk2-platforms.mk      |   2 +-
+ support/testing/infra/emulator.py             |   6 +-
+ support/testing/tests/boot/test_edk2.py       |   6 +-
+ support/testing/tests/boot/test_grub.py       |   2 +
+ support/testing/tests/package/test_fwts.py    |   4 +-
+ 12 files changed, 152 insertions(+), 13 deletions(-)
+ create mode 100644 boot/edk2/0001-OvmfPkg-QemuVideoDxe-add-feature-PCD-to-remap-frameb.patch
 
-Well, I am new to updating buildroot, and when my simple update did not
-work, I copy&pasted the 'snapshot' addition to _SITE from another
-package, and then it worked. It was probably something else, because
-your simplified version now works for me as well. Things happen, sorry
-about the confusion!
-
-
---IkgcPtgoNrdPQ+qa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmcj8poACgkQFA3kzBSg
-Kbb77A/9F4wVndKE1Ey4cuSO8YOJuvgmu7PKUnCoi18ahSBZw/R5PUq0575oBZSn
-3+lxzaSim+67jB93n22u8ppYYYQxDbxnZ1AbcXfl8L5FfDhBPrVcGtZikgyjP+U2
-1fbuEcn5aWxRpGMU0J3ZWHAw8J3gCttRRTVHUh35a0rW+0O8q/nJXstX3luMZCfb
-SZkd3WNrW5Q0bSBA9XWbKVF63Xhkgvaz8tN0dWGIdlH0NqEGKOoFgM8g/e+c4g8I
-AsRM1w6jQsi+jykp9UgXuR7fluiDSArTcr04qaF6jq0hCTZ9+Xho0y7yQuam3htF
-BkRGKUzCMj1KBBaitpUoguqbQgjd6KxBXN23lGr2fMm+IBqc1vxm/JGK5fubOzH8
-yHFWO4aOcYvxgdonReY0QmQwI6EFhqYdpfmg1zgwSPmUPWMiuvlfLJZ35j/HZoWp
-nHCly6fSrEc7EReZXdUTRh2exNipv+dOSr8z4ZjgJZ/9mYHi7b4aBrsdw+d0GVfI
-fcB43/Cizdd4KidDg/diCeKvN51R7DUY2P1bP5nf9A2ALBfBQDK19ShZ5Mh9QDZS
-Hkjd2S/VorkQjfEtxZuwW82JIbxxRCMJF/59fbO0Y1/LCkmdOSfHbeM5Dxa2HTB6
-QIp7c3eUURi5fYPn68kmtssdQ5mrdLWSBjLFQkrQaNp/XxYUuwg=
-=081T
------END PGP SIGNATURE-----
-
---IkgcPtgoNrdPQ+qa--
-
---===============7352668053364399269==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+-- 
+2.47.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7352668053364399269==--
