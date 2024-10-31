@@ -1,76 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBE6ED767FD
-	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 20:01:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1935D767FA
+	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 20:01:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9612380F22;
-	Thu, 31 Oct 2024 20:01:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D93F4094F;
+	Thu, 31 Oct 2024 20:01:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9oi207B11Tmw; Thu, 31 Oct 2024 20:01:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4ArABoGuTmyb; Thu, 31 Oct 2024 20:01:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C08CF80F34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59D5B4092E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C08CF80F34;
-	Thu, 31 Oct 2024 20:01:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 80BFC5E50
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59D5B4092E;
+	Thu, 31 Oct 2024 20:01:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 218A05E4F
  for <buildroot@buildroot.org>; Thu, 31 Oct 2024 20:00:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6EED560C06
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0DE384092E
  for <buildroot@buildroot.org>; Thu, 31 Oct 2024 20:00:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EclvFfuGPUwF for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iQwdYGxZd0We for <buildroot@buildroot.org>;
  Thu, 31 Oct 2024 20:00:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 52BE060BDD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52BE060BDD
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 52BE060BDD
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 20:00:58 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5409BC0005;
- Thu, 31 Oct 2024 20:00:55 +0000 (UTC)
-Date: Thu, 31 Oct 2024 21:00:54 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Alexandre Esse <alexandre.esse.dev@gmail.com>
-Message-ID: <20241031210054.3353eaf2@windsurf>
-In-Reply-To: <20241031185057.427423-1-bernd@kuhls.net>
-References: <20241031185057.427423-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E6B4D4092C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6B4D4092C
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E6B4D4092C
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 20:00:57 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a02c6.dip0.t-ipconnect.de [91.58.2.198])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 8E952A4C0EEA;
+ Thu, 31 Oct 2024 21:00:52 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:34224)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98)
+ (envelope-from <bernd@kuhls.net>) id 1t6bLf-000000000uY-3Ta2;
+ Thu, 31 Oct 2024 20:00:52 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Thu, 31 Oct 2024 21:00:51 +0100
+Message-Id: <20241031200051.1097467-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1730404855;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=uvyyF7mG4QZK0yE9ZG4fptnU3GQQ6opTbRFws17acoE=;
- b=nTA228A4G9eQNApFYI0GlJyoiMURFUFZTgKyqx/PDELubVALCw246b+IVEQrTTNBkNRD4n
- kYzG2s3rgQknSHF4p4H7ej93SSTvD20xpq+rbWuJbkT231OpGn7QPoN4ueiwbC5z5/mfm9
- ExIoPEo0T9oMeS7CPMpEMEhEABUE/mMfA2843oDPIZJUnhFkMPGMv9gtJTQx3IZ1zqpQV0
- lPL1dBdpJ+Al9+wpWYeep+QZqjrqpiP20P63xJdPKKHKH9ZnchtehZ/80O4MOozJ+F36Ih
- TCvh4dcK4/rX4NdOsfZ3hU/5v/G/+NCO5tZlrOVn77pm0fCObRd9Ii359J/wQw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=kuhls.net; 
+ s=kas202406071026; t=1730404852;
+ bh=pRTbauZaReN/SV866+mn81e8TlgWOpEzwxGg17T5X0o=;
+ h=From:To:Cc:Subject:Date:From;
+ b=oY/YrCeouVDh7wFZkcxi32leEaAx1jop0zMq4oHi8V4KagwhOLHavd5ukkqcJpW1h
+ 4n8QZx0fb9VCCgqF82DggscPr2f9y9vr/IAUa7nHOgFe1stccDirj2mzjAKMzg+PX5
+ LYxd0UjOyHZlzNcV4ut1WlMdmXjTHc6M4eusveJ0pMmL9S7lEaxJxUGIqjmb5/e/Il
+ TCiTombbYOZIIKr5rKrQoNTrRNZwmewxI/MpvpS4+NCr96f2ZFiwUJzXghpL9IaXJQ
+ 02xKuqM3hkfR/u4K5+iHLzxUkKSF8P9+i99uvHG3LlI4vFMMccVnfyDPAdoIeRtqG4
+ hN//vScfBbvvA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nTA228A4
-Subject: Re: [Buildroot] [PATCH 1/1] package/v4l2loopback: bump version to
- 0.13.2
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202406071026 header.b=oY/YrCeo
+Subject: [Buildroot] [PATCH 1/1] package/python-cryptography: requires RC4
+ support in openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,35 +81,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 31 Oct 2024 19:50:57 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+Fixes:
+http://autobuild.buildroot.net/results/988/98819c1e202ddd77a390c9063ad31ee0601fefbe/
 
-> Changelog:
-> https://github.com/umlaeute/v4l2loopback/blob/v0.13.2/ChangeLog
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/356/356be839ce23154e9f808469b4483e7eaae316e1/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/v4l2loopback/v4l2loopback.hash | 2 +-
->  package/v4l2loopback/v4l2loopback.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+The build error, afaics, first appeared in
+http://autobuild.buildroot.net/results/a08/a087c27dbc92c643f607ca9c66977156778ff1a0//
+after the bump to version 43.0.1 with buildroot commit
+37c397c8b691495b21623b7d0a4d1e5ee7f0f61e which added chacha support when
+building with libopenssl.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/python-cryptography/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
+diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
+index d12f040656..51b408823f 100644
+--- a/package/python-cryptography/Config.in
++++ b/package/python-cryptography/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA if BR2_PACKAGE_LIBOPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_PYTHON_CFFI # runtime
+ 	help
+ 	  cryptography is a package designed to expose cryptographic
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
