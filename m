@@ -4,74 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14B1AD767F6
-	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 18:22:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFB9DD767F4
+	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 18:26:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D327060B1D;
-	Thu, 31 Oct 2024 18:22:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7CE460AC9;
+	Thu, 31 Oct 2024 18:26:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a0Pt93YwsnT3; Thu, 31 Oct 2024 18:22:41 +0000 (UTC)
+ id bY0x5WcaesQd; Thu, 31 Oct 2024 18:26:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E26EB60AFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FB7760AFC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E26EB60AFD;
-	Thu, 31 Oct 2024 18:22:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 670AF494E
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 18:22:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FB7760AFC;
+	Thu, 31 Oct 2024 18:26:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 48C5C494E
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 18:26:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 43EC780D1F
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 18:22:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 285CE40204
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 18:26:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id suvZPoX-D_v2 for <buildroot@buildroot.org>;
- Thu, 31 Oct 2024 18:22:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r_8thMDuOhXz for <buildroot@buildroot.org>;
+ Thu, 31 Oct 2024 18:26:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 33C4F80CE9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33C4F80CE9
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 33C4F80CE9
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 18:22:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A6A4D40002;
- Thu, 31 Oct 2024 18:22:34 +0000 (UTC)
-Date: Thu, 31 Oct 2024 19:22:33 +0100
-To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Cc: Marcus Hoffmann <buildroot@bubu1.eu>, Marcus Hoffmann
- <marcus.hoffmann@othermo.de>, Sen Hastings <sen@hastings.org>, "Yann E.
- MORIN" <yann.morin.1998@free.fr>, Norbert Lange <nolange79@gmail.com>
-Message-ID: <20241031192233.65bb353e@windsurf>
-In-Reply-To: <20241030114547.555006-1-buildroot@bubu1.eu>
-References: <20241030114547.555006-1-buildroot@bubu1.eu>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1730398955;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=wr9G8H/y1lHPW81H7ga7rPEa7HUeSdcC3FVTFv8JETE=;
- b=VJ+4UjoPn/xIHTnTVGjAUO722yJwZxuI/nt5K7AALfN3cU06SF+/v3yhy/i6C1oDLjwb6T
- LrcegXqDOR4KQuqmDi3wrFNAMtWtw1LC0Cu0qFyGC93FoW0z/3enjTAC8UPi/Vedab0xap
- FMSNcyXjTsIa+kXxjWItSsEVgpFFrkYTQmDR8nZsGoUl1UwXhBUtx99UjCunZYYpTgeJf3
- xGTHmpkeEAMvA2XKvfhoTKw9nHzJOJ/wLWyKtp291qg2UvrbZ4x1HUa7MfOW/RrmTNAuPd
- 7dc08XanPOmcghiIVFx1Mb3a8C7d8vDaolyCOonCSOGL+pnO5cOBa6eaUhmlkQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VJ+4UjoP
-Subject: Re: [Buildroot] [PATCH] package/systemd: bump to 256.7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3563B40158
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3563B40158
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 18:26:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1FCA7852A6; Thu, 31 Oct 2024 18:26:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 31 Oct 2024 19:22:42 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 378110eb597de6fdab09df8f9da2233cb04dc820
+X-Git-Newrev: 75fca5bb5fa61e91c0274b377677e2e5592fd452
+X-Patchwork-Hint: ignore
+Message-Id: <20241031182644.1FCA7852A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-compat53: bump to version
+ 0.14.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,33 +60,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 30 Oct 2024 12:45:38 +0100
-Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=75fca5bb5fa61e91c0274b377677e2e5592fd452
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-> 
-> Remove patch that was applied upstream.
-> 
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-> ---
->  ...g_loop.h-fix-missing-LOOP_SET_BLOCK_.patch | 38 -------------------
->  package/systemd/systemd.hash                  |  2 +-
->  package/systemd/systemd.mk                    |  2 +-
->  3 files changed, 2 insertions(+), 40 deletions(-)
->  delete mode 100644 package/systemd/0001-src-basic-missing_loop.h-fix-missing-LOOP_SET_BLOCK_.patch
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lua-compat53/lua-compat53.hash | 4 ++--
+ package/lua-compat53/lua-compat53.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lua-compat53/lua-compat53.hash b/package/lua-compat53/lua-compat53.hash
+index 1930063fdc..cd2c35d621 100644
+--- a/package/lua-compat53/lua-compat53.hash
++++ b/package/lua-compat53/lua-compat53.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256  bff8e597384776de7c139bee7d6a6f2c05c3eb7315d08733473fa986720cec60  compat53-0.12-1.src.rock
+-sha256  870cdff7e4db4c2e84a335b2b9e242b9f963830550026e2057a5885e945982e5  lua-compat-5.3-0.12/LICENSE
++sha256  987e286e63e568c2a7d50b6a66ea9d4189254be49ebd6477ed8945e23e195c44  compat53-0.14.3-1.src.rock
++sha256  870cdff7e4db4c2e84a335b2b9e242b9f963830550026e2057a5885e945982e5  lua-compat-5.3-0.14.3/LICENSE
+diff --git a/package/lua-compat53/lua-compat53.mk b/package/lua-compat53/lua-compat53.mk
+index 12ac5c011b..048a52279f 100644
+--- a/package/lua-compat53/lua-compat53.mk
++++ b/package/lua-compat53/lua-compat53.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_COMPAT53_VERSION_UPSTREAM = 0.12
++LUA_COMPAT53_VERSION_UPSTREAM = 0.14.3
+ LUA_COMPAT53_VERSION = $(LUA_COMPAT53_VERSION_UPSTREAM)-1
+ LUA_COMPAT53_NAME_UPSTREAM = compat53
+ LUA_COMPAT53_SUBDIR = lua-compat-5.3-$(LUA_COMPAT53_VERSION_UPSTREAM)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
