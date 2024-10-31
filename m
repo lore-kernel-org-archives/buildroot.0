@@ -1,52 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FF5FD767FB
-	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 19:54:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C9D6D767FA
+	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 19:54:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E99A3405C5;
-	Thu, 31 Oct 2024 19:54:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1029981461;
+	Thu, 31 Oct 2024 19:54:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BIpvQCQ4CLJd; Thu, 31 Oct 2024 19:54:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oGdBLYZ_X915; Thu, 31 Oct 2024 19:54:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7B1F40678
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CC3F8148F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7B1F40678;
-	Thu, 31 Oct 2024 19:54:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2AA6D5E4F
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 19:54:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CC3F8148F;
+	Thu, 31 Oct 2024 19:54:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A0B585E50
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 19:54:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B76460AD5
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 19:54:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 81E154021C
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 19:54:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wR5KGUkB-Ax5 for <buildroot@buildroot.org>;
- Thu, 31 Oct 2024 19:54:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MskUDSGnAuIA for <buildroot@buildroot.org>;
+ Thu, 31 Oct 2024 19:54:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3252D6073E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3252D6073E
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 19:54:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2B68C85518; Thu, 31 Oct 2024 19:54:27 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 31 Oct 2024 20:54:09 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8756b76a0f8d4844c7389c7fc45dbbfc880ebae1
-X-Git-Newrev: 5ab8eb3cac0c87c850c800d639004205807faf27
-X-Patchwork-Hint: ignore
-Message-Id: <20241031195427.2B68C85518@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnuplot: fix build failures on
- undefined FE_UNDERFLOW
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0E681400D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E681400D7
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0E681400D7
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 19:54:34 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A8C241C0005;
+ Thu, 31 Oct 2024 19:54:31 +0000 (UTC)
+Date: Thu, 31 Oct 2024 20:54:30 +0100
+To: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Cc: buildroot@buildroot.org, Michael Fischer <mf@go-sys.de>, Anthony
+ Viallard <viallard@syscom-instruments.com>
+Message-ID: <20241031205430.45907fec@windsurf>
+In-Reply-To: <e229fa46-f9ef-4ab6-b7d2-523809e2a3d6@grenoble.cnrs.fr>
+References: <7a7eb00c-ce72-4a05-adf2-7229578c0030@grenoble.cnrs.fr>
+ <e229fa46-f9ef-4ab6-b7d2-523809e2a3d6@grenoble.cnrs.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730404472;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=qnwf9SV5f2rXEesuDL4tzjIXPk9hcP+LnakMPkJnnCg=;
+ b=hCXIDE+Nxd7gxE/cRxZfHd45VCUWFxUNCp1TlmfUZYkrsz/MhzNsb3s18CUz8yDddCl29j
+ 9YYBxYs321QzAUepPhQw3LcdzvFokpwxKuEjSnt1OSQbBamhZPHU1EeB4C4sojzxxGjkwn
+ KCBF63k/Ti3Y9jTo7cQdQElZx+vgr1fHBXAir92myfn7+YQCfglP/NmlxjjBCjODpXHxbW
+ GBfQLtuYfPGK30+EOKgjJK9qhFRlFOuWZ+50Lq3nyxQenOxNySUERdBwlHRWHeG3DkVg2B
+ SwSHOgX7lGQzmBWwIuiJnURnmn7vvIbPjtII501V/iOGhzdojPMDhcCZm+IpIw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=hCXIDE+N
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/gnuplot: fix build failures
+ on undefined FE_UNDERFLOW
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,69 +86,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ab8eb3cac0c87c850c800d639004205807faf27
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 27 Sep 2024 14:09:01 +0200
+Edgar Bonet <bonet@grenoble.cnrs.fr> wrote:
 
-Gnuplot carries the implicit assumption that, if the header fenv.h is
-available, then it must define FE_UNDERFLOW. This assumption fails on
-microblaze{,el}, mips{,64}{,el}, nios2 and or1k.
+> Gnuplot carries the implicit assumption that, if the header fenv.h is
+> available, then it must define FE_UNDERFLOW. This assumption fails on
+> microblaze{,el}, mips{,64}{,el}, nios2 and or1k.
+> 
+> Fixes:
+>   - https://autobuild.buildroot.org/results/aa177c4f4f7c7429f052cebbf54f7027e4b2cabd/
+>   - https://autobuild.buildroot.org/results/868ca441daa2485b997f307edeede31dd229bfc2/
+>   - https://autobuild.buildroot.org/results/0a152cbfe23703bc5012098864d7fd5608775882/
+>   - https://autobuild.buildroot.org/results/d43be86091c9bd9163c145264151532f0f485528/
+> Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+> ---
+> Changes v1 -> v2:
+>   - replaced the submitted patch with the version accepted upstream
+>     (different title and slightly different contents)
+>   - removed Upstream: link to the submitted patch
+>   - added Upstream: links to the accepted commits (for 'master' and the
+>     'branch-6-0-stable' maintenance branch)
+>   - in the commit log, updated the list of architectures where the build
+>     fails
+>   - in the commit log, updated Fixes: links to point to the latest
+>     failure on each architecture family
 
-Fixes:
-  - https://autobuild.buildroot.org/results/aa177c4f4f7c7429f052cebbf54f7027e4b2cabd/
-  - https://autobuild.buildroot.org/results/868ca441daa2485b997f307edeede31dd229bfc2/
-  - https://autobuild.buildroot.org/results/0a152cbfe23703bc5012098864d7fd5608775882/
-  - https://autobuild.buildroot.org/results/d43be86091c9bd9163c145264151532f0f485528/
+Applied to master, thanks a lot!
 
-Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0002-check-for-defined-FE_UNDERFLOW.patch      | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
-
-diff --git a/package/gnuplot/0002-check-for-defined-FE_UNDERFLOW.patch b/package/gnuplot/0002-check-for-defined-FE_UNDERFLOW.patch
-new file mode 100644
-index 0000000000..e84c72aaed
---- /dev/null
-+++ b/package/gnuplot/0002-check-for-defined-FE_UNDERFLOW.patch
-@@ -0,0 +1,32 @@
-+From 806641b5ef504488f871b5cbd9e5c356d67d0bd1 Mon Sep 17 00:00:00 2001
-+From: Edgar Bonet <bonet@grenoble.cnrs.fr>
-+Date: Tue, 24 Sep 2024 20:03:18 -0700
-+Subject: [PATCH] check for defined(FE_UNDERFLOW)
-+
-+According to fenv(3), the macro FE_UNDERFLOW is defined by fenv.h only
-+if the implementation supports handling of the underflow exception. Do
-+not assume the presence of fenv.h implies FE_UNDERFLOW is defined.
-+
-+Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
-+Upstream: https://sourceforge.net/p/gnuplot/gnuplot-main/ci/926d2c26d31f4b69feda372c76a28643ef45359d/
-+Upstream: https://sourceforge.net/p/gnuplot/gnuplot-main/ci/806641b5ef504488f871b5cbd9e5c356d67d0bd1/
-+---
-+ src/complexfun.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/complexfun.c b/src/complexfun.c
-+index 7a5d9a13f..7ddb4ed60 100644
-+--- a/src/complexfun.c
-++++ b/src/complexfun.c
-+@@ -86,7 +86,7 @@
-+ 	int_error(NO_CARET, "%s: error present on entry (errno %d %s)", who, errno, strerror(errno));
-+ #endif
-+ 
-+-#ifdef HAVE_FENV_H
-++#if defined (HAVE_FENV_H) && defined (FE_UNDERFLOW)
-+ #define handle_underflow( who, var ) \
-+     if (errno) { \
-+ 	if (fetestexcept(FE_UNDERFLOW)) { \
-+-- 
-+2.34.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
