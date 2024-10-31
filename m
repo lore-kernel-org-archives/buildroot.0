@@ -1,95 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CB9BD767E9
-	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 17:26:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 577CED767F2
+	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 17:33:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDC6E408A9;
-	Thu, 31 Oct 2024 17:26:05 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ypAd2rH-Uwgd; Thu, 31 Oct 2024 17:26:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7DFC408D6
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7DFC408D6;
-	Thu, 31 Oct 2024 17:26:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F14A5E50
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:26:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D0E660C21
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:26:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 10511605FC;
+	Thu, 31 Oct 2024 17:33:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q6prDQyOkNaL for <buildroot@buildroot.org>;
- Thu, 31 Oct 2024 17:26:02 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom; client-ip=192.198.163.17;
- helo=mgamail.intel.com; envelope-from=andriy.shevchenko@linux.intel.com;
+ id Vamur8mg2Afm; Thu, 31 Oct 2024 17:33:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 142F860A99
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 142F860A99;
+	Thu, 31 Oct 2024 17:33:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6CF755E4F
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:33:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5AE3060A62
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:33:23 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8cCkG7ENy5nu for <buildroot@buildroot.org>;
+ Thu, 31 Oct 2024 17:33:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3313E60C15
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3313E60C15
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3313E60C15
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:26:02 +0000 (UTC)
-X-CSE-ConnectionGUID: Ar5jhwzcRI28A96K02P98Q==
-X-CSE-MsgGUID: cdOdzn3fQ6SaZYpnGdkJvQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11242"; a="30041721"
-X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; d="scan'208";a="30041721"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
- by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 31 Oct 2024 10:26:02 -0700
-X-CSE-ConnectionGUID: Hdz/AWRQRRiDh6NM1KTu9Q==
-X-CSE-MsgGUID: 8WBQzRcGSUqfZkwHgWttvw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; d="scan'208";a="87833732"
-Received: from smile.fi.intel.com ([10.237.72.154])
- by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 31 Oct 2024 10:26:00 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
- (envelope-from <andriy.shevchenko@linux.intel.com>)
- id 1t6Yvl-00000009jyV-20FR; Thu, 31 Oct 2024 19:25:57 +0200
-Date: Thu, 31 Oct 2024 19:25:57 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Aaron Sierra <aaron@bubbl-tek.com>
-Cc: Vincent Fazio <vfazio@xes-inc.com>, Andy Yan <andyshrk@163.com>,
- buildroot <buildroot@buildroot.org>, Andy Yan <andyshrk@gmail.com>
-Message-ID: <ZyO9pdGiQ8Wpvscb@smile.fi.intel.com>
-References: <PH1P110MB1603BAEB621A821D82C0A2C19F44A@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
- <Zw_FDy5XWpeQ78sG@smile.fi.intel.com>
- <1929b27b55e.1242e8abc627480.7414881916261699452@bubbl-tek.com>
- <ZxJL9O0KM7WP7b-d@smile.fi.intel.com>
- <192afcdcd6d.1213d420c999874.906482760730917485@bubbl-tek.com>
- <192c0393182.d05ea8bb202213.1651339018002716691@bubbl-tek.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4AA57605FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AA57605FC
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4AA57605FC
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 17:33:22 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 22F9A240004;
+ Thu, 31 Oct 2024 17:33:17 +0000 (UTC)
+Date: Thu, 31 Oct 2024 18:33:16 +0100
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: buildroot@buildroot.org, Andy Yan <andyshrk@163.com>, Andy Yan
+ <andyshrk@gmail.com>
+Message-ID: <20241031183316.23ca9174@windsurf>
+In-Reply-To: <ZyO9bOAks5c_vMrV@smile.fi.intel.com>
+References: <20240927183553.2866682-1-andriy.shevchenko@linux.intel.com>
+ <20241026144748.09d6b892@windsurf>
+ <Zx9EBoth4bf6QpQd@smile.fi.intel.com>
+ <20241028092600.61ee97f7@windsurf>
+ <ZyO9bOAks5c_vMrV@smile.fi.intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <192c0393182.d05ea8bb202213.1651339018002716691@bubbl-tek.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
- t=1730395562; x=1761931562;
- h=date:from:to:cc:subject:message-id:references:
- mime-version:in-reply-to;
- bh=m48inadZ3QTKgZxyCToE0446cr8Iuhy6f++lUqJsLTs=;
- b=Z/WodXFUgW9liV9jIs/ByVoYn0A1DDV7+JUYJWYkeGbfcIgHB3DK0b/N
- Q+XgFtBJBVrln8KV/mgJM6PsKwcCXEqV/qG/T/MAeghFlPSg4M93dr1b7
- Ihl84LmXBbuHnCHP4ZqyVflPkitPMNqMyftQE4B35L367UTHX4bb4Vgn9
- R+V2Q9mhiX8VtR5pDS5MH6IwofljFZhr/iKsYjzlx5m0BKTvoW3EjiZ+l
- aS3td65KifIBWAa3ZCIEwPJQsKSC0q3nDjchUAl/ljorKgjfePfpotQyX
- E/eVwbsnV/XruNFZqQXjU5CczEd3O4Ufr+gxVSgTW6hv4r4MSjcwbB9pR
- Q==;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730395999;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=dCWkPzX3FYAGe0IPhjflU7J06NOe5WtlVCFxPRL8aFs=;
+ b=ZZDurptK0fqSZbViFB7s92PE/LGe9+znhN0bqcCbt8jCdrLWJAoHK4kes11pMzA1ubiZwh
+ oyHwxvBLeBWzx95b1Vuv5BvL9PwyjspyJbSUWS4WnwB351w6ZD424txuXMLx3S55JRMzum
+ zDHG2J7RiJt030gslJofYO/qaoHCsVKTJeINGn/uNh9uFbZPTexL47rI9mxy45Aj4oO/H8
+ 2aaa0M1Pucu64nuWwRM4d2HKEQsqzYZMyl4yDCbed3XPYK3uJ2+cjDdFyjqMwdGK8ZiVFb
+ E7xXyv065QeWkZPB4TKhV3zfg42K8l0tnpzTFg4s5Gtwl643yEa+3tMq2wpBPA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=linux.intel.com
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256
- header.s=Intel header.b=Z/WodXFU
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZZDurptK
 Subject: Re: [Buildroot] [PATCH v2 1/1] package: Add iotools package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -102,28 +86,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, Oct 24, 2024 at 03:30:26PM -0500, Aaron Sierra wrote:
-> > On Mon, 21 Oct 2024 10:59:13 -0500 Aaron Sierra  wrote:
-> >
->  > Be on the lookout for contributions to your repository that address my remaining concerns. 
-> 
-> I've posted a pull request to your Github repo, https://github.com/andy-shev/iotools/pull/5,
-> that expands the runtime (and project) documentation, while adding support for symlink
-> installation in a cross-build environment.
+On Thu, 31 Oct 2024 19:25:00 +0200
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-Thank you!
-I just reviewed it, in general looks very good. Only few comments to address.
+> Seems Aaron already does a lot to improve this by moving to CMake. I asked him
+> for a few changes in his PR and most likely we soon have the updated version in
+> Buildroot that satisfies the requirements.
 
+Clearly using a standardized build system (CMake, meson, etc.) will
+definitely help in having a more "regular" behavior.
+
+Thanks!
+
+Thomas
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
