@@ -1,68 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 126B2E68979
-	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 12:01:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DD2BD6B6B4
+	for <buildroot@archiver.kernel.org>; Thu, 31 Oct 2024 12:45:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CA344071D;
-	Thu, 31 Oct 2024 12:01:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2286C60A80;
+	Thu, 31 Oct 2024 12:45:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sfzam_SAa0_Z; Thu, 31 Oct 2024 12:01:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oexdix2zFS3o; Thu, 31 Oct 2024 12:45:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3E6340554
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EF8B60A7A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3E6340554;
-	Thu, 31 Oct 2024 12:01:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 51E415E50
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 12:01:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6EF8B60A7A;
+	Thu, 31 Oct 2024 12:45:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 95506494E
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 12:45:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 403DD80CFD
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 12:01:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 845638148F
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 12:45:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ad5DY-E0xwiB for <buildroot@buildroot.org>;
- Thu, 31 Oct 2024 12:01:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BB0AC80AB2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB0AC80AB2
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BB0AC80AB2
- for <buildroot@buildroot.org>; Thu, 31 Oct 2024 12:01:39 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id CBC2D35206D8; Thu, 31 Oct 2024 13:01:35 +0100 (CET)
-Date: Thu, 31 Oct 2024 13:01:35 +0100
-From: Waldemar Brodkorb <wbx@openadk.org>
+ id Qwh4ohRdUWQt for <buildroot@buildroot.org>;
+ Thu, 31 Oct 2024 12:45:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF78A81494
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF78A81494
+ for <buildroot@buildroot.org>; Thu, 31 Oct 2024 12:45:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A068684E85; Thu, 31 Oct 2024 12:45:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Message-ID: <ZyNxnz3raEBsZU7x@waldemar-brodkorb.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-32-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1730376095; bh=hqdf9M1PmNPYXXsV+UDMhpBb1GZIsnY2JNkNz0HytvE=;
- h=Date:From:To:Subject:From;
- b=tH/rLQUrBR4BVyQBRdbMTU1stjMhfUQkWFjlTZbP6R0TCHKfgLRSOwa1JLyr5YBH2
- ZGRgtw4Vz0fIbMxs3yCiUN58FHJItc1pl/xAt/ed048P/pod7s3Xro4zvbYyvgchzl
- D2p8RD7fIobENSufqiKGceoblDEIcZuf0fi7m1pb7nzvJlltyMiO6koRBZoO3FoOq/
- S9XwIYoIHOmgpyV8SMt1Nh1D0me3udjFwG5eAi3RQ9X2oCBDoWQCBCUwpGW+XX3Oj9
- JFw8bdxyjjP/UtNqj2M9CzAYWRze/8Nfi8gXhGYWQcI44o9cj0yCzrFAAgV7FHfe5z
- k4b2yqmIVLiPw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=tH/rLQUr
-Subject: [Buildroot] [PATCH] package/zabbix: update to 7.0.5
+Date: Thu, 31 Oct 2024 13:45:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dc9c4e05761fa850403c8c2c21e1bfbe719aecc2
+X-Git-Newrev: 55b333029efa8b405a5687a47632617306eddedc
+X-Patchwork-Hint: ignore
+Message-Id: <20241031124526.A068684E85@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nodejs: bump to version 22.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,45 +57,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here for release notes:
-https://www.zabbix.com/rn/rn7.0.5
+commit: https://git.buildroot.net/buildroot/commit/?id=55b333029efa8b405a5687a47632617306eddedc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+This marks the transitioning of the 22.x releases
+of nodejs into LTS. [1]
+
+LICENSE hash changed due to
+* various new bundled components[2,3,4]
+* removed bundled components [5,6]
+
+All new components fall under MIT or Apache license which are already
+mentioned in the license field.
+
+All node package tests have been run sucessfully after the update.
+
+[1] https://nodejs.org/en/blog/release/v22.11.0
+[2] https://github.com/nodejs/node/commit/77936c3d2482ded2cb868f20f177433081b6dca8
+[3] https://github.com/nodejs/node/commit/92439fc160c19281faacfdf084ba718b79dd537f
+[4] https://github.com/nodejs/node/commit/da6c61def82190fd07cbdd9bb946644273eddf96
+[5] https://github.com/nodejs/node/commit/8e4fd2842bd6d2640dd0477323fe911c991265d7
+[6] https://github.com/nodejs/node/commit/20a8c96c412bb2c2dd74a5739cfb61919f1ec787
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/zabbix/zabbix.hash | 2 +-
- package/zabbix/zabbix.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nodejs/nodejs.hash | 12 ++++++------
+ package/nodejs/nodejs.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/zabbix/zabbix.hash b/package/zabbix/zabbix.hash
-index 843dc445d6..b4b71db5c8 100644
---- a/package/zabbix/zabbix.hash
-+++ b/package/zabbix/zabbix.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  173059f57f11716146da79345e5a6bc52eceee6a5c4410664b8500a955598b2a  zabbix-7.0.3.tar.gz
-+sha256  215301b6e089a685a2fabcca17fc65e5766d42d2079174b65a1bf28df7679692  zabbix-7.0.5.tar.gz
- sha256  0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0  COPYING
-diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
-index dda60ef161..318030214c 100644
---- a/package/zabbix/zabbix.mk
-+++ b/package/zabbix/zabbix.mk
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 61bda55098..aaa9e4619a 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,8 +1,8 @@
+ # From https://nodejs.org/dist/v20.15.1/SHASUMS256.txt.asc
+-sha256  10d47a46ef208b3e4b226e4d595a82659123b22397ed77b7975d989114ec317e  node-v20.15.1-linux-arm64.tar.xz
+-sha256  7bc120efdd8018f6915471b963d9b80adf4ed406d6dc9edb4ae944b85f505c4c  node-v20.15.1-linux-armv7l.tar.xz
+-sha256  b33e684802251397ad62ad3f8a1836267ee8b7723f87f669470018ad0035287b  node-v20.15.1-linux-ppc64le.tar.xz
+-sha256  26700f8d3e78112ad4a2618a9c8e2816e38a49ecf0213ece80e54c38cb02563f  node-v20.15.1-linux-x64.tar.xz
+-sha256  fdd53a5729d936691a2a1151046fb4897721cb8b0fca2af957823a9b40fe0c34  node-v20.15.1.tar.xz
++sha256  6031d04b98f59ff0f7cb98566f65b115ecd893d3b7870821171708cdbaf7ae6e  node-v22.11.0-linux-arm64.tar.xz
++sha256  9de0fdcfb1cccbe03f72f939e4e6f03867aef3da8223f90606cd93757704dae0  node-v22.11.0-linux-armv7l.tar.xz
++sha256  d1d49d7d611b104b6d616e18ac439479d8296aa20e3741432de0e85f4735a81e  node-v22.11.0-linux-ppc64le.tar.xz
++sha256  83bf07dd343002a26211cf1fcd46a9d9534219aad42ee02847816940bf610a72  node-v22.11.0-linux-x64.tar.xz
++sha256  bbf0297761d53aefda9d7855c57c7d2c272b83a7b5bad4fea9cb29006d8e1d35  node-v22.11.0.tar.xz
+ # Locally calculated
+-sha256  49cd410e0fe6a8879a40d0764092d1e6114cc85fe41d4efed990d028eec25582  LICENSE
++sha256  f0cb1ad806ba5d681f378a8cc2e539fe4b54839290eda3c814ec8994af2b8422  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 104d2cf258..bf0764136e 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- ZABBIX_VERSION_MAJOR = 7.0
--ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).3
-+ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).5
- ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/stable/$(ZABBIX_VERSION_MAJOR)
- ZABBIX_SELINUX_MODULES = zabbix
- ZABBIX_LICENSE = AGPL-3.0
--- 
-2.39.5
-
+ # _VERSION, _SOURCE and _SITE must be kept empty to avoid downloading anything
+-NODEJS_COMMON_VERSION = 20.15.1
++NODEJS_COMMON_VERSION = 22.11.0
+ NODEJS_COMMON_SOURCE = node-v$(NODEJS_COMMON_VERSION).tar.xz
+ NODEJS_COMMON_SITE = http://nodejs.org/dist/v$(NODEJS_COMMON_VERSION)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
