@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1001E6F06F
-	for <buildroot@archiver.kernel.org>; Fri,  1 Nov 2024 16:52:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC423E6F06E
+	for <buildroot@archiver.kernel.org>; Fri,  1 Nov 2024 16:56:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 655D642444;
-	Fri,  1 Nov 2024 16:52:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65A394006A;
+	Fri,  1 Nov 2024 16:56:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FNCTlKBu8dYN; Fri,  1 Nov 2024 16:52:04 +0000 (UTC)
+ id 5lDEiyHap_6n; Fri,  1 Nov 2024 16:56:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 277F541E5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E56E42444
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 277F541E5E;
-	Fri,  1 Nov 2024 16:52:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2AD9C979
- for <buildroot@buildroot.org>; Fri,  1 Nov 2024 16:52:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E56E42444;
+	Fri,  1 Nov 2024 16:56:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F78160
+ for <buildroot@buildroot.org>; Fri,  1 Nov 2024 16:56:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0E30640458
- for <buildroot@buildroot.org>; Fri,  1 Nov 2024 16:52:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1249440376
+ for <buildroot@buildroot.org>; Fri,  1 Nov 2024 16:56:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n4nXK7cF7h7t for <buildroot@buildroot.org>;
- Fri,  1 Nov 2024 16:52:01 +0000 (UTC)
+ id IIKrfCb9GwGK for <buildroot@buildroot.org>;
+ Fri,  1 Nov 2024 16:56:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::134; helo=mail-il1-x134.google.com;
+ client-ip=2607:f8b0:4864:20::d33; helo=mail-io1-xd33.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 44436400D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44436400D7
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
- [IPv6:2607:f8b0:4864:20::134])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 44436400D7
- for <buildroot@buildroot.org>; Fri,  1 Nov 2024 16:52:01 +0000 (UTC)
-Received: by mail-il1-x134.google.com with SMTP id
- e9e14a558f8ab-3a3c00f2c75so8172475ab.2
- for <buildroot@buildroot.org>; Fri, 01 Nov 2024 09:52:01 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C3CA5400D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3CA5400D7
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C3CA5400D7
+ for <buildroot@buildroot.org>; Fri,  1 Nov 2024 16:56:14 +0000 (UTC)
+Received: by mail-io1-xd33.google.com with SMTP id
+ ca18e2360f4ac-83a9ca86049so83552039f.0
+ for <buildroot@buildroot.org>; Fri, 01 Nov 2024 09:56:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730479920; x=1731084720;
+ d=1e100.net; s=20230601; t=1730480173; x=1731084973;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=vNAal98h/ToNt9EXacf4h+xU/K88qMRqOim0Rc38zQo=;
- b=FEUOTR84mvxlIDW39BuDQd1O7J4JGkRLHr5eenqXbBx9r5oWIIDwCXpcB4NGDOMzDg
- 6zDlM8m66VhrbagkkB27EMujPxRNMyFVTT98e3Es95Y8I3ndngbadgQ3JAO6wVDoB4rW
- H7QaRYPoJVZtUd17+iHwVRTSKhv2jWMtxzgN7lBHhXVoF9mJE4sTA5GZYbpgKiLumR7g
- qvuP2Tmk7G/t1jV6kGnct4knBPEJ9lctxWtcCqfs7ODbJ27WMpLfSkn5XbACXVoTsNhJ
- LvQYe0zv0O+Ww6FlZSBorZuBt7V7olU1QnuduORNPMOZw8WQPPXRgFuM5yfXo9nw0cUp
- EW7w==
-X-Gm-Message-State: AOJu0Yy3RyAuUGA9mca3A3rbUrHS4XeTNxN1cYmJ6wMDbjXP7ZgAPP9r
- UYr6tW9xCcUlqTUQqcE/JKugU9I3JNrDtyUsDTeHP4axYep1t1O2i0KpeQ==
-X-Google-Smtp-Source: AGHT+IFLCYyDCpjLahpHZK83WVAqFfrZQk8iJ45m/rz8mMeIUXRGeVhu7QhKTADQrPKk2k04//gzVA==
-X-Received: by 2002:a05:6e02:1487:b0:3a6:aa75:5a59 with SMTP id
- e9e14a558f8ab-3a6b0288ce3mr46538915ab.1.1730479919910; 
- Fri, 01 Nov 2024 09:51:59 -0700 (PDT)
+ bh=7ciPFzXp8VtZUcRMDBUSBxkRA0fB6FqVsVMhCY8BJg0=;
+ b=r+8SBY9iTnVxjLj4m1RmEbFl3bY1KUkLe3BdSKDu0DWjL4NRm6+rvrCF24bcC9oH7e
+ fCOo9hBazH0LSNaADyPbF7eXNJMTAW4bUURbHE3MZbkb+xUnfGVT2nNXZ/mdiJ2iO+xR
+ qNDRWYCPM0EAFVlfzsyqoXkW5IeVW91aP/tRlqILl5UaDkWZQZX+cbLY39+pEbv2HU/P
+ SU8MP8H7GqaiKAtRybR/TP7w/cPKdEKdXVpmBooXmrBS0CnmI8DGks/VnkbkZ7Fg1VIQ
+ 9AodXaPba08kEwCA/40deW1My7Jt+S3d2cuEWr/sLMPa/FirLiPVAQdLqS7daRkbwYzX
+ 9bBg==
+X-Gm-Message-State: AOJu0Yy1WedNSEVxEthtcxyPFoXieczsL8UxOdZfnScwyHCS93Fo3LMM
+ 2B+pKkTnorNJhy8N0zMYlGoe5/OYrhilnXmFmhdHOctWATj0qbaWMffvrQ==
+X-Google-Smtp-Source: AGHT+IFqXLDJO2dfMOfbzZWT3xxZrh0vzQHRqscMqpWC5qSrkUQFCCW/dLYSfBVrPTQ0rMLcHJDEsw==
+X-Received: by 2002:a05:6602:2cce:b0:832:480d:6fe1 with SMTP id
+ ca18e2360f4ac-83b1bcfc72fmr2578890739f.0.1730480173401; 
+ Fri, 01 Nov 2024 09:56:13 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
  [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a6a97b0058sm9168915ab.5.2024.11.01.09.51.59
+ 8926c6da1cb9f-4de0488830esm811774173.16.2024.11.01.09.56.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 01 Nov 2024 09:51:59 -0700 (PDT)
+ Fri, 01 Nov 2024 09:56:13 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  1 Nov 2024 10:51:57 -0600
-Message-Id: <20241101165157.379660-1-james.hilliard1@gmail.com>
+Date: Fri,  1 Nov 2024 10:56:11 -0600
+Message-Id: <20241101165611.382147-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1730479920; x=1731084720; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1730480173; x=1731084973; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=vNAal98h/ToNt9EXacf4h+xU/K88qMRqOim0Rc38zQo=;
- b=lXw22+zqsEpbpipYrPQ2x2KDxSBKEiFvBdFNL0KeJ8brG0Jxpxh4w4zRV6lmw3NBZL
- HDOQ/z7Ys0NJigyFtR/8Cegg8ZWC/U8HrI4tzmJwU1hRo/wJqgrCbEcmC0WvDXFiwt4X
- QMvRgyl6hj+ikrvLxnRb+M1frOPRBmyhFwW9RSRhiUV1FTlMw+/u4sIudsbqcis0H4AL
- LhCJkGZA/gN0lEdTQq0usGHO8QfOcnndSZyuQvNms/kSjM6No3eKdpdjotakH3nxd+5G
- Qg2lfibrKS7yIsSU4AlplCkQCvbwSXVJ84m+ZdLiA3R+/XrNfeW0+fr16pzAvqfjllxg
- LDCQ==
+ bh=7ciPFzXp8VtZUcRMDBUSBxkRA0fB6FqVsVMhCY8BJg0=;
+ b=BnZmjiA0V4yvtPEtDq6Z7g4xpAIIEOUVCDJYcAHEaMZWTav4wwRUFl/X7/J+f+bmmA
+ cnfvGWsHXjOwWyT3MAl+rI9hVcHdPOMm8Gmh3iTg6h383Odihu9Uy5PPP5RcHO0dm/WX
+ DyZ7NI6ltStItJonXCqNgzj3iQ8vQGHKycvB6lEOwACjUbP1D9e7eOXmrx7g0JsYfrjg
+ qX7M9RLYEDfjQq7jsTlfeYyZAZjuTg5yztlLGHENc1HN1XDwvfpDH5PjKlr5c1g9S+lp
+ XMyZJJ6jLWkhq48/hjPFFynEX/dLN8FAu6WLvd/Ciy6EplLmQ3Il6dLhXq/tFtUQAcYs
+ Xgag==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=lXw22+zq
-Subject: [Buildroot] [PATCH 1/1] package/python-google-api-core: bump to
- version 2.22.0
+ header.a=rsa-sha256 header.s=20230601 header.b=BnZmjiA0
+Subject: [Buildroot] [PATCH 1/1] package/python-grpcio-reflection: bump to
+ version 1.67.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,38 +108,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-google-api-core/python-google-api-core.hash | 4 ++--
- package/python-google-api-core/python-google-api-core.mk   | 4 ++--
+ .../python-grpcio-reflection/python-grpcio-reflection.hash    | 4 ++--
+ package/python-grpcio-reflection/python-grpcio-reflection.mk  | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-google-api-core/python-google-api-core.hash b/package/python-google-api-core/python-google-api-core.hash
-index 90fe60c6fe..397ce7cb40 100644
---- a/package/python-google-api-core/python-google-api-core.hash
-+++ b/package/python-google-api-core/python-google-api-core.hash
+diff --git a/package/python-grpcio-reflection/python-grpcio-reflection.hash b/package/python-grpcio-reflection/python-grpcio-reflection.hash
+index 516434e1d1..a64fbeae54 100644
+--- a/package/python-grpcio-reflection/python-grpcio-reflection.hash
++++ b/package/python-grpcio-reflection/python-grpcio-reflection.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/google-api-core/json
--md5  1fd24ef85c43d7df429c6f953c5b2e87  google_api_core-2.21.0.tar.gz
--sha256  4a152fd11a9f774ea606388d423b68aa7e6d6a0ffe4c8266f74979613ec09f81  google_api_core-2.21.0.tar.gz
-+md5  b69067b81abd55aa7eecc22858ea326c  google_api_core-2.22.0.tar.gz
-+sha256  26f8d76b96477db42b55fd02a33aae4a42ec8b86b98b94969b7333a2c828bf35  google_api_core-2.22.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/grpcio-reflection/json
+-md5  ae7a26702153311fc7fa5bd4ee232ac4  grpcio_reflection-1.67.0.tar.gz
+-sha256  c47143738b1897b6ce4af5e0e338c85c9aee5fdcbb3355d368a8dcae46d8933c  grpcio_reflection-1.67.0.tar.gz
++md5  e9a0f06f8886b5f95da4e599b0960ef5  grpcio_reflection-1.67.1.tar.gz
++sha256  507d9785a72032816e9bb5add4a660c655813a6bc1537b957822c652c88bf458  grpcio_reflection-1.67.1.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-google-api-core/python-google-api-core.mk b/package/python-google-api-core/python-google-api-core.mk
-index ec8cf671cf..b48d934e73 100644
---- a/package/python-google-api-core/python-google-api-core.mk
-+++ b/package/python-google-api-core/python-google-api-core.mk
+ sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
+diff --git a/package/python-grpcio-reflection/python-grpcio-reflection.mk b/package/python-grpcio-reflection/python-grpcio-reflection.mk
+index d211fd18df..4e8c3e8dc3 100644
+--- a/package/python-grpcio-reflection/python-grpcio-reflection.mk
++++ b/package/python-grpcio-reflection/python-grpcio-reflection.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_GOOGLE_API_CORE_VERSION = 2.21.0
-+PYTHON_GOOGLE_API_CORE_VERSION = 2.22.0
- PYTHON_GOOGLE_API_CORE_SOURCE = google_api_core-$(PYTHON_GOOGLE_API_CORE_VERSION).tar.gz
--PYTHON_GOOGLE_API_CORE_SITE = https://files.pythonhosted.org/packages/28/c8/046abf3ea11ec9cc3ea6d95e235a51161039d4a558484a997df60f9c51e9
-+PYTHON_GOOGLE_API_CORE_SITE = https://files.pythonhosted.org/packages/00/c2/425f97c2087affbd452a05d3faa08d97de333f2ca554733e1becab55ee4e
- PYTHON_GOOGLE_API_CORE_SETUP_TYPE = setuptools
- PYTHON_GOOGLE_API_CORE_LICENSE = Apache-2.0
- PYTHON_GOOGLE_API_CORE_LICENSE_FILES = LICENSE
+-PYTHON_GRPCIO_REFLECTION_VERSION = 1.67.0
++PYTHON_GRPCIO_REFLECTION_VERSION = 1.67.1
+ PYTHON_GRPCIO_REFLECTION_SOURCE = grpcio_reflection-$(PYTHON_GRPCIO_REFLECTION_VERSION).tar.gz
+-PYTHON_GRPCIO_REFLECTION_SITE = https://files.pythonhosted.org/packages/fe/69/08a7c3c3524e3af650d22bd8e0015e35bc284eae919fbb38bc2702809d07
++PYTHON_GRPCIO_REFLECTION_SITE = https://files.pythonhosted.org/packages/17/61/618d56bd1f7069dea5fee8fa6efb5e6548b6edb52000ef1a7b242c0c1b04
+ PYTHON_GRPCIO_REFLECTION_SETUP_TYPE = setuptools
+ PYTHON_GRPCIO_REFLECTION_LICENSE = Apache-2.0
+ PYTHON_GRPCIO_REFLECTION_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
