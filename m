@@ -1,65 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E50B2E6F06F
-	for <buildroot@archiver.kernel.org>; Fri,  1 Nov 2024 17:10:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9CBFE6F070
+	for <buildroot@archiver.kernel.org>; Fri,  1 Nov 2024 17:10:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AED6F6063F;
-	Fri,  1 Nov 2024 17:10:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EDA5842493;
+	Fri,  1 Nov 2024 17:10:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WwXnQUApGzjy; Fri,  1 Nov 2024 17:10:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fNYgUBxFHA6V; Fri,  1 Nov 2024 17:10:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE97B6071D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0C00423A0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE97B6071D;
-	Fri,  1 Nov 2024 17:10:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id AC2A2AF2
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0C00423A0;
+	Fri,  1 Nov 2024 17:10:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B21614D1C
  for <buildroot@buildroot.org>; Fri,  1 Nov 2024 17:10:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B60D40376
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9479E82064
  for <buildroot@buildroot.org>; Fri,  1 Nov 2024 17:10:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id epC6JthSzD9j for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kjvNi2wmuEbg for <buildroot@buildroot.org>;
  Fri,  1 Nov 2024 17:10:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D617D4042C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D617D4042C
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D617D4042C
- for <buildroot@buildroot.org>; Fri,  1 Nov 2024 17:10:49 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-4319399a411so18634075e9.2
- for <buildroot@buildroot.org>; Fri, 01 Nov 2024 10:10:49 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 817E282062
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 817E282062
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 817E282062
+ for <buildroot@buildroot.org>; Fri,  1 Nov 2024 17:10:50 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-43162cf1eaaso23549125e9.0
+ for <buildroot@buildroot.org>; Fri, 01 Nov 2024 10:10:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1730481048; x=1731085848;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=H7B/sbW6nr2lotPSYgNfOZkHn34nI+nEkbuZH0xTixc=;
- b=LuLvDfIpps8lTlYiOvvEBy0XsCSZKvhLEovnpNRHoYT4b2yrF5FJ3GgzRciYr0+KGA
- SpyN6qCV98hNWUb+3fAfjZpM80dJziokw7dqtfdgsba8crNkNd8QSkrNX7R9W9EXLNKS
- sREYMrbGCuPXj4A9Muax//SIRKASoTKexWmuyyFxMdtLGnCtfc4pqLwFCTOPm29SbxVs
- BesQW0LQZOfj7Vi/DjEpXYIx+09AeoOX/vUncvz984x5MJA3phsrTtiwCcC8iZuQMBBh
- ZO+W/i8rXADb9ELTDBxeMRUfTuoOesYeGYYawpOFEkmHfFEdy6Wu/ARP7ui9EU0+I0M+
- EBzw==
-X-Gm-Message-State: AOJu0YypYdmB+gB2ES2zuzXVD0QjSHtdVcdIH8mcDMqDUztLSF4/mAeC
- +lUxa+X8HUI0+EGYgY3DWs7PFHQv2qYa3AyxJ6tcZ57LqIRDTFuLGnowe7QFp7Tx7qiEBQQ6wDt
- Z
-X-Google-Smtp-Source: AGHT+IHO6hDwWDP1YYhfl8/2u8R1jTMm3CriYLqZyMCxz8l4BR2ZoKYMe6vn40OCjmnWEM25tH+f7Q==
-X-Received: by 2002:a05:600c:350b:b0:42c:e0da:f15c with SMTP id
- 5b1f17b1804b1-4319acbb947mr184240255e9.20.1730481047644; 
- Fri, 01 Nov 2024 10:10:47 -0700 (PDT)
+ bh=jToBjef3dANQ6uuHypn27fsL3Y+TmEN5wXjn235bCsA=;
+ b=OZvqZF1EGQR4VnknvM8yGxHURE71a66yeBGUXBaLFrve9zzRMhkSq8vlWQzv97cZjj
+ 18AL+VemrnBbFGBRZqxvNzFada7wVOxKE+8iJEl5fC0hUWNP8EsMnzEWmQ0Se0reiPl/
+ oAGOWxeHcIV4QHyLl1H+ZzUBpKLuf/j13wu74dBnkWI3pdGW7z1IlWiB7GLjAsj/oF6F
+ xghCtnoxo3RyATBm1Q+g1XWajrx8JTxnM/pEH1VgMx8mEWzruLtvMWRPzt2OL8HLiBgK
+ LZ5pZZMYebjxFtKYPZ8A1inrnU0lOdamTDY4UhEZ0AZ4UPFZjgFA6nOhYkjmOUkN4LDU
+ rwgQ==
+X-Gm-Message-State: AOJu0Yz6/rrNAwyl3CztR5NBKEgIf1vBNKiHwsivizQpiw0tfLVXPTQB
+ v/sXFDrcTd2bsnI9KB425pqXkiLQ2rGw9RlaXNXpq1b0BcncidEYiVgLQEPb8NtNLD+FnSsX8WD
+ d
+X-Google-Smtp-Source: AGHT+IF0GDB15dmx8vnwwpYorOBPupvpm6wBAfaxOtSlsNQVV8yfpoKu9kf+ywIF+WtbjNECoplacQ==
+X-Received: by 2002:a05:600c:5250:b0:431:5465:8072 with SMTP id
+ 5b1f17b1804b1-43283294a9emr45606125e9.31.1730481048061; 
+ Fri, 01 Nov 2024 10:10:48 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
@@ -69,8 +69,8 @@ Received: from P-NTS-Evian.home
  Fri, 01 Nov 2024 10:10:47 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Romain Naour <romain.naour@smile.fr>
-Date: Fri,  1 Nov 2024 18:10:43 +0100
-Message-ID: <20241101171044.3320155-2-romain.naour@smile.fr>
+Date: Fri,  1 Nov 2024 18:10:44 +0100
+Message-ID: <20241101171044.3320155-3-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.45.0
 In-Reply-To: <20241101171044.3320155-1-romain.naour@smile.fr>
 References: <20241101171044.3320155-1-romain.naour@smile.fr>
@@ -80,19 +80,20 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=H7B/sbW6nr2lotPSYgNfOZkHn34nI+nEkbuZH0xTixc=;
- b=LNi7AwljSu5BaPcf3F369+jRfUO010EqjNi6Nmx4/Sxo4h/Sj/oVSbzORzlLsF9uQH
- Mjd+z6pmKPaRs6Y7uNU9P3z/frISA715kK+81dYOXoh5k55qYRk9MsyYrOhfpUj+m5kq
- bQiQCdXFnPWAgh5NYTDTmA28MYnqsjsV13Pcc=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=jToBjef3dANQ6uuHypn27fsL3Y+TmEN5wXjn235bCsA=;
+ b=vpF1WNqFGI8KsLBvo77KtmteiZM2dhCPzG1oaJJ7y/yacz5eXiQbEcMaViDKpBaV20
+ GQJoydigaSk0SkSBf1vBX3N4o1Xpj5b/KOzOnsTyEQolxQrZoAqbdm++SsEnYJHSS90X
+ PZTXWqFj5CgDGw1FPRABBcTQRLiyX4ksFqctQ=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=LNi7Awlj
-Subject: [Buildroot] [PATCHv2 2/3] package/python-twisted: add missing
- python3-xml dependency
+ header.s=google header.b=vpF1WNqF
+Subject: [Buildroot] [PATCHv2 3/3]
+ package/python-magic-wormhole-mailbox-server: add missing python-setuptools
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,52 +112,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Currently the test TestPythonTwisted is not broken [1] since it doesn't
-test all modules provided by python-twisted package.
+TestPythonPy3MagicWormhole runtime test is currently broken due to
+missing python-setuptools dependency.
 
-But TestPythonTwisted should have failed due to missing xml in
-twisted/web module.
+wormhole-mailbox server fail to start with:
 
-Due to this, TestPythonPy3MagicWormhole runtime test is currently
-broken.
-
-Add missing python3-xml dependency and update
-sample_python_twisted.py to load twisted/web that uses xml
-module.
-
-Fixes (partially due to missing python setuptool in
-python-magic-wormhole-mailbox-server):
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992646
+    File "/usr/lib/python3.12/site-packages/wormhole_mailbox_server/server_tap.py", line 11, in <module>
+    File "/usr/lib/python3.12/site-packages/wormhole_mailbox_server/database.py", line 5, in <module>
+  ModuleNotFoundError: No module named 'pkg_resources'
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/python-twisted/Config.in                       | 1 +
- support/testing/tests/package/sample_python_twisted.py | 1 +
- 2 files changed, 2 insertions(+)
+ package/python-magic-wormhole-mailbox-server/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-twisted/Config.in b/package/python-twisted/Config.in
-index 2d2bc30972..3254278fe9 100644
---- a/package/python-twisted/Config.in
-+++ b/package/python-twisted/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_PYTHON_TWISTED
- 	select BR2_PACKAGE_PYTHON_HYPERLINK # runtime
- 	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE # runtime
- 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
- 	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
+diff --git a/package/python-magic-wormhole-mailbox-server/Config.in b/package/python-magic-wormhole-mailbox-server/Config.in
+index a0721e866f..a4f4c5ced5 100644
+--- a/package/python-magic-wormhole-mailbox-server/Config.in
++++ b/package/python-magic-wormhole-mailbox-server/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER
+ 	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
+ 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
+ 	select BR2_PACKAGE_PYTHON_AUTOBAHN # runtime
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime, pkg_resources
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
  	help
- 	  Twisted is an event-driven networking engine written in
-diff --git a/support/testing/tests/package/sample_python_twisted.py b/support/testing/tests/package/sample_python_twisted.py
-index b5540522fc..ec5ce2a31c 100644
---- a/support/testing/tests/package/sample_python_twisted.py
-+++ b/support/testing/tests/package/sample_python_twisted.py
-@@ -1,5 +1,6 @@
- from twisted.internet import protocol, reactor, endpoints
- from twisted.web.client import readBody  # noqa: F401
-+from twisted.web import xmlrpc, server  # noqa: F401
- 
- 
- class F(protocol.Factory):
 -- 
 2.45.0
 
