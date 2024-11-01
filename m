@@ -4,90 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7022E6F075
-	for <buildroot@archiver.kernel.org>; Fri,  1 Nov 2024 18:06:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 383A6E6F075
+	for <buildroot@archiver.kernel.org>; Fri,  1 Nov 2024 18:09:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 38F72605EA;
-	Fri,  1 Nov 2024 18:06:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F18E1605E5;
+	Fri,  1 Nov 2024 18:09:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N_LciVVXVYve; Fri,  1 Nov 2024 18:06:42 +0000 (UTC)
+ id b35tJkFwV6oM; Fri,  1 Nov 2024 18:09:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AED6605EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FC85605EA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4AED6605EF;
-	Fri,  1 Nov 2024 18:06:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8CCED979
- for <buildroot@buildroot.org>; Fri,  1 Nov 2024 18:06:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FC85605EA;
+	Fri,  1 Nov 2024 18:09:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 52823979
+ for <buildroot@buildroot.org>; Fri,  1 Nov 2024 18:09:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A106402E5
- for <buildroot@buildroot.org>; Fri,  1 Nov 2024 18:06:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 32F53605EA
+ for <buildroot@buildroot.org>; Fri,  1 Nov 2024 18:09:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WB40ZIIB7oC7 for <buildroot@buildroot.org>;
- Fri,  1 Nov 2024 18:06:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l_sjFBuS0hOe for <buildroot@buildroot.org>;
+ Fri,  1 Nov 2024 18:09:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::133; helo=mail-il1-x133.google.com;
+ client-ip=2607:f8b0:4864:20::12c; helo=mail-il1-x12c.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6C705402EF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C705402EF
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
- [IPv6:2607:f8b0:4864:20::133])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6C705402EF
- for <buildroot@buildroot.org>; Fri,  1 Nov 2024 18:06:39 +0000 (UTC)
-Received: by mail-il1-x133.google.com with SMTP id
- e9e14a558f8ab-3a6adaee7acso5864135ab.0
- for <buildroot@buildroot.org>; Fri, 01 Nov 2024 11:06:39 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4CA79605E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CA79605E5
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
+ [IPv6:2607:f8b0:4864:20::12c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4CA79605E5
+ for <buildroot@buildroot.org>; Fri,  1 Nov 2024 18:09:19 +0000 (UTC)
+Received: by mail-il1-x12c.google.com with SMTP id
+ e9e14a558f8ab-3a4e5e574b6so7351335ab.0
+ for <buildroot@buildroot.org>; Fri, 01 Nov 2024 11:09:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730484398; x=1731089198;
+ d=1e100.net; s=20230601; t=1730484558; x=1731089358;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=pDdQP70mUP6JSo4xOhhkza4J+U5940P7A4sJ8WIYAaI=;
- b=ELlf/PDm7lDBENjinY0ustwiMOTD6TC688vynKXtcvNLLgEKiJ/IBhCLJKA4sIlUlY
- QZK1+OUZCe4Y1DfoD1WYlqCh7uXqeuubQTCzNXC/+LWdRXbQ04Vrtp801guH1FsL8QOY
- axFs2SuSKwHoCQlnOTpTOuRDHBd/ztesCkrD9fxDmog6KdI0c8x1eAEq2rD5sl80wczp
- NzFUiQNkYWi7JKqIfyrPDlZTlpU0IZQb6grT8ggqdGNIi3rOaqqmzkt1mxbPq+RLjXEQ
- tsvOS31uS1OsM4umLE4MO4Ix04w39wLU4lh8kgMgPbWna8Xap8vzT7jOe1NHbplTTGT4
- cBwQ==
-X-Gm-Message-State: AOJu0YwZ8S/JSC2YbDsbH+hSkH3HUHn2aH3cpDvQHuukkpZ5snWGYUCu
- oWEFOPbV/c3kBrFW7haRR08CnG7dXPFzBfH/fENG8/4fwxZP7wqKAIsEVQ==
-X-Google-Smtp-Source: AGHT+IF1+DGlxgGhm523hDTDOy+XdrQhPPkgUywL7FWn2ajGhzJqYps2CEcVW0nLZI9a01PlSt7icg==
-X-Received: by 2002:a05:6e02:11b3:b0:3a6:abc2:7388 with SMTP id
- e9e14a558f8ab-3a6abc27846mr48426405ab.16.1730484397990; 
- Fri, 01 Nov 2024 11:06:37 -0700 (PDT)
+ bh=f7Oi+gB/WTVGJvh/ONUbS9UWz3sUTIKHZSWJ19UHaHg=;
+ b=UH83hVFUHaUxp6D/xeFbpjghYBscWBK+1C/qYZ4b2M/5zILs/StMMaodQVlRcedF5h
+ FE6lhONYlCRIlV8aJUXeufN6va5zUxPhQz4UKa+hIUEG9xDQ74877XpPuYUQmd05KnLt
+ Y7pZQ1K50PR+QvBmynsRY5JbaVsE1UWmiqpRRvXfyL59xePkvMEdNDletGOvmyYgy1Up
+ bOMPWmAxjUuLC2V2EZVwT4a8MxIzUhP+gbJFV9sOOLR2bClUE3RtLbVyqxJESfYBGJF1
+ DQ3gk54yrGchlsd/IN6AT7qT11mW0tx/cS8ghy5L/77LU79EqGFqf6Pqv0SR6a/EXVep
+ UPFw==
+X-Gm-Message-State: AOJu0YzRmr4UKvxqOwjuonw3d+A6ljTLr287LGUrkWWYlraG9HgBsMDT
+ GoFMRrhx0chFPvwwLapEJte6OjKBtiHBVr+1XpXWg9SIPGPPLyerCnDXLw==
+X-Google-Smtp-Source: AGHT+IFGILIwsfqkS+wX9w6qY0/bWqEqBY7oAoB0DfyHnLAixG7Y1tDYYTrJKw86YO3ZrWHDPC70Yw==
+X-Received: by 2002:a92:d10e:0:b0:3a6:bafd:5650 with SMTP id
+ e9e14a558f8ab-3a6bafd5803mr11244485ab.10.1730484557854; 
+ Fri, 01 Nov 2024 11:09:17 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
  [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a6a99cc4c9sm9559785ab.46.2024.11.01.11.06.36
+ 8926c6da1cb9f-4de049c8498sm823434173.157.2024.11.01.11.09.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 01 Nov 2024 11:06:37 -0700 (PDT)
+ Fri, 01 Nov 2024 11:09:17 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  1 Nov 2024 12:06:35 -0600
-Message-Id: <20241101180635.1028681-1-james.hilliard1@gmail.com>
+Date: Fri,  1 Nov 2024 12:09:16 -0600
+Message-Id: <20241101180916.1036264-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1730484398; x=1731089198; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1730484558; x=1731089358; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=pDdQP70mUP6JSo4xOhhkza4J+U5940P7A4sJ8WIYAaI=;
- b=CzXTUI9scTVbgqXgrza706BGsibB34L9VMtgclVzYGCjdYy3e3aF33ctVbHm19ZAef
- 7MvTZvWSELWohI/k2ZmbLbB+0YpbmwU8PII8FXQ7E6jzVg4x3Pr9Hb89xpds6woiV9vW
- 4acfJVBfGQ1hUE4eMDUnUbJ348Oi0h2NZ57PPwJCwqu0T2KeYPYps8m7dBRM/41k5j5o
- JGZyAl6sG3ZD2Ruaas3O5QhMuxWQA6D2kD/U7/BTtUYM596ZA6JtFVYI8KlwBxR7TuUD
- ruyEJ22TEh498s+XZvguCo6H+yR9eIo2SppyL3v+yhgwOzGt8wI3LtWVhv5VnwXEe0Mk
- oHJw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=f7Oi+gB/WTVGJvh/ONUbS9UWz3sUTIKHZSWJ19UHaHg=;
+ b=nsHViAmsYaMt23pL5jgUcTRQGi5kKB73KbTeofDKncGV8MTLBtrwoHDdaX76qAVa6o
+ oO3NU7dO7AoJ8D7vPeMT5Fexf4CJZjrK1+ECS9r/SzBdfTYrIbz8LQXMLfeXOQxBnfcq
+ M8xi/vNSAnYdbmzX0/49D/y24NJVNlrH2utKsq7GuUZtv6UpN6eB8CywQ71dH49V6+be
+ x3WOQramVyDa2iHd7tffBYUUmsynhYW8v6sqo2R2Y8gDehhpSnl0m3BXbOuaQ4a42MqX
+ B9icXerpAV5UnCL8xqVIQ+27TixtGIhtF9yJPC/+7/H7FKnudmu7QN5YEusDY0Vwq1dB
+ bPoQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=CzXTUI9s
-Subject: [Buildroot] [PATCH 1/1] package/swig: bump to version 4.3.0
+ header.a=rsa-sha256 header.s=20230601 header.b=nsHViAms
+Subject: [Buildroot] [PATCH 1/1] package/python-m2crypto: bump to version
+ 0.43.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,7 +100,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Gustavo Heinz <gustavo@gsthnz.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -107,36 +109,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/swig/swig.hash | 2 +-
- package/swig/swig.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-m2crypto/python-m2crypto.hash | 4 ++--
+ package/python-m2crypto/python-m2crypto.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/swig/swig.hash b/package/swig/swig.hash
-index 21590c422a..9c1dbcc2fc 100644
---- a/package/swig/swig.hash
-+++ b/package/swig/swig.hash
+diff --git a/package/python-m2crypto/python-m2crypto.hash b/package/python-m2crypto/python-m2crypto.hash
+index aa8fe09c14..98307af0cf 100644
+--- a/package/python-m2crypto/python-m2crypto.hash
++++ b/package/python-m2crypto/python-m2crypto.hash
 @@ -1,5 +1,5 @@
- # Locally computed:
--sha256  2af08aced8fcd65cdb5cc62426768914bedc735b1c250325203716f78e39ac9b  swig-4.1.1.tar.gz
-+sha256  f7203ef796f61af986c70c05816236cbd0d31b7aa9631e5ab53020ab7804aa9e  swig-4.3.0.tar.gz
- sha256  f53abaeed775018d519a1b9615f0ca17894772bd9ca21c2a156bf340ac41c13e  LICENSE
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE-GPL
- sha256  7f50d942373a871211c5efee03f3db2f9efd1cff1002b0ef8e3748baa611a5c2  LICENSE-UNIVERSITIES
-diff --git a/package/swig/swig.mk b/package/swig/swig.mk
-index ad585c3f97..7e84bdd431 100644
---- a/package/swig/swig.mk
-+++ b/package/swig/swig.mk
-@@ -4,8 +4,8 @@
+ # md5, sha256 from https://pypi.org/pypi/m2crypto/json
+-md5  b88bcb1d4aeb817f91eb627d08b673a2  m2crypto-0.42.0.tar.gz
+-sha256  42b62df2caf623161b1d643a7235464c2fe2a3105049ebc498a6d47dc08f64b4  m2crypto-0.42.0.tar.gz
++md5  75c50150857eb60e4f447b04d13ff507  m2crypto-0.43.0.tar.gz
++sha256  6c2c1c7bb0e8aa768f7ca803da7dbc2666d4003b26bd7adf70233afc59d8cf33  m2crypto-0.43.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4eca478396f4b2b020729a111fce3f096456d74500bfd8f2b0388c3c69f997c0  LICENCE
+diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
+index 79dfc1beb2..b5142c9bb2 100644
+--- a/package/python-m2crypto/python-m2crypto.mk
++++ b/package/python-m2crypto/python-m2crypto.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--SWIG_VERSION_MAJOR = 4.1
--SWIG_VERSION = $(SWIG_VERSION_MAJOR).1
-+SWIG_VERSION_MAJOR = 4.3
-+SWIG_VERSION = $(SWIG_VERSION_MAJOR).0
- SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
- HOST_SWIG_DEPENDENCIES = host-bison host-pcre2
- HOST_SWIG_CONF_OPTS = \
+-PYTHON_M2CRYPTO_VERSION = 0.42.0
++PYTHON_M2CRYPTO_VERSION = 0.43.0
+ PYTHON_M2CRYPTO_SOURCE = m2crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
+-PYTHON_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/85/9f/b8977ce2971cf5f823db3fdb31e7e061b9662da318a17b6bf0c653f84aee
++PYTHON_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/ff/1b/4771f0ecfdd9df6752ae5d0cf040545bb3cfe8a504af87e05c9ac4a6a499
+ PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
+ PYTHON_M2CRYPTO_LICENSE = MIT
+ PYTHON_M2CRYPTO_LICENSE_FILES = LICENCE
 -- 
 2.34.1
 
