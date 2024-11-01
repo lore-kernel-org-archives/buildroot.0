@@ -4,81 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAD8DE6F083
-	for <buildroot@archiver.kernel.org>; Fri,  1 Nov 2024 18:58:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04F6DE6F083
+	for <buildroot@archiver.kernel.org>; Fri,  1 Nov 2024 18:58:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3D16606E3;
-	Fri,  1 Nov 2024 18:58:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF4CE60719;
+	Fri,  1 Nov 2024 18:58:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 85GTSB6QMgWb; Fri,  1 Nov 2024 18:58:30 +0000 (UTC)
+ id ezmVXygIuAHX; Fri,  1 Nov 2024 18:58:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0656606E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C64CF60680
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B0656606E5;
-	Fri,  1 Nov 2024 18:58:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 965BD979
- for <buildroot@buildroot.org>; Fri,  1 Nov 2024 18:58:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C64CF60680;
+	Fri,  1 Nov 2024 18:58:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 67A1C27E1
+ for <buildroot@buildroot.org>; Fri,  1 Nov 2024 18:58:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 843D74049C
- for <buildroot@buildroot.org>; Fri,  1 Nov 2024 18:58:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63551605CA
+ for <buildroot@buildroot.org>; Fri,  1 Nov 2024 18:58:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kYu5Uwcxyx1n for <buildroot@buildroot.org>;
- Fri,  1 Nov 2024 18:58:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bHZzGGw56iUO for <buildroot@buildroot.org>;
+ Fri,  1 Nov 2024 18:58:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3860440281
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3860440281
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ABE2C605A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABE2C605A6
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3860440281
- for <buildroot@buildroot.org>; Fri,  1 Nov 2024 18:58:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ABE2C605A6
+ for <buildroot@buildroot.org>; Fri,  1 Nov 2024 18:58:40 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a02c6.dip0.t-ipconnect.de [91.58.2.198])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id A112BA4C2429;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B2F52A4C242C;
  Fri,  1 Nov 2024 19:57:59 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:36440)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1t6wqM-000000002yP-3Ukr;
+ (envelope-from <bernd@kuhls.net>) id 1t6wqM-000000002yP-451l;
  Fri, 01 Nov 2024 18:57:59 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, Daniel Lang <dalang@gmx.at>,
  Valentin Korenblit <valentinkorenblit@gmail.com>,
  Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Romain Naour <romain.naour@gmail.com>,
- Romain Naour <romain.naour@smile.fr>,
- Sebastian Weyer <sebastian.weyer@smile.fr>,
- Antoine Coutant <antoine.coutant@smile.fr>
-Date: Fri,  1 Nov 2024 19:57:55 +0100
-Message-Id: <20241101185758.729921-3-bernd@kuhls.net>
+ Romain Naour <romain.naour@gmail.com>
+Date: Fri,  1 Nov 2024 19:57:56 +0100
+Message-Id: <20241101185758.729921-4-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20241101185758.729921-1-bernd@kuhls.net>
 References: <20241101185758.729921-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202406071026; t=1730487479;
- bh=bRIxL6KF56BvrE+WPUSNuEZe5D9eM4eHUrnmkNvlqnc=;
+ bh=hWbiP2ZxvpMFZZ/NfU1LOmPr0TKoWQ/657+8kPOcpuU=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=Cfi0/cZqrepv20MMpD+j2arnlUaiYPjDT+SdxQ0w1H1YPPcc28GonpqOKCXJxbGGp
- Y0hkWZ3s/4pX3m3qg3pXR9ijhm8eCgqoYGMFLMupClcJpNVnFafE8UiNlcnQS3jPtb
- augR6z7B9FYF7UAoQfDSNEHG6N0e8qWb0RPGIOOJacX3GuUPDCfz4RUxTiEcJ1pUsf
- r2eHWQ+k7R6e9WSu2oFhN6ocv2+Gb6koo0s3nULpyzviEb8LTU4s8mU7Xzuu8tS7Z+
- Q+UCyaEWYJ1IlEplB1bTstvu0voHDlNiJsAtz9trMRzz3diYgisahDMOKtunWHTTZM
- sNaRuchO6JtxQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=Rr4kGgm5Re7KGXuLQvsb0CYw9n4Plo2Yy5V2KJQV4jbphSYeIV7jO+Fe9uVMKcCXE
+ 5AVg6nJiL46NB7hDqwgyDNY4Wlq5jh5KHojfEt+H44dzqHbag9wLJxmtBVLjqvEP3a
+ 6O52FQljsL3XZa9OdatLVo/dREEE8Noyo6MtJYimBQCkZZuaob0UtbA3PaOu69gci1
+ ifERkaTdsyd1dn9HU6XI/U61tP65JOVg9YKxU43cFBkWxxf4hj05jKi/ye1uGM9nZK
+ vxhfyjl3AHkUTZtn63f5xxm8+PP1x7eE31na500oPSECOI506Dg3XL7E+ZQl003Fyz
+ sOTpmX8gOuwng==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202406071026 header.b=Cfi0/cZq
-Subject: [Buildroot] [PATCH 3/6] package/spirv-llvm-translator: add target
- variant to provide LLVMSPIRVLib
+ header.s=kas202406071026 header.b=Rr4kGgm5
+Subject: [Buildroot] [PATCH 4/6] package/spirv-tools: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,86 +91,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Romain Naour <romain.naour@smile.fr>
+Needed for mesa3d bump to 24.1.0.
 
-This target version is needed for Rusticl which is an LLVM based OpenCL
-framework[1]. Rusticl allow programs to compile OpenCL C/C++ code
-at runtime with Clang. Clang generates LLVM IR which is translated into
-SPIR-V by spirv-llvm-translator. Finally, mesa can use its internal
-tools to manage SPIR-V.
-
-[1]: https://docs.mesa3d.org/rusticl.html
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
-Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/Config.in                             |  1 +
- package/spirv-llvm-translator/Config.in       | 22 +++++++++++++++++++
- .../spirv-llvm-translator.mk                  | 10 +++++++++
- 3 files changed, 33 insertions(+)
- create mode 100644 package/spirv-llvm-translator/Config.in
+ package/spirv-tools/spirv-tools.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index fd0de2cb6d..d62eb08025 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -335,6 +335,7 @@ comment "Graphic applications"
- 	source "package/pngquant/Config.in"
- 	source "package/qt5cinex/Config.in"
- 	source "package/rrdtool/Config.in"
-+	source "package/spirv-llvm-translator/Config.in"
- 	source "package/spirv-tools/Config.in"
- 	source "package/stellarium/Config.in"
- 	source "package/sway/Config.in"
-diff --git a/package/spirv-llvm-translator/Config.in b/package/spirv-llvm-translator/Config.in
-new file mode 100644
-index 0000000000..73ca787d8a
---- /dev/null
-+++ b/package/spirv-llvm-translator/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
-+	bool "spirv-translator"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
-+	select BR2_PACKAGE_LLVM
-+	select BR2_PACKAGE_SPIRV_HEADERS
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  LLVM/SPIR-V Bi-Directional Translator is a library and tool
-+	  for translation between LLVM IR and SPIR-V.
-+
-+	  https://github.com/khronosGroup/SPIRV-LLVM-Translator
-+
-+comment "spirv-translator needs a toolchain w/ threads, C++, gcc >= 7, dynamic library, host gcc >= 7"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 \
-+		|| BR2_STATIC_LIBS || !BR2_HOST_GCC_AT_LEAST_7
-diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.mk b/package/spirv-llvm-translator/spirv-llvm-translator.mk
-index 523890a986..ffc8a63b89 100644
---- a/package/spirv-llvm-translator/spirv-llvm-translator.mk
-+++ b/package/spirv-llvm-translator/spirv-llvm-translator.mk
-@@ -19,4 +19,14 @@ HOST_SPIRV_LLVM_TRANSLATOR_CONF_OPTS = \
- 	-DLLVM_EXTERNAL_PROJECTS="SPIRV-Headers" \
- 	-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=$(HOST_DIR)/include
+diff --git a/package/spirv-tools/spirv-tools.mk b/package/spirv-tools/spirv-tools.mk
+index e863911b03..51b1c9f22a 100644
+--- a/package/spirv-tools/spirv-tools.mk
++++ b/package/spirv-tools/spirv-tools.mk
+@@ -10,6 +10,7 @@ SPIRV_TOOLS_SITE = $(call github,KhronosGroup,SPIRV-Tools,sdk-$(SPIRV_TOOLS_VERS
+ SPIRV_TOOLS_LICENSE = Apache-2.0
+ SPIRV_TOOLS_LICENSE_FILES = LICENSE
+ SPIRV_TOOLS_DEPENDENCIES = spirv-headers
++HOST_SPIRV_TOOLS_DEPENDENCIES = host-spirv-headers
+ SPIRV_TOOLS_INSTALL_STAGING = YES
  
-+SPIRV_LLVM_TRANSLATOR_INSTALL_STAGING = YES
-+SPIRV_LLVM_TRANSLATOR_DEPENDENCIES = host-clang host-llvm llvm spirv-headers
-+SPIRV_LLVM_TRANSLATOR_CONF_OPTS = \
-+	-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=$(STAGING_DIR)/usr \
-+	-DLLVM_BUILD_TOOLS=ON \
-+	-DLLVM_DIR=$(STAGING_DIR)/lib/cmake/llvm \
-+	-DLLVM_SPIRV_BUILD_EXTERNAL=YES \
-+	-DLLVM_SPIRV_INCLUDE_TESTS=OFF
+ SPIRV_TOOLS_CONF_OPTS = \
+@@ -18,4 +19,11 @@ SPIRV_TOOLS_CONF_OPTS = \
+ 	-DSPIRV_SKIP_TESTS=ON \
+ 	-DSPIRV_WERROR=OFF
+ 
++HOST_SPIRV_TOOLS_CONF_OPTS = \
++	-DSPIRV-Headers_SOURCE_DIR=$(HOST_DIR) \
++	-DSPIRV_TOOLS_BUILD_STATIC=OFF \
++	-DSPIRV_SKIP_TESTS=ON \
++	-DSPIRV_WERROR=OFF
 +
-+$(eval $(cmake-package))
- $(eval $(host-cmake-package))
+ $(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.39.5
 
