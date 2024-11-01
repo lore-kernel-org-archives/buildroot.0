@@ -4,76 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AE51E6B240
-	for <buildroot@archiver.kernel.org>; Fri,  1 Nov 2024 11:31:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6420E6B24F
+	for <buildroot@archiver.kernel.org>; Fri,  1 Nov 2024 12:08:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E2DE80C13;
-	Fri,  1 Nov 2024 11:31:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 430D984454;
+	Fri,  1 Nov 2024 12:08:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iMaNY40Ekx3Q; Fri,  1 Nov 2024 11:31:02 +0000 (UTC)
+ id S5J7YL-geU_0; Fri,  1 Nov 2024 12:08:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B7DA80C6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 454F684367
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B7DA80C6C;
-	Fri,  1 Nov 2024 11:31:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CD54560
- for <buildroot@buildroot.org>; Fri,  1 Nov 2024 11:31:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 454F684367;
+	Fri,  1 Nov 2024 12:08:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DB5E9725
+ for <buildroot@buildroot.org>; Fri,  1 Nov 2024 12:08:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C91FD80581
- for <buildroot@buildroot.org>; Fri,  1 Nov 2024 11:31:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B77B784443
+ for <buildroot@buildroot.org>; Fri,  1 Nov 2024 12:08:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xPeoxTfiS4Dn for <buildroot@buildroot.org>;
- Fri,  1 Nov 2024 11:31:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0175A80561
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0175A80561
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0175A80561
- for <buildroot@buildroot.org>; Fri,  1 Nov 2024 11:30:59 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id D5A6B19F5C6;
- Fri,  1 Nov 2024 12:30:55 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:53676])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 01 Nov 2024 12:30:55 +0100
+ id l6Y1yTzrZGGE for <buildroot@buildroot.org>;
+ Fri,  1 Nov 2024 12:08:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=114.111.35.29;
+ helo=cvsmtppost09.nm.naver.com; envelope-from=dungeonlords789@naver.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2FBB384381
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FBB384381
+Received: from cvsmtppost09.nm.naver.com (cvsmtppost09.nm.naver.com
+ [114.111.35.29])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2FBB384381
+ for <buildroot@buildroot.org>; Fri,  1 Nov 2024 12:08:02 +0000 (UTC)
+X-Originating-IP: 125.132.232.68
+Received: from cvsendbo031.nm ([10.112.22.37])
+ by cvsmtppost09.nm.naver.com with ESMTP id LaACbXVuSFy+MCO7CIp5kg
+ for <buildroot@buildroot.org>; Fri, 01 Nov 2024 12:08:00 -0000
+X-Session-ID: UwTPDjQ8Q5uvvfaAq6bqQw
+X-Originating-IP: 125.132.232.68
+X-Works-Send-Opt: xeYZjAJYjHmlKxu/FoJYKxgXKBwkx0eFjAu=
+X-Works-Smtp-Source: ZZKqFAgqFqJZ+HmmaAtm+6E=
+Received: from Linux.. ([125.132.232.68])
+ by cvnsmtp006.nm.naver.com with ESMTP id UwTPDjQ8Q5uvvfaAq6bqQw
+ for <multiple recipients>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 01 Nov 2024 12:08:00 -0000
+From: Cherniaev Andrei <dungeonlords789@naver.com>
+To: buildroot@buildroot.org
+Date: Fri,  1 Nov 2024 21:07:33 +0900
+Message-ID: <20241101120733.4136790-1-dungeonlords789@naver.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Fri, 01 Nov 2024 12:30:55 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Romain Naour <romain.naour@smile.fr>
-Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>
-In-Reply-To: <49a0a3c1-93ae-4474-887e-ae007be648cd@smile.fr>
-References: <20241031213348.2057705-1-ju.o@free.fr>
- <20241031213348.2057705-9-ju.o@free.fr>
- <49a0a3c1-93ae-4474-887e-ae007be648cd@smile.fr>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <5a2c1374954863ac78534a9822d8404c@free.fr>
-X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1730460658;
- bh=uYTpHDPBbEfYG5jjBsssRiqBz2PNpJhIltYcmTPZSWk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=g45UCJbEdw0tRuc5I40FZpJVZh6v4L7S3nnOqWsG54w2/5LU/RW8IqJ7/pCAboEmL
- Yz0zitFvucXCEOJID0amNQaltq1W3YZNDziudFnMvY3iFakk/YWnTeGxQ5xmXBtYgF
- LA+GikKqnjzykAKyP/kvdlfrizmq83waglf9AeApWW409YyOz9KO1RAG0BaDmghI2U
- ThgsIiGfaZCg6sv1fn8t52p9ZIhHTOeaxurvfonGT9peyvv05gfjovqE5mwpibxiR6
- Wg4hKRZYFeFWL6Sf7k/GZSpxaruKkjKEBSosjt+iyBX13tRovHsTfxdjGMswUfDoja
- 5u0xmGBiqwzRQ==
+ d=naver.com; s=s20171208; 
+ t=1730462880; bh=KrbDfwe2hXN7lq8LK5X5ol23YKwstZLYYWqtQ4umAws=;
+ h=From:To:Subject:Date:Message-ID:From:Subject:Feedback-ID:
+ X-Works-Security;
+ b=aDQ/9szlTZtNI+F0vw3/F0izuXl9hdJ6b0HMA2QWINZ1ZDOBJMZqkd+CmenD15oeh
+ vxlbzrPQDeTY8T9YhuaPGqLcmJ1I0C3onV7xmGATIa+e1Pftr2/f9U5k94bDyw5E/C
+ PFxMsXTb1DGA086aRXR7Z4jui2qrtVd94pPUigUu5612s4Hsjey7OBnsolpcKJzNQk
+ c8evkBKJlI/un60DOdBaH9iWO7uEpwseihhlG0Za8vJ6ZBJAp+CDyBMNju2iDWfM4H
+ wtjTgWAHF7Zpfi2BjJ9rxCfrJV+9mbQLmVAblOSgTvF3+GsMmQZtk+SakecrPP1nnV
+ t/RGagJ+Ta3jg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
+ header.from=naver.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=g45UCJbE
-Subject: Re: [Buildroot] [PATCH v3 8/8] support/testing: test_grub: update
- and re-enable the test
+ dkim=pass (2048-bit key,
+ unprotected) header.d=naver.com header.i=@naver.com header.a=rsa-sha256
+ header.s=s20171208 header.b=aDQ/9szl
+Subject: [Buildroot] [PATCH 1/1] board/mender: sync with board/pc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,31 +87,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Cherniaev Andrei <dungeonlords789@naver.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgUm9tYWluLAoKVGhhbmtzIGZvciB0aGUgcmV2aWV3LgoKT24gMzEvMTAvMjAyNCAyMzoxMiwg
-Um9tYWluIE5hb3VyIHdyb3RlOgo+IEhlbGxvIEp1bGllbiwKPiAKPiBMZSAzMS8xMC8yMDI0IMOg
-IDIyOjMzLCBKdWxpZW4gT2xpdmFpbiBhIMOpY3JpdMKgOgo+PiBUaGUgRURLMiBidW1wIHRvIHN0
-YWJsZTIwMjQwNSBpbnRyb2R1Y2VkIGFuIGluY29tcGF0aWJpbGl0eSB3aXRoIHRoZQo+PiBRZW11
-IHZlcnNpb24gNS4yLjAgcHJlc2VudCBpbiB0aGUgcmVmZXJlbmNlIERvY2tlciBpbWFnZS4gRm9y
-IHRoYXQKPj4gcmVhc29uLCB0aGlzIHRlc3Qgd2FzIGRpc2FibGVkLgo+PiAKPj4gVGhpcyBjb21t
-aXQgZW5hYmxlcyBob3N0LXFlbXUgaW4gdGhlIGJ1aWxkLCB0byBiZSB1c2VkIGJ5IHRoZSBydW50
-aW1lCj4+IHRlc3QgaW5mcmFzdHJ1Y3R1cmUuCj4+IAo+PiBTaW5jZSB0aGlzIGNvbW1pdCBzd2l0
-Y2ggdG8gYSBtb3JlIHJlY2VudCBob3N0LXFlbXUsIGl0IGFsc28gcmVtb3Zlcwo+PiBmaXJtd2Fy
-ZSBvcHRpb25zIHRvIHdvcmthcm91bmQgb2xkIHFlbXUgYnVncy4KPj4gCj4+IFRob3NlIGNoYW5n
-ZXMgYXJlIGZpeGluZyB0aGlzIHRlc3QsIHdoaWNoIGlzIHdoeSB0aGlzIGNvbW1pdCAKPj4gcmUt
-ZW5hYmxlcwo+PiBpdCBieSByZW1vdmluZyB0aGUgc2tpcFRlc3QoKSBpbnZvY2F0aW9uLgo+PiAK
-Pj4gU2lnbmVkLW9mZi1ieTogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4KPiAKPiBTYW1l
-IHF1ZXN0aW9uIGFib3V0IG5lb3ZlcnNlLW4xLgoKSSB0aGluayB0aGlzIHNwZWNpZmljIHRlc3Qg
-Y2FuIHN0YXkgYXMgaXQgaXMuCgpDb21wYXJlZCB0byB0ZXN0X2VkazIgYW5kIHRlc3RfZnd0cywg
-dGhpcyB0ZXN0IGRvZXMgbm90IHVzZQpTQlNBIChpdCBkb2VzIG5vdCBzZWxlY3QgQlIyX1RBUkdF
-VF9FREsyX1BMQVRGT1JNX1FFTVVfU0JTQT15KS4KCkl0IGlzICJqdXN0IiBFRkkuIFNvIEkgYmVs
-aWV2ZSBpdCBjYW4gc3RheSB3aXRoIGNvcnRleC1hNTMuCgo+IFJldmlld2VkLWJ5OiBSb21haW4g
-TmFvdXIgPHJvbWFpbi5uYW91ckBzbWlsZS5mcj4KPiAKPiBCZXN0IHJlZ2FyZHMsCj4gUm9tYWlu
-CgpCZXN0IHJlZ2FyZHMsCgpKdWxpZW4uCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+and fix dd of=sdc because it is very dangerous to have exiting drive in example
+
+Signed-off-by: Cherniaev Andrei <dungeonlords789@naver.com>
+---
+ board/mender/x86_64/readme.txt |  8 ++++----
+ board/pc/readme.txt            | 13 ++++++++-----
+ 2 files changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/board/mender/x86_64/readme.txt b/board/mender/x86_64/readme.txt
+index a9755ec58b..01a0254511 100644
+--- a/board/mender/x86_64/readme.txt
++++ b/board/mender/x86_64/readme.txt
+@@ -11,14 +11,14 @@ Mender UEFI PC sample config
+ 
+   $ make
+ 
+-2. Write the Pendrive
++2. Write the image
+ 
+-  The build process will create a Pendrive image called disk.img in
++  The build process will create a all-in-one image called disk.img in
+   output/images.
+ 
+   Write the image to a pendrive:
+ 
+-  $ dd if=output/images/disk.img of=/dev/${pendrive}; sync
++  $ dd if=output/images/disk.img of=/dev/sdX; sync
+ 
+   Once the process is complete, insert it into the target PC and boot.
+ 
+@@ -66,4 +66,4 @@ particular needs, as this option changes the mender artifact name.
+ Using mender
+ ========================
+ Please read the mender documentation at:
+-https://docs.mender.io/2.2/getting-started
++https://docs.mender.io
+diff --git a/board/pc/readme.txt b/board/pc/readme.txt
+index 41aec50d36..e2ba6769f0 100644
+--- a/board/pc/readme.txt
++++ b/board/pc/readme.txt
+@@ -17,14 +17,14 @@ Bare PC sample config
+ 
+   $ make
+ 
+-2. Write the pendrive
++2. Write the image
+ 
+-  The build process will create a pendrive image called sdcard.img in
++  The build process will create a all-in-one image called disk.img in
+   output/images.
+ 
+   Write the image to a pendrive:
+ 
+-  $ dd if=output/images/disk.img of=/dev/sdc; sync
++  $ dd if=output/images/disk.img of=/dev/sdX; sync
+ 
+   Once it's done insert it into the target PC and boot.
+ 
+@@ -42,8 +42,11 @@ Emulation in qemu (BIOS)
+ 1. Edit grub-bios.cfg
+ 
+   Since the driver will show up in the virtual machine as /dev/vda,
+-  change board/pc/grub-bios.cfg to use root=/dev/vda2 instead of
+-  root=/dev/sda2. Then rebuild grub2 and the image.
++  change board/pc/grub-bios.cfg to use root=/dev/vda1 instead of
++  root=/dev/sda1.
++1.1. Rebuild grub2 and the image:
++
++make grub2-rebuild && make
+ 
+ 2. Run the emulation with:
+ 
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
