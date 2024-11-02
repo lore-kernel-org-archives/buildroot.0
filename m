@@ -4,96 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCAC7E67805
-	for <buildroot@archiver.kernel.org>; Sat,  2 Nov 2024 15:21:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD250E67802
+	for <buildroot@archiver.kernel.org>; Sat,  2 Nov 2024 15:21:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F6E161519;
-	Sat,  2 Nov 2024 15:21:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7ADCF61545;
+	Sat,  2 Nov 2024 15:21:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I951parigV69; Sat,  2 Nov 2024 15:21:34 +0000 (UTC)
+ id 9dKDqZ92Ylnk; Sat,  2 Nov 2024 15:21:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F55761521
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B000161544
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F55761521;
-	Sat,  2 Nov 2024 15:21:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 06A1B27E1
- for <buildroot@buildroot.org>; Sat,  2 Nov 2024 15:21:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B000161544;
+	Sat,  2 Nov 2024 15:21:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A9597979
+ for <buildroot@buildroot.org>; Sat,  2 Nov 2024 15:21:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D4B0F41681
- for <buildroot@buildroot.org>; Sat,  2 Nov 2024 15:21:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 98C49404B6
+ for <buildroot@buildroot.org>; Sat,  2 Nov 2024 15:21:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rqz6gxtFcuuz for <buildroot@buildroot.org>;
- Sat,  2 Nov 2024 15:21:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xZMsjvCy-2dG for <buildroot@buildroot.org>;
+ Sat,  2 Nov 2024 15:21:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62a; helo=mail-ej1-x62a.google.com;
+ client-ip=2a00:1450:4864:20::631; helo=mail-ej1-x631.google.com;
  envelope-from=olteanv@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 529A5401CC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 529A5401CC
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 529A5401CC
- for <buildroot@buildroot.org>; Sat,  2 Nov 2024 15:21:27 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id
- a640c23a62f3a-a99f9fa66fdso57500066b.0
- for <buildroot@buildroot.org>; Sat, 02 Nov 2024 08:21:27 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 15A094010A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15A094010A
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 15A094010A
+ for <buildroot@buildroot.org>; Sat,  2 Nov 2024 15:21:28 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id
+ a640c23a62f3a-a9a139be16dso52670566b.3
+ for <buildroot@buildroot.org>; Sat, 02 Nov 2024 08:21:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730560885; x=1731165685;
+ d=1e100.net; s=20230601; t=1730560887; x=1731165687;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=S5UJAkPOhSEqcx4TWlc0waNb3LKhCG2y/ayJFICNtbg=;
- b=ffhZPqxd2S8L11OAIQEUvt1trVGoEAYzMAzXQMSP9dCNmExvSWdod9HmFpRWwqh7bo
- I/i2zv7MsfZivxYYiWRI14BvnZ3+bgPU29L3BfOTn+DV8W0BbbfSnFA/VFjUsqxjVprl
- sSZli0MkkuS39fhrSXxpZrO+eIZDG7avxXFwG+Qi++aueZ71Uuz+orN8plWGCBar+c97
- Y2YatyxS2jybEDmCPzcUQgtvQpkN7Wz/MIWiHSEpwawxTUJoOc8PEII5sOYgEWeppV3k
- 29jJHqkQKL7SfrnoPNbbcgRTtOwhfir6KcVLxtoFYoxkhYyTiNvNce9VduL4Cm9wxISl
- WnHw==
-X-Gm-Message-State: AOJu0YwX2JofeQzGbvRkJiUwUIkA9poXkpEm+ejR1PTtR/AS/nZjk8aV
- kgsdTdTkJ2e7cPhn4JqU88puSEW8SULwfJlH8Hp/tQpvVk5kb/B7QYL4tR+m
-X-Google-Smtp-Source: AGHT+IGLz/Ow+VL7Zm2kySfNpQwtHlCUfYNkiLeP6lydj7MiWa/nWTnfScILWdp7r1GhCUu2idXt4A==
-X-Received: by 2002:a17:907:72c2:b0:a9a:7f84:9408 with SMTP id
- a640c23a62f3a-a9de5d0aebdmr1076090166b.3.1730560884559; 
- Sat, 02 Nov 2024 08:21:24 -0700 (PDT)
+ bh=hjdo6vRtYR0Ho6cQXNDexsZtg1sOIZGZ8Us3/IOkxuo=;
+ b=FWWKx+58TuXZtHTEhc344hhyErRYL0aqAyX0piL+xGBccO+sHAjjmQzu/8nJ/ircH3
+ s272gqsheZU3vsik3QVbzzGjSyjDz0uFK50gakWmvx8YNyoAnU7Fh9V2rAJF2OCcMd3x
+ X7G/n3B/xy1nukiJ8ZItGg8zFdciUFBx8YQgaws89dhB8wSGtuiHJ9yWDCT6q8fuD4+o
+ xWAt0+q8MxXX3p2gDvNdQ/FeVDgd7cfQdwt3Aw5HfT1CdnMtDUoUXKVWanOfXwrBDQMR
+ hMERrNBKItRRJRHp8awd5zAW6LXResS7IAM6hcpRvXx+dMYieXI8qn3BsoA+dF3BFX1h
+ VySg==
+X-Gm-Message-State: AOJu0YzGTqcfxeE2m6mC1JasUoxfS+gmtL0JDbrX57CIrJYjzBcIPyGt
+ sF3Rph3IzvKajf8/ZblCKbDSLzeV8KlPdLbf9im9FCNqA/hyj6DG/Xw7WjeH
+X-Google-Smtp-Source: AGHT+IGVUEwX/GUf4ZHmwqDQsm0H0a1y0OPj3sYnCYyOmDpfPFl7bLrow68oRdeAh2tOCqljBBdyTQ==
+X-Received: by 2002:a05:6402:520d:b0:5cb:6b9f:91fd with SMTP id
+ 4fb4d7f45d1cf-5cbbf9208e7mr9342131a12.5.1730560886509; 
+ Sat, 02 Nov 2024 08:21:26 -0700 (PDT)
 Received: from skbuf.lan ([188.25.134.29]) by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5ceac74ced8sm2587535a12.17.2024.11.02.08.21.22
+ 4fb4d7f45d1cf-5ceac74ced8sm2587535a12.17.2024.11.02.08.21.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 02 Nov 2024 08:21:23 -0700 (PDT)
+ Sat, 02 Nov 2024 08:21:25 -0700 (PDT)
 From: Vladimir Oltean <olteanv@gmail.com>
 To: buildroot@buildroot.org
 Cc: Brandon Maier <Brandon.Maier@collins.com>,
  Rabeeh Khoury <rabeeh@solid-run.com>, Josua Mayer <josua@solid-run.com>,
  Ioana Ciornei <ciorneiioana@gmail.com>
-Date: Sat,  2 Nov 2024 17:21:03 +0200
-Message-ID: <20241102152106.2153747-5-olteanv@gmail.com>
+Date: Sat,  2 Nov 2024 17:21:04 +0200
+Message-ID: <20241102152106.2153747-6-olteanv@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241102152106.2153747-1-olteanv@gmail.com>
 References: <20241102152106.2153747-1-olteanv@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1730560885; x=1731165685; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1730560887; x=1731165687; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=S5UJAkPOhSEqcx4TWlc0waNb3LKhCG2y/ayJFICNtbg=;
- b=U9W201jJbIIMyevKJAYAWHsjgQtmBQgzGH62G2RetxKOu3dLPo9GjgzTElDWwQXqJ4
- NDN+JWJJ/PUP7RZQnrMvsVbObI20La4rogeRDV+TCHdcU/IxYgRV/wGKZlVWddFh+YX8
- ia12bfwfuyLqnvoUpf00pa9GEBJGtz4gEcC8vORRcy3ZAE+CaYAjaF5qnTQsrhNpIupe
- gxiHXcJe9KtzIuG/kkiVjN1oVQWBKx9hjSmh5ObB0yIbfm6E6XC/3I+NSNStG+zVi+1U
- L2LGYT+R3NxvJ6BFCI98oZRJ4HFtX2qTXKyEfI0sdmVRRhOqbiUwPogBcekztTkexvG4
- e74g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=hjdo6vRtYR0Ho6cQXNDexsZtg1sOIZGZ8Us3/IOkxuo=;
+ b=DhkYbVfznIDxuZ5vJqgeB0Zf6EzlUr+mZeReyi5rd0syIaRFlOdYSD3uZ+YmyGPlE2
+ IHCfi1wBs+jDELWUBM72gYyGliXUfhOkX8wsJhUVY3Osd88Vjn2hJgny49ueSQf5Ur/R
+ yjmOwFfiMjDm13Bk5vKL8gfZVFmsfKkMZE4e4GieBDaFqZidbFTcSAU71xx47lchJHVa
+ DF9F+KCFkCBfqHyREbNElwJXLo2QnIpjcfQRkY4eVEZJCXHJ08HPAIejjC1PtwVsjOYM
+ 0qraLPG7X1eKju6wR22MQADgnA5teYxe0ylusY9y4PFKXehuXmsBXjn9xxR+RQksvGet
+ tXZg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=U9W201jJ
-Subject: [Buildroot] [PATCH 4/7] package/qoriq-mc-utils: new package
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=DhkYbVfz
+Subject: [Buildroot] [PATCH 5/7] package/qoriq-restool: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,122 +109,109 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The configuration files for the MC firmware binary are distributed
-through a separate repository on GitHub, and need a different package.
-They are licensed differently than the firmware itself, and unlike the
-firmware, they are customizable.
+Introduce a package for the restool program, which permits the user to
+modify the network configuration of the DPAA2 subsystem and create one
+that is adequate to their use case.
 
 Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/qoriq-mc-utils/Config.in           | 35 ++++++++++++++++++++++
- package/qoriq-mc-utils/qoriq-mc-utils.hash |  3 ++
- package/qoriq-mc-utils/qoriq-mc-utils.mk   | 22 ++++++++++++++
- 5 files changed, 62 insertions(+)
- create mode 100644 package/qoriq-mc-utils/Config.in
- create mode 100644 package/qoriq-mc-utils/qoriq-mc-utils.hash
- create mode 100644 package/qoriq-mc-utils/qoriq-mc-utils.mk
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/qoriq-restool/Config.in          | 21 +++++++++++++++++++++
+ package/qoriq-restool/qoriq-restool.hash |  3 +++
+ package/qoriq-restool/qoriq-restool.mk   | 24 ++++++++++++++++++++++++
+ 5 files changed, 50 insertions(+)
+ create mode 100644 package/qoriq-restool/Config.in
+ create mode 100644 package/qoriq-restool/qoriq-restool.hash
+ create mode 100644 package/qoriq-restool/qoriq-restool.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index adfdd97a044a..ace48c35961c 100644
+index ace48c35961c..596a1f8ed36d 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -3308,6 +3308,7 @@ F:	configs/ts5500_defconfig
- N:	Vladimir Oltean <olteanv@gmail.com>
+@@ -3309,6 +3309,7 @@ N:	Vladimir Oltean <olteanv@gmail.com>
  F:	package/qoriq-ddr-phy-binary/
  F:	package/qoriq-mc-binary/
-+F:	package/qoriq-mc-utils/
+ F:	package/qoriq-mc-utils/
++F:	package/qoriq-restool/
  
  N:	Volkov Viacheslav <sv99@inbox.ru>
  F:	package/v4l2grab/
 diff --git a/package/Config.in b/package/Config.in
-index 92f2f43a0bb1..47a4648f49a2 100644
+index 47a4648f49a2..d379a762bd55 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -457,6 +457,7 @@ menu "Firmware"
- 	source "package/qoriq-ddr-phy-binary/Config.in"
- 	source "package/qoriq-fm-ucode/Config.in"
- 	source "package/qoriq-mc-binary/Config.in"
-+	source "package/qoriq-mc-utils/Config.in"
- 	source "package/rcw-smarc-sal28/Config.in"
- 	source "package/rpi-firmware/Config.in"
- 	source "package/sunxi-boards/Config.in"
-diff --git a/package/qoriq-mc-utils/Config.in b/package/qoriq-mc-utils/Config.in
+@@ -598,6 +598,7 @@ endmenu
+ 	source "package/pru-software-support/Config.in"
+ 	source "package/pulseview/Config.in"
+ 	source "package/qoriq-cadence-dp-firmware/Config.in"
++	source "package/qoriq-restool/Config.in"
+ 	source "package/raspi-gpio/Config.in"
+ 	source "package/rdma-core/Config.in"
+ 	source "package/read-edid/Config.in"
+diff --git a/package/qoriq-restool/Config.in b/package/qoriq-restool/Config.in
 new file mode 100644
-index 000000000000..bb45ffbc9ca7
+index 000000000000..3f1834a7dce0
 --- /dev/null
-+++ b/package/qoriq-mc-utils/Config.in
-@@ -0,0 +1,35 @@
-+config BR2_PACKAGE_QORIQ_MC_UTILS
-+	bool "qoriq-mc-utils"
++++ b/package/qoriq-restool/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_QORIQ_RESTOOL
++	bool "qoriq-restool"
 +	help
-+	  The Management Complex (MC) is a key component of the networking
-+	  subsystem named DPAA2 (Data Path Acceleration Architecture, second
-+	  version) in some NXP Layerscape SoCs.
++	  The DPAA2 architecture in Layerscape SoCs consists of
++	  networking resources that can be assembled into various
++	  nuggets of functionality, called "objects" (DPMAC, DPNI,
++	  DPDMUX, DPSW etc), by the Management Complex (MC) firmware.
 +
-+	  The MC firmware is configured through two distinct files named DPL
-+	  and DPC, which are customizable by the end user. Example
-+	  configuration files for NXP reference boards are distributed through
-+	  this package, and are frequently patched to produce the configuration
-+	  required in other scenarios.
++	  The MC firmware reads a file called Data Path Layout (DPL)
++	  which describes the set of networking objects it should
++	  create statically, at boot time.
 +
-+	  https://github.com/nxp-qoriq/mc-utils
++	  The restool program is able to talk to the Management Complex
++	  at runtime and permits the dynamic reconfiguration of
++	  networking objects, as well as saving the current configuration
++	  into a new DPL file. Without the restool program, the only
++	  possible networking configuration is that specified in the
++	  boot-time DPL file.
++
++	  https://github.com/nxp-qoriq/restool
 +	  https://www.nxp.com/webapp/Download?colCode=DPAA2UM # sign in required
-+
-+if BR2_PACKAGE_QORIQ_MC_UTILS
-+
-+config BR2_PACKAGE_QORIQ_MC_UTILS_DPC
-+	string "Data Path Configuration (DPC) file"
-+	help
-+	  The DPC file contains the settings defining the behavior of the MC
-+	  firmware. Its source code follows the device tree syntax and is
-+	  compiled to a device tree blob, which is the file that must be
-+	  specified here.
-+
-+config BR2_PACKAGE_QORIQ_MC_UTILS_DPL
-+	string "Data Path Layout (DPL) file"
-+	help
-+	  The DPL file contains a description of the initial networking objects
-+	  created by the MC firmware when it boots. Its source code follows the
-+	  device tree syntax and is compiled to a device tree blob, which is
-+	  the file that must be specified here.
-+
-+endif
-diff --git a/package/qoriq-mc-utils/qoriq-mc-utils.hash b/package/qoriq-mc-utils/qoriq-mc-utils.hash
+diff --git a/package/qoriq-restool/qoriq-restool.hash b/package/qoriq-restool/qoriq-restool.hash
 new file mode 100644
-index 000000000000..f0234b9d1ff8
+index 000000000000..c2332d9b27eb
 --- /dev/null
-+++ b/package/qoriq-mc-utils/qoriq-mc-utils.hash
++++ b/package/qoriq-restool/qoriq-restool.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256  1d3f4a6b2661cff9cfb5d4fcba3b181eb6febdd88a127fa069e306f51d778fc5  qoriq-mc-utils-10.39.0.tar.gz
-+sha256  7a223031d76339df0e4e5a94d193a270fb9963d42b577aa42fe130a4657f3e17  LICENSE
-diff --git a/package/qoriq-mc-utils/qoriq-mc-utils.mk b/package/qoriq-mc-utils/qoriq-mc-utils.mk
++sha256  0cfced32caa615266ff633946d40a36660c856d7eb057b81de392570e136c5e5  qoriq-restool-lf-6.6.36-2.1.0.tar.gz
++sha256  68f4b15ecc085729419bc60ca6eeadca5af0237bbfec791e8a79da9c943d42e9  LICENSE
+diff --git a/package/qoriq-restool/qoriq-restool.mk b/package/qoriq-restool/qoriq-restool.mk
 new file mode 100644
-index 000000000000..d4fc5e27385e
+index 000000000000..4a89a80afa70
 --- /dev/null
-+++ b/package/qoriq-mc-utils/qoriq-mc-utils.mk
-@@ -0,0 +1,22 @@
-+################################################################################
++++ b/package/qoriq-restool/qoriq-restool.mk
+@@ -0,0 +1,24 @@
++###############################################################################
 +#
-+# qoriq-mc-utils
++# qoriq-restool
 +#
 +################################################################################
 +
-+QORIQ_MC_UTILS_VERSION = 10.39.0
-+QORIQ_MC_UTILS_SITE = $(call github,nxp-qoriq,mc-utils,mc_release_$(QORIQ_MC_UTILS_VERSION))
-+QORIQ_MC_UTILS_LICENSE = BSD-3-Clause
-+QORIQ_MC_UTILS_INSTALL_IMAGES = YES
-+QORIQ_MC_UTILS_INSTALL_TARGET = NO
++QORIQ_RESTOOL_VERSION = lf-6.6.36-2.1.0
++QORIQ_RESTOOL_SITE = $(call github,nxp-qoriq,restool,$(QORIQ_RESTOOL_VERSION))
++QORIQ_RESTOOL_LICENSE = GPL2.0
++QORIQ_RESTOOL_LICENSE_FILES = COPYING
 +
-+define QORIQ_MC_UTILS_BUILD_CMDS
-+	$(MAKE) -C $(@D)/config/
++QORIQ_RESTOOL_MAKE_OPTS = \
++	CC="$(TARGET_CC)" \
++	CROSS_COMPILE="$(TARGET_CROSS)"
++
++define QORIQ_RESTOOL_BUILD_CMDS
++	cd $(@D) && $(TARGET_MAKE_ENV) $(MAKE) $(QORIQ_RESTOOL_MAKE_OPTS)
 +endef
 +
-+define QORIQ_MC_UTILS_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -D $(@D)/config/$(call qstrip,$(BR2_PACKAGE_QORIQ_MC_UTILS_DPC)) $(BINARIES_DIR)/dpc.dtb
-+	$(INSTALL) -D $(@D)/config/$(call qstrip,$(BR2_PACKAGE_QORIQ_MC_UTILS_DPL)) $(BINARIES_DIR)/dpl.dtb
++define QORIQ_RESTOOL_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) prefix=/usr install
 +endef
 +
 +$(eval $(generic-package))
