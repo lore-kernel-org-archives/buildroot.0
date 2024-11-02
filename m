@@ -1,101 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49C4AE67814
-	for <buildroot@archiver.kernel.org>; Sat,  2 Nov 2024 22:04:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D454E677F7
+	for <buildroot@archiver.kernel.org>; Sat,  2 Nov 2024 22:56:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D62188445B;
-	Sat,  2 Nov 2024 22:04:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16A2260E11;
+	Sat,  2 Nov 2024 22:56:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9L76bTpMDawc; Sat,  2 Nov 2024 22:04:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dRUV7V7WJaji; Sat,  2 Nov 2024 22:56:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C431484443
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1813961125
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C431484443;
-	Sat,  2 Nov 2024 22:04:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5C04459D9
- for <buildroot@buildroot.org>; Sat,  2 Nov 2024 22:04:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1813961125;
+	Sat,  2 Nov 2024 22:56:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E3082723
+ for <buildroot@buildroot.org>; Sat,  2 Nov 2024 22:56:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4A8C341036
- for <buildroot@buildroot.org>; Sat,  2 Nov 2024 22:04:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C3D7141721
+ for <buildroot@buildroot.org>; Sat,  2 Nov 2024 22:56:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JrvobCDFn7nD for <buildroot@buildroot.org>;
- Sat,  2 Nov 2024 22:04:04 +0000 (UTC)
+ id YkWxWAEYJgDd for <buildroot@buildroot.org>;
+ Sat,  2 Nov 2024 22:56:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D7CD940F27
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7CD940F27
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D7CD940F27
- for <buildroot@buildroot.org>; Sat,  2 Nov 2024 22:04:02 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-37d3e8d923fso2027446f8f.0
- for <buildroot@buildroot.org>; Sat, 02 Nov 2024 15:04:02 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1D7CD4172C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D7CD4172C
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1D7CD4172C
+ for <buildroot@buildroot.org>; Sat,  2 Nov 2024 22:56:49 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-4315e62afe0so26557765e9.1
+ for <buildroot@buildroot.org>; Sat, 02 Nov 2024 15:56:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730585040; x=1731189840;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=TdViTJS25tBkoUvwvYXC2GuJWCoBkFO8IwVKDwkbnDE=;
- b=A2FQymsg0a26OWhh65qTxnpgiRMz5aHSZ4COlX9nLX2rpvsOU6Fh+oiWupxBTy+Pk5
- UBGaYyyFpsqviJ+NeZmQqPdrTHEXp8+LyU+1xqrxymQayPpdCc5M146p1w+u3bv0D5FY
- ty1o92oVRnVfZIDkHVR48BPeAVlAeqJNaQ2XDypMnZgivaJUxWCyXzuvSbcSjjczwU2i
- NVbzabDOSt5akDqCaMGt0X1Tpg9Q6GlZbt4YeYp+hW1NVwXt9OlppRVTxrDhP9ITiJ74
- taFBE6YE++PFDROYL/gXUyK4GJ2KaOx5O9zS6jKXG49xkUuQ0gnFueVe0nJy0xtZA6Rq
- u4iw==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVexoyczrhNkPshFQynlc8Lr+ZCbYhL2UrZd+Zz+9ZZhx5MQZVLoxys/aE4tsI0Hmsk/nSWdkEqm/k=@buildroot.org
-X-Gm-Message-State: AOJu0YzWOyfnjW65pY1V+rxyKOMbxtC+QD/7uSFrTEGUefIO4UI/ss8n
- UFIF8a21X1vWAO3j7W0hMFhwvGO017IxlLwJAJcBaV8i0ZTopBhY9EJT/hBDPsA=
-X-Google-Smtp-Source: AGHT+IErBheDNWmUsKTYQT58dtaix0qHpvpHP9Ag8CrEjc2sf438W7hC5/20DBpB321oxCmqtkLBaA==
-X-Received: by 2002:adf:f18c:0:b0:374:c621:3d67 with SMTP id
- ffacd0b85a97d-38061137930mr20330157f8f.24.1730585038684; 
- Sat, 02 Nov 2024 15:03:58 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:e3ef:2d7a:4131:71f?
+ d=1e100.net; s=20230601; t=1730588207; x=1731193007;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8ks3rs2CubnQ/fs4MvdLqRumjz1ih3F71RTaTrBOpwE=;
+ b=X5RW3U9kzjBGwN7gpqNGhpr1j34gNFIk37SSdBaI6lUAfgK63XebfNnmlYxzpxnfRN
+ CYgTvt8RnBzMV09ly120MnjTr+Til4R9jWJCaQZ4M3BiPo3Rjmt/8AiFfpW86hBMLpmL
+ nkMZqiqLBOyh/joy0UxzXmU6blntMPXY9jyfNukCMh9dO1dPMjhRHdTJgDz9k5GFWPPc
+ XljdzZFvrLKD95rGD74nswQ2WYS5nsTiXsoPTsgwjb7Ta6hMtiTgpsswRWPJruOZltOb
+ KxDiNqNrz7n2OvwbeQt8XBV7dFgSuRXeJUhb9/5okMUWbDAo9fmatiMich8fNLV2vgaR
+ AfVQ==
+X-Gm-Message-State: AOJu0YzPfOzIuyEMD+y55Q/+a7XQNxUkouXgabqlisbxiBv6zc0/5Wpt
+ GH1P30GIXTJEemMro2Q47IIkL6hffd5S5NsMLl3TlfiDCiyU2mI/vKcrSXzJxZjRGaZIWR/GGLS
+ h
+X-Google-Smtp-Source: AGHT+IHK65RQYHIEWundV1kK1diDYLe8mRt2xrcbsktGZV+WKDW4ikBVObQ/C/ZccJli1niaXvl1SQ==
+X-Received: by 2002:a05:600c:1c01:b0:431:12a8:7f1a with SMTP id
+ 5b1f17b1804b1-4319acadc13mr256961525e9.16.1730588207396; 
+ Sat, 02 Nov 2024 15:56:47 -0700 (PDT)
+Received: from P-NTS-Evian.home
  (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4327d5bf225sm105361915e9.11.2024.11.02.15.03.58
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 02 Nov 2024 15:03:58 -0700 (PDT)
-Message-ID: <e0025ae6-4171-4f25-bc49-d0e6b9881b3d@smile.fr>
-Date: Sat, 2 Nov 2024 23:03:57 +0100
+ ffacd0b85a97d-381c10d437bsm9124744f8f.30.2024.11.02.15.56.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 02 Nov 2024 15:56:47 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@smile.fr>
+Date: Sat,  2 Nov 2024 23:56:44 +0100
+Message-ID: <20241102225644.692402-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.45.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Antoine Tenart <atenart@kernel.org>,
- Marek Belisko <marek.belisko@open-nandra.com>
-References: <20240916151206.947484-1-adam.duskett@amarulasolutions.com>
- <20240916151206.947484-12-adam.duskett@amarulasolutions.com>
-Content-Language: fr, en-US
-In-Reply-To: <20240916151206.947484-12-adam.duskett@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1730585040; x=1731189840; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=TdViTJS25tBkoUvwvYXC2GuJWCoBkFO8IwVKDwkbnDE=;
- b=YwUJMMIF7/2lhEAbo8ICzt1oeVnx502WtQQtsQ7qCFdvZnHNWeyez5XIm+t+s51VdH
- hzp8Xf6/dkd0mywIovI9nA119VTDeO3AQ0bgQ1os1Pk8kSJcMg6VfPXjg2kI1FLviusw
- ngA3DqsRTRkCCcV+QgUSZizVzvc3botmvN5aw=
+ d=smile.fr; s=google; t=1730588207; x=1731193007; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8ks3rs2CubnQ/fs4MvdLqRumjz1ih3F71RTaTrBOpwE=;
+ b=OlvljfsDAZRDqLRfsokepkoAfPgffJMCoX9jwT6C/QHgjYdL8IPoOYrVnaV1LPYNRw
+ GiWUVEedl8MM6XhsWwM4zReOjtYktBWMLgvnFlPL6649+qnlLv4Q+jnsC1jWJIG6jrl4
+ Jg5W5JwxvfpX2NR2tGzFyG3dWd4JCMg50L02k=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=YwUJMMIF
-Subject: Re: [Buildroot] [PATCH 11/13] package/polkit: bump version to 125
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=OlvljfsD
+Subject: [Buildroot] [PATCH] package/polkit: disable PIDFD when systemd is
+ not available
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,43 +103,94 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQWRhbSwgQWxsLAoKTGUgMTYvMDkvMjAyNCDDoCAxNzoxMiwgQWRhbSBEdXNrZXR0IGEg
-w6ljcml0wqA6Cj4gQWxzbywgY2hhbmdlIHRoZSB1cmwgdG8gaHR0cHM6Ly9naXRodWIuY29tL3Bv
-bGtpdC1vcmcvcG9sa2l0IGFzCj4gaHR0cHM6Ly9naXRsYWIuZnJlZWRlc2t0b3Aub3JnL3BvbGtp
-dC9wb2xraXQgVGhlIG5ldyBhZGRyZXNzIG9mIHRoZSBjb2RlYmFzZQo+IGZvciB0aGUgcG9sa2l0
-IHByb2plY3QgcG9pbnRzIHRvIHRoZSBnaXRodWIgVVJMLgoKVGVzdFBvbGtpdEluaXRkIGZhaWwg
-c2luY2UgdGhlIHBvbGtpdCB2ZXJzaW9uIGJ1bXAgdG8gMTI1IFsxXQoKSXQgc2VlbXMgYW4gdXBz
-dHJlYW0gaXNzdWUgdW5kZXIgaW52ZXN0aWdhdGlvbiBbMl0uCgpbMV0gaHR0cHM6Ly9naXRsYWIu
-Y29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy84MTk5OTkyNTk2ClsyXSBodHRwczov
-L2dpdGh1Yi5jb20vcG9sa2l0LW9yZy9wb2xraXQvaXNzdWVzLzQ1MQoKQmVzdCByZWdhcmRzLApS
-b21haW4KCgoKPiAKPiBTaWduZWQtb2ZmLWJ5OiBBZGFtIER1c2tldHQgPGFkYW0uZHVza2V0dEBh
-bWFydWxhc29sdXRpb25zLmNvbT4KPiAtLS0KPiAgcGFja2FnZS9wb2xraXQvcG9sa2l0Lmhhc2gg
-fCAyICstCj4gIHBhY2thZ2UvcG9sa2l0L3BvbGtpdC5tayAgIHwgNCArKy0tCj4gIDIgZmlsZXMg
-Y2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQg
-YS9wYWNrYWdlL3BvbGtpdC9wb2xraXQuaGFzaCBiL3BhY2thZ2UvcG9sa2l0L3BvbGtpdC5oYXNo
-Cj4gaW5kZXggNWVhZGM4OTc1My4uYTM4NTVhZGVjZCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3Bv
-bGtpdC9wb2xraXQuaGFzaAo+ICsrKyBiL3BhY2thZ2UvcG9sa2l0L3BvbGtpdC5oYXNoCj4gQEAg
-LTEsMyArMSwzIEBACj4gICMgTG9jYWxseSBjYWxjdWxhdGVkCj4gLXNoYTI1NiAgYjY5Mjc4ZjZl
-YTBlYWM0MDYzNTBjNDVmNTcyMGUyZmU1ZTRiZWFmOWY1M2MxNmQ5OTAyZTAyNTk2NTQxODg2NCAg
-cG9sa2l0LTEyMy50YXIuZ3oKPiArc2hhMjU2ICBlYTVjZDZlNmUyYWZhNmJhZDkzOGVlNzcwYmYw
-YzJjZDkzMTc5MTBmMzc5NTZmYWViYTI4NjlhZGNmMzc0N2QxICBwb2xraXQtMTI1LnRhci5nego+
-ICBzaGEyNTYgIGQyZTJhYTk3M2UyOWM3NWUxYjQ5MmU2N2VhN2I3ZGE5ZGUyZDUwMWQ0OWE5MzQ2
-NTc5NzFmZDc0ZjlhMGIwYTggIENPUFlJTkcKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9wb2xraXQv
-cG9sa2l0Lm1rIGIvcGFja2FnZS9wb2xraXQvcG9sa2l0Lm1rCj4gaW5kZXggY2RiYmY4ZjliMC4u
-ZmI0OWY2Y2UyYSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3BvbGtpdC9wb2xraXQubWsKPiArKysg
-Yi9wYWNrYWdlL3BvbGtpdC9wb2xraXQubWsKPiBAQCAtNCw4ICs0LDggQEAKPiAgIwo+ICAjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIwo+ICAKPiAtUE9MS0lUX1ZFUlNJT04gPSAxMjMKPiAtUE9MS0lU
-X1NJVEUgPSBodHRwczovL2dpdGxhYi5mcmVlZGVza3RvcC5vcmcvcG9sa2l0L3BvbGtpdC8tL2Fy
-Y2hpdmUvJChQT0xLSVRfVkVSU0lPTikKPiArUE9MS0lUX1ZFUlNJT04gPSAxMjUKPiArUE9MS0lU
-X1NJVEUgPSAkKGNhbGwgZ2l0aHViLHBvbGtpdC1vcmcscG9sa2l0LCQoUE9MS0lUX1ZFUlNJT04p
-KQo+ICBQT0xLSVRfTElDRU5TRSA9IEdQTC0yLjAKPiAgUE9MS0lUX0xJQ0VOU0VfRklMRVMgPSBD
-T1BZSU5HCj4gIFBPTEtJVF9DUEVfSURfVkFMSUQgPSBZRVMKCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+Since the Polkit version bump 125, TestPolkitInitd fail due to an
+upstream issue related to the new PIDFD support introduced in
+Polkit 124 [1].
+
+The PIDFD issue only affect OS without systemd.
+
+Only enable PIDFD support when systemd is available until
+upstream fix the issue.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992596
+
+[1] https://github.com/polkit-org/polkit/issues/451
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ ...-PIDFD-when-systemd-is-not-available.patch | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 package/polkit/0001-meson-disable-PIDFD-when-systemd-is-not-available.patch
+
+diff --git a/package/polkit/0001-meson-disable-PIDFD-when-systemd-is-not-available.patch b/package/polkit/0001-meson-disable-PIDFD-when-systemd-is-not-available.patch
+new file mode 100644
+index 0000000000..621b1feef7
+--- /dev/null
++++ b/package/polkit/0001-meson-disable-PIDFD-when-systemd-is-not-available.patch
+@@ -0,0 +1,53 @@
++From 51a1c5b5ab616fe0243b40baddb4864199bbe624 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@smile.fr>
++Date: Sat, 2 Nov 2024 23:33:16 +0100
++Subject: [PATCH] meson: disable PIDFD when systemd is not available
++
++Since the Polkit version bump 125, TestPolkitInitd fail due to an
++upstream issue related to the new PIDFD support introduced in
++Polkit 124 [1].
++
++The PIDFD issue only affect OS without systemd.
++
++Only enable PIDFD support when systemd is available until
++upstream fix the issue.
++
++Fixes:
++https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992596
++
++[1] https://github.com/polkit-org/polkit/issues/451
++
++Upstream: Not applicable
++
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ meson.build | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index 302c189..5c247f4 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -202,8 +202,6 @@ if enable_logind
++ endif
++ config_data.set('HAVE_LIBSYSTEMD', enable_logind)
++ 
++-config_data.set('HAVE_PIDFD_OPEN', cc.get_define('SYS_pidfd_open', prefix: '#include <sys/syscall.h>') != '')
++-
++ # systemd unit / sysuser / tmpfiles.d file installation directories
++ systemdsystemunitdir = get_option('systemdsystemunitdir')
++ systemd_dep = dependency('systemd', required : false)
++@@ -222,6 +220,10 @@ else
++   tmpfiles_dir = '/usr/lib/tmpfiles.d'
++ endif
++ 
+++# PIDFD is broken with sysvinit based OS since 124 release
+++# https://github.com/polkit-org/polkit/issues/451
+++config_data.set('HAVE_PIDFD_OPEN', systemd_dep.found() and cc.get_define('SYS_pidfd_open', prefix: '#include <sys/syscall.h>') != '')
+++
++ # User for running polkitd
++ polkitd_user = get_option('polkitd_user')
++ config_data.set_quoted('POLKITD_USER', polkitd_user)
++-- 
++2.45.0
++
+-- 
+2.45.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
