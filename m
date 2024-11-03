@@ -1,78 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 353A1D1118E
-	for <buildroot@archiver.kernel.org>; Sun,  3 Nov 2024 19:02:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCCC1D1118E
+	for <buildroot@archiver.kernel.org>; Sun,  3 Nov 2024 19:20:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C8F4760598;
-	Sun,  3 Nov 2024 19:01:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69209406D4;
+	Sun,  3 Nov 2024 19:20:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xuztk5KjhHuW; Sun,  3 Nov 2024 19:01:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pb2T_QTvXpNb; Sun,  3 Nov 2024 19:20:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C015C6059B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31E5440DA7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C015C6059B;
-	Sun,  3 Nov 2024 19:01:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id AF7041128
- for <buildroot@buildroot.org>; Sun,  3 Nov 2024 19:01:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 31E5440DA7;
+	Sun,  3 Nov 2024 19:20:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6D9F7B8
+ for <buildroot@buildroot.org>; Sun,  3 Nov 2024 19:20:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9069D81403
- for <buildroot@buildroot.org>; Sun,  3 Nov 2024 19:01:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B60340DAB
+ for <buildroot@buildroot.org>; Sun,  3 Nov 2024 19:20:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V4AWIvWnekfq for <buildroot@buildroot.org>;
- Sun,  3 Nov 2024 19:01:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 69D4A80DF0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69D4A80DF0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 69D4A80DF0
- for <buildroot@buildroot.org>; Sun,  3 Nov 2024 19:01:54 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id CEAFA13F89C;
- Sun,  3 Nov 2024 20:01:50 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:37834])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 03 Nov 2024 20:01:50 +0100
-MIME-Version: 1.0
-Date: Sun, 03 Nov 2024 20:01:50 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5AcQ7q1dUJ-L for <buildroot@buildroot.org>;
+ Sun,  3 Nov 2024 19:20:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59E51406D4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 59E51406D4
+ for <buildroot@buildroot.org>; Sun,  3 Nov 2024 19:20:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4C85D85638; Sun,  3 Nov 2024 19:20:20 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Romain Naour <romain.naour@smile.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241103143751.756123-1-romain.naour@smile.fr>
-References: <20241103143751.756123-1-romain.naour@smile.fr>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <894c353f8b1392cc90c8552cabc0eefa@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1730660512;
- bh=99wLK8v93YofX6yEZ1V3PJcIJbyFBF3g34PwsYQwcBo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=fzNSMe+FNzUE4ECyb5xisMYW3h3jhqDf0SjoVX0Tl6XQPPO1p0fzYkgNTiu99Utcy
- lCheZGV4paK5EeAcFxINoBx1cldeC4wmzTvmZXTG+09gvRh9tM3p69O8YouUDwejiu
- ux0xtjKP0Zx7Tp4uWhJA7qwaUmfpr4vroVw/7wO+g/gnE/mQd7GxXDF3lKO+O0slFO
- oZUZFoHKG7x9Y1xnGNI5mSmkO4ipb6UAejj4rwp3L93e0A/frbVyEwqNiRLLIvWXm3
- LHr7CEcuwoHIZOSb0ngTa0ok/N/2q4Ix9keaoaSHoFkCWvL+ydKWDxL8aJpb1QNy4O
- K58gCkZYWZn8g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=fzNSMe+F
-Subject: Re: [Buildroot] [PATCH] board/mender/x86_64/post-image-efi.sh: use
- bash for genimage.sh
+To: buildroot@buildroot.org
+Date: Sun, 3 Nov 2024 20:04:26 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c146555faa3fe563e9848be562d129d08f561d7f
+X-Git-Newrev: 12de75644b427e317628d2a7c4169f7e74c10e73
+X-Patchwork-Hint: ignore
+Message-Id: <20241103192020.4C85D85638@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnvme: bump to version 1.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,65 +58,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 03/11/2024 15:37, Romain Naour via buildroot wrote:
-> mender_x86_64_efi_defconfig started failing to build since 2024.08 in
-> our Gitlab-ci since the board/mender/x86_64/post-image-efi.sh is
-> calling support/scripts/genimage.sh with the host default shell.
-> 
-> There is no problem if the default shell is bash but our docker
-> image uses dash as default shell. Since support/scripts/genimage.sh
-> is actually a bash script it's not going to work if bashisms are used:
-> 
->   support/scripts/genimage.sh: 57: Syntax error: redirection unexpected
-> 
-> Indeed bashisms have been added recently in
-> support/scripts/genimage.sh by the commit introducing bmap image
-> support [1].
-> 
-> Remove "sh" before support/scripts/genimage.sh and rely on
-> "/usr/bin/env bash" to find the bash interpreter.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/8233226891
-> 
-> [1] 6889056f1eb4293de67c28b1ff6ee34be05d2ee4
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+commit: https://git.buildroot.net/buildroot/commit/?id=12de75644b427e317628d2a7c4169f7e74c10e73
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master. Thanks!
+For release note, see:
+https://github.com/linux-nvme/libnvme/releases/tag/v1.11
 
-> ---
-> I checked if "sh support/scripts/genimage.sh" is used somewhere else.
-> ---
->  board/mender/x86_64/post-image-efi.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/board/mender/x86_64/post-image-efi.sh 
-> b/board/mender/x86_64/post-image-efi.sh
-> index 073b18c972..ab12386076 100755
-> --- a/board/mender/x86_64/post-image-efi.sh
-> +++ b/board/mender/x86_64/post-image-efi.sh
-> @@ -54,7 +54,7 @@ generate_mender_image() {
->  }
-> 
->  generate_image() {
-> -    sh support/scripts/genimage.sh -c "${BOARD_DIR}/genimage-efi.cfg"
-> +    support/scripts/genimage.sh -c "${BOARD_DIR}/genimage-efi.cfg"
->  }
-> 
->  # Main function.
-> --
-> 2.45.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libnvme/libnvme.hash | 2 +-
+ package/libnvme/libnvme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libnvme/libnvme.hash b/package/libnvme/libnvme.hash
+index 05727f7cb3..5c221b7dce 100644
+--- a/package/libnvme/libnvme.hash
++++ b/package/libnvme/libnvme.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  add9efa968e8341459fcaa2d96f2594a6f871e1fb3f57c02ce1c8ba5424f3960  libnvme-1.10.tar.gz
++sha256  f6da60036b14e0427246718a32abff442228331f9ae3853f89160cf366d83dfe  libnvme-1.11.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libnvme/libnvme.mk b/package/libnvme/libnvme.mk
+index 93de76e83e..b1039265df 100644
+--- a/package/libnvme/libnvme.mk
++++ b/package/libnvme/libnvme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNVME_VERSION = 1.10
++LIBNVME_VERSION = 1.11
+ LIBNVME_SITE = $(call github,linux-nvme,libnvme,v$(LIBNVME_VERSION))
+ LIBNVME_LICENSE = LGPL-2.1
+ LIBNVME_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
