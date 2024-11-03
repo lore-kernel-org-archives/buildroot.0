@@ -1,77 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BFC1D11180
-	for <buildroot@archiver.kernel.org>; Sun,  3 Nov 2024 16:30:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BF12D11187
+	for <buildroot@archiver.kernel.org>; Sun,  3 Nov 2024 17:38:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DECEF6077B;
-	Sun,  3 Nov 2024 16:30:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1F2E810CE;
+	Sun,  3 Nov 2024 17:38:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bEGKfbA9SeWC; Sun,  3 Nov 2024 16:30:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sX5FqY0bNcCD; Sun,  3 Nov 2024 17:38:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF53A607CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66DF680CA8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF53A607CE;
-	Sun,  3 Nov 2024 16:30:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 66DF680CA8;
+	Sun,  3 Nov 2024 17:38:10 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id BC42BB8
- for <buildroot@buildroot.org>; Sun,  3 Nov 2024 16:30:35 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 86E94723
+ for <buildroot@buildroot.org>; Sun,  3 Nov 2024 17:38:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9DA0741228
- for <buildroot@buildroot.org>; Sun,  3 Nov 2024 16:30:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 74BC740BCF
+ for <buildroot@buildroot.org>; Sun,  3 Nov 2024 17:38:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JfH-vbyj2Uvn for <buildroot@buildroot.org>;
- Sun,  3 Nov 2024 16:30:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 46A3341208
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46A3341208
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 46A3341208
- for <buildroot@buildroot.org>; Sun,  3 Nov 2024 16:30:34 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 35F9B780333;
- Sun,  3 Nov 2024 17:30:31 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:54196])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 03 Nov 2024 17:30:31 +0100
-MIME-Version: 1.0
-Date: Sun, 03 Nov 2024 17:30:31 +0100
+ id qTYIAFLHCTXz for <buildroot@buildroot.org>;
+ Sun,  3 Nov 2024 17:38:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC14D40BB7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC14D40BB7
+ for <buildroot@buildroot.org>; Sun,  3 Nov 2024 17:38:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D1FB38555C; Sun,  3 Nov 2024 17:38:06 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Romain Naour <romain.naour@smile.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241101225148.3432542-1-romain.naour@smile.fr>
-References: <20241101225148.3432542-1-romain.naour@smile.fr>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <d8b2e65d03903b457637cc7fcdaa3485@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1730651432;
- bh=IjYqS0IQnIrhrkoPJRpc/TGVL8DxvGQPsH1/BW8VGgk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=fABzgYlWwTRBXoPkKzInBk7bpf3X0wLfaf4mjRP9fAIRJAgVDfcX5G0AfvWC92f1F
- 1JpK9gVyHUTDAt3fTu83oJY7GPaEqUdJS51iWHl/mOtbC8k+68HNPF+SNZg5wdYgR+
- Ejuvvp52xLn37oTBA7Smbd9zA48fUcnijoI4PSi3YZf7Hul4M4ICUJHocjdPNJGmNx
- CXHxHW+Qu3I00yoxUyIQV2EZSEHBbn06yKF4vHJb1QA9bTN36wEciFRE/iXaw3G/1Z
- 9PpvgrLNOaQudmBID6J7LNsqupIs+jqmZ1yqF1Z2QmBYfyzGmDYdUpZA53q2rObmue
- LybJDxkR6Yo1w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=fABzgYlW
-Subject: Re: [Buildroot] [PATCH] package/util-linux: allowing building even
- on non-Y2038 compliant systems
+To: buildroot@buildroot.org
+Date: Sun, 3 Nov 2024 18:33:50 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 11ae90b0011abe3ad01d9953c7d41d444e689f5c
+X-Git-Newrev: 771da1dd9b209adfb27d2dd344a4b2fdcc8bacc4
+X-Patchwork-Hint: ignore
+Message-Id: <20241103173806.D1FB38555C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/nvidia_bf3_defconfig: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,79 +58,349 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============2454093666052274851=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/11/2024 23:51, Romain Naour via buildroot wrote:
-> Since the bump of util-linux to version 2.40.2 in Buildroot commit
-> f14929c657a7b1794dcd39ac469d2ad826465d98 ("package/util-linux: update
-> to 2.40.2"), the build will fail on systems that are not Y2038,
-> such as uClibc configurations.
-> 
-> In order to preserve the previous behavior, pass --disable-year2038.
-> See the gnulib documentation for details [0]. Contrary to what the
-> option name might suggest, it doesn't really disable Y2038 support,
-> but only the check that the system is Y2038 compliant. So even with
-> --disable-year2038, if the system is Y2038 compliant (uses a 64-bit
-> arch, uses the musl C library, or uses the glibc C library with
-> BR2_TIME_BITS_64=y), util-linux tools will be Y2038 compliant.
-> 
-> "--disable-year2038" is already used to build tar package since [1].
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992338 
-> (TestIso9660SyslinuxInternal)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992337 
-> (TestIso9660SyslinuxExternalCompress)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992335 
-> (TestIso9660SyslinuxExternal)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992259 
-> (TestSysLinuxX86LegacyBios)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992257 
-> (TestSysLinuxX86EFI)
-> 
-> [0] 
-> https://www.gnu.org/software/gnulib/manual/html_node/Avoiding-the-year-2038-problem.html
-> [1] 7f1088f9cae9f191740423a0084bb31f94af2e75
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+--===============2454093666052274851==
+Content-Type: text/plain
 
-Applied to master. Thanks!
+commit: https://git.buildroot.net/buildroot/commit/?id=771da1dd9b209adfb27d2dd344a4b2fdcc8bacc4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> ---
->  package/util-linux/util-linux.mk | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/util-linux/util-linux.mk 
-> b/package/util-linux/util-linux.mk
-> index c3737a8d12..7a143290eb 100644
-> --- a/package/util-linux/util-linux.mk
-> +++ b/package/util-linux/util-linux.mk
-> @@ -42,9 +42,13 @@ UTIL_LINUX_DEPENDENCIES = \
->  	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBS),util-linux-libs) \
->  	$(TARGET_NLS_DEPENDENCIES)
-> +# --disable-year2038: tells the configure script to not abort if the
-> +# system is not Y2038 compliant. util-linux will support year2038 if
-> +# the system is compliant even with this option passed
->  UTIL_LINUX_CONF_OPTS += \
->  	--disable-rpath \
-> -	--disable-makeinstall-chown
-> +	--disable-makeinstall-chown \
-> +	--disable-year2038
-> 
->  UTIL_LINUX_LINK_LIBS = $(TARGET_NLS_LIBS)
-> 
-> --
-> 2.45.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+This patch adds a basic support for the Bluefied3 board from
+Mellanox/NVIDIA:
+  - https://www.nvidia.com/en-us/networking/products/data-processing-unit/
+
+  Brief summary of the board features:
+  - multicore ARM
+      - 16 Core ARM Processor
+  - DDR4: 16GB/32GB
+  - 2x embedded CX7
+
+Signed-off-by: Vincent Jardin <vjardin@free.fr>
+Reviewed-by: Julien Olivain <ju.o@free.fr>
+[Julien:
+- remove add-custom-hashes from the commit log
+- add link for upstream kernel hashes
+- check hash with pgp
+- reflow the readme.txt
+- regenerated defconfig with make savedefconfig]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ DEVELOPERS                                         |   2 +
+ board/nvidia/bf3/linux.config                      | 163 +++++++++++++++++++++
+ .../bf3/patches/linux-headers/linux-headers.hash   |   1 +
+ board/nvidia/bf3/patches/linux/linux.hash          |   4 +
+ board/nvidia/bf3/readme.txt                        |  70 +++++++++
+ configs/nvidia_bf3_defconfig                       |  12 ++
+ 6 files changed, 252 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 327b2e64db..edf823b34b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3271,6 +3271,8 @@ N:	Victor Huesca <victor.huesca@bootlin.com>
+ F:	support/testing/tests/core/test_root_password.py
+ 
+ N:	Vincent Jardin <vjardin@free.fr>
++F:	board/nvidia/bf3/
++F:	configs/nvidia_bf3_defconfig
+ F:	package/dpdk/
+ 
+ N:	Vincent Prince <vincent.prince.fr@gmail.com>
+diff --git a/board/nvidia/bf3/linux.config b/board/nvidia/bf3/linux.config
+new file mode 100644
+index 0000000000..5dce565481
+--- /dev/null
++++ b/board/nvidia/bf3/linux.config
+@@ -0,0 +1,163 @@
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_NO_HZ_IDLE=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_TASKSTATS=y
++CONFIG_MEMCG=y
++CONFIG_BLK_CGROUP=y
++CONFIG_CPUSETS=y
++CONFIG_CGROUP_DEVICE=y
++CONFIG_CGROUP_CPUACCT=y
++CONFIG_SCHED_AUTOGROUP=y
++CONFIG_PROFILING=y
++CONFIG_ARCH_VEXPRESS=y
++CONFIG_COMPAT=y
++CONFIG_ACPI=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_BLK_DEV_BSGLIB=y
++CONFIG_BINFMT_MISC=y
++CONFIG_TRANSPARENT_HUGEPAGE=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_PACKET_DIAG=y
++CONFIG_UNIX=y
++CONFIG_NET_KEY=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_ADVANCED_ROUTER=y
++CONFIG_BRIDGE=y
++CONFIG_NET_SCHED=y
++CONFIG_VSOCKETS=y
++CONFIG_PCI=y
++CONFIG_PCI_HOST_GENERIC=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_FW_CFG_SYSFS=y
++CONFIG_FW_CFG_SYSFS_CMDLINE=y
++CONFIG_VIRTIO_BLK=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_CHR_DEV_SG=y
++CONFIG_SCSI_CONSTANTS=y
++CONFIG_SCSI_LOGGING=y
++CONFIG_SCSI_SCAN_ASYNC=y
++CONFIG_SCSI_VIRTIO=y
++CONFIG_ATA=y
++CONFIG_NETDEVICES=y
++CONFIG_DUMMY=y
++CONFIG_MACVLAN=y
++CONFIG_VIRTIO_NET=y
++CONFIG_NLMON=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_SERIAL_AMBA_PL011=y
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
++CONFIG_VIRTIO_CONSOLE=y
++CONFIG_HW_RANDOM=y
++CONFIG_HW_RANDOM_VIRTIO=y
++CONFIG_TCG_TPM=y
++CONFIG_TCG_TIS=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_PL031=y
++CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_INPUT=y
++CONFIG_VIRTIO_MMIO=y
++CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
++CONFIG_MAILBOX=y
++CONFIG_PL320_MBOX=y
++CONFIG_ARM_SMMU_V3=y
++CONFIG_EXT4_FS=y
++CONFIG_FUSE_FS=y
++CONFIG_VIRTIO_FS=y
++CONFIG_OVERLAY_FS=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_RAS=y
++CONFIG_EDAC=y
++CONFIG_EDAC_LEGACY_SYSFS=y
++CONFIG_EDAC_BLUEFIELD=y
++CONFIG_I2C=y
++CONFIG_MELLANOX_PLATFORM=y
++CONFIG_REGMAP_I2C=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_GPIO_MLXBF2=y
++CONFIG_GPIO_MLXBF3=y
++CONFIG_GPIO_MLXBF=y
++CONFIG_I2C_MLXBF=y
++CONFIG_I2C_MLXCPLD=y
++CONFIG_I2C_MUX=y
++CONFIG_I2C_MUX_MLXCPLD=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_MLXCPLD=y
++CONFIG_LEDS_MLXREG=y
++CONFIG_NET_SWITCHDEV=y
++CONFIG_MLX5_BRIDGE=y
++CONFIG_NET_CLS_ACT=y
++CONFIG_NET_TC_SKB_EXT=y
++CONFIG_CONFIG_NET_CLS_ACT=y
++CONFIG_MLX5_CLS_ACT=y
++CONFIG_DCB=y
++CONFIG_MLX5_CORE_EN_DCB=y
++CONFIG_MLX5_CORE_EN=y
++CONFIG_MLX5_CORE=y
++CONFIG_MLX5_DPLL=y
++CONFIG_MLX5_EN_ARFS=y
++CONFIG_INET_ESP=y
++CONFIG_INET6_ESP=y
++CONFIG_XFRM_OFFLOAD=y
++CONFIG_INET_ESP_OFFLOAD=y
++CONFIG_INET6_ESP_OFFLOAD=y
++CONFIG_MLX5_EN_IPSEC=y
++CONFIG_MLX5_EN_RXNFC=y
++CONFIG_TLS_DEVICE=y
++CONFIG_TLS=y
++CONFIG_MLX5_EN_TLS=y
++CONFIG_MLX5_ESWITCH=y
++CONFIG_MLX5_FPGA_IPSEC=y
++CONFIG_MLX5_FPGA_TLS=y
++CONFIG_MLX5_FPGA=y
++CONFIG_MLX5_IPSEC=y
++CONFIG_MACSEC=y
++CONFIG_MLX5_MACSEC=y
++CONFIG_MLX5_MPFS=y
++CONFIG_MLX5_SF_MANAGER=y
++CONFIG_MLX5_SF=y
++CONFIG_MLX5_SW_STEERING=y
++CONFIG_NETFILTER=y
++CONFIG_NETFILTER_INGRESS=y
++CONFIG_NF_CONNTRACK=y
++CONFIG_NF_TABLES=y
++CONFIG_NF_FLOW_TABLE=y
++CONFIG_NET_ACT_CT=y
++CONFIG_MLX5_TC_CT=y
++CONFIG_MLX5_TC_SAMPLE=y
++CONFIG_MLX5_TLS=y
++CONFIG_VDPA=y
++CONFIG_VHOST_IOTLB=y
++CONFIG_MLX5_VDPA_NET=y
++CONFIG_MLX5_VDPA_STEERING_DEBUG=y
++CONFIG_MLX5_VDPA=y
++CONFIG_IOMMUFD=y
++CONFIG_IOMMU_SUPPORT=y
++CONFIG_VFIO=y
++CONFIG_MLX5_VFIO_PCI=y
++CONFIG_MLXBF_BOOTCTL=y
++CONFIG_MLXBF_GIGE=y
++CONFIG_MLXBF_PMC=y
++CONFIG_MLXBF_TMFIFO=y
++CONFIG_MLXFW=y
++CONFIG_MLXREG_HOTPLUG=y
++CONFIG_MLXREG_IO=y
++CONFIG_WATCHDOG=y
++CONFIG_MLX_WDT=y
++CONFIG_MMC=y
++CONFIG_MMC_DW=y
++CONFIG_MMC_DW_BLUEFIELD=y
++CONFIG_NET_VENDOR_MELLANOX=y
++CONFIG_PINCTRL=y
++CONFIG_PINCTRL_MLXBF3=y
++CONFIG_POWER_MLXBF=y
++CONFIG_SENSORS_MLXREG_FAN=y
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_RD_GZIP=y
++CONFIG_INITRAMFS_COMPRESSION_GZIP=y
+diff --git a/board/nvidia/bf3/patches/linux-headers/linux-headers.hash b/board/nvidia/bf3/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/nvidia/bf3/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/nvidia/bf3/patches/linux/linux.hash b/board/nvidia/bf3/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..d2272b2110
+--- /dev/null
++++ b/board/nvidia/bf3/patches/linux/linux.hash
+@@ -0,0 +1,4 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++# After checking with pgp with using key
++# B8868C80BA62A1FFFAF5FDA9632D3A06589DA6B1
++sha256  c954f60197008f1e1f32a1e77293903cf3801d2543ec4bf521f5651eb7f133ce  linux-6.11.6.tar.xz
+diff --git a/board/nvidia/bf3/readme.txt b/board/nvidia/bf3/readme.txt
+new file mode 100644
+index 0000000000..7e072d21e2
+--- /dev/null
++++ b/board/nvidia/bf3/readme.txt
+@@ -0,0 +1,70 @@
++*****************
++BlueField 3 Board
++*****************
++
++The BlueField 3 board is provided "as-is" without official support
++from NVIDIA.
++
++For a detailed description of this board, please refer to the official
++website:
++https://www.nvidia.com/en-us/networking/products/data-processing-unit/
++
++
++Missing Kernel Modules
++======================
++
++Please note that the following kernel modules are unavailable as they
++are not included in the Linux upstream repository:
++  - CONFIG_MLXBF_PTM (module: mlxbf-ptm)
++  - CONFIG_MLXBF_PKA (module: mlxbf-pka)
++
++For further details on these kernel modules and their usage, please
++refer to the NVIDIA documentation:
++https://docs.nvidia.com/networking/display/bluefielddpuosv470/installing+popular+linux+distributions+on+bluefield
++
++
++Boot loader
++===========
++
++NVIDIA does not provide information for rebuilding the ARM BL1, BL2,
++BL3, UEFI, or other components in the boot stages. Therefore, we
++assume the BF3 board is already running the pre-built Ubuntu image
++provided in the BFB installation format.
++
++Since there are no available details on the BF3's BFB format or the
++ARM Trusted Firmware (ATF) needed to rebuild BL1, BL2, BL3, UEFI, or
++GRUB, these components are assumed to remain unmodified.
++
++
++Grub Configuration and Image Loading
++====================================
++
++The board's image is loaded from the BF3's GRUB, with the following
++GRUB settings, assuming the console is set to `hvc0` to provide access
++thru `/dev/rshimN/console` from the root CPU since the root CPU's
++rshim exposes a virtio console over the PCIe bus to the BR3 board.
++
++To update GRUB settings, boot using the built-in BF3 Ubuntu image.
++
++Extract of /etc/default/grub:
++
++    GRUB_DEFAULT=0
++    GRUB_TIMEOUT_STYLE=menu
++    GRUB_TIMEOUT=-1
++    GRUB_RECORDFAIL_TIMEOUT=5
++    GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
++    GRUB_CMDLINE_LINUX_DEFAULT=""
++    GRUB_CMDLINE_LINUX="console=hvc0 earlyprintk=hvc0 earlycon=hvc0 loglevel=7 fixrtc net.ifnames=0 biosdevname=0 iommu.passthrough=1"
++
++
++Uploading Buildroot Images
++--------------------------
++
++After configuring GRUB, you can upload your Buildroot images to the
++BF3’s GRUB boot folder:
++
++    scp build_folder/images/Image BF3:/boot/vmlinuz-buildroot-xyz
++
++Finally, run `update-grub` on the BF3 board to apply the updated GRUB settings.
++
++Enjoy!
+diff --git a/configs/nvidia_bf3_defconfig b/configs/nvidia_bf3_defconfig
+new file mode 100644
+index 0000000000..3f958c0062
+--- /dev/null
++++ b/configs/nvidia_bf3_defconfig
+@@ -0,0 +1,12 @@
++BR2_aarch64=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
++BR2_GLOBAL_PATCH_DIR="board/nvidia/bf3/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.6"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/nvidia/bf3/linux.config"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_TARGET_ROOTFS_INITRAMFS=y
++# BR2_TARGET_ROOTFS_TAR is not set
+
+--===============2454093666052274851==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2454093666052274851==--
