@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FFF2D1CA04
-	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 22:07:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DC84D1CA01
+	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 22:07:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D274B80FFF;
-	Mon,  4 Nov 2024 22:07:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3EA5A402D7;
+	Mon,  4 Nov 2024 22:07:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9gcLo1u5YGJF; Mon,  4 Nov 2024 22:07:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id viv4RFxWIdGt; Mon,  4 Nov 2024 22:07:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2F54810BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D97574038D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B2F54810BF;
-	Mon,  4 Nov 2024 22:07:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D97574038D;
+	Mon,  4 Nov 2024 22:07:11 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 50FD5B8
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 22:06:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7990AB8
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 22:06:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC559400AC
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 22:06:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4AD7A40100
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 22:06:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dCMgRD_n1gBa for <buildroot@buildroot.org>;
+ id oth52DKtoaLd for <buildroot@buildroot.org>;
  Mon,  4 Nov 2024 22:06:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80F5C4057A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69DD54059E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 80F5C4057A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 69DD54059E
  for <buildroot@buildroot.org>; Mon,  4 Nov 2024 22:06:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6DFC285D04; Mon,  4 Nov 2024 22:06:51 +0000 (UTC)
+ id 5638585D00; Mon,  4 Nov 2024 22:06:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 4 Nov 2024 23:03:52 +0100
+Date: Mon, 4 Nov 2024 23:03:47 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0d4177598ce7e73f2b97ac58c21fb177343643e3
-X-Git-Newrev: fba62f2ab13c095de860a07851d148181f4e38bc
+X-Git-Oldrev: cc0823c2d14321b91b94801834050331f5ea28e1
+X-Git-Newrev: c58a2a9687c045379c0f768c8c6c1c1a41842a85
 X-Patchwork-Hint: ignore
-Message-Id: <20241104220651.6DFC285D04@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: test_edk2: update and
- re-enable the test
+Message-Id: <20241104220651.5638585D00@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_aarch64_sbsa_defconfig:
+ switch to neoverse-n1 (armv8.2a)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,61 +66,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fba62f2ab13c095de860a07851d148181f4e38bc
+commit: https://git.buildroot.net/buildroot/commit/?id=c58a2a9687c045379c0f768c8c6c1c1a41842a85
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The EDK2 bump to stable202405 introduced an incompatibility with the
-Qemu version 5.2.0 present in the reference Docker image. For that
-reason, this test was disabled.
+The SBSA Reference Platform was updated to neoverse-n1 (armv8.2a) in
+Qemu v8.1 [1].
 
-This commit updates ATF to 2.11 and kernel to 6.6.58, and enables
-host-qemu in the build, to be used by the runtime test infrastructure.
+BR2_cortex_a57:
+  # cat /proc/cpuinfo
+  processor       : 0
+  BogoMIPS        : 2000.00
+  Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+  CPU implementer : 0x41
+  CPU architecture: 8
+  CPU variant     : 0x1
+  CPU part        : 0xd07
+  CPU revision    : 0
+[...]
 
-Those changes are fixing this test, which is why this commit re-enables
-it by removing the skipTest() invocation.
+BR2_neoverse_n1:
+  # cat /proc/cpuinfo
+  processor       : 0
+  BogoMIPS        : 2000.00
+  Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp ssbs
+  CPU implementer : 0x41
+  CPU architecture: 8
+  CPU variant     : 0x4
+  CPU part        : 0xd0c
+  CPU revision    : 1
+[...]
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Tests test_fwts.py test_edk2.py using
+BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA=y are not updated to neoverse-n1 by
+this commit. Those tests were disabled in a previous commit. Those
+tests will be updated and fixed in followup commits.
+
+Note: SBSA Reference Platform was recently updated again to neoverse-n2
+(armv9.0a) in Qemu v9.1 [2]. But there is no armv9.0a support yet in
+Buildroot.
+
+[1] https://gitlab.com/qemu-project/qemu/-/commit/1877272bad7b08b67312503ee66184279876c7bd
+[2] https://gitlab.com/qemu-project/qemu/-/commit/b1d592e7b0a7301eae8e3baa99744ac35db3cd2a
+
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
+[Julien: add a small comment in commit log about tests]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/testing/tests/boot/test_edk2.py | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ board/qemu/aarch64-sbsa/readme.txt  | 2 +-
+ configs/qemu_aarch64_sbsa_defconfig | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/boot/test_edk2.py b/support/testing/tests/boot/test_edk2.py
-index 7d350f52d9..e6b7855284 100644
---- a/support/testing/tests/boot/test_edk2.py
-+++ b/support/testing/tests/boot/test_edk2.py
-@@ -16,7 +16,7 @@ class TestEdk2(infra.basetest.BRTest):
-         BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/qemu/aarch64-sbsa/genimage.cfg"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.34"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.58"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="support/testing/tests/boot/test_edk2/linux.config"
-         BR2_TARGET_EDK2=y
-@@ -25,18 +25,16 @@ class TestEdk2(infra.basetest.BRTest):
-         BR2_TARGET_GRUB2_ARM64_EFI=y
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.11"
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu_sbsa"
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-         BR2_PACKAGE_HOST_GENIMAGE=y
-         BR2_PACKAGE_HOST_DOSFSTOOLS=y
-         BR2_PACKAGE_HOST_MTOOLS=y
-+        BR2_PACKAGE_HOST_QEMU=y
-+        BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-         """
+diff --git a/board/qemu/aarch64-sbsa/readme.txt b/board/qemu/aarch64-sbsa/readme.txt
+index cf5f66d4d6..7d97d7f6ab 100644
+--- a/board/qemu/aarch64-sbsa/readme.txt
++++ b/board/qemu/aarch64-sbsa/readme.txt
+@@ -17,7 +17,7 @@ Run the emulation with:
  
--    def setUp(self):
--        self.skipTest("Incompatible QEmu 5.2.0 (Docker image) / "
--                      "EDK2 (stable202405) versions.")
--
-     def test_run(self):
-         hda = os.path.join(self.builddir, "images", "disk.img")
-         flash0 = os.path.join(self.builddir, "images", "SBSA_FLASH0.fd")
+   qemu-system-aarch64 \
+     -M sbsa-ref \
+-    -cpu cortex-a57 \
++    -cpu neoverse-n1 \
+     -smp 4 \
+     -m 1024 \
+     -nographic \
+diff --git a/configs/qemu_aarch64_sbsa_defconfig b/configs/qemu_aarch64_sbsa_defconfig
+index 23d274b529..6df2b2e273 100644
+--- a/configs/qemu_aarch64_sbsa_defconfig
++++ b/configs/qemu_aarch64_sbsa_defconfig
+@@ -1,5 +1,5 @@
+ BR2_aarch64=y
+-BR2_cortex_a57=y
++BR2_neoverse_n1=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
