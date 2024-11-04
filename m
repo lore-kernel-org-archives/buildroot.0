@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDBA1D1CA00
-	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 21:56:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A38BCD1CA00
+	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 21:59:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D123880E47;
-	Mon,  4 Nov 2024 21:56:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 655E080FA2;
+	Mon,  4 Nov 2024 21:59:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BLxVwVJyZcXq; Mon,  4 Nov 2024 21:56:46 +0000 (UTC)
+ id mZyCgq5HJbkP; Mon,  4 Nov 2024 21:59:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1E2280FB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8756980FA6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1E2280FB9;
-	Mon,  4 Nov 2024 21:56:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id AE42D723
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 21:56:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8756980FA6;
+	Mon,  4 Nov 2024 21:59:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C82B7B8
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 21:59:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9AED780FF5
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 21:56:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A0A134031B
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 21:59:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a7PhZL6gaZTD for <buildroot@buildroot.org>;
- Mon,  4 Nov 2024 21:56:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id I3UFlCiETkPS for <buildroot@buildroot.org>;
+ Mon,  4 Nov 2024 21:59:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0F58A81025
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F58A81025
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0F58A81025
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 21:56:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3E0E71BF205;
- Mon,  4 Nov 2024 21:56:38 +0000 (UTC)
-Date: Mon, 4 Nov 2024 22:56:37 +0100
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-Message-ID: <20241104225637.73691b7e@windsurf>
-In-Reply-To: <20241027212732.3337953-1-ju.o@free.fr>
-References: <20241027212732.3337953-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1730757398;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=5Gy7w2JooaWDqUOeH4L8PIR5hphBONTelJYbbs9qTng=;
- b=R3mpq8j866PwgUr1VniDzk8FhkHd0D5rxRdRmY6ZVFJ28KVr9eHaZpPV+NnVSttdIrJE0J
- OECYgNVdKw9cnjGj7UtVlm1Q3+mGyOpzYZHT+u+pwb8iew1UD45CLA5nrNXA2CnI2HQheQ
- sF5g5GRSITdE9NkYpU7PcQ79Ue5+0BED+PISDZk33wTbXPGbotYOxklvB1wLJrwAp6Rdgo
- H2G4HFYxgbjZVJomf6eo8Lea7DUmdMH6BLCa40ywPz8oWHFgpjEyXWRe3pfNMqWQ8GN/Ws
- y/wTJ6ATQQQTDyjSugY504bb4jMJNVjz9vHf7cRTe38DUGluZsR/esv3V8QGWA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=R3mpq8j8
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add audit runtime test
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 843D840328
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 843D840328
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 21:59:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6C5BB85C48; Mon,  4 Nov 2024 21:59:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 4 Nov 2024 22:56:58 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 60e0817ebec2a76a0c65b038092245642b31d52f
+X-Git-Newrev: 46f794853a008cc0ac96b3bd42b3d5b536301092
+X-Patchwork-Hint: ignore
+Message-Id: <20241104215906.6C5BB85C48@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-lsdbus: bump to version
+ ae5e674e5e792dd72e4164c436ca7b064158e7c6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,29 +60,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 27 Oct 2024 22:27:32 +0100
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=46f794853a008cc0ac96b3bd42b3d5b536301092
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This test was suggested by Thomas, in:
-> https://lists.buildroot.org/pipermail/buildroot/2024-October/766091.html
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-> Patch tested in:
-> https://gitlab.com/jolivain/buildroot/-/jobs/8199781301
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lua-lsdbus/lua-lsdbus.hash | 2 +-
+ package/lua-lsdbus/lua-lsdbus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lua-lsdbus/lua-lsdbus.hash b/package/lua-lsdbus/lua-lsdbus.hash
+index 93a086f16c..43029f61e9 100644
+--- a/package/lua-lsdbus/lua-lsdbus.hash
++++ b/package/lua-lsdbus/lua-lsdbus.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9a967720736b0f6ff9b3f527846de28aaf74f58775af6358c13c31c0ac37b832  lua-lsdbus-ca7509b41a26b4a3c9b9d2c523be090bdbcc89fe.tar.gz
++sha256  33d14d52df702dbb2b1e5b7770cb4e4efb11df2da0b743c5f9a19e16a09783fe  lua-lsdbus-ae5e674e5e792dd72e4164c436ca7b064158e7c6.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/lua-lsdbus/lua-lsdbus.mk b/package/lua-lsdbus/lua-lsdbus.mk
+index 865a5f8f34..606fa16c5e 100644
+--- a/package/lua-lsdbus/lua-lsdbus.mk
++++ b/package/lua-lsdbus/lua-lsdbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_LSDBUS_VERSION = ca7509b41a26b4a3c9b9d2c523be090bdbcc89fe
++LUA_LSDBUS_VERSION = ae5e674e5e792dd72e4164c436ca7b064158e7c6
+ LUA_LSDBUS_SITE = $(call github,kmarkus,lsdbus,$(LUA_LSDBUS_VERSION))
+ LUA_LSDBUS_DEPENDENCIES = luainterpreter mxml systemd
+ LUA_LSDBUS_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
