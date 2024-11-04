@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB9EFD1BDF1
-	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 20:42:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44E35D1BDF2
+	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 20:42:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8BB580F2F;
-	Mon,  4 Nov 2024 20:42:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 146598104B;
+	Mon,  4 Nov 2024 20:42:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g4vo7oXTrrB0; Mon,  4 Nov 2024 20:42:07 +0000 (UTC)
+ id 3yDdYxUwQgGU; Mon,  4 Nov 2024 20:42:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3DA581021
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2680681063
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3DA581021;
-	Mon,  4 Nov 2024 20:42:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D54D83B
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2680681063;
+	Mon,  4 Nov 2024 20:42:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 11F0F27E1
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C30D181021
+ by smtp4.osuosl.org (Postfix) with ESMTP id F0816402A9
  for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CFh4cJPYm5Tx for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V0Gqj9jVf96R for <buildroot@buildroot.org>;
  Mon,  4 Nov 2024 20:42:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 993908101B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B403A4030B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 993908101B
+ by smtp4.osuosl.org (Postfix) with ESMTP id B403A4030B
  for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 92C4585BFC; Mon,  4 Nov 2024 20:42:04 +0000 (UTC)
+ id 9F74584CC9; Mon,  4 Nov 2024 20:42:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 4 Nov 2024 21:39:12 +0100
+Date: Mon, 4 Nov 2024 21:39:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd30022e9cb74c4171c7d8874fac3b5f4aa9253c
-X-Git-Newrev: 1ddc2bcb36144f3f6ab4991207b372eae6ca6979
+X-Git-Oldrev: 1ddc2bcb36144f3f6ab4991207b372eae6ca6979
+X-Git-Newrev: 80bf8d11e651f208df36aa03a843b5fdbd432610
 X-Patchwork-Hint: ignore
-Message-Id: <20241104204204.92C4585BFC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-botocore: bump to version
- 1.35.53
+Message-Id: <20241104204204.9F74584CC9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-colorlog: bump to version
+ 6.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,45 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ddc2bcb36144f3f6ab4991207b372eae6ca6979
+commit: https://git.buildroot.net/buildroot/commit/?id=80bf8d11e651f208df36aa03a843b5fdbd432610
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-botocore/python-botocore.hash | 4 ++--
- package/python-botocore/python-botocore.mk   | 4 ++--
+ package/python-colorlog/python-colorlog.hash | 4 ++--
+ package/python-colorlog/python-colorlog.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
-index 5dc348fc30..6879cee31c 100644
---- a/package/python-botocore/python-botocore.hash
-+++ b/package/python-botocore/python-botocore.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/botocore/json
--md5  5742162ec6e63e7d7ea7ccc7d1f8c0b0  botocore-1.35.36.tar.gz
--sha256  354ec1b766f0029b5d6ff0c45d1a0f9e5007b7d2f3ec89bcdd755b208c5bc797  botocore-1.35.36.tar.gz
-+md5  41a22a0b48a9f4a90f5333fd64bfcb34  botocore-1.35.53.tar.gz
-+sha256  e610ae076ad1eaed5680d3990493659bbabdffd67b15c61d8373a23e4bc41062  botocore-1.35.53.tar.gz
+diff --git a/package/python-colorlog/python-colorlog.hash b/package/python-colorlog/python-colorlog.hash
+index 8750149f75..464ec55321 100644
+--- a/package/python-colorlog/python-colorlog.hash
++++ b/package/python-colorlog/python-colorlog.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/colorlog/json
+-md5  0e1097df510644310e09593929e89096  colorlog-6.8.2.tar.gz
+-sha256  3e3e079a41feb5a1b64f978b5ea4f46040a94f11f0e8bbb8261e3dbbeca64d44  colorlog-6.8.2.tar.gz
++md5  eded3e4cf270c1d1fabc170826f4d735  colorlog-6.9.0.tar.gz
++sha256  bfba54a1b93b94f54e1f4fe48395725a3d92fd2a4af702f6bd70946bdc0c6ac2  colorlog-6.9.0.tar.gz
  # Locally computed sha256 checksums
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  tests/unit/auth/aws4_testsuite/LICENSE
-diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
-index 84a8d43705..3f05c051a2 100644
---- a/package/python-botocore/python-botocore.mk
-+++ b/package/python-botocore/python-botocore.mk
+ sha256  b1d9082bc483623fd59fc7279b457f0e40d942a76426cde257239e04dfe4125a  LICENSE
+diff --git a/package/python-colorlog/python-colorlog.mk b/package/python-colorlog/python-colorlog.mk
+index 5289c08cda..c23e1c720f 100644
+--- a/package/python-colorlog/python-colorlog.mk
++++ b/package/python-colorlog/python-colorlog.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BOTOCORE_VERSION = 1.35.36
-+PYTHON_BOTOCORE_VERSION = 1.35.53
- PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
--PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/8d/4f/11d2d314f0bdbe7ff975737d125e1a5357115afe28fcc64f13e68b05ba61
-+PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/48/c9/d5a1f5ad4024eda0d5d1b4103d28085c13cf42ca377fc141f7df4ad1cec9
- PYTHON_BOTOCORE_SETUP_TYPE = setuptools
- PYTHON_BOTOCORE_LICENSE = Apache-2.0
- PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt tests/unit/auth/aws4_testsuite/LICENSE
+-PYTHON_COLORLOG_VERSION = 6.8.2
++PYTHON_COLORLOG_VERSION = 6.9.0
+ PYTHON_COLORLOG_SOURCE = colorlog-$(PYTHON_COLORLOG_VERSION).tar.gz
+-PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/db/38/2992ff192eaa7dd5a793f8b6570d6bbe887c4fbbf7e72702eb0a693a01c8
++PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/d3/7a/359f4d5df2353f26172b3cc39ea32daa39af8de522205f512f458923e677
+ PYTHON_COLORLOG_SETUP_TYPE = setuptools
+ PYTHON_COLORLOG_LICENSE = MIT
+ PYTHON_COLORLOG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
