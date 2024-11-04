@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34635D1BDED
-	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 20:43:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70246D1BDF1
+	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 20:43:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F037540540;
-	Mon,  4 Nov 2024 20:43:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3DF38810A2;
+	Mon,  4 Nov 2024 20:43:03 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7qe4xy-WBOcS; Mon,  4 Nov 2024 20:43:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39DE3810DA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39DE3810DA;
+	Mon,  4 Nov 2024 20:43:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 029E83B
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C139140530
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GmfWKDhSTGd9; Mon,  4 Nov 2024 20:42:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A16C440545
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A16C440545;
-	Mon,  4 Nov 2024 20:42:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7171927E1
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0095D4056A
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X4RU87Z4n_RC for <buildroot@buildroot.org>;
- Mon,  4 Nov 2024 20:42:06 +0000 (UTC)
+ id rhP7kXoyKyCB for <buildroot@buildroot.org>;
+ Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1FFB4059E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F223B40528
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B1FFB4059E
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F223B40528
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AA542843A1; Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
+ id EE45D84CC9; Mon,  4 Nov 2024 20:42:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 4 Nov 2024 21:39:46 +0100
+Date: Mon, 4 Nov 2024 21:39:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 253aff15a86d0d3d74ff7a224b439c20f3382fc7
-X-Git-Newrev: af471fc415bdf3719ff2fc605274080f4926251a
+X-Git-Oldrev: 9c2db937d85c8968ea1d6b5da18742167b87ab3c
+X-Git-Newrev: 41ac6c2be67fbd43dba8e0b7b3e6e3465dfe1aa8
 X-Patchwork-Hint: ignore
-Message-Id: <20241104204205.AA542843A1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-yarl: bump to version 1.17.1
+Message-Id: <20241104204204.EE45D84CC9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-mwscrape: bump to version
+ 2e153faa678b90402ca87aa765f7d11386d7942c
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +66,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af471fc415bdf3719ff2fc605274080f4926251a
+commit: https://git.buildroot.net/buildroot/commit/?id=41ac6c2be67fbd43dba8e0b7b3e6e3465dfe1aa8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-yarl/python-yarl.hash | 4 ++--
- package/python-yarl/python-yarl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-mwscrape/python-mwscrape.hash | 2 +-
+ package/python-mwscrape/python-mwscrape.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
-index 0966c51a55..3918383548 100644
---- a/package/python-yarl/python-yarl.hash
-+++ b/package/python-yarl/python-yarl.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/yarl/json
--md5  7b27203f854753afb8e6b0b560459f1d  yarl-1.17.0.tar.gz
--sha256  d3f13583f378930377e02002b4085a3d025b00402d5a80911726d43a67911cd9  yarl-1.17.0.tar.gz
-+md5  d356afad18b20095b766ad47bedcb34a  yarl-1.17.1.tar.gz
-+sha256  067a63fcfda82da6b198fa73079b1ca40b7c9b7994995b6ee38acda728b64d47  yarl-1.17.1.tar.gz
- # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
-index 2c6ff3ecc9..c7d846521f 100644
---- a/package/python-yarl/python-yarl.mk
-+++ b/package/python-yarl/python-yarl.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-mwscrape/python-mwscrape.hash b/package/python-mwscrape/python-mwscrape.hash
+index 0f64a9e19c..82964d317e 100644
+--- a/package/python-mwscrape/python-mwscrape.hash
++++ b/package/python-mwscrape/python-mwscrape.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  2d0e6c747f6a866dedbc759f78830b3f496e8d03401a3c727d0b48735341c5b6  python-mwscrape-568ccbe6e12dd6391277df02adf724ba0e5f9197.tar.gz
++sha256  11b97dab59a4494238fc7f86c3d132bd9f042890284e9f477ed4cef0e869921f  python-mwscrape-2e153faa678b90402ca87aa765f7d11386d7942c.tar.gz
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE.txt
+diff --git a/package/python-mwscrape/python-mwscrape.mk b/package/python-mwscrape/python-mwscrape.mk
+index 8b6c718c56..b15e026505 100644
+--- a/package/python-mwscrape/python-mwscrape.mk
++++ b/package/python-mwscrape/python-mwscrape.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_YARL_VERSION = 1.17.0
-+PYTHON_YARL_VERSION = 1.17.1
- PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
--PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/55/8f/d2d546f8b674335fa7ef83cc5c1892294f3f516c570893e65a7ea8ed49c9
-+PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/54/9c/9c0a9bfa683fc1be7fdcd9687635151544d992cccd48892dc5e0a5885a29
- PYTHON_YARL_LICENSE = Apache-2.0
- PYTHON_YARL_LICENSE_FILES = LICENSE
- PYTHON_YARL_SETUP_TYPE = setuptools
+-PYTHON_MWSCRAPE_VERSION = 568ccbe6e12dd6391277df02adf724ba0e5f9197
++PYTHON_MWSCRAPE_VERSION = 2e153faa678b90402ca87aa765f7d11386d7942c
+ PYTHON_MWSCRAPE_SITE = $(call github,itkach,mwscrape,$(PYTHON_MWSCRAPE_VERSION))
+ PYTHON_MWSCRAPE_LICENSE = MPL-2.0
+ PYTHON_MWSCRAPE_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
