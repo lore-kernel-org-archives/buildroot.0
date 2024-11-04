@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B039AD1BDF1
-	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 20:42:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C714D1BDF1
+	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 20:42:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8029C8104F;
-	Mon,  4 Nov 2024 20:42:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B174810F5;
+	Mon,  4 Nov 2024 20:42:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6Gjdh5yXeg52; Mon,  4 Nov 2024 20:42:46 +0000 (UTC)
+ id k3ADdwKqcc7Y; Mon,  4 Nov 2024 20:42:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87BBF81083
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5BA9810E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87BBF81083;
-	Mon,  4 Nov 2024 20:42:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 578C73B
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5BA9810E6;
+	Mon,  4 Nov 2024 20:42:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C2DE962
  for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 23D8260796
+ by smtp2.osuosl.org (Postfix) with ESMTP id 76189404C1
  for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hrHJN3nZjBP9 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eo9At4Fa3kUj for <buildroot@buildroot.org>;
  Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FA2F6079D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50C924056A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3FA2F6079D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 50C924056A
  for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C21884CC9; Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
+ id 4DA7F85BFC; Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 4 Nov 2024 21:39:31 +0100
+Date: Mon, 4 Nov 2024 21:39:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 55fdf4c61da9006d5b0e2c647cb44f4350434ac4
-X-Git-Newrev: 0eb7d710daa0aa0cf0a066d1702effe1f7d63b17
+X-Git-Oldrev: b3a56335ce234bc033ff35f0819947ad257dfeba
+X-Git-Newrev: 8d48b515025016bb9673df81409b19eb31e6bb30
 X-Patchwork-Hint: ignore
-Message-Id: <20241104204205.3C21884CC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pysmi: bump to version 1.5.6
+Message-Id: <20241104204205.4DA7F85BFC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-rpds-py: bump to version
+ 0.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +66,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0eb7d710daa0aa0cf0a066d1702effe1f7d63b17
+commit: https://git.buildroot.net/buildroot/commit/?id=8d48b515025016bb9673df81409b19eb31e6bb30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-pysmi/python-pysmi.hash | 4 ++--
- package/python-pysmi/python-pysmi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-rpds-py/python-rpds-py.hash | 2 +-
+ package/python-rpds-py/python-rpds-py.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pysmi/python-pysmi.hash b/package/python-pysmi/python-pysmi.hash
-index 39a76fc740..1736572710 100644
---- a/package/python-pysmi/python-pysmi.hash
-+++ b/package/python-pysmi/python-pysmi.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pysmi/json
--md5  84ff7ba2166c022b194c271f43b14c56  pysmi-1.5.5.tar.gz
--sha256  ad96dc983370e2b29a37dcc3af4ca6948127522b629bece23320ca0698c1b605  pysmi-1.5.5.tar.gz
-+md5  4fc3708430d818df6d6cf3543b01d5d6  pysmi-1.5.6.tar.gz
-+sha256  5b25825a5b4a566c42615c7b80547834dd32be394bf0c0504f56676843f96749  pysmi-1.5.6.tar.gz
+diff --git a/package/python-rpds-py/python-rpds-py.hash b/package/python-rpds-py/python-rpds-py.hash
+index 99fcbc04db..4c7db5789a 100644
+--- a/package/python-rpds-py/python-rpds-py.hash
++++ b/package/python-rpds-py/python-rpds-py.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after vendoring
+-sha256  49fe05f6d243cf4c4c25848340eda678b985debaebca30ba1573aa34b9cfbbef  python-rpds-py-0.20.0-cargo2.tar.gz
++sha256  ff923a84c29f2ef21c26acbda476612393efb4854e13520b73a5dd0f7dc36fb2  python-rpds-py-0.20.1-cargo2.tar.gz
  # Locally computed sha256 checksums
- sha256  bc211b99a3eb46f3b1f64f8152dffc869d3bc4bffed82545732ef9e34628513b  LICENSE.rst
-diff --git a/package/python-pysmi/python-pysmi.mk b/package/python-pysmi/python-pysmi.mk
-index 753105928c..a2793647d8 100644
---- a/package/python-pysmi/python-pysmi.mk
-+++ b/package/python-pysmi/python-pysmi.mk
+ sha256  314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909  LICENSE
+diff --git a/package/python-rpds-py/python-rpds-py.mk b/package/python-rpds-py/python-rpds-py.mk
+index fc23eaec35..c2f484a66e 100644
+--- a/package/python-rpds-py/python-rpds-py.mk
++++ b/package/python-rpds-py/python-rpds-py.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYSMI_VERSION = 1.5.5
-+PYTHON_PYSMI_VERSION = 1.5.6
- PYTHON_PYSMI_SOURCE = pysmi-$(PYTHON_PYSMI_VERSION).tar.gz
--PYTHON_PYSMI_SITE = https://files.pythonhosted.org/packages/dc/fb/8461c21d0893c72492100b35fce128b057c4e615e79b0ce4496412ffec0c
-+PYTHON_PYSMI_SITE = https://files.pythonhosted.org/packages/a3/a1/b43edf8fd80c550782c9f0daa499c7d3013d31ff924405a7f96c9cdaa5d2
- PYTHON_PYSMI_SETUP_TYPE = pep517
- PYTHON_PYSMI_LICENSE = BSD-2-Clause
- PYTHON_PYSMI_LICENSE_FILES = LICENSE.rst
+-PYTHON_RPDS_PY_VERSION = 0.20.0
++PYTHON_RPDS_PY_VERSION = 0.20.1
+ PYTHON_RPDS_PY_SOURCE_PYPI = rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz
+-PYTHON_RPDS_PY_SITE_PYPI = https://files.pythonhosted.org/packages/55/64/b693f262791b818880d17268f3f8181ef799b0d187f6f731b1772e05a29a
++PYTHON_RPDS_PY_SITE_PYPI = https://files.pythonhosted.org/packages/25/cb/8e919951f55d109d658f81c9b49d0cc3b48637c50792c5d2e77032b8c5da
+ PYTHON_RPDS_PY_SITE = $(PYTHON_RPDS_PY_SITE_PYPI)/$(PYTHON_RPDS_PY_SOURCE_PYPI)?buildroot-path=filename
+ PYTHON_RPDS_PY_SETUP_TYPE = maturin
+ PYTHON_RPDS_PY_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
