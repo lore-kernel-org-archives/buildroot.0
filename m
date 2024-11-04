@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30109D1BDF1
-	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 20:42:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34635D1BDED
+	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 20:43:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC954810D3;
-	Mon,  4 Nov 2024 20:42:57 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9ean2rdEwV7s; Mon,  4 Nov 2024 20:42:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88FEB8110C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88FEB8110C;
-	Mon,  4 Nov 2024 20:42:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6C6C4962
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AEFE14052B
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F037540540;
+	Mon,  4 Nov 2024 20:43:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W5SG3IMTrSvT for <buildroot@buildroot.org>;
- Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
+ id GmfWKDhSTGd9; Mon,  4 Nov 2024 20:42:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A16C440545
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A16C440545;
+	Mon,  4 Nov 2024 20:42:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7171927E1
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0095D4056A
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X4RU87Z4n_RC for <buildroot@buildroot.org>;
+ Mon,  4 Nov 2024 20:42:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2611240530
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1FFB4059E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2611240530
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1FFB4059E
  for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DF6484C92; Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
+ id AA542843A1; Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 4 Nov 2024 21:39:27 +0100
+Date: Mon, 4 Nov 2024 21:39:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 56430ba0a5a07cfa1386909eb682432f61b98e2e
-X-Git-Newrev: c083c582aca6177c8c1191db98d30eb92a8e767e
+X-Git-Oldrev: 253aff15a86d0d3d74ff7a224b439c20f3382fc7
+X-Git-Newrev: af471fc415bdf3719ff2fc605274080f4926251a
 X-Patchwork-Hint: ignore
-Message-Id: <20241104204205.1DF6484C92@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pydantic-core: bump to
- version 2.25.1
+Message-Id: <20241104204205.AA542843A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-yarl: bump to version 1.17.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,42 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c083c582aca6177c8c1191db98d30eb92a8e767e
+commit: https://git.buildroot.net/buildroot/commit/?id=af471fc415bdf3719ff2fc605274080f4926251a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-pydantic-core/python-pydantic-core.hash | 2 +-
- package/python-pydantic-core/python-pydantic-core.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-yarl/python-yarl.hash | 4 ++--
+ package/python-yarl/python-yarl.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
-index 8280447a14..2ee1c5cfef 100644
---- a/package/python-pydantic-core/python-pydantic-core.hash
-+++ b/package/python-pydantic-core/python-pydantic-core.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  34fc9b62235ed33320ee6139dff66da88584fc08a7322a808526b95aa3141449  python-pydantic-core-2.25.0-cargo2.tar.gz
-+sha256  5617ab9b3785c52ffc07f19b1125d24e6062179041a839be8e7d1ceaa378c522  python-pydantic-core-2.25.1-cargo2.tar.gz
+diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
+index 0966c51a55..3918383548 100644
+--- a/package/python-yarl/python-yarl.hash
++++ b/package/python-yarl/python-yarl.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/yarl/json
+-md5  7b27203f854753afb8e6b0b560459f1d  yarl-1.17.0.tar.gz
+-sha256  d3f13583f378930377e02002b4085a3d025b00402d5a80911726d43a67911cd9  yarl-1.17.0.tar.gz
++md5  d356afad18b20095b766ad47bedcb34a  yarl-1.17.1.tar.gz
++sha256  067a63fcfda82da6b198fa73079b1ca40b7c9b7994995b6ee38acda728b64d47  yarl-1.17.1.tar.gz
  # Locally computed sha256 checksums
- sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
-diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
-index 0ac54265a4..b1d0a21e15 100644
---- a/package/python-pydantic-core/python-pydantic-core.mk
-+++ b/package/python-pydantic-core/python-pydantic-core.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
+index 2c6ff3ecc9..c7d846521f 100644
+--- a/package/python-yarl/python-yarl.mk
++++ b/package/python-yarl/python-yarl.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYDANTIC_CORE_VERSION = 2.25.0
-+PYTHON_PYDANTIC_CORE_VERSION = 2.25.1
- PYTHON_PYDANTIC_CORE_SOURCE_PYPI = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
--PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/b5/fc/4e4d9ac36c99c2bbb5a87885abc508f7d274706a571e3be253dc570943eb
-+PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/38/f2/88e2e8b3903be9df15207bdcab90987d16fb98ee794ad1b3cfdbce9815fc
- PYTHON_PYDANTIC_CORE_SITE = $(PYTHON_PYDANTIC_CORE_SITE_PYPI)/$(PYTHON_PYDANTIC_CORE_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
- PYTHON_PYDANTIC_CORE_LICENSE = MIT
+-PYTHON_YARL_VERSION = 1.17.0
++PYTHON_YARL_VERSION = 1.17.1
+ PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
+-PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/55/8f/d2d546f8b674335fa7ef83cc5c1892294f3f516c570893e65a7ea8ed49c9
++PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/54/9c/9c0a9bfa683fc1be7fdcd9687635151544d992cccd48892dc5e0a5885a29
+ PYTHON_YARL_LICENSE = Apache-2.0
+ PYTHON_YARL_LICENSE_FILES = LICENSE
+ PYTHON_YARL_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
