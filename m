@@ -1,76 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB05DD1BDC0
-	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 18:35:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A18F5D1BDE5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 18:58:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7482680C37;
-	Mon,  4 Nov 2024 18:35:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A902607C4;
+	Mon,  4 Nov 2024 18:58:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QCyF5edXXAR9; Mon,  4 Nov 2024 18:35:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d9014uNzA0Pq; Mon,  4 Nov 2024 18:58:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F7DC80B90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BFBA607D0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F7DC80B90;
-	Mon,  4 Nov 2024 18:35:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2D9DF3B
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 18:35:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6BFBA607D0;
+	Mon,  4 Nov 2024 18:58:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 418023B
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 18:58:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0DC7280AEC
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 18:35:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1F41940612
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 18:58:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MlkwCN_-uSPs for <buildroot@buildroot.org>;
- Mon,  4 Nov 2024 18:35:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D1D2880AE9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1D2880AE9
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D1D2880AE9
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 18:34:59 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pRDAT1Hre5ZZ for <buildroot@buildroot.org>;
+ Mon,  4 Nov 2024 18:58:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E843540603
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E843540603
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E843540603
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 18:58:32 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
  (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 3EB0F19F5AF;
- Mon,  4 Nov 2024 19:34:55 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:41222])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 04 Nov 2024 19:34:55 +0100
-MIME-Version: 1.0
-Date: Mon, 04 Nov 2024 19:34:55 +0100
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 3B3B2B00573;
+ Mon,  4 Nov 2024 19:58:26 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
-To: Romain Naour <romain.naour@smile.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241103221340.1770246-1-romain.naour@smile.fr>
-References: <20241103221340.1770246-1-romain.naour@smile.fr>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <e98ba88d11ca0103bc65d71df800a4cb@free.fr>
-X-Sender: ju.o@free.fr
+To: buildroot@buildroot.org
+Cc: TIAN Yuanhao <tianyuanhao3@163.com>,
+	Julien Olivain <ju.o@free.fr>
+Date: Mon,  4 Nov 2024 19:58:17 +0100
+Message-ID: <20241104185817.171086-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.47.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1730745296;
- bh=IxyvBk0NOYrtMC71WjRJaMG3ojmLuq+mHUFs+CsiaMg=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=nQogmhPs/r01+7qpe09Hb1iqvgKD7GF8s7c/zVw98RonIitWE5SFyaaxQ95eIVxkH
- +IiyDXBmcR6OeFag66AK+OTapJzMBxisvXHjGo8jX1+lL34brvqAuwN44b+t3Q1c+t
- 21318g6Cr+uYW+uHvH3/6UxLfmU9UHDlRFJg+Da9zlqXvlqvetv7X8BzX6CM6H0aCz
- 78S4jPcf3ZguZriiCQeDZFivDVLKN9BJ92ZLdbZ5fU1oXy4xWNPZoo735J2vguSBT4
- RAe+vdm5PSbqv6aLzgEwlcWfcChPL2lSbNEAABnDS0BgeIc0QVQJ2Ah6iyCbukq9CZ
- Kr+uyb9b1X1kw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1730746709;
+ bh=cKpOqmMj6ZJLMvNtJyblH2b8FMraCAMtzxOlRSMGJLs=;
+ h=From:To:Cc:Subject:Date:From;
+ b=GvSV4QEUo7EHkCy+q9/DERhBgOVAHyzFCmsIRLFOfKfa5lhcIyMVvUYuJrteXZDyu
+ wavDe2oyKJ1yV0c2QvbN5HV++55wh3s/9lBRBwfFjxcMIoCM8VBLDPPApQvns1HMC/
+ 6aL4HHXO6M4HyCFmzr/Vyw87wA4KScKERbbB+za5Ny5g1emRWVubRfOueqSsoB/ikn
+ ZNhe/N1E/8idounXTeSwc7IbY1FqtvumzSsmz2uYUVPWqODwkEtzx4oWkzZcrRZeVb
+ nBgKkTiTlj7NQ/M7XnHx3sJVowWQotZJ9a3PiSHvhJ1HvUP05LEtUG6uYdiOLssiOk
+ aRuiAPTq0skDw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=nQogmhPs
-Subject: Re: [Buildroot] [PATCH 1/2] package/opkg: bump to version 0.7.0
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=GvSV4QEU
+Subject: [Buildroot] [PATCH 1/1] package/libsolv: bump version to 0.7.30
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,123 +78,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 03/11/2024 23:13, Romain Naour via buildroot wrote:
-> Since the toolchain-external-bootlin version bump to 2024.05-1 the
-> TestOpkg fail due to a "spurious error check" fixed in opkg 0.7.0 [1].
-> 
-> With toolchain-external-bootlin 2024.02-1 (gcc-12) and opkg 0.6.2:
-> 
->   opkg install example-snmpd-package_1.0_arm.ipk
->   Installing example-snmpd-package (1.0) on root.
->   Configuring example-snmpd-package.
->   Starting SNMP daemon: OK
->   echo $?
->   0
-> 
-> With toolchain-external-bootlin 2024.05-1 (gcc-13) and opkg 0.6.2:
-> 
->   opkg install example-snmpd-package_1.0_arm.ipk
->   echo $?
->   255
-> 
-> The new gcc-13 seems to be confused while compiling opkg 0.6.2
-> without the "spurious error check" fix [1]
-> 
-> With toolchain-external-bootlin 2024.05-1 (gcc-13) and opkg 0.7.0:
-> 
->   opkg install example-snmpd-package_1.0_arm.ipk
->   Installing example-snmpd-package (1.0) on root.
->   Configuring example-snmpd-package.
->   Starting SNMP daemon: OK
->   echo $?
->   0
-> 
-> Keep new ACL and XATTRS support introduced in opkg 0.6.3 disabled.
-> 
-> Update opkg to the new upstream url [2].
-> 
-> [1] 
-> https://git.yoctoproject.org/opkg/commit?id=b5cc53d56e381803d3f55019254ab7d608160ae1
-> [2] 
-> https://github.com/openembedded/openembedded-core/commit/6ff8b43e08840582ee8d88261cbaffd33c2304f9
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992571
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+For a change log since 0.7.25, see:
+https://github.com/openSUSE/libsolv/blob/0.7.30/NEWS#L4
 
-Series applied to master. Thanks!
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested (compilation only) in:
+https://gitlab.com/jolivain/buildroot/-/pipelines/1526685818
+---
+ package/libsolv/libsolv.hash | 2 +-
+ package/libsolv/libsolv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> ---
->  package/opkg/Config.in | 2 +-
->  package/opkg/opkg.hash | 2 +-
->  package/opkg/opkg.mk   | 6 ++++--
->  3 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/opkg/Config.in b/package/opkg/Config.in
-> index 1f6a39343f..ccea63cf7f 100644
-> --- a/package/opkg/Config.in
-> +++ b/package/opkg/Config.in
-> @@ -17,7 +17,7 @@ config BR2_PACKAGE_OPKG
->  	  conforms to a subset of debian's policy manual regarding
->  	  control files.
-> 
-> -	  https://code.google.com/archive/p/opkg/
-> +	  https://git.yoctoproject.org/opkg/
-> 
->  if BR2_PACKAGE_OPKG
-> 
-> diff --git a/package/opkg/opkg.hash b/package/opkg/opkg.hash
-> index c6ecefba21..3928a2ce01 100644
-> --- a/package/opkg/opkg.hash
-> +++ b/package/opkg/opkg.hash
-> @@ -1,4 +1,4 @@
->  # From http://downloads.yoctoproject.org/releases/opkg/SHA256SUMS
-> -sha256  
-> ac73a90a2549cd04948e563d915912c78e1b8ba0f43af75c5a53fcca474adbd5  
-> opkg-0.6.2.tar.gz
-> +sha256  
-> d973fd0f1568f58f87d6aecd9aa95e3e1f60214a45cee26704bf8fe757c54567  
-> opkg-0.7.0.tar.gz
->  # Locally calculated
->  sha256  
-> 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  
-> COPYING
-> diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
-> index a550543f3e..f86149a519 100644
-> --- a/package/opkg/opkg.mk
-> +++ b/package/opkg/opkg.mk
-> @@ -4,13 +4,15 @@
->  #
->  
-> ################################################################################
-> 
-> -OPKG_VERSION = 0.6.2
-> +OPKG_VERSION = 0.7.0
->  OPKG_SITE = https://downloads.yoctoproject.org/releases/opkg
->  OPKG_DEPENDENCIES = host-pkgconf libarchive
->  OPKG_LICENSE = GPL-2.0+
->  OPKG_LICENSE_FILES = COPYING
->  OPKG_INSTALL_STAGING = YES
-> -OPKG_CONF_OPTS = --enable-sha256
-> +OPKG_CONF_OPTS = --enable-sha256 \
-> +	--without-acl \
-> +	--without-xattrs
-> 
->  ifeq ($(BR2_PACKAGE_OPKG_GPG_SIGN),y)
->  OPKG_CONF_OPTS += --enable-gpg
-> --
-> 2.45.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/package/libsolv/libsolv.hash b/package/libsolv/libsolv.hash
+index b18a682ccf..97259ae93f 100644
+--- a/package/libsolv/libsolv.hash
++++ b/package/libsolv/libsolv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  b382bba4196b19c36eb34e0ef02546c0b922be601c6f73390c9ab643895b656a  libsolv-0.7.25.tar.gz
++sha256  ce4aa2f0e3c5c9ab99dced6a1810af3f670f1b98892394edc68ccabe7b272133  libsolv-0.7.30.tar.gz
+ sha256  57f15acfb29fbef7749779e096a5885c60b716633e34484a21bb717554c0198f  LICENSE.BSD
+diff --git a/package/libsolv/libsolv.mk b/package/libsolv/libsolv.mk
+index 2a9f1bf208..2317d3e663 100644
+--- a/package/libsolv/libsolv.mk
++++ b/package/libsolv/libsolv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSOLV_VERSION = 0.7.25
++LIBSOLV_VERSION = 0.7.30
+ LIBSOLV_SITE = $(call github,openSUSE,libsolv,$(LIBSOLV_VERSION))
+ LIBSOLV_LICENSE = BSD-3-Clause
+ LIBSOLV_LICENSE_FILES = LICENSE.BSD
+-- 
+2.47.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
