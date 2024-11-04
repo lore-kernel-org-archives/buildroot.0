@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03143D1BDF1
-	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 20:43:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE3E0D1BDED
+	for <buildroot@archiver.kernel.org>; Mon,  4 Nov 2024 20:43:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD7F7810E6;
-	Mon,  4 Nov 2024 20:43:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F031810D5;
+	Mon,  4 Nov 2024 20:43:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FEcnNG-8smRS; Mon,  4 Nov 2024 20:43:10 +0000 (UTC)
+ id tj6zSw-JXvZx; Mon,  4 Nov 2024 20:43:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5DA78111F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36DB381143
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5DA78111F;
-	Mon,  4 Nov 2024 20:43:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2D0863B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36DB381143;
+	Mon,  4 Nov 2024 20:43:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2F9C0962
  for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4391F4057A
- for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF3A540528
+ for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 851qMlZGMNHE for <buildroot@buildroot.org>;
- Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5lz2F4ypgJir for <buildroot@buildroot.org>;
+ Mon,  4 Nov 2024 20:42:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A01C40594
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F8A14052C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7A01C40594
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F8A14052C
  for <buildroot@buildroot.org>; Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6D13F85BFC; Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
+ id 33AD4843A1; Mon,  4 Nov 2024 20:42:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 4 Nov 2024 21:39:38 +0100
+Date: Mon, 4 Nov 2024 21:39:29 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cab9b431a47b184589251a9b404d31074bb024ea
-X-Git-Newrev: 2825b8ef1ccad72f48b7a9f6ffe8b2ed45203fbf
+X-Git-Oldrev: c82213042958f1d530e01f1f52395975d2c2cd63
+X-Git-Newrev: 55fdf4c61da9006d5b0e2c647cb44f4350434ac4
 X-Patchwork-Hint: ignore
-Message-Id: <20241104204205.6D13F85BFC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-setuptools: bump to version
- 75.3.0
+Message-Id: <20241104204205.33AD4843A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyphen: bump to version
+ 0.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2825b8ef1ccad72f48b7a9f6ffe8b2ed45203fbf
+commit: https://git.buildroot.net/buildroot/commit/?id=55fdf4c61da9006d5b0e2c647cb44f4350434ac4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-setuptools/python-setuptools.hash | 4 ++--
- package/python-setuptools/python-setuptools.mk   | 4 ++--
+ package/python-pyphen/python-pyphen.hash | 4 ++--
+ package/python-pyphen/python-pyphen.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-index 272b2571f2..e99fc7d9b2 100644
---- a/package/python-setuptools/python-setuptools.hash
-+++ b/package/python-setuptools/python-setuptools.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/setuptools/json
--md5  4d69de91ce968f45825bf36d95f2a626  setuptools-75.2.0.tar.gz
--sha256  753bb6ebf1f465a1912e19ed1d41f403a79173a9acf66a42e7e6aec45c3c16ec  setuptools-75.2.0.tar.gz
-+md5  ca5ea2d5e9622d6a7b9f6c6664821853  setuptools-75.3.0.tar.gz
-+sha256  fba5dd4d766e97be1b1681d98712680ae8f2f26d7881245f2ce9e40714f1a686  setuptools-75.3.0.tar.gz
+diff --git a/package/python-pyphen/python-pyphen.hash b/package/python-pyphen/python-pyphen.hash
+index 57028efd4b..d37b906910 100644
+--- a/package/python-pyphen/python-pyphen.hash
++++ b/package/python-pyphen/python-pyphen.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/Pyphen/json
+-md5  6307e0e89f71a8252fb6abecc372d251  pyphen-0.16.0.tar.gz
+-sha256  2c006b3ddf072c9571ab97606d9ab3c26a92eaced4c0d59fd1d26988f308f413  pyphen-0.16.0.tar.gz
++md5  acb06fb5953d2b5435fa8d1428d6652f  pyphen-0.17.0.tar.gz
++sha256  1d13acd1ce37a384d7612954ae6c7801bb4c5316da0e2b937b2127ba702a3da4  pyphen-0.17.0.tar.gz
  # Locally computed sha256 checksums
- sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index bd3da05488..d6b65a2b9e 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
+ sha256  4fd1c78fcec632bc872ba7b42ba04be330029cfffa411039b48a4f2262bb8240  LICENSE
+ sha256  2233a3eecf299bc271f1a9f57f0b3198343ad4ab16571d70320133002c51496b  COPYING.GPL
+diff --git a/package/python-pyphen/python-pyphen.mk b/package/python-pyphen/python-pyphen.mk
+index 84560f8a7f..61f050c8c9 100644
+--- a/package/python-pyphen/python-pyphen.mk
++++ b/package/python-pyphen/python-pyphen.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SETUPTOOLS_VERSION = 75.2.0
-+PYTHON_SETUPTOOLS_VERSION = 75.3.0
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/07/37/b31be7e4b9f13b59cde9dcaeff112d401d49e0dc5b37ed4a9fc8fb12f409
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/ed/22/a438e0caa4576f8c383fa4d35f1cc01655a46c75be358960d815bfbb12bd
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
+-PYTHON_PYPHEN_VERSION = 0.16.0
++PYTHON_PYPHEN_VERSION = 0.17.0
+ PYTHON_PYPHEN_SOURCE = pyphen-$(PYTHON_PYPHEN_VERSION).tar.gz
+-PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/33/87/493fc9e2597923a2b02a1facc376a3bf8e682698ae177b340c0c5fd1fdec
++PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/66/46/3dd0ae4b52016496069af6c4fca3b5918b0281fc92678f739edb8f3eb377
+ PYTHON_PYPHEN_SETUP_TYPE = flit
+ PYTHON_PYPHEN_LICENSE = LGPL-2.1+, MPL-1.1, GPL-2.0+
+ PYTHON_PYPHEN_LICENSE_FILES = LICENSE COPYING.GPL COPYING.LGPL COPYING.MPL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
