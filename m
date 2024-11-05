@@ -4,47 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D601BD31763
-	for <buildroot@archiver.kernel.org>; Tue,  5 Nov 2024 16:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76480D31765
+	for <buildroot@archiver.kernel.org>; Tue,  5 Nov 2024 16:39:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 92555810BB;
-	Tue,  5 Nov 2024 16:19:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 329B280BA2;
+	Tue,  5 Nov 2024 16:39:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2JUg6ilK3y50; Tue,  5 Nov 2024 16:19:29 +0000 (UTC)
+ id R9bzRQQQw2cP; Tue,  5 Nov 2024 16:39:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3360810EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35CDE80FF7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3360810EC;
-	Tue,  5 Nov 2024 16:19:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 00034B8
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 16:19:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35CDE80FF7;
+	Tue,  5 Nov 2024 16:39:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 84A163B
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 16:39:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D44908110B
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 16:19:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 64578403CE
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 16:39:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LayoRwAZ_Q13 for <buildroot@buildroot.org>;
- Tue,  5 Nov 2024 16:19:27 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=172.245.244.108;
- helo=busybox.net; envelope-from=noreplysdesk@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B961B810EA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B961B810EA
-Received: from busybox.net (unknown [172.245.244.108])
- by smtp1.osuosl.org (Postfix) with ESMTP id B961B810EA
- for <buildroot@busybox.net>; Tue,  5 Nov 2024 16:19:26 +0000 (UTC)
-From: Support<noreplysdesk@busybox.net>
-To: buildroot@busybox.net
-Date: 05 Nov 2024 17:19:25 +0100
-Message-ID: <20241105171925.CE30CDE4C284E593@busybox.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BNzxuEA9ZuAy for <buildroot@buildroot.org>;
+ Tue,  5 Nov 2024 16:39:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::12e; helo=mail-il1-x12e.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B7C3E40363
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7C3E40363
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B7C3E40363
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 16:39:00 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id
+ e9e14a558f8ab-3a6ababaaa9so17457935ab.1
+ for <buildroot@buildroot.org>; Tue, 05 Nov 2024 08:39:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1730824739; x=1731429539;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Ynx9qgUfwCCRgPEXQfAcsFo5HgM/wcqfB+v+1gfqdPA=;
+ b=IwR7POvv30VQKCLHR2aIiNDcr3U6VBYAxyBwRAaLJUDpjHQQaN8f3jv2aZ52aarwD9
+ J0s0OXoVYn7uV8xMeeQ0OPxCmNJ1uN7NgpLqIIv+lzYzxPiJyiTXUV7d7kIisn3H9WS0
+ DeHhXiehDEAZQeSbuUKBcRoGDFP8vbUEdFHUcdueGsOjXT1SgKzJg/fXwLdDSXpg9juv
+ MFzGmk30ev8z46zXkR8JSBogpSkH+mDlL3eTOD9kER3UBEWbKblZ8WOsrZO//1PAzeU9
+ gXSuTb67RG6+sQxnH7Yax6gaJ+51yvLuNt7zuoitdXO33p+WtrhsNPZwJnb7Ywf8eoOI
+ J2fQ==
+X-Gm-Message-State: AOJu0YxUeQsDFm6pkR9wGbcVg9cfwASCatwz1Wlgnfjga75sEV/U2VxL
+ hHZHk25qntWT6mSp5GxJOjLPRZlOUZiSS2rqR+cFfFOnT4jDFRLnFCCwDg==
+X-Google-Smtp-Source: AGHT+IEjvZjMoxsSgcd0JUoehOzDbs7UugNSxQYBN6Iu6MWc2l6ZGWAzVrifnr4rL7QzA54stLvACw==
+X-Received: by 2002:a92:c543:0:b0:3a6:c472:765e with SMTP id
+ e9e14a558f8ab-3a6c47279edmr93203855ab.11.1730824739371; 
+ Tue, 05 Nov 2024 08:38:59 -0800 (PST)
+Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
+ [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
+ e9e14a558f8ab-3a6a97b007asm29274695ab.17.2024.11.05.08.38.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 05 Nov 2024 08:38:58 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue,  5 Nov 2024 09:38:57 -0700
+Message-Id: <20241105163857.1377193-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Account Verification  buildroot
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1730824739; x=1731429539; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Ynx9qgUfwCCRgPEXQfAcsFo5HgM/wcqfB+v+1gfqdPA=;
+ b=FqS9odKwHW+qgDPevsriWNmlURZcgeczf0mwOEOWnOqy3u3DXwH8/L/5LLn79yp8yo
+ l2YB6kpTqYUuQrvAiTJTRLc0ACpPJkli0ABhf6kI34Z/B3GAw58P3oQBUDz6MB5Pg79w
+ ehbTzmt/ZJCCL6NJJiONoK+B5ESlEYJ5K/Tu9wj+wETB1awncmnxMTVZ8TDT9xt3Rcni
+ uclrUJmtzu5sTYusOpcjRnOJvfpSt45XjxIVycHCxZ96au9oe4+cdphalLvuady9gRrl
+ 0xTA7cMUsUpSaUNU5b5U50Gpfg+MJd2BND4BM2UuA18E9lTwRVf/b/zGP7eH81BKqAiE
+ MmhA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=FqS9odKw
+Subject: [Buildroot] [PATCH 1/1] package/python-betterproto: use poetry
+ setup type
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -56,108 +100,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============6160899012877824860=="
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6160899012877824860==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Use the new poetry setup type which automatically pulls in the
+host-python-poetry-core dependency.
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.=
-w3.org/TR/html4/loose.dtd">
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-betterproto/python-betterproto.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-<HTML><HEAD>
-<META name=3DGENERATOR content=3D"MSHTML 11.00.10570.1001"></HEAD>
-<body style=3D"MARGIN: 0.5em">
-<DIV dir=3Dltr>
-<DIV style=3D'FONT-SIZE: 13px; BORDER-TOP: 0px; FONT-FAMILY: "helvetica neu=
-e",helvetica,arial,"lucida grande",sans-serif; WHITE-SPACE: normal; WORD-SP=
-ACING: 0px; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(0,0,0); FONT=
--STYLE: normal; PADDING-TOP: 0px; LETTER-SPACING: normal; BACKGROUND-COLOR:=
- rgb(255,255,255); TEXT-INDENT: 0px; font-variant-ligatures: normal; font-v=
-ariant-caps: normal; text-decoration-style: initial; text-decoration-color:=
- initial'>
-<FONT color=3D#3f59a4 size=3D6 face=3D"Lucida Sans Unicode">Account Verific=
-ation</FONT><FONT size=3D6>&nbsp;<B><SPAN style=3D"FONT-FAMILY: calibri,ari=
-al,helvetica,sans-serif">&nbsp;</SPAN></B></FONT></DIV>
-<DIV style=3D'FONT-SIZE: 13px; FONT-FAMILY: "helvetica neue",helvetica,aria=
-l,"lucida grande",sans-serif; WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-=
-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(0,0,0); FONT-STYLE: normal; L=
-ETTER-SPACING: normal; BACKGROUND-COLOR: rgb(255,255,255); TEXT-INDENT: 0px=
-; font-variant-ligatures: normal; font-variant-caps: normal; text-decoratio=
-n-style: initial; text-decoration-color: initial'><BR>&nbsp;</DIV>
-<DIV style=3D'FONT-SIZE: 13px; FONT-FAMILY: "helvetica neue",helvetica,aria=
-l,"lucida grande",sans-serif; WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-=
-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(0,0,0); FONT-STYLE: normal; L=
-ETTER-SPACING: normal; BACKGROUND-COLOR: rgb(255,255,255); TEXT-INDENT: 0px=
-; font-variant-ligatures: normal; font-variant-caps: normal; text-decoratio=
-n-style: initial; text-decoration-color: initial'>
-<DIV style=3D"BORDER-TOP: 0px; PADDING-TOP: 0px">
-<DIV style=3D"BORDER-TOP: 0px; PADDING-TOP: 0px">
-<DIV style=3D"FONT-SIZE: 12px; BORDER-TOP: 0px; PADDING-TOP: 0px">
-<DIV style=3D"BORDER-TOP: 0px; PADDING-TOP: 0px">
-<DIV style=3D"BORDER-TOP: 0px; PADDING-TOP: 0px">
-<DIV style=3D"BORDER-TOP: 0px; PADDING-TOP: 0px"><FONT size=3D2><SPAN style=
-=3D"FONT-FAMILY: calibri,arial,helvetica,sans-serif"><B style=3D'FONT-FAMIL=
-Y: "helvetica neue",helvetica,arial,sans-serif; COLOR: rgb(38,40,42)'>Dear&=
-nbsp;</B></SPAN></FONT> <B style=3D"FONT-SIZE: 12px; FONT-FAMILY: roboto-re=
-gular, helvetica, arial, sans-serif; COLOR: rgb(34,34,34)">buildroot</B> <F=
-ONT size=3D2><SPAN style=3D"FONT-FAMILY: calibri,arial,helvetica,sans-serif=
-">
-<B style=3D'FONT-FAMILY: "helvetica neue",helvetica,arial,sans-serif; COLOR=
-: rgb(38,40,42)'></B><FONT size=3D3><SPAN style=3D"FONT-SIZE: small; COLOR:=
- rgb(34,34,34)"><FONT size=3D3>,</FONT></SPAN>&nbsp;</FONT></SPAN><BR><BR><=
-SPAN style=3D"FONT-FAMILY: calibri,arial,helvetica,sans-serif">Your&nbsp;&n=
-bsp;</SPAN><SPAN style=3D"FONT-FAMILY: calibri,arial,helvetica,sans-serif; =
-COLOR: rgb(255,0,0)"><FONT face=3D"Lucida Grande, Lucida Sans Unicode, Luci=
-da Sans, DejaVu Sans, Verdana, sans-serif">Email Account</FONT>
-</SPAN><SPAN style=3D"FONT-FAMILY: calibri,arial,helvetica,sans-serif">&nbs=
-p;&nbsp;has been&nbsp;<B>BLACKLISTED</B>&nbsp;under the Mail Network Servic=
-e due to Subsequent Verification failure on your Account.</SPAN></FONT><BR>=
-&nbsp;</DIV></DIV>
-<DIV><FONT size=3D2><SPAN style=3D"FONT-FAMILY: calibri,arial,helvetica,san=
-s-serif">Our service team will terminate its service within 24hrs to your A=
-ccount if proper Verification is not done.</SPAN></FONT><BR>&nbsp;</DIV></D=
-IV>
-<DIV><FONT size=3D2><SPAN style=3D"FONT-FAMILY: calibri,arial,helvetica,san=
-s-serif">We recommend that you Upgrade and Verify your Account now to avoid=
- suspension.&nbsp;</SPAN><BR><BR>
-<A style=3D"BORDER-LEFT-WIDTH: 1px; BORDER-RIGHT-WIDTH: 1px; BORDER-TOP-COL=
-OR: rgb(48,121,237); BACKGROUND: rgb(77,144,254); BORDER-BOTTOM-WIDTH: 1px;=
- BORDER-LEFT-COLOR: rgb(48,121,237); COLOR: rgb(255,255,255); BORDER-BOTTOM=
--COLOR: rgb(48,121,237); TEXT-ALIGN: center; PADDING-LEFT: 8px; BORDER-RIGH=
-T-COLOR: rgb(48,121,237); LINE-HEIGHT: 27px; PADDING-RIGHT: 8px; BORDER-TOP=
--WIDTH: 1px"=20
-href=3D"https://ipfs.io/ipfs/bafybeic7dtey5m7csxlf36ghqaz6iec45hg2blrdzqyqf=
-yqrqgq74k6szq?filename=3Ddaramate.html#buildroot@busybox.net" rel=3D"noopen=
-er noreferrer" target=3D_blank data-saferedirecturl=3D"https://www.google.c=
-om/url?q=3Dhttp://icdjosemaria.com/wp-admin/includes/step/update?email%3D%2=
-5250%2525&amp;source=3Dgmail&amp;ust=3D1730009275992000&amp;usg=3DAOvVaw3jU=
-Q-dOPktmkRIEyJUiQfg">VISIT YOUR ACCOUNT DASHBOARD &amp; VERIFY NOW</A><BR><=
-BR><SPAN style=3D"FONT-FAMILY: calibri,arial,helvetica,sans-serif">
-Thanks,&nbsp;<BR>Mail Administrator&nbsp;<BR>Copyright&nbsp;</SPAN></FONT><=
-FONT size=3D2 face=3D"times new roman, new york, times, serif">&copy; 2024<=
-/FONT><BR>&nbsp;</DIV></DIV>
-<DIV style=3D"FONT-SIZE: 12px">
-<DIV style=3D"BORDER-TOP: 0px; PADDING-TOP: 0px">
-<DIV style=3D"BORDER-TOP: 0px; PADDING-TOP: 0px">
-<DIV style=3D"BORDER-TOP: 0px; PADDING-TOP: 0px">
-<DIV style=3D"BORDER-TOP: 0px; PADDING-TOP: 0px"><FONT size=3D2 face=3D"tim=
-es new roman, new york, times, serif">Please do not reply to this message, =
-Mail sent to this address cannot be answered.</FONT></DIV></DIV></DIV></DIV=
-></DIV></DIV></DIV></DIV></DIV></BODY></HTML>
-
---===============6160899012877824860==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/python-betterproto/python-betterproto.mk b/package/python-betterproto/python-betterproto.mk
+index 70eb403f6e..0fc43e86a2 100644
+--- a/package/python-betterproto/python-betterproto.mk
++++ b/package/python-betterproto/python-betterproto.mk
+@@ -7,9 +7,8 @@
+ PYTHON_BETTERPROTO_VERSION = 2.0.0b7
+ PYTHON_BETTERPROTO_SOURCE = betterproto-$(PYTHON_BETTERPROTO_VERSION).tar.gz
+ PYTHON_BETTERPROTO_SITE = https://files.pythonhosted.org/packages/4e/94/930a1368fbed92adc897a9a1fae282e3f9d608547dbf805034ca549f381a
+-PYTHON_BETTERPROTO_SETUP_TYPE = pep517
++PYTHON_BETTERPROTO_SETUP_TYPE = poetry
+ PYTHON_BETTERPROTO_LICENSE = MIT
+ PYTHON_BETTERPROTO_LICENSE_FILES = LICENSE.md
+-PYTHON_BETTERPROTO_DEPENDENCIES = host-python-poetry-core
+ 
+ $(eval $(python-package))
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6160899012877824860==--
