@@ -1,94 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91A21D36108
-	for <buildroot@archiver.kernel.org>; Tue,  5 Nov 2024 19:14:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54F9DD3610E
+	for <buildroot@archiver.kernel.org>; Tue,  5 Nov 2024 19:17:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51ACF605FE;
-	Tue,  5 Nov 2024 19:14:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 212F080F8B;
+	Tue,  5 Nov 2024 19:17:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v8PxwGrBD5tk; Tue,  5 Nov 2024 19:17:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E60380F94
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E60380F94;
+	Tue,  5 Nov 2024 19:17:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2E58A3B
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 19:17:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0F83360878
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 19:17:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8oWJE_TgEf6h; Tue,  5 Nov 2024 19:14:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55BF860872
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 55BF860872;
-	Tue,  5 Nov 2024 19:14:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 132373B
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 19:14:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E7C31402FF
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 19:14:25 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P_MgUvhkxL9O for <buildroot@buildroot.org>;
- Tue,  5 Nov 2024 19:14:25 +0000 (UTC)
+ id X4EYvueiky3d for <buildroot@buildroot.org>;
+ Tue,  5 Nov 2024 19:17:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2c; helo=mail-io1-xd2c.google.com;
+ client-ip=2607:f8b0:4864:20::d29; helo=mail-io1-xd29.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B007E40304
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B007E40304
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B007E40304
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 19:14:23 +0000 (UTC)
-Received: by mail-io1-xd2c.google.com with SMTP id
- ca18e2360f4ac-83aac75fcceso196225539f.0
- for <buildroot@buildroot.org>; Tue, 05 Nov 2024 11:14:23 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0829360872
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0829360872
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
+ [IPv6:2607:f8b0:4864:20::d29])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0829360872
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 19:17:04 +0000 (UTC)
+Received: by mail-io1-xd29.google.com with SMTP id
+ ca18e2360f4ac-83a9be2c0e6so229468739f.2
+ for <buildroot@buildroot.org>; Tue, 05 Nov 2024 11:17:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730834063; x=1731438863;
+ d=1e100.net; s=20230601; t=1730834223; x=1731439023;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=8ISTLPNVLaLJNC+xiSpM4Utb/t72pawjPWp2KSdilqA=;
- b=VJ0fbppJnIx3wzJj7VkcQoVSOVFyYRjDVK6xoLWJ+MeP8gN2YI+yJnQoMy7CKZSNBh
- qrzaasQB4Tb1vbu4/fOaNyH49CbhLA+vue1aHoq+ruuhKdZl9kPOjlJwJyq98i+bT1Vx
- iNlmFJgSlNEimHAdRJ0hujh3hGcm73jJIA3uW67J4x1vEdsp/P+WQ1q2K9HjeC2H0N+a
- H9rDlA0kreq+efLajhLAF+236sklzHOwhuJHhUzCUXWkT5YDnwXlikDSDDkejycCLSmj
- xiJnnqnq8XF1BXilXyxrDZMbSZTUyVhVmeto+bVRnAFYikLcviyc5pxmRzfheRb+Tfsv
- Xl0w==
-X-Gm-Message-State: AOJu0YwMJuUYhkGCXpszpAx+3j2JXKSRxgRzI2kuQYy7Q3BBdxV60Wk9
- ro4HdCe15GiZjzgRYChiQLfpQVRP2o1hC4EvHgeTfeVTa6+ica+3tCf3Og==
-X-Google-Smtp-Source: AGHT+IF1ADLwlIL1tg606+syMoYToSr6hjl2nJEZzdil+ByEjXXPQVo2b1xtLYCu9nOtaPMiFEVD9g==
-X-Received: by 2002:a05:6602:6b0e:b0:82d:18d:bab with SMTP id
- ca18e2360f4ac-83b719f043emr1730252539f.15.1730834062681; 
- Tue, 05 Nov 2024 11:14:22 -0800 (PST)
+ bh=w0PalD8i166DsxmWvITXYjPpzASDaz6w4exEDkUZwXc=;
+ b=Gf794eq4tmTVWFJcubCKtmmgZr/NTKvz2tRJKrx3zyv3fV4OcLsZ21ZU2753msLvtU
+ Bglu2VDdirgufyTWocLPjFG8VemvP79XPNzhkaUDSOSUqtvt0Wo649Ub+WVrOfTvv+Af
+ Lts8oD1TFHa7xF9bzzZIvlAhoPPBoQrLpsXisSdVozGSuZy2vOhWLaZxH1BQ8E6cTsOK
+ KptQfd6sXour/qVLcvpBD/t/RgJZTxNLhCP33Bx6BcT+ePbmdADaHrgthSeuNNTcLXPa
+ 74yt7qB2IXECFvNzRorDR29X/rdzexkXhwku2ebDvEnFuzdDVQY2HaGCGufX6qUmx2Td
+ wheg==
+X-Gm-Message-State: AOJu0Yytcub0bmnpNBuJVMLN2M1AaLj9gznV5H4nQ9v+jIpPDM2KEoO2
+ 8SweIQHAovFH+s4wlKVsJULTX+3l+syGNw8WVNyVfv0QXeyYzmIC1/lbWg==
+X-Google-Smtp-Source: AGHT+IF178aDTcq+rotcNLUFgyRoo4K9PLl9XGwaOy58FzzjnWvPT2ra1wB73h479JKjfIHLtFqlug==
+X-Received: by 2002:a05:6602:15ca:b0:83a:d3cc:779a with SMTP id
+ ca18e2360f4ac-83b719f04a6mr1867315839f.11.1730834223475; 
+ Tue, 05 Nov 2024 11:17:03 -0800 (PST)
 Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
  [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-83b67bb5831sm282181639f.26.2024.11.05.11.14.21
+ 8926c6da1cb9f-4de04889521sm2557797173.24.2024.11.05.11.17.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 05 Nov 2024 11:14:22 -0800 (PST)
+ Tue, 05 Nov 2024 11:17:03 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  5 Nov 2024 12:14:20 -0700
-Message-Id: <20241105191420.1580269-1-james.hilliard1@gmail.com>
+Date: Tue,  5 Nov 2024 12:17:02 -0700
+Message-Id: <20241105191702.1582087-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1730834063; x=1731438863; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1730834223; x=1731439023; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8ISTLPNVLaLJNC+xiSpM4Utb/t72pawjPWp2KSdilqA=;
- b=JLH/hilVZSWsYPBZeVS7wELCYHgpgucXhRxFRJYPZ+IdghgzIzrMU2iTqrq45xkdHq
- 6n6xqVHXdziCpOlNFME8HljjelNmD3kRqKnu7lhIydm/lToI8eSkZiXQCcgoSpycf1N8
- kruoyN0wwVdv3TMhToaYgDFo+9w63mhIHwWz8q9cucI2F5obG7vGkzno0lKk0/qMLYGp
- EYQ4Gwt1ETZbJJqX26nl9z+43okPcWDNlYJMRKhciOY128ZuMJZu/uCguF6DYCF5WAKt
- kr2ndadM6/Er8sOMElJKxOwz0bZOly4rEWOy9Cjcq5sz1QoRxHIRucG8idKHKfBKSh6k
- FOaQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=w0PalD8i166DsxmWvITXYjPpzASDaz6w4exEDkUZwXc=;
+ b=aDslqPX8Q2f9K3PBrLVpcl39C9Dh3Ld2PBsiG7LKP/MsuIZ6X++u93o65bSGTgsQ3w
+ 0WYpXDez3U8IJFMyhiTOhzZ+ApntazN2UpGGiRsF/SRuFr7It7tYKRhSJXjEzu2+j8Vp
+ r1IT4j7TP6FlGG9FbSyhg7x3+9wu4KBPxe5Ukx5Q6srV5EZdOMKPoiUfj7L6+F09Bkma
+ 5beJLhXTqTRtTdQ9pb1xSFpJTuviXMXXnoZy+Jtk/LErGW23sJyuF1E9oY0bPVfAmTFu
+ 3CXPNTShOmpeKo0LHUB+Ogi3IMyDlGLEhcq0uQ4HliDJM11DLZaRmjbAqJWdEfNLMdkX
+ 1tuA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JLH/hilV
-Subject: [Buildroot] [PATCH 1/1] package/python-typeguard: bump to version
- 4.4.1
+ header.a=rsa-sha256 header.s=20230601 header.b=aDslqPX8
+Subject: [Buildroot] [PATCH 1/1] package/python-watchdog: bump to version
+ 6.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,38 +108,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-typeguard/python-typeguard.hash | 4 ++--
- package/python-typeguard/python-typeguard.mk   | 4 ++--
+ package/python-watchdog/python-watchdog.hash | 4 ++--
+ package/python-watchdog/python-watchdog.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-typeguard/python-typeguard.hash b/package/python-typeguard/python-typeguard.hash
-index 6bb7c031c6..8cd3dd0dc6 100644
---- a/package/python-typeguard/python-typeguard.hash
-+++ b/package/python-typeguard/python-typeguard.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/typeguard/json
--md5  609f7e69f381dcbe600d971a3c43d4db  typeguard-4.4.0.tar.gz
--sha256  463bd8697a65a4aa576a63767c369b1ecfba8a5ba735edfe3223127b6ecfa28c  typeguard-4.4.0.tar.gz
-+md5  842237266846dbb102b7239fcf4faeb6  typeguard-4.4.1.tar.gz
-+sha256  0d22a89d00b453b47c49875f42b6601b961757541a2e1e0ef517b6e24213c21b  typeguard-4.4.1.tar.gz
+diff --git a/package/python-watchdog/python-watchdog.hash b/package/python-watchdog/python-watchdog.hash
+index 4377871db2..508cf88b27 100644
+--- a/package/python-watchdog/python-watchdog.hash
++++ b/package/python-watchdog/python-watchdog.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/watchdog/json
+-md5  83499e8a193ba23bb68436fbdc249589  watchdog-5.0.3.tar.gz
+-sha256  108f42a7f0345042a854d4d0ad0834b741d421330d5f575b81cb27b883500176  watchdog-5.0.3.tar.gz
++md5  d3adf236e17e5747e397f7d0b93e05b4  watchdog-6.0.0.tar.gz
++sha256  9ddf7c82fda3ae8e24decda1338ede66e1c99883db93711d8fb941eaa2d8c282  watchdog-6.0.0.tar.gz
  # Locally computed sha256 checksums
- sha256  6163f7987dfb38d6bc320ce2b70b2f02b862bc41126516d552ef1cd43247e758  LICENSE
-diff --git a/package/python-typeguard/python-typeguard.mk b/package/python-typeguard/python-typeguard.mk
-index 928a34e395..df5433993d 100644
---- a/package/python-typeguard/python-typeguard.mk
-+++ b/package/python-typeguard/python-typeguard.mk
+ sha256  39f081828db6f94c70123fa4fb30c1bce3e215a8fdece53a49991fe076a69c08  COPYING
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-watchdog/python-watchdog.mk b/package/python-watchdog/python-watchdog.mk
+index f5ef770fcf..888cce6e1a 100644
+--- a/package/python-watchdog/python-watchdog.mk
++++ b/package/python-watchdog/python-watchdog.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TYPEGUARD_VERSION = 4.4.0
-+PYTHON_TYPEGUARD_VERSION = 4.4.1
- PYTHON_TYPEGUARD_SOURCE = typeguard-$(PYTHON_TYPEGUARD_VERSION).tar.gz
--PYTHON_TYPEGUARD_SITE = https://files.pythonhosted.org/packages/79/5a/91b7c8cfc2e96962442abc9d65c650436dd831910b4d7878980d6596fb98
-+PYTHON_TYPEGUARD_SITE = https://files.pythonhosted.org/packages/62/c3/400917dd37d7b8c07e9723f3046818530423e1e759a56a22133362adab00
- PYTHON_TYPEGUARD_SETUP_TYPE = setuptools
- PYTHON_TYPEGUARD_LICENSE = MIT
- PYTHON_TYPEGUARD_LICENSE_FILES = LICENSE
+-PYTHON_WATCHDOG_VERSION = 5.0.3
++PYTHON_WATCHDOG_VERSION = 6.0.0
+ PYTHON_WATCHDOG_SOURCE = watchdog-$(PYTHON_WATCHDOG_VERSION).tar.gz
+-PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/a2/48/a86139aaeab2db0a2482676f64798d8ac4d2dbb457523f50ab37bf02ce2c
++PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/db/7d/7f3d619e951c88ed75c6037b246ddcf2d322812ee8ea189be89511721d54
+ PYTHON_WATCHDOG_SETUP_TYPE = setuptools
+ PYTHON_WATCHDOG_LICENSE = Apache-2.0
+ PYTHON_WATCHDOG_LICENSE_FILES = LICENSE COPYING
 -- 
 2.34.1
 
