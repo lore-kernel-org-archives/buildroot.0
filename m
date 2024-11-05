@@ -4,70 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E837FD35E40
-	for <buildroot@archiver.kernel.org>; Tue,  5 Nov 2024 20:41:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B861D3E773
+	for <buildroot@archiver.kernel.org>; Tue,  5 Nov 2024 21:35:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87F3280BE0;
-	Tue,  5 Nov 2024 20:41:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0054280FEF;
+	Tue,  5 Nov 2024 21:35:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YMyBprvt518h; Tue,  5 Nov 2024 20:41:57 +0000 (UTC)
+ id dP3sv7Vb66sI; Tue,  5 Nov 2024 21:35:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AB9980DD7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B83380F91
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8AB9980DD7;
-	Tue,  5 Nov 2024 20:41:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9A2A03B
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 20:41:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B83380F91;
+	Tue,  5 Nov 2024 21:35:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 19001B8
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 21:35:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 88D2B80DD7
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 20:41:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 11C0140653
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 21:35:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sgpnVAI1sf8K for <buildroot@buildroot.org>;
- Tue,  5 Nov 2024 20:41:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7655D80BE0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7655D80BE0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7655D80BE0
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 20:41:54 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ku_XzAQfV7wQ for <buildroot@buildroot.org>;
+ Tue,  5 Nov 2024 21:35:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 455CE40638
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 455CE40638
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 455CE40638
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 21:35:26 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 0D42EB00596;
- Tue,  5 Nov 2024 21:41:49 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Julien Olivain <ju.o@free.fr>
-Date: Tue,  5 Nov 2024 21:41:44 +0100
-Message-ID: <20241105204144.2563973-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.47.0
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id C0C7A60137;
+ Tue,  5 Nov 2024 22:35:22 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:60050])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 05 Nov 2024 22:35:22 +0100
 MIME-Version: 1.0
+Date: Tue, 05 Nov 2024 22:35:22 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Vincent Jardin <vjardin@free.fr>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20241105095744.60477-2-vjardin@free.fr>
+References: <20241105095744.60477-1-vjardin@free.fr>
+ <20241105095744.60477-2-vjardin@free.fr>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <aedee4f5789c42dae10d18bc9f9f7c61@free.fr>
+X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1730839312;
- bh=rVa35zheuZmKt7TPrkKCd8zfjhymL84rntfZpScAIUY=;
- h=From:To:Cc:Subject:Date:From;
- b=dXdUH+rPYuDdX5wThaD1ZtEkECIVTpLoQDMMaxgzbiA+FKPw/1TbxKzY1QekQS3l5
- yQpjF44yhtIrHmdHVXtgFpHMV+Q1QNnIoEw3269c0fnbkd/vrbqbnvKOp6d7L5YnhI
- T9YNY60olMIjcKg5xWBz8fCazwsr3sG+9zE2wnq+YN116rhKIxsIRBGCTPgh6ymNeX
- eIHbKpj/HkD3qy7QonMCS2NScJ+m/BEhekx4b/2awXMT9IqKCXYiVo+o9pDttKUMaS
- w1CG0w2d9QL9rwQ2VGYHJldflMuVR9PzT2LmuhXYkNeT3kIMoaAAERprGdaBTH9zxw
- aUKc/yMEmQ7Cg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1730842523;
+ bh=jELw7fu/FtqiSZCUnIvJsuUu1DoZCS3rM13TRqYSJWs=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=YZeciKUcOC8lxH9qMaKjcrTQwsmNIHYvD7oHp/8pwYO3p149K4k32UV+8P2yt9Yo7
+ d2Ug+MKm4g5YZ6RrZDgqZGupJf+WAW6CY8iDCtNXlV5Ucd6TUDrnNWJICqQ2F8r3UB
+ /TXyF9RQVYPdRXqwCP+YctclVouJ6WnQd0j3AdiMygprRnOnAe0vc6QUmAFkcW+Ri/
+ 82v8JACI5iJywK/DJTdxDVEnPq+zoaCKkNLFTutHaSQV+jaK5XHZ4AbLhe6IZBakcv
+ xK1bJ7+VqOYxu8DSjZHjfFTARHwISGP3uB22wFCA1DE+TQ89eDM11x0Xa4TrXnTu97
+ n4uVmtc6/J2hw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=dXdUH+rP
-Subject: [Buildroot] [PATCH 1/1] support/testing/tests/boot/test_grub.py:
- new test for RISCV64 EFI
+ header.s=smtp-20201208 header.b=YZeciKUc
+Subject: Re: [Buildroot] [PATCH v0 1/1] package/bfscripts: add 3.9.7-1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,89 +84,242 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit f439b47ed "boot/grub2: add RISC-V 64bit EFI support" [1]
-introduced the grub2 RISC-V UEFI support.
+Hi Vincent,
 
-At that time, it was not possible to have a runtime test for this.
-qemu-system-riscv64 is not in the Buildroot Docker reference image,
-and the base distribution (Debian 11) does not provide a
-sufficiently recent version. A qemu-system-riscv64 >= 8.0.0 is needed.
+Thanks for this new contribution!
 
-Commit 0d4177598 "support/testing/infra/emulator.py: add build host
-dir to qemu search path" [2] added the capability to use the
-Buildroot host-qemu package inside runtime test.
+In Buildroot, for new packages the commit log one liner is generally
+in the form of:
+"package/bfscripts: new package"
 
-With this support, it is now possible to add a runtime test for a
-grub2 UEFI boot on RISC-V 64bit.
+Could you reword to that, please?
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/f439b47ed6e987306c7de6d9c3be11de04935377
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/0d4177598ce7e73f2b97ac58c21fb177343643e3
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- support/testing/tests/boot/test_grub.py | 44 +++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+On 05/11/2024 10:57, Vincent Jardin wrote:
+> Bootstrap the installation of Mellanox/NVIDIA Bluefield scripts
+> that can be run either on the host CPU or on the onboard ARM64 CPU.
+> 
+> Signed-off-by: Vincent Jardin <vjardin@free.fr>
+> ---
+>  DEVELOPERS                       |  1 +
+>  configs/nvidia_bf3_defconfig     |  3 +++
+>  package/Config.in                |  1 +
+>  package/bfscripts/Config.in      |  7 +++++++
+>  package/bfscripts/S99bfup        | 17 +++++++++++++++++
+>  package/bfscripts/bfscripts.hash |  3 +++
+>  package/bfscripts/bfscripts.mk   | 29 +++++++++++++++++++++++++++++
+>  7 files changed, 61 insertions(+)
+>  create mode 100644 package/bfscripts/Config.in
+>  create mode 100644 package/bfscripts/S99bfup
+>  create mode 100644 package/bfscripts/bfscripts.hash
+>  create mode 100644 package/bfscripts/bfscripts.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index edf823b34b..a11e4e580e 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -3273,6 +3273,7 @@ 
+> F:	support/testing/tests/core/test_root_password.py
+>  N:	Vincent Jardin <vjardin@free.fr>
+>  F:	board/nvidia/bf3/
+>  F:	configs/nvidia_bf3_defconfig
+> +F:	package/bfscripts/
+>  F:	package/dpdk/
+> 
+>  N:	Vincent Prince <vincent.prince.fr@gmail.com>
+> diff --git a/configs/nvidia_bf3_defconfig 
+> b/configs/nvidia_bf3_defconfig
+> index 3f958c0062..95054d5b15 100644
+> --- a/configs/nvidia_bf3_defconfig
+> +++ b/configs/nvidia_bf3_defconfig
+> @@ -10,3 +10,6 @@ 
+> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/nvidia/bf3/linux.config"
+>  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>  BR2_TARGET_ROOTFS_INITRAMFS=y
+>  # BR2_TARGET_ROOTFS_TAR is not set
+> +BR2_PACKAGE_BASH=y
+> +BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+> +BR2_PACKAGE_BFSCRIPTS=y
 
-diff --git a/support/testing/tests/boot/test_grub.py b/support/testing/tests/boot/test_grub.py
-index c753a16c34..d9b5ed2143 100644
---- a/support/testing/tests/boot/test_grub.py
-+++ b/support/testing/tests/boot/test_grub.py
-@@ -172,3 +172,47 @@ class TestGrubAArch64EFI(infra.basetest.BRTest):
- 
-         cmd = "efivar -l"
-         self.assertRunOk(cmd)
-+
-+
-+class TestGrubRiscV64EFI(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_riscv=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/riscv64-virt-efi/assemble-flash-images support/scripts/genimage.sh"
-+        BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/qemu/riscv64-virt-efi/genimage.cfg"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.59"
-+        BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+        BR2_PACKAGE_EFIVAR=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_TARGET_EDK2=y
-+        BR2_TARGET_GRUB2=y
-+        BR2_TARGET_GRUB2_RISCV64_EFI=y
-+        BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+        BR2_PACKAGE_HOST_GENIMAGE=y
-+        BR2_PACKAGE_HOST_MTOOLS=y
-+        BR2_PACKAGE_HOST_QEMU=y
-+        BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-+        """
-+
-+    def test_run(self):
-+        disk = os.path.join(self.builddir, "images", "disk.img")
-+        flash0 = os.path.join(self.builddir, "images", "RISCV_VIRT_CODE.fd")
-+        flash1 = os.path.join(self.builddir, "images", "RISCV_VIRT_VARS.fd")
-+        qemu_opts = [
-+            "-M", "virt,pflash0=pflash0,pflash1=pflash1,acpi=off",
-+            "-blockdev", f"node-name=pflash0,driver=file,read-only=on,filename={flash0}",
-+            "-blockdev", f"node-name=pflash1,driver=file,filename={flash1}",
-+            "-drive", f"file={disk},format=raw,if=virtio"
-+        ]
-+        self.emulator.boot(arch="riscv64", options=qemu_opts)
-+        self.emulator.login()
-+
-+        cmd = "mount -t efivarfs none /sys/firmware/efi/efivars"
-+        self.assertRunOk(cmd)
-+
-+        cmd = "efivar -l"
-+        self.assertRunOk(cmd)
--- 
-2.47.0
+This commit should only introduce the package. The
+nvidia_bf3_defconfig should also remain as it is. The defconfig
+files in Buildroot are kept minimal.
 
+I believe this package is not necessary to boot Linux on this board.
+
+Therefore, the selection of this package should be left to the end
+user, in his configuration.
+
+Could you remove all the changes in configs/nvidia_bf3_defconfig?
+
+> 
+  diff --git a/package/Config.in b/package/Config.in
+> index 876b340a8a..d7430287b9 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -475,6 +475,7 @@ endmenu
+>  	source "package/apcupsd/Config.in"
+>  	source "package/avrdude/Config.in"
+>  	source "package/bcache-tools/Config.in"
+> +	source "package/bfscripts/Config.in"
+>  	source "package/biosdevname/Config.in"
+>  	source "package/brickd/Config.in"
+>  	source "package/brltty/Config.in"
+> diff --git a/package/bfscripts/Config.in b/package/bfscripts/Config.in
+> new file mode 100644
+> index 0000000000..bdfd45a4ed
+> --- /dev/null
+> +++ b/package/bfscripts/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_BFSCRIPTS
+> +	bool "bfscripts"
+> +	select BR2_PACKAGE_BASH
+> +	help
+> +	  Install bfscripts from Mellanox/NVIDIA.
+
+
+This description does not give much information on what this package
+is doing. Consider something like:
+"""
+Collection of scripts used for Mellanox/NVIDIA BlueField SoC
+system management.
+"""
+
+I also see you decided to install a subset of all the available
+scripts.
+
+So you could also mention here:
+"""
+Install the scripts: bfcfg, bfrshlog and bfup.
+"""
+
+> +	  https://github.com/Mellanox/bfscripts
+> diff --git a/package/bfscripts/S99bfup b/package/bfscripts/S99bfup
+> new file mode 100644
+> index 0000000000..63a2867dab
+> --- /dev/null
+> +++ b/package/bfscripts/S99bfup
+> @@ -0,0 +1,17 @@
+> +#!/bin/sh
+> +#
+> +# notify to the root PCIe (/dev/rshimN/misc) that Linux is up
+> +# and that BF3 boardis ready
+
+                       ^^ there is a missing space here.
+
+> +
+> +case "$1" in
+> +  start)
+> +	printf "bfup: "
+> +	/usr/bin/bfup
+> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
+> +	;;
+> +  *)
+> +	echo "Usage: $0 {start}"
+> +	exit 1
+> +esac
+> +
+> +exit $?
+
+Here, this shell script generates warnings, when using the command
+"utils/docker-run make check-package":
+
+     package/bfscripts/S99bfup:7: should be indented with tabs 
+(https://nightly.buildroot.org/#adding-packages-start-script)
+     package/bfscripts/S99bfup:12: should be indented with tabs 
+(https://nightly.buildroot.org/#adding-packages-start-script)
+     package/bfscripts/S99bfup:0: DAEMON variable not defined 
+(https://nightly.buildroot.org/#adding-packages-start-script)
+     package/bfscripts/S99bfup:0: run 'shellcheck' and fix the warnings
+
+Could you fix those, please?
+
+
+> diff --git a/package/bfscripts/bfscripts.hash 
+> b/package/bfscripts/bfscripts.hash
+> new file mode 100644
+> index 0000000000..05f2966ab9
+> --- /dev/null
+> +++ b/package/bfscripts/bfscripts.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed
+> +sha256  
+> 92123fcaeb8eb9ba7f296e2457e82f56831c6fd19c1ad1a5949b7bc7d5d0a837  
+> bfscripts-3.9.7-1.tar.gz
+> +sha256  
+> ab52bc4ac5e66e42e0ce14172c4d1d40969919db98cc0e11d2f6178dcc97bf4d  
+> LICENSE
+> diff --git a/package/bfscripts/bfscripts.mk 
+> b/package/bfscripts/bfscripts.mk
+> new file mode 100644
+> index 0000000000..cb13defb8f
+> --- /dev/null
+> +++ b/package/bfscripts/bfscripts.mk
+> @@ -0,0 +1,29 @@
+> +################################################################################
+> +#
+> +# bfscripts
+> +#
+> +################################################################################
+> +
+> +BFSCRIPTS_VERSION = 3.9.7-1
+> +BFSCRIPTS_SITE = $(call 
+> github,Mellanox,bfscripts,$(BFSCRIPTS_VERSION))
+> +BFSCRIPTS_DEPENDENCIES = bash
+
+bash is a runtime dependency on target. BFSCRIPTS_DEPENDENCIES
+should only list build dependencies. Since there is none, this line
+can be removed.
+
+> +BFSCRIPTS_LICENSE = BSD-2-Clause
+> +BFSCRIPTS_LICENSE_FILES = LICENSE
+> +
+> +BFSCRIPTS_FILES_TO_INSTALL = bfcfg \
+
+For readability, could you format as:
+
+BFSCRIPTS_FILES_TO_INSTALL = \
+	bfcfg \
+	bfrshlog \
+	bfup
+
+> +	bfrshlog \
+> +	bfup
+> +
+> +define BFSCRIPTS_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/bin
+
+There is no need to create the /usr/bin. It should already be present
+from the system skeleton. See:
+https://gitlab.com/buildroot.org/buildroot/-/tree/master/system/skeleton/usr/bin
+
+> +	$(foreach f,$(BFSCRIPTS_FILES_TO_INSTALL),\
+> +		$(INSTALL) -D -m 0755 $(@D)/$(f) $(TARGET_DIR)/usr/bin/$(f)
+> +	)
+> +endef
+> +
+> +define BFSCRIPTS_INSTALL_INIT_SYSV
+> +	$(INSTALL) -D -m 755 package/bfscripts/S99bfup \
+> +		$(TARGET_DIR)/etc/init.d/S99bfup
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
