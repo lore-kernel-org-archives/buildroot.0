@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F39C7D12676
-	for <buildroot@archiver.kernel.org>; Tue,  5 Nov 2024 09:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A063D12671
+	for <buildroot@archiver.kernel.org>; Tue,  5 Nov 2024 09:59:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6E6C607C1;
-	Tue,  5 Nov 2024 09:54:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 100ED606F6;
+	Tue,  5 Nov 2024 09:59:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d3PmxpJ-am6w; Tue,  5 Nov 2024 09:54:37 +0000 (UTC)
+ id c3UrSzKDgjH5; Tue,  5 Nov 2024 09:59:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2F64607DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EC7E607A4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2F64607DF;
-	Tue,  5 Nov 2024 09:54:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6E2363B
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 09:54:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EC7E607A4;
+	Tue,  5 Nov 2024 09:59:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 135CC3B
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 09:59:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B83380D17
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 09:54:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01DC9607C1
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 09:59:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6fDLmLz0j-VE for <buildroot@buildroot.org>;
- Tue,  5 Nov 2024 09:54:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.67.31.28;
- helo=smtprelay01.ispgateway.de; envelope-from=mf@go-sys.de;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 682A280D07
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 682A280D07
-Received: from smtprelay01.ispgateway.de (smtprelay01.ispgateway.de
- [80.67.31.28])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 682A280D07
- for <buildroot@busybox.net>; Tue,  5 Nov 2024 09:54:35 +0000 (UTC)
-Received: from [84.191.232.240] (helo=mail.go-sys.de)
- by smtprelay01.ispgateway.de with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.98)
- (envelope-from <mf@go-sys.de>) id 1t8G7p-000000007BV-2oMi
- for buildroot@busybox.net; Tue, 05 Nov 2024 10:45:25 +0100
-Received: from mail.go-sys.de (192.168.1.9) by mail.go-sys.de (192.168.1.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 5 Nov
- 2024 10:45:25 +0100
-Received: from go-sys.de (192.168.1.175) by mail.go-sys.de (192.168.1.9) with
- Microsoft SMTP Server id 15.1.2507.39 via Frontend Transport;
- Tue, 5 Nov 2024 10:45:25 +0100
-From: Michael Fischer <mf@go-sys.de>
-To: <buildroot@busybox.net>
-CC: Michael Fischer <mf@go-sys.de>
-Date: Tue, 5 Nov 2024 10:45:06 +0100
-Message-ID: <20241105094506.26849-1-mf@go-sys.de>
-X-Mailer: git-send-email 2.20.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GUktmOlk1Qu9 for <buildroot@buildroot.org>;
+ Tue,  5 Nov 2024 09:59:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 26410606F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26410606F6
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 26410606F6
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 09:59:06 +0000 (UTC)
+Received: from localhost.localdomain (unknown
+ [IPv6:2a01:e0a:2af:22b0:a4ad:3140:e0ab:8c71])
+ (Authenticated sender: vjardin@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id E39FA13F88D;
+ Tue,  5 Nov 2024 10:59:01 +0100 (CET)
+From: Vincent Jardin <vjardin@free.fr>
+To: buildroot@buildroot.org
+Cc: vjardin@free.fr
+Date: Tue,  5 Nov 2024 10:57:43 +0100
+Message-ID: <20241105095744.60477-1-vjardin@free.fr>
+X-Mailer: git-send-email 2.46.1
 MIME-Version: 1.0
-X-C2ProcessedOrg: 5fa85167-cd6f-46be-bafe-19070fe3dac3
-X-CrossPremisesHeadersFilteredBySendConnector: mail.go-sys.de
-X-OrganizationHeadersPreserved: mail.go-sys.de
-X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=go-sys.de
-Subject: [Buildroot] [PATCH] package/sdl2: bump version to 2.30.9
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1730800743;
+ bh=dUCysAB5AcGf7feWyiSHnDcXQHRdhuiennHVNwFMJvo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=MQ1ChLmr4CAEf8mvW/U/rb4VZUCYAsjnDqo/fVZew3j86nbfAi02vzelO/iOW2FP+
+ +TCvq/Hf9QAEywMrw82lTuquLVqz0mz8hC4L7N2zhfnDtXfGU+kdcM9Le0ejQr0AUj
+ C70c71SrvjQJdIZ8twG3xQvDgdeD6jsWVZzx/rdOHIYD02uNvPD1fnFqtdsNIt8VBD
+ xySwyfpaZBcs/iyWGe1GgB8KK8T3nsanJJxXaHHAB6Rbbb24FWe7ntvQq00/lcS+V0
+ ruUDIBvWtIFKptvDTyHhCe7sc7GPayGyzGbnn1M66gC4UehD/exYKbDDxShD/b1WvT
+ 06gK7B+Tt3PrQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=MQ1ChLmr
+Subject: [Buildroot] [PATCH v0 0/1] add bfscripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,38 +81,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
----
- package/sdl2/sdl2.hash | 4 ++--
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+v0:
+  - it is a Request For Comment patch
+  - some of the bfscripts could be run on the host CPU and the
+    PCIe ARM board, so I did not enforce a dependency on the BF3 board.
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 4cd3cb08d8..140767ef0a 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.7.tar.gz.sig
--sha256  2508c80438cd5ff3bbeb8fe36b8f3ce7805018ff30303010b61b03bb83ab9694  SDL2-2.30.7.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.9.tar.gz.sig
-+sha256  24b574f71c87a763f50704bbb630cbe38298d544a1f890f099a4696b1d6beba4  SDL2-2.30.9.tar.gz
- # Locally calculated
- sha256  9b9e1764f06701bcf7ce21e942c682d5921ba0900c6fca760321b1c8837a9662  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 558deed4bc..9eee5c7123 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SDL2_VERSION = 2.30.7
-+SDL2_VERSION = 2.30.9
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+Vincent Jardin (1):
+  package/bfscripts: add 3.9.7-1
+
+ DEVELOPERS                       |  1 +
+ configs/nvidia_bf3_defconfig     |  3 +++
+ package/Config.in                |  1 +
+ package/bfscripts/Config.in      |  7 +++++++
+ package/bfscripts/S99bfup        | 17 +++++++++++++++++
+ package/bfscripts/bfscripts.hash |  3 +++
+ package/bfscripts/bfscripts.mk   | 29 +++++++++++++++++++++++++++++
+ 7 files changed, 61 insertions(+)
+ create mode 100644 package/bfscripts/Config.in
+ create mode 100644 package/bfscripts/S99bfup
+ create mode 100644 package/bfscripts/bfscripts.hash
+ create mode 100644 package/bfscripts/bfscripts.mk
+
 -- 
-2.20.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
