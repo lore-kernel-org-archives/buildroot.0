@@ -1,78 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56AAAD36136
-	for <buildroot@archiver.kernel.org>; Tue,  5 Nov 2024 20:13:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18FE3D36136
+	for <buildroot@archiver.kernel.org>; Tue,  5 Nov 2024 20:20:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1002260833;
-	Tue,  5 Nov 2024 20:13:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B3C9C80FB9;
+	Tue,  5 Nov 2024 20:20:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5IMFrPl8XO41; Tue,  5 Nov 2024 20:13:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jz5g0a-Ufsy1; Tue,  5 Nov 2024 20:20:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16B16605A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA0A080FDE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 16B16605A8;
-	Tue,  5 Nov 2024 20:13:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id CC5AD3B
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 20:13:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA0A080FDE;
+	Tue,  5 Nov 2024 20:20:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 22C303B
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 20:20:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AAAAD4018E
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 20:13:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 10E9440664
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 20:20:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2gjDhORNWvWO for <buildroot@buildroot.org>;
- Tue,  5 Nov 2024 20:13:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t6RSM_wLflQo for <buildroot@buildroot.org>;
+ Tue,  5 Nov 2024 20:20:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 418B540158
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 418B540158
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 418B540158
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 20:13:24 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9C7D740668
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C7D740668
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9C7D740668
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 20:20:52 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 795B3B005AF;
- Tue,  5 Nov 2024 21:13:18 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:45024])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 05 Nov 2024 21:13:18 +0100
-MIME-Version: 1.0
-Date: Tue, 05 Nov 2024 21:13:18 +0100
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id C6C05B0051B;
+ Tue,  5 Nov 2024 21:20:46 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
-To: Brandon Maier <brandon.maier@collins.com>
-Cc: buildroot@buildroot.org, Kilian Zinnecker <kilian.zinnecker@mail.de>,
- Niklas Cassel <cassel@kernel.org>
-In-Reply-To: <20241104-rock5b-uboot-uuid-v1-1-0f2f34d87778@collins.com>
-References: <20241104-rock5b-uboot-uuid-v1-1-0f2f34d87778@collins.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <14c5f1aa001b793d42bdb7189460053d@free.fr>
-X-Sender: ju.o@free.fr
+To: buildroot@buildroot.org
+Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ Julien Olivain <ju.o@free.fr>
+Date: Tue,  5 Nov 2024 21:20:39 +0100
+Message-ID: <20241105202039.2556992-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.47.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1730837601;
- bh=LP3ZkLDwZITUp41bkVIbQ4VAV/IFkQyKAlMRemgWl2E=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=oL03bL10gwWHZW8ggfV2hW8t57HVD2RRgyp6v7rM5ijLN7Hn2kKETeI+qpLrMnNcQ
- ObgzxAvdXkaVjwp1/7coyjH1v3uwhdDidl4bDptX4/BflBHCW1ALbiPfiOMxMvTBxl
- LcpHGjnl80hoD6bgkMReUSkVWwjfOCYlqhyqz1ipbpXrp7EhNXxZ41XN/COwSQZSA7
- TWffCJD49TlhLaOcgLvsqr+r/5EjMHfhhJTXaausQYyz7eD1sSyHpE41Gld+AfgHML
- 1XoLD0FXSyswqr+akZGkT8yZ8vawvuX373ncsKDaCPINeX7kQ8f1IBIANFgLc1wPIW
- QB6ImErX2ehRQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1730838051;
+ bh=y/9Lc3WyD9CKGF7lWNaNfarb6RXm+IX3XIs2T5vi9Pk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ElR2DSezJRn0UntryOfJM9kW2SiPF2/09UNjk4BHsOOZ0BP/OWW6mha73a3KhcIE1
+ NryOmcC7oSGZ06mby5dai1l+jAze6l1Z3zlw+I3RH9CvrsiP4DIOpKA4ZngXZ22X4P
+ P5Co8UYXrBM1T+ziR7oYmusnKx/hKwy68UvtfFufSNcJVSltrF2kTFXAQym4CN480U
+ MI+Yo11CO8U8htT+MMZ66gE2kYClMDF5oJ9/v7LrOIxo8h4RvzBEGP/3yBOeSpOYq+
+ z/pqiLUrISDh/lXvdirqamqtQdJMaayk4DPv8PYwHxbeF/8hw6FM9PGVqJJlEYYYin
+ giE/Fy78Zw3jw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=oL03bL10
-Subject: Re: [Buildroot] [PATCH] configs/rock5b_defconfig: add missing
- U-Boot build dependency
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=ElR2DSez
+Subject: [Buildroot] [PATCH 1/1] support/testing/infra/emulator.py: add qemu
+ version in run log
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,55 +79,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/11/2024 22:39, Brandon Maier via buildroot wrote:
-> When building the rock5b with BR2_PER_PACKAGE_DIRECTORIES enabled, the
-> following error occurs from U-Boot.
-> 
->   tools/mkeficapsule.c:19:10: fatal error: uuid/uuid.h: No such file or
->   directory
->      19 | #include <uuid/uuid.h>
->         |          ^~~~~~~~~~~~~
-> 
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+In some specific situations, there is subtle bugs which depends on a
+specific Qemu emulator version and the code it runs.
 
-Applied to master. Thanks!
+For example, EDK2 on Aarch64 could work with specific versions of Qemu,
+EDK2 and ATF. See commit cc0823c2d "boot/edk2: bump to version
+edk2-stable202405" [1].
 
-> ---
->  configs/rock5b_defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-> index 
-> af748a5d25a2b2be3f72d6d93d413be04c5a59a8..38b5aad206229f57925480820c94487b2db5365b 
-> 100644
-> --- a/configs/rock5b_defconfig
-> +++ b/configs/rock5b_defconfig
-> @@ -39,6 +39,7 @@ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
->  BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
->  BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
->  BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
-> +BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
->  BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN=y
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
->  BR2_PACKAGE_HOST_DTC=y
-> 
-> ---
-> base-commit: d74a5a218fabee928abb347086648ad142f7d5a5
-> change-id: 20241104-rock5b-uboot-uuid-7824f5d9f24b
-> 
-> Best regards,
-> --
-> Brandon Maier <brandon.maier@collins.com>
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Also, some Qemu bugs made the guest OS crash. See for example commit
+9534b9c00 "package/qemu: fix qemu 9.x issue for AArch32 Secure
+PL1&0" [2].
+
+Commit 0d4177598 "support/testing/infra/emulator.py: add build host
+dir to qemu search path" added the ability for a runtime test to
+select host-qemu in order to use it. It is also possible for a user
+to use the "utils/run-tests" script on its host system providing its
+own version of Qemu. The Buildroot CI can also use its Qemu version
+included in the reference Docker image.
+
+This means the Qemu emulator for running a runtime test can be from
+several sources:
+- Buildroot Docker reference image,
+- Buildroot host-qemu package version,
+- Developer host OS qemu version.
+
+Those versions can also change in time.
+
+In order to help debugging of those subtle emulator bugs, this commit
+adds a recording of the actual Qemu version used to run a test.
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/cc0823c2d14321b91b94801834050331f5ea28e1
+[2] https://gitlab.com/buildroot.org/buildroot/-/commit/9534b9c00c23cfd69a4e122c26fca9d3da93d329
+[3] https://gitlab.com/buildroot.org/buildroot/-/commit/0d4177598ce7e73f2b97ac58c21fb177343643e3
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ support/testing/infra/emulator.py | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index 238e123302..ef5be2a19e 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -116,15 +116,21 @@ class Emulator(object):
+         ldavg_str = f"{ldavg[0]:.2f}, {ldavg[1]:.2f}, {ldavg[2]:.2f}"
+         self.logfile.write(f"> host loadavg: {ldavg_str}\n")
+         self.logfile.write(f"> timeout multiplier: {self.timeout_multiplier}\n")
+-        self.logfile.write("> starting qemu with '%s'\n" % " ".join(qemu_cmd))
++        self.logfile.write(f"> emulator using {qemu_cmd[0]} version:\n")
+         host_bin = os.path.join(self.builddir, "host", "bin")
+         br_path = host_bin + os.pathsep + os.environ["PATH"]
++        qemu_env = {"QEMU_AUDIO_DRV": "none",
++                    "PATH": br_path}
++        pexpect.run(f"{qemu_cmd[0]} --version",
++                    encoding='utf-8',
++                    logfile=self.logfile,
++                    env=qemu_env)
++        self.logfile.write("> starting qemu with '%s'\n" % " ".join(qemu_cmd))
+         self.qemu = pexpect.spawn(qemu_cmd[0], qemu_cmd[1:],
+                                   timeout=5 * self.timeout_multiplier,
+                                   encoding='utf-8',
+                                   codec_errors='replace',
+-                                  env={"QEMU_AUDIO_DRV": "none",
+-                                       "PATH": br_path})
++                                  env=qemu_env)
+         # We want only stdout into the log to avoid double echo
+         self.qemu.logfile_read = self.logfile
+ 
+-- 
+2.47.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
