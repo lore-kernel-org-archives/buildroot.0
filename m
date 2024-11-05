@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B6AED31769
-	for <buildroot@archiver.kernel.org>; Tue,  5 Nov 2024 17:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF14CD31773
+	for <buildroot@archiver.kernel.org>; Tue,  5 Nov 2024 17:59:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E794401E3;
-	Tue,  5 Nov 2024 17:52:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95213405E1;
+	Tue,  5 Nov 2024 17:59:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DOHpAVc4k5Le; Tue,  5 Nov 2024 17:52:21 +0000 (UTC)
+ id 5iEG-1Pgd5Gt; Tue,  5 Nov 2024 17:59:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DBBB40230
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72C1A405FD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2DBBB40230;
-	Tue,  5 Nov 2024 17:52:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8D1743B
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 17:52:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72C1A405FD;
+	Tue,  5 Nov 2024 17:59:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D42B1723
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 17:59:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 87FEB401E3
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 17:52:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CEA2040224
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 17:59:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6sZSXzhq6e41 for <buildroot@buildroot.org>;
- Tue,  5 Nov 2024 17:52:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VZPWizqqjI3z for <buildroot@buildroot.org>;
+ Tue,  5 Nov 2024 17:59:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2c; helo=mail-io1-xd2c.google.com;
+ client-ip=2607:f8b0:4864:20::d33; helo=mail-io1-xd33.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 735B7401D3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 735B7401D3
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 735B7401D3
- for <buildroot@buildroot.org>; Tue,  5 Nov 2024 17:52:18 +0000 (UTC)
-Received: by mail-io1-xd2c.google.com with SMTP id
- ca18e2360f4ac-83aac75fcceso193093139f.0
- for <buildroot@buildroot.org>; Tue, 05 Nov 2024 09:52:18 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F354440042
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F354440042
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F354440042
+ for <buildroot@buildroot.org>; Tue,  5 Nov 2024 17:59:45 +0000 (UTC)
+Received: by mail-io1-xd33.google.com with SMTP id
+ ca18e2360f4ac-83aad4a05eeso237505839f.1
+ for <buildroot@buildroot.org>; Tue, 05 Nov 2024 09:59:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730829137; x=1731433937;
+ d=1e100.net; s=20230601; t=1730829585; x=1731434385;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=2GLWsOQHG7OXvcaBGdjGI1opHbd++4hiDcBeEGfmeEc=;
- b=RGD4aXCbah09GlLcd9mQdx66cnqcFBkhf54gGJkQJvMUP87PkvJ2fVtEo0vq/ArmPa
- 9OVR/OJkrjhVfr5jLOBG6JUZ43Acx0K1bxkj7yjFVyeUnXqsyYHqJGMo5o9G5Q64iKZ7
- H4JDqk0slpYzkxNTlfagKlbGLMNm093MKgVeZWKbOnr/M9U2odFy4viYpu2+pTNm4ILB
- GV42ddzgpG6xxPgc6Xdgx77IF+zHB4WiWsn9nFxFwHx1xMPzJEUdW9JgIK6oywiNfeAI
- Lx9dhAZoGDz9sjpC7V8n6VGVl6GlvQS3uTjfS44NTUcxJ9UL47FWAqGlU60N7P4G+Vrc
- Qj3g==
-X-Gm-Message-State: AOJu0YyuCg5ukUxU+aKQOfTYjpYfquVBlOc8ikAanBDS/DYfvsM2H0gh
- h6ZgSUCuBx1UmoWRJrPDPCHMSOb2Jl/xd28EI7BIGh89cLvT4rJ/y/Ihlg==
-X-Google-Smtp-Source: AGHT+IHdlom4P0JWl9xGTwZpVzPnNZPRLFQaFDmGt23agIuBewKASXWAlY2vjAPWY4mMZNJWu/oQzQ==
-X-Received: by 2002:a05:6e02:216e:b0:3a6:aa59:fffa with SMTP id
- e9e14a558f8ab-3a6b02b808amr151270945ab.11.1730829137253; 
- Tue, 05 Nov 2024 09:52:17 -0800 (PST)
+ bh=rk4ecAqg1Ji4QwTK+xzhG4eT10puRmE5I/msoytqytA=;
+ b=bUz6P0A5ye55l7wAXgYkdlaRohYaGMt8SM03OZ62jLOpRy7J3Kv+WrKQku4i+em0RW
+ 3SHjHTM/yRPZLdI9f4xPLHKTDDkryZr07xmrho4Popk1cgmBk62GSgYHdJXUP4aicjkx
+ gRoa05S47UL9CzzBR3n2T0ZpXairyWsEyATHcsQww0SKb8cgOx99DEUe2gsPDb5le2mM
+ QRN/JDbuQvhss5b6FMlxkC0g+7ZJtBYmRQOZfZha+csYepOOKJY0eUJkLF7vZ/NRoSmf
+ DkGMGeffcEQi6qXLrS8bwU4OGQaQs8FDW8pQiBb492o/dSXH4wb++tbWcDJegknpNZPr
+ ZWTw==
+X-Gm-Message-State: AOJu0YxDwdaEh5VFwy9FyeHBb1J5F+hbtsE82x5DMQf1QQdSGhZEnoEQ
+ oUq4+nrOD+dekwFD8BbxGuIyljpvRZY99cS8H8f8VYHdNOSLkev95vbqPQ==
+X-Google-Smtp-Source: AGHT+IHSCF64VB6k8KDkCEf6xuswrxwMgbdigms0CLlmXFQINCA2ws/dfqyePNOnJf6luLZLlpAuzA==
+X-Received: by 2002:a05:6602:6d10:b0:83a:b98e:9240 with SMTP id
+ ca18e2360f4ac-83b5676f807mr2466357239f.10.1730829584699; 
+ Tue, 05 Nov 2024 09:59:44 -0800 (PST)
 Received: from james-x399.localdomain (97-118-131-57.hlrn.qwest.net.
  [97.118.131.57]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a6a97cf50asm29669615ab.31.2024.11.05.09.52.16
+ 8926c6da1cb9f-4de04887f79sm2476652173.7.2024.11.05.09.59.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 05 Nov 2024 09:52:16 -0800 (PST)
+ Tue, 05 Nov 2024 09:59:44 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  5 Nov 2024 10:52:15 -0700
-Message-Id: <20241105175215.1402819-1-james.hilliard1@gmail.com>
+Date: Tue,  5 Nov 2024 10:59:31 -0700
+Message-Id: <20241105175931.1405047-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1730829137; x=1731433937; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1730829585; x=1731434385; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=2GLWsOQHG7OXvcaBGdjGI1opHbd++4hiDcBeEGfmeEc=;
- b=HZJ+QxNGZt/BDdfjvpmq4MknBm9MCebgj0I5u/mRJqubs5owD9kYQhrl6GECw1+RRT
- vShm8gYFyEoO6I+zxeL4/mIFzxMPmhOi5luyWPeVCQZM1IDq9PcrWgFP+jm8uIrJ2pGR
- zPqiDvWFIj3tnGpADYqbb+rpeJ6IBIkMdySMVR1KZxDWBXXu1Icm/uV68iqvumy8kiEw
- B6pQBAhDZMoZPiDC/HtapsBoLly6G6un7ezvwPybjmjEphUHj85li3/2nff5RwpEeD0k
- tg/v3ea7/8rnlMEHwLnhLntuDKQeKdfN3+myg+XtkqG5VcCY5liIQYp/i8Z2GQliRypt
- 4W0w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=rk4ecAqg1Ji4QwTK+xzhG4eT10puRmE5I/msoytqytA=;
+ b=a74VtXj3tB9wRBENJhQNbiME6gUwvjWRfIz6xr+rPbxOwSqK9hmsgSjpAosyFuBw9w
+ SZJCk1dS6aE8syne5bhBASy1KmvGJb5m7lXMZa0EvWU5e4sfm0QFFuyfbknurT2TCnTR
+ ut7S1Q4HO+mDIFM/jFcm4fclSx8T9nlrWKpbBzFPTu7BncUlMiw64g1cJ1e9MFNYxreS
+ kHeN2xqCK62K/enC4Wxob7MjurDe6oR6GaD6Tr7NksWTzOw13F3rc/2fXC0Bc3USGvZQ
+ KQAe/9y30YLViToE64hpvBHXmB69Q5R1JUj1UlnYQ+oTdJYQY4AGLl19wEA1CR/YJ8/4
+ OcUg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=HZJ+QxNG
-Subject: [Buildroot] [PATCH 1/1] package/python-dunamai: use poetry setup
- type
+ header.a=rsa-sha256 header.s=20230601 header.b=a74VtXj3
+Subject: [Buildroot] [PATCH 1/1] package/bmap-tools: use poetry setup type
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,7 +100,7 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: James Hilliard <james.hilliard1@gmail.com>,
- Fiona Klute <fiona.klute@gmx.de>, Asaf Kahlon <asafka7@gmail.com>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -112,25 +111,23 @@ host-python-poetry-core dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-dunamai/python-dunamai.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/bmap-tools/bmap-tools.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/python-dunamai/python-dunamai.mk b/package/python-dunamai/python-dunamai.mk
-index c3ab45fd6e..bd6c71fd6a 100644
---- a/package/python-dunamai/python-dunamai.mk
-+++ b/package/python-dunamai/python-dunamai.mk
-@@ -7,10 +7,9 @@
- PYTHON_DUNAMAI_VERSION = 1.22.0
- PYTHON_DUNAMAI_SOURCE = dunamai-$(PYTHON_DUNAMAI_VERSION).tar.gz
- PYTHON_DUNAMAI_SITE = https://files.pythonhosted.org/packages/a0/fe/aee602f08765de4dd753d2e5d6cbd480857182e345f161f7a19ad1979e4d
--PYTHON_DUNAMAI_SETUP_TYPE = pep517
-+PYTHON_DUNAMAI_SETUP_TYPE = poetry
- PYTHON_DUNAMAI_LICENSE = MIT
- PYTHON_DUNAMAI_LICENSE_FILES = LICENSE
--HOST_PYTHON_DUNAMAI_DEPENDENCIES = host-python-poetry-core \
--	host-python-packaging
-+HOST_PYTHON_DUNAMAI_DEPENDENCIES = host-python-packaging
+diff --git a/package/bmap-tools/bmap-tools.mk b/package/bmap-tools/bmap-tools.mk
+index 3455063e21..3c661cb9e2 100644
+--- a/package/bmap-tools/bmap-tools.mk
++++ b/package/bmap-tools/bmap-tools.mk
+@@ -8,9 +8,7 @@ BMAP_TOOLS_VERSION = 3.8.0
+ BMAP_TOOLS_SITE = $(call github,yoctoproject,bmaptool,v$(BMAP_TOOLS_VERSION))
+ BMAP_TOOLS_LICENSE = GPL-2.0
+ BMAP_TOOLS_LICENSE_FILES = LICENSE
+-BMAP_TOOLS_SETUP_TYPE = setuptools
+-BMAP_TOOLS_DEPENDENCIES = host-python-poetry-core
+-HOST_BMAP_TOOLS_DEPENDENCIES = host-python-poetry-core
++BMAP_TOOLS_SETUP_TYPE = poetry
  
+ $(eval $(python-package))
  $(eval $(host-python-package))
 -- 
 2.34.1
