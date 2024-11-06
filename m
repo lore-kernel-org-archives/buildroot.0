@@ -1,75 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75D43D59F7A
-	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 22:28:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E40D2D59F7A
+	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 22:28:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A97981330;
-	Wed,  6 Nov 2024 22:28:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE97040585;
+	Wed,  6 Nov 2024 22:28:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2EBcAz8H0Ig0; Wed,  6 Nov 2024 22:28:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R1d91gHgwBn6; Wed,  6 Nov 2024 22:28:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62AA38131E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EC12406AE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 62AA38131E;
-	Wed,  6 Nov 2024 22:28:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D4EEA4C38
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 22:28:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6EC12406AE;
+	Wed,  6 Nov 2024 22:28:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5E780B8
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 22:28:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2BC54812A4
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 22:28:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B17840716
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 22:28:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sE_yNSAoAjcK for <buildroot@buildroot.org>;
- Wed,  6 Nov 2024 22:28:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4IJK-J4ggQ0e for <buildroot@buildroot.org>;
+ Wed,  6 Nov 2024 22:28:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
  helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1179B8131E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1179B8131E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 147FA40585
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 147FA40585
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1179B8131E
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 22:28:34 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 57E41C0004;
- Wed,  6 Nov 2024 22:28:33 +0000 (UTC)
-Date: Wed, 6 Nov 2024 23:27:34 +0100
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 147FA40585
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 22:28:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E36A1C0007;
+ Wed,  6 Nov 2024 22:28:34 +0000 (UTC)
+Date: Wed, 6 Nov 2024 23:27:40 +0100
 To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org, Asaf Kahlon <asafka7@gmail.com>
-Message-ID: <20241106232734.7492cacb@windsurf>
-In-Reply-To: <20241105180857.1411063-1-james.hilliard1@gmail.com>
-References: <20241105180857.1411063-1-james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Christian Kellermann
+ <christian.kellermann@solectrix.de>, Asaf Kahlon <asafka7@gmail.com>
+Message-ID: <20241106232740.7a852014@windsurf>
+In-Reply-To: <20241105181142.1421388-1-james.hilliard1@gmail.com>
+References: <20241105181142.1421388-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1730932113;
+ d=bootlin.com; s=gm1; t=1730932115;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=+vfT+lAYdcAjeCDuYlg2owvJxN8h2SScixcy1c2khog=;
- b=a0Zk64dQonipfT6vG+YgiSNrs1Xb/OZdZSNDb2Wy6XfeFbIaH57km+GJWlZqqz6sJvXuQe
- LcmobX/0Em9mZ1g3hjRQdhJuyFi+1Pj+ZRMM5vU6cx6n0XhgfeQ+hOZfRbEGRBNG/Op1gP
- TNLGIbX7O19QVYfk8pbUAQjmDtymHHom4NFYvE8NSEYESSiJR0Ml8m6tH1YscsopWqK90r
- uk2F+gp36c7MpXU9+GkeWVCzvWXPNa0Cf9HC0VAeGJVAXKzGkQ+LA70ho4P84Rr1XIkfdb
- bJ8fx9/XLzXXido+pBOyURTtxb2QGOTudpFHxlzQ/VdcglkWQwfPKZ5harN/bw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=PIFi1CTzC6IQxOwx/H9glqqBp7hXQ+g7OSPEt7cAwBQ=;
+ b=Fir8fZlqDVKeYH0dEWMO5cuxGoZSyU9KaRTndNCwGyJEZzAcRbswIICCquj3KAgDqCQJUi
+ r8FhTyV2db7MRHNb3Z/sGz7So/r5RkPigfzysvD1fkKBDIhk3Blro5bITEMLpQhtAzYkbL
+ dNJTgRXknutUxHGFYI5dF7rXab8uHfW0gyGSwpxlJRjegPLroWVbwrhT7qPwthdvEhnXy1
+ +VXfBNAexpaqnxcuoXtirg4dpDZg1GrJTzmGamGTSthTKYFMAemtduwZx9wfP6SOpO+aQq
+ AcyI8MSlcK5YZE4CoRQ4h59UjZrmQMU0wHmiGOR6g9OQFklyYnmMrHa0gS+LtA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=a0Zk64dQ
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-legacy-cgi: use poetry
+ header.s=gm1 header.b=Fir8fZlq
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-pylibftdi: use poetry
  setup type
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -89,7 +90,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  5 Nov 2024 11:08:57 -0700
+On Tue,  5 Nov 2024 11:11:42 -0700
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
 > Use the new poetry setup type which automatically pulls in the
@@ -97,8 +98,8 @@ James Hilliard <james.hilliard1@gmail.com> wrote:
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/python-legacy-cgi/python-legacy-cgi.mk | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  package/python-pylibftdi/python-pylibftdi.mk | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
