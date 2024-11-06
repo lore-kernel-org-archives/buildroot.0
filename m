@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 659C3D59F73
-	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 21:13:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44B28D59F67
+	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 21:13:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DEDAA40740;
-	Wed,  6 Nov 2024 21:13:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD4654075F;
+	Wed,  6 Nov 2024 21:13:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ti0TGIg4RGCt; Wed,  6 Nov 2024 21:13:18 +0000 (UTC)
+ id xzbd9U9MNeAt; Wed,  6 Nov 2024 21:13:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6829440729
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF85340748
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6829440729;
-	Wed,  6 Nov 2024 21:13:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 02B244C3B
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:13:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF85340748;
+	Wed,  6 Nov 2024 21:13:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 00F414C38
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:13:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F11FF60659
+ by smtp2.osuosl.org (Postfix) with ESMTP id DCE14403E7
  for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:13:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cLN7_M4jdeOj for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u3pjpmQJGvDE for <buildroot@buildroot.org>;
  Wed,  6 Nov 2024 21:13:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED72060606
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBB7E40260
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED72060606
+ by smtp2.osuosl.org (Postfix) with ESMTP id DBB7E40260
  for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:13:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E71F485E5E; Wed,  6 Nov 2024 21:13:15 +0000 (UTC)
+ id CF7B885E53; Wed,  6 Nov 2024 21:13:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 6 Nov 2024 22:05:07 +0100
+Date: Wed, 6 Nov 2024 21:49:30 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 6822a658e68de3603f249c7ebe86a6730d3be90e
-X-Git-Newrev: 3e801931dc28fe37359dfe36e93b2ca81aaac49b
+X-Git-Oldrev: f51525bca2865ac47bfdc96bc09987ad3797a20a
+X-Git-Newrev: b0cfdd972afee887246acf44d6aef34007bc6938
 X-Patchwork-Hint: ignore
-Message-Id: <20241106211315.E71F485E5E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libarchive:
- security bump to version 3.7.7
+Message-Id: <20241106211315.CF7B885E53@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] boot/uboot: update link
+ to the U-Boot docs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,82 +65,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e801931dc28fe37359dfe36e93b2ca81aaac49b
+commit: https://git.buildroot.net/buildroot/commit/?id=b0cfdd972afee887246acf44d6aef34007bc6938
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Security fixes:
-- gzip: prevent a hang when processing a malformed gzip inside a gzip
-  (#2366, OSS-Fuzz)
-- tar: don't crash on truncated tar archives (#2364, OSS-Fuzz)
-- tar: fix two leaks in tar header parsing (#2377)
+The denx.de/wiki/U-Boot link now redirects to docs.u-boot.org/en/latest
+Replace the link to the new location for the U-Boot documentation
 
-Important bugfixes:
-- 7-zip: read/write symlink paths as UTF-8 (#2252)
-- cpio: exit with an error code if an entry could not be extracted (#2371)
-- rar5: report encrypted entries (#2096)
-- tar: fix truncation of entry pathnames in specific archives (#2360)
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Bryan Brattlof <bb@ti.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 55d0c9a9a6f89ed5c4d2e0d25cf499f180a99ee1)
-[Peter: mark as security bump]
+(cherry picked from commit 164d9f0546372eb076506eebc8f88c6c4a544a36)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch     | 2 +-
- .../0002-autotools-do-not-add-iconv-for-Requires.private.patch          | 2 +-
- package/libarchive/libarchive.hash                                      | 2 +-
- package/libarchive/libarchive.mk                                        | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ boot/uboot/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libarchive/0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch b/package/libarchive/0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch
-index e630c51fef..31ac4b0b5a 100644
---- a/package/libarchive/0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch
-+++ b/package/libarchive/0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch
-@@ -15,7 +15,7 @@ diff --git a/configure.ac b/configure.ac
- index 93f7af94..204a4e69 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -449,9 +449,7 @@ if test "x$with_iconv" != "xno"; then
-+@@ -455,9 +455,7 @@ if test "x$with_iconv" != "xno"; then
-      AC_CHECK_HEADERS([localcharset.h])
-      am_save_LIBS="$LIBS"
-      LIBS="${LIBS} ${LIBICONV}"
-diff --git a/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch b/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch
-index aca2dab9db..a5b4c86a2f 100644
---- a/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch
-+++ b/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch
-@@ -17,7 +17,7 @@ diff --git a/configure.ac b/configure.ac
- index 99bff20d1..f245d0c55 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -449,7 +449,6 @@ if test "x$with_iconv" != "xno"; then
-+@@ -455,7 +455,6 @@ if test "x$with_iconv" != "xno"; then
-      AC_CHECK_HEADERS([localcharset.h])
-      am_save_LIBS="$LIBS"
-      LIBS="${LIBS} ${LIBICONV}"
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index 08920b61c5..c0b04b0f4b 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,4 +1,4 @@
- # From https://www.libarchive.de/downloads/sha256sums
--sha256  0a2efdcb185da2eb1e7cd8421434cb9a6119f72417a13335cca378d476fd3ba0  libarchive-3.7.6.tar.xz
-+sha256  879acd83c3399c7caaee73fe5f7418e06087ab2aaf40af3e99b9e29beb29faee  libarchive-3.7.7.tar.xz
- # Locally computed:
- sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index d3a447552e..70123ee2b1 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index beafb38930..5b524c487f 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -3,7 +3,7 @@ config BR2_TARGET_UBOOT
+ 	help
+ 	  Build "Das U-Boot" Boot Monitor
  
--LIBARCHIVE_VERSION = 3.7.6
-+LIBARCHIVE_VERSION = 3.7.7
- LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
+-	  https://www.denx.de/wiki/U-Boot
++	  https://docs.u-boot.org/en/latest/
+ 
+ if BR2_TARGET_UBOOT
+ choice
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
