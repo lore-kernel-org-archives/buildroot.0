@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 694C5D59F6F
-	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 20:19:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEA4ED59F6F
+	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 20:19:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2155960AA1;
-	Wed,  6 Nov 2024 20:19:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACDDF4080B;
+	Wed,  6 Nov 2024 20:19:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id boW2EECpIoFK; Wed,  6 Nov 2024 20:19:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w6Ad9zeRVjAR; Wed,  6 Nov 2024 20:19:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B6CE60A81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79CE640824
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B6CE60A81;
-	Wed,  6 Nov 2024 20:19:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 92BCB3B
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 20:19:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79CE640824;
+	Wed,  6 Nov 2024 20:19:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 188F6B8
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 20:19:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 73F85813D9
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 20:19:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 146FE813F9
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 20:19:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id msLx4yrcuh-c for <buildroot@buildroot.org>;
- Wed,  6 Nov 2024 20:19:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+ id ORJGDqTgQye1 for <buildroot@buildroot.org>;
+ Wed,  6 Nov 2024 20:19:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E6ABA813D8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6ABA813D8
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E6ABA813D8
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 20:18:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E5903813EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5903813EE
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E5903813EE
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 20:19:23 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.7.2] ([85.22.112.161]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MRCOE-1tVp9J0xcq-00K07v; Wed, 06
- Nov 2024 21:18:57 +0100
-Message-ID: <012ea8d0-873b-49e8-bf4f-6277a32b053b@gmx.de>
-Date: Wed, 6 Nov 2024 21:18:56 +0100
+Received: from [192.168.7.2] ([85.22.112.161]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MjjCL-1tW2ZG0BhL-00f7JY; Wed, 06
+ Nov 2024 21:19:21 +0100
+Message-ID: <10c04649-a2cf-41e3-89e5-6c8a1bac1f28@gmx.de>
+Date: Wed, 6 Nov 2024 21:19:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20241105164350.1380330-1-james.hilliard1@gmail.com>
+References: <20241105175215.1402819-1-james.hilliard1@gmail.com>
 Content-Language: en-US, de-DE-1901, de-DE
 Autocrypt: addr=fiona.klute@gmx.de; keydata=
  xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
@@ -90,48 +90,48 @@ Autocrypt: addr=fiona.klute@gmx.de; keydata=
  MCTaUC2HWAAsiG90beT7JkkKKgMLS9DxmX9BN5Cm18Azckexy+vMg79LCcfw/gocQ4+lQn4/
  3BjqSuHfj+dXG+qcQ9pgB5+4/812hHog78dKT2r8l3ax3mHZCDTAC9Ks3LQU9/pMBm6K6nnL
  a4ASpGZSg2zLGIT0gnzi5h8EcIu9J1BFq6zRPZIjxBlhswF6J0BXjlDVe/3JzmeTTts=
-In-Reply-To: <20241105164350.1380330-1-james.hilliard1@gmail.com>
-X-Provags-ID: V03:K1:/GYHL/pRXfcCAv+oj/B8wsUHmugZ147qeRKu9rAeHR0rdue167k
- IOy8b8aiPvtqDnZA4KBVwYQw/bJANsoJuKjE8sCnzliGg4JgWYH1KExJA/bz8ZeIEdLB3gq
- IVGJZ4BpDFMlgEXR57q4UA79rsPYHcgDUZh3eGo+i2KD9Cxx8brkRDBHlM9BM5Yh2XOo5i0
- HcBnVwwogttsAzwLPp1zg==
-UI-OutboundReport: notjunk:1;M01:P0:SjxAhIwS1DY=;QS8cQagoyAfK7V0lC/bngFmg1Nn
- cRzz/9a0yYOwC1OgZ8zV1B94rUzATFOPXKRa5+bEDKb/0h9U1PLU51pYar2/EXxiCLZ6joAKp
- nSbCUSIiUR7ldnqV/3SksEzkvS6ark+JHB1EcnaTldewxHHFO0RlpYuOqewQS3g6gC+2Jk8eQ
- poha70Dt/8jE673dhlGuQozcJDghqgWZztZ6hDa+8g6bI6AJP2pLkb/DbmxOiMdNkRboA/Uqa
- xDKNe2FaS6QG03twemxkrDK1mPreOqvhcyt4/d2xC/9hZl9A1AHv2/ij0BB2s7eT2M7Lm3D0y
- ha9JZWETG03me3/EOK3VicAmhh3wOiU8DLktpTO+rMBYcZykjvPozJ6Az5UCgsuq+ImOCkWek
- CHHCb3BJBjBbZfaPTOQdKdx9Gi0yyYpwKXIHE8TAOKfF7HDTbUpW+7vH6jtMUx/+Coy8m7OpQ
- G3DMdee1sIJxEQ7XegmWTsRj5bAtRDLiyVtmHJny+zUfsv8zfeqT6qlYMCf2ZkPzvVLMDWxJB
- Vh8GavpjZSmNx5LIDDnqjwMMGE54dHrhBk52zS/qrebRSA9tHSrCokw+vRNrbUI+czfZB4pZn
- LjOZbrmo23eGrvVKGKrQlHQhSQOF8kKhYLp61kmv1Sb2RKyNlty3vU6tppN6bnRf/Bi946I2M
- f7GejD36GrWLuOEV/sBPyhPJfYx/bqErXsfVMoo9ELRxUXl3n4X8LZx2A80ml7kz6e8PJQK+d
- nASvk7grzSY8lLLmw9BVvuGu69/PksTUZXxSkE0eR036cQ9EKp351+UoeoN1E5gmbswAiMG0A
- IcIuEIyXHB/LeKDenViJJmsw==
+In-Reply-To: <20241105175215.1402819-1-james.hilliard1@gmail.com>
+X-Provags-ID: V03:K1:WdAHMst90TI7gasUpidpMN+uLI1l/U54fzd1mAe5N7YsHUH5Tg2
+ EWQmkaYBWMAkRpKy9J1xKV+/CRMCN4LjdihR8pF/XF41v0/TmZHv9VjfNU0htKJ4MtjENSG
+ eJd2wg05EomprWItvAyJoBmjuPhLh1/k8M2VjU7fX7Y9ptJwKuAKZee58QF2IUJ7TksHJj3
+ mzeA3gM9AGhalEZeO9L/g==
+UI-OutboundReport: notjunk:1;M01:P0:yp1sxqEqoBc=;UM6HgUUOzFhCcb1m3vJ2TbA7Ucl
+ yu+Gj6oKe7xsaxHGVZBj5reuDdL77q5D2edWj4ounZnC13aay8NqhYJ04RDfS3JXFj9zZZ4TU
+ QRlAoMGSz/Masgkez86fSIiHBRCZv6BKl1huD2CFpvW4C9DL4xT58awD1yP5g/v/7CSh6mrxZ
+ 5tHH9fWyYp5lmxCO82jkpIo7939G7wk3hO4moUqQ8ifh/ajwOUaKfSTtNilkMSSBSfhouNqAZ
+ XSglyoDjJUBBB4B9QQCH+ZDU0uz9wk0bPQnOsqwxUp40UFtpWU2prKbcN5elpgCImdChEpGw0
+ 6XkiLvMYSM6STf5Hs3SVDccEi6ym+vztZmTqv0sQ+E1NeDSS0KPCQu8RCxK29Q9jkwoRhbzjC
+ 237f+qwnZ+MC9e8re34DxPtK+J5jfs9hvsye5USl4qK6f8jIR9LtVE5ZVULhyoLm8f90ojkrh
+ 5oA1UzbBc6/4faYorbh0nhxRDQd4sobEc5i0L0h804r6iPyjul7TN+MH7QAqxVrK4yHNQ3FZ9
+ uZMGZe+gLhmBwFhvUoFUAZ6ZeggvI7J4dPu4scsWjnZbK1VMjt/9HnRfAjFcvsf8bGIXIJ2+e
+ qVGzElc2zqD/pyaoS8s6MOgUQntjUqz/p+x8g3abwNEo5laEh+eU8uJ/Wsd/YUBd9SS0cKxi8
+ hgbjp4Il+IJojZ/CEEJiAIPJSOfNPOBmd08DaS+RRjnWTtGH/HJehDtdZNAxJi+cp+fBaTidJ
+ dIK5NNUqdrloQFmz34OkuNoedcT8SHXYwumUkJKcz7pqG0niDL3ubaPCQgzFa3Z2DkrVH6nB0
+ w7pfGJLuY2UNpNPqOfh44DACg60OuzON+NMGbOb/WjYbwjjVQzdhottaZcORD/ouH6gSClgHi
+ o6UtwS+Yb9r3iMoH3xs/9KtfHRk4CAdX3Kbee+i8/9syC7Xp5pZ9+/o4V
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1730924337; x=1731529137; i=fiona.klute@gmx.de;
- bh=h4l78vcC9WWSZ+L4jLtGnhqksl/+fRHtBY+Yj/EGaEQ=;
+ s=s31663417; t=1730924361; x=1731529161; i=fiona.klute@gmx.de;
+ bh=JiTTTTAPJrMqN1GmXlNyzuxdfqfLpAGxhYXZme4PuJI=;
  h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
  References:From:In-Reply-To:Content-Type:
  Content-Transfer-Encoding:cc:content-transfer-encoding:
  content-type:date:from:message-id:mime-version:reply-to:subject:
  to;
- b=gk2IbA6pMQle/xQwgYb8UGBBOaIp3Wrg0ZL0k4RdG8uj1bylvMC0/xa0/BzthLwa
- 2Vl/yUCKzBH1IoZR9L/5NVvgTx3U4S7kRy6rghkdqAEAXutgRTkzHcYoXX5nXu0S6
- 7evnlKXMltuA6UxjGq2EQ4bYblEC7sYyd8iQy55XIUqrhVPgUQLnXM3TWB2hAJhhl
- 93XqztdExk8USl4vzXCxT3TbeT0q9EfR7/OqiHj0vhP/KdDayh5Bgx1SsicPWNsHy
- NoYxtUkD8n+nKlSgtckADHLAMhRRbQlmzQGitbGx9LjBQqv85+DV8zj6Py8U7SOkR
- LI8W/llHztDtUrBhVQ==
+ b=Gle+jAZt+P9LKMEbKddA4bGCT3IgYj/wCdfBpBZO7m3KaFCxo8IDTMtkg3BCwjYB
+ rYETrm2bHFokwKKjc5EiHvc1pbfW9NsKpwVjm29L+gc1cjvMXVBu5hOpiVU6vRpVx
+ CTchSWRwJ6Yx6rp6vm1XAdSAtPmAjx4VfjarQRwA3pgAlhhJbfQRxE0zTXpcaW4F5
+ XVFSbGI6PtB8m/E087MkWKYuqjY76zqYGHm/SEAMQnzwsLHRcgAdW+GK1VBq4ew80
+ p2tTwL5wiAsOWRAPpX/y0n5MFljU28s8nCBDmlA6j2JTasttzHbEWTz45d6YqAdyM
+ WqGPvnaqdIwEk2rCHg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=gk2IbA6p
-Subject: Re: [Buildroot] [PATCH 1/1]
- package/python-poetry-dynamic-versioning: use poetry setup type
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=Gle+jAZt
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-dunamai: use poetry
+ setup type
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -151,7 +151,7 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am 05.11.24 um 17:43 schrieb James Hilliard:
+Am 05.11.24 um 18:52 schrieb James Hilliard:
 > Use the new poetry setup type which automatically pulls in the
 > host-python-poetry-core dependency.
 >
@@ -163,26 +163,26 @@ Reviewed-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Thank you!
 
 > ---
->   .../python-poetry-dynamic-versioning.mk                       | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   package/python-dunamai/python-dunamai.mk | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
 >
-> diff --git a/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk b/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk
-> index 31567380ef..e159e80324 100644
-> --- a/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk
-> +++ b/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk
-> @@ -7,10 +7,10 @@
->   PYTHON_POETRY_DYNAMIC_VERSIONING_VERSION = 1.4.1
->   PYTHON_POETRY_DYNAMIC_VERSIONING_SOURCE = poetry_dynamic_versioning-$(PYTHON_POETRY_DYNAMIC_VERSIONING_VERSION).tar.gz
->   PYTHON_POETRY_DYNAMIC_VERSIONING_SITE = https://files.pythonhosted.org/packages/dd/70/1138211a6e5051d28596922ed39acf20b42819db5ae1f93e465b9a903c28
-> -PYTHON_POETRY_DYNAMIC_VERSIONING_SETUP_TYPE = pep517
-> +PYTHON_POETRY_DYNAMIC_VERSIONING_SETUP_TYPE = poetry
->   PYTHON_POETRY_DYNAMIC_VERSIONING_LICENSE = MIT
->   PYTHON_POETRY_DYNAMIC_VERSIONING_LICENSE_FILES = LICENSE
-> -HOST_PYTHON_POETRY_DYNAMIC_VERSIONING_DEPENDENCIES = host-python-poetry-core \
-> +HOST_PYTHON_POETRY_DYNAMIC_VERSIONING_DEPENDENCIES = \
->   	host-python-dunamai \
->   	host-python-jinja2 \
->   	host-python-tomlkit
+> diff --git a/package/python-dunamai/python-dunamai.mk b/package/python-dunamai/python-dunamai.mk
+> index c3ab45fd6e..bd6c71fd6a 100644
+> --- a/package/python-dunamai/python-dunamai.mk
+> +++ b/package/python-dunamai/python-dunamai.mk
+> @@ -7,10 +7,9 @@
+>   PYTHON_DUNAMAI_VERSION = 1.22.0
+>   PYTHON_DUNAMAI_SOURCE = dunamai-$(PYTHON_DUNAMAI_VERSION).tar.gz
+>   PYTHON_DUNAMAI_SITE = https://files.pythonhosted.org/packages/a0/fe/aee602f08765de4dd753d2e5d6cbd480857182e345f161f7a19ad1979e4d
+> -PYTHON_DUNAMAI_SETUP_TYPE = pep517
+> +PYTHON_DUNAMAI_SETUP_TYPE = poetry
+>   PYTHON_DUNAMAI_LICENSE = MIT
+>   PYTHON_DUNAMAI_LICENSE_FILES = LICENSE
+> -HOST_PYTHON_DUNAMAI_DEPENDENCIES = host-python-poetry-core \
+> -	host-python-packaging
+> +HOST_PYTHON_DUNAMAI_DEPENDENCIES = host-python-packaging
+>
+>   $(eval $(host-python-package))
 
 _______________________________________________
 buildroot mailing list
