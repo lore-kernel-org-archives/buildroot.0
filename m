@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC3BAD59F67
-	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 21:21:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56045D59F73
+	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 21:21:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9708C80C73;
-	Wed,  6 Nov 2024 21:21:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 903E5409BA;
+	Wed,  6 Nov 2024 21:21:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0IqrBud6PfBJ; Wed,  6 Nov 2024 21:21:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CcqTIMEiWMS2; Wed,  6 Nov 2024 21:21:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADBA6813DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F72040905
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ADBA6813DA;
-	Wed,  6 Nov 2024 21:21:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D22313B
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:21:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F72040905;
+	Wed,  6 Nov 2024 21:21:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F58F3B
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:21:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C0D7681362
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:21:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0023460A6B
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:21:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h6YokhCqENv5 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y0TfqMZ39dRz for <buildroot@buildroot.org>;
  Wed,  6 Nov 2024 21:21:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEBDB80C73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F21CD60A51
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EEBDB80C73
+ by smtp3.osuosl.org (Postfix) with ESMTP id F21CD60A51
  for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:21:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E67DF85E99; Wed,  6 Nov 2024 21:21:12 +0000 (UTC)
+ id D8B8B85E94; Wed,  6 Nov 2024 21:21:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 6 Nov 2024 22:19:29 +0100
+Date: Wed, 6 Nov 2024 22:19:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bca077698f9c32775b31af554aaee068a1429479
-X-Git-Newrev: b1ce2522b4e469ee738b1a141299ff99db70ef13
+X-Git-Oldrev: 2207e843b485b58cfc75f78dafc874ebfa91180f
+X-Git-Newrev: bca077698f9c32775b31af554aaee068a1429479
 X-Patchwork-Hint: ignore
-Message-Id: <20241106212112.E67DF85E99@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/collectd: fix protoc version check
+Message-Id: <20241106212112.D8B8B85E94@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mosh: fix compatibility with newer
+ protobuf versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,72 +66,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1ce2522b4e469ee738b1a141299ff99db70ef13
+commit: https://git.buildroot.net/buildroot/commit/?id=bca077698f9c32775b31af554aaee068a1429479
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We need to add a patch fixing the protoc version check in collectd's
-configure script, prior to bumping protobuf to a newer version.
+We need to backport a patch to fix compatibility with newer protobuf
+versions, prior to bumping protobuf.
+
+Remove CFLAGS setting -std=c++11 and enable autoreconf so that
+the patch is applied properly.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...004-configure.ac-fix-protoc-version-check.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ package/mosh/0001-Bump-C-version-to-C-17.patch | 49 ++++++++++++++++++++++++++
+ package/mosh/mosh.mk                           |  4 +--
+ 2 files changed, 50 insertions(+), 3 deletions(-)
 
-diff --git a/package/collectd/0004-configure.ac-fix-protoc-version-check.patch b/package/collectd/0004-configure.ac-fix-protoc-version-check.patch
+diff --git a/package/mosh/0001-Bump-C-version-to-C-17.patch b/package/mosh/0001-Bump-C-version-to-C-17.patch
 new file mode 100644
-index 0000000000..edf5008f03
+index 0000000000..eea3889828
 --- /dev/null
-+++ b/package/collectd/0004-configure.ac-fix-protoc-version-check.patch
-@@ -0,0 +1,48 @@
-+From 77f33d05355b115d3384d94c1c4e36c56ea28b09 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Wed, 30 Oct 2024 12:45:51 -0600
-+Subject: [PATCH] configure.ac: fix protoc version check
++++ b/package/mosh/0001-Bump-C-version-to-C-17.patch
+@@ -0,0 +1,49 @@
++From eee1a8cf413051c2a9104e8158e699028ff56b26 Mon Sep 17 00:00:00 2001
++From: Alex Chernyakhovsky <alex@achernya.com>
++Date: Sun, 30 Jul 2023 16:19:46 -0400
++Subject: [PATCH] Bump C++ version to C++17
 +
-+The current version check for 3.0.0+ fails to handle cases where
-+protoc is above version 3.0.0 but does not start with a 3, for
-+example protoc may have a version of 28.1.
++Protobuf versions since 3.6.0 have long had a C++11 dependency; even
++more recent versions have picked up an Abseil dependency bumping that
++to C++14. Since it is now 2023, defaulting to C++17 is reasonable, so
++remove the conditional C++ standards version check that mosh
++previously had and replace it with an unconditional C++17 check.
 +
-+To fix this use AX_COMPARE_VERSION to properly compare the version.
++This means that all future commits can use C++17 features. According
++to https://en.cppreference.com/w/cpp/compiler_support/17 this means
++that minimum effective compiler versions for mosh become:
++
++gcc 7 (May 2017)
++clang 5 (September 2017)
++
++This, in turn, implies that future versions of mosh will no longer be
++available for RHEL/CentOS 7 (June 2014).
++
++Closes: #1267
 +
 +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+Upstream: https://github.com/collectd/collectd/pull/4332
++Upstream: https://github.com/mobile-shell/mosh/commit/eee1a8cf413051c2a9104e8158e699028ff56b26
 +---
-+ configure.ac | 17 ++++++++++-------
-+ 1 file changed, 10 insertions(+), 7 deletions(-)
++ configure.ac | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
 +
 +diff --git a/configure.ac b/configure.ac
-+index 86d2378b..1f7a9cdf 100644
++index ee70c7b..7f7dc3b 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -4897,13 +4897,16 @@ AC_PATH_PROG([PROTOC], [protoc])
-+ have_protoc3="no"
-+ if test "x$PROTOC" != "x"; then
-+   AC_MSG_CHECKING([for protoc 3.0.0+])
-+-  if $PROTOC --version | $EGREP libprotoc.3 >/dev/null; then
-+-    protoc3="yes (`$PROTOC --version`)"
-+-    have_protoc3="yes"
-+-  else
-+-    protoc3="no (`$PROTOC --version`)"
-+-  fi
-+-  AC_MSG_RESULT([$protoc3])
-++  AC_SUBST([PROTOC_VERSION], [`$PROTOC --version | cut -d ' ' -f 2`])
-++  AX_COMPARE_VERSION([$PROTOC_VERSION],[ge],[3],
-++    [
-++      have_protoc3="yes"
-++      AC_MSG_RESULT([yes ($PROTOC_VERSION)])
-++    ],
-++    [
-++      AC_MSG_RESULT([no ($PROTOC_VERSION)])
-++    ]
-++  )
-+ fi
-+ AM_CONDITIONAL([HAVE_PROTOC3], [test "x$have_protoc3" = "xyes"])
++@@ -22,9 +22,9 @@ AS_IF([test x"$PROTOC" = x],
++ # automake 1.12 seems to require this, but automake 1.11 doesn't recognize it
++ m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 + 
++-# Protobuf 3.6+ requires C++11.
++-AS_IF([pkg-config --atleast-version 3.6.0 protobuf],
++-  [AX_CXX_COMPILE_STDCXX([11])])
+++# Protobuf transitively requires at least C++14, get ahead of the
+++# curve and require at least C++17.
+++AX_CXX_COMPILE_STDCXX([17])
++ 
++ WARNING_CXXFLAGS=""
++ PICKY_CXXFLAGS=""
 +-- 
 +2.34.1
 +
+diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
+index c938f70719..3c41a17401 100644
+--- a/package/mosh/mosh.mk
++++ b/package/mosh/mosh.mk
+@@ -9,9 +9,7 @@ MOSH_SITE = https://mosh.org
+ MOSH_DEPENDENCIES = zlib ncurses protobuf host-pkgconf
+ MOSH_LICENSE = GPL-3.0+ with exception
+ MOSH_LICENSE_FILES = COPYING COPYING.iOS
+-
+-# protobuf needs c++11 (since 3.6.0)
+-MOSH_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++MOSH_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MOSH_CONF_OPTS += --with-crypto-library=openssl
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
