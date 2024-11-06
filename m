@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56045D59F73
-	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 21:21:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E24F6D59F73
+	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 21:21:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 903E5409BA;
-	Wed,  6 Nov 2024 21:21:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF3AA408F3;
+	Wed,  6 Nov 2024 21:21:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CcqTIMEiWMS2; Wed,  6 Nov 2024 21:21:19 +0000 (UTC)
+ id oDVwio5XytPi; Wed,  6 Nov 2024 21:21:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F72040905
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8E2C409F8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F72040905;
-	Wed,  6 Nov 2024 21:21:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F58F3B
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8E2C409F8;
+	Wed,  6 Nov 2024 21:21:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EAC344C38
  for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:21:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0023460A6B
+ by smtp2.osuosl.org (Postfix) with ESMTP id C80A840BC2
  for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:21:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y0TfqMZ39dRz for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kJbC3yCBKxXM for <buildroot@buildroot.org>;
  Wed,  6 Nov 2024 21:21:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F21CD60A51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28D1E40282
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F21CD60A51
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:21:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28D1E40282
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:21:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8B8B85E94; Wed,  6 Nov 2024 21:21:12 +0000 (UTC)
+ id 12C4885E99; Wed,  6 Nov 2024 21:21:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 6 Nov 2024 22:19:09 +0100
+Date: Wed, 6 Nov 2024 22:20:18 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2207e843b485b58cfc75f78dafc874ebfa91180f
-X-Git-Newrev: bca077698f9c32775b31af554aaee068a1429479
+X-Git-Oldrev: a3b2bc8e16d58e6009b2c628e170dc480fe00035
+X-Git-Newrev: c679a44b31c333a958dec903a12ffb8adc4e58f2
 X-Patchwork-Hint: ignore
-Message-Id: <20241106212112.D8B8B85E94@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mosh: fix compatibility with newer
- protobuf versions
+Message-Id: <20241106212113.12C4885E99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/protobuf-c: fix protobuf >= 26.0
+ compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,92 +66,223 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bca077698f9c32775b31af554aaee068a1429479
+commit: https://git.buildroot.net/buildroot/commit/?id=c679a44b31c333a958dec903a12ffb8adc4e58f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We need to backport a patch to fix compatibility with newer protobuf
-versions, prior to bumping protobuf.
-
-Remove CFLAGS setting -std=c++11 and enable autoreconf so that
-the patch is applied properly.
+Add some patches fixing protobuf >= 26.0 compatibility, before doing
+this version bump.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mosh/0001-Bump-C-version-to-C-17.patch | 49 ++++++++++++++++++++++++++
- package/mosh/mosh.mk                           |  4 +--
- 2 files changed, 50 insertions(+), 3 deletions(-)
+ ...Protect-against-being-invoked-against-edi.patch | 57 +++++++++++++++
+ ...-FieldSyntax-to-maximize-compatibility-ac.patch | 84 ++++++++++++++++++++++
+ ...or-GenerateHeader-Set-min_header_version-.patch | 44 ++++++++++++
+ 3 files changed, 185 insertions(+)
 
-diff --git a/package/mosh/0001-Bump-C-version-to-C-17.patch b/package/mosh/0001-Bump-C-version-to-C-17.patch
+diff --git a/package/protobuf-c/0001-CGenerator-Protect-against-being-invoked-against-edi.patch b/package/protobuf-c/0001-CGenerator-Protect-against-being-invoked-against-edi.patch
 new file mode 100644
-index 0000000000..eea3889828
+index 0000000000..c674ca2ee1
 --- /dev/null
-+++ b/package/mosh/0001-Bump-C-version-to-C-17.patch
-@@ -0,0 +1,49 @@
-+From eee1a8cf413051c2a9104e8158e699028ff56b26 Mon Sep 17 00:00:00 2001
-+From: Alex Chernyakhovsky <alex@achernya.com>
-+Date: Sun, 30 Jul 2023 16:19:46 -0400
-+Subject: [PATCH] Bump C++ version to C++17
++++ b/package/protobuf-c/0001-CGenerator-Protect-against-being-invoked-against-edi.patch
+@@ -0,0 +1,57 @@
++From 2480f4d9d2fa97e5511ed0914ee529a344e969a7 Mon Sep 17 00:00:00 2001
++From: Robert Edmonds <edmonds@users.noreply.github.com>
++Date: Wed, 20 Mar 2024 22:43:30 -0400
++Subject: [PATCH] CGenerator: Protect against being invoked against "edition"
++ syntax .proto files
 +
-+Protobuf versions since 3.6.0 have long had a C++11 dependency; even
-+more recent versions have picked up an Abseil dependency bumping that
-+to C++14. Since it is now 2023, defaulting to C++17 is reasonable, so
-+remove the conditional C++ standards version check that mosh
-+previously had and replace it with an unconditional C++17 check.
++The Google protobuf project is currently experimenting with a new syntax
++for .proto files called "editions". Since protobuf-c is a proto2/proto3
++compiler, after the previous commit reimplementing `FieldSyntax()`, the
++protobuf compiler will abort like this if presented with an "editions"
++syntax .proto file due to the safety check in `FieldSyntax()`:
 +
-+This means that all future commits can use C++17 features. According
-+to https://en.cppreference.com/w/cpp/compiler_support/17 this means
-+that minimum effective compiler versions for mosh become:
++    $ protoc --experimental_editions --c_out=. test.proto
++    protoc-gen-c: ./protoc-c/c_helpers.h:178: int google::protobuf::compiler::c::FieldSyntax(const google::protobuf::FieldDescriptor*): Assertion `syntax == "proto2" || syntax == "proto3"' failed.
++    --c_out: protoc-gen-c: Plugin killed by signal 6.
 +
-+gcc 7 (May 2017)
-+clang 5 (September 2017)
++On protobuf 26, our `CodeGenerator` can implement certain methods to
++declare that we "support" editions, and then reject any other edition
++except proto2 and proto3, which have apparently been retroactively
++declared to be "editions". Of course this needs to be wrapped in a
++version guard.
 +
-+This, in turn, implies that future versions of mosh will no longer be
-+available for RHEL/CentOS 7 (June 2014).
++With this protection in place, the protobuf compiler cleanly exits with
++a nice error message like this:
 +
-+Closes: #1267
++    $ protoc --experimental_editions --c_out=. test.proto
++    WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
++    E0000 00:00:1710988958.296200   20022 descriptor.cc:4620] Invalid proto descriptor for file "test.proto":
++    E0000 00:00:1710988958.296239   20022 descriptor.cc:4623]   test.proto: Edition 2023 is later than the maximum supported edition PROTO3
++    --c_out: protoc-gen-c: Plugin failed with status code 1.
 +
 +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+Upstream: https://github.com/mobile-shell/mosh/commit/eee1a8cf413051c2a9104e8158e699028ff56b26
++Upstream: https://github.com/protobuf-c/protobuf-c/pull/711
 +---
-+ configure.ac | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
++ protoc-c/c_generator.h | 6 ++++++
++ 1 file changed, 6 insertions(+)
 +
-+diff --git a/configure.ac b/configure.ac
-+index ee70c7b..7f7dc3b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -22,9 +22,9 @@ AS_IF([test x"$PROTOC" = x],
-+ # automake 1.12 seems to require this, but automake 1.11 doesn't recognize it
-+ m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
++diff --git a/protoc-c/c_generator.h b/protoc-c/c_generator.h
++index b8b44aa..4aeb579 100644
++--- a/protoc-c/c_generator.h
+++++ b/protoc-c/c_generator.h
++@@ -93,6 +93,12 @@ class PROTOC_C_EXPORT CGenerator : public CodeGenerator {
++                 const std::string& parameter,
++                 OutputDirectory* output_directory,
++                 std::string* error) const;
+++
+++#if GOOGLE_PROTOBUF_VERSION >= 5026000
+++  uint64_t GetSupportedFeatures() const { return CodeGenerator::FEATURE_SUPPORTS_EDITIONS; }
+++  Edition GetMinimumEdition() const { return Edition::EDITION_PROTO2; }
+++  Edition GetMaximumEdition() const { return Edition::EDITION_PROTO3; }
+++#endif
++ };
 + 
-+-# Protobuf 3.6+ requires C++11.
-+-AS_IF([pkg-config --atleast-version 3.6.0 protobuf],
-+-  [AX_CXX_COMPILE_STDCXX([11])])
-++# Protobuf transitively requires at least C++14, get ahead of the
-++# curve and require at least C++17.
-++AX_CXX_COMPILE_STDCXX([17])
-+ 
-+ WARNING_CXXFLAGS=""
-+ PICKY_CXXFLAGS=""
++ }  // namespace c
 +-- 
 +2.34.1
 +
-diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
-index c938f70719..3c41a17401 100644
---- a/package/mosh/mosh.mk
-+++ b/package/mosh/mosh.mk
-@@ -9,9 +9,7 @@ MOSH_SITE = https://mosh.org
- MOSH_DEPENDENCIES = zlib ncurses protobuf host-pkgconf
- MOSH_LICENSE = GPL-3.0+ with exception
- MOSH_LICENSE_FILES = COPYING COPYING.iOS
--
--# protobuf needs c++11 (since 3.6.0)
--MOSH_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
-+MOSH_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MOSH_CONF_OPTS += --with-crypto-library=openssl
+diff --git a/package/protobuf-c/0002-Reimplement-FieldSyntax-to-maximize-compatibility-ac.patch b/package/protobuf-c/0002-Reimplement-FieldSyntax-to-maximize-compatibility-ac.patch
+new file mode 100644
+index 0000000000..e14a9fbc75
+--- /dev/null
++++ b/package/protobuf-c/0002-Reimplement-FieldSyntax-to-maximize-compatibility-ac.patch
+@@ -0,0 +1,84 @@
++From ee3d9e5423c93ee6b828fdda8e7fef13a77634eb Mon Sep 17 00:00:00 2001
++From: Robert Edmonds <edmonds@users.noreply.github.com>
++Date: Wed, 20 Mar 2024 22:25:54 -0400
++Subject: [PATCH] Reimplement FieldSyntax() to maximize compatibility across
++ protobuf versions
++
++Recent versions of Google protobuf have broken the interfaces for
++determining the syntax version of a .proto file. The current protobuf-c
++1.5.0 release does not compile with Google protobuf 26.0 due to the most
++recentage breakage. There is a possible workaround involving the Google
++protobuf `FileDescriptorLegacy` class, which is documented as:
++
++// TODO Remove this deprecated API entirely.
++
++So we probably shouldn't rely on it.
++
++Instead, this commit obtains the `FileDescriptorProto` corresponding
++to the passed in `FieldDescriptor` and interrogates the `syntax` field
++directly. This is a single implementation with no version-specific
++workarounds. Hopefully this won't break in the next Google protobuf
++release.
++
++I tested the `FieldSyntax()` implementation in this commit across a
++number of different Google protobuf releases and found that it worked
++(`make && make check`) on all of them:
++
++- Google protobuf 3.6.1.3 (Ubuntu 20.04)
++- Google protobuf 3.12.4 (Ubuntu 22.04)
++- Google protobuf 3.21.12 (Debian 12 + Debian unstable)
++- Google protobuf 3.25.2 (Debian experimental)
++- Google protobuf 26.1-dev
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://github.com/protobuf-c/protobuf-c/pull/711
++---
++ protoc-c/c_helpers.h | 24 ++++++++++++++----------
++ 1 file changed, 14 insertions(+), 10 deletions(-)
++
++diff --git a/protoc-c/c_helpers.h b/protoc-c/c_helpers.h
++index 062d330..be28b60 100644
++--- a/protoc-c/c_helpers.h
+++++ b/protoc-c/c_helpers.h
++@@ -70,10 +70,6 @@
++ #include <protobuf-c/protobuf-c.pb.h>
++ #include <google/protobuf/io/printer.h>
++ 
++-#if GOOGLE_PROTOBUF_VERSION >= 4023000
++-# include <google/protobuf/descriptor_legacy.h>
++-#endif
++-
++ namespace google {
++ namespace protobuf {
++ namespace compiler {
++@@ -173,13 +169,21 @@ struct NameIndex
++ int compare_name_indices_by_name(const void*, const void*);
++ 
++ // Return the syntax version of the file containing the field.
++-// This wrapper is needed to be able to compile against protobuf2.
++ inline int FieldSyntax(const FieldDescriptor* field) {
++-#if GOOGLE_PROTOBUF_VERSION >= 4023000
++-  return FileDescriptorLegacy(field->file()).syntax() == FileDescriptorLegacy::SYNTAX_PROTO3 ? 3 : 2;
++-#else
++-  return field->file()->syntax() == FileDescriptor::SYNTAX_PROTO3 ? 3 : 2;
++-#endif
+++  auto proto = FileDescriptorProto();
+++  field->file()->CopyTo(&proto);
+++
+++  if (proto.has_syntax()) {
+++    auto syntax = proto.syntax();
+++    assert(syntax == "proto2" || syntax == "proto3");
+++    if (syntax == "proto2") {
+++      return 2;
+++    } else if (syntax == "proto3") {
+++      return 3;
+++    }
+++  }
+++
+++  return 2;
++ }
++ 
++ // Work around changes in protobuf >= 22.x without breaking compilation against
++-- 
++2.34.1
++
+diff --git a/package/protobuf-c/0003-FileGenerator-GenerateHeader-Set-min_header_version-.patch b/package/protobuf-c/0003-FileGenerator-GenerateHeader-Set-min_header_version-.patch
+new file mode 100644
+index 0000000000..d7d9cdf845
+--- /dev/null
++++ b/package/protobuf-c/0003-FileGenerator-GenerateHeader-Set-min_header_version-.patch
+@@ -0,0 +1,44 @@
++From a6cf1aa386067e26d582cc1d1e327787595c9f13 Mon Sep 17 00:00:00 2001
++From: Robert Edmonds <edmonds@users.noreply.github.com>
++Date: Wed, 20 Mar 2024 21:48:10 -0400
++Subject: [PATCH] FileGenerator::GenerateHeader(): Set `min_header_version`
++ unconditionally
++
++Previously, we were conditionally trying to set `min_header_version` to
++the lowest possible value, and relying on a "legacy" Google interface to
++determine the file descriptor's syntax version as part of that
++determination.
++
++Instead, simply bump the minimum version to 1003000 (1.3.0). This
++release was almost 7 years ago. In practice protobuf-c users should not
++be shipping pre-compiled .pb-c.c/.pb-c.h files, anyway.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://github.com/protobuf-c/protobuf-c/pull/711
++---
++ protoc-c/c_file.cc | 9 +--------
++ 1 file changed, 1 insertion(+), 8 deletions(-)
++
++diff --git a/protoc-c/c_file.cc b/protoc-c/c_file.cc
++index ca0ad34..c6d8a24 100644
++--- a/protoc-c/c_file.cc
+++++ b/protoc-c/c_file.cc
++@@ -117,14 +117,7 @@ FileGenerator::~FileGenerator() {}
++ void FileGenerator::GenerateHeader(io::Printer* printer) {
++   std::string filename_identifier = FilenameIdentifier(file_->name());
++ 
++-  int min_header_version = 1000000;
++-#if GOOGLE_PROTOBUF_VERSION >= 4023000
++-  if (FileDescriptorLegacy(file_).syntax() == FileDescriptorLegacy::SYNTAX_PROTO3) {
++-#else
++-  if (file_->syntax() == FileDescriptor::SYNTAX_PROTO3) {
++-#endif
++-    min_header_version = 1003000;
++-  }
+++  const int min_header_version = 1003000;
++ 
++   // Generate top of header.
++   printer->Print(
++-- 
++2.34.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
