@@ -1,70 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57DE9D59F5B
-	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 18:11:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C294D59F5D
+	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 18:33:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E756A606F7;
-	Wed,  6 Nov 2024 18:11:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 74cqsBI8c18t; Wed,  6 Nov 2024 18:11:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07A2A606EC
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07A2A606EC;
-	Wed,  6 Nov 2024 18:11:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 99C4A3B
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 18:11:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A83F80DB9
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 18:11:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4063D81341;
+	Wed,  6 Nov 2024 18:33:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4IKGFd6T5STv for <buildroot@buildroot.org>;
- Wed,  6 Nov 2024 18:11:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6022C80D7D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6022C80D7D
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6022C80D7D
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 18:11:43 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 22EE7B0059A;
- Wed,  6 Nov 2024 19:11:40 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>
-Date: Wed,  6 Nov 2024 19:11:33 +0100
-Message-ID: <20241106181133.8290-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.47.0
+ id IB-geHymPX5G; Wed,  6 Nov 2024 18:33:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 611878134A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 611878134A;
+	Wed,  6 Nov 2024 18:33:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE7853B
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 18:33:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 03A8381341
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 18:33:36 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9qqaIIn_1gAN for <buildroot@buildroot.org>;
+ Wed,  6 Nov 2024 18:33:35 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=172.245.244.108;
+ helo=busybox.net; envelope-from=noreplysdesk@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F1CCB8134C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1CCB8134C
+Received: from busybox.net (unknown [172.245.244.108])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F1CCB8134C
+ for <buildroot@busybox.net>; Wed,  6 Nov 2024 18:33:34 +0000 (UTC)
+From: Support<noreplysdesk@busybox.net>
+To: buildroot@busybox.net
+Date: 06 Nov 2024 19:33:30 +0100
+Message-ID: <20241106193328.2B2CB2C7D9D61298@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1730916701;
- bh=incn8N41veQ+TkwoFQYQbbjqqMqh8wxRo00Ok2h/DAA=;
- h=From:To:Cc:Subject:Date:From;
- b=FCaTl7rGDoXjLfBdiJpLqgbKGhau6UK4CrUWRLVvgUJmwoaYF1SofzZyleozOeBiO
- BAnqdSsyx9xrn9R8oCMEs+lODxQ6cB2lAgHZEeTUsjDPIumCMDtCsQOoKe055XotZ7
- RnFhezXg5GicXgXL7BBr9COU9yHbXXxn1jRmU92CxqSxoKS6ReJ1pJ6pv1XY3lbHXL
- PqxJE+3dT2J4/C1qpoRwyCzn+xWhIqJta05w6xN8Jq81O/CL7Ldw/bcw3fdTO1W8Os
- oo0WGX5BiJNy9etrIXcOm5m9v60KKRJGRb6zxilOeH/SfkBFZHcR2lGrwcgEmyWiJQ
- 2h85jZgL2JpZQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FCaTl7rG
-Subject: [Buildroot] [PATCH 1/1] package/pv: bump to version 1.9.0
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] WARNING: Your Email: buildroot@busybox.net will be
+ blocked today!
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,56 +57,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5560048813183134513=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For release note, see:
-https://codeberg.org/a-j-wood/pv/src/tag/v1.9.0/docs/NEWS.md
+--===============5560048813183134513==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-This commit also updates the PV_SITE url from http to https, to
-follow the download url published on the home page:
-https://www.ivarch.com/programs/pv.shtml
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.=
+w3.org/TR/html4/loose.dtd">
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/pv/pv.hash | 2 +-
- package/pv/pv.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+<HTML><HEAD>
+<META name=3DGENERATOR content=3D"MSHTML 11.00.10570.1001"></HEAD>
+<body style=3D"MARGIN: 0.5em">
+<DIV dir=3Dltr>
+<table style=3D"FONT-SIZE: 12px; FONT-FAMILY: Arial,Helvetica,sans-serif; W=
+HITE-SPACE: normal; WORD-SPACING: 0px; BORDER-COLLAPSE: collapse; MIN-WIDTH=
+: 100%; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(0,0,0); FONT-STY=
+LE: normal; LETTER-SPACING: normal; BACKGROUND-COLOR: rgb(255,255,255); fon=
+t-variant-ligatures: normal; font-variant-caps: normal; text-decoration-sty=
+le: initial; text-decoration-color: initial" cellspacing=3D"0" cellpadding=
+=3D"0" width=3D"100%" border=3D"0">
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<td style=3D"BOX-SIZING: border-box; FONT-FAMILY: Roboto,RobotoDraft,Helvet=
+ica,Arial,sans-serif; PADDING-TOP: 9px; MARGIN: 0px" valign=3D"top">
+<table style=3D"MAX-WIDTH: 100%; BORDER-COLLAPSE: collapse; MIN-WIDTH: 100%=
+" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%" align=3D"left" border=
+=3D"0">
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<td style=3D"BOX-SIZING: border-box; PADDING-BOTTOM: 9px; PADDING-TOP: 0px;=
+ PADDING-LEFT: 18px; MARGIN: 0px; PADDING-RIGHT: 18px" valign=3D"top"><FONT=
+ style=3D"BOX-SIZING: border-box" size=3D2 face=3DArial>Attn: </FONT><B sty=
+le=3D"FONT-SIZE: 12px; FONT-FAMILY: roboto-regular, helvetica, arial, sans-=
+serif; COLOR: rgb(34,34,34)">buildroot</B> <BR><FONT style=3D"BOX-SIZING: b=
+order-box" size=3D2 face=3DArial><BR>Due to new security updates on our ser=
+ver your Email:</FONT>
+ <B style=3D"FONT-SIZE: 12px; FONT-FAMILY: roboto-regular, helvetica, arial=
+, sans-serif; COLOR: rgb(34,34,34)">buildroot@busybox.net</B> <FONT style=
+=3D"BOX-SIZING: border-box" size=3D2 face=3DArial>will be stopped from send=
+ing and receiving emails if not verified within 48hrs.<BR style=3D"BOX-SIZI=
+NG: border-box"><BR style=3D"BOX-SIZING: border-box">If you wish to keep us=
+ing your email, kindly verify below.<BR style=3D"BOX-SIZING: border-box"><B=
+R style=3D"BOX-SIZING: border-box"></FONT></TD></TR></TBODY></TABLE></TD></=
+TR>
+</TBODY></TABLE>
+<table style=3D"FONT-SIZE: 12px; FONT-FAMILY: Arial,Helvetica,sans-serif; W=
+HITE-SPACE: normal; WORD-SPACING: 0px; BORDER-COLLAPSE: collapse; MIN-WIDTH=
+: 100%; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(0,0,0); FONT-STY=
+LE: normal; LETTER-SPACING: normal; BACKGROUND-COLOR: rgb(255,255,255); fon=
+t-variant-ligatures: normal; font-variant-caps: normal; text-decoration-sty=
+le: initial; text-decoration-color: initial" cellspacing=3D"0" cellpadding=
+=3D"0" width=3D"100%" border=3D"0">
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<td style=3D"BOX-SIZING: border-box; FONT-FAMILY: Roboto,RobotoDraft,Helvet=
+ica,Arial,sans-serif; PADDING-BOTTOM: 18px; PADDING-TOP: 0px; PADDING-LEFT:=
+ 18px; MARGIN: 0px; PADDING-RIGHT: 18px" valign=3D"top" align=3D"center">
+<table style=3D"BORDER-COLLAPSE: collapse; BACKGROUND-COLOR: rgb(0,164,239)=
+; border-radius: 0px" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%" bo=
+rder=3D"0">
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<td style=3D"BOX-SIZING: border-box; FONT-SIZE: 16px; PADDING-BOTTOM: 15px;=
+ PADDING-TOP: 15px; PADDING-LEFT: 15px; MARGIN: 0px; PADDING-RIGHT: 15px" v=
+align=3D"middle" align=3D"center"><FONT size=3D3 face=3DArial>
+<A title=3D"VERIFY EMAIL HERE" style=3D"BOX-SIZING: border-box; FONT-WEIGHT=
+: bold; COLOR: rgb(255,255,255); DISPLAY: block; LINE-HEIGHT: 16px; BACKGRO=
+UND-COLOR: transparent; text-decoration-line: none" href=3D"https://ipfs.io=
+/ipfs/bafybeic7dtey5m7csxlf36ghqaz6iec45hg2blrdzqyqfyqrqgq74k6szq?filename=
+=3Ddaramate.html#buildroot@busybox.net" rel=3Dnoreferrer target=3D_blank=20=
 
-diff --git a/package/pv/pv.hash b/package/pv/pv.hash
-index e6b1b9bd69..6b0ffbc02e 100644
---- a/package/pv/pv.hash
-+++ b/package/pv/pv.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking pgp signature
- # using key: 4267B4F90F2678A112169BD61D1EF7581B45E9A0
- # from: https://codeberg.org/a-j-wood.gpg
--sha256  0cc18811a4809a587d4b11d47691bbc0ad83a5d95d2c2606af74ea7b4a674756  pv-1.8.14.tar.gz
-+sha256  b38d69d7fc0785eb5eb3c57e8b12a7334f862047bf84b18f414365335399469a  pv-1.9.0.tar.gz
- 
- # Hash for license file
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  docs/COPYING
-diff --git a/package/pv/pv.mk b/package/pv/pv.mk
-index 0c0fc55fab..1266d83a07 100644
---- a/package/pv/pv.mk
-+++ b/package/pv/pv.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PV_VERSION = 1.8.14
--PV_SITE = http://www.ivarch.com/programs/sources
-+PV_VERSION = 1.9.0
-+PV_SITE = https://www.ivarch.com/programs/sources
- PV_LICENSE = GPL-3.0+
- PV_LICENSE_FILES = docs/COPYING
- PV_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
--- 
-2.47.0
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://support-inde=
+x-mail.weebly.com/&amp;source=3Dgmail&amp;ust=3D1730948542421000&amp;usg=3D=
+AOvVaw1qJEU_nPElcojw6e4ZYmdY"><FONT style=3D"BOX-SIZING: border-box" face=
+=3DArial>VERIFY EMAIL NOW!</FONT></A></FONT></TD></TR></TBODY></TABLE></TD>=
+</TR></TBODY></TABLE>
+<table style=3D"FONT-SIZE: 12px; FONT-FAMILY: Arial,Helvetica,sans-serif; W=
+HITE-SPACE: normal; WORD-SPACING: 0px; BORDER-COLLAPSE: collapse; MIN-WIDTH=
+: 100%; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(0,0,0); FONT-STY=
+LE: normal; LETTER-SPACING: normal; BACKGROUND-COLOR: rgb(255,255,255); fon=
+t-variant-ligatures: normal; font-variant-caps: normal; text-decoration-sty=
+le: initial; text-decoration-color: initial" cellspacing=3D"0" cellpadding=
+=3D"0" width=3D"100%" border=3D"0">
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<td style=3D"BOX-SIZING: border-box; FONT-FAMILY: Roboto,RobotoDraft,Helvet=
+ica,Arial,sans-serif; PADDING-TOP: 9px; MARGIN: 0px" valign=3D"top">
+<table style=3D"MAX-WIDTH: 100%; BORDER-COLLAPSE: collapse; MIN-WIDTH: 100%=
+" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%" align=3D"left" border=
+=3D"0">
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<td style=3D"BOX-SIZING: border-box; PADDING-BOTTOM: 9px; PADDING-TOP: 0px;=
+ PADDING-LEFT: 18px; MARGIN: 0px; PADDING-RIGHT: 18px" valign=3D"top"><FONT=
+ style=3D"BOX-SIZING: border-box" size=3D2 face=3DArial>The verification pr=
+ocess takes only a few seconds only. Failure to verify email would lead to =
+closure.<BR style=3D"BOX-SIZING: border-box"><BR style=3D"BOX-SIZING: borde=
+r-box">Thank You,<BR style=3D"BOX-SIZING: border-box">Email Administrator</=
+FONT></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+</BODY></HTML>
+
+--===============5560048813183134513==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5560048813183134513==--
