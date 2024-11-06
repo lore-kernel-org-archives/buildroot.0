@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE235D59F67
-	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 21:26:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09665D59F73
+	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 21:30:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F3F54092C;
-	Wed,  6 Nov 2024 21:26:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF26340A7A;
+	Wed,  6 Nov 2024 21:30:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c-b1Ve9iSpvj; Wed,  6 Nov 2024 21:26:17 +0000 (UTC)
+ id Hlg7FVI3ctkD; Wed,  6 Nov 2024 21:30:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E1BE40936
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E71A40B5F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E1BE40936;
-	Wed,  6 Nov 2024 21:26:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5FDAE3B
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:26:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E71A40B5F;
+	Wed,  6 Nov 2024 21:30:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DADA34C38
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:30:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4EB1F60B05
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:26:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BA1C640B5F
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:30:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3wRMTkKYtluZ for <buildroot@buildroot.org>;
- Wed,  6 Nov 2024 21:26:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xhhZvqFgZGy2 for <buildroot@buildroot.org>;
+ Wed,  6 Nov 2024 21:30:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 279BE60AF2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 279BE60AF2
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 279BE60AF2
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:26:13 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EBFAD240003;
- Wed,  6 Nov 2024 21:26:11 +0000 (UTC)
-Date: Wed, 6 Nov 2024 22:26:11 +0100
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 23B00409F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23B00409F8
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 23B00409F8
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:30:19 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 93B77E0003;
+ Wed,  6 Nov 2024 21:30:16 +0000 (UTC)
+Date: Wed, 6 Nov 2024 22:30:15 +0100
 To: James Hilliard <james.hilliard1@gmail.com>
 Cc: buildroot@buildroot.org, Marcus Folkesson <marcus.folkesson@gmail.com>,
  Kamel Bouhara <kamel.bouhara@gmail.com>, Woodrow Douglass
@@ -48,34 +48,34 @@ Cc: buildroot@buildroot.org, Marcus Folkesson <marcus.folkesson@gmail.com>,
  Kahlon <asafka7@gmail.com>, Marcin Niestroj <m.niestroj@grinn-global.com>,
  Christian Stewart <christian@aperture.us>, Robert Rose
  <robertroyrose@gmail.com>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20241106222611.338f4a97@windsurf>
-In-Reply-To: <20241030190020.1444105-1-james.hilliard1@gmail.com>
+Message-ID: <20241106223015.75d7b3b4@windsurf>
+In-Reply-To: <20241030190020.1444105-2-james.hilliard1@gmail.com>
 References: <20241030190020.1444105-1-james.hilliard1@gmail.com>
+ <20241030190020.1444105-2-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1730928372;
+ d=bootlin.com; s=gm1; t=1730928617;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=z3wu5zyZc95zhj+DgdBw+HagCzqpT8/lTN/WrbZ/qt0=;
- b=VViO2WXGijpPak3kcesAuKozMWlL3GsBxlr0JxY759go3iQepKDcq/j5x+xaC4ujZfwOKC
- u4DDTG5J4c+c4EltNE8IX7qqQPf/B3La6Dh60bZPAZxC+83p+H8xAY4zul/A1DhuNByK/E
- WpRJbznv03VzCcADh9o5gbdz0QsUEGTD3rHp4wEPZ5FStC6lTZ6DkjWZ3/mYP3yYoqoqM8
- uxoFN3R2pjJX6URdN/tbiynXCkxRep+/Y9DO0mj4I7NnRCe9sY4sGidt51zmINjgio429C
- e8X99N3Pf3nVbThElo5EVJw2Xwvv5Ylo6eZBO1oXMu5WcPZCC6XX+EPRG1pmKQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=YfJTehZX2CYkANYxIddG3i7n5CA5sJgwmXU4AvkukLQ=;
+ b=FPCHEH/v1GlTjowLytDh83AukotbjuBH3bJzcV1GbZQUUnTS7BvWS8dlrfqVYWbOdjSpWv
+ s5QkyTaKBNumcetlAwcL6NC1sMUgUioEy2arBaKNkDCDOaDq6lOF4rBpssP/HcQopxdlvA
+ cgPs9rQfUp63H+0BR76Iapg4cVYibzDpyFdbkZpjYlyRvhhmhoL7Hbet3TRGWQkYtsCinZ
+ IXOQSW7xpfJdC2YiHctE5wNaFXaEhbn4782/goLlp9A/8MwscVQuAwZuoG9h/2fmTe5oEz
+ uFtESPIcth04jZcbmUaYtyanUoZXv7R5PLY0k6Rs8U+LiaESQO6Nxd1qB81/mA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VViO2WXG
-Subject: Re: [Buildroot] [PATCH v4 1/6] package/{python-}protobuf: bump to
- version 28.1
+ header.s=gm1 header.b=FPCHEH/v
+Subject: Re: [Buildroot] [PATCH v4 2/6] package/grpc: bump to version 1.66.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,66 +94,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
-
-Thanks for your work on this complicated package.
-
-On Wed, 30 Oct 2024 13:00:15 -0600
+On Wed, 30 Oct 2024 13:00:16 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Migrate protobuf build from autotools to cmake.
+> Add new -DgRPC_BUILD_CODEGEN=OFF config option which is required if
+> no plugins are enabled.
+> 
+> Drop no longer relevant add GPR_DISABLE_WRAPPED_MEMCPY patch.
+> 
+> Rebase remaining patches.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Unfortunately, while doing so, you have missed to review carefully
-protobuf.mk, and you left some code that was autotools-related, and
-therefore no longer taken into account after the cmake migration.
+There's something I'm not super happy with with this bump:
 
-In particular:
+- It is needed to fix the current build breakage in grpc
+  (http://autobuild.buildroot.net/results/b2dfc13dcac8396bc7510a4d992558a01d3c9f22/),
+  which is caused by your bump of libabseil-cpp in
+  0d40b47866753340b214e811af53e6a95216bbb3.
 
-ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-PROTOBUF_CONF_ENV += LIBS=-latomic
-endif
+- But this grpc version bump *requires* the protobuf bump (apparently).
+  So it's a lot of version bumps needed to fix a build issue.
 
-is not taken into account after the cmake migration, but is still
-needed, otherwise the build breaks for example on SPARC. It needs to be
-changed to:
+I would have preferred a more minimal fix of the grpc build for the
+current master, and separately a bump, but backporting the fix for the
+libaseil-cpp issue seems difficult.
 
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--PROTOBUF_CONF_ENV += LIBS=-latomic
-+PROTOBUF_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+So, fair enough, let's do it with a protobuf bump + grpc bump.
+
+Overall, I did not apply this patch because it requires your protobuf
+bump, but the protobuf bump needs more work.
+
+However, please add into your patch series the following additional
+patch:
+
+commit 122e581244877ce4383448a1a298dd9ae480cde7
+Author: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date:   Mon Nov 4 23:27:44 2024 +0100
+
+    package/grpc: remove BR2_TOOLCHAIN_HAS_GCC_BUG_85180 dead code
+    
+    This work-around was added in commit
+    716f8b34c526c702aa19e9a66a25df5d3a6ea663 ("package/grpc: work around
+    gcc bug 85180") to work around a bug on Microblaze. However, since
+    commit
+    ae0557403a3a4cbf5354f0ab1784a08623382e5e ("package/libabseil-cpp: add
+    BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS"), grpc depends on
+    libaseil-cpp, which isn't available on Microblaze, making the
+    GCC_BUG_85180 no longer needed, and effectively dead code. This commit
+    drops it.
+    
+    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 47ebf1997c..39be4f583f 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -59,11 +59,6 @@ GRPC_CFLAGS += -DGPR_DISABLE_WRAPPED_MEMCPY
+ GRPC_CXXFLAGS += -DGPR_DISABLE_WRAPPED_MEMCPY
  endif
+ 
+-ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+-GRPC_CFLAGS += -O0
+-GRPC_CXXFLAGS += -O0
+-endif
+-
+ GRPC_CONF_OPTS += \
+ 	-DCMAKE_C_FLAGS="$(GRPC_CFLAGS)" \
+ 	-DCMAKE_CXX_FLAGS="$(GRPC_CXXFLAGS)"
 
-Also:
 
-PROTOBUF_CXXFLAGS = $(TARGET_CXXFLAGS)
 
-ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-PROTOBUF_CXXFLAGS += -O0
-endif
-
-ifeq ($(BR2_or1k),y)
-PROTOBUF_CXXFLAGS += -mcmodel=large
-endif
-
-PROTOBUF_CONF_ENV = CXXFLAGS="$(PROTOBUF_CXXFLAGS)"
-
-is not taken into account after the cmake migration... but is in fact
-no longer needed, and therefore should be dropped (perhaps as a
-preparation commit). It is no longer needed because:
-
-    The BR2_or1k workaround is removed, as protobuf depends on
-    libabseil-cpp, which isn't available on OpenRISC.
-    
-    The BR2_TOOLCHAIN_HAS_GCC_BUG_85180 workaround is removed, as this
-    workaround is for Microblaze, and protobuf depends on libabseil-cpp,
-    which isn't avialable on Microblaze.
-    
-Finally, this protobuf bump breaks the build of kismet (at least).
-Could you check this, and generally check more reverse dependencies of
-protobuf?
-
-Thanks a lot!
-
-Thomas
 -- 
 Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering and training
