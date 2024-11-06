@@ -1,63 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08128D59F6A
-	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 19:51:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB886D59F6A
+	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 19:52:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4F76811EA;
-	Wed,  6 Nov 2024 19:51:54 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EWYiQ4MFAS0X; Wed,  6 Nov 2024 19:51:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8D0D810D0
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C8D0D810D0;
-	Wed,  6 Nov 2024 19:51:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4866B3B
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 19:51:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 362CF605EA
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 19:51:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 940B0600C4;
+	Wed,  6 Nov 2024 19:52:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b84CtYA3Omlm for <buildroot@buildroot.org>;
- Wed,  6 Nov 2024 19:51:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id IK0WRnVM-Ick; Wed,  6 Nov 2024 19:52:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD3D2605DE
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD3D2605DE;
+	Wed,  6 Nov 2024 19:52:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 035D4B8
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 19:52:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4C83605DE
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 19:52:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qmemSUMxK9zT for <buildroot@buildroot.org>;
+ Wed,  6 Nov 2024 19:52:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2741D600C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2741D600C4
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2741D600C4
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 19:51:50 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5E34F1BF204;
- Wed,  6 Nov 2024 19:51:48 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1t8m4C-000Lsx-1r;
- Wed, 06 Nov 2024 20:51:48 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30D99600C4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 30D99600C4
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 19:52:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1CBAE85DCB; Wed,  6 Nov 2024 19:52:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: buildroot@buildroot.org
-References: <20241105112039.532435-1-mika.westerberg@linux.intel.com>
-Date: Wed, 06 Nov 2024 20:51:48 +0100
-In-Reply-To: <20241105112039.532435-1-mika.westerberg@linux.intel.com> (Mika
- Westerberg's message of "Tue, 5 Nov 2024 13:20:38 +0200")
-Message-ID: <87ikt0f8dn.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/tbtools: bump to version 0.4.2
+To: buildroot@buildroot.org
+Date: Wed, 6 Nov 2024 20:52:12 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7bb88682e87dbbffaf01adfb5d9e223fa2f67742
+X-Git-Newrev: ea8ce66c3750598c8771dc933fb6aa71c72fa967
+X-Patchwork-Hint: ignore
+Message-Id: <20241106195256.1CBAE85DCB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tbtools: bump to version 0.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,20 +58,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Mika" == Mika Westerberg <mika.westerberg@linux.intel.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ea8ce66c3750598c8771dc933fb6aa71c72fa967
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Update to the latest release of tbtools.
- > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Update to the latest release of tbtools.
 
-Committed, thanks.
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tbtools/tbtools.hash | 2 +-
+ package/tbtools/tbtools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tbtools/tbtools.hash b/package/tbtools/tbtools.hash
+index 85efbfa4ec..25879c2780 100644
+--- a/package/tbtools/tbtools.hash
++++ b/package/tbtools/tbtools.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d35c50063b254a561d567926fe8e5280206f6144c12f3f82e832f87392b67510  tbtools-0.4.1-cargo2.tar.gz
++sha256  6ec94630bc4e1afec1342cfd635d1c7da7d82f6c5f00adac61d164505c2a0717  tbtools-0.4.2-cargo2.tar.gz
+ sha256  9b16a3add311d607af8d9b348a842a37840d0f47dfcc6cf2a7756ee02c24ed69  LICENSE
+diff --git a/package/tbtools/tbtools.mk b/package/tbtools/tbtools.mk
+index baba0e8a3b..13b2ee65f9 100644
+--- a/package/tbtools/tbtools.mk
++++ b/package/tbtools/tbtools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TBTOOLS_VERSION = 0.4.1
++TBTOOLS_VERSION = 0.4.2
+ TBTOOLS_SITE = $(call github,intel,tbtools,v$(TBTOOLS_VERSION))
+ TBTOOLS_LICENSE = MIT
+ TBTOOLS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
