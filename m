@@ -4,69 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD6EFD59F67
-	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 21:19:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D65ED59F73
+	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 21:21:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A9EA407C6;
-	Wed,  6 Nov 2024 21:19:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F5C24091C;
+	Wed,  6 Nov 2024 21:21:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2y-ILMcsEja6; Wed,  6 Nov 2024 21:19:48 +0000 (UTC)
+ id ZEAqex2c9eez; Wed,  6 Nov 2024 21:21:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FEC840945
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B703B408C8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FEC840945;
-	Wed,  6 Nov 2024 21:19:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B703B408C8;
+	Wed,  6 Nov 2024 21:21:14 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 767123B
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:19:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8E85D4C38
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:21:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 601EC407C6
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:19:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7B937408F3
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:21:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kQN5Wje-xVTz for <buildroot@buildroot.org>;
- Wed,  6 Nov 2024 21:19:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.116;
- helo=smtpcmd03116.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6560A40956
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6560A40956
-Received: from smtpcmd03116.aruba.it (smtpcmd03116.aruba.it [62.149.158.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6560A40956
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:19:42 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id 8nRDtJWxUgIuB8nREtksUp; Wed, 06 Nov 2024 22:19:40 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed,  6 Nov 2024 22:19:39 +0100
-Message-Id: <20241106211939.826163-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.39.5
+ id BSZ2MzpHlGsy for <buildroot@buildroot.org>;
+ Wed,  6 Nov 2024 21:21:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1577B408D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1577B408D9
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1577B408D9
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:21:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DE6FB40005;
+ Wed,  6 Nov 2024 21:21:09 +0000 (UTC)
+Date: Wed, 6 Nov 2024 22:21:09 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Kamel Bouhara <kamel.bouhara@gmail.com>, Woodrow Douglass
+ <wdouglass@carnegierobotics.com>, Julien Olivain <ju.o@free.fr>, Asaf
+ Kahlon <asafka7@gmail.com>, Marcin Niestroj <m.niestroj@grinn-global.com>,
+ Christian Stewart <christian@aperture.us>, Robert Rose
+ <robertroyrose@gmail.com>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20241106222109.7773f15d@windsurf>
+In-Reply-To: <20241030190020.1444105-5-james.hilliard1@gmail.com>
+References: <20241030190020.1444105-1-james.hilliard1@gmail.com>
+ <20241030190020.1444105-5-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfOkmspUyvzihwmZ9cy0Q+hJJSwCQeFzGed42HYPDarE82fDQCFOlLGZRcsnCAiU5yCMG9E4A+P8fv8yptsUgc7XkTVuzJw56ThutPWw67512etJfjZCt
- Osd/mjwXZtpRCto6R2YIQMnSMqDAnJmlaBFboMcPX21bNjxCBgxoXdlG7itbqcdVb44fo3jLAUXVbmLmFdtNC3uNNADoz3c2zOHCOsIfl7+23gbpi9QAuYvQ
- IWROLCfFUkt7yibZs0QP3tWyyaZoQBC/Jbk5KjLPKqQ=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1730927980; bh=CT5Fuux9tSkd/hbNRfsibqB1RR8UMJruOEvx9A3mTEA=;
- h=From:To:Subject:Date:MIME-Version;
- b=K+327QEFMdCUWKalxNk4bkH+lkIqabd8hhOveAUzMYLeBr/RR4qfXODd5aQgU4kUT
- J7o/r1N+BpoX74bbo8d1lgym3VRHqsFtLKrkyQB28JVl1AZbEWt/00Us6BtcSFTQ8q
- hFaUWYjjj85sfDpNBvmfcSHGTfLFt67pdWAbTGHUY7g8F8PAJxzH/6rTm6wSKLSeR4
- duPdvZRJilSpuImezQG+olQwhulcXjTmW7xmc1eyC+6znRKCGdFeQ59Rl6r+jO+q2i
- RsHXWMCCf/D79hQ4fhCDUKxKK4zG6UWGVPz1nEXfamfqsQsuwhWBYWup6sA95GNkQm
- nKUqls5iwCHPQ==
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730928070;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=uqPgpqlE+JNyM18UaYP9DAsBL9LNt9P4QF74ZyxmIUg=;
+ b=KqOBqHD6cKt4zJOPscFa0ASLNVR2u0pLmxjcfdXUiaeKj0BzyvY/tc4yEcxBtV4jDfMs0M
+ nCgKdv7qxX0yIYdL87pULpQ2Lj/y3BemnVjOuIAU7SKG4aHeBLiLsSjV81h9D94fDlanOW
+ 0YY3+4f7p4iIK37BAcm+rkraA5Zow/kVRnk5n+W5eKa3CsU33VtFI/N29dYoQ8V0+2LrSm
+ BXDPK/aSMrL3pLQ5DCidSCsSGhV/pG/HVC4QeS8obpvBmHfpxzBymH3NsrzO1kLaJLGw+u
+ jBrvyj+VN5GV//EBYlxcAW45kVOvCvg/Lo5xM7heNxjMELsCwRo5IdvkU3CK5g==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=K+327QEF
-Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 10.1.0
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=KqOBqHD6
+Subject: Re: [Buildroot] [PATCH v4 5/6] package/mosh: fix compatibility with
+ newer protobuf versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,42 +88,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Wed, 30 Oct 2024 13:00:19 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 562727d3df..ebc26ac5bf 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b2cb13bd351904cb9038f907dc0dee0ae07127061242fe3556b2795c4e9748fc  harfbuzz-10.0.1.tar.xz
-+sha256  6ce3520f2d089a33cef0fc48321334b8e0b72141f6a763719aaaecd2779ecb82  harfbuzz-10.1.0.tar.xz
- sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 510c0a946c..2a89c48225 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 10.0.1
-+HARFBUZZ_VERSION = 10.1.0
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+> We need to backport a patch to fix compatibility with newer protobuf
+> versions.
+> 
+> Remove CFLAGS setting -std=c++11 and enable autoreconf so that
+> patch is applied properly.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  .../mosh/0001-Bump-C-version-to-C-17.patch    | 49 +++++++++++++++++++
+>  package/mosh/mosh.mk                          |  4 +-
+>  2 files changed, 50 insertions(+), 3 deletions(-)
+>  create mode 100644 package/mosh/0001-Bump-C-version-to-C-17.patch
+
+Applied to master, thanks. This should have been *before* the protobuf
+bump in your series, as it fixes an issue with the bump, but also works
+before the bump, so it really is a preparation commit.
+
+Thomas
 -- 
-2.39.5
-
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
