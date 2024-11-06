@@ -1,72 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7483D59F75
-	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 20:57:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4811FD59F73
+	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 21:06:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94E3E40305;
-	Wed,  6 Nov 2024 20:57:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11B3880CDF;
+	Wed,  6 Nov 2024 21:06:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eXLoZCmam0el; Wed,  6 Nov 2024 20:57:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aD3MO8CUZ-zV; Wed,  6 Nov 2024 21:06:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9046B404E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3417D811E3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9046B404E9;
-	Wed,  6 Nov 2024 20:57:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id ABDDC3B
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 20:57:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3417D811E3;
+	Wed,  6 Nov 2024 21:06:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0128E4C38
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:06:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 82CD340260
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 20:57:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E24FF60652
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:06:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xWO9k3sNBxL9 for <buildroot@buildroot.org>;
- Wed,  6 Nov 2024 20:57:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fd8t1e1rIwCx for <buildroot@buildroot.org>;
+ Wed,  6 Nov 2024 21:06:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0F05440281
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F05440281
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0F05440281
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 20:57:03 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 981865221
- for <buildroot@buildroot.org>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 06 Nov 2024 20:56:59 +0000 (UTC)
-Message-ID: <28fa3e81-4abf-4ee1-8b93-e5c3a43c4e6c@korsgaard.com>
-Date: Wed, 6 Nov 2024 21:56:58 +0100
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D3AC560606
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3AC560606
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D3AC560606
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:06:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 33D1340006
+ for <buildroot@buildroot.org>; Wed,  6 Nov 2024 21:06:45 +0000 (UTC)
+Message-ID: <2756d951-aada-4d76-b61c-4c34c88efab5@korsgaard.com>
+Date: Wed, 6 Nov 2024 22:06:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: buildroot@buildroot.org
-References: <20241013103341.78501-1-bernd@kuhls.net>
+References: <20241022211635.36d035fe@windsurf>
 Content-Language: en-US
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20241013103341.78501-1-bernd@kuhls.net>
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=KACTd6in+zydtN2Rm0o68qrbKJU2Q8xfl49ekJWwqFK8HNeeTYvvKi1DOy9jLbjrvI01hA5kOjMWIZlgymzzbkHdqimUZCP7hf5Cq/S4LVuIaVEn2CrWHlkCHuD4KdFzrgnOShwSHXONVe2NqnB6dEVC25jBIWY1yY1uGBMz1k7tZ2NkT1Qr6+OjZCzhY6LGGuEEdctJJFSYibRG636NMrw6FcreJt/SHA+WuWLshDsxiSnuahmc0r80bOEzr2fhNXqghd+/9L8grA6iRB84L4o6t75adnOIhLS1+kVL8xpAiJQKEEToANCy6MT/gZ+7Uru4VDcqxwz5mgd99FLb+g==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=4ELEB+dPX+hfZV2/QJWPe2539cIyHlu0rc5fDQnIXjE=;
- h=Feedback-ID:Received:Date:Subject:To:From; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+In-Reply-To: <20241022211635.36d035fe@windsurf>
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=KACTd6in
-Subject: Re: [Buildroot] [PATCH 1/4] {linux, linux-headers}: bump 6.{1, 6,
- 10}.x series
+Subject: Re: [Buildroot] Welcome to Julien Olivain as Buildroot maintainer
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,15 +70,22 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10/13/24 12:33, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->   linux/Config.in                      | 2 +-
->   linux/linux.hash                     | 6 +++---
->   package/linux-headers/Config.in.host | 6 +++---
->   3 files changed, 7 insertions(+), 7 deletions(-)
+On 10/22/24 21:16, Thomas Petazzoni via buildroot wrote:
+> Hello all,
+> 
+> We're happy to announce that we've just added Julien Olivain as a
+> new member of the Buildroot maintainer's team. This has been in
+> discussion way before Yann decided to retire from the maintainer's
+> team, so it is unrelated to Yann's decision, but obviously will be
+> useful to help handle the amount of contributions we receive.
+> 
+> Julien has been making for a few years very positive contributions to
+> Buildroot, and we believe he will help the project in a similarly
+> positive way as a maintainer.
+> 
+> Once again, welcome Julien!
 
-Committed to 2024.02.x and 2024.08.x, thanks.
+Yes, welcome Julien!
 
 -- 
 Bye, Peter Korsgaard
