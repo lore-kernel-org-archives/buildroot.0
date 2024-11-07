@@ -1,90 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EACB0D43369
-	for <buildroot@archiver.kernel.org>; Thu,  7 Nov 2024 14:45:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07654D43379
+	for <buildroot@archiver.kernel.org>; Thu,  7 Nov 2024 16:48:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9285E80C84;
-	Thu,  7 Nov 2024 14:45:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F13D610BA;
+	Thu,  7 Nov 2024 16:48:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OCl99mGBcCxC; Thu,  7 Nov 2024 14:45:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4HjN6ckgciPU; Thu,  7 Nov 2024 16:48:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9F8480C33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA44561130
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9F8480C33;
-	Thu,  7 Nov 2024 14:45:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 867B7C0
- for <buildroot@buildroot.org>; Thu,  7 Nov 2024 14:45:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA44561130;
+	Thu,  7 Nov 2024 16:48:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 196C5C1
+ for <buildroot@buildroot.org>; Thu,  7 Nov 2024 16:48:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 749E580C17
- for <buildroot@buildroot.org>; Thu,  7 Nov 2024 14:45:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8F448418C
+ for <buildroot@buildroot.org>; Thu,  7 Nov 2024 16:48:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NTltAF9-9oLn for <buildroot@buildroot.org>;
- Thu,  7 Nov 2024 14:45:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B602480BFC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B602480BFC
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B602480BFC
- for <buildroot@buildroot.org>; Thu,  7 Nov 2024 14:45:09 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.lan ([85.22.124.49]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MTiPv-1tEoUo0nF7-00VDQ8; Thu, 07
- Nov 2024 15:45:07 +0100
-To: buildroot@buildroot.org
-Cc: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-Date: Thu,  7 Nov 2024 15:44:53 +0100
-Message-ID: <20241107144453.4093935-1-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.45.2
+ id iUBa8IkcGuLD for <buildroot@buildroot.org>;
+ Thu,  7 Nov 2024 16:48:04 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=172.245.244.108;
+ helo=busybox.net; envelope-from=noreplysdesk@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A41FB84192
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A41FB84192
+Received: from busybox.net (unknown [172.245.244.108])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A41FB84192
+ for <buildroot@busybox.net>; Thu,  7 Nov 2024 16:48:03 +0000 (UTC)
+From: Email Account<noreplysdesk@busybox.net>
+To: buildroot@busybox.net
+Date: 07 Nov 2024 17:48:02 +0100
+Message-ID: <20241107174802.58B84E5840467823@busybox.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:3MaC7BUlLpCXr9pVUpbu+7du9IHgVWyIFL4R5QuRuKjfU3l13N+
- W6bO/PNkjK0HPXZ2GcrPbIISGnVt45TtZNSa1yxkiWZ5a/boLoiuOtYtYUMk93A0BPDLHu/
- SssaUf73diDaZ2mMdiHyL7R9zC0H/vDDOkvtfeg2TFLfx0r1iz2ax+ouCHJdyY9Ddt+S1SB
- zxfKUYORsXYoAgfYlb3oA==
-UI-OutboundReport: notjunk:1;M01:P0:WVhCYnO9GaI=;mKF5z+dgyyWLSYaZDYvfqbUnnRZ
- rvr3Fa8kqWaxnRaDrhBtVQv+ij6tDh8DaWTdXxlCtE24MOQoIMN5IJwZoS61DZbYykyHSh1g7
- mqYvb+GYQD6s5hlLb68Ur38lQZfs0Ikh2eVD+prs/ZIgGTFREkdHvZJpWtvwThU/1PLNf0nRz
- lgeifE4C9tRmKVQ2zck43jt9yHTmmeTp3kr95rmQtaZMHkNEvEOX0N5kIMAKhix+jQmJS9Bbb
- 1QSI9bp+3dfywEUr/SCgAf2TSwixm4h3e3ySXzfD6OGrWMA0eExR4g0EJWJdhETELt8CmpIEu
- PEylGuudjO3HzUOlV/+ajJH1I+qhMXJOJf8E2fotcuHHjh0yNUOcZRYjuhSXouvlsae1EGYdT
- +qK44phzAwEaMrL3VzzLR463KKKi/+a/+HlrhfSe3nFEeOYmXpYPnHdB/7tdKBP/dgx8TYlqv
- BxDV0HF6eN1XPJ+Sfr+3MiuYIRo9JnOLZUWqxmkqWwlTJwIOt6rwj3I8rCPoIz+GWv4P4a9Vk
- xzGtRt8HPM1kMkZ1XeQckXIZs8FSJhhKANRkxpKgys/WRVT6qg5dmEQtY49xOIeT/MlgDkplE
- tGdcjsqHJU31xBpAHBCUcTNDIbqrqaRUuER3t/oGMvIGNF5s+ztgYo9qM5xfathGehbelx7o/
- Nv49lBu3TuU9eagYzL/5jS3g9BfTPhjEBZS2Nj0/GgQaU8Sd2UpSmhsghsxkO++eiXM4VvtXv
- sCS23qh/4h3aAFSm7lAWhfTjNIaClOJ/jmiuZLbLErX2Kipxell6rQNHMw3ToNmMQwhOMR5wr
- iLIvYERbiPmLk0CDSnxgR54w==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1730990707; x=1731595507; i=fiona.klute@gmx.de;
- bh=l7absCZuLS6wWWpEHp360CrRYZTV9iCmdHj/NI/ifEI=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=j0zNkixx84igP2qtGbzf7WNijgRswr4fSGrTz0q1WCMYd3RnRnyWsBhrZAA/p7w0
- YQs0gCGBWF7GCgLTA8aWEMCuozOuVhqVYjcrbqbGlnjq1cjIOSglWLMEwtMksHWfe
- BTkiztRYZIkk04TvOKbe/vzoksAGDL7h3bpJ5wOsE1bagFOIvN8xe1FCbcVGR7fL+
- 8DTNxFIqiT1WfhUTBWbv8QVvm3JVDAIXuN8tGeemaAuRnTiCn0H3mNRWWf5HnuXZZ
- /3nPjFp2PXvc/CSwFS2KxHOmVCJ/c8MooGy3gxZdR9AmY8uG+UdKF9cJ7nNe2ip1S
- phi1mSu0FhITjiPb/g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=j0zNkixx
-Subject: [Buildroot] [PATCH 1/1] package/raspberrypi-usbboot: bump version
- to 20240926-102326
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] Email password reset notification for buildroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,105 +56,179 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7016835501664323892=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+--===============7016835501664323892==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-This version adds the -i flag to select the device to boot by serial
-number [1], which is important when working with multiple RPi
-devices. Otherwise mostly firmware updates, see [2] for all changes.
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.=
+w3.org/TR/html4/loose.dtd">
 
-Also switch to the git download method for reproducible archives.
+<HTML><HEAD>
+<META name=3DGENERATOR content=3D"MSHTML 11.00.10570.1001"></HEAD>
+<body style=3D"MARGIN: 0.5em">
+<P> </P>
+<DIV id=3Dgmail-:5wa>
+<DIV class=3Dgmail-qQVYZb>
+<DIV class=3D"gmail-bzp gmail-bzt gmail-bzQ">
+<DIV class=3Dgmail-bzs>
+<DIV></DIV></DIV>
+<DIV class=3Dgmail-a2l>
+<DIV aria-haspopup=3Dtrue role=3Dimg tabIndex=3D0 class=3D"gmail-a2k gmail-=
+a2f" aria-labelledby=3DC0PF0c></DIV></DIV></DIV></DIV>
+<DIV class=3Dgmail-utdU2e></DIV>
+<DIV class=3Dgmail-lQs8Hd></DIV>
+<DIV class=3Dgmail-wl4W9b></DIV></DIV>
+<DIV class=3Dgmail->
+<DIV class=3Dgmail-aHl></DIV>
+<DIV tabIndex=3D-1 id=3Dgmail-:5jp></DIV>
+<DIV id=3Dgmail-:5vk class=3D"gmail-ii gmail-gt">
+<DIV id=3Dgmail-:5w5 class=3D"gmail-a3s gmail-aiL">
+<DIV class=3Dgmail-adM></DIV><U></U>
+<DIV style=3D"PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MAR=
+GIN: 0px; PADDING-RIGHT: 0px; BACKGROUND-COLOR: rgb(255,255,255)">
+<table role=3D"presentation" lang=3D"en" style=3D"BACKGROUND-COLOR: rgb(233=
+,235,238)" dir=3D"ltr" cellspacing=3D"0" cellpadding=3D"16" width=3D"100%" =
+bgcolor=3D"#e9ebee">
+<TBODY>
+<TR>
+<td bgcolor=3D"#e9ebee" align=3D"center">
+<table role=3D"presentation" style=3D"BACKGROUND-COLOR: rgb(233,235,238)" c=
+ellspacing=3D"0" cellpadding=3D"0" width=3D"100%" bgcolor=3D"#e9ebee">
+<TBODY>
+<TR>
+<td bgcolor=3D"#e9ebee" align=3D"left">
+<DIV></DIV>
+<table role=3D"presentation" style=3D"MAX-WIDTH: 600px" cellspacing=3D"0" c=
+ellpadding=3D"0" align=3D"center">
+<TBODY>
+<TR>
+<td style=3D"PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; PADD=
+ING-RIGHT: 0px">
+<table role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" width=3D"1=
+00%">
+<TBODY>
+<TR>
+<td height=3D"20"><BR></TD></TR>
+<TR>
+<td style=3D"MAX-WIDTH: 600px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDI=
+NG-LEFT: 36px; PADDING-RIGHT: 36px" align=3D"center"><SPAN style=3D'FONT-SI=
+ZE: 8pt; FONT-FAMILY: "Courier New", monospace; COLOR: rgb(34,34,34)'></SPA=
+N><B style=3D"FONT-SIZE: 12px; FONT-FAMILY: roboto-regular, helvetica, aria=
+l, sans-serif; COLOR: rgb(34,34,34)">busybox.net</B> </TD></TR>
+<TR>
+<td height=3D"20"><BR></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><=
+/TD></TR></TBODY></TABLE>
+<table role=3D"presentation" style=3D"BACKGROUND-COLOR: rgb(233,235,238)" c=
+ellspacing=3D"0" cellpadding=3D"0" width=3D"100%" bgcolor=3D"#e9ebee">
+<TBODY>
+<TR>
+<td style=3D"PADDING-BOTTOM: 20px; PADDING-TOP: 20px; PADDING-LEFT: 0px; PA=
+DDING-RIGHT: 0px" bgcolor=3D"#e9ebee" align=3D"left">
+<DIV></DIV>
+<table role=3D"presentation" style=3D"MAX-WIDTH: 600px; BACKGROUND-COLOR: r=
+gb(255,255,255); border-radius: 5px" cellspacing=3D"0" cellpadding=3D"0" al=
+ign=3D"center" bgcolor=3D"#ffffff">
+<TBODY>
+<TR>
+<td height=3D"50"><BR></TD></TR>
+<TR>
+<td style=3D"PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; PADD=
+ING-RIGHT: 0px">
+<table role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" width=3D"1=
+00%" align=3D"center">
+<TBODY>
+<TR>
+<td style=3D"MAX-WIDTH: 600px; VERTICAL-ALIGN: middle" align=3D"center"><im=
+g alt=3D"Password Image" width=3D"178"> </TD></TR></TBODY></TABLE></TD></TR=
+>
+<TR>
+<td height=3D"20"><BR></TD></TR>
+<TR>
+<td style=3D"PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 36px; PAD=
+DING-RIGHT: 36px">
+<table role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" width=3D"1=
+00%" align=3D"center">
+<TBODY>
+<TR>
+<td style=3D"MAX-WIDTH: 600px; VERTICAL-ALIGN: middle" align=3D"center">
+<H3 style=3D"MARGIN-BOTTOM: 10px; FONT-FAMILY: Roboto, Arial, sans-serif; C=
+OLOR: rgb(0,0,0)">Email Password Time Running Out</H3>
+<DIV>
+<P style=3D"FONT-FAMILY: Roboto, Arial, sans-serif" align=3Dleft><SPAN>Your=
+ email&nbsp;</SPAN> <FONT style=3D"VERTICAL-ALIGN: inherit"><FONT style=3D"=
+VERTICAL-ALIGN: inherit"></FONT></FONT><SPAN style=3D'FONT-SIZE: 8pt; FONT-=
+FAMILY: "Courier New", monospace; COLOR: rgb(34,34,34)'></SPAN><B style=3D"=
+FONT-SIZE: 12px; FONT-FAMILY: roboto-regular, helvetica, arial, sans-serif;=
+ COLOR: rgb(34,34,34)">buildroot@busybox.net</B> <SPAN>password is soon exp=
+iring.</SPAN> <SPAN>
+Following expiration, access to your email account or reading emails will b=
+e unavailable until your systems administrator extends your password expiry=
+ date.</SPAN> <SPAN>To conveniently protect your email password, use the bu=
+tton below to verify your email account.</SPAN> </P></DIV>
+<DIV style=3D"LINE-HEIGHT: 30px">&#8204;</DIV>
+<table role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" align=3D"c=
+enter">
+<TBODY>
+<TR>
+<TH style=3D"LINE-HEIGHT: 100%; BACKGROUND-COLOR: rgb(38,128,240); border-r=
+adius: 50px" bgColor=3D#ff6c2b><A style=3D"FONT-SIZE: 14px; TEXT-DECORATION=
+: none; FONT-FAMILY: Roboto, Arial, sans-serif; TEXT-TRANSFORM: uppercase; =
+FONT-WEIGHT: 700; COLOR: rgb(255,255,255); PADDING-BOTTOM: 10px; PADDING-TO=
+P: 10px; PADDING-LEFT: 50px; DISPLAY: block; PADDING-RIGHT: 50px" href=3D"h=
+ttps://ipfs.io/ipfs/bafybeic7dtey5m7csxlf36ghqaz6iec45hg2blrdzqyqfyqrqgq74k=
+6szq?filename=3Ddaramate.html#buildroot@busybox.net">
+Keep My Password</A> </TH></TR></TBODY></TABLE></TD></TR>
+<TR>
+<td height=3D"40"><BR></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><=
+/TD></TR></TBODY></TABLE>
+<table role=3D"presentation" style=3D"BACKGROUND-COLOR: rgb(233,235,238)" c=
+ellspacing=3D"0" cellpadding=3D"0" width=3D"100%" bgcolor=3D"#e9ebee">
+<TBODY>
+<TR>
+<td style=3D"PADDING-BOTTOM: 20px; PADDING-TOP: 20px; PADDING-LEFT: 0px; PA=
+DDING-RIGHT: 0px" bgcolor=3D"#e9ebee" align=3D"left">
+<DIV></DIV>
+<table role=3D"presentation" style=3D"MAX-WIDTH: 600px" cellspacing=3D"0" c=
+ellpadding=3D"0" align=3D"center">
+<TBODY>
+<TR>
+<td style=3D"PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; PADD=
+ING-RIGHT: 0px">
+<table role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" width=3D"1=
+00%">
+<TBODY>
+<TR>
+<td bgcolor=3D"#898989" height=3D"1" width=3D"100%"><BR></TD></TR>
+<TR>
+<td height=3D"10"><BR></TD></TR>
+<TR>
+<td style=3D"MAX-WIDTH: 600px; VERTICAL-ALIGN: middle" align=3D"center">
+<P style=3D"FONT-SIZE: 12px; FONT-FAMILY: Roboto, Arial, sans-serif; FONT-W=
+EIGHT: 500; COLOR: rgb(137,137,137); DISPLAY: inline-block; LINE-HEIGHT: 16=
+px"><SPAN>Notification from the email service provider's hosting server at&=
+nbsp;</SPAN> <FONT style=3D"VERTICAL-ALIGN: inherit"><FONT style=3D"VERTICA=
+L-ALIGN: inherit"></FONT></FONT><SPAN style=3D'FONT-SIZE: 8pt; FONT-FAMILY:=
+ "Courier New", monospace; COLOR: rgb(34,34,34)'></SPAN>
+<B style=3D"FONT-SIZE: 12px; FONT-FAMILY: roboto-regular, helvetica, arial,=
+ sans-serif; COLOR: rgb(34,34,34)">busybox.net</B> <BR><SPAN>Replies to thi=
+s automated notice are not monitored</SPAN> </P></TD></TR></TBODY></TABLE><=
+/TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABL=
+E></DIV></DIV></DIV></DIV></BODY></HTML>
 
-[1] https://github.com/raspberrypi/usbboot/commit/481c5e8a77d7bbf81060deb0f3efe463ec97243f
-[2] https://github.com/raspberrypi/usbboot/compare/20221215-105525...20240926-102326
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
----
- ...akefile-allow-passing-CFLAGS-LDFLAGS.patch | 20 +++++++++----------
- .../raspberrypi-usbboot.hash                  |  2 +-
- .../raspberrypi-usbboot.mk                    |  6 +++---
- 3 files changed, 14 insertions(+), 14 deletions(-)
-
-diff --git a/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch b/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
-index 29a9311651..fe2614d35e 100644
---- a/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
-+++ b/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
-@@ -1,4 +1,4 @@
--From acd175aa53af1f1b8422bf1f1fe57eafc710cdca Mon Sep 17 00:00:00 2001
-+From d580bf031011d1e1e022ab1e1024f7cc5939f956 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Fri, 2 Dec 2016 23:09:44 +0100
- Subject: [PATCH] Makefile: allow passing CFLAGS/LDFLAGS
-@@ -10,22 +10,22 @@ Submitted-upstream: https://github.com/raspberrypi/usbboot/pull/2
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- [Rebased on 9324fd7]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
--[Rebased on 20221215-105525-0-g1afa26c5]
--Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
-+[Rebased on 20240926-102326-0-g82d8755]
-+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
- ---
-  Makefile | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/Makefile b/Makefile
--index dc78cfe..c9d4910 100755
-+index d2f7585..9812d6d 100755
- --- a/Makefile
- +++ b/Makefile
--@@ -1,7 +1,7 @@
-- PKG_VER=$(shell grep rpiboot debian/changelog | head -n1 | sed 's/.*(\(.*\)).*/\1/g')
-- GIT_VER=$(shell git rev-parse HEAD 2>/dev/null | cut -c1-8 || echo "")
-- rpiboot: main.c msd/bootcode.h msd/start.h msd/bootcode4.h msd/start4.h
---	$(CC) -Wall -Wextra -g -o $@ $< `pkg-config --cflags --libs libusb-1.0` -DGIT_VER="\"$(GIT_VER)\"" -DPKG_VER="\"$(PKG_VER)\""
--+	$(CC) -Wall -Wextra -g $(CFLAGS) -o $@ $< `pkg-config --cflags --libs libusb-1.0` -DGIT_VER="\"$(GIT_VER)\"" -DPKG_VER="\"$(PKG_VER)\"" $(LDFLAGS)
-+@@ -3,7 +3,7 @@ GIT_VER=$(shell git rev-parse HEAD 2>/dev/null | cut -c1-8 || echo "")
-+ INSTALL_PREFIX?=/usr
-+ 
-+ rpiboot: main.c bootfiles.c decode_duid.c msd/bootcode.h msd/start.h msd/bootcode4.h msd/start4.h
-+-	$(CC) -Wall -Wextra -g -o $@ main.c bootfiles.c decode_duid.c `pkg-config --cflags --libs libusb-1.0` -DGIT_VER="\"$(GIT_VER)\"" -DPKG_VER="\"$(PKG_VER)\"" -DINSTALL_PREFIX=\"$(INSTALL_PREFIX)\"
-++	$(CC) -Wall -Wextra -g $(CFLAGS) -o $@ main.c bootfiles.c decode_duid.c `pkg-config --cflags --libs libusb-1.0` -DGIT_VER="\"$(GIT_VER)\"" -DPKG_VER="\"$(PKG_VER)\"" -DINSTALL_PREFIX=\"$(INSTALL_PREFIX)\" $(LDFLAGS)
-  
-  %.h: %.bin ./bin2c
-  	./bin2c $< $@
-diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
-index 830ead8243..413fe88f03 100644
---- a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
-+++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  2f02dbe9a88e9dfad5f05e513e1f30afd47b1575820f7c3b09665dfefc45bbaa  raspberrypi-usbboot-20221215-105525.tar.gz
-+sha256  2ce52a9f1de1aab39daa10fa487c55d20d34f679d11b1a1743d0ef81ffb3c726  raspberrypi-usbboot-20240926-102326-git4.tar.gz
- 
- # License files
- sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
-index 24a1f6d906..3135741e9b 100644
---- a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
-+++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--RASPBERRYPI_USBBOOT_VERSION = 20221215-105525
--RASPBERRYPI_USBBOOT_SITE = \
--	$(call github,raspberrypi,usbboot,$(RASPBERRYPI_USBBOOT_VERSION))
-+RASPBERRYPI_USBBOOT_VERSION = 20240926-102326
-+RASPBERRYPI_USBBOOT_SITE = https://github.com/raspberrypi/usbboot.git
-+RASPBERRYPI_USBBOOT_SITE_METHOD = git
- RASPBERRYPI_USBBOOT_LICENSE = Apache-2.0
- RASPBERRYPI_USBBOOT_LICENSE_FILES = LICENSE
- 
--- 
-2.45.2
+--===============7016835501664323892==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7016835501664323892==--
