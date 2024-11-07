@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65272D5AE70
-	for <buildroot@archiver.kernel.org>; Thu,  7 Nov 2024 08:02:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2457DD5AE70
+	for <buildroot@archiver.kernel.org>; Thu,  7 Nov 2024 08:02:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18E0A4197E;
-	Thu,  7 Nov 2024 08:02:32 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CWUYKzIab6Ka; Thu,  7 Nov 2024 08:02:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 552C041972
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 552C041972;
-	Thu,  7 Nov 2024 08:02:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F2EEC1
- for <buildroot@buildroot.org>; Thu,  7 Nov 2024 08:02:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E7E3B820E5
- for <buildroot@buildroot.org>; Thu,  7 Nov 2024 08:01:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F60983ABC;
+	Thu,  7 Nov 2024 08:02:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fNLalmgqWC5W for <buildroot@buildroot.org>;
+ id vRochAUsakh5; Thu,  7 Nov 2024 08:02:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88A3C8210F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88A3C8210F;
+	Thu,  7 Nov 2024 08:02:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 33B06C2
+ for <buildroot@buildroot.org>; Thu,  7 Nov 2024 08:02:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0BE96820E4
+ for <buildroot@buildroot.org>; Thu,  7 Nov 2024 08:01:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k9cxQOsXGzCD for <buildroot@buildroot.org>;
  Thu,  7 Nov 2024 08:01:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D57BF820E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECCD2820E8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D57BF820E4
+ by smtp1.osuosl.org (Postfix) with ESMTP id ECCD2820E8
  for <buildroot@buildroot.org>; Thu,  7 Nov 2024 08:01:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D11CF85C67; Thu,  7 Nov 2024 08:01:53 +0000 (UTC)
+ id E8B1C85C5B; Thu,  7 Nov 2024 08:01:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Nov 2024 08:56:16 +0100
+Date: Thu, 7 Nov 2024 08:56:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d08b7029d3ad5afd472e10afa9a9480b3994452a
-X-Git-Newrev: 8774dd7ef22145d003a2db14e5cf3a54ef2e1b1a
+X-Git-Oldrev: 324c68e00391103cc5005565177159c7928ab07f
+X-Git-Newrev: 0ad2827ca60a17784c43f5db841d78152be93bae
 X-Patchwork-Hint: ignore
-Message-Id: <20241107080153.D11CF85C67@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-sentry-sdk: bump to version
- 2.18.0
+Message-Id: <20241107080153.E8B1C85C5B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-watchdog: bump to version
+ 6.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8774dd7ef22145d003a2db14e5cf3a54ef2e1b1a
+commit: https://git.buildroot.net/buildroot/commit/?id=0ad2827ca60a17784c43f5db841d78152be93bae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
- package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
+ package/python-watchdog/python-watchdog.hash | 4 ++--
+ package/python-watchdog/python-watchdog.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
-index d2ec964dc0..6243632685 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.hash
-+++ b/package/python-sentry-sdk/python-sentry-sdk.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
--md5  74b67571ab1edd296ae68ed43843c308  sentry_sdk-2.17.0.tar.gz
--sha256  dd0a05352b78ffeacced73a94e86f38b32e2eae15fff5f30ca5abb568a72eacf  sentry_sdk-2.17.0.tar.gz
-+md5  d68e388f9a261c00515e0f758303240f  sentry_sdk-2.18.0.tar.gz
-+sha256  0dc21febd1ab35c648391c664df96f5f79fb0d92d7d4225cd9832e53a617cafd  sentry_sdk-2.18.0.tar.gz
+diff --git a/package/python-watchdog/python-watchdog.hash b/package/python-watchdog/python-watchdog.hash
+index 4377871db2..508cf88b27 100644
+--- a/package/python-watchdog/python-watchdog.hash
++++ b/package/python-watchdog/python-watchdog.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/watchdog/json
+-md5  83499e8a193ba23bb68436fbdc249589  watchdog-5.0.3.tar.gz
+-sha256  108f42a7f0345042a854d4d0ad0834b741d421330d5f575b81cb27b883500176  watchdog-5.0.3.tar.gz
++md5  d3adf236e17e5747e397f7d0b93e05b4  watchdog-6.0.0.tar.gz
++sha256  9ddf7c82fda3ae8e24decda1338ede66e1c99883db93711d8fb941eaa2d8c282  watchdog-6.0.0.tar.gz
  # Locally computed sha256 checksums
- sha256  6d7ec62dc20e8b92cb88b89fb3b55ee8576505f3e1afa57952548f6eea5d008e  LICENSE
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
-index a7cdd2d3d7..e2cbdcf405 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.mk
-+++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+ sha256  39f081828db6f94c70123fa4fb30c1bce3e215a8fdece53a49991fe076a69c08  COPYING
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-watchdog/python-watchdog.mk b/package/python-watchdog/python-watchdog.mk
+index f5ef770fcf..888cce6e1a 100644
+--- a/package/python-watchdog/python-watchdog.mk
++++ b/package/python-watchdog/python-watchdog.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SENTRY_SDK_VERSION = 2.17.0
-+PYTHON_SENTRY_SDK_VERSION = 2.18.0
- PYTHON_SENTRY_SDK_SOURCE = sentry_sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
--PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/b1/83/7d0956a71ac894717099be3669ca7b8f164bccbcfb570b2f02817d0a0068
-+PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/24/cc/0d87cc8246f52d92228aa6718a24e1988a2893f4abe2f64ec5a8bcba4185
- PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
- PYTHON_SENTRY_SDK_LICENSE = MIT
- PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
+-PYTHON_WATCHDOG_VERSION = 5.0.3
++PYTHON_WATCHDOG_VERSION = 6.0.0
+ PYTHON_WATCHDOG_SOURCE = watchdog-$(PYTHON_WATCHDOG_VERSION).tar.gz
+-PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/a2/48/a86139aaeab2db0a2482676f64798d8ac4d2dbb457523f50ab37bf02ce2c
++PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/db/7d/7f3d619e951c88ed75c6037b246ddcf2d322812ee8ea189be89511721d54
+ PYTHON_WATCHDOG_SETUP_TYPE = setuptools
+ PYTHON_WATCHDOG_LICENSE = Apache-2.0
+ PYTHON_WATCHDOG_LICENSE_FILES = LICENSE COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
