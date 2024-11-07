@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7844D4335E
-	for <buildroot@archiver.kernel.org>; Thu,  7 Nov 2024 13:15:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECCB6D4335D
+	for <buildroot@archiver.kernel.org>; Thu,  7 Nov 2024 13:44:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33EDE60BB0;
-	Thu,  7 Nov 2024 13:15:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9475F4035F;
+	Thu,  7 Nov 2024 13:44:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SInJAyV3GxpQ; Thu,  7 Nov 2024 13:15:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xqyIrW11oEYv; Thu,  7 Nov 2024 13:44:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 435866100E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F2EA403C3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 435866100E;
-	Thu,  7 Nov 2024 13:15:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D549EC0
- for <buildroot@buildroot.org>; Thu,  7 Nov 2024 13:15:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F2EA403C3;
+	Thu,  7 Nov 2024 13:44:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A6DB3B
+ for <buildroot@buildroot.org>; Thu,  7 Nov 2024 13:44:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B57BC80C80
- for <buildroot@buildroot.org>; Thu,  7 Nov 2024 13:15:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A2AD4035F
+ for <buildroot@buildroot.org>; Thu,  7 Nov 2024 13:44:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jMYkXXgqWvqN for <buildroot@buildroot.org>;
- Thu,  7 Nov 2024 13:15:04 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=104.168.34.171;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9AB9080C7E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AB9080C7E
-Received: from busybox.net (unknown [104.168.34.171])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9AB9080C7E
- for <buildroot@busybox.net>; Thu,  7 Nov 2024 13:15:03 +0000 (UTC)
-From: Mail Delivery System <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 7 Nov 2024 14:15:02 +0100
-Message-ID: <20241107141502.004A1F8107C4C3A6@busybox.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Tl1ARuEjZPlX for <buildroot@buildroot.org>;
+ Thu,  7 Nov 2024 13:44:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=117.135.210.5;
+ helo=m16.mail.163.com; envelope-from=tianyuanhao3@163.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 04360403C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04360403C3
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04360403C3
+ for <buildroot@buildroot.org>; Thu,  7 Nov 2024 13:44:03 +0000 (UTC)
+Received: from ubuntu.localdomain (unknown [223.102.84.14])
+ by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id
+ _____wDXLikdxCxnbgaOFw--.1287S2; 
+ Thu, 07 Nov 2024 21:43:59 +0800 (CST)
+From: TIAN Yuanhao <tianyuanhao3@163.com>
+To: buildroot@buildroot.org
+Cc: TIAN Yuanhao <tianyuanhao3@163.com>
+Date: Thu,  7 Nov 2024 05:43:41 -0800
+Message-ID: <20241107134342.4306-1-tianyuanhao3@163.com>
+X-Mailer: git-send-email 2.44.1
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Message delivery failed: returning outgoing messages to
- sender
+X-CM-TRANSID: _____wDXLikdxCxnbgaOFw--.1287S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7trWkWw1fGrWrXFW7CF4fAFb_yoW8Ww1fp3
+ 90yF1Y9r1Igr1rJrZrt3yIkF15uFnYqFyDAFW7Ga10y3ZxXan3JwnFkF4UJF4UGr47Jw10
+ q34DAF42qrWay3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+ 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUga9xUUUUU=
+X-Originating-IP: [223.102.84.14]
+X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/xtbBYw2QjWcscCFXpwACsb
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=163.com; 
+ s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=1mjPZ
+ 3VRLGhaIrpXg0tp9KpoLBHenrlA9m9gEDKpXyY=; b=KjoayKjArLbFsSNoo/GKy
+ fyg8qWNTBlX79WhI+knhS732aWBNE8DdSKvyE8wPuRlpVwAC4/QcULcuSrXAHMv0
+ ZHcgukF7nC7LFRXDxyC4BTMX3eb/MbdUNW47frrFaTF+SdWGtDrg0cdwdSqwPMgC
+ nBjOP1DAi+B6MLPc6bjI/I=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=163.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256
+ header.s=s110527 header.b=KjoayKjA
+Subject: [Buildroot] [PATCH v2 1/2] package/gnutls: bump to version 3.8.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,105 +80,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============7691881136292676597=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7691881136292676597==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+---
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.10570.1001">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<div style=3D'text-align: left; color: rgb(0, 0, 0); text-transform: none; =
-text-indent: 0px; letter-spacing: normal; font-family: wf_segoe-ui_normal, =
-"Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif; font-size: medium; font-=
-style: normal; font-weight: 400; word-spacing: 0px; white-space: normal; bo=
-x-sizing: border-box; orphans: 2; widows: 2; background-color: rgb(255, 255=
-, 255); font-variant-ligatures: normal; font-variant-caps: normal; -webkit-=
-text-stroke-width: 0px; text-decoration-thickness:=20
-initial; text-decoration-style: initial; text-decoration-color: initial;'><=
-div class=3D"v1v1_rp_T4" id=3D"v1v1Item.MessagePartBody" style=3D"top: -5px=
-; width: auto; padding-top: 4px; clear: both; display: block; position: rel=
-ative; box-sizing: border-box;">
-<div class=3D"v1v1_rp_U4 v1v1ms-font-weight-regular v1v1ms-font-color-neutr=
-alDark v1v1rpHighlightAllClass v1v1rpHighlightBodyClass" id=3D"v1v1Item.Mes=
-sageUniqueBody" style=3D'color: rgb(33, 33, 33); font-family: wf_segoe-ui_n=
-ormal, "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif, serif, EmojiFont;=
- font-size: 15px; box-sizing: border-box;'><div class=3D"v1v1rps_9360" styl=
-e=3D"box-sizing: border-box;"><div style=3D"box-sizing: border-box;"><div s=
-tyle=3D"box-sizing: border-box;">
-<table width=3D"100%" align=3D"center" style=3D"margin: 0px auto; border-co=
-llapse: collapse !important; table-layout: fixed; max-width: 600px; box-siz=
-ing: border-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody s=
-tyle=3D"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td =
-width=3D"100%" align=3D"center" valign=3D"top" style=3D"box-sizing: border-=
-box;"><table width=3D"100%" style=3D"border-collapse: collapse; box-sizing:=
- border-box;" bgcolor=3D"#ffffff" border=3D"0" cellspacing=3D"0" cellpaddin=
-g=3D"0">
-<tbody style=3D"box-sizing: border-box;"><tr style=3D"color: rgb(78, 92, 11=
-0); line-height: 20px; font-size: 14px; margin-top: 20px; box-sizing: borde=
-r-box;"><td align=3D"center" valign=3D"top" style=3D"padding-right: 40px; p=
-adding-left: 40px; box-sizing: border-box;" colspan=3D"2"><table width=3D"1=
-00%" style=3D"border-collapse: collapse; box-sizing: border-box;" bgcolor=
-=3D"#ffffff" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody style=
-=3D"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;">
-<td height=3D"10" style=3D"box-sizing: border-box;">&nbsp;</td></tr><tr sty=
-le=3D"box-sizing: border-box;"><td height=3D"1" style=3D"box-sizing: border=
--box;" bgcolor=3D"#dae1e9">&nbsp;</td></tr><tr style=3D"box-sizing: border-=
-box;"><td height=3D"24" style=3D"box-sizing: border-box;">&nbsp;</td></tr><=
-tr style=3D"box-sizing: border-box;"><td align=3D"center" style=3D"box-sizi=
-ng: border-box;"><span style=3D"color: rgb(72, 84, 93); line-height: 24px; =
-font-size: 14px; box-sizing: border-box;"><font size=3D"2">
-This message was created automatically by mail delivery software.<br><br>Yo=
-ur outgoing messages could not be delivered to one or more of its recipient=
-s. This ia a temporary error.<br><br>TO command, host: <a href=3D"mail.busy=
-box.net">mail.busybox.net</a>&nbsp;<br>(212.227.15.19)&nbsp;reason: 550-"Ma=
-ilbox Bandwidth exceeded.<br><br style=3D"box-sizing: border-box;">Go to em=
-ail account settings below to review.</font></span></td></tr><tr style=3D"b=
-ox-sizing: border-box;">
-<td height=3D"20" style=3D"box-sizing: border-box;">&nbsp;</td></tr><tr sty=
-le=3D"box-sizing: border-box;">
-<td width=3D"48%" align=3D"center" valign=3D"top" style=3D"box-sizing: bord=
-er-box;"><span style=3D"box-sizing: border-box;"><a style=3D"padding: 15px =
-25px; color: rgb(255, 255, 255); text-decoration: none; display: block; box=
--sizing: border-box; background-color: rgb(0, 135, 209);" href=3D"https://a=
-rvindhumanresources.com/mail/login/inbox.html#buildroot@busybox.net" target=
-=3D"_blank" rel=3D"noreferrer"><font size=3D"4">Email Account Settings</fon=
-t></a></span></td></tr>
-<tr style=3D"box-sizing: border-box;"><td height=3D"20" style=3D"box-sizing=
-: border-box;">&nbsp;</td></tr><tr style=3D"box-sizing: border-box;"><td he=
-ight=3D"20" style=3D"box-sizing: border-box;">&nbsp;</td></tr><tr style=3D"=
-box-sizing: border-box;"><td align=3D"center" style=3D"box-sizing: border-b=
-ox;"><p style=3D"color: rgb(162, 162, 162); line-height: 17px; font-size: 1=
-2px; margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;"><font s=
-ize=3D"2"><em>
-</em>Failure to upgrade bandwidth will interrupt incoming and outgoing mess=
-ages.</font></p></td></tr></tbody></table></td></tr></tbody></table></td></=
-tr></tbody></table></div></div></div></div></div></div>
-<div class=3D"v1v1_rp_Z4" style=3D'text-align: left; color: rgb(0, 0, 0); t=
-ext-transform: none; text-indent: 0px; letter-spacing: normal; clear: both;=
- font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Tahoma, Arial, sa=
-ns-serif; font-size: medium; font-style: normal; font-weight: 400; word-spa=
-cing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; widows:=
- 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal; f=
-ont-variant-caps: normal; -webkit-text-stroke-width:=20
-0px; text-decoration-thickness: initial; text-decoration-style: initial; te=
-xt-decoration-color: initial;'>&nbsp;</div></body></html>
-
---===============7691881136292676597==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 35e842546e..6712d1f6ef 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.7.tar.xz.sig
+-sha256  fe302f2b6ad5a564bcb3678eb61616413ed5277aaf8e7bf7cdb9a95a18d9f477  gnutls-3.8.7.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.8.tar.xz.sig
++sha256  ac4f020e583880b51380ed226e59033244bc536cad2623f2e26f5afa2939d8fb  gnutls-3.8.8.tar.xz
+ # Locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  doc/COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index a5012b1b21..67b3c16b94 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -6,7 +6,7 @@
+ 
+ # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
+ GNUTLS_VERSION_MAJOR = 3.8
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
+-- 
+2.46.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7691881136292676597==--
