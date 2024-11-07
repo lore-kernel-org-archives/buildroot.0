@@ -4,92 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65458D59F7D
-	for <buildroot@archiver.kernel.org>; Wed,  6 Nov 2024 22:38:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E8CFD59F7C
+	for <buildroot@archiver.kernel.org>; Thu,  7 Nov 2024 00:26:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AF226000A;
-	Wed,  6 Nov 2024 22:38:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D1686069A;
+	Thu,  7 Nov 2024 00:26:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hQ_P1QDehAUK; Wed,  6 Nov 2024 22:38:15 +0000 (UTC)
+ id lJtsoxnqqJx4; Thu,  7 Nov 2024 00:26:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95E796065F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D6DD606C6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95E796065F;
-	Wed,  6 Nov 2024 22:38:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E19912807
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 22:38:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D6DD606C6;
+	Thu,  7 Nov 2024 00:26:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D6CE42807
+ for <buildroot@buildroot.org>; Thu,  7 Nov 2024 00:26:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CF5466065F
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 22:38:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B60DD40713
+ for <buildroot@buildroot.org>; Thu,  7 Nov 2024 00:26:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4tattd111P1o for <buildroot@buildroot.org>;
- Wed,  6 Nov 2024 22:38:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cumF369fY19d for <buildroot@buildroot.org>;
+ Thu,  7 Nov 2024 00:26:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EB9356065E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB9356065E
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EB9356065E
- for <buildroot@buildroot.org>; Wed,  6 Nov 2024 22:38:11 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-43152b79d25so3010705e9.1
- for <buildroot@buildroot.org>; Wed, 06 Nov 2024 14:38:11 -0800 (PST)
+ client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
+ envelope-from=olteanv@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4894B40712
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4894B40712
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4894B40712
+ for <buildroot@buildroot.org>; Thu,  7 Nov 2024 00:26:00 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id
+ a640c23a62f3a-a9a139be16dso4943166b.3
+ for <buildroot@buildroot.org>; Wed, 06 Nov 2024 16:26:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1730932690; x=1731537490;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ElO/Xl2yw5S5KS/pMfEVh3eO0Yb00ycz+RSg9gPdOSE=;
- b=l+SG9EQdWCGX1S4ED5EZtUfZAfx9WQJ1rxgsUT4EJfSA4Uh5kVl60pJrKZm2VFeAq4
- /hD0qDLsTMq5TipshLN4eBhKIT6m9Srq72UGFhX1HKNVvW6vg3LgZfDVAZTXPoMZBB7s
- hwsVO23EDeHLo/QJhfKWWFDEQNYpEPxGVYHhMxUcuvKpBe+fc6xRAY+KyGxd0gHG5KhB
- osaybG+rfx/OMWKqxTaxRXozKzln1W9V0FShG8F2q6+vp6GNgvbgBcZHqfVRFF8bT1ZY
- ifAw63sHGwucrd1y9x0G6yWbPu4gSsv0yO8B3Fr7IbZUWT5Dn2OMsmDbMlt+dLcM813V
- 80eg==
-X-Gm-Message-State: AOJu0YyNPj8d9HrBkd4FZDva9wnmiaNBkr8/F6LqycT4Pg4J7oZ+WXc6
- TadPYkNPVsu9Uh9yBJnGjx3vYMvSJcNbwkPXsFRh24CcOC2y/nMji4FslXRu7VV8zKIj249gUv/
- 0
-X-Google-Smtp-Source: AGHT+IH7X41mXEBP5+5LZLT9IgJze4vvy2oZsYrVQ7hA8tllxCOAReyhPyCN2rmw8nZEp/wba9IPXA==
-X-Received: by 2002:a05:600c:3b9c:b0:431:5ce4:bcf0 with SMTP id
- 5b1f17b1804b1-4327b6fd1b9mr203043025e9.15.1730932689690; 
- Wed, 06 Nov 2024 14:38:09 -0800 (PST)
-Received: from P-NTS-Evian.home
- (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-432b053051fsm2001405e9.6.2024.11.06.14.38.08
+ d=1e100.net; s=20230601; t=1730939158; x=1731543958;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=TFi4t7G7Vm0wqrcSY5SmlzKo3WUiy9p/uOjOKET3hF4=;
+ b=ZHc9NKvUrHR4fL/r3FtsUBfzTdPA8jETyhvnfPU9BnkhJYc9HEkXGp5RSrc8oD6Cza
+ RiVTervtUFq1Xi5iq5fJoV09CPo3MjmaS2n1Jl6IOtutxgRij1J0QBuUFIbxBCFRX/DE
+ 4vWbuUU6cUig7Gqe5lTdSh8x+WGT2xCtAAIchegBjLQ/Sn7OT3FMbJ9HYI1FCD/Xyz6z
+ PkD2j4lNgRll67/g9IC7KNueL1CyypfPv2O5nG+wH4BNngEOOt9WfdHQ4+Gj+mC/q2nA
+ z5JpkA2/MvHtWMwrRrR8cq5hEcBbLiob52En6lbNs4cYiB4M/BTVoGR+SRjDgP9ICYQD
+ hK5w==
+X-Gm-Message-State: AOJu0Ywfc0U9MWz8IM/IhZUjQgcTBzb6mEeASjTxQCX4c4328eeCJTAD
+ 4VJrjQDXefVtyMBolnL4lZybKRf0E07urE1Gjz3DOid46qzPBIzW1Fi0NuEg
+X-Google-Smtp-Source: AGHT+IGOeiTBwAhd1A/7RVZi0wFOm61Dc7mzdqOBneTYm0sPgaHiYsSGCiXXHNkwlHH8+ZZdoA0wNg==
+X-Received: by 2002:a17:907:1c14:b0:a99:fbb6:4956 with SMTP id
+ a640c23a62f3a-a9ed3b641f9mr53870066b.10.1730939157298; 
+ Wed, 06 Nov 2024 16:25:57 -0800 (PST)
+Received: from skbuf ([188.25.106.17]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a9ee0ad2f76sm10441266b.89.2024.11.06.16.25.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 06 Nov 2024 14:38:09 -0800 (PST)
+ Wed, 06 Nov 2024 16:25:55 -0800 (PST)
+Date: Thu, 7 Nov 2024 02:25:52 +0200
+From: Vladimir Oltean <olteanv@gmail.com>
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>
-Date: Wed,  6 Nov 2024 23:38:06 +0100
-Message-ID: <20241106223806.3101627-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.45.0
+Cc: Brandon Maier <Brandon.Maier@collins.com>,
+ Rabeeh Khoury <rabeeh@solid-run.com>, Josua Mayer <josua@solid-run.com>,
+ Ioana Ciornei <ciorneiioana@gmail.com>
+Message-ID: <20241107002552.k6owquxxbxp3qhct@skbuf>
+References: <20241102152106.2153747-1-olteanv@gmail.com>
+ <20241102152106.2153747-2-olteanv@gmail.com>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20241102152106.2153747-2-olteanv@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1730932690; x=1731537490; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ElO/Xl2yw5S5KS/pMfEVh3eO0Yb00ycz+RSg9gPdOSE=;
- b=uwH4EdkHye2MHaj6Z2brLD65QKZp178HZpjUukvrQb5wL4RQNrOPSu7UxWUFdsIQJh
- Jk7int5wgBRPY2HaOsQ1yPXbqEdCrGHZ4h+OaOSurB+9qh6dnUUlaw8nEcH/iDVdcnXR
- N+nPUFwnoVza1I7ol+QetdGWBZItVis4VYzIQ=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=uwH4EdkH
-Subject: [Buildroot] [PATCH] support/testing/{test_edk2, test_grub,
- test_iso9660, test_fwts}: fix edk2 download
+ d=gmail.com; s=20230601; t=1730939158; x=1731543958; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+ bh=TFi4t7G7Vm0wqrcSY5SmlzKo3WUiy9p/uOjOKET3hF4=;
+ b=FI/bdsJJewUsmkKRE9LJW7NMqM1FahdIJdhFoccSnxPS9JI9/tAcPNA0vFGL6/IkL+
+ NCOxzNYP9FrS39I8cuVVaQIo7s5ur3GLs8UPV2gH2YgaMck2q8BThkoFnqI30ONQzpxp
+ TEBttxoR+eu0TsMkCzTK3SbJBTVbK8iiI91PwqTTA/1E1jLbVenres5zzVxpLK7kQ+p+
+ UQspOoBXXTnoevlQLQ7TVCwYF2VFIAuwaXNDpasJmo+VjSTck/oXbp2djEQDBPzsPd34
+ DhrntUH50JbcPaOy9I6228fpRf8JXThU6afUs+bJNrNvbd2c7xJrztdXbk2u03kqsHhT
+ +X6g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=FI/bdsJJ
+Subject: Re: [Buildroot] [PATCH 1/7] platform/layerscape: bump Linux Factory
+ tag to lf-6.6.36-2.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,269 +106,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All EDK2 releases <= edk2-stable202408 can't be fetched from git
-anymore due to a missing git submodule as reported by [1].
+On Sat, Nov 02, 2024 at 05:21:00PM +0200, Vladimir Oltean wrote:
+> diff --git a/board/freescale/ls1046a-frwy/readme.txt b/board/freescale/ls1046a-frwy/readme.txt
+> index 4d1e0e1dcd9c..3e7390daa6be 100644
+> --- a/board/freescale/ls1046a-frwy/readme.txt
+> +++ b/board/freescale/ls1046a-frwy/readme.txt
+> @@ -9,15 +9,18 @@ for more details about the board and the QorIQ Layerscape SoC, see the following
+>    - https://www.nxp.com/FRWY-LS1046A
+>    - https://www.nxp.com/docs/en/quick-reference-guide/FRWY-LS1046AGSG.pdf
+>  
+> -for the software NXP LSDK (Layerscape Software Development Kit), see
+> -  - https://www.nxp.com/docs/en/user-guide/LSDKUG_Rev21.08.pdf
+> +for the software Layerscape Linux Distribution PoC (LLDP), the latest public
+> +user guide lags several revisions behind:
+> +  - https://docs.nxp.com/bundle/LLDPUG_L6.1.36_2.1.0/page/topics/about_this_document.html
 
-Usually Buildroot fall-back using https://sources.buildroot.net thanks
-to BR2_BACKUP_SITE where a backup of the generated archive is
-available. But the BRConfigTest remove BR2_BACKUP_SITE default value
-while generating the .config used by runtime tests.
+Actually, I've found newer documentation, this will need updating.
+https://docs.nxp.com/bundle/UG10143/page/topics/about_this_document.html
+https://www.nxp.com/docs/en/user-guide/UG10143.pdf
 
-Replace the BR2_BACKUP_SITE override from BRConfigTest in order to
-continue testing EDK2 package using the usual backup site.
-
-This workaround needs to be removed with the next EDK2 version bump
-using this commit [2].
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8258995977 (TestGrubX8664EFI)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8258995962 (TestGrubi386EFI)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8258995455 (TestFwts)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8258995427 (TestIso9660Grub2Hybrid)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8258995416 (TestIso9660Grub2EFI)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8258992621 (TestEdk2)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8258990697 (TestGrubAArch64EFI)
-
-[1] https://github.com/tianocore/edk2/issues/6398
-[2] https://github.com/tianocore/edk2/commit/95d8a1c255cfb8e063d679930d08ca6426eb5701
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- support/testing/tests/boot/test_edk2.py    | 22 ++++++++
- support/testing/tests/boot/test_grub.py    | 66 ++++++++++++++++++++++
- support/testing/tests/fs/test_iso9660.py   | 44 +++++++++++++++
- support/testing/tests/package/test_fwts.py | 22 ++++++++
- 4 files changed, 154 insertions(+)
-
-diff --git a/support/testing/tests/boot/test_edk2.py b/support/testing/tests/boot/test_edk2.py
-index e6b7855284..39d7a4dbcc 100644
---- a/support/testing/tests/boot/test_edk2.py
-+++ b/support/testing/tests/boot/test_edk2.py
-@@ -35,6 +35,28 @@ class TestEdk2(infra.basetest.BRTest):
-         BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-         """
- 
-+    def __init__(self, names):
-+        """Setup common test variables."""
-+        super(TestEdk2, self).__init__(names)
-+        """All EDK2 releases <= edk2-stable202408 can't be fetched from git
-+           anymore due to a missing git submodule as reported by [1].
-+
-+           Usually Buildroot fall-back using https://sources.buildroot.net
-+           thanks to BR2_BACKUP_SITE where a backup of the generated archive
-+           is available. But the BRConfigTest remove BR2_BACKUP_SITE default
-+           value while generating the .config used by TestEdk2.
-+
-+           Replace the BR2_BACKUP_SITE override from BRConfigTest in order
-+           to continue testing EDK2 package using the usual backup site.
-+
-+           To be removed with the next EDK2 version bump using this commit
-+           [2].
-+
-+           [1] https://github.com/tianocore/edk2/issues/6398
-+           [2] https://github.com/tianocore/edk2/commit/95d8a1c255cfb8e063d679930d08ca6426eb5701
-+        """
-+        self.config = self.config.replace('BR2_BACKUP_SITE=""\n', '')
-+
-     def test_run(self):
-         hda = os.path.join(self.builddir, "images", "disk.img")
-         flash0 = os.path.join(self.builddir, "images", "SBSA_FLASH0.fd")
-diff --git a/support/testing/tests/boot/test_grub.py b/support/testing/tests/boot/test_grub.py
-index c753a16c34..c6e86f7b71 100644
---- a/support/testing/tests/boot/test_grub.py
-+++ b/support/testing/tests/boot/test_grub.py
-@@ -58,6 +58,28 @@ class TestGrubi386EFI(infra.basetest.BRTest):
-         BR2_PACKAGE_HOST_DOSFSTOOLS=y
-         """.format(infra.filepath("tests/boot/test_grub/post-build.sh"))
- 
-+    def __init__(self, names):
-+        """Setup common test variables."""
-+        super(TestGrubi386EFI, self).__init__(names)
-+        """All EDK2 releases <= edk2-stable202408 can't be fetched from git
-+           anymore due to a missing git submodule as reported by [1].
-+
-+           Usually Buildroot fall-back using https://sources.buildroot.net
-+           thanks to BR2_BACKUP_SITE where a backup of the generated archive
-+           is available. But the BRConfigTest remove BR2_BACKUP_SITE default
-+           value while generating the .config used by TestGrubi386EFI.
-+
-+           Replace the BR2_BACKUP_SITE override from BRConfigTest in order
-+           to continue testing EDK2 package using the usual backup site.
-+
-+           To be removed with the next EDK2 version bump using this commit
-+           [2].
-+
-+           [1] https://github.com/tianocore/edk2/issues/6398
-+           [2] https://github.com/tianocore/edk2/commit/95d8a1c255cfb8e063d679930d08ca6426eb5701
-+        """
-+        self.config = self.config.replace('BR2_BACKUP_SITE=""\n', '')
-+
-     def test_run(self):
-         hda = os.path.join(self.builddir, "images", "disk.img")
-         bios = os.path.join(self.builddir, "images", "OVMF.fd")
-@@ -109,6 +131,28 @@ class TestGrubX8664EFI(infra.basetest.BRTest):
-         BR2_PACKAGE_HOST_DOSFSTOOLS=y
-         """.format(infra.filepath("tests/boot/test_grub/post-build.sh"))
- 
-+    def __init__(self, names):
-+        """Setup common test variables."""
-+        super(TestGrubX8664EFI, self).__init__(names)
-+        """All EDK2 releases <= edk2-stable202408 can't be fetched from git
-+           anymore due to a missing git submodule as reported by [1].
-+
-+           Usually Buildroot fall-back using https://sources.buildroot.net
-+           thanks to BR2_BACKUP_SITE where a backup of the generated archive
-+           is available. But the BRConfigTest remove BR2_BACKUP_SITE default
-+           value while generating the .config used by TestGrubX8664EFI.
-+
-+           Replace the BR2_BACKUP_SITE override from BRConfigTest in order
-+           to continue testing EDK2 package using the usual backup site.
-+
-+           To be removed with the next EDK2 version bump using this commit
-+           [2].
-+
-+           [1] https://github.com/tianocore/edk2/issues/6398
-+           [2] https://github.com/tianocore/edk2/commit/95d8a1c255cfb8e063d679930d08ca6426eb5701
-+        """
-+        self.config = self.config.replace('BR2_BACKUP_SITE=""\n', '')
-+
-     def test_run(self):
-         hda = os.path.join(self.builddir, "images", "disk.img")
-         bios = os.path.join(self.builddir, "images", "OVMF.fd")
-@@ -158,6 +202,28 @@ class TestGrubAArch64EFI(infra.basetest.BRTest):
-         """.format(post_image=infra.filepath("tests/boot/test_grub/post-image-aarch64-efi.sh"),
-                    linux_fragment=infra.filepath("tests/boot/test_grub/linux-aarch64-efi.config"))
- 
-+    def __init__(self, names):
-+        """Setup common test variables."""
-+        super(TestGrubAArch64EFI, self).__init__(names)
-+        """All EDK2 releases <= edk2-stable202408 can't be fetched from git
-+           anymore due to a missing git submodule as reported by [1].
-+
-+           Usually Buildroot fall-back using https://sources.buildroot.net
-+           thanks to BR2_BACKUP_SITE where a backup of the generated archive
-+           is available. But the BRConfigTest remove BR2_BACKUP_SITE default
-+           value while generating the .config used by TestGrubAArch64EFI.
-+
-+           Replace the BR2_BACKUP_SITE override from BRConfigTest in order
-+           to continue testing EDK2 package using the usual backup site.
-+
-+           To be removed with the next EDK2 version bump using this commit
-+           [2].
-+
-+           [1] https://github.com/tianocore/edk2/issues/6398
-+           [2] https://github.com/tianocore/edk2/commit/95d8a1c255cfb8e063d679930d08ca6426eb5701
-+        """
-+        self.config = self.config.replace('BR2_BACKUP_SITE=""\n', '')
-+
-     def test_run(self):
-         hda = os.path.join(self.builddir, "images", "disk.img")
-         bios = os.path.join(self.builddir, "images", "QEMU_EFI.fd")
-diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
-index 3d08f2e895..6f8ca06de3 100644
---- a/support/testing/tests/fs/test_iso9660.py
-+++ b/support/testing/tests/fs/test_iso9660.py
-@@ -135,6 +135,28 @@ class TestIso9660Grub2EFI(infra.basetest.BRTest):
-         """.format(infra.filepath("conf/grub2-efi.cfg"),
-                    infra.filepath("conf/grub2.cfg"))
- 
-+    def __init__(self, names):
-+        """Setup common test variables."""
-+        super(TestIso9660Grub2EFI, self).__init__(names)
-+        """All EDK2 releases <= edk2-stable202408 can't be fetched from git
-+           anymore due to a missing git submodule as reported by [1].
-+
-+           Usually Buildroot fall-back using https://sources.buildroot.net
-+           thanks to BR2_BACKUP_SITE where a backup of the generated archive
-+           is available. But the BRConfigTest remove BR2_BACKUP_SITE default
-+           value while generating the .config used by TestIso9660Grub2EFI.
-+
-+           Replace the BR2_BACKUP_SITE override from BRConfigTest in order
-+           to continue testing EDK2 package using the usual backup site.
-+
-+           To be removed with the next EDK2 version bump using this commit
-+           [2].
-+
-+           [1] https://github.com/tianocore/edk2/issues/6398
-+           [2] https://github.com/tianocore/edk2/commit/95d8a1c255cfb8e063d679930d08ca6426eb5701
-+        """
-+        self.config = self.config.replace('BR2_BACKUP_SITE=""\n', '')
-+
-     def test_run(self):
-         exit_code = test_mount_internal_external(self.emulator,
-                                                  self.builddir, internal=True,
-@@ -163,6 +185,28 @@ class TestIso9660Grub2Hybrid(infra.basetest.BRTest):
-         """.format(infra.filepath("conf/grub2-efi.cfg"),
-                    infra.filepath("conf/grub2.cfg"))
- 
-+    def __init__(self, names):
-+        """Setup common test variables."""
-+        super(TestIso9660Grub2Hybrid, self).__init__(names)
-+        """All EDK2 releases <= edk2-stable202408 can't be fetched from git
-+           anymore due to a missing git submodule as reported by [1].
-+
-+           Usually Buildroot fall-back using https://sources.buildroot.net
-+           thanks to BR2_BACKUP_SITE where a backup of the generated archive
-+           is available. But the BRConfigTest remove BR2_BACKUP_SITE default
-+           value while generating the .config used by TestIso9660Grub2Hybrid.
-+
-+           Replace the BR2_BACKUP_SITE override from BRConfigTest in order
-+           to continue testing EDK2 package using the usual backup site.
-+
-+           To be removed with the next EDK2 version bump using this commit
-+           [2].
-+
-+           [1] https://github.com/tianocore/edk2/issues/6398
-+           [2] https://github.com/tianocore/edk2/commit/95d8a1c255cfb8e063d679930d08ca6426eb5701
-+        """
-+        self.config = self.config.replace('BR2_BACKUP_SITE=""\n', '')
-+
-     def test_run(self):
-         exit_code = test_mount_internal_external(self.emulator,
-                                                  self.builddir, internal=True,
-diff --git a/support/testing/tests/package/test_fwts.py b/support/testing/tests/package/test_fwts.py
-index 5b79a17e33..6e2b6f50ba 100644
---- a/support/testing/tests/package/test_fwts.py
-+++ b/support/testing/tests/package/test_fwts.py
-@@ -38,6 +38,28 @@ class TestFwts(infra.basetest.BRTest):
-         BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-         """
- 
-+    def __init__(self, names):
-+        """Setup common test variables."""
-+        super(TestFwts, self).__init__(names)
-+        """All EDK2 releases <= edk2-stable202408 can't be fetched from git
-+           anymore due to a missing git submodule as reported by [1].
-+
-+           Usually Buildroot fall-back using https://sources.buildroot.net
-+           thanks to BR2_BACKUP_SITE where a backup of the generated archive
-+           is available. But the BRConfigTest remove BR2_BACKUP_SITE default
-+           value while generating the .config used by TestFwts.
-+
-+           Replace the BR2_BACKUP_SITE override from BRConfigTest in order
-+           to continue testing EDK2 package using the usual backup site.
-+
-+           To be removed with the next EDK2 version bump using this commit
-+           [2].
-+
-+           [1] https://github.com/tianocore/edk2/issues/6398
-+           [2] https://github.com/tianocore/edk2/commit/95d8a1c255cfb8e063d679930d08ca6426eb5701
-+        """
-+        self.config = self.config.replace('BR2_BACKUP_SITE=""\n', '')
-+
-     def test_run(self):
-         hda = os.path.join(self.builddir, "images", "disk.img")
-         flash0 = os.path.join(self.builddir, "images", "SBSA_FLASH0.fd")
--- 
-2.45.0
-
+I've noticed patch 6/7 "board/lx2160acex7: new platform" didn't reach
+the mailing lists. I got a message it was moderated by the email server
+due to its large size. Is there something actionable for me?
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
