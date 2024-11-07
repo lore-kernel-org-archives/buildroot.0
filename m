@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FFBFD5AE72
-	for <buildroot@archiver.kernel.org>; Thu,  7 Nov 2024 08:02:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A707DD5AE70
+	for <buildroot@archiver.kernel.org>; Thu,  7 Nov 2024 08:02:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB6DF408DA;
-	Thu,  7 Nov 2024 08:02:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F47D419A8;
+	Thu,  7 Nov 2024 08:02:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MsSaLNCAuTUK; Thu,  7 Nov 2024 08:02:44 +0000 (UTC)
+ id e0mnDPOIPs7c; Thu,  7 Nov 2024 08:02:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFFB441981
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55563419A1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFFB441981;
-	Thu,  7 Nov 2024 08:02:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 120C0C0
- for <buildroot@buildroot.org>; Thu,  7 Nov 2024 08:02:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55563419A1;
+	Thu,  7 Nov 2024 08:02:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F6F8C1
+ for <buildroot@buildroot.org>; Thu,  7 Nov 2024 08:02:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D271820BC
- for <buildroot@buildroot.org>; Thu,  7 Nov 2024 08:01:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2196082112
+ for <buildroot@buildroot.org>; Thu,  7 Nov 2024 08:02:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WzIDjtvqWLyS for <buildroot@buildroot.org>;
- Thu,  7 Nov 2024 08:01:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id xmd4Ih7Ko3-G for <buildroot@buildroot.org>;
+ Thu,  7 Nov 2024 08:02:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12242820EB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 12242820EB
- for <buildroot@buildroot.org>; Thu,  7 Nov 2024 08:01:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0975D85C67; Thu,  7 Nov 2024 08:01:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 7 Nov 2024 08:56:24 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4d01cba194d1fdfbc684f37817b4c86625c438a7
-X-Git-Newrev: 580d899382e28beb518d697315e9364c4dfd73d3
-X-Patchwork-Hint: ignore
-Message-Id: <20241107080154.0975D85C67@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-zopfli: bump to version
- 0.2.3.post1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EBE188210F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBE188210F
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EBE188210F
+ for <buildroot@buildroot.org>; Thu,  7 Nov 2024 08:02:30 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 32E6A240004;
+ Thu,  7 Nov 2024 08:02:28 +0000 (UTC)
+Date: Thu, 7 Nov 2024 09:02:27 +0100
+To: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Cc: buildroot@buildroot.org
+Message-ID: <20241107090227.1ebd111d@windsurf>
+In-Reply-To: <20241105164900.205431-1-thomas.claveirole@green-communications.fr>
+References: <20241105164900.205431-1-thomas.claveirole@green-communications.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1730966548;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=gtDUtcH8KchQE1sTPTEzBpQou8p+ceNyC2NO/O+JUcM=;
+ b=E+6tdHdqqccD+dg4ZNJuewYS2jlQGBAITgPvMX98WQ99yXUHRLssrKhK84gN3KWW+tdqiL
+ F5VDeqajnKRCePS1Ldf+KvtazRZ0wfdS7wKjQItLimSQT14hibuykf0tapjnDLNXwSyuaU
+ gZW78mcb7GStD6ZYU7hlnSCjRbatc0no0jGyhzlK5sKqEEE+CAIGd/vBlOenf6fA8RVkJL
+ pkzgySEI8R7wtpmayFfx+SPR29kdrWTavpJ7a2BeiahFkhfsJmcZCi/c/cbEYyJWXSDtWM
+ mJ9xcAUp/og51R1nxVfuFtLHqMLg8qR9iWpTULwso2hQYu0qfSrATr/ym1Vm+w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=E+6tdHdq
+Subject: Re: [Buildroot] [PATCH 1/1] package/openlayers: bump to version
+ 10.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,62 +84,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=580d899382e28beb518d697315e9364c4dfd73d3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  5 Nov 2024 17:49:00 +0100
+Thomas Claveirole <thomas.claveirole@green-communications.fr> wrote:
 
-Switch from zip archive to tar.gz archive.
+> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+> ---
+>  package/openlayers/openlayers.hash | 2 +-
+>  package/openlayers/openlayers.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-zopfli/python-zopfli.hash |  4 ++--
- package/python-zopfli/python-zopfli.mk   | 12 +++---------
- 2 files changed, 5 insertions(+), 11 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/python-zopfli/python-zopfli.hash b/package/python-zopfli/python-zopfli.hash
-index c397808029..0fd009879c 100644
---- a/package/python-zopfli/python-zopfli.hash
-+++ b/package/python-zopfli/python-zopfli.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/zopfli/json
--md5  7c8761eac18a9c6c16049192fc4fe119  zopfli-0.2.3.zip
--sha256  dbc9841bedd736041eb5e6982cd92da93bee145745f5422f3795f6f258cdc6ef  zopfli-0.2.3.zip
-+md5  2c42e8d5918059b84a42c0d53c5a6852  zopfli-0.2.3.post1.tar.gz
-+sha256  96484dc0f48be1c5d7ae9f38ed1ce41e3675fd506b27c11a6607f14b49101e99  zopfli-0.2.3.post1.tar.gz
- # Locally computed sha256 checksums
- sha256  018b1cb87efdf7a04c2fcc13d57ed63f62149113fb207b27ea13430d64f13513  COPYING
-diff --git a/package/python-zopfli/python-zopfli.mk b/package/python-zopfli/python-zopfli.mk
-index df76845a7f..47a27b1084 100644
---- a/package/python-zopfli/python-zopfli.mk
-+++ b/package/python-zopfli/python-zopfli.mk
-@@ -4,18 +4,12 @@
- #
- ################################################################################
- 
--PYTHON_ZOPFLI_VERSION = 0.2.3
--PYTHON_ZOPFLI_SOURCE = zopfli-$(PYTHON_ZOPFLI_VERSION).zip
--PYTHON_ZOPFLI_SITE = https://files.pythonhosted.org/packages/92/d8/71230eb25ede499401a9a39ddf66fab4e4dab149bf75ed2ecea51a662d9e
-+PYTHON_ZOPFLI_VERSION = 0.2.3.post1
-+PYTHON_ZOPFLI_SOURCE = zopfli-$(PYTHON_ZOPFLI_VERSION).tar.gz
-+PYTHON_ZOPFLI_SITE = https://files.pythonhosted.org/packages/5e/7c/a8f6696e694709e2abcbccd27d05ef761e9b6efae217e11d977471555b62
- PYTHON_ZOPFLI_SETUP_TYPE = setuptools
- PYTHON_ZOPFLI_LICENSE = Apache-2.0
- PYTHON_ZOPFLI_LICENSE_FILES = COPYING
- PYTHON_ZOPFLI_DEPENDENCIES = host-python-setuptools-scm
- 
--define PYTHON_ZOPFLI_EXTRACT_CMDS
--	$(UNZIP) -d $(@D) $(PYTHON_ZOPFLI_DL_DIR)/$(PYTHON_ZOPFLI_SOURCE)
--	mv $(@D)/zopfli-$(PYTHON_ZOPFLI_VERSION)/* $(@D)
--	$(RM) -r $(@D)/zopfli-$(PYTHON_ZOPFLI_VERSION)
--endef
--
- $(eval $(python-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
