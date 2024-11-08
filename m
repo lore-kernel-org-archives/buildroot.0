@@ -1,95 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2473DD64070
-	for <buildroot@archiver.kernel.org>; Fri,  8 Nov 2024 17:38:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 447C9D64074
+	for <buildroot@archiver.kernel.org>; Fri,  8 Nov 2024 18:21:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8DDE42AC1;
-	Fri,  8 Nov 2024 17:38:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qo4ccDWP4xiW; Fri,  8 Nov 2024 17:38:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A57642ABF
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A57642ABF;
-	Fri,  8 Nov 2024 17:38:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 44E35C0
- for <buildroot@buildroot.org>; Fri,  8 Nov 2024 17:38:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26767811CE
- for <buildroot@buildroot.org>; Fri,  8 Nov 2024 17:38:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D4F04846F2;
+	Fri,  8 Nov 2024 18:21:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cKYTkypDNYBG for <buildroot@buildroot.org>;
- Fri,  8 Nov 2024 17:38:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52b; helo=mail-ed1-x52b.google.com;
- envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 482A681153
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 482A681153
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 482A681153
- for <buildroot@busybox.net>; Fri,  8 Nov 2024 17:38:09 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id
- 4fb4d7f45d1cf-5cec7cde922so3114598a12.3
- for <buildroot@busybox.net>; Fri, 08 Nov 2024 09:38:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1731087487; x=1731692287;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=mz3lB4UzYMc816Lek/0PVDpYC6syh0bM6Cy/d9LPiFY=;
- b=iikNu+ZEc83ej1HZo+o9YAtEGJYzXfIuJVYfWzD8bN0XlsSiuxOUalhZ7Eg8CJmOi+
- 8+j1z6MuDiX1SboQG08ktKHygxvgXrBO7Ii9xjua0zGfr1jgZfgkoSuywKdChFpak9vR
- 9Haeo+qW/BSBm8BGHaqJyPqskdyQimFaCGXpX2Dsu7P58z694tthHjS/tepeWQ9y+KUi
- JaXCgcpdbdr8EvpGTZnG2xNvpc4wj7o1pGviYVmulnSWRrGVv6u1xjA+Ry4gRewT9w/1
- ickB3i/hxRMwKuwJJf/DNX3JlbdFh+sKUBujXmsN7Qy3OWGxitmJjkm/xhJSSiAP33VY
- eg9w==
-X-Gm-Message-State: AOJu0YycX5TZRen4bBhTAgYJmKFYVtWCpV065fM5KP7lkDWoGbKI05jF
- WYNVHkbJoO/aGFM3/cEKI+YKbVhEpuPbLbuWhyL2Hcko2FP2Ioy0nolOW2C+wESvdu0rRvYvGcy
- Asw==
-X-Google-Smtp-Source: AGHT+IFnCTrW7bXkkonZZ8cpdn2UkmGTpF1xXG9i5zrk+XNLBw2K0G2/2MQS6u/88CQPVXPr4MQKOg==
-X-Received: by 2002:a17:907:26c2:b0:a9a:dac:2ab9 with SMTP id
- a640c23a62f3a-a9eefff12c6mr341110866b.42.1731087487053; 
- Fri, 08 Nov 2024 09:38:07 -0800 (PST)
-Received: from vm-2404.. (206.34.66.37.rev.sfr.net. [37.66.34.206])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a9ee0def48csm256935666b.155.2024.11.08.09.38.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 08 Nov 2024 09:38:06 -0800 (PST)
-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Fri,  8 Nov 2024 18:37:53 +0100
-Message-ID: <20241108173754.1642869-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1731087487; x=1731692287; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=mz3lB4UzYMc816Lek/0PVDpYC6syh0bM6Cy/d9LPiFY=;
- b=becI9Pie77vK/1+tSu7XWoCpBrfOxNpnknzSpnC7RUx4HFpd8l4780lzo2OqahC3PJ
- k5dZtkOKi9/vYa8QO9YWFIO94BzyltRH5qa6iL+Ckwc5bzhFU7C/LtM1OqO+INsuyNyI
- w/97y4gGEvpmNk1x0wtyZ6TVMIjCWRPjzJKZW3bFO0sL4i7VrRbafhqhpg/Cba/T9Omu
- dpY27caLXTAPf9S2pVSOLLcPKVhif92T/J49MrT+P/YHGhmpyLiF99z0KVpOelocwKNj
- 5TfulrV8Dz4acRRDDwM0UlKzz0Wl4p85xkNLkD7h400FDq3qSOQ6v4gVr5vdbN3kMZ3M
- Vqlg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gadz.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
- header.s=google header.b=becI9Pie
-Subject: [Buildroot] [PATCH] package/luaexpat: bump to version 1.5.2
+ id 4wObO_WaWkRw; Fri,  8 Nov 2024 18:21:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2EDE846EF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2EDE846EF;
+	Fri,  8 Nov 2024 18:21:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 36239C2
+ for <buildroot@buildroot.org>; Fri,  8 Nov 2024 18:21:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2382C4321B
+ for <buildroot@buildroot.org>; Fri,  8 Nov 2024 18:21:54 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E5Od-iKONCEl for <buildroot@buildroot.org>;
+ Fri,  8 Nov 2024 18:21:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11DB043211
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11DB043211
+ for <buildroot@buildroot.org>; Fri,  8 Nov 2024 18:21:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EAE1085D63; Fri,  8 Nov 2024 18:21:52 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 8 Nov 2024 19:19:07 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 47fc9e5509837260310cd7e41335fade29b587b1
+X-Git-Newrev: d242ab6b8e2805ee173de54bec47dbbcbcecc939
+X-Patchwork-Hint: ignore
+Message-Id: <20241108182152.EAE1085D63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/postgis: bump to version 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,47 +58,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-diff LICENSE:
-    -Copyright (C) 2003-2007 The Kepler Project, 2013-2022 Matthew Wild
-    +Copyright (C) 2003-2007 The Kepler Project, 2013-2024 Matthew Wild
+commit: https://git.buildroot.net/buildroot/commit/?id=d242ab6b8e2805ee173de54bec47dbbcbcecc939
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Changelog: https://github.com/postgis/postgis/blob/3.5.0/NEWS
+
+Licenses updates:
+- extensions/address_goecoder is released under MIT License
+ https://github.com/postgis/postgis/commit/12b699aebaa4cb817adacfba8ea48dba2d5204f5
+
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+[Julien: fixed Changelog link]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/luaexpat/luaexpat.hash | 4 ++--
- package/luaexpat/luaexpat.mk   | 2 +-
+ package/postgis/postgis.hash | 4 ++--
+ package/postgis/postgis.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/luaexpat/luaexpat.hash b/package/luaexpat/luaexpat.hash
-index 621293a0b..91fc9177c 100644
---- a/package/luaexpat/luaexpat.hash
-+++ b/package/luaexpat/luaexpat.hash
+diff --git a/package/postgis/postgis.hash b/package/postgis/postgis.hash
+index 7e62e8e168..9e283f5ac7 100644
+--- a/package/postgis/postgis.hash
++++ b/package/postgis/postgis.hash
 @@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256  eb7abc4cc39dd50eecb30896686bac84e66fd3c0774d0749b391e7ac5d222f45  luaexpat-1.5.1-1.src.rock
--sha256  7e6a727e5b57cca713a2f2633f05d7e0cc1e261cc6a7613bbe266e625b2f14da  luaexpat/LICENSE
-+sha256  a88ac147d2ceaf168fddedd2245928f35d4c0218094142b054db7e9bae0b5b82  luaexpat-1.5.2-1.src.rock
-+sha256  9a169eddcc5b1f05e85659a0ba5403a7e3804bc3b6e60b730251d963e1a9ac10  luaexpat/LICENSE
-diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
-index 73675a8ee..86d800d69 100644
---- a/package/luaexpat/luaexpat.mk
-+++ b/package/luaexpat/luaexpat.mk
+ # Locally calculated
+-sha256  c8c874c00ba4a984a87030af6bf9544821502060ad473d5c96f1d4d0835c5892  postgis-3.4.2.tar.gz
+-sha256  2a3bde0a77224496ea6d8efa686da7e29ab0dd6b1a8f90ba12beaf7ae28e878a  LICENSE.TXT
++sha256  ca698a22cc2b2b3467ac4e063b43a28413f3004ddd505bdccdd74c56a647f510  postgis-3.5.0.tar.gz
++sha256  81749eea887e78402c9b85896cd629b155bc29256927f818f01001f038146391  LICENSE.TXT
+diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
+index 867aa4caea..a2b121e6f5 100644
+--- a/package/postgis/postgis.mk
++++ b/package/postgis/postgis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUAEXPAT_VERSION = 1.5.1-1
-+LUAEXPAT_VERSION = 1.5.2-1
- LUAEXPAT_SUBDIR = luaexpat
- LUAEXPAT_LICENSE = MIT
- LUAEXPAT_LICENSE_FILES = $(LUAEXPAT_SUBDIR)/LICENSE
--- 
-2.43.0
-
+-POSTGIS_VERSION = 3.4.2
++POSTGIS_VERSION = 3.5.0
+ POSTGIS_SITE = https://download.osgeo.org/postgis/source
+ # parallel build issues
+ POSTGIS_MAKE = $(MAKE1)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
