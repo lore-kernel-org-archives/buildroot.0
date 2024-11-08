@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2DE5D64089
-	for <buildroot@archiver.kernel.org>; Fri,  8 Nov 2024 20:55:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4E3AD64089
+	for <buildroot@archiver.kernel.org>; Fri,  8 Nov 2024 20:57:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B34142B31;
-	Fri,  8 Nov 2024 20:55:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90838611D5;
+	Fri,  8 Nov 2024 20:57:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rRJKk2oqBKvC; Fri,  8 Nov 2024 20:55:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sG4_9cbPelBC; Fri,  8 Nov 2024 20:57:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36F1C42B2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C52860619
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36F1C42B2E;
-	Fri,  8 Nov 2024 20:55:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1BA2AC2
- for <buildroot@buildroot.org>; Fri,  8 Nov 2024 20:55:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C52860619;
+	Fri,  8 Nov 2024 20:57:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6EFE8C2
+ for <buildroot@buildroot.org>; Fri,  8 Nov 2024 20:57:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF99E820CB
- for <buildroot@buildroot.org>; Fri,  8 Nov 2024 20:55:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6B29C84538
+ for <buildroot@buildroot.org>; Fri,  8 Nov 2024 20:57:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A3_Ny5_0g9uM for <buildroot@buildroot.org>;
- Fri,  8 Nov 2024 20:55:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37D3580C10
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 37D3580C10
- for <buildroot@buildroot.org>; Fri,  8 Nov 2024 20:55:29 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2C94E85D9F; Fri,  8 Nov 2024 20:55:29 +0000 (UTC)
+ id hwL2JeQXBePt for <buildroot@buildroot.org>;
+ Fri,  8 Nov 2024 20:56:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 59E3A8453C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59E3A8453C
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 59E3A8453C
+ for <buildroot@buildroot.org>; Fri,  8 Nov 2024 20:56:58 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 84F2E5FFC0;
+ Fri,  8 Nov 2024 21:56:53 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:33076])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 08 Nov 2024 21:56:53 +0100
+MIME-Version: 1.0
+Date: Fri, 08 Nov 2024 21:56:53 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 8 Nov 2024 21:51:10 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d242ab6b8e2805ee173de54bec47dbbcbcecc939
-X-Git-Newrev: 9e84f38be87393f5b0d0298f762bfcaf0f76f120
-X-Patchwork-Hint: ignore
-Message-Id: <20241108205529.2C94E85D9F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ffmpeg: fix build on riscv32
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+In-Reply-To: <20241103101141.964221-1-bernd@kuhls.net>
+References: <20241103101141.964221-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <a1d3344315d2847c2bc055a6a927087f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1731099415;
+ bh=4D5sC0VugU+MTQYrApsfotKA/nC2B0sds9u7AsY3XXU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=kOwBiLx2HEz2UO6C6rZ465TTMX1PDOiOW/qptfbVDZzNkyoUJjKDmPWc2DsxGpNLZ
+ NRNN2t67vKZcpOeYcAV2xquVAXn4a1qDXaTv3e9hpsxVeTQPr4k9ohSjI5405CAeSq
+ SwlId6tDhUnIUkFXVEbZnxzpXZ+AP8+cbnb6QCetI8F5QhNWFwIkw5vmb8GWpAJLp2
+ HjM+dG5yagwbk4aLIaCfezTRsTiVfTmtEAnO5vcqdtE7AOSWA6VHdqEyk7nn1LWasH
+ +V7LxauiPIIbN1uAtlrGd/KWJo9tTO1huJ0vUBXfTRuLLtXTy87Mf8nspSoc0KDEck
+ CIyUsQsRa3xLA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=kOwBiLx2
+Subject: Re: [Buildroot] [PATCH 1/1] package/ffmpeg: fix build on riscv32
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,47 +82,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e84f38be87393f5b0d0298f762bfcaf0f76f120
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/11/2024 11:11, Bernd Kuhls wrote:
+> Ported patch from OpenEmbedded:
+> https://github.com/openembedded/openembedded-core/commit/010b068bcc126dbbc1e2032997e8d83360a7de35
+> 
+> "ffmpeg 6.0 has added assembly routines which uses rv64i ISA
+> unconditionally, ideally it should check for ISA before using those
+> instructions."
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/8a7082a0f24ebcf264aeac5e0fea704dc6a6bb1c/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Ported patch from OpenEmbedded:
-https://github.com/openembedded/openembedded-core/commit/010b068bcc126dbbc1e2032997e8d83360a7de35
+Applied to master, thanks.
 
-"ffmpeg 6.0 has added assembly routines which uses rv64i ISA
-unconditionally, ideally it should check for ISA before using those
-instructions."
-
-Fixes:
-https://autobuild.buildroot.org/results/8a7082a0f24ebcf264aeac5e0fea704dc6a6bb1c/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/ffmpeg/ffmpeg.mk | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index a010c0168c..1e18b5e2da 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -529,6 +529,11 @@ else
- FFMPEG_CONF_OPTS += --disable-altivec
- endif
- 
-+# Fix build failure on several missing assembly instructions
-+ifeq ($(BR2_RISCV_32),y)
-+FFMPEG_CONF_OPTS += --disable-rvv --disable-asm
-+endif
-+
- # Uses __atomic_fetch_add_4
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- FFMPEG_CONF_OPTS += --extra-libs=-latomic
+> ---
+>  package/ffmpeg/ffmpeg.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+> index a010c0168c..1e18b5e2da 100644
+> --- a/package/ffmpeg/ffmpeg.mk
+> +++ b/package/ffmpeg/ffmpeg.mk
+> @@ -529,6 +529,11 @@ else
+>  FFMPEG_CONF_OPTS += --disable-altivec
+>  endif
+> 
+> +# Fix build failure on several missing assembly instructions
+> +ifeq ($(BR2_RISCV_32),y)
+> +FFMPEG_CONF_OPTS += --disable-rvv --disable-asm
+> +endif
+> +
+>  # Uses __atomic_fetch_add_4
+>  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+>  FFMPEG_CONF_OPTS += --extra-libs=-latomic
+> --
+> 2.39.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
