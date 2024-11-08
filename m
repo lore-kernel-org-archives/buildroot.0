@@ -4,97 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F3E4D64099
-	for <buildroot@archiver.kernel.org>; Fri,  8 Nov 2024 23:13:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BB52D64099
+	for <buildroot@archiver.kernel.org>; Fri,  8 Nov 2024 23:13:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D0EC960898;
-	Fri,  8 Nov 2024 23:13:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3900D6060C;
+	Fri,  8 Nov 2024 23:13:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eNLWHoSdC88P; Fri,  8 Nov 2024 23:13:08 +0000 (UTC)
+ id v3V2hUW6cKiE; Fri,  8 Nov 2024 23:13:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFB6560A77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31DED60617
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFB6560A77;
-	Fri,  8 Nov 2024 23:13:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 078ADC2
- for <buildroot@buildroot.org>; Fri,  8 Nov 2024 23:13:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 31DED60617;
+	Fri,  8 Nov 2024 23:13:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8705BC2
+ for <buildroot@buildroot.org>; Fri,  8 Nov 2024 23:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD1674249E
- for <buildroot@buildroot.org>; Fri,  8 Nov 2024 23:13:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 73CFA4046B
+ for <buildroot@buildroot.org>; Fri,  8 Nov 2024 23:13:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SW57Sgy_2DFO for <buildroot@buildroot.org>;
- Fri,  8 Nov 2024 23:13:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hFSSXVew4MOw for <buildroot@buildroot.org>;
+ Fri,  8 Nov 2024 23:13:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::f44; helo=mail-qv1-xf44.google.com;
+ client-ip=2607:f8b0:4864:20::742; helo=mail-qk1-x742.google.com;
  envelope-from=git@jdknight.me; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 35EE542490
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35EE542490
-Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com
- [IPv6:2607:f8b0:4864:20::f44])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 35EE542490
- for <buildroot@buildroot.org>; Fri,  8 Nov 2024 23:13:04 +0000 (UTC)
-Received: by mail-qv1-xf44.google.com with SMTP id
- 6a1803df08f44-6cbf2fc28feso16028246d6.0
- for <buildroot@buildroot.org>; Fri, 08 Nov 2024 15:13:04 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1A9A840572
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A9A840572
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com
+ [IPv6:2607:f8b0:4864:20::742])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1A9A840572
+ for <buildroot@buildroot.org>; Fri,  8 Nov 2024 23:13:38 +0000 (UTC)
+Received: by mail-qk1-x742.google.com with SMTP id
+ af79cd13be357-7b1474b1377so177719785a.2
+ for <buildroot@buildroot.org>; Fri, 08 Nov 2024 15:13:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1731107583; x=1731712383;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=NCMWmpccVzj7ax7arfE44EAlwxOyFNrUD4ZZoFXr/7I=;
- b=D+0JQ7P4kFmQR5dYCA5qzlizrx1u9nmZgLc2mhSnrzeZ9VFps8atmdgSryS5Gya5Hv
- QNJvPKbYYJjEBJb2lKZOwm5jS27cW5cOwmkGEcmV0dhrVUwgIg4ZaNMYAUfuwH/jFHQm
- mKmr3KjEteUoisyQFACGpf1905Vt2fRrxXWmXo+gR1vFcbmOzjgqa5A3mzY8zYQNT7rh
- cwGUZo8fCshSA58E/U/zgJzqhw74GFGb0bbIAhsKAFnKZH6vIbZRh0EMtEw4lWnAZKve
- vsaTxJA8agDzeoTV1mKBaZgC6KyK+oL9fIzHV1bPvauco1/NFee3n/hpx7yWhdHBy1Ep
- zgtg==
-X-Gm-Message-State: AOJu0Yx8uzBj9Gs5arTRwSJ9qGgnr0t2AUFvD+WOvlkELXLRccVnCxnc
- j/wCvnhTRZzFV1nIYUt2IomJBqHFlGcapeEEo6ct9i4vyHx3xevLWgaTL+Lg5x56EcPl2ysN2AX
- TQH2kS+xl
-X-Google-Smtp-Source: AGHT+IEIK08AxBeDPDWiKUK//vjh1c9xP96tkkyAY9XrLmLcf3xlirmKVvHDwm+WA2om1pej4InzfA==
-X-Received: by 2002:a05:6214:5992:b0:6cb:ef96:c79e with SMTP id
- 6a1803df08f44-6d39e1cebc5mr63129816d6.34.1731107583359; 
- Fri, 08 Nov 2024 15:13:03 -0800 (PST)
+ d=1e100.net; s=20230601; t=1731107617; x=1731712417;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=gV0q91YFHhtsHom51nHsNB6Qhm84KO4bDWDCvJ5F1Ys=;
+ b=fsk6WoqIxYIlaHmIoMApn1o58fWsq96uYx0q+/Zi2Y3Bi4yDbdqsE5BuikpEfO2V6j
+ a9k6vfjNRXE68YGbqCIMrfoMgp9WyPccpqp8o8t50hO+OCl7KqcwJMkLmd0pLq58u9X+
+ c30u6J0In88/uw2M3UwU1B43I6Wh7NxV3mOfLlF5MWV4nYUacH0we8tv+6S+p6tpxgfL
+ tMYbKGknjDeOOMW7fFZrYrg/2M25n1z9Xf0buz/XZHfdCNgAkMFwhi4b7tK+SR0ZZlvK
+ By7O+0ZwVTrhfa4J6Wt1bAZODKds1LV+/Smv1tCzASJ/864ykRDk+uu0bOg9Se3071dn
+ m+hw==
+X-Gm-Message-State: AOJu0Yxx5tiPLZ/WgQQqMXZJWtlR/JPIi6XFXNk6Tks1WQ4GisVzmbvy
+ B8T+SJ3978ew9sDgA+UeDWUVxwiK4IZTLLeDqvJn3tBsk1pKT00/jvABGNxrQaspmhryaXAb5CZ
+ MN0Jr7HaB
+X-Google-Smtp-Source: AGHT+IH9l7/6QpZxZ3q8lJo2COLHpk57NDwlyafovw19ivnck10x9J6pz8uEfLB8rFJROLNiSerbpQ==
+X-Received: by 2002:a05:620a:2444:b0:7b1:522a:b07 with SMTP id
+ af79cd13be357-7b331e60e2fmr555528685a.61.1731107617312; 
+ Fri, 08 Nov 2024 15:13:37 -0800 (PST)
 Received: from localhost.localdomain
  (bras-base-jkvlon0513w-grc-47-76-71-165-74.dsl.bell.ca. [76.71.165.74])
  by smtp.gmail.com with ESMTPSA id
- af79cd13be357-7b32ac88721sm204327085a.65.2024.11.08.15.13.01
+ af79cd13be357-7b32ac88721sm204327085a.65.2024.11.08.15.13.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 08 Nov 2024 15:13:02 -0800 (PST)
+ Fri, 08 Nov 2024 15:13:36 -0800 (PST)
 From: James Knight <git@jdknight.me>
 To: buildroot@buildroot.org
 Cc: James Knight <git@jdknight.me>
-Date: Fri,  8 Nov 2024 18:12:35 -0500
-Message-ID: <20241108231236.2838-1-git@jdknight.me>
+Date: Fri,  8 Nov 2024 18:12:36 -0500
+Message-ID: <20241108231236.2838-2-git@jdknight.me>
 X-Mailer: git-send-email 2.46.2.windows.1
+In-Reply-To: <20241108231236.2838-1-git@jdknight.me>
+References: <20241108231236.2838-1-git@jdknight.me>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=jdknight-me.20230601.gappssmtp.com; s=20230601; t=1731107583; x=1731712383;
+ d=jdknight-me.20230601.gappssmtp.com; s=20230601; t=1731107617; x=1731712417;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=NCMWmpccVzj7ax7arfE44EAlwxOyFNrUD4ZZoFXr/7I=;
- b=jDSscpFWqGVOcfttlUp2Yo2wINWnvobSIxzZXeCToMeoSdNDAlc/QGnLUmstTatKuM
- fELCkgU6OrUfqrza/+poclX9br2KvmhDpLfJ+dhRByT3Zpzm13ILLvvyad2DEPmtNCrr
- VqfJDFz/mdyFsWE7W11phKbH2AxU5DxEvnWGh7Khao+t/OTqrS5FlJ7TCCsmO4g2QmWu
- A4K9ZK7ZhJBDv/nUr55UOIi7k5bz4P2KlcmJ4aXUgmJZo9hJ2bd5X615RYpQDCd0iHCO
- nbSu8GG0bbr1wFgbWHbYUfuuWAIaYIXuY8Wx8EM2ohgD/my0EU/T6pv+Gqo4EP9R0F/k
- a7Bw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=gV0q91YFHhtsHom51nHsNB6Qhm84KO4bDWDCvJ5F1Ys=;
+ b=ksK3A6g4UJPhfMFQxNNX0zmTzJJBCkOyZmRjxVBlnLno7DeOI/CdheG9wBXYyuN3rC
+ 7dRq+nroQzH9W4FI70AS9AB0h2R7dhRyJHsjTkTqbawyUJaDI2NRsorxgYz4kNoC1+PC
+ fWjNtbiRF/APWjwIqzoDBttp1Jrvu5SQ6WUH6LyUm4QFkLTQ/zeP/o2XR5yzfCogx6Y6
+ CHtbJhtIaGWRcoKhjxVjnJYbD0iuTIpAdaZUrZTfBVq61Tw75ydu1en1exZ+86msR1mY
+ dfmAP+Y8qh36P7x3mOM5tDms++cBYVHNrsvQVSUVqtYUe/FyFE5Iiq9K9hpbOChysq/i
+ btiA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=jdknight.me
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=jdknight-me.20230601.gappssmtp.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=jdknight-me.20230601.gappssmtp.com
  header.i=@jdknight-me.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=jDSscpFW
-Subject: [Buildroot] [PATCH v2 1/2] linux: support each linux latest lts
- version
+ header.s=20230601 header.b=ksK3A6g4
+Subject: [Buildroot] [PATCH v2 2/2] support: add a kernel version
+ configuration helper script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,154 +113,173 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Provides support for a board configuration to use the latest version of
-the Linux kernel for a specific LTS. While the existing
-`BR2_LINUX_KERNEL_LATEST_VERSION` allows desired configurations to roll
-with a latest stable release, in some scenarios, a user may want the
-same ability but for a specific Linux LTS. For example, if a user is
-using an external toolchain that is also tied to a specific Linux LTS.
+Provides a helper script which can be used to quickly synchronize the
+kernel versions defined in the Linux's `Config.in` file based on the
+contents populated inside `linux.hash`.
 
-Having these new options avoids the need for rolling configuration to
-rely on `BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE` with the
-`BR2_DOWNLOAD_FORCE_CHECK_HASHES` option disabled.
+The goal of this script is to help the maintenance effort required when
+possibly supporting all active Linux LTS versions in the tree at a
+given time.
 
 Signed-off-by: James Knight <git@jdknight.me>
 ---
 Changes v1 -> v2:
-  - Updated versions to use latest versions tracked in `linux.hash`.
+  - Introduced in the v2 of this series.
 
-See also: https://lore.kernel.org/buildroot/CALAjcgXZKYjpsFV1E7Ry-0N5NEGV01hebSb8tEgoAtHvkfvCOA@mail.gmail.com/
+This is optional. No worries if not desired.
 ---
- linux/Config.ext.in                  |  4 +--
- linux/Config.in                      | 45 ++++++++++++++++++++++++++++
- linux/linux.mk                       |  2 +-
- package/linux-headers/Config.in.host |  4 +--
- 4 files changed, 48 insertions(+), 7 deletions(-)
+ support/scripts/sync-kernel-versions.py | 142 ++++++++++++++++++++++++
+ 1 file changed, 142 insertions(+)
+ create mode 100755 support/scripts/sync-kernel-versions.py
 
-diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-index 3cbf42d3447615105a67ca369fd728784c58ca8b..fe4abd779cfbb969dd1a865821b78fd62c7ca425 100644
---- a/linux/Config.ext.in
-+++ b/linux/Config.ext.in
-@@ -48,9 +48,7 @@ comment "xenomai needs a uClibc or glibc toolchain w/ threads"
- # RTAI
- config BR2_LINUX_KERNEL_EXT_RTAI
- 	bool "RTAI Real-time patch"
--	depends on !BR2_LINUX_KERNEL_LATEST_VERSION
--	depends on !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	depends on !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-+	depends on !BR2_LINUX_KERNEL_LATEST_SERIES
- 	select BR2_PACKAGE_RTAI
- 	help
- 	  RTAI Kernel part.
-diff --git a/linux/Config.in b/linux/Config.in
-index 16c015b41261e0a12940c1cc1cca4745211b56b9..667601d6f010b6bd7fa1c1481ec54eb19043766a 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -16,6 +16,12 @@ if BR2_LINUX_KERNEL
- config BR2_LINUX_NEEDS_MODULES
- 	bool
- 
-+# Track if the selected kernel version is a "latest" series. This can be
-+# used handle certain configurations such as preventing the use of the
-+# RTAI Real-time patch.
-+config BR2_LINUX_KERNEL_LATEST_SERIES
-+	bool
+diff --git a/support/scripts/sync-kernel-versions.py b/support/scripts/sync-kernel-versions.py
+new file mode 100755
+index 0000000000000000000000000000000000000000..2684b052657b0b98ac0265cd1b74a514d03ba9ca
+--- /dev/null
++++ b/support/scripts/sync-kernel-versions.py
+@@ -0,0 +1,142 @@
++#!/usr/bin/env python3
++#
++# Provides a script to allow the automatic updating of a Linux
++# package's `Config.in` file based on the version information detailed
++# in a `linux.hash` file.
 +
- #
- # Version selection. We provide the choice between:
- #
-@@ -29,10 +35,42 @@ choice
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (6.11)"
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11 if BR2_KERNEL_HEADERS_AS_KERNEL
- 
-+config BR2_LINUX_KERNEL_LATEST_LTS_6_6_VERSION
-+	bool "Latest LTS 6.6 version"
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6 if BR2_KERNEL_HEADERS_AS_KERNEL
++from pathlib import Path
++import argparse
++import re
 +
-+config BR2_LINUX_KERNEL_LATEST_LTS_6_1_VERSION
-+	bool "Latest LTS 6.1 version"
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1 if BR2_KERNEL_HEADERS_AS_KERNEL
 +
-+config BR2_LINUX_KERNEL_LATEST_LTS_5_15_VERSION
-+	bool "Latest LTS 5.15 version"
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15 if BR2_KERNEL_HEADERS_AS_KERNEL
++# searching for a version pattern inside a `linux.hash` file
++LINUX_VERSION_PATTERN = r'.*-([1-9]+.*)\.t.*'
 +
-+config BR2_LINUX_KERNEL_LATEST_LTS_5_10_VERSION
-+	bool "Latest LTS 5.10 version"
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
 +
-+config BR2_LINUX_KERNEL_LATEST_LTS_5_4_VERSION
-+	bool "Latest LTS 5.4 version"
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 if BR2_KERNEL_HEADERS_AS_KERNEL
++def main():
++    # argument parsing
++    parser = argparse.ArgumentParser()
++    parser.add_argument('--dry-run', action='store_true',
++                        help='Do not change any files')
++    parser.add_argument('--verbose', action='store_true',
++                        help='Output additional information')
++    args = parser.parse_args()
 +
-+config BR2_LINUX_KERNEL_LATEST_LTS_4_19_VERSION
-+	bool "Latest LTS 4.19 version"
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19 if BR2_KERNEL_HEADERS_AS_KERNEL
++    # helpers
++    def verbose(msg):
++        if args.verbose:
++            print(f'(verbose) {msg}')
 +
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (5.10.162-cip24)"
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
-@@ -53,6 +91,7 @@ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	bool "Latest CIP RT SLTS version (5.10.162-cip24-rt10)"
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
- 	help
- 	  Same as the CIP version, but this is the PREEMPT_RT realtime
-@@ -135,6 +174,12 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "6.11.6" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.6.59" if BR2_LINUX_KERNEL_LATEST_LTS_6_6_VERSION
-+	default "6.1.115" if BR2_LINUX_KERNEL_LATEST_LTS_6_1_VERSION
-+	default "5.15.170" if BR2_LINUX_KERNEL_LATEST_LTS_5_15_VERSION
-+	default "5.10.228" if BR2_LINUX_KERNEL_LATEST_LTS_5_10_VERSION
-+	default "5.4.284" if BR2_LINUX_KERNEL_LATEST_LTS_5_4_VERSION
-+	default "4.19.322" if BR2_LINUX_KERNEL_LATEST_LTS_4_19_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 1d3d8fffa6085c58d024a8519377365d19766521..477d1e16143bea2f106e7f3f9212d0efefc98db1 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -49,7 +49,7 @@ LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v$(firstword $(subst ., ,$(LINUX_
- endif
- endif
- 
--ifeq ($(BR2_LINUX_KERNEL)$(BR2_LINUX_KERNEL_LATEST_VERSION),y)
-+ifeq ($(BR2_LINUX_KERNEL)$(BR2_LINUX_KERNEL_LATEST_SERIES),y)
- BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
- endif
- 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2f7a731d369ad7ac8f2a353fefa1a94c3740e8b1..d47f9fde29e327a05287aa874a46337963f620aa 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -114,9 +114,7 @@ endif
- choice
- 	bool "Custom kernel headers series"
- 	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
--	depends on !BR2_LINUX_KERNEL_LATEST_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
--	depends on !BR2_LINUX_KERNEL_LATEST_CIP_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
--	depends on !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
-+	depends on !BR2_LINUX_KERNEL_LATEST_SERIES || !BR2_KERNEL_HEADERS_AS_KERNEL
- 	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL || \
- 		   BR2_KERNEL_HEADERS_CUSTOM_TARBALL || BR2_KERNEL_HEADERS_CUSTOM_GIT
- 	help
++    # find the linux package folder
++    br_dir = Path(__file__).parent.parent.parent
++
++    linux_pkg_dir = br_dir / 'linux'
++    if not linux_pkg_dir.is_dir():
++        print('unable to find the linux package folder')
++        return 1
++
++    linux_conf = linux_pkg_dir / 'Config.in'
++    if not linux_conf.is_file():
++        print('unable to find the linux configuration file')
++        return 1
++
++    linux_hash = linux_pkg_dir / 'linux.hash'
++    if not linux_hash.is_file():
++        print('unable to find the linux hash file')
++        return 1
++
++    # extract expected linux entries from the hash file
++    try:
++        with linux_hash.open(encoding='utf-8') as f:
++            raw_hash_output = f.readlines()
++    except OSError as e:
++        print(f'error reading file {linux_hash}: {e}')
++        return 1
++
++    entries = {}
++    for hash_entry in raw_hash_output:
++        if hash_entry.startswith('sha'):
++            _, _, fname = hash_entry.strip().split(maxsplit=2)
++            if fname.startswith('linux-'):
++                verbose(f'detected linux entry: {fname}')
++
++                match = re.search(LINUX_VERSION_PATTERN, fname)
++                if match:
++                    vnum = match.group(1)
++                    ventry = extract_ventry(vnum)
++                    entries[ventry] = vnum
++                    verbose(f'detected linux version ({fname}): {vnum}')
++                else:
++                    verbose(f'unable to detect linux version: {fname}')
++
++    # read the existing Linux configuration file
++    conf_contents = []
++    has_updated = False
++    process_cfg = None
++    try:
++        with linux_conf.open(encoding='utf-8') as f:
++            lines = f.read().splitlines()
++            for line in lines:
++                # wait until we are processing the kernel version section
++                if process_cfg is None:
++                    if 'config BR2_LINUX_KERNEL_VERSION' in line:
++                        process_cfg = True
++
++                # if we are processing, check each version entry for any
++                # updates that are required
++                elif process_cfg:
++                    # stop if the section is done
++                    if not line:
++                        process_cfg = False
++                    # check if this is a linux configuration entry that
++                    # might need to be updated
++                    elif 'default "' in line:
++                        front, raw_version, tail = line.split(maxsplit=2)
++                        vnum = raw_version.replace('"', '')
++                        if '.' in vnum:
++                            ventry = extract_ventry(vnum)
++                            if ventry in entries:
++                                new_vnum = entries[ventry]
++                                # if the version is outdated, replace the line
++                                if vnum != new_vnum:
++                                    print(f'Sync: {vnum} -> {new_vnum}')
++                                    line = f'\t{front} "{new_vnum}" {tail}'
++                                    has_updated = True
++
++                conf_contents.append(line)
++
++    except OSError as e:
++        print(f'error reading file {linux_conf}: {e}')
++        return 1
++
++    # update the linux configuration file if we have new changes
++    if has_updated and not args.dry_run:
++        print(f'Updating: {linux_conf}')
++        try:
++            with linux_conf.open('w', encoding='utf-8', newline='') as f:
++                for line in conf_contents:
++                    f.write(f'{line}\n')
++
++        except OSError as e:
++            print(f'error writing file {linux_conf}: {e}')
++            return 1
++
++    if not has_updated:
++        print('No outdated versions.')
++
++    return 0
++
++
++def extract_ventry(vnum):
++    vmaj, vmin, _ = vnum.split('.', maxsplit=2)
++
++    ventry = f'{vmaj}.{vmin}'
++    if '-' in vnum:
++        _, postfix = vnum.split('-', maxsplit=1)
++        ventry += f'-{postfix}'
++
++    return ventry
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
 -- 
 2.46.2.windows.1
 
