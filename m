@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1996BD5E376
-	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 17:12:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 779BDD5E376
+	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 17:12:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE3FE8461D;
-	Sat,  9 Nov 2024 17:12:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fxRMcLIZ8dTH; Sat,  9 Nov 2024 17:12:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9DD784637
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D9DD784637;
-	Sat,  9 Nov 2024 17:12:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3C3F5DAE
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7864542B26
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42E9042C19;
+	Sat,  9 Nov 2024 17:12:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2P9eQ5tIeiqB for <buildroot@buildroot.org>;
- Sat,  9 Nov 2024 17:12:26 +0000 (UTC)
+ id g2tCf5F18Rmg; Sat,  9 Nov 2024 17:12:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AC1742C1B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0AC1742C1B;
+	Sat,  9 Nov 2024 17:12:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4BD11D92
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5629142BD5
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:29 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lkRQiZm1feob for <buildroot@buildroot.org>;
+ Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 803B742C02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A35142BFF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 803B742C02
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A35142BFF
  for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7C2F785ECF; Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
+ id 7198885B25; Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Nov 2024 18:10:03 +0100
+Date: Sat, 9 Nov 2024 18:03:49 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 29eb209010d48500f66c2f2b642beabcd1017eee
-X-Git-Newrev: 24df18a14879ac27bf72aac1e57b49e5d2d49432
+X-Git-Oldrev: b9d4a86552cdc28cdbd2bd4dc9c4fb1757a0e597
+X-Git-Newrev: 29eb209010d48500f66c2f2b642beabcd1017eee
 X-Patchwork-Hint: ignore
-Message-Id: <20241109171225.7C2F785ECF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/python3: bump
- version to 3.12.7
+Message-Id: <20241109171225.7198885B25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] DEVELOPERS: drop my
+ packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,47 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24df18a14879ac27bf72aac1e57b49e5d2d49432
+commit: https://git.buildroot.net/buildroot/commit/?id=29eb209010d48500f66c2f2b642beabcd1017eee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Release notes:
-https://blog.python.org/2024/10/python-3127-released.html
+I still follow Buildroot development and use it for some personal
+projects, but no longer have the time to be an active contributor.
+Some of these are important defconfigs and packages to have up-to-date
+in Buildroot, and mostly other developers have been doing that work, so
+I am dropping them so that someone from the active contributors can be
+the maintainer contact for them.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b6bc0912720206fa22a250b67f6a4d75bcdf8141)
+(cherry picked from commit 1dc370cc9009b5362aad5e2e481703f0ca76b4a2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 0cd852c325..ad73a85a7f 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-3126/
--md5  cb669514937d3e894e74081627722aa5  Python-3.12.6.tar.xz
-+# From https://www.python.org/downloads/release/python-3127/
-+md5  c6c933c1a0db52597cb45a7910490f93  Python-3.12.7.tar.xz
- # Locally computed
--sha256  1999658298cf2fb837dffed8ff3c033ef0c98ef20cf73c5d5f66bed5ab89697c  Python-3.12.6.tar.xz
-+sha256  24887b92e2afd4a2ac602419ad4b596372f67ac9b077190f459aba390faf5550  Python-3.12.7.tar.xz
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 4b328f70fb..d029d3dbbc 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8aee8d18ff..d5f5eb0f97 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -914,18 +914,6 @@ N:	Eric Limpens <limpens@gmail.com>
+ F:	package/pifmrds/
+ F:	package/ympd/
  
- PYTHON3_VERSION_MAJOR = 3.12
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).6
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).7
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+-N:	Erico Nunes <nunes.erico@gmail.com>
+-F:	board/aarch64-efi/
+-F:	configs/aarch64_efi_defconfig
+-F:	package/acpica/
+-F:	package/acpitool/
+-F:	package/efibootmgr/
+-F:	package/efivar/
+-F:	package/fwts/
+-F:	package/spi-tools/
+-F:	package/xdotool/
+-F:	configs/pc_x86_64_*
+-
+ N:	Erik Larsson <karl.erik.larsson@gmail.com>
+ F:	package/imx-mkimage/
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
