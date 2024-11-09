@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69352D5E378
-	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 17:12:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2211D5E379
+	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 17:12:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 06C3581091;
-	Sat,  9 Nov 2024 17:12:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F44542C0D;
+	Sat,  9 Nov 2024 17:12:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LxMTzdPoA5dQ; Sat,  9 Nov 2024 17:12:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SVHhQ6H9eg55; Sat,  9 Nov 2024 17:12:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6AEB84635
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2CCE42C19
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6AEB84635;
-	Sat,  9 Nov 2024 17:12:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 11F4FDAD
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2CCE42C19;
+	Sat,  9 Nov 2024 17:12:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4816EDAE
  for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 90E77400BF
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EAAE942BD5
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5yPJJl8t_dbK for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id THPQ3Lhh9xVH for <buildroot@buildroot.org>;
  Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D8DF40263
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 612F942BEC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D8DF40263
+ by smtp4.osuosl.org (Postfix) with ESMTP id 612F942BEC
  for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6736885ED0; Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
+ id 47EDE85ED2; Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Nov 2024 17:59:35 +0100
+Date: Sat, 9 Nov 2024 17:51:51 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: ab14d47d9a0808e10ef6f75706708b7a6cc6eeb8
-X-Git-Newrev: b9d4a86552cdc28cdbd2bd4dc9c4fb1757a0e597
+X-Git-Oldrev: 3e6603ec122a167f93b6901f7d77d00958a1047f
+X-Git-Newrev: 06046f9e960113215158d00b7ed5235a45939d2f
 X-Patchwork-Hint: ignore
-Message-Id: <20241109171225.6736885ED0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/sqlite: bump
- version to 3.46.1
+Message-Id: <20241109171225.47EDE85ED2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/ruby: update to
+ 3.3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9d4a86552cdc28cdbd2bd4dc9c4fb1757a0e597
+commit: https://git.buildroot.net/buildroot/commit/?id=06046f9e960113215158d00b7ed5235a45939d2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Release notes: https://sqlite.org/releaselog/3_46_1.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0ce51e24e5ba0c708b61899c49d638f056f71e38)
+(cherry picked from commit 9208ee8467f48d55adf91eba86ba8374c30556ed)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.hash | 2 +-
- package/sqlite/sqlite.mk   | 4 ++--
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 5eae86f159..e9017c4855 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6f8e6a7b335273748816f9b3b62bbdc372a889de8782d7f048c653a447417a7d  sqlite-autoconf-3460000.tar.gz
-+sha256  67d3fe6d268e6eaddcae3727fce58fcc8e9c53869bdd07a0c61e38ddf2965071  sqlite-autoconf-3460100.tar.gz
- sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 8bd0a5cb4d..614b4b8ed2 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,8 +4,8 @@
- #
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 3831e701fb..d6622909e5 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,5 +1,5 @@
+-# https://www.ruby-lang.org/en/news/2024/07/09/ruby-3-3-4-released/
+-sha512  b26461a13ff82a08a282f10108028bb2a2e4a28da6182a291062fc54089c6655d79c22cc69d59156f9b11cb10a17fe8c69d489343fbae123a45f03361b95c9eb  ruby-3.3.4.tar.xz
++# https://www.ruby-lang.org/en/news/2024/09/03/3-3-5-released/
++sha512  dd5c6a7f74854e143e0ca46b9d7c0d1983fc4886f5f733cd108345dbf4b21f61ad978ad6806e05a57b7af28fd9216dd38d7145808188bbb3695a7f3a4eda3883  ruby-3.3.5.tar.xz
+ 
+ # License files, Locally calculated
+ sha256  e849b28d324423e636a3e6bc5d583cdaf4bd046c2b20872c53886b612d01a4a1  LEGAL
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 08ecbf5941..2e04cb3e92 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SQLITE_VERSION = 3.46.0
--SQLITE_TAR_VERSION = 3460000
-+SQLITE_VERSION = 3.46.1
-+SQLITE_TAR_VERSION = 3460100
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2024
- SQLITE_LICENSE = blessing
+ RUBY_VERSION_MAJOR = 3.3
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).4
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).5
+ RUBY_VERSION_EXT = 3.3.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
