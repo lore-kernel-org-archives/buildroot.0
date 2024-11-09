@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 087D0D5E376
-	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 16:23:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC6B1D5E376
+	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 16:27:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2AB52405AB;
-	Sat,  9 Nov 2024 16:23:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 390704059A;
+	Sat,  9 Nov 2024 16:27:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4FR0vQhG4vUc; Sat,  9 Nov 2024 16:23:29 +0000 (UTC)
+ id meKW6wc5Q5LB; Sat,  9 Nov 2024 16:27:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E7D7404CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A46A40448
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E7D7404CC;
-	Sat,  9 Nov 2024 16:23:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 07045D92
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 16:23:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A46A40448;
+	Sat,  9 Nov 2024 16:27:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8B965D8F
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 16:27:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD08E40228
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 16:23:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C5244050C
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 16:27:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BMMEOVkhnefm for <buildroot@buildroot.org>;
- Sat,  9 Nov 2024 16:23:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id 0oCwtjMd9caU for <buildroot@buildroot.org>;
+ Sat,  9 Nov 2024 16:27:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3E24640398
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E24640398
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3E24640398
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 16:23:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 40C16FF805;
- Sat,  9 Nov 2024 16:23:23 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1t9oF8-006IS2-2T;
- Sat, 09 Nov 2024 17:23:22 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BA2B404E3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8BA2B404E3
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 16:27:21 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 72A2085B5E; Sat,  9 Nov 2024 16:27:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: buildroot@buildroot.org
-References: <Zuj4YO+IYp/aFBBj@waldemar-brodkorb.de>
-Date: Sat, 09 Nov 2024 17:23:22 +0100
-In-Reply-To: <Zuj4YO+IYp/aFBBj@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Tue, 17 Sep 2024 05:32:48 +0200")
-Message-ID: <87ttcgcr5x.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/bind: update to 9.18.29
+To: buildroot@buildroot.org
+Date: Sat, 9 Nov 2024 17:22:26 +0100
+X-Git-Refname: refs/heads/2024.08.x
+X-Git-Oldrev: 00a9042f4d3206a6ff7eaff1b913bedddc27eeae
+X-Git-Newrev: 807f5ab115686f4579b0bb867fd574b89f45c00f
+X-Patchwork-Hint: ignore
+Message-Id: <20241109162721.72A2085B5E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/bind: force
+ shared build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,22 +59,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=807f5ab115686f4579b0bb867fd574b89f45c00f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
- > See here for a Changelog:
- > https://downloads.isc.org/isc/bind9/9.18.29/doc/arm/html/notes.html#notes-for-bind-9-18-29
+We got following error with --enable-static:
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+checking whether to build static libraries... yes
+configure: error: Static linking is not supported as it disables dlopen() and certain security features (e.g. RELRO, ASLR)
 
-Committed to 2024.02.x and 2024.08.x, thanks.
+Fixes:
 
--- 
-Bye, Peter Korsgaard
+ http://autobuild.buildroot.org/results/b55/b553898381ff0fdf5dd705fbb11b469b7564c6e6
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 7b43e248180ad3b3dd1804687bc4457f29a88137)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bind/bind.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 217c9916fd..d594ab5e39 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -33,6 +33,7 @@ BIND_CONF_OPTS = \
+ 	--enable-epoll \
+ 	--disable-doh \
+ 	--disable-backtrace \
++	--disable-static \
+ 	--with-openssl=$(STAGING_DIR)/usr
+ 
+ BIND_DEPENDENCIES = host-pkgconf libuv openssl
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
