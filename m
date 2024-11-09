@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2211D5E379
-	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 17:12:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09916D5E378
+	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 17:12:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F44542C0D;
-	Sat,  9 Nov 2024 17:12:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFBE660648;
+	Sat,  9 Nov 2024 17:12:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SVHhQ6H9eg55; Sat,  9 Nov 2024 17:12:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X5MzOxEdlkdr; Sat,  9 Nov 2024 17:12:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2CCE42C19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0B8060628
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2CCE42C19;
-	Sat,  9 Nov 2024 17:12:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4816EDAE
+	by smtp3.osuosl.org (Postfix) with ESMTP id B0B8060628;
+	Sat,  9 Nov 2024 17:12:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BF3E0D8F
  for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EAAE942BD5
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4539A605F5
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id THPQ3Lhh9xVH for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1EioDVHEegKg for <buildroot@buildroot.org>;
  Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 612F942BEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61202605C5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 612F942BEC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 61202605C5
  for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 47EDE85ED2; Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
+ id 5DE3C85ECF; Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Nov 2024 17:51:51 +0100
+Date: Sat, 9 Nov 2024 17:57:24 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 3e6603ec122a167f93b6901f7d77d00958a1047f
-X-Git-Newrev: 06046f9e960113215158d00b7ed5235a45939d2f
+X-Git-Oldrev: 761eb4ad9ec61660567c7dacb6e16f437aa80a1b
+X-Git-Newrev: ab14d47d9a0808e10ef6f75706708b7a6cc6eeb8
 X-Patchwork-Hint: ignore
-Message-Id: <20241109171225.47EDE85ED2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/ruby: update to
- 3.3.5
+Message-Id: <20241109171225.5DE3C85ECF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/bind: update to
+ 9.18.31
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06046f9e960113215158d00b7ed5235a45939d2f
+commit: https://git.buildroot.net/buildroot/commit/?id=ab14d47d9a0808e10ef6f75706708b7a6cc6eeb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
+
+See here for a changelog:
+https://downloads.isc.org/isc/bind9/9.18.31/doc/arm/html/notes.html#notes-for-bind-9-18-31
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9208ee8467f48d55adf91eba86ba8374c30556ed)
+(cherry picked from commit abb6d4bddce4bd619f335efee70bae72e7adf779)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 3831e701fb..d6622909e5 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2024/07/09/ruby-3-3-4-released/
--sha512  b26461a13ff82a08a282f10108028bb2a2e4a28da6182a291062fc54089c6655d79c22cc69d59156f9b11cb10a17fe8c69d489343fbae123a45f03361b95c9eb  ruby-3.3.4.tar.xz
-+# https://www.ruby-lang.org/en/news/2024/09/03/3-3-5-released/
-+sha512  dd5c6a7f74854e143e0ca46b9d7c0d1983fc4886f5f733cd108345dbf4b21f61ad978ad6806e05a57b7af28fd9216dd38d7145808188bbb3695a7f3a4eda3883  ruby-3.3.5.tar.xz
- 
- # License files, Locally calculated
- sha256  e849b28d324423e636a3e6bc5d583cdaf4bd046c2b20872c53886b612d01a4a1  LEGAL
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 08ecbf5941..2e04cb3e92 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index dbffff05ea..abcbf0a938 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.18.30/bind-9.18.30.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.18.31/bind-9.18.31.tar.xz.asc
+ # with key 706B6C28620E76F91D11F7DF510A642A06C52CEC
+-sha256  9f6817640970267317e5aa143ecf70531040f2155636b1a63ea45379aa09034a  bind-9.18.30.tar.xz
++sha256  51b258969275c5206ef745a5aac03dbe98f1c8031fefed378d53597e7987b1b3  bind-9.18.31.tar.xz
+ sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 81e608380d..52b1e56c40 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 3.3
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).4
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).5
- RUBY_VERSION_EXT = 3.3.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-BIND_VERSION = 9.18.30
++BIND_VERSION = 9.18.31
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
