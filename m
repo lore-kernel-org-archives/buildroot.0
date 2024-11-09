@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89455D5E376
-	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 17:13:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5042D5E379
+	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 17:13:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 552278465D;
-	Sat,  9 Nov 2024 17:13:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A965E42C4A;
+	Sat,  9 Nov 2024 17:13:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ih_0p9ibCsbG; Sat,  9 Nov 2024 17:13:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YVIMYUYaAKEx; Sat,  9 Nov 2024 17:13:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75DCB84678
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89EA542C52
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75DCB84678;
-	Sat,  9 Nov 2024 17:13:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89EA542C52;
+	Sat,  9 Nov 2024 17:13:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A3BCD92
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:13:33 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 24896D8F
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:13:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7AEB6400D0
+ by smtp2.osuosl.org (Postfix) with ESMTP id CE89540258
  for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:13:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CcD6leU9wOXr for <buildroot@buildroot.org>;
+ id 3T_33IlQLhdU for <buildroot@buildroot.org>;
  Sat,  9 Nov 2024 17:13:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A68040259
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53EB540277
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4A68040259
+ by smtp2.osuosl.org (Postfix) with ESMTP id 53EB540277
  for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:13:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2658985F09; Sat,  9 Nov 2024 17:13:30 +0000 (UTC)
+ id 3BD2785F06; Sat,  9 Nov 2024 17:13:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Nov 2024 17:41:41 +0100
+Date: Sat, 9 Nov 2024 17:47:53 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 5dc99e10e124c5b1b12f69f528e6b3239e7bfefc
-X-Git-Newrev: f0d7171ad9552f8a4f54758f53cef51391cea298
+X-Git-Oldrev: 9db028f8a2bdc28fc34d3ee792135526d719afec
+X-Git-Newrev: 24be3a65873a3313bc059317c75f9fbc3ef71cc3
 X-Patchwork-Hint: ignore
-Message-Id: <20241109171330.2658985F09@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libcurl: ignore
- CVE-2024-32928
+Message-Id: <20241109171330.3BD2785F06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/intel-microcode:
+ security bump version to 20240910
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,35 +65,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0d7171ad9552f8a4f54758f53cef51391cea298
+commit: https://git.buildroot.net/buildroot/commit/?id=24be3a65873a3313bc059317c75f9fbc3ef71cc3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-This vulnerability only affects libcurl deployments in Nest products
-because of incorrect use.
+Release notes:
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20240813
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20240910
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+20240813 fixes
+CVE-2024-24853: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01083.html
+CVE-2024-25939: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01118.html
+CVE-2024-24980: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01100.html
+CVE-2023-42667: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01038.html
+CVE-2023-49141: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01046.html
+
+20240910 fixes
+CVE-2024-23984: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01103.html
+CVE-2024-24968: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01097.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7e739d49b235c1692edbb51dcc23671eaa79fd4f)
+(cherry picked from commit 6beab5b73993027643d5da3bbddca6f44d1ed6e4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 9bf7724e7d..71fb6152c7 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -32,6 +32,10 @@ LIBCURL_CONF_OPTS = \
- 	--disable-ldap \
- 	--disable-ldaps
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 742be5ae79..20dfaa41b4 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c29eb35fdbd39e3ed8587e6f0b1275cc03265f230c2fcaf88e2a1556451e773f  intel-microcode-20240531.tar.gz
++sha256  8b7582eac7e9a691356e18b3bdcbc7b2db09494e040ec980a4a5fb6d0da261bf  intel-microcode-20240910.tar.gz
+ sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 6862565bc8..24729494d0 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Only affects Nest products.
-+# https://nvd.nist.gov/vuln/detail/CVE-2024-32928
-+LIBCURL_IGNORE_CVES += CVE-2024-32928
-+
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- LIBCURL_CONF_OPTS += --enable-threaded-resolver
- else
+-INTEL_MICROCODE_VERSION = 20240531
++INTEL_MICROCODE_VERSION = 20240910
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
