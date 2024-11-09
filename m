@@ -1,73 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8481AD5E381
-	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 22:16:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACFDBD5E381
+	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 22:16:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 512E96071C;
-	Sat,  9 Nov 2024 22:16:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cG3UxBN9gI1C; Sat,  9 Nov 2024 22:16:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE3D760716
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE3D760716;
-	Sat,  9 Nov 2024 22:16:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 05F27D8F
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 22:16:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC2308114C
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 22:16:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CBC281363;
+	Sat,  9 Nov 2024 22:16:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zexb2eaA05jH for <buildroot@buildroot.org>;
- Sat,  9 Nov 2024 22:16:29 +0000 (UTC)
+ id VOwqxjyBfWn0; Sat,  9 Nov 2024 22:16:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 852FB81346
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 852FB81346;
+	Sat,  9 Nov 2024 22:16:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E2DFAC2
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 22:16:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF91D40177
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 22:16:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uKAoJ4oKR-Zl for <buildroot@buildroot.org>;
+ Sat,  9 Nov 2024 22:16:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12a; helo=mail-il1-x12a.google.com;
+ client-ip=2607:f8b0:4864:20::135; helo=mail-il1-x135.google.com;
  envelope-from=brandon.maier@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3736280C1B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3736280C1B
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
- [IPv6:2607:f8b0:4864:20::12a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3736280C1B
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 22:16:29 +0000 (UTC)
-Received: by mail-il1-x12a.google.com with SMTP id
- e9e14a558f8ab-3a6be9bd626so12919485ab.2
- for <buildroot@buildroot.org>; Sat, 09 Nov 2024 14:16:29 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 98454401F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98454401F6
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
+ [IPv6:2607:f8b0:4864:20::135])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 98454401F6
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 22:16:30 +0000 (UTC)
+Received: by mail-il1-x135.google.com with SMTP id
+ e9e14a558f8ab-3a6bba54722so13438195ab.2
+ for <buildroot@buildroot.org>; Sat, 09 Nov 2024 14:16:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1731190588; x=1731795388;
+ d=1e100.net; s=20230601; t=1731190589; x=1731795389;
  h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
  :mime-version:subject:date:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=x7B0IsyN/yawz0J0r94nXyfqCN2j+xJDPsA5B/v6VIA=;
- b=ADPjUddv1kZGtBWZluvMahLHqFzge+sEbblE4NqmdRIdHeJWYe3Ra+by66+zPkwZo0
- q/cSV11a0BB5FfQ8lL2wm0Z+3/CD3tZS5Ohkt1m0kwoIJZKsL1PCfP7wFlrtGHFeWaDr
- 1rI5Zp95dxYeybBZJjHgHxB2lHGcZ76svimQ0Ca3+HL+4j97dPTZa23laQlfV20oeWmW
- 0mllAgkb9+cweTZAeh+dTRYvDwo0TRHrYx8tMGcXw936/I/CPO6O/Qy+s+eiHWzVnae3
- COW7N5ZhisOextwzWW6sewPdJf65O2ZsCzSkJHtRi8qRp5e81oosr/6ZQScA6LIKWjmo
- qvxw==
-X-Gm-Message-State: AOJu0YxdzriuJUpkWyup17xzoZ2kX4AkOUhcSi2lp/3WZGxKxqvdpUm9
- fyUbMY98YSZ5BiM7ytGzn/kif3wUddxhxQl/VBftZFr9OnUAq8GI
-X-Google-Smtp-Source: AGHT+IGzxeANdqI/QWhSlcgyUgE+5uXKv4lbSBq4rOt6yXAQHWoUnsqwg46HQOimcGLG5VWm3t374A==
-X-Received: by 2002:a05:6e02:2205:b0:3a6:c4c1:e732 with SMTP id
- e9e14a558f8ab-3a6f1a256d4mr87744055ab.18.1731190588061; 
- Sat, 09 Nov 2024 14:16:28 -0800 (PST)
+ bh=iF4fY0/D8eu6DoC1365+/gonqQyrS5EAXr2kACSSHTo=;
+ b=HiuaQQHnuWKKGMXLyWcIaCAsDfc1fanEzBzHDeoKheaYmCc6B8gAibWYPkajJht+uW
+ 69I0v6xM9eQE/26g7aA1N4nuVhnzhrgACWT0eO1DQdkg9UkADp5CZ43jkyJpgu68F9IL
+ KeWA/HQRCN8wP2EiOw9Yq7HVNazeN11fHNo0f/QPg+bbWpfsY+6/HZcii8W55+jtAOnd
+ OBRnnyqy+BrVUx6BcZ/XIgJat9NvzpOmN7768RvqwmNZWRD7GKduK/isqZfZHefkDs4w
+ tJoOqpJ96hpNLvS1CI4QdThStlBSqt64KdxOjRvGLf36Iv+M+RuXdJ/4Vn7+meUDsmnN
+ HcGw==
+X-Gm-Message-State: AOJu0Yy13OUN251WvxbRj29S4GB64Jo8DFD0BPFwo+yhOAdBcOK2j6gJ
+ rpPHg3goOxG4Q3K6PkvilbOhJkz44urTu+NgkdWV8btFQosoGOGb
+X-Google-Smtp-Source: AGHT+IERPnWuLy2P9XKu1nE2bvw0ffSw5WGeQrN9hEsnQbZ3H39cbIhjTDP9/mA2ZhAtpFgR8u81+w==
+X-Received: by 2002:a05:6e02:214f:b0:3a6:aade:e328 with SMTP id
+ e9e14a558f8ab-3a6f19a03d1mr86633875ab.4.1731190589542; 
+ Sat, 09 Nov 2024 14:16:29 -0800 (PST)
 Received: from localhost (207-191-210-45.dhcp.imoncommunications.net.
  [207.191.210.45]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4de787d6278sm538822173.88.2024.11.09.14.16.27
+ e9e14a558f8ab-3a6f9842d67sm5443745ab.35.2024.11.09.14.16.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 09 Nov 2024 14:16:27 -0800 (PST)
+ Sat, 09 Nov 2024 14:16:29 -0800 (PST)
 From: Brandon Maier <brandon.maier@gmail.com>
-Date: Sat, 09 Nov 2024 16:16:18 -0600
+Date: Sat, 09 Nov 2024 16:16:19 -0600
 MIME-Version: 1.0
-Message-Id: <20241109-genimage-partition-type-uuid-v1-4-9f23180c7195@gmail.com>
+Message-Id: <20241109-genimage-partition-type-uuid-v1-5-9f23180c7195@gmail.com>
 References: <20241109-genimage-partition-type-uuid-v1-0-9f23180c7195@gmail.com>
 In-Reply-To: <20241109-genimage-partition-type-uuid-v1-0-9f23180c7195@gmail.com>
 To: buildroot@buildroot.org
@@ -75,25 +75,25 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Niklas Cassel <cassel@kernel.org>, Brandon Maier <brandon.maier@gmail.com>
 X-Mailer: b4 0.14.2
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1731190588; x=1731795388; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1731190589; x=1731795389; darn=buildroot.org;
  h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
  :mime-version:subject:date:from:from:to:cc:subject:date:message-id
  :reply-to;
- bh=x7B0IsyN/yawz0J0r94nXyfqCN2j+xJDPsA5B/v6VIA=;
- b=h1YpzhQbXVRqyksoZ/F0DsxNjiqbzLOG2PwK+Rexz968DAa297dxarJ/rT/lzU/f4f
- A2P14On/i79HV8FSqrfY+cTjdTpwsBJEQTof1xx2rAe5D6Ui7OFE3cvg7zAQspLsRi2z
- hFocBF1FA1PyC0kjvKQkJ3HILvNDgWGYyROkH4zqgxeJCeMzhk5o2xpy1cekDuKPykUr
- rYBp/WLbhz402q76rGyNlTONKhhz/hoA1WwZPdE3i3XmLdVg1l6esOBU4tlO7WULsvsT
- FwO7Uo85m74JyNOmLslmJT5ugw3w/2qwxjpjzRScJOFMNAlwpQgEOOvCXS65wdCQWNco
- X2jA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=iF4fY0/D8eu6DoC1365+/gonqQyrS5EAXr2kACSSHTo=;
+ b=cjUrI82Iu1B5tINKeGPgjiOSVrBQdxq2eUThqxOMqH2OxQWyBd5t1YX7VAMHp4rHFv
+ YDh1RmwOBy2wsQQ43exFi8CW2Pa5tPEk34MxrtNnxttPrDvG9M5LxpyxC2L1rCHYGDcO
+ LO2Nlnq2QV1zhxqh0M/H3wPE4wr8yqMyRiQa9/G3Jm2rxE+XA9yrbHIqbuFmuiMbMoLa
+ lPmLagxjV6TbqCzzQJVq2QpI8IkBRW5sU7iSiy4fWhPzr4rgj43prfOdW1ZQGQVLJBGm
+ LhGc1mE4s6Q2Vt71D80r7o1Z8muIvbuZ5aoZeBpiE9vSiyI4Pt+s3RSIlF8Vwe3/2LAX
+ 4sEA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=h1YpzhQb
-Subject: [Buildroot] [PATCH 04/17] board/visionfive2: use
- partition-type-uuid "L"
+ header.a=rsa-sha256 header.s=20230601 header.b=cjUrI82I
+Subject: [Buildroot] [PATCH 05/17] board/pc: use partition-type-uuid
+ "root-x86"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,21 +112,21 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Brandon Maier <brandon.maier@gmail.com>
 ---
- board/visionfive2/genimage.cfg | 2 +-
+ board/pc/genimage-efi.cfg | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/visionfive2/genimage.cfg b/board/visionfive2/genimage.cfg
-index 8133e740c0da233873937540d2a42b76d05a6f19..73d027c2e843246eaa8a4323e874c8892c0c2b88 100644
---- a/board/visionfive2/genimage.cfg
-+++ b/board/visionfive2/genimage.cfg
-@@ -16,7 +16,7 @@ image sdcard.img {
+diff --git a/board/pc/genimage-efi.cfg b/board/pc/genimage-efi.cfg
+index c231e1b9b2626c5a788c85511b1f1e9d12759d33..7d3d69bd067c2c39f5188d82d2e1fd11088657e1 100644
+--- a/board/pc/genimage-efi.cfg
++++ b/board/pc/genimage-efi.cfg
+@@ -25,7 +25,7 @@ image disk.img {
  	}
  
- 	partition rootfs {
--		partition-type-uuid = 0FC63DAF-8483-4772-8E79-3D69D8477DE4
-+		partition-type-uuid = L
- 		bootable = true
- 		image = "rootfs.ext4"
+ 	partition root {
+-		partition-type-uuid = 44479540-f297-41b2-9af7-d131d5f0458a
++		partition-type-uuid = root-x86
+ 		partition-uuid = UUID_TMP
+ 		image = "rootfs.ext2"
  	}
 
 -- 
