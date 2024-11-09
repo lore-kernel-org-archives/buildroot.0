@@ -1,60 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60B60D5E376
-	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 17:07:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5FACD5E377
+	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 17:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0410E42414;
-	Sat,  9 Nov 2024 17:07:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C3998459F;
+	Sat,  9 Nov 2024 17:09:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yU-SQfj-BTmu; Sat,  9 Nov 2024 17:07:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RNWj7LZab1PC; Sat,  9 Nov 2024 17:09:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF68A4241C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6443845A9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF68A4241C;
-	Sat,  9 Nov 2024 17:07:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D6E96D92
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:07:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6443845A9;
+	Sat,  9 Nov 2024 17:09:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0C09CD8F
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:09:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B749440339
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:07:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 071B5845A9
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:09:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ss4M55sOrl4U for <buildroot@buildroot.org>;
- Sat,  9 Nov 2024 17:07:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vBaFs6_AHqtE for <buildroot@buildroot.org>;
+ Sat,  9 Nov 2024 17:09:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=114.111.35.235;
+ helo=cvsmtppost20.nm.naver.com; envelope-from=dungeonlords789@naver.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B3404400D0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3404400D0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B3404400D0
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:07:01 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 01F0920002
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:06:59 +0000 (UTC)
-Message-ID: <1667f49c-b488-46c5-a148-d0d95fff2458@korsgaard.com>
-Date: Sat, 9 Nov 2024 18:06:59 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8B6498459F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B6498459F
+Received: from cvsmtppost20.nm.naver.com (cvsmtppost20.nm.naver.com
+ [114.111.35.235])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8B6498459F
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:09:18 +0000 (UTC)
+X-Originating-IP: 125.132.232.68
+Received: from cvsendbo029.nm ([10.112.18.60])
+ by cvsmtppost20.nm.naver.com with ESMTP id dV8bEFZDQUOV0-rfeknXSA
+ for <buildroot@buildroot.org>; Sat, 09 Nov 2024 17:09:17 -0000
+X-Session-ID: Gc2EprWNRPuNebaejFAw8Q
+X-Originating-IP: 125.132.232.68
+X-Works-Send-Opt: xeYZjAJYjHmlKxu/FoJYKxgXKBwkx0eFjAu=
+X-Works-Smtp-Source: m9YqKxuqFqJZ+HmrFxbl+6E=
+Received: from Linux.. ([125.132.232.68])
+ by cvnsmtp002.nm.naver.com with ESMTP id Gc2EprWNRPuNebaejFAw8Q
+ for <multiple recipients>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sat, 09 Nov 2024 17:09:16 -0000
+From: Cherniaev Andrei <dungeonlords789@naver.com>
 To: buildroot@buildroot.org
-References: <20241003152523.1131434-1-nunes.erico@gmail.com>
- <20241024224228.55f1a784@windsurf>
-Content-Language: en-US
-From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20241024224228.55f1a784@windsurf>
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: drop my packages
+Cc: Marcus Hoffmann <bubu@bubu1.eu>,
+ Cherniaev Andrei <dungeonlords789@naver.com>
+Date: Sun, 10 Nov 2024 02:09:00 +0900
+Message-ID: <20241109170900.1766890-1-dungeonlords789@naver.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=naver.com; s=s20171208; 
+ t=1731172157; bh=na9dskwDzE5KVWHF4KHWm44NsiUHFVoA7FRernLvWzw=;
+ h=From:To:Subject:Date:Message-ID:From:Subject:Feedback-ID:
+ X-Works-Security;
+ b=a4p9NkoKWIIcFE6rMNy8+CI60waIxnlceYBj3btVwL2lDT2wgblRMZoyIHpZphcr9
+ cmli/NH1qylV7MCRQrrv/lzTNsQMSQoQAPJvFHmeQ3MfbwmdlCsP/JqdKFHft0dufX
+ Vs46LLY0L5YPubSstiQV1ECVdM96eOMafKGkIgyaQuiezLxoO5+xPhMqH0tFuOMo6Z
+ 8Ij24RDcSF8d7YLWvka8u6MiUAbjhHfB1Q26VmwdpOUqSicYCI+oUm4DsXwEUTnOL5
+ tcOh7SQpNjfbC3GhQWAw2pvf3+fIa3Ht3J/3TOPsMa0IlxWygTgvYefZnVV6qz4O6O
+ g8KTgeYFX8c7A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=naver.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=naver.com header.i=@naver.com header.a=rsa-sha256
+ header.s=s20171208 header.b=a4p9NkoK
+Subject: [Buildroot] [PATCH 1/1] package/picotool: fix help
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,39 +89,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10/24/24 22:42, Thomas Petazzoni via buildroot wrote:
-> On Thu,  3 Oct 2024 17:25:23 +0200
-> Erico Nunes <nunes.erico@gmail.com> wrote:
-> 
->> I still follow Buildroot development and use it for some personal
->> projects, but no longer have the time to be an active contributor.
->> Some of these are important defconfigs and packages to have up-to-date
->> in Buildroot, and mostly other developers have been doing that work, so
->> I am dropping them so that someone from the active contributors can be
->> the maintainer contact for them.
->>
->> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
->> ---
->>   DEVELOPERS | 12 ------------
->>   1 file changed, 12 deletions(-)
-> 
-> Applied to master, thanks. That being said, as Arnout said: a given
-> package or defconfig can be associated to multiple in our DEVELOPERS
-> file. So if you're registered as a developer for a given package or
-> defconfig, it doesn't prevent anyone from being registered as a
-> developer for the same package or defconfig.
-> 
-> In any case: thanks a lot for all your contributions to Buildroot!
+before this you will every-time see "*** picotool needs a toolchain w/ C++, threads, gcc >= 4.9 ***" even if all features are enabled
 
-Committed to 2024.02.x and 2024.08.x, thanks!
+Signed-off-by: Cherniaev Andrei <dungeonlords789@naver.com>
+---
+ package/picotool/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/picotool/Config.in b/package/picotool/Config.in
+index bbbcef405d..51c7c71188 100644
+--- a/package/picotool/Config.in
++++ b/package/picotool/Config.in
+@@ -1,6 +1,6 @@
+ comment "picotool needs a toolchain w/ C++, threads, gcc >= 4.9"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ config BR2_PACKAGE_PICOTOOL
 -- 
-Bye, Peter Korsgaard
+2.43.0
 
 _______________________________________________
 buildroot mailing list
