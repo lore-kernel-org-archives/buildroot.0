@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCC83D5E376
-	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 16:28:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D927D5E373
+	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 16:28:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D55040621;
-	Sat,  9 Nov 2024 16:28:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD9F440669;
+	Sat,  9 Nov 2024 16:28:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n4M019mPM0Ds; Sat,  9 Nov 2024 16:28:35 +0000 (UTC)
+ id fttHTeWZ2I48; Sat,  9 Nov 2024 16:28:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 683524065E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAB34406F4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 683524065E;
-	Sat,  9 Nov 2024 16:28:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 755C9DAD
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 16:28:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CAB34406F4;
+	Sat,  9 Nov 2024 16:28:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A93ABD8F
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 16:28:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55AAA400BF
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 16:28:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8A4F3400BF
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 16:28:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wOMVlf6T1dxg for <buildroot@buildroot.org>;
+ id 0vF-7DVSc5WR for <buildroot@buildroot.org>;
  Sat,  9 Nov 2024 16:28:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A57B40261
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24AD540263
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A57B40261
+ by smtp2.osuosl.org (Postfix) with ESMTP id 24AD540263
  for <buildroot@buildroot.org>; Sat,  9 Nov 2024 16:28:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14E7185C24; Sat,  9 Nov 2024 16:28:30 +0000 (UTC)
+ id 1F6A585C33; Sat,  9 Nov 2024 16:28:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Nov 2024 17:23:04 +0100
+Date: Sat, 9 Nov 2024 17:23:40 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 66f888250026099b21ff29dc81cdbffb0aacdcbd
-X-Git-Newrev: 8ed50ea167581179c153811fe6b91d91d7f66c1a
+X-Git-Oldrev: 8ed50ea167581179c153811fe6b91d91d7f66c1a
+X-Git-Newrev: 993dffe44db536b8e379a46f510003ec4d8a5db7
 X-Patchwork-Hint: ignore
-Message-Id: <20241109162830.14E7185C24@busybox.osuosl.org>
+Message-Id: <20241109162830.1F6A585C33@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2024.02.x] package/bind: update to
- 9.18.29
+ 9.18.30
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,15 +65,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ed50ea167581179c153811fe6b91d91d7f66c1a
+commit: https://git.buildroot.net/buildroot/commit/?id=993dffe44db536b8e379a46f510003ec4d8a5db7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 See here for a Changelog:
-https://downloads.isc.org/isc/bind9/9.18.29/doc/arm/html/notes.html#notes-for-bind-9-18-29
+https://downloads.isc.org/isc/bind9/9.18.30/doc/arm/html/notes.html#notes-for-bind-9-18-30
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit e5dbcbf80435b4faddfad6b741c2dac06a7693dc)
+(cherry picked from commit af27e44bb2a0fedd249b180989a300da58f52c1f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/bind/bind.hash | 4 ++--
@@ -81,26 +81,26 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index feb3430a73..2d4e247932 100644
+index 2d4e247932..dbffff05ea 100644
 --- a/package/bind/bind.hash
 +++ b/package/bind/bind.hash
 @@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.18.28/bind-9.18.28.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.18.29/bind-9.18.29.tar.xz.asc
+-# Verified from https://ftp.isc.org/isc/bind9/9.18.29/bind-9.18.29.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.18.30/bind-9.18.30.tar.xz.asc
  # with key 706B6C28620E76F91D11F7DF510A642A06C52CEC
--sha256  e7cce9a165f7b619eefc4832f0a8dc16b005d29e3890aed6008c506ea286a5e7  bind-9.18.28.tar.xz
-+sha256  c39ce5d09a8cb10108116fa533445de9f7fdfe0063e8d7c4c46ba1fd20d7bf6d  bind-9.18.29.tar.xz
+-sha256  c39ce5d09a8cb10108116fa533445de9f7fdfe0063e8d7c4c46ba1fd20d7bf6d  bind-9.18.29.tar.xz
++sha256  9f6817640970267317e5aa143ecf70531040f2155636b1a63ea45379aa09034a  bind-9.18.30.tar.xz
  sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
 diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index d594ab5e39..23687ec620 100644
+index 23687ec620..81e608380d 100644
 --- a/package/bind/bind.mk
 +++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.18.28
-+BIND_VERSION = 9.18.29
+-BIND_VERSION = 9.18.29
++BIND_VERSION = 9.18.30
  BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
  BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
  # bind does not support parallel builds.
