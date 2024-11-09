@@ -1,93 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50568D5E37E
-	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 19:28:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8EB6D5E380
+	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 20:29:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C46A042977;
-	Sat,  9 Nov 2024 19:28:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A57E60678;
+	Sat,  9 Nov 2024 20:29:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8JxZy7SII3xF; Sat,  9 Nov 2024 19:28:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UukJ93ZH-dAP; Sat,  9 Nov 2024 20:29:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 767FB428C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C8716066E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 767FB428C4;
-	Sat,  9 Nov 2024 19:28:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D9CA8D8F
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 19:28:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C8716066E;
+	Sat,  9 Nov 2024 20:29:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0C3EED8F
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 20:29:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B77B240434
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 19:28:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E18EE6066E
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 20:29:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Woeet8zz0Uon for <buildroot@buildroot.org>;
- Sat,  9 Nov 2024 19:28:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d30; helo=mail-io1-xd30.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 961F04049E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 961F04049E
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
- [IPv6:2607:f8b0:4864:20::d30])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 961F04049E
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 19:28:05 +0000 (UTC)
-Received: by mail-io1-xd30.google.com with SMTP id
- ca18e2360f4ac-83aad4a05eeso128339339f.1
- for <buildroot@buildroot.org>; Sat, 09 Nov 2024 11:28:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1731180484; x=1731785284;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=SXXXa3Cb21o4izhW9C0FMnv8rMILv/sQ3NWMZKI24cs=;
- b=iadGNMWFlx9SjIGe9FhyztyMAoNQIk3Xp/wygpr/+Nb7X8Lkgv0Kp1QvJr1fsdud6v
- GqfNvqvyK6XhI1GQiLWUlKkYMbcljhDIYviGlYG8nOFveK3gRsLACrfuOe0Drm+zhZJV
- UQSf7RhJ+EC9mJGco7eYc/4jJe7NgNHD+WPMa6lW3dKgGlxPOZIsNiljyV/MGPLedyUR
- d3Mm+x1fMCzaqtAcCEDAbqYv9aLMikV2Zh26itUuw2cTN/Y9J2isBBmS1EXSGScav6EI
- PTNAhAjrBFU97VsFfcrmNoxkbhE2xiASlVi8CMnAFUIDr4HIeWE9KokxdTGpcHaPB4yK
- IYGg==
-X-Gm-Message-State: AOJu0YyUJWvJ1sC/hMxKDoSGYJpKxAxh68jBb8hIlwTDNQHGeD0kQyAG
- MRb6OT23sEy5GnKCg2uxATPx5w+oThd0kgj/Zd1dgezNGIo2gI3vd8IIQg==
-X-Google-Smtp-Source: AGHT+IHVwpEkPOqfygAcdbtVt+061sbJX21ial2wvMIcNTutIMIQ+sHLqsucaa+1wH6YQd+fFrAYpA==
-X-Received: by 2002:a05:6e02:188d:b0:3a4:e823:1cd9 with SMTP id
- e9e14a558f8ab-3a6f1a2f36fmr76869945ab.16.1731180483864; 
- Sat, 09 Nov 2024 11:28:03 -0800 (PST)
-Received: from james-x399.localdomain (71-33-148-91.hlrn.qwest.net.
- [71.33.148.91]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a6f9820e28sm4655355ab.16.2024.11.09.11.28.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 09 Nov 2024 11:28:03 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat,  9 Nov 2024 12:28:01 -0700
-Message-Id: <20241109192801.799966-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DovPEImH1KEm for <buildroot@buildroot.org>;
+ Sat,  9 Nov 2024 20:29:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E0ECB60664
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0ECB60664
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E0ECB60664
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 20:29:41 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 674C9780316;
+ Sat,  9 Nov 2024 21:29:36 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:39798])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 09 Nov 2024 21:29:36 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1731180484; x=1731785284; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=SXXXa3Cb21o4izhW9C0FMnv8rMILv/sQ3NWMZKI24cs=;
- b=WF8GQ3IZhJnoOSPMUcQa9Kpx1EF2jWTyIvHSPL0IDpCN5hvzaiQt7CMItqWA/yTmlT
- kLoMEufczthnAscOzSnfIf28VCN3QFPv9cBscf07cvpfTfVUmccmLkF4hr+aZdMiL11B
- dsnYimP2ufdbBf/PDIqb1cuDdemFaDG2Rew7+llejbxuG6w7/vUdhUGZrs6M8H7YuwPq
- M2WiVmUgxTxsDDQIfh/53+oBI+pL8jKNbcfcmO/CA5UORVfh2Ay9jz5wE20QbGHBYiq5
- 6HFx8mAV0hGG35b5JpVz/xbTD0kbowIbsfZg5ookT/iQpykSjSbiZOg6dD03FSDH7/yK
- iMwA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+Date: Sat, 09 Nov 2024 21:29:36 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20240818235602.1867361-1-james.hilliard1@gmail.com>
+References: <20240818235602.1867361-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <f801ef73029a96970d99d8298afe78c1@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1731184177;
+ bh=H0rdOx5AM0yqUAyrbNp6T1BSlnSV2VJEB8UQn7JNLZc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=CGHASiKcag3QY0IQrkk5hyZ/bqVXN+A3IqEX+DvpCuFsaJS5wTfEjmfTDnSBzP0ed
+ pUkneyqwekwF75it1261TlJqTGr88LmOwtxSh8unA8ybt1ytUzNdzBjLUGAkf+bqoL
+ YYplPIbVv1o4ApOj6R0Vow6YCyrKm75xeRpu93rBCZF7unirXSQuKuieFrC0foewAP
+ Ekzdj7hK1AljFuR8BO0kin2KVWsOcpgcU2J0sp7BT8j8gH2jX0hpoDlWygAaG1CcNJ
+ wXg3jm1i4KTpphbycUqo+HsgLZgHSTtCAQZvJNctBtYGAfQRvLrL4wypmeoWp0badv
+ nY8bb8FN+DpzA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=WF8GQ3IZ
-Subject: [Buildroot] [PATCH 1/1] package/python-wheel: bump to version 0.45.0
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=CGHASiKc
+Subject: Re: [Buildroot] [PATCH 1/1] package/uefisettings: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,49 +82,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-wheel/python-wheel.hash | 4 ++--
- package/python-wheel/python-wheel.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi James,
 
-diff --git a/package/python-wheel/python-wheel.hash b/package/python-wheel/python-wheel.hash
-index 1f9a49a44c..35bee60b72 100644
---- a/package/python-wheel/python-wheel.hash
-+++ b/package/python-wheel/python-wheel.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/wheel/json
--md5  440ff4fe51579b7ed16f02af8f8d9494  wheel-0.44.0.tar.gz
--sha256  a29c3f2817e95ab89aa4660681ad547c0e9547f20e75b0562fe7723c9a2a9d49  wheel-0.44.0.tar.gz
-+md5  3d1f79ff04a1252fa709dec58aa7249b  wheel-0.45.0.tar.gz
-+sha256  a57353941a3183b3d5365346b567a260a0602a0f8a635926a7dede41b94c674a  wheel-0.45.0.tar.gz
- # Locally computed sha256 checksums
- sha256  30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654  LICENSE.txt
-diff --git a/package/python-wheel/python-wheel.mk b/package/python-wheel/python-wheel.mk
-index 1802280e24..21060cfc66 100644
---- a/package/python-wheel/python-wheel.mk
-+++ b/package/python-wheel/python-wheel.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_WHEEL_VERSION = 0.44.0
-+PYTHON_WHEEL_VERSION = 0.45.0
- PYTHON_WHEEL_SOURCE = wheel-$(PYTHON_WHEEL_VERSION).tar.gz
--PYTHON_WHEEL_SITE = https://files.pythonhosted.org/packages/b7/a0/95e9e962c5fd9da11c1e28aa4c0d8210ab277b1ada951d2aee336b505813
-+PYTHON_WHEEL_SITE = https://files.pythonhosted.org/packages/e7/52/fd4516fb8f7d11a08e3f9cd69eb1558f098ab67e79f32d920c4974ee550f
- PYTHON_WHEEL_SETUP_TYPE = flit
- PYTHON_WHEEL_LICENSE = MIT
- PYTHON_WHEEL_LICENSE_FILES = LICENSE.txt
--- 
-2.34.1
+While running a test-pkg on this package, it seems all
+32-bit builds are failing. See:
+https://gitlab.com/jolivain/buildroot/-/pipelines/1534897225
 
+Does this package needs a "depends on BR2_ARCH_IS_64"?
+Can you have a look please?
+
+On 19/08/2024 01:56, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  DEVELOPERS                             |  1 +
+>  package/Config.in                      |  1 +
+>  package/uefisettings/Config.in         |  9 +++++++++
+>  package/uefisettings/uefisettings.hash |  3 +++
+>  package/uefisettings/uefisettings.mk   | 12 ++++++++++++
+>  5 files changed, 26 insertions(+)
+>  create mode 100644 package/uefisettings/Config.in
+>  create mode 100644 package/uefisettings/uefisettings.hash
+>  create mode 100644 package/uefisettings/uefisettings.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index d7d0af3543..4b80b2d0a9 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1503,6 +1503,7 @@ F:	package/serd/
+>  F:	package/sord/
+>  F:	package/sratom/
+>  F:	package/stb/
+> +F:	package/uefisettings/
+>  F:	package/zchunk/
+>  F:	support/testing/tests/package/sample_python_rtoml.py
+>  F:	support/testing/tests/package/test_python_rtoml.py
+> diff --git a/package/Config.in b/package/Config.in
+> index f2c63ffb6e..4f2d0cf7b1 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -648,6 +648,7 @@ endmenu
+>  	source "package/udev/Config.in"
+>  	source "package/udev-gentoo-scripts/Config.in"
+>  	source "package/udisks/Config.in"
+> +	source "package/uefisettings/Config.in"
+>  	source "package/uhubctl/Config.in"
+>  	source "package/umtprd/Config.in"
+>  	source "package/upower/Config.in"
+> diff --git a/package/uefisettings/Config.in 
+> b/package/uefisettings/Config.in
+> new file mode 100644
+> index 0000000000..734f9b864d
+> --- /dev/null
+> +++ b/package/uefisettings/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_UEFISETTINGS
+> +	bool "uefisettings"
+> +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+> +	select BR2_PACKAGE_HOST_RUSTC
+> +	help
+> +	  The tool to read/get/extract and write/change/modify
+> +	  BIOS/UEFI settings from Linux terminal.
+> +
+> +	  https://github.com/linuxboot/uefisettings
+> diff --git a/package/uefisettings/uefisettings.hash 
+> b/package/uefisettings/uefisettings.hash
+> new file mode 100644
+> index 0000000000..505b5de566
+> --- /dev/null
+> +++ b/package/uefisettings/uefisettings.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256  
+> 5d4d6f771e615df9fee3d531c85dad9946ed793fc0a0e636dee1d342780f7863  
+> uefisettings-f90aed759b9c2217bea336e37ab5282616ece390-cargo2.tar.gz
+> +sha256  
+> acc0b83e151985bb943d35ac37e7522fef28d707af9a4829678e92baa409aaf1  
+> LICENSE
+> diff --git a/package/uefisettings/uefisettings.mk 
+> b/package/uefisettings/uefisettings.mk
+> new file mode 100644
+> index 0000000000..0559b1c504
+> --- /dev/null
+> +++ b/package/uefisettings/uefisettings.mk
+> @@ -0,0 +1,12 @@
+> +################################################################################
+> +#
+> +# uefisettings
+> +#
+> +################################################################################
+> +
+> +UEFISETTINGS_VERSION = f90aed759b9c2217bea336e37ab5282616ece390
+> +UEFISETTINGS_SITE = $(call 
+> github,linuxboot,uefisettings,$(UEFISETTINGS_VERSION))
+> +UEFISETTINGS_LICENSE = BSD-3-Clause
+> +UEFISETTINGS_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(cargo-package))
+> --
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
