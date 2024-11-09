@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1B8DD5E376
-	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 17:12:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB92CD5E378
+	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 17:12:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 445AF42AD7;
-	Sat,  9 Nov 2024 17:12:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EJKvCpwIyQko; Sat,  9 Nov 2024 17:12:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BECE242B26
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BECE242B26;
-	Sat,  9 Nov 2024 17:12:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 63002DAD
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1CB6260606
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8937E605F5;
+	Sat,  9 Nov 2024 17:12:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ynJ9vfww_M8c for <buildroot@buildroot.org>;
+ id VWCNSstC-r3w; Sat,  9 Nov 2024 17:12:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 880BA60606
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 880BA60606;
+	Sat,  9 Nov 2024 17:12:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EBFE2D8F
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5865B4025C
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xuoNwP90AyAP for <buildroot@buildroot.org>;
  Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BEF660623
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58A76400BF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3BEF660623
+ by smtp2.osuosl.org (Postfix) with ESMTP id 58A76400BF
  for <buildroot@buildroot.org>; Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 298E185B25; Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
+ id 3DD9585ED1; Sat,  9 Nov 2024 17:12:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Nov 2024 17:47:49 +0100
+Date: Sat, 9 Nov 2024 17:49:37 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: f92e435be398359b56c45e9170d8d3145a0cc624
-X-Git-Newrev: a29fdc342adefcceaf165d13a55a71c4363f51cc
+X-Git-Oldrev: 5ab51299c126d2e2357e16d1e23f81649650ccd2
+X-Git-Newrev: 3e6603ec122a167f93b6901f7d77d00958a1047f
 X-Patchwork-Hint: ignore
-Message-Id: <20241109171225.298E185B25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/intel-microcode:
- security bump version to 20240910
+Message-Id: <20241109171225.3DD9585ED1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/libtraceevent:
+ bump to version 1.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,55 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a29fdc342adefcceaf165d13a55a71c4363f51cc
+commit: https://git.buildroot.net/buildroot/commit/?id=3e6603ec122a167f93b6901f7d77d00958a1047f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Release notes:
-https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20240813
-https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20240910
-
-20240813 fixes
-CVE-2024-24853: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01083.html
-CVE-2024-25939: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01118.html
-CVE-2024-24980: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01100.html
-CVE-2023-42667: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01038.html
-CVE-2023-49141: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01046.html
-
-20240910 fixes
-CVE-2024-23984: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01103.html
-CVE-2024-24968: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01097.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6beab5b73993027643d5da3bbddca6f44d1ed6e4)
+(cherry picked from commit 54c88416e85136ae3da1808ce17bf9641666ae1d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-microcode/intel-microcode.hash | 2 +-
- package/intel-microcode/intel-microcode.mk   | 2 +-
+ package/libtraceevent/libtraceevent.hash | 2 +-
+ package/libtraceevent/libtraceevent.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index 742be5ae79..20dfaa41b4 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libtraceevent/libtraceevent.hash b/package/libtraceevent/libtraceevent.hash
+index d59e0a9188..c0738de4e7 100644
+--- a/package/libtraceevent/libtraceevent.hash
++++ b/package/libtraceevent/libtraceevent.hash
+@@ -1,4 +1,4 @@
  # Locally computed
--sha256  c29eb35fdbd39e3ed8587e6f0b1275cc03265f230c2fcaf88e2a1556451e773f  intel-microcode-20240531.tar.gz
-+sha256  8b7582eac7e9a691356e18b3bdcbc7b2db09494e040ec980a4a5fb6d0da261bf  intel-microcode-20240910.tar.gz
- sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 6862565bc8..24729494d0 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
+-sha256  233d88adf5bae6b4511980f0f6314f348326b55fdb3dc9c4212c810e1ab06789  libtraceevent-1.8.3.tar.gz
++sha256  dc456d4d2bf4b4cd4d0c737d3374a8093f9e5ca18c1d7fc2279a4bf41e613121  libtraceevent-1.8.4.tar.gz
+ sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
+ sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSES/LGPL-2.1
+diff --git a/package/libtraceevent/libtraceevent.mk b/package/libtraceevent/libtraceevent.mk
+index 35e1152d37..8c3514f265 100644
+--- a/package/libtraceevent/libtraceevent.mk
++++ b/package/libtraceevent/libtraceevent.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_MICROCODE_VERSION = 20240531
-+INTEL_MICROCODE_VERSION = 20240910
- INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license
+-LIBTRACEEVENT_VERSION = 1.8.3
++LIBTRACEEVENT_VERSION = 1.8.4
+ LIBTRACEEVENT_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot
+ LIBTRACEEVENT_LICENSE = GPL-2.0, LGPL-2.1
+ LIBTRACEEVENT_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
