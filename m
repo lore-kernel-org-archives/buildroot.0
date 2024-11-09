@@ -1,78 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F233D5E37A
-	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 18:27:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33D95D5E36B
+	for <buildroot@archiver.kernel.org>; Sat,  9 Nov 2024 18:40:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 659E684101;
-	Sat,  9 Nov 2024 18:27:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE558600BB;
+	Sat,  9 Nov 2024 18:40:43 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7vCRVR6qOlCt; Sat,  9 Nov 2024 18:40:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF76B60586
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF76B60586;
+	Sat,  9 Nov 2024 18:40:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AD6CFD92
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 18:40:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E1108121A
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 18:40:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n8TR7jp8b6mW; Sat,  9 Nov 2024 18:27:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7821C84164
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7821C84164;
-	Sat,  9 Nov 2024 18:27:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4F388D8F
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 18:27:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F1494021A
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 18:27:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0TfY6fDCOzbX for <buildroot@buildroot.org>;
- Sat,  9 Nov 2024 18:27:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 977C440462
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 977C440462
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 977C440462
- for <buildroot@buildroot.org>; Sat,  9 Nov 2024 18:27:46 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id BAB1AB00571;
- Sat,  9 Nov 2024 19:27:40 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:54012])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 09 Nov 2024 19:27:40 +0100
+ id 4NzqHACX7b8H for <buildroot@buildroot.org>;
+ Sat,  9 Nov 2024 18:40:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::12c; helo=mail-il1-x12c.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A2DC4811E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2DC4811E3
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
+ [IPv6:2607:f8b0:4864:20::12c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A2DC4811E3
+ for <buildroot@buildroot.org>; Sat,  9 Nov 2024 18:40:39 +0000 (UTC)
+Received: by mail-il1-x12c.google.com with SMTP id
+ e9e14a558f8ab-3a6be9bd626so12547515ab.2
+ for <buildroot@buildroot.org>; Sat, 09 Nov 2024 10:40:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1731177638; x=1731782438;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=MWWHrz8ja2EO7iO6I8/w6dnbBcIxMnFn3YO2TcJ0vPY=;
+ b=hnDeCPYDS5tJl63mX25GdiP1SjEGq9swjhY2W0jI40T+yy3xClZeNKFjLF3lYGdliB
+ +vd9j5cY8xHtSrczWxzqfYzuLg04of2IASgV4wyRIHZM8oH7U41S29WcMckcXwc6kEPT
+ N6mE25WBhRUOfulC2SM/9vTnPC4Rf3xgQ0qseN+3aVjoblxJp13pj4BtBZwA7NpuD+lh
+ aDjVsYJVawSH2WGAWbXy6QNUnQ+c4v524OSWkeQKF26ErfRrxWYqnip4bvpz2DXnYzH7
+ LIAlUrMdIL4Ao4mQJzps37t3rHTfIFl5vrA11DVeczHBZdX7fDFGPKy3PBKmps9LVb0K
+ H8Ew==
+X-Gm-Message-State: AOJu0YzLGXaVBTYrkxuXbcBgec9TDq+ZnJ0fDe+yt0vNgV0BUiK0ESSu
+ KUp9+D9djOmhf33zI7cDGYRZJ6Vl1ku0Wz30p6navWkb+lTX1vaQdSiQtA==
+X-Google-Smtp-Source: AGHT+IFAi7snmYbkcFeE/G3o9bbi2j7J3Q+AiIfwYQUeZo8eFJRFc0ztVgenE1TIHO9ZxWRByXfq4Q==
+X-Received: by 2002:a05:6e02:17c6:b0:3a0:a80a:997c with SMTP id
+ e9e14a558f8ab-3a6f1a25691mr65048865ab.19.1731177638371; 
+ Sat, 09 Nov 2024 10:40:38 -0800 (PST)
+Received: from james-x399.localdomain (71-33-148-91.hlrn.qwest.net.
+ [71.33.148.91]) by smtp.gmail.com with ESMTPSA id
+ e9e14a558f8ab-3a6f9820ec3sm4515735ab.5.2024.11.09.10.40.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 09 Nov 2024 10:40:37 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  9 Nov 2024 11:40:28 -0700
+Message-Id: <20241109184028.752155-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date: Sat, 09 Nov 2024 19:27:40 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: buildroot@buildroot.org, Giulio Benetti
- <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20241104212118.1442429-1-petr.vorel@gmail.com>
-References: <20241104212118.1442429-1-petr.vorel@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <7795ac034059913362bcd00f948099f7@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1731176863;
- bh=07iszn4D3uQ9zsfLFSMq7OmTBneUEeeRaS9DrFJZxy0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=RupOIsOL8CE3wxvWTNHhBMMEfX07d/Wx4ESeeqy8QBRyjFNhzbdFaYIbMOK0Yjbft
- 0SdOI7UWwMmepnxQ0PrRXANB/vnN5uXI3Eh74N6quN6133YU+RR/pEblUSm+zqwc6Q
- M9PPs9Yr+6UdxmkjXYE6E2RXDKbiKKcweSlZD2pyjqtRynZFSy4IuIEentDCiBazBn
- 1eC4OOdIvEEGeJXb776Qd5AbxqNBzlzfLd+fGSG/vCLhYVUL7REDLRgioO9B5H9T/j
- XQgFRceSzLQZ87Z44fcszjqeoG6KEz8tXddTcNmmpyRnprfxJh553vAlOzLk/5Unqh
- bqkPVXAFhRHvw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1731177638; x=1731782438; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=MWWHrz8ja2EO7iO6I8/w6dnbBcIxMnFn3YO2TcJ0vPY=;
+ b=gOaz5uwjnRm9DMs3hEtWPcsE+WhMXU6bnOX0zwxzaOX3vsSBuFGylvuVHM2qcaWTMj
+ Rub8DydgJGN6pcOdeZeUhqS7PaPOQAHhED078DW+Unws2GMmTNWZFoe7dEg7GddYi3H9
+ 4MOqESifEMqZgBC8gHPDnOA2FhLguKJ0zpL7P10W7dJz+9x3qiZ/FsodXxLbjHwIh/Lz
+ DQ0UGEE71GfMzZChls7VgYZ1Nz8yO5wNvUxLzsa5YB+doYP7/d6QaHPA50T95nC5GTTr
+ 1wyNSw4l3EWQ7NupNi7DwZLGd9hS/+EUKqrOBLxx+fnxtF2syj383rong+Vv9DulUM+v
+ 7xbg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=RupOIsOL
-Subject: Re: [Buildroot] [PATCH] package/libtirpc: bump version to 1.3.6
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=gOaz5uwj
+Subject: [Buildroot] [PATCH 1/1] package/python-meson-python: bump to
+ version 0.17.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,63 +101,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/11/2024 22:21, Petr Vorel wrote:
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Add new host-python-packaging build dependency.
 
-Applied to master, thanks!
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-meson-python/python-meson-python.hash | 4 ++--
+ package/python-meson-python/python-meson-python.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-> ---
->  package/libtirpc/libtirpc.hash | 4 ++--
->  package/libtirpc/libtirpc.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libtirpc/libtirpc.hash 
-> b/package/libtirpc/libtirpc.hash
-> index b1113264ae..946e30b807 100644
-> --- a/package/libtirpc/libtirpc.hash
-> +++ b/package/libtirpc/libtirpc.hash
-> @@ -1,5 +1,5 @@
->  # From sourceforge's info on download page:
-> -sha1  f5b209b2a7f3ffcdcff5b5b54fefc6a90ddec0d3  libtirpc-1.3.5.tar.bz2
-> +sha1  03352908461ad2122e5be4a678893aaa2ad2ac45  libtirpc-1.3.6.tar.bz2
->  # Locally computed
-> -sha256  
-> 9b31370e5a38d3391bf37edfa22498e28fe2142467ae6be7a17c9068ec0bf12f  
-> libtirpc-1.3.5.tar.bz2
-> +sha256  
-> bbd26a8f0df5690a62a47f6aa30f797f3ef8d02560d1bc449a83066b5a1d3508  
-> libtirpc-1.3.6.tar.bz2
->  sha256  
-> 17cf6098f95bdbb269f0bbc68e76c88fe20487ca7ec53f454923ab4256ecd2e7  
-> COPYING
-> diff --git a/package/libtirpc/libtirpc.mk 
-> b/package/libtirpc/libtirpc.mk
-> index 1020c512a0..2d2675895c 100644
-> --- a/package/libtirpc/libtirpc.mk
-> +++ b/package/libtirpc/libtirpc.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
-> 
-> -LIBTIRPC_VERSION = 1.3.5
-> +LIBTIRPC_VERSION = 1.3.6
->  LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
->  LIBTIRPC_SITE = 
-> http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
->  LIBTIRPC_LICENSE = BSD-3-Clause
-> --
-> 2.45.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/package/python-meson-python/python-meson-python.hash b/package/python-meson-python/python-meson-python.hash
+index 537353bad2..11f1807144 100644
+--- a/package/python-meson-python/python-meson-python.hash
++++ b/package/python-meson-python/python-meson-python.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/meson-python/json
+-md5  e91eb9946d7bb8be06e434c5a2dadd05  meson_python-0.15.0.tar.gz
+-sha256  fddb73eecd49e89c1c41c87937cd89c2d0b65a1c63ba28238681d4bd9484d26f  meson_python-0.15.0.tar.gz
++md5  bf1299782f02e4bb590a437bd140fd12  meson_python-0.17.1.tar.gz
++sha256  efb91f69f2e19eef7bc9a471ed2a4e730088cc6b39eacaf3e49fc4f930eb5f83  meson_python-0.17.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  8f82ea9ef9a55b47f4170536d02e48b5bc33fc5135e5b4a1b5f8d6404833ec9b  LICENSE
+diff --git a/package/python-meson-python/python-meson-python.mk b/package/python-meson-python/python-meson-python.mk
+index 64d5de4ba9..be8ab00c6a 100644
+--- a/package/python-meson-python/python-meson-python.mk
++++ b/package/python-meson-python/python-meson-python.mk
+@@ -4,15 +4,16 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MESON_PYTHON_VERSION = 0.15.0
++PYTHON_MESON_PYTHON_VERSION = 0.17.1
+ PYTHON_MESON_PYTHON_SOURCE = meson_python-$(PYTHON_MESON_PYTHON_VERSION).tar.gz
+-PYTHON_MESON_PYTHON_SITE = https://files.pythonhosted.org/packages/a2/3b/276b596824a0820987fdcc7721618453b4f9a8305fe20b611a00ac3f948e
++PYTHON_MESON_PYTHON_SITE = https://files.pythonhosted.org/packages/67/66/91d242ea8dd1729addd36069318ba2cd03874872764f316c3bb51b633ed2
+ PYTHON_MESON_PYTHON_SETUP_TYPE = pep517
+ PYTHON_MESON_PYTHON_LICENSE = MIT
+ PYTHON_MESON_PYTHON_LICENSE_FILES = LICENSE
+ HOST_PYTHON_MESON_PYTHON_DEPENDENCIES = \
+ 	host-meson \
+ 	host-patchelf \
++	host-python-packaging \
+ 	host-python-pyproject-metadata
+ 
+ $(eval $(host-python-package))
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
