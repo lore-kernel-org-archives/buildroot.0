@@ -1,75 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2188AD12D50
-	for <buildroot@archiver.kernel.org>; Sun, 10 Nov 2024 19:48:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D6EFD12D50
+	for <buildroot@archiver.kernel.org>; Sun, 10 Nov 2024 20:47:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BCB7680D85;
-	Sun, 10 Nov 2024 19:48:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A72CE401FE;
+	Sun, 10 Nov 2024 20:47:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FFdqJi83ema0; Sun, 10 Nov 2024 19:48:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NWCvMom5TVRF; Sun, 10 Nov 2024 20:47:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B263080D34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 447E240174
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B263080D34;
-	Sun, 10 Nov 2024 19:48:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 551EEDAC
- for <buildroot@buildroot.org>; Sun, 10 Nov 2024 19:48:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 447E240174;
+	Sun, 10 Nov 2024 20:47:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E86D5DAC
+ for <buildroot@buildroot.org>; Sun, 10 Nov 2024 20:47:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 305B880D34
- for <buildroot@buildroot.org>; Sun, 10 Nov 2024 19:48:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5EA540155
+ for <buildroot@buildroot.org>; Sun, 10 Nov 2024 20:47:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2ZK1ZlZ6D5Zv for <buildroot@buildroot.org>;
- Sun, 10 Nov 2024 19:48:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AB73B80BA8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB73B80BA8
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AB73B80BA8
- for <buildroot@buildroot.org>; Sun, 10 Nov 2024 19:48:38 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0a50.dip0.t-ipconnect.de [91.58.10.80])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id BD3B3A4C3077
- for <buildroot@buildroot.org>; Sun, 10 Nov 2024 20:48:35 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59834)
- by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1tADvH-000000003QL-0Lvw
- for buildroot@buildroot.org; Sun, 10 Nov 2024 19:48:35 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sun, 10 Nov 2024 20:48:35 +0100
-Message-Id: <20241110194835.1149037-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ButTLeg7GnVT for <buildroot@buildroot.org>;
+ Sun, 10 Nov 2024 20:47:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6FA0F4015E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FA0F4015E
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6FA0F4015E
+ for <buildroot@buildroot.org>; Sun, 10 Nov 2024 20:47:34 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 579A2B00539;
+ Sun, 10 Nov 2024 21:47:30 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:58020])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 10 Nov 2024 21:47:30 +0100
 MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202406071026; t=1731268115;
- bh=J1me6XcmwnDhNiR9dSlJ4x0yvRfEJrXMm//+Hupz4No=;
- h=From:To:Subject:Date:From;
- b=RGQucwMLIDvbcTWPYQdC4TugO4EkYWmzytYSkfqNLjMbH+fXmB9fZWB64rVW7y9Nl
- ix4tcHvBjBa1hJZwA2uZH18j8Zuwt+N7V+ASdnHMuyNsOUAjQ0aJ1ehnL6vbq+DiTI
- KEXMTMzSN28TGhByQ8RjZlOhodXWXkeVFEPRY6eI0xd2xTpiYvmtc34+VemcVcMgx6
- l9K9STDPIogNRbABEP9CgBHcFIczeIThFxRnJgp4QeMy3aqTevan+xyE6p+eK8jn1J
- aHRHneLy0zFHDLnODL+rEFSuzgypuNhaYIpL/tc6mKBNB+trggLxcEYffvCDYk+nWp
- OeJ1sQg4dC5og==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Date: Sun, 10 Nov 2024 21:47:30 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Vincent Jardin <vjardin@free.fr>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20241110182451.49722-2-vjardin@free.fr>
+References: <20241110182451.49722-1-vjardin@free.fr>
+ <20241110182451.49722-2-vjardin@free.fr>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <327efbe09f993c827276a3e68923b604@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1731271651;
+ bh=ma8yw6fV0BqxNY/JxaJEQsRtRFAELzYQ33sfSGCSKhg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Lano2ga6Bo6U+TKrPLbGICuN3Z+drWvhtJcB5CCV6NlpmVJlRLmBEs4C6TRpQjlzd
+ WiKGGAmsls0ETBQZtbWurP4kB7K6PowuXQwoOY99ofJH9/KcdLkNmqfgrI9uLxoiKX
+ 1FxZQDlcKzNv47K4DbxrhDjn+H7xFtgEcda1HvbusjsGkqaikIOHW8damEMv0nMoWL
+ b5NMMmPBuXFAjfh0QTpj9dDll4F76MKXANaRtnKWF711HAt5kzeG+5tCQawlystym/
+ +AE/fpZAU2uZs99PLcZHwA7NxSlS8yAqc525o1Cc/RaZ8K2djAVoli/R4ANN2lrPMf
+ QheWlYR/djI7w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202406071026 header.b=RGQucwML
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.19.x / 5.{4,
- 10, 15}.x / 6.{1, 6, 11}.x series
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Lano2ga6
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/mlx5ctl: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,84 +83,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+Hi Vincent,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 16c015b412..5e5df7eb40 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -134,7 +134,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.11.6" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.11.7" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index a52cd623cd..7bb05dee49 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  c954f60197008f1e1f32a1e77293903cf3801d2543ec4bf521f5651eb7f133ce  linux-6.11.6.tar.xz
--sha256  23616808d8c08f12815ff898f4edb4c11397a2b2843d029ee62452d21833a76d  linux-6.6.59.tar.xz
--sha256  0fd8ba827e1f1888376d88fd1d1c80d707c587c75b0f18c26530824be437ba6f  linux-6.1.115.tar.xz
-+sha256  0bf5ec644817d7928920f763581311f5bf258a92759cf2f30985da743af3ebb2  linux-6.11.7.tar.xz
-+sha256  52f9e32d5082ab94253447fd66670d0c3bb765cfcb99b0bf61d1b8eae25952ef  linux-6.6.60.tar.xz
-+sha256  17eb68336ee2a8f34378bf6089ffe8f805b978eda314c299d2a63b0603833b81  linux-6.1.116.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  fd596545a3d6d93196db3fa29e4926e60900b9c05b3b9ccdee9e35d8e376e7a9  linux-5.15.170.tar.xz
--sha256  76cc8d7f1528f87902e38697229661d0617a7d6ab86166be9f3ef9a613b17b72  linux-5.10.228.tar.xz
--sha256  77221ab9aebeac746915c755ec3b7d320f85cd219c63d9c501820fbca1e3b32b  linux-5.4.284.tar.xz
-+sha256  2953e064d8123c4c22c4fd48011378d73c8b99a3bf3d989e33f4f5c8f82f2a3b  linux-5.15.171.tar.xz
-+sha256  08a6b5e6bbff85ef017f67b722f6beec7f12fe36fc0f9043f27a91990b88cde0  linux-5.10.229.tar.xz
-+sha256  be32c37ef2f6f724fa13acf43cbc9aacfd3acef58964923dae5daa6206d3429c  linux-5.4.285.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  4e27cdf999359876a0ff489bff6ece7ba5798ff37c2289db0c9e9422a9014162  linux-4.19.322.tar.xz
-+sha256  eec9215fbac649d826fda9d3421da47aebd3c4e69e060e5106d32e309a9b6a1c  linux-4.19.323.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2f7a731d36..a58f54138a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -428,13 +428,13 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.19.322"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.284"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.228"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.170"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.115"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.59"	if BR2_KERNEL_HEADERS_6_6
--	default "6.11.6"	if BR2_KERNEL_HEADERS_6_11
-+	default "4.19.323"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.285"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.229"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.171"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.116"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.60"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.11.7"	if BR2_KERNEL_HEADERS_6_11
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
--- 
-2.39.5
+Thanks for this patch!
 
+On 10/11/2024 19:24, Vincent Jardin wrote:
+> Add a new package that can be used to manage the Mellanox/NVIDIA
+> Connect-X boards.
+> 
+> Signed-off-by: Vincent Jardin <vjardin@free.fr>
+> ---
+>  DEVELOPERS                   |  1 +
+>  package/Config.in            |  1 +
+>  package/mlx5ctl/Config.in    |  9 +++++++++
+>  package/mlx5ctl/mlx5ctl.hash |  3 +++
+>  package/mlx5ctl/mlx5ctl.mk   | 12 ++++++++++++
+>  5 files changed, 26 insertions(+)
+>  create mode 100644 package/mlx5ctl/Config.in
+>  create mode 100644 package/mlx5ctl/mlx5ctl.hash
+>  create mode 100644 package/mlx5ctl/mlx5ctl.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index edf823b34b..384e185944 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -3274,6 +3274,7 @@ N:	Vincent Jardin <vjardin@free.fr>
+>  F:	board/nvidia/bf3/
+>  F:	configs/nvidia_bf3_defconfig
+>  F:	package/dpdk/
+> +F:	package/mlx5ctl/
+> 
+>  N:	Vincent Prince <vincent.prince.fr@gmail.com>
+>  F:	package/nss-myhostname/
+> diff --git a/package/Config.in b/package/Config.in
+> index 876b340a8a..d60835a2be 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -567,6 +567,7 @@ endmenu
+>  	source "package/memtool/Config.in"
+>  	source "package/mhz/Config.in"
+>  	source "package/minicom/Config.in"
+> +	source "package/mlx5ctl/Config.in"
+>  	source "package/msr-tools/Config.in"
+>  	source "package/mxt-app/Config.in"
+>  	source "package/nanocom/Config.in"
+> diff --git a/package/mlx5ctl/Config.in b/package/mlx5ctl/Config.in
+> new file mode 100644
+> index 0000000000..0eaaf29653
+> --- /dev/null
+> +++ b/package/mlx5ctl/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_MLX5CTL
+> +	bool "mlx5ctl"
+> +	help
+> +	  Provides a unified toolset for accessing, debugging, and
+> +	  monitoring ConnectX MLX5 devices, utilizing secure interface
+> +	  to simplify diagnostics in production systems with a secure
+> +	  kernel lockdown enabled.
+> +
+> +	  https://github.com/saeedtx/mlx5ctl
+
+Looking at the mlx5ctl README.md file:
+https://github.com/saeedtx/mlx5ctl/blob/main/README.md#drivers-needed
+
+mlx5ctl (user space) needs Kernel the drivers:
+mlx5_core.ko (ConnectX device core driver)
+mlx5ctl.ko (ConnectX debug uAPI driver)
+
+I can find mlx5_core in the upstream Kernel (the one you
+included in your nvidia_bf3_defconfig) in here:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/net/ethernet/mellanox/mlx5/core/Kconfig?h=v6.11.6#n6
+
+I am not able to find the "mlx5ctl". Is there an out of source tree
+driver somewhere? Quickly searching, I'm only able to find this 
+proposal:
+https://lore.kernel.org/all/ZcRgp76yWcDfEbMy@x130/T/
+And a LWN article:
+https://lwn.net/Articles/969383/
+
+When proposing this user-space package, from which source are you
+planning to use this Kernel mlx5ctl?
+
+Before adding such a package, we should make sure there will
+be an easy way in Buildroot to have all its dependencies.
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
