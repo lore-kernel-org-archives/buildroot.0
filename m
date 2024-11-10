@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8CA1D12D4B
-	for <buildroot@archiver.kernel.org>; Sun, 10 Nov 2024 16:46:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49E8BD12D4A
+	for <buildroot@archiver.kernel.org>; Sun, 10 Nov 2024 16:46:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B7E6060718;
-	Sun, 10 Nov 2024 16:46:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBB4C4043A;
+	Sun, 10 Nov 2024 16:46:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M1o0JnjKYrxW; Sun, 10 Nov 2024 16:46:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rYCs3bUwhG4w; Sun, 10 Nov 2024 16:46:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4A9360766
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4F0140448
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4A9360766;
-	Sun, 10 Nov 2024 16:46:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B5FC26C
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4F0140448;
+	Sun, 10 Nov 2024 16:46:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B8432DAC
  for <buildroot@buildroot.org>; Sun, 10 Nov 2024 16:46:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A45780F5F
- for <buildroot@buildroot.org>; Sun, 10 Nov 2024 16:46:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4911840284
+ for <buildroot@buildroot.org>; Sun, 10 Nov 2024 16:46:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wUN8ULZik5gr for <buildroot@buildroot.org>;
- Sun, 10 Nov 2024 16:46:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D9c_CvcTT3m5 for <buildroot@buildroot.org>;
+ Sun, 10 Nov 2024 16:46:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B380580F58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E19540189
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B380580F58
- for <buildroot@buildroot.org>; Sun, 10 Nov 2024 16:46:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E19540189
+ for <buildroot@buildroot.org>; Sun, 10 Nov 2024 16:46:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9CF8F85F80; Sun, 10 Nov 2024 16:46:17 +0000 (UTC)
+ id 39EC385F56; Sun, 10 Nov 2024 16:46:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 10 Nov 2024 17:44:02 +0100
+Date: Sun, 10 Nov 2024 17:44:26 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 166810dc5c002252b9ffa217a2f3b96b009d74af
-X-Git-Newrev: a509c61c62658548414cf136243d857e8703cfb3
+X-Git-Oldrev: b449ad4aad39d5b398fb123fbe8f0f062692a4d6
+X-Git-Newrev: 6974f782bb669f080482032d22ba37a035a24aef
 X-Patchwork-Hint: ignore
-Message-Id: <20241110164617.9CF8F85F80@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-botocore: bump to version
- 1.35.57
+Message-Id: <20241110164618.39EC385F56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-rpds-py: bump to version
+ 0.21.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,45 +66,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a509c61c62658548414cf136243d857e8703cfb3
+commit: https://git.buildroot.net/buildroot/commit/?id=6974f782bb669f080482032d22ba37a035a24aef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-botocore/python-botocore.hash | 4 ++--
- package/python-botocore/python-botocore.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-rpds-py/python-rpds-py.hash | 2 +-
+ package/python-rpds-py/python-rpds-py.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
-index 6879cee31c..1076a748b2 100644
---- a/package/python-botocore/python-botocore.hash
-+++ b/package/python-botocore/python-botocore.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/botocore/json
--md5  41a22a0b48a9f4a90f5333fd64bfcb34  botocore-1.35.53.tar.gz
--sha256  e610ae076ad1eaed5680d3990493659bbabdffd67b15c61d8373a23e4bc41062  botocore-1.35.53.tar.gz
-+md5  d317006e6032155bfd46a949cddbac72  botocore-1.35.57.tar.gz
-+sha256  d96306558085baf0bcb3b022d7a8c39c93494f031edb376694d2b2dcd0e81327  botocore-1.35.57.tar.gz
+diff --git a/package/python-rpds-py/python-rpds-py.hash b/package/python-rpds-py/python-rpds-py.hash
+index 4c7db5789a..a2b36b8d06 100644
+--- a/package/python-rpds-py/python-rpds-py.hash
++++ b/package/python-rpds-py/python-rpds-py.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after vendoring
+-sha256  ff923a84c29f2ef21c26acbda476612393efb4854e13520b73a5dd0f7dc36fb2  python-rpds-py-0.20.1-cargo2.tar.gz
++sha256  a2bafde869e0a9e6390de8b1d1144a4c874850b016898c71fd5313c027ba709e  python-rpds-py-0.21.0-cargo2.tar.gz
  # Locally computed sha256 checksums
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  tests/unit/auth/aws4_testsuite/LICENSE
-diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
-index 3f05c051a2..d8d410aea5 100644
---- a/package/python-botocore/python-botocore.mk
-+++ b/package/python-botocore/python-botocore.mk
+ sha256  314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909  LICENSE
+diff --git a/package/python-rpds-py/python-rpds-py.mk b/package/python-rpds-py/python-rpds-py.mk
+index c2f484a66e..87172cdc59 100644
+--- a/package/python-rpds-py/python-rpds-py.mk
++++ b/package/python-rpds-py/python-rpds-py.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BOTOCORE_VERSION = 1.35.53
-+PYTHON_BOTOCORE_VERSION = 1.35.57
- PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
--PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/48/c9/d5a1f5ad4024eda0d5d1b4103d28085c13cf42ca377fc141f7df4ad1cec9
-+PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/61/17/65b0a3bb507b19a7a1c6cc7c63e374906891798986f0ba2b6ad174ece86a
- PYTHON_BOTOCORE_SETUP_TYPE = setuptools
- PYTHON_BOTOCORE_LICENSE = Apache-2.0
- PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt tests/unit/auth/aws4_testsuite/LICENSE
+-PYTHON_RPDS_PY_VERSION = 0.20.1
++PYTHON_RPDS_PY_VERSION = 0.21.0
+ PYTHON_RPDS_PY_SOURCE_PYPI = rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz
+-PYTHON_RPDS_PY_SITE_PYPI = https://files.pythonhosted.org/packages/25/cb/8e919951f55d109d658f81c9b49d0cc3b48637c50792c5d2e77032b8c5da
++PYTHON_RPDS_PY_SITE_PYPI = https://files.pythonhosted.org/packages/23/80/afdf96daf9b27d61483ef05b38f282121db0e38f5fd4e89f40f5c86c2a4f
+ PYTHON_RPDS_PY_SITE = $(PYTHON_RPDS_PY_SITE_PYPI)/$(PYTHON_RPDS_PY_SOURCE_PYPI)?buildroot-path=filename
+ PYTHON_RPDS_PY_SETUP_TYPE = maturin
+ PYTHON_RPDS_PY_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
