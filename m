@@ -4,67 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C38C3D12D4B
-	for <buildroot@archiver.kernel.org>; Sun, 10 Nov 2024 17:11:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2BA3D12D4B
+	for <buildroot@archiver.kernel.org>; Sun, 10 Nov 2024 17:13:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F82080D18;
-	Sun, 10 Nov 2024 17:11:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9109780D18;
+	Sun, 10 Nov 2024 17:13:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CWQ-m-sJ7jZT; Sun, 10 Nov 2024 17:11:40 +0000 (UTC)
+ id f-pR-rAIYF89; Sun, 10 Nov 2024 17:13:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B198080D14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A316380D19
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B198080D14;
-	Sun, 10 Nov 2024 17:11:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A316380D19;
+	Sun, 10 Nov 2024 17:13:41 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 48B9D6C
- for <buildroot@buildroot.org>; Sun, 10 Nov 2024 17:11:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 778C96C
+ for <buildroot@buildroot.org>; Sun, 10 Nov 2024 17:13:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 285F6402D7
- for <buildroot@buildroot.org>; Sun, 10 Nov 2024 17:11:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 55CF5402D7
+ for <buildroot@buildroot.org>; Sun, 10 Nov 2024 17:13:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RrXZ0zP2OtUf for <buildroot@buildroot.org>;
- Sun, 10 Nov 2024 17:11:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0233C401D8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0233C401D8
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0233C401D8
- for <buildroot@buildroot.org>; Sun, 10 Nov 2024 17:11:37 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id D982AB0054E;
- Sun, 10 Nov 2024 18:11:33 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, Julien Olivain <ju.o@free.fr>
-Date: Sun, 10 Nov 2024 18:11:29 +0100
-Message-ID: <20241110171129.326957-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.47.0
+ id 5pLIBLixlcg1 for <buildroot@buildroot.org>;
+ Sun, 10 Nov 2024 17:13:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D7D4B401D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7D4B401D8
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D7D4B401D8
+ for <buildroot@buildroot.org>; Sun, 10 Nov 2024 17:13:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E47B11C0002;
+ Sun, 10 Nov 2024 17:13:34 +0000 (UTC)
+Date: Sun, 10 Nov 2024 18:13:34 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+Message-ID: <20241110181334.0746f1a8@windsurf>
+In-Reply-To: <20241110103624.1041337-1-bernd@kuhls.net>
+References: <20241110103624.1041337-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1731258696;
- bh=/UW/bHvrItJKrOw27kClcA8eZNIlR7kxqk9rsIEPxJU=;
- h=From:To:Cc:Subject:Date:From;
- b=DxGaB0PUkGVSVxVl8+MEpNglYu/4MmDkYy7K1Zj7bwfQWQ8eS9av4Dy/MErXTrYyY
- Z1LafedD4oI6u5ViNWTrtFpszzKV/O+VUbBnPpGrEGtUI3Gextpx0hv3kV53drgoDw
- AUV2m4WMqOO5qM2n9kWzrbkYgzHK7OTyNZA4LYXbd2VcI/ZdDnrmwBKeuSZ4nX7uSc
- 8DhElC+NnmTbv1/cCxjhjsVWUvXkxcL33VlEmphS3LYrwfxDv/tOnDVE+alur3IJSR
- 0s6OUq2HTkBtRJQhYCcuIEQFyRzk3BP46pq5tu8sFYJJo9qXeIzXSBZwbkqrP+yfQi
- TTk/AxWZ98TcA==
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1731258815;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ZBg60ldPN/PNzF9mgrDSzJms633BbXdtSFs5i7dHOHE=;
+ b=d2+QTRw9q/vcihECJVNxe7GVS4JaMJ1EDBn2qpZDF2NnCItGfpqmnJ/LNbvFBeiveC24Ib
+ gMXNIqV1TofQIp7j5GVgZHvpfCR4T15jKGdsqKSnhlFC0gEXDpftGvwZHTFKPhKjs7O5iM
+ 5IKxW8rN+kQr16lnYe6Lqa9TeHVR8cUa7QBklZ1ouTQZD7M6WX1g6K7gRWntoCs3wJqOUC
+ dlsaWAtCH5nlRe4Do3Td08r/3tx60Dio36V/NiwSftbAOfwkb1VgnLGz7By+jFaMisA39j
+ YL0KQtIR5X7LvHfEREr3+1e5WiQT483MmDZj46HW0GSZ5n+t2A/8bCvbcXU31Q==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=DxGaB0PU
-Subject: [Buildroot] [PATCH 1/1] package/usbredir: fix package homepage URL
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=d2+QTRw9
+Subject: Re: [Buildroot] [PATCH 1/1] package/libvpl: not supported on mips64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,39 +81,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The current homepage URL [1] redirects to its https and ends up to
-a HTTP 404 not found error. This commit fixes the issue by replacing
-it with the new URL [2].
+Hello Bernd,
 
-[1] http://www.spice-space.org/page/UsbRedir
-[2] https://www.spice-space.org/usbredir.html
+On Sun, 10 Nov 2024 11:36:24 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/usbredir/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/package/libvpl/Config.in b/package/libvpl/Config.in
+> index b9e9a20fd7..5a370ed2e3 100644
+> --- a/package/libvpl/Config.in
+> +++ b/package/libvpl/Config.in
+> @@ -1,6 +1,6 @@
+>  config BR2_PACKAGE_LIBVPL_ARCH_SUPPORTS
+>  	bool
+> -	default y if BR2_ARCH_IS_64
+> +	default y if BR2_ARCH_IS_64 && !BR2_mips64 && !BR2_mips64el
+>  	default y if BR2_arm
 
-diff --git a/package/usbredir/Config.in b/package/usbredir/Config.in
-index 6de6227e5c..46ccac122d 100644
---- a/package/usbredir/Config.in
-+++ b/package/usbredir/Config.in
-@@ -17,7 +17,7 @@ config BR2_PACKAGE_USBREDIR
- 	  Note: only the library is installed, not the utilities. Say
- 	  'y' below if you want the tools too.
- 
--	  http://www.spice-space.org/page/UsbRedir
-+	  https://www.spice-space.org/usbredir.html
- 
- if BR2_PACKAGE_USBREDIR
- 
+Thanks for the fix. However, would it be possible to do something a bit
+more consistent with what the code does?
+
+#if defined(_WIN64) || defined(__LP64__)
+    #define MFX_PACK_BEGIN_STRUCT_W_PTR()    MFX_PACK_BEGIN_X(8)
+    #define MFX_PACK_BEGIN_STRUCT_W_L_TYPE() MFX_PACK_BEGIN_X(8)
+/* 32-bit ILP32 data model Windows* (Intel(r) architecture) */
+#elif defined(_WIN32) || defined(_M_IX86) && !defined(__linux__)
+    #define MFX_PACK_BEGIN_STRUCT_W_PTR()    MFX_PACK_BEGIN_X(4)
+    #define MFX_PACK_BEGIN_STRUCT_W_L_TYPE() MFX_PACK_BEGIN_X(8)
+/* 32-bit ILP32 data model Linux* */
+#elif defined(__ILP32__) || defined(__arm__)
+    #define MFX_PACK_BEGIN_STRUCT_W_PTR()    MFX_PACK_BEGIN_X(4)
+    #define MFX_PACK_BEGIN_STRUCT_W_L_TYPE() MFX_PACK_BEGIN_X(4)
+
+So in our case, the code works on:
+
+- Architectures that define __LP64__
+- Architectures that define __ILP32__
+- Architectures that define __arm__
+
+Currently we only enable for 64-bit architectures and ARM, but other
+32-bit architectures are also supported (the ones that define
+__ILP32__).
+
+This can easily be checked by looking at the built-in cross-compiler
+defines:
+
+$ ARCH-linux-gcc -dM -E - < /dev/null | grep -E "(LP|ILP)"
+
+For example, it looks like i386 would be supported.
+
+Thanks!
+
+Thomas
 -- 
-2.47.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
