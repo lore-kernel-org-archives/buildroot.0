@@ -4,72 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A245DD12D49
-	for <buildroot@archiver.kernel.org>; Sun, 10 Nov 2024 16:53:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 467CED12D4B
+	for <buildroot@archiver.kernel.org>; Sun, 10 Nov 2024 17:00:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6ACB560639;
-	Sun, 10 Nov 2024 16:53:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F247260768;
+	Sun, 10 Nov 2024 17:00:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id olLfPRZmnacH; Sun, 10 Nov 2024 16:53:41 +0000 (UTC)
+ id PG759e3lljkO; Sun, 10 Nov 2024 17:00:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81FFA60673
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0778C60762
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81FFA60673;
-	Sun, 10 Nov 2024 16:53:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7BC966C
- for <buildroot@buildroot.org>; Sun, 10 Nov 2024 16:53:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0778C60762;
+	Sun, 10 Nov 2024 17:00:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15F10DAC
+ for <buildroot@buildroot.org>; Sun, 10 Nov 2024 17:00:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D98980FDD
- for <buildroot@buildroot.org>; Sun, 10 Nov 2024 16:53:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9A76404A9
+ for <buildroot@buildroot.org>; Sun, 10 Nov 2024 17:00:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 98QHRvIoBnjf for <buildroot@buildroot.org>;
- Sun, 10 Nov 2024 16:53:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5AF1780F90
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AF1780F90
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5AF1780F90
- for <buildroot@buildroot.org>; Sun, 10 Nov 2024 16:53:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E633140002;
- Sun, 10 Nov 2024 16:53:34 +0000 (UTC)
-Date: Sun, 10 Nov 2024 17:53:34 +0100
-To: Cherniaev Andrei <dungeonlords789@naver.com>
-Cc: buildroot@buildroot.org, Marcus Hoffmann <bubu@bubu1.eu>
-Message-ID: <20241110175334.54847106@windsurf>
-In-Reply-To: <20241109170900.1766890-1-dungeonlords789@naver.com>
-References: <20241109170900.1766890-1-dungeonlords789@naver.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oxHyOLmwWTbs for <buildroot@buildroot.org>;
+ Sun, 10 Nov 2024 17:00:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A424B404A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A424B404A6
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A424B404A6
+ for <buildroot@buildroot.org>; Sun, 10 Nov 2024 17:00:41 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id BE2D6B0054E;
+ Sun, 10 Nov 2024 18:00:36 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Sun, 10 Nov 2024 18:00:31 +0100
+Message-ID: <20241110170031.322853-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1731257615;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=d/SJYj62PgUOGh8byAXa2+/BiuI3Cu54O64BIbcZ4Wg=;
- b=JwzZRr1gLWXCYOU8FMU8M4wlX+ljL8FzoeBm2fUVwmMJvngN2b0MumE3lQU8N8e3MJpee+
- hb7tbjR0OLvReyWx9vr2kH4XDI7q02ZzHBx1y8usUx/fi5JjJSSzniCAXJWtLjKSaVpqAU
- n0pTTB+Nk9oUQeCFLV1i49jOa0eIiLzr12zwSoXnJwwNhTyvo3vP5R8iI4ShO4lRf+jkJC
- sgfMg4wtfe688jGQFCLeSa+F2Oa+aA5wal3gokCdcJcKzRCYO0Mm8YEvUYOo/sXCugJkQo
- G1hw2AmRJ5lU7ip2DjLKFawqSQAw1C0zCAGuLgdSCnWlGb36/1W1qsB/t5MRBg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1731258038;
+ bh=4kdhUZmTjR8CH+KV0+oUiNN8dtT0iaLip1OX+DazZCw=;
+ h=From:To:Cc:Subject:Date:From;
+ b=MWPaGzA0hZTXnH4Lq8SAKmXX1A6LmjZ+6Knvw9XIkejNJsE7Hna5QNBnllhClAOvk
+ xL2WzXofKqGR/LD0TpDm6X5oPvjw2HeW43+eHZh8tjGNaaLJ1uUSaSkCSRTmsVNfSH
+ 9hL+keTy75V8HNO3umAeJr/Hry3RIC5g9NSjZIq/VAWoFOM2ET0wCGSFEktp4jjS7x
+ 4kDX7kGTdiiaoN+xSEz8DvASNNegC1TLpLQQwVPEShNjMHY/olZO7yG/bsIJv+vex3
+ EZr98D0mqbsWNUv2e5DP3lACkAHdffCbGWhiPdmGOdFxdyP+UvkXTFNqup/1h5m2wW
+ XTS3ZIsxDfZew==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JwzZRr1g
-Subject: Re: [Buildroot] [PATCH 1/1] package/picotool: fix help
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=MWPaGzA0
+Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version 2.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,30 +77,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 10 Nov 2024 02:09:00 +0900
-Cherniaev Andrei <dungeonlords789@naver.com> wrote:
+For change log since v2.3.7, see:
+https://github.com/FluidSynth/fluidsynth/releases/tag/v2.4.0
 
-> before this you will every-time see "*** picotool needs a toolchain w/ C++, threads, gcc >= 4.9 ***" even if all features are enabled
-> 
-> Signed-off-by: Cherniaev Andrei <dungeonlords789@naver.com>
-> ---
->  package/picotool/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/pipelines/1535415352
+---
+ package/fluidsynth/fluidsynth.hash | 2 +-
+ package/fluidsynth/fluidsynth.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+index 787e97ce37..49ca85994c 100644
+--- a/package/fluidsynth/fluidsynth.hash
++++ b/package/fluidsynth/fluidsynth.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  38d1d910783ab67c07a4d859d1aa95525979ff352b927e25b1ae894c774bb4c4  fluidsynth-2.3.7.tar.gz
++sha256  fd4d216a3030abc56a339985ab0506328660cd77b2d71dd98c240c58c03d8f7f  fluidsynth-2.4.0.tar.gz
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+index 98b56ba696..87e34ca9fe 100644
+--- a/package/fluidsynth/fluidsynth.mk
++++ b/package/fluidsynth/fluidsynth.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLUIDSYNTH_VERSION = 2.3.7
++FLUIDSYNTH_VERSION = 2.4.0
+ FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+ FLUIDSYNTH_LICENSE = LGPL-2.1+
+ FLUIDSYNTH_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.47.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
