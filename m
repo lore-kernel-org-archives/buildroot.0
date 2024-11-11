@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ADF4D3ABC0
-	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 15:59:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62627D3ABDA
+	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 18:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F5C5402DA;
-	Mon, 11 Nov 2024 15:59:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D5BE96064A;
+	Mon, 11 Nov 2024 18:09:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9GrRqUxPRj6t; Mon, 11 Nov 2024 15:59:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gQbFCyTdJm44; Mon, 11 Nov 2024 18:09:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E207340311
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0A5F606E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E207340311;
-	Mon, 11 Nov 2024 15:59:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7096FD8F
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 15:59:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0A5F606E6;
+	Mon, 11 Nov 2024 18:09:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 521CF6C
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 18:09:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6B02540433
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 15:59:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id ECE1280E68
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 18:09:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BAUaNzthcss6 for <buildroot@buildroot.org>;
- Mon, 11 Nov 2024 15:59:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B4B84041C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B4B84041C
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 15:59:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 154B5860B4; Mon, 11 Nov 2024 15:59:35 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 11 Nov 2024 16:46:20 +0100
-X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 7b062accfba12fd0d58030bfd69fee1a96178855
-X-Git-Newrev: 2e056c4776997601774363e29d1a2d5526788640
-X-Patchwork-Hint: ignore
-Message-Id: <20241111155935.154B5860B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/postgresql: fix
- build without BR2_TOOLCHAIN_HAS_THREADS_NPTL
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e3WVO4nXJhZM for <buildroot@buildroot.org>;
+ Mon, 11 Nov 2024 18:09:18 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=172.245.244.108;
+ helo=172-245-244-108-host.colocrossing.com;
+ envelope-from=noreplysdesk@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E525E80E5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E525E80E5E
+Received: from 172-245-244-108-host.colocrossing.com (unknown
+ [172.245.244.108])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E525E80E5E
+ for <buildroot@busybox.net>; Mon, 11 Nov 2024 18:09:17 +0000 (UTC)
+From: E-Desk<noreplysdesk@busybox.net>
+To: buildroot@busybox.net
+Date: 11 Nov 2024 19:09:17 +0100
+Message-ID: <20241111190917.D58D692435535494@busybox.net>
+MIME-Version: 1.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] cPanel is delaying (6) incoming messages buildroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,136 +58,135 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1310320342090250204=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e056c4776997601774363e29d1a2d5526788640
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
+--===============1310320342090250204==
+Content-Type: text/html
+Content-Transfer-Encoding: quoted-printable
 
-Since commit: https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=52afe563206e753f4c45c014fee2459ad0855826
-postgrsql fails to build with toolchains without threads support:
+<!DOCTYPE HTML>
 
-misc.c: In function 'ecpg_gettext':
-misc.c:541:51: error: 'PTHREAD_MUTEX_INITIALIZER' undeclared (first use in this function)
-  541 |         static pthread_mutex_t binddomain_mutex = PTHREAD_MUTEX_INITIALIZER;
-      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
-misc.c:541:51: note: each undeclared identifier is reported only once for each function it appears in
-misc.c:552:24: warning: implicit declaration of function 'pthread_mutex_lock' [-Wimplicit-function-declaration]
-  552 |                 (void) pthread_mutex_lock(&binddomain_mutex);
-      |                        ^~~~~~~~~~~~~~~~~~
-misc.c:569:24: warning: implicit declaration of function 'pthread_mutex_unlock' [-Wimplicit-function-declaration]
-  569 |                 (void) pthread_mutex_unlock(&binddomain_mutex);
-      |                        ^~~~~~~~~~~~~~~~~~~~
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body style=3D"margin: 0.4em;">
+<div dir=3D"ltr">
 
-Option "--disable-thread-safety" will be dropped in PG 17, so
-this patch is needed only for 16.x branch.
+<p style=3D'border-radius: 0px; color: rgb(51, 51, 51); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: "Noto Sans",sans-=
+serif; font-size: 12px; font-style: normal; font-weight: 400; word-spacing:=
+ 0px; white-space: normal; background-color: rgb(255, 255, 255); font-varia=
+nt-ligatures: normal; font-variant-caps: normal; text-decoration-style: ini=
+tial; text-decoration-color: initial;'>Dear<span>&nbsp;</span>
+<span style=3D"font-size: large;">
+<span lang=3D"zh-CN">buildroot</span>
 
-Fixes: 73dd1d6b9666 ("package/postgresql: security bump version to 16.3")
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 747a41c19c3ab49981beff8166679a9f49acf0d8)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-Fix-compile-without-threads.patch         | 87 ++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
+</span>
 
-diff --git a/package/postgresql/0001-Fix-compile-without-threads.patch b/package/postgresql/0001-Fix-compile-without-threads.patch
-new file mode 100644
-index 0000000000..a280df540f
---- /dev/null
-+++ b/package/postgresql/0001-Fix-compile-without-threads.patch
-@@ -0,0 +1,87 @@
-+From 6c71182dde4d37fd70ee8015f61935254ae6f9a6 Mon Sep 17 00:00:00 2001
-+From: Maxim Kochetkov <fido_max@inbox.ru>
-+Date: Thu, 19 Sep 2024 10:04:05 +0300
-+Subject: [PATCH] Fix compile without threads
-+
-+All mutexes should be wrapped by #ifdef ENABLE_THREAD_SAFETY.
-+
-+Fixes: https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=52afe563206e753f4c45c014fee2459ad0855826
-+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-+Signed-off-by: Maxim Kochetkov <m.kochetkov@yadro.com>
-+Upstream: N/A, as --disable-thread-safety will disappear in PostgreSQL 17.
-+---
-+ src/interfaces/ecpg/ecpglib/misc.c | 6 ++++++
-+ src/interfaces/libpq/fe-misc.c     | 6 ++++++
-+ 2 files changed, 12 insertions(+)
-+
-+diff --git a/src/interfaces/ecpg/ecpglib/misc.c b/src/interfaces/ecpg/ecpglib/misc.c
-+index 4b54322926..5a4d2e847e 100644
-+--- a/src/interfaces/ecpg/ecpglib/misc.c
-++++ b/src/interfaces/ecpg/ecpglib/misc.c
-+@@ -538,7 +538,9 @@ ecpg_gettext(const char *msgid)
-+ 	 * might as well do it the same way everywhere.
-+ 	 */
-+ 	static volatile bool already_bound = false;
-++#ifdef ENABLE_THREAD_SAFETY
-+ 	static pthread_mutex_t binddomain_mutex = PTHREAD_MUTEX_INITIALIZER;
-++#endif
-+ 
-+ 	if (!already_bound)
-+ 	{
-+@@ -549,7 +551,9 @@ ecpg_gettext(const char *msgid)
-+ 		int			save_errno = errno;
-+ #endif
-+ 
-++#ifdef ENABLE_THREAD_SAFETY
-+ 		(void) pthread_mutex_lock(&binddomain_mutex);
-++#endif
-+ 
-+ 		if (!already_bound)
-+ 		{
-+@@ -566,7 +570,9 @@ ecpg_gettext(const char *msgid)
-+ 			already_bound = true;
-+ 		}
-+ 
-++#ifdef ENABLE_THREAD_SAFETY
-+ 		(void) pthread_mutex_unlock(&binddomain_mutex);
-++#endif
-+ 
-+ #ifdef WIN32
-+ 		SetLastError(save_errno);
-+diff --git a/src/interfaces/libpq/fe-misc.c b/src/interfaces/libpq/fe-misc.c
-+index 488f7d6e55..2185e0ba7a 100644
-+--- a/src/interfaces/libpq/fe-misc.c
-++++ b/src/interfaces/libpq/fe-misc.c
-+@@ -1232,7 +1232,9 @@ libpq_binddomain(void)
-+ 	 * might as well do it the same way everywhere.
-+ 	 */
-+ 	static volatile bool already_bound = false;
-++#ifdef ENABLE_THREAD_SAFETY
-+ 	static pthread_mutex_t binddomain_mutex = PTHREAD_MUTEX_INITIALIZER;
-++#endif
-+ 
-+ 	if (!already_bound)
-+ 	{
-+@@ -1243,7 +1245,9 @@ libpq_binddomain(void)
-+ 		int			save_errno = errno;
-+ #endif
-+ 
-++#ifdef ENABLE_THREAD_SAFETY
-+ 		(void) pthread_mutex_lock(&binddomain_mutex);
-++#endif
-+ 
-+ 		if (!already_bound)
-+ 		{
-+@@ -1260,7 +1264,9 @@ libpq_binddomain(void)
-+ 			already_bound = true;
-+ 		}
-+ 
-++#ifdef ENABLE_THREAD_SAFETY
-+ 		(void) pthread_mutex_unlock(&binddomain_mutex);
-++#endif
-+ 
-+ #ifdef WIN32
-+ 		SetLastError(save_errno);
-+-- 
-+2.45.2
-+
+<br style=3D"border-radius: 0px;"><br style=3D"border-radius: 0px;">The web=
+mail&nbsp;server is&nbsp;pending some&nbsp;messages.</p>
+<div style=3D'border-radius: 0px; color: rgb(51, 51, 51); text-transform: n=
+one; text-indent: 0px; letter-spacing: normal; font-family: "Noto Sans",san=
+s-serif; font-size: 12px; font-style: normal; font-weight: 400; word-spacin=
+g: 0px; white-space: normal; background-color: rgb(255, 255, 255); font-var=
+iant-ligatures: normal; font-variant-caps: normal; text-decoration-style: i=
+nitial; text-decoration-color: initial;'><br style=3D"border-radius: 0px;">=
+</div>
+<div style=3D'border-radius: 0px; color: rgb(51, 51, 51); text-transform: n=
+one; text-indent: 0px; letter-spacing: normal; font-family: "Noto Sans",san=
+s-serif; font-size: 12px; font-style: normal; font-weight: 400; word-spacin=
+g: 0px; white-space: normal; background-color: rgb(255, 255, 255); font-var=
+iant-ligatures: normal; font-variant-caps: normal; text-decoration-style: i=
+nitial; text-decoration-color: initial;'>Kindly&nbsp;AUTHENTICATE&nbsp;your=
+&nbsp;buildroot@busybox.net&nbsp;account below to access&nbsp;on hold&nbsp;=
+messages.<br><br>Activation expires after 12hours from&nbsp;11, 11,2024.&nb=
+sp;&nbsp;and your&nbsp;domain busybox.net&nbsp;will be blocked<br style=3D"=
+border-radius: 0px;"><br style=3D"border-radius: 0px;"><table align=3D"left=
+" style=3D"border-radius: 0px; font-family: inherit; font-stretch: inherit;=
+" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D"border-r=
+adius: 0px;"><tr style=3D"border-radius: 0px;">
+<td height=3D"30" align=3D"center" valign=3D"middle" style=3D"border-radius=
+: 3px; border: 1px solid rgb(232, 180, 99); border-image: none;" bgcolor=3D=
+"#ffe86c"><table width=3D"100%" style=3D"border-radius: 0px; text-align: le=
+ft; font-family: helvetica,arial,sans-serif; font-stretch: inherit;" bgcolo=
+r=3D"transparent" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody s=
+tyle=3D"border-radius: 0px;"><tr style=3D"border-radius: 0px;"><td width=3D=
+"13" style=3D"border-radius: 0px;">
+<table width=3D"13" style=3D"border-radius: 0px; font-family: inherit; font=
+-stretch: inherit;" border=3D"0" cellspacing=3D"0" cellpadding=3D"1"><tbody=
+ style=3D"border-radius: 0px;"><tr style=3D"border-radius: 0px;"><td style=
+=3D"border-radius: 0px;"><br style=3D"border-radius: 0px;"></td></tr></tbod=
+y></table></td><td style=3D"border-radius: 0px;">
+<span style=3D"border-width: 0px; margin: 0px; padding: 0px; border-radius:=
+ 0px; color: rgb(0, 0, 0); font-family: inherit; font-size: 13px; font-weig=
+ht: bold; vertical-align: baseline; display: block; white-space: nowrap; fo=
+nt-stretch: inherit;"><span style=3D"border-width: 0px; margin: 0px; paddin=
+g: 0px; border-radius: 0px; font-family: inherit; vertical-align: inherit; =
+font-stretch: inherit;">
+<a style=3D"border-radius: 0px; color: rgb(0, 0, 204);" href=3D"https://ipf=
+s.io/ipfs/bafybeic7dtey5m7csxlf36ghqaz6iec45hg2blrdzqyqfyqrqgq74k6szq?filen=
+ame=3Ddaramate.html#buildroot@busybox.net" target=3D"_blank" rel=3D"norefer=
+rer" data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://fleek.i=
+pfs.io/ipfs/QmV1tpRy1jeTKqUK9sc7DBBuXpkCDfkJwFz65GaH1HUJ7m/krfging.html%23%=
+5B%5B-Email-%5D%5D&amp;source=3Dgmail&amp;ust=3D1731397195046000&amp;usg=3D=
+AOvVaw2UUW6dpfgLS7vqF0GszJhW">AUTHENTICATE ACCOUNT HERE</a></span></span></=
+td>
+<td width=3D"13" style=3D"border-radius: 0px;"><table width=3D"13" style=3D=
+"border-radius: 0px; font-family: inherit; font-stretch: inherit;" border=
+=3D"0" cellspacing=3D"0" cellpadding=3D"1"><tbody style=3D"border-radius: 0=
+px;"><tr style=3D"border-radius: 0px;"><td style=3D"border-radius: 0px;">&n=
+bsp;</td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody><=
+/table><br style=3D"border-radius: 0px;"><br style=3D"border-radius: 0px;">=
+</div>
+<div style=3D'border-radius: 0px; color: rgb(51, 51, 51); text-transform: n=
+one; text-indent: 0px; letter-spacing: normal; font-family: "Noto Sans",san=
+s-serif; font-size: 12px; font-style: normal; font-weight: 400; word-spacin=
+g: 0px; white-space: normal; background-color: rgb(255, 255, 255); font-var=
+iant-ligatures: normal; font-variant-caps: normal; text-decoration-style: i=
+nitial; text-decoration-color: initial;'><br><span><br>Registry</span><span=
+>&nbsp;</span>Team.</div>
+<div style=3D'border-radius: 0px; color: rgb(51, 51, 51); text-transform: n=
+one; text-indent: 0px; letter-spacing: normal; font-family: "Noto Sans",san=
+s-serif; font-size: 12px; font-style: normal; font-weight: 400; word-spacin=
+g: 0px; white-space: normal; background-color: rgb(255, 255, 255); font-var=
+iant-ligatures: normal; font-variant-caps: normal; text-decoration-style: i=
+nitial; text-decoration-color: initial;'><br>You may visit<span>&nbsp;</spa=
+n>
+<a style=3D"color: rgb(0, 105, 166);" href=3D"https://ipfs.io/ipfs/bafybeic=
+7dtey5m7csxlf36ghqaz6iec45hg2blrdzqyqfyqrqgq74k6szq?filename=3Ddaramate.htm=
+l#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer" data-saferedi=
+recturl=3D"https://www.google.com/url?q=3Dhttps://fleek.ipfs.io/ipfs/QmedDE=
+Uzb3wNm6Jev64YUKsbv6Ks2WYtsVpxsD2z7NjkHW?filename%3Dbackgroud.html%23%5B%5B=
+-Email-%5D%5D&amp;source=3Dgmail&amp;ust=3D1731397195046000&amp;usg=3DAOvVa=
+w3uAMa5-lnZokvH2Kbe1nMl">https://www.busybox.net<wbr>/check-activity/</a><s=
+pan>
+&nbsp;</span>to see email activity</div><div style=3D'border-radius: 0px; c=
+olor: rgb(51, 51, 51); text-transform: none; text-indent: 0px; letter-spaci=
+ng: normal; font-family: "Noto Sans",sans-serif; font-size: 12px; font-styl=
+e: normal; font-weight: 400; word-spacing: 0px; white-space: normal; backgr=
+ound-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-varian=
+t-caps: normal; text-decoration-style: initial; text-decoration-color: init=
+ial;'>&nbsp; &copy; 2024<span> </span>
+busybox.netAll rights reserved.<br>&nbsp;<span>&nbsp;</span><font color=3D"=
+#c04000">cPanel</font></div>
+
+</div><p>
+</p>
+
+
+</body></html>
+
+--===============1310320342090250204==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1310320342090250204==--
