@@ -4,50 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7AA0D2E9F0
-	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 13:37:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45D9BD2E9FF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 14:22:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98FB380D5A;
-	Mon, 11 Nov 2024 13:37:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DCA5080BE5;
+	Mon, 11 Nov 2024 14:22:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WDngKH5lY3_i; Mon, 11 Nov 2024 13:37:52 +0000 (UTC)
+ id vqb18G9sZp0X; Mon, 11 Nov 2024 14:22:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9989B80D5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0224880BF2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9989B80D5E;
-	Mon, 11 Nov 2024 13:37:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9BE31D8F
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 13:37:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0224880BF2;
+	Mon, 11 Nov 2024 14:22:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 514226C
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 14:22:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8573740217
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 13:37:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D39FB401B1
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 14:22:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yFLNxiMSmiR5 for <buildroot@buildroot.org>;
- Mon, 11 Nov 2024 13:37:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id vPettgM1jE_K for <buildroot@buildroot.org>;
+ Mon, 11 Nov 2024 14:22:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32BE6400FE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 32BE6400FE
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 13:37:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F9AD86070; Mon, 11 Nov 2024 13:37:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 906AD401C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 906AD401C2
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 906AD401C2
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 14:22:03 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5A98EE0003;
+ Mon, 11 Nov 2024 14:22:00 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1tAVIl-00AUn3-1v;
+ Mon, 11 Nov 2024 15:21:59 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 11 Nov 2024 11:03:03 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 47b7dbc3b25d17fe91ff91749ae34c370bf6a2dd
-X-Git-Newrev: c86e433d1e6bc2ce245a9bdc41008f8696d1d4e3
-X-Patchwork-Hint: ignore
-Message-Id: <20241111133734.1F9AD86070@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] {linux,
- linux-headers}: bump 5.{10, 15}.x / 6.{1, 6, 11}.x series
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org,  Romain Naour <romain.naour@gmail.com>
+References: <20240930193627.50229-1-ju.o@free.fr>
+Date: Mon, 11 Nov 2024 15:21:59 +0100
+In-Reply-To: <20240930193627.50229-1-ju.o@free.fr> (Julien Olivain's message
+ of "Mon, 30 Sep 2024 21:36:27 +0200")
+Message-ID: <87o72lc0l4.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/liblinear: fix _SITE url
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,76 +69,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c86e433d1e6bc2ce245a9bdc41008f8696d1d4e3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 70359eaa0dfdb79f7566fdaf9b0adc81c27bfe1d)
-[Peter; drop 6.11.x bump]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ > The package _SITE url only contains the latest version at a given point
+ > in time. When a new version is published, it is replacing the old one.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 93d2200cab..2f90a41298 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.6.56" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.6.58" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 7cc406183e..9bd990123c 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,9 +1,9 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  f74812f78e88992c416434cb107639e13a551dbaff36bb90d6346ab16ab71a95  linux-6.6.56.tar.xz
--sha256  8bd8de3562fb006653e550a934e66ed9f80b7576258a03e2caa2e3ce1c1f9f24  linux-6.1.112.tar.xz
-+sha256  e7df81e588d70fab5ec3ec3bb04ac53d51f0860fc3b1ec45e0a4167a026899db  linux-6.6.58.tar.xz
-+sha256  2286e4a02ea2fbe65023dbf779f20aa994ba2b8d37ed559049378089451aa256  linux-6.1.114.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  b1751f18ece3df08d502dd87a9ab1a317dc0f9486355bf8ee62ba6af0b35da30  linux-5.15.167.tar.xz
--sha256  f6a19a64785965b9fcac0bcb6fd2412b45ca449495bb03592d46f9a50be51ca6  linux-5.10.226.tar.xz
-+sha256  e618c6d845fd1bc89477508e8d084bbe791fc88bf7623adee2deb6ecb2275370  linux-5.15.169.tar.xz
-+sha256  76cc8d7f1528f87902e38697229661d0617a7d6ab86166be9f3ef9a613b17b72  linux-5.10.228.tar.xz
- sha256  77221ab9aebeac746915c755ec3b7d320f85cd219c63d9c501820fbca1e3b32b  linux-5.4.284.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256  4e27cdf999359876a0ff489bff6ece7ba5798ff37c2289db0c9e9422a9014162  linux-4.19.322.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d9614ff60a..7361dae8cd 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -405,10 +405,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.19.322"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.4.284"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.226"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.167"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.112"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.56"	if BR2_KERNEL_HEADERS_6_6
-+	default "5.10.228"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.169"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.114"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.58"	if BR2_KERNEL_HEADERS_6_6
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ > This issue was not detected because the archive was downloaded from the
+ > sources.buildroot.org backup mirror, when the primary source became
+ > unavailable.
+
+ > Since commit 559bb33ae "support/testing: do not use s.b.o" [1], the
+ > runtime test infrastructure is disabling this backup mirror. This
+ > makes the nmap runtime test failing [2], which is using liblinear as
+ > a dependency.
+
+ > The liblinear package author confirmed in a private email that all the
+ > releases, including the latest version, are all kept in the "oldfiles"
+ > directory.
+
+ > This commit fixes this download issue by updating the _SITE url to that
+ > location. While at it, this commit also change the url to use https
+ > (since the http equivalent redirects to https).
+
+ > Fixes:
+ > - [2]
+
+ > [1] https://gitlab.com/buildroot.org/buildroot/-/commit/559bb33ae71dd2358ca2314ccb24b56cc3809fc1
+ > [2] https://gitlab.com/buildroot.org/buildroot/-/jobs/7948008007
+
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+
+Committed to 2024.02.x and 2024.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
