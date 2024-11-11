@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63A8CD2E9F0
-	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 13:37:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBE69D2E9F1
+	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 13:37:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 295C6606CA;
-	Mon, 11 Nov 2024 13:37:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zoIXvLnuR21N; Mon, 11 Nov 2024 13:37:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10625606D0
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 10625606D0;
-	Mon, 11 Nov 2024 13:37:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 73236D8F
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 13:37:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 54FAA80D4C
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 13:37:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8539580D2C;
+	Mon, 11 Nov 2024 13:37:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x4LD0GxbDeMn for <buildroot@buildroot.org>;
+ id YF6K_jt0mWFf; Mon, 11 Nov 2024 13:37:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D692B80D4E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D692B80D4E;
+	Mon, 11 Nov 2024 13:37:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 21FEADB1
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 13:37:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F2070400F8
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 13:37:35 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0oGCM8FzZNzp for <buildroot@buildroot.org>;
  Mon, 11 Nov 2024 13:37:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EA3780D50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 832D040278
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6EA3780D50
+ by smtp2.osuosl.org (Postfix) with ESMTP id 832D040278
  for <buildroot@buildroot.org>; Mon, 11 Nov 2024 13:37:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 69C1786071; Mon, 11 Nov 2024 13:37:34 +0000 (UTC)
+ id 7FF2E86070; Mon, 11 Nov 2024 13:37:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Nov 2024 11:46:26 +0100
+Date: Mon, 11 Nov 2024 11:51:29 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 7eeb2c77ab66c46055914997669315215caeac25
-X-Git-Newrev: 3ac71fa840fd0bae912cecae7b04d266cfd8f465
+X-Git-Oldrev: 5a2be8f85a03b377ba0edf773d571fa86fc66774
+X-Git-Newrev: 0366f75ad5f98dec84592e491ec72be759452457
 X-Patchwork-Hint: ignore
-Message-Id: <20241111133734.69C1786071@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/python-pyqt5-sip:
- new package
+Message-Id: <20241111133734.7FF2E86070@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add
+ python-pyqt5 test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,103 +65,190 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ac71fa840fd0bae912cecae7b04d266cfd8f465
+commit: https://git.buildroot.net/buildroot/commit/?id=0366f75ad5f98dec84592e491ec72be759452457
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-This packages adds the PyQt5.sip module.
-
-The official documentation [1] mentions that this module is needed
-during PyQt5 runtime. It is currently compiled without any
-dependencies to Qt or PyQt5, but it seems quite useless without it.
-The module was introduced together with PyQt 5.11 [2].
-
-[1] https://www.riverbankcomputing.com/static/Docs/PyQt5/installation.html#building-and-installing-from-source
-[2] https://www.riverbankcomputing.com/static/Docs/PyQt5/incompatibilities.html#pyqt-v5-11
-
-Signed-off-by: Ralf Dragon <hypnotoad@lindra.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 0281a71fe91ff0598be409b261cb38eda1d609a0)
+(cherry picked from commit d8c2c2cb57b87035908e234c0fc2127a34cfcf0d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                     |  3 +++
- package/Config.in                              |  1 +
- package/python-pyqt5-sip/Config.in             |  7 +++++++
- package/python-pyqt5-sip/python-pyqt5-sip.hash |  7 +++++++
- package/python-pyqt5-sip/python-pyqt5-sip.mk   | 14 ++++++++++++++
- 5 files changed, 32 insertions(+)
+ DEVELOPERS                                         |  2 +
+ support/testing/tests/package/test_python_pyqt5.py | 79 ++++++++++++++++++++++
+ .../package/test_python_pyqt5/linux-vkms.fragment  |  1 +
+ .../rootfs-overlay/root/pyqt5test.py               | 60 ++++++++++++++++
+ 4 files changed, 142 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a18d6901a6..f1629093aa 100644
+index f1629093aa..a1d639707e 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2606,6 +2606,9 @@ F:	package/gupnp-av/
- F:	package/let-me-create/
- F:	package/nanomsg/
- 
-+N:	Ralf Dragon <hypnotoad@lindra.de>
-+F:	package/python-pyqt5-sip/
-+
- N:	Ramon Fried <rfried.dev@gmail.com>
- F:	package/bitwise/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 36a3584c64..4db262f48e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1279,6 +1279,7 @@ menu "External python modules"
- 	source "package/python-pypng/Config.in"
- 	source "package/python-pyqrcode/Config.in"
- 	source "package/python-pyqt5/Config.in"
-+	source "package/python-pyqt5-sip/Config.in"
- 	source "package/python-pyratemp/Config.in"
- 	source "package/python-pyroute2/Config.in"
- 	source "package/python-pyrsistent/Config.in"
-diff --git a/package/python-pyqt5-sip/Config.in b/package/python-pyqt5-sip/Config.in
+@@ -1860,6 +1860,8 @@ F:	support/testing/tests/package/test_python_magic_wormhole.py
+ F:	support/testing/tests/package/test_python_midiutil.py
+ F:	support/testing/tests/package/test_python_ml_dtypes.py
+ F:	support/testing/tests/package/test_python_pyalsa.py
++F:	support/testing/tests/package/test_python_pyqt5.py
++F:	support/testing/tests/package/test_python_pyqt5/
+ F:	support/testing/tests/package/test_python_spake2.py
+ F:	support/testing/tests/package/test_rdma_core.py
+ F:	support/testing/tests/package/test_rdma_core/
+diff --git a/support/testing/tests/package/test_python_pyqt5.py b/support/testing/tests/package/test_python_pyqt5.py
 new file mode 100644
-index 0000000000..3eda2c8d1f
+index 0000000000..5f1952b559
 --- /dev/null
-+++ b/package/python-pyqt5-sip/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PYQT5_SIP
-+	bool "python-pyqt5-sip"
-+	help
-+	  This is the PyQt5.sip module which is needed at runtime for
-+	  the PyQt5 module from package python-pyqt5.
++++ b/support/testing/tests/package/test_python_pyqt5.py
+@@ -0,0 +1,79 @@
++import os
 +
-+	  https://pypi.org/project/PyQt5-sip/
-diff --git a/package/python-pyqt5-sip/python-pyqt5-sip.hash b/package/python-pyqt5-sip/python-pyqt5-sip.hash
-new file mode 100644
-index 0000000000..fb4a8cb04d
---- /dev/null
-+++ b/package/python-pyqt5-sip/python-pyqt5-sip.hash
-@@ -0,0 +1,7 @@
-+# from https://pypi.org/project/PyQt5-sip/12.30.0
-+sha256  7f321daf84b9c9dbca61b80e1ef37bdaffc0e93312edae2cd7da25b953971d91  PyQt5_sip-12.13.0.tar.gz
++import infra.basetest
 +
-+# Hash for license files:
-+md5  9cd437778ebd1c056a76b4ded73b3a6d  LICENSE
-+md5  e91355d8a6f8bd8f7c699d62863c7303  LICENSE-GPL2
-+md5  7ea41d866d6638e430db5287a3f66090  LICENSE-GPL3
-diff --git a/package/python-pyqt5-sip/python-pyqt5-sip.mk b/package/python-pyqt5-sip/python-pyqt5-sip.mk
++
++class TestPythonPyQt5(infra.basetest.BRTest):
++    # We use a specific configuration for:
++    # - using Aarch64, to have more than 256MB memory,
++    # - using a kernel config fragment, to enable VKMS,
++    # - to have an ext4 rootfs image exposed as a virtio storage
++    #   (rather than cpio initrd). This will save some memory, as the
++    #   rootfs image is big.
++    kernel_fragment = \
++        infra.filepath("tests/package/test_python_pyqt5/linux-vkms.fragment")
++    rootfs_overlay = \
++        infra.filepath("tests/package/test_python_pyqt5/rootfs-overlay")
++    config = \
++        f"""
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.81"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kernel_fragment}"
++        BR2_PACKAGE_DEJAVU=y
++        BR2_PACKAGE_LIBDRM=y
++        BR2_PACKAGE_MESA3D=y
++        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
++        BR2_PACKAGE_MESA3D_LLVM=y
++        BR2_PACKAGE_MESA3D_OPENGL_EGL=y
++        BR2_PACKAGE_MESA3D_OPENGL_ES=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_PYQT5=y
++        BR2_PACKAGE_QT5=y
++        BR2_PACKAGE_QT5BASE_EGLFS=y
++        BR2_PACKAGE_QT5BASE_FONTCONFIG=y
++        BR2_PACKAGE_QT5BASE_WIDGETS=y
++        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_4=y
++        BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
++                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M",
++                                    "-drive", f"file={drive},if=virtio,format=raw"])
++        self.emulator.login()
++
++        # We run the test application with a customized message.
++        # NOTE: to manually debug this test, a Qemu emulator with
++        # virtio-gpu can be used by starting it the command line from
++        # the run log generated by this test, and by adding the
++        # arguments "-device virtio-gpu -display gtk". With this, the
++        # test application will be observable on the Qemu window. Once
++        # logged, we can use the "card1" DRM/KMS device (virtio-gpu,
++        # instead of card0, which is vkms on "card0") by using the
++        # command:
++        #     echo '{"device":"/dev/dri/card1"}' > cfg.json
++        #     export QT_QPA_EGLFS_KMS_CONFIG="$PWD/cfg.json"
++        # The Qt debug can also be enabled with the command:
++        #     export QT_LOGGING_RULES=*=true
++        # Then, run the /root/pyqt5test.py application.
++        msg = "Hello Buildroot."
++        cmd = f'/root/pyqt5test.py "{msg}"'
++        self.assertRunOk(cmd, timeout=30)
++
++        # We check the test message is present in the file created by
++        # the previous application execution.
++        cmd = f'grep -F "{msg}" /root/message.txt'
++        self.assertRunOk(cmd)
+diff --git a/support/testing/tests/package/test_python_pyqt5/linux-vkms.fragment b/support/testing/tests/package/test_python_pyqt5/linux-vkms.fragment
 new file mode 100644
-index 0000000000..e52081ab45
+index 0000000000..ec2ed4460c
 --- /dev/null
-+++ b/package/python-pyqt5-sip/python-pyqt5-sip.mk
-@@ -0,0 +1,14 @@
-+################################################################################
++++ b/support/testing/tests/package/test_python_pyqt5/linux-vkms.fragment
+@@ -0,0 +1 @@
++CONFIG_DRM_VKMS=y
+diff --git a/support/testing/tests/package/test_python_pyqt5/rootfs-overlay/root/pyqt5test.py b/support/testing/tests/package/test_python_pyqt5/rootfs-overlay/root/pyqt5test.py
+new file mode 100755
+index 0000000000..3efeed7687
+--- /dev/null
++++ b/support/testing/tests/package/test_python_pyqt5/rootfs-overlay/root/pyqt5test.py
+@@ -0,0 +1,60 @@
++#! /usr/bin/env python3
 +#
-+# python-SIP-QT5
-+#
-+################################################################################
++# This is a test application for PyQt5. It is showing a text label and
++# a "quit" button. The text of the label can be set with the first
++# (non-Qt) command line argument. A timer will send a click signal to
++# the quit button after 3 seconds. When quitting, the text of the
++# label is saved in a "message.txt" file in the current working
++# directory.
 +
-+PYTHON_PYQT5_SIP_VERSION = 12.13.0
-+PYTHON_PYQT5_SIP_SITE = https://files.pythonhosted.org/packages/ee/81/fce2a475aa56c1f49707d9306b930695b6ff078c2242c9f2fd72a3214e1f
-+PYTHON_PYQT5_SIP_SOURCE = PyQt5_sip-$(PYTHON_PYQT5_SIP_VERSION).tar.gz
-+PYTHON_PYQT5_SIP_LICENSE = SIP license or GPL-2.0 or GPL-3.0
-+PYTHON_PYQT5_SIP_LICENSE_FILES = LICENSE LICENSE-GPL2 LICENSE-GPL3
-+PYTHON_PYQT5_SIP_SETUP_TYPE = setuptools
++import sys
 +
-+$(eval $(python-package))
++from PyQt5.QtCore import PYQT_VERSION_STR, QFile, QIODevice, QT_VERSION_STR, QTextStream, QTimer, Qt
++from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QVBoxLayout, QWidget
++
++
++class TestApp(QWidget):
++
++    def __init__(self, message, parent=None):
++        super(TestApp, self).__init__(parent)
++
++        self.label = QLabel(message)
++        self.label.setAlignment(Qt.AlignCenter)
++
++        self.button = QPushButton("Quit")
++        self.button.clicked.connect(self.on_button_clicked)
++
++        self.layout = QVBoxLayout()
++        self.layout.addWidget(self.label)
++        self.layout.addWidget(self.button)
++
++        self.setLayout(self.layout)
++
++        self.timer = QTimer()
++        self.timer.timeout.connect(self.button.click)
++
++    def on_button_clicked(self):
++        self.save_message()
++        app.quit()
++
++    def save_message(self):
++        f = QFile("message.txt")
++        if f.open(QIODevice.WriteOnly):
++            QTextStream(f) << (self.label.text() + '\n')
++        f.close()
++
++
++if __name__ == "__main__":
++    print("PyQt5 test for Buildroot")
++    print(f"Qt version {QT_VERSION_STR}")
++    print(f"PyQt version {PYQT_VERSION_STR}")
++
++    msg = "Hello World"
++    app = QApplication(sys.argv)
++    args = app.arguments()
++    if len(args) > 1:
++        msg = args[1]
++    testApp = TestApp(message=msg)
++    testApp.show()
++    testApp.timer.start(3000)
++    sys.exit(app.exec())
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
