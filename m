@@ -4,73 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85818D3ABF4
-	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 21:12:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 145F7D3ABF6
+	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 21:27:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 292FE606BB;
-	Mon, 11 Nov 2024 21:12:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A605760707;
+	Mon, 11 Nov 2024 21:27:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id huEOddJgOP3d; Mon, 11 Nov 2024 21:12:37 +0000 (UTC)
+ id 4BdM7hAemd6P; Mon, 11 Nov 2024 21:27:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCDC160702
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D653660711
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BCDC160702;
-	Mon, 11 Nov 2024 21:12:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E3814DB1
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 21:12:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D653660711;
+	Mon, 11 Nov 2024 21:27:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9B9DBDB1
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 21:27:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C5D5580CF7
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 21:12:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7CF6360716
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 21:27:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qeKEmtxxHYY3 for <buildroot@buildroot.org>;
- Mon, 11 Nov 2024 21:12:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ilsxyghc1DPG for <buildroot@buildroot.org>;
+ Mon, 11 Nov 2024 21:27:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D4C0580CA0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4C0580CA0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D4C0580CA0
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 21:12:30 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E9D5EFF802;
- Mon, 11 Nov 2024 21:12:28 +0000 (UTC)
-Date: Mon, 11 Nov 2024 22:12:28 +0100
-To: Brandon Maier <brandon.maier@gmail.com>
-Cc: buildroot@buildroot.org, Niklas Cassel <cassel@kernel.org>
-Message-ID: <20241111221228.211b7a61@windsurf>
-In-Reply-To: <20241109-genimage-partition-type-uuid-v1-0-9f23180c7195@gmail.com>
-References: <20241109-genimage-partition-type-uuid-v1-0-9f23180c7195@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0F3E360707
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F3E360707
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0F3E360707
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 21:27:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 24BF7240003;
+ Mon, 11 Nov 2024 21:27:35 +0000 (UTC)
+Date: Mon, 11 Nov 2024 22:27:34 +0100
+To: Scott Fan <fancp2007@gmail.com>
+Cc: buildroot@buildroot.org, Gero Schwaericke <gero.schwaericke@posteo.de>
+Message-ID: <20241111222734.2912b453@windsurf>
+In-Reply-To: <20241108154627.1922163-1-fancp2007@gmail.com>
+References: <20241108133641.1216345-1-fancp2007@gmail.com>
+ <20241108154627.1922163-1-fancp2007@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1731359549;
+ d=bootlin.com; s=gm1; t=1731360455;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=jCkekiMmdc60/p4tRO+sjwfvR3xLeYnydTMKZiC5BhU=;
- b=CMjmaUB+MJEiWC5HBhajJc5l5+hrl6U5R569/NGYvNP5POwD0uEMqJ7jnFLMrPLIN1BYyO
- 8pOcpL9bMfFCsc3MtNa3zKiqBnjl8KkeAJFv6NDGJJMwTrHuCS70uhWGZlgZlaQp7Jo+MH
- hX93uGyqcLkO0f9ETGbliov6YL6mVQlCeiVrNHbf/o+5r6VviBOpxdVb2zR1VJlGM6onps
- f3wLfD8ZzP0DjuCCL3REJbWzBLchb80RIGn8h0DHstEvO7Zbl7QOd8/JofOjd7Z54pW+Vr
- voPpw6JGGJiQwIRCn1K0Xh3evsDyt2+7NwW5iUuBiv/AVqI9aj3twNAXjpj/zw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=PN3zlFel8IgNPkRvu+KxDSgUxlUtRlzF9P1LtNJF7kU=;
+ b=hs0SAjVMGhjWhqwgzavYfUkQp5rtvFqjk5Bvfh4wIKOXNYLMYgWiVpdedtlmPINvv53P7R
+ 3cpcA9kYQmBJED6YwClDgmWqkpvSaxG273r6nzn/9O39EITlMpOwUzP1q+jOCsMP+CAV3i
+ x35pZtFm1lg4JCs6Q0qux8DNkX1iSd28Tgjv/w58lIFpO3LzIMzcmBz1mZx4aEAuJjqZjr
+ InZVy5IIiozlsHuqBC4XnF7SaY5oPqU/eub/aJJCb1I40J86o/9Pjd6hxMfBYLalhFX/xn
+ tlH6sf5du5VaZaYEsxYh9uzoS8est8W4Q5XdLzKkAgU+U7c5AKb99tgQVtKoGQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CMjmaUB+
-Subject: Re: [Buildroot] [PATCH 00/17] board: cleanup genimage
- partition-type-uuid shortcuts
+ header.s=gm1 header.b=hs0SAjVM
+Subject: Re: [Buildroot] [PATCH v3] configs/cubieboard1: bump Linux to
+ 6.11.6 and U-Boot to 2024.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,43 +90,21 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Brandon,
+On Fri,  8 Nov 2024 23:46:25 +0800
+Scott Fan <fancp2007@gmail.com> wrote:
 
-On Sat, 09 Nov 2024 16:16:14 -0600
-Brandon Maier <brandon.maier@gmail.com> wrote:
-
-> Buildroot boards using genimage's "partition-type-uuid" can use either a
-> full GUID or one of the shortcuts defined in genimage[1]. The Buildroot
-> manual recommends using the "L", "U", or "F" shortcuts over a full GUID;
-> but does not specify how any other GUID should be defined.
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
 > 
-> This series tries to bring consistency to partition-type-uuid by making
-> shortcuts the preferred method. First we update the Buildroot manual to
-> say shortcuts should be preferred when available. Then we update all
-> boards to use shortcuts.
-> 
-> This series is partially implementing Thomas suggestion to have
-> consistency when using "L" vs "root-${ARCH}" vs full GUIDs[2].
+> ---
+> Changes v1 -> v2:
+>   - update the linux.hash and uboot.hash file
 
-Thanks for working on this! However, I'm slightly confused as to what
-the goal of this series is in the overall process of making things more
-consistent.
-
-With your series enabled, some root filesystems still use L, some use
-root-*, which isn't very consistent. Is your series "only" about
-replacing full GUID by shortcuts, for the moment?
-
-I'm fine with going this way, but then the PATCH 01/17 should be
-accurate about what's recommended nowadays. Because saying in the doc
-we want L for the rootfs, but many genimage.cfg use root-* isn't really
-great.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
