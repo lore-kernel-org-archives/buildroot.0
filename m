@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C99F3D3ABC3
-	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 15:59:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ADF4D3ABC0
+	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 15:59:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9558460585;
-	Mon, 11 Nov 2024 15:59:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6rICw56vQDnQ; Mon, 11 Nov 2024 15:59:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 927E460594
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 927E460594;
-	Mon, 11 Nov 2024 15:59:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5BB8C6C
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 15:59:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 494C6402E4
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 15:59:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F5C5402DA;
+	Mon, 11 Nov 2024 15:59:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Umg-oX8sRQKa for <buildroot@buildroot.org>;
+ id 9GrRqUxPRj6t; Mon, 11 Nov 2024 15:59:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E207340311
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E207340311;
+	Mon, 11 Nov 2024 15:59:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7096FD8F
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 15:59:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B02540433
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 15:59:36 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BAUaNzthcss6 for <buildroot@buildroot.org>;
  Mon, 11 Nov 2024 15:59:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38453402DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B4B84041C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 38453402DA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1B4B84041C
  for <buildroot@buildroot.org>; Mon, 11 Nov 2024 15:59:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 24737860B5; Mon, 11 Nov 2024 15:59:35 +0000 (UTC)
+ id 154B5860B4; Mon, 11 Nov 2024 15:59:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Nov 2024 16:55:57 +0100
+Date: Mon, 11 Nov 2024 16:46:20 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 2e056c4776997601774363e29d1a2d5526788640
-X-Git-Newrev: 312984bdbd044549cc36504e01ba3b60c94ed6f1
+X-Git-Oldrev: 7b062accfba12fd0d58030bfd69fee1a96178855
+X-Git-Newrev: 2e056c4776997601774363e29d1a2d5526788640
 X-Patchwork-Hint: ignore
-Message-Id: <20241111155935.24737860B5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] support/testing: package:
- bitcoin: fix test by increasing timeouts
+Message-Id: <20241111155935.154B5860B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/postgresql: fix
+ build without BR2_TOOLCHAIN_HAS_THREADS_NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,47 +65,129 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=312984bdbd044549cc36504e01ba3b60c94ed6f1
+commit: https://git.buildroot.net/buildroot/commit/?id=2e056c4776997601774363e29d1a2d5526788640
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Generating Bitcoins to an address can take longer than the current
-timeout, on slow runners. This commit fixes this issue by increasing
-the timeout on specific commands. This issue was also observed more
-frequently on newer bitcoin-core version 28.0.
+Since commit: https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=52afe563206e753f4c45c014fee2459ad0855826
+postgrsql fails to build with toolchains without threads support:
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/7782083081
+misc.c: In function 'ecpg_gettext':
+misc.c:541:51: error: 'PTHREAD_MUTEX_INITIALIZER' undeclared (first use in this function)
+  541 |         static pthread_mutex_t binddomain_mutex = PTHREAD_MUTEX_INITIALIZER;
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+misc.c:541:51: note: each undeclared identifier is reported only once for each function it appears in
+misc.c:552:24: warning: implicit declaration of function 'pthread_mutex_lock' [-Wimplicit-function-declaration]
+  552 |                 (void) pthread_mutex_lock(&binddomain_mutex);
+      |                        ^~~~~~~~~~~~~~~~~~
+misc.c:569:24: warning: implicit declaration of function 'pthread_mutex_unlock' [-Wimplicit-function-declaration]
+  569 |                 (void) pthread_mutex_unlock(&binddomain_mutex);
+      |                        ^~~~~~~~~~~~~~~~~~~~
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Option "--disable-thread-safety" will be dropped in PG 17, so
+this patch is needed only for 16.x branch.
+
+Fixes: 73dd1d6b9666 ("package/postgresql: security bump version to 16.3")
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 859c4ea5f74f713777ffa980f1627b46a311bdd4)
+(cherry picked from commit 747a41c19c3ab49981beff8166679a9f49acf0d8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_bitcoin.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../0001-Fix-compile-without-threads.patch         | 87 ++++++++++++++++++++++
+ 1 file changed, 87 insertions(+)
 
-diff --git a/support/testing/tests/package/test_bitcoin.py b/support/testing/tests/package/test_bitcoin.py
-index 93aa9383ab..1f00345a12 100644
---- a/support/testing/tests/package/test_bitcoin.py
-+++ b/support/testing/tests/package/test_bitcoin.py
-@@ -130,7 +130,7 @@ class TestBitcoin(infra.basetest.BRTest):
-         # #1. We should receive the 50 BTC reward at this address.
-         cmd = self.cli_cmd
-         cmd += f" generatetoaddress {req_blk_count} {btc_addr1}"
--        self.assertRunOk(cmd)
-+        self.assertRunOk(cmd, timeout=30)
- 
-         # We should now see the previously created blocks.
-         cur_blk_cnt = self.get_block_count()
-@@ -169,7 +169,7 @@ class TestBitcoin(infra.basetest.BRTest):
-         # the previous transaction (but this will not give the 50 BTC
-         # reward).
-         cmd = f"{self.cli_cmd} generatetoaddress 1 {btc_addr2}"
--        self.assertRunOk(cmd)
-+        self.assertRunOk(cmd, timeout=30)
- 
-         # We should see one more block.
-         cur_blk_cnt = self.get_block_count()
+diff --git a/package/postgresql/0001-Fix-compile-without-threads.patch b/package/postgresql/0001-Fix-compile-without-threads.patch
+new file mode 100644
+index 0000000000..a280df540f
+--- /dev/null
++++ b/package/postgresql/0001-Fix-compile-without-threads.patch
+@@ -0,0 +1,87 @@
++From 6c71182dde4d37fd70ee8015f61935254ae6f9a6 Mon Sep 17 00:00:00 2001
++From: Maxim Kochetkov <fido_max@inbox.ru>
++Date: Thu, 19 Sep 2024 10:04:05 +0300
++Subject: [PATCH] Fix compile without threads
++
++All mutexes should be wrapped by #ifdef ENABLE_THREAD_SAFETY.
++
++Fixes: https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=52afe563206e753f4c45c014fee2459ad0855826
++Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
++Signed-off-by: Maxim Kochetkov <m.kochetkov@yadro.com>
++Upstream: N/A, as --disable-thread-safety will disappear in PostgreSQL 17.
++---
++ src/interfaces/ecpg/ecpglib/misc.c | 6 ++++++
++ src/interfaces/libpq/fe-misc.c     | 6 ++++++
++ 2 files changed, 12 insertions(+)
++
++diff --git a/src/interfaces/ecpg/ecpglib/misc.c b/src/interfaces/ecpg/ecpglib/misc.c
++index 4b54322926..5a4d2e847e 100644
++--- a/src/interfaces/ecpg/ecpglib/misc.c
+++++ b/src/interfaces/ecpg/ecpglib/misc.c
++@@ -538,7 +538,9 @@ ecpg_gettext(const char *msgid)
++ 	 * might as well do it the same way everywhere.
++ 	 */
++ 	static volatile bool already_bound = false;
+++#ifdef ENABLE_THREAD_SAFETY
++ 	static pthread_mutex_t binddomain_mutex = PTHREAD_MUTEX_INITIALIZER;
+++#endif
++ 
++ 	if (!already_bound)
++ 	{
++@@ -549,7 +551,9 @@ ecpg_gettext(const char *msgid)
++ 		int			save_errno = errno;
++ #endif
++ 
+++#ifdef ENABLE_THREAD_SAFETY
++ 		(void) pthread_mutex_lock(&binddomain_mutex);
+++#endif
++ 
++ 		if (!already_bound)
++ 		{
++@@ -566,7 +570,9 @@ ecpg_gettext(const char *msgid)
++ 			already_bound = true;
++ 		}
++ 
+++#ifdef ENABLE_THREAD_SAFETY
++ 		(void) pthread_mutex_unlock(&binddomain_mutex);
+++#endif
++ 
++ #ifdef WIN32
++ 		SetLastError(save_errno);
++diff --git a/src/interfaces/libpq/fe-misc.c b/src/interfaces/libpq/fe-misc.c
++index 488f7d6e55..2185e0ba7a 100644
++--- a/src/interfaces/libpq/fe-misc.c
+++++ b/src/interfaces/libpq/fe-misc.c
++@@ -1232,7 +1232,9 @@ libpq_binddomain(void)
++ 	 * might as well do it the same way everywhere.
++ 	 */
++ 	static volatile bool already_bound = false;
+++#ifdef ENABLE_THREAD_SAFETY
++ 	static pthread_mutex_t binddomain_mutex = PTHREAD_MUTEX_INITIALIZER;
+++#endif
++ 
++ 	if (!already_bound)
++ 	{
++@@ -1243,7 +1245,9 @@ libpq_binddomain(void)
++ 		int			save_errno = errno;
++ #endif
++ 
+++#ifdef ENABLE_THREAD_SAFETY
++ 		(void) pthread_mutex_lock(&binddomain_mutex);
+++#endif
++ 
++ 		if (!already_bound)
++ 		{
++@@ -1260,7 +1264,9 @@ libpq_binddomain(void)
++ 			already_bound = true;
++ 		}
++ 
+++#ifdef ENABLE_THREAD_SAFETY
++ 		(void) pthread_mutex_unlock(&binddomain_mutex);
+++#endif
++ 
++ #ifdef WIN32
++ 		SetLastError(save_errno);
++-- 
++2.45.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
