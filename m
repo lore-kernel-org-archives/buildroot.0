@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 573B3D3ABFA
-	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 21:44:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9526CD3ABCF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 22:46:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B4D360749;
-	Mon, 11 Nov 2024 21:44:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 42B9480E16;
+	Mon, 11 Nov 2024 22:46:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sbz_tA1sDwlG; Mon, 11 Nov 2024 21:44:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id trGDUoZd0O59; Mon, 11 Nov 2024 22:46:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31C326074D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC1F080DFF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31C326074D;
-	Mon, 11 Nov 2024 21:44:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7D374E0D
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 21:44:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC1F080DFF;
+	Mon, 11 Nov 2024 22:46:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A26BD8F
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 22:46:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D51840527
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 21:44:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB67B80DFF
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 22:46:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dpcJohY7YGcy for <buildroot@buildroot.org>;
- Mon, 11 Nov 2024 21:44:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aaZw6P_XJcuO for <buildroot@buildroot.org>;
+ Mon, 11 Nov 2024 22:46:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3921640525
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3921640525
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 21:44:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2188B86148; Mon, 11 Nov 2024 21:44:48 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 11 Nov 2024 22:27:15 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 323567552bef83a82caa4c6f1f7f29231ae31a59
-X-Git-Newrev: 36f1195493245c2299c436be5716cdee072ac8cf
-X-Patchwork-Hint: ignore
-Message-Id: <20241111214448.2188B86148@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/cubieboard1: bump Linux to 6.11.6
- and U-Boot to 2024.10
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DBD6680AC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBD6680AC6
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DBD6680AC6
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 22:46:39 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2AA441BF204;
+ Mon, 11 Nov 2024 22:46:37 +0000 (UTC)
+Date: Mon, 11 Nov 2024 23:46:36 +0100
+To: Fiona Klute via buildroot <buildroot@buildroot.org>
+Cc: Fiona Klute <fiona.klute@gmx.de>
+Message-ID: <20241111234636.704b57ae@windsurf>
+In-Reply-To: <20241107144453.4093935-1-fiona.klute@gmx.de>
+References: <20241107144453.4093935-1-fiona.klute@gmx.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1731365197;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=dPanK5u73ZJdJsktAOWs6apdt9nvJmZ/VVkga8ZNDok=;
+ b=Mm4TlXywhVJqL6PB7MaLL4wEEFshh7yj1x77AQCmrFtzHVCVL20JAt/Rqh710yjTkXPJsj
+ nUl0DqmMZAUHbxwqM6jVpoYtoyDBBT28hoFtr7DYFDUCBlzRJ63+hJjHVUb/LlRzK2iWeO
+ GqBmkXk+KO0kARPo6+vp/ykvJ6vtoFof1yNRqiAqoyqZ4We7uqFirmxtPMVQYWUN6ZGUD7
+ yrUlCTXBPPkgzZ71esltqTW+JcbjF2PMp/b4SOi1BOPvVYFF+cZqdOTwbGzzuul1yi8txn
+ lV4nuZ28rUWAhmvcm/WCnIK0KRriJuadwiZ5tB1S3cuCtHdpZjfoufxj+Y+N3Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Mm4TlXyw
+Subject: Re: [Buildroot] [PATCH 1/1] package/raspberrypi-usbboot: bump
+ version to 20240926-102326
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,71 +84,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36f1195493245c2299c436be5716cdee072ac8cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  7 Nov 2024 15:44:53 +0100
+Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/cubietech/cubieboard1/patches/linux/linux.hash | 2 +-
- board/cubietech/cubieboard1/patches/uboot/uboot.hash | 2 +-
- configs/cubieboard1_defconfig                        | 7 ++++---
- 3 files changed, 6 insertions(+), 5 deletions(-)
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+> 
+> This version adds the -i flag to select the device to boot by serial
+> number [1], which is important when working with multiple RPi
+> devices. Otherwise mostly firmware updates, see [2] for all changes.
+> 
+> Also switch to the git download method for reproducible archives.
+> 
+> [1] https://github.com/raspberrypi/usbboot/commit/481c5e8a77d7bbf81060deb0f3efe463ec97243f
+> [2] https://github.com/raspberrypi/usbboot/compare/20221215-105525...20240926-102326
+> 
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+> ---
+>  ...akefile-allow-passing-CFLAGS-LDFLAGS.patch | 20 +++++++++----------
+>  .../raspberrypi-usbboot.hash                  |  2 +-
+>  .../raspberrypi-usbboot.mk                    |  6 +++---
+>  3 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/board/cubietech/cubieboard1/patches/linux/linux.hash b/board/cubietech/cubieboard1/patches/linux/linux.hash
-index 5e9df51ecd..42d02c9f78 100644
---- a/board/cubietech/cubieboard1/patches/linux/linux.hash
-+++ b/board/cubietech/cubieboard1/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  19b31956d229b5b9ca5671fa1c74320179682a3d8d00fc86794114b21da86039  linux-6.8.12.tar.xz
-+sha256  c954f60197008f1e1f32a1e77293903cf3801d2543ec4bf521f5651eb7f133ce  linux-6.11.6.tar.xz
-diff --git a/board/cubietech/cubieboard1/patches/uboot/uboot.hash b/board/cubietech/cubieboard1/patches/uboot/uboot.hash
-index 97a2b4eaf9..904fa56c02 100644
---- a/board/cubietech/cubieboard1/patches/uboot/uboot.hash
-+++ b/board/cubietech/cubieboard1/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
-+sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-diff --git a/configs/cubieboard1_defconfig b/configs/cubieboard1_defconfig
-index c2ced443ef..c3dede47b8 100644
---- a/configs/cubieboard1_defconfig
-+++ b/configs/cubieboard1_defconfig
-@@ -1,6 +1,6 @@
- BR2_arm=y
- BR2_cortex_a8=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
- BR2_GLOBAL_PATCH_DIR="board/cubietech/cubieboard1/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_OVERLAY="board/cubietech/cubieboard1/rootfs_overlay"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/cubietech/cubieboard1/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.6"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun4i-a10-cubieboard"
-@@ -18,8 +18,9 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_SPL=y
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
