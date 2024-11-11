@@ -1,51 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACA81D3ABF6
-	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 20:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45402D3ABF5
+	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 20:51:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63BF3606E6;
-	Mon, 11 Nov 2024 20:46:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F0DAE401DF;
+	Mon, 11 Nov 2024 20:51:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fWqd3obyoSQV; Mon, 11 Nov 2024 20:46:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cNJa2qqUGhZR; Mon, 11 Nov 2024 20:51:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59998606F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD6AA4018C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59998606F8;
-	Mon, 11 Nov 2024 20:46:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E8A7DB1
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 20:46:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD6AA4018C;
+	Mon, 11 Nov 2024 20:51:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3DB2CD8F
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 20:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9E76E606E6
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 20:46:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1EFFD60702
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 20:51:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w2HXz4wMh6tB for <buildroot@buildroot.org>;
- Mon, 11 Nov 2024 20:46:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id UAPtETE7ONct for <buildroot@buildroot.org>;
+ Mon, 11 Nov 2024 20:51:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B97C1606FF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B97C1606FF
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 20:46:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A5CC78612C; Mon, 11 Nov 2024 20:46:43 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 11 Nov 2024 21:41:29 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 122a5e252911b2ebd84d59d802e7b28b2a499f24
-X-Git-Newrev: 9b40127534bf3e34b5161baf0dd318e65a66dd99
-X-Patchwork-Hint: ignore
-Message-Id: <20241111204643.A5CC78612C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/usbredir: bump version to 0.14.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9B77F606FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B77F606FF
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9B77F606FF
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 20:51:31 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B9CD71C0003;
+ Mon, 11 Nov 2024 20:51:29 +0000 (UTC)
+Date: Mon, 11 Nov 2024 21:51:29 +0100
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org, "Yann E . MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20241111215129.7aa50466@windsurf>
+In-Reply-To: <20241110171129.326957-1-ju.o@free.fr>
+References: <20241110171129.326957-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1731358290;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=1W3wjNScetojsK6z2HvUaOAeu7hxOkMedhoRmMhBqV4=;
+ b=nOZRFiQ5tY7l0PRfB5q914ovVtDQoIGxvBTuUc4SnlqSeaetmtpErGYlHxNPOGoS9tSwU9
+ f1fPH4niF9xmc97s5nA+HrH2Fe+qV8eYJRzWzn7m0H6dYJTicdxYtUSdUPcV/EKaUYTe/j
+ SatOtJeTqHRBNJcjKVIM0M3QJxiAN/KzbeodzbOFZ7ImecNsM4DHsYYKPpXfjBmUzlfeld
+ m/y0eMeOdyfnLbSDqDXYuWCal3OO5FcaNTZn7kYzDnCt77atdvmZj45RqHxhKzL++RDtqz
+ zNVe2gbqwbQEVkM5ulJheU0/hbqMMdGLYQd/JfR38FXDq0FAfL6yUb5lxI+imw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=nOZRFiQ5
+Subject: Re: [Buildroot] [PATCH 1/1] package/usbredir: fix package homepage
+ URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,65 +84,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b40127534bf3e34b5161baf0dd318e65a66dd99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 10 Nov 2024 18:11:29 +0100
+Julien Olivain <ju.o@free.fr> wrote:
 
-For change log, see [1].
+> The current homepage URL [1] redirects to its https and ends up to
+> a HTTP 404 not found error. This commit fixes the issue by replacing
+> it with the new URL [2].
+> 
+> [1] http://www.spice-space.org/page/UsbRedir
+> [2] https://www.spice-space.org/usbredir.html
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  package/usbredir/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-This commit also updates the _SITE to the URL published on the
-homepage [2]. The main motivation is to use HTTPS.
+Applied to master, thanks.
 
-This commit also adds a comment in the hash file about the pgp
-signature verification.
-
-[1] https://gitlab.freedesktop.org/spice/usbredir/-/blob/usbredir-0.14.0/ChangeLog.md
-[2] https://www.spice-space.org/usbredir.html
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/usbredir/usbredir.hash | 8 ++++++--
- package/usbredir/usbredir.mk   | 4 ++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/package/usbredir/usbredir.hash b/package/usbredir/usbredir.hash
-index 577e08efba..2be6301281 100644
---- a/package/usbredir/usbredir.hash
-+++ b/package/usbredir/usbredir.hash
-@@ -1,5 +1,9 @@
--# https://spice-space.org/download/usbredir/usbredir-0.13.0.tar.xz.sha256sum
--sha256  4ba6faa02c0ae6deeb4c53883d66ab54b3a5899bead42ce4ded9568b9a7dc46e  usbredir-0.13.0.tar.xz
-+# Hash from:
-+# https://www.spice-space.org/download/usbredir/usbredir-0.14.0.tar.xz.sha256sum
-+# After checking pgp signature:
-+# https://www.spice-space.org/download/usbredir/usbredir-0.14.0.tar.xz.sig
-+# with key 206D3B352F566F3B0E6572E997D9123DE37A484F
-+sha256  924dfb5c78328fae45a4c93a01bc83bb72c1310abeed119109255627a8baa332  usbredir-0.14.0.tar.xz
- 
- # Hash for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
-index 325e7313aa..aefe51b6c4 100644
---- a/package/usbredir/usbredir.mk
-+++ b/package/usbredir/usbredir.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--USBREDIR_VERSION = 0.13.0
-+USBREDIR_VERSION = 0.14.0
- USBREDIR_SOURCE = usbredir-$(USBREDIR_VERSION).tar.xz
--USBREDIR_SITE = http://spice-space.org/download/usbredir
-+USBREDIR_SITE = https://www.spice-space.org/download/usbredir
- USBREDIR_LICENSE = LGPL-2.1+ (libraries)
- USBREDIR_LICENSE_FILES = COPYING.LIB
- USBREDIR_INSTALL_STAGING = YES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
