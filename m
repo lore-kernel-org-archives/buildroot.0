@@ -4,68 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67073D2E9FF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 14:35:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84C41D2E9F0
+	for <buildroot@archiver.kernel.org>; Mon, 11 Nov 2024 14:35:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22BA380A74;
-	Mon, 11 Nov 2024 14:35:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 56B3B80C59;
+	Mon, 11 Nov 2024 14:35:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N74bIwTmyOEs; Mon, 11 Nov 2024 14:35:14 +0000 (UTC)
+ id 2YJfvoiXkL2t; Mon, 11 Nov 2024 14:35:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C19D80A79
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55CDE80C4C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C19D80A79;
-	Mon, 11 Nov 2024 14:35:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B79B8DB1
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 14:35:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55CDE80C4C;
+	Mon, 11 Nov 2024 14:35:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A923C6C
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 14:35:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A618C80A79
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 14:35:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7CA9260625
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 14:35:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 28gkDBXliwJM for <buildroot@buildroot.org>;
- Mon, 11 Nov 2024 14:35:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a54Fd-LR8WE3 for <buildroot@buildroot.org>;
+ Mon, 11 Nov 2024 14:35:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CAAD880A74
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAAD880A74
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CAAD880A74
- for <buildroot@buildroot.org>; Mon, 11 Nov 2024 14:35:11 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1525839445
- for <buildroot@buildroot.org>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 11 Nov 2024 14:35:09 +0000 (UTC)
-Message-ID: <1cc3197b-6e74-4945-9b95-43a36530e4c7@korsgaard.com>
-Date: Mon, 11 Nov 2024 15:35:07 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: buildroot@buildroot.org
-References: <20240921172634.3642820-1-bernd@kuhls.net>
-Content-Language: en-US
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA5D1605A0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BA5D1605A0
+ for <buildroot@buildroot.org>; Mon, 11 Nov 2024 14:35:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A747386094; Mon, 11 Nov 2024 14:35:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20240921172634.3642820-1-bernd@kuhls.net>
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=LZZQ0aub9v8Ms/tnSr74W+ztayrmch1YHwh8xhn/M+zxATvxPAB4coh8OKtEI0PYdsBXzcC4wa2J1yxEeQyQ9q2hV5WjiRHz40xHjoJosVxSiOFkuZCrv3R/IBPpZbm7KRZ4OZ/JLMMSR0DB7Pv+kSOojTQAuXJxfUSAqo0EoK6qoXJxL0uV8UZVqOBuiwViOf5BFMhpADQ+Le3Ll3+BTwD0DSDU3iVXzL8yXxfm8AKqvg2x2U3F0/TjKA+BhONu5f+aSZdzGx2Hrto5RBO3f9VDO7vXQ9SNB/KYl4oAu+KMCgem7IkRbAriNZ7mJJQ90F6g7Bgc252wvdOTWC6zaQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=jKgI/htKbWTYHwQkEqWgvPRJzZrS9X6Hp/UJs/2T1Ec=;
- h=Feedback-ID:Received:Date:Subject:To:From; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=LZZQ0aub
-Subject: Re: [Buildroot] [PATCH 1/1] package/libxml2: bump version to 2.13.4
+To: buildroot@buildroot.org
+Date: Mon, 11 Nov 2024 15:31:32 +0100
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: cb52559946d50859dcb4d42ef08a3bf34f00944c
+X-Git-Newrev: c19c359e5e83aa8011014ce7ad4252a3625a4415
+X-Patchwork-Hint: ignore
+Message-Id: <20241111143551.A747386094@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/openjdk: fix typo
+ in help text of openjdk zero
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,23 +59,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 9/21/24 19:26, Bernd Kuhls wrote:
-> Release notes:
-> https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.4.news
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
+commit: https://git.buildroot.net/buildroot/commit/?id=c19c359e5e83aa8011014ce7ad4252a3625a4415
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Committed to 2024.08.x, thanks.
+Signed-off-by: He Haorui <hehaorui1999@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 9f3e805428302c16769da78ce6604d5db77fbc39)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openjdk/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
-
+diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
+index 25d6960ecf..78775370ca 100644
+--- a/package/openjdk/Config.in
++++ b/package/openjdk/Config.in
+@@ -148,7 +148,7 @@ config BR2_PACKAGE_OPENJDK_JVM_VARIANT_ZERO
+ 	select BR2_PACKAGE_LIBFFI
+ 	help
+ 	  A non-assembler variant with wide arch support, however
+-	  performance is less then client/server.
++	  performance is less than client/server.
+ 
+ 	  http://openjdk.java.net/projects/zero
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
