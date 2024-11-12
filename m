@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06ED0D597A1
-	for <buildroot@archiver.kernel.org>; Tue, 12 Nov 2024 20:16:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BEF9D597A0
+	for <buildroot@archiver.kernel.org>; Tue, 12 Nov 2024 20:17:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DFB54402FD;
-	Tue, 12 Nov 2024 20:16:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4819607A8;
+	Tue, 12 Nov 2024 20:17:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cYkCrTX6BUce; Tue, 12 Nov 2024 20:16:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G54eezVs49sU; Tue, 12 Nov 2024 20:17:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7363D40345
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF0C46076C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7363D40345;
-	Tue, 12 Nov 2024 20:16:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C29EB725
- for <buildroot@buildroot.org>; Tue, 12 Nov 2024 20:16:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF0C46076C;
+	Tue, 12 Nov 2024 20:17:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 183E7DB1
+ for <buildroot@buildroot.org>; Tue, 12 Nov 2024 20:17:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B03BE40302
- for <buildroot@buildroot.org>; Tue, 12 Nov 2024 20:16:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EDF328118F
+ for <buildroot@buildroot.org>; Tue, 12 Nov 2024 20:17:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b1pUXVfLUvhp for <buildroot@buildroot.org>;
- Tue, 12 Nov 2024 20:16:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NtXV4hRRp7yb for <buildroot@buildroot.org>;
+ Tue, 12 Nov 2024 20:17:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9727A402FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18DDD8118D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9727A402FD
- for <buildroot@buildroot.org>; Tue, 12 Nov 2024 20:16:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 18DDD8118D
+ for <buildroot@buildroot.org>; Tue, 12 Nov 2024 20:17:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8203E86186; Tue, 12 Nov 2024 20:16:50 +0000 (UTC)
+ id 07D6586159; Tue, 12 Nov 2024 20:17:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Nov 2024 21:10:32 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: ceff4b7dc4e7048a4175ede7ffa1631b9f91ed18
-X-Git-Newrev: 679c4392a5cd5e9f2f4e932d788da1ec3a990641
+Date: Tue, 12 Nov 2024 21:10:25 +0100
+X-Git-Refname: refs/heads/2024.08.x
+X-Git-Oldrev: 18a325d3a468856363f7d04fd3f45c85e29939c2
+X-Git-Newrev: bd1d78763755868680d0fcf42c55e357d9e2bbf9
 X-Patchwork-Hint: ignore
-Message-Id: <20241112201650.8203E86186@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/wpebackend-fdo:
+Message-Id: <20241112201756.07D6586159@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/wpebackend-fdo:
  bump version to 1.14.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=679c4392a5cd5e9f2f4e932d788da1ec3a990641
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=bd1d78763755868680d0fcf42c55e357d9e2bbf9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 This is a bugfix release which plugs a couple of small leaks, and
 includes patch "0001-Cast-to-EGLNativeWindowType-explicitly.patch",
