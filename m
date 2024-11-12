@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8322ED41C27
-	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 09:54:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 653F7D41C2B
+	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 09:54:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 521BB8117A;
-	Wed, 13 Nov 2024 09:54:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 076A08117E;
+	Wed, 13 Nov 2024 09:54:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SUiA9PQDuC3I; Wed, 13 Nov 2024 09:54:17 +0000 (UTC)
+ id FV0eiuGTv3S6; Wed, 13 Nov 2024 09:54:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59D75811F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AFFB811F1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 59D75811F5;
-	Wed, 13 Nov 2024 09:54:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8AFFB811F1;
+	Wed, 13 Nov 2024 09:54:19 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 45F00E11
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:53:56 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 87571E11
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:53:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 04C274045A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4EE6F4055A
  for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:53:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ia0ujGQ7BkcC for <buildroot@buildroot.org>;
+ id GrlkM4vDOVBj for <buildroot@buildroot.org>;
  Wed, 13 Nov 2024 09:53:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32C8E405F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33C82405F6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 32C8E405F0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 33C82405F6
  for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:53:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2F11286229; Wed, 13 Nov 2024 09:53:51 +0000 (UTC)
+ id 1B98D86226; Wed, 13 Nov 2024 09:53:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Nov 2024 22:44:49 +0100
+Date: Tue, 12 Nov 2024 22:32:11 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 71e9e15be76d81e68f0bebaa9d8d2b175ff79ec2
-X-Git-Newrev: a1bf4fa4bcf540a1ec94c58ce013f2847b6cf94c
+X-Git-Oldrev: 6d27b33ada1a92ed9cc1e055e87bcd7724aae52b
+X-Git-Newrev: bc681f41ad3ee0678c6e4a86b4ce71cda5d86186
 X-Patchwork-Hint: ignore
-Message-Id: <20241113095351.2F11286229@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] utils/genrandconfig:
- handle BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+Message-Id: <20241113095351.1B98D86226@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/php: bump version
+ to 8.2.25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1bf4fa4bcf540a1ec94c58ce013f2847b6cf94c
+commit: https://git.buildroot.net/buildroot/commit/?id=bc681f41ad3ee0678c6e4a86b4ce71cda5d86186
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-When BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y,
-BR2_LINUX_KERNEL_IMAGE_TARGET_NAME is supposed to be non-empty. But in
-the context of genraconfig, we don't know to what value
-BR2_LINUX_KERNEL_IMAGE_TARGET_NAME can be set, so let's avoid cases
-where BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y. By dropping this option,
-kconfig will revert back to the default image format for the selected
-architecture.
+Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_2
+Release notes: https://news-web.php.net/php.announce/441
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/1d104a051c83bb31e98565369a2ec7badfa21eca/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b07d21ab984d10cbabeb186fbd47d446e027c03b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/genrandconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 28a0c1b605..514434bc06 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -241,6 +241,10 @@ async def fixup_config(sysinfo, configfile):
-             configlines.remove('BR2_LINUX_KERNEL_SIMPLEIMAGE=y\n')
-             configlines.append('BR2_LINUX_KERNEL_VMLINUX=y\n')
+diff --git a/package/php/php.hash b/package/php/php.hash
+index a4f10678cd..6615e159b6 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  80a5225746a9eb484475b312d4c626c63a88a037d8e56d214f30205e1ba1411a  php-8.2.24.tar.xz
++sha256  330b54876ea1d05ade12ee9726167332058bccd58dffa1d4e12117f6b4f616b9  php-8.2.25.tar.xz
  
-+    if 'BR2_LINUX_KERNEL=y\n' in configlines and \
-+       'BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y\n' in configlines:
-+        configlines.remove('BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y')
-+
-     if 'BR2_LINUX_KERNEL_EXT_AUFS=y\n' in configlines and \
-        'BR2_LINUX_KERNEL_EXT_AUFS_VERSION=""\n' in configlines:
-         configlines.remove('BR2_LINUX_KERNEL_EXT_AUFS=y\n')
+ # License file
+ sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index e79613d5ed..372aad916f 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 8.2.24
++PHP_VERSION = 8.2.25
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
