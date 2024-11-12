@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6B15D41C2D
-	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 09:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5278D41C2B
+	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 09:55:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A33DA811FD;
-	Wed, 13 Nov 2024 09:55:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96EA9813D5;
+	Wed, 13 Nov 2024 09:55:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Of320extLneb; Wed, 13 Nov 2024 09:55:25 +0000 (UTC)
+ id 10Wp2TKTnOzc; Wed, 13 Nov 2024 09:55:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B62FB81232
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 769C8813EC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B62FB81232;
-	Wed, 13 Nov 2024 09:55:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D02BE2E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 769C8813EC;
+	Wed, 13 Nov 2024 09:55:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 56241E2E
  for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:55:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF4B9811A3
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:55:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 246CD4038F
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:55:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uiQLeyeuKQqw for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2DPCRmJhzI62 for <buildroot@buildroot.org>;
  Wed, 13 Nov 2024 09:55:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC898811A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F7C8403B0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EC898811A5
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:55:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2F7C8403B0
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:55:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DAF468627A; Wed, 13 Nov 2024 09:55:04 +0000 (UTC)
+ id 2C5C986286; Wed, 13 Nov 2024 09:55:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Nov 2024 21:57:38 +0100
+Date: Tue, 12 Nov 2024 22:44:39 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 2d7514186bf1a4c8ce8b38bad4219d5f94376e76
-X-Git-Newrev: 2f6c9f86326dbcc20fca7c2ad7e81f7e4719377b
+X-Git-Oldrev: 97b722418cfe253f5989daa11867a11bfecba791
+X-Git-Newrev: 938aa7413fa29d7e696b65ec742c5bce9af09bd5
 X-Patchwork-Hint: ignore
-Message-Id: <20241113095504.DAF468627A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/libpng: bump
- version to 1.6.44
+Message-Id: <20241113095505.2C5C986286@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] utils/genrandconfig:
+ handle BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,46 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f6c9f86326dbcc20fca7c2ad7e81f7e4719377b
+commit: https://git.buildroot.net/buildroot/commit/?id=938aa7413fa29d7e696b65ec742c5bce9af09bd5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Release notes:
-https://sourceforge.net/p/png-mng/mailman/message/58815959/
-https://raw.githubusercontent.com/pnggroup/libpng/v1.6.44/ANNOUNCE
+When BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y,
+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME is supposed to be non-empty. But in
+the context of genraconfig, we don't know to what value
+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME can be set, so let's avoid cases
+where BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y. By dropping this option,
+kconfig will revert back to the default image format for the selected
+architecture.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fixes:
+
+  http://autobuild.buildroot.net/results/1d104a051c83bb31e98565369a2ec7badfa21eca/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 583bb434ffe1eec0dbf6887dd719c3f41a6253e9)
+(cherry picked from commit b07d21ab984d10cbabeb186fbd47d446e027c03b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpng/libpng.hash | 4 ++--
- package/libpng/libpng.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ utils/genrandconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index 356c0e3e5d..3fd4033f83 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,4 +1,4 @@
--# From https://sourceforge.net/p/png-mng/mailman/message/58741099/
--sha256  6a5ca0652392a2d7c9db2ae5b40210843c0bbc081cbd410825ab00cc59f14a6c  libpng-1.6.43.tar.xz
-+# From https://sourceforge.net/p/png-mng/mailman/message/58815959/
-+sha256  60c4da1d5b7f0aa8d158da48e8f8afa9773c1c8baa5d21974df61f1886b8ce8e  libpng-1.6.44.tar.xz
- # Locally computed:
- sha256  7317e078e2d3b5d7ba5a6159e650945153262b44b76f6700f8e9edb261c5143e  LICENSE
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index af38afde47..3e7fc42d82 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 282a9ebdea..0698cc5ff0 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -248,6 +248,10 @@ async def fixup_config(sysinfo, configfile):
+             configlines.remove('BR2_LINUX_KERNEL_SIMPLEIMAGE=y\n')
+             configlines.append('BR2_LINUX_KERNEL_VMLINUX=y\n')
  
--LIBPNG_VERSION = 1.6.43
-+LIBPNG_VERSION = 1.6.44
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
++    if 'BR2_LINUX_KERNEL=y\n' in configlines and \
++       'BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y\n' in configlines:
++        configlines.remove('BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y')
++
+     if 'BR2_LINUX_KERNEL_EXT_AUFS=y\n' in configlines and \
+        'BR2_LINUX_KERNEL_EXT_AUFS_VERSION=""\n' in configlines:
+         configlines.remove('BR2_LINUX_KERNEL_EXT_AUFS=y\n')
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
