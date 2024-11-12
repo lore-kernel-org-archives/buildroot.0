@@ -1,94 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE162D12D66
-	for <buildroot@archiver.kernel.org>; Tue, 12 Nov 2024 12:38:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D455DD12D66
+	for <buildroot@archiver.kernel.org>; Tue, 12 Nov 2024 12:39:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F47C606EC;
-	Tue, 12 Nov 2024 12:38:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F92080C63;
+	Tue, 12 Nov 2024 12:39:01 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8r5Bbc5dVXMi; Tue, 12 Nov 2024 12:39:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B853280C8A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B853280C8A;
+	Tue, 12 Nov 2024 12:39:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 30AD76C
+ for <buildroot@buildroot.org>; Tue, 12 Nov 2024 12:38:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0BF35607A7
+ for <buildroot@buildroot.org>; Tue, 12 Nov 2024 12:38:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0UVNWjLi3ut3; Tue, 12 Nov 2024 12:38:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 822096074D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 822096074D;
-	Tue, 12 Nov 2024 12:38:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 44D80DB1
- for <buildroot@buildroot.org>; Tue, 12 Nov 2024 12:38:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 31E96404C6
- for <buildroot@buildroot.org>; Tue, 12 Nov 2024 12:38:54 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nNwUw7Wm8BQ2 for <buildroot@buildroot.org>;
- Tue, 12 Nov 2024 12:38:53 +0000 (UTC)
+ id Wkt0bM-eJiGT for <buildroot@buildroot.org>;
+ Tue, 12 Nov 2024 12:38:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::431; helo=mail-pf1-x431.google.com;
+ client-ip=2607:f8b0:4864:20::632; helo=mail-pl1-x632.google.com;
  envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6EAC14067B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EAC14067B
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com
- [IPv6:2607:f8b0:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6EAC14067B
- for <buildroot@buildroot.org>; Tue, 12 Nov 2024 12:38:53 +0000 (UTC)
-Received: by mail-pf1-x431.google.com with SMTP id
- d2e1a72fcca58-723f37dd76cso5727603b3a.0
- for <buildroot@buildroot.org>; Tue, 12 Nov 2024 04:38:53 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EBF4160777
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBF4160777
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
+ [IPv6:2607:f8b0:4864:20::632])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EBF4160777
+ for <buildroot@buildroot.org>; Tue, 12 Nov 2024 12:38:57 +0000 (UTC)
+Received: by mail-pl1-x632.google.com with SMTP id
+ d9443c01a7336-20ce65c8e13so61409815ad.1
+ for <buildroot@buildroot.org>; Tue, 12 Nov 2024 04:38:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1731415132; x=1732019932;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=BQ+0JqfsfwiirCOfoKxt8vuZIo3ODiyvIkfqt9KGGGU=;
- b=pRwiRRxd9SnN/tvoAkJsXLoLsm7d337n60H8hY2LwQPqcJq8F0bvCE4GXRqhepjxl5
- 4ez0T8NKpOf654XiW8MVxj8ZrsTk1EYbkxqq7mQmHXi2I11NaQoghHArrQqe4nVrKfIj
- gFCoSO7lb1tivDYxOU4UmyQcURZeXX4YSGanp61mkAzbSAz/0o1b2VJh1tCu6zZ4ltRQ
- iFZa2zdIiSzLutt82elRweYK8ESCwsx6H0pFcxJ1LRwO3SYX65MBxNxKuQxlSew7DrZm
- chFFnnl3CV9KWSwhDopfOJtlMzrtz4ruMr2WcNN4uFRxDIPZE46V9dlsNVl/lbI6Q53F
- sKPA==
-X-Gm-Message-State: AOJu0YwVe0IyFwRvz0B1/JJvjHbylVm7hv4gOtZZC/0hB//bqi06XSlW
- QL3aC2nsHZkgr8ofck9r5aBvZ/8Vn21uwd7eiVo6ILGBwkuCJGYV50tvpg==
-X-Google-Smtp-Source: AGHT+IHLtjq1XBnaR8CkboDemVRYIY2LPB1MF8TSO3Di5FHG96GOjDUp9loQIdqhONkClTRvsHMU0w==
-X-Received: by 2002:a05:6a00:4099:b0:724:46eb:c38f with SMTP id
- d2e1a72fcca58-72446ebc554mr4685697b3a.25.1731415131893; 
- Tue, 12 Nov 2024 04:38:51 -0800 (PST)
+ d=1e100.net; s=20230601; t=1731415137; x=1732019937;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=0k4H6HE5PpjgG1wmPfPCYD/zXcLUSCSlK4wOO7uAm6g=;
+ b=smVJN429NofM6rwVU7DtP0xebfbaJpyM5fdGKoTT+8QXW/UU2MriCZMfkH7/N2BnDZ
+ e9m37O15wGm9yOM0Tns2b9UNpZNMu54u7JR8vURQa02wUM8MU0vrUxfObK8XNfbPk2L+
+ EqIMlXGtmR7pvP3wOstwG364rCIRBeTKZrpCZQehYIurgkimV08pe39OQcg+MV5UWU9d
+ 19p9vTviUYvzdaxFaTsvBJjp4irpUFpqTu8qhhWT0yrAIP4Vaw/bMDpAjfJk4Yo/yMqc
+ mzv+2RrJ1tAfBxr/Wr7xM3D7znCnZmrBIWKN+SF5B4/oy7faKvLFftPtXJ/yOFBPZJb3
+ iNMQ==
+X-Gm-Message-State: AOJu0YwqhtsPotNYLEPG49FjMYmV4q/bG8zcy5CZdu4dM0aTHrU0iiQh
+ 3vUcW5nCDw892tXz3ppKY16rP9Xq5T8hdg6QicwC3gkpPAk8j993Fjl1+g==
+X-Google-Smtp-Source: AGHT+IGm032SgmQNz6ePzwtblM1GSgsswXzY0RNdRQ9++7n/vT8nNMMiRu/QHbeSVGHqFHgNVzbvng==
+X-Received: by 2002:a17:903:1247:b0:20c:d469:ba95 with SMTP id
+ d9443c01a7336-2118350f948mr179557685ad.16.1731415136682; 
+ Tue, 12 Nov 2024 04:38:56 -0800 (PST)
 Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-72407860a97sm11408453b3a.27.2024.11.12.04.38.50
+ d9443c01a7336-21177e42782sm91940585ad.157.2024.11.12.04.38.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 12 Nov 2024 04:38:51 -0800 (PST)
+ Tue, 12 Nov 2024 04:38:56 -0800 (PST)
 From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
 Cc: Scott Fan <fancp2007@gmail.com>
-Date: Tue, 12 Nov 2024 20:38:44 +0800
-Message-ID: <20241112123845.7120-1-fancp2007@gmail.com>
+Date: Tue, 12 Nov 2024 20:38:45 +0800
+Message-ID: <20241112123845.7120-2-fancp2007@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241112123845.7120-1-fancp2007@gmail.com>
+References: <20241112123845.7120-1-fancp2007@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1731415132; x=1732019932; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=BQ+0JqfsfwiirCOfoKxt8vuZIo3ODiyvIkfqt9KGGGU=;
- b=dvUE/eN87CM/UOI8eFjyY9Tsp6Ac1XCQK6f3Y1KyjLFEwO4ZotBk+6vKCOuzYxmgaQ
- M+3HiZdkK0hxp5qxPTemoY+3+iZgcyHcT1ltYnd85+NWV4f0KIwWikmr7z1/cIP97zNF
- VSgiWRoR/nf/s6NeDchONn9CXc5Ol99nq7ef6cQ9p8BHLKjCQDryeU1r8RRC4GnviiSl
- gleuuGq+m0wruEGvNmwwU+8tMrQEr+Pq+RBqS3kmQIASeIvgjC6T216NvEZv7dvIImc1
- TkP0Pq1FS4gw8VMQKpXKKe5HIt0XdkYjx2Sbh1uTZuFPSlER76KU1iXkSqta6TknWTuQ
- f+sw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1731415137; x=1732019937; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=0k4H6HE5PpjgG1wmPfPCYD/zXcLUSCSlK4wOO7uAm6g=;
+ b=BXuStEKsTo+Ch5CZiiyWBg7f9h9Rf6A+rHwsHF18140eeE2HpOAfg1g4gljD4Ph7bs
+ TPnn/e0VfAk/4cgX646Yh5wKGe/rTiHqlRKxfcpYW8Nt/wvqbvgCFrN+YsUL4gLbhO03
+ EJm+LhK/tpA6zbAEcwdgWdeJLlRttAPAVLZrMNrktL1rk1DB9peO/nSBe/3udnKY/3+v
+ JvMnpyD2tMKgSeRhUxTxDKH7jIdze3+a/dsXwjglnoM4aa68cJvaBPq/aTvcHBJz37Zy
+ 0AgvWmcJy5t9TkwTCW15hS1B/H9f82kLD2YjRJrjbi5gDrj3V4STFoi+Yo18jdKlq2IC
+ GBKA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=dvUE/eN8
-Subject: [Buildroot] [PATCH 1/2] configs/cubieboard1: bump Linux vesion to
- 6.11.7
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=BXuStEKs
+Subject: [Buildroot] [PATCH 2/2] board/cubietech/cubieboard1: use lowercase
+ keywords in extlinux.conf file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,33 +109,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+This commit also updates the label name, and the unnecessary "default"
+entry is also removed.
+
 Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
- board/cubietech/cubieboard1/patches/linux/linux.hash | 2 +-
- configs/cubieboard1_defconfig                        | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../rootfs_overlay/boot/extlinux/extlinux.conf           | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/board/cubietech/cubieboard1/patches/linux/linux.hash b/board/cubietech/cubieboard1/patches/linux/linux.hash
-index 42d02c9f78..f97a04ac84 100644
---- a/board/cubietech/cubieboard1/patches/linux/linux.hash
-+++ b/board/cubietech/cubieboard1/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  c954f60197008f1e1f32a1e77293903cf3801d2543ec4bf521f5651eb7f133ce  linux-6.11.6.tar.xz
-+sha256  0bf5ec644817d7928920f763581311f5bf258a92759cf2f30985da743af3ebb2  linux-6.11.7.tar.xz
-diff --git a/configs/cubieboard1_defconfig b/configs/cubieboard1_defconfig
-index c3dede47b8..308de10823 100644
---- a/configs/cubieboard1_defconfig
-+++ b/configs/cubieboard1_defconfig
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/cubietech/cubieboard1/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.7"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun4i-a10-cubieboard"
+diff --git a/board/cubietech/cubieboard1/rootfs_overlay/boot/extlinux/extlinux.conf b/board/cubietech/cubieboard1/rootfs_overlay/boot/extlinux/extlinux.conf
+index 2fde683f38..5b071dce84 100644
+--- a/board/cubietech/cubieboard1/rootfs_overlay/boot/extlinux/extlinux.conf
++++ b/board/cubietech/cubieboard1/rootfs_overlay/boot/extlinux/extlinux.conf
+@@ -1,5 +1,4 @@
+-DEFAULT linux
+-LABEL linux
+-  KERNEL /boot/zImage
+-  DEVICETREE /boot/sun4i-a10-cubieboard.dtb
+-  APPEND console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p1 rootwait
++label cubieboard-buildroot
++  kernel /boot/zImage
++  devicetree /boot/sun4i-a10-cubieboard.dtb
++  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p1 rootwait
 -- 
 2.43.0
 
