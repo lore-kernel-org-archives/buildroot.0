@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6720CD637A3
-	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 17:54:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61D52D637A4
+	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 17:55:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DEB780B13;
-	Wed, 13 Nov 2024 17:54:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F9BA80B13;
+	Wed, 13 Nov 2024 17:55:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G4_DnTJcjzCu; Wed, 13 Nov 2024 17:54:47 +0000 (UTC)
+ id 6vLk_Vub1SGI; Wed, 13 Nov 2024 17:55:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5379B80B1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EC3881460
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5379B80B1F;
-	Wed, 13 Nov 2024 17:54:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 385B86C
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 17:54:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4EC3881460;
+	Wed, 13 Nov 2024 17:55:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B3BA36C
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 17:55:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2771580B13
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 17:54:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94738404BC
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 17:55:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id snJIO5DpHzCu for <buildroot@buildroot.org>;
- Wed, 13 Nov 2024 17:54:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SwKjzX0Y7iWe for <buildroot@buildroot.org>;
+ Wed, 13 Nov 2024 17:55:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1E2A780AEC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E2A780AEC
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1E2A780AEC
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 17:54:44 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CD39C240002;
- Wed, 13 Nov 2024 17:54:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 85DB6400F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85DB6400F6
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 85DB6400F6
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 17:55:31 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8A3AFE0004;
+ Wed, 13 Nov 2024 17:55:28 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tBHZh-00H1b1-0b;
- Wed, 13 Nov 2024 18:54:41 +0100
+ (envelope-from <peter@korsgaard.com>) id 1tBHaR-00H1jx-2l;
+ Wed, 13 Nov 2024 18:55:27 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Scott Fan <fancp2007@gmail.com>
-Cc: buildroot@buildroot.org,  Maxim Kochetkov <fido_max@inbox.ru>
-References: <20241113073850.3185120-1-fancp2007@gmail.com>
-Date: Wed, 13 Nov 2024 18:54:41 +0100
-In-Reply-To: <20241113073850.3185120-1-fancp2007@gmail.com> (Scott Fan's
- message of "Wed, 13 Nov 2024 15:38:46 +0800")
-Message-ID: <87plmzxbmm.fsf@dell.be.48ers.dk>
+To: Michel Alex <Alex.Michel@wiedemann-group.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <AS1P250MB0608A6F40DB013B7B6024202A95A2@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
+Date: Wed, 13 Nov 2024 18:55:27 +0100
+In-Reply-To: <AS1P250MB0608A6F40DB013B7B6024202A95A2@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
+ (Michel Alex's message of "Wed, 13 Nov 2024 09:48:16 +0000")
+Message-ID: <87ldxnxblc.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/timescaledb: bump version to 2.17.2
+Subject: Re: [Buildroot] [PATCH 1/2] package/libzenoh-c: bump to version
+ 1.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,10 +75,10 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Scott" == Scott Fan <fancp2007@gmail.com> writes:
+>>>>> "Michel" == Michel Alex <Alex.Michel@wiedemann-group.com> writes:
 
- > Release notes: https://github.com/timescale/timescaledb/blob/2.17.2/CHANGELOG.md
- > Signed-off-by: Scott Fan <fancp2007@gmail.com>
+ > https://github.com/eclipse-zenoh/zenoh-c/releases/tag/1.0.2
+ > Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
 
 Committed, thanks.
 
