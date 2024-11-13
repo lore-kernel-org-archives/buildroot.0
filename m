@@ -4,61 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBFF5D462DA
-	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 16:46:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43782D462DA
+	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 16:49:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 982144010E;
-	Wed, 13 Nov 2024 16:46:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF6FC4016D;
+	Wed, 13 Nov 2024 16:48:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id idC2z5-W8kjh; Wed, 13 Nov 2024 16:46:38 +0000 (UTC)
+ id BYOmnmDKXwOY; Wed, 13 Nov 2024 16:48:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5E2D40120
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A162E4057E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5E2D40120;
-	Wed, 13 Nov 2024 16:46:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 884126C
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 16:46:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A162E4057E;
+	Wed, 13 Nov 2024 16:48:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 416416C
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 16:48:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 68A9940120
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 16:46:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3AB7840B83
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 16:48:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fOvbyVSbJWYl for <buildroot@buildroot.org>;
- Wed, 13 Nov 2024 16:46:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id chAgKckcXYvG for <buildroot@buildroot.org>;
+ Wed, 13 Nov 2024 16:48:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 41CB54010E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41CB54010E
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 41CB54010E
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 16:46:35 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4DD271BF210;
- Wed, 13 Nov 2024 16:46:34 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tBGVl-00GwPM-2D;
- Wed, 13 Nov 2024 17:46:33 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 227BC4011C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 227BC4011C
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 16:48:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1BF1086309; Wed, 13 Nov 2024 16:48:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Cc: Marcus Hoffmann <buildroot@bubu1.eu>
-References: <20241029154911.3268784-1-buildroot@bubu1.eu>
- <f3ea39a0-ec59-461c-bbf8-e2b561bd284e@bubu1.eu>
-Date: Wed, 13 Nov 2024 17:46:33 +0100
-In-Reply-To: <f3ea39a0-ec59-461c-bbf8-e2b561bd284e@bubu1.eu> (Marcus Hoffmann
- via buildroot's message of "Tue, 29 Oct 2024 16:51:48 +0100")
-Message-ID: <8734jvytcm.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/nghttp2: bump to 1.64.0
+To: buildroot@buildroot.org
+Date: Wed, 13 Nov 2024 16:55:41 +0100
+X-Git-Refname: refs/heads/2024.08.x
+X-Git-Oldrev: f5b935ada7e46ec201ba8f0ec2d8a225028825e1
+X-Git-Newrev: 3382f699e7ce4f2ffbd65a61b45eb5a99f7deb90
+X-Patchwork-Hint: ignore
+Message-Id: <20241113164856.1BF1086309@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/qemu: remove
+ leftover QEMU_IGNORE_CVES from Qemu 8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,31 +59,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Marcus" == Marcus Hoffmann via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3382f699e7ce4f2ffbd65a61b45eb5a99f7deb90
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
- > On 29.10.24 16:49, Marcus Hoffmann via buildroot wrote:
- >> Changelog:
- >> * https://github.com/nghttp2/nghttp2/releases/tag/v1.59.0
- >> * https://github.com/nghttp2/nghttp2/releases/tag/v1.60.0
- >> * https://github.com/nghttp2/nghttp2/releases/tag/v1.61.0
+Theses CVE are no longer listed by pkg-stats:
 
- > Turns out that this fixes a security issue:
+  https://nvd.nist.gov/vuln/detail/CVE-2023-4135
+  https://nvd.nist.gov/vuln/detail/CVE-2023-3354
+  https://nvd.nist.gov/vuln/detail/CVE-2023-3180
 
- > Fixes: CVE-2024-28182 [1] - Reading unbounded number of HTTP/2
- >        CONTINUATION frames to cause excessive CPU usage
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 10b4c31b812128f255e8ea58050879b953d58f0e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qemu/qemu.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
- > [1]:
- > https://github.com/nghttp2/nghttp2/security/advisories/GHSA-x6x3-gv8h-m57q
-
-Committed to 2024.02.x and 2024.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 16cff13d18..a2d164d189 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -17,12 +17,6 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
+ #       individual source files.
+ QEMU_CPE_ID_VENDOR = qemu
+ 
+-# Need to ignore the following CVEs because the CPE database does
+-# not have an entry for the 8.1.1 version yet.
+-QEMU_IGNORE_CVES += CVE-2023-4135
+-QEMU_IGNORE_CVES += CVE-2023-3354
+-QEMU_IGNORE_CVES += CVE-2023-3180
+-
+ #-------------------------------------------------------------
+ 
+ # The build system is now partly based on Meson.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
