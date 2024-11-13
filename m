@@ -1,99 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CBFAD41C07
-	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 06:04:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB61DD41C11
+	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 07:39:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EFA8E80ACF;
-	Wed, 13 Nov 2024 06:04:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66EBE60591;
+	Wed, 13 Nov 2024 07:39:02 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C8mcubagln2c; Wed, 13 Nov 2024 07:39:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D7DB60597
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D7DB60597;
+	Wed, 13 Nov 2024 07:39:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E3FB1E11
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 07:38:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DFDC681336
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 07:38:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3YBp-uCTuGvj; Wed, 13 Nov 2024 06:04:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18A7180BA4
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18A7180BA4;
-	Wed, 13 Nov 2024 06:04:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D461E2E
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 06:04:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0AE9940A82
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 06:04:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uZMBMGwIeGTI for <buildroot@buildroot.org>;
- Wed, 13 Nov 2024 06:04:43 +0000 (UTC)
+ id 6PZiKL0NrzTT for <buildroot@buildroot.org>;
+ Wed, 13 Nov 2024 07:38:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::529; helo=mail-pg1-x529.google.com;
+ client-ip=2607:f8b0:4864:20::1036; helo=mail-pj1-x1036.google.com;
  envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2733940A0E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2733940A0E
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com
- [IPv6:2607:f8b0:4864:20::529])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2733940A0E
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 06:04:43 +0000 (UTC)
-Received: by mail-pg1-x529.google.com with SMTP id
- 41be03b00d2f7-7ea7e2ff5ceso4554642a12.2
- for <buildroot@buildroot.org>; Tue, 12 Nov 2024 22:04:42 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BE47681252
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE47681252
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
+ [IPv6:2607:f8b0:4864:20::1036])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BE47681252
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 07:38:58 +0000 (UTC)
+Received: by mail-pj1-x1036.google.com with SMTP id
+ 98e67ed59e1d1-2e9b4a5862fso3883090a91.1
+ for <buildroot@buildroot.org>; Tue, 12 Nov 2024 23:38:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1731477882; x=1732082682;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=8p64aGOqs2dO0ySrrr05Iu8Lfcjx6bvgj5CTxBv44KQ=;
- b=rT+KQU8GYOhCvdRwXCrS/k1wdNRdt3AHQRCQscBwVNZNnSctDUqrGRwoRtS0TzXz9D
- y+Uqxo2bN9+4C167raxVQS7TkWihxmA2DhtYKPyAx+SBkkLF7Nu2wPS5ZioU+X5AV7Hy
- SBSFKVECVRNfVnljcmGNw7vpfesoeSRCAaWVxFD4QZsfiAwPFv5/BemzFxQAmQT1Ko56
- dN2RAFXhKUu8L/R8O4AQG5IJnB8ACWxWwNpgKY7D1QwbHC+ta2cevG6lUp0zwZnTbrrS
- C1fX4HkioZ3l8ZxkfV5HtqnaeHQf2YuGKiiuRro6Cu5s6RjxoAbjy/HZs6TjCAQ/IUO2
- mN4w==
-X-Gm-Message-State: AOJu0YxwWi1EKjNN9M2HX2xRSLV7zVAvnzKSqaVEPzXCW/JS7YltqcvL
- yik04hKJgtSToDmMBEbeT+S05k4TeqirunMpQklIYQa7BlnzcCJ39IEFUg==
-X-Google-Smtp-Source: AGHT+IHCjFrhF0NgQkhbg4a65aPO1eM0fwYVEkoyiGNnjeM+9aOd39GyZ5X/+3tF7hVm9xPMiWApGA==
-X-Received: by 2002:a05:6a20:72a1:b0:1db:db2f:f3a5 with SMTP id
- adf61e73a8af0-1dc5f90b7f1mr6954029637.21.1731477882008; 
- Tue, 12 Nov 2024 22:04:42 -0800 (PST)
+ d=1e100.net; s=20230601; t=1731483537; x=1732088337;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=io6p8OakzGuviM+lFYV76uvXFXZhBWf21AQ8C2RYrio=;
+ b=SvP/zUwXHsw7wr/ytpyG7A2bqheD7DxoXxWX3itXasxYQ518LXd61HWYw0sRatgl+j
+ ZmCFV3xyRG63DqXuGYf2DhQsXrULNTd46N4LyOV7WsxpWaWYMrUD+88jzOzo+gu+AtGd
+ srNu7hlR9B07pjL3cYqhQzGUI2nva2yXLnafBLMtgeeiRZ63Nd/Tb/h7Yj1fLkE8bFUp
+ /U6spwr4PuNrnqHJmkh7Ke/zDLiYqoNkZeCHlExa9swnuJFf2aqERYiWfbCRSAA9g8oR
+ xV/BMQPIfPZX4+ZXLT1iEG9v09xsWupGg4ulJlSUG38EluxrWQdH9GyxZBXnr2Xg8aiF
+ RsMA==
+X-Gm-Message-State: AOJu0YyaH//bYpQJRaPBvqj6p98GpQAk4iLxEPyGuAvwswc1HSI4yUr2
+ Dogcre+qgz6SwCF4NVDhlaWcWrD6lsTiLJxKnHtDJgOag7nTb7w6cZy3gA==
+X-Google-Smtp-Source: AGHT+IGzY76DnjjIPMIVPob1XCUkrUEsn7ofUiIWvplW78W/GGRkemNJIR7EnHsFHAu+w0+qn1Kw/Q==
+X-Received: by 2002:a17:90b:2684:b0:2e8:f178:f668 with SMTP id
+ 98e67ed59e1d1-2e9e4adc5e8mr7022486a91.11.1731483537430; 
+ Tue, 12 Nov 2024 23:38:57 -0800 (PST)
 Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-21177dc9073sm103097265ad.1.2024.11.12.22.04.41
+ 98e67ed59e1d1-2e9f3faee95sm783414a91.47.2024.11.12.23.38.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 12 Nov 2024 22:04:41 -0800 (PST)
+ Tue, 12 Nov 2024 23:38:56 -0800 (PST)
 From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
 Cc: Scott Fan <fancp2007@gmail.com>,
- Kilian Zinnecker <kilian.zinnecker@mail.de>
-Date: Wed, 13 Nov 2024 14:04:16 +0800
-Message-ID: <20241113060418.1207859-2-fancp2007@gmail.com>
+	Maxim Kochetkov <fido_max@inbox.ru>
+Date: Wed, 13 Nov 2024 15:38:46 +0800
+Message-ID: <20241113073850.3185120-1-fancp2007@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241113060418.1207859-1-fancp2007@gmail.com>
-References: <20241113060418.1207859-1-fancp2007@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1731477882; x=1732082682; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=8p64aGOqs2dO0ySrrr05Iu8Lfcjx6bvgj5CTxBv44KQ=;
- b=MOxeudRlOJsHfAXCck7kmVjIccL30A2/gQrbKYXJygLMfgkMSkpxuNukJKrJDnjFz/
- jgGqRdY6ib1DMh3hRxPI7qLHoPyeChOb2rqgG9kD3Nne15H7R/OYdzdOZ+L3BMGM8vv2
- Aw+mFtLwahG5cDn4J/rBufBA72nZJ3TPhLzCJk9Ci6KQyLWt6h0F7tVoFG6zKfqe2snU
- ow5Z/KOihOv8hyTpVFeSGj1zkVEeNALX6YwvmHJ45i9ZBDWZ+w19lNutg944E7iM+w3/
- Mck8to8XTFiwtvuQutFyhzVEP7qsAcw9xN1jdNMk5sYysr3XWSEmaSg3wrqmhvDPs5Jh
- 82Ug==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1731483537; x=1732088337; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=io6p8OakzGuviM+lFYV76uvXFXZhBWf21AQ8C2RYrio=;
+ b=K+BPJhxzpzGZReWqOduuONwUX8C/0J6cM7azJZWsEwZ2p2cPfU/kQz8Y6nb6LyhUPC
+ eCorPhzIRZsV5vl/43QOQ7jFgGap5g+V8Xgahi51Qv0H0XHO85j/EFeaIF/SqbsOjpZA
+ CBGiiGchNMrc5pEh40sqvaviTgK1NBfsdgHD1/V+4GOODrI0aHyUlPFjQaIPPiEjmHyj
+ Ed9E9HHu7yoKBarLlHXnoO9FOR3e53OmmVtDdmgNCIuYyBFeag39d70pCkaSdJLy2ddR
+ euWiVOtOy7WC7irP2GY8joF36AEqWNQ9fLAwqgiQEUHVNQ2OoFJapoFvA0LCodDfX6lT
+ kiMQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=MOxeudRl
-Subject: [Buildroot] [PATCH 2/2] configs/rock5b_defconfig: bump rockchip
- firmware version to 2024-09-05
+ header.s=20230601 header.b=K+BPJhxz
+Subject: [Buildroot] [PATCH] package/timescaledb: bump version to 2.17.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,30 +106,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release Notes:
-https://github.com/rockchip-linux/rkbin/blob/master/doc/release/RK3588_EN.md
-https://github.com/rockchip-linux/rkbin/blob/master/doc/release/RK3588_CN.md
+Release notes: https://github.com/timescale/timescaledb/blob/2.17.2/CHANGELOG.md
 
 Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
- configs/rock5b_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/timescaledb/timescaledb.hash | 2 +-
+ package/timescaledb/timescaledb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-index 38b5aad206..5c74916bbf 100644
---- a/configs/rock5b_defconfig
-+++ b/configs/rock5b_defconfig
-@@ -24,8 +24,8 @@ BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
- BR2_PACKAGE_LINUX_FIRMWARE=y
- BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
- BR2_PACKAGE_ROCKCHIP_RKBIN=y
--BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin"
--BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME="bin/rk35/rk3588_bl31_v1.40.elf"
-+BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.18.bin"
-+BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME="bin/rk35/rk3588_bl31_v1.47.elf"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
+diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
+index f8b6b2c5a1..08d981661e 100644
+--- a/package/timescaledb/timescaledb.hash
++++ b/package/timescaledb/timescaledb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6277cf43f5695e23dae1c5cfeba00474d730b66ed53665a84b787a6bb1a57e28  timescaledb-2.17.1.tar.gz
++sha256  b2fcc29e9975b88c5323aefb062346326694c391d52af46186f5a5ad09136d47  timescaledb-2.17.2.tar.gz
+ sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index 55a4eace79..c9dda67282 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TIMESCALEDB_VERSION = 2.17.1
++TIMESCALEDB_VERSION = 2.17.2
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
