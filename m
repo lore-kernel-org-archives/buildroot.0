@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C48B7D41C2B
-	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 09:54:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43887D41C2C
+	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 09:54:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7965B404E9;
-	Wed, 13 Nov 2024 09:54:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1213180872;
+	Wed, 13 Nov 2024 09:54:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qC5sTkFvpI_z; Wed, 13 Nov 2024 09:54:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1WUfGa0JVJSq; Wed, 13 Nov 2024 09:54:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6D1C403B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED75680ABF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6D1C403B8;
-	Wed, 13 Nov 2024 09:54:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED75680ABF;
+	Wed, 13 Nov 2024 09:54:40 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 16D0F1531
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:54:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3D6EC1DC4
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:54:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67080405F3
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:53:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 097BA405EB
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:53:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lEjvnYMKclny for <buildroot@buildroot.org>;
+ id G2uOTVVmFN5a for <buildroot@buildroot.org>;
  Wed, 13 Nov 2024 09:53:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D3D040AFA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F22140AF9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D3D040AFA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F22140AF9
  for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:53:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 574A586226; Wed, 13 Nov 2024 09:53:51 +0000 (UTC)
+ id 6C6358621D; Wed, 13 Nov 2024 09:53:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Nov 2024 09:18:13 +0100
+Date: Wed, 13 Nov 2024 09:27:33 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: d917825b2aef3696228b86394273a570bb35eab5
-X-Git-Newrev: 020a6c269bd4da0c3df7c55b621b61c997bc3706
+X-Git-Oldrev: d115b018596ecf5f4869398c984cfe659401a3ac
+X-Git-Newrev: c8198f6e0f464c135c24b78928408a38a2d7c35d
 X-Patchwork-Hint: ignore
-Message-Id: <20241113095351.574A586226@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libmdbx: bump
- version to 0.12.12
+Message-Id: <20241113095351.6C6358621D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/ntp: fix build
+ with GCC 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,97 +60,92 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9154074463906192198=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9154074463906192198==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=020a6c269bd4da0c3df7c55b621b61c997bc3706
+commit: https://git.buildroot.net/buildroot/commit/?id=c8198f6e0f464c135c24b78928408a38a2d7c35d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-This is bugfix release of stable libmdbx branch.
+Fix pthread_detach() detection that is broken when building
+with GCC 14.x:
 
-The most significant fixes since v0.12.10 (the previous version pinned to
-buildroot):
+checking for pthread_kill... yes
+checking for pthread_rwlock_destroy with <pthread.h>... yes
+checking for pthread_detach with <pthread.h>... no
+configure: error: could not locate pthread_detach()
+make[1]: *** [package/pkg-generic.mk:273:
+/home/user/buildroot/bsp-barebox/build/ntp-4.2.8p17/.stamp_configured]
+Error 1
+make: *** [Makefile:82: _all] Error 2
 
- - Fixed the possibility of `SIGSEGV` inside the `coherence_check()` after
-   changing the geometry by another process with an increase in the upper
-   DB size above the previous in-process limit.
+Reference: https://bugs.ntp.org/show_bug.cgi?id=3926
 
- - Fixed cursor(s) handling opened in parent transactions and closed before
-   the completion of nested/child transactions. In such case, closed
-   cursors were "resurrected", which led to a leak of memory allocated for
-   such cursors.
+Additionally, refresh patch 0002 to fix the offset of hunk 1.
 
- - Fixed a possibility of `SIGSEGV` when enabling logging of the
-   `MDBX_LOG_TRACE` level in debug builds.
-
- - Correction of the missing `TXN_END_EOTDONE` in the case the start of
-   a reading transaction fails. The mentioned bit-flag was missing in the
-   transaction destruction/shutdown path on error its launch. Because of
-   this, an attempt was made to destroy the cursors, which led to crash
-   debug builds, since the corresponding array is intentionally filled
-   with poison pointers.
-
- - Modification of `mdbx_close_by()` to return an error when trying to
-   close the dbi descriptor of a table created and/or modified in a
-   still-running transaction. Such premature closure of the descriptor is
-   an incorrect use of the API and a violation of the contract/preconditions
-   formulated in the description of `mdbx_close_dbi()`.
-
-   However, instead of returning an error, an incorrect closure of the
-   descriptor was performed, which could lead to the creation of a table
-   with an empty name, leakage of database pages and/or corruption of a
-   b-tree structure (wrong reference to the root of a table).
-
-The complete ChangeLog:
-    https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
-
-Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 81e7806b9353ab403e202d3e3d1d2a5818eb390f)
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 40d0797027a610a3afcb8c2703210298a52f60f5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmdbx/libmdbx.hash | 2 +-
- package/libmdbx/libmdbx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ntp/0002-ntp-syscalls-fallback.patch    |  9 +++++----
+ package/ntp/0003-fix-pthread-detach-check.patch | 26 +++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+), 4 deletions(-)
 
-diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
-index 1dbdef7c69..222e7caf5c 100644
---- a/package/libmdbx/libmdbx.hash
-+++ b/package/libmdbx/libmdbx.hash
-@@ -1,5 +1,5 @@
- # Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
--sha256  4637e06768a9a8fc7577e6e458e045ad1f9a8baee74996a3c88bc0ad64cbcf67  libmdbx-amalgamated-0.12.10.tar.xz
-+sha256  19c0eb33e1ed43ca2a94dceb06dd31946432d16f30a9751d3701c67efa22eb1a  libmdbx-amalgamated-0.12.12.tar.xz
+diff --git a/package/ntp/0002-ntp-syscalls-fallback.patch b/package/ntp/0002-ntp-syscalls-fallback.patch
+index 535fc93dfd..46704b9d3f 100644
+--- a/package/ntp/0002-ntp-syscalls-fallback.patch
++++ b/package/ntp/0002-ntp-syscalls-fallback.patch
+@@ -8,10 +8,11 @@ Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+  configure.ac | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
  
- # Locally calculated
- sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-index 6e0571ff24..c736945e92 100644
---- a/package/libmdbx/libmdbx.mk
-+++ b/package/libmdbx/libmdbx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBMDBX_VERSION = 0.12.10
-+LIBMDBX_VERSION = 0.12.12
- LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
- LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
- LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
-
---===============9154074463906192198==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-diff --git a/configure.ac b/configure.ac
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1523,11 +1523,11 @@ AC_CACHE_CHECK(
++Index: ntp-4.2.8p17/configure.ac
++===================================================================
++--- ntp-4.2.8p17.orig/configure.ac
+++++ ntp-4.2.8p17/configure.ac
++@@ -1472,11 +1472,11 @@ AC_CACHE_CHECK(
+      [ntp_cv_var_ntp_syscalls],
+      [
+  	ntp_cv_var_ntp_syscalls=no
+diff --git a/package/ntp/0003-fix-pthread-detach-check.patch b/package/ntp/0003-fix-pthread-detach-check.patch
+new file mode 100644
+index 0000000000..894b422f2c
+--- /dev/null
++++ b/package/ntp/0003-fix-pthread-detach-check.patch
+@@ -0,0 +1,26 @@
++fix pthread_detach check
++
++Upstream: https://bugs.ntp.org/show_bug.cgi?id=3926
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ sntp/m4/openldap-thread-check.m4 |    6 ++----
++ 1 file changed, 2 insertions(+), 4 deletions(-)
++
++Index: ntp-4.2.8p17/sntp/m4/openldap-thread-check.m4
++===================================================================
++--- ntp-4.2.8p17.orig/sntp/m4/openldap-thread-check.m4
+++++ ntp-4.2.8p17/sntp/m4/openldap-thread-check.m4
++@@ -262,10 +262,8 @@ pthread_rwlock_t rwlock;
++ 				dnl save the flags
++ 				AC_LINK_IFELSE([AC_LANG_PROGRAM([[
++ #include <pthread.h>
++-#ifndef NULL
++-#define NULL (void*)0
++-#endif
++-]], [[pthread_detach(NULL);]])],[ol_cv_func_pthread_detach=yes],[ol_cv_func_pthread_detach=no])
+++pthread_t thread;
+++]], [[pthread_detach(thread);]])],[ol_cv_func_pthread_detach=yes],[ol_cv_func_pthread_detach=no])
++ 			])
++
++ 			if test $ol_cv_func_pthread_detach = no ; then
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9154074463906192198==--
