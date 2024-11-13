@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF468D597B0
-	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 16:49:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B871D597BD
+	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 16:49:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1E42405E9;
-	Wed, 13 Nov 2024 16:49:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5C7A608A5;
+	Wed, 13 Nov 2024 16:49:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3SVJGx8Yo4O7; Wed, 13 Nov 2024 16:49:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zZwWyaK5r87C; Wed, 13 Nov 2024 16:49:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54A2E405EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C51F86086B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54A2E405EB;
-	Wed, 13 Nov 2024 16:49:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8E27D1531
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 16:48:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C51F86086B;
+	Wed, 13 Nov 2024 16:49:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AC5196C
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 16:48:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 70B964059E
+ by smtp2.osuosl.org (Postfix) with ESMTP id A6E0E40B46
  for <buildroot@buildroot.org>; Wed, 13 Nov 2024 16:48:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QgyBSmytJmdy for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EwrKH2YI9msa for <buildroot@buildroot.org>;
  Wed, 13 Nov 2024 16:48:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EF954057E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5513840B32
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5EF954057E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5513840B32
  for <buildroot@buildroot.org>; Wed, 13 Nov 2024 16:48:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4B1CA8630B; Wed, 13 Nov 2024 16:48:56 +0000 (UTC)
+ id 3FF3B86309; Wed, 13 Nov 2024 16:48:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Nov 2024 17:17:19 +0100
+Date: Wed, 13 Nov 2024 17:16:11 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 9a8e12341158b826a714aa0f43eb714fe787744d
-X-Git-Newrev: 43f9594c879361c5dfe8d974ba36e9db2f07e69f
+X-Git-Oldrev: 48c3ea6fd7b1040c7438cb684eac83824a8f0bcb
+X-Git-Newrev: 9a8e12341158b826a714aa0f43eb714fe787744d
 X-Patchwork-Hint: ignore
-Message-Id: <20241113164856.4B1CA8630B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/libpng: fix arm
- soft-float build
+Message-Id: <20241113164856.3FF3B86309@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/apache: include
+ ap_config_auto.h to define _GNU_SOURCE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +65,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43f9594c879361c5dfe8d974ba36e9db2f07e69f
+commit: https://git.buildroot.net/buildroot/commit/?id=9a8e12341158b826a714aa0f43eb714fe787744d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Bumping libpng to 1.6.44 with buildroot commit
-583bb434ffe1eec0dbf6887dd719c3f41a6253e9
-causes a build failure on arm because the NEON code is only available
-for softfp and hardfp ABIs, and not soft-float.
-
 Fixes:
-http://autobuild.buildroot.net/results/021/02158525203d8c7f16a4a32637d44d6c87b7f333/
+http://autobuild.buildroot.net/results/2f6/2f6b7bbb4c97e4c91b3abd6bb205e237e57045fa/
+and many more.
+
+The bug was introduced by bumping apache to 2.4.59 with buildroot commit
+e0bbfaea0e983c1ce42a9c3085f3ca3dd796852f which includes
+https://github.com/apache/httpd/commit/008e6afcfdae36bce1b5f3fc0cb9519375fd99cf
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Co-authored-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a100286aa1eff05db57230eceebbb6aa79c63d1a)
+(cherry picked from commit 028d047cebf0cb2089063ee16bc48770ae277c61)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpng/libpng.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ ...r-Include-ap_config_auto.h-to-define-_GNU.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 3e7fc42d82..9761993d79 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -17,7 +17,9 @@ HOST_LIBPNG_DEPENDENCIES = host-pkgconf host-zlib
- LIBPNG_CONFIG_SCRIPTS = libpng$(LIBPNG_SERIES)-config libpng-config
- LIBPNG_CONF_OPTS = --disable-tools
- 
--ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_aarch64),y)
-+ifeq ($(BR2_aarch64),y)
-+LIBPNG_CONF_OPTS += --enable-arm-neon
-+else ifeq ($(BR2_ARM_CPU_HAS_NEON):$(BR2_ARM_SOFT_FLOAT),y:)
- LIBPNG_CONF_OPTS += --enable-arm-neon
- else
- LIBPNG_CONF_OPTS += --disable-arm-neon
+diff --git a/package/apache/0004-ap_log_error-Include-ap_config_auto.h-to-define-_GNU.patch b/package/apache/0004-ap_log_error-Include-ap_config_auto.h-to-define-_GNU.patch
+new file mode 100644
+index 0000000000..40386147cf
+--- /dev/null
++++ b/package/apache/0004-ap_log_error-Include-ap_config_auto.h-to-define-_GNU.patch
+@@ -0,0 +1,40 @@
++From f7a85d0d2b76db75dc976e8dfa1101c954ea1a74 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Mon, 28 Oct 2024 23:13:05 +0100
++Subject: [PATCH] ap_log_error: Include ap_config_auto.h to define
++ _GNU_SOURCE
++
++gettid() needs _GNU_SOURCE defined which is provided by ap_config_auto.h
++
++Fixes buildroot error:
++http://autobuild.buildroot.net/results/2f6/2f6b7bbb4c97e4c91b3abd6bb205e237e57045fa//build-end.log
++
++log.c: In function 'log_tid':
++log.c:637:21: error: implicit declaration of function 'gettid'; did you mean 'getgid'? [-Wimplicit-function-declaration]
++  637 |         pid_t tid = gettid();
++
++Upstream: https://github.com/apache/httpd/pull/496
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ server/log.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/server/log.c b/server/log.c
++index 91dcf2c3eb..e709288858 100644
++--- a/server/log.c
+++++ b/server/log.c
++@@ -21,6 +21,10 @@
++  *
++  */
++ 
+++#if !defined(WIN32) && !defined(NETWARE)
+++#include "ap_config_auto.h"
+++#endif
+++
++ #include "apr.h"
++ #include "apr_general.h"        /* for signal stuff */
++ #include "apr_strings.h"
++-- 
++2.39.5
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
