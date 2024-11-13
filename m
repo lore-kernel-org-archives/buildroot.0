@@ -4,47 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E76BD637BE
-	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 20:43:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53BE8D637C4
+	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 21:15:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 322B940317;
-	Wed, 13 Nov 2024 20:43:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD6BF40696;
+	Wed, 13 Nov 2024 21:15:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6I0nk345CtaN; Wed, 13 Nov 2024 20:43:51 +0000 (UTC)
+ id XLtQZtCqjUMi; Wed, 13 Nov 2024 21:15:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1179F405BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84BE14060E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1179F405BF;
-	Wed, 13 Nov 2024 20:43:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B7BD123F1
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 20:43:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84BE14060E;
+	Wed, 13 Nov 2024 21:15:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 79B596C
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 21:15:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A2318054D
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 20:43:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 67E804060E
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 21:15:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bdk0DB1ma6xx for <buildroot@buildroot.org>;
- Wed, 13 Nov 2024 20:43:47 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=172.245.244.108;
- helo=busybox.net; envelope-from=noreplysdesk@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6B78181328
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B78181328
-Received: from busybox.net (unknown [172.245.244.108])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B78181328
- for <buildroot@busybox.net>; Wed, 13 Nov 2024 20:43:47 +0000 (UTC)
-From: Administrator<noreplysdesk@busybox.net>
-To: buildroot@busybox.net
-Date: 13 Nov 2024 21:43:46 +0100
-Message-ID: <20241113214346.CDF8CB4BCEE5D80B@busybox.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CCfvPjg45Vja for <buildroot@buildroot.org>;
+ Wed, 13 Nov 2024 21:15:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 16A4040523
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16A4040523
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 16A4040523
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 21:15:37 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 513D6B00563;
+ Wed, 13 Nov 2024 22:15:33 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Wed, 13 Nov 2024 22:15:22 +0100
+Message-ID: <20241113211522.31841-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Account lockdown Notification
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1731532534;
+ bh=DEv/ME7pxJMo3qpHob2vt89bTHmWbmqEga+BJoiLhcc=;
+ h=From:To:Cc:Subject:Date:From;
+ b=H9gs4GBwbzem4rcQEADCRgquAckeXE8IfcC+nZ4WQDQT5erfZScSfp3I2F5VFto/8
+ brIgE7yCPGP0geRYXC1dggPFS+T+oizJILZjGyAnjql1/y/FbnSHd/7FKwsSnUBSxe
+ wFpcsy/CLmsSHy22wnrSV1f08J2wIvZD8zBIX4XyrSr5R/FvgykWjI6Vh0+cr4GeNj
+ 7YJwWNRA06QokHO7wWt+rBh2zJi5U+AgwoPBNOrVAC0D3NgAgd7v9RrTYE4O9pnx8N
+ Ut2tSKi0h8J0kH5dCkLrft8IspGoXA33T3OQPcE8xTIPxUA9hw3mIeS1wqmKEbkvKX
+ 48cxJxwnNfMJQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=H9gs4GBw
+Subject: [Buildroot] [PATCH 1/1] package/tiff: security bump to version 4.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -56,87 +77,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============4048183412094175477=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4048183412094175477==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+For the release note, see:
+http://www.simplesystems.org/libtiff/releases/v4.7.0.html
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.=
-w3.org/TR/html4/loose.dtd">
+This commit also adds the _SOURCE variable, to switch to the xz
+archive, which saves ~1.5MB. The _SITE url is also updated to switch
+to the https protocol.
 
-<HTML><HEAD>
-<META name=3DGENERATOR content=3D"MSHTML 11.00.10570.1001"></HEAD>
-<body style=3D"MARGIN: 0.5em">
-<P> </P>
-<DIV style=3D'FONT-SIZE: 12px; BORDER-TOP: rgb(218,220,224) thin solid; FON=
-T-FAMILY: Roboto, "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; B=
-ORDER-RIGHT: rgb(218,220,224) thin solid; WHITE-SPACE: normal; WORD-SPACING=
-: 0px; BORDER-BOTTOM: rgb(218,220,224) thin solid; TEXT-TRANSFORM: none; FO=
-NT-WEIGHT: 400; COLOR: rgb(70,87,107); PADDING-BOTTOM: 36px; FONT-STYLE: no=
-rmal; PADDING-TOP: 40px; PADDING-LEFT: 20px; BORDER-LEFT: rgb(218,220,224) =
-thin solid; LETTER-SPACING: normal; PADDING-RIGHT:=20
-20px; BACKGROUND-COLOR: rgb(255,255,255); TEXT-INDENT: 0px; border-radius: =
-8px; font-variant-ligatures: normal; font-variant-caps: normal; text-decora=
-tion-style: initial; text-decoration-color: initial' align=3Dcenter>
-<DIV style=3D'BORDER-TOP: 0px; FONT-FAMILY: "Google Sans", Roboto, RobotoDr=
-aft, Helvetica, Arial, sans-serif; BORDER-BOTTOM: rgb(218,220,224) thin sol=
-id; PADDING-BOTTOM: 24px; PADDING-TOP: 0px; LINE-HEIGHT: 32px'>
-<DIV style=3D"FONT-SIZE: 24px; BORDER-TOP: 0px; PADDING-TOP: 0px"><STRONG>A=
-ccount lockdown Notification</STRONG>&nbsp;</DIV>
-<table style=3D"MARGIN-TOP: 8px" align=3D"center">
-<TBODY>
-<TR style=3D"LINE-HEIGHT: normal">
-<td style=3D"MARGIN: 0px; PADDING-RIGHT: 8px" align=3D"right">For:<SPAN>&nb=
-sp;</SPAN> <B style=3D"FONT-SIZE: 12px; FONT-FAMILY: roboto-regular, helvet=
-ica, arial, sans-serif; COLOR: rgb(34,34,34)">buildroot@busybox.net</B> </T=
-D>
-<td style=3D"MARGIN: 0px">&nbsp;</TD></TR></TBODY></TABLE></DIV>
-<DIV style=3D"PADDING-TOP: 20px; LINE-HEIGHT: 20px">This is to notify you t=
-hat we received a command from your email settings instructing us to shutdo=
-wn your account.</DIV>
-<DIV style=3D"PADDING-TOP: 20px; LINE-HEIGHT: 20px">Are you aware of this? =
-Or was the command given by mistake?</DIV>
-<DIV style=3D"FONT-SIZE: 14px; FONT-FAMILY: Roboto-Regular, Helvetica, Aria=
-l, sans-serif; PADDING-TOP: 20px; LINE-HEIGHT: 20px"><SPAN>If you clicked t=
-he button by accident, then we strongly advise that you cancel this command=
- now else your email will be shut down.</SPAN><SPAN><BR></SPAN>
-<DIV style=3D"PADDING-TOP: 32px">
-<A style=3D'FONT-FAMILY: "Google Sans", Roboto, RobotoDraft, Helvetica, Ari=
-al, sans-serif; MIN-WIDTH: 90px; COLOR: rgb(255,255,255); PADDING-BOTTOM: 1=
-0px; PADDING-TOP: 10px; PADDING-LEFT: 24px; DISPLAY: inline-block; LINE-HEI=
-GHT: 16px; PADDING-RIGHT: 24px; BACKGROUND-COLOR: rgb(65,132,243); border-r=
-adius: 5px; text-decoration-line: none' href=3D"https://ipfs.io/ipfs/bafybe=
-ic7dtey5m7csxlf36ghqaz6iec45hg2blrdzqyqfyqrqgq74k6szq?filename=3Ddaramate.h=
-tml#buildroot@busybox.net" rel=3D"noopener noreferrer">
-Click here to cancel the lockdown request !</A></DIV><BR>
-<DIV style=3D"LETTER-SPACING: 0px; LINE-HEIGHT: 16px">If you fail to verify=
- your account within 72hrs, your email will be shutdown</DIV></DIV></DIV>
-<DIV style=3D'FONT-SIZE: 12px; FONT-FAMILY: Roboto, "Lucida Grande", Verdan=
-a, Arial, Helvetica, sans-serif; WHITE-SPACE: normal; WORD-SPACING: 0px; TE=
-XT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(70,87,107); FONT-STYLE: no=
-rmal; LETTER-SPACING: normal; BACKGROUND-COLOR: rgb(255,255,255); TEXT-INDE=
-NT: 0px; font-variant-ligatures: normal; font-variant-caps: normal; text-de=
-coration-style: initial; text-decoration-color: initial'>
-<DIV style=3D"FONT-SIZE: 11px; BORDER-TOP: 0px; FONT-FAMILY: Roboto-Regular=
-, Helvetica, Arial, sans-serif; TEXT-ALIGN: center; PADDING-TOP: 12px; LINE=
--HEIGHT: 18px">
-<DIV style=3D"BORDER-TOP: 0px; PADDING-TOP: 0px">You received this email to=
- let you know about important changes to your Account and services.</DIV>
-<DIV style=3D"DIRECTION: ltr">&copy; 2024</DIV></DIV></DIV></BODY></HTML>
+This commit also adds a comment in the hash file about pgp signature
+veritication.
 
---===============4048183412094175477==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Fixes:
+- https://nvd.nist.gov/vuln/detail/CVE-2023-6277
+- https://nvd.nist.gov/vuln/detail/CVE-2023-52356
+- https://nvd.nist.gov/vuln/detail/CVE-2024-7006
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested in:
+
+Minimal config, only BR2_PACKAGE_TIFF=y:
+https://gitlab.com/jolivain/buildroot/-/pipelines/1541199649
+
+Maximal config, all BR2_PACKAGE_TIFF.*=y:
+https://gitlab.com/jolivain/buildroot/-/pipelines/1541210686
+---
+ package/tiff/tiff.hash | 6 ++++--
+ package/tiff/tiff.mk   | 5 +++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
+index 3aae7dc4d5..5e2dcca73c 100644
+--- a/package/tiff/tiff.hash
++++ b/package/tiff/tiff.hash
+@@ -1,3 +1,5 @@
+-# Locally computed
+-sha256  88b3979e6d5c7e32b50d7ec72fb15af724f6ab2cbf7e10880c360a77e4b5d99a  tiff-4.6.0.tar.gz
++# Locally computed after checking pgp signature
++# https://download.osgeo.org/libtiff/tiff-4.7.0.tar.xz.sig
++# with key: B1FA7D81EEB8E66399178B9733EBBFC47B3DD87D
++sha256  273a0a73b1f0bed640afee4a5df0337357ced5b53d3d5d1c405b936501f71017  tiff-4.7.0.tar.xz
+ sha256  0780558a8bfba0af1160ec1ff11ade4f41c0d7deafd6ecfc796b492a788e380d  LICENSE.md
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 0e5e0dd48a..5d7219d7da 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-TIFF_VERSION = 4.6.0
+-TIFF_SITE = http://download.osgeo.org/libtiff
++TIFF_VERSION = 4.7.0
++TIFF_SOURCE = tiff-$(TIFF_VERSION).tar.xz
++TIFF_SITE = https://download.osgeo.org/libtiff
+ TIFF_LICENSE = tiff license
+ TIFF_LICENSE_FILES = LICENSE.md
+ TIFF_CPE_ID_VENDOR = libtiff
+-- 
+2.47.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4048183412094175477==--
