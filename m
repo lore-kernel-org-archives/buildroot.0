@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5278D41C2B
-	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 09:55:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 178C6D41C27
+	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 09:55:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96EA9813D5;
-	Wed, 13 Nov 2024 09:55:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 10Wp2TKTnOzc; Wed, 13 Nov 2024 09:55:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 769C8813EC
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 769C8813EC;
-	Wed, 13 Nov 2024 09:55:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 56241E2E
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:55:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 246CD4038F
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:55:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE700403B0;
+	Wed, 13 Nov 2024 09:55:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2DPCRmJhzI62 for <buildroot@buildroot.org>;
+ id 1BR1rwy5Bn89; Wed, 13 Nov 2024 09:55:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAACA403B1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAACA403B1;
+	Wed, 13 Nov 2024 09:55:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 889F41DC4
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:55:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 16CAF60842
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:55:06 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8sVIesHguDg1 for <buildroot@buildroot.org>;
  Wed, 13 Nov 2024 09:55:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F7C8403B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 451606083A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F7C8403B0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 451606083A
  for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:55:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2C5C986286; Wed, 13 Nov 2024 09:55:05 +0000 (UTC)
+ id 414E786283; Wed, 13 Nov 2024 09:55:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Nov 2024 22:44:39 +0100
+Date: Wed, 13 Nov 2024 09:01:55 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 97b722418cfe253f5989daa11867a11bfecba791
-X-Git-Newrev: 938aa7413fa29d7e696b65ec742c5bce9af09bd5
+X-Git-Oldrev: 2461b54aa84f4e0ff2bbacacb6ae55c55c6ecd6d
+X-Git-Newrev: f9e1b87fe112fa4ffc5f7dea4a5c9422978b3a1b
 X-Patchwork-Hint: ignore
-Message-Id: <20241113095505.2C5C986286@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] utils/genrandconfig:
- handle BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+Message-Id: <20241113095505.414E786283@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/criu: fix comment
+ condition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=938aa7413fa29d7e696b65ec742c5bce9af09bd5
+commit: https://git.buildroot.net/buildroot/commit/?id=f9e1b87fe112fa4ffc5f7dea4a5c9422978b3a1b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-When BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y,
-BR2_LINUX_KERNEL_IMAGE_TARGET_NAME is supposed to be non-empty. But in
-the context of genraconfig, we don't know to what value
-BR2_LINUX_KERNEL_IMAGE_TARGET_NAME can be set, so let's avoid cases
-where BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y. By dropping this option,
-kconfig will revert back to the default image format for the selected
-architecture.
+in e97fc89e7b a dependency on host-gcc >= 7 was added but
+for the comment the condition was not correctly inverted.
 
-Fixes:
+Fixes: e97fc89e7b ("package/protobuf-c: bump to version 1.5.0")
 
-  http://autobuild.buildroot.net/results/1d104a051c83bb31e98565369a2ec7badfa21eca/
-
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b07d21ab984d10cbabeb186fbd47d446e027c03b)
+(cherry picked from commit 84ef9bede635726542a72af5c61f84914acfe122)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/genrandconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/criu/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 282a9ebdea..0698cc5ff0 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -248,6 +248,10 @@ async def fixup_config(sysinfo, configfile):
-             configlines.remove('BR2_LINUX_KERNEL_SIMPLEIMAGE=y\n')
-             configlines.append('BR2_LINUX_KERNEL_VMLINUX=y\n')
- 
-+    if 'BR2_LINUX_KERNEL=y\n' in configlines and \
-+       'BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y\n' in configlines:
-+        configlines.remove('BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y')
-+
-     if 'BR2_LINUX_KERNEL_EXT_AUFS=y\n' in configlines and \
-        'BR2_LINUX_KERNEL_EXT_AUFS_VERSION=""\n' in configlines:
-         configlines.remove('BR2_LINUX_KERNEL_EXT_AUFS=y\n')
+diff --git a/package/criu/Config.in b/package/criu/Config.in
+index 30b131cd30..fc6897c4d0 100644
+--- a/package/criu/Config.in
++++ b/package/criu/Config.in
+@@ -50,4 +50,4 @@ comment "criu needs a glibc or musl toolchain w/ threads, host gcc >= 7, gcc >=
+ 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 \
+ 		|| BR2_TOOLCHAIN_USES_UCLIBC || !BR2_INSTALL_LIBSTDCPP \
+ 		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
+-		|| BR2_HOST_GCC_AT_LEAST_7
++		|| !BR2_HOST_GCC_AT_LEAST_7
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
