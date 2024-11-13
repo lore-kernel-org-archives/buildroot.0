@@ -4,50 +4,131 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4813DD41C2B
-	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 09:55:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29E6FD41C35
+	for <buildroot@archiver.kernel.org>; Wed, 13 Nov 2024 10:54:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A0BB820D7;
-	Wed, 13 Nov 2024 09:55:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A7E380DC7;
+	Wed, 13 Nov 2024 10:54:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lgJnkjetMl24; Wed, 13 Nov 2024 09:55:51 +0000 (UTC)
+ id 8-Z7Hy-iC3nn; Wed, 13 Nov 2024 10:54:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F22B820D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B01D780F69
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F22B820D1;
-	Wed, 13 Nov 2024 09:55:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 16FFAE11
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:55:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B01D780F69;
+	Wed, 13 Nov 2024 10:54:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BA2E4E2E
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 10:54:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A3B60811A5
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:55:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5C26404FE
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 10:54:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zyxiqHqjuyPq for <buildroot@buildroot.org>;
- Wed, 13 Nov 2024 09:55:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5807B811C5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5807B811C5
- for <buildroot@buildroot.org>; Wed, 13 Nov 2024 09:55:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 553C58627A; Wed, 13 Nov 2024 09:55:05 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 13 Nov 2024 09:18:28 +0100
-X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 8d39a532b5ea511805514bc5fa025ab9321a53ab
-X-Git-Newrev: fd70ba89928c7073c50654a962187943237cdfa8
-X-Patchwork-Hint: ignore
-Message-Id: <20241113095505.553C58627A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/libmdbx: bump
- version to 0.12.12
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IbfyjLWW7ZgK for <buildroot@buildroot.org>;
+ Wed, 13 Nov 2024 10:54:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1071640471
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1071640471
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1071640471
+ for <buildroot@buildroot.org>; Wed, 13 Nov 2024 10:54:18 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.7.2] ([85.22.115.140]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MTABT-1tM0dc1PbT-00TEb7 for
+ <buildroot@buildroot.org>; Wed, 13 Nov 2024 11:54:15 +0100
+Message-ID: <1af29766-5cfd-47a5-adb5-d90ff42dd095@gmx.de>
+Date: Wed, 13 Nov 2024 11:54:14 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US, de-DE-1901, de-DE
+To: Buildroot ML <buildroot@buildroot.org>
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+X-Provags-ID: V03:K1:rwjvADuCFaq4Ur82X4Xd5AVCpqaZr+q322DFuPEA7H3kDhVajTQ
+ /Krl1EOBEoWwUp06KISdjk8UF+7niijv9KUpQsJaygIwDSALrcq/pkBQLnnRSOlmUYFhHOb
+ 4IJZFuOZc+FGwYxfW9b+V318XrEtC0GjiIpSDNpE2THPS23C8wI2waD3LvQOX1XIQSZgv0s
+ 0JSguyBJtUGn8x/NRoJTg==
+UI-OutboundReport: notjunk:1;M01:P0:kTefLoHuUUw=;jYJlvNrb0UIVC5zp5YRuozSx+4U
+ C/nyLZogom5iEFB5ZXKI3JiLMKGv7e8qfgX2rByVki2EINAJfST9VJINpOTg18kW6JKyxNcW2
+ wZdnsihgE574XaFek6hYl7zuY38zzzSl9suIVXYpq9V6jMHqdzb5AJxWic5oGT8fMj4OfGTba
+ LtGWGyoKEVM46172iAIAqNqoN4uOSYOmQoB7EPyvp/9DjPD0f6W8uIm5GHV3VU06+qnV/wc84
+ jzIDxKrTZncQvfxLmwwaE7Ednj0eiuG2/FfwUv7BnryxWGr7S2dEMd2Al6pUFLuEn0wnA1p8V
+ U8ubHsRIOUedLPI6TrlTTdBmRyZTKpnAqYZylNeAdvdXvjmf7/M8MSlX862Jc2G20FaEt6ISE
+ fKVUYZ2KreZulgJeBaSJj77R4XUAUnuoFrYtHCF1ASizfcgbIT1LGdxEtUTZd8JctgBGK6XWq
+ gPqCSDtO/fzcEQ/gnUuk8jAUxP3ohpRmNpUvzN7ez/HDhcqGwPSTiHT/5sib1ZlOkilau9HG0
+ ZwBjIU04MREDZdFVTz3v11ADd29+WfiT+cMMprxB5qJgRgQZNGA+uk2TZvm30tJH67icmi7zI
+ 6zruKyxALj8jq+y3b8tehYFJv0MkmI/cB2Jl9uoYBIIpBSU5CKP8fcYfg9abeieFBMsg92Q3n
+ am9UHYgdM+aLmw4GKCTVgUDMUeJA6pwRupEBivf1kBi4+p9AiIm4vVB7/FbRUiHPQ/2+Hbqfo
+ J+70lW+m80DXWNlt0oXjSSeiuou8VLzzodRBZFQGuEeLMrQEn/qrv5wtiQH2ogK2oxLr1LmN9
+ LWJZjqQEjgIzHkEMs1qMezWHMDwC/doaJf81zJaLtyLlaBjG8x0IThR0c9i5HXAVDNAtNXhsn
+ U3elFrt3uRuT/J4KIXVYtnYQglGPqHGVMlC0N0O+IsClxxe/hSnbzXb73
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.de; 
+ s=s31663417; t=1731495255; x=1732100055; i=fiona.klute@gmx.de;
+ bh=vabtQ+HJVkqM26q7AhFcZFp/8YhwwnV4MMDWWLk/8Jk=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:From:Subject:
+ Content-Type:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=PIEt5dTdzHlYX/sQFdOEMsSyhj2shXoL32v+2CoqeqndsDVxwKjDRt1rIMPeMVYd
+ /7p1bPMVW+tvtMjnlEED42pSoVW6i3pWa/mPhxrsSavc338zHKIUklSNTX4RLlc36
+ D2HjMoLMfL0ZHb57YZ4A4YCUnSHVuT7tvTLftpXCxWMHEwEsxb7VnQL2eTdHWzgVk
+ AHN08f9rn45OlC6calH7LeVGffP+/x68IuMTtM5e6TV+JRDDx23NfEQzUwULj+I9S
+ gdIMfpB9D7Vex5+WuwqFPIILMUlYGlqtNhZ4nsXqmlxLrASqeB0jijXyc8BMQGvm9
+ FJ44IHrRRDhP2g5/6A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=PIEt5dTd
+Subject: [Buildroot] Consistency check for UID/GID tables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,98 +140,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3890244523362552571=="
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3890244523362552571==
-Content-Type: text/plain
+Hi everyone,
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd70ba89928c7073c50654a962187943237cdfa8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
+as pointed out in the documentation [1] autogenerated UIDs/GIDs might
+cause issues if they change during updates, so one should set stable
+UIDs/GIDs for users/groups owning files.
 
-This is bugfix release of stable libmdbx branch.
+I'd like to create a consistency check, to make sure that any files in
+the generated image will be owned by users/groups with fixed UIDs/GIDs.
 
-The most significant fixes since v0.12.10 (the previous version pinned to
-buildroot):
+Am I right that the following files in the output dir would be the ones
+to consider, or am I missing something?
 
- - Fixed the possibility of `SIGSEGV` inside the `coherence_check()` after
-   changing the geometry by another process with an increase in the upper
-   DB size above the previous in-process limit.
+build/buildroot-fs/full_users_table.txt
+build/buildroot-fs/full_devices_table.txt
+target/etc/passwd
+target/etc/group
 
- - Fixed cursor(s) handling opened in parent transactions and closed before
-   the completion of nested/child transactions. In such case, closed
-   cursors were "resurrected", which led to a leak of memory allocated for
-   such cursors.
+The target passwd/group files are on the list because /var/www is set to
+be owned by 33:33 (www-data:www-data), which is defined in the skeleton
+passwd/group files and not using makeusers.
 
- - Fixed a possibility of `SIGSEGV` when enabling logging of the
-   `MDBX_LOG_TRACE` level in debug builds.
+Of course I'll want to supplement that with a runtime check, but the
+image should be consistent to start with.
 
- - Correction of the missing `TXN_END_EOTDONE` in the case the start of
-   a reading transaction fails. The mentioned bit-flag was missing in the
-   transaction destruction/shutdown path on error its launch. Because of
-   this, an attempt was made to destroy the cursors, which led to crash
-   debug builds, since the corresponding array is intentionally filled
-   with poison pointers.
+Finally, would such a check script/target be interesting for Buildroot
+in general?
 
- - Modification of `mdbx_close_by()` to return an error when trying to
-   close the dbi descriptor of a table created and/or modified in a
-   still-running transaction. Such premature closure of the descriptor is
-   an incorrect use of the API and a violation of the contract/preconditions
-   formulated in the description of `mdbx_close_dbi()`.
+Best regards,
+Fiona
 
-   However, instead of returning an error, an incorrect closure of the
-   descriptor was performed, which could lead to the creation of a table
-   with an empty name, leakage of database pages and/or corruption of a
-   b-tree structure (wrong reference to the root of a table).
 
-The complete ChangeLog:
-    https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
-
-Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 81e7806b9353ab403e202d3e3d1d2a5818eb390f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libmdbx/libmdbx.hash | 2 +-
- package/libmdbx/libmdbx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
-index 1dbdef7c69..222e7caf5c 100644
---- a/package/libmdbx/libmdbx.hash
-+++ b/package/libmdbx/libmdbx.hash
-@@ -1,5 +1,5 @@
- # Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
--sha256  4637e06768a9a8fc7577e6e458e045ad1f9a8baee74996a3c88bc0ad64cbcf67  libmdbx-amalgamated-0.12.10.tar.xz
-+sha256  19c0eb33e1ed43ca2a94dceb06dd31946432d16f30a9751d3701c67efa22eb1a  libmdbx-amalgamated-0.12.12.tar.xz
- 
- # Locally calculated
- sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-index 6e0571ff24..c736945e92 100644
---- a/package/libmdbx/libmdbx.mk
-+++ b/package/libmdbx/libmdbx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBMDBX_VERSION = 0.12.10
-+LIBMDBX_VERSION = 0.12.12
- LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
- LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
- LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
-
---===============3890244523362552571==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+[1] https://nightly.buildroot.org/#_caveat_with_automatic_uids_and_gids
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3890244523362552571==--
