@@ -4,118 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D6ADD68B30
-	for <buildroot@archiver.kernel.org>; Thu, 14 Nov 2024 15:25:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A49E6D68B33
+	for <buildroot@archiver.kernel.org>; Thu, 14 Nov 2024 16:03:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F6AF84488;
-	Thu, 14 Nov 2024 15:25:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52D568057E;
+	Thu, 14 Nov 2024 16:03:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ejHxL1hH7Aau; Thu, 14 Nov 2024 15:25:41 +0000 (UTC)
+ id xqjkVFeIJSVP; Thu, 14 Nov 2024 16:03:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 311028448E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F090811DF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 311028448E;
-	Thu, 14 Nov 2024 15:25:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 05497968
- for <buildroot@buildroot.org>; Thu, 14 Nov 2024 15:25:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F090811DF;
+	Thu, 14 Nov 2024 16:03:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D3E4B968
+ for <buildroot@buildroot.org>; Thu, 14 Nov 2024 16:03:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E78F384487
- for <buildroot@buildroot.org>; Thu, 14 Nov 2024 15:25:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C1961605E8
+ for <buildroot@buildroot.org>; Thu, 14 Nov 2024 16:03:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PAyRTUVsx4A9 for <buildroot@buildroot.org>;
- Thu, 14 Nov 2024 15:25:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.10;
- helo=mout.kundenserver.de;
- envelope-from=nicolas.cavallari@green-communications.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7D06C84481
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D06C84481
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7D06C84481
- for <buildroot@buildroot.org>; Thu, 14 Nov 2024 15:25:36 +0000 (UTC)
-Received: from [192.168.0.66] ([88.171.60.104]) by mrelayeu.kundenserver.de
- (mreue109 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1M5fUy-1t8qZQ2P7K-00FiNi; Thu, 14 Nov 2024 16:25:34 +0100
-Message-ID: <4f4607c1-7aa7-4b1c-9d0d-d8fdef58c973@green-communications.fr>
-Date: Thu, 14 Nov 2024 16:25:34 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4TM-ac45fnOq for <buildroot@buildroot.org>;
+ Thu, 14 Nov 2024 16:03:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 456C2605D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 456C2605D7
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 456C2605D7
+ for <buildroot@buildroot.org>; Thu, 14 Nov 2024 16:03:52 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 51ED11BF206;
+ Thu, 14 Nov 2024 16:03:50 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1tBcJx-002R8x-2L;
+ Thu, 14 Nov 2024 17:03:49 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org,  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20241028223754.2462242-1-bernd@kuhls.net>
+ <877c97yujm.fsf@dell.be.48ers.dk>
+Date: Thu, 14 Nov 2024 17:03:49 +0100
+In-Reply-To: <877c97yujm.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Wed, 13 Nov 2024 17:20:45 +0100")
+Message-ID: <87ttc9x0nu.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Fiona Klute <fiona.klute@gmx.de>, Buildroot ML <buildroot@buildroot.org>
-References: <1af29766-5cfd-47a5-adb5-d90ff42dd095@gmx.de>
- <e3e6612f-a9dd-45a6-89eb-9165788c5b8b@green-communications.fr>
- <b25d0a28-cc5c-451a-a719-e932f1fa1aaa@gmx.de>
-Content-Language: en-US
-From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-Autocrypt: addr=Nicolas.Cavallari@green-communications.fr; keydata=
- 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
-In-Reply-To: <b25d0a28-cc5c-451a-a719-e932f1fa1aaa@gmx.de>
-X-Provags-ID: V03:K1:nTuFXquICVf4pg6CYOQj1Oq5hHolvjFoEn/+heUmT28rmVLyFlG
- uVDhOVhkMTKZ41if/3HKXJWHJ4abR3irAo/Uqhj4Uy2IxjbDF63GG9LbqWNn3v7rOma3dKD
- HIkAO71gLqc9mqpZptqVXqNtxeeE1/zMiwn+rBvqZ39yGMu4MP3/mT/EEP/Cq/ktZEH9kPV
- b9DviEC0FxZlqcPkhFIWQ==
-UI-OutboundReport: notjunk:1;M01:P0:W74fJ2wAhcE=;jqSp3bvCxgqR0pnwExFv58q4m7W
- 48GlMB6rPIlln5GF2gyZ8a7yXToQnjT7v7G+/YQXVCIEI0WwbMk4GLB/clWggkZCqVXJrIc1V
- u0YZovw7ysqg4CST/N8EJEXqqxhYN/RRXKrKvXnE8GZzn8JAaMDvB7QT/pYetXVZgViq5pnlz
- 3qlotfVFQO1GuexegbRkKtnyGZ5P5kJM6PP+USIVHM0o9RArSGYDDXGgKBNA2RXhvGdbkWfZN
- j+YfutwcxluCxKN1I35n8xRrDgOvbBrcuQV+QUzHG5FiwoqYYlk/Sm7kB5H8l9ihM11pkWUJx
- D4IITFWcAnFIv5Rvl/b1oj6gEWOTIPhggfhr3xljmWx0TrXi63j/fIf1y86ngVLtBTLXvgEPD
- 60OXZfQs9o7JVLwus63XZlA0muct8+bC1+yca3IuqMvbNwa5dQeMxVqyBIq8YHSCGMkPeKCpq
- nGbkve38wd+rxUzkOgpdjLZnvHBYxM6ZgdThnpezSh9P2lAEMT5kHfJdi8IlmzoBpxykXb41M
- TcqulYTsvZIVYCfLzelMcDKUFO6zweHKEEZLr7m5Xw6BeHCCF1m1XC8w5Dcv2dYw+9/0yM0o5
- 1YhO8QSyQEWJv43dsV3uKE6h/nuEHXObbZ5F1ZTf2XcnyW7Ga4UvyIByeFEnYtd5sGwnKJ3s4
- xj0XnvODTQ99l0VyVkYezIfJP0gE2Z3TWbYJUWvRhIZ5/fAogP/nr3kvScxm2tipCmruPQ9FI
- PBFz0lJWit0qUJ0BmNJVOg1RPHYDml2ljs1F6iGd7YG54JTFKTL1JEXunVokxZCmJ6RN98qg3
- 1Y8tjm+Gr1H7pbYS+wXC1mbmdP05PPGv3/3Jp2371OeWhKpmhPMpDlFE0o9LT0oj90
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=green-communications.fr
-Subject: Re: [Buildroot] Consistency check for UID/GID tables
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/libpng: fix arm soft-float
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,62 +71,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/11/2024 12:50, Fiona Klute wrote:
-> Am 14.11.24 um 09:35 schrieb Nicolas Cavallari:
->> On 13/11/2024 11:54, Fiona Klute via buildroot wrote:
->>> Hi everyone,
->>>
->>> as pointed out in the documentation [1] autogenerated UIDs/GIDs might
->>> cause issues if they change during updates, so one should set stable
->>> UIDs/GIDs for users/groups owning files.
->>>
->>> I'd like to create a consistency check, to make sure that any files in
->>> the generated image will be owned by users/groups with fixed UIDs/GIDs.
->>
->> Isn't fixing the UID/GID of users enough ? Since Buildroot typically
->> uses usernames to define permissions, making sure users never change
->> their ids is enough, as long as user names don't change. If the username
->> changes, we can probably assume that it is intentional.
-> 
-> By "consistency check" I mean to verify that exactly the expected
-> users/groups exist, with the expected UIDs/GIDs as applicable, and that
-> there are no files owned by an undefined user. I want to do this
-> automatically (as part of the build) to ensure that nothing is missed,
-> including on updates or changes to the config.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-So you want to check that the output matches your expectation and fail if it 
-does not match, while I want to force the output to be the expectation and make 
-Buildroot refuse to use anything else. Both are equally valid ways to achieve 
-the same thing.
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+ >> Bumping libpng to 1.6.44 with buildroot commit
+ >> 583bb434ffe1eec0dbf6887dd719c3f41a6253e9
+ >> causes a build failure on arm because the NEON code is only available
+ >> for softfp and hardfp ABIs, and not soft-float.
 
-> My system uses a squashfs image that's updated as a whole, with an
-> overlay for /etc. /etc/passwd and /etc/group will be changed, at the
-> very least to create an individual user account. So any changes to
-> defined system users/groups need to be recreated as a system is updated
-> in the field. This includes users/groups that don't own files, if e.g. a
-> service added in an update tries to switch to a user that doesn't exist
-> that'd cause errors.
+ >> Fixes:
+ >> http://autobuild.buildroot.net/results/021/02158525203d8c7f16a4a32637d44d6c87b7f333/
 
-I have a similar usecase.
+ >> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ >> Co-authored-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ >> ---
+ >> v2: updated LIBPNG_CONF_OPTS (Thomas)
 
->> The only problem with this is that makeusers is fairly limited. We
->> cannot specify "set the uid of this existing user" or "add this existing
->> user to a new group" without overriding all other fields for that user.
->> I have a local patch to work around that, but it's incomplete and I
->> don't think upstream is interested.
->>
->> It would also help to be able to forbid the automatic UID generation and
->> fail the build when it would be required. But the last patch submission
->> that could do this was rejected.
-> 
-> A patch to makeusers, or to Buildroot?
+ > Committed to 2024.02.x and 2024.08.x, thanks.
 
-support/scripts/mkusers is part of Buildroot.
+We unfortunately still have a number of autobuilder issues on
+arm(eb). It looks like we may need to pass -mfpu=neon in CFLAGS.
+
+Is that something you can have a look at doing?
+
+I didn't want to hold up the 2024.02.x release and the 1.6.44 bump is
+not really that important, so I've reverted it for now for 2024.02.x.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
