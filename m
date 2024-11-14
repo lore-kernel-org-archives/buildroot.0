@@ -1,69 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99FA2D6A221
-	for <buildroot@archiver.kernel.org>; Thu, 14 Nov 2024 19:02:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BA45D6A22E
+	for <buildroot@archiver.kernel.org>; Thu, 14 Nov 2024 20:47:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 461E2407C5;
-	Thu, 14 Nov 2024 19:02:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 484FF605B0;
+	Thu, 14 Nov 2024 20:47:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id adD-cLfEZkdf; Thu, 14 Nov 2024 19:02:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FbHk1RaLruRl; Thu, 14 Nov 2024 20:47:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 049F3407CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51664605C0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 049F3407CC;
-	Thu, 14 Nov 2024 19:02:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B66FF968
- for <buildroot@buildroot.org>; Thu, 14 Nov 2024 19:02:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 51664605C0;
+	Thu, 14 Nov 2024 20:47:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C5B99BF
+ for <buildroot@buildroot.org>; Thu, 14 Nov 2024 20:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 98367407CD
- for <buildroot@buildroot.org>; Thu, 14 Nov 2024 19:02:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B3C6F84608
+ for <buildroot@buildroot.org>; Thu, 14 Nov 2024 20:47:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C3pwyUikjFOo for <buildroot@buildroot.org>;
- Thu, 14 Nov 2024 19:02:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E41B5407C5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E41B5407C5
-Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E41B5407C5
- for <buildroot@buildroot.org>; Thu, 14 Nov 2024 19:02:21 +0000 (UTC)
-Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 74E20440FAC;
- Thu, 14 Nov 2024 20:58:45 +0200 (IST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z0n4ZpzSGn5A for <buildroot@buildroot.org>;
+ Thu, 14 Nov 2024 20:47:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7789B84602
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7789B84602
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7789B84602
+ for <buildroot@buildroot.org>; Thu, 14 Nov 2024 20:47:11 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id C4C96B005FE;
+ Thu, 14 Nov 2024 21:47:07 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 14 Nov 2024 21:02:10 +0200
-Message-ID: <f1012c843a68027c24f3e7f482a63f7d23a3f13e.1731610930.git.baruch@tkos.co.il>
-X-Mailer: git-send-email 2.45.2
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Thu, 14 Nov 2024 21:47:01 +0100
+Message-ID: <20241114204701.40561-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1731610725;
- bh=ibMSj+yWF0dEbonQAHhn2H4cClTRGQz+oF2+Bk5lEkM=;
+ d=free.fr; s=smtp-20201208; t=1731617229;
+ bh=13UEhhVmKXc6qbp5N17Gqv6lx0osMPlN43oxH74tfmk=;
  h=From:To:Cc:Subject:Date:From;
- b=yXBMahyjsDtGbFRU6F3P5uhglmnmTaYlHS2kyMtCtacP3K2x5jUCsc0QZFD/pJcYp
- BVZK3fbu8iO5QfZAatAKc42KtKVc6jkVq9EKKJ3UONw7fNYwkAMI0fJSKFRGW1IjvA
- WOmdpDk1A7y9ArjM14BVew4GK4U1Ub+9geDsvvzRpOvA0sOr4f9pP3dE0mIE0o8jwS
- Qwz8Yoqh/mVby3c8cSqzVQwXMler4OXjkIZAIVVzfEjgknDQmb7DD5NtlYHriDR/ro
- jrK1zgVn5FMRRe1hihOecm4s08qqm0RSMus34cGtWdKwrlUrN6onMLYPr4OICTgVZc
- QgKY6QTbjYl4A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=tkos.co.il
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=yXBMahyj
-Subject: [Buildroot] [PATCH] package/socat: bump to version 1.8.0.1
+ b=CFyWXltlYAfp7rUyekKToUr4aUHRiDJioFMKZVc2zdQPJyEG/YOsYkukPVqK6KDTk
+ 1SHekOc+Cxu0H51mNYiEya4kIXEPORXeKQ/mxzvpNg+uawWtBSeENSRvMaykM/I+o/
+ 3AKw8qSe7apXjwp2uiXUTZGJRhrrxr0iVq25SkIcD4uGOXdnWXZGdqhumJU0eC4W7N
+ TFSNtvdd3WqUEe7fycuMqYkDLkvHn5lJO1U8txM7+yo9aVu3OEiNQAAqPIuYTeRBRt
+ +t1I7d4lCSM8dGV6DADxy/n/yX0b8B5BhIPD/Il++rLcLZEtGhDbV0HIwY2vhE6sVK
+ aWBKyuLc1+0Ww==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=CFyWXltl
+Subject: [Buildroot] [PATCH next 1/1] package/tinycompress: bump to version
+ 1.2.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,52 +77,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update README hash for changes unrelated to license.
+For commit log, see:
+https://github.com/alsa-project/tinycompress/commits/v1.2.13/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+This commit also adds in the hash file a commit with the pgp signature
+source and key id used for the verification.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/socat/socat.hash | 6 +++---
- package/socat/socat.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/tinycompress/tinycompress.hash | 4 +++-
+ package/tinycompress/tinycompress.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/socat/socat.hash b/package/socat/socat.hash
-index 2a14d7530301..70c6e6a8f1c5 100644
---- a/package/socat/socat.hash
-+++ b/package/socat/socat.hash
-@@ -1,8 +1,8 @@
- # From http://www.dest-unreach.org/socat/download.md5sum
--md5  51f9ecdf5d942d0a3c150ea400eb89ef  socat-1.8.0.0.tar.bz2
-+md5  e53a6e8e8594ac87476fe4ae361bbcd1  socat-1.8.0.1.tar.bz2
- # From http://www.dest-unreach.org/socat/download.sha256sum
--sha256  e1de683dd22ee0e3a6c6bbff269abe18ab0c9d7eb650204f125155b9005faca7  socat-1.8.0.0.tar.bz2
-+sha256  6a283565db7cf86292c6f70504c58abb03e29888adeed5a6c5f3457e803c1b81  socat-1.8.0.1.tar.bz2
+diff --git a/package/tinycompress/tinycompress.hash b/package/tinycompress/tinycompress.hash
+index f86b75f346..1a2b2c0203 100644
+--- a/package/tinycompress/tinycompress.hash
++++ b/package/tinycompress/tinycompress.hash
+@@ -1,5 +1,7 @@
+ # Locally calculated after checking pgp signature
+-sha256  ebbe788c28328e7cca245aaf9194a5ad0dc91e9e0dc883c2cf9feb6d42c9f3fc  tinycompress-1.2.11.tar.bz2
++# from https://www.alsa-project.org/files/pub/tinycompress/tinycompress-1.2.13.tar.bz2.sig
++# with key F04DF50737AC1A884C4B3D718380596DA6E59C91
++sha256  0efe6cbd7bff31983e0d416df0436767665cc4cd70d278c06ce0e83e0eeab5db  tinycompress-1.2.13.tar.bz2
+ 
  # Locally calculated
--sha256  de9d702354b2e748ea87eb20d18c3d90ebede5dc6d2fc3c2e0645d139a5181bc  README
-+sha256  6c07bae42bf0a919c9dd6583f76cc9020a472652dcdad3e84923074a1f412d75  README
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  fd9e48ca316a5032069b9521f4f4b4d9b1c60365012bae1e62286bcd5bd2e761  COPYING.OpenSSL
-diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-index 7f634c28f09e..84d9cd3cf84d 100644
---- a/package/socat/socat.mk
-+++ b/package/socat/socat.mk
+ sha256  912ea37a4435594a3b3c35f04efa4b5b7af2e68a05f5319c16c881711a31e4b7  COPYING
+diff --git a/package/tinycompress/tinycompress.mk b/package/tinycompress/tinycompress.mk
+index fabd5884b2..b5764ea293 100644
+--- a/package/tinycompress/tinycompress.mk
++++ b/package/tinycompress/tinycompress.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SOCAT_VERSION = 1.8.0.0
-+SOCAT_VERSION = 1.8.0.1
- SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
- SOCAT_SITE = http://www.dest-unreach.org/socat/download
- SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
+-TINYCOMPRESS_VERSION = 1.2.11
++TINYCOMPRESS_VERSION = 1.2.13
+ TINYCOMPRESS_SOURCE = tinycompress-$(TINYCOMPRESS_VERSION).tar.bz2
+ TINYCOMPRESS_SITE = https://www.alsa-project.org/files/pub/tinycompress
+ TINYCOMPRESS_LICENSE = BSD-3-Clause and LGPL-2.1
 -- 
-2.45.2
+2.47.0
 
 _______________________________________________
 buildroot mailing list
