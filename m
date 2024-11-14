@@ -1,98 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA1EBD6A22F
-	for <buildroot@archiver.kernel.org>; Thu, 14 Nov 2024 21:04:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0144D6A22D
+	for <buildroot@archiver.kernel.org>; Thu, 14 Nov 2024 21:10:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69D2C60683;
-	Thu, 14 Nov 2024 21:04:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53AA8407CD;
+	Thu, 14 Nov 2024 21:10:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9eh4S12GPxr4; Thu, 14 Nov 2024 21:04:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BPBnJACwE7zo; Thu, 14 Nov 2024 21:10:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79C0160678
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDD56406FB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79C0160678;
-	Thu, 14 Nov 2024 21:04:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id ED65DBF
- for <buildroot@buildroot.org>; Thu, 14 Nov 2024 21:04:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDD56406FB;
+	Thu, 14 Nov 2024 21:10:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id ADB1F1ED5
+ for <buildroot@buildroot.org>; Thu, 14 Nov 2024 21:10:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E88BE80B6E
- for <buildroot@buildroot.org>; Thu, 14 Nov 2024 21:04:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96D4A40263
+ for <buildroot@buildroot.org>; Thu, 14 Nov 2024 21:10:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZUOyIz6HlBfZ for <buildroot@buildroot.org>;
- Thu, 14 Nov 2024 21:04:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
- envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9C65980B77
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C65980B77
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9C65980B77
- for <buildroot@buildroot.org>; Thu, 14 Nov 2024 21:04:51 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-43162cf1eaaso12273655e9.0
- for <buildroot@buildroot.org>; Thu, 14 Nov 2024 13:04:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1731618289; x=1732223089;
- h=in-reply-to:content-disposition:mime-version:references:reply-to
- :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=VI23hYUoS/6IqpQpdaQZ6zaJmIiXwlx3tikuxRWzn2M=;
- b=RLKI6m6Ecu08aHGeZfs7MQE3SC1EbTATk9G+BIQoX5WuRH3sOsr5hxP1oS9WEZ5CEi
- fQjO0S2t7q0fXyBjt7bOAG7sCOpo2A72fh4nvb7gPdcaswtvaEo8QJsdClmdZhff1XA3
- yf7b2WiX7z3UfUIcCDSYWg7sAcLWJ3I9bdhgnSeMkmaZ0KD3V0EezKpRpl/mssxcAa8Z
- tIwP+TKg79ceuLqjwBAsElggFKKtm9y0wyJA3iySWVzfePGD/ziSzmdhaDPEdW2OG7IT
- /eQc3kn6Do4994Mz3PfC5UjuXTr5+T7x4hNgrq6D2Ox5Vdb9remSESd1vZNJlnF5JqC4
- 7FGw==
-X-Gm-Message-State: AOJu0YwpGAPM+9oeis66FlV+Si7iQSMLfErjRahjgWowpGW+KluNHjym
- bkIMlN4PTP5lgRdqSNfrs7YKc4QDoVB2yK8BS9UOjwJc8flM48EY
-X-Google-Smtp-Source: AGHT+IGHe6e/23MYIWxPW6t4bB1kHtXU6cfpn+jQ0JTNMJN0/8tT8jighxmcFpaXWGC6aw84wmWmtw==
-X-Received: by 2002:a05:600c:c8f:b0:42b:ac3d:3abc with SMTP id
- 5b1f17b1804b1-432df78f3d1mr1753955e9.24.1731618289263; 
- Thu, 14 Nov 2024 13:04:49 -0800 (PST)
-Received: from pevik (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-432da2800absm35539715e9.25.2024.11.14.13.04.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Nov 2024 13:04:48 -0800 (PST)
-Date: Thu, 14 Nov 2024 22:04:45 +0100
-From: Petr Vorel <petr.vorel@gmail.com>
-To: Anssi Hannula <anssi.hannula@bitwise.fi>
-Message-ID: <20241114210445.GA372474@pevik>
-References: <20241106100210.1547916-1-anssi.hannula@bitwise.fi>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h5o9bmKbniPD for <buildroot@buildroot.org>;
+ Thu, 14 Nov 2024 21:10:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3461540277
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3461540277
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3461540277
+ for <buildroot@buildroot.org>; Thu, 14 Nov 2024 21:10:03 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id E76D2B00565;
+ Thu, 14 Nov 2024 22:09:57 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Cc: =?UTF-8?q?Andr=C3=A9=20Zwing?= <nerv@dawncrow.de>,
+ Julien Olivain <ju.o@free.fr>
+Date: Thu, 14 Nov 2024 22:09:52 +0100
+Message-ID: <20241114210952.61365-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20241106100210.1547916-1-anssi.hannula@bitwise.fi>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1731618289; x=1732223089; darn=buildroot.org;
- h=in-reply-to:content-disposition:mime-version:references:reply-to
- :message-id:subject:cc:to:from:date:from:to:cc:subject:date
- :message-id:reply-to;
- bh=VI23hYUoS/6IqpQpdaQZ6zaJmIiXwlx3tikuxRWzn2M=;
- b=k1dEAaqEDM1PvnXdVyyqYrwFzlNxgampdydiSYdRfbZZDWPPDZ6V05tSOEctDPH6xf
- bE5T1M4DrxalSZqZpQ9tx2T1b0GsS8VtazZmlZb2j4HGYsvrQdWeI3eoKHQKfvYg0Ybs
- xf68RidKYCi1dCUrk5yYomVwFzbOiWlHhsU8dabQ+ro9k//ZnUM1iq4pgcznVkt5wlSB
- KpWkHxE0tqEd84JW+0h7F8UdiDOTSqqRl6jkEghRIMzWi9b8ziup1gPU2YIO14ORaA78
- mCZlm+EdoZ1GBPXDuwJyCGzPYkmlHn6d6xzU9uqROsaFjCVCw7M0g+2tvpqzopYdY7iv
- TmQQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1731618600;
+ bh=K7XmiL1m5lfnVeOyVQujNQGaP+R9TV5Sng7fQS5Th2E=;
+ h=From:To:Cc:Subject:Date:From;
+ b=aZ62/Dd5KEThiZJzpHhSLHEWJ1KpoWypfoVP72tZ5JYL8E+2CzTfrxynlFhyN+a69
+ eYCfk7xukqm8NqSLY5R2h7xwOPJW+KUmR0EJ/6gca0ZRVBF5h1dTUDnwDdyxfEiCkX
+ vhh2FSEsKe1Aiy57heYEV4efI7ssNqSDAORfRXfjepf15JepKgEbU7HrpBRib/kar8
+ Lmtadbr/tHBLBA3PzvHIYY+ijOYe5gXHJATQ79Npz6TFjVaLotGcKCSIGzab2Nl94l
+ HsxC1gHqFX4nzXjD4/R2JIcB0i2UJ0bT2uMe8GfHGUQruRHnnwvameNMEiPhmLRrQj
+ ccI/iTS+Ss+4w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=k1dEAaqE
-Subject: Re: [Buildroot] [PATCH 1/1] package/nfs-utils: fix unit
- dependencies without systemd on build host
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=aZ62/Dd5
+Subject: [Buildroot] [PATCH 1/1] package/libkrb5: security bump to version
+ 1.21.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,55 +79,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Anssi, all,
+For the change log, see [1].
 
-> nfs-utils configure script uses "systemd-escape" to determine the
-> rpc_pipefs mount point unit name in the non-default case.
+The license hash file changed, due to the year update. See [2].
+This commit also adds a comment in the hash file the pgp signature file
+source and key id used for the verification.
 
-> If the host build system has no systemd this will silently result in an
-> empty name, causing rpc_pipefs.target to incorrectly depend on ".mount".
+Fixes:
+- https://nvd.nist.gov/vuln/detail/CVE-2024-37370
+- https://nvd.nist.gov/vuln/detail/CVE-2024-37371
 
-> Fix that by depending on host-systemd for build.
+[1] https://web.mit.edu/kerberos/www/krb5-1.21/
+[2] https://github.com/krb5/krb5/commit/fec2c44ee93bfd3282bed99509a941d56a6e2c21
 
-> Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
-> ---
->  package/nfs-utils/nfs-utils.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested (compilation only) in:
+https://gitlab.com/jolivain/buildroot/-/pipelines/1543592409
+---
+ package/libkrb5/libkrb5.hash | 6 ++++--
+ package/libkrb5/libkrb5.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-> index b757e3e51d..9ea3bae79d 100644
-> --- a/package/nfs-utils/nfs-utils.mk
-> +++ b/package/nfs-utils/nfs-utils.mk
-> @@ -79,7 +79,7 @@ NFS_UTILS_POST_INSTALL_TARGET_HOOKS += NFS_UTILS_INSTALL_FIXUP
+diff --git a/package/libkrb5/libkrb5.hash b/package/libkrb5/libkrb5.hash
+index 02c0e3396e..0403b3aed0 100644
+--- a/package/libkrb5/libkrb5.hash
++++ b/package/libkrb5/libkrb5.hash
+@@ -1,5 +1,7 @@
+ # Locally calculated after checking pgp signature
+-sha256  9560941a9d843c0243a71b17a7ac6fe31c7cebb5bce3983db79e52ae7e850491  krb5-1.21.2.tar.gz
++# from https://web.mit.edu/kerberos/dist/krb5/1.21/krb5-1.21.3.tar.gz.asc
++# with key C4493CB739F4A89F9852CBC20CBA08575F8372DF
++sha256  b7a4cd5ead67fb08b980b21abd150ff7217e85ea320c9ed0c6dadd304840ad35  krb5-1.21.3.tar.gz
+ 
+ # Hash for license file:
+-sha256  0d5373486138cb176c063db98274b4c4ab6ef3518c4191360736384b780306c2  NOTICE
++sha256  7601361a275aadbe35c90185519323c28730d60c553683e56fd06cf9c5f749a6  NOTICE
+diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
+index def627d422..e57a2b98a2 100644
+--- a/package/libkrb5/libkrb5.mk
++++ b/package/libkrb5/libkrb5.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBKRB5_VERSION_MAJOR = 1.21
+-LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).2
++LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).3
+ LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION_MAJOR)
+ LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
+ LIBKRB5_SUBDIR = src
+-- 
+2.47.0
 
->  ifeq ($(BR2_INIT_SYSTEMD),y)
->  NFS_UTILS_CONF_OPTS += --with-systemd=/usr/lib/systemd/system
-> -NFS_UTILS_DEPENDENCIES += systemd
-> +NFS_UTILS_DEPENDENCIES += systemd host-systemd
-
-Given that majority of the developers use Buildroot with Linux distro with
-systemd I'm not happy about all of then need to build host-systemd.
-
-Is there any better solution for this? If not let's fix the problem with
-accepting the dependency.
-
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
-
-Kind regards,
-Petr
-
->  else
->  NFS_UTILS_CONF_OPTS += --without-systemd
->  endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
