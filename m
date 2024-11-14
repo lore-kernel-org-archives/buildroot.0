@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B30F7D68B33
-	for <buildroot@archiver.kernel.org>; Thu, 14 Nov 2024 16:25:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42DC3D68B33
+	for <buildroot@archiver.kernel.org>; Thu, 14 Nov 2024 16:25:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1777140788;
-	Thu, 14 Nov 2024 16:25:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 52E2640771;
+	Thu, 14 Nov 2024 16:25:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CErLoqaR0_up; Thu, 14 Nov 2024 16:25:48 +0000 (UTC)
+ id gZRabf9MsmMh; Thu, 14 Nov 2024 16:25:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B94F640769
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE7AA40792
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B94F640769;
-	Thu, 14 Nov 2024 16:25:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7682C27DF
- for <buildroot@buildroot.org>; Thu, 14 Nov 2024 16:25:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE7AA40792;
+	Thu, 14 Nov 2024 16:25:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C6D5968
+ for <buildroot@buildroot.org>; Thu, 14 Nov 2024 16:25:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 551BD40B31
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5807140741
  for <buildroot@buildroot.org>; Thu, 14 Nov 2024 16:25:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H_ejB0qFtmCn for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KYXsw3ZBvgnt for <buildroot@buildroot.org>;
  Thu, 14 Nov 2024 16:25:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A149400C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DD2840769
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A149400C5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6DD2840769
  for <buildroot@buildroot.org>; Thu, 14 Nov 2024 16:25:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 412D1863D7; Thu, 14 Nov 2024 16:25:44 +0000 (UTC)
+ id 5788C863D9; Thu, 14 Nov 2024 16:25:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Nov 2024 16:55:19 +0100
+Date: Thu, 14 Nov 2024 17:25:26 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 1d8cf02e88e212cf4c7bc9b18ccdc582a5edb95b
-X-Git-Newrev: 7e2038d9efec14f462246b9e2f06146b382863ec
+X-Git-Oldrev: 7e2038d9efec14f462246b9e2f06146b382863ec
+X-Git-Newrev: e843fa764bfbdd64e6b15344a01014c6dccf0ce9
 X-Patchwork-Hint: ignore
-Message-Id: <20241114162544.412D1863D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] Revert "package/libpng:
- bump version to 1.6.44"
+Message-Id: <20241114162544.5788C863D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] Update for 2024.02.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,49 +64,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e2038d9efec14f462246b9e2f06146b382863ec
+commit: https://git.buildroot.net/buildroot/commit/?id=e843fa764bfbdd64e6b15344a01014c6dccf0ce9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
-
-This reverts commit 6f22278527c15e8944c0bdc819a023355cc2c001.
-
-Libpng 1.6.44 triggers a number of autobuilder issues on arm(eb), E.G.:
-
-http://autobuild.buildroot.net/results/72af84420ebdae8cb10c6988312e50268583a427/
-http://autobuild.buildroot.net/results/e4c0e3685ffc63a2c6ffa4f60e4ed6ffdd81deea/
-
-The "fixes and improvements" in 1.6.44 are not strictly needed for
-2024.02.x, so go back to 1.6.43 instead.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpng/libpng.hash | 4 ++--
- package/libpng/libpng.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ CHANGES                  | 13 +++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index 3fd4033f83..356c0e3e5d 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,4 +1,4 @@
--# From https://sourceforge.net/p/png-mng/mailman/message/58815959/
--sha256  60c4da1d5b7f0aa8d158da48e8f8afa9773c1c8baa5d21974df61f1886b8ce8e  libpng-1.6.44.tar.xz
-+# From https://sourceforge.net/p/png-mng/mailman/message/58741099/
-+sha256  6a5ca0652392a2d7c9db2ae5b40210843c0bbc081cbd410825ab00cc59f14a6c  libpng-1.6.43.tar.xz
- # Locally computed:
- sha256  7317e078e2d3b5d7ba5a6159e650945153262b44b76f6700f8e9edb261c5143e  LICENSE
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 3e7fc42d82..af38afde47 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/CHANGES b/CHANGES
+index 61fb82fcc2..527d344c9c 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,16 @@
++2024.02.8, released November 14th, 2024
++
++	Important / security related fixes.
++
++	Updated/fixed packages: apache, asterisk, bind, bootgen, criu,
++	file, fluidsynth, ghostscript, heimdal, intel-microcode,
++	jailhouse, jsoncpp, libarchive, libcurl, libldns, liblinear,
++	libmdbx, libopenh264, ltrace, lightning, nghttp2, ntp, php,
++	postgresql, procps-ng, python-pyqt5, ruby, sysvinit, tor,
++	wpebackend-fdo
++
++	New packages: python-pyqt5-sip
++
+ 2024.02.7, released October 21th, 2024
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 7373f6432f..9702aadf3d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -90,9 +90,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2024.02.7
++export BR2_VERSION := 2024.02.8
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1729494000
++BR2_VERSION_EPOCH = 1731601000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 20b22d45e8..91a801bc16 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBPNG_VERSION = 1.6.44
-+LIBPNG_VERSION = 1.6.43
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+ # Buildroot version to use
+-RELEASE='2024.02.7'
++RELEASE='2024.02.8'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
