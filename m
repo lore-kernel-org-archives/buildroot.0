@@ -1,94 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0A12D68BCF
-	for <buildroot@archiver.kernel.org>; Fri, 15 Nov 2024 19:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C232D68BD1
+	for <buildroot@archiver.kernel.org>; Fri, 15 Nov 2024 20:11:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 769184088C;
-	Fri, 15 Nov 2024 19:52:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ikbtTWrEG51v; Fri, 15 Nov 2024 19:52:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4350F407D2
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4350F407D2;
-	Fri, 15 Nov 2024 19:52:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 88CE927DF
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 19:52:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4598A61096
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 19:52:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29490606B1;
+	Fri, 15 Nov 2024 20:11:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dW1xxOQ3Wz4J for <buildroot@buildroot.org>;
- Fri, 15 Nov 2024 19:52:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::633; helo=mail-pl1-x633.google.com;
- envelope-from=f.fainelli@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2F2D360A48
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F2D360A48
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com
- [IPv6:2607:f8b0:4864:20::633])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2F2D360A48
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 19:52:18 +0000 (UTC)
-Received: by mail-pl1-x633.google.com with SMTP id
- d9443c01a7336-21145812538so18154725ad.0
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 11:52:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1731700337; x=1732305137;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=cyoKY6+H7MtEWJKyDqC29jfqTpoiy1hvfZSAC2tbO5Y=;
- b=wVbO4HqRV9vQfDZQsczKb416TJlB1rZcKEBXkwjgfwe8fCm7D1g+0OiV8GCv3nNGhs
- jm3nuy7pdivjWkxIS6UcL8/gOUVqSQPJoMlOAzKOu+rm9/U5GG4eQYIfdnP2ImpAgCmn
- /pPtVvDvc4+Jt6YwbeR0gwafDtXp29v7i4Ym8jGqWUYkK5ciPnErtaXgPMlS7SjjTk0v
- DlMdsaTr8uwM6us5CJYjH0z679tCzXc1usvyDrnXJRvuD5B4OMgMAps2+eqs2V0Pr4SM
- Ai3RXtTVtaALMM9z2ckGp4hSBjAtifdg9lZgSLIw1Zwsz40aT+BTwtQYynKVi1wMkULC
- cUoA==
-X-Gm-Message-State: AOJu0Yy4F4ECvdURZd270/7LJURK661oPIN220O9a+Ey6NgLhRSm3EWK
- gGESxPh83TLlzZkktYtEv7M9ztcj/RWdVtXWQJbgY73jCIfInvVV14Elsg==
-X-Google-Smtp-Source: AGHT+IGp7pASUC4XESsiTXei9OME09uit5AxS5mHp6qmOpG7oEVrvWMuHq8nIB2pMANhiuJm9IdXbw==
-X-Received: by 2002:a17:902:dacd:b0:211:e4c5:cd5b with SMTP id
- d9443c01a7336-211e4c5cdcfmr19539225ad.50.1731700336912; 
- Fri, 15 Nov 2024 11:52:16 -0800 (PST)
-Received: from eldorado.. (ip68-4-215-93.oc.oc.cox.net. [68.4.215.93])
- by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-211d0dc5d7bsm16034505ad.36.2024.11.15.11.52.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 Nov 2024 11:52:16 -0800 (PST)
-From: Florian Fainelli <f.fainelli@gmail.com>
+ id gemxNfN8uTld; Fri, 15 Nov 2024 20:11:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 348F4607FC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 348F4607FC;
+	Fri, 15 Nov 2024 20:11:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3EFE4BF
+ for <buildroot@buildroot.org>; Fri, 15 Nov 2024 20:11:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1DD1943011
+ for <buildroot@buildroot.org>; Fri, 15 Nov 2024 20:11:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W9IlUnyeNE0i for <buildroot@buildroot.org>;
+ Fri, 15 Nov 2024 20:11:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AC880400AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC880400AF
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AC880400AF
+ for <buildroot@buildroot.org>; Fri, 15 Nov 2024 20:11:42 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c858.dip0.t-ipconnect.de [79.214.200.88])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CA7DAA4C33A5
+ for <buildroot@buildroot.org>; Fri, 15 Nov 2024 21:11:40 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:54594)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98)
+ (envelope-from <bernd@kuhls.net>) id 1tC2fM-000000004fJ-0kjb
+ for buildroot@buildroot.org; Fri, 15 Nov 2024 20:11:40 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 15 Nov 2024 11:52:13 -0800
-Message-ID: <20241115195213.633633-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Fri, 15 Nov 2024 21:11:40 +0100
+Message-Id: <20241115201140.363683-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1731700337; x=1732305137; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=cyoKY6+H7MtEWJKyDqC29jfqTpoiy1hvfZSAC2tbO5Y=;
- b=gJ59m8dAwQp8yEnNzORzml8bTB2aY61WehsuxXhIgXtp7SBMirLwvwqWODgBkhNAh/
- VPyxlYSg6bI1nPDfY6+mOfA3265pch4OnxAoF9MD2CHdPivRtAl+yzSFNPSmWoxSS2sr
- G6cb0BnsyfKDW2EnZzDwEO8FSTdXL71S93N5r9KtPyQUqQHUQ1a+Ed5SxA+pw5jI41J9
- mOpm0/yRbY3WfTKBLTFCDnTVjrFV+3/zJkPy3lAcWo6YNWipfMamBTUQQTwc0kLCfLDA
- +SY4h4MuCHBVhvxc1HxgMVmPg83IqkxUXIbqGje/0Z3jE63XAfC5hwZu0VBcF3pPvQOs
- lTzA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=kuhls.net; 
+ s=kas202406071026; t=1731701500;
+ bh=D9VpmJ7Z6ojGJ1YjtSZIxUS4RWVnFgGBYaU6/9P5TfE=;
+ h=From:To:Subject:Date:From;
+ b=PqKVwFsFKlNpSBMmLdjlBZsOYUIdtbCWOE3rif0e/eLKGDbNpOrHhzx2ipqgyHcXI
+ prR/mbZCmetCqQrykdVHMsJj4Y30RevCy+8p3DFFF0LIRRlp+5V7EGZmgFrWwP6Zkc
+ QHpISxlZ0u+46+fLBzXbz3viSx03b760R/RVFqtiELjYkjQ6iGpICyPaSorsT31C/U
+ LjpW8KzvDM68rdDsZlj+1/XrkuLclnP+8qpir/n6fBcIjuP9oIhUHdOmu//6+JXGRz
+ H1mWlAvQBpkoRn3JGO1xFxCWys4BTcJlxCRhaQ9bBJzT0zCL/hbjWOGbXNlMWXP6hF
+ MbQRNFzhxv5ZQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=gJ59m8dA
-Subject: [Buildroot] [PATCH] package/linux-tools: perf: Disable shellcheck
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202406071026 header.b=PqKVwFsF
+Subject: [Buildroot] [PATCH 1/1] package/intel-microcode: security bump
+ version to 20241112
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,43 +81,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Florian Fainelli <f.fainelli@gmail.com>, mmayer@broadcom.com,
- Bernd Kuhls <bernd@kuhls.net>, ju.o@free.fr,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The use of shellcheck within perf is not a functional requirement and it can
-lead to build failures where the perf makefile attempts to link in empty
-.shellcheck_log files:
+Release notes:
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases
 
-https://lore.kernel.org/r/fb078045-dc05-426e-b21e-72ffae3e8e1b@gmail.com
+CVE-2024-21853
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01101.html
 
-Disable shellcheck since we do not need it at all.
+CVE-2024-23918
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01079.html
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+CVE-2024-24968
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01097.html
+
+CVE-2024-23984
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01103.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/linux-tools/linux-tool-perf.mk.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
-index 65aba2e9fe25..df3030439efc 100644
---- a/package/linux-tools/linux-tool-perf.mk.in
-+++ b/package/linux-tools/linux-tool-perf.mk.in
-@@ -28,7 +28,8 @@ PERF_MAKE_FLAGS = \
- 	NO_LIBPERL=1 \
- 	NO_LIBPYTHON=1 \
- 	NO_LIBBIONIC=1 \
--	NO_LIBTRACEEVENT=1
-+	NO_LIBTRACEEVENT=1 \
-+	NO_SHELLCHECK=1
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 20dfaa41b4..81a4573110 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8b7582eac7e9a691356e18b3bdcbc7b2db09494e040ec980a4a5fb6d0da261bf  intel-microcode-20240910.tar.gz
++sha256  37246208ef68039be752438c72400a688a2238df13a7f5282497c80be2d8366d  intel-microcode-20241112.tar.gz
+ sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 24729494d0..17f25edc83 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # We need to pass an argument to ld for setting the emulation when
- # building for MIPS architecture, otherwise the default one will always
+-INTEL_MICROCODE_VERSION = 20240910
++INTEL_MICROCODE_VERSION = 20241112
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
 -- 
-2.43.0
+2.39.5
 
 _______________________________________________
 buildroot mailing list
