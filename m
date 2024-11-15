@@ -4,70 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5C04D68BDC
-	for <buildroot@archiver.kernel.org>; Fri, 15 Nov 2024 23:25:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C7CCD68BDD
+	for <buildroot@archiver.kernel.org>; Fri, 15 Nov 2024 23:59:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62DFB611E1;
-	Fri, 15 Nov 2024 23:25:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7CBB60F34;
+	Fri, 15 Nov 2024 23:59:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iXJOxogOpJQd; Fri, 15 Nov 2024 23:25:21 +0000 (UTC)
+ id DGCk-AIORsTy; Fri, 15 Nov 2024 23:59:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E404611E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBBC561081
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E404611E4;
-	Fri, 15 Nov 2024 23:25:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 396261EB8
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 23:25:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBBC561081;
+	Fri, 15 Nov 2024 23:59:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 76D07BF
+ for <buildroot@buildroot.org>; Fri, 15 Nov 2024 23:59:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 274D541BB7
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 23:25:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6382C61081
+ for <buildroot@buildroot.org>; Fri, 15 Nov 2024 23:59:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MsJVo_yzPQau for <buildroot@buildroot.org>;
- Fri, 15 Nov 2024 23:25:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E8-DHoptXMQv for <buildroot@buildroot.org>;
+ Fri, 15 Nov 2024 23:59:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
  helo=smtp1-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DA9FC41B93
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA9FC41B93
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 85BB560F34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85BB560F34
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DA9FC41B93
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 23:25:18 +0000 (UTC)
-Received: from L25025.local (unknown
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 85BB560F34
+ for <buildroot@buildroot.org>; Fri, 15 Nov 2024 23:59:21 +0000 (UTC)
+Received: from localhost.localdomain (unknown
  [IPv6:2a01:e0a:2af:22b0:c8e6:f99:ce4c:c68])
  (Authenticated sender: vjardin@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 3A0BBB0051E;
- Sat, 16 Nov 2024 00:25:16 +0100 (CET)
-Date: Sat, 16 Nov 2024 00:25:16 +0100
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id AF01AB0051B;
+ Sat, 16 Nov 2024 00:59:17 +0100 (CET)
 From: Vincent Jardin <vjardin@free.fr>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-Message-ID: <rdst6ihihplrkwh3gmueiwb3ge5q5kzamczdsi62qsenuijhbj@n44frqrgrkcw>
-References: <20241115224753.1074295-1-ju.o@free.fr>
+To: buildroot@buildroot.org
+Cc: vjardin@free.fr,
+	Vincent Jardin <vjardin@iliad-free.fr>
+Date: Sat, 16 Nov 2024 00:57:54 +0100
+Message-ID: <20241115235757.43480-1-vjardin@free.fr>
+X-Mailer: git-send-email 2.46.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20241115224753.1074295-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1731713117;
- bh=2NshZ22bnaBg4APfXhEWjJVFMdb3Ax/4ypdL/jkElAY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=lj7xjKApyJVdMPjkumUdWfKCkGyky0txPhbGbMCgvevBisDKVAPSsdkspsBj0IkSZ
- VqfKR7w9TizfHcBmPOHqcdWCgBsN0bhXAUIGrngni6FSVrnSZ+OB1ixpumF+02fV1d
- aIfbxwj49ybynnVbnluYnoIpMI/8ZbOTUIYoU3ZS2F+Gx7OvRVhce2ffclZ1w0ylbO
- VXa6tbE3vx5k+0nH3kcehNI/OKMdDJ+L6rkowJOuIzjabbVA2ksXPCdpWxnCx+qkwD
- bCT3mTm1msBnnDko4783IsCQl0g2gKdbzD39Gd1J4rTO0fdCG/8tUxJdxj77BMR1gV
- 9tBkKB2jM2wPQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1731715159;
+ bh=OqnSSd5VTSoCZJvOXA41rXqYmsxZcsBG8CvpCaIYoyY=;
+ h=From:To:Cc:Subject:Date:From;
+ b=iCQRJLUZOsYt6KlQle6ROkvCykhXwd8uLjd1Q1v7fMZPeQoFcaespOI0dzJlMKxnf
+ GE+hVGidLW3A5LgODa6kL+BoHRyxlxm5kVQHr4kuL/e3RuS6ZLr8QlUzGQpLuJ2O9n
+ w0bvGD97CUJXxbJxA9yArvpqgqJGCZVvaivs2msJ3blLFfRZQfvNEAgCkh7Be+wG1w
+ 2rlOW1E0Wh9Ki6aPG8FIOgTNI8Jrnywj7MJR0n/I4/7ehqJTaq8/okRQM2qQKxQoSS
+ WFQFzM+HW56lRPlMDbdj6qOaOzcVzyk7IrhbgULo7Vn6o0KSGpEMvFyY6zPn+qmWgC
+ RWTkWPuoCcHbw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=lj7xjKAp
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: new ltp-testsuite
- runtime test
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=iCQRJLUZ
+Subject: [Buildroot] [PATCH v1 0/3] package/mstflint: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,85 +83,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, Nov 15, 2024 at 11:47:53PM UTC, Julien Olivain wrote:
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-> Patch tested in:
-> https://gitlab.com/jolivain/buildroot/-/jobs/8388435290
+From: Vincent Jardin <vjardin@iliad-free.fr>
 
-It is a very good idea to run LTP. How can it be extended to be run with
-more CPU architecture ? To run some wider set of tests ?
+v1:
+  - add package/mstflint
+  - import set of mstflint fixes for cross compilation
+  - fix DPDK that can use mstflint if probeded by meson
 
-> ---
->  DEVELOPERS                                    |  1 +
->  .../tests/package/test_ltp_testsuite.py       | 39 +++++++++++++++++++
->  2 files changed, 40 insertions(+)
->  create mode 100644 support/testing/tests/package/test_ltp_testsuite.py
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 3945803d53..1ff269b362 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1931,6 +1931,7 @@ F:	support/testing/tests/package/test_links.py
->  F:	support/testing/tests/package/test_links/
->  F:	support/testing/tests/package/test_lrzip.py
->  F:	support/testing/tests/package/test_lrzsz.py
-> +F:	support/testing/tests/package/test_ltp_testsuite.py
->  F:	support/testing/tests/package/test_ltrace.py
->  F:	support/testing/tests/package/test_lvm2.py
->  F:	support/testing/tests/package/test_lzip.py
-> diff --git a/support/testing/tests/package/test_ltp_testsuite.py b/support/testing/tests/package/test_ltp_testsuite.py
-> new file mode 100644
-> index 0000000000..a85ceb35a6
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_ltp_testsuite.py
-> @@ -0,0 +1,39 @@
-> +import os
-> +
-> +import infra.basetest
-> +
-> +
-> +class TestLtpTestsuite(infra.basetest.BRTest):
-> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-> +        """
-> +        BR2_PACKAGE_LTP_TESTSUITE=y
-> +        BR2_TARGET_ROOTFS_EXT2=y
-> +        BR2_TARGET_ROOTFS_EXT2_4=y
-> +        BR2_TARGET_ROOTFS_EXT2_SIZE="600M"
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def test_run(self):
-> +        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
-> +        self.emulator.boot(arch="armv5",
-> +                           kernel="builtin",
-> +                           kernel_cmdline=["rootwait", "root=/dev/sda"],
-> +                           options=["-drive", f"file={drive},if=scsi,format=raw"])
-> +        self.emulator.login()
-> +
-> +        # We run a reduced number of tests (read syscall tests) for a
-> +        # fast execution. See "runltp --help" for option details.
-> +        cmd = "/usr/lib/ltp-testsuite/runltp"
-> +        cmd += " -p -q"
-> +        cmd += " -s ^read0[0-9]*"
-> +        cmd += " -l /tmp/ltp.log"
-> +        cmd += " -o /tmp/ltp.output"
-> +        cmd += " -C /tmp/ltp.failed"
-> +        cmd += " -T /tmp/ltp.tconf"
-> +        self.assertRunOk(cmd)
-> +
-> +        # We print the LTP run log and check there was zero failure in
-> +        # our test selection.
-> +        out, ret = self.emulator.run("cat /tmp/ltp.log")
-> +        self.assertEqual(ret, 0)
-> +        self.assertIn("Total Failures: 0", out)
-> -- 
-> 2.47.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Vincent Jardin (3):
+  package/mstflint: add new package
+  package/mstflint: fix cross compilation
+  package/dpdk: add dependency on mstflint
+
+ DEVELOPERS                                    |   1 +
+ package/Config.in                             |   1 +
+ package/dpdk/dpdk.mk                          |   3 +-
+ ...-fix-static-link-drop-LDFLAGS-static.patch | 250 ++++++++++++++++++
+ ...-libxml2-do-not-enforce-isystem-path.patch |  51 ++++
+ .../0003-configure.ac-libcurl-patch.patch     |  43 +++
+ .../0004-openssl-add-missing-engine.h.patch   |  29 ++
+ ...explicit-BUILD_DYNAMIC-for-Makefiles.patch |  43 +++
+ ...06-libmtcr_ul-drop-install-exec-hook.patch |  29 ++
+ .../0007-Makefile.am-dynamic-vs-static.patch  |  54 ++++
+ .../0008-libmtcr_ul.so-missing-for-DPDK.patch |  29 ++
+ package/mstflint/Config.in                    |  16 ++
+ package/mstflint/mstflint.mk                  |  42 +++
+ 13 files changed, 590 insertions(+), 1 deletion(-)
+ create mode 100644 package/mstflint/0001-Makefile.am-fix-static-link-drop-LDFLAGS-static.patch
+ create mode 100644 package/mstflint/0002-libxml2-do-not-enforce-isystem-path.patch
+ create mode 100644 package/mstflint/0003-configure.ac-libcurl-patch.patch
+ create mode 100644 package/mstflint/0004-openssl-add-missing-engine.h.patch
+ create mode 100644 package/mstflint/0005-configure.ac-explicit-BUILD_DYNAMIC-for-Makefiles.patch
+ create mode 100644 package/mstflint/0006-libmtcr_ul-drop-install-exec-hook.patch
+ create mode 100644 package/mstflint/0007-Makefile.am-dynamic-vs-static.patch
+ create mode 100644 package/mstflint/0008-libmtcr_ul.so-missing-for-DPDK.patch
+ create mode 100644 package/mstflint/Config.in
+ create mode 100644 package/mstflint/mstflint.mk
+
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
