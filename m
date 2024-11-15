@@ -4,69 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7325D68BDB
-	for <buildroot@archiver.kernel.org>; Fri, 15 Nov 2024 22:02:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CD76D68BDB
+	for <buildroot@archiver.kernel.org>; Fri, 15 Nov 2024 22:30:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36C5D607A2;
-	Fri, 15 Nov 2024 22:02:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E85C605C6;
+	Fri, 15 Nov 2024 22:30:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OONVeUzqpZmm; Fri, 15 Nov 2024 22:02:28 +0000 (UTC)
+ id X8P3BuJuMmTt; Fri, 15 Nov 2024 22:30:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E78160730
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B09660E07
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E78160730;
-	Fri, 15 Nov 2024 22:02:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6F726BF
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 22:02:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B09660E07;
+	Fri, 15 Nov 2024 22:30:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F25227DF
+ for <buildroot@buildroot.org>; Fri, 15 Nov 2024 22:30:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4FD65406C4
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 22:02:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 302E084749
+ for <buildroot@buildroot.org>; Fri, 15 Nov 2024 22:30:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wsGGqwIo9VzB for <buildroot@buildroot.org>;
- Fri, 15 Nov 2024 22:02:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 305DB406B8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 305DB406B8
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 305DB406B8
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 22:02:24 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 61733B00565;
- Fri, 15 Nov 2024 23:02:20 +0100 (CET)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EK_q7AiRioWH for <buildroot@buildroot.org>;
+ Fri, 15 Nov 2024 22:30:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6527084747
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6527084747
+ for <buildroot@buildroot.org>; Fri, 15 Nov 2024 22:30:18 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4DA0B8640D; Fri, 15 Nov 2024 22:30:18 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>
-Date: Fri, 15 Nov 2024 23:02:15 +0100
-Message-ID: <20241115220215.1057916-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.47.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1731708141;
- bh=fW3vNVY0Vf4Imk7rvlhuCVnAcNp2w04jd2NsQxScwrk=;
- h=From:To:Cc:Subject:Date:From;
- b=KZLhuu3oQlnD9PhZJor1xhIIdLIQcVsN+XZf6m5/eDbPNUsJ7Nf0h848PgrwpPq9f
- Aej5PoRQK5xQx4c+WI6vIZi3bir4h+05Ek75zUS4RQU6xOVavkH+bXva39sOvQigyD
- CFcOboxIAo9YdZas+60SJrc4As0n5yjpkCxD2sq3S1w48NZdes0CB82aNrQ4Cp73TG
- f9/Ay9zqORvUR5Asiu2DxjobLPmX5NaP8tcYUGUF+m7S/K58IVHCbs+eyGdEOb3EDm
- X/LPvtgei3IkLPEnMwEFedFAnKBl4BI9jmoUuSLPfLxhKZ7uWs+e7Ss1Cg7XnUwgRe
- VZ52zGen3KoHg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=KZLhuu3o
-Subject: [Buildroot] [PATCH next 1/1] Config.in: switch GNU mirrors URL to
- https
+Date: Fri, 15 Nov 2024 23:25:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d571951c67d63824fcdf96cba8b59c80876a827a
+X-Git-Newrev: 649b31fc6d29d4fc5788ab13e32d704de63b2a0c
+X-Patchwork-Hint: ignore
+Message-Id: <20241115223018.4DA0B8640D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-microcode: security bump
+ version to 20241112
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,37 +59,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As explained on [1], the primary GNU mirrors URL is https.
-This commit updates BR2_GNU_MIRROR to switch to it.
+commit: https://git.buildroot.net/buildroot/commit/?id=649b31fc6d29d4fc5788ab13e32d704de63b2a0c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[1] https://www.gnu.org/prep/ftp.html
+Release notes:
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases
 
+CVE-2024-21853
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01101.html
+
+CVE-2024-23918
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01079.html
+
+CVE-2024-24968
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01097.html
+
+CVE-2024-23984
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01103.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index df43db7eff..34972979d1 100644
---- a/Config.in
-+++ b/Config.in
-@@ -285,7 +285,7 @@ config BR2_KERNEL_MIRROR
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 20dfaa41b4..81a4573110 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8b7582eac7e9a691356e18b3bdcbc7b2db09494e040ec980a4a5fb6d0da261bf  intel-microcode-20240910.tar.gz
++sha256  37246208ef68039be752438c72400a688a2238df13a7f5282497c80be2d8366d  intel-microcode-20241112.tar.gz
+ sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 24729494d0..17f25edc83 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_GNU_MIRROR
- 	string "GNU Software mirror"
--	default "http://ftpmirror.gnu.org"
-+	default "https://ftpmirror.gnu.org"
- 	help
- 	  GNU has multiple software mirrors scattered around the
- 	  world. The following allows you to select your preferred
--- 
-2.47.0
-
+-INTEL_MICROCODE_VERSION = 20240910
++INTEL_MICROCODE_VERSION = 20241112
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
