@@ -1,73 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEDBCD68BDD
-	for <buildroot@archiver.kernel.org>; Fri, 15 Nov 2024 23:59:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68276D68BE3
+	for <buildroot@archiver.kernel.org>; Sat, 16 Nov 2024 04:18:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA4E680BC4;
-	Fri, 15 Nov 2024 23:59:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 880196059C;
+	Sat, 16 Nov 2024 04:18:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZiBndDMVxgwi; Fri, 15 Nov 2024 23:59:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rhp6sXxK5G4b; Sat, 16 Nov 2024 04:18:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB5FE80BB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08A33610BC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DB5FE80BB2;
-	Fri, 15 Nov 2024 23:59:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id ECC95BF
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 23:59:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 08A33610BC;
+	Sat, 16 Nov 2024 04:18:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 50A7E231C
+ for <buildroot@buildroot.org>; Sat, 16 Nov 2024 04:18:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DBDB480ACB
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 23:59:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3EA4F61101
+ for <buildroot@buildroot.org>; Sat, 16 Nov 2024 04:18:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MAziaKL4BIZ3 for <buildroot@buildroot.org>;
- Fri, 15 Nov 2024 23:59:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9D78C80A68
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D78C80A68
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9D78C80A68
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 23:59:33 +0000 (UTC)
-Received: from localhost.localdomain (unknown
- [IPv6:2a01:e0a:2af:22b0:c8e6:f99:ce4c:c68])
- (Authenticated sender: vjardin@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id D7D3EB00539;
- Sat, 16 Nov 2024 00:59:28 +0100 (CET)
-From: Vincent Jardin <vjardin@free.fr>
-To: buildroot@buildroot.org
-Cc: vjardin@free.fr,
-	Vincent Jardin <vjardin@iliad-free.fr>
-Date: Sat, 16 Nov 2024 00:57:56 +0100
-Message-ID: <20241115235757.43480-3-vjardin@free.fr>
-X-Mailer: git-send-email 2.46.1
-In-Reply-To: <20241115235757.43480-1-vjardin@free.fr>
-References: <20241115235757.43480-1-vjardin@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nEZjRXauQwCt for <buildroot@buildroot.org>;
+ Sat, 16 Nov 2024 04:18:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6B8CA6059C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B8CA6059C
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6B8CA6059C
+ for <buildroot@buildroot.org>; Sat, 16 Nov 2024 04:18:21 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id
+ a640c23a62f3a-aa1f73966a5so59998666b.2
+ for <buildroot@buildroot.org>; Fri, 15 Nov 2024 20:18:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1731730699; x=1732335499;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=yv2xoS0ZAYzuRzp6apyWV7fcTdkc7yciCdxq/yJj9DY=;
+ b=KVWaUet/DBlNO9L+ynXKbmY2X12IKUiisclvnbnBXlZqBMOH8RpqUQttANczNoZ2h/
+ Nto4IWU6dN9QWt0eAN5/dK8ZSatf2LdehALxMrTTUIi6sEdNcah9dfwVlnS22/xBf+r8
+ vuWe9Od6IO6oiM1xD6nr4zvU6VO5boYMOMefp2fPSOKONtIB7XWukcIr7n/eSVSKlnpl
+ dCVkPGCphDzBRJ24ksb9i7VlHRgYflecpzw5vSJPjPpsic/hvHHxbGu1Wfeinysp9bNJ
+ VuSoDlYp9IJn4v4xmwb7GNtPOPR2BO/vyZl2hOkTCv70c2LDxsQzAjvEk8oYQVKPTjMA
+ G6ZQ==
+X-Gm-Message-State: AOJu0YzMaDtYVmMd+TPB8gXc9aS+x2rVU8t69Wmfm1pXaUubrJSQBTRr
+ aAl56cMJP+RTTT5NZBK3B9P/WAwRkwp68/SOpWWTskBJkSmWbA+mj/h/1A==
+X-Google-Smtp-Source: AGHT+IGvn+mevDg9gHGLTziNRMtKyLjFio9McJu0F4FCnvkaybvHQ7mSY0+U/5W/RvBMXFpDcNmjaA==
+X-Received: by 2002:a17:907:7b86:b0:a99:d6cf:a1df with SMTP id
+ a640c23a62f3a-aa483525e0bmr389984666b.46.1731730698957; 
+ Fri, 15 Nov 2024 20:18:18 -0800 (PST)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-5cf79b8a4d4sm2162202a12.4.2024.11.15.20.18.18
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 15 Nov 2024 20:18:18 -0800 (PST)
+Message-ID: <67381d0a.500a0220.1b8de2.88e3@mx.google.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1731715172;
- bh=Wwo4G3KaKwC3CLEB9gyRojgVvldHVsCZ/+dYVvZlK5Y=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=Woy/XC5Wrikn25Zrh3yaCOW3/c0UU36emfmBpakkQecpK+w+e7Jh+m7CK+AqJVp4S
- UIISSSNP0ymiWnzF6B8qFRyDWzsuisYf4qcuJ/R0yuN4TsXmtmuhmtWHza1XfFrxFl
- 1K5+JDgtf19qx9iym5EwjVdh+CBKAoVnNi8VBj7H0/tFwtS7bDEjY6Mv0W1phfy9k7
- Br71FdqCd+e5J1Ath9J/kwiQxJGsud84jYvEVOpankY5p3XSrMmvccQC8cuzhwb3pW
- SDhNojA/ip+4LOlMlmi7aBjOwrdKlUix70+ZEouh6ob/cAyO+g0y4TfOTjJtTwDs11
- wsAJcQcXQFIFA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+To: buildroot@buildroot.org
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Sat, 16 Nov 2024 04:18:18 -0000
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1731730699; x=1732335499; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:from:to:cc:subject:date:message-id:reply-to;
+ bh=yv2xoS0ZAYzuRzp6apyWV7fcTdkc7yciCdxq/yJj9DY=;
+ b=byGokDpuQWn65/yJdjzarZFUsTDcvVBYfzoW5LGdH25dIbq/ZSY/Yzh2bku0Mm9xOi
+ +igiOiffw3Xr5CdpazpwqOnW4AxuSEi4xc6H14p2jP6TVG56wmAQ39SkBIefWj7mHk3i
+ AvNMvfw9V66roDDPbOgeySjeS3nmZlcKyuIu6WhalAP+dTpB1wFPKUXrI9QB9q7hxRqG
+ GyXLy/D7B4/4g7hV+GFiy34D/KFbfcj2mhmNM0R6SfQzBw4jqAp4tfIwfIe4ywk5Ul2v
+ aay6p1yjRf0L9naKnDnOgtVxmAT4tY5DroDEMcKYhEVqyEn/2G4tgxZg0yRrGOhbV8Uw
+ s3dg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Woy/XC5W
-Subject: [Buildroot] [PATCH v1 2/3] package/mstflint: fix cross compilation
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=byGokDpu
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2024-11-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,613 +105,199 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Most mst tools cannot be cross compiled. This serie of patch
-that has been proposed for reviews to Mellanox enables a proper
-dynamic linkage along with proper paths for cross compilations.
+Hello,
 
-The pull request is available at:
-  https://github.com/Mellanox/mstflint/pull/1026
+Autobuild statistics for 2024-11-15
+===================================
 
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
-Signed-off-by: Vincent Jardin <vjardin@iliad-free.fr>
----
- ...-fix-static-link-drop-LDFLAGS-static.patch | 250 ++++++++++++++++++
- ...-libxml2-do-not-enforce-isystem-path.patch |  51 ++++
- .../0003-configure.ac-libcurl-patch.patch     |  43 +++
- .../0004-openssl-add-missing-engine.h.patch   |  29 ++
- ...explicit-BUILD_DYNAMIC-for-Makefiles.patch |  43 +++
- ...06-libmtcr_ul-drop-install-exec-hook.patch |  29 ++
- .../0007-Makefile.am-dynamic-vs-static.patch  |  54 ++++
- .../0008-libmtcr_ul.so-missing-for-DPDK.patch |  29 ++
- 8 files changed, 528 insertions(+)
- create mode 100644 package/mstflint/0001-Makefile.am-fix-static-link-drop-LDFLAGS-static.patch
- create mode 100644 package/mstflint/0002-libxml2-do-not-enforce-isystem-path.patch
- create mode 100644 package/mstflint/0003-configure.ac-libcurl-patch.patch
- create mode 100644 package/mstflint/0004-openssl-add-missing-engine.h.patch
- create mode 100644 package/mstflint/0005-configure.ac-explicit-BUILD_DYNAMIC-for-Makefiles.patch
- create mode 100644 package/mstflint/0006-libmtcr_ul-drop-install-exec-hook.patch
- create mode 100644 package/mstflint/0007-Makefile.am-dynamic-vs-static.patch
- create mode 100644 package/mstflint/0008-libmtcr_ul.so-missing-for-DPDK.patch
+      branch |  OK | NOK | TIM | TOT |
+  2024.02.x  |  1  |  3  |  0  |  4  |
+  2024.08.x  |  2  |  4  |  0  |  6  |
+    master   |  8  | 67  |  1  | 76  |
+     next    |  1  |  2  |  0  |  3  |
 
-diff --git a/package/mstflint/0001-Makefile.am-fix-static-link-drop-LDFLAGS-static.patch b/package/mstflint/0001-Makefile.am-fix-static-link-drop-LDFLAGS-static.patch
-new file mode 100644
-index 0000000000..7d14bb10ee
---- /dev/null
-+++ b/package/mstflint/0001-Makefile.am-fix-static-link-drop-LDFLAGS-static.patch
-@@ -0,0 +1,250 @@
-+From b588c7ec89861924cb5c2e64997af4f23e05f21a Mon Sep 17 00:00:00 2001
-+From: Vincent Jardin <vjardin@free.fr>
-+Date: Tue, 12 Nov 2024 00:06:45 +0100
-+Subject: [PATCH] Makefile.am: fix static link, drop LDFLAGS static
-+
-+I do not understand why some -static are enforced while dynamic
-+linkage could be used.
-+
-+We should not have any -static in order to be able to link
-+for the targets.
-+
-+Signed-off-by: Vincent Jardin <vjardin@free.fr>
-+Upstream: https://github.com/Mellanox/mstflint/pull/1026
-+---
-+ cmdif/Makefile.am                                  |  4 ++--
-+ dev_mgt/Makefile.am                                |  4 ++--
-+ flint/Makefile.am                                  |  2 +-
-+ mlxarchive/Makefile.am                             |  2 +-
-+ mlxconfig/Makefile.am                              |  2 +-
-+ mlxfwupdate/Makefile.am                            |  2 +-
-+ mlxlink/Makefile.am                                |  2 +-
-+ mlxreg/Makefile.am                                 |  2 +-
-+ mstdump/crd_main/Makefile.am                       |  2 +-
-+ mtcr_py/Makefile.am                                |  2 +-
-+ reg_access/Makefile.am                             |  4 ++--
-+ resourcetools/resourcedump_lib/src/sdk/Makefile.am |  4 ++--
-+ small_utils/Makefile.am                            | 14 +++++++-------
-+ 13 files changed, 23 insertions(+), 23 deletions(-)
-+
-+diff --git a/cmdif/Makefile.am b/cmdif/Makefile.am
-+index 7bb332aa..d3a8ec9a 100644
-+--- a/cmdif/Makefile.am
-++++ b/cmdif/Makefile.am
-+@@ -53,7 +53,7 @@ libcmdif_la_SOURCES = tools_cif.c tools_cif.h icmd_cif_common.c icmd_cif_common.
-+ cmdif_pylibdir = $(libdir)/mstflint/python_tools/
-+ cmdif_pylib_DATA = ${CCMDIF_SO} cmdif.py
-+ ${CCMDIF_SO}: libcmdif.la
-+-	$(CC) -g -Wall -pthread -shared ${CFLAGS} *.o -o ${CCMDIF_SO} \
-+-	$(top_builddir)/tools_layouts/.libs/libtools_layouts.a $(top_builddir)/${MTCR_CONF_DIR}/.libs/libmtcr_ul.a
-++	$(CC) -g -Wall -pthread -shared ${CFLAGS} .libs/*.o -o ${CCMDIF_SO} \
-++	$(top_builddir)/tools_layouts/.libs/libtools_layouts.a $(top_builddir)/${MTCR_CONF_DIR}/.libs/libmtcr_ul.so
-+ 
-+ CLEANFILES = ${CCMDIF_SO}
-+diff --git a/dev_mgt/Makefile.am b/dev_mgt/Makefile.am
-+index a5f66e9f..40522343 100644
-+--- a/dev_mgt/Makefile.am
-++++ b/dev_mgt/Makefile.am
-+@@ -50,9 +50,9 @@ dev_mgt_pylib_DATA = c_dev_mgt.so
-+ dist_dev_mgt_pylib_DATA = dev_mgt.py
-+ 
-+ c_dev_mgt.so: libdev_mgt.la
-+-	$(CC) -g -Wall -pthread -shared ${CFLAGS} tools_dev_types.o -o c_dev_mgt.so \
-++	$(CC) -g -Wall -pthread -shared ${CFLAGS} .libs/tools_dev_types.o -o c_dev_mgt.so \
-+ 	$(top_builddir)/reg_access/.libs/libreg_access.a \
-+ 	$(top_builddir)/tools_layouts/.libs/libtools_layouts.a \
-+-	$(top_builddir)/${MTCR_CONF_DIR}/.libs/libmtcr_ul.a
-++	$(top_builddir)/${MTCR_CONF_DIR}/.libs/libmtcr_ul.so
-+ 
-+ CLEANFILES = c_dev_mgt.so
-+diff --git a/flint/Makefile.am b/flint/Makefile.am
-+index d990b95a..26a200c6 100644
-+--- a/flint/Makefile.am
-++++ b/flint/Makefile.am
-+@@ -71,7 +71,7 @@ mstflint_DEPENDENCIES = \
-+ 
-+ LDADD_mstflint = ${LDL}
-+ 
-+-mstflint_LDFLAGS = -static
-++#mstflint_LDFLAGS = -static
-+ 
-+ if ENABLE_DC
-+ LDADD_mstflint += -lz
-+diff --git a/mlxarchive/Makefile.am b/mlxarchive/Makefile.am
-+index 5aa79942..aa0851d5 100755
-+--- a/mlxarchive/Makefile.am
-++++ b/mlxarchive/Makefile.am
-+@@ -91,7 +91,7 @@ mstarchive_LDADD = libmstarchive.la \
-+                    $(CURL_LIBS) \
-+                    -llzma -lm ${LDL}
-+ 
-+-mstarchive_LDFLAGS = -static
-++#mstarchive_LDFLAGS = -static
-+ 
-+ if ENABLE_OPENSSL
-+ mstarchive_LDADD += $(top_builddir)/mlxsign_lib/libmlxsign.la -lcrypto -lssl
-+diff --git a/mlxconfig/Makefile.am b/mlxconfig/Makefile.am
-+index ac2d3459..42d48345 100755
-+--- a/mlxconfig/Makefile.am
-++++ b/mlxconfig/Makefile.am
-+@@ -98,7 +98,7 @@ mstconfig_DEPENDENCIES = \
-+ 
-+ mstconfig_LDADD = $(mstconfig_DEPENDENCIES) ${LDL}
-+ 
-+-mstconfig_LDFLAGS = -static
-++#mstconfig_LDFLAGS = -static
-+ 
-+ if DISABLE_XML2
-+ AM_CXXFLAGS += -DDISABLE_XML2
-+diff --git a/mlxfwupdate/Makefile.am b/mlxfwupdate/Makefile.am
-+index 2ae7c3fd..4cecbacf 100755
-+--- a/mlxfwupdate/Makefile.am
-++++ b/mlxfwupdate/Makefile.am
-+@@ -133,4 +133,4 @@ mstfwmanager_DEPENDENCIES += $(top_builddir)/mlxdpa/libmstdpa.a
-+ endif
-+ 
-+ mstfwmanager_LDADD = $(mstfwmanager_DEPENDENCIES) $(LDADD_mstfwmanager)
-+-mstfwmanager_LDFLAGS = -static
-++#mstfwmanager_LDFLAGS = -static
-+diff --git a/mlxlink/Makefile.am b/mlxlink/Makefile.am
-+index 9d13198e..48c9436a 100644
-+--- a/mlxlink/Makefile.am
-++++ b/mlxlink/Makefile.am
-+@@ -69,4 +69,4 @@ mstlink_DEPENDENCIES = \
-+ 
-+ mstlink_LDADD = $(mstlink_DEPENDENCIES) -llzma ${LDL} -lexpat
-+ 
-+-mstlink_LDFLAGS = -static
-++#mstlink_LDFLAGS = -static
-+diff --git a/mlxreg/Makefile.am b/mlxreg/Makefile.am
-+index e90c2e72..6e478fd8 100644
-+--- a/mlxreg/Makefile.am
-++++ b/mlxreg/Makefile.am
-+@@ -62,4 +62,4 @@ mstreg_DEPENDENCIES = \
-+ 
-+ mstreg_LDADD = $(mstreg_DEPENDENCIES) -llzma ${LDL} -lexpat
-+ 
-+-mstreg_LDFLAGS = -static
-++#mstreg_LDFLAGS = -static
-+diff --git a/mstdump/crd_main/Makefile.am b/mstdump/crd_main/Makefile.am
-+index 6fd2abb1..8b521f23 100755
-+--- a/mstdump/crd_main/Makefile.am
-++++ b/mstdump/crd_main/Makefile.am
-+@@ -39,5 +39,5 @@ bin_PROGRAMS = mstregdump
-+ mstregdump_SOURCES = mstdump.c
-+ mstregdump_LDADD = ../crd_lib/libcrdump.a ../../dev_mgt/libdev_mgt.la ../../reg_access/libreg_access.la ../../tools_layouts/libtools_layouts.la \
-+ 			../../${MTCR_CONF_DIR}/libmtcr_ul.la  -lm ${LDL}
-+-mstregdump_LDFLAGS = -static
-++#mstregdump_LDFLAGS = -static
-+ mstregdump_CFLAGS = -DMSTDUMP_NAME=\"mstregdump\" -DDEV_EXAMPLE=\"0b:00.0\"
-+diff --git a/mtcr_py/Makefile.am b/mtcr_py/Makefile.am
-+index 46fa4e60..3b847dcf 100644
-+--- a/mtcr_py/Makefile.am
-++++ b/mtcr_py/Makefile.am
-+@@ -35,6 +35,6 @@ mtcr_pylibdir = $(libdir)/mstflint/python_tools/
-+ mtcr_pylib_DATA = cmtcr.so
-+ dist_mtcr_pylib_DATA = mtcr.py
-+ cmtcr.so:
-+-	$(CC) -g -Wall -pthread -shared ${CFLAGS} -o cmtcr.so -Wl,--whole-archive $(top_builddir)/${MTCR_CONF_DIR}/.libs/libmtcr_ul.a -Wl,--no-whole-archive
-++	$(CC) -g -Wall -pthread -shared ${CFLAGS} -o cmtcr.so $(top_builddir)/${MTCR_CONF_DIR}/.libs/libmtcr_ul.so
-+ 
-+ CLEANFILES = cmtcr.so
-+diff --git a/reg_access/Makefile.am b/reg_access/Makefile.am
-+index 8e38c473..45068a19 100644
-+--- a/reg_access/Makefile.am
-++++ b/reg_access/Makefile.am
-+@@ -57,7 +57,7 @@ reg_access_pylib_DATA = ${RREG_ACCESS_SO}
-+ dist_reg_access_pylib_DATA = regaccess.py regaccess_hca_ext_structs.py regaccess_switch_ext_structs.py
-+ 
-+ ${RREG_ACCESS_SO}: libreg_access.la
-+-	$(CC) -g -Wall -pthread -shared ${CFLAGS} *.o -o ${RREG_ACCESS_SO} \
-+-	$(top_builddir)/tools_layouts/.libs/libtools_layouts.a $(top_builddir)/${MTCR_CONF_DIR}/.libs/libmtcr_ul.a
-++	$(CC) -g -Wall -pthread -shared ${CFLAGS} .libs/*.o -o ${RREG_ACCESS_SO} \
-++	$(top_builddir)/tools_layouts/.libs/libtools_layouts.a $(top_builddir)/${MTCR_CONF_DIR}/.libs/libmtcr_ul.so
-+ 
-+ CLEANFILES = ${RREG_ACCESS_SO}
-+diff --git a/resourcetools/resourcedump_lib/src/sdk/Makefile.am b/resourcetools/resourcedump_lib/src/sdk/Makefile.am
-+index aefc88a4..76619f59 100644
-+--- a/resourcetools/resourcedump_lib/src/sdk/Makefile.am
-++++ b/resourcetools/resourcedump_lib/src/sdk/Makefile.am
-+@@ -63,7 +63,7 @@ libraryinclude_HEADERS = \
-+ # if WIN_BUILD
-+ # MTCR_LIB = $(MTCR_DIR)/.libs/libmtcr.dll.a
-+ # else
-+-MTCR_LIB = $(top_builddir)/${MTCR_CONF_DIR}/.libs/libmtcr_ul.a
-++MTCR_LIB = $(top_builddir)/${MTCR_CONF_DIR}/.libs/libmtcr_ul.so
-+ # endif
-+ 
-+ if ENABLE_RDMEM
-+@@ -86,7 +86,7 @@ resource_dump_sdk_so_DEPS = \
-+ 
-+ # if !WIN_BUILD
-+ libresource_dump_sdk.so: libresource_dump_sdk.la
-+-	$(CC) -Wall -pthread -shared ${CFLAGS} $(COMPILER_FPIC) libresource_dump_sdk_la-resource_dump_sdk.o \
-++	$(CC) -Wall -pthread -shared ${CFLAGS} $(COMPILER_FPIC) .libs/libresource_dump_sdk_la-resource_dump_sdk.o \
-+ 	-o libresource_dump_sdk.so ${AM_LDFLAGS} $(resource_dump_sdk_so_DEPS)
-+ # else
-+ # libresource_dump_sdk.dll: libresource_dump_sdk.la
-+diff --git a/small_utils/Makefile.am b/small_utils/Makefile.am
-+index 4da2b6a4..00e26b9d 100644
-+--- a/small_utils/Makefile.am
-++++ b/small_utils/Makefile.am
-+@@ -47,12 +47,12 @@ bin_SCRIPTS = mstfwreset
-+ mstmread_SOURCES = mread.c
-+ mstmread_DEPENDENCIES = $(top_builddir)/${MTCR_CONF_DIR}/libmtcr_ul.la
-+ mstmread_LDADD = $(mstmread_DEPENDENCIES) ${LDL}
-+-mstmread_LDFLAGS = -static
-++#mstmread_LDFLAGS = -static
-+ 
-+ mstmwrite_SOURCES = mwrite.c
-+ mstmwrite_DEPENDENCIES = $(top_builddir)/${MTCR_CONF_DIR}/libmtcr_ul.la
-+ mstmwrite_LDADD = $(mstmwrite_DEPENDENCIES) ${LDL}
-+-mstmwrite_LDFLAGS = -static
-++#mstmwrite_LDFLAGS = -static
-+ 
-+ mstvpd_SOURCES = vpd.c
-+ mstvpd_DEPENDENCIES = $(top_builddir)/mvpd/libmvpd.la \
-+@@ -61,7 +61,7 @@ mstvpd_DEPENDENCIES = $(top_builddir)/mvpd/libmvpd.la \
-+                $(top_builddir)/reg_access/libreg_access.la \
-+                $(top_builddir)/tools_layouts/libtools_layouts.la
-+ mstvpd_LDADD = $(mstvpd_DEPENDENCIES) ${LDL}
-+-mstvpd_LDFLAGS = -static
-++#mstvpd_LDFLAGS = -static
-+ 
-+ mstcongestion_SOURCES = congestion.cpp
-+ mstcongestion_DEPENDENCIES = $(top_builddir)/cmdif/libcmdif.la \
-+@@ -71,12 +71,12 @@ mstcongestion_DEPENDENCIES = $(top_builddir)/cmdif/libcmdif.la \
-+                       $(top_builddir)/cmdparser/libcmdparser.a \
-+                       $(top_builddir)/${MTCR_CONF_DIR}/libmtcr_ul.la
-+ mstcongestion_LDADD = $(mstcongestion_DEPENDENCIES) ${LDL}
-+-mstcongestion_LDFLAGS = -static
-++#mstcongestion_LDFLAGS = -static
-+ 
-+ mstmcra_SOURCES = mcra.c
-+ mstmcra_DEPENDENCIES = $(top_builddir)/${MTCR_CONF_DIR}/libmtcr_ul.la
-+ mstmcra_LDADD = $(mstmcra_DEPENDENCIES) ${LDL}
-+-mstmcra_LDFLAGS = -static
-++#mstmcra_LDFLAGS = -static
-+ 
-+ if LINUX_BUILD
-+ bin_PROGRAMS += mstfwctrl
-+@@ -86,14 +86,14 @@ mstfwctrl_DEPENDENCIES = $(top_builddir)/${MTCR_CONF_DIR}/libmtcr_ul.la \
-+                			 $(top_builddir)/dev_mgt/libdev_mgt.la \
-+  	                     $(top_builddir)/reg_access/libreg_access.la
-+ mstfwctrl_LDADD = $(mstfwctrl_DEPENDENCIES) ${LDL}
-+-mstfwctrl_LDFLAGS = -static
-++#mstfwctrl_LDFLAGS = -static
-+ endif
-+ 
-+ mstmtserver_SOURCES = mtserver.c tcp.c tcp.h
-+ mstmtserver_CFLAGS = -DMST_UL
-+ mstmtserver_DEPENDENCIES = $(top_builddir)/${MTCR_CONF_DIR}/libmtcr_ul.la
-+ mstmtserver_LDADD = $(mstmtserver_DEPENDENCIES) ${LDL}
-+-mstmtserver_LDFLAGS = -static
-++#mstmtserver_LDFLAGS = -static
-+ 
-+ SUBDIRS = mlxfwresetlib
-+ MSTFWRESET_PYTHON_WRAPPER=mstfwreset
-+-- 
-+2.34.1
-+
-diff --git a/package/mstflint/0002-libxml2-do-not-enforce-isystem-path.patch b/package/mstflint/0002-libxml2-do-not-enforce-isystem-path.patch
-new file mode 100644
-index 0000000000..d7f85aeb2b
---- /dev/null
-+++ b/package/mstflint/0002-libxml2-do-not-enforce-isystem-path.patch
-@@ -0,0 +1,51 @@
-+From 46579bfd3c1bdc64d24ba0c61f34034546980ef0 Mon Sep 17 00:00:00 2001
-+From: Vincent Jardin <vjardin@free.fr>
-+Date: Wed, 13 Nov 2024 10:40:32 +0100
-+Subject: [PATCH] libxml2: do not enforce isystem path
-+
-+It is not compliant with cross compilation, it will lead to the
-+following:
-+
-+aarch64-buildroot-linux-gnu-g++ -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1 -DHAVE_TERMIOS_H -DHAVE_SYS_PCI_H -isystem /usr/include/libxml2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.cpp
-+aarch64-buildroot-linux-gnu-g++: ERROR: unsafe header/library path used in cross-compilation: '-isystem' '/usr/include/libxml2'
-+
-+configure.ac: proper probe libxml2
-+
-+libxml2: CFLAGS and CXXFLAGS are used
-+Makefiles are not using xml_CFLAGS
-+
-+Signed-off-by: Vincent Jardin <vjardin@free.fr>
-+Upstream: https://github.com/Mellanox/mstflint/pull/1026
-+---
-+ configure.ac | 15 +++++----------
-+ 1 file changed, 5 insertions(+), 10 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 2ce7d8d4..7cc0fb7e 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -187,16 +187,11 @@ AC_ARG_ENABLE(xml2,
-+             [enable_xml2="no"])
-+ AC_MSG_RESULT($enable_xml2)
-+ if test [ "x$enable_xml2" = "xyes" ] || [ test "x$enable_fw_mgr" = "xyes" ]; then
-+-    # XML2 checks
-+-    AC_LANG_PUSH([C++])
-+-        if test "x$OS" = "xFreeBSD"; then
-+-            CXXFLAGS="${CXXFLAGS} -isystem /usr/local/include/libxml2"
-+-        else
-+-            CXXFLAGS="${CXXFLAGS} -isystem /usr/include/libxml2"
-+-        fi
-+-        AC_CHECK_HEADER([libxml2/libxml/xpath.h],[],[AC_MSG_ERROR([libxml2: xpath.h is not found in the system PATH. make sure libxml2 headers are installed.])])
-+-        AC_CHECK_LIB(xml2, xmlDocDumpFormatMemoryEnc,, AC_MSG_ERROR([cannot find xml2 xmlDocDumpFormatMemoryEnc() function. Try re-installing the library...]))
-+-    AC_LANG_POP([C++])
-++	PKG_CHECK_MODULES(xml, [libxml-2.0])
-++	AC_SUBST(xml_CFLAGS)
-++	AC_SUBST(xml_LIBS)
-++	CXXFLAGS="$CXXFLAGS $xml_CFLAGS"
-++	CFLAGS="$CFLAGS $xml_CFLAGS"
-+ fi
-+ 
-+ AM_CONDITIONAL(DISABLE_XML2, [test  "x$enable_xml2" = "xno"])
-+-- 
-+2.34.1
-+
-diff --git a/package/mstflint/0003-configure.ac-libcurl-patch.patch b/package/mstflint/0003-configure.ac-libcurl-patch.patch
-new file mode 100644
-index 0000000000..76fe5bdcf8
---- /dev/null
-+++ b/package/mstflint/0003-configure.ac-libcurl-patch.patch
-@@ -0,0 +1,43 @@
-+From 01209d569bf6508bc1e9ffa24c995b7114f6339a Mon Sep 17 00:00:00 2001
-+From: Vincent Jardin <vjardin@free.fr>
-+Date: Thu, 14 Nov 2024 00:47:01 +0100
-+Subject: [PATCH] configure.ac: libcurl patch
-+
-+the include path cannot be hardcoded with:
-+  /usr/include/curl/
-+
-+Signed-off-by: Vincent Jardin <vjardin@free.fr>
-+Upstream: https://github.com/Mellanox/mstflint/pull/1026
-+---
-+ configure.ac | 11 ++++++++++-
-+ 1 file changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 7cc0fb7e..aa903954 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -139,11 +139,20 @@ AC_ARG_ENABLE(fw-mgr,
-+              [enable_fw_mgr="no"])
-+ AC_MSG_RESULT($enable_fw_mgr)
-+ if test "x$enable_fw_mgr" = "xyes"; then
-++    # Find curl using pkg-config
-++    PKG_CHECK_MODULES([CURL], [libcurl], [
-++        CURL_INC_DIR=$(pkg-config --cflags-only-I libcurl | sed 's/-I//')
-++    ], [
-++        AC_MSG_ERROR([Cannot find curl via pkg-config. Please install libcurl development files.])
-++    ])
-++
-+     AC_CHECK_HEADER(curl/curl.h,,AC_MSG_ERROR([cannot find curl/curl.h . this header is needed for compiling fw manager tool]))
-++
-+     AC_CHECK_HEADER(zlib.h,,AC_MSG_ERROR([cannot find zlib.h . this header is needed for compiling fw manager tool]))
-+     AC_CHECK_LIB(z, uncompress,, AC_MSG_ERROR([cannot find zlib uncompress() function.]))
-+     AC_CHECK_HEADER(lzma.h,,AC_MSG_ERROR([Cannot find lzma.h.]))
-+-    CURL_INC_DIR=/usr/include/curl/
-++
-++    AC_SUBST([CURL_INC_DIR])
-+ fi
-+ 
-+ # mlxdpa
-+-- 
-+2.34.1
-+
-diff --git a/package/mstflint/0004-openssl-add-missing-engine.h.patch b/package/mstflint/0004-openssl-add-missing-engine.h.patch
-new file mode 100644
-index 0000000000..fdb437bb37
---- /dev/null
-+++ b/package/mstflint/0004-openssl-add-missing-engine.h.patch
-@@ -0,0 +1,29 @@
-+From 9990de4c8dfb0bd72093db2c40e51ef887fda5ca Mon Sep 17 00:00:00 2001
-+From: Vincent Jardin <vjardin@free.fr>
-+Date: Thu, 14 Nov 2024 01:08:05 +0100
-+Subject: [PATCH] openssl: add missing engine.h
-+
-+engine is exported by openssl/engine.h ; if not, we can have some
-+compilation warnings of some undefined symbols.
-+
-+Signed-off-by: Vincent Jardin <vjardin@free.fr>
-+Upstream: https://github.com/Mellanox/mstflint/pull/1026
-+---
-+ mlxsign_lib/mlxsign_openssl_engine.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/mlxsign_lib/mlxsign_openssl_engine.cpp b/mlxsign_lib/mlxsign_openssl_engine.cpp
-+index 8fc6bdc1..ecd28f57 100644
-+--- a/mlxsign_lib/mlxsign_openssl_engine.cpp
-++++ b/mlxsign_lib/mlxsign_openssl_engine.cpp
-+@@ -34,6 +34,7 @@
-+ #if !defined(NO_OPEN_SSL) && !defined(NO_DYNAMIC_ENGINE)
-+ #include "mlxsign_openssl_engine.h"
-+ #include <iostream>
-++#include <openssl/engine.h>
-+ #include <openssl/ssl.h>
-+ #include <openssl/sha.h>
-+ #include <openssl/rsa.h>
-+-- 
-+2.34.1
-+
-diff --git a/package/mstflint/0005-configure.ac-explicit-BUILD_DYNAMIC-for-Makefiles.patch b/package/mstflint/0005-configure.ac-explicit-BUILD_DYNAMIC-for-Makefiles.patch
-new file mode 100644
-index 0000000000..fc778b48f5
---- /dev/null
-+++ b/package/mstflint/0005-configure.ac-explicit-BUILD_DYNAMIC-for-Makefiles.patch
-@@ -0,0 +1,43 @@
-+From ddafc9f5c5aa01e07f480a99e7a6398f22049165 Mon Sep 17 00:00:00 2001
-+From: Vincent Jardin <vjardin@free.fr>
-+Date: Thu, 14 Nov 2024 17:38:04 +0100
-+Subject: [PATCH] configure.ac: explicit BUILD_DYNAMIC for Makefiles
-+
-+Thanks to this definition, we'll be able to ave cleaner Makefiles.
-+
-+Signed-off-by: Vincent Jardin <vjardin@free.fr>
-+Upstream: https://github.com/Mellanox/mstflint/pull/1026
-+---
-+ configure.ac | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index aa903954..943352b7 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -275,6 +275,7 @@ AC_ARG_ENABLE([all_static],
-+     [enable_all_static="no"])
-+ AC_MSG_RESULT($enable_all_static)
-+ 
-++BUILD_DYNAMIC="yes"
-+ AS_IF([test "x$enable_all_static" = "xyes"], [
-+   if test "x$enable_dc" = "xyes"; then
-+     AC_MSG_ERROR([cannot enable all static with enable dc . add --disable-dc to remove dependency with dynamic zlib])
-+@@ -285,10 +286,14 @@ AS_IF([test "x$enable_all_static" = "xyes"], [
-+   if test "x$enable_inband" = "xyes"; then
-+     AC_MSG_ERROR([cannot enable all static with enable inband . add --disable-inband to remove dependency with dynamic inband])
-+   fi
-++  BUILD_DYNAMIC="no"
-+   LDFLAGS="$LDFLAGS -all-static"
-+   CFLAGS="$CFLAGS -DSQLITE_OMIT_LOAD_EXTENSION=0 -DIBVSMAD_DLOPEN"
-+ ])
-+ 
-++# Define conditionals for the Makefile.am
-++AM_CONDITIONAL([BUILD_DYNAMIC], [test "$BUILD_DYNAMIC" = "yes"])
-++
-+ AC_SUBST(TOOLS_CRYPTO)
-+ AM_CONDITIONAL(ENABLE_OPENSSL, [test "x$enable_openssl" = "xyes" ])
-+ AM_CONDITIONAL(ENABLE_CS, [test  "x$enable_cs" = "xyes" || test "x$enable_openssl" = "xyes" ])
-+-- 
-+2.34.1
-+
-diff --git a/package/mstflint/0006-libmtcr_ul-drop-install-exec-hook.patch b/package/mstflint/0006-libmtcr_ul-drop-install-exec-hook.patch
-new file mode 100644
-index 0000000000..42fd6a0d10
---- /dev/null
-+++ b/package/mstflint/0006-libmtcr_ul-drop-install-exec-hook.patch
-@@ -0,0 +1,29 @@
-+From 3d6032e2df388a123a2f812ba1d9b0d701f4a21d Mon Sep 17 00:00:00 2001
-+From: Vincent Jardin <vjardin@free.fr>
-+Date: Thu, 14 Nov 2024 17:54:26 +0100
-+Subject: [PATCH] libmtcr_ul: drop install-exec-hook
-+
-+the .so file should remain for the target when dynamic linkage is used.
-+If the file is removed, none of the applications will be loadable.
-+
-+Signed-off-by: Vincent Jardin <vjardin@free.fr>
-+Upstream: https://github.com/Mellanox/mstflint/pull/1026
-+---
-+ mtcr_ul/Makefile.am | 4 ----
-+ 1 file changed, 4 deletions(-)
-+
-+diff --git a/mtcr_ul/Makefile.am b/mtcr_ul/Makefile.am
-+index a2a644ee..828fa677 100644
-+--- a/mtcr_ul/Makefile.am
-++++ b/mtcr_ul/Makefile.am
-+@@ -52,7 +52,3 @@ endif
-+ 
-+ libraryincludedir=$(includedir)/mstflint
-+ libraryinclude_HEADERS = $(top_srcdir)/include/mtcr_ul/mtcr.h  $(top_srcdir)/include/mtcr_ul/mtcr_com_defs.h  $(top_srcdir)/include/mtcr_ul/mtcr_mf.h
-+-
-+-install-exec-hook:
-+-	rm -f $(DESTDIR)$(pkglibdir)/libmtcr_ul.so* $(DESTDIR)$(pkglibdir)/libmtcr_ul.la
-+-	ln -snf mstflint/libmtcr_ul.a $(DESTDIR)$(libdir)/
-+-- 
-+2.34.1
-+
-diff --git a/package/mstflint/0007-Makefile.am-dynamic-vs-static.patch b/package/mstflint/0007-Makefile.am-dynamic-vs-static.patch
-new file mode 100644
-index 0000000000..535ef0cd31
---- /dev/null
-+++ b/package/mstflint/0007-Makefile.am-dynamic-vs-static.patch
-@@ -0,0 +1,54 @@
-+From cbc96409ac7a5804e62035544d1a89eb0067b56d Mon Sep 17 00:00:00 2001
-+From: Vincent Jardin <vjardin@free.fr>
-+Date: Thu, 14 Nov 2024 17:55:07 +0100
-+Subject: [PATCH] Makefile.am: dynamic vs static
-+
-+start using DYNAMIC in order to be aligned with the
-+  --enable-all-static
-+argument.
-+
-+Signed-off-by: Vincent Jardin <vjardin@free.fr>
-+Upstream: https://github.com/Mellanox/mstflint/pull/1026
-+---
-+ mlxsign_lib/Makefile.am | 6 ++++++
-+ mtcr_ul/Makefile.am     | 5 +++++
-+ 2 files changed, 11 insertions(+)
-+
-+diff --git a/mlxsign_lib/Makefile.am b/mlxsign_lib/Makefile.am
-+index b0c7e652..804031b5 100644
-+--- a/mlxsign_lib/Makefile.am
-++++ b/mlxsign_lib/Makefile.am
-+@@ -38,7 +38,13 @@ AM_CPPFLAGS = \
-+ AM_CXXFLAGS = -Wall -W  -g -MP -MD -pipe $(COMPILER_FPIC)
-+ AM_CXXFLAGS += -DTOOLS_CRYPTO_KEY='$(TOOLS_CRYPTO_KEY)' -DTOOLS_CRYPTO_IV='$(TOOLS_CRYPTO_IV)'
-+ 
-++if BUILD_DYNAMIC
-++pkglib_LTLIBRARIES = libmlxsign.la
-++libmlxsign_la_LDFLAGS = -version-info 0:0:0 -no-undefined
-++else
-+ noinst_LTLIBRARIES = libmlxsign.la
-++endif
-++
-+ libmlxsign_la_SOURCES = mlxsign_lib.cpp mlxsign_lib.h mlxsign_com_def.h \
-+                        mlxsign_openssl_engine.h mlxsign_openssl_engine.cpp \
-+                        mlxsign_signer_interface.h mlxsign_signer_interface.cpp
-+diff --git a/mtcr_ul/Makefile.am b/mtcr_ul/Makefile.am
-+index 828fa677..59c50c5e 100644
-+--- a/mtcr_ul/Makefile.am
-++++ b/mtcr_ul/Makefile.am
-+@@ -32,7 +32,12 @@
-+ 
-+ AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/include/mtcr_ul -I$(top_srcdir)/common -I$(top_srcdir)/dev_mgt
-+ 
-++if BUILD_DYNAMIC
-+ pkglib_LTLIBRARIES = libmtcr_ul.la
-++libmtcr_ul_la_LDFLAGS = -version-info 0:0:0 -no-undefined
-++else
-++noinst_LTLIBRARIES = libmtcr_ul.la
-++endif
-+ 
-+ libmtcr_ul_la_SOURCES = mtcr_ul.c mtcr_ib.h  mtcr_int_defs.h\
-+ 			mtcr_ib_res_mgt.h mtcr_ib_res_mgt.c\
-+-- 
-+2.34.1
-+
-diff --git a/package/mstflint/0008-libmtcr_ul.so-missing-for-DPDK.patch b/package/mstflint/0008-libmtcr_ul.so-missing-for-DPDK.patch
-new file mode 100644
-index 0000000000..6c417d819a
---- /dev/null
-+++ b/package/mstflint/0008-libmtcr_ul.so-missing-for-DPDK.patch
-@@ -0,0 +1,29 @@
-+From 7f5822ca13630c56ebbd4b29cead926c7440f7a6 Mon Sep 17 00:00:00 2001
-+From: Vincent Jardin <vjardin@free.fr>
-+Date: Thu, 14 Nov 2024 22:15:05 +0100
-+Subject: [PATCH] libmtcr_ul.so missing for DPDK
-+
-+DPDK assumes that the library shall be into /usr/lib instead of /usr/lib/mstflint/
-+
-+Signed-off-by: Vincent Jardin <vjardin@free.fr>
-+Upstream: https://github.com/Mellanox/mstflint/pull/1026
-+---
-+ mtcr_ul/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/mtcr_ul/Makefile.am b/mtcr_ul/Makefile.am
-+index 59c50c5e..63fc8a73 100644
-+--- a/mtcr_ul/Makefile.am
-++++ b/mtcr_ul/Makefile.am
-+@@ -33,7 +33,7 @@
-+ AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/include/mtcr_ul -I$(top_srcdir)/common -I$(top_srcdir)/dev_mgt
-+ 
-+ if BUILD_DYNAMIC
-+-pkglib_LTLIBRARIES = libmtcr_ul.la
-++lib_LTLIBRARIES = libmtcr_ul.la
-+ libmtcr_ul_la_LDFLAGS = -version-info 0:0:0 -no-undefined
-+ else
-+ noinst_LTLIBRARIES = libmtcr_ul.la
-+-- 
-+2.34.1
-+
+Classification of failures by reason for master
+-----------------------------------------------
+
+             dahdi-linux-3.3.0 | 5 
+ ibm-sw-tpm2-rev183-2024-03-27 | 5 
+                lmbench-3.0-a9 | 4 
+     linux-5.10.162-cip24-rt10 | 3 
+android-tools-4.2.2+git2013... | 2 
+                 c-ares-1.34.2 | 2 
+  gobject-introspection-1.76.1 | 2 
+                latencytop-0.5 | 2 
+                  libnss-3.106 | 2 
+                  linux-6.11.7 | 2 
+               linux-pam-1.6.1 | 2 
+          obsidian-cursors-1.0 | 2 
+               procps-ng-4.0.4 | 2 
+             util-linux-2.40.2 | 2 
+                    azmq-1.0.3 | 1 
+                    bat-0.24.0 | 1 
+             batman-adv-2024.2 | 1 
+             berkeleydb-5.3.28 | 1 
+  binutils-arc-2023.09-release | 1 
+                   bird-2.15.1 | 1 
+                  boost-1.83.0 | 1 
+                cryptopp-8.9.0 | 1 
+                  curlpp-0.8.1 | 1 
+                    fcft-3.1.8 | 1 
+                  giblib-1.2.4 | 1 
+         gobject-introspection | 1 
+             gstreamer1-1.22.9 | 1 
+            host-binutils-2.42 | 1 
+host-binutils-bare-metal-2.... | 1 
+           host-doxygen-1.8.18 | 1 
+host-heimdal-f4faaeaba371ff... | 1 
+    host-python-greenlet-3.1.1 | 1 
+               libcap-ng-0.8.5 | 1 
+                 libv4l-1.28.1 | 1 
+                  libva-2.22.0 | 1 
+           libzenoh-pico-1.0.2 | 1 
+                   linux-tools | 1 
+               mariadb-10.11.6 | 1 
+                   mimic-1.1.0 | 1 
+                    mpir-3.0.0 | 1 
+            nodejs-src-22.11.0 | 1 
+                   pcre2-10.43 | 1 
+                   perl-5.40.0 | 1 
+               pulseaudio-17.0 | 1 
+      python-autocommand-2.2.2 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    | android-tools-4.2.2+git2013... | NOK | https://autobuild.buildroot.org/results/a05524d70fbf47fa4514ef23f6edbbaaa35b7a3f |     
+ powerpc64   | android-tools-4.2.2+git2013... | NOK | https://autobuild.buildroot.org/results/57396d9176281c9ad1a7346dd128a725227fe357 |     
+   s390x     |           azmq-1.0.3           | NOK | https://autobuild.buildroot.org/results/62f2e6fa28218a1b94d608df7dfcf4a98cfb33ff |     
+   s390x     |           bat-0.24.0           | NOK | https://autobuild.buildroot.org/results/b5290c65598c3a8ec1f446f4d4b79fc3778edd59 |     
+   mips64    |       batman-adv-2024.2        | NOK | https://autobuild.buildroot.org/results/87ec04f0e628932708a2314539421640e98b448e |     
+  aarch64    |       berkeleydb-5.3.28        | NOK | https://autobuild.buildroot.org/results/fd80e0d4797c12b3f89b5e03c670f6dd811b409e | ORPH
+    arc      |  binutils-arc-2023.09-release  | NOK | https://autobuild.buildroot.org/results/1c5f3374691648c0ca0bda881a16f04b7452856b |     
+  mips64el   |          bird-2.15.1           | NOK | https://autobuild.buildroot.org/results/9aec0cf4844bed4f32216d1738332ed6f658aaee |     
+  riscv64    |          boost-1.83.0          | NOK | https://autobuild.buildroot.org/results/55f931d864e5816936f61d1b7e0d1f5e19503712 |     
+ microblaze  |         c-ares-1.34.2          | NOK | https://autobuild.buildroot.org/results/687ef58130d3d7b650be03b7cd113a68bd0aea06 | ORPH
+ microblaze  |         c-ares-1.34.2          | NOK | https://autobuild.buildroot.org/results/6f0f54c37ae2a7577658cd38d276fee446e642b0 | ORPH
+   nios2     |         cryptopp-8.9.0         | NOK | https://autobuild.buildroot.org/results/e825ff081d3b133a4ed2c7a1fb286942de37765c |     
+   s390x     |          curlpp-0.8.1          | NOK | https://autobuild.buildroot.org/results/e3aa996c8dadfd5ac1745488d0eb5bb1b4147970 |     
+   armeb     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/1a22cedeca7093f156c0effa31df6d8250516ebd |     
+microblazeel |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/e3726344830ef3abf6d6fbaa869b25f8881a6fb4 |     
+    arm      |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/007fcdea722f268876949238a099500b30a0180d |     
+powerpc64le  |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/e7db31d9dbb939f952109be465a16db30e6f7cfe |     
+    i686     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/913abd360b9e87cbde3281c978bf72e3eb324786 |     
+    mips     |           fcft-3.1.8           | NOK | https://autobuild.buildroot.org/results/5216342998dae53ed1d24c351b14dc9dbb7ba5e4 |     
+   mipsel    |          giblib-1.2.4          | NOK | https://autobuild.buildroot.org/results/3525a735ef991873b76228404dada8c5b8fffbd1 |     
+ microblaze  |     gobject-introspection      | TIM | https://autobuild.buildroot.org/results/90e1cbb64f0d8e1c9db5d730aec5ecc0ad9ae1b8 |     
+  aarch64    |  gobject-introspection-1.76.1  | NOK | https://autobuild.buildroot.org/results/04b1629385003f80f9204441325b5ec8bd984dcd | ORPH
+   mipsel    |  gobject-introspection-1.76.1  | NOK | https://autobuild.buildroot.org/results/5151c5bc222bf12eeee1ec17b502865342a88fa2 | ORPH
+    sh4      |       gstreamer1-1.22.9        | NOK | https://autobuild.buildroot.org/results/c1c2dd4bd93626778d74259484c66340431cc58c | ORPH
+  sparc64    |       host-binutils-2.42       | NOK | https://autobuild.buildroot.org/results/dec63333bc38b8e1aca9c337afbd3f76be7798fb |     
+    mips     | host-binutils-bare-metal-2.... | NOK | https://autobuild.buildroot.org/results/3e9bdab1f04173e954563e1b47fe100cc585ac1a |     
+    arm      |      host-doxygen-1.8.18       | NOK | https://autobuild.buildroot.org/results/75d256bf542725b65552db63c4666bfcff5e5100 | ORPH
+    m68k     | host-heimdal-f4faaeaba371ff... | NOK | https://autobuild.buildroot.org/results/4578019c5c85e0c336eabbce98d5f85dafe0c560 | ORPH
+   nios2     |   host-python-greenlet-3.1.1   | NOK | https://autobuild.buildroot.org/results/a096aa29950920e5ef8b118502c2b568c6cedfdd |     
+   x86_64    | ibm-sw-tpm2-rev183-2024-03-27  | NOK | https://autobuild.buildroot.org/results/0cfd719f6a2d241b13b1c63bf3f972e96fef6568 |     
+  mips64el   | ibm-sw-tpm2-rev183-2024-03-27  | NOK | https://autobuild.buildroot.org/results/e489af407e020106355b21f06ca4f0154e3c667b |     
+microblazeel | ibm-sw-tpm2-rev183-2024-03-27  | NOK | https://autobuild.buildroot.org/results/2c0b7c445271b99699d7c3906fda7659cca6ec91 |     
+   nios2     | ibm-sw-tpm2-rev183-2024-03-27  | NOK | https://autobuild.buildroot.org/results/7a48e03c935fb6d40d02cdefbd24a01b3c7eac8e |     
+  sparc64    | ibm-sw-tpm2-rev183-2024-03-27  | NOK | https://autobuild.buildroot.org/results/a9ad9de8dbd9869bf9f75b7b011edd8613a8698c |     
+   nios2     |         latencytop-0.5         | NOK | https://autobuild.buildroot.org/results/fbef5ec0a23c022010eaa1fa1953e2e2905adfba | ORPH
+  mips64el   |         latencytop-0.5         | NOK | https://autobuild.buildroot.org/results/48e53163b4506a6993b4452d51da3eccece862a3 | ORPH
+  riscv64    |        libcap-ng-0.8.5         | NOK | https://autobuild.buildroot.org/results/40c5960174ee91002abbbe45d433ce60ec19cb8a |     
+   s390x     |          libnss-3.106          | NOK | https://autobuild.buildroot.org/results/8dd142f7d06aa3464dd0ecb35ff0899f74a723fc |     
+powerpc64le  |          libnss-3.106          | NOK | https://autobuild.buildroot.org/results/050b361ced4fd842ab7075087cb2bd1561c89b71 |     
+ aarch64_be  |         libv4l-1.28.1          | NOK | https://autobuild.buildroot.org/results/80517f5f3c9b609a64e24ec2585de2b9f0b8e42f |     
+    mips     |          libva-2.22.0          | NOK | https://autobuild.buildroot.org/results/2813c695968d8a6af015557f989648205ec6604e |     
+   armeb     |      libzenoh-pico-1.0.2       | NOK | https://autobuild.buildroot.org/results/10b3695c3c9b733622eb379e464f2756a4a71f49 |     
+   armeb     |   linux-5.10.162-cip24-rt10    | NOK | https://autobuild.buildroot.org/results/9fd802af39687ec39eb4761eb14db94e5fc345ae | ORPH
+  mips64el   |   linux-5.10.162-cip24-rt10    | NOK | https://autobuild.buildroot.org/results/0deb9a67762dcdd536cf0265c4de127b56414e09 | ORPH
+   mipsel    |   linux-5.10.162-cip24-rt10    | NOK | https://autobuild.buildroot.org/results/250e1ea2387427785773f5567d54194b35211eb3 | ORPH
+  powerpc    |          linux-6.11.7          | NOK | https://autobuild.buildroot.org/results/c6bb0f1e079ab5141b94a7c6b28fc3d0e5125c52 | ORPH
+  mips64el   |          linux-6.11.7          | NOK | https://autobuild.buildroot.org/results/0a770a52c39f3eedf0e948a51dc0a1c34c183325 | ORPH
+   sparc     |        linux-pam-1.6.1         | NOK | https://autobuild.buildroot.org/results/15d3556fa6002e55dadebe92e1e650f62970b0b6 | ORPH
+   x86_64    |        linux-pam-1.6.1         | NOK | https://autobuild.buildroot.org/results/e2bc4155af5d58e57ec927990d316e6cd9bdedcc | ORPH
+   armeb     |          linux-tools           | NOK | https://autobuild.buildroot.org/results/235ea30e256ce3975598637a339b78db93f76108 | ORPH
+   sparc     |         lmbench-3.0-a9         | NOK | https://autobuild.buildroot.org/results/c13412c5be002432e11dfe3cef2bdf0503f2c764 | ORPH
+    mips     |         lmbench-3.0-a9         | NOK | https://autobuild.buildroot.org/results/ad019d721fdb7c56207b87b43755406872d33367 | ORPH
+  sparc64    |         lmbench-3.0-a9         | NOK | https://autobuild.buildroot.org/results/687d3c9e5a58edd6c2f0021ee8a897f48ac28b32 | ORPH
+   s390x     |         lmbench-3.0-a9         | NOK | https://autobuild.buildroot.org/results/4c1fe8a5682ed8fb79e1c7d466761334ee260582 | ORPH
+powerpc64le  |        mariadb-10.11.6         | NOK | https://autobuild.buildroot.org/results/6bad65124beef61e3ad9e30dae7f926628c48046 | ORPH
+   nios2     |          mimic-1.1.0           | NOK | https://autobuild.buildroot.org/results/f896585862ce86f6c3b12e9546339d1b4cf2d8f3 |     
+  powerpc    |           mpir-3.0.0           | NOK | https://autobuild.buildroot.org/results/9d05d7e8d274cc1a5c1ccb38a9e0c8b551cc0e7c |     
+  aarch64    |       nodejs-src-22.11.0       | NOK | https://autobuild.buildroot.org/results/1b7c113d7cf60b3f9e0cf3b1fddf1edc133bfbeb |     
+   xtensa    |      obsidian-cursors-1.0      | NOK | https://autobuild.buildroot.org/results/785dc656bb92b249f102722004385a12deb2fe01 | ORPH
+ microblaze  |      obsidian-cursors-1.0      | NOK | https://autobuild.buildroot.org/results/b66526331622e4247960baad5ddb0f827ea52d2b | ORPH
+    mips     |          pcre2-10.43           | NOK | https://autobuild.buildroot.org/results/ce09cc03caedfee85123932c2dcce2ea29095dd4 | ORPH
+microblazeel |          perl-5.40.0           | NOK | https://autobuild.buildroot.org/results/d9e24ccce10dbc9314ca79e41b61c697ba81a027 |     
+   sparc     |        procps-ng-4.0.4         | NOK | https://autobuild.buildroot.org/results/2a225e72e7cdef783c3a707cce93559a80e3457d | ORPH
+    or1k     |        procps-ng-4.0.4         | NOK | https://autobuild.buildroot.org/results/9e05c6004a01eee8b150d4b1d61e0054bc4ae708 | ORPH
+   nios2     |        pulseaudio-17.0         | NOK | https://autobuild.buildroot.org/results/a5be060c4879d1775796b4e158b9694cb4b1f475 | ORPH
+   sparc     |    python-autocommand-2.2.2    | NOK | https://autobuild.buildroot.org/results/8ef7f0301242ff2d0da3d902ed723f5f905c3850 |     
+  riscv64    |       util-linux-2.40.2        | NOK | https://autobuild.buildroot.org/results/98783974d52a40c445a8b69d1a54b33321b9c26f | ORPH
+   xtensa    |       util-linux-2.40.2        | NOK | https://autobuild.buildroot.org/results/b65444be51d480d81e97980aea4d09dd377325ee | ORPH
+
+
+Classification of failures by reason for 2024.02.x
+--------------------------------------------------
+
+           babeld-babeld-1.9.2 | 1 
+                   foot-1.16.2 | 1 
+host-prelink-cross-a853a5d7... | 1 
+
+
+Detail of failures for 2024.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   nios2     |      babeld-babeld-1.9.2       | NOK | https://autobuild.buildroot.org/results/5a02194d54087806e01ffdd01d340dcfbf745198 |     
+microblazeel |          foot-1.16.2           | NOK | https://autobuild.buildroot.org/results/70abd9db301d4937213c96355caec6f0aa0ab081 |     
+    i686     | host-prelink-cross-a853a5d7... | NOK | https://autobuild.buildroot.org/results/52b88c1f80b5b2ab3b06e0f2bdbf3e48bdcd1355 | ORPH
+
+
+Classification of failures by reason for 2024.08.x
+--------------------------------------------------
+
+              dropbear-2024.85 | 1 
+                liboauth-1.0.3 | 1 
+                   lsuio-0.2.0 | 1 
+                   rauc-1.11.3 | 1 
+
+
+Detail of failures for 2024.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    or1k     |        dropbear-2024.85        | NOK | https://autobuild.buildroot.org/results/e6fc6af595a964a3b4c5635a4510123238ba1615 |     
+powerpc64le  |         liboauth-1.0.3         | NOK | https://autobuild.buildroot.org/results/d1ed5516622ba3736f71ec0f6ef2e2a1d4cd0775 | ORPH
+  powerpc    |          lsuio-0.2.0           | NOK | https://autobuild.buildroot.org/results/4b50758d88d8c21076b9d8040037a6ecdfe44674 | ORPH
+  sparc64    |          rauc-1.11.3           | NOK | https://autobuild.buildroot.org/results/8a275de6ef55ac0f69df104c0f1c67c6ecdc7540 |     
+
+
+Classification of failures by reason for next
+---------------------------------------------
+
+  gobject-introspection-1.76.1 | 1 
+ ibm-sw-tpm2-rev183-2024-03-27 | 1 
+
+
+Detail of failures for next
+---------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    |  gobject-introspection-1.76.1  | NOK | https://autobuild.buildroot.org/results/2da9947661c0a09710b39d41130c9a579edb4192 | ORPH
+  mips64el   | ibm-sw-tpm2-rev183-2024-03-27  | NOK | https://autobuild.buildroot.org/results/b2de46eee12cd20261f9f94fd3a2fb06341157cb |     
+
+
+
 -- 
-2.34.1
-
+https://autobuild.buildroot.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
