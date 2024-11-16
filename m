@@ -4,73 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23616D68BE8
-	for <buildroot@archiver.kernel.org>; Sat, 16 Nov 2024 11:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E453DD68BEA
+	for <buildroot@archiver.kernel.org>; Sat, 16 Nov 2024 11:32:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A85D841E85;
-	Sat, 16 Nov 2024 11:19:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD9C841EA2;
+	Sat, 16 Nov 2024 11:32:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NcpcrsBUJjK4; Sat, 16 Nov 2024 11:19:28 +0000 (UTC)
+ id HW9zONL0EkZo; Sat, 16 Nov 2024 11:32:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C4CF41A6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3914C41E8D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C4CF41A6B;
-	Sat, 16 Nov 2024 11:19:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F96BB14
- for <buildroot@buildroot.org>; Sat, 16 Nov 2024 11:19:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3914C41E8D;
+	Sat, 16 Nov 2024 11:32:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B027F1EB8
+ for <buildroot@buildroot.org>; Sat, 16 Nov 2024 11:32:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 00CFF84957
- for <buildroot@buildroot.org>; Sat, 16 Nov 2024 11:19:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9C079431A6
+ for <buildroot@buildroot.org>; Sat, 16 Nov 2024 11:32:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l382ySfL_ScQ for <buildroot@buildroot.org>;
- Sat, 16 Nov 2024 11:19:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D5DB784953
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5DB784953
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D5DB784953
- for <buildroot@buildroot.org>; Sat, 16 Nov 2024 11:19:25 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id A12D213F88D;
- Sat, 16 Nov 2024 12:19:20 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:38540])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 16 Nov 2024 12:19:20 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ssFMyDuW6SFk for <buildroot@buildroot.org>;
+ Sat, 16 Nov 2024 11:32:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 99C5E400E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99C5E400E0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 99C5E400E0
+ for <buildroot@buildroot.org>; Sat, 16 Nov 2024 11:32:40 +0000 (UTC)
+Received: from L25025.local (unknown
+ [IPv6:2a01:e0a:2af:22b0:ec16:eb41:83aa:c38c])
+ (Authenticated sender: vjardin@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 4D4702003CA;
+ Sat, 16 Nov 2024 12:32:36 +0100 (CET)
+Date: Sat, 16 Nov 2024 12:32:36 +0100
+From: Vincent Jardin <vjardin@free.fr>
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+Message-ID: <uzkqd3tco4pvgprixhilwcxp4swb65phmjhsuiguusuxhphtco@yfry7ub5nkkg>
+References: <20241115220215.1057916-1-ju.o@free.fr>
 MIME-Version: 1.0
-Date: Sat, 16 Nov 2024 12:19:20 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Vincent Jardin <vjardin@free.fr>
-Cc: buildroot@buildroot.org, zer0@droids-corp.org, robin@jarry.cc
-In-Reply-To: <20241115173510.31009-1-vjardin@free.fr>
-References: <20241115173510.31009-1-vjardin@free.fr>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <31efd2663d1b8e193e49c0cc76113384@free.fr>
-X-Sender: ju.o@free.fr
+Content-Disposition: inline
+In-Reply-To: <20241115220215.1057916-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1731755964;
- bh=tljqmSDCYJTCXHa4ZeLYequB+2evzBj/rDs+RAcVWM0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=NNoJs3L7gI6fHpDR50NGT4BrhneHGJWSiTkjQpi+sVap+Txxn5F8dbSDQsP6ctZ6Y
- /vkhOx0oHLMH3+2f/YcrChrkYHz4i8krQTQ2E9xwy+eMaMsgYK06elJ79N9O4rBLsE
- oQM6U9897UHfImupVX6l6geI65at7JAEJ+cw2dGWCl83D3Vyg7JD+BP3qvJHaDVJJh
- Vzs1dW0ZjslniJ8tD0udwerCXQIW2hWIGUsY6tm76xjh/E9lNXmg0K6aSTjAe2V69G
- qAlIZRGddrmNCICucbc3+/VaZXbyW/P/+rTKFp4aJMfd3F34ys0OuPUVe9iO6BfFZN
- wMD4dlMOiASKA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1731756757;
+ bh=DM53qrqgPyPD6fNJAO5RifHA/RCWaa2HzKo44xHvhK4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=D0w0Ng50uXaQzK0Ycx6gBXu5MyKvIqow9Hr+BhuVTxqGgsTUABYGPNy+BxDp+S+/G
+ nz+d4kVZWoaJ1Pv/ZhHjIRIhw4yELgNnVkK4FZFpCiEgcIykl0+mIprbJf6VYaQpeY
+ abzMTqrv1BhpdKz3kXX4bK4Pgx6rwz0fuxV4VdSXA0/HKUKWSSn+2ZCSmVHwB2aI+9
+ bvlHKgZs8WX9HuvnSHmZ7eBql0jB+2ogIr4L4vguJUUPfNXqeaNgWfI0Jnb10DDyCb
+ LXVvraFobB1GiFIXIPSmpnDcOXixxa0TH7jJe/j/8jdWv5Ak/XEDF9gxtWlqtmP76d
+ kXrXjZR9yvqcw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=NNoJs3L7
-Subject: Re: [Buildroot] [PATCH 1/1] package/libecoli: new package
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=D0w0Ng50
+Subject: Re: [Buildroot] [PATCH next 1/1] Config.in: switch GNU mirrors URL
+ to https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,108 +79,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Vincent,
-
-Thanks for the patch!
-
-The .hash file is missing in this new package proposal. See:
-https://buildroot.org/downloads/manual/manual.html#adding-packages-hash
-Could you add it, please?
-
-Also, out of curiosity: I believe you propose this library to be used
-as a dependency by another package you'll propose? Which one it is?
-(is it "grout", since you introduced dpdk?)
-
-On 15/11/2024 18:35, Vincent Jardin wrote:
-> Add a new smart library for CLI / command line.
+On Fri, Nov 15, 2024 at 11:02:15PM UTC, Julien Olivain wrote:
+> As explained on [1], the primary GNU mirrors URL is https.
+> This commit updates BR2_GNU_MIRROR to switch to it.
 > 
-> Signed-off-by: Vincent Jardin <vjardin@free.fr>
-> ---
->  DEVELOPERS                   |  1 +
->  package/Config.in            |  1 +
->  package/libecoli/Config.in   |  7 +++++++
->  package/libecoli/libecoli.mk | 17 +++++++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/libecoli/Config.in
->  create mode 100644 package/libecoli/libecoli.mk
+> [1] https://www.gnu.org/prep/ftp.html
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 3945803d53..a44c79e66a 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -3285,6 +3285,7 @@ F:	board/nvidia/bf3/
->  F:	configs/nvidia_bf3_defconfig
->  F:	package/bfscripts/
->  F:	package/dpdk/
-> +F:	package/libecoli/
-> 
->  N:	Vincent Prince <vincent.prince.fr@gmail.com>
->  F:	package/nss-myhostname/
-> diff --git a/package/Config.in b/package/Config.in
-> index 1eb5e1e020..278c82bb05 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2337,6 +2337,7 @@ menu "Text and terminal handling"
->  	source "package/icu/Config.in"
->  	source "package/inih/Config.in"
->  	source "package/libcli/Config.in"
-> +	source "package/libecoli/Config.in"
->  	source "package/libedit/Config.in"
->  	source "package/libenca/Config.in"
->  	source "package/libestr/Config.in"
-> diff --git a/package/libecoli/Config.in b/package/libecoli/Config.in
-> new file mode 100644
-> index 0000000000..765a8b9e5c
-> --- /dev/null
-> +++ b/package/libecoli/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LIBECOLI
-> +	bool "libecoli"
-> +	depends on BR2_PACKAGE_LIBEDIT
-> +	help
-> +	  libecoli is the best library to develop a CLI
-> +
-> +	  https://github.com/rjarry/libecoli/
-> diff --git a/package/libecoli/libecoli.mk 
-> b/package/libecoli/libecoli.mk
-> new file mode 100644
-> index 0000000000..7ade6666ff
-> --- /dev/null
-> +++ b/package/libecoli/libecoli.mk
-> @@ -0,0 +1,17 @@
-> +################################################################################
-> +#
-> +# libecoli
-> +#
-> +################################################################################
-> +
-> +LIBECOLI_VERSION = 0.2.0
-> +LIBECOLI_SITE = $(call github,rjarry,libecoli,v$(LIBECOLI_VERSION))
-> +LIBECOLI_INSTALL_STAGING = YES
-> +LIBECOLI_LICENSE = BSD-3-Clause
-> +LIBECOLI_LICENSE_FILES = license/bsd-3-clause.txt
-> +
-> +LIBECOLI_DEPENDENCIES = \
-> +	host-pkgconf \
-> +	libedit
-> +
-> +$(eval $(meson-package))
-> --
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-Best regards,
+LGTM, thanks for the hints on reviews. Let's start easy ;)
 
-Julien.
+Reviewed-by: Vincent Jardin <vjardin@free.fr>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
