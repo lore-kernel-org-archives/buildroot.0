@@ -4,74 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48050D68BF5
-	for <buildroot@archiver.kernel.org>; Sat, 16 Nov 2024 18:38:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D7A3D68BF5
+	for <buildroot@archiver.kernel.org>; Sat, 16 Nov 2024 18:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 038E74248D;
-	Sat, 16 Nov 2024 18:38:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27B5E400B9;
+	Sat, 16 Nov 2024 18:51:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dY5tjkWHkvDW; Sat, 16 Nov 2024 18:38:49 +0000 (UTC)
+ id JOhkb2m8eUiN; Sat, 16 Nov 2024 18:51:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C79564248E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAE644249F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C79564248E;
-	Sat, 16 Nov 2024 18:38:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EAE644249F;
+	Sat, 16 Nov 2024 18:51:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A8998B14
- for <buildroot@buildroot.org>; Sat, 16 Nov 2024 18:38:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id F3CA01EB9
+ for <buildroot@buildroot.org>; Sat, 16 Nov 2024 18:51:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8952D41FD4
- for <buildroot@buildroot.org>; Sat, 16 Nov 2024 18:38:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E1D3C4249F
+ for <buildroot@buildroot.org>; Sat, 16 Nov 2024 18:51:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Y8NuKB4bfFb for <buildroot@buildroot.org>;
- Sat, 16 Nov 2024 18:38:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 54E0E4248D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54E0E4248D
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 54E0E4248D
- for <buildroot@buildroot.org>; Sat, 16 Nov 2024 18:38:45 +0000 (UTC)
+ id ZOUdI1Z4rQX3 for <buildroot@buildroot.org>;
+ Sat, 16 Nov 2024 18:51:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0BBFD40D7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BBFD40D7B
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0BBFD40D7B
+ for <buildroot@buildroot.org>; Sat, 16 Nov 2024 18:51:18 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 0B26B5FFA3;
- Sat, 16 Nov 2024 19:38:39 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:50628])
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id F36D8B00548;
+ Sat, 16 Nov 2024 19:51:14 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:54418])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 16 Nov 2024 19:38:39 +0100
+ with HTTP (HTTP/1.0 POST); Sat, 16 Nov 2024 19:51:14 +0100
 MIME-Version: 1.0
-Date: Sat, 16 Nov 2024 19:38:39 +0100
+Date: Sat, 16 Nov 2024 19:51:14 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: buildroot@buildroot.org, "Yann E. MORIN" <yann.morin.1998@free.fr>
-In-Reply-To: <20241114223356.1629969-1-petr.vorel@gmail.com>
-References: <20241114223356.1629969-1-petr.vorel@gmail.com>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, linux-amarula@amarulasolutions.com
+In-Reply-To: <20241112181350.2559743-1-dario.binacchi@amarulasolutions.com>
+References: <20241112181350.2559743-1-dario.binacchi@amarulasolutions.com>
 User-Agent: Webmail Free/1.6.9
-Message-ID: <06e284c9484b53541184b29c1edb54f6@free.fr>
+Message-ID: <ba4363f09fe487436a800ddb9bcbd3e6@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1731782322;
- bh=Om3/PI9Cn4Jmr8dRu5wPqkV3t5RW0dtNX1/IUPVdmEE=;
+ d=free.fr; s=smtp-20201208; t=1731783077;
+ bh=kR7aQNB+h6a8dAbQQN99wEskwkP0kw0UsAXp8UBxTwU=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=k1VEXXVyr9dQh41U3HSP3gxgcEAdEWkwrfWgyAzCf/VEFDI23SyTGyiOa9nRt26GX
- HOim76IAkvhU7xjgJ4A+jLK7+lHmsHXxSH17yq9o243Q7dWKVj0+p145VFcHsJJ1is
- IAVJ/LyBlHKRnZqI31wGlm+/vTOdd5BE8DeREOZPZr+tHocRevHMj2s8mt+4XuWzIQ
- c7oMUtCUbjLEglnVwbmaM6SKF8m1SU3BmQ2IeN61peLoat8QXdINE4g1szQcE5Qka2
- OVhivANewcZuviyO4Zujfp7kZpxiUQ7/myC88lInyfl5Z3l/rA5BhJSD7Dcpgu1bvc
- +kgHbslB766MA==
+ b=XujUS4grelFCsY3Md2CzQBPWuCgyYQL10zyJYCLrjOZf2Qdzz0WRBae/r91bR/7Ji
+ gPlKfTiR7nFWLa14+7FeL9SPHk3Dw3oErrjA7GGE3loRaxUB8BGGFjQ0YQflJm5GmA
+ 6WJiGKDODQM4WvTTaxayKb8ciOQ/BLXDRgLwgZB+T/oGLGEuWaVfzgrKwb4cjKhCZq
+ HgmYBCKA/6dMXOXYNZo/+27N4E6SDtUFOvE5eSczUdJqXB6L8/P583T7BMvz7oQxUE
+ C3fofZkK86NV3Jat2aavDi9Fu32XjhV2UsrkuXErJdhweeRZyzpb3PzuciFUAfxS4C
+ OyOm9h0cXxZYA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=k1VEXXVy
-Subject: Re: [Buildroot] [PATCH 1/1] package/ltp-testsuite: bump version to
- 20240930
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=XujUS4gr
+Subject: Re: [Buildroot] [PATCH 1/1] package/uuu: bump to version 1.5.191
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,67 +87,53 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/11/2024 23:33, Petr Vorel wrote:
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+On 12/11/2024 19:13, Dario Binacchi wrote:
+> Add python binding
+> 
+> Release notes:
+> https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.191
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 Applied to next, thanks.
 
 > ---
-> Hi,
+>  package/uuu/uuu.hash | 2 +-
+>  package/uuu/uuu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> Tested:
->                     bootlin-armv5-uclibc [1/6]: OK
->                      bootlin-armv7-glibc [2/6]: OK
->                    bootlin-armv7m-uclibc [3/6]: SKIPPED
->                      bootlin-x86-64-musl [4/6]: SKIPPED
->                       br-arm-full-static [5/6]: OK
->                              arm-aarch64 [6/6]: OK
-> 
-> Kind regards,
-> Petr
-> 
->  package/ltp-testsuite/ltp-testsuite.hash | 4 ++--
->  package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/ltp-testsuite/ltp-testsuite.hash 
-> b/package/ltp-testsuite/ltp-testsuite.hash
-> index 03aa586156..41915cd817 100644
-> --- a/package/ltp-testsuite/ltp-testsuite.hash
-> +++ b/package/ltp-testsuite/ltp-testsuite.hash
-> @@ -1,4 +1,4 @@
-> -# From: 
-> https://github.com/linux-test-project/ltp/releases/download/20240524/ltp-full-20240524.tar.xz.sha256
+> diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
+> index 9dc286c41ffc..8460481e0ff0 100644
+> --- a/package/uuu/uuu.hash
+> +++ b/package/uuu/uuu.hash
+> @@ -1,3 +1,3 @@
+>  # locally computed
 > -sha256  
-> 2b7c07bb281b7ec49981eeb06c4b66f147b103977254632678d384034f6e9663  
-> ltp-full-20240524.tar.xz
-> +# From: 
-> https://github.com/linux-test-project/ltp/releases/download/20240930/ltp-full-20240930.tar.xz.sha256
+> 723d3da358e6af974a056e3adbcb105fac9dad4b87544de0d22b8c974a8037aa  
+> uuu_source-uuu_1.5.182.tar.gz
 > +sha256  
-> 3e9e806405aa602e2d21d221d885fd4914ff2da23eb8bba3d0f0f468bdf60238  
-> ltp-full-20240930.tar.xz
->  # Locally computed
+> 28792a9776d1ee73f6f20f7c49a7b81dcab10311733c5becac8928145fc86170  
+> uuu_source-uuu_1.5.191.tar.gz
 >  sha256  
-> 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  
-> COPYING
-> diff --git a/package/ltp-testsuite/ltp-testsuite.mk 
-> b/package/ltp-testsuite/ltp-testsuite.mk
-> index bbeb80c732..417052eae7 100644
-> --- a/package/ltp-testsuite/ltp-testsuite.mk
-> +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  
+> LICENSE
+> diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
+> index e57828a0ca6e..8faadc0201a1 100644
+> --- a/package/uuu/uuu.mk
+> +++ b/package/uuu/uuu.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  
 > ################################################################################
 > 
-> -LTP_TESTSUITE_VERSION = 20240524
-> +LTP_TESTSUITE_VERSION = 20240930
->  LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
->  LTP_TESTSUITE_SITE = 
-> https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
-> 
+> -UUU_VERSION = 1.5.182
+> +UUU_VERSION = 1.5.191
+>  UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
+>  UUU_SITE = 
+> https://github.com/nxp-imx/mfgtools/releases/download/uuu_$(UUU_VERSION)
+>  UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
 > --
-> 2.45.2
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
