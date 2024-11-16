@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FD08D68BE7
-	for <buildroot@archiver.kernel.org>; Sat, 16 Nov 2024 16:35:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 443B9D68BF5
+	for <buildroot@archiver.kernel.org>; Sat, 16 Nov 2024 16:47:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12EFC845B2;
-	Sat, 16 Nov 2024 16:35:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4CFC42490;
+	Sat, 16 Nov 2024 16:47:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fbtZJFJ0yIDE; Sat, 16 Nov 2024 16:35:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uJbJexcAy88O; Sat, 16 Nov 2024 16:47:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0689381098
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0C8B42AC6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0689381098;
-	Sat, 16 Nov 2024 16:35:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0C8B42AC6;
+	Sat, 16 Nov 2024 16:47:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 66957B14
- for <buildroot@buildroot.org>; Sat, 16 Nov 2024 16:35:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3AE891EB8
+ for <buildroot@buildroot.org>; Sat, 16 Nov 2024 16:47:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4574440436
- for <buildroot@buildroot.org>; Sat, 16 Nov 2024 16:35:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2068C404A8
+ for <buildroot@buildroot.org>; Sat, 16 Nov 2024 16:47:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DiDCxP9eSVSV for <buildroot@buildroot.org>;
- Sat, 16 Nov 2024 16:35:52 +0000 (UTC)
+ id toGs7_NMD3Lv for <buildroot@buildroot.org>;
+ Sat, 16 Nov 2024 16:47:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C957C40363
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C957C40363
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EE32D40436
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE32D40436
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C957C40363
- for <buildroot@buildroot.org>; Sat, 16 Nov 2024 16:35:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EE32D40436
+ for <buildroot@buildroot.org>; Sat, 16 Nov 2024 16:47:34 +0000 (UTC)
 Received: from home.juju.sh (unknown
  [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id E5334B0051B;
- Sat, 16 Nov 2024 17:35:45 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id B3319B0055A;
+ Sat, 16 Nov 2024 17:47:31 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 16 Nov 2024 17:35:37 +0100
-Message-ID: <20241116163537.12530-1-ju.o@free.fr>
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Sat, 16 Nov 2024 17:47:27 +0100
+Message-ID: <20241116164727.16193-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1731774948;
- bh=QPfpqxaTKopTt83h8dDJR6dS4ZTJaTnAUMLOmyCWFks=;
+ d=free.fr; s=smtp-20201208; t=1731775652;
+ bh=PbjFfoLpJ7y6kYP9B8iK70KOv5w1tde5tVrWHSOjGnM=;
  h=From:To:Cc:Subject:Date:From;
- b=A2aasCkNj0b8RZKtuRxbVo01bk65M2D039VhmS6gtHlg1Ji91YmawVXz4R+ePtrb3
- hfnByE/pShyLAtN7tEM934vHLolczGIELOVrUM8SbrPDeJd0EV4LcWglP/xC4/pxa9
- NO7X6wDYuVRBedywXAiIVQ1Jt2xTG8aV4oQ1KzB5hy3zmI5JrNvX9jq8kKjVO3cssH
- wfUlZzqrHimrOVRAIbMBmkHDtsafc5ilcwCQX4i6jdvPSGPZsTFclJ5YywzeY9HJeR
- Y1eDogp1Ke7KOcYQTRN5q2MJL6/uLkY/a1q6Uqaiqv/PUK3A54uJO+YbW85xB87dRM
- sz2CowiFRCWTg==
+ b=HnxIpGA1VqTqEGsLOKKwbM9YihyACRAXWmsSZqeRdmVuCeSQurm7upDDT4JlpTJf1
+ 5M32sdcesiBAqODAfGWduae0XER8X3dejm3DR7gCzw7nKChCut5qakIAD7K/v7ZL/l
+ NS8/I5OWmOJOfLOfy23BvlyooscBBR4UMJtAVSzXqiDKS3NwzUGbRv67Q8nnFSFYzM
+ z4PZscufV6MF+sSlf1XVZN9C40N5SSg42NgM83rHVFuhE9bgPE/k9X3Ga+GqpHJcGL
+ UwgpUGeU3u2tDz94qQU2Pq71nqTRrFTH2mlJdeCoq6kLqGIRbwBUZ/yOX1IzzRjAm1
+ eOGhWE7ROpeAA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=A2aasCkN
-Subject: [Buildroot] [PATCH 1/1] support/testing/tests/boot/test_edk2.py:
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=HnxIpGA1
+Subject: [Buildroot] [PATCH 1/1] support/testing/tests/package/test_fwts.py:
  switch to neoverse-n1 cpu
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -77,7 +77,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -90,28 +89,28 @@ Commit c58a2a968 "configs/qemu_aarch64_sbsa_defconfig: switch to
 neoverse-n1 (armv8.2a)" [2] reflected this change in
 qemu_aarch64_sbsa_defconfig.
 
-This commit updates the	test_edk2 runtime test the same way.
+This commit updates the	test_fwts runtime test the same way.
 
 This update is possible with the help of commits [3] and [4].
 
 [1] https://gitlab.com/qemu-project/qemu/-/commit/1877272bad7b08b67312503ee66184279876c7bd
 [2] https://gitlab.com/buildroot.org/buildroot/-/commit/c58a2a9687c045379c0f768c8c6c1c1a41842a85
 [3] https://gitlab.com/buildroot.org/buildroot/-/commit/0d4177598ce7e73f2b97ac58c21fb177343643e3
-[4] https://gitlab.com/buildroot.org/buildroot/-/commit/fba62f2ab13c095de860a07851d148181f4e38bc
+[4] https://gitlab.com/buildroot.org/buildroot/-/commit/027ddcbff65bb9dc1799d89fc140a33e81d35421
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
 Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/8388684107
+https://gitlab.com/jolivain/buildroot/-/jobs/8388701667
 ---
- support/testing/tests/boot/test_edk2.py | 3 ++-
+ support/testing/tests/package/test_fwts.py | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/boot/test_edk2.py b/support/testing/tests/boot/test_edk2.py
-index 39d7a4dbcc..54a59089da 100644
---- a/support/testing/tests/boot/test_edk2.py
-+++ b/support/testing/tests/boot/test_edk2.py
-@@ -7,6 +7,7 @@ class TestEdk2(infra.basetest.BRTest):
+diff --git a/support/testing/tests/package/test_fwts.py b/support/testing/tests/package/test_fwts.py
+index 6e2b6f50ba..4df13b60f9 100644
+--- a/support/testing/tests/package/test_fwts.py
++++ b/support/testing/tests/package/test_fwts.py
+@@ -7,6 +7,7 @@ class TestFwts(infra.basetest.BRTest):
      config = \
          """
          BR2_aarch64=y
@@ -119,7 +118,7 @@ index 39d7a4dbcc..54a59089da 100644
          BR2_TOOLCHAIN_EXTERNAL=y
          BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
          BR2_TARGET_ROOTFS_EXT2=y
-@@ -63,7 +64,7 @@ class TestEdk2(infra.basetest.BRTest):
+@@ -66,7 +67,7 @@ class TestFwts(infra.basetest.BRTest):
          flash1 = os.path.join(self.builddir, "images", "SBSA_FLASH1.fd")
          self.emulator.boot(arch="aarch64",
                             options=["-M", "sbsa-ref",
