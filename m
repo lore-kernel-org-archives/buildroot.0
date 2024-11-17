@@ -1,94 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DF7CD10F30
-	for <buildroot@archiver.kernel.org>; Sun, 17 Nov 2024 21:13:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F928D10F33
+	for <buildroot@archiver.kernel.org>; Sun, 17 Nov 2024 22:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF134614C3;
-	Sun, 17 Nov 2024 21:13:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1FDC784148;
+	Sun, 17 Nov 2024 22:05:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8etgOQzfCva1; Sun, 17 Nov 2024 21:13:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DopZKKt9kA0x; Sun, 17 Nov 2024 22:05:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74A78614A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44BE084488
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74A78614A1;
-	Sun, 17 Nov 2024 21:13:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2914BDB3
- for <buildroot@buildroot.org>; Sun, 17 Nov 2024 21:13:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 44BE084488;
+	Sun, 17 Nov 2024 22:05:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9A49BB14
+ for <buildroot@buildroot.org>; Sun, 17 Nov 2024 22:05:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 16E5642AFE
- for <buildroot@buildroot.org>; Sun, 17 Nov 2024 21:13:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8840D84488
+ for <buildroot@buildroot.org>; Sun, 17 Nov 2024 22:05:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XYnE5SOkE0pe for <buildroot@buildroot.org>;
- Sun, 17 Nov 2024 21:13:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iryzHStMQ616 for <buildroot@buildroot.org>;
+ Sun, 17 Nov 2024 22:05:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6136742ABA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6136742ABA
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6136742ABA
- for <buildroot@buildroot.org>; Sun, 17 Nov 2024 21:13:08 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-431695fa98bso28516225e9.3
- for <buildroot@buildroot.org>; Sun, 17 Nov 2024 13:13:08 -0800 (PST)
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=robertoxmed@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B275484148
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B275484148
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B275484148
+ for <buildroot@buildroot.org>; Sun, 17 Nov 2024 22:05:06 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-4316a44d1bbso19809435e9.3
+ for <buildroot@buildroot.org>; Sun, 17 Nov 2024 14:05:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1731877987; x=1732482787;
+ d=1e100.net; s=20230601; t=1731881104; x=1732485904;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=ByFVV7wfxKxJOjGodZHSTF/256ee5bgBHu847HZDN4Q=;
- b=PsUgh0RdPINhDmvkbslGdb5bVMVBq5UtofTC2AWWdMZDScZxvwPJYns4Was1qP2stb
- 1IHUj7Mx8w52eYKcFKd3cbsWGC0ipNzFy0ZBJoXMN2OpgeU0PrxPghkQoPPPt5yOx4zA
- qyZDWEUgxatTvAZtXQCdyIkZqGuU0iPQPMOLvH4Ho48MBDdg7WAuicPhNCbLfNqOafJz
- A4SKZeSb2K3G/0kWKUgggBke/D+PWFuh8i5NzfwA9N3e3sf4KV7PwcxLn5ApF+EG2D+C
- 3DuFwLGNIk2ZnZP3MNuYZ0KvGj2YWVo7eEhUHXaUgS7RVnx+1X5h8Haj+lZdB3uUDHTT
- qovw==
-X-Gm-Message-State: AOJu0YzKlYQh1KzPYLcXt4YFmMnvF3gMoFGKQtcRtRyR0SPx1LfZP7IO
- mGefDd6GkefrxH+xAwQVC96DtiH3tZ1hYwZP2Zs+iwMAXWrmKcj0nZH8h2CDMm/BllzgpTrryS/
- 4
-X-Google-Smtp-Source: AGHT+IGKXi1C7uhUI77Vcb7tTJTNPBRsHMvCsgOpARLhB4oMLlS8AUwI3VFJhIY29Pwi3w3nh+JkBg==
-X-Received: by 2002:a05:600c:4e8b:b0:431:4f29:4a98 with SMTP id
- 5b1f17b1804b1-432df77c605mr80267655e9.20.1731877986969; 
- Sun, 17 Nov 2024 13:13:06 -0800 (PST)
-Received: from P-NTS-Evian.home
- (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
+ bh=n0PNSr4590k+BrWzHd/FC8RZIQl3wZZbZ26AdQPWRKU=;
+ b=BYqI6BjOkkOk6nYHzz826RK7sNzP/A10sfn1RxlLC3geO+ShTHlhdj7MQ62PSRnI03
+ ezgBsbM3pNRDL4bVWeuoDnKF9ugsSMYTSnJw9jzjy2aWKo4TcC0gc08VaoXNKNh2Pvnn
+ QHhJFVQ8TuNH7C2Iv37sGnVlA2WYmGcqqLeO1BENYFkRkTR/2QUwwybQF1lgowyLibVQ
+ RdZDfFS/i6Nx9i3P8IMpfLfbaRWNBYG/r1GTz/eBeSqAobmZwN+t9weJ3nv/TCYMdMfA
+ 2xLVSK9WWyf4I7ohfXqSG2WDjGDVJZJKgOAJRi7rsAvYmIvdHCAzNn8c6qp9tM5xFPtb
+ xliQ==
+X-Gm-Message-State: AOJu0YwVPFqHph0UGO1zAZMid+Ulw6K2d4tpJmwmPDq2dAnc6fZkE064
+ rwPAG9WHUyDKzbcfTrGkcrbXv98TVdCLH/rni9CoPC6Oh0QCp2dP11V6nnkJ
+X-Google-Smtp-Source: AGHT+IF2yZceEumXj5iLFSYOxkhnUmow6U8EnfWdwomXAx+PBlv4bEiLUcoPYktB9fr86BueBFk1Ew==
+X-Received: by 2002:a05:600c:1d8f:b0:431:5a27:839c with SMTP id
+ 5b1f17b1804b1-432df71eb8fmr90040175e9.5.1731881104268; 
+ Sun, 17 Nov 2024 14:05:04 -0800 (PST)
+Received: from Suzaku.home ([2001:bb6:11e3:a300:da4d:c63d:b184:11d6])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-432da28ce85sm133162435e9.33.2024.11.17.13.13.06
+ 5b1f17b1804b1-432dab80821sm131158645e9.23.2024.11.17.14.05.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 17 Nov 2024 13:13:06 -0800 (PST)
+ Sun, 17 Nov 2024 14:05:03 -0800 (PST)
+From: Roberto Medina <robertoxmed@gmail.com>
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>
-Date: Sun, 17 Nov 2024 22:13:04 +0100
-Message-ID: <20241117211304.2195084-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.45.0
+Cc: Roberto Medina <robertoxmed@gmail.com>
+Date: Sun, 17 Nov 2024 22:04:59 +0000
+Message-ID: <20241117220500.584642-1-robertoxmed@gmail.com>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1731877987; x=1732482787; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1731881104; x=1732485904; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ByFVV7wfxKxJOjGodZHSTF/256ee5bgBHu847HZDN4Q=;
- b=EmsO1qINRZum1+KUs4UOQSXhmKMuFKy2KSAO7RCtr9jwaMmBvA1Ts4wwexDHS31qU0
- W/40/XYp+iyZtnvMwZ+qjIwlwZeZyGIKD9w2lUfi7Waddk9/7gO+CHwhvniQIbVw6d60
- rs3jcoIEN0u3WSN5996C0GnDu2M58suO1U+co=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=EmsO1qIN
-Subject: [Buildroot] [PATCH] package/python-sip: disable parallel install
+ bh=n0PNSr4590k+BrWzHd/FC8RZIQl3wZZbZ26AdQPWRKU=;
+ b=GupuYGFunRy1m6Zqks52d0j+BPWiUpnBJ/+6qXB2xIV+ycMkguCaqrKcZohtzBokJT
+ I3A26QRW8RiWY1uUXB06TFwkM7Gyl9VFW5ETdN90BckbnyM9tHX3TSB+8EAyed4TIuTs
+ edPypxrRwhjkhIY+UlFy50HSjt/coH2eKPr4nrIAzST7fU3CngxpKYJhGwyBv7rl+mUo
+ YFeIpEW8vZthxz76uNxq106QhGYhcC+niZT5EYsojiaRTfkk6fKdVY2Ufa6Z5Y3IwbJu
+ lybp7tPlFuqYChwHcA51ysUbXdeZ4QkzeuPnxeRL6kqVdYK3No/4AckmdDLEvN/Pkn6B
+ jO7Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=GupuYGFu
+Subject: [Buildroot] [PATCH v3 0/1] configs/roc_pc_rk3399: Bump Linux, U-Boot,
+ TF-A
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,56 +101,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-{host-}python-sip may fail to install on fast machine, so disable
-parallel install.
+v3 -> v2:
+- Revert to use Glibc.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8350440972 (TestPythonPyQt5)
-http://autobuild.buildroot.org/results/8f2/8f24656f3a66d21f2d3c6d6b1adc6bb5f1c0c801 (2024-10-15)
-http://autobuild.buildroot.org/results/6e6/6e6bbee714b10e0f04c9d17b7e0ecce057d21d2a (2022-07-15)
+v2 -> v1:
+- Enable checking hashes and add relevant hash files.
+- Move from Glibc to uClibc.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- package/python-sip/python-sip.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Roberto Medina (1):
+  configs/roc_pc_rk3399: Bump Linux, U-Boot, TF-A
 
-diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
-index 392928f01e..f71724f68a 100644
---- a/package/python-sip/python-sip.mk
-+++ b/package/python-sip/python-sip.mk
-@@ -21,8 +21,10 @@ define HOST_PYTHON_SIP_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
- 
-+# Race condition on fast machine between sipconfig.py install and
-+# {sipdistutils.py,mk_distinfo.py} scripts.
- define HOST_PYTHON_SIP_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) install -C $(@D)
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE1) install -C $(@D)
- endef
- 
- define PYTHON_SIP_CONFIGURE_CMDS
-@@ -42,8 +44,10 @@ define PYTHON_SIP_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
- 
-+# Race condition on fast machine between sipconfig.py install and
-+# {sipdistutils.py,mk_distinfo.py} scripts.
- define PYTHON_SIP_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) install -C $(@D)
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) install -C $(@D)
- endef
- 
- $(eval $(generic-package))
+ .../arm-trusted-firmware/arm-trusted-firmware.hash     |  2 ++
+ .../patches/linux-headers/linux-headers.hash           |  1 +
+ board/firefly/roc-rk3399-pc/patches/linux/linux.hash   |  2 ++
+ board/firefly/roc-rk3399-pc/patches/uboot/uboot.hash   |  2 ++
+ configs/roc_pc_rk3399_defconfig                        | 10 ++++++----
+ 5 files changed, 13 insertions(+), 4 deletions(-)
+ create mode 100644 board/firefly/roc-rk3399-pc/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+ create mode 120000 board/firefly/roc-rk3399-pc/patches/linux-headers/linux-headers.hash
+ create mode 100644 board/firefly/roc-rk3399-pc/patches/linux/linux.hash
+ create mode 100644 board/firefly/roc-rk3399-pc/patches/uboot/uboot.hash
+
 -- 
-2.45.0
+2.47.0
 
 _______________________________________________
 buildroot mailing list
