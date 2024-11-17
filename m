@@ -4,100 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76065D10F35
-	for <buildroot@archiver.kernel.org>; Sun, 17 Nov 2024 22:05:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AF99D10F35
+	for <buildroot@archiver.kernel.org>; Sun, 17 Nov 2024 22:09:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4409184AD0;
-	Sun, 17 Nov 2024 22:05:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C69E084EA4;
+	Sun, 17 Nov 2024 22:09:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5BCMqKSMWhSX; Sun, 17 Nov 2024 22:05:17 +0000 (UTC)
+ id hQoSMU5cW0hi; Sun, 17 Nov 2024 22:09:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6249084A86
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D488984EA6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6249084A86;
-	Sun, 17 Nov 2024 22:05:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D488984EA6;
+	Sun, 17 Nov 2024 22:09:05 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1E8EEDB3
- for <buildroot@buildroot.org>; Sun, 17 Nov 2024 22:05:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 24D62DB2
+ for <buildroot@buildroot.org>; Sun, 17 Nov 2024 22:09:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD200607A9
- for <buildroot@buildroot.org>; Sun, 17 Nov 2024 22:05:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 12D956159C
+ for <buildroot@buildroot.org>; Sun, 17 Nov 2024 22:09:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mMDqYhxU-l_f for <buildroot@buildroot.org>;
- Sun, 17 Nov 2024 22:05:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
- envelope-from=robertoxmed@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2D6486156A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D6486156A
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2D6486156A
- for <buildroot@buildroot.org>; Sun, 17 Nov 2024 22:05:14 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-3823eb7ba72so664388f8f.0
- for <buildroot@buildroot.org>; Sun, 17 Nov 2024 14:05:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1731881112; x=1732485912;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=n1T0crj7ZzkrKfIzFyIRgOL8BEQzcy1WG7s7nV0xr6k=;
- b=C0UEXCz5/xOHdw2UsSFQH617obsm4CLYy2HzA+A3R0U/kPc5g8ImHBXuivqqlZfD9B
- tYqvXLnFF/851/JItkaMDM0ljxwRUD3p4qEi7TMXFzLzFCi/q5yhR0HDNdJGwxPwuXX6
- QTecStBF22LPPHEYKM3wiQ4y+xDIS+fzNYCTXTaWmlFxlvRQZocUluljSMi1OTXuaql/
- JuX0TlmmF6lmZIlQvCryqCPNYRUZlqCEW1Rlf+n9C0IKiPm1KqWW+EyFTzcSHACLIlzj
- PYcuY2K5vfcaiCUy1BJohaZ3DbFXO/owlOdlzieZ4J/ucNm3d9x8AVED+NUICwVAVAcH
- 5fqQ==
-X-Gm-Message-State: AOJu0YxHPWEv0hBRvAiWgY91x6UnOobvepHqvNhvAQ6skOX8DoG1LscR
- yTgcW/1h6AblCdYBSAwCihw5k7os+n1ZYGsTAwzyd+wy2Q3/Sp28StWauoiQHx0=
-X-Google-Smtp-Source: AGHT+IHZ4lurPEkuLNMYpILU8krB/u3FRsAsHymHr2qrKPOtUcnM/uqG0e9lyMXpHiv1QojJtcSG2w==
-X-Received: by 2002:a05:6000:480f:b0:37d:47b7:f2f5 with SMTP id
- ffacd0b85a97d-3822590b8camr8170578f8f.4.1731881112181; 
- Sun, 17 Nov 2024 14:05:12 -0800 (PST)
-Received: from ?IPV6:2001:bb6:11e3:a300:da4d:c63d:b184:11d6?
- ([2001:bb6:11e3:a300:da4d:c63d:b184:11d6])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-382371a5646sm5424193f8f.0.2024.11.17.14.05.11
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 17 Nov 2024 14:05:11 -0800 (PST)
-Message-ID: <16261939-c409-48e2-b63c-12c8223acf9a@gmail.com>
-Date: Sun, 17 Nov 2024 22:05:10 +0000
+ id HTpmrmk7EASY for <buildroot@buildroot.org>;
+ Sun, 17 Nov 2024 22:09:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.41;
+ helo=smtpcmd0641.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D467661592
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D467661592
+Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D467661592
+ for <buildroot@buildroot.org>; Sun, 17 Nov 2024 22:09:00 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id CnRxtmDndDhSBCnRxtRVOv; Sun, 17 Nov 2024 23:08:58 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sun, 17 Nov 2024 22:54:29 +0100
+Message-Id: <20241117215429.136783-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, ju.o@free.fr
-Cc: buildroot@buildroot.org
-References: <20241025093248.2015508-1-robertoxmed@gmail.com>
- <20241025093248.2015508-2-robertoxmed@gmail.com>
- <20241104231424.4c39ed7d@windsurf>
-Content-Language: en-US
-From: Roberto Medina <robertoxmed@gmail.com>
-In-Reply-To: <20241104231424.4c39ed7d@windsurf>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1731881112; x=1732485912; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=n1T0crj7ZzkrKfIzFyIRgOL8BEQzcy1WG7s7nV0xr6k=;
- b=YZ/oo6gQOzT4zNvRp3Ptwkw5/F9Jix9BVJUCUQmWZN9NcLV4/C9I5KMto6051/Ib8z
- tVYrclDAHz6csYGcQg7BKAYOcL1Z0v6NOS9kiIxEcBjEhhlnUnOaFRfy0GPHZ296g8sO
- ajMeTHTCWIw5PtBr9m/NmOOfxc5oqYO6qkY+Ghfsa0d+CKdMsD8AOfxSv4stEltB9n90
- dSPYgiIjSNcDTPf08wi80qigqNwJN8erW/OXoEAoD8aC4r5YWlhUsAj2INYMqCngrs2D
- XeXVfjRXF+0NfHGKwuuIy0wPlqTwcWohco1layCjk7tYanzPO9PV56IWREjqdWeFNx+b
- zh7w==
+X-CMAE-Envelope: MS4xfIgzEqwh9//8M4svnAOA8MO4BWPOfSVXCEHu/xoSoUjOs6alQPIILh2uJ4ajwKVgUrUTo5nWzLmTFJ4Pt4R0fhC167yTaKfyfyJJp7e+epqXBYhatU+L
+ yrLzhAXPdML2rhNddWDbZyMcPiDaVjplmrXkqE6JJq1g8PI3yTlyK2q3SaNLHs8GFl56n5UAiPsXQU484VXCIS0xbxEC5yXvIQcOcZ43r4SInanj7dfXQRpb
+ PhJeX882rEEC+LeRMHBkGsDctjuxezP9kapw48Z+4ks=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1731881338; bh=Nr4ey3lbB/uZQhDbLGlPcYT1n4poDeXn360xgRGqcs8=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=eKoQhEos5HPSU5cZN1dyJTbprWFM8FcHev8D2nbbK+VluDcNVulqjTsXGzsWueUVV
+ 4EVlnTK3E0sGK0IkiYt0HsRmFoFJPYKq6NIEycxcUDPaFShTzAJUuw1PLb9bT4C0qP
+ aP013YFAMyXSqZ/U1RcOq/GiO4Y7+p0Egv/T3p3aiVblgVesZNnV0oDi5XDB8zdmbO
+ PBNc+V1+I/IMLt4Ojz6oKZ+ZVNvzvppNpnyQpicxCp/e5ejNIl84JfAxxLrs85smiR
+ B378Y9B+zktpNxEL8A0aYnQlX/u6jDejPqj8Rp1/JrteVb0qwfn9RDcJCtoop8EfU5
+ PFjIiHn8udsuQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=YZ/oo6gQ
-Subject: Re: [Buildroot] [PATCH v2 1/1] configs/roc_pc_rk3399: Bump Linux,
- U-Boot, TF-A
+ dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=eKoQhEos
+Subject: [Buildroot] [PATCH] package/libnvme: bump to version 1.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,25 +78,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas, Julien,
+For release note, see:
+https://github.com/linux-nvme/libnvme/releases/tag/v1.11.1
 
-On 11/4/24 10:14 PM, Thomas Petazzoni wrote:
-> Could you send a v3 without this change to uclibc, or provide an
-> explanation?
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libnvme/libnvme.hash | 2 +-
+ package/libnvme/libnvme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Had some issues building the image on the container with Glibc for some 
-reason. Probably a bad clean on my side when testing.
-
-Submitted a v3 reverting this change. Thanks for the feedback.
-
-Best regards,
-Roberto
-
+diff --git a/package/libnvme/libnvme.hash b/package/libnvme/libnvme.hash
+index 5c221b7dce..68546c76b4 100644
+--- a/package/libnvme/libnvme.hash
++++ b/package/libnvme/libnvme.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  f6da60036b14e0427246718a32abff442228331f9ae3853f89160cf366d83dfe  libnvme-1.11.tar.gz
++sha256  6d5d8ba2cc4c94a61a994c9f7f25b3b26ef973fb5c0daa37729890903f37a1f1  libnvme-1.11.1.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libnvme/libnvme.mk b/package/libnvme/libnvme.mk
+index b1039265df..fc7edda7ff 100644
+--- a/package/libnvme/libnvme.mk
++++ b/package/libnvme/libnvme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNVME_VERSION = 1.11
++LIBNVME_VERSION = 1.11.1
+ LIBNVME_SITE = $(call github,linux-nvme,libnvme,v$(LIBNVME_VERSION))
+ LIBNVME_LICENSE = LGPL-2.1
+ LIBNVME_LICENSE_FILES = COPYING
+-- 
+2.39.5
 
 _______________________________________________
 buildroot mailing list
