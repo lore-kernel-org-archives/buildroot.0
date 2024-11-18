@@ -1,88 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7697D43FE7
-	for <buildroot@archiver.kernel.org>; Mon, 18 Nov 2024 07:57:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3D99D4920C
+	for <buildroot@archiver.kernel.org>; Mon, 18 Nov 2024 11:20:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A57A84F31;
-	Mon, 18 Nov 2024 07:57:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4132242F3F;
+	Mon, 18 Nov 2024 11:20:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uaUY3DLKg753; Mon, 18 Nov 2024 07:57:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GCSMTJIfYP8u; Mon, 18 Nov 2024 11:20:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 806FD84F38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FD7242F2B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 806FD84F38;
-	Mon, 18 Nov 2024 07:57:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id DF8DEDB3
- for <buildroot@buildroot.org>; Mon, 18 Nov 2024 07:57:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FD7242F2B;
+	Mon, 18 Nov 2024 11:20:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3D857B14
+ for <buildroot@buildroot.org>; Mon, 18 Nov 2024 11:20:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA2648495F
- for <buildroot@buildroot.org>; Mon, 18 Nov 2024 07:57:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1DC9B80BE4
+ for <buildroot@buildroot.org>; Mon, 18 Nov 2024 11:20:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LBqopuY4LIHV for <buildroot@buildroot.org>;
- Mon, 18 Nov 2024 07:57:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.122;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A1AB584F34
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1AB584F34
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.122])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A1AB584F34
- for <buildroot@buildroot.org>; Mon, 18 Nov 2024 07:57:05 +0000 (UTC)
-Received: from unknown (HELO opfedv3rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 18 Nov 2024 08:57:02 +0100
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0c.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 18 Nov 2024 08:57:02 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Mon, 18 Nov 2024 08:57:01 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Mon, 18 Nov 2024 08:57:01 +0100
-X-IronPort-AV: E=Sophos;i="6.12,163,1728943200"; d="scan'208";a="223942447"
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-CC: <yann.morin@orange.com>
-Date: Mon, 18 Nov 2024 08:57:00 +0100
-Message-ID: <33d2cab38fd2a37a7240b00b0391de8244c5b58f.1731916620.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
+ id 3e0wZfXgI1Wp for <buildroot@buildroot.org>;
+ Mon, 18 Nov 2024 11:20:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 244FE80B85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 244FE80B85
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 244FE80B85
+ for <buildroot@buildroot.org>; Mon, 18 Nov 2024 11:20:39 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.113.37]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MQMyZ-1tQ0O320kz-00UebC; Mon, 18
+ Nov 2024 12:20:34 +0100
+To: buildroot@buildroot.org
+Date: Mon, 18 Nov 2024 12:20:07 +0100
+Message-ID: <20241118112007.3120799-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX104.corporate.adroot.infra.ftgroup (10.115.26.5)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
+X-Provags-ID: V03:K1:HHfBxInTpZFulRIElM3ZR1fJugQdqg51FR30bX6BNaTVjTk1oPp
+ Y51+Rc7YG9KwRfS/mOC7TGf4FsuJRz1m1tFeRT9CbEipnRaHRD9lOvKP6yO5VBljYmeXfEo
+ rtbgaOIjujFJmMkpEGN+HEQhwmofRkjXilkwt5xatZknT9kDw/rpN+Dpr5HMKzGKC0Onnr7
+ 1RWJCaJh9xV+d0KNv582w==
+UI-OutboundReport: notjunk:1;M01:P0:j29sb7rse3U=;wcjlvm307V02jsurrIajtgXSPiH
+ lrTCxj2EWHygFT+P3/TRpGy18m1c/R3Ke6YBM8fBgzos4ykD2zgADF3ITfEzKVwmiKv3YfVaK
+ UZ7FrqYuuaoTpwQKL9Gd8tDdEUxNaeNQM3RSuUJ9krbCttIk8KGwRRC616ZNN2o8y8kau4WNs
+ Bqht6KFPZno4B9mElXLHplxPHEOXuIQSrCd+b6/cAVIyQtEEFtzh+pqiNN6zemLyaWNC7SVV2
+ lGmEliOk+67fmvFVwUZTIdYsRROg28RULE8Ly9NnpSlHUuPzdPq3A2bgdphhfcp64VA6Gqz5d
+ xp0fGidMiqozi5E7O4hOlSfsFUY+FcXK1xynxnpuJ8zDpkl9RsSMgEXRlf0S+X6GtVlHsO7Q2
+ eL/uNoFQ3o6URdl9fWpK673hZlMYwH9np01KWbFCOurQ9RCsNIUPrd6Mtg4WwATb5/9tsm5Gk
+ TRs8rMpSFCUtl2gxg0XUPPCI8DlYSn1+75D0Dnkn6+zhgThi1AaOrv+i3mDwlIyNLDVFvZRsC
+ VqbIFXy7SbLdNiBjubrAAyYq5nnWNrQvMgN+Xo+Fzzc9CDWUOZHdKa6W4tq06fW3OlUPbDLDW
+ H4k5jUEGZj5I5e5WCIexVTbtLkpHxHAWyI/+DWFnrlRpYTbE2IjUej1a5+LrjK9zV93snzYrh
+ UhCzD776LF0G66rOTQJYJVWm0TKDlN2HM4iyH97hjvXBprX9Y5Y+1mbGvd4C91otJ2Lnix7sm
+ Nc+ko2mPcb25/nYjGykoj2WZVvbqVqD2bHoJfznrY8naaWsP0tqc2zrCIl+jRw62wWRIQNOa8
+ GdnUtzViCjGXa9Pnc36qlHHuILgb4sqJAbVVG/76fJH+duxA41X8KsU8sqIJ0e83+WHIgCKwJ
+ 56yysXA0UEJs7UUi8m2K026BxodqfpLrIfpQ6U/npyhIoa+GWhsmDW3qj
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1731916625; x=1763452625;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=8m/LNclqxEXh3cDEeyLP2v3zock9M4ekTArBiGIlIgs=;
- b=EFmyK+NVMLJ+FwewlDs2pjzLg5fGF94fgAR0TSLBpC4kgZ9wAJoX2BJ4
- RBlcWM6ChWAj1iaU0z77qWt4RBz/fQNzctUV8pwmdtnGbsRiJxHvgxQ12
- 1pfBdxTT4bzOtcNACI45/il0D5fld/5P/iGTej3oTLnmvCp1ZA4x+d5ZQ
- lLvkCGUDANM1/YZPQHw/wYsjZ6s3r9H3faLaGXUZtETjFfvrMENwqfjg5
- gHPOJj2H9WpL1A0sNeZl1iB7qssvj7/HfVFOGKKCnCLZ7Z/XNWcQZJt4L
- IBKhyKBQy2MVYqSDH+8LEL10oRwzb0wRg4qjMRr9L1jfXoDknb3YsO2ph
- g==;
+ d=gmx.de; 
+ s=s31663417; t=1731928834; x=1732533634; i=fiona.klute@gmx.de;
+ bh=v9gN3ZpZqytyvTAnhzBQ/ASc9r+iS7kH/5SAcTyHDiQ=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=msLbA6yndGKyoUzWas4zLUkfzJozdx/YRhZ2/l4ZQlsEZix5OLmv3mUl7vZ1avOl
+ e6vtm8Z/s3fMndM5XRioojA7n54RPmYqmt6EcP1rCDMVvKJKr0oeGH18l4r5OUDE2
+ hWPmCtwNUXJqOW+jb8q8IVCX+xKGSENJ0zbmWzNhoch9EElUDNcA/9IO4yFvT9y00
+ SihzxtdTZTUsYf3M0LSai/KeIVs163wbIKcAABQgQHXJSGX+GWDBIZvk+7NW6tADZ
+ 1yqdVbwhbQUDGguMxq2s7AWG/X4PndFb/XJMYshkzAYilpGIaywTtIeUvuNXOhKHN
+ HUzhzEkkjXdpEFFioA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=EFmyK+NV
-Subject: [Buildroot] [PATCH] package/skopeo: bump to version 1.17.0
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=msLbA6yn
+Subject: [Buildroot] [PATCH 1/1] package/bmap-tools: select host-python3 if
+ building host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,55 +97,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Host bmap-tools runs using host-python3, but did not select it,
+leading to the confusing situation that BR2_PACKAGE_HOST_PYTHON3=n
+even though it was built and working.
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- package/skopeo/skopeo.hash | 2 +-
- package/skopeo/skopeo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bmap-tools/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/skopeo/skopeo.hash b/package/skopeo/skopeo.hash
-index c523dea46a..684232b350 100644
---- a/package/skopeo/skopeo.hash
-+++ b/package/skopeo/skopeo.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9402e71f3fba979d0c0509240b963847bfeda2eac60be83eb5a628fd67d098e6  skopeo-1.16.1-go2.tar.gz
-+sha256  e548c044c7b644ba455f482df387ec90aceea432b9c61a0bab0ec8534970eb69  skopeo-1.17.0-go2.tar.gz
- sha256  716a8b80635c394681e652823e1e42e411ad2d254e1f202403422d74f4b0b106  LICENSE
-diff --git a/package/skopeo/skopeo.mk b/package/skopeo/skopeo.mk
-index e2f7b8e889..2e0cb8e1cc 100644
---- a/package/skopeo/skopeo.mk
-+++ b/package/skopeo/skopeo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SKOPEO_VERSION = 1.16.1
-+SKOPEO_VERSION = 1.17.0
- SKOPEO_SITE = $(call github,containers,skopeo,v$(SKOPEO_VERSION))
- 
- SKOPEO_LICENSE = Apache-2.0
+diff --git a/package/bmap-tools/Config.in.host b/package/bmap-tools/Config.in.host
+index cb4d35a437..499f9d177d 100644
+--- a/package/bmap-tools/Config.in.host
++++ b/package/bmap-tools/Config.in.host
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_HOST_BMAP_TOOLS
+ 	bool "host bmap-tools"
++	select BR2_PACKAGE_HOST_PYTHON3 # runtime
+ 	select BR2_PACKAGE_HOST_PYTHON_SIX # runtime
+ 	help
+ 	  Tool to flash image files to block devices using the block map
 -- 
-2.34.1
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.45.2
 
 _______________________________________________
 buildroot mailing list
