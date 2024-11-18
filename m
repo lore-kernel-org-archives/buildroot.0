@@ -4,68 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4DA8D60CFA
-	for <buildroot@archiver.kernel.org>; Mon, 18 Nov 2024 23:24:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23815D60CF8
+	for <buildroot@archiver.kernel.org>; Mon, 18 Nov 2024 23:41:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CA8060890;
-	Mon, 18 Nov 2024 23:24:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B687C605F4;
+	Mon, 18 Nov 2024 23:41:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LlYOvGaey4SY; Mon, 18 Nov 2024 23:24:33 +0000 (UTC)
+ id fXxjrqfl3Fwz; Mon, 18 Nov 2024 23:41:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 851396089B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB48D60874
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 851396089B;
-	Mon, 18 Nov 2024 23:24:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 308A327EB
- for <buildroot@buildroot.org>; Mon, 18 Nov 2024 23:24:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB48D60874;
+	Mon, 18 Nov 2024 23:41:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DDB1BDB2
+ for <buildroot@buildroot.org>; Mon, 18 Nov 2024 23:41:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D0708001C
- for <buildroot@buildroot.org>; Mon, 18 Nov 2024 23:24:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE59840186
+ for <buildroot@buildroot.org>; Mon, 18 Nov 2024 23:41:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LBOFBWBR904S for <buildroot@buildroot.org>;
- Mon, 18 Nov 2024 23:24:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3EB2D84D6A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3EB2D84D6A
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3EB2D84D6A
- for <buildroot@buildroot.org>; Mon, 18 Nov 2024 23:24:30 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id E9F6DB0055A;
- Tue, 19 Nov 2024 00:24:25 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Cc: "Yann E . MORIN" <yann.morin@orange.com>,
-	Julien Olivain <ju.o@free.fr>
-Date: Tue, 19 Nov 2024 00:24:20 +0100
-Message-ID: <20241118232420.3166108-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.47.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5HV6w172UnoX for <buildroot@buildroot.org>;
+ Mon, 18 Nov 2024 23:41:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 67C1840170
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67C1840170
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 67C1840170
+ for <buildroot@buildroot.org>; Mon, 18 Nov 2024 23:41:40 +0000 (UTC)
+Received: from L25025.local (unknown
+ [IPv6:2a01:e0a:2af:22b0:c4ca:84b0:902:f281])
+ (Authenticated sender: vjardin@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 0DDF85FFAA;
+ Tue, 19 Nov 2024 00:41:35 +0100 (CET)
+Date: Tue, 19 Nov 2024 00:41:34 +0100
+From: Vincent Jardin <vjardin@free.fr>
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org, Olivier Matz <zer0@droids-corp.org>, 
+ robin@jarry.cc
+Message-ID: <egtut4qkub4u4bruoraffjyszw57jwso2m64h57hf2tlaf6znz@vogkglwpkttn>
+References: <31efd2663d1b8e193e49c0cc76113384@free.fr>
+ <20241117201744.31404-1-vjardin@free.fr>
+ <f878eb52507a883446a6a4284656b9ef@free.fr>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <f878eb52507a883446a6a4284656b9ef@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1731972268;
- bh=U6mXnUMcApV5EGNQKy9PLsnphPOmo4gW87MM2pGcoT4=;
- h=From:To:Cc:Subject:Date:From;
- b=M180FpT0Y+JC/FwUTqWbdH4LlfaLyUnWtldewhimlS1GmTZaw1lkJcXeXFdWmnzah
- DYIRZ/0TZlBdEXd3stED1nu0FoWG6butIkiPEBLMuO/jhbAqFNUQtm4rzTR6wav0HL
- Sr09kgmvPDpx1F5LDNb/EpzGkNuyN7hTWXIKYc/JA6ELcu9Lk+QbXAx39qPYFY0ZN4
- XXOdC08uuPSNfLup4rjWywLXBG6v4LddGbRu+SyLnTvQkOQ5qUDa3LtdKriHKH3lSM
- T13YbQz8XRZezKTo6ETTQs0c7mYZl7i2Jfu6oXtGYYNkl1yARomiTq6De7rBP4Fbgr
- RQHo7TSQRoPCw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1731973298;
+ bh=T9lkTsaaFykyMMT0xdlIrib+fgmri5cJhYHmwEN5OqA=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=aICzjTVSVVK09y8fHd6kQETNC75Wf4hCpgnaYgurhrONin93/m7ruFsKfNQEqCwAq
+ yXVWQhgKkFCcQ+1709c1eJK1UVTVeV/vEMFyfuCxsS1jHQr6Pvg5ba2P+qp6j/yH0R
+ Yticz7warllJ+ckUVp0wLUNj3e/0RKynDBvydxDlSaaH+ipdjugKL7LarMhwo4tTsK
+ JvGmoihdRq/9oy866cn+DWDr6s2mCXEZgYaFsrsoQTUQZaEddYShSjUJdXh4izLLYG
+ DdSZ10LYcleLg2hiLypwKXZUzCl8pjZZJ5eTGkYL/QFaip9mjndH4pjvoFUGptidPK
+ hPwkR4gB+Onuw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=M180FpT0
-Subject: [Buildroot] [PATCH 1/1] package/skopeo: select BR2_PACKAGE_HOST_GO
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=aICzjTVS
+Subject: Re: [Buildroot] [PATCH 1/1] package/libecoli: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,39 +87,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-host-skopeo fail to build, using the commands:
+Hi Julien,
 
-    echo BR2_PACKAGE_HOST_SKOPEO=y >.config
-    make olddefconfig
-    make host-skopeo
+On Mon, Nov 18, 2024 at 11:40:20PM UTC, Julien Olivain wrote:
+> I applied this patch to next.
 
-This commit fixes the issue by selecting BR2_PACKAGE_HOST_GO
-in the Config.in file.
+Thank you
 
-Fixes:
+> 
+> After doing some testing, I had to rework it a bit. See:
+> https://gitlab.com/buildroot.org/buildroot/-/commit/ba65c4dd4b0745eecd5692bbeba82907cb0df5eb
 
-    make: *** No rule to make target 'host-', needed by '/buildroot/output/build/host-go-1.23.2/.stamp_configured'.  Stop.
+Which tests lead to those udpates of Config.in ? How could I have
+detected it ?
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/skopeo/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+> Now, I'm expecting to see a patch proposal for dpdk/grout ;)
 
-diff --git a/package/skopeo/Config.in.host b/package/skopeo/Config.in.host
-index 334a12b6fc..1c1c8f3ebe 100644
---- a/package/skopeo/Config.in.host
-+++ b/package/skopeo/Config.in.host
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_HOST_SKOPEO
- 	bool "host skopeo"
- 	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS
-+	select BR2_PACKAGE_HOST_GO
- 	help
- 	  skopeo is a command line utility that performs various
- 	  operations on container images and image repositories.
--- 
-2.47.0
+I need to wait for the next DPDK release, grout has some dependencies on
+rte_ip6.h which is not available into the release supported by Buildroot
+yet. I could not find a proper workaround yet, so it'll be easier to
+wait for the next release.
 
+If you want, I can submit a RFC/Request For Comment patch but you should
+wait before merging it.
+
+Meanwhile, I'd like to submit some few updates on libecoli, maybe DPDK and
+there are some few dependencies on mstflint that are pending
+  https://patchwork.ozlabs.org/project/buildroot/list/?submitter=89131
+
+Best regards,
+  Vincent
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
