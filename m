@@ -4,72 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C4BBD591B2
-	for <buildroot@archiver.kernel.org>; Mon, 18 Nov 2024 20:26:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35AC0D591B2
+	for <buildroot@archiver.kernel.org>; Mon, 18 Nov 2024 20:52:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F394060E68;
-	Mon, 18 Nov 2024 20:26:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C0046088F;
+	Mon, 18 Nov 2024 20:52:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7jjJYS59wSVM; Mon, 18 Nov 2024 20:26:53 +0000 (UTC)
+ id Vm3UoqedcA1o; Mon, 18 Nov 2024 20:52:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0091660B3F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23A6C60805
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0091660B3F;
-	Mon, 18 Nov 2024 20:26:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9431427EB
- for <buildroot@buildroot.org>; Mon, 18 Nov 2024 20:26:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 23A6C60805;
+	Mon, 18 Nov 2024 20:52:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 40535DB3
+ for <buildroot@buildroot.org>; Mon, 18 Nov 2024 20:52:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7515985040
- for <buildroot@buildroot.org>; Mon, 18 Nov 2024 20:26:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A15F4058E
+ for <buildroot@buildroot.org>; Mon, 18 Nov 2024 20:52:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I3pUuzy-ecST for <buildroot@buildroot.org>;
- Mon, 18 Nov 2024 20:26:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EC8B085037
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC8B085037
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EC8B085037
- for <buildroot@buildroot.org>; Mon, 18 Nov 2024 20:26:49 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1ba79.dip0.t-ipconnect.de [84.161.186.121])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 09727A4C0D8F
- for <buildroot@buildroot.org>; Mon, 18 Nov 2024 21:26:46 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:41606)
- by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1tD8Kc-000000005Ev-0WRB
- for buildroot@buildroot.org; Mon, 18 Nov 2024 20:26:45 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jpfViFALobRP for <buildroot@buildroot.org>;
+ Mon, 18 Nov 2024 20:51:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1C18400FF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D1C18400FF
+ for <buildroot@buildroot.org>; Mon, 18 Nov 2024 20:51:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BAF2B86425; Mon, 18 Nov 2024 20:51:58 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 18 Nov 2024 21:26:45 +0100
-Message-Id: <20241118202645.152204-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202406071026; t=1731961606;
- bh=9eN6RXJDZzD0YTH3Llf6tGSqCmmrUk9ismjPhyV8vFc=;
- h=From:To:Subject:Date:From;
- b=lcCePPa5UDKvxU6pPXPeVXOq1dlalSqIuYp/z6Za3UW+0CWMQ/xu4MpQ5TGmcIvyu
- wVeceiBtySoDLRFzdZliomZl773WlHGln5mbp2pFvepc19Fm4ZI9ep3gbG5zBxq228
- 9cqdUdtR5m7otM9R6wQFt+rvVyb8AXae7EVfaa/uzL583PX/eBhs/gFfqFmXQ3doT5
- Kvx0nYKBS/nazmMyDYzzzUlqNdl6jP6wGxdzsuz/EuONwUE8fcDlPQWLsQekmCfQnZ
- a8WZ7GlybboLaHjMN7nlXDRevcHojew42Nov/LJoe3Xy86L3a8Wl3VeVTY1iUocsdR
- oUWMHcJwrb6MQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202406071026 header.b=lcCePPa5
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.19.x / 5.{4,
- 10, 15}.x / 6.{1, 6, 11}.x series
+Date: Mon, 18 Nov 2024 21:24:35 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 9a9e49fcb3fb288aa60fc73c8bf6c8bc190ae4ab
+X-Git-Newrev: f59f69e0e01e2ece4c2e57cc0c371e017c36fe29
+X-Patchwork-Hint: ignore
+Message-Id: <20241118205158.BAF2B86425@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/roc_pc_rk3399: Bump
+ Linux, U-Boot, TF-A
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,84 +59,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=f59f69e0e01e2ece4c2e57cc0c371e017c36fe29
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+- Bump Linux to 6.6.56 (LTS).
+- Bump U-Boot to 2024.07, so it contains commit ebb0ad4eef0a ("arch: arm:
+mach-rockchip: Kconfig: Enable BOOTSTD_FULL for RK3399 and RK3588").
+- Bump TF-A to 2.11.
+- Enable hash checking: BR2_DOWNLOAD_FORCE_CHECK_HASHES.
+- Add relevant hashes in the patches folder for the board.
+
+Signed-off-by: Roberto Medina <robertoxmed@gmail.com>
+[Julien: update .checkpackageignore]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ .checkpackageignore                                            |  1 -
+ .../patches/arm-trusted-firmware/arm-trusted-firmware.hash     |  2 ++
+ .../roc-rk3399-pc/patches/linux-headers/linux-headers.hash     |  1 +
+ board/firefly/roc-rk3399-pc/patches/linux/linux.hash           |  2 ++
+ board/firefly/roc-rk3399-pc/patches/uboot/uboot.hash           |  2 ++
+ configs/roc_pc_rk3399_defconfig                                | 10 ++++++----
+ 6 files changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 5e5df7eb40..62f0b06d7b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -134,7 +134,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.11.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.11.9" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 7bb05dee49..07c1ce7e4f 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  0bf5ec644817d7928920f763581311f5bf258a92759cf2f30985da743af3ebb2  linux-6.11.7.tar.xz
--sha256  52f9e32d5082ab94253447fd66670d0c3bb765cfcb99b0bf61d1b8eae25952ef  linux-6.6.60.tar.xz
--sha256  17eb68336ee2a8f34378bf6089ffe8f805b978eda314c299d2a63b0603833b81  linux-6.1.116.tar.xz
-+sha256  75658a7aa3bd9598c96ee1e5862c5e1d34fced75c28d825c727a1510a6f384b4  linux-6.11.9.tar.xz
-+sha256  e2c35611775534941b9d4dd871f3ae5b988b6594dc9033b5ca784366e07d9336  linux-6.6.62.tar.xz
-+sha256  010784bd7161c32c4cd68a423d4dcb14e4587677d238b2825a31fe012869224c  linux-6.1.118.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  2953e064d8123c4c22c4fd48011378d73c8b99a3bf3d989e33f4f5c8f82f2a3b  linux-5.15.171.tar.xz
--sha256  08a6b5e6bbff85ef017f67b722f6beec7f12fe36fc0f9043f27a91990b88cde0  linux-5.10.229.tar.xz
--sha256  be32c37ef2f6f724fa13acf43cbc9aacfd3acef58964923dae5daa6206d3429c  linux-5.4.285.tar.xz
-+sha256  8a4b2a47ccc9b208b2b6ed9a216ea1a5eb12852c723bec1a04de9e671a1d7da8  linux-5.15.173.tar.xz
-+sha256  cd1850ef3b771886df4e0b4c4eb07033864abab2bb553a20fd9e3cdc23584b47  linux-5.10.230.tar.xz
-+sha256  180754f3df0e8d7f206625255b3f5a6e1f441feec83336df42613ca8f6b1887c  linux-5.4.286.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  eec9215fbac649d826fda9d3421da47aebd3c4e69e060e5106d32e309a9b6a1c  linux-4.19.323.tar.xz
-+sha256  90e140ad2d07da88b43d5930cfda7bffc5c121660e9d8a86d96a9efe4d87ffe6  linux-4.19.324.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index a58f54138a..f74802adc9 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -428,13 +428,13 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.19.323"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.285"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.229"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.171"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.116"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.60"	if BR2_KERNEL_HEADERS_6_6
--	default "6.11.7"	if BR2_KERNEL_HEADERS_6_11
-+	default "4.19.324"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.286"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.230"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.173"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.118"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.62"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.11.9"	if BR2_KERNEL_HEADERS_6_11
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
--- 
-2.39.5
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index b793026881..959bb822d3 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -220,7 +220,6 @@ configs/pine64_pinecube_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_sopine_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_star64_defconfig lib_defconfig.ForceCheckHash
+ configs/riotboard_defconfig lib_defconfig.ForceCheckHash
+-configs/roc_pc_rk3399_defconfig lib_defconfig.ForceCheckHash
+ configs/rock64_defconfig lib_defconfig.ForceCheckHash
+ configs/rock_pi_n8_defconfig lib_defconfig.ForceCheckHash
+ configs/roseapplepi_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/firefly/roc-rk3399-pc/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/firefly/roc-rk3399-pc/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+new file mode 100644
+index 0000000000..8b77e1f165
+--- /dev/null
++++ b/board/firefly/roc-rk3399-pc/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  c0f23ccc71c49989e9ad238acf334473c17b7c88f79a20c829c3d443e3794a22  arm-trusted-firmware-v2.11-git4.tar.gz
+diff --git a/board/firefly/roc-rk3399-pc/patches/linux-headers/linux-headers.hash b/board/firefly/roc-rk3399-pc/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/firefly/roc-rk3399-pc/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/firefly/roc-rk3399-pc/patches/linux/linux.hash b/board/firefly/roc-rk3399-pc/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..98edd13a58
+--- /dev/null
++++ b/board/firefly/roc-rk3399-pc/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  f74812f78e88992c416434cb107639e13a551dbaff36bb90d6346ab16ab71a95  linux-6.6.56.tar.xz
+diff --git a/board/firefly/roc-rk3399-pc/patches/uboot/uboot.hash b/board/firefly/roc-rk3399-pc/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..fe9b4f53dc
+--- /dev/null
++++ b/board/firefly/roc-rk3399-pc/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
+diff --git a/configs/roc_pc_rk3399_defconfig b/configs/roc_pc_rk3399_defconfig
+index 1323752683..145e155fac 100644
+--- a/configs/roc_pc_rk3399_defconfig
++++ b/configs/roc_pc_rk3399_defconfig
+@@ -1,6 +1,8 @@
+ BR2_aarch64=y
+ BR2_cortex_a72_a53=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_GLOBAL_PATCH_DIR="board/firefly/roc-rk3399-pc/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="roc-rk3399-pc"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to ROC-RK3399-PC!"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/firefly/roc-rk3399-pc/post-build.sh"
+@@ -8,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/firefly/roc-rk3399-pc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.61"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.56"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-roc-pc"
+@@ -21,14 +23,14 @@ BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O 64bit"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.9"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.11"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="roc-pc-rk3399"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
