@@ -4,76 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62066D591B6
-	for <buildroot@archiver.kernel.org>; Mon, 18 Nov 2024 20:55:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66C2DD60CE5
+	for <buildroot@archiver.kernel.org>; Mon, 18 Nov 2024 21:30:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3BB940220;
-	Mon, 18 Nov 2024 20:55:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F197342F4B;
+	Mon, 18 Nov 2024 21:30:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1fM-uB0_2cUp; Mon, 18 Nov 2024 20:55:05 +0000 (UTC)
+ id ajX7iH1WMuav; Mon, 18 Nov 2024 21:30:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B05540223
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FDE442EFC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B05540223;
-	Mon, 18 Nov 2024 20:55:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E0DF2DB3
- for <buildroot@buildroot.org>; Mon, 18 Nov 2024 20:55:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FDE442EFC;
+	Mon, 18 Nov 2024 21:30:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3C719DB3
+ for <buildroot@buildroot.org>; Mon, 18 Nov 2024 21:30:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DBDF681329
- for <buildroot@buildroot.org>; Mon, 18 Nov 2024 20:55:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 89FC942E69
+ for <buildroot@buildroot.org>; Mon, 18 Nov 2024 21:30:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DuzddZC2IR9J for <buildroot@buildroot.org>;
- Mon, 18 Nov 2024 20:55:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 69D9D81325
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69D9D81325
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 69D9D81325
- for <buildroot@buildroot.org>; Mon, 18 Nov 2024 20:55:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5JzcU3Z7kv19 for <buildroot@buildroot.org>;
+ Mon, 18 Nov 2024 21:30:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4F27842F0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F27842F0A
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4F27842F0A
+ for <buildroot@buildroot.org>; Mon, 18 Nov 2024 21:30:33 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id D6FAEB0053E;
- Mon, 18 Nov 2024 21:54:58 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:50208])
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id BADD32003B4;
+ Mon, 18 Nov 2024 22:30:28 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:37642])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 18 Nov 2024 21:54:58 +0100
+ with HTTP (HTTP/1.0 POST); Mon, 18 Nov 2024 22:30:28 +0100
 MIME-Version: 1.0
-Date: Mon, 18 Nov 2024 21:54:58 +0100
+Date: Mon, 18 Nov 2024 22:30:28 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: Roberto Medina <robertoxmed@gmail.com>
+To: yann.morin@orange.com
 Cc: buildroot@buildroot.org
-In-Reply-To: <20241117220500.584642-2-robertoxmed@gmail.com>
-References: <20241117220500.584642-1-robertoxmed@gmail.com>
- <20241117220500.584642-2-robertoxmed@gmail.com>
+In-Reply-To: <33d2cab38fd2a37a7240b00b0391de8244c5b58f.1731916620.git.yann.morin@orange.com>
+References: <33d2cab38fd2a37a7240b00b0391de8244c5b58f.1731916620.git.yann.morin@orange.com>
 User-Agent: Webmail Free/1.6.9
-Message-ID: <8ad05d9774584d398fab6e43dc1bd3ca@free.fr>
+Message-ID: <d4b2a6d01129df0ace236f20b58e19e1@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1731963300;
- bh=p4qiEZisghYzJUagcMX+2qu29abOBB0pZy2mT72+Fvw=;
+ d=free.fr; s=smtp-20201208; t=1731965429;
+ bh=+66Qq2oADImmytcCijBu8FZQaAczw7ASsLFeTvhIJT8=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=WTnDzpZppKiud4n1xzkr7Fz+tLqqE7/jcN3Wn38+53ivid0IrzUmiWHdYMbo3j1k8
- TpYmF1Emxt+qX1S9ttULcHGShk53FPXWPEpd0xNX2PZCJvksntHHDJyjo8BpwTHlSC
- JnjNXpUGhEOOci96uv8Hywb1LPBDKqhrTc8Gv76WhJLr7SIL80Ehe4mgP80oYmypto
- cG4sGqv2TR15ktlu+fulXFsywsUzhnjPVk2RsB/Drg4PsSs0z1m9NADorSVIcMfc0h
- yUXSYSfsXnNKKJ+s559V9JxW0Zl/Uks40enKZnP1ryxDk/EkPKKgh3HHRaxqkDOcu2
- KgSf1c1D8b54g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=SF3f1PJs33tc0xl7sEHxVsfhkCoabsuPIc7llEJL0BdwpNwqMwFeXSzd0/J3tzQuM
+ YLcA3yNFj9C5nHwU0s00RtXi2XmTEhte8ZAWrL/GXD1R5MyI5AVVqcKXEO98P2B6XY
+ cg2EjdLNrzibaxnVU0Gf6/ViUVkRXW2l2GUI/beVmJrF1aj4ZzchAmyLHmfRM/Ant4
+ 12p3SBDMQjG22CEOOLUKOpy1NtowinXbGYemYrHdXuADKc09ysEYmCB+3Kz70H7OLT
+ /rKkKTsrve63Vy4t4TU3pmxVzqOGPSdQEbs0xDOCxw0/F1RxIXBjfNdcW1KfWPc/UI
+ 4gmqL0XaHpvpA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=WTnDzpZp
-Subject: Re: [Buildroot] [PATCH v3 1/1] configs/roc_pc_rk3399: Bump Linux,
- U-Boot, TF-A
+ header.s=smtp-20201208 header.b=SF3f1PJs
+Subject: Re: [Buildroot] [PATCH] package/skopeo: bump to version 1.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,138 +88,73 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Roberto,
-
-On 17/11/2024 23:05, Roberto Medina wrote:
-> - Bump Linux to 6.6.56 (LTS).
-> - Bump U-Boot to 2024.07, so it contains commit ebb0ad4eef0a ("arch: 
-> arm:
-> mach-rockchip: Kconfig: Enable BOOTSTD_FULL for RK3399 and RK3588").
-> - Bump TF-A to 2.11.
-> - Enable hash checking: BR2_DOWNLOAD_FORCE_CHECK_HASHES.
-> - Add relevant hashes in the patches folder for the board.
+On 18/11/2024 08:57, yann.morin@orange.com wrote:
+> From: "Yann E. MORIN" <yann.morin@orange.com>
 > 
-> Signed-off-by: Roberto Medina <robertoxmed@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 
-Applied to next, thanks.
-
-Side note: I updated .checkpackageignore, due to a
-"make check-package" error.
-
-Also, another comment, see below.
+Applied to next, thanks!
 
 > ---
->  .../arm-trusted-firmware/arm-trusted-firmware.hash     |  2 ++
->  .../patches/linux-headers/linux-headers.hash           |  1 +
->  board/firefly/roc-rk3399-pc/patches/linux/linux.hash   |  2 ++
->  board/firefly/roc-rk3399-pc/patches/uboot/uboot.hash   |  2 ++
->  configs/roc_pc_rk3399_defconfig                        | 10 ++++++----
->  5 files changed, 13 insertions(+), 4 deletions(-)
->  create mode 100644 
-> board/firefly/roc-rk3399-pc/patches/arm-trusted-firmware/arm-trusted-firmware.hash
->  create mode 120000 
-> board/firefly/roc-rk3399-pc/patches/linux-headers/linux-headers.hash
->  create mode 100644 
-> board/firefly/roc-rk3399-pc/patches/linux/linux.hash
->  create mode 100644 
-> board/firefly/roc-rk3399-pc/patches/uboot/uboot.hash
+>  package/skopeo/skopeo.hash | 2 +-
+>  package/skopeo/skopeo.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git 
-> a/board/firefly/roc-rk3399-pc/patches/arm-trusted-firmware/arm-trusted-firmware.hash 
-> b/board/firefly/roc-rk3399-pc/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-> new file mode 100644
-> index 0000000000..8b77e1f165
-> --- /dev/null
-> +++ 
-> b/board/firefly/roc-rk3399-pc/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
+> diff --git a/package/skopeo/skopeo.hash b/package/skopeo/skopeo.hash
+> index c523dea46a..684232b350 100644
+> --- a/package/skopeo/skopeo.hash
+> +++ b/package/skopeo/skopeo.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  
+> 9402e71f3fba979d0c0509240b963847bfeda2eac60be83eb5a628fd67d098e6  
+> skopeo-1.16.1-go2.tar.gz
 > +sha256  
-> c0f23ccc71c49989e9ad238acf334473c17b7c88f79a20c829c3d443e3794a22  
-> arm-trusted-firmware-v2.11-git4.tar.gz
-> diff --git 
-> a/board/firefly/roc-rk3399-pc/patches/linux-headers/linux-headers.hash 
-> b/board/firefly/roc-rk3399-pc/patches/linux-headers/linux-headers.hash
-> new file mode 120000
-> index 0000000000..5808d92afe
-> --- /dev/null
-> +++ 
-> b/board/firefly/roc-rk3399-pc/patches/linux-headers/linux-headers.hash
-> @@ -0,0 +1 @@
-> +../linux/linux.hash
-> \ No newline at end of file
-> diff --git a/board/firefly/roc-rk3399-pc/patches/linux/linux.hash 
-> b/board/firefly/roc-rk3399-pc/patches/linux/linux.hash
-> new file mode 100644
-> index 0000000000..98edd13a58
-> --- /dev/null
-> +++ b/board/firefly/roc-rk3399-pc/patches/linux/linux.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256  
-> f74812f78e88992c416434cb107639e13a551dbaff36bb90d6346ab16ab71a95  
-> linux-6.6.56.tar.xz
-> diff --git a/board/firefly/roc-rk3399-pc/patches/uboot/uboot.hash 
-> b/board/firefly/roc-rk3399-pc/patches/uboot/uboot.hash
-> new file mode 100644
-> index 0000000000..fe9b4f53dc
-> --- /dev/null
-> +++ b/board/firefly/roc-rk3399-pc/patches/uboot/uboot.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256  
-> f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  
-> u-boot-2024.07.tar.bz2
-> diff --git a/configs/roc_pc_rk3399_defconfig 
-> b/configs/roc_pc_rk3399_defconfig
-> index 1323752683..145e155fac 100644
-> --- a/configs/roc_pc_rk3399_defconfig
-> +++ b/configs/roc_pc_rk3399_defconfig
-> @@ -1,6 +1,8 @@
->  BR2_aarch64=y
->  BR2_cortex_a72_a53=y
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-> +BR2_GLOBAL_PATCH_DIR="board/firefly/roc-rk3399-pc/patches"
-> +BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
->  BR2_TARGET_GENERIC_HOSTNAME="roc-rk3399-pc"
->  BR2_TARGET_GENERIC_ISSUE="Welcome to ROC-RK3399-PC!"
+> e548c044c7b644ba455f482df387ec90aceea432b9c61a0bab0ec8534970eb69  
+> skopeo-1.17.0-go2.tar.gz
+>  sha256  
+> 716a8b80635c394681e652823e1e42e411ad2d254e1f202403422d74f4b0b106  
+> LICENSE
+> diff --git a/package/skopeo/skopeo.mk b/package/skopeo/skopeo.mk
+> index e2f7b8e889..2e0cb8e1cc 100644
+> --- a/package/skopeo/skopeo.mk
+> +++ b/package/skopeo/skopeo.mk
+> @@ -4,7 +4,7 @@
+>  #
 >  
-> BR2_ROOTFS_POST_BUILD_SCRIPT="board/firefly/roc-rk3399-pc/post-build.sh"
-> @@ -8,7 +10,7 @@ 
-> BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->  BR2_ROOTFS_POST_SCRIPT_ARGS="-c 
-> board/firefly/roc-rk3399-pc/genimage.cfg"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.61"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.56"
->  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-roc-pc"
-> @@ -21,14 +23,14 @@ BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O 64bit"
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
->  
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
-
-The default TF-A repo url was updated in commit:
-https://gitlab.com/buildroot.org/buildroot/-/commit/e1aacc3049e03bd788fc58b9233bf5a93f2613a1
-
-So those _CUSTOM_GIT and _CUSTOM_REPO_URL configs are no longer
-needed.
-
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.9"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.11"
-
-Also this _CUSTOM_REPO_VERSION can be replaced with
-_CUSTOM_VERSION=y _CUSTOM_VERSION_VALUE="...".
-
-Could you do those change in a future update please?
-
-Best regards,
-
-Julien.
+> ################################################################################
+> 
+> -SKOPEO_VERSION = 1.16.1
+> +SKOPEO_VERSION = 1.17.0
+>  SKOPEO_SITE = $(call github,containers,skopeo,v$(SKOPEO_VERSION))
+> 
+>  SKOPEO_LICENSE = Apache-2.0
+> --
+> 2.34.1
+> 
+> ____________________________________________________________________________________________________________
+> Ce message et ses pieces jointes peuvent contenir des informations 
+> confidentielles ou privilegiees et ne doivent donc
+> pas etre diffuses, exploites ou copies sans autorisation. Si vous avez 
+> recu ce message par erreur, veuillez le signaler
+> a l'expediteur et le detruire ainsi que les pieces jointes. Les 
+> messages electroniques etant susceptibles d'alteration,
+> Orange decline toute responsabilite si ce message a ete altere, deforme 
+> ou falsifie. Merci.
+> 
+> This message and its attachments may contain confidential or privileged 
+> information that may be protected by law;
+> they should not be distributed, used or copied without authorisation.
+> If you have received this email in error, please notify the sender and 
+> delete this message and its attachments.
+> As emails may be altered, Orange is not liable for messages that have 
+> been modified, changed or falsified.
+> Thank you.
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
