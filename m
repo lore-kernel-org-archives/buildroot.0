@@ -1,71 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE5DED60D09
-	for <buildroot@archiver.kernel.org>; Tue, 19 Nov 2024 01:45:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26E33D60D09
+	for <buildroot@archiver.kernel.org>; Tue, 19 Nov 2024 01:46:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 720B160786;
-	Tue, 19 Nov 2024 01:45:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA6C842ED9;
+	Tue, 19 Nov 2024 01:46:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iI-g2dMxlUGz; Tue, 19 Nov 2024 01:45:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MtlrNt3D6c7D; Tue, 19 Nov 2024 01:46:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70B3960883
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D27B142ED8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70B3960883;
-	Tue, 19 Nov 2024 01:45:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 463F0DB2
- for <buildroot@buildroot.org>; Tue, 19 Nov 2024 01:45:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D27B142ED8;
+	Tue, 19 Nov 2024 01:46:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DA957DB2
+ for <buildroot@buildroot.org>; Tue, 19 Nov 2024 01:46:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 348C360883
- for <buildroot@buildroot.org>; Tue, 19 Nov 2024 01:45:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BC26984C30
+ for <buildroot@buildroot.org>; Tue, 19 Nov 2024 01:46:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jeGduhn_mxMw for <buildroot@buildroot.org>;
- Tue, 19 Nov 2024 01:45:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0E96B60786
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E96B60786
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0E96B60786
- for <buildroot@buildroot.org>; Tue, 19 Nov 2024 01:45:53 +0000 (UTC)
-Received: from localhost.localdomain (unknown
- [IPv6:2a01:e0a:2af:22b0:c4ca:84b0:902:f281])
- (Authenticated sender: vjardin@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id DCCF75FFA3;
- Tue, 19 Nov 2024 02:45:49 +0100 (CET)
-From: Vincent Jardin <vjardin@free.fr>
-To: buildroot@buildroot.org
-Cc: vjardin@free.fr
-Date: Tue, 19 Nov 2024 02:44:32 +0100
-Message-ID: <20241119014432.46926-1-vjardin@free.fr>
-X-Mailer: git-send-email 2.46.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OBd1i-xq9iO5 for <buildroot@buildroot.org>;
+ Tue, 19 Nov 2024 01:46:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=60.248.80.70;
+ helo=atcsqr.andestech.com; envelope-from=peterlin@andestech.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 98BE184C2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98BE184C2C
+Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net
+ [60.248.80.70])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 98BE184C2C
+ for <buildroot@buildroot.org>; Tue, 19 Nov 2024 01:46:16 +0000 (UTC)
+Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
+ by Atcsqr.andestech.com with ESMTPS id 4AJ1k8We080352
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK)
+ for <buildroot@buildroot.org>; Tue, 19 Nov 2024 09:46:08 +0800 (+08)
+ (envelope-from peterlin@andestech.com)
+Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS34.andestech.com
+ (10.0.1.134) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 19 Nov
+ 2024 09:46:08 +0800
+To: <buildroot@buildroot.org>
+CC: <peterlin@andestech.com>, <ycliang@andestech.com>
+Date: Tue, 19 Nov 2024 09:46:01 +0800
+Message-ID: <20241119014601.1660159-1-peterlin@andestech.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1731980751;
- bh=BctnBtwYXeby7KPt/n420a2HltCOnoPfIJQ6lGMawek=;
- h=From:To:Cc:Subject:Date:From;
- b=bFh51+60pktI/Ra5QvtWt+dTTYnRDUdqLTtpCf5QH150aiNWkHulKzKfcY7Z8Y4dQ
- ZuwuYBM9kS5UXfZaEG1eudecGSbYJqFYTcadx8yF8aD6DHUAjEy2lwt60InE7OiQvy
- 0XIgWBHYyZzq+A/5o78/yUz9yAIoUhQ6BMq/6bmKvsCTa7gP/QAvpaXFCX/Kvpva4o
- iQEudxJXPNOuyOkdTPBN4yUMZcus6AKahJIhOxbwdmXSFTzxx3bXxs88cj7l2nPJMi
- Fg46eSWvnhr3yscpck90/QDOUfTxkqaskev9ncP6xRIpHw9VP59yjZl1jKtN1I+kJ0
- axxqfBObJkdXg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=bFh51+60
-Subject: [Buildroot] [PATCH 1/1] package/libnss-ato: new package
+X-Originating-IP: [10.0.15.183]
+X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
+ ATCPCS34.andestech.com (10.0.1.134)
+X-DNSRBL: 
+X-MAIL: Atcsqr.andestech.com 4AJ1k8We080352
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=andestech.com
+Subject: [Buildroot] [PATCH] DEVELOPERS: update maintainer of Andes platform
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,108 +73,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Yu Chien Peter Lin via buildroot <buildroot@buildroot.org>
+Reply-To: Yu Chien Peter Lin <peterlin@andestech.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The libnss_ato module is a set of C library extensions which allows to
-map every nss request for unknown user to a single predefined user.
+I will lose access to my email next week, so hand
+it over to Leo Yu-Chi Liang.
 
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
+Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
+Reviewed-by: Leo Yu-Chi Liang <ycliang@andestech.com>
 ---
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/libnss-ato/Config.in       |  7 +++++++
- package/libnss-ato/libnss-ato.hash |  4 ++++
- package/libnss-ato/libnss-ato.mk   | 27 +++++++++++++++++++++++++++
- 5 files changed, 40 insertions(+)
- create mode 100644 package/libnss-ato/Config.in
- create mode 100644 package/libnss-ato/libnss-ato.hash
- create mode 100644 package/libnss-ato/libnss-ato.mk
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3945803d53..6dee1c10ec 100644
+index 3945803d53..0bc318811e 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -3285,6 +3285,7 @@ F:	board/nvidia/bf3/
- F:	configs/nvidia_bf3_defconfig
- F:	package/bfscripts/
- F:	package/dpdk/
-+F:	package/libnss-ato/
+@@ -2527,7 +2527,7 @@ F:	package/dbus-broker/
+ F:	package/systemd/
+ F:	package/tcf-agent/
  
- N:	Vincent Prince <vincent.prince.fr@gmail.com>
- F:	package/nss-myhostname/
-diff --git a/package/Config.in b/package/Config.in
-index 1eb5e1e020..30dc2c1712 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1610,6 +1610,7 @@ menu "Crypto"
- 	source "package/libmd/Config.in"
- 	source "package/libmhash/Config.in"
- 	source "package/libnss/Config.in"
-+	source "package/libnss-ato/Config.in"
- 	source "package/libolm/Config.in"
- 	source "package/libp11/Config.in"
- 	source "package/libscrypt/Config.in"
-diff --git a/package/libnss-ato/Config.in b/package/libnss-ato/Config.in
-new file mode 100644
-index 0000000000..ca3b7413d9
---- /dev/null
-+++ b/package/libnss-ato/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBNSS_ATO
-+	bool "libnss-ato"
-+	help
-+	  Library to map every nss request for unknown user to a
-+	  single predefined user.
-+
-+	  https://github.com/donapieppo/libnss-ato
-diff --git a/package/libnss-ato/libnss-ato.hash b/package/libnss-ato/libnss-ato.hash
-new file mode 100644
-index 0000000000..d63d84e6b1
---- /dev/null
-+++ b/package/libnss-ato/libnss-ato.hash
-@@ -0,0 +1,4 @@
-+# Locally computed
-+sha256  3de3161d298c48e55d7416ad89130e13dd72263b93563f3fb79c899fa8450ce2  copyright
-+sha256  e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  lgpl-3.0.txt
-+sha256  3cd9e41e293a37a541729a5f88b1c0d4433a0b9cb78b8e4637ad57c08add96c5  libnss-ato-4a29c8410cdac590a210dab2dec41d5f4b40d282-git4.tar.gz
-diff --git a/package/libnss-ato/libnss-ato.mk b/package/libnss-ato/libnss-ato.mk
-new file mode 100644
-index 0000000000..4676e44d8d
---- /dev/null
-+++ b/package/libnss-ato/libnss-ato.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# libnss-ato
-+#
-+################################################################################
-+
-+LIBNSS_ATO_VERSION = 4a29c8410cdac590a210dab2dec41d5f4b40d282
-+LIBNSS_ATO_SITE = https://github.com/donapieppo/libnss-ato.git
-+LIBNSS_ATO_SITE_METHOD = git
-+LIBNSS_ATO_LICENSE = LGPL-3.0+
-+LIBNSS_ATO_LICENSE_FILES = copyright lgpl-3.0.txt
-+
-+# Skip the default build system (no configure/Makefile to use)
-+define LIBNSS_ATO_BUILD_CMDS
-+	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-+		-fPIC -Wall -shared -o $(@D)/libnss_ato.so.2 \
-+		-Wl,-soname,libnss_ato.so.2 \
-+		$(@D)/libnss_ato.c
-+endef
-+
-+define LIBNSS_ATO_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/libnss_ato.so.2 $(TARGET_DIR)/lib/libnss_ato.so.2
-+	ln -sf libnss_ato.so.2 $(TARGET_DIR)/lib/libnss_ato.so
-+	$(INSTALL) -D -m 0644 $(@D)/libnss-ato.conf $(TARGET_DIR)/etc/libnss-ato.conf
-+endef
-+
-+$(eval $(generic-package))
+-N:	Yu Chien Peter Lin <peterlin@andestech.com>
++N:	Leo Yu-Chi Liang <ycliang@andestech.com>
+ F:	board/andes
+ F:	configs/andes_ae350_45_defconfig
+ F:	package/andes-spi-burn/
 -- 
-2.34.1
+2.45.2
 
 _______________________________________________
 buildroot mailing list
