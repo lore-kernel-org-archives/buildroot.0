@@ -1,58 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90632D68BCF
-	for <buildroot@archiver.kernel.org>; Fri, 15 Nov 2024 19:52:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4FAED4417E
+	for <buildroot@archiver.kernel.org>; Tue, 19 Nov 2024 16:12:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2654160682;
-	Fri, 15 Nov 2024 19:52:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 66E8885367;
+	Tue, 19 Nov 2024 16:12:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cPzI7HSCfuRk; Fri, 15 Nov 2024 19:52:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fQJT5TyaXXIX; Tue, 19 Nov 2024 16:12:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27AC160738
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73BBE85361
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27AC160738;
-	Fri, 15 Nov 2024 19:52:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 273AEBF
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 19:52:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 73BBE85361;
+	Tue, 19 Nov 2024 16:12:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6327B27EB
+ for <buildroot@buildroot.org>; Tue, 19 Nov 2024 16:12:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 07CC3404EF
- for <buildroot@buildroot.org>; Fri, 15 Nov 2024 19:52:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 406204022A
+ for <buildroot@buildroot.org>; Tue, 19 Nov 2024 16:12:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KKCOIX8Dezy0 for <buildroot@buildroot.org>;
- Fri, 15 Nov 2024 19:52:14 +0000 (UTC)
+ id R_rBChiqaB02 for <buildroot@buildroot.org>;
+ Tue, 19 Nov 2024 16:12:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
  helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A306F400AF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A306F400AF
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4E1CF40146
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E1CF40146
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A306F400AF
- for <buildroot@uclibc.org>; Fri, 15 Nov 2024 19:52:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4E1CF40146
+ for <buildroot@uclibc.org>; Tue, 19 Nov 2024 16:12:16 +0000 (UTC)
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1tC2MT-00094m-QQ
- for buildroot@uclibc.org; Fri, 15 Nov 2024 20:52:09 +0100
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1tDQpl-0002JY-GT
+ for buildroot@uclibc.org; Tue, 19 Nov 2024 17:12:09 +0100
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-From: Bernd Kuhls <bernd@kuhls.net>
-Date: Fri, 15 Nov 2024 20:51:44 +0100
-Message-ID: <pan$864c$16c9c8cd$9e750283$328e7b9@ID-313208.user.individual.net>
-References: <20241110103624.1041337-1-bernd@kuhls.net>
- <20241110181334.0746f1a8__5312.39102581225$1731258842$gmane$org@windsurf>
-Mime-Version: 1.0
-User-Agent: Pan/0.154 (Izium; 517acf4)
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 19 Nov 2024 16:12:05 -0000 (UTC)
+Message-ID: <vhidcl$8c5$1@ciao.gmane.io>
+User-Agent: slrn/1.0.3 (Linux)
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=fail (p=none dis=none)
- header.from=kuhls.net
-Subject: Re: [Buildroot] [PATCH 1/1] package/libvpl: not supported on mips64
+ header.from=gmail.com
+Subject: [Buildroot] downloads: removing git repos and offline builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,56 +61,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Sun, 10 Nov 2024 18:13:34 +0100 schrieb Thomas Petazzoni via buildroot:
+I've been using buildroot for many years and have always been able to
+archive (previously in SVN, now in Git/LFS) the contents of the
+downloads directory so that production firmware can be built offline
+using nothing but files checked out from SVN/Git.  A question has come
+up with opkg-utils.  It downloads a source tarball and clones a git
+repository:
 
-> $ ARCH-linux-gcc -dM -E - < /dev/null | grep -E "(LP|ILP)"
-> 
-> For example, it looks like i386 would be supported.
+    $ ls -l downloads/opkg-utils/
+    total 48
+    drwxr-xr-x 4 grante grante  4096 Nov 19 09:25 git
+    -rw-r--r-- 1 grante grante   512 Nov 19 09:25 git.readme
+    -rw-r--r-- 1 grante grante 36872 Nov 19 09:25 opkg-utils-0.6.2-br1.tar.gz
 
-Hi Thomas,
+Actually, I'm not entirely sure whether it downloaded that tarball or
+created it from the git repository -- I now suspect the latter.
 
-tested a defconfig based on support/config-fragments/autobuild/br-i386-
-pentium4-full.config
+In either case, I can't archive a git repository.
 
-BR2_x86_pentium4=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/
-tarballs/br-i386-pentium4-full-2020.11.2.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_PACKAGE_LIBVPL=y
+It _appears_ that removing the git repo and leaving the tar.gz file is
+sufficient for doing a build, and if that tarball is present buildroot
+won't need to access the upstream git repository (thus allowing
+offline builds using the arhcived tarball).
 
-libvpl build is broken:
+Requiring offline builds for production firmware can't be that unusual.
 
-output/build/libvpl-2.13.0/api/vpl/mfxdefs.h:75:6: error: #error Unknown 
-packing
-   75 |     #error Unknown packing
+Is just removing the git repo and archiving the tarball how people
+usually deal with this situation?
 
-because the compiler does not define __ILP32__
-
-$ i686-linux-gcc -dM -E - < /dev/null | grep -E "(LP|ILP)"
-$ 
-
-The same is valid for support/config-fragments/autobuild/bootlin-riscv32-
-glibc.config
-
-$ riscv32-linux-gcc  -dM -E - < /dev/null | grep -E "(LP|ILP)"
-$ 
-
-I did not test other 32bit platforms because the only dependee of libvpl, 
-intel-vpl-gpu-rt, is unsupported on 32bit archs anyway.
-
-Regards, Bernd
+--
+Grant
 
 _______________________________________________
 buildroot mailing list
