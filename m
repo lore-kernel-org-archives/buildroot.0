@@ -4,73 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AB65D6C2B4
-	for <buildroot@archiver.kernel.org>; Tue, 19 Nov 2024 21:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF967D6C2AF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Nov 2024 22:32:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A3B180A7C;
-	Tue, 19 Nov 2024 21:59:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9584E8520F;
+	Tue, 19 Nov 2024 22:32:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5yl-lXbfhEpz; Tue, 19 Nov 2024 21:59:39 +0000 (UTC)
+ id mrMM6DL-aI8r; Tue, 19 Nov 2024 22:31:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AE4280A67
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EC0485200
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1AE4280A67;
-	Tue, 19 Nov 2024 21:59:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6C60EDB3
- for <buildroot@buildroot.org>; Tue, 19 Nov 2024 21:59:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EC0485200;
+	Tue, 19 Nov 2024 22:31:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E012B27EB
+ for <buildroot@buildroot.org>; Tue, 19 Nov 2024 22:31:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5AD8D80A63
- for <buildroot@buildroot.org>; Tue, 19 Nov 2024 21:59:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE0F184E24
+ for <buildroot@buildroot.org>; Tue, 19 Nov 2024 22:31:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 00KyeFj9YkfK for <buildroot@buildroot.org>;
- Tue, 19 Nov 2024 21:59:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4254280A4C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4254280A4C
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4254280A4C
- for <buildroot@buildroot.org>; Tue, 19 Nov 2024 21:59:36 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 61DB92003CE;
- Tue, 19 Nov 2024 22:59:31 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:59668])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 19 Nov 2024 22:59:31 +0100
-MIME-Version: 1.0
-Date: Tue, 19 Nov 2024 22:59:31 +0100
+ id r1yKdiz3EOhD for <buildroot@buildroot.org>;
+ Tue, 19 Nov 2024 22:31:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9216851FF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C9216851FF
+ for <buildroot@buildroot.org>; Tue, 19 Nov 2024 22:31:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B4563864A8; Tue, 19 Nov 2024 22:31:56 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Vincent Jardin <vjardin@free.fr>
-Cc: buildroot@buildroot.org, zer0@droids-corp.org, robin@jarry.cc
-In-Reply-To: <20241119203329.57567-1-vjardin@free.fr>
-References: <20241119203329.57567-1-vjardin@free.fr>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <b9ce24a0f89d07fcbc3ea9711d8b16d2@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1732053574;
- bh=2s7Qkku8jwiw5gC7sCxiuCtoqMcqaA2jl9VRJv1wvwI=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=kX5eACl9/T0XHqFR1hP6FyTGb8rZh/WPFRqmenp3ZylmJhxZYVO7wwfEz3taqn6if
- XB3YDywJDcbtzN4OoVKbUOh48q3Bn+7MXYUO+J1uyd4mcqzEmbbod9z2m1RGgNJrff
- 6p9elaHMhEJ5CaFz0aQpxluy05PaRpXFC07zKI+xmsgcjCndGcu/oWU9dMCQrdqhsz
- fnQe5pcR6qKpgXLWyUYS8Cg3g1c0ldVedvVAzrGN7/hXOfpv/ds++tAoJ5A0iGGIHg
- qxgKkefrPuJl6KnJr6Pr91OsPuZymZfCvGnx5FO7ieyJce026kc8qMpSpYDDUUGN9r
- xELF/b7B5F4nw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=kX5eACl9
-Subject: Re: [Buildroot] [PATCH 1/1] package/libecoli: bump version to 0.3.0
+To: buildroot@buildroot.org
+Date: Tue, 19 Nov 2024 23:27:56 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: c084f74dfd8d1e9e973cb1498b71302736269b92
+X-Git-Newrev: 65c68f9b69c252d409b414e444212d520ca2bf46
+X-Patchwork-Hint: ignore
+Message-Id: <20241119223156.B4563864A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/imx8mn_bsh_smm_s2[_pro]: bump U-Boot to 2024.10 and Linux to 6.11.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,91 +59,145 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/11/2024 21:33, Vincent Jardin wrote:
-> This new version includes the missing headers that will be needed for
-> grout. Its meson option has been revamped.
-> 
-> Signed-off-by: Vincent Jardin <vjardin@free.fr>
-> Suggested-by: Robin Jarry <robin@jarry.cc>
+commit: https://git.buildroot.net/buildroot/commit/?id=65c68f9b69c252d409b414e444212d520ca2bf46
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Applied to next, thanks.
+The patch bumps U-Boot to version 2024.10 and the Linux kernel to version
+6.11.8.
+The new version of U-Boot has added EFI Capsule support, which depends on
+GnuTLS, thus requiring the activation of BR2_TARGET_UBOOT_NEEDS_GNUTLS.
+U-Boot also needs util-linux, therefore
+BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX is added.
+The version of TF-A remains 2.10, but the LTS version is used as suggested
+by the maintainers.
 
-I made a small change, detected by "utils/docker-run make 
-check-package".
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+[Julien: added BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../patches/arm-trusted-firmware/arm-trusted-firmware.hash    |  2 --
+ board/bsh/common/imx8mn-bsh-smm-s2/patches/linux/linux.hash   |  2 +-
+ board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/uboot.hash   |  2 +-
+ configs/imx8mn_bsh_smm_s2_defconfig                           | 11 ++++++-----
+ configs/imx8mn_bsh_smm_s2_pro_defconfig                       | 11 ++++++-----
+ 5 files changed, 14 insertions(+), 14 deletions(-)
 
-> ---
->  package/libecoli/libecoli.hash |  2 +-
->  package/libecoli/libecoli.mk   | 11 ++++++++++-
->  2 files changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libecoli/libecoli.hash 
-> b/package/libecoli/libecoli.hash
-> index 0540ef7270..433550f91b 100644
-> --- a/package/libecoli/libecoli.hash
-> +++ b/package/libecoli/libecoli.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256  
-> 0da8f953e054dd2ba75a0d1dcbbc8830b76747282035e1d1de6082ec3bb6f995  
-> libecoli-0.2.0.tar.gz
-> +sha256  
-> e66a85a35bae644b0baf9a4e6d084ff926ebaa12023f9df9f34e8f7a46834da8  
-> libecoli-0.3.0.tar.gz
->  sha256  
-> e58bf9ec962bee9b3e37abcaa0bc0ec940b05efdc1d1a5a4d9e2fdbcc08b7bdd  
-> LICENSE
-> diff --git a/package/libecoli/libecoli.mk 
-> b/package/libecoli/libecoli.mk
-> index c46f62b523..f518208e92 100644
-> --- a/package/libecoli/libecoli.mk
-> +++ b/package/libecoli/libecoli.mk
-> @@ -4,14 +4,23 @@
->  #
->  
-> ################################################################################
-> 
-> -LIBECOLI_VERSION = 0.2.0
-> +LIBECOLI_VERSION = 0.3.0
->  LIBECOLI_SITE = $(call github,rjarry,libecoli,v$(LIBECOLI_VERSION))
->  LIBECOLI_INSTALL_STAGING = YES
->  LIBECOLI_LICENSE = BSD-3-Clause
->  LIBECOLI_LICENSE_FILES = LICENSE
-> 
-> +LIBECOLI_INSTALL_STAGING = YES
-
-This _INSTALL_STAGING is duplicate. It was already present in the 
-initial 0.2.0
-submission.
-
-> +
->  LIBECOLI_DEPENDENCIES = \
->  	host-pkgconf \
->  	libedit
-> 
-> +LIBECOLI_CONF_OPTS = \
-> +	-Ddoc=disabled \
-> +	-Deditline=enabled \
-> +	-Dexamples=disabled \
-> +	-Dyaml=disabled \
-> +	-Dtests=disabled
-> +
->  $(eval $(meson-package))
-> --
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
-Best regards,
-
-Julien.
+diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+deleted file mode 100644
+index 6f02bfbb22..0000000000
+--- a/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256  7efa89e1b4e4106ee05d68e876c8efbb146364d89cfd5d26bf4647b09c08f32b  arm-trusted-firmware-v2.10-git4.tar.gz
+diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/linux/linux.hash b/board/bsh/common/imx8mn-bsh-smm-s2/patches/linux/linux.hash
+index 53eb143894..28988ed019 100644
+--- a/board/bsh/common/imx8mn-bsh-smm-s2/patches/linux/linux.hash
++++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  774698422ee54c5f1e704456f37c65c06b51b4e9a8b0866f34580d86fef8e226  linux-6.10.tar.xz
++sha256  aee8a844fe152420bece70ffae8525b9b23089aa4da31fa32f30e1859bf93c3d  linux-6.11.8.tar.xz
+diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/uboot.hash b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/uboot.hash
+index fe9b4f53dc..904fa56c02 100644
+--- a/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/uboot.hash
++++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
++sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
+diff --git a/configs/imx8mn_bsh_smm_s2_defconfig b/configs/imx8mn_bsh_smm_s2_defconfig
+index 2b358cf57b..c9c0527b18 100644
+--- a/configs/imx8mn_bsh_smm_s2_defconfig
++++ b/configs/imx8mn_bsh_smm_s2_defconfig
+@@ -1,12 +1,12 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
+ BR2_GLOBAL_PATCH_DIR="board/bsh/common/imx8mn-bsh-smm-s2/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/bsh/imx8mn-bsh-smm-s2/post-build.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.8"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/bsh/common/imx8mn-bsh-smm-s2/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -21,19 +21,20 @@ BR2_TARGET_ROOTFS_UBIFS=y
+ BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
+ BR2_TARGET_ROOTFS_UBIFS_RT_NONE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.10"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30a60000"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mn_bsh_smm_s2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
++BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/configs/imx8mn_bsh_smm_s2_pro_defconfig b/configs/imx8mn_bsh_smm_s2_pro_defconfig
+index e903cbf314..fa02873402 100644
+--- a/configs/imx8mn_bsh_smm_s2_pro_defconfig
++++ b/configs/imx8mn_bsh_smm_s2_pro_defconfig
+@@ -1,5 +1,5 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
+ BR2_GLOBAL_PATCH_DIR="board/bsh/common/imx8mn-bsh-smm-s2/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/bsh/imx8mn-bsh-smm-s2-pro/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/bsh/imx8mn-bsh-smm-s2-pro/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.8"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/bsh/common/imx8mn-bsh-smm-s2/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -23,18 +23,19 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.10"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30a60000"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mn_bsh_smm_s2pro"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
++BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
