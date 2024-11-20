@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E5ABD743D8
-	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:30:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F276ED743D8
+	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:31:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A699160B91;
-	Wed, 20 Nov 2024 21:30:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B51E40246;
+	Wed, 20 Nov 2024 21:31:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4AeuTOmcYvx3; Wed, 20 Nov 2024 21:30:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yUEBe7B3wRgB; Wed, 20 Nov 2024 21:31:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F688606AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2531240268
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F688606AE;
-	Wed, 20 Nov 2024 21:30:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2531240268;
+	Wed, 20 Nov 2024 21:31:46 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id BF961970
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:30:34 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D3430970
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:31:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A01FD606AE
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:30:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B3224606AE
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:31:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T2BtaxnNUaId for <buildroot@buildroot.org>;
- Wed, 20 Nov 2024 21:30:33 +0000 (UTC)
+ id zRyjDfXhPEHf for <buildroot@buildroot.org>;
+ Wed, 20 Nov 2024 21:31:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C86860617
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA94E60617
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C86860617
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:30:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA94E60617
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:31:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 814A58650E; Wed, 20 Nov 2024 21:30:33 +0000 (UTC)
+ id C42B086521; Wed, 20 Nov 2024 21:31:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Nov 2024 22:12:45 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 8a50eb162b4c339ccb5b310bf65c790973cf98e8
-X-Git-Newrev: 17555734e88938afae7d0a332b17d04e384d4397
+Date: Wed, 20 Nov 2024 22:11:50 +0100
+X-Git-Refname: refs/heads/2024.08.x
+X-Git-Oldrev: 22e818e66b242a6936126e3114d5bcc8256c6704
+X-Git-Newrev: d04f68826f842671d2c7433086057c5d6c447964
 X-Patchwork-Hint: ignore
-Message-Id: <20241120213033.814A58650E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add
+Message-Id: <20241120213142.C42B086521@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] support/testing: add
  rrdtool runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17555734e88938afae7d0a332b17d04e384d4397
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d04f68826f842671d2c7433086057c5d6c447964
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -78,17 +78,17 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 101 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 0cbcac4c8b..badb72007b 100644
+index 639ed01cfa..1e0862f1c0 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1864,6 +1864,7 @@ F:	support/testing/tests/package/test_python_pyqt5/
- F:	support/testing/tests/package/test_python_spake2.py
+@@ -1941,6 +1941,7 @@ F:	support/testing/tests/package/test_python_spake2.py
+ F:	support/testing/tests/package/test_python_sympy.py
  F:	support/testing/tests/package/test_rdma_core.py
  F:	support/testing/tests/package/test_rdma_core/
 +F:	support/testing/tests/package/test_rrdtool.py
+ F:	support/testing/tests/package/test_rt_tests.py
  F:	support/testing/tests/package/test_screen.py
  F:	support/testing/tests/package/test_sed.py
- F:	support/testing/tests/package/test_socat.py
 diff --git a/support/testing/tests/package/test_rrdtool.py b/support/testing/tests/package/test_rrdtool.py
 new file mode 100644
 index 0000000000..431a867bf2
