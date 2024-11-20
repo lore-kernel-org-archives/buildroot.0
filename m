@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E88B7D743D8
-	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:03:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26E27D743D9
+	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:03:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA0E4610C5;
-	Wed, 20 Nov 2024 21:03:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 921C6610C6;
+	Wed, 20 Nov 2024 21:03:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5RvNKK0uqz6Z; Wed, 20 Nov 2024 21:03:08 +0000 (UTC)
+ id XRxID2mF1C4e; Wed, 20 Nov 2024 21:03:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CEF160A5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F979610C1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3CEF160A5D;
-	Wed, 20 Nov 2024 21:03:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 16574970
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F979610C1;
+	Wed, 20 Nov 2024 21:03:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2D6765B28
  for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:02:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB8C440AEF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 40F4960A5D
  for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:02:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZzKsUPI3NZ6T for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FKY1qoDrGRJW for <buildroot@buildroot.org>;
  Wed, 20 Nov 2024 21:02:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A8F0403AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5104060646
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7A8F0403AA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5104060646
  for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:02:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 62E3C864E8; Wed, 20 Nov 2024 21:02:57 +0000 (UTC)
+ id 49029860B6; Wed, 20 Nov 2024 21:02:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Nov 2024 21:46:09 +0100
+Date: Wed, 20 Nov 2024 21:38:41 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: d184ae6720fcfda2e3980e45f1c1f3de49a8e485
-X-Git-Newrev: f15c0686ee0d8d2f638e9fa56df303a5f415b9b9
+X-Git-Oldrev: 35069b0ab586f85d141b157754348948fd47d141
+X-Git-Newrev: 9ffb14ced94a106e05b81de4f3029ee711d127b2
 X-Patchwork-Hint: ignore
-Message-Id: <20241120210257.62E3C864E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/ntp: add
- upstream-provided patch to fix regression
+Message-Id: <20241120210257.49029860B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/qt6/qt6base:
+ remove -DFEATURE_concurrent=OFF from unconditional options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,84 +65,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f15c0686ee0d8d2f638e9fa56df303a5f415b9b9
+commit: https://git.buildroot.net/buildroot/commit/?id=9ffb14ced94a106e05b81de4f3029ee711d127b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-This patch fixes a regression [1] introduced in ntpd 4.2.8p18 [2].
+Since commit
+a39e0b95e1d927599e212098d1db4d2fafb2a35c ("package/qt6/qt6base: add
+support for concurrent module"), we have an explicit option that
+enables/disables concurrent support, so it no longer makes sense to
+explicitly disable it unconditionally first.
 
-  ntpd[200]: Listen normally on 3 lo [::1]:123
-  ntpd[200]: bind(20) AF_INET6 [fe80::bf3d:254d:dee0:d345%3]:123 flags 0x811 failed: Cannot assign requested address
-  ntpd[200]: unable to create socket on enp0s3 (4) for [fe80::bf3d:254d:dee0:d345%3]:123
-  ntpd[192]: daemon control: got EOF
-  ntpd[192]: daemon child died with signal 11
-  systemd[1]: ntpd.service: Control process exited, code=exited, status=70/SOFTWARE
-  systemd[1]: ntpd.service: Failed with result 'exit-code'.
-  systemd[1]: Failed to start Network Time Service.
-
-If the IPv6 link-local interface was not ready for binding on the first
-attempt, ntpd would segfault in update_interfaces(). The segfault would
-only occur when ntpd was started as part of the boot sequence. Most
-- but not all - boots were affected. Evidently it could happen that the
-timing of ntpd's start up was delayed enough that the IPv6 link-local
-interface was ready for the bind() call when it was first issued by
-open_socket() via create_interface().
-
-[1]: https://bugs.ntp.org/show_bug.cgi?id=3928
-[2]: https://bugs.ntp.org/show_bug.cgi?id=3913
-
-Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Hannah Kiekens <hannah.kiekens@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 489e38fd2c16f9de2a187a4774df29f8c929bc30)
+(cherry picked from commit 2de79d7065bc27c94b654232b12acd0af582a0ad)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0004-Fix-crash-when-binding-IPv6-address.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/qt6/qt6base/qt6base.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/ntp/0004-Fix-crash-when-binding-IPv6-address.patch b/package/ntp/0004-Fix-crash-when-binding-IPv6-address.patch
-new file mode 100644
-index 0000000000..b4e7378a32
---- /dev/null
-+++ b/package/ntp/0004-Fix-crash-when-binding-IPv6-address.patch
-@@ -0,0 +1,38 @@
-+Fix crash when binding IPv6 address
-+
-+Reference:
-+  https://bugs.ntp.org/show_bug.cgi?id=3928
-+
-+Upstream: https://people.nwtime.org/hart/ntp-stable-3928-29.tar.gz
-+
-+Ported fix from updated tarball provided by upstream:
-+https://bugs.ntp.org/show_bug.cgi?id=3928#c14
-+
-+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
-+---
-+ ntpd/ntp_io.c |    6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+Index: ntp-4.2.8p18/ntpd/ntp_io.c
-+===================================================================
-+--- ntp-4.2.8p18.orig/ntpd/ntp_io.c
-++++ ntp-4.2.8p18/ntpd/ntp_io.c
-+@@ -1917,15 +1917,15 @@ update_interfaces(
-+ 			}
-+ 			new_interface_found = TRUE;
-+ 			DPRINT_INTERFACE(3,
-+-				(ep, "updating ", " new - created\n"));
-++				(ep2, "updating ", " new - created\n"));
-+ 		}
-+ 		else {
-+ 			DPRINT_INTERFACE(3,
-+-				(ep, "updating ", " new - FAILED"));
-++				(ep2, "updating ", " new - FAILED"));
-+ 
-+ 			msyslog(LOG_ERR,
-+ 				"cannot bind address %s",
-+-				stoa(&ep->sin));
-++				stoa(&ep2->sin));
-+ 		}
-+ 		free(ep2);
-+ 	}
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index 4c0392f92d..e3c8f8920a 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -46,7 +46,6 @@ QT6BASE_INSTALL_STAGING = YES
+ QT6BASE_CONF_OPTS = \
+ 	-DQT_HOST_PATH=$(HOST_DIR) \
+ 	-DINSTALL_ARCHDATADIR=lib/qt6 \
+-	-DFEATURE_concurrent=OFF \
+ 	-DFEATURE_xml=OFF \
+ 	-DFEATURE_sql=OFF \
+ 	-DFEATURE_testlib=OFF \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
