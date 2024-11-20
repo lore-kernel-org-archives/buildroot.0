@@ -4,70 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BB1BD60D14
-	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 09:24:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F31BD44171
+	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 09:35:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12EAE851C3;
-	Wed, 20 Nov 2024 09:24:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F051C85336;
+	Wed, 20 Nov 2024 09:35:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P0Abl5vvdANq; Wed, 20 Nov 2024 09:24:28 +0000 (UTC)
+ id YhSo4uXvwqQv; Wed, 20 Nov 2024 09:35:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3ECA6851CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0519B8534C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3ECA6851CE;
-	Wed, 20 Nov 2024 09:24:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id AE698DB3
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 09:24:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0519B8534C;
+	Wed, 20 Nov 2024 09:35:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A0E01970
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 09:35:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9BEAD606B9
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 09:24:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8DB8B405CA
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 09:35:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xGQT5rKAkPNd for <buildroot@buildroot.org>;
- Wed, 20 Nov 2024 09:24:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C37DC6067E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C37DC6067E
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C37DC6067E
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 09:24:25 +0000 (UTC)
-Received: from L25025.local (unknown [213.36.7.11])
- (Authenticated sender: vjardin@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 849C978050F;
- Wed, 20 Nov 2024 10:24:22 +0100 (CET)
-Date: Wed, 20 Nov 2024 10:24:21 +0100
-From: Vincent Jardin <vjardin@free.fr>
-To: Simon Richter <simon@sinic.eu>
-Cc: buildroot@buildroot.org
-Message-ID: <wma5p3xw7npf2ei7amuy4b7wup65t7kvdfl5jw62ry3knqjkab@kvjydgslz37g>
-References: <20241120073755.17583-1-simon@sinic.eu>
- <sy4c2ptgmdeb2ww3p2ofjtq3emcfx2shpsgqi7vwgalq6lonvo@ocnuadjhz6te>
- <4f503f92-b1a4-4b6b-96e0-89352680105e@sinic.eu>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4x66E__CPtXg for <buildroot@buildroot.org>;
+ Wed, 20 Nov 2024 09:35:52 +0000 (UTC)
+X-Greylist: delayed 482 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 20 Nov 2024 09:35:52 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1EBF640148
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EBF640148
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
+ helo=serv15.avernis.de; envelope-from=br015@umbiko.net; receiver=<UNKNOWN> 
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1EBF640148
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 09:35:51 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id A2BA2BDE28FF;
+ Wed, 20 Nov 2024 10:27:44 +0100 (CET)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <4f503f92-b1a4-4b6b-96e0-89352680105e@sinic.eu>
+Date: Wed, 20 Nov 2024 09:27:44 +0000
+From: Andreas Ziegler <br015@umbiko.net>
+To: Grant Edwards <grant.b.edwards@gmail.com>
+Cc: buildroot <buildroot@buildroot.org>
+In-Reply-To: <mailman.17954.1732090118.1448558.buildroot@buildroot.org>
+References: <mailman.17954.1732090118.1448558.buildroot@buildroot.org>
+Message-ID: <eb63a9dac0a90b6aa67315f285039615@umbiko.net>
+X-Sender: br015@umbiko.net
+X-Virus-Scanned: clamav-milter 1.0.7 at serv15.avernis.de
+X-Virus-Status: Clean
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1732094663;
- bh=hcAnQn2ACbFEispun2KB4uAPy+AkZL1PXeZ+WwgNGDM=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=exLn9rgZrZ9eJPZCC5JaD0hdWafObMvzZplXiMGvt/7/+hN9fGRqve9Ofqi1F7UUh
- /4EQomM9w/w/Phuh+l2L8V3CI/cXH7AtcUyK+t59xvANq2oEupQ3mlYERIeRUJFy4j
- yRRY5BgaamKLAQ0haMfpmX4JADRjmuhvw4t5CGstD7oCHbUWvzaQPrhajPv8g22dRD
- tl+skOlzbHZBIrMBzLRE+jrI7DaA9V9ZRobsrggulMcFHEwfPgbMX9X4FaRoCmUwoL
- tcV8ogmEEaHi53Sgwg2FkB0Yj/VmQ8IarGui7o5sXg3DJMhNYmjojvzAv8WwBXk/WZ
- 2yiO8TZk+F7Rg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=exLn9rgZ
-Subject: Re: [Buildroot] [PATCH] package/pkg-generic.mk: add missing quotes
+ d=umbiko.net; s=mail; 
+ t=1732094864; bh=867bJOOmS1gOBRowqgqdSWNBxQQ2sXo2FZWrf/bO8UM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=0+ES7nCwa7iCgs5h9hdndc0kj5O5De9QpE0iF2RD/h6tW05rnOTIj5YpzJo6st9xj
+ SbAPXed9AFF3/dbR723f/l+4eYkV+q/n32Tyn4h1hpG8fk61C6rT+0AtZUXbJ/F1kg
+ mgw8Q4hyex+QV5if4xFqfxIpjyUxHlW11vO3eaVQ=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=umbiko.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=0+ES7nCw
+Subject: Re: [Buildroot] downloads: removing git repos and offline builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,21 +77,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Simon,
+Hi Grant,
 
-On Wed, Nov 20, 2024 at 09:32:02AM UTC, Simon Richter wrote:
-> If there is a better way to solve this, I will be happy to implement it.
+On 2024-11-19 16:12, Grant Edwards wrote:
+> 
+> I've been using buildroot for many years and have always been able to
+> archive (previously in SVN, now in Git/LFS) the contents of the
+> downloads directory so that production firmware can be built offline
+> using nothing but files checked out from SVN/Git.  A question has come
+> up with opkg-utils.  It downloads a source tarball and clones a git
+> repository:
+> 
+>     $ ls -l downloads/opkg-utils/
+>     total 48
+>     drwxr-xr-x 4 grante grante  4096 Nov 19 09:25 git
+>     -rw-r--r-- 1 grante grante   512 Nov 19 09:25 git.readme
+>     -rw-r--r-- 1 grante grante 36872 Nov 19 09:25 
+> opkg-utils-0.6.2-br1.tar.gz
+> 
+> Actually, I'm not entirely sure whether it downloaded that tarball or
+> created it from the git repository -- I now suspect the latter.
+> 
 
-$ echo "foo&b a;r" | sed 's/&/%26/g; s/?/%3F/g; s/;/%3B/g; s/ /%20/g'
-foo%26b%20a%3Br
+The order is git repository -> tarball -> build directory. The git 
+repository will be reused or recreated if either the package version 
+changes or the tarball is removed. I use this behaviour occasionally to 
+'fake' package versions.
 
-best regards,
-  Vincent
+> In either case, I can't archive a git repository.
+> 
+> It _appears_ that removing the git repo and leaving the tar.gz file is
+> sufficient for doing a build, and if that tarball is present buildroot
+> won't need to access the upstream git repository (thus allowing
+> offline builds using the arhcived tarball).
+> 
+> Requiring offline builds for production firmware can't be that unusual.
+> 
+> Is just removing the git repo and archiving the tarball how people
+> usually deal with this situation?
+
+Any objections to just using a line in .gitignore?
+
+   downloads/*/git
+
+Kind regards,
+Andreas
+
+> --
+> Grant
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
