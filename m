@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70405D743D8
-	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:03:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14630D743DA
+	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:03:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B31E60C14;
-	Wed, 20 Nov 2024 21:03:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF98760B92;
+	Wed, 20 Nov 2024 21:03:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rs12FvDhCfqf; Wed, 20 Nov 2024 21:03:02 +0000 (UTC)
+ id FvaEBEafya2r; Wed, 20 Nov 2024 21:03:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 665E060BCF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75CC160E70
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 665E060BCF;
-	Wed, 20 Nov 2024 21:03:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B4F85B28
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75CC160E70;
+	Wed, 20 Nov 2024 21:03:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CA63027D6
  for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:02:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 397E685115
+ by smtp2.osuosl.org (Postfix) with ESMTP id A580242F82
  for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:02:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ch3t5eL7erNd for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VVpaCSbDdkyN for <buildroot@buildroot.org>;
  Wed, 20 Nov 2024 21:02:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6ACD085125
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93AC140AEF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6ACD085125
+ by smtp2.osuosl.org (Postfix) with ESMTP id 93AC140AEF
  for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:02:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 56700864E7; Wed, 20 Nov 2024 21:02:57 +0000 (UTC)
+ id 8E850864E7; Wed, 20 Nov 2024 21:02:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Nov 2024 21:43:12 +0100
+Date: Wed, 20 Nov 2024 21:54:06 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 9ffb14ced94a106e05b81de4f3029ee711d127b2
-X-Git-Newrev: d184ae6720fcfda2e3980e45f1c1f3de49a8e485
+X-Git-Oldrev: ab3491e02e885acceae6cb7c50bd452ab9c6ee31
+X-Git-Newrev: 026ad00c9961d77ff9cc277b19ee7f8f10933c40
 X-Patchwork-Hint: ignore
-Message-Id: <20241120210257.56700864E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/linux-pam: adjust
- login pam file for lastlog
+Message-Id: <20241120210257.8E850864E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/sshguard: patch
+ /usr/local/sbin/sshguard path in systemd service
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,61 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d184ae6720fcfda2e3980e45f1c1f3de49a8e485
+commit: https://git.buildroot.net/buildroot/commit/?id=026ad00c9961d77ff9cc277b19ee7f8f10933c40
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-when pam_lastlog.so is not installed login issues an error
-that it is not able to load it.
+The systemd service deployed to the target is derived from an example
+hardcoded for the /usr/local/sbin/ path, but we install sshguard at
+/usr/sbin/. Thus, by default we get this error message:
 
-Hence only enable the entry when pam_lastlog.so is installed.
+$ journalctl -b -u sshguard.service -f
+systemd[1]: Started SSHGuard - blocks brute-force login attempts.
+(sshguard)[612]: sshguard.service: Unable to locate executable '/usr/local/sbin/sshguard': No such file or directory
+(sshguard)[612]: sshguard.service: Failed at step EXEC spawning /usr/local/sbin/sshguard: No such file or directory
+systemd[1]: sshguard.service: Main process exited, code=exited, status=203/EXEC
+systemd[1]: sshguard.service: Failed with result 'exit-code'.
+systemd[1]: sshguard.service: Scheduled restart job, restart counter is at 5.
+systemd[1]: sshguard.service: Start request repeated too quickly.
+systemd[1]: sshguard.service: Failed with result 'exit-code'.
+systemd[1]: Failed to start SSHGuard - blocks brute-force login attempts.
 
-Fixes:
- login[649]: PAM unable to dlopen(/lib/security/pam_lastlog.so): /lib/security/pam_lastlog.so: cannot open shared object file: No such file or directory
- login[649]: PAM adding faulty module: /lib/security/pam_lastlog.so
+Fix up the path in the service after the $(INSTALL) command has run.
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ee5c08aa88757c214172161b469437450880a7f8)
+(cherry picked from commit 750d0e377d66b88fc7c976f492aeafc1def4b7dc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-pam/linux-pam.mk | 5 +++++
- package/linux-pam/login.pam    | 2 +-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ package/sshguard/sshguard.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index a5b8c9151f..23b09efbae 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -56,6 +56,10 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LINUX_PAM_LASTLOG),y)
- LINUX_PAM_CONF_OPTS += --enable-lastlog
-+define LINUX_PAM_LASTLOG_PAMFILE_TWEAK
-+	$(SED) 's/^# \(.*pam_lastlog.so.*\)$$/\1/' \
-+		$(TARGET_DIR)/etc/pam.d/login
-+endef
- else
- LINUX_PAM_CONF_OPTS += --disable-lastlog
- endif
-@@ -66,6 +70,7 @@ define LINUX_PAM_INSTALL_CONFIG
- 		$(TARGET_DIR)/etc/pam.d/login
- 	$(INSTALL) -m 0644 -D package/linux-pam/other.pam \
- 		$(TARGET_DIR)/etc/pam.d/other
-+	$(LINUX_PAM_LASTLOG_PAMFILE_TWEAK)
- 	$(LINUX_PAM_SELINUX_PAMFILE_TWEAK)
+diff --git a/package/sshguard/sshguard.mk b/package/sshguard/sshguard.mk
+index 8d03635743..97cbbb2bdd 100644
+--- a/package/sshguard/sshguard.mk
++++ b/package/sshguard/sshguard.mk
+@@ -25,6 +25,8 @@ endef
+ define SSHGUARD_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0644 $(@D)/examples/sshguard.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/sshguard.service
++	$(SED) 's:/usr/local/sbin/sshguard:/usr/sbin/sshguard:g' \
++		$(TARGET_DIR)/usr/lib/systemd/system/sshguard.service
  endef
  
-diff --git a/package/linux-pam/login.pam b/package/linux-pam/login.pam
-index 5df7db628c..21d2afb61e 100644
---- a/package/linux-pam/login.pam
-+++ b/package/linux-pam/login.pam
-@@ -8,5 +8,5 @@ password	required	pam_unix.so nullok
- session		required	pam_limits.so
- session		required	pam_env.so
- session		required	pam_unix.so
--session		optional	pam_lastlog.so
-+# session	optional	pam_lastlog.so
- # session	required	pam_selinux.so open
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
