@@ -1,67 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A6E9D743D2
-	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 20:39:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 514FBD743D8
+	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 20:45:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1988B606DA;
-	Wed, 20 Nov 2024 20:39:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45C34407B3;
+	Wed, 20 Nov 2024 20:45:12 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G3VMRPah-xEs; Wed, 20 Nov 2024 20:45:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A252407CF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A252407CF;
+	Wed, 20 Nov 2024 20:45:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 12492970
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 20:45:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E744D60A5D
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 20:45:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gs2gY_hCqwwv; Wed, 20 Nov 2024 20:39:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23327606EC
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23327606EC;
-	Wed, 20 Nov 2024 20:39:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 62186970
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 20:39:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F4FB40AEF
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 20:39:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TGOFRxbYKEYd for <buildroot@buildroot.org>;
- Wed, 20 Nov 2024 20:39:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id TerlkiUPmVhS for <buildroot@buildroot.org>;
+ Wed, 20 Nov 2024 20:45:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3CF01405CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CF01405CA
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3CF01405CA
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 20:39:36 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E58741C0003;
- Wed, 20 Nov 2024 20:39:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 11F31608D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11F31608D9
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 11F31608D9
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 20:45:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AFE2BFF803;
+ Wed, 20 Nov 2024 20:45:04 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tDrU4-001AjL-0V;
- Wed, 20 Nov 2024 21:39:32 +0100
+ (envelope-from <peter@korsgaard.com>) id 1tDrZP-001C2r-34;
+ Wed, 20 Nov 2024 21:45:03 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,  Hannah Kiekens
- <hannah.kiekens@mind.be>,  Jesse Van Gavere <jesseevg@gmail.com>,  Roy
- Kollen Svendsen <roykollensvendsen@gmail.com>
-References: <20240921080845.18098-1-hannah.kiekens@mind.be>
- <20241029222938.67c80af7@windsurf>
-Date: Wed, 20 Nov 2024 21:39:32 +0100
-In-Reply-To: <20241029222938.67c80af7@windsurf> (Thomas Petazzoni via
- buildroot's message of "Tue, 29 Oct 2024 22:29:38 +0100")
-Message-ID: <87bjy9vdvf.fsf@dell.be.48ers.dk>
+To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+References: <20241001092057.612830-1-buildroot@heine.tech>
+Date: Wed, 20 Nov 2024 21:45:03 +0100
+In-Reply-To: <20241001092057.612830-1-buildroot@heine.tech> (Michael Nosthoff
+ via buildroot's message of "Tue, 1 Oct 2024 11:20:55 +0200")
+Message-ID: <877c8xvdm8.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt6/qt6base: remove
- -DFEATURE_concurrent=OFF from hard coded list
+Subject: Re: [Buildroot] [PATCH] package/linux-pam: adjust login pam file
+ for lastlog
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,21 +74,22 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@buildroot.org> writes:
 
- > On Sat, 21 Sep 2024 10:08:45 +0200
- > Hannah Kiekens via buildroot <buildroot@buildroot.org> wrote:
+ > when pam_lastlog.so is not installed login issues an error
+ > that it is not able to load it.
 
- >> It is set by BR2_PACKAGE_QT6BASE_CONCURRENT
- >> 
- >> Signed-off-by: Hannah Kiekens <hannah.kiekens@mind.be>
- >> ---
- >> package/qt6/qt6base/qt6base.mk | 1 -
- >> 1 file changed, 1 deletion(-)
+ > Hence only enable the entry when pam_lastlog.so is installed.
 
- > Well spotted, thanks!
+ > Fixes:
+ >  login[649]: PAM unable to dlopen(/lib/security/pam_lastlog.so):
+ > /lib/security/pam_lastlog.so: cannot open shared object file: No such
+ > file or directory
+ >  login[649]: PAM adding faulty module: /lib/security/pam_lastlog.so
 
-Committed to 2024.02.x and 2024.08.x, thanks.
+ > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+
+Committed to 2024.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
