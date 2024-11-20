@@ -1,64 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43E3DD743D8
-	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:31:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99DAFD743DA
+	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:33:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1382760617;
-	Wed, 20 Nov 2024 21:31:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8A3E4AD3F;
+	Wed, 20 Nov 2024 21:33:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hSA7Vo2ef2xU; Wed, 20 Nov 2024 21:33:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 630184AC6E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 630184AC6E;
+	Wed, 20 Nov 2024 21:33:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 00FBC970
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:33:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D237C60AAA
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:33:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gowd92TFUPiq; Wed, 20 Nov 2024 21:31:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 370FB606AE
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 370FB606AE;
-	Wed, 20 Nov 2024 21:31:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7E55B5B28
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:31:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5FE6384C55
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:31:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8yGRJBF8IP0x for <buildroot@buildroot.org>;
- Wed, 20 Nov 2024 21:31:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id F_DnN5d9OKWT for <buildroot@buildroot.org>;
+ Wed, 20 Nov 2024 21:33:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5584284C3C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5584284C3C
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5584284C3C
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:31:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 415DA1BF205;
- Wed, 20 Nov 2024 21:31:52 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tDsIh-002LaF-1s;
- Wed, 20 Nov 2024 22:31:51 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFBDC60C05
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFBDC60C05
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:33:10 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CA7388652B; Wed, 20 Nov 2024 21:33:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org,  Maxim Kochetkov <fido_max@inbox.ru>
-References: <20241120204812.1886876-1-bernd@kuhls.net>
-Date: Wed, 20 Nov 2024 22:31:51 +0100
-In-Reply-To: <20241120204812.1886876-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Wed, 20 Nov 2024 21:48:12 +0100")
-Message-ID: <87y11dsibc.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: security bump
- version to 16.5
+To: buildroot@buildroot.org
+Date: Wed, 20 Nov 2024 22:31:35 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 575d971820dedf7a0c6e217deb57ecd4db1218f5
+X-Git-Newrev: 257c1de7e9ec54da2d2d0a040b5a0fda06cd05f2
+X-Patchwork-Hint: ignore
+Message-Id: <20241120213310.CA7388652B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/postgresql: security bump version
+ to 16.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,24 +59,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=257c1de7e9ec54da2d2d0a040b5a0fda06cd05f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Release notes:
- > https://www.postgresql.org/about/news/postgresql-171-165-159-1414-1317-and-1221-released-2955/
+Release notes:
+https://www.postgresql.org/about/news/postgresql-171-165-159-1414-1317-and-1221-released-2955/
 
- > Fixes CVE-2024-10976, CVE-2024-10977, CVE-2024-10978 & CVE-2024-10979.
+Fixes CVE-2024-10976, CVE-2024-10977, CVE-2024-10978 & CVE-2024-10979.
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 1d9a9081b7..6a15f78628 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v16.4/postgresql-16.4.tar.bz2.sha256
+-sha256  971766d645aa73e93b9ef4e3be44201b4f45b5477095b049125403f9f3386d6f  postgresql-16.4.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v16.5/postgresql-16.5.tar.bz2.sha256
++sha256  a6cbbb7037f98cb8afa7d3970b7c48040cf02b115e39253a0c037a8bb8e778f0  postgresql-16.5.tar.bz2
+ # License file, Locally calculated
+ sha256  9bf20ee493926a7e17a74bc7f05089fbc014269667b1540bc35a6b194a40c9de  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 4021a54300..12693e625c 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 16.4
++POSTGRESQL_VERSION = 16.5
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
