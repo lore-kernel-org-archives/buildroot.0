@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14630D743DA
-	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:03:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E88B7D743D8
+	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:03:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF98760B92;
-	Wed, 20 Nov 2024 21:03:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA0E4610C5;
+	Wed, 20 Nov 2024 21:03:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FvaEBEafya2r; Wed, 20 Nov 2024 21:03:04 +0000 (UTC)
+ id 5RvNKK0uqz6Z; Wed, 20 Nov 2024 21:03:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75CC160E70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CEF160A5D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75CC160E70;
-	Wed, 20 Nov 2024 21:03:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CEF160A5D;
+	Wed, 20 Nov 2024 21:03:07 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id CA63027D6
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:02:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 16574970
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:02:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A580242F82
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB8C440AEF
  for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:02:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VVpaCSbDdkyN for <buildroot@buildroot.org>;
+ id ZzKsUPI3NZ6T for <buildroot@buildroot.org>;
  Wed, 20 Nov 2024 21:02:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93AC140AEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A8F0403AA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93AC140AEF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7A8F0403AA
  for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:02:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E850864E7; Wed, 20 Nov 2024 21:02:57 +0000 (UTC)
+ id 62E3C864E8; Wed, 20 Nov 2024 21:02:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Nov 2024 21:54:06 +0100
+Date: Wed, 20 Nov 2024 21:46:09 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: ab3491e02e885acceae6cb7c50bd452ab9c6ee31
-X-Git-Newrev: 026ad00c9961d77ff9cc277b19ee7f8f10933c40
+X-Git-Oldrev: d184ae6720fcfda2e3980e45f1c1f3de49a8e485
+X-Git-Newrev: f15c0686ee0d8d2f638e9fa56df303a5f415b9b9
 X-Patchwork-Hint: ignore
-Message-Id: <20241120210257.8E850864E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/sshguard: patch
- /usr/local/sbin/sshguard path in systemd service
+Message-Id: <20241120210257.62E3C864E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/ntp: add
+ upstream-provided patch to fix regression
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,47 +65,84 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=026ad00c9961d77ff9cc277b19ee7f8f10933c40
+commit: https://git.buildroot.net/buildroot/commit/?id=f15c0686ee0d8d2f638e9fa56df303a5f415b9b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-The systemd service deployed to the target is derived from an example
-hardcoded for the /usr/local/sbin/ path, but we install sshguard at
-/usr/sbin/. Thus, by default we get this error message:
+This patch fixes a regression [1] introduced in ntpd 4.2.8p18 [2].
 
-$ journalctl -b -u sshguard.service -f
-systemd[1]: Started SSHGuard - blocks brute-force login attempts.
-(sshguard)[612]: sshguard.service: Unable to locate executable '/usr/local/sbin/sshguard': No such file or directory
-(sshguard)[612]: sshguard.service: Failed at step EXEC spawning /usr/local/sbin/sshguard: No such file or directory
-systemd[1]: sshguard.service: Main process exited, code=exited, status=203/EXEC
-systemd[1]: sshguard.service: Failed with result 'exit-code'.
-systemd[1]: sshguard.service: Scheduled restart job, restart counter is at 5.
-systemd[1]: sshguard.service: Start request repeated too quickly.
-systemd[1]: sshguard.service: Failed with result 'exit-code'.
-systemd[1]: Failed to start SSHGuard - blocks brute-force login attempts.
+  ntpd[200]: Listen normally on 3 lo [::1]:123
+  ntpd[200]: bind(20) AF_INET6 [fe80::bf3d:254d:dee0:d345%3]:123 flags 0x811 failed: Cannot assign requested address
+  ntpd[200]: unable to create socket on enp0s3 (4) for [fe80::bf3d:254d:dee0:d345%3]:123
+  ntpd[192]: daemon control: got EOF
+  ntpd[192]: daemon child died with signal 11
+  systemd[1]: ntpd.service: Control process exited, code=exited, status=70/SOFTWARE
+  systemd[1]: ntpd.service: Failed with result 'exit-code'.
+  systemd[1]: Failed to start Network Time Service.
 
-Fix up the path in the service after the $(INSTALL) command has run.
+If the IPv6 link-local interface was not ready for binding on the first
+attempt, ntpd would segfault in update_interfaces(). The segfault would
+only occur when ntpd was started as part of the boot sequence. Most
+- but not all - boots were affected. Evidently it could happen that the
+timing of ntpd's start up was delayed enough that the IPv6 link-local
+interface was ready for the bind() call when it was first issued by
+open_socket() via create_interface().
 
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+[1]: https://bugs.ntp.org/show_bug.cgi?id=3928
+[2]: https://bugs.ntp.org/show_bug.cgi?id=3913
+
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 750d0e377d66b88fc7c976f492aeafc1def4b7dc)
+(cherry picked from commit 489e38fd2c16f9de2a187a4774df29f8c929bc30)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sshguard/sshguard.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ .../0004-Fix-crash-when-binding-IPv6-address.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/sshguard/sshguard.mk b/package/sshguard/sshguard.mk
-index 8d03635743..97cbbb2bdd 100644
---- a/package/sshguard/sshguard.mk
-+++ b/package/sshguard/sshguard.mk
-@@ -25,6 +25,8 @@ endef
- define SSHGUARD_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0644 $(@D)/examples/sshguard.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/sshguard.service
-+	$(SED) 's:/usr/local/sbin/sshguard:/usr/sbin/sshguard:g' \
-+		$(TARGET_DIR)/usr/lib/systemd/system/sshguard.service
- endef
- 
- $(eval $(autotools-package))
+diff --git a/package/ntp/0004-Fix-crash-when-binding-IPv6-address.patch b/package/ntp/0004-Fix-crash-when-binding-IPv6-address.patch
+new file mode 100644
+index 0000000000..b4e7378a32
+--- /dev/null
++++ b/package/ntp/0004-Fix-crash-when-binding-IPv6-address.patch
+@@ -0,0 +1,38 @@
++Fix crash when binding IPv6 address
++
++Reference:
++  https://bugs.ntp.org/show_bug.cgi?id=3928
++
++Upstream: https://people.nwtime.org/hart/ntp-stable-3928-29.tar.gz
++
++Ported fix from updated tarball provided by upstream:
++https://bugs.ntp.org/show_bug.cgi?id=3928#c14
++
++Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
++---
++ ntpd/ntp_io.c |    6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++Index: ntp-4.2.8p18/ntpd/ntp_io.c
++===================================================================
++--- ntp-4.2.8p18.orig/ntpd/ntp_io.c
+++++ ntp-4.2.8p18/ntpd/ntp_io.c
++@@ -1917,15 +1917,15 @@ update_interfaces(
++ 			}
++ 			new_interface_found = TRUE;
++ 			DPRINT_INTERFACE(3,
++-				(ep, "updating ", " new - created\n"));
+++				(ep2, "updating ", " new - created\n"));
++ 		}
++ 		else {
++ 			DPRINT_INTERFACE(3,
++-				(ep, "updating ", " new - FAILED"));
+++				(ep2, "updating ", " new - FAILED"));
++ 
++ 			msyslog(LOG_ERR,
++ 				"cannot bind address %s",
++-				stoa(&ep->sin));
+++				stoa(&ep2->sin));
++ 		}
++ 		free(ep2);
++ 	}
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
