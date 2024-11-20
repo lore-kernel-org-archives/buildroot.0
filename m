@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F276ED743D8
-	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:31:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E06B5D743D9
+	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:31:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B51E40246;
-	Wed, 20 Nov 2024 21:31:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 25E3E403DE;
+	Wed, 20 Nov 2024 21:31:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yUEBe7B3wRgB; Wed, 20 Nov 2024 21:31:46 +0000 (UTC)
+ id cbylrNIdYRTT; Wed, 20 Nov 2024 21:31:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2531240268
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBD2640328
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2531240268;
-	Wed, 20 Nov 2024 21:31:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D3430970
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:31:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBD2640328;
+	Wed, 20 Nov 2024 21:31:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 149EA5B28
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:31:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B3224606AE
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:31:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 00DDB4057F
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:31:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zRyjDfXhPEHf for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HBuPYsmzOV0w for <buildroot@buildroot.org>;
  Wed, 20 Nov 2024 21:31:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA94E60617
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA34D403AA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA94E60617
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA34D403AA
  for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:31:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C42B086521; Wed, 20 Nov 2024 21:31:42 +0000 (UTC)
+ id B811186520; Wed, 20 Nov 2024 21:31:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Nov 2024 22:11:50 +0100
+Date: Wed, 20 Nov 2024 22:10:16 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 22e818e66b242a6936126e3114d5bcc8256c6704
-X-Git-Newrev: d04f68826f842671d2c7433086057c5d6c447964
+X-Git-Oldrev: 6239e449d15e6f714714353bf10f100e0397d3fa
+X-Git-Newrev: 22e818e66b242a6936126e3114d5bcc8256c6704
 X-Patchwork-Hint: ignore
-Message-Id: <20241120213142.C42B086521@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] support/testing: add
- rrdtool runtime test
+Message-Id: <20241120213142.B811186520@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/systemd: bump to
+ 256.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,142 +60,106 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2449922488877101225=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d04f68826f842671d2c7433086057c5d6c447964
+--===============2449922488877101225==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=22e818e66b242a6936126e3114d5bcc8256c6704
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Remove patch that was applied upstream.
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8756b76a0f8d4844c7389c7fc45dbbfc880ebae1)
+(cherry picked from commit 6ec14080cd20cfd4e265c37c85446f24a70b5db6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                    |   1 +
- support/testing/tests/package/test_rrdtool.py | 100 ++++++++++++++++++++++++++
- 2 files changed, 101 insertions(+)
+ ...issing_loop.h-fix-missing-LOOP_SET_BLOCK_.patch | 38 ----------------------
+ package/systemd/systemd.hash                       |  2 +-
+ package/systemd/systemd.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 40 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 639ed01cfa..1e0862f1c0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1941,6 +1941,7 @@ F:	support/testing/tests/package/test_python_spake2.py
- F:	support/testing/tests/package/test_python_sympy.py
- F:	support/testing/tests/package/test_rdma_core.py
- F:	support/testing/tests/package/test_rdma_core/
-+F:	support/testing/tests/package/test_rrdtool.py
- F:	support/testing/tests/package/test_rt_tests.py
- F:	support/testing/tests/package/test_screen.py
- F:	support/testing/tests/package/test_sed.py
-diff --git a/support/testing/tests/package/test_rrdtool.py b/support/testing/tests/package/test_rrdtool.py
-new file mode 100644
-index 0000000000..431a867bf2
---- /dev/null
-+++ b/support/testing/tests/package/test_rrdtool.py
-@@ -0,0 +1,100 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestRRDTool(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_RRDTOOL=y
-+        BR2_PACKAGE_RRDTOOL_RRDGRAPH=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # We check the program can run.
-+        self.assertRunOk("rrdtool --version")
-+
-+        # This test sequence is inspired from parts of the RRDTool
-+        # tutorial:
-+        # https://oss.oetiker.ch/rrdtool/tut/rrdtutorial.en.html
-+
-+        rrd_file = "test.rrd"
-+        data_source = "speed"
-+
-+        cmd = f"rrdtool create {rrd_file}"
-+        cmd += " --start 920804400"
-+        cmd += f" DS:{data_source}:COUNTER:600:U:U"
-+        cmd += " RRA:AVERAGE:0.5:1:24"
-+        cmd += " RRA:AVERAGE:0.5:6:10"
-+        self.assertRunOk(cmd)
-+
-+        # Some data to fill in our database, from the tutorial page.
-+        data = [12345, 12357, 12363, 12363, 12363,
-+                12373, 12383, 12393, 12399, 12405,
-+                12411, 12415, 12420, 12422, 12423]
-+        timestamp = 920804700  # timestamp of: Sun Mar  7 12:05:00 PM CET 1999
-+
-+        # We check we can put our data in the database. We start at
-+        # our timestamp, then increase by 5 minutes.
-+        for d in data:
-+            cmd = f"rrdtool update {rrd_file} {timestamp}:{d}"
-+            timestamp += 300
-+            self.assertRunOk(cmd)
-+
-+        # We check we can read back our data.
-+        cmd = f"rrdtool fetch {rrd_file}"
-+        cmd += " AVERAGE --start 920804400 --end 920809200"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0].strip(), data_source)
-+        # We check that at time=920805600 we have speed=0.
-+        data_line = next(ln for ln in out if ln.strip().startswith('920805600:'))
-+        speed = float(data_line.split(':')[1])
-+        self.assertAlmostEqual(speed, 0.)
-+
-+        # We generate a first simple image graph.
-+        cmd = "rrdtool graph speed.png"
-+        cmd += " --start 920804400 --end 920808000"
-+        cmd += f" DEF:myspeed={rrd_file}:{data_source}:AVERAGE"
-+        cmd += " LINE2:myspeed#FF0000"
-+        self.assertRunOk(cmd, timeout=20)
-+
-+        # We check the output file exists and has a size
-+        # greater than zero.
-+        self.assertRunOk("test -s speed.png")
-+
-+        # We generate a slightly more complex graph.
-+        cmd = "rrdtool graph speed2.png"
-+        cmd += " --start 920804400 --end 920808000"
-+        cmd += " --vertical-label m/s"
-+        cmd += f" DEF:myspeed={rrd_file}:{data_source}:AVERAGE"
-+        cmd += " CDEF:realspeed=myspeed,1000,\\*"
-+        cmd += " LINE2:realspeed#FF0000"
-+        self.assertRunOk(cmd, timeout=20)
-+
-+        # Again, we check the output file exists.
-+        self.assertRunOk("test -s speed2.png")
-+
-+        # Finally, we generate the last graph, with some rules.
-+        cmd = "rrdtool graph speed3.png"
-+        cmd += " --start 920804400 --end 920808000"
-+        cmd += " --vertical-label km/h"
-+        cmd += f" DEF:myspeed={rrd_file}:{data_source}:AVERAGE"
-+        cmd += " \"CDEF:kmh=myspeed,3600,*\""
-+        cmd += " CDEF:fast=kmh,100,GT,kmh,0,IF"
-+        cmd += " CDEF:good=kmh,100,GT,0,kmh,IF"
-+        cmd += " HRULE:100#0000FF:\"Maximum allowed\""
-+        cmd += " AREA:good#00FF00:\"Good speed\""
-+        cmd += " AREA:fast#FF0000:\"Too fast\""
-+        self.assertRunOk(cmd, timeout=20)
-+
-+        # And again, we check the output file exists.
-+        self.assertRunOk("test -s speed3.png")
+diff --git a/package/systemd/0001-src-basic-missing_loop.h-fix-missing-LOOP_SET_BLOCK_.patch b/package/systemd/0001-src-basic-missing_loop.h-fix-missing-LOOP_SET_BLOCK_.patch
+deleted file mode 100644
+index 0ab5a4e98d..0000000000
+--- a/package/systemd/0001-src-basic-missing_loop.h-fix-missing-LOOP_SET_BLOCK_.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 56ab1c54497d9fac74380ff9e11aaf931a917d2b Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+-Date: Fri, 14 Jun 2024 14:37:29 +0200
+-Subject: [PATCH] src/basic/missing_loop.h: fix missing LOOP_SET_BLOCK_SIZE
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Builds with kernels headers < 4.14 fail with:
+-
+-../src/shared/loop-util.c: In function ‘loop_configure_fallback’:
+-../src/shared/loop-util.c:237:31: error: ‘LOOP_SET_BLOCK_SIZE’ undeclared (first use in this function); did you mean ‘LOOP_SET_DIRECT_IO’?
+-                 if (ioctl(fd, LOOP_SET_BLOCK_SIZE, (unsigned long) c->block_size) < 0)
+-                               ^~~~~~~~~~~~~~~~~~~
+-                               LOOP_SET_DIRECT_IO
+-
+-Fixes: https://github.com/systemd/systemd/issues/33341
+-Upstream: https://github.com/systemd/systemd/commit/56ab1c54497d9fac74380ff9e11aaf931a917d2b
+-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+----
+- src/basic/missing_loop.h | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/src/basic/missing_loop.h b/src/basic/missing_loop.h
+-index b88501d78b..f83a14c914 100644
+---- a/src/basic/missing_loop.h
+-+++ b/src/basic/missing_loop.h
+-@@ -29,3 +29,7 @@ assert_cc(LOOP_SET_DIRECT_IO == 0x4C08);
+- #ifndef LOOP_SET_STATUS_SETTABLE_FLAGS
+- #  define LOOP_SET_STATUS_SETTABLE_FLAGS (LO_FLAGS_AUTOCLEAR | LO_FLAGS_PARTSCAN)
+- #endif
+-+
+-+#ifndef LOOP_SET_BLOCK_SIZE
+-+#  define LOOP_SET_BLOCK_SIZE 0x4C09
+-+#endif
+--- 
+-2.34.1
+-
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 399ac61492..976d88c1f5 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256  7861d544190f938cac1b242624d78c96fe2ebbc7b72f86166e88b50451c6fa58  systemd-256.4.tar.gz
++sha256  896d76ff65c88f5fd9e42f90d152b0579049158a163431dd77cdc57748b1d7b0  systemd-256.7.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+ sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 5dca8681bc..87a8285b8a 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -19,7 +19,7 @@
+ # - Diff sysusers.d with the previous version
+ # - Diff factory/etc/nsswitch.conf with the previous version
+ #   (details are often sprinkled around in README and manpages)
+-SYSTEMD_VERSION = 256.4
++SYSTEMD_VERSION = 256.7
+ SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = \
+ 	LGPL-2.1+, \
+
+--===============2449922488877101225==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2449922488877101225==--
