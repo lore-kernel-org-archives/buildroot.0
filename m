@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FE01D743D8
-	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 20:52:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22558D743D2
+	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 20:53:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A820543355;
-	Wed, 20 Nov 2024 20:52:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF24660818;
+	Wed, 20 Nov 2024 20:53:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7HyitkmKXZYu; Wed, 20 Nov 2024 20:53:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E913D6059F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E913D6059F;
+	Wed, 20 Nov 2024 20:53:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0978327D6
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 20:53:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9D684711B
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 20:53:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s-7HeBMfu0O8; Wed, 20 Nov 2024 20:52:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A386544625
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A386544625;
-	Wed, 20 Nov 2024 20:52:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D8AD7970
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 20:52:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C419B42F82
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 20:52:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UesGfZ37twtV for <buildroot@buildroot.org>;
- Wed, 20 Nov 2024 20:52:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id xdUFv0iaHt9b for <buildroot@buildroot.org>;
+ Wed, 20 Nov 2024 20:53:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4309240AEF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4309240AEF
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4309240AEF
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 20:52:27 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B7C891C0006;
- Wed, 20 Nov 2024 20:52:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 96D9F45AEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96D9F45AEB
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 96D9F45AEB
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 20:53:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 25C1B240004;
+ Wed, 20 Nov 2024 20:53:22 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tDrgX-001Dzn-0b;
- Wed, 20 Nov 2024 21:52:25 +0100
+ (envelope-from <peter@korsgaard.com>) id 1tDrhS-001EBv-1k;
+ Wed, 20 Nov 2024 21:53:22 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-References: <f068d8afdff3043860dcd894bc5076c1b3817ea5.1727425450.git.baruch@tkos.co.il>
-Date: Wed, 20 Nov 2024 21:52:25 +0100
-In-Reply-To: <f068d8afdff3043860dcd894bc5076c1b3817ea5.1727425450.git.baruch@tkos.co.il>
- (Baruch Siach via buildroot's message of "Fri, 27 Sep 2024 11:24:10
- +0300")
-Message-ID: <87y11dtypi.fsf@dell.be.48ers.dk>
+To: Romain Naour via buildroot <buildroot@buildroot.org>
+Cc: Romain Naour <romain.naour@smile.fr>
+References: <20241030194650.C1CE984CF1@busybox.osuosl.org>
+Date: Wed, 20 Nov 2024 21:53:22 +0100
+In-Reply-To: <20241030194650.C1CE984CF1@busybox.osuosl.org> (Romain Naour via
+ buildroot's message of "Wed, 30 Oct 2024 20:45:29 +0100")
+Message-ID: <87ttc1tynx.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/ebtables: remove
- KERNEL_64_USERSPACE_32 workaround
+Subject: Re: [Buildroot] [git commit] package/musl-compat-headers: fix
+ download of queue.h
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,31 +70,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Baruch" == Baruch Siach via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Romain" == Romain Naour via buildroot <buildroot@buildroot.org> writes:
 
- > This workaround breaks build with gcc 14.
- > Upstream developers acknowledged[1] the 32/64 compatibility issue more
- > than 3 years ago, but no proper fix has been applied. Specifically, for
- > aarch64 we don't even enable BR2_KERNEL_64_USERLAND_32, so this
- > workaround is not effective there.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=ebcccdfbd625b2773de705f4519454c131561f17
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The least we can do is make ebtables depend on
- > !BR2_KERNEL_64_USERLAND_32.
+ > http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys/queue.h?rev=1.70 now
+ > returns some HTML soup instead of the plain text version of the file,
+ > causing the hash check to fail.
 
- > [1] https://lore.kernel.org/all/20210518181730.13436-1-patrickdepinguin@gmail.com/
+ > http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys/queue.h?rev=1.70;content-type=text%2Fplain
+ > returns the correct data, but the ";" in the URL causes some issues
+ > with the parsing logic in Buildroot.
+
+ > So let's switch to
+ > https://raw.githubusercontent.com/NetBSD/src/03be82a6b173b3c62116b7a186067fed3004dd44/sys/sys/queue.h
+ > which delivers exactly the same file, but hopefully will be more
+ > stable. The file name changed to just queue.h, but the contents is the
+ > same.
 
  > Fixes:
- > http://autobuild.buildroot.net/results/680674c2b61209b505efa022a8fd9751ddc5fd47/
- > http://autobuild.buildroot.net/results/60f8f5f087111ec3f300dc7979363de5a9f64f08/
 
- > Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ >   http://autobuild.buildroot.net/results/57c8078f382f74859076512425b2f1c52f44e95a/
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992850 (and many other similar cases)
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
 Committed to 2024.02.x and 2024.08.x, thanks.
 
