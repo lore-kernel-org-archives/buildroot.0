@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14CC2D743D9
-	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:04:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15A19D743D9
+	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:04:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1E596FA50;
-	Wed, 20 Nov 2024 21:04:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84179606D6;
+	Wed, 20 Nov 2024 21:04:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hIDz5yAb3TfR; Wed, 20 Nov 2024 21:04:29 +0000 (UTC)
+ id QeAQinuBW2Rx; Wed, 20 Nov 2024 21:04:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FDD46FA4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 149B36FA4D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FDD46FA4A;
-	Wed, 20 Nov 2024 21:04:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 149B36FA4D;
+	Wed, 20 Nov 2024 21:04:33 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A0D527D6
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:04:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 18896970
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:04:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 430E2610C1
+ by smtp3.osuosl.org (Postfix) with ESMTP id EAB8561141
  for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:04:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dp3qcoRrfTlJ for <buildroot@buildroot.org>;
+ id KogAkateInGe for <buildroot@buildroot.org>;
  Wed, 20 Nov 2024 21:04:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D087610C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99BA5610A6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D087610C5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 99BA5610A6
  for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:04:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88DB186502; Wed, 20 Nov 2024 21:04:08 +0000 (UTC)
+ id 95C517F881; Wed, 20 Nov 2024 21:04:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Nov 2024 21:53:13 +0100
+Date: Wed, 20 Nov 2024 21:53:51 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 96706bc7fe013b1f3f62199c4a63587282701322
-X-Git-Newrev: 2d8d9c45f5ea0730a502e59c629405e2400c37fc
+X-Git-Oldrev: 2d8d9c45f5ea0730a502e59c629405e2400c37fc
+X-Git-Newrev: 09be912cdbefe362fdf98d1b3edceadb524928f0
 X-Patchwork-Hint: ignore
-Message-Id: <20241120210408.88DB186502@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
- package/musl-compat-headers: fix download of queue.h
+Message-Id: <20241120210408.95C517F881@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/sshguard: patch
+ /usr/local/sbin/sshguard path in systemd service
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,58 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d8d9c45f5ea0730a502e59c629405e2400c37fc
+commit: https://git.buildroot.net/buildroot/commit/?id=09be912cdbefe362fdf98d1b3edceadb524928f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys/queue.h?rev=1.70 now
-returns some HTML soup instead of the plain text version of the file,
-causing the hash check to fail.
+The systemd service deployed to the target is derived from an example
+hardcoded for the /usr/local/sbin/ path, but we install sshguard at
+/usr/sbin/. Thus, by default we get this error message:
 
-http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys/queue.h?rev=1.70;content-type=text%2Fplain
-returns the correct data, but the ";" in the URL causes some issues
-with the parsing logic in Buildroot.
+$ journalctl -b -u sshguard.service -f
+systemd[1]: Started SSHGuard - blocks brute-force login attempts.
+(sshguard)[612]: sshguard.service: Unable to locate executable '/usr/local/sbin/sshguard': No such file or directory
+(sshguard)[612]: sshguard.service: Failed at step EXEC spawning /usr/local/sbin/sshguard: No such file or directory
+systemd[1]: sshguard.service: Main process exited, code=exited, status=203/EXEC
+systemd[1]: sshguard.service: Failed with result 'exit-code'.
+systemd[1]: sshguard.service: Scheduled restart job, restart counter is at 5.
+systemd[1]: sshguard.service: Start request repeated too quickly.
+systemd[1]: sshguard.service: Failed with result 'exit-code'.
+systemd[1]: Failed to start SSHGuard - blocks brute-force login attempts.
 
-So let's switch to
-https://raw.githubusercontent.com/NetBSD/src/03be82a6b173b3c62116b7a186067fed3004dd44/sys/sys/queue.h
-which delivers exactly the same file, but hopefully will be more
-stable. The file name changed to just queue.h, but the contents is the
-same.
+Fix up the path in the service after the $(INSTALL) command has run.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/57c8078f382f74859076512425b2f1c52f44e95a/
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992850 (and many other similar cases)
-
+Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit ebcccdfbd625b2773de705f4519454c131561f17)
+(cherry picked from commit 750d0e377d66b88fc7c976f492aeafc1def4b7dc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/musl-compat-headers/musl-compat-headers.hash | 2 +-
- package/musl-compat-headers/musl-compat-headers.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sshguard/sshguard.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/musl-compat-headers/musl-compat-headers.hash b/package/musl-compat-headers/musl-compat-headers.hash
-index 626145df34..27e0afb68c 100644
---- a/package/musl-compat-headers/musl-compat-headers.hash
-+++ b/package/musl-compat-headers/musl-compat-headers.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  c13407edd0e33be73cae72514cb234f8612e1c0e54401c9448daffd3a240158b  queue.h?rev=1.70
-+sha256  c13407edd0e33be73cae72514cb234f8612e1c0e54401c9448daffd3a240158b  queue.h
-diff --git a/package/musl-compat-headers/musl-compat-headers.mk b/package/musl-compat-headers/musl-compat-headers.mk
-index 1cfa894879..865b0bae43 100644
---- a/package/musl-compat-headers/musl-compat-headers.mk
-+++ b/package/musl-compat-headers/musl-compat-headers.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/sshguard/sshguard.mk b/package/sshguard/sshguard.mk
+index 8d03635743..97cbbb2bdd 100644
+--- a/package/sshguard/sshguard.mk
++++ b/package/sshguard/sshguard.mk
+@@ -25,6 +25,8 @@ endef
+ define SSHGUARD_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0644 $(@D)/examples/sshguard.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/sshguard.service
++	$(SED) 's:/usr/local/sbin/sshguard:/usr/sbin/sshguard:g' \
++		$(TARGET_DIR)/usr/lib/systemd/system/sshguard.service
+ endef
  
- # No main site, just using extra downloads
--MUSL_COMPAT_HEADERS_QUEUE_H = http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys/queue.h?rev=1.70
-+MUSL_COMPAT_HEADERS_QUEUE_H = https://raw.githubusercontent.com/NetBSD/src/03be82a6b173b3c62116b7a186067fed3004dd44/sys/sys/queue.h
- 
- MUSL_COMPAT_HEADERS_EXTRA_DOWNLOADS = $(MUSL_COMPAT_HEADERS_QUEUE_H)
- 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
