@@ -4,60 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D906D743D8
-	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:00:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08FE6D743D9
+	for <buildroot@archiver.kernel.org>; Wed, 20 Nov 2024 21:01:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C360460BDB;
-	Wed, 20 Nov 2024 21:00:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD4BC605E1;
+	Wed, 20 Nov 2024 21:01:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yI2zFvUKGzGV; Wed, 20 Nov 2024 21:00:01 +0000 (UTC)
+ id o-s6ML-NNNRB; Wed, 20 Nov 2024 21:01:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20F5B60662
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1FE160646
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20F5B60662;
-	Wed, 20 Nov 2024 21:00:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C47E27D6
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:00:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1FE160646;
+	Wed, 20 Nov 2024 21:01:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8FDDE970
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:01:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 05A7E40971
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:00:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D562413C6
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:01:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HDyXY0nwvWnk for <buildroot@buildroot.org>;
- Wed, 20 Nov 2024 20:59:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ko3HVRsm2Qrf for <buildroot@buildroot.org>;
+ Wed, 20 Nov 2024 21:01:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DFF5F45AC9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFF5F45AC9
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DFF5F45AC9
- for <buildroot@buildroot.org>; Wed, 20 Nov 2024 20:59:58 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 00D3EFF802;
- Wed, 20 Nov 2024 20:59:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7F5F2403AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F5F2403AA
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7F5F2403AA
+ for <buildroot@buildroot.org>; Wed, 20 Nov 2024 21:01:28 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1117D1BF207;
+ Wed, 20 Nov 2024 21:01:25 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tDrno-001FFm-1K;
- Wed, 20 Nov 2024 21:59:56 +0100
+ (envelope-from <peter@korsgaard.com>) id 1tDrpF-001FaK-0c;
+ Wed, 20 Nov 2024 22:01:25 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour via buildroot <buildroot@buildroot.org>
-Cc: Romain Naour <romain.naour@smile.fr>
-References: <20241030212700.2517051-1-romain.naour@smile.fr>
-Date: Wed, 20 Nov 2024 21:59:56 +0100
-In-Reply-To: <20241030212700.2517051-1-romain.naour@smile.fr> (Romain Naour
- via buildroot's message of "Wed, 30 Oct 2024 22:27:00 +0100")
-Message-ID: <87h681tycz.fsf@dell.be.48ers.dk>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Cc: Cherniaev Andrei <dungeonlords789@naver.com>,  Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+References: <20241031110441.2953443-1-dungeonlords789@naver.com>
+ <20241031184531.39b21c15@windsurf>
+Date: Wed, 20 Nov 2024 22:01:25 +0100
+In-Reply-To: <20241031184531.39b21c15@windsurf> (Thomas Petazzoni via
+ buildroot's message of "Thu, 31 Oct 2024 18:45:31 +0100")
+Message-ID: <87cyiptyai.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/checksec: fix download
+Subject: Re: [Buildroot] [PATCH 1/1] configs/pc: fix grub root device in help
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,34 +76,23 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > checksec-2.7.1.tar.gz archive was replaced or regenerated by upstream
- > sometime between the 22 September 2024 [1] and the 29 September 2024
- > [2].
+ > Hello,
+ > On Thu, 31 Oct 2024 20:04:41 +0900
+ > Cherniaev Andrei <dungeonlords789@naver.com> wrote:
 
- > diffoscope report no changes in extracted files exept a different
- > top directory name (checksec.sh-2.7.1/checksec-2.7.1):
+ >> Also make docs more user-friendly
+ >> 
+ >> Signed-off-by: Cherniaev Andrei <dungeonlords789@naver.com>
 
- >   --- checksec-2.7.1.tar.gz a0d7a444d4603fb3d62fa25ef678e544ef39fa7b3c9bd5d22f1a8c526152cdde
- >   +++ checksec-2.7.1.tar.gz eba0616f4033385d6093608a2a2aad3c2debb847d6778c87346f89c80946684f
+ > Thanks for your contribution, I have applied the part of your patch
+ > fixing root=/dev/sda1 and root=/dev/vda1. The rest wasn't relevant, as
+ > it's considered general Buildroot knowledge. We're not going to repeat
+ > in each and every configuration file which package to rebuild to get
+ > things taken into account.
 
- >   Files identical despite different names
- >   --- checksec-2.7.1/ChangeLog
- >   +++ checksec.sh-2.7.1/ChangeLog
-
- > Use the git hash of the 2.7.1 release to use a different archive name
- > than the checksec-2.7.1.tar.gz archive previously released.
-
- > [1] https://gitlab.com/buildroot.org/buildroot/-/jobs/7888799855
- > [2] https://gitlab.com/buildroot.org/buildroot/-/jobs/7948006849
-
- > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/7948006849
-
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
-
-Committed to 2024.08.x, thanks.
+Committed to 2024.02.x and 2024.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
