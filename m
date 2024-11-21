@@ -4,61 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 065A0D6E2A4
-	for <buildroot@archiver.kernel.org>; Thu, 21 Nov 2024 09:45:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCDC1D711CA
+	for <buildroot@archiver.kernel.org>; Thu, 21 Nov 2024 10:26:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A25A360689;
-	Thu, 21 Nov 2024 09:45:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AB3260765;
+	Thu, 21 Nov 2024 10:26:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kx6XphdlFzxn; Thu, 21 Nov 2024 09:45:08 +0000 (UTC)
+ id NxLaWvfNA61z; Thu, 21 Nov 2024 10:26:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B70F6606A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FFC66076A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B70F6606A7;
-	Thu, 21 Nov 2024 09:45:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B2321B8E
- for <buildroot@buildroot.org>; Thu, 21 Nov 2024 09:45:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FFC66076A;
+	Thu, 21 Nov 2024 10:26:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15E76B69
+ for <buildroot@buildroot.org>; Thu, 21 Nov 2024 10:26:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A16DC6067E
- for <buildroot@buildroot.org>; Thu, 21 Nov 2024 09:45:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E12A405E8
+ for <buildroot@buildroot.org>; Thu, 21 Nov 2024 10:26:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZKObeTdSOSVN for <buildroot@buildroot.org>;
- Thu, 21 Nov 2024 09:45:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N7WqT-d0FAy5 for <buildroot@buildroot.org>;
+ Thu, 21 Nov 2024 10:26:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 028A560689
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 028A560689
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 028A560689
- for <buildroot@buildroot.org>; Thu, 21 Nov 2024 09:45:04 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 67F5D1C000B;
- Thu, 21 Nov 2024 09:45:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CEE7E4060B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CEE7E4060B
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CEE7E4060B
+ for <buildroot@buildroot.org>; Thu, 21 Nov 2024 10:26:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C8F3DE000D;
+ Thu, 21 Nov 2024 10:26:23 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tE3kC-004d87-2m;
- Thu, 21 Nov 2024 10:45:00 +0100
+ (envelope-from <peter@korsgaard.com>) id 1tE4OF-005E9l-0U;
+ Thu, 21 Nov 2024 11:26:23 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour via buildroot <buildroot@buildroot.org>
-Cc: Romain Naour <romain.naour@smile.fr>
-References: <20241103143751.756123-1-romain.naour@smile.fr>
-Date: Thu, 21 Nov 2024 10:45:00 +0100
-In-Reply-To: <20241103143751.756123-1-romain.naour@smile.fr> (Romain Naour via
- buildroot's message of "Sun, 3 Nov 2024 15:37:51 +0100")
-Message-ID: <87ed34syxv.fsf@dell.be.48ers.dk>
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+References: <20241027212732.3337953-1-ju.o@free.fr>
+Date: Thu, 21 Nov 2024 11:26:23 +0100
+In-Reply-To: <20241027212732.3337953-1-ju.o@free.fr> (Julien Olivain's message
+ of "Sun, 27 Oct 2024 22:27:32 +0100")
+Message-ID: <878qtcsx0w.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] board/mender/x86_64/post-image-efi.sh: use
- bash for genimage.sh
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add audit runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,35 +74,22 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
- > mender_x86_64_efi_defconfig started failing to build since 2024.08 in
- > our Gitlab-ci since the board/mender/x86_64/post-image-efi.sh is
- > calling support/scripts/genimage.sh with the host default shell.
+ > This test was suggested by Thomas, in:
+ > https://lists.buildroot.org/pipermail/buildroot/2024-October/766091.html
 
- > There is no problem if the default shell is bash but our docker
- > image uses dash as default shell. Since support/scripts/genimage.sh
- > is actually a bash script it's not going to work if bashisms are used:
-
- >   support/scripts/genimage.sh: 57: Syntax error: redirection unexpected
-
- > Indeed bashisms have been added recently in
- > support/scripts/genimage.sh by the commit introducing bmap image
- > support [1].
-
- > Remove "sh" before support/scripts/genimage.sh and rely on
- > "/usr/bin/env bash" to find the bash interpreter.
-
- > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/8233226891
-
- > [1] 6889056f1eb4293de67c28b1ff6ee34be05d2ee4
-
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
  > ---
- > I checked if "sh support/scripts/genimage.sh" is used somewhere else.
+ > Patch tested in:
+ > https://gitlab.com/jolivain/buildroot/-/jobs/8199781301
 
-Committed to 2024.08.x, thanks.
+ > Note: this test was requested during a patch review for a bump to
+ > audit 4.0.2 which is not merged yet. This patch was written and
+ > tested with audit 3.1.2 (the current version). Some adjustments
+ > might be needed with newer audit versions.
+
+Committed to 2024.02.x and 2024.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
