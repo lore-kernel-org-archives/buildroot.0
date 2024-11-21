@@ -1,63 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2076D75BCD
-	for <buildroot@archiver.kernel.org>; Thu, 21 Nov 2024 08:19:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 065A0D6E2A4
+	for <buildroot@archiver.kernel.org>; Thu, 21 Nov 2024 09:45:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 34B3E820E0;
-	Thu, 21 Nov 2024 08:19:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A25A360689;
+	Thu, 21 Nov 2024 09:45:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F04NfdDkB3H9; Thu, 21 Nov 2024 08:19:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kx6XphdlFzxn; Thu, 21 Nov 2024 09:45:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2536F820DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B70F6606A7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2536F820DE;
-	Thu, 21 Nov 2024 08:19:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A2C8B69
- for <buildroot@buildroot.org>; Thu, 21 Nov 2024 08:19:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B70F6606A7;
+	Thu, 21 Nov 2024 09:45:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B2321B8E
+ for <buildroot@buildroot.org>; Thu, 21 Nov 2024 09:45:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2A501820DF
- for <buildroot@buildroot.org>; Thu, 21 Nov 2024 08:19:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A16DC6067E
+ for <buildroot@buildroot.org>; Thu, 21 Nov 2024 09:45:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c5f1hLVnvCrk for <buildroot@buildroot.org>;
- Thu, 21 Nov 2024 08:19:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZKObeTdSOSVN for <buildroot@buildroot.org>;
+ Thu, 21 Nov 2024 09:45:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 927CA820DD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 927CA820DD
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 927CA820DD
- for <buildroot@busybox.net>; Thu, 21 Nov 2024 08:18:59 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 83D89E0003;
- Thu, 21 Nov 2024 08:18:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 028A560689
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 028A560689
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 028A560689
+ for <buildroot@buildroot.org>; Thu, 21 Nov 2024 09:45:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 67F5D1C000B;
+ Thu, 21 Nov 2024 09:45:01 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tE2Ou-004DxP-1m;
- Thu, 21 Nov 2024 09:18:56 +0100
+ (envelope-from <peter@korsgaard.com>) id 1tE3kC-004d87-2m;
+ Thu, 21 Nov 2024 10:45:00 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Grant Edwards <grant.b.edwards@gmail.com>
-Cc: buildroot@busybox.net,  buildroot@uclibc.org
-References: <vhlf46$9b9$1@ciao.gmane.io> <vhlr9b$svh$1@ciao.gmane.io>
-Date: Thu, 21 Nov 2024 09:18:56 +0100
-In-Reply-To: <vhlr9b$svh$1@ciao.gmane.io> (Grant Edwards's message of "Wed, 20
- Nov 2024 23:27:39 -0000 (UTC)")
-Message-ID: <87ldxdrocv.fsf@dell.be.48ers.dk>
+To: Romain Naour via buildroot <buildroot@buildroot.org>
+Cc: Romain Naour <romain.naour@smile.fr>
+References: <20241103143751.756123-1-romain.naour@smile.fr>
+Date: Thu, 21 Nov 2024 10:45:00 +0100
+In-Reply-To: <20241103143751.756123-1-romain.naour@smile.fr> (Romain Naour via
+ buildroot's message of "Sun, 3 Nov 2024 15:37:51 +0100")
+Message-ID: <87ed34syxv.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] Large number of duplicate files in sdk
+Subject: Re: [Buildroot] [PATCH] board/mender/x86_64/post-image-efi.sh: use
+ bash for genimage.sh
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,102 +75,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Grant" == Grant Edwards <grant.b.edwards@gmail.com> writes:
+>>>>> "Romain" == Romain Naour via buildroot <buildroot@buildroot.org> writes:
 
- > On 2024-11-20, Grant Edwards <grant.b.edwards@gmail.com> wrote:
- >> When I do a "make sdk" (using 2024.02.6), the resulting tarball
- >> contains tons of duplicate files.  I'm using an external Linaro ARM
- >> toolchain.  With a fairly bare-bones package selection, the sdk tarball
- >> generated by buildroot appears to be about 40% duplicate files by
- >> size (about 20% by count).
+ > mender_x86_64_efi_defconfig started failing to build since 2024.08 in
+ > our Gitlab-ci since the board/mender/x86_64/post-image-efi.sh is
+ > calling support/scripts/genimage.sh with the host default shell.
 
- > It's actually a bit worse than that. My app wasn't finding files that
- > were duplicated more than once.
+ > There is no problem if the default shell is bash but our docker
+ > image uses dash as default shell. Since support/scripts/genimage.sh
+ > is actually a bash script it's not going to work if bashisms are used:
 
- > Running a simple de-dupe utility on output/host reduced disk space
- > from 928MB to 556MB.
+ >   support/scripts/genimage.sh: 57: Syntax error: redirection unexpected
 
- > That app is pretty conservative: it only links files that have the
- > same name, the same parent directory name, and differing top
- > directory names.
+ > Indeed bashisms have been added recently in
+ > support/scripts/genimage.sh by the commit introducing bmap image
+ > support [1].
 
-Some duplicates are expected, E.G. we have a number of packages that can
-be built for the host and the target (E.G. python3), so if your SDK has
-both host and target variant enabled then there will be some duplicated
-files.
+ > Remove "sh" before support/scripts/genimage.sh and rely on
+ > "/usr/bin/env bash" to find the bash interpreter.
 
-As a comparison, I have a SDK built with 2024.02.8 and a
-Buildroot-generated external toolchain where the SDK .tar.gz is 227MB
-and extracted:
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/8233226891
 
-du -hs
-741M    .
+ > [1] 6889056f1eb4293de67c28b1ff6ee34be05d2ee4
 
-fdupes -rm .
-4179 duplicate files (in 3982 sets), occupying 100.6 megabytes
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ > ---
+ > I checked if "sh support/scripts/genimage.sh" is used somewhere else.
 
-Focusing on the big files I see:
-
-fdupes -rS -G $(( 1000 * 1024 )) .
-1467305 bytes each:
-./opt/ext-toolchain/share/man/man1/aarch64-buildroot-linux-gnu-g++.1
-./opt/ext-toolchain/share/man/man1/aarch64-buildroot-linux-gnu-gcc.1
-
-3334288 bytes each:
-./opt/ext-toolchain/aarch64-buildroot-linux-gnu/bin/ld.bfd
-./opt/ext-toolchain/aarch64-buildroot-linux-gnu/bin/ld
-
-5427708 bytes each:
-./opt/ext-toolchain/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libc.a
-./aarch64-buildroot-linux-gnu/sysroot/usr/lib/libc.a
-
-6316256 bytes each:
-./opt/ext-toolchain/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libstdc++.a
-./opt/ext-toolchain/aarch64-buildroot-linux-gnu/lib64/libstdc++.a
-./aarch64-buildroot-linux-gnu/sysroot/usr/lib/libstdc++.a
-
-1582810 bytes each:
-./opt/ext-toolchain/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libm-2.38.a
-./aarch64-buildroot-linux-gnu/sysroot/usr/lib/libm-2.38.a
-
-2892864 bytes each:
-./opt/ext-toolchain/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libstdc++.so.6.0.30
-./opt/ext-toolchain/aarch64-buildroot-linux-gnu/lib64/libstdc++.so.6.0.30
-./aarch64-buildroot-linux-gnu/sysroot/usr/lib/libstdc++.so.6.0.30
-
-3386286 bytes each:
-./opt/ext-toolchain/aarch64-buildroot-linux-gnu/sysroot/usr/share/i18n/locales/iso14651_t1_common
-./aarch64-buildroot-linux-gnu/sysroot/usr/share/i18n/locales/iso14651_t1_common
-
-1111538 bytes each:
-./opt/ext-toolchain/aarch64-buildroot-linux-gnu/sysroot/usr/share/i18n/locales/iso14651_t1_pinyin
-./aarch64-buildroot-linux-gnu/sysroot/usr/share/i18n/locales/iso14651_t1_pinyin
-
-4523291 bytes each:
-./opt/ext-toolchain/aarch64-buildroot-linux-gnu/sysroot/usr/share/i18n/locales/cns11643_stroke
-./aarch64-buildroot-linux-gnu/sysroot/usr/share/i18n/locales/cns11643_stroke
-
-2148440 bytes each:
-./opt/ext-toolchain/aarch64-buildroot-linux-gnu/sysroot/lib/libc.so.6
-./aarch64-buildroot-linux-gnu/sysroot/lib/libc.so.6
-
-
-So mainly the copy we do of the external toolchain into host/. I think
-we could be smarter about using hard links instead of actually copying
-files / perhaps use hardlink before creating the SDK tarball:
-
-hardlink .
-Mode:                     real
-Method:                   sha256
-Files:                    15298
-Linked:                   2903 files
-Compared:                 0 xattrs
-Compared:                 14922 files
-Saved:                    72.68 MiB
-Duration:                 0.855040 seconds
-
-du -hs
-661M    .
+Committed to 2024.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
