@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B379CE7717F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 13:07:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B62B5E77173
+	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 13:07:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73CAA81229;
-	Sun,  8 Dec 2024 13:07:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 825958120D;
+	Sun,  8 Dec 2024 13:07:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3oyybl2FrF9w; Sun,  8 Dec 2024 13:07:31 +0000 (UTC)
+ id DyIc9IxdLpJt; Sun,  8 Dec 2024 13:07:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AAD381207
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3610A81186
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6AAD381207;
-	Sun,  8 Dec 2024 13:07:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 18971979
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3610A81186;
+	Sun,  8 Dec 2024 13:07:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F3D2979
  for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:06:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 051A94011C
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:06:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5DA360871
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:06:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eMt5ZBenA6qr for <buildroot@buildroot.org>;
- Sun,  8 Dec 2024 13:06:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VPk4Jk8BcsV2 for <buildroot@buildroot.org>;
+ Sun,  8 Dec 2024 13:06:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E25FD403A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61EB7607C0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E25FD403A2
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:06:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 61EB7607C0
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:06:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF66A86B77; Sun,  8 Dec 2024 13:06:53 +0000 (UTC)
+ id 5857786B75; Sun,  8 Dec 2024 13:06:52 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 1 Dec 2024 18:42:33 +0100
+Date: Fri, 22 Nov 2024 19:43:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a6a92a08b35ccecd1ed70feae97a247c7a8bb8aa
-X-Git-Newrev: 2f47195d540f63543728fd4982f2e6ae8aac2b2b
+X-Git-Oldrev: 5f037d5761067549c86e98885101c315a601b884
+X-Git-Newrev: 367b31324f005688947e9a1250acbff1ec54c337
 X-Patchwork-Hint: ignore
-Message-Id: <20241208130653.DF66A86B77@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cage: bump to version 0.2.0
+Message-Id: <20241208130652.5857786B75@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/zynq_zc706_defconfig: bump to
+ xilinx-v2024.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,74 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f47195d540f63543728fd4982f2e6ae8aac2b2b
+commit: https://git.buildroot.net/buildroot/commit/?id=367b31324f005688947e9a1250acbff1ec54c337
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: [1].
+This patch bumps the zynq_zc706_defconfig to xilinx-v2024.2 which includes
+the following updates:
 
-Also, upstream commit [2], included in v0.2, removed the "xwayland"
-build time option. This commit removes the corresponding
-CAGE_CONF_OPTS.
+- Linux v6.6.40
+- U-Boot v2024.01
 
-The cage github project was moved from [3] to [4]. See also [5].
-This commit also updates the _SITE url accordingly.
-
-[1] https://github.com/cage-kiosk/cage/releases/tag/v0.2.0
-[2] https://github.com/cage-kiosk/cage/commit/d3fb99d6654325ec46277cfdb589f89316bed701
-[3] https://github.com/Hjdskes/cage
-[4] https://github.com/cage-kiosk/cage
-[5] https://github.com/cage-kiosk/cage/commit/9a4310f8b6d40be49ca3065742c7462278b1316e
-
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-[Julien:
-  - add new line before S-o-b
-  - add link justifying the removal of xwayland option
-  - update _SITE
-]
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/cage/cage.hash |  6 ++++--
- package/cage/cage.mk   | 10 ++--------
- 2 files changed, 6 insertions(+), 10 deletions(-)
+ configs/zynq_zc706_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cage/cage.hash b/package/cage/cage.hash
-index d5517bd918..e7c971ea26 100644
---- a/package/cage/cage.hash
-+++ b/package/cage/cage.hash
-@@ -1,5 +1,7 @@
--# Generated locally after checking GPG signature from https://github.com/cage-kiosk/cage/releases/download/v0.1.5/cage-0.1.5.tar.gz.sig
--sha256  ece0312e559289df0238289ea6c60e9fed32d27fe3ae8a8f83eeff26ddc239e1  cage-0.1.5.tar.gz
-+# Locally calculated after checking pgp signature
-+# https://github.com/cage-kiosk/cage/releases/download/v0.2.0/cage-0.2.0.tar.gz.sig
-+# with key 34FF9526CFEF0E97A340E2E40FDE7BE0E88F5E48 "emersion <contact@emersion.fr>"
-+sha256  557c194d18af7202a9ec2e8be6dd7129f6c16d0f4528f4079ba26ccd57b6ef88  cage-0.2.0.tar.gz
- 
- # Hashes for license files:
- sha256  e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
-diff --git a/package/cage/cage.mk b/package/cage/cage.mk
-index 119950bc00..6fa39122ee 100644
---- a/package/cage/cage.mk
-+++ b/package/cage/cage.mk
-@@ -4,17 +4,11 @@
- #
- ################################################################################
- 
--CAGE_VERSION = 0.1.5
--CAGE_SITE = https://github.com/Hjdskes/cage/releases/download/v$(CAGE_VERSION)
-+CAGE_VERSION = 0.2.0
-+CAGE_SITE = https://github.com/cage-kiosk/cage/releases/download/v$(CAGE_VERSION)
- CAGE_LICENSE = MIT
- CAGE_LICENSE_FILES = LICENSE
- CAGE_DEPENDENCIES = host-pkgconf wlroots
- CAGE_CONF_OPTS = -Dman-pages=disabled
- 
--ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
--CAGE_CONF_OPTS += -Dxwayland=true
--else
--CAGE_CONF_OPTS += -Dxwayland=false
--endif
--
- $(eval $(meson-package))
+diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
+index 1c662cd566..f50511b822 100644
+--- a/configs/zynq_zc706_defconfig
++++ b/configs/zynq_zc706_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.2)/xlnx_rebase_v6.6_LTS_2024.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+@@ -21,7 +21,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.1)/xlnx_rebase_v2024.01_2024.1.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.2)/xlnx_rebase_v2024.01_2024.2.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
