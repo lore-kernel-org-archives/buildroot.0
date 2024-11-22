@@ -1,53 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6733CE6916C
-	for <buildroot@archiver.kernel.org>; Fri, 22 Nov 2024 16:07:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C93EBE69173
+	for <buildroot@archiver.kernel.org>; Fri, 22 Nov 2024 16:16:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31AC2613A3;
-	Fri, 22 Nov 2024 16:07:53 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2yfwZob0C1rz; Fri, 22 Nov 2024 16:07:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03E2361397
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03E2361397;
-	Fri, 22 Nov 2024 16:07:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4BAF6B69
- for <buildroot@buildroot.org>; Fri, 22 Nov 2024 16:07:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2C8F142B3B
- for <buildroot@buildroot.org>; Fri, 22 Nov 2024 16:07:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7DED9402EF;
+	Fri, 22 Nov 2024 16:16:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J6wlm0ro1YNh for <buildroot@buildroot.org>;
- Fri, 22 Nov 2024 16:07:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id alGKjogcGwEt; Fri, 22 Nov 2024 16:16:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72F7940316
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72F7940316;
+	Fri, 22 Nov 2024 16:16:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E3F06E11
+ for <buildroot@buildroot.org>; Fri, 22 Nov 2024 16:16:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C47C6613B0
+ for <buildroot@buildroot.org>; Fri, 22 Nov 2024 16:16:29 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bljb3mCspFBR for <buildroot@buildroot.org>;
+ Fri, 22 Nov 2024 16:16:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78EAE42B3A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 78EAE42B3A
- for <buildroot@buildroot.org>; Fri, 22 Nov 2024 16:07:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 666EB865AD; Fri, 22 Nov 2024 16:07:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BAFFC61399
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAFFC61399
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BAFFC61399
+ for <buildroot@buildroot.org>; Fri, 22 Nov 2024 16:16:09 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C38420009;
+ Fri, 22 Nov 2024 16:16:06 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1tEWKD-009WmO-1B;
+ Fri, 22 Nov 2024 17:16:05 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 22 Nov 2024 15:31:16 +0100
-X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: d81cd0b488dd42fc00531cfec6968c4a1997e61a
-X-Git-Newrev: f956d40c81a7fee80c42134a88c5b45d2dc6dac6
-X-Patchwork-Hint: ignore
-Message-Id: <20241122160746.666EB865AD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/mbedtls: security
- bump to 2.28.9
+To: Neal Frager <neal.frager@amd.com>
+Cc: <buildroot@buildroot.org>,  <brandon.maier@collins.com>,
+ <luca.ceresoli@bootlin.com>,  <thomas.petazzoni@bootlin.com>,
+ <michal.simek@amd.com>,  <yann.morin.1998@free.fr>, <romain.naour@smile.fr>
+References: <20241119134902.3894638-1-neal.frager@amd.com>
+Date: Fri, 22 Nov 2024 17:16:05 +0100
+In-Reply-To: <20241119134902.3894638-1-neal.frager@amd.com> (Neal Frager's
+ message of "Tue, 19 Nov 2024 13:49:02 +0000")
+Message-ID: <87ttbzqm62.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/bootgen: bump to
+ xilinx_v2024.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,55 +72,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f956d40c81a7fee80c42134a88c5b45d2dc6dac6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
+>>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
 
-Fixes CVE-2024-45157: CTR_DRBG prioritized over HMAC_DRBG as the PSA DRBG
+ > Bump bootgen to xilinx_v2024.2 release.
+ > Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2024-08-1/
+Committed to next, thanks.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Peter: add CVE / advisory details]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 64884430074aa420be48d2e63665c36673aa5e4c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 5466b0e7de..9de7f731da 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.8:
--sha256  241c68402cef653e586be3ce28d57da24598eb0df13fcdea9d99bfce58717132  mbedtls-2.28.8.tar.bz2
-+# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.9:
-+sha256  e85ea97aaf78dd6c0a5ba2e54dd5932ffa15f39abfc189c26beef7684630c02b  mbedtls-2.28.9.tar.bz2
- # Locally calculated
- sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 9757b8b080..2faa6dff55 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--MBEDTLS_VERSION = 2.28.8
--MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/v$(MBEDTLS_VERSION)
-+MBEDTLS_VERSION = 2.28.9
-+MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
- MBEDTLS_CONF_OPTS = \
- 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
