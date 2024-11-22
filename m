@@ -4,69 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDA96E69186
-	for <buildroot@archiver.kernel.org>; Fri, 22 Nov 2024 18:10:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15ABDE69185
+	for <buildroot@archiver.kernel.org>; Fri, 22 Nov 2024 18:25:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8160A60624;
-	Fri, 22 Nov 2024 18:10:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 949E4614C3;
+	Fri, 22 Nov 2024 18:25:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uhqYnjcTeoIP; Fri, 22 Nov 2024 18:10:29 +0000 (UTC)
+ id C3SwIoh5NgsE; Fri, 22 Nov 2024 18:25:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 955476111B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90206614C5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 955476111B;
-	Fri, 22 Nov 2024 18:10:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8B660E11
- for <buildroot@buildroot.org>; Fri, 22 Nov 2024 18:10:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90206614C5;
+	Fri, 22 Nov 2024 18:25:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C7A58E11
+ for <buildroot@buildroot.org>; Fri, 22 Nov 2024 18:25:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6C20240120
- for <buildroot@buildroot.org>; Fri, 22 Nov 2024 18:10:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A84EC614B8
+ for <buildroot@buildroot.org>; Fri, 22 Nov 2024 18:25:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OhNILWZz-jSg for <buildroot@buildroot.org>;
- Fri, 22 Nov 2024 18:10:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 34F5640096
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34F5640096
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 34F5640096
- for <buildroot@buildroot.org>; Fri, 22 Nov 2024 18:10:25 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id B3FF6B00539;
- Fri, 22 Nov 2024 19:10:21 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>,
-	Vincent Jardin <vjardin@free.fr>
-Date: Fri, 22 Nov 2024 19:10:14 +0100
-Message-ID: <20241122181014.96629-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.47.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NLABIIeoMuAv for <buildroot@buildroot.org>;
+ Fri, 22 Nov 2024 18:25:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
+ helo=mslow1.mail.gandi.net; envelope-from=olivier.benjamin@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1CA9E614C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CA9E614C3
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1CA9E614C3
+ for <buildroot@buildroot.org>; Fri, 22 Nov 2024 18:25:02 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id A5696C001D
+ for <buildroot@buildroot.org>; Fri, 22 Nov 2024 18:22:06 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1220DC0004;
+ Fri, 22 Nov 2024 18:22:00 +0000 (UTC)
+Date: Fri, 22 Nov 2024 19:21:59 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1732299023;
- bh=5K8fr6X4jWivNpwzcE1+KZiEkE0AleCokKNnzyjeV9g=;
- h=From:To:Cc:Subject:Date:From;
- b=oGN6mlTrn4lctA6vFS/b9tfk9wbTEp/jg0+VnY6Ilwfq4g46O9Ug3bCOO6uV+QDfB
- P3Kynf9mO1ft//l3UM+rKky88J4c+lB+g29Xmobaf+VTzWJ2YHgDjBSyybU62tNsTy
- 90krVpxdn3sWGtTPYI/DwqlgytI3/Ry6qL1ULFXl2SSS8yGRAYdHgpTzNq4zORzeKR
- 65SkiMZxMc4pYVWuDjxxqP8/pH5i7SIuV5jLx6x45VZSFcd4cks7OLcsVbAD4gl8rg
- Fd18DVqXIYctqwaozq64y6iIxXuWSXAT5+3fQ0Nm0y6g4DIIPHNx2y8nxbeGpwNimT
- nXDSm4i8/BBbg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=oGN6mlTr
-Subject: [Buildroot] [PATCH v2 1/1] package/util-linux-libs: allowing
- building even on non-Y2038 compliant systems
+Message-Id: <20241122-psplash_options-v1-1-b142ac91f53c@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAMbLQGcC/x3N2wqEIBAG4FeJuU5QW+jwKhEhNa4DkeJEFOG77
+ 7SXH/yHBxgzIcNQPZDxJKa4C0xdwRLc/kVFqxisth9jrFWJ0+Y4zDEdEmXlO/R92+qm1ytIK2X
+ 0dP0Xx0kciI+Y7/eglPIDibUA8HAAAAA=
+X-Change-ID: 20241122-psplash_options-f8ef9770390d
+To: buildroot@buildroot.org
+Cc: Phil Eichinger <phil.eichinger@gmail.com>, 
+ Olivier Benjamin <olivier.benjamin@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: olivier.benjamin@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1732299721;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=Y0WcL5vKy3xoDMDJyzDzaiYy6ZRMIkual9Bn6lwTzYo=;
+ b=d8dwBzu+/vL+F7BfCu7x6tH64wmJj9KzZRM1NNE1I15JlqkFCdLJW3G+iAiijmyt+KYYRU
+ VHn14wULCsbaQxeXjodD1dzMB0SYUPcUEKv3Da9bi446Smb35YpOUU39WrylC/tUb+uIoj
+ j9jahyUVoU4uUNBKbT4oA4+DmS0Gs0+H67wfJPe5jxUX5h6DUCIjKn7Yuwj6/qXA6PNoBh
+ H4Wwe2poYL7SbinHTFKYlJpuk0hlHLH3+wKTixYmsY5nn9cBW/L2QhSIgRLh9L2RNkSl7A
+ GHWo5Oo6vl9JnQc/lbF5NUzZyz18iWic4JQlUGrFychmXexHXq3//XJ5knfL5A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=d8dwBzu+
+Subject: [Buildroot] [PATCH] package/psplash: add support for two configure
+ options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,63 +85,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Olivier Benjamin via buildroot <buildroot@buildroot.org>
+Reply-To: Olivier Benjamin <olivier.benjamin@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since the bump of util-linux to version 2.40.2 in Buildroot commit
-f14929c657a7b1794dcd39ac469d2ad826465d98 ("package/util-linux: update
-to 2.40.2"), the build will fail on systems that are not Y2038,
-such as uClibc configurations.
+Add support for two configure options:
+  --disable-progress-bar, via BR2_PACKAGE_PSPLAH_PROGRESS_BAR
+  --disable-startup-msg, via BR2_PACKAGE_PSPLASH_STARTUP_MSG
 
-In order to preserve the previous behavior, pass --disable-year2038.
-See the gnulib documentation for details [1]. Contrary to what the
-option name might suggest, it doesn't really disable Y2038 support,
-but only the check that the system is Y2038 compliant. So even with
---disable-year2038, if the system is Y2038 compliant (uses a 64-bit
-arch, uses the musl C library, or uses the glibc C library with
-BR2_TIME_BITS_64=y), util-linux tools will be Y2038 compliant.
+Both buildroot options will default to 'y' to be compatible with
+the previous behaviour, since those were enable by default by
+not specifying the disable config flag.
 
-"--disable-year2038" was already added to util-linux in commit
-11ae90b00 "package/util-linux: allowing building even on non-Y2038
-compliant systems".
-
-Fixes:
-https://autobuild.buildroot.org/results/630fc287deb1cf5a684f274058b918a5d7aef989
-
-[1] https://www.gnu.org/software/gnulib/manual/html_node/Avoiding-the-year-2038-problem.html
-
-Reviewed-by: Vincent Jardin <vjardin@free.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Olivier Benjamin <olivier.benjamin@bootlin.com>
 ---
-Change v1 -> v2:
-- Add comment near --disable-year2038 (comment from Vincent)
----
- package/util-linux/util-linux-libs/util-linux-libs.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/psplash/Config.in  | 12 ++++++++++++
+ package/psplash/psplash.mk | 12 ++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/package/util-linux/util-linux-libs/util-linux-libs.mk b/package/util-linux/util-linux-libs/util-linux-libs.mk
-index 0337e7e13a..9340d5ae4f 100644
---- a/package/util-linux/util-linux-libs/util-linux-libs.mk
-+++ b/package/util-linux/util-linux-libs/util-linux-libs.mk
-@@ -26,9 +26,13 @@ UTIL_LINUX_LIBS_DEPENDENCIES = \
- 	host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt) \
- 	$(TARGET_NLS_DEPENDENCIES)
-+# --disable-year2038: tells the configure script to not abort if the
-+# system is not Y2038 compliant. util-linux-libs will support year2038
-+# if the system is compliant even with this option passed
- UTIL_LINUX_LIBS_CONF_OPTS += \
- 	--disable-rpath \
--	--disable-makeinstall-chown
-+	--disable-makeinstall-chown \
-+	--disable-year2038
+diff --git a/package/psplash/Config.in b/package/psplash/Config.in
+index da99b264e0458766f3c5840568acd7980d0ef313..6379c5537fa18612a3dda862995a9f9a857da121 100644
+--- a/package/psplash/Config.in
++++ b/package/psplash/Config.in
+@@ -35,6 +35,18 @@ config BR2_PACKAGE_PSPLASH_IMAGE
+ 	  Use a personalized png image as boot splash.
+ 	  Let it empty if you want to keep the psplash default image.
  
- UTIL_LINUX_LIBS_LINK_LIBS = $(TARGET_NLS_LIBS)
++config BR2_PACKAGE_PSPLASH_PROGRESS_BAR
++	bool "enable progress bar"
++	default y
++	help
++	  Enable management of the progress bar via the "PROGRESS" command.
++
++config BR2_PACKAGE_PSPLASH_STARTUP_MSG
++       bool "enable startup message"
++       default y
++       help
++         Enable text banner output on startup.
++
+ endif
  
+ comment "psplash needs a toolchain w/ wchar"
+diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+index 69f9bf386da0a6b3463a30b7b8a7b09ad9017819..f13f92d5875775aff0eafa8a4f11dc6c68bd0ce4 100644
+--- a/package/psplash/psplash.mk
++++ b/package/psplash/psplash.mk
+@@ -19,6 +19,18 @@ else
+ PSPLASH_CONF_OPTS += --without-systemd
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PSPLASH_PROGRESS_BAR), y)
++PSPLASH_CONF_OPTS +=
++else
++PSPLASH_CONF_OPTS += --disable-progress-bar
++endif
++
++ifeq ($(BR2_PACKAGE_PSPLASH_STARTUP_MSG), y)
++PSPLASH_CONF_OPTS +=
++else
++PSPLASH_CONF_OPTS += --disable-startup-msg
++endif
++
+ PSPLASH_IMAGE = $(call qstrip,$(BR2_PACKAGE_PSPLASH_IMAGE))
+ 
+ ifneq ($(PSPLASH_IMAGE),)
+
+---
+base-commit: 175dbdf3fc67775486ddf121b6deb651e2bf7c06
+change-id: 20241122-psplash_options-f8ef9770390d
+
+Best regards,
 -- 
-2.47.0
+Olivier Benjamin <olivier.benjamin@bootlin.com>
 
 _______________________________________________
 buildroot mailing list
