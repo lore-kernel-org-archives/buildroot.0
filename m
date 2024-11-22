@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2207AE77180
-	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 13:07:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C85FE77173
+	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 13:07:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E65ED811E3;
-	Sun,  8 Dec 2024 13:07:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBE6581203;
+	Sun,  8 Dec 2024 13:07:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jk3ZhZyglntG; Sun,  8 Dec 2024 13:07:24 +0000 (UTC)
+ id futn4M1HkFZ6; Sun,  8 Dec 2024 13:07:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3572811E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2684A811ED
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E3572811E7;
-	Sun,  8 Dec 2024 13:07:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3FF5DED2
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:06:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2684A811ED;
+	Sun,  8 Dec 2024 13:07:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 11445ED2
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:06:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EFF9E40424
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D8836084E
  for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:06:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hX-Iz6ZL-cGr for <buildroot@buildroot.org>;
- Sun,  8 Dec 2024 13:06:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U6ltSdKJQEwA for <buildroot@buildroot.org>;
+ Sun,  8 Dec 2024 13:06:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 379E0403CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4ACF8607BC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 379E0403CB
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:06:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4ACF8607BC
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:06:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 345DA86B7A; Sun,  8 Dec 2024 13:06:53 +0000 (UTC)
+ id 4564E86B74; Sun,  8 Dec 2024 13:06:52 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 26 Nov 2024 21:29:53 +0100
+Date: Fri, 22 Nov 2024 19:43:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 283d30e89f4ef6c088cd5f547e5d31c08e9847b3
-X-Git-Newrev: b03dc5b615b217ea3246caa5f94de5e62ec17a8a
+X-Git-Oldrev: 853c3d62c5afd2da7a271f1572b3cbaf62800901
+X-Git-Newrev: bc8448eeae071b85c777c3c411c96f875b0619e8
 X-Patchwork-Hint: ignore
-Message-Id: <20241208130653.345DA86B7A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mmc-utils: bump to 523d8f3cfb21
+Message-Id: <20241208130652.4564E86B74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/xilinx/patches: add xilinx_v2024.2
+ hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,53 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b03dc5b615b217ea3246caa5f94de5e62ec17a8a
+commit: https://git.buildroot.net/buildroot/commit/?id=bc8448eeae071b85c777c3c411c96f875b0619e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream commit f884bfe684f2c31e1f5b7c9247b364178fa20ea3 changed the
-default build behavior to run `sparse` which is problematic if the tool
-is not available on the host during builds.
+Add hashes for xilinx_v2024.2 release for zynq boards.
 
-Update the build command to not define `C` so `sparse` is skipped.
+xilinx_v2024.2 release includes:
+ - linux 6.6.40
+ - uboot 2024.01
 
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mmc-utils/mmc-utils.hash | 2 +-
- package/mmc-utils/mmc-utils.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/xilinx/patches/linux/linux.hash | 1 +
+ board/xilinx/patches/uboot/uboot.hash | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/mmc-utils/mmc-utils.hash b/package/mmc-utils/mmc-utils.hash
-index fec7533d16..48bfd7bc04 100644
---- a/package/mmc-utils/mmc-utils.hash
-+++ b/package/mmc-utils/mmc-utils.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4547b5f0f8a43857dcfb516b8b9c987d07febfecbe3d27987f43064db46ca8f9  mmc-utils-e1281d4de9166b7254ba30bb58f9191fc2c9e7fb-git4.tar.gz
-+sha256  1ae5706ce56bfedda94a01e87c5151ac750fb849987aeb74ff89d70f43556131  mmc-utils-523d8f3cfb219d800f45860892e742e3a355f1bb-git4.tar.gz
- sha256  4207d81122a02555f78c5a11b61c83a331ee03dc933e1ef9dd932ef9b434d12d  README
-diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
-index 48c347d846..28ac62678b 100644
---- a/package/mmc-utils/mmc-utils.mk
-+++ b/package/mmc-utils/mmc-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MMC_UTILS_VERSION = e1281d4de9166b7254ba30bb58f9191fc2c9e7fb
-+MMC_UTILS_VERSION = 523d8f3cfb219d800f45860892e742e3a355f1bb
- MMC_UTILS_SITE = https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git
- MMC_UTILS_SITE_METHOD = git
- MMC_UTILS_LICENSE = GPL-2.0
-@@ -25,7 +25,7 @@ endif
- # let's do this here otherwise it won't be automatically set and build
- # will fail
- define MMC_UTILS_BUILD_CMDS
--	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) C= \
- 		CFLAGS="$(MMC_UTILS_CFLAGS)" \
- 		AM_CFLAGS='-DVERSION=\"$(shell echo $(MMC_UTILS_VERSION) | head -c 6)\"'
- endef
+diff --git a/board/xilinx/patches/linux/linux.hash b/board/xilinx/patches/linux/linux.hash
+index b007db4303..6f269e1c71 100644
+--- a/board/xilinx/patches/linux/linux.hash
++++ b/board/xilinx/patches/linux/linux.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  6415cfcfd74e943d6ae44f6c1edcae09bf6cd89410b03c4290bf1464a8368f84  xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz
++sha256  8ebbbe2d40597d9a5f36d47a1dfe4caffcef3d9f5ffa059ed4504bb761282593  xlnx_rebase_v6.6_LTS_2024.2.tar.gz
+diff --git a/board/xilinx/patches/uboot/uboot.hash b/board/xilinx/patches/uboot/uboot.hash
+index a5ab9fae05..1fb12d1a11 100644
+--- a/board/xilinx/patches/uboot/uboot.hash
++++ b/board/xilinx/patches/uboot/uboot.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  58e391a001d9d8ed347ab3258ff7c8435c866b1ff2b2c22ebc95af592444c0f5  xlnx_rebase_v2024.01_2024.1.tar.gz
++sha256  f1a86ccdbe60bac89177a24bbfd56fc6e8e67823669f0997de563c3cc0ea4dd1  xlnx_rebase_v2024.01_2024.2.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
