@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B02C7E6ADEA
-	for <buildroot@archiver.kernel.org>; Sat, 23 Nov 2024 09:52:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FD84E6ADEA
+	for <buildroot@archiver.kernel.org>; Sat, 23 Nov 2024 10:01:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6549440604;
-	Sat, 23 Nov 2024 09:52:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60E4042492;
+	Sat, 23 Nov 2024 10:01:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TSG6EVnggrbo; Sat, 23 Nov 2024 09:52:25 +0000 (UTC)
+ id Hz2sID1JxpeH; Sat, 23 Nov 2024 10:01:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30C1040605
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D25FF407DB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 30C1040605;
-	Sat, 23 Nov 2024 09:52:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2CE4D1D8B
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 09:52:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D25FF407DB;
+	Sat, 23 Nov 2024 10:01:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 22F4E1D93
+ for <buildroot@buildroot.org>; Sat, 23 Nov 2024 10:01:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 179244029F
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 09:52:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0089A407DB
+ for <buildroot@buildroot.org>; Sat, 23 Nov 2024 10:01:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bW7IjO64eQtH for <buildroot@buildroot.org>;
- Sat, 23 Nov 2024 09:52:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ly9D8TeJU2_X for <buildroot@buildroot.org>;
+ Sat, 23 Nov 2024 10:01:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA35440124
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9E46407D7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA35440124
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 09:52:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C9E46407D7
+ for <buildroot@buildroot.org>; Sat, 23 Nov 2024 10:01:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D056B86417; Sat, 23 Nov 2024 09:52:22 +0000 (UTC)
+ id BDA618642C; Sat, 23 Nov 2024 10:01:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Nov 2024 10:51:49 +0100
+Date: Sat, 23 Nov 2024 11:00:53 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4b271906a74ab773ff276cf5d6d90209c4d32cab
-X-Git-Newrev: fa20df5d75914cf99df8c968681fb74a688c0129
+X-Git-Oldrev: fa20df5d75914cf99df8c968681fb74a688c0129
+X-Git-Newrev: 81d111dbd49fd0597fdec3924c29f7c9e09e7d89
 X-Patchwork-Hint: ignore
-Message-Id: <20241123095222.D056B86417@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/util-linux-libs: allowing building
- even on non-Y2038 compliant systems
+Message-Id: <20241123100116.BDA618642C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2024.11-rc2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,57 +64,132 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa20df5d75914cf99df8c968681fb74a688c0129
+commit: https://git.buildroot.net/buildroot/commit/?id=81d111dbd49fd0597fdec3924c29f7c9e09e7d89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the bump of util-linux to version 2.40.2 in Buildroot commit
-f14929c657a7b1794dcd39ac469d2ad826465d98 ("package/util-linux: update
-to 2.40.2"), the build will fail on systems that are not Y2038,
-such as uClibc configurations.
-
-In order to preserve the previous behavior, pass --disable-year2038.
-See the gnulib documentation for details [1]. Contrary to what the
-option name might suggest, it doesn't really disable Y2038 support,
-but only the check that the system is Y2038 compliant. So even with
---disable-year2038, if the system is Y2038 compliant (uses a 64-bit
-arch, uses the musl C library, or uses the glibc C library with
-BR2_TIME_BITS_64=y), util-linux tools will be Y2038 compliant.
-
-"--disable-year2038" was already added to util-linux in commit
-11ae90b00 "package/util-linux: allowing building even on non-Y2038
-compliant systems".
-
-Fixes:
-https://autobuild.buildroot.org/results/630fc287deb1cf5a684f274058b918a5d7aef989
-
-[1] https://www.gnu.org/software/gnulib/manual/html_node/Avoiding-the-year-2038-problem.html
-
-Reviewed-by: Vincent Jardin <vjardin@free.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/util-linux/util-linux-libs/util-linux-libs.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ CHANGES                    |  8 ++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ 4 files changed, 40 insertions(+), 11 deletions(-)
 
-diff --git a/package/util-linux/util-linux-libs/util-linux-libs.mk b/package/util-linux/util-linux-libs/util-linux-libs.mk
-index 0337e7e13a..9340d5ae4f 100644
---- a/package/util-linux/util-linux-libs/util-linux-libs.mk
-+++ b/package/util-linux/util-linux-libs/util-linux-libs.mk
-@@ -26,9 +26,13 @@ UTIL_LINUX_LIBS_DEPENDENCIES = \
- 	host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt) \
- 	$(TARGET_NLS_DEPENDENCIES)
-+# --disable-year2038: tells the configure script to not abort if the
-+# system is not Y2038 compliant. util-linux-libs will support year2038
-+# if the system is compliant even with this option passed
- UTIL_LINUX_LIBS_CONF_OPTS += \
- 	--disable-rpath \
--	--disable-makeinstall-chown
-+	--disable-makeinstall-chown \
-+	--disable-year2038
+diff --git a/CHANGES b/CHANGES
+index a53bfdd69d..59fdfd15c4 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,11 @@
++2024.11-rc2, released November 23rd, 2024
++
++	Fixes all over the tree.
++
++	Updated/fixed packages: bmap-tools, go, intel-microcode,
++	libblockdev, libcurl, libkrb5, libnvme, libpng, php,
++	postgresql, python-sip, skopeo, tiff, util-linux-libs
++
+ 2024.11-rc1, released November 13th, 2024
  
- UTIL_LINUX_LIBS_LINK_LIBS = $(TARGET_NLS_LIBS)
+ 	Fixes all over the tree and package updates.
+diff --git a/Makefile b/Makefile
+index 7b3aa3a020..c6ea6269a1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
  
+ # Set and export the version string
+-export BR2_VERSION := 2024.11-rc1
++export BR2_VERSION := 2024.11-rc2
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1731520600
++BR2_VERSION_EPOCH = 1732356000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index d0b926448b..0d4bad5afb 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -76,37 +76,37 @@
+ 	</div>
+       </div>
+ 
+-      <h3 style="text-align: center;">Latest release candidate: <b>2024.11-rc1</b></h3>
++      <h3 style="text-align: center;">Latest release candidate: <b>2024.11-rc2</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2024.11-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2024.11-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2024.11-rc1.tar.gz">buildroot-2024.11-rc1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2024.11-rc1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2024.11-rc2.tar.gz">buildroot-2024.11-rc2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2024.11-rc2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2024.11-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.11-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2024.11-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.11-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2024.11-rc1.tar.xz">buildroot-2024.11-rc1.tar.xz</a></h3>
+-	  <p><a href="/downloads/buildroot-2024.11-rc1.tar.xz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2024.11-rc2.tar.xz">buildroot-2024.11-rc2.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2024.11-rc2.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index d643f6a163..5af0779eff 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2024.11-rc2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>23 November 2024</small></p>
++      </div>
++      <div class="timeline-body">
++        <p>Another week, another release candidate with more cleanups and build fixes. See the
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2024.11-rc2/CHANGES">CHANGES</a>
++	  file for more details.</p>
++
++	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2024.11-rc2.tar.xz">2024.11-rc2
++	  release</a>, and report any problems found to the
++         <a href="support.html">mailing list</a> or
++         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
