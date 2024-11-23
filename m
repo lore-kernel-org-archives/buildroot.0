@@ -4,61 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28870E6ADEB
-	for <buildroot@archiver.kernel.org>; Sat, 23 Nov 2024 09:52:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B02C7E6ADEA
+	for <buildroot@archiver.kernel.org>; Sat, 23 Nov 2024 09:52:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CEE97405C5;
-	Sat, 23 Nov 2024 09:52:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6549440604;
+	Sat, 23 Nov 2024 09:52:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FToYZeRnbEOu; Sat, 23 Nov 2024 09:52:15 +0000 (UTC)
+ id TSG6EVnggrbo; Sat, 23 Nov 2024 09:52:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84AD540604
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30C1040605
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84AD540604;
-	Sat, 23 Nov 2024 09:52:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E3F11D8B
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 09:52:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30C1040605;
+	Sat, 23 Nov 2024 09:52:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2CE4D1D8B
+ for <buildroot@buildroot.org>; Sat, 23 Nov 2024 09:52:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C3814029F
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 09:52:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 179244029F
+ for <buildroot@buildroot.org>; Sat, 23 Nov 2024 09:52:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZBZ-OmiuV5-j for <buildroot@buildroot.org>;
- Sat, 23 Nov 2024 09:52:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id bW7IjO64eQtH for <buildroot@buildroot.org>;
+ Sat, 23 Nov 2024 09:52:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2A61340124
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A61340124
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2A61340124
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 09:52:11 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D1E91C0003;
- Sat, 23 Nov 2024 09:52:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tEmoD-00Bekl-2W;
- Sat, 23 Nov 2024 10:52:09 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA35440124
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA35440124
+ for <buildroot@buildroot.org>; Sat, 23 Nov 2024 09:52:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D056B86417; Sat, 23 Nov 2024 09:52:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org,  Vincent Jardin <vjardin@free.fr>
-References: <20241122181014.96629-1-ju.o@free.fr>
-Date: Sat, 23 Nov 2024 10:52:09 +0100
-In-Reply-To: <20241122181014.96629-1-ju.o@free.fr> (Julien Olivain's message
- of "Fri, 22 Nov 2024 19:10:14 +0100")
-Message-ID: <87cyimqnue.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/util-linux-libs: allowing
- building even on non-Y2038 compliant systems
+To: buildroot@buildroot.org
+Date: Sat, 23 Nov 2024 10:51:49 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4b271906a74ab773ff276cf5d6d90209c4d32cab
+X-Git-Newrev: fa20df5d75914cf99df8c968681fb74a688c0129
+X-Patchwork-Hint: ignore
+Message-Id: <20241123095222.D056B86417@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/util-linux-libs: allowing building
+ even on non-Y2038 compliant systems
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,45 +59,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fa20df5d75914cf99df8c968681fb74a688c0129
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Since the bump of util-linux to version 2.40.2 in Buildroot commit
- > f14929c657a7b1794dcd39ac469d2ad826465d98 ("package/util-linux: update
- > to 2.40.2"), the build will fail on systems that are not Y2038,
- > such as uClibc configurations.
+Since the bump of util-linux to version 2.40.2 in Buildroot commit
+f14929c657a7b1794dcd39ac469d2ad826465d98 ("package/util-linux: update
+to 2.40.2"), the build will fail on systems that are not Y2038,
+such as uClibc configurations.
 
- > In order to preserve the previous behavior, pass --disable-year2038.
- > See the gnulib documentation for details [1]. Contrary to what the
- > option name might suggest, it doesn't really disable Y2038 support,
- > but only the check that the system is Y2038 compliant. So even with
- > --disable-year2038, if the system is Y2038 compliant (uses a 64-bit
- > arch, uses the musl C library, or uses the glibc C library with
- > BR2_TIME_BITS_64=y), util-linux tools will be Y2038 compliant.
+In order to preserve the previous behavior, pass --disable-year2038.
+See the gnulib documentation for details [1]. Contrary to what the
+option name might suggest, it doesn't really disable Y2038 support,
+but only the check that the system is Y2038 compliant. So even with
+--disable-year2038, if the system is Y2038 compliant (uses a 64-bit
+arch, uses the musl C library, or uses the glibc C library with
+BR2_TIME_BITS_64=y), util-linux tools will be Y2038 compliant.
 
- > "--disable-year2038" was already added to util-linux in commit
- > 11ae90b00 "package/util-linux: allowing building even on non-Y2038
- > compliant systems".
+"--disable-year2038" was already added to util-linux in commit
+11ae90b00 "package/util-linux: allowing building even on non-Y2038
+compliant systems".
 
- > Fixes:
- > https://autobuild.buildroot.org/results/630fc287deb1cf5a684f274058b918a5d7aef989
+Fixes:
+https://autobuild.buildroot.org/results/630fc287deb1cf5a684f274058b918a5d7aef989
 
- > [1] https://www.gnu.org/software/gnulib/manual/html_node/Avoiding-the-year-2038-problem.html
+[1] https://www.gnu.org/software/gnulib/manual/html_node/Avoiding-the-year-2038-problem.html
 
- > Reviewed-by: Vincent Jardin <vjardin@free.fr>
- > Signed-off-by: Julien Olivain <ju.o@free.fr>
- > ---
- > Change v1 -> v2:
- > - Add comment near --disable-year2038 (comment from Vincent)
+Reviewed-by: Vincent Jardin <vjardin@free.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/util-linux/util-linux-libs/util-linux-libs.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/util-linux/util-linux-libs/util-linux-libs.mk b/package/util-linux/util-linux-libs/util-linux-libs.mk
+index 0337e7e13a..9340d5ae4f 100644
+--- a/package/util-linux/util-linux-libs/util-linux-libs.mk
++++ b/package/util-linux/util-linux-libs/util-linux-libs.mk
+@@ -26,9 +26,13 @@ UTIL_LINUX_LIBS_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt) \
+ 	$(TARGET_NLS_DEPENDENCIES)
++# --disable-year2038: tells the configure script to not abort if the
++# system is not Y2038 compliant. util-linux-libs will support year2038
++# if the system is compliant even with this option passed
+ UTIL_LINUX_LIBS_CONF_OPTS += \
+ 	--disable-rpath \
+-	--disable-makeinstall-chown
++	--disable-makeinstall-chown \
++	--disable-year2038
+ 
+ UTIL_LINUX_LIBS_LINK_LIBS = $(TARGET_NLS_LIBS)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
