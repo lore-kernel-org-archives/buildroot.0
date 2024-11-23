@@ -4,50 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04798D75E5D
-	for <buildroot@archiver.kernel.org>; Sat, 23 Nov 2024 18:35:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5FDAE6688F
+	for <buildroot@archiver.kernel.org>; Sat, 23 Nov 2024 22:52:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A45A084191;
-	Sat, 23 Nov 2024 18:35:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4FDAF84962;
+	Sat, 23 Nov 2024 22:52:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V8BJz3GNHpCs; Sat, 23 Nov 2024 18:35:37 +0000 (UTC)
+ id rXLH0fEwwj_5; Sat, 23 Nov 2024 22:52:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0B61841A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C7348497F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0B61841A6;
-	Sat, 23 Nov 2024 18:35:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C7348497F;
+	Sat, 23 Nov 2024 22:52:14 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 314BFE11
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 18:35:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CF6E31D8B
+ for <buildroot@buildroot.org>; Sat, 23 Nov 2024 22:52:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F46842EAE
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 18:35:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AFEE742AF1
+ for <buildroot@buildroot.org>; Sat, 23 Nov 2024 22:52:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nyf9ugxUQHfy for <buildroot@buildroot.org>;
- Sat, 23 Nov 2024 18:35:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id v2-aAvfm5yKf for <buildroot@buildroot.org>;
+ Sat, 23 Nov 2024 22:52:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F41542EC7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F41542EC7
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 18:35:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ECFA18655E; Sat, 23 Nov 2024 18:35:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EA288428C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA288428C4
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EA288428C4
+ for <buildroot@buildroot.org>; Sat, 23 Nov 2024 22:52:09 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9D5E320002;
+ Sat, 23 Nov 2024 22:52:03 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1tEyyw-00E6iF-2x;
+ Sat, 23 Nov 2024 23:52:02 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Nov 2024 19:34:37 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 7805e72284cf6df517efa62a5a419458ce78a7c6
-X-Git-Newrev: 35d3dd33dadb5d91c4c4f260def4078f75df6e3b
-X-Patchwork-Hint: ignore
-Message-Id: <20241123183534.ECFA18655E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/gamin: fetch from
- sources.buildroot.net
+Date: Sat, 23 Nov 2024 23:51:55 +0100
+Message-Id: <20241123225155.3362363-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH] package/quagga: fetch from sources.buildroot.net
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,38 +65,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35d3dd33dadb5d91c4c4f260def4078f75df6e3b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
-
-Fixes https://autobuild.buildroot.org/results/ef2/ef2b87da32c81fa635f795a99f352a18f535ec25/
+Fixes https://autobuild.buildroot.org/results/54a/54a165827f536be47cd45c98da3937a1e94a7c65/
 
 Upstream is no longer accessible, so use s.b.n instead.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gamin/gamin.mk | 3 ++-
+ package/quagga/quagga.mk | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/gamin/gamin.mk b/package/gamin/gamin.mk
-index 4621b1646f..70bbde5f66 100644
---- a/package/gamin/gamin.mk
-+++ b/package/gamin/gamin.mk
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 5d8d52263a..dd921552f1 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
 @@ -5,7 +5,8 @@
  ################################################################################
  
- GAMIN_VERSION = 0.1.10
--GAMIN_SITE = http://www.gnome.org/~veillard/gamin/sources
-+# upstream (http://www.gnome.org/~veillard/gamin/sources) dead
-+GAMIN_SITE = http://sources.buildroot.net/gamin
- GAMIN_AUTORECONF = YES
- GAMIN_INSTALL_STAGING = YES
- GAMIN_LICENSE = LGPL-2.0+
+ QUAGGA_VERSION = 1.2.4
+-QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
++# upstream (http://download.savannah.gnu.org/releases/quagga) dead
++QUAGGA_SITE = http://sources.buildroot.net/quagga
+ QUAGGA_INSTALL_STAGING = YES
+ QUAGGA_DEPENDENCIES = host-gawk host-pkgconf
+ QUAGGA_LICENSE = GPL-2.0+
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
