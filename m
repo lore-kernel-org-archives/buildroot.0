@@ -4,150 +4,150 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5CB5E6ADF3
-	for <buildroot@archiver.kernel.org>; Sat, 23 Nov 2024 11:12:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48B94E6ADF4
+	for <buildroot@archiver.kernel.org>; Sat, 23 Nov 2024 11:12:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D09942D39;
-	Sat, 23 Nov 2024 11:12:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08DE0408AC;
+	Sat, 23 Nov 2024 11:12:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1jclEbZ-Jt3H; Sat, 23 Nov 2024 11:12:12 +0000 (UTC)
+ id YyYuDoNzxBwH; Sat, 23 Nov 2024 11:12:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ED7242D50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E783442D56
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2ED7242D50;
-	Sat, 23 Nov 2024 11:12:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E783442D56;
+	Sat, 23 Nov 2024 11:12:16 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id AEEF31E39
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 11:12:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B123CE11
+ for <buildroot@buildroot.org>; Sat, 23 Nov 2024 11:12:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 981A2409D6
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 11:12:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9C84B405EB
+ for <buildroot@buildroot.org>; Sat, 23 Nov 2024 11:12:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XngBnqDznRhf for <buildroot@buildroot.org>;
- Sat, 23 Nov 2024 11:12:07 +0000 (UTC)
+ id l9XD4lIRyeuC for <buildroot@buildroot.org>;
+ Sat, 23 Nov 2024 11:12:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2409::61f;
- helo=nam04-dm6-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2413::62c;
+ helo=nam10-dm6-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7D915405EB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D915405EB
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam04on2061f.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2409::61f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7D915405EB
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 11:12:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6680140470
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6680140470
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam10on2062c.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2413::62c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6680140470
+ for <buildroot@buildroot.org>; Sat, 23 Nov 2024 11:12:14 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KFzvVji76D6EBgOeaSpGrx+uU3uXxfN8gP0ybEcddl9y4Ejp9vdyhvzz14r2LmKDD8HR+macKAFFm0T28BMLZ5n0A5ii31YBl6j6atKmKTV+d0YJzXa+vwwRWhxu4npUiDgPiyqmebB1vA6c8d0lp94m0+GaMjA96tUeoTpm3l6XHbBzevGbwYkvlcAAQKDue/jWF8cN1eaLU9L580LaSwVvwyGbGXj5p1nodAuMPc380vB2NT5pj5YoXYW0+3/s+3SpEa6/vChSwFpvteZjgXWQVjsAO+Ek1hsRDXsswi6je6nvJEZbNfF5b+sKKG/vXTBy5Ndko7ec61lGnirmcw==
+ b=UIJuZ/MZc35hnEFCWysrBQ7kCshJMs0S7Mw5YFkYhnE9G/pNwEWzTBtIq/JbjGY9HrKu17yXVT6SLjNzlMQ9VRxfGNZyDHLjv62svF4cNjtLA2ekOlHaTWnwcmMWW+M/c4x78UqoJDhgdy0PhPIu6GfvRnb3T1rUesEMXtUGMK3DbQk9rgem3OJnlz+3wXW0IpMIbcxXrP18kci9rOugAa29J3SyUqmnT8FjWBeBys9/maU2Lho9q4k6fbvf7Za+2GFHMw0mu7EOB/vgH0ADJGPxR2850HzeLQegO/H44AMn5GJLapIS+5j8cYwbKy0h16gu/nVDIvb+ktEmxoFI6w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y3D+QyZWqWL/U+wEjUIDMhQb+fhKyeAy2qmCYMeqZtk=;
- b=WfpEUjW//qaIDRpEi8+AefW6eWuYOdA4rNzlq/j4cKE4dcwGQWQCocTEK9Om1Xt7DwSm6x9+12UliPjAsHasNKgCofUfJ5AT5LKz6PpjTb9Z09A7zA2/ahgJpM+VMzyoj7C3mQ7WW21mw0lxnkiuavbNhdzyCNlw5PveQC3gUuMJQoU+4KGKKjAVcg2+qeBr/viMl/zfK8kOWDUfKlDhiUEcF5VGZBG9SFHrNNYJJXKTYknyX0btixuTMI3MoOUz+c/bfgXL34o3GFd2edJwP9YYMxT/pijcivOgWVM4Ez4diIB287VD5mvRRH0spU8548Vm4/wq6Aub97o0tyRa0A==
+ bh=557/dC0pPnCvqAwuRAXNnabuayuVoFRMA/HP9x99wRo=;
+ b=dGVbbZQ8eBwwL2YkAVkfKI1hNWCFkqHkZ1GB/EOlKSRBx9hZhEG/cIiEdsBWTYOia8pCEj5+qgCfRNxudgslZDU1em2jz9dgEoHpYhQDuI34WFZITqLtBfzRAGwgHLG+n4mn3JSGevkWXcJXAEkEyiUUN5VG2gTBi3oGVvGccJT44X05lJQbgGamCP9F91ULCHCWLDKbPIfOgCFkotPXP74l/s+lXAXLajviO336huZacUpDQHwFbDc9LtPvyz4mmVDlI+98QUa6thnkN9pDyOVOl2tbB6ebw17SS7CnJk4c/Za9UaMBOVN6HPYuRHmNt38ElPkIp4yiM03AknzXXQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.12) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from MW2PR16CA0004.namprd16.prod.outlook.com (2603:10b6:907::17) by
- SA1PR12MB6871.namprd12.prod.outlook.com (2603:10b6:806:25f::22) with
- Microsoft SMTP Server (version=TLS1_2,
+Received: from CH5PR03CA0005.namprd03.prod.outlook.com (2603:10b6:610:1f1::24)
+ by MW3PR12MB4380.namprd12.prod.outlook.com (2603:10b6:303:5a::19)
+ with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.27; Sat, 23 Nov
- 2024 11:12:01 +0000
-Received: from SJ5PEPF000001D1.namprd05.prod.outlook.com
- (2603:10b6:907:0:cafe::9c) by MW2PR16CA0004.outlook.office365.com
- (2603:10b6:907::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8182.18 via Frontend
- Transport; Sat, 23 Nov 2024 11:12:00 +0000
+ 2024 11:12:10 +0000
+Received: from CH3PEPF00000014.namprd21.prod.outlook.com
+ (2603:10b6:610:1f1:cafe::d8) by CH5PR03CA0005.outlook.office365.com
+ (2603:10b6:610:1f1::24) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8182.17 via Frontend Transport; Sat,
+ 23 Nov 2024 11:12:09 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.12)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.12 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.12; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.12) by
- SJ5PEPF000001D1.mail.protection.outlook.com (10.167.242.53) with Microsoft
+ client-ip=165.204.84.12; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.12) by
+ CH3PEPF00000014.mail.protection.outlook.com (10.167.244.119) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8182.16 via Frontend Transport; Sat, 23 Nov 2024 11:11:59 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.8230.0 via Frontend Transport; Sat, 23 Nov 2024 11:12:09 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sat, 23 Nov
- 2024 05:11:59 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sat, 23 Nov
- 2024 05:11:58 -0600
+ 2024 05:12:05 -0600
 Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Sat, 23 Nov 2024 05:11:57 -0600
+ Transport; Sat, 23 Nov 2024 05:12:04 -0600
 To: <buildroot@buildroot.org>
-Date: Sat, 23 Nov 2024 11:11:45 +0000
-Message-ID: <20241123111150.2124027-1-neal.frager@amd.com>
+Date: Sat, 23 Nov 2024 11:11:48 +0000
+Message-ID: <20241123111150.2124027-4-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20241123111150.2124027-1-neal.frager@amd.com>
+References: <20241123111150.2124027-1-neal.frager@amd.com>
 MIME-Version: 1.0
+Received-SPF: None (SATLEXMB03.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D1:EE_|SA1PR12MB6871:EE_
-X-MS-Office365-Filtering-Correlation-Id: b157f752-2f09-4df4-1950-08dd0bafa6b1
+X-MS-TrafficTypeDiagnostic: CH3PEPF00000014:EE_|MW3PR12MB4380:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9416e4f8-2659-4e22-a6be-08dd0bafac35
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|82310400026|376014|1800799024|36860700013|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?p0AkU+I/6p9kDa9VW7smqW6SJqHfocG6M42QJuDDgsmwHshsTqy0/8ZVT+uU?=
- =?us-ascii?Q?/cr9yLhbUxDKOkwbaHJIFw8crZkYPfSXHbnWLeoSK+d5jpUfiXftdUSpOpsO?=
- =?us-ascii?Q?dcK9ovtTeQvhwZdeqLDyNuRtrc0kxLYrYNcQm6KaNvVroD07RKJb9n6yytKx?=
- =?us-ascii?Q?Lh2TSx5oW8cQfnfOVkgoAiiVwqoyWLaP/X15yQYulwWtuIhOrIALlywue+LK?=
- =?us-ascii?Q?lDT+2mdjX9upOcxeDXKmOWykONWYDoAOmM0qrJP7vkhI2yhgmFPWCyXMcxqo?=
- =?us-ascii?Q?Japl/VzL5ZAruHB3T11CTWm2uF3yKisY78TKztRlI3twIpqQB7ScI35UQYEQ?=
- =?us-ascii?Q?A0Ay1yIdEfnKO8VlkMS7xZLeW5YTPAy8AhWRYALllWJW9AI0VtO0piWrXuIg?=
- =?us-ascii?Q?fdOIOs/ZJLRkNmOxJiLdHb+V84vGGSoq99JRzZXBOXd1/5bqgY1jZb1ab6ID?=
- =?us-ascii?Q?M5eHFu1XJ95wmEs1wn7+TolEM9sk4cvS1tSTusAY50DVMuAd+IxoJGge8fIq?=
- =?us-ascii?Q?83TeMd2/XVLp8rBHGEvvD85+8/9EKeCnAN+v8/16M9LMHbZg9LTiF+WWXAFx?=
- =?us-ascii?Q?1I4tmOU0+SPPlMwDXU4YJFnMQliSBFPhydK56zK4De60GqjrH7bgpijFuEXX?=
- =?us-ascii?Q?jMp5d4uh21y/stPa2msIBb5eYgb0oxG/kzB959+vGIr5pkhKKDOPevTZPP71?=
- =?us-ascii?Q?7xaPT1tVuHkRhqZALefdBVfOoccRcZOS9q5/t5q2xxTu9VBtGgLVmFUMJOL4?=
- =?us-ascii?Q?s9Wu+KAwUQk1IT5Wxm6S7DIK0EbmTbYNhpFkbgYK8NAqVQCTlTcXtdMPsiX3?=
- =?us-ascii?Q?o/S5NkQ03zduTWG/P0dJMfB8MoLgc5oAWgb+rXqNlZKD6lchoGYkAmA684DC?=
- =?us-ascii?Q?NmHMZN84ALaWd7H5TZaSR3SjOlLet2juzFlY2q5sAP1PL/qD6OI5DW6jrwJD?=
- =?us-ascii?Q?UJM4fKrd76/jEWnpn+52SchPwGnByoVMWEuH2W2Jg3/E/nmVJBTbvFY6Jcva?=
- =?us-ascii?Q?Tk/okDH9GwXDB1RCw4E06BtdKIj9HSMSxLmMPEJ4UlGfiORW8x8gUt5zbPx5?=
- =?us-ascii?Q?z5M7+0iNd7Wxtk8GuSR5pkWYHvrOgaJ9oMtEInrJxJvlmiIC26xXDci6Wg2o?=
- =?us-ascii?Q?zCVYqzVj5ILxTU8xQVFj16gd7UFSuRKpcDa4RvYaPB0OqzGPVvVMkpKmDnMz?=
- =?us-ascii?Q?eni82sV/OHiPaNGg0KiNOjMLojZRmEXRuMl6j/96NDw9LjgWeXfC6HOYL1e9?=
- =?us-ascii?Q?IAZ/5ntc7toqBm0CCZkvfAlMBmpO4cxOS+Z/s1ePEYLeW24vKxzaQofycQnY?=
- =?us-ascii?Q?JuaOirtJMpypcrWxZXro5Cj6EZWovz8BG/ajj/G6mq8X7O/VT8QraaDq/OCf?=
- =?us-ascii?Q?M3VCKP87azf7EoiaEcZM6hgzWooKP3d+gcOQnXJfjvEMIu04y4Pv2gJenxAE?=
- =?us-ascii?Q?kGcdJWf4LG96dqqSARDxq6xSRZnKF5IsAJIupo1Hr/0G8a7xgsTTKQ=3D=3D?=
+ ARA:13230040|82310400026|36860700013|376014|1800799024|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?hvuNzBy0IZhHzebES8Hiz/5s76wbzNE+BTjMRTUyFPKQOS63+t79IaacXsXu?=
+ =?us-ascii?Q?LyIyunU3vmfchXYe9xOXXNrWZ374LE77SrtyrJIoEwt/f1m2yeR5HikCGh7t?=
+ =?us-ascii?Q?YRaKI4hLorntubqXgd2YQS51+mtlvN3qk+uYhfZ7we7c58jFsfPCbkOMxA0e?=
+ =?us-ascii?Q?/9WqmYIAQ/eEdfA0ZzChDZ8w4P4ZnJRhXq5bSoRNjHtJ018Zwi4rN/IFcDaT?=
+ =?us-ascii?Q?/kT3xIkFvmFN/q6I5LVKyjbcvmJj819761U7i6rXMudSbgL+zp4U6ZkMLrrI?=
+ =?us-ascii?Q?7i22vEC2wo1qaT5w8iuT7u1+5XqJLl5dT//MDFbXVHZQlvw5dmd9SFC2LKNJ?=
+ =?us-ascii?Q?RVhr8rs1CQogr7QQ1Cd8CKTjQ0IESbpTOb6xNUdptR/4TH1dtnLmObdof310?=
+ =?us-ascii?Q?4BVP1w6oDZhhRqVnF7FzNY9TBSI87xBLp0GPAU7wU2Tv2yX32aByDbKypowL?=
+ =?us-ascii?Q?Ngd2PbdwmvFBHslH97EcWvYDFw3n/Z148CC1ZgWaKFdhQvd+PRT9kUcw/8hi?=
+ =?us-ascii?Q?YZ6v11qc1+8OfsURTw0jsYZuI2pMNwzxdHnwvFEPmCuHQiJJdcXQJAYkjh17?=
+ =?us-ascii?Q?ZkX423WyVmU9O0LF28KjA27uPDkEuNINEWeSKOL05R10wi+gfcQWv52P6/iJ?=
+ =?us-ascii?Q?Z0rOpGNuiRZ8bmwDx7g9+L5Unxzr6cX9Co+HlNyjUV7fuBQ2ZSEC1sy4faE4?=
+ =?us-ascii?Q?OVLOlMaC/HhLoquyWIbVaK0VwCQhuyWk4AiHa+Y2S6FHatgwMPjyMU9pgsIj?=
+ =?us-ascii?Q?Pxzr3HaVqn2wg3/sWfJ8dDVto4IZvgWHpCL0aWJ9JWbefD7AgH6gYjTBr1lj?=
+ =?us-ascii?Q?84gSpxRa5qYS1B6D4h/qYvABSkCHZZdLhxwtVeKXTS4eRlNA7OTLNXxQ135k?=
+ =?us-ascii?Q?ELIXWo45r8bABjZ+bWCb11e2WjkGMSUK/B63cY8vmYdVMIoBMYV4MYJANeeO?=
+ =?us-ascii?Q?YQbodgRLg6zzuJLRdpG24QfFETciDuoK9CjSuUQJtdNth35yl3enJ7+g70FM?=
+ =?us-ascii?Q?hzyoD0LnQ0SXeiUJeYEfdHmSfhwRF+tBe5utyDfIOYGsyUBTbLnuGRak9FZD?=
+ =?us-ascii?Q?UIDYCIYdvof4+tlxC5GsQm6521Aasc6ETLrx8lKLESSqD6cHb5vNl0nWVHIz?=
+ =?us-ascii?Q?ywXn+lvr1aAs9oQ3omH9grUz4ejXQznbKmWUZ6nU8LFKTIMcxZQPOlbnGj7o?=
+ =?us-ascii?Q?Ibbm3bH4hf5Cc7Ekeu7Dgf0sBYWClyG+Jawf2dH0DVFJTRmvZBx5QzL9GRu/?=
+ =?us-ascii?Q?LVykwuXDYtMVup2nnGjVClaIZEtw0Guahp/P9ioYC0JYRVjuPcCB5dz1IvoM?=
+ =?us-ascii?Q?E2Zho2cxCEELcF5iu1R1VNCmqEDnEA76elJar5Vk+RgGzjF6UNbR0MUqQUKt?=
+ =?us-ascii?Q?hW26WYLK/VKj93C4hMivpMyDZpmi9XdIgjq6wArNZpHF73WoZG/QsnLxpJp7?=
+ =?us-ascii?Q?F5Cw+DXo2MenhdieofH3Ua1/rTLJqVRJvxzzT/ltK1G120J1iK3xcg=3D=3D?=
 X-Forefront-Antispam-Report: CIP:165.204.84.12; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:atlvpn-bp.amd.com; CAT:NONE;
- SFS:(13230040)(82310400026)(376014)(1800799024)(36860700013)(41080700001);
+ IPV:NLI; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:atlvpn-bp.amd.com; CAT:NONE;
+ SFS:(13230040)(82310400026)(36860700013)(376014)(1800799024)(41080700001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2024 11:11:59.8722 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b157f752-2f09-4df4-1950-08dd0bafa6b1
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2024 11:12:09.2076 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9416e4f8-2659-4e22-a6be-08dd0bafac35
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.12];
- Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SJ5PEPF000001D1.namprd05.prod.outlook.com
+ Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CH3PEPF00000014.namprd21.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6871
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4380
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y3D+QyZWqWL/U+wEjUIDMhQb+fhKyeAy2qmCYMeqZtk=;
- b=afhoSFIQz2AzKFf3x8ial91VGSTUn1jVe/hlrN9/1iazV5Hr9jWHbiy9yEsqHPgu7TyS5n82De3As1XK+pZN9pV3rrjDafcLURRl8KXOluXOJAN/Jj5OGO45f19a6HdAwfZu4i5EKYT53FjlEVizXr0PwxtlKnPyIl709SiJiQs=
+ bh=557/dC0pPnCvqAwuRAXNnabuayuVoFRMA/HP9x99wRo=;
+ b=GJUY+2M9rR+WwxH0EYDfXiFKDe3KCqUBLgbWd9BzzTpJGbhZjPQl8lp2NmB1887i4HBog5JMX6jZcp7c3iZhOt3UHyEdkDxMsJgCIE24edtHQff05q6sjeJJhNhCpRUDJPu1zzksILs8prOylwn8Z7Ne6aM7zTa/5PSh0GWM8dQ=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=afhoSFIQ
-Subject: [Buildroot] [PATCH v1 1/6] board/xilinx/patches: add xilinx_v2024.2
- hashes
+ header.s=selector1 header.b=GJUY+2M9
+Subject: [Buildroot] [PATCH v1 4/6] configs/zynqmp_zcu106_defconfig: bump to
+ xilinx-v2024.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -169,36 +169,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add remaining hashes for xilinx_v2024.2 release for zynqmp and versal boards.
+This patch bumps the zynqmp_zcu106_defconfig to xilinx-v2024.2 which includes
+the following updates:
 
-xilinx_v2024.2 release includes:
- - atf 2.10
- - linux 6.6.40
- - uboot 2024.01
- - xilinx-prebuilt xilinx_v2024.2
+- ATF v2.10
+- Linux v6.6.40
+- PMUFW xilinx-v2024.2
+- U-Boot v2024.01
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash       | 1 +
- board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash        | 1 +
- 2 files changed, 2 insertions(+)
+ configs/zynqmp_zcu106_defconfig | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-index e300398541..2ef3a98196 100644
---- a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256  c3369c89eab4e452bbc76c630e5dccb6c0ae588c0175b6c8549aa0241deb06ef  xlnx_rebase_v2.10_2024.1.tar.gz
-+sha256  a45390c9e1d584a389abd37ee49dce3f8d3b41718b1fd7c977608b5387a38955  xlnx_rebase_v2.10_2024.2.tar.gz
-diff --git a/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash b/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
-index c955cd79f5..3bd33a29a0 100644
---- a/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
-+++ b/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256  7abcba4e0e44e3a4adf9c1f971d918575226d7604dfd64a386baaa00c1c6c35f  xilinx-prebuilt-xilinx_v2024.1.tar.gz
-+sha256  ef61a4b249ecbf632a25cc34c3b03b8290be44397ff739467ac92ec1701e23bf  xilinx-prebuilt-xilinx_v2024.2.tar.gz
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 3a13834c96..4c5ac16f0c 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.2)/xlnx_rebase_v6.6_LTS_2024.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
+@@ -17,13 +17,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.10_2024.1)/xlnx_rebase_v2.10_2024.1.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.10_2024.2)/xlnx_rebase_v2.10_2024.2.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.1)/xlnx_rebase_v2024.01_2024.1.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.2)/xlnx_rebase_v2024.01_2024.2.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+@@ -38,6 +38,7 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu106/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu106-rev1.0"
+ BR2_TARGET_XILINX_PREBUILT=y
++BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.2"
+ BR2_TARGET_XILINX_PREBUILT_BOARD="zcu106"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
 2.25.1
 
