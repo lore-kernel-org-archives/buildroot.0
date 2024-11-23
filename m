@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29DD8C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:31:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2641FC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:31:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFE3342EB2;
-	Fri, 28 Feb 2025 16:31:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDE546FA38;
+	Fri, 28 Feb 2025 16:31:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fb4xUkCfli2G; Fri, 28 Feb 2025 16:31:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1aNFdzI9HoS8; Fri, 28 Feb 2025 16:31:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95DCB42EB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3B266FBDC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95DCB42EB3;
-	Fri, 28 Feb 2025 16:30:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3B266FBDC;
+	Fri, 28 Feb 2025 16:31:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 162AA68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:35 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 165B31DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2711941992
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1AFD241800
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E4wwNWSr8xZg for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:30 +0000 (UTC)
+ id ee7nAN6nfq8l for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABA9541809
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C38C40DCB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ABA9541809
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C38C40DCB
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A26A78769C; Fri, 28 Feb 2025 16:29:29 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 4856E879C2; Fri, 28 Feb 2025 16:29:30 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Nov 2024 22:00:32 +0100
+Date: Sat, 23 Nov 2024 10:46:59 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 353a37b04d0da29b0dfda3c98381b24839a1adc9
-X-Git-Newrev: a359514630165fe03c7bd159af10b7d20d08334a
+X-Git-Oldrev: dbb019db73d8d78466c04b1847f501317a7aa214
+X-Git-Newrev: 4b271906a74ab773ff276cf5d6d90209c4d32cab
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162929.A26A78769C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: update maintainer
- of Andes platform
+Message-Id: <20250228162930.4856E879C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-sip: disable
+ parallel install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,32 +65,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a359514630165fe03c7bd159af10b7d20d08334a
+commit: https://git.buildroot.net/buildroot/commit/?id=4b271906a74ab773ff276cf5d6d90209c4d32cab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-I will lose access to my email next week, so hand
-it over to Leo Yu-Chi Liang.
+{host-}python-sip may fail to install on fast machine, so disable
+parallel install.
 
-Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
-Reviewed-by: Leo Yu-Chi Liang <ycliang@andestech.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/8350440972 (TestPythonPyQt5)
+http://autobuild.buildroot.org/results/8f2/8f24656f3a66d21f2d3c6d6b1adc6bb5f1c0c801 (2024-10-15)
+http://autobuild.buildroot.org/results/6e6/6e6bbee714b10e0f04c9d17b7e0ecce057d21d2a (2022-07-15)
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-sip/python-sip.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fc189fa644..d75df5cc55 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2515,7 +2515,7 @@ F:	package/dbus-broker/
- F:	package/systemd/
- F:	package/tcf-agent/
+diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
+index 392928f01e..f71724f68a 100644
+--- a/package/python-sip/python-sip.mk
++++ b/package/python-sip/python-sip.mk
+@@ -21,8 +21,10 @@ define HOST_PYTHON_SIP_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
  
--N:	Yu Chien Peter Lin <peterlin@andestech.com>
-+N:	Leo Yu-Chi Liang <ycliang@andestech.com>
- F:	board/andes
- F:	configs/andes_ae350_45_defconfig
- F:	package/andes-spi-burn/
++# Race condition on fast machine between sipconfig.py install and
++# {sipdistutils.py,mk_distinfo.py} scripts.
+ define HOST_PYTHON_SIP_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) install -C $(@D)
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE1) install -C $(@D)
+ endef
+ 
+ define PYTHON_SIP_CONFIGURE_CMDS
+@@ -42,8 +44,10 @@ define PYTHON_SIP_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
+ 
++# Race condition on fast machine between sipconfig.py install and
++# {sipdistutils.py,mk_distinfo.py} scripts.
+ define PYTHON_SIP_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) install -C $(@D)
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) install -C $(@D)
+ endef
+ 
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
