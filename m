@@ -1,77 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AB01E668BC
-	for <buildroot@archiver.kernel.org>; Sun, 24 Nov 2024 16:29:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49224E668BC
+	for <buildroot@archiver.kernel.org>; Sun, 24 Nov 2024 17:43:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8AB6184A88;
-	Sun, 24 Nov 2024 16:29:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E37842DD7;
+	Sun, 24 Nov 2024 17:43:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jzeOKRXGjPyj; Sun, 24 Nov 2024 16:29:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jHUvranfH0fT; Sun, 24 Nov 2024 17:43:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DE8A84A97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34E9542DC1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DE8A84A97;
-	Sun, 24 Nov 2024 16:29:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A522231
- for <buildroot@buildroot.org>; Sun, 24 Nov 2024 16:29:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 34E9542DC1;
+	Sun, 24 Nov 2024 17:43:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6F4A44961
+ for <buildroot@buildroot.org>; Sun, 24 Nov 2024 17:43:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 85C896084C
- for <buildroot@buildroot.org>; Sun, 24 Nov 2024 16:29:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 562AC405F7
+ for <buildroot@buildroot.org>; Sun, 24 Nov 2024 17:43:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xdGhC8J4PhVz for <buildroot@buildroot.org>;
- Sun, 24 Nov 2024 16:29:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 57E7760842
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57E7760842
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 57E7760842
- for <buildroot@buildroot.org>; Sun, 24 Nov 2024 16:29:12 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D55AA240002;
- Sun, 24 Nov 2024 16:29:09 +0000 (UTC)
-Date: Sun, 24 Nov 2024 17:29:08 +0100
-To: Scott Fan <fancp2007@gmail.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20241124172908.2b4db731@windsurf>
-In-Reply-To: <CAFkzVZbczGknp7uz78yCHo+8aW3RbjQG0ns4fGPv=Gakb02fWw@mail.gmail.com>
-References: <20241030002020.73963-1-fancp2007@gmail.com>
- <20241031191844.60ba9a59@windsurf>
- <CAFkzVZbczGknp7uz78yCHo+8aW3RbjQG0ns4fGPv=Gakb02fWw@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NnpOmVHikjGF for <buildroot@buildroot.org>;
+ Sun, 24 Nov 2024 17:43:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 19C2C40329
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19C2C40329
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 19C2C40329
+ for <buildroot@buildroot.org>; Sun, 24 Nov 2024 17:43:44 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 8E34DB0059A;
+ Sun, 24 Nov 2024 18:43:40 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Sun, 24 Nov 2024 18:43:35 +0100
+Message-ID: <20241124174335.1715104-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1732465750;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=RL3MEOevkPF+CXUN9R+52XNndJ9EBjbCXzVrgyHYX10=;
- b=a9BiZS8DFZ1INhNWVME8rcwQHN/X8WMzVgQDODN/Td4aNoZazlDKvbJYqmG3y+0VeZF7bp
- aHfwGMB0OyZ39Bsio/BLzRujEBswsSYrSx77qu1pYQhAFNVVoSWZsvcmMoCg+S8x1XQgnh
- 1piqahFqx4+rn3vCOF+aVhEln99LyIhTO5c1Iul5P+1Gilzjn7fVa7kFcm24YR651j/VV/
- lUIHOsrbWHxTPJfg1qAiO0sQikbDBS4VQ/2C12Q/WLjuF/N9NrQGCk8qSq2VZ0u9a6yT8s
- zFC5WK6UHRy/kldV9wzQa5ff+o6Kr184MxqNV9dGGuSf1MnOCmu4Ni6UzfYYVQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=a9BiZS8D
-Subject: Re: [Buildroot] [PATCH] package/procps-ng: fix pidfd_open checking
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1732470221;
+ bh=dcKcBc2axaMtjMspYP665RXCdfmR35mXN6ur3XbUP2A=;
+ h=From:To:Cc:Subject:Date:From;
+ b=NRCGX5Yw24vcjHyYm1NnOP4iJGZ2M8HHEJPkNuS5D8OKy7u09tTZfx9D4al9CoZSV
+ AqfCxnWh27iP9GHRx/IW7f7V6SvbCoTmO/OuXJiskAewfvU1Xqfpb7CukkjBlMJy3W
+ aKXGBCs9H19iMkVqdENjeSd7nGoZttHwTEb2TA6/oe4rqGEzOOf/j29gAdPtOu33kg
+ P6q5YQmyJF/1ye9qam2LmRbmU1KcGEXafaNjH6+meOcnRx/IdlhbS7+8UxY9pdnjbc
+ 3h+ZIFXiUWhcGI+JSlRouIpbAXJ5BiU5uMKSyzf9vuVA5XfjhiWDSD5v3GMPTd68Po
+ fUAMVjHXIUpaQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=NRCGX5Yw
+Subject: [Buildroot] [PATCH 1/1] package/doxygen: fix _SITE download URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,75 +76,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Scott,
+Doxygen source archive download fails with a HTTP 404 Not Found
+error.
 
-Sorry for the slow feedback. Not sure what the status of this is and
-whether my answer is still useful/relevant.
+The doxygen download page [1] mention that older versions can be
+downloaded on SourceForge at [2].
 
-On Fri, 1 Nov 2024 09:31:08 +0800
-Scott Fan <fancp2007@gmail.com> wrote:
+This commit fixes the issue by changing _SITE to this new URL.
 
-> > So I'm not sure my previous review was clear enough: what is wrong is
-> > the procps-ng patch itself, it shouldn't AC_MSG_ERROR(), but instead it
-> > should automatically disable pidwait, as if the user had passed
-> > --disable-pidwait.
-> 
-> I understand what you mean, but I may not have expressed my thoughts clearly.
-> 
-> Before this patch was applied, I got a compile error (not configure
-> error) when the package was built with linux-headers-4.19.322,
-> Then I tried to figure out what was going wrong and I eventually found
-> this patch from upstream.
-> 
-> After this patch was applied, it threw a configure error (not compile
-> error), which is what I expected.
-> 
-> As the patch said:
-> The previous build setup would check for pidfd_open using
-> AC_CHECK_FUNC and would be incorrectly reported as true.
-> 
-> Therefore, I think the key to this patch is that it successfully fixes
-> the pidfd_open checking issue.
-> 
-> If pidfd_open() and __NR_pidfd_open were not present, it will report
-> an AC_MSG_ERROR message,
-> and gives us the --disable-pidwait configure option, so you are
-> explicit in not wanting and knowing you wont get pidwait.
-> 
-> Whereas you mean, instead of AC_MSG_ERROR(), it should automatically
-> disable pidwait, as if the user had passed --disable-pidwait.
-> I'm not sure if this is acceptable to the upstream maintainers, who
-> want you to be clear about the purpose of the option you passed.
-> Even if it is approved , it would require a new patch to improve this behavior.
-> 
-> 
-> To solve my compilation problem (with linux-headers-4.19.322), in the
-> current case, I had to pass the --disable-pidwait option.
-> If at some point in the future, when the patch you expect is
-> successfully applied, I will remove it.
+Fixes:
+https://autobuild.buildroot.org/results/253450bf374ce858fe12712059c435fc773d52f8
 
-What you can do then is:
+[1] https://www.doxygen.nl/download.html
+[2] https://sourceforge.net/projects/doxygen/files/
 
-ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19),)
-PROCPS_NG_CONF_OPTS += disable-pidwait
-endif
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/doxygen/doxygen.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This will ensure to disable pidwait support when headers are < 4.19.
-
-Best regards,
-
-Thomas
+diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
+index b24c527a20..b3bcb34097 100644
+--- a/package/doxygen/doxygen.mk
++++ b/package/doxygen/doxygen.mk
+@@ -6,7 +6,7 @@
+ 
+ DOXYGEN_VERSION = 1.8.18
+ DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
+-DOXYGEN_SITE = http://doxygen.nl/files
++DOXYGEN_SITE = https://sourceforge.net/projects/doxygen/files/rel-$(DOXYGEN_VERSION)
+ DOXYGEN_LICENSE = GPL-2.0
+ DOXYGEN_LICENSE_FILES = LICENSE
+ DOXYGEN_CPE_ID_VENDOR = doxygen
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.47.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
