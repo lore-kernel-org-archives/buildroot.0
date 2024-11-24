@@ -1,59 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A775E6688F
-	for <buildroot@archiver.kernel.org>; Sat, 23 Nov 2024 23:19:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F31F0E6688F
+	for <buildroot@archiver.kernel.org>; Sun, 24 Nov 2024 00:33:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 32B36810B8;
-	Sat, 23 Nov 2024 23:19:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 989D9600B6;
+	Sun, 24 Nov 2024 00:33:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XHf1LYKHhfsC; Sat, 23 Nov 2024 23:19:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u_2stuGMDCq7; Sun, 24 Nov 2024 00:33:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1362F811EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D0B8606A5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1362F811EA;
-	Sat, 23 Nov 2024 23:19:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D0B8606A5;
+	Sun, 24 Nov 2024 00:33:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 336DE1D8B
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 23:19:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A68061D8B
+ for <buildroot@buildroot.org>; Sun, 24 Nov 2024 00:33:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1181A40AB2
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 23:19:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F5B041C96
+ for <buildroot@buildroot.org>; Sun, 24 Nov 2024 00:33:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fZ3TxIGmbqvh for <buildroot@buildroot.org>;
- Sat, 23 Nov 2024 23:19:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+ id Z52pUJlaZRmu for <buildroot@buildroot.org>;
+ Sun, 24 Nov 2024 00:33:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 563E540582
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 563E540582
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 563E540582
- for <buildroot@buildroot.org>; Sat, 23 Nov 2024 23:19:00 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1A4BCE0003;
- Sat, 23 Nov 2024 23:18:57 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1tEzOz-00EAuw-1a;
- Sun, 24 Nov 2024 00:18:57 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6445841C08
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6445841C08
+ for <buildroot@buildroot.org>; Sun, 24 Nov 2024 00:33:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 465C186584; Sun, 24 Nov 2024 00:33:23 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 24 Nov 2024 00:18:54 +0100
-Message-Id: <20241123231854.3378544-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH-NEXT] package/quagga: drop package
+Date: Sun, 24 Nov 2024 01:31:21 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: eafbd991485ded874e1df8cda0fd9ecfa2ccde6f
+X-Git-Newrev: c0a5fcf781f4dceb85e6a5c5a98b2ff373ff245f
+X-Patchwork-Hint: ignore
+Message-Id: <20241124003323.465C186584@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/quagga: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,10 +58,14 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://git.buildroot.net/buildroot/commit/?id=c0a5fcf781f4dceb85e6a5c5a98b2ff373ff245f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 The upstream git repo and download location is gone and the package hasn't
 seen any version updates since 2019. It was also dropped from Debian:
@@ -78,28 +75,21 @@ https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1000216
 So drop the package here as well.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                           |   3 -
- Config.in.legacy                              |   9 ++
- package/Config.in                             |   1 -
- package/olsr/olsr.mk                          |   2 -
- .../quagga/0001-fix-ipctl-forwarding.patch    |  27 ----
- ...2-lib-prefix.h-fix-build-with-gcc-10.patch |  36 -----
- .../quagga/0003-Fix-build-with-gcc-10.patch   | 127 ------------------
- package/quagga/Config.in                      |  95 -------------
- package/quagga/quagga.hash                    |   5 -
- package/quagga/quagga.mk                      | 114 ----------------
- package/quagga/quagga@.service                |  17 ---
- package/quagga/quagga_tmpfiles.conf           |   1 -
+ .checkpackageignore                                |   3 -
+ Config.in.legacy                                   |   9 ++
+ package/Config.in                                  |   1 -
+ package/olsr/olsr.mk                               |   2 -
+ package/quagga/0001-fix-ipctl-forwarding.patch     |  27 -----
+ .../0002-lib-prefix.h-fix-build-with-gcc-10.patch  |  36 ------
+ package/quagga/0003-Fix-build-with-gcc-10.patch    | 127 ---------------------
+ package/quagga/Config.in                           |  95 ---------------
+ package/quagga/quagga.hash                         |   5 -
+ package/quagga/quagga.mk                           | 114 ------------------
+ package/quagga/quagga@.service                     |  17 ---
+ package/quagga/quagga_tmpfiles.conf                |   1 -
  12 files changed, 9 insertions(+), 428 deletions(-)
- delete mode 100644 package/quagga/0001-fix-ipctl-forwarding.patch
- delete mode 100644 package/quagga/0002-lib-prefix.h-fix-build-with-gcc-10.patch
- delete mode 100644 package/quagga/0003-Fix-build-with-gcc-10.patch
- delete mode 100644 package/quagga/Config.in
- delete mode 100644 package/quagga/quagga.hash
- delete mode 100644 package/quagga/quagga.mk
- delete mode 100644 package/quagga/quagga@.service
- delete mode 100644 package/quagga/quagga_tmpfiles.conf
 
 diff --git a/.checkpackageignore b/.checkpackageignore
 index 959bb822d3..f897565718 100644
@@ -630,9 +620,6 @@ index e16c475fd4..0000000000
 +++ /dev/null
 @@ -1 +0,0 @@
 -d /var/run/quagga/ 1755 quagga quagga -
--- 
-2.39.5
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
