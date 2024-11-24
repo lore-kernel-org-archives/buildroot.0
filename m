@@ -1,78 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 645BBE668B5
-	for <buildroot@archiver.kernel.org>; Sun, 24 Nov 2024 14:53:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AB01E668BC
+	for <buildroot@archiver.kernel.org>; Sun, 24 Nov 2024 16:29:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED66C61563;
-	Sun, 24 Nov 2024 14:53:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8AB6184A88;
+	Sun, 24 Nov 2024 16:29:17 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jzeOKRXGjPyj; Sun, 24 Nov 2024 16:29:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DE8A84A97
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DE8A84A97;
+	Sun, 24 Nov 2024 16:29:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A522231
+ for <buildroot@buildroot.org>; Sun, 24 Nov 2024 16:29:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 85C896084C
+ for <buildroot@buildroot.org>; Sun, 24 Nov 2024 16:29:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j_0tUfmjdrEz; Sun, 24 Nov 2024 14:53:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2D4861565
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2D4861565;
-	Sun, 24 Nov 2024 14:53:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4DBC14961
- for <buildroot@buildroot.org>; Sun, 24 Nov 2024 14:53:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B18A42F72
- for <buildroot@buildroot.org>; Sun, 24 Nov 2024 14:53:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VOUm_sawjFyO for <buildroot@buildroot.org>;
- Sun, 24 Nov 2024 14:53:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F29D542F76
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F29D542F76
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F29D542F76
- for <buildroot@buildroot.org>; Sun, 24 Nov 2024 14:53:11 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 86D5E13F8B8;
- Sun, 24 Nov 2024 15:53:07 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:55198])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 24 Nov 2024 15:53:07 +0100
-MIME-Version: 1.0
-Date: Sun, 24 Nov 2024 15:53:07 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
+ id xdGhC8J4PhVz for <buildroot@buildroot.org>;
+ Sun, 24 Nov 2024 16:29:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 57E7760842
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57E7760842
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 57E7760842
+ for <buildroot@buildroot.org>; Sun, 24 Nov 2024 16:29:12 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D55AA240002;
+ Sun, 24 Nov 2024 16:29:09 +0000 (UTC)
+Date: Sun, 24 Nov 2024 17:29:08 +0100
+To: Scott Fan <fancp2007@gmail.com>
 Cc: buildroot@buildroot.org
-In-Reply-To: <874j3wrbta.fsf@dell.be.48ers.dk>
-References: <20241123225155.3362363-1-peter@korsgaard.com>
- <3a4e6ae025bfd288bb98c7b492ec499f@free.fr> <874j3wrbta.fsf@dell.be.48ers.dk>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <590e2a64e91171ef406a0f1f1f0fe1da@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1732459988;
- bh=8T+NhpxHgNYX1zu80lJq1fKpv1DgyWmjJlyvsh+bwfI=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Bz8qHegJVRscS2FkhYtK3IVuVV6ZGAJ369iIRIZNBjFjFbv2SfYS1DOx/JORhDmZW
- lTxd+++DuTEdcO6rSR8pla+H0Kb0RZmwsyJHO+t1y8MNuKAYtiTspFsNgsNLkTz2Z9
- uIZ7ndGEIX8EIY36Na6Nrcm+U8aqEaF1UsV7Coa8lGkQ5xmj+jpJwA4v9Zue/Jy5up
- sd9e+0HjJO1ZoRND2bBlOAjuLBHoO0c+rOiOVqEuPYUpJ0DeltKfafhNbrTBqx4m1X
- 4J0bApFi3d5kmRlOH1A4WwwTQBMoVm8Gp77PkGDxrFaZ9D17vkoaaE1GuMut88Oyoi
- hi4/f07PPFPVw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Bz8qHegJ
-Subject: Re: [Buildroot] [PATCH] package/quagga: fetch from
- sources.buildroot.net
+Message-ID: <20241124172908.2b4db731@windsurf>
+In-Reply-To: <CAFkzVZbczGknp7uz78yCHo+8aW3RbjQG0ns4fGPv=Gakb02fWw@mail.gmail.com>
+References: <20241030002020.73963-1-fancp2007@gmail.com>
+ <20241031191844.60ba9a59@windsurf>
+ <CAFkzVZbczGknp7uz78yCHo+8aW3RbjQG0ns4fGPv=Gakb02fWw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1732465750;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=RL3MEOevkPF+CXUN9R+52XNndJ9EBjbCXzVrgyHYX10=;
+ b=a9BiZS8DFZ1INhNWVME8rcwQHN/X8WMzVgQDODN/Td4aNoZazlDKvbJYqmG3y+0VeZF7bp
+ aHfwGMB0OyZ39Bsio/BLzRujEBswsSYrSx77qu1pYQhAFNVVoSWZsvcmMoCg+S8x1XQgnh
+ 1piqahFqx4+rn3vCOF+aVhEln99LyIhTO5c1Iul5P+1Gilzjn7fVa7kFcm24YR651j/VV/
+ lUIHOsrbWHxTPJfg1qAiO0sQikbDBS4VQ/2C12Q/WLjuF/N9NrQGCk8qSq2VZ0u9a6yT8s
+ zFC5WK6UHRy/kldV9wzQa5ff+o6Kr184MxqNV9dGGuSf1MnOCmu4Ni6UzfYYVQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=a9BiZS8D
+Subject: Re: [Buildroot] [PATCH] package/procps-ng: fix pidfd_open checking
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,53 +83,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter,
+Hello Scott,
 
-On 24/11/2024 14:38, Peter Korsgaard wrote:
->>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
-> 
->  > Hi Peter,
->  > On 23/11/2024 23:51, Peter Korsgaard wrote:
->  >> Fixes
->  >> 
-> https://autobuild.buildroot.org/results/54a/54a165827f536be47cd45c98da3937a1e94a7c65/
->  >> Upstream is no longer accessible, so use s.b.n instead.
->  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->  >> ---
->  >> package/quagga/quagga.mk | 3 ++-
->  >> 1 file changed, 2 insertions(+), 1 deletion(-)
->  >> diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
->  >> index 5d8d52263a..dd921552f1 100644
->  >> --- a/package/quagga/quagga.mk
->  >> +++ b/package/quagga/quagga.mk
->  >> @@ -5,7 +5,8 @@
->  >> 
-> ################################################################################
->  >> QUAGGA_VERSION = 1.2.4
->  >> -QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
->  >> +# upstream (http://download.savannah.gnu.org/releases/quagga) dead
->  >> +QUAGGA_SITE = http://sources.buildroot.net/quagga
-> 
->  > Should we use https instead? The default BR2_BACKUP_SITE value
->  > is using it:
->  > 
-> https://gitlab.com/buildroot.org/buildroot/-/blob/2024.11-rc2/Config.in#L265
-> 
-> Given the download hashes it doesn't really matter. I used HTTP as that
-> is what we use for the other packages and because of the server
-> migration we are currently doing HTTPS is a bit tricky (buildroot.net
-> DNS is at Cloudflare, buildroot.org is at Hetzner).
+Sorry for the slow feedback. Not sure what the status of this is and
+whether my answer is still useful/relevant.
 
-Thanks for the clarification. I applied to master.
+On Fri, 1 Nov 2024 09:31:08 +0800
+Scott Fan <fancp2007@gmail.com> wrote:
+
+> > So I'm not sure my previous review was clear enough: what is wrong is
+> > the procps-ng patch itself, it shouldn't AC_MSG_ERROR(), but instead it
+> > should automatically disable pidwait, as if the user had passed
+> > --disable-pidwait.
+> 
+> I understand what you mean, but I may not have expressed my thoughts clearly.
+> 
+> Before this patch was applied, I got a compile error (not configure
+> error) when the package was built with linux-headers-4.19.322,
+> Then I tried to figure out what was going wrong and I eventually found
+> this patch from upstream.
+> 
+> After this patch was applied, it threw a configure error (not compile
+> error), which is what I expected.
+> 
+> As the patch said:
+> The previous build setup would check for pidfd_open using
+> AC_CHECK_FUNC and would be incorrectly reported as true.
+> 
+> Therefore, I think the key to this patch is that it successfully fixes
+> the pidfd_open checking issue.
+> 
+> If pidfd_open() and __NR_pidfd_open were not present, it will report
+> an AC_MSG_ERROR message,
+> and gives us the --disable-pidwait configure option, so you are
+> explicit in not wanting and knowing you wont get pidwait.
+> 
+> Whereas you mean, instead of AC_MSG_ERROR(), it should automatically
+> disable pidwait, as if the user had passed --disable-pidwait.
+> I'm not sure if this is acceptable to the upstream maintainers, who
+> want you to be clear about the purpose of the option you passed.
+> Even if it is approved , it would require a new patch to improve this behavior.
+> 
+> 
+> To solve my compilation problem (with linux-headers-4.19.322), in the
+> current case, I had to pass the --disable-pidwait option.
+> If at some point in the future, when the patch you expect is
+> successfully applied, I will remove it.
+
+What you can do then is:
+
+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19),)
+PROCPS_NG_CONF_OPTS += disable-pidwait
+endif
+
+This will ensure to disable pidwait support when headers are < 4.19.
 
 Best regards,
 
-Julien.
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
