@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB932D58D6A
-	for <buildroot@archiver.kernel.org>; Mon, 25 Nov 2024 17:11:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EDEDD58D69
+	for <buildroot@archiver.kernel.org>; Mon, 25 Nov 2024 17:18:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7DC8485199;
-	Mon, 25 Nov 2024 17:11:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 349D885277;
+	Mon, 25 Nov 2024 17:18:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zowl_4GxM2EQ; Mon, 25 Nov 2024 17:11:41 +0000 (UTC)
+ id m1l49rr0NIMH; Mon, 25 Nov 2024 17:18:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4A1F85198
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3DA08526F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4A1F85198;
-	Mon, 25 Nov 2024 17:11:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2D869496F
- for <buildroot@buildroot.org>; Mon, 25 Nov 2024 17:11:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F3DA08526F;
+	Mon, 25 Nov 2024 17:18:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BAB29E11
+ for <buildroot@buildroot.org>; Mon, 25 Nov 2024 17:18:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0E2A261606
- for <buildroot@buildroot.org>; Mon, 25 Nov 2024 17:11:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B382440C1A
+ for <buildroot@buildroot.org>; Mon, 25 Nov 2024 17:18:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0XmCKOip-GQu for <buildroot@buildroot.org>;
- Mon, 25 Nov 2024 17:11:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rAFGWglBAH_s for <buildroot@buildroot.org>;
+ Mon, 25 Nov 2024 17:18:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
  helo=smtp5-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 58D95615C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58D95615C9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E8269402A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8269402A7
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 58D95615C9
- for <buildroot@buildroot.org>; Mon, 25 Nov 2024 17:11:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E8269402A7
+ for <buildroot@buildroot.org>; Mon, 25 Nov 2024 17:18:36 +0000 (UTC)
 Received: from L25025.local (unknown
  [IPv6:2a01:e0a:2af:22b0:d5a0:995c:bdc2:eaac])
  (Authenticated sender: vjardin@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 51DEF5FFC0;
- Mon, 25 Nov 2024 18:11:32 +0100 (CET)
-Date: Mon, 25 Nov 2024 18:11:32 +0100
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id E40F56013C;
+ Mon, 25 Nov 2024 18:18:33 +0100 (CET)
+Date: Mon, 25 Nov 2024 18:18:33 +0100
 From: Vincent Jardin <vjardin@free.fr>
 To: abelino <abelino.romo@gmail.com>
 Cc: buildroot@buildroot.org
-Message-ID: <75juhuej4ux7b3upw5kzi7wocap7ans3vd6nbyi64fehl6xe3q@da3br2t57lqz>
+Message-ID: <nfrp5pen3gginip5e3amcb7moslbtb52bczpzoept4boja55uh@2psca5ps44q5>
 References: <20241125000233.2772592-1-abelino.romo@gmail.com>
- <20241125000233.2772592-3-abelino.romo@gmail.com>
+ <20241125000233.2772592-2-abelino.romo@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20241125000233.2772592-3-abelino.romo@gmail.com>
+In-Reply-To: <20241125000233.2772592-2-abelino.romo@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1732554693;
- bh=SUbEkuKzxQUMFkQWM+sELcd98mPOrRRYbObIRmWFktU=;
+ d=free.fr; s=smtp-20201208; t=1732555115;
+ bh=QgRT8WieY6/Ve18qImBFzsu39E0+kvkQSS8H0RBTVLc=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=t5oTgrEYfvliAqvpKaRcPGNL8WXexBWwzGcC/zyKZT2I9YFu7FtT0idPe4GWW1d5X
- nF6FOh69Lo4NBsz62BIjHJIy7ZJl8BwpFW/RLv8AIfLcz+7U7FFqYRPofOk4W0Feve
- wxk+/hVIj2kSGkTn3MM7WbwMZezAOqSDL2yVw//C9bAU3HgvAczbdBHAxpvOInUAmj
- YpGDrj6Po2hQsglB8NflaP0p1tZz5CPE3PQ+CqOFAtBba8BirpvNTFDiEjUMB40YlZ
- NEYLs1GFqWqW+G/dG4EX7OetPawRfQ9HdzbSwEMQ1rhQk0cxzbZ7zquuKNfQNM9wfP
- DRRbQHerycyjg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=L1fPhN0fvMcfuWY5AuwxP8TbYK88aBiQjzKzZZxosPC5cTeW2s93MTm7NiBrFKRz3
+ RhNrEepYXvIsbi8vJcd61bcpVynxdcKC57h0KeJt83B/phAgH7bXEQbK+ZLZUMEPNg
+ qpq9AMYfe6spDBGyqnXtnvxjqxkzHo/YMXZFsG7g26BPDamLs7YTQz31OTQHvzFjdC
+ hEJAQEPrxGIwb3+ezQK+cLmx7e4zo4V+32iNsZ7cnaxapbZZ9aszWnT6nYD5vetVkd
+ g2E0XJpyOflttB2Fgn2grYMugzCQCwn7VWekEsq1gPdjKTnhEBcH5ELlOvjE34dyE8
+ 0VeZs1J2qclhA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=t5oTgrEY
-Subject: Re: [Buildroot] [PATCH 2/2] package/tpm2-tss-engine: add version
- 1.2.0
+ header.s=smtp-20201208 header.b=L1fPhN0f
+Subject: Re: [Buildroot] [PATCH 1/2] package/tpm2-tss: bump version to 4.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,146 +80,181 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGksCgp0aGFua3MgZm9yIHRoaXMgY29udHJpYnV0aW9uLiBTZWUgYmVsb3cgc29tZSBjb21tZW50
-cywKCk9uIFN1biwgTm92IDI0LCAyMDI0IGF0IDA0OjAyOjE4UE0gVVRDLCBhYmVsaW5vIHdyb3Rl
-Ogo+IEludHJvZHVjZSB0aGUgVFBNMi1UU1MgT3BlblNTTCBFbmdpbmUgdG8gZW5hYmxlIFRQTTIg
-ZGV2aWNlIHN1cHBvcnQgaW4KPiBlY29zeXN0ZW1zIHRoYXQgZG8gbm90IHlldCBzdXBwb3J0IE9w
-ZW5TU0wgUHJvdmlkZXJzLiBUaGlzIGlzCj4gcGFydGljdWxhcmx5IHVzZWZ1bCBpbiB0aGUgRXJs
-YW5nIHNwYWNlLCB3aGVyZSBPcGVuU1NMIDMgUHJvdmlkZXJzIGFyZQo+IHN0aWxsIHVuZGVyIGRl
-dmVsb3BtZW50IFsxXS4KCkRvZXMgaXQgaW1wbHkgdGhhdCB3ZSBzaG91bGQgaGF2aW5nIHN1ciB3
-YXJuaW5nID8KCnNyYy90cG0yLXRzcy1lbmdpbmUtcmFuZC5jOiBJbiBmdW5jdGlvbiDigJhpbml0
-X3JhbmTigJk6CnNyYy90cG0yLXRzcy1lbmdpbmUtcmFuZC5jOjE1MDo1OiB3YXJuaW5nOiDigJhF
-TkdJTkVfc2V0X1JBTkTigJkgaXMgZGVwcmVjYXRlZDogU2luY2UgT3BlblNTTCAzLjAgWy1XZGVw
-cmVjYXRlZC1kZWNsYXJhdGlvbnNdCiAgMTUwIHwgICAgIHJldHVybiBFTkdJTkVfc2V0X1JBTkQo
-ZSwgJnJhbmRfbWV0aG9kcyk7CiAgICAgIHwgICAgIF5+fn5+fgoKPiAKPiBbMV0gaHR0cHM6Ly9l
-cmxhbmdmb3J1bXMuY29tL3Qvb3BlbnNzbC0zLXN1cHBvcnQtZm9yLXByb3ZpZGVyLWRlcHJlY2F0
-ZWQtZW5naW5lLXJlcGxhY2VtZW50LzI5NTQvMgo+IAo+IFNpZ25lZC1vZmYtYnk6IGFiZWxpbm8g
-PGFiZWxpbm8ucm9tb0BnbWFpbC5jb20+Cj4gLS0tCj4gIHBhY2thZ2UvQ29uZmlnLmluICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKPiAgLi4uLWRpc2FibGluZy1vZi1kaWdlc3Qt
-c2lnbi1vcGVyYXRpb25zLnBhdGNoIHwgNDYgKysrKysrKysrKysrKysrKysrKwo+ICBwYWNrYWdl
-L3RwbTItdHNzLWVuZ2luZS9Db25maWcuaW4gICAgICAgICAgICAgfCAxMiArKysrKwo+ICBwYWNr
-YWdlL3RwbTItdHNzLWVuZ2luZS90cG0yLXRzcy1lbmdpbmUuaGFzaCAgfCAgMyArKwo+ICBwYWNr
-YWdlL3RwbTItdHNzLWVuZ2luZS90cG0yLXRzcy1lbmdpbmUubWsgICAgfCAxOSArKysrKysrKwo+
-ICA1IGZpbGVzIGNoYW5nZWQsIDgxIGluc2VydGlvbnMoKykKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0
-IHBhY2thZ2UvdHBtMi10c3MtZW5naW5lLzAwMDEtQWxsb3ctZGlzYWJsaW5nLW9mLWRpZ2VzdC1z
-aWduLW9wZXJhdGlvbnMucGF0Y2gKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvdHBtMi10
-c3MtZW5naW5lL0NvbmZpZy5pbgo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS90cG0yLXRz
-cy1lbmdpbmUvdHBtMi10c3MtZW5naW5lLmhhc2gKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2th
-Z2UvdHBtMi10c3MtZW5naW5lL3RwbTItdHNzLWVuZ2luZS5tawo+IAo+IGRpZmYgLS1naXQgYS9w
-YWNrYWdlL0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29uZmlnLmluCj4gaW5kZXggMWViNWUxZTAyMC4u
-NGY0YjdhMzRkNSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2th
-Z2UvQ29uZmlnLmluCj4gQEAgLTE2MzMsNiArMTYzMyw3IEBAIG1lbnUgIkNyeXB0byIKPiAgCXNv
-dXJjZSAicGFja2FnZS90cG0yLW9wZW5zc2wvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdl
-L3RwbTItcGtjczExL0NvbmZpZy5pbiIKPiAgCXNvdXJjZSAicGFja2FnZS90cG0yLXRzcy9Db25m
-aWcuaW4iCj4gKwlzb3VyY2UgInBhY2thZ2UvdHBtMi10c3MtZW5naW5lL0NvbmZpZy5pbiIKPiAg
-CXNvdXJjZSAicGFja2FnZS90cm91c2Vycy9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2Uv
-dXN0cmVhbS1zc2wvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL3dvbGZzc2wvQ29uZmln
-LmluIgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3RwbTItdHNzLWVuZ2luZS8wMDAxLUFsbG93LWRp
-c2FibGluZy1vZi1kaWdlc3Qtc2lnbi1vcGVyYXRpb25zLnBhdGNoIGIvcGFja2FnZS90cG0yLXRz
-cy1lbmdpbmUvMDAwMS1BbGxvdy1kaXNhYmxpbmctb2YtZGlnZXN0LXNpZ24tb3BlcmF0aW9ucy5w
-YXRjaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uN2NlNzE3ZGY0
-YQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL3RwbTItdHNzLWVuZ2luZS8wMDAxLUFs
-bG93LWRpc2FibGluZy1vZi1kaWdlc3Qtc2lnbi1vcGVyYXRpb25zLnBhdGNoCj4gQEAgLTAsMCAr
-MSw0NiBAQAo+ICtGcm9tIGFmOGIyNmU3ZmZlNjk4MzcxOTdmYjg0MWU5YTMxMjMwYWUwMWM5Y2Mg
-TW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206IEFuZHJlYXMgRnVjaHMgPGFuZHJlYXMu
-ZnVjaHNAaW5maW5lb24uY29tPgo+ICtEYXRlOiBNb24sIDIyIE1heSAyMDIzIDE0OjA2OjQxICsw
-MjAwCj4gK1N1YmplY3Q6IFtQQVRDSF0gQ29uZmlndXJlOiBBbGxvdyBkaXNhYmxpbmcgb2YgZGln
-ZXN0LXNpZ24gb3BlcmF0aW9ucwo+ICsKPiArU2luY2UgdGhlIGRpZ2VzdC1zaWduIG9wZXJhdGlv
-bnMgcGVyZm9ybSB0aGUgaGFzaCBvbiB0aGUgVFBNIGFuZAo+ICtUUE1zIGluIGdlbmVyYWwgZG8g
-bm90IHN1cHBvcnQgU0hBNTEyLCB0aGlzIGNhbiBsZWFkIHRvIGVycm9ycy4KPiArRGVwZW5kaW5n
-IG9uIHRoZSB1c2UgY2FzZSwgaXQgbWlnaHQgYmUgcHJlZmVyYWJsZSB0byBub3Qgc3VwcG9ydAo+
-ICtyZXN0cmljdGVkIGtleXMgKHZpYSBkaWdlc3Qrc2lnbikgYnV0IHRvIHJlbHkgb24gb3JkaW5h
-cnkga2V5cwo+ICtvbmx5Lgo+ICsKPiArVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS90cG0y
-LXNvZnR3YXJlL3RwbTItdHNzLWVuZ2luZS9jb21taXQvYWY4YjI2ZTdmZmU2OTgzNzE5N2ZiODQx
-ZTlhMzEyMzBhZTAxYzljYwo+ICtTaWduZWQtb2ZmLWJ5OiBBbmRyZWFzIEZ1Y2hzIDxhbmRyZWFz
-LmZ1Y2hzQGluZmluZW9uLmNvbT4KCldoZW4gd2lsbCBhIHRwbTItdHNzLWVuZ2luZSByZWxlYXNl
-IHVwZGF0ZSBiZSBhdmFpbGFibGUgdG8gYXZvaWQgdGhpcwpwYXRjaCA/IERpZCB5b3Ugc3VnZ2Vz
-dC9hc2sgZm9yIGEgbmV3IHJlbGVhc2UgdG8gdGhlIHRwbTItdHNzLWVuZ2luZQpjb21tdW5pdHkg
-dXNpbmcgYSBnaXRodWIgaXNzdWUgPwoKPiArLS0tCj4gKyBjb25maWd1cmUuYWMgfCAxMCArKysr
-KysrKy0tCj4gKyAxIGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygt
-KQo+ICsKPiArZGlmZiAtLWdpdCBhL2NvbmZpZ3VyZS5hYyBiL2NvbmZpZ3VyZS5hYwo+ICtpbmRl
-eCBkNGE5MzU2Li5iMzc5MDQyIDEwMDY0NAo+ICstLS0gYS9jb25maWd1cmUuYWMKPiArKysrIGIv
-Y29uZmlndXJlLmFjCj4gK0BAIC0xMTYsMTMgKzExNiwxOSBAQCBQS0dfQ0hFQ0tfTU9EVUxFUyhb
-Q1JZUFRPXSwgW2xpYmNyeXB0byA+PSAxLjAuMmddLAo+ICsgUEtHX0NIRUNLX01PRFVMRVMoW1RT
-UzJfRVNZU10sIFt0c3MyLWVzeXMgPj0gMi4zXSkKPiArIFBLR19DSEVDS19NT0RVTEVTKFtUU1My
-X01VXSwgW3RzczItbXVdKQo+ICsgUEtHX0NIRUNLX01PRFVMRVMoW1RTUzJfVENUSUxEUl0sIFt0
-c3MyLXRjdGlsZHJdKQo+ICsrCj4gKyBBQ19DSEVDS19MSUIoW2NyeXB0b10sIEVDX0tFWV9NRVRI
-T0Rfc2V0X2NvbXB1dGVfa2V5LAo+ICsgICAgICAgW0FNX0NPTkRJVElPTkFMKFtIQVZFX09QRU5T
-U0xfRUNESF0sIHRydWUpXSwKPiArICAgICAgIFtBTV9DT05ESVRJT05BTChbSEFWRV9PUEVOU1NM
-X0VDREhdLCBmYWxzZSldKQo+ICsrCj4gKytBQ19BUkdfRU5BQkxFKFtkaWdlc3RzaWduXSwKPiAr
-KyAgICAgICAgICAgICAgW0FTX0hFTFBfU1RSSU5HKFstLWRpc2FibGUtZGlnZXN0c2lnbl0sCj4g
-KysgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBbRGlzYWJsZSBzdXBwb3J0IGZvciBkaWdl
-c3QgYW5kIHNpZ24gbWV0aG9kcywgaGVscHMgd2l0aCBUUE0gdW5zdXBwb3J0ZWQgaGFzaCBhbGdv
-cml0aG1zLl0pXSwsCj4gKysgICAgICAgICAgICAgIFtlbmFibGVfZGlnZXN0c2lnbj15ZXNdKQo+
-ICsgQUNfQ0hFQ0tfTElCKFtjcnlwdG9dLCBFVlBfUEtFWV9tZXRoX3NldF9kaWdlc3RfY3VzdG9t
-LAo+ICstICAgICAgW0FNX0NPTkRJVElPTkFMKFtIQVZFX09QRU5TU0xfRElHRVNUX1NJR05dLCB0
-cnVlKV0sCj4gKysgICAgICBbQU1fQ09ORElUSU9OQUwoW0hBVkVfT1BFTlNTTF9ESUdFU1RfU0lH
-Tl0sIFt0ZXN0ICJ4JGVuYWJsZV9kaWdlc3RzaWduIiAhPSAieG5vIl0pXSwKPiArICAgICAgIFtB
-TV9DT05ESVRJT05BTChbSEFWRV9PUEVOU1NMX0RJR0VTVF9TSUdOXSwgZmFsc2UpXSkKPiArLUFT
-X0lGKFt0ZXN0ICJ4JGFjX2N2X2xpYl9jcnlwdG9fRVZQX1BLRVlfbWV0aF9zZXRfZGlnZXN0X2N1
-c3RvbSIgPSB4eWVzXSwKPiArK0FTX0lGKFt0ZXN0ICJ4JGFjX2N2X2xpYl9jcnlwdG9fRVZQX1BL
-RVlfbWV0aF9zZXRfZGlnZXN0X2N1c3RvbSIgPSB4eWVzICYmIHRlc3QgIngkZW5hYmxlX2RpZ2Vz
-dHNpZ24iID0gInh5ZXMiXSwKPiArICAgICAgIFtBQ19ERUZJTkUoW0hBVkVfT1BFTlNTTF9ESUdF
-U1RfU0lHTl0sIFsxXSwKPiArICAgICAgICAgICAgICAgICAgSGF2ZSByZXF1aXJlZCBmdW5jdGlv
-bmFsaXR5IGZyb20gT3BlblNTTCB0byBzdXBwb3J0IGRpZ2VzdCBhbmQgc2lnbildKQo+ICsgCj4g
-Ky0tIAo+ICsyLjQ3LjAKPiArCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvdHBtMi10c3MtZW5naW5l
-L0NvbmZpZy5pbiBiL3BhY2thZ2UvdHBtMi10c3MtZW5naW5lL0NvbmZpZy5pbgo+IG5ldyBmaWxl
-IG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uMjdkOTI1YTYwZgo+IC0tLSAvZGV2L251
-bGwKPiArKysgYi9wYWNrYWdlL3RwbTItdHNzLWVuZ2luZS9Db25maWcuaW4KPiBAQCAtMCwwICsx
-LDEyIEBACj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9UUE0yX1RTU19FTkdJTkUKPiArCWJvb2wgInRw
-bTItdHNzLWVuZ2luZSIKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9UUE0yX1RTUwo+ICsJc2VsZWN0
-IEJSMl9QQUNLQUdFX0xJQk9QRU5TU0xfRU5HSU5FUwo+ICsJaGVscAo+ICsJICBUaGUgdHBtMi10
-c3MtZW5naW5lIHByb2plY3QgaW1wbGVtZW50cyBhIGNyeXB0b2dyYXBoaWMgZW5naW5lCj4gKwkg
-IGZvciBPcGVuU1NMIGZvciBUcnVzdGVkIFBsYXRmb3JtIE1vZHVsZSAoVFBNIDIuMCkgdXNpbmcg
-dGhlCj4gKwkgIHRwbTItdHNzIHNvZnR3YXJlIHN0YWNrIHRoYXQgZm9sbG93cyB0aGUgVHJ1c3Rl
-ZCBDb21wdXRpbmcKPiArCSAgR3JvdXBzIChUQ0cpIFRQTSBTb2Z0d2FyZSBTdGFjayAoVFNTIDIu
-MCkuIEl0IHVzZXMgdGhlCj4gKwkgIEVuaGFuY2VkIFN5c3RlbSBBUEkgKEVTQVBJKSBpbnRlcmZh
-Y2Ugb2YgdGhlIFRTUyAyLjAgZm9yCj4gKwkgIGRvd253YXJkcyBjb21tdW5pY2F0aW9uLiBJdCBz
-dXBwb3J0cyBSU0EgZGVjcnlwdGlvbiBhbmQKPiArCSAgc2lnbmF0dXJlcyBhcyB3ZWxsIGFzIEVD
-RFNBIHNpZ25hdHVyZXMuCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvdHBtMi10c3MtZW5naW5lL3Rw
-bTItdHNzLWVuZ2luZS5oYXNoIGIvcGFja2FnZS90cG0yLXRzcy1lbmdpbmUvdHBtMi10c3MtZW5n
-aW5lLmhhc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjI5NDg0
-N2Q1ZjgKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS90cG0yLXRzcy1lbmdpbmUvdHBt
-Mi10c3MtZW5naW5lLmhhc2gKPiBAQCAtMCwwICsxLDMgQEAKPiArIyBMb2NhbGx5IGNvbXB1dGVk
-Ogo+ICtzaGEyNTYgIDNjOTRmZWYxMTBkZDM2MzBiM2MyOGM1ODc1ZmViYmE3NmI3ZDViYTJmY2Mw
-NGExNGM0YTMwZjVkMjE1N2MyNjUgIHRwbTItdHNzLWVuZ2luZS0xLjIuMC50YXIuZ3oKPiArc2hh
-MjU2ICA3YTc3OTE1ZjM0Y2FmMThkNDdiYzMxNzUwZGFlNDdkYmQ3Zjc4OTVlOTViYmI4MzcwZjQ3
-N2MyNTAwOTM4OGY2ICBMSUNFTlNFCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvdHBtMi10c3MtZW5n
-aW5lL3RwbTItdHNzLWVuZ2luZS5tayBiL3BhY2thZ2UvdHBtMi10c3MtZW5naW5lL3RwbTItdHNz
-LWVuZ2luZS5tawo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uNzY4
-ZjllZTNiZAo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL3RwbTItdHNzLWVuZ2luZS90
-cG0yLXRzcy1lbmdpbmUubWsKPiBAQCAtMCwwICsxLDE5IEBACj4gKyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjCj4gKyMKPiArIyB0cG0yLXRzcy1lbmdpbmUKPiArIwo+ICsjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIwo+ICsKPiArVFBNMl9UU1NfRU5HSU5FX1ZFUlNJT04gPSAxLjIuMAo+ICtUUE0yX1RT
-U19FTkdJTkVfU0lURSA9IGh0dHBzOi8vZ2l0aHViLmNvbS90cG0yLXNvZnR3YXJlL3RwbTItdHNz
-LWVuZ2luZS9yZWxlYXNlcy9kb3dubG9hZC8kKFRQTTJfVFNTX0VOR0lORV9WRVJTSU9OKQoKWW91
-IHNob3VsZCByYXRoZXIgdXNlOgpUUE0yX1RTU19FTkdJTkVfU0lURSA9ICQoY2FsbCBnaXRodWIs
-dHBtMi1zb2Z0d2FyZSx0cG0yLXRzcy1lbmdpbmUsJChUUE0yX1RTU19FTkdJTkVfVkVSU0lPTikp
-CgpJIGRpZCB0cnkgaXQsIHlvdSdsbCBuZWVkIHRvIHVwZGF0ZSB0aGUgaGFzaC9zaWduYXR1cmUg
-ZmlsZSB0b28uCgo+ICtUUE0yX1RTU19FTkdJTkVfTElDRU5TRSA9IEJTRC0zLUNsYXVzZQo+ICtU
-UE0yX1RTU19FTkdJTkVfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UKPiArVFBNMl9UU1NfRU5HSU5F
-X0lOU1RBTExfU1RBR0lORyA9IFlFUwo+ICtUUE0yX1RTU19FTkdJTkVfREVQRU5ERU5DSUVTID0g
-aG9zdC1wa2djb25mIHRwbTItdHNzCj4gK1RQTTJfVFNTX0VOR0lORV9BVVRPUkVDT05GID0gWUVT
-Cj4gKwo+ICtUUE0yX1RTU19FTkdJTkVfQ09ORl9PUFRTID0gXAo+ICsJLS1kaXNhYmxlLWRpZ2Vz
-dHNpZ24gXAoKVGhlIC0tZGlzYWJsZS1kaWdlc3RzaWduIGNhbiBtYWtlIHNlbnNlLCBidXQgaXQg
-c2hvdWxkIGJlIGEgQ29uZmlnLmluCmZsYWcuCgo+ICsJLS13aXRoLWVuZ2luZXNkaXI9Ii91c3Iv
-bGliL2VuZ2luZXMtMyIKCkNvdWxkIHlvdSBhbGlnbiBpdCB3aXRoIHRoZSBsaWJwMTEgZW5naW5l
-c2RpciB0b28gPwoKVGhleSBhcmUgdXNpbmc6CiMgcGtnLWNvbmZpZyByZXR1cm5zIGEgbGliY3J5
-cHRvIGVuZ2luZXNkaXIgcHJlZml4ZWQgd2l0aCB0aGUgc3lzcm9vdCwKIyBzbyBsZXQncyByaXAg
-aXQgb3V0LgpMSUJQMTFfQ09ORl9PUFRTID0gXAogICAgICAgIC0td2l0aC1lbmdpbmVzZGlyPWAk
-KFBLR19DT05GSUdfSE9TVF9CSU5BUlkpIC0tdmFyaWFibGUgZW5naW5lc2RpciBsaWJjcnlwdG8g
-fCB4YXJncyByZWFkbGluayAtZiB8IHNlZCAncyVeJChTVEFHSU5HX0RJUiklJSdgCgpiZXN0IHJl
-Z2FyZHMsCiAgVmluY2VudAoKPiArCj4gKyQoZXZhbCAkKGF1dG90b29scy1wYWNrYWdlKSkKPiAt
-LSAKPiAyLjQ3LjAKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9y
-Zwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
-b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
-bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hi,
+
+see below,
+
+On Sun, Nov 24, 2024 at 04:02:17PM UTC, abelino wrote:
+> On v3.2.2, testing with an Infineon SLB9673 resulted in the following
+> error when attempting to read from a previously written NV index.
+> Upgrading to the latest release, v4.1.3, resolves the issue:
+> 
+> ```shell
+> ~# tpm2_nvread 0x1900001
+> WARN: Reading full size of the NV index
+> ERROR:esys:../tpm2-tss-3.2.2/src/tss2-esys/esys_iutil.c:1096:esys_GetResourceObject() Error: Esys handle does not exist (70018).
+> ERROR: Esys_SequenceComplete(0x70018) - esapi:The ESYS_TR resource object is bad
+> ERROR: Failed to get shandle
+> ERROR: Failed to read NVRAM area at index 0x1900001
+> ERROR: Unable to run tpm2_nvread
+> ```
+> 
+> Between v3.2.2 and v4.1.3, the most notable update is v4.1.0 [1], which
+> includes a fix for CVE-2024-29040, along with 40+ bug fixes and 10+ new
+> features. Bumping to v4.1.3 adds access to these improvements and
+> addresses the NV index read issue.
+> 
+> [1] https://github.com/tpm2-software/tpm2-tss/releases/tag/4.1.0
+> 
+> Signed-off-by: abelino <abelino.romo@gmail.com>
+> ---
+>  .checkpackageignore                           |  1 -
+>  ...01-Temporary-fix-for-build-without-C.patch | 44 -------------------
+>  package/tpm2-tss/Config.in                    |  2 +
+>  package/tpm2-tss/tpm2-tss.hash                |  2 +-
+>  package/tpm2-tss/tpm2-tss.mk                  |  9 ++--
+>  5 files changed, 6 insertions(+), 52 deletions(-)
+>  delete mode 100644 package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
+> 
+> diff --git a/.checkpackageignore b/.checkpackageignore
+> index b793026881..906a733b7b 100644
+> --- a/.checkpackageignore
+> +++ b/.checkpackageignore
+> @@ -1237,7 +1237,6 @@ package/tinycompress/0001-wave-add-time.h-missing-header-inclusion.patch lib_pat
+>  package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch lib_patch.Upstream
+>  package/tinyxml/0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch lib_patch.Upstream
+>  package/tpm2-abrmd/S80tpm2-abrmd Shellcheck lib_sysv.Indent lib_sysv.Variables
+> -package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch lib_patch.Upstream
+>  package/transmission/S92transmission Shellcheck lib_sysv.ConsecutiveEmptyLines lib_sysv.Indent lib_sysv.Variables
+>  package/triggerhappy/S10triggerhappy Shellcheck lib_sysv.Indent lib_sysv.Variables
+>  package/trinity/0001-Fix-build-with-GCC-10.patch lib_patch.Upstream
+> diff --git a/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch b/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
+> deleted file mode 100644
+> index 812c753ffb..0000000000
+> --- a/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
+> +++ /dev/null
+> @@ -1,44 +0,0 @@
+> -From 7dc753ad27a8cd14c9b00be94ca89b847cf05ce9 Mon Sep 17 00:00:00 2001
+> -From: Carlos Santos <unixmania@gmail.com>
+> -Date: Mon, 23 Dec 2019 08:02:19 -0300
+> -Subject: [PATCH] Temporary fix for build without C++
+> -
+> -C++ is required only for the fuzzing tests but AC_PROG_CXX is included
+> -by configure.ac even when fuzzing is not enabled (which we don't do on
+> -Buildroot).
+> -
+> -The patch applied upstream had issues and was reverted[1]. Use a local
+> -patch to solve the problem temporaryly.
+> -
+> -Fixes:
+> -    http://autobuild.buildroot.net/results/13f5e37b47b255da4158bec34e5459136f7e60d4
+> -    http://autobuild.buildroot.net/results/1c26db2509c79e00c0de1165945277eaa57b149f
+> -    http://autobuild.buildroot.net/results/b7b6b7b7aca79e847b442cbd2305427d91fe5d70
+> -    http://autobuild.buildroot.net/results/1cd5a82a0e799aa5027e2e2c03b246332cc3a15d
+> -    http://autobuild.buildroot.net/results/d7ec878907f714377c83e9a496e97cbf9382d787
+> -    http://autobuild.buildroot.net/results/1c7f0c1b3ce4871cd87bd6059b1f0a6dc4e74a9c
+> -    http://autobuild.buildroot.net/results/196b81d580325607c8da90beeb79e1f6b8ab8b47
+> -    http://autobuild.buildroot.net/results/f90f7b4ac710b56686635f8ae27059c11b963e47
+> -
+> -1. https://github.com/tpm2-software/tpm2-tss/commit/60c26e4c4faba6ba12469485653e17092b510840
+> -
+> -Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> ----
+> - configure.ac | 1 -
+> - 1 file changed, 1 deletion(-)
+> -
+> -diff --git a/configure.ac b/configure.ac
+> -index ff59dd7c..3e4028fb 100755
+> ---- a/configure.ac
+> -+++ b/configure.ac
+> -@@ -26,7 +26,6 @@ AX_IS_RELEASE(dash-version)
+> - AX_CHECK_ENABLE_DEBUG([info])
+> - 
+> - AC_PROG_CC
+> --AC_PROG_CXX
+> - AC_PROG_LN_S
+> - AC_USE_SYSTEM_EXTENSIONS
+> - LT_INIT()
+> --- 
+> -2.26.2
+> -
+> diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
+> index 857987ae36..d87c1e0d8d 100644
+> --- a/package/tpm2-tss/Config.in
+> +++ b/package/tpm2-tss/Config.in
+> @@ -39,6 +39,8 @@ config BR2_PACKAGE_TPM2_TSS_FAPI
+>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
+>  	select BR2_PACKAGE_JSON_C
+>  	select BR2_PACKAGE_LIBCURL
+> +	select BR2_PACKAGE_UTIL_LINUX
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>  	help
+>  	  This option allows to enable Feature API (FAPI).  Feature
+>  	  API (FAPI) as described in the "TSS 2.0 Feature API
+> diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
+> index c9fa4e6ae0..891c1285b0 100644
+> --- a/package/tpm2-tss/tpm2-tss.hash
+> +++ b/package/tpm2-tss/tpm2-tss.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+> -sha256  ba9e52117f254f357ff502e7d60fce652b3bfb26327d236bbf5ab634235e40f1  tpm2-tss-3.2.2.tar.gz
+> +sha256  37f1580200ab78305d1fc872d89241aaee0c93cbe85bc559bf332737a60d3be8  tpm2-tss-4.1.3.tar.gz
+>  sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
+> diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
+> index b76d16e71e..c8a7df7724 100644
+> --- a/package/tpm2-tss/tpm2-tss.mk
+> +++ b/package/tpm2-tss/tpm2-tss.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -TPM2_TSS_VERSION = 3.2.2
+> +TPM2_TSS_VERSION = 4.1.3
+>  TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
+
+You should update it using $(call github,tpm2-software,) too.
+
+best regards,
+  Vincent
+
+>  TPM2_TSS_LICENSE = BSD-2-Clause
+>  TPM2_TSS_LICENSE_FILES = LICENSE
+> @@ -13,9 +13,6 @@ TPM2_TSS_CPE_ID_PRODUCT = tpm2_software_stack
+>  TPM2_TSS_INSTALL_STAGING = YES
+>  TPM2_TSS_DEPENDENCIES = openssl host-pkgconf
+>  
+> -# 0001-configure-Only-use-CXX-when-fuzzing.patch
+> -TPM2_TSS_AUTORECONF = YES
+> -
+>  # systemd-sysusers and systemd-tmpfiles are only used at install time
+>  # to trigger the creation of users adn tmpfiles, which we do not care
+>  # about at build time. groupadd, useradd, and setfacl are used in the
+> @@ -36,10 +33,10 @@ TPM2_TSS_CONF_OPTS = \
+>  TPM2_TSS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
+>  
+>  ifeq ($(BR2_PACKAGE_TPM2_TSS_FAPI),y)
+> -TPM2_TSS_DEPENDENCIES += json-c libcurl
+> +TPM2_TSS_DEPENDENCIES += json-c libcurl util-linux
+>  TPM2_TSS_CONF_OPTS += --enable-fapi
+>  else
+> -TPM2_TSS_CONF_OPTS += --disable-fapi
+> +TPM2_TSS_CONF_OPTS += --disable-fapi --disable-policy
+>  endif
+>  
+>  define TPM2_TSS_USERS
+> -- 
+> 2.47.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
