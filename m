@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3E3AD58D66
-	for <buildroot@archiver.kernel.org>; Mon, 25 Nov 2024 16:42:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0403CD58D69
+	for <buildroot@archiver.kernel.org>; Mon, 25 Nov 2024 16:42:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B837984FAE;
-	Mon, 25 Nov 2024 16:42:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD06A84FBE;
+	Mon, 25 Nov 2024 16:42:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 67kJt5ndZaBp; Mon, 25 Nov 2024 16:42:39 +0000 (UTC)
+ id B5Y7hmC0hG4m; Mon, 25 Nov 2024 16:42:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AFFF84FC7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B9D884FD3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4AFFF84FC7;
-	Mon, 25 Nov 2024 16:42:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id CC3244E7B
- for <buildroot@buildroot.org>; Mon, 25 Nov 2024 16:42:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B9D884FD3;
+	Mon, 25 Nov 2024 16:42:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3806B496F
+ for <buildroot@buildroot.org>; Mon, 25 Nov 2024 16:42:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ADE1261600
- for <buildroot@buildroot.org>; Mon, 25 Nov 2024 16:42:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 16EE74339C
+ for <buildroot@buildroot.org>; Mon, 25 Nov 2024 16:42:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nTID44t53kX7 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TrQobGWgE4cp for <buildroot@buildroot.org>;
  Mon, 25 Nov 2024 16:42:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F19E6615FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2062433B4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F19E6615FB
+ by smtp2.osuosl.org (Postfix) with ESMTP id F2062433B4
  for <buildroot@buildroot.org>; Mon, 25 Nov 2024 16:42:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 700E28404B; Mon, 25 Nov 2024 16:42:34 +0000 (UTC)
+ id 8DA4E865D5; Mon, 25 Nov 2024 16:42:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Nov 2024 17:21:46 +0100
+Date: Mon, 25 Nov 2024 17:40:56 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 985d126cd78e2b071a57532e5b18867ef3481378
-X-Git-Newrev: 7babcd8937a15ae471af706aceb2203ff849127a
+X-Git-Oldrev: 59256d02f802f93390d6851f5d870363f4d86b58
+X-Git-Newrev: d5b713c266481ff10275fc7c6ade24bfac37dc05
 X-Patchwork-Hint: ignore
-Message-Id: <20241125164234.700E28404B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/ffmpeg: fix build
- on riscv32
+Message-Id: <20241125164234.8DA4E865D5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/irssi: bump
+ version to 1.4.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7babcd8937a15ae471af706aceb2203ff849127a
+commit: https://git.buildroot.net/buildroot/commit/?id=d5b713c266481ff10275fc7c6ade24bfac37dc05
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Ported patch from OpenEmbedded:
-https://github.com/openembedded/openembedded-core/commit/010b068bcc126dbbc1e2032997e8d83360a7de35
+For change log, see:
+https://irssi.org/NEWS/#news-v1-4-5
 
-"ffmpeg 6.0 has added assembly routines which uses rv64i ISA
-unconditionally, ideally it should check for ISA before using those
-instructions."
+This commit also adds the pgp key id used for the signature
+verification.
 
-Fixes:
-https://autobuild.buildroot.org/results/8a7082a0f24ebcf264aeac5e0fea704dc6a6bb1c/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 9e84f38be87393f5b0d0298f762bfcaf0f76f120)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 525c1369bc76831e8f1722d9fdad94422ab89784)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ffmpeg/ffmpeg.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/irssi/irssi.hash | 5 +++--
+ package/irssi/irssi.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index a010c0168c..1e18b5e2da 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -529,6 +529,11 @@ else
- FFMPEG_CONF_OPTS += --disable-altivec
- endif
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index df72ee4d76..f2798d14c8 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,4 +1,5 @@
+-# Locally calculated after checking pgp signature
+-sha256  fefe9ec8c7b1475449945c934a2360ab12693454892be47a6d288c63eb107ead  irssi-1.4.4.tar.xz
++# Locally calculated after checking pgp signature with key
++# 7EE65E3082A5FB06AC7C368D00CCB587DDBEF0E1
++sha256  72a951cb0ad622785a8962801f005a3a412736c7e7e3ce152f176287c52fe062  irssi-1.4.5.tar.xz
+ # Locally calculated
+ sha256  a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index 6790bf0c96..7c86569d62 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Fix build failure on several missing assembly instructions
-+ifeq ($(BR2_RISCV_32),y)
-+FFMPEG_CONF_OPTS += --disable-rvv --disable-asm
-+endif
-+
- # Uses __atomic_fetch_add_4
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- FFMPEG_CONF_OPTS += --extra-libs=-latomic
+-IRSSI_VERSION = 1.4.4
++IRSSI_VERSION = 1.4.5
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ IRSSI_SITE = https://codeberg.org/irssi/irssi/releases/download/$(IRSSI_VERSION)
+ IRSSI_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
