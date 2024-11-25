@@ -1,103 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 360AFD3B7C2
-	for <buildroot@archiver.kernel.org>; Mon, 25 Nov 2024 00:02:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA380D3B7C9
+	for <buildroot@archiver.kernel.org>; Mon, 25 Nov 2024 00:02:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5776961546;
-	Mon, 25 Nov 2024 00:02:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZmeZE15JbvfB; Mon, 25 Nov 2024 00:02:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D8BD60BD4
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D8BD60BD4;
-	Mon, 25 Nov 2024 00:02:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5FE114961
- for <buildroot@buildroot.org>; Mon, 25 Nov 2024 00:02:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D840403AF
- for <buildroot@buildroot.org>; Mon, 25 Nov 2024 00:02:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E0FD42CF2;
+	Mon, 25 Nov 2024 00:02:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WhR3u9fp7Nuf for <buildroot@buildroot.org>;
- Mon, 25 Nov 2024 00:02:35 +0000 (UTC)
+ id qsBsMylE2V1r; Mon, 25 Nov 2024 00:02:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A21654034C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A21654034C;
+	Mon, 25 Nov 2024 00:02:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7D9964961
+ for <buildroot@buildroot.org>; Mon, 25 Nov 2024 00:02:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 78DDB84795
+ for <buildroot@buildroot.org>; Mon, 25 Nov 2024 00:02:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vK7hRKTzgH61 for <buildroot@buildroot.org>;
+ Mon, 25 Nov 2024 00:02:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::433; helo=mail-pf1-x433.google.com;
+ client-ip=2607:f8b0:4864:20::62b; helo=mail-pl1-x62b.google.com;
  envelope-from=abelino.romo@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 69F8C40347
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69F8C40347
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com
- [IPv6:2607:f8b0:4864:20::433])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 69F8C40347
- for <buildroot@buildroot.org>; Mon, 25 Nov 2024 00:02:34 +0000 (UTC)
-Received: by mail-pf1-x433.google.com with SMTP id
- d2e1a72fcca58-724f0f6300aso1788893b3a.2
- for <buildroot@buildroot.org>; Sun, 24 Nov 2024 16:02:34 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5E84884794
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E84884794
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5E84884794
+ for <buildroot@buildroot.org>; Mon, 25 Nov 2024 00:02:43 +0000 (UTC)
+Received: by mail-pl1-x62b.google.com with SMTP id
+ d9443c01a7336-212776d6449so42024635ad.1
+ for <buildroot@buildroot.org>; Sun, 24 Nov 2024 16:02:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1732492953; x=1733097753;
+ d=1e100.net; s=20230601; t=1732492962; x=1733097762;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=868C1r8RFzkhxuNj7Qk5HVwQUBkYAr2kSszojBsmzss=;
- b=oHFOOal+yfDBt0Yvx0+DqXLbEbimH15hZWLeeBCixENty+ndYQhzILJbUJIzF7vark
- tuE6+XwmW7GbYX2tHBM9ACswAXQcI3F7B3G9j7ONmL/DHRG2dyfPrBRjPDX39MVqDFRQ
- +EgZW0TAJL/66FGisuopsxPfMe7MRpho1WRRy+xuYlTyQ19Z6ZS2wAbG5W5i3odfc3Py
- NfG2RBD9bM6G6xUPVL/UWK8svbeCsBe8IezrpL72iDyq2/gzolavHsemUJY8uZb8RLw1
- Axk9GJnFRFvPsxZAYsuVsEBBeuqEecab4oGWgVEhZMxcOBBL4y/Q3NPeFmZMSDjO/itR
- kxxg==
-X-Gm-Message-State: AOJu0Yw5KzHIBR9NaI9b+ASt1x+yRbazAjCJvLh7vZ8Q0etgr5ulfFap
- PIqZ9hy3ap42iEmsLYfLdCxnRj2kgv2WoIJ25gfGIGqwJtpLJ/Wy2t1PYg==
-X-Gm-Gg: ASbGncsDQjWlpgq6BjeIyY4QuglMtLsJKuHO9rR7+lVj6uR0cY1XXhxB4yK28yAWsT8
- Rk7PgtHZCQeXTZBk4a4n+JUrqNTp/h2/BbPSuIpdEC6EbGp4STxPUJMnHABY97tDf45FLq8Uw7z
- +5QWCaBOzHxB4nqn439CrZ/OfdXCTcY3tUQIv4NbjD4AAwRjCblZKGxo3jD7lPeYHgCrxVDhtcj
- zWrNx54baVu8VDkoBI12MlLPC08EY8lEtlheIuwLtGEKD6X7T4BusXqKcDS8LaL0Rh8zn+HjeMn
- f4hUTdm5ST/W10Dute6SwgpoQ4PFFQ8=
-X-Google-Smtp-Source: AGHT+IGBu4p8BJjiRVD1DiHCgvdBfrGHoElSTSSXaJ0zWk4sTcHoaszJUV16oWcrZdnDY3jwwFX92g==
-X-Received: by 2002:a17:902:d48a:b0:20c:79bf:6793 with SMTP id
- d9443c01a7336-2129f66ee66mr159099965ad.3.1732492953331; 
- Sun, 24 Nov 2024 16:02:33 -0800 (PST)
+ bh=fGIcdggs1sEhgGTwKIS67slWkVyynGm0H69QAn+oc5o=;
+ b=a3DgUMUvHG9uhqLoHXgIXjJ6tU5k3WqbYw1XgMLJS7HoHZ6MCNGKyANeYpEk7i2GdL
+ hrFgv0Vg79yeKltz1XQA4O9MVXtLLhN43xQTkIgSszF6eodwWAHNXuOXDGuxh7qT3klc
+ okOx01Vg/xZyImWgfUZZTp+3CTWlMzJ663Y+2RjECfNJmps0q+RQZHqChDYkB71ipXrQ
+ kEEi5Tr4OrITFm5vPMnt46XInu0vg4q4OIX3oBuV3s18wbgSqXu6K9pPO+4P19UvojAX
+ oaZcrUbOVE0EFDYxtZdToU5/MimYIIrIitpbEPNb2qSg9A3dRI9sbkM/6T9jjikSk3ei
+ 6K/Q==
+X-Gm-Message-State: AOJu0Yyi1x9YKiKNk++rS1IS5wVHOBA1rPA1PGSy4kwq47CZg6mMUQ2M
+ aSRSEswlgP4olp4UdcmpJAFkag4f5Os+X5mnnisBiOfck6klwp6LvIH7qg==
+X-Gm-Gg: ASbGnctOEJm0Ox80oteEFtOTB+7RVf+Cw/jKb7Wp/OhTIAlVoEOGUWiDENYvpDeqPpQ
+ AtrDTBxocy3ujefS9jJD41U1Le7lsZDteCgaDob+Ddms5oRg9HvcTLv2lthS89rfqhuslV86dpL
+ 8rVRNBFbU5pMo73164z7289lxHpYn7wyHyYC9/ScSkix+ED6HekZ3dofv3VzhmILYsqlMyN+7HD
+ huQI58mZJ63yq/z0/s42j5E5ORNFVqf+zrJaalF+np+drlMSQ/mX30QnM+6mp5OOqm/Y0t9v9wB
+ 4tyw5AW1knth9ESz9zbGAHiZkQqVpW0=
+X-Google-Smtp-Source: AGHT+IEmvu2ty0adBrLku6+Bd69N/FqFoUFJfIlfLGdrsqgnShqjL8NmgvbSjBevgeFxVE9EZH+KSA==
+X-Received: by 2002:a17:902:f64d:b0:20c:968e:4dcd with SMTP id
+ d9443c01a7336-2129f51d3demr153269785ad.7.1732492962426; 
+ Sun, 24 Nov 2024 16:02:42 -0800 (PST)
 Received: from localhost.localdomain (47-144-216-38.lsan.ca.frontiernet.net.
  [47.144.216.38]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-2129dba2eb4sm52072915ad.75.2024.11.24.16.02.32
+ d9443c01a7336-2129dba2eb4sm52072915ad.75.2024.11.24.16.02.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Nov 2024 16:02:32 -0800 (PST)
+ Sun, 24 Nov 2024 16:02:42 -0800 (PST)
 From: abelino <abelino.romo@gmail.com>
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  abelino <abelino.romo@gmail.com>
-Date: Sun, 24 Nov 2024 16:02:17 -0800
-Message-ID: <20241125000233.2772592-2-abelino.romo@gmail.com>
+Date: Sun, 24 Nov 2024 16:02:18 -0800
+Message-ID: <20241125000233.2772592-3-abelino.romo@gmail.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241125000233.2772592-1-abelino.romo@gmail.com>
 References: <20241125000233.2772592-1-abelino.romo@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1732492953; x=1733097753; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1732492962; x=1733097762; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=868C1r8RFzkhxuNj7Qk5HVwQUBkYAr2kSszojBsmzss=;
- b=ASxC/KndojcAvYwiqxoQqi5fRkVin9s1swn7sL1xjYgpXPHZJSwYKU+zhKf2Bc3hM7
- JSe68ptj96Hbu5WO7Nw13AREmGadSDaTQMRuuJAhCNmyEIccczkdC1oaDyLuWvxi4gER
- GQ2X6dewIjyqMNmOtVOb0Vnpp5cJqZHgyZfAp1j69qRqgVvMKnX3PVOizI3x6J/RPsiE
- jiwLwuq2dRGSUuX3Vp0WlO+hQGTAkmSumTfAfWTQNDMG8sN7LQMNUmxZHjPFxCvX5+UO
- sxJTW1oo4liPUBXoxijYCVZPiqlKcXgnBn0HJ/kUB55Dh+Tw0WKOYr9T0WaUulpAYgQM
- 33Dw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=fGIcdggs1sEhgGTwKIS67slWkVyynGm0H69QAn+oc5o=;
+ b=ZWTPmZu1u/7lWUF0Gdm0ahsK9FW33Wy+/0Miq1i2/ZeZ9Fpby0+5/sEZ88YtA6rBhW
+ 2/JaxStkC2Bf2sThpn3f54mBWlVyUZ51EX6CY0Mr3oE3YWofG6tbwJGhv4A8RxqAM+lw
+ NEYdQpHnTZov1FbU9oHZmnfjwT8veLSDEahbDsy21mrtHMFa3QfKBpil/wQCKkUCkpDV
+ jSMYDlsyteSJdkZbdBTzLRVwTOoeHfrSRFvQHr1ywST4gU4viq0X++YNqv7EqMAxbaCN
+ fUyDn7Q1p5ilc1HOYun9ltkYk3ecCS+btd6VNd/cSCW0/qH7/Y+YXxNaA+mxEoxaMlSt
+ Gv+g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ASxC/Knd
-Subject: [Buildroot] [PATCH 1/2] package/tpm2-tss: bump version to 4.1.3
+ header.a=rsa-sha256 header.s=20230601 header.b=ZWTPmZu1
+Subject: [Buildroot] [PATCH 2/2] package/tpm2-tss-engine: add version 1.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,157 +114,142 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On v3.2.2, testing with an Infineon SLB9673 resulted in the following
-error when attempting to read from a previously written NV index.
-Upgrading to the latest release, v4.1.3, resolves the issue:
+Introduce the TPM2-TSS OpenSSL Engine to enable TPM2 device support in
+ecosystems that do not yet support OpenSSL Providers. This is
+particularly useful in the Erlang space, where OpenSSL 3 Providers are
+still under development [1].
 
-```shell
-~# tpm2_nvread 0x1900001
-WARN: Reading full size of the NV index
-ERROR:esys:../tpm2-tss-3.2.2/src/tss2-esys/esys_iutil.c:1096:esys_GetResourceObject() Error: Esys handle does not exist (70018).
-ERROR: Esys_SequenceComplete(0x70018) - esapi:The ESYS_TR resource object is bad
-ERROR: Failed to get shandle
-ERROR: Failed to read NVRAM area at index 0x1900001
-ERROR: Unable to run tpm2_nvread
-```
-
-Between v3.2.2 and v4.1.3, the most notable update is v4.1.0 [1], which
-includes a fix for CVE-2024-29040, along with 40+ bug fixes and 10+ new
-features. Bumping to v4.1.3 adds access to these improvements and
-addresses the NV index read issue.
-
-[1] https://github.com/tpm2-software/tpm2-tss/releases/tag/4.1.0
+[1] https://erlangforums.com/t/openssl-3-support-for-provider-deprecated-engine-replacement/2954/2
 
 Signed-off-by: abelino <abelino.romo@gmail.com>
 ---
- .checkpackageignore                           |  1 -
- ...01-Temporary-fix-for-build-without-C.patch | 44 -------------------
- package/tpm2-tss/Config.in                    |  2 +
- package/tpm2-tss/tpm2-tss.hash                |  2 +-
- package/tpm2-tss/tpm2-tss.mk                  |  9 ++--
- 5 files changed, 6 insertions(+), 52 deletions(-)
- delete mode 100644 package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
+ package/Config.in                             |  1 +
+ ...-disabling-of-digest-sign-operations.patch | 46 +++++++++++++++++++
+ package/tpm2-tss-engine/Config.in             | 12 +++++
+ package/tpm2-tss-engine/tpm2-tss-engine.hash  |  3 ++
+ package/tpm2-tss-engine/tpm2-tss-engine.mk    | 19 ++++++++
+ 5 files changed, 81 insertions(+)
+ create mode 100644 package/tpm2-tss-engine/0001-Allow-disabling-of-digest-sign-operations.patch
+ create mode 100644 package/tpm2-tss-engine/Config.in
+ create mode 100644 package/tpm2-tss-engine/tpm2-tss-engine.hash
+ create mode 100644 package/tpm2-tss-engine/tpm2-tss-engine.mk
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index b793026881..906a733b7b 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1237,7 +1237,6 @@ package/tinycompress/0001-wave-add-time.h-missing-header-inclusion.patch lib_pat
- package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch lib_patch.Upstream
- package/tinyxml/0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch lib_patch.Upstream
- package/tpm2-abrmd/S80tpm2-abrmd Shellcheck lib_sysv.Indent lib_sysv.Variables
--package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch lib_patch.Upstream
- package/transmission/S92transmission Shellcheck lib_sysv.ConsecutiveEmptyLines lib_sysv.Indent lib_sysv.Variables
- package/triggerhappy/S10triggerhappy Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/trinity/0001-Fix-build-with-GCC-10.patch lib_patch.Upstream
-diff --git a/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch b/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
-deleted file mode 100644
-index 812c753ffb..0000000000
---- a/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 7dc753ad27a8cd14c9b00be94ca89b847cf05ce9 Mon Sep 17 00:00:00 2001
--From: Carlos Santos <unixmania@gmail.com>
--Date: Mon, 23 Dec 2019 08:02:19 -0300
--Subject: [PATCH] Temporary fix for build without C++
--
--C++ is required only for the fuzzing tests but AC_PROG_CXX is included
--by configure.ac even when fuzzing is not enabled (which we don't do on
--Buildroot).
--
--The patch applied upstream had issues and was reverted[1]. Use a local
--patch to solve the problem temporaryly.
--
--Fixes:
--    http://autobuild.buildroot.net/results/13f5e37b47b255da4158bec34e5459136f7e60d4
--    http://autobuild.buildroot.net/results/1c26db2509c79e00c0de1165945277eaa57b149f
--    http://autobuild.buildroot.net/results/b7b6b7b7aca79e847b442cbd2305427d91fe5d70
--    http://autobuild.buildroot.net/results/1cd5a82a0e799aa5027e2e2c03b246332cc3a15d
--    http://autobuild.buildroot.net/results/d7ec878907f714377c83e9a496e97cbf9382d787
--    http://autobuild.buildroot.net/results/1c7f0c1b3ce4871cd87bd6059b1f0a6dc4e74a9c
--    http://autobuild.buildroot.net/results/196b81d580325607c8da90beeb79e1f6b8ab8b47
--    http://autobuild.buildroot.net/results/f90f7b4ac710b56686635f8ae27059c11b963e47
--
--1. https://github.com/tpm2-software/tpm2-tss/commit/60c26e4c4faba6ba12469485653e17092b510840
--
--Signed-off-by: Carlos Santos <unixmania@gmail.com>
-----
-- configure.ac | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index ff59dd7c..3e4028fb 100755
----- a/configure.ac
--+++ b/configure.ac
--@@ -26,7 +26,6 @@ AX_IS_RELEASE(dash-version)
-- AX_CHECK_ENABLE_DEBUG([info])
-- 
-- AC_PROG_CC
---AC_PROG_CXX
-- AC_PROG_LN_S
-- AC_USE_SYSTEM_EXTENSIONS
-- LT_INIT()
---- 
--2.26.2
--
-diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
-index 857987ae36..d87c1e0d8d 100644
---- a/package/tpm2-tss/Config.in
-+++ b/package/tpm2-tss/Config.in
-@@ -39,6 +39,8 @@ config BR2_PACKAGE_TPM2_TSS_FAPI
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
- 	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	help
- 	  This option allows to enable Feature API (FAPI).  Feature
- 	  API (FAPI) as described in the "TSS 2.0 Feature API
-diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
-index c9fa4e6ae0..891c1285b0 100644
---- a/package/tpm2-tss/tpm2-tss.hash
-+++ b/package/tpm2-tss/tpm2-tss.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  ba9e52117f254f357ff502e7d60fce652b3bfb26327d236bbf5ab634235e40f1  tpm2-tss-3.2.2.tar.gz
-+sha256  37f1580200ab78305d1fc872d89241aaee0c93cbe85bc559bf332737a60d3be8  tpm2-tss-4.1.3.tar.gz
- sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index b76d16e71e..c8a7df7724 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TPM2_TSS_VERSION = 3.2.2
-+TPM2_TSS_VERSION = 4.1.3
- TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
- TPM2_TSS_LICENSE = BSD-2-Clause
- TPM2_TSS_LICENSE_FILES = LICENSE
-@@ -13,9 +13,6 @@ TPM2_TSS_CPE_ID_PRODUCT = tpm2_software_stack
- TPM2_TSS_INSTALL_STAGING = YES
- TPM2_TSS_DEPENDENCIES = openssl host-pkgconf
- 
--# 0001-configure-Only-use-CXX-when-fuzzing.patch
--TPM2_TSS_AUTORECONF = YES
--
- # systemd-sysusers and systemd-tmpfiles are only used at install time
- # to trigger the creation of users adn tmpfiles, which we do not care
- # about at build time. groupadd, useradd, and setfacl are used in the
-@@ -36,10 +33,10 @@ TPM2_TSS_CONF_OPTS = \
- TPM2_TSS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
- 
- ifeq ($(BR2_PACKAGE_TPM2_TSS_FAPI),y)
--TPM2_TSS_DEPENDENCIES += json-c libcurl
-+TPM2_TSS_DEPENDENCIES += json-c libcurl util-linux
- TPM2_TSS_CONF_OPTS += --enable-fapi
- else
--TPM2_TSS_CONF_OPTS += --disable-fapi
-+TPM2_TSS_CONF_OPTS += --disable-fapi --disable-policy
- endif
- 
- define TPM2_TSS_USERS
+diff --git a/package/Config.in b/package/Config.in
+index 1eb5e1e020..4f4b7a34d5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1633,6 +1633,7 @@ menu "Crypto"
+ 	source "package/tpm2-openssl/Config.in"
+ 	source "package/tpm2-pkcs11/Config.in"
+ 	source "package/tpm2-tss/Config.in"
++	source "package/tpm2-tss-engine/Config.in"
+ 	source "package/trousers/Config.in"
+ 	source "package/ustream-ssl/Config.in"
+ 	source "package/wolfssl/Config.in"
+diff --git a/package/tpm2-tss-engine/0001-Allow-disabling-of-digest-sign-operations.patch b/package/tpm2-tss-engine/0001-Allow-disabling-of-digest-sign-operations.patch
+new file mode 100644
+index 0000000000..7ce717df4a
+--- /dev/null
++++ b/package/tpm2-tss-engine/0001-Allow-disabling-of-digest-sign-operations.patch
+@@ -0,0 +1,46 @@
++From af8b26e7ffe69837197fb841e9a31230ae01c9cc Mon Sep 17 00:00:00 2001
++From: Andreas Fuchs <andreas.fuchs@infineon.com>
++Date: Mon, 22 May 2023 14:06:41 +0200
++Subject: [PATCH] Configure: Allow disabling of digest-sign operations
++
++Since the digest-sign operations perform the hash on the TPM and
++TPMs in general do not support SHA512, this can lead to errors.
++Depending on the use case, it might be preferable to not support
++restricted keys (via digest+sign) but to rely on ordinary keys
++only.
++
++Upstream: https://github.com/tpm2-software/tpm2-tss-engine/commit/af8b26e7ffe69837197fb841e9a31230ae01c9cc
++Signed-off-by: Andreas Fuchs <andreas.fuchs@infineon.com>
++---
++ configure.ac | 10 ++++++++--
++ 1 file changed, 8 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index d4a9356..b379042 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -116,13 +116,19 @@ PKG_CHECK_MODULES([CRYPTO], [libcrypto >= 1.0.2g],
++ PKG_CHECK_MODULES([TSS2_ESYS], [tss2-esys >= 2.3])
++ PKG_CHECK_MODULES([TSS2_MU], [tss2-mu])
++ PKG_CHECK_MODULES([TSS2_TCTILDR], [tss2-tctildr])
+++
++ AC_CHECK_LIB([crypto], EC_KEY_METHOD_set_compute_key,
++       [AM_CONDITIONAL([HAVE_OPENSSL_ECDH], true)],
++       [AM_CONDITIONAL([HAVE_OPENSSL_ECDH], false)])
+++
+++AC_ARG_ENABLE([digestsign],
+++              [AS_HELP_STRING([--disable-digestsign],
+++                              [Disable support for digest and sign methods, helps with TPM unsupported hash algorithms.])],,
+++              [enable_digestsign=yes])
++ AC_CHECK_LIB([crypto], EVP_PKEY_meth_set_digest_custom,
++-      [AM_CONDITIONAL([HAVE_OPENSSL_DIGEST_SIGN], true)],
+++      [AM_CONDITIONAL([HAVE_OPENSSL_DIGEST_SIGN], [test "x$enable_digestsign" != "xno"])],
++       [AM_CONDITIONAL([HAVE_OPENSSL_DIGEST_SIGN], false)])
++-AS_IF([test "x$ac_cv_lib_crypto_EVP_PKEY_meth_set_digest_custom" = xyes],
+++AS_IF([test "x$ac_cv_lib_crypto_EVP_PKEY_meth_set_digest_custom" = xyes && test "x$enable_digestsign" = "xyes"],
++       [AC_DEFINE([HAVE_OPENSSL_DIGEST_SIGN], [1],
++                  Have required functionality from OpenSSL to support digest and sign)])
++ 
++-- 
++2.47.0
++
+diff --git a/package/tpm2-tss-engine/Config.in b/package/tpm2-tss-engine/Config.in
+new file mode 100644
+index 0000000000..27d925a60f
+--- /dev/null
++++ b/package/tpm2-tss-engine/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_TPM2_TSS_ENGINE
++	bool "tpm2-tss-engine"
++	select BR2_PACKAGE_TPM2_TSS
++	select BR2_PACKAGE_LIBOPENSSL_ENGINES
++	help
++	  The tpm2-tss-engine project implements a cryptographic engine
++	  for OpenSSL for Trusted Platform Module (TPM 2.0) using the
++	  tpm2-tss software stack that follows the Trusted Computing
++	  Groups (TCG) TPM Software Stack (TSS 2.0). It uses the
++	  Enhanced System API (ESAPI) interface of the TSS 2.0 for
++	  downwards communication. It supports RSA decryption and
++	  signatures as well as ECDSA signatures.
+diff --git a/package/tpm2-tss-engine/tpm2-tss-engine.hash b/package/tpm2-tss-engine/tpm2-tss-engine.hash
+new file mode 100644
+index 0000000000..294847d5f8
+--- /dev/null
++++ b/package/tpm2-tss-engine/tpm2-tss-engine.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  3c94fef110dd3630b3c28c5875febba76b7d5ba2fcc04a14c4a30f5d2157c265  tpm2-tss-engine-1.2.0.tar.gz
++sha256  7a77915f34caf18d47bc31750dae47dbd7f7895e95bbb8370f477c25009388f6  LICENSE
+diff --git a/package/tpm2-tss-engine/tpm2-tss-engine.mk b/package/tpm2-tss-engine/tpm2-tss-engine.mk
+new file mode 100644
+index 0000000000..768f9ee3bd
+--- /dev/null
++++ b/package/tpm2-tss-engine/tpm2-tss-engine.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# tpm2-tss-engine
++#
++################################################################################
++
++TPM2_TSS_ENGINE_VERSION = 1.2.0
++TPM2_TSS_ENGINE_SITE = https://github.com/tpm2-software/tpm2-tss-engine/releases/download/$(TPM2_TSS_ENGINE_VERSION)
++TPM2_TSS_ENGINE_LICENSE = BSD-3-Clause
++TPM2_TSS_ENGINE_LICENSE_FILES = LICENSE
++TPM2_TSS_ENGINE_INSTALL_STAGING = YES
++TPM2_TSS_ENGINE_DEPENDENCIES = host-pkgconf tpm2-tss
++TPM2_TSS_ENGINE_AUTORECONF = YES
++
++TPM2_TSS_ENGINE_CONF_OPTS = \
++	--disable-digestsign \
++	--with-enginesdir="/usr/lib/engines-3"
++
++$(eval $(autotools-package))
 -- 
 2.47.0
 
