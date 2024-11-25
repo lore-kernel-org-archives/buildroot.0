@@ -4,97 +4,167 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F0D2D59D7F
-	for <buildroot@archiver.kernel.org>; Mon, 25 Nov 2024 22:30:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BF89D59D7F
+	for <buildroot@archiver.kernel.org>; Mon, 25 Nov 2024 22:52:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2D3A42D2A;
-	Mon, 25 Nov 2024 22:30:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 06BC949E9A;
+	Mon, 25 Nov 2024 22:52:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QjXSv_tnyHwc; Mon, 25 Nov 2024 22:30:15 +0000 (UTC)
+ id QcIMGLN8MbQa; Mon, 25 Nov 2024 22:52:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A175942D2D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9785149DE5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A175942D2D;
-	Mon, 25 Nov 2024 22:30:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C652280B
- for <buildroot@buildroot.org>; Mon, 25 Nov 2024 22:30:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9785149DE5;
+	Mon, 25 Nov 2024 22:52:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A0A6280B
+ for <buildroot@buildroot.org>; Mon, 25 Nov 2024 22:52:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 17FF7840AB
- for <buildroot@buildroot.org>; Mon, 25 Nov 2024 22:30:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2476784FB0
+ for <buildroot@buildroot.org>; Mon, 25 Nov 2024 22:52:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XpU-nWgpuWp1 for <buildroot@buildroot.org>;
- Mon, 25 Nov 2024 22:30:14 +0000 (UTC)
+ id 2HebbZJ29coI for <buildroot@buildroot.org>;
+ Mon, 25 Nov 2024 22:52:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22a; helo=mail-lj1-x22a.google.com;
- envelope-from=mattianarducci1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6AD5E8128A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AD5E8128A
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com
- [IPv6:2a00:1450:4864:20::22a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6AD5E8128A
- for <buildroot@buildroot.org>; Mon, 25 Nov 2024 22:30:13 +0000 (UTC)
-Received: by mail-lj1-x22a.google.com with SMTP id
- 38308e7fff4ca-2ffa8df8850so39684331fa.3
- for <buildroot@buildroot.org>; Mon, 25 Nov 2024 14:30:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1732573811; x=1733178611;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=/fjubBGa7vteJigNtjMRNw+Xay0puMCOCUQGDmk7/+o=;
- b=Qt7uLTZEn/NIGvVGrtvPsGd671ur+rDeTetES74XNsD31fudrlxj8SLZFo8eJDW3an
- XKp9NIRIf5S+McRUJtskT79eZt1c/KXpiQYT4+liwdMX8HBTHn+BxnYtW2THqF7q7sMC
- s/HiAk2anvNjPlruKtQ0+4lcgS9Y6be/rONcm/ZW5Z5ahCMAsuMy0A6NfvC15+Qrbk5e
- 4xzFtmnqAPMGfjqFe/O7pbEq6c8Uv8rTjRIdIbJz+cT+P5vQLD0bnHx6TeFIuOccOUiB
- QobP++DX0Y0R6MdHTdy69x10GLgufsFdZz25kygUhr2f8NTMk+KbRBWrXvKahKPRwDnA
- 3QSw==
-X-Gm-Message-State: AOJu0Yz2JbBSbB060Y2ou6mt9kuMjJHjakqktE7X2NbeUeWwdAZF3GZD
- dT9sBoMOHc64kMh5ucMvqG+gmAeBxFa/aC+HjfZhPGARafGuGIFr
-X-Gm-Gg: ASbGnctaadirzmDEDvQMPUcRi2BhFDZE0cRl1Hs7l2HWzW4Ac9t1pZ/klwBqczegUYJ
- YNr1tni2+Fbhgz6/+IeLux4IcfAl/eNX+b8Z/xHyOUU9WlJAiNIABLBYdxv1R41NjrS7QSBR+qk
- llfL/GFeSDWtA+BBafblwhDMEDsdJ08ww0rvFsJXx6L2/Q9ZlBb88WHbBjB8IF/ZEuyl+Ete1o7
- erI8vZxBF22Ggjqd2jIqia0F324uTcrscV/zBjuWam/9M9J2sN/muw=
-X-Google-Smtp-Source: AGHT+IG7dnHZzR6EK1eT3g2p6EdCTiHdlD8ljXP5NZHgWwBoQijEFOoIn/RZdVjxs+V0ddvFQyYf9w==
-X-Received: by 2002:a2e:a903:0:b0:2fb:4ddd:a8f0 with SMTP id
- 38308e7fff4ca-2ffa7174afdmr58805051fa.15.1732573809159; 
- Mon, 25 Nov 2024 14:30:09 -0800 (PST)
-Received: from localhost ([78.208.197.115]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-aa50b28fe55sm515422366b.4.2024.11.25.14.30.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 25 Nov 2024 14:30:08 -0800 (PST)
-From: Mattia Narducci <mattianarducci1@gmail.com>
-To: Zvi Vered <veredz72@gmail.com>
-Cc: buildroot@buildroot.org
-Date: Mon, 25 Nov 2024 23:30:07 +0100
-Message-ID: <8455423.T7Z3S40VBb@localhost>
-In-Reply-To: <CABRndgwO5RUQOK_VBbLgZe4qoNRA1DDw-JCua6h=ory4xquBKQ@mail.gmail.com>
-References: <CABRndgwO5RUQOK_VBbLgZe4qoNRA1DDw-JCua6h=ory4xquBKQ@mail.gmail.com>
+ client-ip=2a01:111:f403:2009::61b;
+ helo=nam10-bn7-obe.outbound.protection.outlook.com;
+ envelope-from=ibai.erkiaga-elorza@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CE2A984FAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE2A984FAC
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com
+ (mail-bn7nam10on2061b.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2009::61b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CE2A984FAC
+ for <buildroot@buildroot.org>; Mon, 25 Nov 2024 22:52:53 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XMagbNQn9TlqiF1NuNa7VaqRfJqiMPqHXbYRVWHJWUvKUss90JuxtFzf/wPHthYE5O1lHYrbrJCvldAFqE5PAl1Flj79gm7dCN/awJhqqrHKtT8fR3hFqPcKzB85zFLwzqvZkA70IkBY8vnOTR1AreuhP8wgAWxxyVSWMjBX2bi7G7mpxCwbn7rRUJ/VXFX/xF6DQZQZRnu9B/y8LKj0u/oLxRNhuOgkno/h4z7kYfwz8epmwPst08mMBV8t3cA2Uv990hotM4kv88qrahVA/1ZZV2wZsNS5bZj/3rIgw4WW4vkX575DSxEbi6N9Awh09beo4sbjDM8HEc8IKMC54g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mLO44jYRgCjYzliz/IhEmTp1pV13zBpQMP2+IWArs9M=;
+ b=xvlsDlmdzoEV4TI3gzURSuQoph34tWn6bWasfdhsR1I6uSUH0KKxUk8YF+FqULjNILzIIEQIARv/Y2/FzGqtcJzGp/rGEMFWRv2dlVkJKBDlJI/34H+tQPQoZvNQz2J9mQGZToiZE2S57RgHnJHGg3Lvu3ccDjd5OC+cSS2WbF9FG4Jb5IKREC2Z8UTxzElm0LAKhCr8d3kacVMTuZWHEDbszS+20pfS8n1S/xN0Ob0UsGtKlaSdA7q2OpuxvHrWP0ZZXH4z6E3OojpgfWhOzvlJV6aDJqmaP2l6cAbbuoEToqiIlJ8TJnmIKhdrJHBZLvW3q6dHDQeO2okVGMAVXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from MN0PR12MB6004.namprd12.prod.outlook.com (2603:10b6:208:380::17)
+ by SA1PR12MB6847.namprd12.prod.outlook.com (2603:10b6:806:25e::12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8182.20; Mon, 25 Nov
+ 2024 22:52:47 +0000
+Received: from MN0PR12MB6004.namprd12.prod.outlook.com
+ ([fe80::8146:4908:c42d:7eb5]) by MN0PR12MB6004.namprd12.prod.outlook.com
+ ([fe80::8146:4908:c42d:7eb5%7]) with mapi id 15.20.8182.019; Mon, 25 Nov 2024
+ 22:52:44 +0000
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: Issues reproducing autobuild error 
+Thread-Index: AQHbP4yyVJbkyYM9U06ZMVgcVFRRQQ==
+Date: Mon, 25 Nov 2024 22:52:44 +0000
+Message-ID: <MN0PR12MB600414FC4F51FC14FAA8BCDCA02E2@MN0PR12MB6004.namprd12.prod.outlook.com>
+Accept-Language: en-GB, en-US, en-IE
+Content-Language: en-GB
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=True;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2024-11-25T22:52:44.332Z;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
+ Internal Distribution
+ Only; MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=0;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard; 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR12MB6004:EE_|SA1PR12MB6847:EE_
+x-ms-office365-filtering-correlation-id: 65040c55-ab49-48b2-a8d2-08dd0da3dfe5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|376014|1800799024|366016|8096899003|38070700018; 
+x-microsoft-antispam-message-info: =?iso-8859-1?Q?eriBqjmCrSpAeanLLWxsQmHFSFHpdCgE707Ewr8dglYjYVSPTuiEMFvNyE?=
+ =?iso-8859-1?Q?de9d1d1asSw7hCQ4OO2dMsRZ0HVBkNL370rA+zA318p7ZkTxTAcNveOv5v?=
+ =?iso-8859-1?Q?dGhC6RkQYl+MESqrr50fhz/IX4cghhjy/GVY2neTu3FYyGQGOko8mS7dr5?=
+ =?iso-8859-1?Q?hnxPwBFekvbcqtQUGxjuGKX9S4E0Kbnum7ZMNBk690iYaTMqOKaKdsZkMq?=
+ =?iso-8859-1?Q?8dhM52mwd7acKZROfTUAX6Y3oQF7dtR7uh+piFvQGF8kXqjPakWLM1CF8t?=
+ =?iso-8859-1?Q?suXVWA+gjCOazrd2rV+dN1IyCm5vo7dbQf3H3av/ceh/uV7/Z3u8Xv/hBO?=
+ =?iso-8859-1?Q?zIx0g1y2/OpzsyY2TxDBtX3ScwQVbDW/NLw7G7IzCf9z7uojH/U679CT9l?=
+ =?iso-8859-1?Q?JMD9DcOsyDfF8wSNOdwlHZJDwuARCHT6tNJ0F5aQSjH0VANHB1H9WfykBs?=
+ =?iso-8859-1?Q?o+X9+/9vFTtuX9xUF791BpszqUiMi/meBlfccuVd7hyV+8+RBvJV3Mb3h+?=
+ =?iso-8859-1?Q?06GpcrpAxOmdHk/1qrNoVUI7/fQiQlpMyU2UMdxNLj+8/iQj0+EAKOd3Tn?=
+ =?iso-8859-1?Q?ijmeEcbnMYY44ydR69EXU3lVtJV6lTmHANIXYR+X9JexojoOEUY7HsGA7B?=
+ =?iso-8859-1?Q?DXdvWi6qmve49vBmhRjscdIye4jrdyvMcUfLbuUzYqEOSrA7iOvnzlbMAb?=
+ =?iso-8859-1?Q?oMuHAtMyA+9bVUB3deZwqd3jFxnNlzgV4KUcYfg/0KQXsiqZtFJ5w/taCV?=
+ =?iso-8859-1?Q?JvriOC+D2xQAolEfGkcn25/gAIlFZnHlzj0Ohgl0NU7BNVYlBkZwzqyC1p?=
+ =?iso-8859-1?Q?syMtlbBb8vWs/h+Zx7iG+QIg8P/4JudLa+eOdSz5ND1zrmVBhWFwCzQo8Y?=
+ =?iso-8859-1?Q?Zb2wPqyuvZ3urXNfWLlQW1+RvUEyNyOVtEK3bS+4VUOPnIpTf8UNjFPwWV?=
+ =?iso-8859-1?Q?7lz0XEmHL/5FeA5Y3ng2dn7JjeaHDqZqaeFQynWq3yeAXnARfaSLeO+IN5?=
+ =?iso-8859-1?Q?+s2119GKHsCH2CU+95Wyf/E+WNSLQ+6lFfuJjzL1JWQY7e8M2d+AeFlWcN?=
+ =?iso-8859-1?Q?5kNinEfFzCnPeuyS4QtgaKACXjgiPkYoStYQ92kn309d/127QfbKqiM9Vn?=
+ =?iso-8859-1?Q?5IQ1VHgJMrLXUW/gDZJhFligOhGeCppDWAwdqTplaMSpP6svAlZEBfvK3e?=
+ =?iso-8859-1?Q?CG4nj/7NbOZJcEFX/Gz3nUditcM3vBI9AkAvYEd3tv9zB7wYBFaJ1cPgKC?=
+ =?iso-8859-1?Q?Bji6yaq44MMTTMp8omCas7BxIjZICTqwkNB6ocDMy1sN7Avrto19GRgO0o?=
+ =?iso-8859-1?Q?JVDne870WIfAvYSzHtmyo4vFJRlbmGyrrAYZs5qJw/vPijtI+szrWHNk6E?=
+ =?iso-8859-1?Q?1oSWrOtbNpFqirXg7fZ6wVbPwlGVUUrE8NXPtSTwsVduefsJ0krp8=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:MN0PR12MB6004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(376014)(1800799024)(366016)(8096899003)(38070700018); DIR:OUT;
+ SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?UDqNZVwFpLxI5tdrh8igtMmAORrKSytYJBGrpiz984zDl7R2eD8JnlvCbl?=
+ =?iso-8859-1?Q?Pq4Ad5mE7FAX9vnss+v9Z+IrVowPvcTx2OkggOIf1k7xAfaaeX0PVKIxaP?=
+ =?iso-8859-1?Q?9KX7ZKWP0IijY2kLxgSRIMHuuK13wYCqxruw+dKQbANznGVk31HAwX3d+b?=
+ =?iso-8859-1?Q?Fv53c3ASxK66K7hchvbukjnB20BYUnwxPQIWQ1YuFjyYOHhWkykrTBExR6?=
+ =?iso-8859-1?Q?vsq+5HLXwPKJxU3Mct1/nqOkMkWSKiuYNfE41lTJGhD0U/zVziW2PdwEMe?=
+ =?iso-8859-1?Q?2+RYQmv3JQjQJdzi3Ueb8jHxLjmgS+ZTryojTJ2ZZcwVZC3bxkY3LAWGgl?=
+ =?iso-8859-1?Q?tV7TabDTrA/7HP+kruD2lkCvmKgAy0vOVPetq3r4vrNz4l8YmbD4u2Mp1Z?=
+ =?iso-8859-1?Q?+1DRBv4j/s7hvxXi0K8Pm6eOWAdey+BMmt9g4RMfN+NcBnpbTmpSfPW6SW?=
+ =?iso-8859-1?Q?fHUSWBFstQtsNozwYtQJwQvFL+kvIA27rJ4xuD8xyNuACcqgs+f9AknwDC?=
+ =?iso-8859-1?Q?fNAEqUiuH3vnLaGnLRgv8zUJnSqba2HizwWkwAAKWDcP37oMo258H528uD?=
+ =?iso-8859-1?Q?LeTJ9CV/4mb7xDxnJEPcDxbgOp54K+oWdSMUfJHwn5ABbZfK5r3QH94GgD?=
+ =?iso-8859-1?Q?ZGGQDOf5fqwuxrcmGTaFzubVpL6Oswgk0t8mH8mZRCey4UsmZewSzS/Ntr?=
+ =?iso-8859-1?Q?aLFmpS4ywqDMhFo8Kuqz7YZq+90bcpqQWf7diRg3fKMQ9rjlsGJdWYH3/a?=
+ =?iso-8859-1?Q?h614HA4ZWDz0sXWwzZFnIqo09TLY1FN9kDjTnGd6Xsf3yT+xkiwRK8s3Wb?=
+ =?iso-8859-1?Q?XlRZjUDDWPCposhtidOyOFwCHUfy71l5ah7xWMlEfz1GdQsQdFiEy3wnO6?=
+ =?iso-8859-1?Q?ja9HwyBLAaCdFFHo7sbqR/4/ro68ZFIS/YmSRWNz3w+YDyea/5HyDU0lgL?=
+ =?iso-8859-1?Q?Hz8s4C9wP03YZTzinla3KUjUksR2AePpe0ENE0NEkcc6WJCqXlLIN6XdbP?=
+ =?iso-8859-1?Q?Iqkn7JO/O2EvHXIm2fxztVUUmQWYYx0EiW61cRF21qZqZ1mYlGHjQpGI/o?=
+ =?iso-8859-1?Q?tcHFcSyEEw/8eQN9D3KgWCMjHagnAGZct2ycYibMD5YL+7aiQ91gyngmDu?=
+ =?iso-8859-1?Q?eR6ZEKhLshXMQxPaqBB/gESFCH/Jbt3AyoRQqJIic4NWHicgcneSLHPHSz?=
+ =?iso-8859-1?Q?9yFgqrkJwNpywtAfVhP983KIoAtcVPLZsBp6ckic/Q7eWBl7sOFX/EphsC?=
+ =?iso-8859-1?Q?lwLgKBSQu4m/xIvbetzUv99qG5TFaGLuDwO+YVrYTCy2FVQAySCO1dcBDX?=
+ =?iso-8859-1?Q?sKLQKsYOjjmiZBvR6f3BG9wtvhNF/PRc+qp54Y9dhhgjI074fsAbr/iB3D?=
+ =?iso-8859-1?Q?LeYTAHfnqBTRr5lQcViGSdGM/SCGdb9VkJHWZQn80RbiVIfRk3dO3fxKNd?=
+ =?iso-8859-1?Q?/9t6+L4JaSnJ04+32mPn9gwWRfALtzUdXetKak8nKU5V6fn0ng4vznoDiG?=
+ =?iso-8859-1?Q?1lJjcIRPm2WGBm2fcSh9P/vBKcS3mBKdE9sL9KaklCJ/11bMWN4nkJ/Qf2?=
+ =?iso-8859-1?Q?ET63bl8fMhp15e5AeN5+reDgEK9YxEweeY8CPWgs6X0YqjgiPbBKr8sSEh?=
+ =?iso-8859-1?Q?37GujusHRGln0=3D?=
 MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6004.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65040c55-ab49-48b2-a8d2-08dd0da3dfe5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2024 22:52:44.3404 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: idz/FLvN1bhi6XRFzAX9AI27CcDCSnggTt9o3wvfOdPNF9Bo/6aSVQtBgmHHc90r
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6847
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1732573811; x=1733178611; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=/fjubBGa7vteJigNtjMRNw+Xay0puMCOCUQGDmk7/+o=;
- b=WhuisaMAr4yowd2nP0kKu4hV20yJ+kRWqPBZ0BsGZx3g8kuoDUEu4qcx5T9JnQ05rJ
- lb7wkbnenhBdlr4FgHIpHWLeDJcfTmSLwa3NZD97nrjXqzuOfhPMPy+22b1jvbBug/CI
- V8GotS18eCPIPGMgUMIOQS7V7lpvN0tApneEE7zCGakMA/uhsskDuyZ2UynH7gI3C8sq
- JjmlhoPRnQFP0oNSKJ5VreZt2CEl1JTDU/n4Vip7znnshK5JClJ6LVR4zu/vZX9I3euK
- Br4PBuJ/jLhXBvbOypU7qhzQASGCNtC5DGEEoQfjINbzYGmbk4T45HwhgH8w0V/R4lC7
- GD6Q==
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mLO44jYRgCjYzliz/IhEmTp1pV13zBpQMP2+IWArs9M=;
+ b=yFESA/zJw+iYMY/1Ofgj07WQDZdghbOvzqJhm6wJ40HVzFGFGDQILj5efAnQx2W6o59tPbkIDOnTklINIo8Xb4IVZ37cJuX+NbyU6BD67EwjGpEnmP2jmp17PrEueIk34jFHpmoG92jF018+rux7LXA+7E+RLgM7XzB3os3KWmc=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=WhuisaMA
-Subject: Re: [Buildroot] 2024.02.6 : modinfo for target side
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=yFESA/zJ
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: [Buildroot] Issues reproducing autobuild error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,38 +176,172 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: "Erkiaga Elorza, Ibai via buildroot" <buildroot@buildroot.org>
+Reply-To: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>
+Content-Type: multipart/mixed; boundary="===============3558176196818526022=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Zvika,
+--===============3558176196818526022==
+Content-Language: en-GB
+Content-Type: multipart/alternative;
+	boundary="_000_MN0PR12MB600414FC4F51FC14FAA8BCDCA02E2MN0PR12MB6004namp_"
 
-On Sat, 16 Nov 2024 06:38:09 +0100 Zvi Vered wrote:
-> In 2024.02.6 I included "kmod"  in "Target packages->System tools"
-> But in rootfs.tar built without any errors, there is no kmod nor modinfo.
+--_000_MN0PR12MB600414FC4F51FC14FAA8BCDCA02E2MN0PR12MB6004namp_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-the kmod package you selected only provides command line utilities like
-modinfo when "kmod utilities" is also selected.
+[AMD Official Use Only - AMD Internal Distribution Only]
 
-There are two options to get them:
+Hi all,
 
-1. do not select kmod package and use the utilities conveniently
-provided by busybox. You should already have insmod, lsmod, modprobe
-and rmmod available if you are using the default busybox configuration.
-Just run make busybox-menuconfig and select modinfo from the "Linux
-Module Utilities" menu
+I've been trying to reproduce an issue with host-binutils-bare-metal packag=
+e that has been reported by autobuild without success. I might be doing som=
+ething wrong so just sharing the steps I'm following to check whether anyon=
+e can guide me on the best process to target this issues.
 
-2. if you really need modinfo from the kmod package, first select "Show
-packages that are also provided by busybox" from "Target packages". 
-Then you should see the new option "kmod utilities" in the "Target
-packages -> System tools" submenu
+I.e. error:
+https://autobuild.buildroot.org/results/214/21497e5a6f7b6717b061f74c7debd83=
+f3bdb3a6e//
 
-Best regards,
-Mattia
+Steps used to test on my host:
 
+make distclean
+make defconfig
+wget <autobuild config URL> -O .config
+make oldconfig
+make host-binutils-bare-metal
+
+The build output is fine and cannot see the linkage issue that is reported =
+on the autobuild log files. Am I missing something? Might be the issue rela=
+ted to just the host machine settings/configuration?
+
+Regards
+Ibai
+
+
+
+
+--_000_MN0PR12MB600414FC4F51FC14FAA8BCDCA02E2MN0PR12MB6004namp_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
+ttom:0;} </style>
+</head>
+<body dir=3D"ltr">
+<p style=3D"font-family:Calibri;font-size:10pt;color:#0000FF;margin:5pt;fon=
+t-style:normal;font-weight:normal;text-decoration:none;" align=3D"Left">
+[AMD Official Use Only - AMD Internal Distribution Only]<br>
+</p>
+<br>
+<div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+Hi all,</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+I've been trying to reproduce an issue with host-binutils-bare-metal packag=
+e that has been reported by autobuild without success. I might be doing som=
+ething wrong so just sharing the steps I'm following to check whether anyon=
+e can guide me on the best process
+ to target this issues.</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+I.e. error:</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+<a href=3D"https://autobuild.buildroot.org/results/214/21497e5a6f7b6717b061=
+f74c7debd83f3bdb3a6e//" target=3D"_blank" id=3D"OWA62aa0e9d-7252-fb63-fa48-=
+fde55bf2f451" class=3D"OWAAutoLink" title=3D"https://autobuild.buildroot.or=
+g/results/214/21497e5a6f7b6717b061f74c7debd83f3bdb3a6e//" rel=3D"noopener n=
+oreferrer" data-auth=3D"NotApplicable" data-linkindex=3D"0" data-ogsc=3D"" =
+style=3D"margin: 0px;">https://autobuild.buildroot.org/results/214/21497e5a=
+6f7b6717b061f74c7debd83f3bdb3a6e//</a></div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+Steps used to test on my host:</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+make distclean</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+make defconfig</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+wget &lt;autobuild config URL&gt; -O .config</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+make oldconfig</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+make host-binutils-bare-metal</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+The build output is fine and cannot see the linkage issue that is reported =
+on the autobuild log files. Am I missing something? Might be the issue rela=
+ted to just the host machine settings/configuration?</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+Regards</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+Ibai</div>
+<div style=3D"margin: 0px; font-family: Arial, Helvetica, sans-serif; font-=
+size: 10pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Arial, Helvetica, sans-=
+serif; font-size: 10pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Arial, Helvetica, sans-=
+serif; font-size: 10pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+</div>
+</body>
+</html>
+
+--_000_MN0PR12MB600414FC4F51FC14FAA8BCDCA02E2MN0PR12MB6004namp_--
+
+--===============3558176196818526022==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3558176196818526022==--
