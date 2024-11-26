@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53878D3B990
-	for <buildroot@archiver.kernel.org>; Tue, 26 Nov 2024 13:27:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92771D3B991
+	for <buildroot@archiver.kernel.org>; Tue, 26 Nov 2024 13:27:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1ABB84DB65;
-	Tue, 26 Nov 2024 13:27:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58CE24DC1A;
+	Tue, 26 Nov 2024 13:27:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hw6lU-pqu3on; Tue, 26 Nov 2024 13:27:03 +0000 (UTC)
+ id 0lf_Ps-Ehe_I; Tue, 26 Nov 2024 13:27:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA5434D462
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5C944D752
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA5434D462;
-	Tue, 26 Nov 2024 13:27:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 743E04E94
- for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:26:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D5C944D752;
+	Tue, 26 Nov 2024 13:27:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C395DB3
+ for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:26:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B93C2408A8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 28D7361AD4
  for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:26:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6sjFbCVOgkU0 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4u16Y9-86F4Q for <buildroot@buildroot.org>;
  Tue, 26 Nov 2024 13:26:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F153405A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F96F6F4C6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F153405A5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3F96F6F4C6
  for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:26:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0BF3C8663E; Tue, 26 Nov 2024 13:26:39 +0000 (UTC)
+ id 32CDE8663E; Tue, 26 Nov 2024 13:26:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Nov 2024 14:23:04 +0100
+Date: Tue, 26 Nov 2024 14:25:59 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 48e79150bac997a7f7dbfd90be16a9cbb46d6775
-X-Git-Newrev: 0b26c8012ee1fd8fa702593d9ff7308eb9c63a3e
+X-Git-Oldrev: 44ebe8ee2bcb42006885bfe27aa2d91fe0ebaced
+X-Git-Newrev: c61c66269389a839498af119e331d76498fac2a4
 X-Patchwork-Hint: ignore
-Message-Id: <20241126132639.0BF3C8663E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/intel-microcode:
- security bump version to 20241112
+Message-Id: <20241126132639.32CDE8663E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] DEVELOPERS: update
+ maintainer of Andes platform
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,55 +65,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b26c8012ee1fd8fa702593d9ff7308eb9c63a3e
+commit: https://git.buildroot.net/buildroot/commit/?id=c61c66269389a839498af119e331d76498fac2a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Release notes:
-https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases
+I will lose access to my email next week, so hand
+it over to Leo Yu-Chi Liang.
 
-CVE-2024-21853
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01101.html
-
-CVE-2024-23918
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01079.html
-
-CVE-2024-24968
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01097.html
-
-CVE-2024-23984
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01103.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
+Reviewed-by: Leo Yu-Chi Liang <ycliang@andestech.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 649b31fc6d29d4fc5788ab13e32d704de63b2a0c)
+(cherry picked from commit a359514630165fe03c7bd159af10b7d20d08334a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-microcode/intel-microcode.hash | 2 +-
- package/intel-microcode/intel-microcode.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index 20dfaa41b4..81a4573110 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  8b7582eac7e9a691356e18b3bdcbc7b2db09494e040ec980a4a5fb6d0da261bf  intel-microcode-20240910.tar.gz
-+sha256  37246208ef68039be752438c72400a688a2238df13a7f5282497c80be2d8366d  intel-microcode-20241112.tar.gz
- sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 24729494d0..17f25edc83 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6081ef2ce0..aaa1e9e711 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2465,7 +2465,7 @@ F:	package/dbus-broker/
+ F:	package/systemd/
+ F:	package/tcf-agent/
  
--INTEL_MICROCODE_VERSION = 20240910
-+INTEL_MICROCODE_VERSION = 20241112
- INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license
+-N:	Yu Chien Peter Lin <peterlin@andestech.com>
++N:	Leo Yu-Chi Liang <ycliang@andestech.com>
+ F:	board/andes
+ F:	configs/andes_ae350_45_defconfig
+ F:	package/kmon/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
