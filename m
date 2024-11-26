@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E624D3B98B
-	for <buildroot@archiver.kernel.org>; Tue, 26 Nov 2024 13:28:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81A93D3B98B
+	for <buildroot@archiver.kernel.org>; Tue, 26 Nov 2024 13:28:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CAE8D6F500;
-	Tue, 26 Nov 2024 13:28:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4946D4E95A;
+	Tue, 26 Nov 2024 13:28:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vwB8b-lvGskD; Tue, 26 Nov 2024 13:28:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LJhhRNIMfyjx; Tue, 26 Nov 2024 13:28:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C164C6F4B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01F494E468
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C164C6F4B9;
-	Tue, 26 Nov 2024 13:28:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9DE13DB3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01F494E468;
+	Tue, 26 Nov 2024 13:28:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BF69F4E94
  for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:28:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 803EB61B39
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1ED2400D9
  for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:28:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ph-39SsTyic2 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ikagfwIE-ymK for <buildroot@buildroot.org>;
  Tue, 26 Nov 2024 13:28:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D9776F4A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92EE8405A5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D9776F4A3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92EE8405A5
  for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:28:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8885D8667C; Tue, 26 Nov 2024 13:28:09 +0000 (UTC)
+ id 7FAFC8667D; Tue, 26 Nov 2024 13:28:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Nov 2024 14:22:31 +0100
+Date: Tue, 26 Nov 2024 14:21:53 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: b302c4bbd67ef65f4a1013a67deab4523dc72f42
-X-Git-Newrev: c2da8dee8b8e21c4db46b3ac2d97c1e5619b7bbd
+X-Git-Oldrev: cea73e726be21259e2288d20d802bd62a6d67bf4
+X-Git-Newrev: b302c4bbd67ef65f4a1013a67deab4523dc72f42
 X-Patchwork-Hint: ignore
-Message-Id: <20241126132809.8885D8667C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/tiff: security
- bump to version 4.7.0
+Message-Id: <20241126132809.7FAFC8667D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libcurl: security
+ bump version to 8.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,61 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2da8dee8b8e21c4db46b3ac2d97c1e5619b7bbd
+commit: https://git.buildroot.net/buildroot/commit/?id=b302c4bbd67ef65f4a1013a67deab4523dc72f42
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-For the release note, see:
-http://www.simplesystems.org/libtiff/releases/v4.7.0.html
+Changelog: https://curl.se/ch/8.11.0.html
 
-This commit also adds the _SOURCE variable, to switch to the xz
-archive, which saves ~1.5MB. The _SITE url is also updated to switch
-to the https protocol.
+Fixes CVE-2024-9681: https://curl.se/docs/CVE-2024-9681.html
 
-This commit also adds a comment in the hash file about pgp signature
-veritication.
-
-Fixes:
-- https://nvd.nist.gov/vuln/detail/CVE-2023-6277
-- https://nvd.nist.gov/vuln/detail/CVE-2023-52356
-- https://nvd.nist.gov/vuln/detail/CVE-2024-7006
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d571951c67d63824fcdf96cba8b59c80876a827a)
+(cherry picked from commit ed4348d1c5657aae1b3f167471470f2eef82e7fa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tiff/tiff.hash | 6 ++++--
- package/tiff/tiff.mk   | 5 +++--
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
-index 3aae7dc4d5..5e2dcca73c 100644
---- a/package/tiff/tiff.hash
-+++ b/package/tiff/tiff.hash
-@@ -1,3 +1,5 @@
--# Locally computed
--sha256  88b3979e6d5c7e32b50d7ec72fb15af724f6ab2cbf7e10880c360a77e4b5d99a  tiff-4.6.0.tar.gz
-+# Locally computed after checking pgp signature
-+# https://download.osgeo.org/libtiff/tiff-4.7.0.tar.xz.sig
-+# with key: B1FA7D81EEB8E66399178B9733EBBFC47B3DD87D
-+sha256  273a0a73b1f0bed640afee4a5df0337357ced5b53d3d5d1c405b936501f71017  tiff-4.7.0.tar.xz
- sha256  0780558a8bfba0af1160ec1ff11ade4f41c0d7deafd6ecfc796b492a788e380d  LICENSE.md
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 0e5e0dd48a..5d7219d7da 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -4,8 +4,9 @@
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 4817ec11d6..93a0f85dee 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.10.1.tar.xz.asc
++# https://curl.se/download/curl-8.11.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  73a4b0e99596a09fa5924a4fb7e4b995a85fda0d18a2c02ab9cf134bebce04ee  curl-8.10.1.tar.xz
++sha256  db59cf0d671ca6e7f5c2c5ec177084a33a79e04c97e71cf183a5cdea235054eb  curl-8.11.0.tar.xz
+ sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 71fb6152c7..1022abac85 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TIFF_VERSION = 4.6.0
--TIFF_SITE = http://download.osgeo.org/libtiff
-+TIFF_VERSION = 4.7.0
-+TIFF_SOURCE = tiff-$(TIFF_VERSION).tar.xz
-+TIFF_SITE = https://download.osgeo.org/libtiff
- TIFF_LICENSE = tiff license
- TIFF_LICENSE_FILES = LICENSE.md
- TIFF_CPE_ID_VENDOR = libtiff
+-LIBCURL_VERSION = 8.10.1
++LIBCURL_VERSION = 8.11.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
