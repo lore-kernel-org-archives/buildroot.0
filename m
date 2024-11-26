@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98CE0D3B98B
-	for <buildroot@archiver.kernel.org>; Tue, 26 Nov 2024 13:28:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BB6AD3B98F
+	for <buildroot@archiver.kernel.org>; Tue, 26 Nov 2024 13:28:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D9D34048F;
-	Tue, 26 Nov 2024 13:28:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CEC404EB76;
+	Tue, 26 Nov 2024 13:28:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vYWK4RXrqy5I; Tue, 26 Nov 2024 13:28:29 +0000 (UTC)
+ id iMnqfgr77ik1; Tue, 26 Nov 2024 13:28:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 248EE4EA77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 796454EB9C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 248EE4EA77;
-	Tue, 26 Nov 2024 13:28:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4D12DDB3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 796454EB9C;
+	Tue, 26 Nov 2024 13:28:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 502E14E94
  for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:28:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7CD236F4A3
- for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:28:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2C25C400D9
+ for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:28:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8J_dyF_z-8DR for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pBpCgJQkmkq1 for <buildroot@buildroot.org>;
  Tue, 26 Nov 2024 13:28:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DDDC61676
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8236408A8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6DDDC61676
+ by smtp2.osuosl.org (Postfix) with ESMTP id A8236408A8
  for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:28:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5BB738667C; Tue, 26 Nov 2024 13:28:09 +0000 (UTC)
+ id 91E3B86680; Tue, 26 Nov 2024 13:28:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Nov 2024 14:03:38 +0100
+Date: Tue, 26 Nov 2024 14:23:09 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 30a1d2196e0aa972031fa309308f37001cf2ffd8
-X-Git-Newrev: e0a8550dc22ca5584fedbba7afe841ebf22c2f29
+X-Git-Oldrev: c2da8dee8b8e21c4db46b3ac2d97c1e5619b7bbd
+X-Git-Newrev: 674d55f9f582eefa5fa058209ed236f01500e214
 X-Patchwork-Hint: ignore
-Message-Id: <20241126132809.5BB738667C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/boost: update
- download url
+Message-Id: <20241126132809.91E3B86680@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/intel-microcode:
+ security bump version to 20241112
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,36 +65,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0a8550dc22ca5584fedbba7afe841ebf22c2f29
+commit: https://git.buildroot.net/buildroot/commit/?id=674d55f9f582eefa5fa058209ed236f01500e214
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-boost moved its package hosting from jfrog to their own url
-provided by the C++ Alliance. According to [0] the old urls
-might cease to exist after December 2024.
+Release notes:
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases
 
-[0] https://lists.boost.org/Archives/boost/2024/05/256914.php
+CVE-2024-21853
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01101.html
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8d4a9afdd530c4957ce03b156bc6a0bf1b4ca507)
+CVE-2024-23918
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01079.html
+
+CVE-2024-24968
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01097.html
+
+CVE-2024-23984
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01103.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 649b31fc6d29d4fc5788ab13e32d704de63b2a0c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boost/boost.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index bb73edfda6..367ec37f6c 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 20dfaa41b4..81a4573110 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8b7582eac7e9a691356e18b3bdcbc7b2db09494e040ec980a4a5fb6d0da261bf  intel-microcode-20240910.tar.gz
++sha256  37246208ef68039be752438c72400a688a2238df13a7f5282497c80be2d8366d  intel-microcode-20241112.tar.gz
+ sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 24729494d0..17f25edc83 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- BOOST_VERSION = 1.83.0
- BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
--BOOST_SITE = https://boostorg.jfrog.io/artifactory/main/release/$(BOOST_VERSION)/source
-+BOOST_SITE = https://archives.boost.io/release/$(BOOST_VERSION)/source
- BOOST_INSTALL_STAGING = YES
- BOOST_LICENSE = BSL-1.0
- BOOST_LICENSE_FILES = LICENSE_1_0.txt
+-INTEL_MICROCODE_VERSION = 20240910
++INTEL_MICROCODE_VERSION = 20241112
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
