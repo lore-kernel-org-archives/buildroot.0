@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E93DE77173
-	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 13:08:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 913ACE77180
+	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 13:08:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D0A4610A0;
-	Sun,  8 Dec 2024 13:08:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 606E581E57;
+	Sun,  8 Dec 2024 13:08:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zfSqVGPL7tfl; Sun,  8 Dec 2024 13:08:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o_FgZsRIoLvc; Sun,  8 Dec 2024 13:08:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E0B860F3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53BFA812D9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E0B860F3B;
-	Sun,  8 Dec 2024 13:08:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53BFA812D9;
+	Sun,  8 Dec 2024 13:08:30 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 361AC979
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:07:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E770EE0
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:07:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 694F060729
+ by smtp3.osuosl.org (Postfix) with ESMTP id 86E046080F
  for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:06:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ErNt1Sn-z0vc for <buildroot@buildroot.org>;
- Sun,  8 Dec 2024 13:06:55 +0000 (UTC)
+ id 9aTmEvbDX-P7 for <buildroot@buildroot.org>;
+ Sun,  8 Dec 2024 13:06:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B5496084F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01A8A6080E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8B5496084F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01A8A6080E
  for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:06:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8872B86B73; Sun,  8 Dec 2024 13:06:53 +0000 (UTC)
+ id F2B0886B74; Sun,  8 Dec 2024 13:06:52 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 29 Nov 2024 21:32:13 +0100
+Date: Tue, 26 Nov 2024 19:34:53 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 05cb33d4c09d0259de893423102c5eaa1e750d91
-X-Git-Newrev: d33a2cd51a3f1860d3ef953cdbd9e01eec519b48
+X-Git-Oldrev: 20b240a9a25f5b734bd65894b714658334bd2148
+X-Git-Newrev: 9aedec00d23904756382f59311ab06ff1955be8a
 X-Patchwork-Hint: ignore
-Message-Id: <20241208130653.8872B86B73@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/xilinx/patches: remove
- xilinx_v2024.1 hashes
+Message-Id: <20241208130652.F2B0886B74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fconfig: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,53 +64,101 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d33a2cd51a3f1860d3ef953cdbd9e01eec519b48
+commit: https://git.buildroot.net/buildroot/commit/?id=9aedec00d23904756382f59311ab06ff1955be8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that all defconfigs have been bumped to xilinx_v2024.2, the
-xilinx_v2024.1 hashes can be removed.
+The upstream location has been dead for 10 years and there is no reverse
+dependencies for it, so drop it.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 1 -
- board/xilinx/patches/linux/linux.hash                               | 1 -
- board/xilinx/patches/uboot/uboot.hash                               | 1 -
- board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash           | 1 -
- 4 files changed, 4 deletions(-)
+ Config.in.legacy             |  7 +++++++
+ package/Config.in            |  1 -
+ package/fconfig/Config.in    |  6 ------
+ package/fconfig/fconfig.hash |  3 ---
+ package/fconfig/fconfig.mk   | 22 ----------------------
+ 5 files changed, 7 insertions(+), 32 deletions(-)
 
-diff --git a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-index 2ef3a98196..15cceebb80 100644
---- a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  c3369c89eab4e452bbc76c630e5dccb6c0ae588c0175b6c8549aa0241deb06ef  xlnx_rebase_v2.10_2024.1.tar.gz
- sha256  a45390c9e1d584a389abd37ee49dce3f8d3b41718b1fd7c977608b5387a38955  xlnx_rebase_v2.10_2024.2.tar.gz
-diff --git a/board/xilinx/patches/linux/linux.hash b/board/xilinx/patches/linux/linux.hash
-index 6f269e1c71..41bf2141fb 100644
---- a/board/xilinx/patches/linux/linux.hash
-+++ b/board/xilinx/patches/linux/linux.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  6415cfcfd74e943d6ae44f6c1edcae09bf6cd89410b03c4290bf1464a8368f84  xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz
- sha256  8ebbbe2d40597d9a5f36d47a1dfe4caffcef3d9f5ffa059ed4504bb761282593  xlnx_rebase_v6.6_LTS_2024.2.tar.gz
-diff --git a/board/xilinx/patches/uboot/uboot.hash b/board/xilinx/patches/uboot/uboot.hash
-index 1fb12d1a11..de0e6adad1 100644
---- a/board/xilinx/patches/uboot/uboot.hash
-+++ b/board/xilinx/patches/uboot/uboot.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  58e391a001d9d8ed347ab3258ff7c8435c866b1ff2b2c22ebc95af592444c0f5  xlnx_rebase_v2024.01_2024.1.tar.gz
- sha256  f1a86ccdbe60bac89177a24bbfd56fc6e8e67823669f0997de563c3cc0ea4dd1  xlnx_rebase_v2024.01_2024.2.tar.gz
-diff --git a/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash b/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
-index 3bd33a29a0..fe6963872c 100644
---- a/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
-+++ b/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  7abcba4e0e44e3a4adf9c1f971d918575226d7604dfd64a386baaa00c1c6c35f  xilinx-prebuilt-xilinx_v2024.1.tar.gz
- sha256  ef61a4b249ecbf632a25cc34c3b03b8290be44397ff739467ac92ec1701e23bf  xilinx-prebuilt-xilinx_v2024.2.tar.gz
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3636228440..2ef1e19516 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2025.02"
+ 
++config BR2_PACKAGE_FCONFIG
++	bool "fconfig has been removed"
++	select BR2_LEGACY
++	help
++	  The fconfig package was removed as it is not maintained
++	  anymore and the upstream URL is gone.
++
+ config BR2_PACKAGE_LIBHID
+ 	bool "libhid has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index d9af39b900..60cdb179a3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -514,7 +514,6 @@ endmenu
+ 	source "package/evemu/Config.in"
+ 	source "package/evtest/Config.in"
+ 	source "package/fbtft/Config.in"
+-	source "package/fconfig/Config.in"
+ 	source "package/flashrom/Config.in"
+ 	source "package/fmtools/Config.in"
+ 	source "package/freeipmi/Config.in"
+diff --git a/package/fconfig/Config.in b/package/fconfig/Config.in
+deleted file mode 100644
+index e7dd58a84a..0000000000
+--- a/package/fconfig/Config.in
++++ /dev/null
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_FCONFIG
+-	bool "fconfig"
+-	help
+-	  fconfig - get/set RedBoot configuration parameters from Linux.
+-
+-	  http://andrzejekiert.ovh.org/software.html.en
+diff --git a/package/fconfig/fconfig.hash b/package/fconfig/fconfig.hash
+deleted file mode 100644
+index 98e7fbf12b..0000000000
+--- a/package/fconfig/fconfig.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  4ff0e8f07e35e46b705c0dbe9d9544ede01ea092a69e3f7db03e55a3f2bb8eb7  fconfig-20080329.tar.gz
+-sha256  e698a9ea4d6dab0a15d3d6fd354b97b820629244f946529cc7f42b2b8e8f16d0  fconfig.c
+diff --git a/package/fconfig/fconfig.mk b/package/fconfig/fconfig.mk
+deleted file mode 100644
+index 1e6fbb40b4..0000000000
+--- a/package/fconfig/fconfig.mk
++++ /dev/null
+@@ -1,22 +0,0 @@
+-################################################################################
+-#
+-# fconfig
+-#
+-################################################################################
+-
+-FCONFIG_VERSION = 20080329
+-# Real upstream location has been disabled
+-# FCONFIG_SITE = http://andrzejekiert.ovh.org/software/fconfig
+-FCONFIG_SITE = http://sources.buildroot.net
+-FCONFIG_LICENSE = GPL-2.0+
+-FCONFIG_LICENSE_FILES = fconfig.c
+-
+-define FCONFIG_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+-endef
+-
+-define FCONFIG_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/fconfig $(TARGET_DIR)/sbin/fconfig
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
