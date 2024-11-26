@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC8DFD3B98D
-	for <buildroot@archiver.kernel.org>; Tue, 26 Nov 2024 13:08:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20885D3B98D
+	for <buildroot@archiver.kernel.org>; Tue, 26 Nov 2024 13:15:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75954407E6;
-	Tue, 26 Nov 2024 13:08:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rnSFsfnWUrbQ; Tue, 26 Nov 2024 13:08:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6454440884
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6454440884;
-	Tue, 26 Nov 2024 13:08:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 61E01DB3
- for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:08:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 43262605E0
- for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:08:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFF12614AD;
+	Tue, 26 Nov 2024 13:15:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id orh9JOv6HPDN for <buildroot@buildroot.org>;
- Tue, 26 Nov 2024 13:08:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id rM280ZL_zEw5; Tue, 26 Nov 2024 13:15:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E581B61607
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E581B61607;
+	Tue, 26 Nov 2024 13:15:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C37E4961
+ for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:15:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2DAD261607
+ for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:15:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gORRcU1v1mkV for <buildroot@buildroot.org>;
+ Tue, 26 Nov 2024 13:15:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3C4A6605DA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C4A6605DA
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3C4A6605DA
- for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:08:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0B558E0002;
- Tue, 26 Nov 2024 13:08:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 14873614AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14873614AD
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 14873614AD
+ for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:15:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B537B1C0005;
+ Tue, 26 Nov 2024 13:15:20 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tFvJ4-008lCn-1x;
- Tue, 26 Nov 2024 14:08:42 +0100
+ (envelope-from <peter@korsgaard.com>) id 1tFvPU-008mLj-0I;
+ Tue, 26 Nov 2024 14:15:20 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org,  "Yann E . MORIN" <yann.morin.1998@free.fr>
-References: <20241110171129.326957-1-ju.o@free.fr>
-Date: Tue, 26 Nov 2024 14:08:42 +0100
-In-Reply-To: <20241110171129.326957-1-ju.o@free.fr> (Julien Olivain's message
- of "Sun, 10 Nov 2024 18:11:29 +0100")
-Message-ID: <87mshmnnvp.fsf@dell.be.48ers.dk>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20241111205256.A64C581479@busybox.osuosl.org>
+Date: Tue, 26 Nov 2024 14:15:20 +0100
+In-Reply-To: <20241111205256.A64C581479@busybox.osuosl.org> (Thomas Petazzoni
+ via buildroot's message of "Mon, 11 Nov 2024 21:52:28 +0100")
+Message-ID: <87iksannkn.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/usbredir: fix package homepage
- URL
+Subject: Re: [Buildroot] [git commit] {linux,
+ linux-headers}: bump 4.19.x / 5.{4, 10, 15}.x / 6.{1, 6, 11}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,16 +75,13 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > The current homepage URL [1] redirects to its https and ends up to
- > a HTTP 404 not found error. This commit fixes the issue by replacing
- > it with the new URL [2].
+ > commit: https://git.buildroot.net/buildroot/commit/?id=323567552bef83a82caa4c6f1f7f29231ae31a59
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > [1] http://www.spice-space.org/page/UsbRedir
- > [2] https://www.spice-space.org/usbredir.html
-
- > Signed-off-by: Julien Olivain <ju.o@free.fr>
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2024.02.x and 2024.08.x, thanks.
 
