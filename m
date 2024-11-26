@@ -1,70 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA884D65543
-	for <buildroot@archiver.kernel.org>; Tue, 26 Nov 2024 18:30:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C23AD6554E
+	for <buildroot@archiver.kernel.org>; Tue, 26 Nov 2024 18:38:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B88E6FA7B;
-	Tue, 26 Nov 2024 18:30:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OR-w0YKbTM8R; Tue, 26 Nov 2024 18:30:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C5276FA83
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C5276FA83;
-	Tue, 26 Nov 2024 18:30:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F375DB3
- for <buildroot@buildroot.org>; Tue, 26 Nov 2024 18:30:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F34844EBD6
- for <buildroot@buildroot.org>; Tue, 26 Nov 2024 18:30:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF1DA451D8;
+	Tue, 26 Nov 2024 18:38:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dR_uZXgLorWl for <buildroot@buildroot.org>;
- Tue, 26 Nov 2024 18:30:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CD6074EBD4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD6074EBD4
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CD6074EBD4
- for <buildroot@buildroot.org>; Tue, 26 Nov 2024 18:30:20 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 98C4FB00572;
- Tue, 26 Nov 2024 19:30:17 +0100 (CET)
+ id cQCHZZHzqQ5a; Tue, 26 Nov 2024 18:38:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD4B34ECB1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD4B34ECB1;
+	Tue, 26 Nov 2024 18:38:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 268524E94
+ for <buildroot@buildroot.org>; Tue, 26 Nov 2024 18:38:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0756E6070C
+ for <buildroot@buildroot.org>; Tue, 26 Nov 2024 18:38:03 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7gRT3N6wYNPM for <buildroot@buildroot.org>;
+ Tue, 26 Nov 2024 18:38:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B20E6FA44
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B20E6FA44
+ for <buildroot@buildroot.org>; Tue, 26 Nov 2024 18:38:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 082F5866B9; Tue, 26 Nov 2024 18:38:02 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>
-Date: Tue, 26 Nov 2024 19:30:12 +0100
-Message-ID: <20241126183012.39202-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.47.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1732645818;
- bh=AexR0f5OIdkV+RphlRPgXSVVOQE75PZHi8d5e4kODkA=;
- h=From:To:Cc:Subject:Date:From;
- b=NkOGYl7esZnmJ5SLPvJABLGxKdoPGx9MNHBecBdZWq17QElv4W/v50D4fYItemUif
- /N/WI2sh4DFaLZ1hwuewQUU5vuMYdtQn4X4gY7bH1pb4Sb5BTmeQuoEzeVY+ffqaQO
- qzO1eCVugYTGdhbOg9EMLUu9+YYvc4mYb+NU/Sm/SXCMSmo5B/NaptgUjKB2I1h/9A
- qyTeU1JLfvM0yrsN3tPE8zoGQSewF20pO9Vqg2TNi07/BGwZC0YNkWGSXOtpM1jfs8
- KgKAbI8h45t6o85hFE+bvD60R7hCPpU4t02wco3IbR9gZCuLf2K/9/mlt3vTmAnkZa
- vQVbZK7kylupg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=NkOGYl7e
-Subject: [Buildroot] [PATCH 1/1] support/testing: new openocd runtime test
+Date: Tue, 26 Nov 2024 19:34:53 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 20b240a9a25f5b734bd65894b714658334bd2148
+X-Git-Newrev: 9aedec00d23904756382f59311ab06ff1955be8a
+X-Patchwork-Hint: ignore
+Message-Id: <20241126183802.082F5866B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fconfig: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,79 +58,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=9aedec00d23904756382f59311ab06ff1955be8a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+The upstream location has been dead for 10 years and there is no reverse
+dependencies for it, so drop it.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/8477140333
----
- DEVELOPERS                                    |  1 +
- support/testing/tests/package/test_openocd.py | 37 +++++++++++++++++++
- 2 files changed, 38 insertions(+)
- create mode 100644 support/testing/tests/package/test_openocd.py
+ Config.in.legacy             |  7 +++++++
+ package/Config.in            |  1 -
+ package/fconfig/Config.in    |  6 ------
+ package/fconfig/fconfig.hash |  3 ---
+ package/fconfig/fconfig.mk   | 22 ----------------------
+ 5 files changed, 7 insertions(+), 32 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d75df5cc55..1045324a52 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1953,6 +1953,7 @@ F:	support/testing/tests/package/test_octave.py
- F:	support/testing/tests/package/test_ola.py
- F:	support/testing/tests/package/test_ola/
- F:	support/testing/tests/package/test_openblas.py
-+F:	support/testing/tests/package/test_openocd.py
- F:	support/testing/tests/package/test_parted.py
- F:	support/testing/tests/package/test_pciutils.py
- F:	support/testing/tests/package/test_perftest.py
-diff --git a/support/testing/tests/package/test_openocd.py b/support/testing/tests/package/test_openocd.py
-new file mode 100644
-index 0000000000..fe4d203073
---- /dev/null
-+++ b/support/testing/tests/package/test_openocd.py
-@@ -0,0 +1,37 @@
-+import os
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3636228440..2ef1e19516 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2025.02"
+ 
++config BR2_PACKAGE_FCONFIG
++	bool "fconfig has been removed"
++	select BR2_LEGACY
++	help
++	  The fconfig package was removed as it is not maintained
++	  anymore and the upstream URL is gone.
 +
-+import infra.basetest
-+
-+
-+class TestOpenOCD(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_OPENOCD=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # We check the program can run.
-+        self.assertRunOk("openocd --version")
-+
-+        msg = "Buildroot"
-+
-+        # We check openocd can run, load a "dummy" driver in the
-+        # standard search path, and use some of its TCL commands. See:
-+        # https://github.com/openocd-org/openocd/blob/v0.12.0/doc/manual/primer/commands.txt#L117
-+        # https://github.com/openocd-org/openocd/blob/v0.12.0/src/jtag/drivers/dummy.c
-+        cmd = "openocd"
-+        cmd += " -f interface/dummy.cfg"
-+        cmd += f" -c 'dummy hello {msg}'"
-+        cmd += " -c shutdown"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        expected_str = f"Greetings {msg}!"
-+        self.assertIn(expected_str, out)
--- 
-2.47.1
-
+ config BR2_PACKAGE_LIBHID
+ 	bool "libhid has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index d9af39b900..60cdb179a3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -514,7 +514,6 @@ endmenu
+ 	source "package/evemu/Config.in"
+ 	source "package/evtest/Config.in"
+ 	source "package/fbtft/Config.in"
+-	source "package/fconfig/Config.in"
+ 	source "package/flashrom/Config.in"
+ 	source "package/fmtools/Config.in"
+ 	source "package/freeipmi/Config.in"
+diff --git a/package/fconfig/Config.in b/package/fconfig/Config.in
+deleted file mode 100644
+index e7dd58a84a..0000000000
+--- a/package/fconfig/Config.in
++++ /dev/null
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_FCONFIG
+-	bool "fconfig"
+-	help
+-	  fconfig - get/set RedBoot configuration parameters from Linux.
+-
+-	  http://andrzejekiert.ovh.org/software.html.en
+diff --git a/package/fconfig/fconfig.hash b/package/fconfig/fconfig.hash
+deleted file mode 100644
+index 98e7fbf12b..0000000000
+--- a/package/fconfig/fconfig.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  4ff0e8f07e35e46b705c0dbe9d9544ede01ea092a69e3f7db03e55a3f2bb8eb7  fconfig-20080329.tar.gz
+-sha256  e698a9ea4d6dab0a15d3d6fd354b97b820629244f946529cc7f42b2b8e8f16d0  fconfig.c
+diff --git a/package/fconfig/fconfig.mk b/package/fconfig/fconfig.mk
+deleted file mode 100644
+index 1e6fbb40b4..0000000000
+--- a/package/fconfig/fconfig.mk
++++ /dev/null
+@@ -1,22 +0,0 @@
+-################################################################################
+-#
+-# fconfig
+-#
+-################################################################################
+-
+-FCONFIG_VERSION = 20080329
+-# Real upstream location has been disabled
+-# FCONFIG_SITE = http://andrzejekiert.ovh.org/software/fconfig
+-FCONFIG_SITE = http://sources.buildroot.net
+-FCONFIG_LICENSE = GPL-2.0+
+-FCONFIG_LICENSE_FILES = fconfig.c
+-
+-define FCONFIG_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+-endef
+-
+-define FCONFIG_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/fconfig $(TARGET_DIR)/sbin/fconfig
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
