@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88971D3B98B
-	for <buildroot@archiver.kernel.org>; Tue, 26 Nov 2024 13:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80E6FD3B98B
+	for <buildroot@archiver.kernel.org>; Tue, 26 Nov 2024 13:26:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EE5C40565;
-	Tue, 26 Nov 2024 13:26:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4516540553;
+	Tue, 26 Nov 2024 13:26:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AGNZNAuLMsKg; Tue, 26 Nov 2024 13:26:49 +0000 (UTC)
+ id 0GDKapZ6g8WE; Tue, 26 Nov 2024 13:26:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E0744054D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36D3E40843
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E0744054D;
-	Tue, 26 Nov 2024 13:26:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C8CB599C
- for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:26:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36D3E40843;
+	Tue, 26 Nov 2024 13:26:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13EC4DB3
+ for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:26:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E0DB3403D5
+ by smtp3.osuosl.org (Postfix) with ESMTP id ECD4561674
  for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:26:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P8bFjL1-hhFr for <buildroot@buildroot.org>;
- Tue, 26 Nov 2024 13:26:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lcvxrb9ynGfJ for <buildroot@buildroot.org>;
+ Tue, 26 Nov 2024 13:26:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2AAD403DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 097076F4A3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D2AAD403DB
- for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:26:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 097076F4A3
+ for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:26:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB40A86640; Tue, 26 Nov 2024 13:26:38 +0000 (UTC)
+ id EBD5686640; Tue, 26 Nov 2024 13:26:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Nov 2024 14:07:44 +0100
+Date: Tue, 26 Nov 2024 14:21:48 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: e21e65d49e23e0726750945dbd3588f3cfae4f54
-X-Git-Newrev: 1b73bbbf7143e33c2a407029c45d2b927a2429c1
+X-Git-Oldrev: ed2f4b2addd62f92c4e59b2fa3043b41dfabee77
+X-Git-Newrev: f35c5ad48ce8a0ecc730697654f6394992ddb3a0
 X-Patchwork-Hint: ignore
-Message-Id: <20241126132638.BB40A86640@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/usbredir: fix
- package homepage URL
+Message-Id: <20241126132638.EBD5686640@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/libcurl: security
+ bump version to 8.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,37 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b73bbbf7143e33c2a407029c45d2b927a2429c1
+commit: https://git.buildroot.net/buildroot/commit/?id=f35c5ad48ce8a0ecc730697654f6394992ddb3a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-The current homepage URL [1] redirects to its https and ends up to
-a HTTP 404 not found error. This commit fixes the issue by replacing
-it with the new URL [2].
+Changelog: https://curl.se/ch/8.11.0.html
 
-[1] http://www.spice-space.org/page/UsbRedir
-[2] https://www.spice-space.org/usbredir.html
+Fixes CVE-2024-9681: https://curl.se/docs/CVE-2024-9681.html
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 122a5e252911b2ebd84d59d802e7b28b2a499f24)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ed4348d1c5657aae1b3f167471470f2eef82e7fa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/usbredir/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/usbredir/Config.in b/package/usbredir/Config.in
-index 6de6227e5c..46ccac122d 100644
---- a/package/usbredir/Config.in
-+++ b/package/usbredir/Config.in
-@@ -17,7 +17,7 @@ config BR2_PACKAGE_USBREDIR
- 	  Note: only the library is installed, not the utilities. Say
- 	  'y' below if you want the tools too.
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 4817ec11d6..93a0f85dee 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.10.1.tar.xz.asc
++# https://curl.se/download/curl-8.11.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  73a4b0e99596a09fa5924a4fb7e4b995a85fda0d18a2c02ab9cf134bebce04ee  curl-8.10.1.tar.xz
++sha256  db59cf0d671ca6e7f5c2c5ec177084a33a79e04c97e71cf183a5cdea235054eb  curl-8.11.0.tar.xz
+ sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 71fb6152c7..1022abac85 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	  http://www.spice-space.org/page/UsbRedir
-+	  https://www.spice-space.org/usbredir.html
- 
- if BR2_PACKAGE_USBREDIR
- 
+-LIBCURL_VERSION = 8.10.1
++LIBCURL_VERSION = 8.11.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
