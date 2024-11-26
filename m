@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DD80D3B98B
-	for <buildroot@archiver.kernel.org>; Tue, 26 Nov 2024 13:26:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0620D3B98E
+	for <buildroot@archiver.kernel.org>; Tue, 26 Nov 2024 13:26:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 31853403F6;
-	Tue, 26 Nov 2024 13:26:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D7A2404E9;
+	Tue, 26 Nov 2024 13:26:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uxtz8qOMDI8w; Tue, 26 Nov 2024 13:26:41 +0000 (UTC)
+ id BUuIEscQnXSH; Tue, 26 Nov 2024 13:26:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72A39403F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73C4940507
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72A39403F4;
-	Tue, 26 Nov 2024 13:26:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BD4A1DB3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 73C4940507;
+	Tue, 26 Nov 2024 13:26:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 01178DB3
  for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:26:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B88D985168
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4969408A8
  for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:26:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vN-1naSj1Qf3 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aqFSuOJQ70uK for <buildroot@buildroot.org>;
  Tue, 26 Nov 2024 13:26:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB22F850BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C64B1400D9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB22F850BC
+ by smtp2.osuosl.org (Postfix) with ESMTP id C64B1400D9
  for <buildroot@buildroot.org>; Tue, 26 Nov 2024 13:26:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C886286647; Tue, 26 Nov 2024 13:26:38 +0000 (UTC)
+ id AF7E48663E; Tue, 26 Nov 2024 13:26:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Nov 2024 14:12:59 +0100
+Date: Tue, 26 Nov 2024 14:04:57 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 1b73bbbf7143e33c2a407029c45d2b927a2429c1
-X-Git-Newrev: 625d8b8706c37f29d346a89d17a0644bd8a27c87
+X-Git-Oldrev: d5b713c266481ff10275fc7c6ade24bfac37dc05
+X-Git-Newrev: e21e65d49e23e0726750945dbd3588f3cfae4f54
 X-Patchwork-Hint: ignore
-Message-Id: <20241126132638.C886286647@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] {linux,
- linux-headers}: bump 4.19.x / 5.{4, 10, 15}.x / 6.{1, 6, 11}.x series
+Message-Id: <20241126132638.AF7E48663E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/boost: update
+ download url
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,66 +65,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=625d8b8706c37f29d346a89d17a0644bd8a27c87
+commit: https://git.buildroot.net/buildroot/commit/?id=e21e65d49e23e0726750945dbd3588f3cfae4f54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+boost moved its package hosting from jfrog to their own url
+provided by the C++ Alliance. According to [0] the old urls
+might cease to exist after December 2024.
+
+[0] https://lists.boost.org/Archives/boost/2024/05/256914.php
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 323567552bef83a82caa4c6f1f7f29231ae31a59)
-[Peter: drop 6.11.x bump]
+(cherry picked from commit 8d4a9afdd530c4957ce03b156bc6a0bf1b4ca507)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ package/boost/boost.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index ee1371e61e..c9fe868df7 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  55e5bcbc68d66776fc46896291f0a24844beb57817345a854d65e3d055fa423e  linux-6.10.14.tar.xz
--sha256  23616808d8c08f12815ff898f4edb4c11397a2b2843d029ee62452d21833a76d  linux-6.6.59.tar.xz
--sha256  0fd8ba827e1f1888376d88fd1d1c80d707c587c75b0f18c26530824be437ba6f  linux-6.1.115.tar.xz
-+sha256  52f9e32d5082ab94253447fd66670d0c3bb765cfcb99b0bf61d1b8eae25952ef  linux-6.6.60.tar.xz
-+sha256  17eb68336ee2a8f34378bf6089ffe8f805b978eda314c299d2a63b0603833b81  linux-6.1.116.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  fd596545a3d6d93196db3fa29e4926e60900b9c05b3b9ccdee9e35d8e376e7a9  linux-5.15.170.tar.xz
--sha256  76cc8d7f1528f87902e38697229661d0617a7d6ab86166be9f3ef9a613b17b72  linux-5.10.228.tar.xz
--sha256  77221ab9aebeac746915c755ec3b7d320f85cd219c63d9c501820fbca1e3b32b  linux-5.4.284.tar.xz
-+sha256  2953e064d8123c4c22c4fd48011378d73c8b99a3bf3d989e33f4f5c8f82f2a3b  linux-5.15.171.tar.xz
-+sha256  08a6b5e6bbff85ef017f67b722f6beec7f12fe36fc0f9043f27a91990b88cde0  linux-5.10.229.tar.xz
-+sha256  be32c37ef2f6f724fa13acf43cbc9aacfd3acef58964923dae5daa6206d3429c  linux-5.4.285.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  4e27cdf999359876a0ff489bff6ece7ba5798ff37c2289db0c9e9422a9014162  linux-4.19.322.tar.xz
-+sha256  eec9215fbac649d826fda9d3421da47aebd3c4e69e060e5106d32e309a9b6a1c  linux-4.19.323.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index f96a8a7b49..3af23b1cab 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -423,12 +423,12 @@ endchoice
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index bb73edfda6..367ec37f6c 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -6,7 +6,7 @@
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.19.322"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.284"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.228"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.170"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.115"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.59"	if BR2_KERNEL_HEADERS_6_6
-+	default "4.19.323"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.285"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.229"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.171"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.116"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.60"	if BR2_KERNEL_HEADERS_6_6
- 	default "6.10.14"	if BR2_KERNEL_HEADERS_6_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ BOOST_VERSION = 1.83.0
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+-BOOST_SITE = https://boostorg.jfrog.io/artifactory/main/release/$(BOOST_VERSION)/source
++BOOST_SITE = https://archives.boost.io/release/$(BOOST_VERSION)/source
+ BOOST_INSTALL_STAGING = YES
+ BOOST_LICENSE = BSL-1.0
+ BOOST_LICENSE_FILES = LICENSE_1_0.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
