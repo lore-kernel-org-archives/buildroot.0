@@ -4,48 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAC77E77173
-	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 13:08:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D18B5E7717F
+	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 13:08:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A479F81150;
-	Sun,  8 Dec 2024 13:08:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5BF4681E0D;
+	Sun,  8 Dec 2024 13:08:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OBGLbZSTZZEp; Sun,  8 Dec 2024 13:08:22 +0000 (UTC)
+ id ZtU7_7lVD7ok; Sun,  8 Dec 2024 13:08:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4C6581276
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0C7D81E06
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C4C6581276;
-	Sun,  8 Dec 2024 13:08:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0C7D81E06;
+	Sun,  8 Dec 2024 13:08:24 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 103F7ED2
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:07:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 48A9B979
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:07:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4D3EB60801
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E20860817
  for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:06:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tXODznI4e_2q for <buildroot@buildroot.org>;
+ id YYkbs04vzifq for <buildroot@buildroot.org>;
  Sun,  8 Dec 2024 13:06:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5042160729
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27D3A6080F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5042160729
+ by smtp3.osuosl.org (Postfix) with ESMTP id 27D3A6080F
  for <buildroot@buildroot.org>; Sun,  8 Dec 2024 13:06:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4D69386B73; Sun,  8 Dec 2024 13:06:53 +0000 (UTC)
+ id 20A788158F; Sun,  8 Dec 2024 13:06:53 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 28 Nov 2024 21:19:47 +0100
+Date: Tue, 26 Nov 2024 20:58:01 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cc77be28fc030f8583a4a7f9f724d0fc9543dba5
-X-Git-Newrev: eb3bf58290852448af09616160b4c003403802a5
+X-Git-Oldrev: c7189657c3d5f93bf72ca5a94678be337b4e205d
+X-Git-Newrev: 3b1d4450a2de85a4211d0a2562445556de294dc5
 X-Patchwork-Hint: ignore
-Message-Id: <20241208130653.4D69386B73@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libiec61850: bump to version 1.6.0
+Message-Id: <20241208130653.20A788158F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/esp-hosted: bump to version
+ 2024-11-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,48 +59,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb3bf58290852448af09616160b4c003403802a5
+commit: https://git.buildroot.net/buildroot/commit/?id=3b1d4450a2de85a4211d0a2562445556de294dc5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://github.com/mz-automation/libiec61850/blob/v1.6.0/CHANGELOG
+It builds up to Linux 6.11.
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Vincent Jardin <vjardin@free.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libiec61850/libiec61850.hash | 2 +-
- package/libiec61850/libiec61850.mk   | 2 +-
+ package/esp-hosted/esp-hosted.hash | 2 +-
+ package/esp-hosted/esp-hosted.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libiec61850/libiec61850.hash b/package/libiec61850/libiec61850.hash
-index be662bebaf..3c23682c49 100644
---- a/package/libiec61850/libiec61850.hash
-+++ b/package/libiec61850/libiec61850.hash
+diff --git a/package/esp-hosted/esp-hosted.hash b/package/esp-hosted/esp-hosted.hash
+index ea18c243d1..ac0164c38c 100644
+--- a/package/esp-hosted/esp-hosted.hash
++++ b/package/esp-hosted/esp-hosted.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  a0f396a5e2249398f2432bb9698e3aecdb9de11b28e5af68f7fb8b14bc3b2f44  libiec61850-1.5.3.tar.gz
-+sha256  0dd0adc7f13215e961d22511bcb1dadfdbdaab969f11a0d975775a6ebdff8099  libiec61850-1.6.0.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/libiec61850/libiec61850.mk b/package/libiec61850/libiec61850.mk
-index 276acce1a8..92b27dc5c2 100644
---- a/package/libiec61850/libiec61850.mk
-+++ b/package/libiec61850/libiec61850.mk
+ # Locally calculated
+-sha256  78ab4f10ddce76749d36511591a0a7bb2a982db96ac1ea1b02b5c35dab725d8c  esp-hosted-91b093365cc58214532b976dd8749f65523d1e6d.tar.gz
++sha256  7fd95a9b47c203a8bd0fdcab21f15c9d4cf1cad936f0206a94da0d932dd42206  esp-hosted-927a34f99724bb744efaf865a7c75cc1615f59a2.tar.gz
+ sha256  ed57d96d27be775b22f9571d3724ef84e0d0b8f24b805ec7f87a32189de19a9c  LICENSE
+diff --git a/package/esp-hosted/esp-hosted.mk b/package/esp-hosted/esp-hosted.mk
+index 4efefc3023..f4382e7fee 100644
+--- a/package/esp-hosted/esp-hosted.mk
++++ b/package/esp-hosted/esp-hosted.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBIEC61850_VERSION = 1.5.3
-+LIBIEC61850_VERSION = 1.6.0
- LIBIEC61850_SITE = $(call github,mz-automation,libiec61850,v$(LIBIEC61850_VERSION))
- LIBIEC61850_INSTALL_STAGING = YES
- LIBIEC61850_LICENSE = GPL-3.0+
+-ESP_HOSTED_VERSION = 91b093365cc58214532b976dd8749f65523d1e6d
++ESP_HOSTED_VERSION = 927a34f99724bb744efaf865a7c75cc1615f59a2
+ ESP_HOSTED_SITE = $(call github,espressif,esp-hosted,$(ESP_HOSTED_VERSION))
+ ESP_HOSTED_DEPENDENCIES = linux
+ ESP_HOSTED_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
