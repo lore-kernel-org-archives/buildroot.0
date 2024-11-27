@@ -4,101 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB369D609A7
-	for <buildroot@archiver.kernel.org>; Wed, 27 Nov 2024 07:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 437C6D6D23C
+	for <buildroot@archiver.kernel.org>; Wed, 27 Nov 2024 21:04:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1BD5C60598;
-	Wed, 27 Nov 2024 07:54:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9E6EE6119F;
+	Wed, 27 Nov 2024 21:04:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AZSwovPaz6cE; Wed, 27 Nov 2024 07:54:45 +0000 (UTC)
+ id Fjwk2WoUHZb3; Wed, 27 Nov 2024 21:04:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E60E606E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7E9B61173
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E60E606E7;
-	Wed, 27 Nov 2024 07:54:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7E9B61173;
+	Wed, 27 Nov 2024 21:04:30 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 24312DB3
- for <buildroot@buildroot.org>; Wed, 27 Nov 2024 07:54:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7081E1DA8
+ for <buildroot@buildroot.org>; Wed, 27 Nov 2024 21:04:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 120AC80B12
- for <buildroot@buildroot.org>; Wed, 27 Nov 2024 07:54:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 51BF68502D
+ for <buildroot@buildroot.org>; Wed, 27 Nov 2024 21:04:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X09CIQMeLqbf for <buildroot@buildroot.org>;
- Wed, 27 Nov 2024 07:54:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
- envelope-from=rgallaispou@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2DCE880AF7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DCE880AF7
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2DCE880AF7
- for <buildroot@buildroot.org>; Wed, 27 Nov 2024 07:54:41 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-3823f1ed492so248899f8f.1
- for <buildroot@buildroot.org>; Tue, 26 Nov 2024 23:54:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1732694079; x=1733298879;
- h=content-transfer-encoding:in-reply-to:content-language:references
- :cc:to:from:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=fe6OdXaDGtnVPh18vJidx9PvE/I8m+tEOO8cMe2ofec=;
- b=aCDnFhY7nKnUj/8JMhF9ifjvpkjBntR+WUw+x7mfmPXDns4abj8dB18hI7J1IE1OoP
- biIMlHoBvJtkYXPe/lWULQMP4+Xde40OIuGqSsQJqqO+gvtqrzIy4QjNShJXRnftAVz5
- EsmCzjMLGWtZtkO0zF88hetrIpA6HhGQoFMerZdP1R0zOi/3XH/1KAObfF1SVSlL5Jzk
- Y463dcuVkFGsF++TrV5cO/OWJ6xWlrBX6j0BlkWH7ehEXKUaAszOoSKOPaDp5zKsgRq2
- lDjZIa+Dv/i9PAGJuhoWGviyxrgfcFkKaFk+oOKyA8XBwAJR+iXCguGsP20L2GC1Lh7P
- pNdA==
-X-Gm-Message-State: AOJu0YzvVvsWGYrkojt0j3lGtZJuhLitRCpLFYny0jbA1aIFrah0kGgm
- Swluvh9BhkV9UOshChPO4siPWcma3axJXVDJo+uw1AMKt5eSFg8IpaAM/Q==
-X-Gm-Gg: ASbGncveL+gRNLfsK1VnE2z6BbasKr2XbmsTMxSnWYoNAt3knNYmUOs9xQ2WeJ4tlw4
- S8lBrFuOEOyzOag+cuAuGcbYPEhIrcxYauXxjPw1LLH+R2UZDI73MGgi7PMIvi8J+xnjF7BAgAq
- 4MMJs5ZP0EztDyvtJMIzuyEFvJGYbw0XYYmA5MGEdcALN6xfO2XRXW8TbgDwTgpLZfujsx+cxRw
- 6m+xbChih6D3IIPLFu/c26Fso2BLxtjo1k6EFOFzx0vgUDJsTAMi6fvSeXM8WDVHGp3JeycmMHq
- YStl/FAXsXdO7Fu70sQ=
-X-Google-Smtp-Source: AGHT+IF7QlsO2Yu9Fnk/F9dTbeUyj/TU2dCOJ3F18KCpeilsXGLT3bJ+Zmop9WXl/zczJuyHPLusGA==
-X-Received: by 2002:a05:6000:1867:b0:382:45db:6a1e with SMTP id
- ffacd0b85a97d-385c682814amr1635767f8f.14.1732694078804; 
- Tue, 26 Nov 2024 23:54:38 -0800 (PST)
-Received: from ?IPV6:2001:861:3385:e20:6384:4cf:52c5:3194?
- ([2001:861:3385:e20:6384:4cf:52c5:3194])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3825fafe831sm15693715f8f.40.2024.11.26.23.54.38
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 26 Nov 2024 23:54:38 -0800 (PST)
-Message-ID: <14f51db1-9c76-44c3-8ec9-6cec88ba21f1@gmail.com>
-Date: Wed, 27 Nov 2024 08:54:38 +0100
+ id g3IKTDi72VlY for <buildroot@buildroot.org>;
+ Wed, 27 Nov 2024 21:04:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F2A6D85008
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2A6D85008
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F2A6D85008
+ for <buildroot@buildroot.org>; Wed, 27 Nov 2024 21:04:26 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 8459D19F5A7;
+ Wed, 27 Nov 2024 22:04:10 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:42194])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 27 Nov 2024 22:04:10 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: =?UTF-8?Q?Rapha=C3=ABl_Gallais-Pou?= <rgallaispou@gmail.com>
-To: buildroot@buildroot.org
-References: <20241114-master-v3-1-8895d5a60a0f@gmail.com>
-Content-Language: en-US, fr
-In-Reply-To: <20241114-master-v3-1-8895d5a60a0f@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1732694079; x=1733298879; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:references
- :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
- :cc:subject:date:message-id:reply-to;
- bh=fe6OdXaDGtnVPh18vJidx9PvE/I8m+tEOO8cMe2ofec=;
- b=hwrGAhEYw0H0IP5avgYP3U9A3Dww1o5SwNaAos1uIkzvXxzjDK/EBS09LS1FslgZF4
- 7fY7WvXF3bPnaYrjqOLzJssJirlQjLVWuSIU+tv9xc1HzTT59hilLBI7y71l7/89S5Zy
- frnRr+QzUfq8Nq2xcnhOZqJAo3Q9eDuJJaoTteHpekg7/8HBVhC0GG1UNDYMrtmFOs7O
- ik9NJPtvxpunVKH4+AbRX6mcFQGQhwJX2fUkqz6DXvzNlDPiqglALG5JJvX+zj635ecs
- u56ubWWyVZaw3CwOK1PayODaA4z9AYZhQSPmZxXVyrJ+4v4v7rsl0UpaCOdIK2PH+7Rh
- AqNw==
+Date: Wed, 27 Nov 2024 22:04:10 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Alexey Lukyanchuk <skif@skif-web.ru>, Bernd Kuhls <bernd@kuhls.net>, Roy
+ Kollen Svendsen <roykollensvendsen@gmail.com>, James Hilliard
+ <james.hilliard1@gmail.com>, Julien Corjon <corjon.j@ecagroup.com>, Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>, Giulio Benetti
+ <giulio.benetti@benettiengineering.com>, Jesse Van Gavere
+ <jesseevg@gmail.com>, Nathaniel Roach <nroach44@gmail.com>
+In-Reply-To: <20241127044301.16943-1-fido_max@inbox.ru>
+References: <20241127044301.16943-1-fido_max@inbox.ru>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <4f9de5d40e48bae0be292eea582b4646@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1732741463;
+ bh=/yjb4qa4Yjl9lC+BFYPYoxeXCmzC6E6j+HrWV7GXK6w=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=lR7vb1Ov9ZNQuQrTGsi3GDRJphzv832JKmecB1qU5rTPeRYLgrT8PTMps774ZlCwI
+ UORQlO7ZtFhW8QDgwxf2e/IyQEFFohvjuGr9xTMRUxN4EfHvjLDIVZ6vCdqxTP76wJ
+ DIJaCbTIbM0Ek8WmINAqEdJ37KbEwUuUBz9Xaxi/I1u+z0Y03NmPRnbKJLu+NdFb4y
+ 3MrzkQlHsOoEky5d5l9XU/Pu6XyHrIIo7ghHAt9wkcnT6XzMjPsM4ffntf40/vBma/
+ TlAagTV5Cgen+ejGSC2MK46MKHGTiitmop7ZICJCXro+JPriilrfB0xPlacxbi5AxI
+ tSfnI6vGNbwtQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=hwrGAhEY
-Subject: Re: [Buildroot] [PATCH v3] configs/stm32mp135f-dk: new defconfig
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=lR7vb1Ov
+Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: bump version to 17.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,255 +89,582 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marleen Vos <marleen.vos@mind.be>, Bartosz Bilas <b.bilas@grinn-global.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CkhpLAoKPiBBZGQgbmV3IGRlZmNvbmZpZyBmb3IgU1RNaWNyb2VsZWN0cm9uaWNzIGJvYXJkIFNU
-TTMyTVAxMzVGLURLLgo+IAo+IFNUTTMyTVAxMzVGLURLIGZlYXR1cmVzIGNhbiBiZSBmb3VuZCBo
-ZXJlOgo+ICAgIGh0dHBzOi8vd3d3LnN0LmNvbS9lbi9ldmFsdWF0aW9uLXRvb2xzL3N0bTMybXAx
-MzVmLWRrLmh0bWwKPiAKPiBTaWduZWQtb2ZmLWJ5OiBSYXBoYWVsIEdhbGxhaXMtUG91IDxyZ2Fs
-bGFpc3BvdUBnbWFpbC5jb20+Cj4gLS0tCgpKdXN0IGEgZ2VudGxlIHBpbmcgb24gdGhpcyBvbmUu
-IDopCgpJIGFsc28gYWRkZWQgQXJub3V0LCB3aG9tIEkgaGFkIGZvcmdvdHRlbiB0byBpbmNsdWRl
-IGluIHJlY2lwaWVudHMgbGlzdC4KClJlZ2FyZHMsClJhcGhhw6tsCj4gVGhpcyBjb21taXQgc2Vy
-aWVzIGlzIGEgZmlyc3QgYXR0ZW1wdCB0byBpbXByb3ZlIHRoZSBvcmdhbml6YXRpb24gYW5kCj4g
-ZnVuY3Rpb25hbGl0eSBvZiB0aGUgU1RNMzIgcGxhdGZvcm0gaW4gQnVpbGRyb290LiBJdCBjb21l
-cyB3aXRoIHR3bwo+IHBhdGNoZXM6Cj4gCj4gMS4gUmVvcmRlciBjb21tb24gU1QgZm9sZGVyOgo+
-ICAgICAtIFJlbmFtZSB0aGUgY29tbW9uIFNUIGZvbGRlciBmcm9tIHN0bTMybXAxNTcgdG8gc3Rt
-MzJtcDF4eC4KPiAgICAgLSBVcGRhdGUgcmVmZXJlbmNlcyBhbmQgcGF0aHMgaW4gcmVsYXRlZCBj
-b25maWd1cmF0aW9uIGZpbGVzLgo+ICAgICAtIFByZXBhcmUgdG8gcmVjZWl2ZSBuZXcgc3RtMzJt
-cDEzIGJvYXJkLgo+IAo+IDIuIEFkZCBuZXcgZGVmY29uZmlnIGZvciBTVE0zMk1QMTM6Cj4gICAg
-IC0gSW50cm9kdWNlIGEgbmV3IGRlZmNvbmZpZyBmaWxlIChzdG0zMm1wMTNfZGspLgo+ICAgICAt
-IEJvb3QgZm9sbG93aW5nIHRoZSBURi1BL09QLVRFRS9VLUJvb3QvTGludXggY2hhaW4uCj4gICAg
-IHYxOgo+ICAgICAtIEluY2x1ZGUgZ2VuZXJpYyAibXVsdGlfdjciIGRlZmNvbmZpZyBmb3IgTGlu
-dXggY29uZmlndXJhdGlvbi4KPiAgICAgdjI6Cj4gICAgIC0gSW5jbHVkZSBhIG1pbmltYWxpc3Rp
-YyBkZWZjb25maWcgZm9yIExpbnV4IGNvbmZpZ3VyYXRpb24uCj4gCj4gU2luY2UgdGhpcyBpcyBh
-IFJGQywgcGxlYXNlIGZlZWwgZnJlZSB0byBkaXNjdXNzIGhvdyB0aG9zZSBjaGFuZ2VzIGNhbgo+
-IGJlIGltcHJvdmVkLgo+IC0tLQo+IENoYW5nZXMgaW4gdjM6Cj4gLSBDaGFuZ2UgTGludXggY29u
-ZmlnIGFzIHBlciBkaXNjdXNzZWQgaGVyZQo+IGh0dHBzOi8vbGlzdHMuYnVzeWJveC5uZXQvcGlw
-ZXJtYWlsL2J1aWxkcm9vdC8yMDI0LU5vdmVtYmVyLzc2NzY1MS5odG1sCj4gLSBBcyBpbnRyb2R1
-Y2VkIGluIGVkYzBhNmIxYTQsIHJlbW92ZSBjb21tZW50cyBpbiBkZWZjb25maWcuCj4gLSBVc2Ug
-TGludXggc3RhYmxlIHY2LjExLjYgdmVyc2lvbiBpbnN0ZWFkIG9mIG1haW5saW5lLgo+IC0gVXNl
-IEJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfTEFURVNUX0xUU18yXzEwX1ZFUlNJT04K
-PiAtIFJlbW92ZSAnRT0wJyBvcHRpb24gaW4gVEYtQSBidWlsZCBjb21tYW5kIGxpbmUuCj4gLSBV
-c2UgR0lUIFVSTCBhbmQgdGFnIHZlcnNpb24gbWV0aG9kIGluc3RlYWQgb2YgdGFyYmFsbCBmb3Ig
-T1AtVEVFCj4gLSBDaGFuZ2UgTGludXggJiBPUC1URUUgaGFzaGVzIGFjY29yZGluZ2x5Cj4gLSBM
-aW5rIHRvIHYyOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjQxMDE3LW1hc3Rlci12Mi0x
-LTdjZjhkNDJkNWQ4MUBnbWFpbC5jb20KPiAKPiBDaGFuZ2VzIGluIHYyOgo+IC0gUmVtb3ZlZCBt
-ZXJnZWQgcGF0Y2g6Cj4gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290
-Ly0vY29tbWl0L2YyMWRiMmJkODNiZjMwNzNhNTBiOGJjZDc5YWY2ZTdhZWQ2ZmIwMDAKPiAtIElu
-Y2x1ZGUgYSBtaW5pbWFsaXN0aWMgZGVmY29uZmlnIGZvciBMaW51eCBjb25maWd1cmF0aW9uCj4g
-LSBSZW1vdmVkIEJSMl9QQUNLQUdFX0hPU1RfQk1BUF9UT09MUyBvcHRpb24uCj4gLSBNb3ZlIEJS
-Ml9MSU5VWF9LRVJORUxfTkVFRFNfSE9TVF9PUEVOU1NMIHRvIHRoZSBhY2NvcmRpbmcgc2VjdGlv
-bi4KPiAtIEhhcmRjb2RlIE9QLVRFRSB2ZXJzaW9uIHVzaW5nIHRhcmJhbGwgbGluay4KPiAtIFVz
-ZSBCUjJfR0xPQkFMX1BBVENIX0RJUiBhbmQgYWRkIE9QLVRFRSBoYXNoIHRvIGNvbW1vbiBmb2xk
-ZXIuCj4gLSBMaW5rIHRvIHYxOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjQwODE0LW1h
-c3Rlci12MS0wLTc4MzRmM2RlZGRjYkBnbWFpbC5jb20KPiAtLS0KPiAgIC4uLi9jb21tb24vc3Rt
-MzJtcDF4eC9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2ggICAgIHwgICAyICstCj4gICAuLi4vc3Rt
-MzJtcDF4eC9wYXRjaGVzL29wdGVlLW9zL29wdGVlLW9zLmhhc2ggICAgICB8ICAgMiArCj4gICAu
-Li4vc3RtaWNyb2VsZWN0cm9uaWNzL3N0bTMybXAxMzVmLWRrL2xpbnV4LmNvbmZpZyB8IDE5MCAr
-KysrKysrKysrKysrKysrKysrKysKPiAgIC4uLi9vdmVybGF5L2Jvb3QvZXh0bGludXgvZXh0bGlu
-dXguY29uZiAgICAgICAgICAgIHwgICA0ICsKPiAgIGJvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9z
-dG0zMm1wMTM1Zi1kay9yZWFkbWUudHh0IHwgIDM4ICsrKysrCj4gICBjb25maWdzL3N0bTMybXAx
-MzVmX2RrX2RlZmNvbmZpZyAgICAgICAgICAgICAgICAgICB8ICA1MCArKysrKysKPiAgIDYgZmls
-ZXMgY2hhbmdlZCwgMjg1IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0t
-Z2l0IGEvYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL2NvbW1vbi9zdG0zMm1wMXh4L3BhdGNoZXMv
-bGludXgvbGludXguaGFzaCBiL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9jb21tb24vc3RtMzJt
-cDF4eC9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2gKPiBpbmRleCA5NWJkMjNjOGQwMjJhYjVkNDli
-NDk3OWI1ZGE0N2JiZGFmMTA1Nzk4Li40MmQwMmM5Zjc4MzZjY2FhY2Y4MmFjZmNiYzUyNDQwMmNl
-YTljOWEzIDEwMDY0NAo+IC0tLSBhL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9jb21tb24vc3Rt
-MzJtcDF4eC9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2gKPiArKysgYi9ib2FyZC9zdG1pY3JvZWxl
-Y3Ryb25pY3MvY29tbW9uL3N0bTMybXAxeHgvcGF0Y2hlcy9saW51eC9saW51eC5oYXNoCj4gQEAg
-LTEsMiArMSwyIEBACj4gICAjIExvY2FsbHkgY2FsY3VsYXRlZAo+IC1zaGEyNTYgIGYwNDgyNjdi
-N2I4ODMxNmM5Y2E3MDhjNjhkMTVhOWFlODAyZGNmYzk0M2MzMTg4YzEyNzNlYjk1OGM0MzMyODEg
-IGxpbnV4LTYuOS44LnRhci54ego+ICtzaGEyNTYgIGM5NTRmNjAxOTcwMDhmMWUxZjMyYTFlNzcy
-OTM5MDNjZjM4MDFkMjU0M2VjNGJmNTIxZjU2NTFlYjdmMTMzY2UgIGxpbnV4LTYuMTEuNi50YXIu
-eHoKPiBkaWZmIC0tZ2l0IGEvYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL2NvbW1vbi9zdG0zMm1w
-MXh4L3BhdGNoZXMvb3B0ZWUtb3Mvb3B0ZWUtb3MuaGFzaCBiL2JvYXJkL3N0bWljcm9lbGVjdHJv
-bmljcy9jb21tb24vc3RtMzJtcDF4eC9wYXRjaGVzL29wdGVlLW9zL29wdGVlLW9zLmhhc2gKPiBu
-ZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
-MDAwMDAwMDAwMDAuLjczZDRlMmM0ZGFmYjFhNGE5NGZhMjZkNjEwMTdlOTJmYWE3ZDEwMWUKPiAt
-LS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL2NvbW1vbi9zdG0z
-Mm1wMXh4L3BhdGNoZXMvb3B0ZWUtb3Mvb3B0ZWUtb3MuaGFzaAo+IEBAIC0wLDAgKzEsMiBAQAo+
-ICsjIExvY2FsbHkgY2FsY3VsYXRlZAo+ICtzaGEyNTYgIDAzYjkxZmQ3ZGZkZjg5MGUzOTY2Zjkz
-MWYwNzYzNGEyYjZhMjkxMWJiZWUyYTAyZWNjNDhkNGE0MGNmNmE5YjggIG9wdGVlLW9zLTQuMy4w
-LWdpdDQudGFyLmd6Cj4gZGlmZiAtLWdpdCBhL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0z
-Mm1wMTM1Zi1kay9saW51eC5jb25maWcgYi9ib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJt
-cDEzNWYtZGsvbGludXguY29uZmlnCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAw
-MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwLi4yNWY1NzA4NDZhZjE5YmFmODdj
-YWE2OWMwY2ZiNmZiNDE1ZjAwNTM3Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2JvYXJkL3N0bWlj
-cm9lbGVjdHJvbmljcy9zdG0zMm1wMTM1Zi1kay9saW51eC5jb25maWcKPiBAQCAtMCwwICsxLDE5
-MCBAQAo+ICtDT05GSUdfU1lTVklQQz15Cj4gK0NPTkZJR19QT1NJWF9NUVVFVUU9eQo+ICtDT05G
-SUdfVVNFTElCPXkKPiArQ09ORklHX05PX0haPXkKPiArQ09ORklHX0hJR0hfUkVTX1RJTUVSUz15
-Cj4gK0NPTkZJR19QUkVFTVBUPXkKPiArQ09ORklHX0lLQ09ORklHPXkKPiArQ09ORklHX0lLQ09O
-RklHX1BST0M9eQo+ICtDT05GSUdfTE9HX0JVRl9TSElGVD0xNgo+ICtDT05GSUdfQkxLX0RFVl9J
-TklUUkQ9eQo+ICtDT05GSUdfQVJDSF9TVE0zMj15Cj4gK0NPTkZJR19BUk1fVEhVTUJFRT15Cj4g
-KyMgQ09ORklHX0NBQ0hFX0wyWDAgaXMgbm90IHNldAo+ICtDT05GSUdfQVJNX0VSUkFUQV80MzA5
-NzM9eQo+ICtDT05GSUdfQVJNX0VSUkFUQV83MjA3ODk9eQo+ICtDT05GSUdfQVJNX0VSUkFUQV83
-NTQzMjI9eQo+ICtDT05GSUdfQVJNX0VSUkFUQV83NTQzMjc9eQo+ICtDT05GSUdfQVJNX0VSUkFU
-QV83NjQzNjk9eQo+ICtDT05GSUdfQVJNX0VSUkFUQV83NzU0MjA9eQo+ICtDT05GSUdfQVJNX0VS
-UkFUQV83OTgxODE9eQo+ICtDT05GSUdfU01QPXkKPiArQ09ORklHX01DUE09eQo+ICtDT05GSUdf
-SElHSE1FTT15Cj4gK0NPTkZJR19GT1JDRV9NQVhfWk9ORU9SREVSPTEyCj4gK0NPTkZJR19TRUND
-T01QPXkKPiArIyBDT05GSUdfQVRBR1MgaXMgbm90IHNldAo+ICtDT05GSUdfWkJPT1RfUk9NX1RF
-WFQ9MHgwCj4gK0NPTkZJR19aQk9PVF9ST01fQlNTPTB4MAo+ICtDT05GSUdfQVJNX0FQUEVOREVE
-X0RUQj15Cj4gK0NPTkZJR19BUk1fQVRBR19EVEJfQ09NUEFUPXkKPiArQ09ORklHX1ZGUD15Cj4g
-K0NPTkZJR19ORU9OPXkKPiArQ09ORklHX0tFUk5FTF9NT0RFX05FT049eQo+ICtDT05GSUdfTU9E
-VUxFUz15Cj4gK0NPTkZJR19NT0RVTEVfVU5MT0FEPXkKPiArQ09ORklHX1BBUlRJVElPTl9BRFZB
-TkNFRD15Cj4gK0NPTkZJR19DTURMSU5FX1BBUlRJVElPTj15Cj4gK0NPTkZJR19DTUE9eQo+ICtD
-T05GSUdfTkVUPXkKPiArQ09ORklHX1BBQ0tFVD15Cj4gK0NPTkZJR19VTklYPXkKPiArQ09ORklH
-X0lORVQ9eQo+ICtDT05GSUdfQ0FOPXkKPiArQ09ORklHX0NBTl9NX0NBTj15Cj4gK0NPTkZJR19E
-RVZUTVBGUz15Cj4gK0NPTkZJR19ERVZUTVBGU19NT1VOVD15Cj4gK0NPTkZJR19ETUFfQ01BPXkK
-PiArQ09ORklHX0NNQV9TSVpFX01CWVRFUz0xMjgKPiArQ09ORklHX1NJTVBMRV9QTV9CVVM9eQo+
-ICtDT05GSUdfQVJNX1NDTUlfUFJPVE9DT0w9eQo+ICtDT05GSUdfTVREPXkKPiArQ09ORklHX01U
-RF9DTURMSU5FX1BBUlRTPXkKPiArQ09ORklHX01URF9CTE9DSz15Cj4gK0NPTkZJR19NVERfTTI1
-UDgwPXkKPiArQ09ORklHX01URF9OQU5EPXkKPiArQ09ORklHX01URF9OQU5EX1NUTTMyX0ZNQzI9
-eQo+ICtDT05GSUdfTVREX1NQSV9OT1I9eQo+ICsjIENPTkZJR19NVERfU1BJX05PUl9VU0VfNEtf
-U0VDVE9SUyBpcyBub3Qgc2V0Cj4gK0NPTkZJR19NVERfVUJJPXkKPiArQ09ORklHX0JMS19ERVZf
-TE9PUD15Cj4gK0NPTkZJR19CTEtfREVWX1JBTT15Cj4gK0NPTkZJR19CTEtfREVWX1JBTV9TSVpF
-PTY1NTM2Cj4gK0NPTkZJR19TUkFNPXkKPiArQ09ORklHX0VFUFJPTV9BVDI0PXkKPiArQ09ORklH
-X05FVERFVklDRVM9eQo+ICtDT05GSUdfVklSVElPX05FVD15Cj4gK0NPTkZJR19LUzg4NTE9eQo+
-ICtDT05GSUdfU01TQzkxMVg9eQo+ICtDT05GSUdfU1RNTUFDX0VUSD15Cj4gK0NPTkZJR19EV01B
-Q19EV0NfUU9TX0VUSD15Cj4gK0NPTkZJR19NRElPX0JJVEJBTkc9eQo+ICtDT05GSUdfSU5QVVRf
-Sk9ZREVWPXkKPiArQ09ORklHX0lOUFVUX0VWREVWPXkKPiArQ09ORklHX0lOUFVUX1RPVUNIU0NS
-RUVOPXkKPiArQ09ORklHX1RPVUNIU0NSRUVOX0VEVF9GVDVYMDY9eQo+ICtDT05GSUdfSU5QVVRf
-TUlTQz15Cj4gK0NPTkZJR19JTlBVVF9TVFBNSUMxX09OS0VZPXkKPiArQ09ORklHX1NFUklBTF9T
-VE0zMj15Cj4gK0NPTkZJR19TRVJJQUxfU1RNMzJfQ09OU09MRT15Cj4gK0NPTkZJR19TRVJJQUxf
-REVWX0JVUz15Cj4gK0NPTkZJR19IV19SQU5ET009eQo+ICtDT05GSUdfSTJDX0NIQVJERVY9eQo+
-ICtDT05GSUdfSTJDX01VWD15Cj4gK0NPTkZJR19JMkNfU1RNMzJGNz15Cj4gK0NPTkZJR19TUEk9
-eQo+ICtDT05GSUdfU1BJX1NUTTMyPXkKPiArQ09ORklHX1NQSV9TVE0zMl9RU1BJPXkKPiArQ09O
-RklHX1BJTkNUUkxfTUNQMjNTMDg9eQo+ICtDT05GSUdfUElOQ1RSTF9TSU5HTEU9eQo+ICtDT05G
-SUdfUElOQ1RSTF9TVE1GWD15Cj4gK0NPTkZJR19QT1dFUl9SRVNFVD15Cj4gK0NPTkZJR19QT1dF
-Ul9SRVNFVF9HUElPPXkKPiArQ09ORklHX1BPV0VSX1JFU0VUX0dQSU9fUkVTVEFSVD15Cj4gK0NP
-TkZJR19QT1dFUl9SRVNFVF9TWVNDT049eQo+ICtDT05GSUdfUE9XRVJfUkVTRVRfU1lTQ09OX1BP
-V0VST0ZGPXkKPiArQ09ORklHX1NZU0NPTl9SRUJPT1RfTU9ERT15Cj4gK0NPTkZJR19XQVRDSERP
-Rz15Cj4gK0NPTkZJR19TVFBNSUMxX1dBVENIRE9HPXkKPiArQ09ORklHX01GRF9TVE0zMl9MUFRJ
-TUVSPXkKPiArQ09ORklHX01GRF9TVFBNSUMxPXkKPiArQ09ORklHX1JFR1VMQVRPUj15Cj4gK0NP
-TkZJR19SRUdVTEFUT1JfRklYRURfVk9MVEFHRT15Cj4gK0NPTkZJR19SRUdVTEFUT1JfQVJNX1ND
-TUk9eQo+ICtDT05GSUdfUkVHVUxBVE9SX1NUTTMyX0JPT1NURVI9eQo+ICtDT05GSUdfUkVHVUxB
-VE9SX1NUTTMyX1ZSRUZCVUY9eQo+ICtDT05GSUdfUkVHVUxBVE9SX1NUTTMyX1BXUj15Cj4gK0NP
-TkZJR19SRUdVTEFUT1JfU1RQTUlDMT15Cj4gK0NPTkZJR19EUk09eQo+ICtDT05GSUdfRFJNX1NU
-TT15Cj4gK0NPTkZJR19EUk1fU1RNX0RTST15Cj4gK0NPTkZJR19EUk1fUEFORUxfT1JJU0VURUNI
-X09UTTgwMDlBPXkKPiArQ09ORklHX0RSTV9TSUk5MDJYPXkKPiArQ09ORklHX0JBQ0tMSUdIVF9M
-Q0RfU1VQUE9SVD15Cj4gKyMgQ09ORklHX0xDRF9DTEFTU19ERVZJQ0UgaXMgbm90IHNldAo+ICtD
-T05GSUdfQkFDS0xJR0hUX0NMQVNTX0RFVklDRT15Cj4gKyMgQ09ORklHX0JBQ0tMSUdIVF9HRU5F
-UklDIGlzIG5vdCBzZXQKPiArQ09ORklHX0ZSQU1FQlVGRkVSX0NPTlNPTEVfUk9UQVRJT049eQo+
-ICtDT05GSUdfU09VTkQ9eQo+ICtDT05GSUdfU05EPXkKPiArQ09ORklHX1NORF9EWU5BTUlDX01J
-Tk9SUz15Cj4gK0NPTkZJR19VU0I9bQo+ICtDT05GSUdfVVNCX09URz15Cj4gK0NPTkZJR19VU0Jf
-WEhDSV9IQ0Q9bQo+ICtDT05GSUdfVVNCX1hIQ0lfUExBVEZPUk09bQo+ICtDT05GSUdfVVNCX0VI
-Q0lfSENEPW0KPiArQ09ORklHX1VTQl9FSENJX0hDRF9QTEFURk9STT1tCj4gK0NPTkZJR19VU0Jf
-T0hDSV9IQ0Q9bQo+ICtDT05GSUdfVVNCX09IQ0lfSENEX1BMQVRGT1JNPW0KPiArQ09ORklHX1VT
-Ql9EV0MyPW0KPiArQ09ORklHX1VTQl9DSElQSURFQT1tCj4gK0NPTkZJR19VU0JfQ0hJUElERUFf
-SE9TVD15Cj4gK0NPTkZJR19VU0JfSVNQMTc2MD1tCj4gK0NPTkZJR19VU0JfSFNJQ19VU0IzNTAz
-PW0KPiArQ09ORklHX1VTQl9HUElPX1ZCVVM9eQo+ICtDT05GSUdfVVNCX0lTUDEzMDE9bQo+ICtD
-T05GSUdfVVNCX1VMUEk9eQo+ICtDT05GSUdfVFlQRUM9eQo+ICtDT05GSUdfVFlQRUNfU1RVU0I9
-eQo+ICtDT05GSUdfTU1DPXkKPiArQ09ORklHX01NQ19CTE9DS19NSU5PUlM9MTYKPiArQ09ORklH
-X01NQ19BUk1NTUNJPXkKPiArQ09ORklHX01NQ19TREhDST15Cj4gK0NPTkZJR19NTUNfU0RIQ0lf
-UExURk09eQo+ICtDT05GSUdfTU1DX0RXPXkKPiArQ09ORklHX05FV19MRURTPXkKPiArQ09ORklH
-X0xFRFNfQ0xBU1M9eQo+ICtDT05GSUdfTEVEU19HUElPPXkKPiArQ09ORklHX0xFRFNfUFdNPXkK
-PiArQ09ORklHX1JUQ19DTEFTUz15Cj4gK0NPTkZJR19SVENfRFJWX1NUTTMyPXkKPiArQ09ORklH
-X0RNQURFVklDRVM9eQo+ICtDT05GSUdfU1RNMzJfRE1BPXkKPiArQ09ORklHX1NUTTMyX0RNQU1V
-WD15Cj4gK0NPTkZJR19TVE0zMl9NRE1BPXkKPiArQ09ORklHX0NPTU1PTl9DTEtfU0NNST15Cj4g
-K0NPTkZJR19IV1NQSU5MT0NLPXkKPiArQ09ORklHX0hXU1BJTkxPQ0tfU1RNMzI9eQo+ICtDT05G
-SUdfU1RNMzJfSVBDQz15Cj4gK0NPTkZJR19SRU1PVEVQUk9DPXkKPiArQ09ORklHX1NUTTMyX1JQ
-Uk9DPXkKPiArQ09ORklHX1JQTVNHX1ZJUlRJTz15Cj4gK0NPTkZJR19SUE1TR19UVFk9eQo+ICtD
-T05GSUdfSUlPPXkKPiArQ09ORklHX0lJT19TV19UUklHR0VSPXkKPiArQ09ORklHX1NEX0FEQ19N
-T0RVTEFUT1I9eQo+ICtDT05GSUdfU1RNMzJfQURDX0NPUkU9eQo+ICtDT05GSUdfU1RNMzJfQURD
-PXkKPiArQ09ORklHX1NUTTMyX0FEQ19URU1QPXkKPiArQ09ORklHX1NUTTMyX0RGU0RNX0FEQz15
-Cj4gK0NPTkZJR19TVE0zMl9MUFRJTUVSX0NOVD15Cj4gK0NPTkZJR19TVE0zMl9EQUM9eQo+ICtD
-T05GSUdfSUlPX0hSVElNRVJfVFJJR0dFUj15Cj4gK0NPTkZJR19JSU9fU1RNMzJfTFBUSU1FUl9U
-UklHR0VSPXkKPiArQ09ORklHX1BXTT15Cj4gK0NPTkZJR19QV01fU1RNMzI9eQo+ICtDT05GSUdf
-UFdNX1NUTTMyX0xQPXkKPiArQ09ORklHX1JFU0VUX1NDTUk9eQo+ICtDT05GSUdfUEhZX1NUTTMy
-X1VTQlBIWUM9eQo+ICtDT05GSUdfTlZNRU1fU1RNMzJfUk9NRU09eQo+ICtDT05GSUdfVEVFPXkK
-PiArQ09ORklHX09QVEVFPXkKPiArQ09ORklHX0NPVU5URVI9eQo+ICtDT05GSUdfU1RNMzJfTFBU
-SU1FUl9DTlQ9eQo+ICtDT05GSUdfU1RNMzJfVElNRVJfQ05UPXkKPiArQ09ORklHX0VYVDRfRlM9
-eQo+ICtDT05GSUdfTVNET1NfRlM9eQo+ICtDT05GSUdfVkZBVF9GUz15Cj4gK0NPTkZJR19UTVBG
-Uz15Cj4gK0NPTkZJR19UTVBGU19QT1NJWF9BQ0w9eQo+ICtDT05GSUdfUFJJTlRLX1RJTUU9eQo+
-IGRpZmYgLS1naXQgYS9ib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJtcDEzNWYtZGsvb3Zl
-cmxheS9ib290L2V4dGxpbnV4L2V4dGxpbnV4LmNvbmYgYi9ib2FyZC9zdG1pY3JvZWxlY3Ryb25p
-Y3Mvc3RtMzJtcDEzNWYtZGsvb3ZlcmxheS9ib290L2V4dGxpbnV4L2V4dGxpbnV4LmNvbmYKPiBu
-ZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
-MDAwMDAwMDAwMDAuLjBjYzQ5ZDZhNTYwYTkwODQ2ZWFkOTkzZmYwMmQzOGNjN2NhZGM3ZTcKPiAt
-LS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL3N0bTMybXAxMzVm
-LWRrL292ZXJsYXkvYm9vdC9leHRsaW51eC9leHRsaW51eC5jb25mCj4gQEAgLTAsMCArMSw0IEBA
-Cj4gK2xhYmVsIHN0bTMybXAxMzVmLWRrLWJ1aWxkcm9vdAo+ICsgIGtlcm5lbCAvYm9vdC96SW1h
-Z2UKPiArICBkZXZpY2V0cmVlIC9ib290L3N0bTMybXAxMzVmLWRrLmR0Ygo+ICsgIGFwcGVuZCBy
-b290PS9kZXYvbW1jYmxrMHA0IHJvb3R3YWl0Cj4gZGlmZiAtLWdpdCBhL2JvYXJkL3N0bWljcm9l
-bGVjdHJvbmljcy9zdG0zMm1wMTM1Zi1kay9yZWFkbWUudHh0IGIvYm9hcmQvc3RtaWNyb2VsZWN0
-cm9uaWNzL3N0bTMybXAxMzVmLWRrL3JlYWRtZS50eHQKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+
-IGluZGV4IDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAuLjQ2ODc5Zjg4
-Y2YwMGQ1MDE5NjYxODE2MjRjYTlhMzE4ZDJjZTk0ZDIKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIv
-Ym9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL3N0bTMybXAxMzVmLWRrL3JlYWRtZS50eHQKPiBAQCAt
-MCwwICsxLDM4IEBACj4gK1NUTTMyTVAxMzVGIERpc2NvdmVyeSBLaXQKPiArCj4gK0ludHJvCj4g
-Kz09PT09Cj4gKwo+ICtUaGlzIGNvbmZpZ3VyYXRpb24gc3VwcG9ydHMgdGhlIFNUTTMyTVAxMzVG
-IERpc2NvdmVyeSBLaXQgKERLKQo+ICtwbGF0Zm9ybToKPiArCj4gKyAgaHR0cHM6Ly93d3cuc3Qu
-Y29tL2VuL2V2YWx1YXRpb24tdG9vbHMvc3RtMzJtcDEzNWYtZGsuaHRtbAo+ICsKPiArSG93IHRv
-IGJ1aWxkCj4gKz09PT09PT09PT09PQo+ICsKPiArICQgbWFrZSBzdG0zMm1wMTM1Zl9ka19kZWZj
-b25maWcKPiArICQgbWFrZQo+ICsKPiArSG93IHRvIHdyaXRlIHRoZSBtaWNyb1NEIGNhcmQKPiAr
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KPiArCj4gK09uY2UgdGhlIGJ1aWxkIHByb2Nl
-c3MgaXMgZmluaXNoZWQgeW91IHdpbGwgaGF2ZSBhbiBpbWFnZSBjYWxsZWQKPiArInNkY2FyZC5p
-bWciIGluIHRoZSBvdXRwdXQvaW1hZ2VzLyBkaXJlY3RvcnkuCj4gKwo+ICtDb3B5IHRoZSBib290
-YWJsZSAic2RjYXJkLmltZyIgb250byBhbiBtaWNyb1NEIGNhcmQgd2l0aCAiZGQiOgo+ICsKPiAr
-ICAkIHN1ZG8gZGQgaWY9b3V0cHV0L2ltYWdlcy9zZGNhcmQuaW1nIG9mPS9kZXYvc2RYCj4gKwo+
-ICtCb290IHRoZSBib2FyZAo+ICs9PT09PT09PT09PT09PQo+ICsKPiArICgxKSBJbnNlcnQgdGhl
-IG1pY3JvU0QgY2FyZCBpbiBjb25uZWN0b3IgQ04xNQo+ICsKPiArICgyKSBQbHVnIGEgbWljcm8t
-VVNCIGNhYmxlIGluIGNvbm5lY3RvciBDTjExIGFuZCBydW4geW91ciBzZXJpYWwKPiArICAgICBj
-b21tdW5pY2F0aW9uIHByb2dyYW0gb24gL2Rldi90dHlBQ00wLgo+ICsKPiArICgzKSBQbHVnIGEg
-VVNCLUMgY2FibGUgaW4gQ042IHRvIHBvd2VyLXVwIHRoZSBib2FyZC4KPiArCj4gKyAoNCkgVGhl
-IHN5c3RlbSB3aWxsIHN0YXJ0LCB3aXRoIHRoZSBjb25zb2xlIG9uIFVBUlQsIGJ1dCBhbHNvIHZp
-c2libGUKPiArICAgICBvbiB0aGUgc2NyZWVuLgo+IGRpZmYgLS1naXQgYS9jb25maWdzL3N0bTMy
-bXAxMzVmX2RrX2RlZmNvbmZpZyBiL2NvbmZpZ3Mvc3RtMzJtcDEzNWZfZGtfZGVmY29uZmlnCj4g
-bmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
-MDAwMDAwMDAwMDAwLi5mODExOWM1M2M0MjdkNTA3ZWUzMWU1YzlkYmExNDkxODJmNjUzN2NkCj4g
-LS0tIC9kZXYvbnVsbAo+ICsrKyBiL2NvbmZpZ3Mvc3RtMzJtcDEzNWZfZGtfZGVmY29uZmlnCj4g
-QEAgLTAsMCArMSw1MCBAQAo+ICtCUjJfYXJtPXkKPiArQlIyX2NvcnRleF9hNz15Cj4gK0JSMl9H
-TE9CQUxfUEFUQ0hfRElSPSJib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3MvY29tbW9uL3N0bTMybXAx
-eHgvcGF0Y2hlcyIKPiArQlIyX0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hFUz15Cj4gK0JSMl9S
-T09URlNfREVWSUNFX0NSRUFUSU9OX0RZTkFNSUNfTURFVj15Cj4gK0JSMl9ST09URlNfT1ZFUkxB
-WT0iYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL3N0bTMybXAxMzVmLWRrL292ZXJsYXkiCj4gK0JS
-Ml9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9jb21t
-b24vc3RtMzJtcDF4eC9wb3N0LWltYWdlLnNoIgo+ICtCUjJfTElOVVhfS0VSTkVMPXkKPiArQlIy
-X0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9N
-X1ZFUlNJT05fVkFMVUU9IjYuMTEuNiIKPiArQlIyX0xJTlVYX0tFUk5FTF9VU0VfQ1VTVE9NX0NP
-TkZJRz15Cj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0NPTkZJR19GSUxFPSJib2FyZC9zdG1p
-Y3JvZWxlY3Ryb25pY3Mvc3RtMzJtcDEzNWYtZGsvbGludXguY29uZmlnIgo+ICtCUjJfTElOVVhf
-S0VSTkVMX0RUU19TVVBQT1JUPXkKPiArQlIyX0xJTlVYX0tFUk5FTF9JTlRSRUVfRFRTX05BTUU9
-InN0L3N0bTMybXAxMzVmLWRrIgo+ICtCUjJfTElOVVhfS0VSTkVMX0lOU1RBTExfVEFSR0VUPXkK
-PiArQlIyX0xJTlVYX0tFUk5FTF9ORUVEU19IT1NUX09QRU5TU0w9eQo+ICtCUjJfUEFDS0FHRV9P
-UFRFRV9DTElFTlQ9eQo+ICtCUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkKPiArQlIyX1RBUkdFVF9S
-T09URlNfRVhUMl80PXkKPiArQlIyX1RBUkdFVF9ST09URlNfRVhUMl9TSVpFPSIxMjBNIgo+ICsj
-IEJSMl9UQVJHRVRfUk9PVEZTX1RBUiBpcyBub3Qgc2V0Cj4gK0JSMl9UQVJHRVRfQVJNX1RSVVNU
-RURfRklSTVdBUkU9eQo+ICtCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0xBVEVTVF9M
-VFNfMl8xMF9WRVJTSU9OPXkKPiArQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9QTEFU
-Rk9STT0ic3RtMzJtcDEiCj4gK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfRklQPXkK
-PiArQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9CTDMxPXkKPiArQlIyX1RBUkdFVF9B
-Uk1fVFJVU1RFRF9GSVJNV0FSRV9CTDMyX09QVEVFPXkKPiArQlIyX1RBUkdFVF9BUk1fVFJVU1RF
-RF9GSVJNV0FSRV9VQk9PVF9BU19CTDMzPXkKPiArQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJN
-V0FSRV9VQk9PVF9CTDMzX0lNQUdFPSJ1LWJvb3Qtbm9kdGIuYmluIgo+ICtCUjJfVEFSR0VUX0FS
-TV9UUlVTVEVEX0ZJUk1XQVJFX0FERElUSU9OQUxfVkFSSUFCTEVTPSJTVE0zMk1QX1NETU1DPTEg
-RFRCX0ZJTEVfTkFNRT1zdG0zMm1wMTM1Zi1kay5kdGIgQkwzM19DRkc9JChCSU5BUklFU19ESVIp
-L3UtYm9vdC5kdGIiCj4gK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfSU1BR0VTPSJm
-aXAuYmluICouc3RtMzIiCj4gK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfTkVFRFNf
-RFRDPXkKPiArQlIyX1RBUkdFVF9PUFRFRV9PUz15Cj4gK0JSMl9UQVJHRVRfT1BURUVfT1NfQ1VT
-VE9NX0dJVD15Cj4gK0JSMl9UQVJHRVRfT1BURUVfT1NfQ1VTVE9NX1JFUE9fVVJMPSJodHRwczov
-L2dpdGh1Yi5jb20vT1AtVEVFL29wdGVlX29zLmdpdCIKPiArQlIyX1RBUkdFVF9PUFRFRV9PU19D
-VVNUT01fUkVQT19WRVJTSU9OPSI0LjMuMCIKPiArQlIyX1RBUkdFVF9PUFRFRV9PU19ORUVEU19Q
-WVRIT05fQ1JZUFRPR1JBUEhZPXkKPiArQlIyX1RBUkdFVF9PUFRFRV9PU19QTEFURk9STT0ic3Rt
-MzJtcDEiCj4gK0JSMl9UQVJHRVRfT1BURUVfT1NfUExBVEZPUk1fRkxBVk9SPSIxMzVGX0RLIgo+
-ICtCUjJfVEFSR0VUX1VCT09UPXkKPiArQlIyX1RBUkdFVF9VQk9PVF9CVUlMRF9TWVNURU1fS0NP
-TkZJRz15Cj4gK0JSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1ZFUlNJT049eQo+ICtCUjJfVEFSR0VU
-X1VCT09UX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSIyMDI0LjA3Igo+ICtCUjJfVEFSR0VUX1VCT09U
-X0JPQVJEX0RFRkNPTkZJRz0ic3RtMzJtcDEzIgo+ICtCUjJfVEFSR0VUX1VCT09UX05FRURTX1BZ
-TElCRkRUPXkKPiArIyBCUjJfVEFSR0VUX1VCT09UX0ZPUk1BVF9CSU4gaXMgbm90IHNldAo+ICtC
-UjJfVEFSR0VUX1VCT09UX0ZPUk1BVF9DVVNUT009eQo+ICtCUjJfVEFSR0VUX1VCT09UX0ZPUk1B
-VF9DVVNUT01fTkFNRT0idS1ib290LW5vZHRiLmJpbiB1LWJvb3QuZHRiIgo+ICtCUjJfVEFSR0VU
-X1VCT09UX0NVU1RPTV9NQUtFT1BUUz0iREVWSUNFX1RSRUU9c3RtMzJtcDEzNWYtZGsiCj4gK0JS
-Ml9QQUNLQUdFX0hPU1RfR0VOSU1BR0U9eQo+IAo+IC0tLQo+IGJhc2UtY29tbWl0OiBlM2Y0NjQ3
-Nzg5NDVkM2U3ZWQzMWM1MGQwN2RlMDJmYjJjZDg1NDY0Cj4gY2hhbmdlLWlkOiAyMDI0MDcyOS1t
-YXN0ZXItM2E3YzljYjljOTZiCj4gCj4gQmVzdCByZWdhcmRzLAoKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+Hi Maxim,
+
+Thanks for the patch!
+
+Buildroot is currently in release candidate for 2024.11 release.
+
+Postgresql published the 16.6 version only including the security
+fix for:
+https://nvd.nist.gov/vuln/detail/CVE-2024-10978
+
+Could you send a minimal patch doing this security bump to 16.6
+on the master branch, please?
+
+Then, this patch changing the major version and the package infra
+to meson should preferably based on the branch "next".
+I have few comments, see below:
+
+On 27/11/2024 05:43, Maxim Kochetkov via buildroot wrote:
+> Changelog: 
+> https://www.postgresql.org/about/news/postgresql-172-166-1510-1415-1318-and-1222-released-2965/
+> 
+> - Use meson build system and drop automake quirks.
+> 
+> - Since commit 
+> https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=68a4b58eca032916e2aad78d63f717dcb147e906
+>   BR2_TOOLCHAIN_HAS_THREADS_NPTL is mandatory dependency
+> 
+> - Since commit 
+> https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=8d9a9f034e925568342c7ccfd8d351a3cd20e7f3
+>   BR2_ENABLE_LOCALE is mandatory dependency
+> 
+> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> ---
+>  package/bandwidthd/Config.in                  |  5 +-
+>  package/collectd/Config.in                    |  4 +
+>  package/lighttpd/Config.in                    |  3 +
+>  package/php/Config.ext                        |  8 +-
+>  package/poco/Config.in                        |  4 +
+>  .../0001-Fix-compile-without-threads.patch    | 87 -------------------
+>  package/postgresql/Config.in                  |  9 +-
+>  package/postgresql/postgresql.hash            |  4 +-
+>  package/postgresql/postgresql.mk              | 67 +++++---------
+>  package/python-psycopg2/Config.in             |  4 +
+>  package/qt5/qt5base/Config.in                 |  4 +-
+>  package/qt6/qt6base/Config.in                 | 10 ++-
+>  package/zabbix/Config.in                      |  3 +
+>  13 files changed, 68 insertions(+), 144 deletions(-)
+>  delete mode 100644 
+> package/postgresql/0001-Fix-compile-without-threads.patch
+> 
+> diff --git a/package/bandwidthd/Config.in 
+> b/package/bandwidthd/Config.in
+> index e2a6f1acb1..b0485ef957 100644
+> --- a/package/bandwidthd/Config.in
+> +++ b/package/bandwidthd/Config.in
+> @@ -34,8 +34,11 @@ if BR2_PACKAGE_BANDWIDTHD
+> 
+>  config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
+>  	bool "enable postgresql log target support"
+> -	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_USE_MMU # postgresql
+>  	depends on BR2_USE_WCHAR # postgresql
+> +	depends on BR2_ENABLE_LOCALE # postgresql
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
+> +	depends on !BR2_STATIC_LIBS # postgresql
+>  	depends on !BR2_OPTIMIZE_FAST # postgresql
+>  	select BR2_PACKAGE_POSTGRESQL
+>  	help
+> diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+> index 39c0d352e5..6568aa1d7b 100644
+> --- a/package/collectd/Config.in
+> +++ b/package/collectd/Config.in
+> @@ -475,7 +475,11 @@ config BR2_PACKAGE_COLLECTD_PING
+> 
+>  config BR2_PACKAGE_COLLECTD_POSTGRESQL
+>  	bool "postgresql"
+> +	depends on BR2_USE_MMU # postgresql
+>  	depends on BR2_USE_WCHAR # postgresql
+> +	depends on BR2_ENABLE_LOCALE # postgresql
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
+> +	depends on !BR2_STATIC_LIBS # postgresql
+>  	depends on !BR2_OPTIMIZE_FAST # postgresql
+>  	select BR2_PACKAGE_POSTGRESQL
+>  	help
+> diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
+> index 66532d7dd5..5311f37ae1 100644
+> --- a/package/lighttpd/Config.in
+> +++ b/package/lighttpd/Config.in
+> @@ -94,6 +94,9 @@ config BR2_PACKAGE_LIGHTTPD_PGSQL
+>  	bool "pgsql support"
+>  	depends on BR2_USE_MMU # postgresql
+>  	depends on BR2_USE_WCHAR # postgresql
+> +	depends on BR2_ENABLE_LOCALE # postgresql
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
+> +	depends on !BR2_STATIC_LIBS # postgresql
+>  	depends on !BR2_OPTIMIZE_FAST # postgresql
+>  	select BR2_PACKAGE_POSTGRESQL
+>  	help
+> diff --git a/package/php/Config.ext b/package/php/Config.ext
+> index d5f8659016..609cf17016 100644
+> --- a/package/php/Config.ext
+> +++ b/package/php/Config.ext
+> @@ -139,8 +139,10 @@ config BR2_PACKAGE_PHP_EXT_MYSQLI
+>  config BR2_PACKAGE_PHP_EXT_PGSQL
+>  	bool "PostgreSQL"
+>  	depends on BR2_USE_MMU # postgresql
+> -	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_USE_WCHAR # postgresql
+> +	depends on BR2_ENABLE_LOCALE # postgresql
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
+> +	depends on !BR2_STATIC_LIBS # postgresql
+>  	depends on !BR2_OPTIMIZE_FAST # postgresql
+>  	select BR2_PACKAGE_POSTGRESQL
+>  	help
+> @@ -174,8 +176,10 @@ config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
+>  config BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL
+>  	bool "PostgreSQL"
+>  	depends on BR2_USE_MMU # postgresql
+> -	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_USE_WCHAR # postgresql
+> +	depends on BR2_ENABLE_LOCALE # postgresql
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
+> +	depends on !BR2_STATIC_LIBS # postgresql
+>  	depends on !BR2_OPTIMIZE_FAST # postgresql
+>  	select BR2_PACKAGE_POSTGRESQL
+>  	help
+> diff --git a/package/poco/Config.in b/package/poco/Config.in
+> index 9bdef125ad..db1b36964e 100644
+> --- a/package/poco/Config.in
+> +++ b/package/poco/Config.in
+> @@ -52,6 +52,10 @@ config BR2_PACKAGE_POCO_DATA_MYSQL
+>  config BR2_PACKAGE_POCO_DATA_PGSQL
+>  	bool "Data/PostgreSQL"
+>  	depends on BR2_USE_MMU # postgresql
+> +	depends on BR2_USE_WCHAR # postgresql
+> +	depends on BR2_ENABLE_LOCALE # postgresql
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
+> +	depends on !BR2_STATIC_LIBS # postgresql
+>  	depends on !BR2_OPTIMIZE_FAST # postgresql
+>  	select BR2_PACKAGE_POCO_DATA
+>  	select BR2_PACKAGE_POSTGRESQL
+> diff --git a/package/postgresql/0001-Fix-compile-without-threads.patch 
+> b/package/postgresql/0001-Fix-compile-without-threads.patch
+> deleted file mode 100644
+> index a280df540f..0000000000
+> --- a/package/postgresql/0001-Fix-compile-without-threads.patch
+> +++ /dev/null
+> @@ -1,87 +0,0 @@
+> -From 6c71182dde4d37fd70ee8015f61935254ae6f9a6 Mon Sep 17 00:00:00 2001
+> -From: Maxim Kochetkov <fido_max@inbox.ru>
+> -Date: Thu, 19 Sep 2024 10:04:05 +0300
+> -Subject: [PATCH] Fix compile without threads
+> -
+> -All mutexes should be wrapped by #ifdef ENABLE_THREAD_SAFETY.
+> -
+> -Fixes: 
+> https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=52afe563206e753f4c45c014fee2459ad0855826
+> -Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> -Signed-off-by: Maxim Kochetkov <m.kochetkov@yadro.com>
+> -Upstream: N/A, as --disable-thread-safety will disappear in PostgreSQL 
+> 17.
+> ----
+> - src/interfaces/ecpg/ecpglib/misc.c | 6 ++++++
+> - src/interfaces/libpq/fe-misc.c     | 6 ++++++
+> - 2 files changed, 12 insertions(+)
+> -
+> -diff --git a/src/interfaces/ecpg/ecpglib/misc.c 
+> b/src/interfaces/ecpg/ecpglib/misc.c
+> -index 4b54322926..5a4d2e847e 100644
+> ---- a/src/interfaces/ecpg/ecpglib/misc.c
+> -+++ b/src/interfaces/ecpg/ecpglib/misc.c
+> -@@ -538,7 +538,9 @@ ecpg_gettext(const char *msgid)
+> - 	 * might as well do it the same way everywhere.
+> - 	 */
+> - 	static volatile bool already_bound = false;
+> -+#ifdef ENABLE_THREAD_SAFETY
+> - 	static pthread_mutex_t binddomain_mutex = PTHREAD_MUTEX_INITIALIZER;
+> -+#endif
+> -
+> - 	if (!already_bound)
+> - 	{
+> -@@ -549,7 +551,9 @@ ecpg_gettext(const char *msgid)
+> - 		int			save_errno = errno;
+> - #endif
+> -
+> -+#ifdef ENABLE_THREAD_SAFETY
+> - 		(void) pthread_mutex_lock(&binddomain_mutex);
+> -+#endif
+> -
+> - 		if (!already_bound)
+> - 		{
+> -@@ -566,7 +570,9 @@ ecpg_gettext(const char *msgid)
+> - 			already_bound = true;
+> - 		}
+> -
+> -+#ifdef ENABLE_THREAD_SAFETY
+> - 		(void) pthread_mutex_unlock(&binddomain_mutex);
+> -+#endif
+> -
+> - #ifdef WIN32
+> - 		SetLastError(save_errno);
+> -diff --git a/src/interfaces/libpq/fe-misc.c 
+> b/src/interfaces/libpq/fe-misc.c
+> -index 488f7d6e55..2185e0ba7a 100644
+> ---- a/src/interfaces/libpq/fe-misc.c
+> -+++ b/src/interfaces/libpq/fe-misc.c
+> -@@ -1232,7 +1232,9 @@ libpq_binddomain(void)
+> - 	 * might as well do it the same way everywhere.
+> - 	 */
+> - 	static volatile bool already_bound = false;
+> -+#ifdef ENABLE_THREAD_SAFETY
+> - 	static pthread_mutex_t binddomain_mutex = PTHREAD_MUTEX_INITIALIZER;
+> -+#endif
+> -
+> - 	if (!already_bound)
+> - 	{
+> -@@ -1243,7 +1245,9 @@ libpq_binddomain(void)
+> - 		int			save_errno = errno;
+> - #endif
+> -
+> -+#ifdef ENABLE_THREAD_SAFETY
+> - 		(void) pthread_mutex_lock(&binddomain_mutex);
+> -+#endif
+> -
+> - 		if (!already_bound)
+> - 		{
+> -@@ -1260,7 +1264,9 @@ libpq_binddomain(void)
+> - 			already_bound = true;
+> - 		}
+> -
+> -+#ifdef ENABLE_THREAD_SAFETY
+> - 		(void) pthread_mutex_unlock(&binddomain_mutex);
+> -+#endif
+> -
+> - #ifdef WIN32
+> - 		SetLastError(save_errno);
+> ---
+> -2.45.2
+> -
+> diff --git a/package/postgresql/Config.in 
+> b/package/postgresql/Config.in
+> index 899907d6a5..06e8646119 100644
+> --- a/package/postgresql/Config.in
+> +++ b/package/postgresql/Config.in
+> @@ -2,6 +2,8 @@ config BR2_PACKAGE_POSTGRESQL
+>  	bool "postgresql"
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on BR2_USE_WCHAR
+> +	depends on BR2_ENABLE_LOCALE # locale_t
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>  	# fails to build in a pure static linking scenario, and
+>  	# postgresql is unlikely to be used in a pure statically
+>  	# linked environment.
+> @@ -32,9 +34,12 @@ config BR2_PACKAGE_POSTGRESQL_FULL
+> 
+>  endif
+> 
+> -comment "postgresql needs a toolchain w/ dynamic library, wchar"
+> +comment "postgresql needs a toolchain w/ dynamic library, wchar, 
+> locale"
+>  	depends on BR2_USE_MMU
+> -	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
+> +	depends on !BR2_USE_WCHAR
+> +	depends on !BR2_ENABLE_LOCALE
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> +	depends on BR2_STATIC_LIBS
+> 
+>  comment "postgresql can't be built with Optimize for fast"
+>  	depends on BR2_OPTIMIZE_FAST
+> diff --git a/package/postgresql/postgresql.hash 
+> b/package/postgresql/postgresql.hash
+> index 6a15f78628..98246ca9b6 100644
+> --- a/package/postgresql/postgresql.hash
+> +++ b/package/postgresql/postgresql.hash
+> @@ -1,4 +1,4 @@
+> -# From 
+> https://ftp.postgresql.org/pub/source/v16.5/postgresql-16.5.tar.bz2.sha256
+> -sha256  
+> a6cbbb7037f98cb8afa7d3970b7c48040cf02b115e39253a0c037a8bb8e778f0  
+> postgresql-16.5.tar.bz2
+> +# From 
+> https://ftp.postgresql.org/pub/source/v17.2/postgresql-17.2.tar.bz2.sha256
+> +sha256  
+> 82ef27c0af3751695d7f64e2d963583005fbb6a0c3df63d0e4b42211d7021164  
+> postgresql-17.2.tar.bz2
+>  # License file, Locally calculated
+>  sha256  
+> 9bf20ee493926a7e17a74bc7f05089fbc014269667b1540bc35a6b194a40c9de  
+> COPYRIGHT
+> diff --git a/package/postgresql/postgresql.mk 
+> b/package/postgresql/postgresql.mk
+> index 12693e625c..a28785f3a2 100644
+> --- a/package/postgresql/postgresql.mk
+> +++ b/package/postgresql/postgresql.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  
+> ################################################################################
+> 
+> -POSTGRESQL_VERSION = 16.5
+> +POSTGRESQL_VERSION = 17.2
+>  POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+>  POSTGRESQL_SITE = 
+> https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+>  POSTGRESQL_LICENSE = PostgreSQL
+> @@ -13,59 +13,41 @@ POSTGRESQL_CPE_ID_VENDOR = postgresql
+>  POSTGRESQL_SELINUX_MODULES = postgresql
+>  POSTGRESQL_INSTALL_STAGING = YES
+>  POSTGRESQL_CONFIG_SCRIPTS = pg_config
+> -POSTGRESQL_CONF_ENV = \
+> -	ac_cv_type_struct_sockaddr_in6=yes \
+> -	pgac_cv_prog_cc_LDFLAGS_EX_BE__Wl___export_dynamic=yes \
+> -	LIBS=$(TARGET_NLS_LIBS)
+> -POSTGRESQL_CONF_OPTS = --disable-rpath
+> +POSTGRESQL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+> +POSTGRESQL_CONF_OPTS = -Drpath=false
+>  POSTGRESQL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+> 
+>  # CVE-2017-8806 is related to postgresql-common package
+>  # It is false positive for postgresql
+>  POSTGRESQL_IGNORE_CVES += CVE-2017-8806
+> 
+> -# https://www.postgresql.org/docs/11/static/install-procedure.html:
+> -# "If you want to invoke the build from another makefile rather than
+> -# manually, you must unset MAKELEVEL or set it to zero"
+> -POSTGRESQL_MAKE_OPTS = MAKELEVEL=0
+
+Running the command "utils/docker-run make check-package" reports
+"package/postgresql/postgresql.mk:24: consecutive empty lines"
+here. Could please remove it?
+
+> 
+>  ifeq ($(BR2_PACKAGE_POSTGRESQL_FULL),y)
+> -POSTGRESQL_MAKE_OPTS += world
+> +POSTGRESQL_NINJA_OPTS += world
+>  POSTGRESQL_INSTALL_TARGET_OPTS += DESTDIR=$(TARGET_DIR) install-world
+>  POSTGRESQL_INSTALL_STAGING_OPTS += DESTDIR=$(STAGING_DIR) 
+> install-world
+>  endif
+> 
+> -ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> -# PostgreSQL does not build against uClibc with locales
+> -# enabled, due to an uClibc bug, see
+> -# http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html
+> -# so overwrite automatic detection and disable locale support
+> -POSTGRESQL_CONF_ENV += pgac_cv_type_locale_t=no
+> -endif
+> -
+> -ifneq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
+> -POSTGRESQL_CONF_OPTS += --disable-thread-safety
+> -endif
+
+Running the command "utils/docker-run make check-package" reports
+"package/postgresql/postgresql.mk:31: consecutive empty lines"
+here. Could please remove it?
+
+> 
+>  ifeq 
+> ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_or1k)$(BR2_nios2)$(BR2_riscv)$(BR2_xtensa),y)
+> -POSTGRESQL_CONF_OPTS += --disable-spinlocks
+> +POSTGRESQL_CONF_OPTS += -Dspinlocks=false
+
+Could you add the "else" case, for all options, please?
+for example, adding here:
+
+else
+POSTGRESQL_CONF_OPTS += -Dspinlocks=true
+
+>  endif
+> 
+>  ifeq ($(BR2_PACKAGE_READLINE),y)
+>  POSTGRESQL_DEPENDENCIES += readline
+
+another example, adding here:
+POSTGRESQL_CONF_OPTS += -Dreadline=enabled
+
+>  else
+> -POSTGRESQL_CONF_OPTS += --without-readline
+> +POSTGRESQL_CONF_OPTS += --Dreadline=disabled
+
+Running the test with command:
+
+     utils/docker-run support/testing/run-tests \
+         -k -d dl -o output_folder \
+         tests.package.test_postgresql
+
+fails on this line, due to an extra dash here.
+"--Dreadline=disabled" should be "-Dreadline=disabled".
+
+>  endif
+> 
+>  ifeq ($(BR2_PACKAGE_ZLIB),y)
+>  POSTGRESQL_DEPENDENCIES += zlib
+
+another example, adding here:
+POSTGRESQL_CONF_OPTS += -Dzlib=enabled
+
+>  else
+> -POSTGRESQL_CONF_OPTS += --without-zlib
+> +POSTGRESQL_CONF_OPTS += -Dzlib=disabled
+>  endif
+> 
+>  ifeq ($(BR2_PACKAGE_TZDATA),y)
+>  POSTGRESQL_DEPENDENCIES += tzdata
+> -POSTGRESQL_CONF_OPTS += --with-system-tzdata=/usr/share/zoneinfo
+> +POSTGRESQL_CONF_OPTS += -Dsystem_tzdata=/usr/share/zoneinfo
+>  else
+>  POSTGRESQL_DEPENDENCIES += host-zic
+>  POSTGRESQL_CONF_ENV += ZIC="$(ZIC)"
+> @@ -73,56 +55,51 @@ endif
+> 
+>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
+>  POSTGRESQL_DEPENDENCIES += openssl
+> -POSTGRESQL_CONF_OPTS += --with-openssl
+> -else
+> -# PostgreSQL checks for /dev/urandom and fails if it's being 
+> cross-compiled and
+> -# an SSL library isn't found. Since /dev/urandom is guaranteed to be 
+> provided
+> -# on Linux systems, explicitly tell the configure script it's 
+> available.
+> -POSTGRESQL_CONF_ENV += ac_cv_file__dev_urandom=yes
+> +POSTGRESQL_CONF_OPTS += -Dssl=openssl
+>  endif
+> 
+>  ifeq ($(BR2_PACKAGE_OPENLDAP),y)
+>  POSTGRESQL_DEPENDENCIES += openldap
+> -POSTGRESQL_CONF_OPTS += --with-ldap
+> +POSTGRESQL_CONF_OPTS += -Dldap=enabled
+>  else
+> -POSTGRESQL_CONF_OPTS += --without-ldap
+> +POSTGRESQL_CONF_OPTS += -Dldap=disabled
+>  endif
+> 
+>  ifeq ($(BR2_PACKAGE_ICU),y)
+>  POSTGRESQL_DEPENDENCIES += icu
+> -POSTGRESQL_CONF_OPTS += --with-icu
+> +POSTGRESQL_CONF_OPTS += -Dicu=enabled
+>  else
+> -POSTGRESQL_CONF_OPTS += --without-icu
+> +POSTGRESQL_CONF_OPTS += -Dicu=disabled
+>  endif
+> 
+>  ifeq ($(BR2_PACKAGE_LIBXML2),y)
+>  POSTGRESQL_DEPENDENCIES += libxml2
+> -POSTGRESQL_CONF_OPTS += --with-libxml
+> +POSTGRESQL_CONF_OPTS += -Dlibxml=enabled
+>  POSTGRESQL_CONF_ENV += XML2_CONFIG=$(STAGING_DIR)/usr/bin/xml2-config
+>  else
+> -POSTGRESQL_CONF_OPTS += --without-libxml
+> +POSTGRESQL_CONF_OPTS += -Dlibxml=disabled
+>  endif
+> 
+>  ifeq ($(BR2_PACKAGE_ZSTD),y)
+>  POSTGRESQL_DEPENDENCIES += host-pkgconf zstd
+> -POSTGRESQL_CONF_OPTS += --with-zstd
+> +POSTGRESQL_CONF_OPTS += -Dzstd=enabled
+>  else
+> -POSTGRESQL_CONF_OPTS += --without-zstd
+> +POSTGRESQL_CONF_OPTS += -Dzstd=disabled
+>  endif
+> 
+>  ifeq ($(BR2_PACKAGE_LZ4),y)
+>  POSTGRESQL_DEPENDENCIES += host-pkgconf lz4
+> -POSTGRESQL_CONF_OPTS += --with-lz4
+> +POSTGRESQL_CONF_OPTS += -Dlz4=enabled
+>  else
+> -POSTGRESQL_CONF_OPTS += --without-lz4
+> +POSTGRESQL_CONF_OPTS += -Dlz4=disabled
+>  endif
+> 
+>  # required for postgresql.service Type=notify
+>  ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+>  POSTGRESQL_DEPENDENCIES += systemd
+> -POSTGRESQL_CONF_OPTS += --with-systemd
+> +POSTGRESQL_CONF_OPTS += -Dsystemd=enabled
+>  else
+> -POSTGRESQL_CONF_OPTS += --without-systemd
+> +POSTGRESQL_CONF_OPTS += -Dsystemd=disabled
+>  endif
+> 
+>  POSTGRESQL_CFLAGS = $(TARGET_CFLAGS)
+> @@ -165,4 +142,4 @@ define POSTGRESQL_INSTALL_INIT_SYSTEMD
+>  		$(TARGET_DIR)/usr/lib/systemd/system/postgresql.service
+>  endef
+> 
+> -$(eval $(autotools-package))
+> +$(eval $(meson-package))
+> diff --git a/package/python-psycopg2/Config.in 
+> b/package/python-psycopg2/Config.in
+> index 4aa86c7690..307c072bd3 100644
+> --- a/package/python-psycopg2/Config.in
+> +++ b/package/python-psycopg2/Config.in
+> @@ -1,6 +1,10 @@
+>  config BR2_PACKAGE_PYTHON_PSYCOPG2
+>  	bool "python-psycopg2"
+> +	depends on BR2_USE_MMU # postgresql
+>  	depends on BR2_USE_WCHAR # postgresql
+> +	depends on BR2_ENABLE_LOCALE # postgresql
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
+> +	depends on !BR2_STATIC_LIBS # postgresql
+>  	depends on !BR2_OPTIMIZE_FAST # postgresql
+>  	select BR2_PACKAGE_POSTGRESQL
+>  	help
+> diff --git a/package/qt5/qt5base/Config.in 
+> b/package/qt5/qt5base/Config.in
+> index 6e6a7cf984..16a17dfc27 100644
+> --- a/package/qt5/qt5base/Config.in
+> +++ b/package/qt5/qt5base/Config.in
+> @@ -72,8 +72,10 @@ config BR2_PACKAGE_QT5BASE_MYSQL
+>  config BR2_PACKAGE_QT5BASE_PSQL
+>  	bool "PostgreSQL Plugin"
+>  	depends on BR2_USE_MMU # postgresql
+> -	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_USE_WCHAR # postgresql
+> +	depends on BR2_ENABLE_LOCALE # postgresql
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
+> +	depends on !BR2_STATIC_LIBS # postgresql
+>  	depends on !BR2_OPTIMIZE_FAST # postgresql
+>  	select BR2_PACKAGE_POSTGRESQL
+>  	help
+> diff --git a/package/qt6/qt6base/Config.in 
+> b/package/qt6/qt6base/Config.in
+> index 3b15d40c83..96a0416dbd 100644
+> --- a/package/qt6/qt6base/Config.in
+> +++ b/package/qt6/qt6base/Config.in
+> @@ -200,10 +200,12 @@ comment "MySQL plugin needs a toolchain w/ C++, 
+> threads"
+> 
+>  config BR2_PACKAGE_QT6BASE_PSQL
+>  	bool "PostgreSQL Plugin"
+> -	depends on BR2_USE_MMU
+> -	depends on !BR2_STATIC_LIBS
+> -	depends on BR2_USE_WCHAR
+> -	depends on !BR2_OPTIMIZE_FAST
+> +	depends on BR2_USE_MMU # postgresql
+> +	depends on BR2_USE_WCHAR # postgresql
+> +	depends on BR2_ENABLE_LOCALE # postgresql
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
+> +	depends on !BR2_STATIC_LIBS # postgresql
+> +	depends on !BR2_OPTIMIZE_FAST # postgresql
+>  	select BR2_PACKAGE_POSTGRESQL
+>  	help
+>  	  Build PostgreSQL plugin
+> diff --git a/package/zabbix/Config.in b/package/zabbix/Config.in
+> index 4940f8ca8e..226bce51ba 100644
+> --- a/package/zabbix/Config.in
+> +++ b/package/zabbix/Config.in
+> @@ -40,7 +40,10 @@ config BR2_PACKAGE_ZABBIX_SERVER_MYSQL
+> 
+>  config BR2_PACKAGE_ZABBIX_SERVER_POSTGRESQL
+>  	bool "postgresql"
+> +	depends on BR2_USE_MMU # postgresql
+>  	depends on BR2_USE_WCHAR # postgresql
+> +	depends on BR2_ENABLE_LOCALE # postgresql
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
+>  	depends on !BR2_STATIC_LIBS # postgresql
+>  	depends on !BR2_OPTIMIZE_FAST # postgresql
+>  	select BR2_PACKAGE_POSTGRESQL
+> --
+> 2.45.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+Best regards,
+
+Julien.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
