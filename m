@@ -1,86 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B360D6D25F
-	for <buildroot@archiver.kernel.org>; Thu, 28 Nov 2024 03:59:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A397D6D25E
+	for <buildroot@archiver.kernel.org>; Thu, 28 Nov 2024 04:18:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 92A7780F44;
-	Thu, 28 Nov 2024 03:59:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7BB6424A0;
+	Thu, 28 Nov 2024 04:18:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T-qTp2_IH2eH; Thu, 28 Nov 2024 03:59:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ksrspS9c0Abo; Thu, 28 Nov 2024 04:18:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0EA88101B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E006442496
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0EA88101B;
-	Thu, 28 Nov 2024 03:59:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E006442496;
+	Thu, 28 Nov 2024 04:18:16 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 380181167
- for <buildroot@buildroot.org>; Thu, 28 Nov 2024 03:59:49 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 04A7A1167
+ for <buildroot@buildroot.org>; Thu, 28 Nov 2024 04:18:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1F23C6087B
- for <buildroot@buildroot.org>; Thu, 28 Nov 2024 03:59:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E6336608A4
+ for <buildroot@buildroot.org>; Thu, 28 Nov 2024 04:18:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VJcdDiVFdti5 for <buildroot@buildroot.org>;
- Thu, 28 Nov 2024 03:59:47 +0000 (UTC)
-X-Greylist: delayed 83792 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 28 Nov 2024 03:59:46 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A2966606F1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2966606F1
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.59.36;
- helo=send197.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
-Received: from send197.i.mail.ru (send197.i.mail.ru [95.163.59.36])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A2966606F1
- for <buildroot@buildroot.org>; Thu, 28 Nov 2024 03:59:45 +0000 (UTC)
-Received: by exim-smtp-78d78789c6-rpwgb with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1tGVgq-00000000G4Z-21pV; Thu, 28 Nov 2024 06:59:41 +0300
-To: buildroot@buildroot.org
-Date: Thu, 28 Nov 2024 06:59:35 +0300
-Message-ID: <20241128035935.9453-1-fido_max@inbox.ru>
-X-Mailer: git-send-email 2.45.2
+ id zfzioif7zH8e for <buildroot@buildroot.org>;
+ Thu, 28 Nov 2024 04:18:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1E72060891
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E72060891
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1E72060891
+ for <buildroot@buildroot.org>; Thu, 28 Nov 2024 04:18:12 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4349f160d62so3138865e9.2
+ for <buildroot@buildroot.org>; Wed, 27 Nov 2024 20:18:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1732767491; x=1733372291;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=snOxhMwwmGXgcPQDv3WTDi8SPbCP9acBMVbWNj8jXOs=;
+ b=R5cBTNT2gCsf2xiQLrEoh40leUGUG8QfyEWvgaYGKfTyb7x+ZXheX/g6xqLnvaXxfz
+ MRwfW6ECpKnl+gm5Hz03WlD5gkxYlPjZA1mH1nCysJYB40e4YqGMpP2JL4dLryX54IJX
+ qAKH1pRb9VT7mxMfsZAZI7SR9VfdMW4hXNhtjoGadznaAIRP+lBpS60PzlW/QlUdLY1D
+ yRz2zAE13F71tJbNcRPPGZKBzFTHLKbrDCLLXWnu954/Zjdq8DynzTcrZVg9ryD5i2Iv
+ GSk6xO4SSiwVVzfmSaXoWNR3dvCtYQKo/DBvaChl0T3GVMAi+UXA9Ea7GQwAz60VwOnX
+ Un7g==
+X-Gm-Message-State: AOJu0YyVzBIk3DV8VZoIBsQ2IZeX6iKkPnhNYI2YZuC94NGUuLArmSRk
+ I7R1qFuq+31n2Tvx3aDwr2PNQo/WhlADwobufmZKWJHCXiCJA8NowqQPwg==
+X-Gm-Gg: ASbGncvZr7CUx41MsHiNnZeDk927N/8k/3wdoxrm9du7G6Q1vCMRF8k9ocDw1mr+9YU
+ 8vY78ZRbpdUjvyCIUTdIa5+hSQnwpo91CGPyI91yaBUChi7Pd1h1akyVDC8VRQcrNknZeLHG5Jx
+ 1X5jQDMD5cRZ2R9PjyKjBApVmINVexA3d7xWYXMmn5m4GNJKgmNUmNUAtxs9FM6LleEwazgR789
+ idPO9u3j8XscwdfNkDqeRjsVaN9ZcZs+kyivRzJYuTfGRw7VsVZcQ==
+X-Google-Smtp-Source: AGHT+IHLJ+MuNyccwLBnWKf35e7tztlxzpHpKu5Nffv6AWArZRFaykHXTo2+wo/s+628QwT1+yrocA==
+X-Received: by 2002:a05:6000:2cd:b0:382:4485:2db2 with SMTP id
+ ffacd0b85a97d-385c6eb8d9emr4926875f8f.1.1732767490574; 
+ Wed, 27 Nov 2024 20:18:10 -0800 (PST)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-5d097eb1d74sm299947a12.75.2024.11.27.20.18.10
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 27 Nov 2024 20:18:10 -0800 (PST)
+Message-ID: <6747ef02.050a0220.33335c.0eca@mx.google.com>
 MIME-Version: 1.0
-X-Mailru-Src: smtp
-X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD97DF634AB044F3A906031D9526404E613A7456936FD4472AA00894C459B0CD1B9F5D88032CEADCA9E479CDAE959BF64248A954DA2D055EA178794C7D1421F24174A43D3E7D3A7B3F6
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE75C385DEB91CEC222EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006371111040D1ED495018638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8265F8F3FA7B3B34D5EE031C7BC26AD70EBD49D9C503EEC8A20879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C0FF650BF36608E5878941B15DA834481FA18204E546F3947CB355ED1E20F5346AF6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F79006379B350FA324A9139A389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F68655334FD4449CB9ECD01F8117BC8BEAAAE862A0553A39223F8577A6DFFEA7CE31A2885C41F97C443847C11F186F3C59DAA53EE0834AAEE
-X-C1DE0DAB: 0D63561A33F958A52A22DC32A4D8A7725002B1117B3ED6967203C4323FB078CF5B6221DB6D7A72AD277AA237ED671D4372AF3B35EA4094CC0A6B3CD6EB70C818C79554A2A72441324ECABB3E3C951CC822D2CEDE4E95CF1B1E618B5D5F965AFD06C07FE7DDBB4AB7B2D1C9E48B6DC60AE2A7E19323554B122E763F503762DF503A459C89EC2EA1C74EAF44D9B582CE87C8A4C02DF684249CC203C45FEA855C8F
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF26627E0B569FD6DE0357DC0226EF9A8E87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF30BEECB530BB475346FE3D80816C6C4938AB07B6C08A5688B383DB1D1A73B713BF40353A1B84A450BDCC763D930D6EFA60D240B50FED97DAF6C6B763ACDAB6044CF1029C7151BDF3457F7985AD47CF5C02C26D483E81D6BEEB84411BD425175970A7FB4ED9620804ADE12199CE9660BE
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojA97iaBGbkJ09q9fv5116wA==
-X-Mailru-Sender: 689FA8AB762F739381B31377CF4CA219F70AF46C747FC711DC97F55CD36FBB3E47F57F7ADFB8A4E490DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; 
- s=mail4; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:
- To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
- Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
- Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
- List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
- X-Cloud-Ids:Disposition-Notification-To;
- bh=ZqEziuJQRLkwlCYv85QuyjBKYX49QD9LChM2AbaaQrg=; t=1732766386; x=1732856386; 
- b=wVg9LKDr25tuWrOVa01PG5A+v90+coI5oGaXoJX1e9qq4SExBz/j5ZawFvBdrBGzNLwtrHkjXUw
- Lyzres10z+KMfptF8H79OOIyVaH1N6/bn8cTE2mJdL7wnq8EdXAkhF5I5PgCFwaqctBz6WBFTFcvF
- h4MtnUXofo9rvb1bN2fFmTkROjcmBxBggUPcSviV/RIF84/y+gEiHbFiYXIHrsLHCIWJOfQtj65V1
- mrhycUBSema2Je/2aJkRjgJ4xEl8ap/BZmCM7sdYSM/rkpJ2RfO85VqVhBA58I7g8GFbNtoUHqJIf
- bIXEYh1h+CbfZereE+U6BBlsw+TQyVibXSyQ==;
+To: buildroot@buildroot.org
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Thu, 28 Nov 2024 04:18:10 -0000
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1732767491; x=1733372291; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:from:to:cc:subject:date:message-id:reply-to;
+ bh=snOxhMwwmGXgcPQDv3WTDi8SPbCP9acBMVbWNj8jXOs=;
+ b=MhOCuH0OY3VoIyWNsS2Hk8zugRxVryegVj2BiiY5lEt+7yMDW7dbZzuBgW9+7yDAOG
+ H6kKqZls1KRn2vOC4L4mUp/7EyNFWoDOZuEXP9ABikLieETrPlN/qSmrvXpJ1glelSsX
+ EGN/p5YE0iiKvTjxKrTwrE0ZkXOkT5adgLLRg2dAI99ktodsPjay1VCu9RRhUGqw6ViA
+ INSJJuAKyQQyrWsxvEjEd8xvIiQlu2h4yUt/tmQAaENRC2nPUb85gyy99ATLtOQwhBg3
+ GnuWVzaJXYF4K7X45BQpnMOifySeGnjDiWl48TIbEtIB2QK2dbzJiymQj4bssnjsFkOB
+ FNnw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=inbox.ru
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
- header.s=mail4 header.b=wVg9LKDr
-X-Mailman-Original-Authentication-Results: exim-smtp-78d78789c6-rpwgb;
- auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: [Buildroot] [PATCH-NEXT 1/1] package/postgresql: bump version to
- 17.2
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=MhOCuH0O
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2024-11-27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,498 +104,208 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Alexey Lukyanchuk <skif@skif-web.ru>, Bernd Kuhls <bernd@kuhls.net>,
- Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>, Maxim Kochetkov <fido_max@inbox.ru>,
- James Hilliard <james.hilliard1@gmail.com>,
- Julien Corjon <corjon.j@ecagroup.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Jesse Van Gavere <jesseevg@gmail.com>, Nathaniel Roach <nroach44@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://www.postgresql.org/about/news/postgresql-172-166-1510-1415-1318-and-1222-released-2965/
+Hello,
 
-- Use meson build system and drop automake quirks.
+Autobuild statistics for 2024-11-27
+===================================
 
-- Since commit https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=68a4b58eca032916e2aad78d63f717dcb147e906
-  BR2_TOOLCHAIN_HAS_THREADS_NPTL is mandatory dependency
+      branch |  OK | NOK | TIM | TOT |
+  2024.02.x  |  2  |  4  |  0  |  6  |
+  2024.08.x  |  4  |  0  |  1  |  5  |
+    master   | 13  | 74  |  2  | 89  |
+     next    |  0  |  3  |  0  |  3  |
 
-- Since commit https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=8d9a9f034e925568342c7ccfd8d351a3cd20e7f3
-  BR2_ENABLE_LOCALE is mandatory dependency
+Classification of failures by reason for master
+-----------------------------------------------
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
----
- package/bandwidthd/Config.in                  |  5 +-
- package/collectd/Config.in                    |  4 +
- package/lighttpd/Config.in                    |  3 +
- package/php/Config.ext                        |  8 +-
- package/poco/Config.in                        |  4 +
- .../0001-Fix-compile-without-threads.patch    | 87 -------------------
- package/postgresql/Config.in                  |  9 +-
- package/postgresql/postgresql.hash            |  4 +-
- package/postgresql/postgresql.mk              | 67 +++++---------
- package/python-psycopg2/Config.in             |  4 +
- package/qt5/qt5base/Config.in                 |  4 +-
- package/qt6/qt6base/Config.in                 | 10 ++-
- package/zabbix/Config.in                      |  3 +
- 13 files changed, 68 insertions(+), 144 deletions(-)
- delete mode 100644 package/postgresql/0001-Fix-compile-without-threads.patch
+             dahdi-linux-3.3.0 | 6 
+                lmbench-3.0-a9 | 6 
+              host-rust-1.82.0 | 5 
+ ibm-sw-tpm2-rev183-2024-03-27 | 4 
+                 linux-6.11.10 | 4 
+             util-linux-2.40.2 | 4 
+           at-spi2-core-2.50.0 | 3 
+                   perl-5.40.0 | 3 
+                  ffmpeg-6.1.2 | 2 
+              fluent-bit-3.1.3 | 2 
+                  giblib-1.2.4 | 2 
+         gobject-introspection | 2 
+  gobject-introspection-1.76.1 | 2 
+             libargtable2-2.13 | 2 
+                   bird-2.15.1 | 1 
+                    brltty-6.6 | 1 
+                  curlpp-0.8.1 | 1 
+                   cvs-1.12.13 | 1 
+                   foot-1.16.2 | 1 
+fs/jffs2/jffs2.mk:71: /home... | 1 
+glibc-2.40-18-g564178076272... | 1 
+                   grpc-1.51.1 | 1 
+            host-binutils-2.42 | 1 
+host-binutils-bare-metal-2.... | 1 
+    host-python-greenlet-3.1.1 | 1 
+                    ipset-7.16 | 1 
+                latencytop-0.5 | 1 
+                libdrm-2.4.123 | 1 
+        liblog4c-localtime-1.0 | 1 
+              libunistring-1.3 | 1 
+          linux-5.10.162-cip24 | 1 
+     linux-5.10.162-cip24-rt10 | 1 
+            linux-fusion-9.0.3 | 1 
+                   linux-tools | 1 
+              luabitop-1.0.2-1 | 1 
+                 mesa3d-24.0.9 | 1 
+                    mpir-3.0.0 | 1 
+          obsidian-cursors-1.0 | 1 
+                 openssh-9.9p1 | 1 
+               pulseaudio-17.0 | 1 
+             subversion-1.14.3 | 1 
+                 wolfssl-5.7.2 | 1 
+                    yajl-2.1.0 | 1 
 
-diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
-index e2a6f1acb1..b0485ef957 100644
---- a/package/bandwidthd/Config.in
-+++ b/package/bandwidthd/Config.in
-@@ -34,8 +34,11 @@ if BR2_PACKAGE_BANDWIDTHD
- 
- config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
- 	bool "enable postgresql log target support"
--	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_MMU # postgresql
- 	depends on BR2_USE_WCHAR # postgresql
-+	depends on BR2_ENABLE_LOCALE # postgresql
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-+	depends on !BR2_STATIC_LIBS # postgresql
- 	depends on !BR2_OPTIMIZE_FAST # postgresql
- 	select BR2_PACKAGE_POSTGRESQL
- 	help
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 39c0d352e5..6568aa1d7b 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -475,7 +475,11 @@ config BR2_PACKAGE_COLLECTD_PING
- 
- config BR2_PACKAGE_COLLECTD_POSTGRESQL
- 	bool "postgresql"
-+	depends on BR2_USE_MMU # postgresql
- 	depends on BR2_USE_WCHAR # postgresql
-+	depends on BR2_ENABLE_LOCALE # postgresql
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-+	depends on !BR2_STATIC_LIBS # postgresql
- 	depends on !BR2_OPTIMIZE_FAST # postgresql
- 	select BR2_PACKAGE_POSTGRESQL
- 	help
-diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
-index 66532d7dd5..5311f37ae1 100644
---- a/package/lighttpd/Config.in
-+++ b/package/lighttpd/Config.in
-@@ -94,6 +94,9 @@ config BR2_PACKAGE_LIGHTTPD_PGSQL
- 	bool "pgsql support"
- 	depends on BR2_USE_MMU # postgresql
- 	depends on BR2_USE_WCHAR # postgresql
-+	depends on BR2_ENABLE_LOCALE # postgresql
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-+	depends on !BR2_STATIC_LIBS # postgresql
- 	depends on !BR2_OPTIMIZE_FAST # postgresql
- 	select BR2_PACKAGE_POSTGRESQL
- 	help
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index d5f8659016..609cf17016 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -139,8 +139,10 @@ config BR2_PACKAGE_PHP_EXT_MYSQLI
- config BR2_PACKAGE_PHP_EXT_PGSQL
- 	bool "PostgreSQL"
- 	depends on BR2_USE_MMU # postgresql
--	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_WCHAR # postgresql
-+	depends on BR2_ENABLE_LOCALE # postgresql
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-+	depends on !BR2_STATIC_LIBS # postgresql
- 	depends on !BR2_OPTIMIZE_FAST # postgresql
- 	select BR2_PACKAGE_POSTGRESQL
- 	help
-@@ -174,8 +176,10 @@ config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
- config BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL
- 	bool "PostgreSQL"
- 	depends on BR2_USE_MMU # postgresql
--	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_WCHAR # postgresql
-+	depends on BR2_ENABLE_LOCALE # postgresql
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-+	depends on !BR2_STATIC_LIBS # postgresql
- 	depends on !BR2_OPTIMIZE_FAST # postgresql
- 	select BR2_PACKAGE_POSTGRESQL
- 	help
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index 9bdef125ad..db1b36964e 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -52,6 +52,10 @@ config BR2_PACKAGE_POCO_DATA_MYSQL
- config BR2_PACKAGE_POCO_DATA_PGSQL
- 	bool "Data/PostgreSQL"
- 	depends on BR2_USE_MMU # postgresql
-+	depends on BR2_USE_WCHAR # postgresql
-+	depends on BR2_ENABLE_LOCALE # postgresql
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-+	depends on !BR2_STATIC_LIBS # postgresql
- 	depends on !BR2_OPTIMIZE_FAST # postgresql
- 	select BR2_PACKAGE_POCO_DATA
- 	select BR2_PACKAGE_POSTGRESQL
-diff --git a/package/postgresql/0001-Fix-compile-without-threads.patch b/package/postgresql/0001-Fix-compile-without-threads.patch
-deleted file mode 100644
-index a280df540f..0000000000
---- a/package/postgresql/0001-Fix-compile-without-threads.patch
-+++ /dev/null
-@@ -1,87 +0,0 @@
--From 6c71182dde4d37fd70ee8015f61935254ae6f9a6 Mon Sep 17 00:00:00 2001
--From: Maxim Kochetkov <fido_max@inbox.ru>
--Date: Thu, 19 Sep 2024 10:04:05 +0300
--Subject: [PATCH] Fix compile without threads
--
--All mutexes should be wrapped by #ifdef ENABLE_THREAD_SAFETY.
--
--Fixes: https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=52afe563206e753f4c45c014fee2459ad0855826
--Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
--Signed-off-by: Maxim Kochetkov <m.kochetkov@yadro.com>
--Upstream: N/A, as --disable-thread-safety will disappear in PostgreSQL 17.
-----
-- src/interfaces/ecpg/ecpglib/misc.c | 6 ++++++
-- src/interfaces/libpq/fe-misc.c     | 6 ++++++
-- 2 files changed, 12 insertions(+)
--
--diff --git a/src/interfaces/ecpg/ecpglib/misc.c b/src/interfaces/ecpg/ecpglib/misc.c
--index 4b54322926..5a4d2e847e 100644
----- a/src/interfaces/ecpg/ecpglib/misc.c
--+++ b/src/interfaces/ecpg/ecpglib/misc.c
--@@ -538,7 +538,9 @@ ecpg_gettext(const char *msgid)
-- 	 * might as well do it the same way everywhere.
-- 	 */
-- 	static volatile bool already_bound = false;
--+#ifdef ENABLE_THREAD_SAFETY
-- 	static pthread_mutex_t binddomain_mutex = PTHREAD_MUTEX_INITIALIZER;
--+#endif
-- 
-- 	if (!already_bound)
-- 	{
--@@ -549,7 +551,9 @@ ecpg_gettext(const char *msgid)
-- 		int			save_errno = errno;
-- #endif
-- 
--+#ifdef ENABLE_THREAD_SAFETY
-- 		(void) pthread_mutex_lock(&binddomain_mutex);
--+#endif
-- 
-- 		if (!already_bound)
-- 		{
--@@ -566,7 +570,9 @@ ecpg_gettext(const char *msgid)
-- 			already_bound = true;
-- 		}
-- 
--+#ifdef ENABLE_THREAD_SAFETY
-- 		(void) pthread_mutex_unlock(&binddomain_mutex);
--+#endif
-- 
-- #ifdef WIN32
-- 		SetLastError(save_errno);
--diff --git a/src/interfaces/libpq/fe-misc.c b/src/interfaces/libpq/fe-misc.c
--index 488f7d6e55..2185e0ba7a 100644
----- a/src/interfaces/libpq/fe-misc.c
--+++ b/src/interfaces/libpq/fe-misc.c
--@@ -1232,7 +1232,9 @@ libpq_binddomain(void)
-- 	 * might as well do it the same way everywhere.
-- 	 */
-- 	static volatile bool already_bound = false;
--+#ifdef ENABLE_THREAD_SAFETY
-- 	static pthread_mutex_t binddomain_mutex = PTHREAD_MUTEX_INITIALIZER;
--+#endif
-- 
-- 	if (!already_bound)
-- 	{
--@@ -1243,7 +1245,9 @@ libpq_binddomain(void)
-- 		int			save_errno = errno;
-- #endif
-- 
--+#ifdef ENABLE_THREAD_SAFETY
-- 		(void) pthread_mutex_lock(&binddomain_mutex);
--+#endif
-- 
-- 		if (!already_bound)
-- 		{
--@@ -1260,7 +1264,9 @@ libpq_binddomain(void)
-- 			already_bound = true;
-- 		}
-- 
--+#ifdef ENABLE_THREAD_SAFETY
-- 		(void) pthread_mutex_unlock(&binddomain_mutex);
--+#endif
-- 
-- #ifdef WIN32
-- 		SetLastError(save_errno);
---- 
--2.45.2
--
-diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
-index 899907d6a5..06e8646119 100644
---- a/package/postgresql/Config.in
-+++ b/package/postgresql/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_POSTGRESQL
- 	bool "postgresql"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_ENABLE_LOCALE # locale_t
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	# fails to build in a pure static linking scenario, and
- 	# postgresql is unlikely to be used in a pure statically
- 	# linked environment.
-@@ -32,9 +34,12 @@ config BR2_PACKAGE_POSTGRESQL_FULL
- 
- endif
- 
--comment "postgresql needs a toolchain w/ dynamic library, wchar"
-+comment "postgresql needs a toolchain w/ dynamic library, wchar, locale"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+	depends on !BR2_USE_WCHAR
-+	depends on !BR2_ENABLE_LOCALE
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_STATIC_LIBS
- 
- comment "postgresql can't be built with Optimize for fast"
- 	depends on BR2_OPTIMIZE_FAST
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 1d9a9081b7..98246ca9b6 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.postgresql.org/pub/source/v16.4/postgresql-16.4.tar.bz2.sha256
--sha256  971766d645aa73e93b9ef4e3be44201b4f45b5477095b049125403f9f3386d6f  postgresql-16.4.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v17.2/postgresql-17.2.tar.bz2.sha256
-+sha256  82ef27c0af3751695d7f64e2d963583005fbb6a0c3df63d0e4b42211d7021164  postgresql-17.2.tar.bz2
- # License file, Locally calculated
- sha256  9bf20ee493926a7e17a74bc7f05089fbc014269667b1540bc35a6b194a40c9de  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 4021a54300..a28785f3a2 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 16.4
-+POSTGRESQL_VERSION = 17.2
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
-@@ -13,59 +13,41 @@ POSTGRESQL_CPE_ID_VENDOR = postgresql
- POSTGRESQL_SELINUX_MODULES = postgresql
- POSTGRESQL_INSTALL_STAGING = YES
- POSTGRESQL_CONFIG_SCRIPTS = pg_config
--POSTGRESQL_CONF_ENV = \
--	ac_cv_type_struct_sockaddr_in6=yes \
--	pgac_cv_prog_cc_LDFLAGS_EX_BE__Wl___export_dynamic=yes \
--	LIBS=$(TARGET_NLS_LIBS)
--POSTGRESQL_CONF_OPTS = --disable-rpath
-+POSTGRESQL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
-+POSTGRESQL_CONF_OPTS = -Drpath=false
- POSTGRESQL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- 
- # CVE-2017-8806 is related to postgresql-common package
- # It is false positive for postgresql
- POSTGRESQL_IGNORE_CVES += CVE-2017-8806
- 
--# https://www.postgresql.org/docs/11/static/install-procedure.html:
--# "If you want to invoke the build from another makefile rather than
--# manually, you must unset MAKELEVEL or set it to zero"
--POSTGRESQL_MAKE_OPTS = MAKELEVEL=0
- 
- ifeq ($(BR2_PACKAGE_POSTGRESQL_FULL),y)
--POSTGRESQL_MAKE_OPTS += world
-+POSTGRESQL_NINJA_OPTS += world
- POSTGRESQL_INSTALL_TARGET_OPTS += DESTDIR=$(TARGET_DIR) install-world
- POSTGRESQL_INSTALL_STAGING_OPTS += DESTDIR=$(STAGING_DIR) install-world
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
--# PostgreSQL does not build against uClibc with locales
--# enabled, due to an uClibc bug, see
--# http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html
--# so overwrite automatic detection and disable locale support
--POSTGRESQL_CONF_ENV += pgac_cv_type_locale_t=no
--endif
--
--ifneq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
--POSTGRESQL_CONF_OPTS += --disable-thread-safety
--endif
- 
- ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_or1k)$(BR2_nios2)$(BR2_riscv)$(BR2_xtensa),y)
--POSTGRESQL_CONF_OPTS += --disable-spinlocks
-+POSTGRESQL_CONF_OPTS += -Dspinlocks=false
- endif
- 
- ifeq ($(BR2_PACKAGE_READLINE),y)
- POSTGRESQL_DEPENDENCIES += readline
- else
--POSTGRESQL_CONF_OPTS += --without-readline
-+POSTGRESQL_CONF_OPTS += --Dreadline=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- POSTGRESQL_DEPENDENCIES += zlib
- else
--POSTGRESQL_CONF_OPTS += --without-zlib
-+POSTGRESQL_CONF_OPTS += -Dzlib=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_TZDATA),y)
- POSTGRESQL_DEPENDENCIES += tzdata
--POSTGRESQL_CONF_OPTS += --with-system-tzdata=/usr/share/zoneinfo
-+POSTGRESQL_CONF_OPTS += -Dsystem_tzdata=/usr/share/zoneinfo
- else
- POSTGRESQL_DEPENDENCIES += host-zic
- POSTGRESQL_CONF_ENV += ZIC="$(ZIC)"
-@@ -73,56 +55,51 @@ endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- POSTGRESQL_DEPENDENCIES += openssl
--POSTGRESQL_CONF_OPTS += --with-openssl
--else
--# PostgreSQL checks for /dev/urandom and fails if it's being cross-compiled and
--# an SSL library isn't found. Since /dev/urandom is guaranteed to be provided
--# on Linux systems, explicitly tell the configure script it's available.
--POSTGRESQL_CONF_ENV += ac_cv_file__dev_urandom=yes
-+POSTGRESQL_CONF_OPTS += -Dssl=openssl
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENLDAP),y)
- POSTGRESQL_DEPENDENCIES += openldap
--POSTGRESQL_CONF_OPTS += --with-ldap
-+POSTGRESQL_CONF_OPTS += -Dldap=enabled
- else
--POSTGRESQL_CONF_OPTS += --without-ldap
-+POSTGRESQL_CONF_OPTS += -Dldap=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_ICU),y)
- POSTGRESQL_DEPENDENCIES += icu
--POSTGRESQL_CONF_OPTS += --with-icu
-+POSTGRESQL_CONF_OPTS += -Dicu=enabled
- else
--POSTGRESQL_CONF_OPTS += --without-icu
-+POSTGRESQL_CONF_OPTS += -Dicu=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
- POSTGRESQL_DEPENDENCIES += libxml2
--POSTGRESQL_CONF_OPTS += --with-libxml
-+POSTGRESQL_CONF_OPTS += -Dlibxml=enabled
- POSTGRESQL_CONF_ENV += XML2_CONFIG=$(STAGING_DIR)/usr/bin/xml2-config
- else
--POSTGRESQL_CONF_OPTS += --without-libxml
-+POSTGRESQL_CONF_OPTS += -Dlibxml=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_ZSTD),y)
- POSTGRESQL_DEPENDENCIES += host-pkgconf zstd
--POSTGRESQL_CONF_OPTS += --with-zstd
-+POSTGRESQL_CONF_OPTS += -Dzstd=enabled
- else
--POSTGRESQL_CONF_OPTS += --without-zstd
-+POSTGRESQL_CONF_OPTS += -Dzstd=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LZ4),y)
- POSTGRESQL_DEPENDENCIES += host-pkgconf lz4
--POSTGRESQL_CONF_OPTS += --with-lz4
-+POSTGRESQL_CONF_OPTS += -Dlz4=enabled
- else
--POSTGRESQL_CONF_OPTS += --without-lz4
-+POSTGRESQL_CONF_OPTS += -Dlz4=disabled
- endif
- 
- # required for postgresql.service Type=notify
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- POSTGRESQL_DEPENDENCIES += systemd
--POSTGRESQL_CONF_OPTS += --with-systemd
-+POSTGRESQL_CONF_OPTS += -Dsystemd=enabled
- else
--POSTGRESQL_CONF_OPTS += --without-systemd
-+POSTGRESQL_CONF_OPTS += -Dsystemd=disabled
- endif
- 
- POSTGRESQL_CFLAGS = $(TARGET_CFLAGS)
-@@ -165,4 +142,4 @@ define POSTGRESQL_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/usr/lib/systemd/system/postgresql.service
- endef
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
-diff --git a/package/python-psycopg2/Config.in b/package/python-psycopg2/Config.in
-index 4aa86c7690..307c072bd3 100644
---- a/package/python-psycopg2/Config.in
-+++ b/package/python-psycopg2/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_PYTHON_PSYCOPG2
- 	bool "python-psycopg2"
-+	depends on BR2_USE_MMU # postgresql
- 	depends on BR2_USE_WCHAR # postgresql
-+	depends on BR2_ENABLE_LOCALE # postgresql
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-+	depends on !BR2_STATIC_LIBS # postgresql
- 	depends on !BR2_OPTIMIZE_FAST # postgresql
- 	select BR2_PACKAGE_POSTGRESQL
- 	help
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 6e6a7cf984..16a17dfc27 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -72,8 +72,10 @@ config BR2_PACKAGE_QT5BASE_MYSQL
- config BR2_PACKAGE_QT5BASE_PSQL
- 	bool "PostgreSQL Plugin"
- 	depends on BR2_USE_MMU # postgresql
--	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_WCHAR # postgresql
-+	depends on BR2_ENABLE_LOCALE # postgresql
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-+	depends on !BR2_STATIC_LIBS # postgresql
- 	depends on !BR2_OPTIMIZE_FAST # postgresql
- 	select BR2_PACKAGE_POSTGRESQL
- 	help
-diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index 3b15d40c83..96a0416dbd 100644
---- a/package/qt6/qt6base/Config.in
-+++ b/package/qt6/qt6base/Config.in
-@@ -200,10 +200,12 @@ comment "MySQL plugin needs a toolchain w/ C++, threads"
- 
- config BR2_PACKAGE_QT6BASE_PSQL
- 	bool "PostgreSQL Plugin"
--	depends on BR2_USE_MMU
--	depends on !BR2_STATIC_LIBS
--	depends on BR2_USE_WCHAR
--	depends on !BR2_OPTIMIZE_FAST
-+	depends on BR2_USE_MMU # postgresql
-+	depends on BR2_USE_WCHAR # postgresql
-+	depends on BR2_ENABLE_LOCALE # postgresql
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-+	depends on !BR2_STATIC_LIBS # postgresql
-+	depends on !BR2_OPTIMIZE_FAST # postgresql
- 	select BR2_PACKAGE_POSTGRESQL
- 	help
- 	  Build PostgreSQL plugin
-diff --git a/package/zabbix/Config.in b/package/zabbix/Config.in
-index 4940f8ca8e..226bce51ba 100644
---- a/package/zabbix/Config.in
-+++ b/package/zabbix/Config.in
-@@ -40,7 +40,10 @@ config BR2_PACKAGE_ZABBIX_SERVER_MYSQL
- 
- config BR2_PACKAGE_ZABBIX_SERVER_POSTGRESQL
- 	bool "postgresql"
-+	depends on BR2_USE_MMU # postgresql
- 	depends on BR2_USE_WCHAR # postgresql
-+	depends on BR2_ENABLE_LOCALE # postgresql
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
- 	depends on !BR2_STATIC_LIBS # postgresql
- 	depends on !BR2_OPTIMIZE_FAST # postgresql
- 	select BR2_PACKAGE_POSTGRESQL
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   mipsel    |      at-spi2-core-2.50.0       | NOK | https://autobuild.buildroot.org/results/63badb0a71bd6106467956a9c82823b61deeff8f |     
+  mips64el   |      at-spi2-core-2.50.0       | NOK | https://autobuild.buildroot.org/results/f02ed6c2f1c1f2254caec1c970ac11b8cc3e6333 |     
+powerpc64le  |      at-spi2-core-2.50.0       | NOK | https://autobuild.buildroot.org/results/04a91fdae561b9c85b403547836662226508fcbd |     
+   arceb     |          bird-2.15.1           | NOK | https://autobuild.buildroot.org/results/5684c3458d86733438014b7ea99eb8fe6e83678c |     
+powerpc64le  |           brltty-6.6           | NOK | https://autobuild.buildroot.org/results/ef704878dfa2e7193e6c03f37116f6de7fb8bd9e |     
+ powerpc64   |          curlpp-0.8.1          | NOK | https://autobuild.buildroot.org/results/c108ec79311f845c12ec4508551566c0294b111f |     
+  aarch64    |          cvs-1.12.13           | NOK | https://autobuild.buildroot.org/results/6d5dca37938c9df5df89ff7d86fbdad1e01d1c12 | ORPH
+ aarch64_be  |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/ce3ab3ba6f484a1ea4c65a7fe28b4b11fa057b44 |     
+    or1k     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/e5ef062a09542d441378e215c124afb42e4952e8 |     
+ powerpc64   |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/456c853d52c94b9a0af96c4d3aa8b2c441d582bf |     
+    sh4      |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/d9ff37ea5b2867ed7dff210ce5ebc80dd5e91148 |     
+powerpc64le  |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/8ca8c13b03b3a7a79674e3e52fd8f474f0c9b88a |     
+ aarch64_be  |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/17a28bf8137a6b789a69e5696618ae971f55dbd2 |     
+   arceb     |          ffmpeg-6.1.2          | NOK | https://autobuild.buildroot.org/results/a35e21e55b5e4368b16fc2a1d4995528ab3ae468 |     
+   arceb     |          ffmpeg-6.1.2          | NOK | https://autobuild.buildroot.org/results/8e70d43fd804ed4590e53f89184ebaf9f84f1995 |     
+   nios2     |        fluent-bit-3.1.3        | NOK | https://autobuild.buildroot.org/results/68d4aa86ac2eba0506b9bdf4da0647c3506989fe |     
+    mips     |        fluent-bit-3.1.3        | NOK | https://autobuild.buildroot.org/results/5bd16cd1bdee36b5867e556806746d026ecd806b |     
+   armeb     |          foot-1.16.2           | NOK | https://autobuild.buildroot.org/results/2f71820bb375af2becfda563a476a16873b85f31 |     
+microblazeel | fs/jffs2/jffs2.mk:71: /home... | NOK | https://autobuild.buildroot.org/results/b356967e9f60646f214c56603881551c55d04eba |     
+ microblaze  |          giblib-1.2.4          | NOK | https://autobuild.buildroot.org/results/01d082f7227d3c0e690fad9c769b574aa067950c |     
+  mips64el   |          giblib-1.2.4          | NOK | https://autobuild.buildroot.org/results/c114855a3da84f5a774bad65f83688ede18924ab |     
+    arc      | glibc-2.40-18-g564178076272... | NOK | https://autobuild.buildroot.org/results/21d0f8cf8ff3cd727dccf804f80318e601b3a5c1 |     
+ microblaze  |     gobject-introspection      | TIM | https://autobuild.buildroot.org/results/3101c636f319c40ff3809b0ab83e6ee9363860bc |     
+microblazeel |     gobject-introspection      | TIM | https://autobuild.buildroot.org/results/f4453c3938d72407c48ba9554d220bfd08e376bb |     
+   sh4eb     |  gobject-introspection-1.76.1  | NOK | https://autobuild.buildroot.org/results/4c2c1614ea3e8342ddc8f71e5d8ae19bfd362ae6 | ORPH
+  sparc64    |  gobject-introspection-1.76.1  | NOK | https://autobuild.buildroot.org/results/6e639706dcbd5e157e99d9bf54bbfed15602324f | ORPH
+ powerpc64   |          grpc-1.51.1           | NOK | https://autobuild.buildroot.org/results/a6a0679e237c36f93f67ed0cf42299bd38f51537 |     
+   mips64    |       host-binutils-2.42       | NOK | https://autobuild.buildroot.org/results/91b5e894df39456d5cd881874660dd3ceaeee975 |     
+    sh4      | host-binutils-bare-metal-2.... | NOK | https://autobuild.buildroot.org/results/0055f945b1b01dc11d753b8b93cbc2ce654c2e5b |     
+   mips64    |   host-python-greenlet-3.1.1   | NOK | https://autobuild.buildroot.org/results/86c6963d2d7cf0bd421445e03459ed6e2d774b66 |     
+   s390x     |        host-rust-1.82.0        | NOK | https://autobuild.buildroot.org/results/ed1b76b7c515195b53cb0aa9cee8321cb2c7ec2f |     
+  aarch64    |        host-rust-1.82.0        | NOK | https://autobuild.buildroot.org/results/40220b7220006714ecd1acd29d63431f833de61f |     
+powerpc64le  |        host-rust-1.82.0        | NOK | https://autobuild.buildroot.org/results/17947325ce96272e18447815ad0a409d9d625005 |     
+ powerpc64   |        host-rust-1.82.0        | NOK | https://autobuild.buildroot.org/results/f0eb7d2733cb26bc17ecdb70538003f32e6eb6e8 |     
+   x86_64    |        host-rust-1.82.0        | NOK | https://autobuild.buildroot.org/results/af0990a35856cb107c1a46920b351ef7c34c34c4 |     
+   sh4aeb    | ibm-sw-tpm2-rev183-2024-03-27  | NOK | https://autobuild.buildroot.org/results/eb9c58c0e737a798bb11cc5f67e6b9fb50685327 |     
+   armeb     | ibm-sw-tpm2-rev183-2024-03-27  | NOK | https://autobuild.buildroot.org/results/cdee839287cd1425a5495cb81b6f2fef0eaa3ab0 |     
+   x86_64    | ibm-sw-tpm2-rev183-2024-03-27  | NOK | https://autobuild.buildroot.org/results/4322e8df2832108c6cabdb520bba2a1d28074e90 |     
+ aarch64_be  | ibm-sw-tpm2-rev183-2024-03-27  | NOK | https://autobuild.buildroot.org/results/4f9fa6b167a2d58527838f6730c18c4b3562f426 |     
+  powerpc    |           ipset-7.16           | NOK | https://autobuild.buildroot.org/results/5c7aa82fa7dd2794272caf358ac0f41d8033ac82 |     
+   s390x     |         latencytop-0.5         | NOK | https://autobuild.buildroot.org/results/6041c307ad50c359c11636b504be0f5b71bbc511 | ORPH
+   mipsel    |       libargtable2-2.13        | NOK | https://autobuild.buildroot.org/results/66a6e885684c7895193fecd2aaa8f9b3d38d9836 | ORPH
+   nios2     |       libargtable2-2.13        | NOK | https://autobuild.buildroot.org/results/a4f092d4073cb9be992bc9a96875fb30e805803d | ORPH
+   sparc     |         libdrm-2.4.123         | NOK | https://autobuild.buildroot.org/results/8620ad05dcd43e92216d1e4374da58d8c8185dfa |     
+    or1k     |     liblog4c-localtime-1.0     | NOK | https://autobuild.buildroot.org/results/8e3e35c77fef92788e41036902d4aa6a40661027 |     
+microblazeel |        libunistring-1.3        | NOK | https://autobuild.buildroot.org/results/03546bdeb0637cded464b3567f6bdc5acfefee4e |     
+  mips64el   |      linux-5.10.162-cip24      | NOK | https://autobuild.buildroot.org/results/bfca8f2383bba71a758dc1294226f623d49d944b | ORPH
+   mipsel    |   linux-5.10.162-cip24-rt10    | NOK | https://autobuild.buildroot.org/results/63862c37d49e7aa2b0146214fe0730440525c3ab | ORPH
+    mips     |         linux-6.11.10          | NOK | https://autobuild.buildroot.org/results/fdcdcfc4b1ebdbbe171aceafb97fbee7d3d63883 | ORPH
+    arc      |         linux-6.11.10          | NOK | https://autobuild.buildroot.org/results/1d03b56f4af0819bf2782bf9e228a2739c4cb56f | ORPH
+  powerpc    |         linux-6.11.10          | NOK | https://autobuild.buildroot.org/results/1c1423406f1a151801865ca62d0454d43f6afc1d | ORPH
+   nios2     |         linux-6.11.10          | NOK | https://autobuild.buildroot.org/results/5cb2d41cd9edb37cdb89d19e6ed650f106be83b4 | ORPH
+  sparc64    |       linux-fusion-9.0.3       | NOK | https://autobuild.buildroot.org/results/ed1e3b2b85321e3389b1911d17c61fe202bbe4af | ORPH
+   arceb     |          linux-tools           | NOK | https://autobuild.buildroot.org/results/5a61101f31752ea00656a6cf6062b73b4d88d0bc | ORPH
+microblazeel |         lmbench-3.0-a9         | NOK | https://autobuild.buildroot.org/results/0e164a5af2121e655c8586037291aad2f0917a33 | ORPH
+  mips64el   |         lmbench-3.0-a9         | NOK | https://autobuild.buildroot.org/results/0b81527e8c064df2f987776b9fcd1ea3b2153ca8 | ORPH
+ microblaze  |         lmbench-3.0-a9         | NOK | https://autobuild.buildroot.org/results/cdf2b03928729820d83ee1af3e444743cc005e2a | ORPH
+  powerpc    |         lmbench-3.0-a9         | NOK | https://autobuild.buildroot.org/results/956a601163d2819aa3d71c74a9d4d07fe23da34e | ORPH
+   mipsel    |         lmbench-3.0-a9         | NOK | https://autobuild.buildroot.org/results/e1644791e07f165d4b32c82db79975749c2924c3 | ORPH
+   x86_64    |         lmbench-3.0-a9         | NOK | https://autobuild.buildroot.org/results/892720166c0d8fde71cd3be4a1e07506eaf22d67 | ORPH
+  mips64el   |        luabitop-1.0.2-1        | NOK | https://autobuild.buildroot.org/results/bd75141f8e693d89ed686c3fa421ba859c897396 |     
+  mips64el   |         mesa3d-24.0.9          | NOK | https://autobuild.buildroot.org/results/c51ccb755fbbd01c4e0f211b707e574136bfa8ce |     
+   sparc     |           mpir-3.0.0           | NOK | https://autobuild.buildroot.org/results/489fa845f4f7f80da01c7d1be034e26c2eb9c354 |     
+powerpc64le  |      obsidian-cursors-1.0      | NOK | https://autobuild.buildroot.org/results/4b1d217744aafaccceb9103c4e804d3d1f97eacd | ORPH
+   armeb     |         openssh-9.9p1          | NOK | https://autobuild.buildroot.org/results/2df1b0c1873183ffbff3cb32bd94afcb535a192a | ORPH
+    arm      |          perl-5.40.0           | NOK | https://autobuild.buildroot.org/results/9cd001722c5203784b6a09a6e4471230d05727bd |     
+    arm      |          perl-5.40.0           | NOK | https://autobuild.buildroot.org/results/54e7f023280f13a1a1c7a18f33a7f2dfc68b4102 |     
+    m68k     |          perl-5.40.0           | NOK | https://autobuild.buildroot.org/results/20a8cbc5833379195dc846486cc963154be78388 |     
+   sparc     |        pulseaudio-17.0         | NOK | https://autobuild.buildroot.org/results/0484ab71b19300825a9ea5ccb3de5868c993ebf6 | ORPH
+powerpc64le  |       subversion-1.14.3        | NOK | https://autobuild.buildroot.org/results/5492fc86e88fae21d233f4c799f94ea0f89a1a7b | ORPH
+  riscv64    |       util-linux-2.40.2        | NOK | https://autobuild.buildroot.org/results/6073950011cc0370e133dc7d681783ee11e71c16 | ORPH
+  riscv64    |       util-linux-2.40.2        | NOK | https://autobuild.buildroot.org/results/1d042671d732868f4476c2016a4970efccbf8b81 | ORPH
+  mips64el   |       util-linux-2.40.2        | NOK | https://autobuild.buildroot.org/results/23a87a25880537ef0cd2ab83b413a0eac144d0d6 | ORPH
+   mips64    |       util-linux-2.40.2        | NOK | https://autobuild.buildroot.org/results/8fbb7e2cd153b212d873a1d62edd0ae50c9714bb | ORPH
+  mips64el   |         wolfssl-5.7.2          | NOK | https://autobuild.buildroot.org/results/07dda44517faad988736ebadec2117f46f0ad019 |     
+   armeb     |           yajl-2.1.0           | NOK | https://autobuild.buildroot.org/results/51938786b10e316f69a1359a38df1b645c8cc09d | ORPH
+
+
+Classification of failures by reason for 2024.02.x
+--------------------------------------------------
+
+  gobject-introspection-1.76.1 | 1 
+              host-rust-1.74.1 | 1 
+           host-systemd-254.13 | 1 
+   python-pydantic-core-2.14.6 | 1 
+
+
+Detail of failures for 2024.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   s390x     |  gobject-introspection-1.76.1  | NOK | https://autobuild.buildroot.org/results/5fd3eb424c725a2012a39776e23fc748b606fb7d | ORPH
+   mipsel    |        host-rust-1.74.1        | NOK | https://autobuild.buildroot.org/results/bda9a990e97e03831b1e9156977a66c6515bad5b |     
+ aarch64_be  |      host-systemd-254.13       | NOK | https://autobuild.buildroot.org/results/9f99a97df2efd5e4ae4ad5cc5882607f0c8766bc |     
+   x86_64    |  python-pydantic-core-2.14.6   | NOK | https://autobuild.buildroot.org/results/91d1b448e3030a8a838618744d8d02f77e09a358 |     
+
+
+Classification of failures by reason for 2024.08.x
+--------------------------------------------------
+
+         gobject-introspection | 1 
+
+
+Detail of failures for 2024.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+microblazeel |     gobject-introspection      | TIM | https://autobuild.buildroot.org/results/2feca894a6c61138f0aed78653271f4fe1b85bef |     
+
+
+Classification of failures by reason for next
+---------------------------------------------
+
+             gstreamer1-1.22.9 | 1 
+                   libks-2.0.5 | 1 
+                lmbench-3.0-a9 | 1 
+
+
+Detail of failures for next
+---------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   armeb     |       gstreamer1-1.22.9        | NOK | https://autobuild.buildroot.org/results/e7cc306a29cff56801398c680ca365ff0b03e5af | ORPH
+   s390x     |          libks-2.0.5           | NOK | https://autobuild.buildroot.org/results/448e12007aa51f6514d43a4a5568e1a25b394d10 | ORPH
+   armeb     |         lmbench-3.0-a9         | NOK | https://autobuild.buildroot.org/results/2f8d6714179693b453969643db8e598f5c440f8c | ORPH
+
+
+
 -- 
-2.45.2
-
+https://autobuild.buildroot.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
