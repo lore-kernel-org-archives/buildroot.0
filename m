@@ -1,110 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E2AED6D255
-	for <buildroot@archiver.kernel.org>; Thu, 28 Nov 2024 03:21:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1882D6D25F
+	for <buildroot@archiver.kernel.org>; Thu, 28 Nov 2024 03:50:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05401607AF;
-	Thu, 28 Nov 2024 03:21:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A2E8848C4;
+	Thu, 28 Nov 2024 03:50:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FYtXStMpmBfd; Thu, 28 Nov 2024 03:21:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6DxRlWVhr98V; Thu, 28 Nov 2024 03:50:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29AE960B3F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8EDD848BE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29AE960B3F;
-	Thu, 28 Nov 2024 03:21:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B3A21167
- for <buildroot@buildroot.org>; Thu, 28 Nov 2024 03:21:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D8EDD848BE;
+	Thu, 28 Nov 2024 03:50:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 63B9E1167
+ for <buildroot@buildroot.org>; Thu, 28 Nov 2024 03:50:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B140607AF
- for <buildroot@buildroot.org>; Thu, 28 Nov 2024 03:21:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 51CEF848BE
+ for <buildroot@buildroot.org>; Thu, 28 Nov 2024 03:50:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nw6PM9m_3fW2 for <buildroot@buildroot.org>;
- Thu, 28 Nov 2024 03:21:15 +0000 (UTC)
-X-Greylist: delayed 587 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 28 Nov 2024 03:21:15 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1E83260859
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E83260859
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=103.168.172.150;
- helo=fout-a7-smtp.messagingengine.com; envelope-from=julio@meroh.net;
- receiver=<UNKNOWN> 
-Received: from fout-a7-smtp.messagingengine.com
- (fout-a7-smtp.messagingengine.com [103.168.172.150])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1E83260859
- for <buildroot@buildroot.org>; Thu, 28 Nov 2024 03:21:15 +0000 (UTC)
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal
- [10.202.2.44])
- by mailfout.phl.internal (Postfix) with ESMTP id 2CA8F13800F0
- for <buildroot@buildroot.org>; Wed, 27 Nov 2024 22:11:27 -0500 (EST)
-Received: from phl-imap-13 ([10.202.2.103])
- by phl-compute-04.internal (MEProxy); Wed, 27 Nov 2024 22:11:27 -0500
-X-ME-Sender: <xms:Xt9HZzCnNWPO0oFu8dqueTrdptCWi-XxEbaB6Z7PjvAiXpqhjXMW8A>
- <xme:Xt9HZ5hrQ3oniAasW3DCtlGlDaUSsDWAKrigZfp1SwmL5vpL2U1OZ3vsE-vS7Tdx4
- t61rRl_PwlgUjxqsW8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrhedtgdehhecutefuodetggdotefrodftvf
- curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
- tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecunecujfgurhepofggfffhvf
- fkufgtgfesthejredtredttdenucfhrhhomhepfdfluhhlihhoucfovghrihhnohdfuceo
- jhhulhhiohesmhgvrhhohhdrnhgvtheqnecuggftrfgrthhtvghrnhepleffiedvteeggf
- dtleeitdduvdelffeutddvfeelfedvjeeiffdthfegfeeuhfdvnecuvehluhhsthgvrhfu
- ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhulhhiohesmhgvrhhohhdrnh
- gvthdpnhgspghrtghpthhtohepuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohep
- sghuihhlughrohhothessghuihhlughrohhothdrohhrgh
-X-ME-Proxy: <xmx:X99HZ-m335hw0UOvI8dL12kCPuWsmLDeOLcHkIGRGp18ZxuzfWWjWQ>
- <xmx:X99HZ1wQLPRIR3cX40oN5ID9jBUIXzkBwQGHZFuhmDOCYPnuq4EckA>
- <xmx:X99HZ4RjiaYFlyEo8foRAN449rFcQ8lYwFLkTgZ_upWOmKPFrnUygA>
- <xmx:X99HZ4aTfg7ek-21lDO599ELdOHEYMeSamM5sh3b22CBYyk1j4ISlQ>
- <xmx:X99HZx6JChwjdZa0_MKval9wbRkaYFGNiKRl6kQkqxCu5Q1dFMfbK4oU>
-Feedback-ID: i25a14935:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
- id DC4DB1F00073; Wed, 27 Nov 2024 22:11:26 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-MIME-Version: 1.0
-Date: Wed, 27 Nov 2024 19:11:03 -0800
-From: "Julio Merino" <julio@meroh.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fjOcqWcpdf5I for <buildroot@buildroot.org>;
+ Thu, 28 Nov 2024 03:50:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::233; helo=mail-oi1-x233.google.com;
+ envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 23E25848BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23E25848BD
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com
+ [IPv6:2607:f8b0:4864:20::233])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 23E25848BD
+ for <buildroot@buildroot.org>; Thu, 28 Nov 2024 03:50:37 +0000 (UTC)
+Received: by mail-oi1-x233.google.com with SMTP id
+ 5614622812f47-3ea47651a10so238378b6e.0
+ for <buildroot@buildroot.org>; Wed, 27 Nov 2024 19:50:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1732765836; x=1733370636;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=CNieq5bzs6UA6hoAnpS8EcLdTf8vcNnJb7xJxMk/jH0=;
+ b=tIzAyqK12WkFxfl4tgryJyN004n6XOdCLNF5GdwJ4Ewa5WtM9XT9SBTf188IPmst+r
+ 6QuWKyyn+2DnwEGWg15LAiUGuZbFqaXktpKky9OhhEMJwr7I0VAOgpkOW2qlemYnMv+I
+ 6inCaSzdPhypyTzu3Qba986eBLCx80yUoaF8nEAk1RgFd8ttW+bxFnpe9oK9jZq394yM
+ +XvLQrK7Hh1Ov5WwZvERGk9OvejHAzNyiYkE3ojyguFtgFdSAxKQu0SijMIbPiR5nMXC
+ dZUn/38Y47uGmdNsh8fNVgk9teuDCUj8YEPxBtCFFR195oCukwu4MJCL2hXEF9TrqNJy
+ zDoA==
+X-Gm-Message-State: AOJu0YxOc32qP6FvMXMt+YEtJcF7O9ZdwJDi8l0LOmvDih/cMhpE2gSR
+ uSVfmbhD2ssYaJNrEfF7fPBjiAj4EQpInkLh/AyzOGvNMviDUyU3L4JNSA==
+X-Gm-Gg: ASbGncu/sivTsHEkXU03W4zKBVAymuHVIgiXabujgVR02DjoeFye/5cr/IiRP6WBtzm
+ SL32A4SSGGB1geoRCyRDAOMAUY6TKOypFNtTYhm6MCCk1bsauJBmUsoIvld2LPfckky5bEk8Wuk
+ JDCVZnNw+znbXuaGOQY1SbkEOzf8F4lM4SJgvLBVaTQMtZuDk99AKcs2iyogoX04/vZ+iIGWkV1
+ Twu6R7u/cbhyWtlASyQtYHpITkTDg9e8pUsBvdSoNE81B0=
+X-Google-Smtp-Source: AGHT+IErLOfsxm/G4AhzUTCX+MvS/OJQQAhwX8LsszmW8fs2HHyBKdZigChJor0lmativYXcg/Mnfg==
+X-Received: by 2002:a05:6808:250c:b0:3ea:4e7c:a916 with SMTP id
+ 5614622812f47-3ea6dd9f26fmr5930019b6e.37.1732765834546; 
+ Wed, 27 Nov 2024 19:50:34 -0800 (PST)
+Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
+ d2e1a72fcca58-7254176148csm397512b3a.19.2024.11.27.19.50.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 27 Nov 2024 19:50:33 -0800 (PST)
+From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
-Message-Id: <52f63db5-124e-4be0-8ebf-3c177b9f9b03@app.fastmail.com>
+Cc: thomas.petazzoni@bootlin.com,
+	Scott Fan <fancp2007@gmail.com>
+Date: Thu, 28 Nov 2024 11:50:14 +0800
+Message-ID: <20241128035016.750439-1-fancp2007@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241030002020.73963-1-fancp2007@gmail.com>
+References: <20241030002020.73963-1-fancp2007@gmail.com>
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=meroh.net; h=cc
- :content-transfer-encoding:content-type:content-type:date:date
- :from:from:in-reply-to:message-id:mime-version:reply-to:subject
- :subject:to:to; s=fm2; t=1732763487; x=1732849887; bh=RVkIx1k6EC
- KUcJWognkPaPysNM5QTZe/088QT07CjQY=; b=IwriyWgXCS5fnHuOyxJTd7hHq4
- ecvo0Mf51IlRHg67v/C2MImOmo+o4l4uZeyZzJDeUJYcGNIFmVSCwr+f/ThPszei
- J59iYF1jytcxiYHIOTa6NeCJi4wtDCXkn89ideVpvtinN05Z9rlA/e/ew3i0z56k
- JiEXmtkVzBxHFqJCjoOwUEui0fhX0CFJS7TWBYC6btquqW0fRFBqG+3+dBh07k4Z
- utha3XTvx/739oiRdZXkUE8uOnNdbnpSaOel1nSqB1lIUl29Wu+xtdqb2xfmsLhd
- IkuGwdS42gMoKg7pdGGjEqUA2Cm6zbRD3VMkL1ZDF+7h9sWNrxck3kstYepA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- messagingengine.com; h=cc:content-transfer-encoding:content-type
- :content-type:date:date:feedback-id:feedback-id:from:from
- :in-reply-to:message-id:mime-version:reply-to:subject:subject:to
- :to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
- 1732763487; x=1732849887; bh=RVkIx1k6ECKUcJWognkPaPysNM5QTZe/088
- QT07CjQY=; b=qHIQP6lzv9XYY8ew/c4LbxnGcC5jmheFXmf/g8jSTAhot7039NN
- 5y9M4HkFznDqFoYy1yhy6Cx2elx61Ga1T8ZotBljZcjwv1CeoB+2OQHclb+O3mVt
- RdZG2zmRTsaVmnu6vWaFeEklemuuFLBanFjkHJc1PyZ+MUJKy0qXzn5t/OKJiM0d
- yefx2EDv5LM/UNCZxuN0J+9l0ER19cmXuVIhirzrjPM+DU8iCwK+T+B1IthJmtWp
- gHQ9K7ae2BLZY3+XBzyA4FPYl10xfS18F8yuUAL0LRS8AX5wIcTLuqNRzvKnMhcn
- DcNCzHF8sTUNqjNZnv+PqZnEe9jhCmJt2cg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=meroh.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=meroh.net header.i=@meroh.net
- header.a=rsa-sha256 header.s=fm2 header.b=IwriyWgX; 
- dkim=pass (2048-bit key,
- unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm1 header.b=qHIQP6lz
-Subject: [Buildroot] How do I generate the vendored Cargo sources?
+ d=gmail.com; s=20230601; t=1732765836; x=1733370636; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=CNieq5bzs6UA6hoAnpS8EcLdTf8vcNnJb7xJxMk/jH0=;
+ b=QUBK+JcvKwfscG+hOKf9fN48AQFPwTulh4DbntLwhrOYfWikRrPIo10FAVIqtEt7Gs
+ 4aazv8PBhptTLYXx6/zzSmsR7fRkXlTbVqhJdXLmMObuL6SkJBRlw2Wk+6hLg+90VC3D
+ rKW0NS6I6wChxAuRvpXgdTpW0KXgI+RKPgVyUoLO30NDOlVUdJTBQdWZp/tTVPUy/lcr
+ nC73R7j/aS2siZd1bvPH3eZ502DVAQZGIvhujh4hgkgqyK03AE4mGcmXXZcYhUIwBk/U
+ StxMnMaQPEvHo+2+1FGv/WxKIXh29d2ut0UhlpN6RnoeSLSqHn2lmEHWr6CK5zuIRJff
+ N8rA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=QUBK+Jcv
+Subject: [Buildroot] [PATCH] package/procps-ng: fix pidfd_open checking
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,15 +112,236 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+The previous build setup would check for pidfd_open using
+AC_CHECK_FUNC and would be incorrectly reported as true.
 
-I'm exploring creating a package in Buildroot that uses Rust for building. The process seems very easy, and I think I've got everything in place... but I do not know how to handle the "cargo2.tar.gz" file and I cannot find any information about this in the documentation.
+Backport patch from upstream:
+[1] https://gitlab.com/procps-ng/procps/-/commit/2507bc475782ff5e0541d37c780dff1e293c9553
+[2] https://gitlab.com/procps-ng/procps/-/commit/587efb47df7ddbfda4e6abdd1e7792a2531a238f
+[3] https://gitlab.com/procps-ng/procps/-/commit/5acbb5dc1587d688de646d739a97251eb893bbb0
 
-As I understand it, this cargo2.tar.gz file is a "vendored" copy of the upstream sources with all Cargo dependencies bundled and locked at specific versions to guarantee reproducible builds.
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+---
+ ...03-build-sys-Fix-pidfd_open-checking.patch | 99 +++++++++++++++++++
+ ...ld-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch | 37 +++++++
+ ...lude-sys-syscall.h-if-making-pidwait.patch | 41 ++++++++
+ package/procps-ng/procps-ng.mk                |  2 +
+ 4 files changed, 179 insertions(+)
+ create mode 100644 package/procps-ng/0003-build-sys-Fix-pidfd_open-checking.patch
+ create mode 100644 package/procps-ng/0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch
+ create mode 100644 package/procps-ng/0005-pgrep-Include-sys-syscall.h-if-making-pidwait.patch
 
-So my question is: how do I generate such tarball given just the upstream tarball?
+diff --git a/package/procps-ng/0003-build-sys-Fix-pidfd_open-checking.patch b/package/procps-ng/0003-build-sys-Fix-pidfd_open-checking.patch
+new file mode 100644
+index 0000000000..fc7e092347
+--- /dev/null
++++ b/package/procps-ng/0003-build-sys-Fix-pidfd_open-checking.patch
+@@ -0,0 +1,99 @@
++From f37d178d5c25c547835d054fbb1eda32c25034b3 Mon Sep 17 00:00:00 2001
++From: Craig Small <csmall@dropbear.xyz>
++Date: Mon, 30 Sep 2024 17:26:01 +1000
++Subject: [PATCH] build-sys: Fix pidfd_open checking
++
++The previous build setup would check for pidfd_open using
++AC_CHECK_FUNC and would be incorrectly reported as true.
++
++Also, if pidfd_open() and __NR_pidfd_open were not present,
++pidwait would silently not be built.
++
++So, changes:
++ compile a small programin using pidfd_open to test it properly
++ conditionally try to find NR_pidfd_open if the function fails
++ complain if neither are present
++ have --disable-pidwait configure option so you are explicit in
++ not wanting and knowing you wont get pidwait
++
++References:
++ #352
++ commit d9c3e3676d86094abaa239b3218f57bf49d70b4f
++ commit 17f94796a9b3c4f1ff28829107a82107dcb362b4
++
++Signed-off-by: Craig Small <csmall@dropbear.xyz>
++
++Upstream: https://gitlab.com/procps-ng/procps/-/commit/2507bc475782ff5e0541d37c780dff1e293c9553
++
++Signed-off-by: Scott Fan <fancp2007@gmail.com>
++[Scott: backported to version 4.0.4]
++---
++ configure.ac | 45 ++++++++++++++++++++++++++++++---------------
++ 1 file changed, 30 insertions(+), 15 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index fec27e3f..0719fcd1 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -170,21 +170,6 @@ AC_TRY_COMPILE([#include <errno.h>],
++ 		AC_MSG_RESULT(yes),
++ 		AC_MSG_RESULT(no))
++ 
++-AC_CHECK_FUNC([pidfd_open], [enable_pidwait=yes], [
++-  AC_MSG_CHECKING([for __NR_pidfd_open])
++-  AC_COMPILE_IFELSE([AC_LANG_SOURCE([
++-#include <sys/syscall.h>
++-#ifndef __NR_pidfd_open
++-#error __NR_pidfd_open not defined
++-#endif
++-    ])], [enable_pidwait=yes], [enable_pidwait=no])
++-  AC_MSG_RESULT([$enable_pidwait])
++-])
++-if test "$enable_pidwait" = yes; then
++-  AC_DEFINE([ENABLE_PIDWAIT], [1], [Enable pidwait])
++-fi
++-AM_CONDITIONAL([BUILD_PIDWAIT], [test x$enable_pidwait = xyes])
++-
++ dnl watch8bit must be before the AC_ARG_WITH set as it sets up ncurses
++ AC_SUBST([WITH_WATCH8BIT])
++ AC_ARG_ENABLE([watch8bit],
++@@ -321,6 +306,36 @@ AC_ARG_ENABLE([pidof],
++ )
++ AM_CONDITIONAL(BUILD_PIDOF, test "x$enable_pidof" = xyes)
++ 
+++# If pidwait is enabled, we need either pidfd_open() or __NR_pidfd_open need to be defined
+++# Cannot use AC_CHECK_FUNC as it (incorrectly) passes with pidfd_open missing
+++AC_ARG_ENABLE([pidwait],
+++  AS_HELP_STRING([--disable-pidwait], [do not build pidwait]),
+++  [], [
+++    enable_pidwait=yes
+++    AC_DEFINE(ENABLE_PIDWAIT, 1, [enable pidwait])
+++  ]
+++)
+++AM_CONDITIONAL(BUILD_PIDWAIT, test "x$enable_pidwait" = xyes)
+++AC_MSG_CHECKING([for pidfd_open()])
+++AC_LINK_IFELSE([AC_LANG_PROGRAM([], [[ [pidfd_open(1,1)]]])],
+++  have_pidfd_open=yes; AC_MSG_RESULT([yes]) ,
+++  have_pidfd_open=no; AC_MSG_RESULT([no])
+++  )
+++
+++AS_IF([[test "x$enable_pidwait" = xyes -a "x$have_pidfd_open" = xno]],
+++   AC_MSG_CHECKING([for __NR_pidfd_open])
+++   AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+++#include <sys/syscall.h>
+++#ifndef __NR_pidfd_open
+++#error __NR_pidfd_open not defined
+++#endif
+++      ])],
+++      AC_MSG_RESULT([yes]),
+++      AC_MSG_RESULT([no])
+++      AC_MSG_ERROR([Neither pidfd_open or __NR_pidfd_open found. Disable pidwait with configure option --disable-pidwait])
+++    )
+++   ,[])
+++
++ AC_ARG_ENABLE([kill],
++   AS_HELP_STRING([--disable-kill], [do not build kill]),
++   [], [enable_kill=yes]
++-- 
++2.43.0
++
+diff --git a/package/procps-ng/0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch b/package/procps-ng/0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch
+new file mode 100644
+index 0000000000..aa65df7706
+--- /dev/null
++++ b/package/procps-ng/0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch
+@@ -0,0 +1,37 @@
++From 1e2d53e1d86cb75e8f39b42b9a5c409e5d3261ed Mon Sep 17 00:00:00 2001
++From: oli-ben <24815225-oli-ben@users.noreply.gitlab.com>
++Date: Wed, 27 Nov 2024 20:17:11 +0000
++Subject: [PATCH] build-sys: Fix define of HAVE_PIDFD_OPEN
++
++Fix cross-compilation issues when using GCC-12.3
++* configure fails to detect that the sysroot does support the pidfd_open
++  syscall wrapper
++* configure fails to define HAVE_PIDFD_OPEN which is used in pgrep.c,
++  so it fails building, because __NR_pidfd_open is then undefined
++
++Upstream: https://gitlab.com/procps-ng/procps/-/commit/587efb47df7ddbfda4e6abdd1e7792a2531a238f
++
++Signed-off-by: Scott Fan <fancp2007@gmail.com>
++[Scott: backported to version 4.0.4]
++---
++ configure.ac | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 0719fcd1..6242a8f8 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -317,8 +317,8 @@ AC_ARG_ENABLE([pidwait],
++ )
++ AM_CONDITIONAL(BUILD_PIDWAIT, test "x$enable_pidwait" = xyes)
++ AC_MSG_CHECKING([for pidfd_open()])
++-AC_LINK_IFELSE([AC_LANG_PROGRAM([], [[ [pidfd_open(1,1)]]])],
++-  have_pidfd_open=yes; AC_MSG_RESULT([yes]) ,
+++AC_LINK_IFELSE([AC_LANG_PROGRAM([], [[pidfd_open(1,1)]])],
+++  have_pidfd_open=yes; AC_DEFINE(HAVE_PIDFD_OPEN, 1, [pidfd_open is defined]) AC_MSG_RESULT([yes]),
++   have_pidfd_open=no; AC_MSG_RESULT([no])
++   )
++ 
++-- 
++2.43.0
++
+diff --git a/package/procps-ng/0005-pgrep-Include-sys-syscall.h-if-making-pidwait.patch b/package/procps-ng/0005-pgrep-Include-sys-syscall.h-if-making-pidwait.patch
+new file mode 100644
+index 0000000000..74f93c8e49
+--- /dev/null
++++ b/package/procps-ng/0005-pgrep-Include-sys-syscall.h-if-making-pidwait.patch
+@@ -0,0 +1,41 @@
++From 81ded587d2484b6f470f2d5c837c5591491377ce Mon Sep 17 00:00:00 2001
++From: Craig Small <csmall@dropbear.xyz>
++Date: Thu, 28 Nov 2024 07:20:42 +1100
++Subject: [PATCH] pgrep: Include sys/syscall.h if making pidwait
++
++sys/syscall.h would only be included if pidwait was made
++and we found pidfd_open() The previous commit fixed the
++finding part, but in fact we want sys/syscall.h either
++way because syscall() is defined there too.
++
++Most of the time the header is included by other headers
++but adding it explicitly means if that header is removed or
++changed it still works.
++
++Signed-off-by: Craig Small <csmall@dropbear.xyz>
++
++Upstream: https://gitlab.com/procps-ng/procps/-/commit/5acbb5dc1587d688de646d739a97251eb893bbb0
++
++Signed-off-by: Scott Fan <fancp2007@gmail.com>
++[Scott: backported to version 4.0.4]
++---
++ src/pgrep.c | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/src/pgrep.c b/src/pgrep.c
++index d8e57dff..a2607532 100644
++--- a/src/pgrep.c
+++++ b/src/pgrep.c
++@@ -44,9 +44,7 @@
++ 
++ #ifdef ENABLE_PIDWAIT
++ #include <sys/epoll.h>
++-#ifndef HAVE_PIDFD_OPEN
++ #include <sys/syscall.h>
++-#endif /* !HAVE_PIDFD_OPEN */
++ #endif
++ 
++ /* EXIT_SUCCESS is 0 */
++-- 
++2.43.0
++
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index c5185c2c8a..9200b6faa6 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -16,6 +16,8 @@ PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
+ 
+ # Applying 0001-build-sys-Add-systemd-elogind-to-w.patch touches Makefile.am
+ # Applying 0002-fix-ncurses-h-include.patch touches configure.ac
++# Applying 0003-build-sys-Fix-pidfd_open-checking.patch touches configure.ac
++# Applying 0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch touches configure.ac
+ PROCPS_NG_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+-- 
+2.43.0
 
-Thank you!
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
