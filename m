@@ -4,86 +4,149 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12007D65553
-	for <buildroot@archiver.kernel.org>; Thu, 28 Nov 2024 06:08:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 860FCD690E9
+	for <buildroot@archiver.kernel.org>; Thu, 28 Nov 2024 08:16:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88DDF608D6;
-	Thu, 28 Nov 2024 06:08:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B71C9608D2;
+	Thu, 28 Nov 2024 08:16:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1qr5IRQhULV2; Thu, 28 Nov 2024 06:08:11 +0000 (UTC)
+ id ejVDw4bXSweX; Thu, 28 Nov 2024 08:16:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC131608DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8155A607D6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC131608DA;
-	Thu, 28 Nov 2024 06:08:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 184121167
- for <buildroot@buildroot.org>; Thu, 28 Nov 2024 06:08:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8155A607D6;
+	Thu, 28 Nov 2024 08:16:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A69911167
+ for <buildroot@buildroot.org>; Thu, 28 Nov 2024 08:16:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 05B15428E1
- for <buildroot@buildroot.org>; Thu, 28 Nov 2024 06:08:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 94894607D6
+ for <buildroot@buildroot.org>; Thu, 28 Nov 2024 08:16:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8KgfQ9vAqReF for <buildroot@buildroot.org>;
- Thu, 28 Nov 2024 06:08:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.221.237.245;
- helo=send150.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B06BF408D4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B06BF408D4
-Received: from send150.i.mail.ru (send150.i.mail.ru [89.221.237.245])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B06BF408D4
- for <buildroot@buildroot.org>; Thu, 28 Nov 2024 06:08:07 +0000 (UTC)
-Received: by exim-smtp-78d78789c6-624cc with esmtpa (envelope-from
- <fido_max@inbox.ru>) id 1tGXh5-000000005im-2usv
- for buildroot@buildroot.org; Thu, 28 Nov 2024 09:08:04 +0300
-Message-ID: <003b9d80-27dd-477a-a5d6-b4dcb83dee12@inbox.ru>
-Date: Thu, 28 Nov 2024 09:08:03 +0300
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4oCzvUjDEr82 for <buildroot@buildroot.org>;
+ Thu, 28 Nov 2024 08:16:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:200a::61d;
+ helo=nam12-mw2-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A8BAD607AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8BAD607AA
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam12on2061d.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:200a::61d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A8BAD607AA
+ for <buildroot@buildroot.org>; Thu, 28 Nov 2024 08:16:48 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iZf+0jBhA9o/7h11fKJc2XzNrDP/WPTXGoC7cSl7CY1gTZ4Jbsd1TTqOZczj5f4vMOaWVl5hhKDlvSEfa/ADFQc4Gf9NuK/wCYErU+9Aw1ZQxVu+rF46FGp+NEbOXZWamNe1NmJCpAmzJ/RiSakeQqD401RNgbhWfE4IHFn+2yyDkWZYzG/5LSpwHfNnYawLMAgNfG5m3hsXsVmDUQR/UF0/Pkz/bqyKuokQhvWLwVfmjakhLPEDbTtZQv6J7J63jyV8OBhmF6I+tnGjwvjd7psLNcOy4e3FPe4sadSWyjRxYqSOrLuBGvFT49/dx2I94kPrSn/OGtUu+52SlJtjFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=19M3Z9ZXvoSwfNBoXIh6Iuglmw6Q6h6LrQJpZz39KSU=;
+ b=NY/wMn9Lvi9y6BkqsXAc3ykFv0kkUoWECkGxXXT9Bi82y72QZWg2O6zscTiQhoBpgU0AjOhFwzL2FdHEhPQJIsk2DLD/4rubZ7kakR0sDnQ29sT7m+0qLjtyo5bRGaL5fUMiMJr6OMCBuWbG1nMKvmkvaortc4+n86+DsvzPN0DrIfERrvqULnRPbYFIpDm4pz6w9dJGNT55u1bE2znNxV0T/zZkSYC99lMeP2zEzFqpJklgWuPcvZxvLlffV0IWQd2eKVHkfhbtWdQCb6H4O8zt3zDYk/FvYMKAxKJdQ3Jy1hEWYSbsn2EY94PCEb55WZhXfYxFsDAU7xQZqnxfTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from BN9PR03CA0990.namprd03.prod.outlook.com (2603:10b6:408:109::35)
+ by DM6PR12MB4340.namprd12.prod.outlook.com (2603:10b6:5:2a8::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.13; Thu, 28 Nov
+ 2024 08:16:42 +0000
+Received: from BL02EPF0001A104.namprd05.prod.outlook.com
+ (2603:10b6:408:109:cafe::f) by BN9PR03CA0990.outlook.office365.com
+ (2603:10b6:408:109::35) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8207.12 via Frontend Transport; Thu,
+ 28 Nov 2024 08:16:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BL02EPF0001A104.mail.protection.outlook.com (10.167.241.135) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8207.12 via Frontend Transport; Thu, 28 Nov 2024 08:16:41 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 28 Nov
+ 2024 02:16:39 -0600
+Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Thu, 28 Nov 2024 02:16:37 -0600
+To: <buildroot@buildroot.org>
+Date: Thu, 28 Nov 2024 08:16:29 +0000
+Message-ID: <20241128081629.3100977-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: buildroot@buildroot.org
-References: <20241128050116.879176-1-fido_max@inbox.ru>
- <87iks87xbz.fsf@tarshish>
-Content-Language: en-US
-In-Reply-To: <87iks87xbz.fsf@tarshish>
-X-Mailru-Src: smtp
-X-4EC0790: 10
-X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD97DF634AB044F3A9041927C67D3DC0654BD8916EDA40F9E6B00894C459B0CD1B963113FEDAC0EC32BD27678DDAA80631406A16DF88AA90160FF6C3322E4D472EAB57612C3CDEB6A40
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE745229D52CF30560CEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637AB1265E79AFCDEF58638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D856291B2E2B47587BAB3CC57EF4A417ECFF07CEB605A7E5E120879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C036A2807E4187C3608941B15DA834481FA18204E546F3947CEDCF5861DED71B2F389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC82FFDA4F57982C5F4F6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA7E827F84554CEF50127C277FBC8AE2E8BA83251EDC214901ED5E8D9A59859A8B6B1CFA6D474D4A6A4089D37D7C0E48F6C5571747095F342E88FB05168BE4CE3AF
-X-C1DE0DAB: 0D63561A33F958A5A8CC193E934244FB5002B1117B3ED6969B7E677C0AD34EBFCA7E60A991436CA2823CB91A9FED034534781492E4B8EEAD27E9584FBD6BDD31BDAD6C7F3747799A
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF3FED46C3ACD6F73ED3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CFC420D114F2088D564BA390AF344412570C7DBE980C247E3F427999E0A5AFD2D3D9E67331CBA3B6E4BDCC763D930D6EFA14CE5B74F6ABE84BF3A3CC47880E1205ED9B43398A0238B7383C93C5AD2DA449913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojA97iaBGbkJ0gyGbrz4tEkg==
-X-Mailru-Sender: 689FA8AB762F739381B31377CF4CA21910D4B2219B4E878156D986D6A963BBECEF712F36BF04AE8C90DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; 
- s=mail4; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References
- :To:Subject:MIME-Version:Date:Message-ID:From:Sender:Reply-To:To:Cc:
- Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
- List-Archive:X-Cloud-Ids:Disposition-Notification-To;
- bh=sXAZ3UlqKLLjp9uvDYguqtQ7DYORVxugdwy2MStVzRs=; t=1732774088; x=1732864088; 
- b=TZCwrRFBULiGgs2Wp0mIAqU4Yg1zI/DuVnGHbgCIDS4UHYcSb0TZcrZRgJZizKlM5C8dGwUwhah
- SWjEG+eXEWQWjtnMvKvSFL0cMXVd++T5Limz+TcLBThkQqKEHX1SntEeaBuEg/ZLaZf3ylmpMCni1
- c3XmzFtvhuJnNlTN+lwb4NoOFiY6CPNR/Q37hMKz665f+WXuPqZq8YMrijqdZfhTIPAcptTWVSf1Z
- Q5qxekOr/b8Cv2xzWFXdcGobF45SG8DXPL6zSzYYukiwuftnpntMzWB9CBxTrDFWMegOscFAV6WgF
- WDZvaZrKP1XXEFw7UU4puztyC3KajwgHd/rA==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=inbox.ru
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
- header.s=mail4 header.b=TZCwrRFB
-X-Mailman-Original-Authentication-Results: exim-smtp-78d78789c6-624cc;
- auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: Re: [Buildroot] [PATCH 1/1] dmaengine: dw-axi-dmac: fix snps,
- axi-max-burst-len settings
+Received-SPF: None (SATLEXMB03.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A104:EE_|DM6PR12MB4340:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6d6ca450-e469-4401-b24e-08dd0f84fd15
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|82310400026|36860700013|1800799024|376014|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?ga6zvvJBcOp8irU9inCzyM4NuwfyKuIlyI97EdWhtVW8WxacZpOfJSNL5UVt?=
+ =?us-ascii?Q?2ikat1zoYhSHniSl9eYaEPAjaTQYv8Gy0TgoJTYlWmkPZReAKhEoCrhqeNGz?=
+ =?us-ascii?Q?WixzS9AOe2toQ4YecNHgEy9iuP0wFfliwKk3Y4Nfs60OZRW5niYv23wAjVwN?=
+ =?us-ascii?Q?X8qSmx4b2/sb7hhMAxFfOfXfh4+AHBOJoOf7nDG69C1v/paKRH/Li5zMraHM?=
+ =?us-ascii?Q?ISvcgTCD9VjddCFS2HDTyvxD2Usgq3JTAmMHLpl/5rYO1wXS/L+EbWTgxRrC?=
+ =?us-ascii?Q?l0nwBP/dNHA/ssBbg9kmj8e5F9qQRLNnRRA1xSm2MkRMmPFynJvEnu7WFP5z?=
+ =?us-ascii?Q?79F4P2Gp4WMpKf3thKNsUtHwe83MzumcwJsZKBjJLQcooO38GkK0fjV6IZNz?=
+ =?us-ascii?Q?v0QW6k085RN+62e4G7s0lILtbuSMH+0jVNh3hT1Jv5GBimNFkIsy67dPA8GE?=
+ =?us-ascii?Q?4rRQrK/50DT0nV9eB9Z+7pzD0hJi+Efj8If2ITuIDT0pYxegDDn2Jl579Tbo?=
+ =?us-ascii?Q?vlrbSn3v9l3AJK6v4noDEv8GSM835a2vNKPglWzVebojljo7ZBrXzLY50Mtm?=
+ =?us-ascii?Q?/d6g8D0JGSW6Zxq7e7j2JUBAcZZANsWL3OvZoGbtpKroxc+Zm2fMHAdGTt8G?=
+ =?us-ascii?Q?djX6IS5+LWkQ54+izevNOzeo8ln7DL2y48+jWcmjZuQfl3Z6/RmEZQph4OiP?=
+ =?us-ascii?Q?12aL4RWeia1erRMkpPVLTogtzxPqN9cDFJy7llQVfsnk5ToKqTO6m+CxCUUr?=
+ =?us-ascii?Q?16qFmP+aW0LH7oEble7YRQeS4MYR6YDdpLUVfYXMRIhf1wf2mvcEJKjNff/4?=
+ =?us-ascii?Q?rNJmXZB7bpzmhJETTFMqzjn1sUU1sGgR9icFXmOhE9oeoiqzDcHOlCX681BK?=
+ =?us-ascii?Q?T6ADeiqqWDXLpceBeWhTQnhafaYBdtzwSIvuav/v+qu1vPCU7Z8soICMo9va?=
+ =?us-ascii?Q?OiBRT2XP+h+6pahNksHUDs8QYWubbFsNZgqkYO5snv2KVy+W1Y6TxiuWJ7AU?=
+ =?us-ascii?Q?N4Bcevvj/a7ETHENteXajuWSEUW/PkmicfwuRseVVTZhvQjzrt0kOLzlihSu?=
+ =?us-ascii?Q?JdRGWEIqO1vYnZXHb7TNWY831v+9n3BxmGBQkdz/UHAJqyVza2vgJOWCfQzT?=
+ =?us-ascii?Q?FvtmWwTNDZ/+Cml2LudDrd67U382q3dgkJjq527M3gNcJqlwqCbYX1jfNpUx?=
+ =?us-ascii?Q?1CLav4gLBNmS/dVJqfKMpai2NM1Exw4sG7zCW9P/iiO7R79h5A0m9wxtP078?=
+ =?us-ascii?Q?Tx3EDQsCE/81Pf6bId4kmwKMxBGbmfQ9w/tqSVGyeeQPUa34vFD8LJ0rIQLr?=
+ =?us-ascii?Q?P6vVutmbtpPET6bVjnB6hyakD3MsglhWZDlIGF7PaGvGgplndkYBfcoudOYc?=
+ =?us-ascii?Q?04b9J763aiEFf5ZJX49JFwcKvhWQvvHhFKQn8HwolRtP+2NyYt93+2DhzdvS?=
+ =?us-ascii?Q?z2ldxvhtODlP2jg3rI15Xt0Ty8EW8c/56VEWExPY6Jf0uop8cZJJTwgfptLv?=
+ =?us-ascii?Q?EGiW3CBJiapnzQk=3D?=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(82310400026)(36860700013)(1800799024)(376014)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2024 08:16:41.2010 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d6ca450-e469-4401-b24e-08dd0f84fd15
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0001A104.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4340
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=19M3Z9ZXvoSwfNBoXIh6Iuglmw6Q6h6LrQJpZz39KSU=;
+ b=JvfWWajxyfAyYsfULaD+s7gg6oV2GAjw3119BXt5B94bsr84wdkHe0svMXk2syr51aqouf2FQLnN04cMvXNqcNfM62L6FMSQtJ7O2NGRpwaeb4nCBaX7VqVai4XYpYKujBUPEBY9RqSHYvYfEJ7TKp7msBAgRUx/oUaNiT/c5jo=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=JvfWWajx
+Subject: [Buildroot] [PATCH v1 1/1] configs/versal_vek280_defconfig: bump to
+ xilinx-v2024.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,29 +158,162 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: luca.ceresoli@bootlin.com, brandon.maier@collins.com, ju.o@free.fr,
+ thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
+ romain.naour@smile.fr, michal.simek@amd.com, yann.morin.1998@free.fr
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-28.11.2024 08:15, Baruch Siach via buildroot wrote:
-> Hi Maxim,
-> 
-> On Thu, Nov 28 2024, Maxim Kochetkov via buildroot wrote:
->> axi_rw_burst_len allowed values range is 1..256. Then this value
->> goes to ARLEN/AWLEN 8-bit fields of lli->ctl_hi. So writing 256
->> leads to overflow and overwrites another fields in LLI. More over
->> ARLEN/AWLEN are zero based (0 - 1, 256 - 255).
->>
->> Fixes: c454d16a7d5a ("dmaengine: dw-axi-dmac: Burst length settings")
->> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-> 
-> This is the wrong list for this patch, I believe.
+This patch bumps the versal_vek280_defconfig to xilinx-v2024.2 which includes
+the following updates:
 
-Yep. Sorry about that. That was miss click.
+- ATF v2.10
+- Linux v6.6.40
+- PLM xilinx-v2024.2
+- PSMFW xilinx-v2024.2
+- U-Boot v2024.01
 
+The board specific Linux patch for the vek280 needs to be changed for the
+2024.2 release.  While the Linux vek280 dts files were correctly updated, the
+prebuilt vpl_gen_fixed.pdi file is still not defining the DDR memory region
+from address 0x8 0000 0000 to 0x8 8000 0000.
+
+For this reason, a new patch is needed for 2024.2 which is only a work around
+until the pdi file is corrected.  This is why the dts patch will not be
+applied upstream.
+
+The following patch has thus been removed:
+board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch
+
+And replaced with:
+board/versal/vek280/patches/linux/0001-arm64-versal-vek280-prebuilt-pdi-is-incorrect.patch
+
+Upstream: n/a
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+---
+ ...al-vek280-prebuilt-pdi-is-incorrect.patch} | 33 ++++++++++---------
+ configs/versal_vek280_defconfig               |  8 ++---
+ 2 files changed, 22 insertions(+), 19 deletions(-)
+ rename board/versal/vek280/patches/linux/{0001-arm64-versal-Fix-vek280-memory-configuration.patch => 0001-arm64-versal-vek280-prebuilt-pdi-is-incorrect.patch} (53%)
+
+diff --git a/board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch b/board/versal/vek280/patches/linux/0001-arm64-versal-vek280-prebuilt-pdi-is-incorrect.patch
+similarity index 53%
+rename from board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch
+rename to board/versal/vek280/patches/linux/0001-arm64-versal-vek280-prebuilt-pdi-is-incorrect.patch
+index d894ad35d1..9451727513 100644
+--- a/board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch
++++ b/board/versal/vek280/patches/linux/0001-arm64-versal-vek280-prebuilt-pdi-is-incorrect.patch
+@@ -1,47 +1,50 @@
+-From: Michal Simek <michal.simek@amd.com>
+-Date: Mon, 15 Jul 2024 08:24:57 +0200
+-Subject: [PATCH] arm64: versal: Fix vek280 memory configuration
++From e79a96ff89b11fea03680633ab830894288ee9f0 Mon Sep 17 00:00:00 2001
++From: Neal Frager <neal.frager@amd.com>
++Date: Thu, 28 Nov 2024 07:50:28 +0000
++Subject: [PATCH 1/1] arm64: versal: vek280 prebuilt pdi is incorrect
+ 
+-Board has 12GB total but Vivado wizard supports one channel LPDDR4 4GB
+-configuration (2GB low + 2GB high) or two channel LPDDR 8GB configuration
+-(2GB low + 6GB high). Wiring the remaining 4GB LPDDR can be done via board
+-tab but not available as option in wizard. That's why only describe 8GB by
+-default.
++The prebuilt vpl_gen_fixed.pdi for the vek280 is incorrect and does not define
++the DDR memory region for address 0x8 0000 0000 - 0x8 8000 0000.  For this
++reason, the intree Linux dts memory node for the vek280 will not boot.
++
++This patch works around the issue until the prebuilt pdi file is changed.
++
++https://github.com/Xilinx/soc-prebuilt-firmware/blob/xilinx_v2024.2/vek280-versal/vpl_gen_fixed.pdi
++
++Upstream: n/a
+ 
+-Signed-off-by: Michal Simek <michal.simek@amd.com>
+ Signed-off-by: Neal Frager <neal.frager@amd.com>
+-Upstream: https://github.com/Xilinx/linux-xlnx/commit/3c7a97d99bdb3dd6b1f36d7d87d3a3c113dfe2ea
+ ---
+  arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts | 2 +-
+  arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts | 2 +-
+  2 files changed, 2 insertions(+), 2 deletions(-)
+ 
+ diff --git a/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts b/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
+-index 1641dc0b5141..ad5d590318e6 100644
++index ad5d590318e6..a306eacca5b3 100644
+ --- a/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
+ +++ b/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
+ @@ -19,7 +19,7 @@ / {
+  
+  	memory: memory@0 {
+  		device_type = "memory";
+--		reg = <0 0 0 0x80000000>, <0x8 0x0 0x7 0x80000000>; /* 32GB */
++-		reg = <0 0 0 0x80000000>, <0x8 0x0 0x1 0x80000000>; /* 2GB + 6GB */
+ +		reg = <0 0 0 0x80000000>, <0x8 0x80000000 0x1 0x80000000>; /* 2GB + 6GB */
+  	};
+  
+  	chosen {
+ diff --git a/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts b/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
+-index fda47cd87b3a..80aae8fa4b11 100644
++index a5ee80a373e2..ba54a5ef0c73 100644
+ --- a/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
+ +++ b/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
+ @@ -19,7 +19,7 @@ / {
+  
+  	memory: memory@0 {
+  		device_type = "memory";
+--		reg = <0 0 0 0x80000000>, <0x8 0x0 0x7 0x80000000>; /* 32GB */
++-		reg = <0 0 0 0x80000000>, <0x8 0x00000000 0x1 0x80000000>; /* 2GB + 6GB */
+ +		reg = <0 0 0 0x80000000>, <0x8 0x80000000 0x1 0x80000000>; /* 2GB + 6GB */
+  	};
+  
+  	chosen {
+ -- 
+-2.43.0
++2.25.1
+ 
+diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
+index fcf440ed89..e90408e6b4 100644
+--- a/configs/versal_vek280_defconfig
++++ b/configs/versal_vek280_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.2)/xlnx_rebase_v6.6_LTS_2024.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vek280-revB"
+@@ -18,13 +18,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.10_2024.1)/xlnx_rebase_v2.10_2024.1.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.10_2024.2)/xlnx_rebase_v2.10_2024.2.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.1)/xlnx_rebase_v2024.01_2024.1.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.2)/xlnx_rebase_v2024.01_2024.2.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+@@ -35,7 +35,7 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
+ BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vek280-revB"
+ BR2_TARGET_XILINX_PREBUILT=y
+-BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.1"
++BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.2"
+ BR2_TARGET_XILINX_PREBUILT_VERSAL=y
+ BR2_TARGET_XILINX_PREBUILT_BOARD="vek280"
+ BR2_PACKAGE_HOST_BOOTGEN=y
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
