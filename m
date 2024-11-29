@@ -1,87 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B610D729E7
-	for <buildroot@archiver.kernel.org>; Fri, 29 Nov 2024 17:04:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B49EED72A16
+	for <buildroot@archiver.kernel.org>; Fri, 29 Nov 2024 20:57:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7DD3240791;
-	Fri, 29 Nov 2024 17:04:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2FA85846B3;
+	Fri, 29 Nov 2024 20:57:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MUDZsAH08G3N; Fri, 29 Nov 2024 17:04:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r_7OWk5cNlaw; Fri, 29 Nov 2024 20:57:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54BDF4080E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CD98846B5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54BDF4080E;
-	Fri, 29 Nov 2024 17:04:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D57F2712
- for <buildroot@buildroot.org>; Fri, 29 Nov 2024 17:04:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CD98846B5;
+	Fri, 29 Nov 2024 20:57:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 110C5AF7
+ for <buildroot@buildroot.org>; Fri, 29 Nov 2024 20:57:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EDE8240A99
- for <buildroot@buildroot.org>; Fri, 29 Nov 2024 17:04:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E5CFE846B4
+ for <buildroot@buildroot.org>; Fri, 29 Nov 2024 20:57:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id erFDDVnH9yyF for <buildroot@buildroot.org>;
- Fri, 29 Nov 2024 17:04:06 +0000 (UTC)
-X-Greylist: delayed 416 seconds by postgrey-1.37 at util1.osuosl.org;
- Fri, 29 Nov 2024 17:04:05 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4CFE340B1E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CFE340B1E
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.103.80.154;
- helo=mx.kolabnow.com; envelope-from=zgyarmati@zgyarmati.de;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id agpAz1jpT1p8 for <buildroot@buildroot.org>;
+ Fri, 29 Nov 2024 20:57:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.154])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4CFE340B1E
- for <buildroot@buildroot.org>; Fri, 29 Nov 2024 17:04:05 +0000 (UTC)
-Received: from localhost (unknown [127.0.0.1])
- by mx.kolabnow.com (Postfix) with ESMTP id 9E41920B367E
- for <buildroot@buildroot.org>; Fri, 29 Nov 2024 17:57:07 +0100 (CET)
-X-Virus-Scanned: amavis at mykolab.com
-Received: from mx.kolabnow.com ([127.0.0.1])
- by localhost (ext-mx-out011.mykolab.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id uxEQi4Z2VdEj for <buildroot@buildroot.org>;
- Fri, 29 Nov 2024 17:57:06 +0100 (CET)
-Received: from int-mx011.mykolab.com (unknown [10.9.13.11])
- by mx.kolabnow.com (Postfix) with ESMTPS id D7A2920B3675
- for <buildroot@buildroot.org>; Fri, 29 Nov 2024 17:57:05 +0100 (CET)
-Received: from ext-subm010.mykolab.com (unknown [10.9.6.10])
- by int-mx011.mykolab.com (Postfix) with ESMTPS id CB9AB3118135
- for <buildroot@buildroot.org>; Fri, 29 Nov 2024 17:57:05 +0100 (CET)
-From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17A65846B7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 17A65846B7
+ for <buildroot@buildroot.org>; Fri, 29 Nov 2024 20:57:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 043FA867C8; Fri, 29 Nov 2024 20:57:05 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Date: Fri, 29 Nov 2024 17:56:56 +0100
-Message-Id: <20241129165656.184507-1-zgyarmati@zgyarmati.de>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kolabnow.com; h=
- content-transfer-encoding:mime-version:message-id:date:date
- :subject:subject:from:from:received:received:received; s=
- dkim20240523; t=1732899426; x=1734713827; bh=9j8UysYYPm3HzwQ/qQv
- jFIiy5727Cv1Sy9cuzUFp1e4=; b=lgiSk/fqDbRbDXYq8GoetwIoYwP5su7K0Vw
- PSxtk97XxAW8o18L1tlbGzShAG8Jbdd3u28LPhWppiUTBx1ggnPowpDrzrnw8FQC
- E6Xd9BQJWZ5Gz9ynw1kg5CNP6QNh3NYyVwX8J2wweqhbUYelSznQfa19ReLzjPfV
- x7uiUh1UIQp4Izk9m+mCaIzD5AIeuq1SYPFopCgsTmvT9pPblULQ9vXK3b16NNZD
- CJlbiaT1qSmvedsvYaNIXyEBevv5j6VisbrKr8J1EzFAsoZU18SLwI3DNByjnrIZ
- yW82b5U+bve5ESZ4VJu93CmYxc9hD1IEGm6+E8Mhj/ZHYtajO+g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=zgyarmati.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kolabnow.com header.i=@kolabnow.com header.a=rsa-sha256
- header.s=dkim20240523 header.b=lgiSk/fq
-X-Mailman-Original-Authentication-Results: ext-mx-out011.mykolab.com (amavis); 
- dkim=pass (2048-bit key)
- reason="pass (just generated, assumed good)"
- header.d=kolabnow.com
-Subject: [Buildroot] [PATCH 1/1] package/simple-mail: version bump 3.1.0
+Date: Fri, 29 Nov 2024 21:32:13 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 05cb33d4c09d0259de893423102c5eaa1e750d91
+X-Git-Newrev: d33a2cd51a3f1860d3ef953cdbd9e01eec519b48
+X-Patchwork-Hint: ignore
+Message-Id: <20241129205705.043FA867C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/xilinx/patches: remove
+ xilinx_v2024.1 hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,44 +59,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=d33a2cd51a3f1860d3ef953cdbd9e01eec519b48
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Now that all defconfigs have been bumped to xilinx_v2024.2, the
+xilinx_v2024.1 hashes can be removed.
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/simple-mail/simple-mail.hash | 2 +-
- package/simple-mail/simple-mail.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 1 -
+ board/xilinx/patches/linux/linux.hash                               | 1 -
+ board/xilinx/patches/uboot/uboot.hash                               | 1 -
+ board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash           | 1 -
+ 4 files changed, 4 deletions(-)
 
-diff --git a/package/simple-mail/simple-mail.hash b/package/simple-mail/simple-mail.hash
-index 4de1525b53..ba4d36c2b3 100644
---- a/package/simple-mail/simple-mail.hash
-+++ b/package/simple-mail/simple-mail.hash
-@@ -1,5 +1,5 @@
+diff --git a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 2ef3a98196..15cceebb80 100644
+--- a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,3 +1,2 @@
  # Locally calculated
--sha256  f93e93843d11da5c4ec44225eba46ccb3e9710fd594a27b966901745429ed4f4  simple-mail-3.0.0.tar.gz
-+sha256  d4a46b5c3f706669ffb3c9e4d2ff5e2bd892eda639f80784d862fa94a2082eb2  simple-mail-3.1.0.tar.gz
- 
- # Hash for license file
- sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  LICENSE
-diff --git a/package/simple-mail/simple-mail.mk b/package/simple-mail/simple-mail.mk
-index 82bea45f21..7063e9dd0f 100644
---- a/package/simple-mail/simple-mail.mk
-+++ b/package/simple-mail/simple-mail.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SIMPLE_MAIL_VERSION = 3.0.0
-+SIMPLE_MAIL_VERSION = 3.1.0
- SIMPLE_MAIL_SITE = $(call github,cutelyst,simple-mail,v$(SIMPLE_MAIL_VERSION))
- SIMPLE_MAIL_INSTALL_STAGING = YES
- SIMPLE_MAIL_LICENSE = LGPL-2.1+
--- 
-2.39.5
-
+-sha256  c3369c89eab4e452bbc76c630e5dccb6c0ae588c0175b6c8549aa0241deb06ef  xlnx_rebase_v2.10_2024.1.tar.gz
+ sha256  a45390c9e1d584a389abd37ee49dce3f8d3b41718b1fd7c977608b5387a38955  xlnx_rebase_v2.10_2024.2.tar.gz
+diff --git a/board/xilinx/patches/linux/linux.hash b/board/xilinx/patches/linux/linux.hash
+index 6f269e1c71..41bf2141fb 100644
+--- a/board/xilinx/patches/linux/linux.hash
++++ b/board/xilinx/patches/linux/linux.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256  6415cfcfd74e943d6ae44f6c1edcae09bf6cd89410b03c4290bf1464a8368f84  xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz
+ sha256  8ebbbe2d40597d9a5f36d47a1dfe4caffcef3d9f5ffa059ed4504bb761282593  xlnx_rebase_v6.6_LTS_2024.2.tar.gz
+diff --git a/board/xilinx/patches/uboot/uboot.hash b/board/xilinx/patches/uboot/uboot.hash
+index 1fb12d1a11..de0e6adad1 100644
+--- a/board/xilinx/patches/uboot/uboot.hash
++++ b/board/xilinx/patches/uboot/uboot.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256  58e391a001d9d8ed347ab3258ff7c8435c866b1ff2b2c22ebc95af592444c0f5  xlnx_rebase_v2024.01_2024.1.tar.gz
+ sha256  f1a86ccdbe60bac89177a24bbfd56fc6e8e67823669f0997de563c3cc0ea4dd1  xlnx_rebase_v2024.01_2024.2.tar.gz
+diff --git a/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash b/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
+index 3bd33a29a0..fe6963872c 100644
+--- a/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
++++ b/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256  7abcba4e0e44e3a4adf9c1f971d918575226d7604dfd64a386baaa00c1c6c35f  xilinx-prebuilt-xilinx_v2024.1.tar.gz
+ sha256  ef61a4b249ecbf632a25cc34c3b03b8290be44397ff739467ac92ec1701e23bf  xilinx-prebuilt-xilinx_v2024.2.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
