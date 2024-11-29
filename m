@@ -4,75 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D854D6EBE2
-	for <buildroot@archiver.kernel.org>; Fri, 29 Nov 2024 07:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46471D6EBF0
+	for <buildroot@archiver.kernel.org>; Fri, 29 Nov 2024 09:11:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8140F60730;
-	Fri, 29 Nov 2024 07:57:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C97966075F;
+	Fri, 29 Nov 2024 09:11:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A2Gmf0XMCqui; Fri, 29 Nov 2024 07:57:42 +0000 (UTC)
+ id INpT2mC2TNMb; Fri, 29 Nov 2024 09:11:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88D1260690
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBABB6074C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88D1260690;
-	Fri, 29 Nov 2024 07:57:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B7A8A6A
- for <buildroot@buildroot.org>; Fri, 29 Nov 2024 07:57:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBABB6074C;
+	Fri, 29 Nov 2024 09:11:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3EB86A6A
+ for <buildroot@buildroot.org>; Fri, 29 Nov 2024 09:11:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0EC7340180
- for <buildroot@buildroot.org>; Fri, 29 Nov 2024 07:57:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1C85D81068
+ for <buildroot@buildroot.org>; Fri, 29 Nov 2024 09:11:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tv_wSea9fCp2 for <buildroot@buildroot.org>;
- Fri, 29 Nov 2024 07:57:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l0VxsD78ULX2 for <buildroot@buildroot.org>;
+ Fri, 29 Nov 2024 09:11:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.241.56.171;
+ helo=mout-p-201.mailbox.org; envelope-from=j+buildroot-list@maschinengott.de;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D5AB0400D2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5AB0400D2
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D5AB0400D2
- for <buildroot@buildroot.org>; Fri, 29 Nov 2024 07:57:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E0A766000B;
- Fri, 29 Nov 2024 07:57:34 +0000 (UTC)
-Date: Fri, 29 Nov 2024 08:57:33 +0100
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-Message-ID: <20241129085733.757371c3@windsurf>
-In-Reply-To: <18522091953e830b634abf3bbe776b17@free.fr>
-References: <20241126182855.38704-1-ju.o@free.fr>
- <20241128211817.6c68520d@windsurf>
- <18522091953e830b634abf3bbe776b17@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3529C81013
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3529C81013
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3529C81013
+ for <buildroot@buildroot.org>; Fri, 29 Nov 2024 09:11:44 +0000 (UTC)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4Y06qt2GNhz9stK
+ for <buildroot@buildroot.org>; Fri, 29 Nov 2024 10:11:38 +0100 (CET)
+Message-ID: <b57fbc12-ea8d-4ecf-8e8b-a78f61c4d4f9@maschinengott.de>
+Date: Fri, 29 Nov 2024 10:11:33 +0100
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+From: j+buildroot-list@maschinengott.de
+To: buildroot@buildroot.org
+References: <20241122223158.5315-1-j+buildroot-list@maschinengott.de>
+Content-Language: en-US
+In-Reply-To: <20241122223158.5315-1-j+buildroot-list@maschinengott.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1732867055;
+ d=maschinengott.de; 
+ s=MBO0001; t=1732871498;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ to:to:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=8KTJJoSj9qI98Cuj92lAM334vhJlhuShwJypiU92t8Y=;
- b=Ob/qjvFZQzG23Etsp/yl9ePRMRPrnNtZ8vuLiZylvqRgMSJlLLkhhHQy0EIjdV79KgJjyV
- +rVffZHXs4lVfNe/vixg1vrs5LcclSmqpjkvAXZi4mOs8G/T0wAcWtJPmjCxZL/IkzOslX
- vIsCNR621I5Iq6akXULX/Wg10k0B7IoitwkNguvvdP+bvaTuRKQtOdA54TZIiTFwLgTiut
- QKVcya94rV5F6r3+v7Om3XgMKywVhhproOiJDaj70KEUifEXVREVGkKL+1v2ieeFMAuzej
- ICHvkAqtRNKb74HAwCCD1RWOJBHvoClWsFV6RRrYf6bSU/tL2nKX3CMa40Eckg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=bxAVoE3Ieqkyd5ERGbhSQu7RzaTuJFrHxw2BiKxrvzs=;
+ b=v/jbg1KezPl6yqZEmB8P3jk4diCuqJhsMzUekOzUQCQ9+BWsrgW78uA9pOOH324XIW/M3P
+ LW4SLd2Mdnw/bJFn1BT/A3AqEQCIOVqwiYoi534t7i3znCh4zyv4CJRqgyoE3EOpkYMrTZ
+ lDfIsmp57GQfTe5JTxzmi/fc3lwT7tLjGF74yaufEF1rvQAUMMqNKEa1sFSobWRu/6D9eG
+ lqeZoqJ5fyRAamtju51WZ2dRZHV5TPS3r2tilL90sSalGnycgmWNInQKW2rsbQaLG375Zv
+ JmxDO2AwNPKNjp+6+pjC7tHvMy+t8NibTa5JawE2k0m7gshtRpyp97CDO+4FrQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=maschinengott.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Ob/qjvFZ
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: improve mosquitto test
- reliability
+ unprotected) header.d=maschinengott.de header.i=@maschinengott.de
+ header.a=rsa-sha256 header.s=MBO0001 header.b=v/jbg1Ke
+Subject: Re: [Buildroot] [PATCH] Documentation patch with some small things
+ that threw me off as a newcomer to the project.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,43 +84,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Could somebody take a look at this? It might not be much, but I think 
+it's still a big improvement for newcomers to the project. (Especially 
+the change in quickstart.adoc.)
 
-On Thu, 28 Nov 2024 21:35:49 +0100
-Julien Olivain <ju.o@free.fr> wrote:
-
-> > Thanks a lot, I've applied to master. However, I'm not a huge fan of
-> > those hardcoded "sleep 5": it makes the test longer even on fast
-> > machines, and it doesn't necessarily resolve the problem in all
-> > situations. But I think you had yourself mentioned in some other thread
-> > that it would be nicer to have some kind of retry loop instead?  
+On 22.11.24 23:31, j12i wrote:
+> From: j12i <j+buildroot@maschinengott.de>
 > 
-> I am not a fan either...  This will help for the time being.
-
-Absolutely, that's why I applied even though it isn't the "perfect"
-solution.
-
-> I have few patches about a retry loop I need polish before proposing.
-> I also don't want to include retry logic everywhere like this one:
-> https://gitlab.com/buildroot.org/buildroot/-/blob/2024.11-rc2/support/testing/tests/package/test_mdadm.py#L125
+> This is my first contribution to this project and at the same time my first time using git send-email. Please tell me if I'm doing it wrong, but don't get angry at me.
 > 
-> I currently add new functions in support/testing/infra/basetest.py for
-> those situations.
+> This results from a conversation I had on IRC today with xogium.
+> 
+> The change in docs/manual/getting.adoc is in reference to the following section in docs/manual/contribute.adoc:
+> 
+>> Refer to Chapter 3, Getting Buildroot for more information on obtaining a Buildroot git tree.
+> ---
+>   README                       |  2 ++
+>   docs/manual/getting.adoc     |  2 ++
+>   docs/manual/quickstart.adoc  | 11 +++++++++++
+>   docs/website/contribute.html |  2 ++
+>   4 files changed, 17 insertions(+)
+> 
+> diff --git a/README b/README
+> index 008e996f5f..2fa1905f6b 100644
+> --- a/README
+> +++ b/README
+> @@ -7,6 +7,8 @@ Online documentation can be found at http://buildroot.org/docs.html
+>   
+>   To build and use the buildroot stuff, do the following:
+>   
+> +0) (if you want to build an image for a specific board, run
+> +   'make <whatever_board>_defconfig' to have starting point)
+>   1) run 'make menuconfig'
+>   2) select the target architecture and the packages you wish to compile
+>   3) run 'make'
+> diff --git a/docs/manual/getting.adoc b/docs/manual/getting.adoc
+> index 51c97d5793..f338fef2d6 100644
+> --- a/docs/manual/getting.adoc
+> +++ b/docs/manual/getting.adoc
+> @@ -10,6 +10,8 @@ November. Release numbers are in the format YYYY.MM, so for example
+>   
+>   Release tarballs are available at http://buildroot.org/downloads/[].
+>   
+> +https://gitlab.com/buildroot.org/buildroot[The git repo is on Gitlab].
+> +
+>   For your convenience, a https://www.vagrantup.com/[Vagrantfile] is
+>   available in `support/misc/Vagrantfile` in the Buildroot source tree
+>   to quickly set up a virtual machine with the needed dependencies to
+> diff --git a/docs/manual/quickstart.adoc b/docs/manual/quickstart.adoc
+> index 605031037f..42cd72a88b 100644
+> --- a/docs/manual/quickstart.adoc
+> +++ b/docs/manual/quickstart.adoc
+> @@ -8,6 +8,17 @@ is no need to be root to configure and use Buildroot. By running all
+>   commands as a regular user, you protect your system against packages
+>   behaving badly during compilation and installation.
+>   
+> +[NOTE]
+> +====
+> +This chapter just gives a general outline of the process to build an image. To build an image for a specific board, run
+> +
+> +----
+> + $ make <whatever_board>_defconfig
+> +----
+> +
+> +first to base your work upon.
+> +====
+> +
+>   The first step when using Buildroot is to create a configuration.
+>   Buildroot has a nice configuration tool similar to the one you can
+>   find in the http://www.kernel.org/[Linux kernel] or in
+> diff --git a/docs/website/contribute.html b/docs/website/contribute.html
+> index 52c30d60d3..4155fb96da 100644
+> --- a/docs/website/contribute.html
+> +++ b/docs/website/contribute.html
+> @@ -26,6 +26,8 @@
+>   	  your own patches</a> through the
+>   	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
+>   	</a></li>
+> +	<li><a href="https://gitlab.com/buildroot.org/buildroot">The git repo of buildroot's source code is on gitlab
+> +	</a></li>
+>         </ul>
+>   
+>         <p>For more details on these topics, check out the
 
-Good idea!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
