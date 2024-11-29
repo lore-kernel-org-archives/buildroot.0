@@ -1,158 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16515D6EBF4
-	for <buildroot@archiver.kernel.org>; Fri, 29 Nov 2024 09:53:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37F4FD6EC00
+	for <buildroot@archiver.kernel.org>; Fri, 29 Nov 2024 11:12:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D2ABA84143;
-	Fri, 29 Nov 2024 09:53:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCF7F60B67;
+	Fri, 29 Nov 2024 11:12:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DZrE7sbHiF6a; Fri, 29 Nov 2024 09:53:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CMdKz4aKCkWR; Fri, 29 Nov 2024 11:12:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FCB084163
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F26C560B5B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FCB084163;
-	Fri, 29 Nov 2024 09:53:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3CB9E712
- for <buildroot@buildroot.org>; Fri, 29 Nov 2024 09:53:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F26C560B5B;
+	Fri, 29 Nov 2024 11:12:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B020DA6A
+ for <buildroot@buildroot.org>; Fri, 29 Nov 2024 11:12:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 29EA8405AC
- for <buildroot@buildroot.org>; Fri, 29 Nov 2024 09:53:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9DC7541187
+ for <buildroot@buildroot.org>; Fri, 29 Nov 2024 11:12:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sSc1BMBG-meR for <buildroot@buildroot.org>;
- Fri, 29 Nov 2024 09:53:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2408::60e;
- helo=nam04-bn8-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0805640499
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0805640499
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam04on2060e.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2408::60e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0805640499
- for <buildroot@buildroot.org>; Fri, 29 Nov 2024 09:53:28 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=B1jfLMugBzmBoOdMuCKXXDw/6X5p36Sgm3BwPmoYHysBdfpjDcCmUFzPXyKt6U0LRLQvREwvDIQP9Xuh+ngdpi9bdMhifRyaQjm5mD4/GS+k7vnxKYYgRt4epYfTBqjSP8V9ix15iCcm2XMoY9DTjBvTKyedlgAcF4JdBzJG9yl2LM7Of3bVpe5noTe/dDrd2cTymQSxviBjQjKnaYs1kiPVkqffjsHeUvo3m/txPmvWMTqBFA0xx5cJhHlcadf4orM04t7d9fNEmgxsH5NNn13cvleSvZtG//M9+duItuC1nhdttfviYw5dqNoeEiTVuFGWkYXqHDUf4+CpwtnIMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mUlsoG6awg4HeO60Rqe9oBv9SGE1piDN/Csgzoggw3Y=;
- b=UgTVGaL50cH0li3ONJ8fr6oYyo2E/T8hs78yDbUja5KOmaC/Ml5iRB2tyexj28Rg5eyr224kC448PbulHSrgVsXdn2JEuBTFX+g0amC3nNLGk1WasDE9Vwsg2uQXFpF3P+w5CB9VJj6txCUVtEkTBv4hWUUiDgN9MgOc0FkODBBOHX0OnakCrdk6sx90ly8UDDhdUJ1qD+B8fHagxAsXwDEDtAT/sW8clW50nkmr1kn6pWfRqxxu/mLMXxAFsG4xVIHCi9RPRG5DM8UFvTnM0yU1heJQLeiHdnfvtSlLNUDQ4uSf69mHm/Kthu1CXtU8RlsQCQNVjO27tENoS9PsvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from CH2PR07CA0044.namprd07.prod.outlook.com (2603:10b6:610:5b::18)
- by SA3PR12MB9180.namprd12.prod.outlook.com (2603:10b6:806:39b::18)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.13; Fri, 29 Nov
- 2024 09:53:24 +0000
-Received: from CH3PEPF00000012.namprd21.prod.outlook.com
- (2603:10b6:610:5b:cafe::8) by CH2PR07CA0044.outlook.office365.com
- (2603:10b6:610:5b::18) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8207.13 via Frontend Transport; Fri,
- 29 Nov 2024 09:53:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CH3PEPF00000012.mail.protection.outlook.com (10.167.244.117) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8230.0 via Frontend Transport; Fri, 29 Nov 2024 09:53:24 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 29 Nov
- 2024 03:53:23 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 29 Nov
- 2024 03:53:23 -0600
-Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Fri, 29 Nov 2024 03:53:22 -0600
-To: <buildroot@buildroot.org>
-Date: Fri, 29 Nov 2024 09:53:04 +0000
-Message-ID: <20241129095304.950313-4-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20241129095304.950313-1-neal.frager@amd.com>
-References: <20241129095304.950313-1-neal.frager@amd.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TSPlNXz6m0cK for <buildroot@buildroot.org>;
+ Fri, 29 Nov 2024 11:12:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.59.79;
+ helo=send240.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C76494124C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C76494124C
+Received: from send240.i.mail.ru (send240.i.mail.ru [95.163.59.79])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C76494124C
+ for <buildroot@buildroot.org>; Fri, 29 Nov 2024 11:12:05 +0000 (UTC)
+Received: by exim-smtp-66468c9cd6-cjfkm with esmtpa (envelope-from
+ <fido_max@inbox.ru>)
+ id 1tGyuo-00000000Got-13K8; Fri, 29 Nov 2024 14:12:03 +0300
+To: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+	Maxim Kochetkov <fido_max@inbox.ru>
+Date: Fri, 29 Nov 2024 14:11:56 +0300
+Message-ID: <20241129111156.629528-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-Received-SPF: None (SATLEXMB05.amd.com: neal.frager@amd.com does not designate
- permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF00000012:EE_|SA3PR12MB9180:EE_
-X-MS-Office365-Filtering-Correlation-Id: 95f3ea04-4d80-49ad-45e7-08dd105baa67
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|376014|82310400026|1800799024|36860700013|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?QaBZAcMgIr09/rqQ1QqjPIoCdAAmNzf97vT7cWQyaNN7yoIvHx9YL6eFBH/8?=
- =?us-ascii?Q?EYHUJGE+MWwAct0bhdIBmOo+bVV0pF3wfNZmXvmYlPCUhudMBo+dFpRGwVaF?=
- =?us-ascii?Q?bqqJVZ2RD2nI3wjsLReTpqsEyLnlj3MwpUCu59iuSoTAxmLHT69yXb93Mm5N?=
- =?us-ascii?Q?AOxY615K1IqDwgr1gheGlsqrn0SF391yEHsjr4K1HPR/wr1dcYbihE85DvFd?=
- =?us-ascii?Q?ExZG7NXO0wPcFtFjoS9ZHUkQwA5Ea3qWsKVyvFc/ZrIu838VNHne0e2l8PAM?=
- =?us-ascii?Q?963ZQdB1qIeDUazmiqAoCWiw+NZpjYq1iNX3WKj7PwzXvqvIbrUNuplup6ic?=
- =?us-ascii?Q?9YZlU7lwfG5+juCwVG+zde/YjWfMa4SGBB2uDrXzPZayk9h0MkQ2ABdx0nob?=
- =?us-ascii?Q?/T6MgxQbmuMi3dNaWFy4tD0rBkCl36LOMtZfZRgWLMmpPHPuwe2spGwr2RPo?=
- =?us-ascii?Q?BGSggpT1Ziu/PUJ1VNvXS75DhiXgYpyu9PY7KHEL9KpFWtMDlJbGgKjkIZIy?=
- =?us-ascii?Q?z6zq41K7CysnUDIfqJ9xtRHV1ielV7Y2T6BxTo2PWj9gpj1hBvyGszDXzF7V?=
- =?us-ascii?Q?bPsBtfXlc7mwQfq9ymL9q2fyUxtiFjIwQwTL21S2WyKFu6JbnyejVMzlQrCg?=
- =?us-ascii?Q?VQ0J1paRmrBoYWLSkR8h46UFAm1sdUSKahdxnewq+AFyB0/nncI600KJ65u/?=
- =?us-ascii?Q?BKEksS1hklycMVa7q+tGt/YJEgyon7L9vZHsOey3iUxDre58LCU7csR+F1sn?=
- =?us-ascii?Q?f/J5YXxVKrHrYX24GO70Ct9XuSnQl8UoUHgE/tqY6+ZOlCX0EDHF8Y7/6RRS?=
- =?us-ascii?Q?0IFr1te7b66PIX3UL9EzGPpAUKN5hOkeNSJn+25a3NUpawhOvxhPw9Zb36gk?=
- =?us-ascii?Q?u1dFTVm5F0d5rEd+h+6qdlU5N+i75giKzcFQBY9cKO11LQz5sJAHN83yu0y0?=
- =?us-ascii?Q?bNeYM/raO0ieEVE5wZ3yIm7j/qiq7JG1FIsa1Fz0rdbxLZXuyHpcPR0c2o5y?=
- =?us-ascii?Q?sLlG5TVEG5AGJVkSJb0JU7GLnV7U+esWz2VxKBcJc2e4L8jwi8CmOokWvBuM?=
- =?us-ascii?Q?S1st9lrwF4LY/jj3D14GE2RwJm/A5lQuHQSp5H8RiSnYTL4+aTuY07h9KFwy?=
- =?us-ascii?Q?KfWL+jawTJCMnuhC1UmxSwUOpBwkjR+QndY5ubha33PIPC7Lb8cXa+Bu/GhU?=
- =?us-ascii?Q?CKroGk0HonO857cbmS/17c8A3+psWAekUoFoXS8YvSk4WfU+GAANqS6qkNJK?=
- =?us-ascii?Q?k+Gu98Nr4oG21mv0An/K1d84XLLfa/J8coTR0S0SAgiW8zdjTIx4nsqWIeic?=
- =?us-ascii?Q?AxxwJ9Ep+zFwphrWbr/CcjpAQVot4f0dxiJgw5iMUa/7VHjSeX4VmGy3H988?=
- =?us-ascii?Q?X6OIqLzelKQAulpSco0sk30HGyRoDPTYjmrCmdltxY9TXrP7+mkyAa+8D5cI?=
- =?us-ascii?Q?nc+zv1aDIctoWMqkUNpEIxtI4vc+aXtGS7d7pfnS0cAbOgLDk5mj0mDy/eXX?=
- =?us-ascii?Q?Rw0kakB8kZTLkmY=3D?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013)(41080700001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2024 09:53:24.2504 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95f3ea04-4d80-49ad-45e7-08dd105baa67
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CH3PEPF00000012.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB9180
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mUlsoG6awg4HeO60Rqe9oBv9SGE1piDN/Csgzoggw3Y=;
- b=a4sbynQgiqGn8tJslc6BASnoLuZXwIc47xRigLyTbB/sshSE0/8kyf7bH4kiwz0FxGCxNXiANvEYiRNPWT2on5X4N8ZAWvsFMZBF5YRrjh15CXkv6/iY0pgzxFVH/sztgWIIRuTYCRUzanXSHtZPNbllTWS35vI0Ga26JNtB4Yk=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=a4sbynQg
-Subject: [Buildroot] [PATCH v1 4/4] board/xilinx/patches: remove
- xilinx_v2024.1 hashes
+X-Mailru-Src: smtp
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD934EED3D1897221AD7963B5772F8CAA085A37D6F5BC3E7429182A05F538085040EDDF15EF9609E8653DE06ABAFEAF6705D2CF97A547ECA91B73EB17F61F89B0C69799EF890AE2F8A9
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE74323F140F3EE5B6AC2099A533E45F2D0395957E7521B51C2CFCAF695D4D8E9FCEA1F7E6F0F101C6778DA827A17800CE7DD4CC05688AD5D0CEA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38BC08E230531AC9C909E38A20A3E67AAE2AD4D772B8B019052FF081EF552CEA1261DF9E95F17B0083B26EA987F6312C9EC4B6963042765DA4BC26CFBAC0749D213D2E47CDBA5A96583C09775C1D3CA48CF90D92131081DE748117882F4460429724CE54428C33FAD30A8DF7F3B2552694AC26CFBAC0749D213D2E47CDBA5A9658378DA827A17800CE73CD73D99384BA5CA9FA2833FD35BB23DF004C906525384302BEBFE083D3B9BA71A620F70A64A45A98AA50765F7900637F9425D8FA97DB4396D1867E19FE1407959CC434672EE6371089D37D7C0E48F6C8AA50765F7900637AD0424077D726551EFF80C71ABB335746BA297DBC24807EABDAD6C7F3747799A
+X-C1DE0DAB: 0D63561A33F958A5C314420F5929380A5002B1117B3ED69653DF81CC311BA1EA957033528158102E823CB91A9FED034534781492E4B8EEAD81B3E0F64AD3EF57C79554A2A72441328621D336A7BC284946AD531847A6065A535571D14F44ED41
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF80379E750005F57121E0D7B2E9283AAC913C762668BDC3163A7C384184BCCF7A9EC5AF04A575AA6CBDCC763D930D6EFAEB0D92F417C22EF344DDAB89A6D4FB432F9FF9D0AADBAD605F4332CA8FE04980913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojCM9bcLeta7rYgiqw6J19mQ==
+X-Mailru-Sender: 689FA8AB762F739381B31377CF4CA2193B1BF23F31CAC24290375F77CE29670F9A275FED18919DF290DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; 
+ s=mail4; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:
+ To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
+ Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+ Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+ List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
+ X-Cloud-Ids:Disposition-Notification-To;
+ bh=C3NR1Yzd3PPYxyFvL3XbUaC289gl+m4QgqoAOpAIGIE=; t=1732878726; x=1732968726; 
+ b=D9JrR9jcD0K1jptlm0w6HJuN9aRnLHpc9FV7IaI8I5E+ljg8Jayo9Fc6h+ok0/CGvC80dZ1LOQ8
+ GBD8QMxe5V7UmRUpZfln5ikUJfRjqnkhi3X0+6TYFhHiiK7T93+5jzutuDhcqVgAIYhxqsH9ETqzv
+ 75NAwLzthvdFHSIrJmzPPgYkh/Mrs5gzr0Q0ck8uoZjRFYcdwlD7wqB6saXOQmJt4aq0yv9Cq04tR
+ /2w0ft2gIVgERY1S6J5vNDt3hU2DtPBcl0iowWREa5QPHhZ7ElVoIN/u9FkrZQr1GbSl+nRqIZA1V
+ W3iD5IYMQg7z4RAFfXnBfKxWX3ltt0ch9dwA==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=inbox.ru
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
+ header.s=mail4 header.b=D9JrR9jc
+X-Mailman-Original-Authentication-Results: exim-smtp-66468c9cd6-cjfkm;
+ auth=pass
+ smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
+Subject: [Buildroot] [PATCH 1/1] package/alsa-lib: add BR2_USE_MMU dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -164,61 +91,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: luca.ceresoli@bootlin.com, brandon.maier@collins.com, ju.o@free.fr,
- thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
- romain.naour@smile.fr, michal.simek@amd.com, yann.morin.1998@free.fr
+From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Now that all defconfigs have been bumped to xilinx_v2024.2, the
-xilinx_v2024.1 hashes can be removed.
+Build fails with:
+ucm_exec.c: In function 'uc_mgr_exec':
+ucm_exec.c:229:13: error: implicit declaration of function 'fork' [-Wimplicit-function-declaration]
+  229 |         p = fork();
+      |             ^~~~
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+ucm uses fork() so add BR2_USE_MMU dependency for it.
+
+Fixes: https://autobuild.buildroot.org/results/a287d3eef7ea5ea9a85b5b35d14e3698df4ecd01/build-end.log
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash       | 1 -
- board/xilinx/patches/linux/linux.hash                            | 1 -
- board/xilinx/patches/uboot/uboot.hash                            | 1 -
- board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash        | 1 -
- 4 files changed, 4 deletions(-)
+ package/alsa-lib/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-index 2ef3a98196..15cceebb80 100644
---- a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  c3369c89eab4e452bbc76c630e5dccb6c0ae588c0175b6c8549aa0241deb06ef  xlnx_rebase_v2.10_2024.1.tar.gz
- sha256  a45390c9e1d584a389abd37ee49dce3f8d3b41718b1fd7c977608b5387a38955  xlnx_rebase_v2.10_2024.2.tar.gz
-diff --git a/board/xilinx/patches/linux/linux.hash b/board/xilinx/patches/linux/linux.hash
-index 6f269e1c71..41bf2141fb 100644
---- a/board/xilinx/patches/linux/linux.hash
-+++ b/board/xilinx/patches/linux/linux.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  6415cfcfd74e943d6ae44f6c1edcae09bf6cd89410b03c4290bf1464a8368f84  xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz
- sha256  8ebbbe2d40597d9a5f36d47a1dfe4caffcef3d9f5ffa059ed4504bb761282593  xlnx_rebase_v6.6_LTS_2024.2.tar.gz
-diff --git a/board/xilinx/patches/uboot/uboot.hash b/board/xilinx/patches/uboot/uboot.hash
-index 1fb12d1a11..de0e6adad1 100644
---- a/board/xilinx/patches/uboot/uboot.hash
-+++ b/board/xilinx/patches/uboot/uboot.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  58e391a001d9d8ed347ab3258ff7c8435c866b1ff2b2c22ebc95af592444c0f5  xlnx_rebase_v2024.01_2024.1.tar.gz
- sha256  f1a86ccdbe60bac89177a24bbfd56fc6e8e67823669f0997de563c3cc0ea4dd1  xlnx_rebase_v2024.01_2024.2.tar.gz
-diff --git a/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash b/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
-index 3bd33a29a0..fe6963872c 100644
---- a/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
-+++ b/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  7abcba4e0e44e3a4adf9c1f971d918575226d7604dfd64a386baaa00c1c6c35f  xilinx-prebuilt-xilinx_v2024.1.tar.gz
- sha256  ef61a4b249ecbf632a25cc34c3b03b8290be44397ff739467ac92ec1701e23bf  xilinx-prebuilt-xilinx_v2024.2.tar.gz
+diff --git a/package/alsa-lib/Config.in b/package/alsa-lib/Config.in
+index 447916a29f..98b61896d4 100644
+--- a/package/alsa-lib/Config.in
++++ b/package/alsa-lib/Config.in
+@@ -69,8 +69,12 @@ config BR2_PACKAGE_ALSA_LIB_SEQ
+ config BR2_PACKAGE_ALSA_LIB_UCM
+ 	bool "ucm"
+ 	default y
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_ALSA_LIB_MIXER
+ 
++comment "ucm needs a toolchain w/ fork support"
++	depends on !BR2_USE_MMU
++
+ config BR2_PACKAGE_ALSA_LIB_ALISP
+ 	bool "alisp"
+ 	default y
 -- 
-2.25.1
+2.45.2
 
 _______________________________________________
 buildroot mailing list
