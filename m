@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58DD9D4977B
-	for <buildroot@archiver.kernel.org>; Sun,  1 Dec 2024 17:45:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D17A5D49782
+	for <buildroot@archiver.kernel.org>; Sun,  1 Dec 2024 17:45:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5EA66F49B;
-	Sun,  1 Dec 2024 17:45:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B7134AE77;
+	Sun,  1 Dec 2024 17:45:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cwRMglVMXgv2; Sun,  1 Dec 2024 17:45:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M0P8_8yxDJcD; Sun,  1 Dec 2024 17:45:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4EE86F50C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A8C64A150
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4EE86F50C;
-	Sun,  1 Dec 2024 17:45:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id CF7DB60
- for <buildroot@buildroot.org>; Sun,  1 Dec 2024 17:45:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A8C64A150;
+	Sun,  1 Dec 2024 17:45:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F151977
+ for <buildroot@buildroot.org>; Sun,  1 Dec 2024 17:45:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A6FD66F50C
+ by smtp1.osuosl.org (Postfix) with ESMTP id E335C84FAD
  for <buildroot@buildroot.org>; Sun,  1 Dec 2024 17:45:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TFwgqLLGlDj8 for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jAQr-7a2b6uF for <buildroot@buildroot.org>;
  Sun,  1 Dec 2024 17:45:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E783A6F49B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED83C84C43
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E783A6F49B
+ by smtp1.osuosl.org (Postfix) with ESMTP id ED83C84C43
  for <buildroot@buildroot.org>; Sun,  1 Dec 2024 17:45:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D04B0867C7; Sun,  1 Dec 2024 17:45:50 +0000 (UTC)
+ id E64D8867C9; Sun,  1 Dec 2024 17:45:50 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 1 Dec 2024 16:04:32 +0100
+Date: Sun, 1 Dec 2024 18:42:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 47881d30dbf4977e8dd1ca54106fbb9aeaef8413
-X-Git-Newrev: ae0e6d14d547c0d71cf68c75c821f4b2c1d367dd
+X-Git-Oldrev: a6a92a08b35ccecd1ed70feae97a247c7a8bb8aa
+X-Git-Newrev: 2f47195d540f63543728fd4982f2e6ae8aac2b2b
 X-Patchwork-Hint: ignore
-Message-Id: <20241201174550.D04B0867C7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libxkbcommon: bump
- version to 1.7.0
+Message-Id: <20241201174550.E64D8867C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/cage: bump to version
+ 0.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,48 +65,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae0e6d14d547c0d71cf68c75c821f4b2c1d367dd
+commit: https://git.buildroot.net/buildroot/commit/?id=2f47195d540f63543728fd4982f2e6ae8aac2b2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog:
-https://lists.freedesktop.org/archives/wayland-devel/2024-March/043539.html
+Changelog: [1].
+
+Also, upstream commit [2], included in v0.2, removed the "xwayland"
+build time option. This commit removes the corresponding
+CAGE_CONF_OPTS.
+
+The cage github project was moved from [3] to [4]. See also [5].
+This commit also updates the _SITE url accordingly.
+
+[1] https://github.com/cage-kiosk/cage/releases/tag/v0.2.0
+[2] https://github.com/cage-kiosk/cage/commit/d3fb99d6654325ec46277cfdb589f89316bed701
+[3] https://github.com/Hjdskes/cage
+[4] https://github.com/cage-kiosk/cage
+[5] https://github.com/cage-kiosk/cage/commit/9a4310f8b6d40be49ca3065742c7462278b1316e
 
 Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 [Julien:
   - add new line before S-o-b
-  - add missing space in hash file (fix "make check-package" error)
+  - add link justifying the removal of xwayland option
+  - update _SITE
 ]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libxkbcommon/libxkbcommon.hash | 4 ++--
- package/libxkbcommon/libxkbcommon.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/cage/cage.hash |  6 ++++--
+ package/cage/cage.mk   | 10 ++--------
+ 2 files changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
-index fff2b7a943..6cdd79e01a 100644
---- a/package/libxkbcommon/libxkbcommon.hash
-+++ b/package/libxkbcommon/libxkbcommon.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2022-February/042104.html
--sha256  106cec5263f9100a7e79b5f7220f889bc78e7d7ffc55d2b6fdb1efefb8024031  libxkbcommon-1.4.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2024-March/043539.html
-+sha256  65782f0a10a4b455af9c6baab7040e2f537520caa2ec2092805cdfd36863b247  libxkbcommon-1.7.0.tar.xz
+diff --git a/package/cage/cage.hash b/package/cage/cage.hash
+index d5517bd918..e7c971ea26 100644
+--- a/package/cage/cage.hash
++++ b/package/cage/cage.hash
+@@ -1,5 +1,7 @@
+-# Generated locally after checking GPG signature from https://github.com/cage-kiosk/cage/releases/download/v0.1.5/cage-0.1.5.tar.gz.sig
+-sha256  ece0312e559289df0238289ea6c60e9fed32d27fe3ae8a8f83eeff26ddc239e1  cage-0.1.5.tar.gz
++# Locally calculated after checking pgp signature
++# https://github.com/cage-kiosk/cage/releases/download/v0.2.0/cage-0.2.0.tar.gz.sig
++# with key 34FF9526CFEF0E97A340E2E40FDE7BE0E88F5E48 "emersion <contact@emersion.fr>"
++sha256  557c194d18af7202a9ec2e8be6dd7129f6c16d0f4528f4079ba26ccd57b6ef88  cage-0.2.0.tar.gz
  
- # License file:
- sha256  086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb  LICENSE
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-index 882791b917..c60580ef84 100644
---- a/package/libxkbcommon/libxkbcommon.mk
-+++ b/package/libxkbcommon/libxkbcommon.mk
-@@ -4,7 +4,7 @@
+ # Hashes for license files:
+ sha256  e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
+diff --git a/package/cage/cage.mk b/package/cage/cage.mk
+index 119950bc00..6fa39122ee 100644
+--- a/package/cage/cage.mk
++++ b/package/cage/cage.mk
+@@ -4,17 +4,11 @@
  #
  ################################################################################
  
--LIBXKBCOMMON_VERSION = 1.4.0
-+LIBXKBCOMMON_VERSION = 1.7.0
- LIBXKBCOMMON_SITE = https://xkbcommon.org/download
- LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
- LIBXKBCOMMON_LICENSE = MIT/X11
+-CAGE_VERSION = 0.1.5
+-CAGE_SITE = https://github.com/Hjdskes/cage/releases/download/v$(CAGE_VERSION)
++CAGE_VERSION = 0.2.0
++CAGE_SITE = https://github.com/cage-kiosk/cage/releases/download/v$(CAGE_VERSION)
+ CAGE_LICENSE = MIT
+ CAGE_LICENSE_FILES = LICENSE
+ CAGE_DEPENDENCIES = host-pkgconf wlroots
+ CAGE_CONF_OPTS = -Dman-pages=disabled
+ 
+-ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
+-CAGE_CONF_OPTS += -Dxwayland=true
+-else
+-CAGE_CONF_OPTS += -Dxwayland=false
+-endif
+-
+ $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
