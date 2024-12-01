@@ -4,76 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E1A6D49763
-	for <buildroot@archiver.kernel.org>; Sun,  1 Dec 2024 11:37:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D97FBD49771
+	for <buildroot@archiver.kernel.org>; Sun,  1 Dec 2024 15:07:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B1C14F07C;
-	Sun,  1 Dec 2024 11:37:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 556164EC28;
+	Sun,  1 Dec 2024 15:07:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C5se3Ggtz9CF; Sun,  1 Dec 2024 11:37:24 +0000 (UTC)
+ id l4dPOPP_-83I; Sun,  1 Dec 2024 15:07:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB34B4F07F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F06654EC06
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB34B4F07F;
-	Sun,  1 Dec 2024 11:37:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 789616C
- for <buildroot@buildroot.org>; Sun,  1 Dec 2024 11:37:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F06654EC06;
+	Sun,  1 Dec 2024 15:07:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7D063976
+ for <buildroot@buildroot.org>; Sun,  1 Dec 2024 15:07:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6BFEC4036F
- for <buildroot@buildroot.org>; Sun,  1 Dec 2024 11:37:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 695E54EC06
+ for <buildroot@buildroot.org>; Sun,  1 Dec 2024 15:07:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DDsr3EHYE8rd for <buildroot@buildroot.org>;
- Sun,  1 Dec 2024 11:37:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C87A2400DA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C87A2400DA
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C87A2400DA
- for <buildroot@buildroot.org>; Sun,  1 Dec 2024 11:37:20 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7IYCTPJ0jNyi for <buildroot@buildroot.org>;
+ Sun,  1 Dec 2024 15:07:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E461C4EBE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E461C4EBE1
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E461C4EBE1
+ for <buildroot@buildroot.org>; Sun,  1 Dec 2024 15:07:23 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
  (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id D8BE719F5C3;
- Sun,  1 Dec 2024 12:37:12 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:52862])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 01 Dec 2024 12:37:12 +0100
-MIME-Version: 1.0
-Date: Sun, 01 Dec 2024 12:37:12 +0100
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 7B839B00573;
+ Sun,  1 Dec 2024 16:07:19 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
-To: Christian Stewart <christian@aperture.us>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20241128012217.21455-1-christian@aperture.us>
-References: <20241128012217.21455-1-christian@aperture.us>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <b11604c62e77db9b7b87d985850be89b@free.fr>
-X-Sender: ju.o@free.fr
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Sun,  1 Dec 2024 16:07:13 +0100
+Message-ID: <20241201150713.13429-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.47.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1733053037;
- bh=6MFuP/EI2CivSydBeGW6rGPh4udFWc9ixKxGaNEf5S4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=LwvONLIEtDiXhD/p16I52i5QAakIfFk8DnGHSb5gWUK5BAUqP4xfIJ8F0EukrD99J
- 3zLbNR0jz2cvozqlK7lm0fE1S+cYcliFR0gY9w+rxtveNz4F8I/jBSxDRH+SKWEHlt
- dB2GCZqBCaRA6l7SssdRGH3WEa0qwBaUXRWT+/sGNtrt7N7BxTPe7OzMW1nlFKQ0Ij
- bO/u93W0NcQ4aAOfZXn7XHoytM0mHuAL1dtnfQ6hdREPHXhp7TlEuug84xFvS2uEfw
- pk8hOydwJkASuWsQRPWH+UutSvSANVAPyUhoZWNUqbzXElotSVHNfSqyb9qWUqvrFn
- YL5JfyCgWH5fA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1733065640;
+ bh=sAdR4sh3J35mOSsk9iMX8HNscUn+3f1NSblyns5sL0Q=;
+ h=From:To:Cc:Subject:Date:From;
+ b=TjZudCYf5tTN4eGj2iUhPGW3orAJVbPpRokQA4ER2jJIYp/84SVVgFcSoyR0UDMp7
+ z7kFHF8n+eOCZDlYc/ovHagYY1YcDmNKWhn2lQXAFNpyfCkLDH3dSp4y4hYHUhxnlZ
+ CjqSEFoqp+WDnJ1VOFXt1U3XV8TNKE0dSWjIuO8T64a1zAjKemU0GtwZcXueusfXN7
+ gMxXvVsyXoePDCN0jNSi89PM2cDOCzNbnSvSGTq2f8uQmqSOnmKa6nNTGHrbFIFU2V
+ pjHE4/4MMb+gNEcFVjfiIhZpRnO33XiT3VTlZiqMTMVcxJOiW9p0B25vAJblV4HOz6
+ tk3SqiwVgDpTw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=LwvONLIE
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/go: bump version to go1.23.3
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=TjZudCYf
+Subject: [Buildroot] [PATCH next 1/1] package/file: bump version to 5.46
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,117 +76,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 28/11/2024 02:22, Christian Stewart via buildroot wrote:
-> go1.23.3 (released 2024-11-06) includes fixes to the linker, the 
-> runtime,
-> and the net/http, os, and syscall packages.
-> 
-> https://go.dev/doc/devel/release#go1.23.minor
-> 
-> Signed-off-by: Christian Stewart <christian@aperture.us>
+See release announce [1].
 
-Applied to next, thanks.
+The src/mygetopt.h file license was updated from BSD-4-Clause to
+BSD-2-Clause in upstream commit [2]. This change makes this file using
+the same license as most other files. So this commit removes the
+license entry for this file and update the _LICENSE accordingly.
 
-> ---
->  package/go/go-bin/go-bin.hash | 14 +++++++-------
->  package/go/go-src/go-src.hash |  2 +-
->  package/go/go.mk              |  2 +-
->  3 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/package/go/go-bin/go-bin.hash 
-> b/package/go/go-bin/go-bin.hash
-> index cc87cac3a6..5f008c773e 100644
-> --- a/package/go/go-bin/go-bin.hash
-> +++ b/package/go/go-bin/go-bin.hash
-> @@ -1,9 +1,9 @@
->  # sha256 checksum from https://go.dev/dl/
-> -sha256  
-> 36930162a93df417d90bd22c6e14daff4705baac2b02418edda671cdfa9cd07f  
-> go1.23.2.src.tar.gz
-> -sha256  
-> cb1ed4410f68d8be1156cee0a74fcfbdcd9bca377c83db3a9e1b07eebc6d71ef  
-> go1.23.2.linux-386.tar.gz
-> -sha256  
-> 542d3c1705f1c6a1c5a80d5dc62e2e45171af291e755d591c5e6531ef63b454e  
-> go1.23.2.linux-amd64.tar.gz
-> -sha256  
-> f626cdd92fc21a88b31c1251f419c17782933a42903db87a174ce74eeecc66a9  
-> go1.23.2.linux-arm64.tar.gz
-> -sha256  
-> e3286bdde186077e65e961cbe18874d42a461e5b9c472c26572b8d4a98d15c40  
-> go1.23.2.linux-armv6l.tar.gz
-> -sha256  
-> c164ce7d894b10fd861d7d7b96f1dbea3f993663d9f0c30bc4f8ae3915db8b0c  
-> go1.23.2.linux-ppc64le.tar.gz
-> -sha256  
-> de1f94d7dd3548ba3036de1ea97eb8243881c22a88fcc04cc08c704ded769e02  
-> go1.23.2.linux-s390x.tar.gz
-> +sha256  
-> 8d6a77332487557c6afa2421131b50f83db4ae3c579c3bc72e670ee1f6968599  
-> go1.23.3.src.tar.gz
-> +sha256  
-> 3d7b00191a43c50d28e0903a0c576104bc7e171a8670de419d41111c08dfa299  
-> go1.23.3.linux-386.tar.gz
-> +sha256  
-> a0afb9744c00648bafb1b90b4aba5bdb86f424f02f9275399ce0c20b93a2c3a8  
-> go1.23.3.linux-amd64.tar.gz
-> +sha256  
-> 1f7cbd7f668ea32a107ecd41b6488aaee1f5d77a66efd885b175494439d4e1ce  
-> go1.23.3.linux-arm64.tar.gz
-> +sha256  
-> 5f0332754beffc65af65a7b2da76e9dd997567d0d81b6f4f71d3588dc7b4cb00  
-> go1.23.3.linux-armv6l.tar.gz
-> +sha256  
-> e3b926c81e8099d3cee6e6e270b85b39c3bd44263f8d3df29aacb4d7e00507c8  
-> go1.23.3.linux-ppc64le.tar.gz
-> +sha256  
-> 6bd72fcef72b046b6282c2d1f2c38f31600e4fe9361fcd8341500c754fb09c38  
-> go1.23.3.linux-s390x.tar.gz
->  sha256  
-> 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  
-> LICENSE
-> diff --git a/package/go/go-src/go-src.hash 
-> b/package/go/go-src/go-src.hash
-> index b475ec4a46..1a185d011c 100644
-> --- a/package/go/go-src/go-src.hash
-> +++ b/package/go/go-src/go-src.hash
-> @@ -1,3 +1,3 @@
->  # From https://go.dev/dl
-> -sha256  
-> 36930162a93df417d90bd22c6e14daff4705baac2b02418edda671cdfa9cd07f  
-> go1.23.2.src.tar.gz
-> +sha256  
-> 8d6a77332487557c6afa2421131b50f83db4ae3c579c3bc72e670ee1f6968599  
-> go1.23.3.src.tar.gz
->  sha256  
-> 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  
-> LICENSE
-> diff --git a/package/go/go.mk b/package/go/go.mk
-> index 33dc681358..3dd590bf6f 100644
-> --- a/package/go/go.mk
-> +++ b/package/go/go.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
-> 
-> -GO_VERSION = 1.23.2
-> +GO_VERSION = 1.23.3
-> 
->  HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
->  HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
-> --
-> 2.39.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+This commit also replaces the mention "one file" on BSD-3-Clause, to
+the actual file name using it, which is "vasprintf.c".
+
+This commit also updates the Config.in package homepage URL,
+to use https.
+
+[1] https://mailman.astron.com/pipermail/file/2024-November/001435.html
+[2] https://github.com/file/file/commit/d605bb40478c4ce94aef88316d3a928b3da746f5
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/pipelines/1567957114
+https://gitlab.com/jolivain/buildroot/-/jobs/8512987847
+---
+ package/file/Config.in | 2 +-
+ package/file/file.hash | 5 ++---
+ package/file/file.mk   | 6 +++---
+ 3 files changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/package/file/Config.in b/package/file/Config.in
+index edc4d874b2..6b5326f660 100644
+--- a/package/file/Config.in
++++ b/package/file/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_FILE
+ 	  Program to identify a file's format by scanning binary data
+ 	  for known patterns.
+ 
+-	  http://www.darwinsys.com/file/
++	  https://www.darwinsys.com/file/
+diff --git a/package/file/file.hash b/package/file/file.hash
+index 7c15569c09..53c4d5c4db 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
+@@ -1,7 +1,6 @@
+ # Locally calculated after verifying signature
+-# https://astron.com/pub/file/file-5.45.tar.gz.asc
++# https://astron.com/pub/file/file-5.46.tar.gz.asc
+ # using key BE04995BA8F90ED0C0C176C471112AB16CB33B3A
+-sha256  fc97f51029bb0e2c9f4e3bffefdaf678f0e039ee872b9de5c002a6d09c784d82  file-5.45.tar.gz
++sha256  c9cc77c7c560c543135edc555af609d5619dbef011997e988ce40a3d75d86088  file-5.46.tar.gz
+ sha256  0bfa856a9930bddadbef95d1be1cf4e163c0be618e76ea3275caaf255283e274  COPYING
+-sha256  4ccb60d623884ef637af4a5bc16b2cb350163e2135e967655837336019a64462  src/mygetopt.h
+ sha256  2e14b6fa9a74f952ebfde3c96527158df281c953cfaf35609eb854d4da30131c  src/vasprintf.c
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 27d9181d76..a33b306c4c 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-FILE_VERSION = 5.45
++FILE_VERSION = 5.46
+ FILE_SITE = https://astron.com/pub/file
+-FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
+-FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
++FILE_LICENSE = BSD-2-Clause, BSD-3-Clause (vasprintf.c)
++FILE_LICENSE_FILES = COPYING src/vasprintf.c
+ FILE_CPE_ID_VALID = YES
+ 
+ FILE_AUTORECONF = YES
+-- 
+2.47.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
