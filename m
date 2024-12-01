@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57318D49789
-	for <buildroot@archiver.kernel.org>; Sun,  1 Dec 2024 20:43:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA9FED4978C
+	for <buildroot@archiver.kernel.org>; Sun,  1 Dec 2024 21:03:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D460584396;
-	Sun,  1 Dec 2024 20:43:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 523A085068;
+	Sun,  1 Dec 2024 21:03:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ABi11t5bUxYd; Sun,  1 Dec 2024 20:43:03 +0000 (UTC)
+ id ttbrihPXkPNq; Sun,  1 Dec 2024 21:03:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FB2484479
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DC9F8506B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FB2484479;
-	Sun,  1 Dec 2024 20:43:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 957C76C
- for <buildroot@buildroot.org>; Sun,  1 Dec 2024 20:43:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4DC9F8506B;
+	Sun,  1 Dec 2024 21:03:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F3D35976
+ for <buildroot@buildroot.org>; Sun,  1 Dec 2024 21:03:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 76F7C820F8
- for <buildroot@buildroot.org>; Sun,  1 Dec 2024 20:43:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D553B60845
+ for <buildroot@buildroot.org>; Sun,  1 Dec 2024 21:03:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A4hIY0rJg5XX for <buildroot@buildroot.org>;
- Sun,  1 Dec 2024 20:43:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Rc1reBPEtZdK for <buildroot@buildroot.org>;
+ Sun,  1 Dec 2024 21:03:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6527E845EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C17786068F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6527E845EA
- for <buildroot@buildroot.org>; Sun,  1 Dec 2024 20:43:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C17786068F
+ for <buildroot@buildroot.org>; Sun,  1 Dec 2024 21:03:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57E51867ED; Sun,  1 Dec 2024 20:43:01 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id B531F86180; Sun,  1 Dec 2024 21:03:45 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 1 Dec 2024 21:42:09 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 47c5ac28e1037881f5ea13f3ab2d676fb0e000aa
-X-Git-Newrev: 58ff0cb5c43cd6909841b066a78a7689eeea6080
+Date: Sun, 1 Dec 2024 20:20:33 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 139be85362f0047d0c06a033b83201f4fe54bbb5
+X-Git-Newrev: bd94801092f6cdce71f78423abb602b0b72f6bec
 X-Patchwork-Hint: ignore
-Message-Id: <20241201204301.57E51867ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lrzsz: fix FTBFS by upgrading and
- applying Debian fix
+Message-Id: <20241201210345.B531F86180@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libpam-radius-auth:
+ bump to version 3.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,239 +60,69 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7961654719266223162=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7961654719266223162==
-Content-Type: text/plain
+commit: https://git.buildroot.net/buildroot/commit/?id=bd94801092f6cdce71f78423abb602b0b72f6bec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58ff0cb5c43cd6909841b066a78a7689eeea6080
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+For change log, see [1].
 
-This failure appeared when trying to build lrzsz:
+Buildroot commit [2] changed _SITE from using the ftp site to a
+github download. This github generated archive has a different hash
+compare to release files, due to a different directory name in the
+archive. This does not allow to check the published PGP signatures.
+This new 3.0.0 version is published as a github release asset. This
+commit updates _SITE and _SOURCE to use those release files. The
+archive is switched to bz2 archive which is smaller. Finally, this
+commit adds a comment in the hash file, with the signature link and
+the pgp key used for the signature.
 
-lsyslog.c:73:5: error: implicit declaration of function ‘vasprintf’; did you mean ‘vsprintf’? [-Wimplicit-function-declaration]
+[1] https://github.com/FreeRADIUS/pam_radius/blob/release_3_0_0/Changelog
+[2] https://gitlab.com/buildroot.org/buildroot/-/commit/860b1b958797bd16bfe7666bb308a5ea026b1b46
 
-To fix the problem, let's follow Debian. Switch to 0.12.21rc (which is
-already out there 25 years!) and import their patch adding includes.
-
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-[Peter: add Upstream tag to patch]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vincent Jardin <vjardin@free.fr>
+[Julien: change to use the release archive so the PGP
+  signature can be checked]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../lrzsz/0001-configure-fix-main-prototype.patch  |  16 +--
- .../lrzsz/0004-FTBFS-fix-missing-includes.patch    | 124 +++++++++++++++++++++
- package/lrzsz/lrzsz.hash                           |   2 +-
- package/lrzsz/lrzsz.mk                             |   4 +-
- 4 files changed, 136 insertions(+), 10 deletions(-)
+ package/libpam-radius-auth/libpam-radius-auth.hash | 6 ++++--
+ package/libpam-radius-auth/libpam-radius-auth.mk   | 5 +++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/lrzsz/0001-configure-fix-main-prototype.patch b/package/lrzsz/0001-configure-fix-main-prototype.patch
-index 46b7aade00..dfe4385a1c 100644
---- a/package/lrzsz/0001-configure-fix-main-prototype.patch
-+++ b/package/lrzsz/0001-configure-fix-main-prototype.patch
-@@ -1,4 +1,4 @@
--From 43b2b711fedd3a28d497b3a5c0e9054fa203ef3d Mon Sep 17 00:00:00 2001
-+From c2758812867a52a6bb56b87d52c35ebff797e777 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Date: Sun, 15 Sep 2024 15:12:07 +0200
- Subject: [PATCH] configure: fix main() prototype
-@@ -10,23 +10,25 @@ configure script directly.
+diff --git a/package/libpam-radius-auth/libpam-radius-auth.hash b/package/libpam-radius-auth/libpam-radius-auth.hash
+index 63f3f1e45e..383576f568 100644
+--- a/package/libpam-radius-auth/libpam-radius-auth.hash
++++ b/package/libpam-radius-auth/libpam-radius-auth.hash
+@@ -1,5 +1,7 @@
+-# Locally calculated after checking PGP signature
+-sha256  798dc358e7a143163e103bd38c4101645b2e93d82aa0ec63d32c0cb929d9c65c  libpam-radius-auth-2.0.0.tar.gz
++# Locally calculated after checking PGP signature from
++# https://github.com/FreeRADIUS/pam_radius/releases/download/release_3_0_0/pam_radius-3.0.0.tar.bz2.sig
++# with key: BF2384EC6938B9744B03E2A620E37C25995B4F85
++sha256  fa622eef903fdcc8b3f64bd1d6437ccc1f160758ce65f947ceba951770071143  pam_radius-3.0.0.tar.bz2
  
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Upstream: N/A, patching generated file
-+[wsa: rebased to 0.12.21rc]
-+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
- ---
-  configure | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/configure b/configure
--index db26726..d160e27 100755
-+index cc586d5..16a259a 100755
- --- a/configure
- +++ b/configure
--@@ -1008,7 +1008,7 @@ cross_compiling=$ac_cv_prog_cc_cross
-- cat > conftest.$ac_ext <<EOF
-- #line 1010 "configure"
-+@@ -1053,7 +1053,7 @@ cat > conftest.$ac_ext << EOF
-+ #line 1054 "configure"
-  #include "confdefs.h"
-+ 
- -main(){return(0);}
- +int main(){return(0);}
-  EOF
-- if { (eval echo configure:1014: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
-+ if { (eval echo configure:1059: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-    ac_cv_prog_cc_works=yes
- -- 
--2.46.0
-+2.45.2
- 
-diff --git a/package/lrzsz/0004-FTBFS-fix-missing-includes.patch b/package/lrzsz/0004-FTBFS-fix-missing-includes.patch
-new file mode 100644
-index 0000000000..51b5f09c26
---- /dev/null
-+++ b/package/lrzsz/0004-FTBFS-fix-missing-includes.patch
-@@ -0,0 +1,124 @@
-+From a9faaf7f02811e7409074362700e963609885ba6 Mon Sep 17 00:00:00 2001
-+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-+Date: Fri, 29 Nov 2024 14:14:25 +0100
-+Subject: [PATCH] FTBFS fix missing includes
-+
-+From: https://sources.debian.org/data/main/l/lrzsz/0.12.21rc-0.1/debian/patches/include.diff
-+
-+Description: Fixes FTBFS (missing includes)
-+Author: Martin A. Godisch <godisch@debian.org>
-+Bug-Debian: https://bugs.debian.org/1066514
-+Forwarded: no
-+
-+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-+Upstream: https://sources.debian.org/data/main/l/lrzsz/0.12.21rc-0.1/debian/patches/include.diff
-+---
-+ lib/error.c     | 1 +
-+ src/canit.c     | 1 +
-+ src/lrz.c       | 1 +
-+ src/lsyslog.c   | 1 +
-+ src/lsz.c       | 1 +
-+ src/tcp.c       | 1 +
-+ src/zperr.c     | 1 +
-+ src/zreadline.c | 1 +
-+ 8 files changed, 8 insertions(+)
-+
-+diff --git a/lib/error.c b/lib/error.c
-+index 8b96b91..3861578 100644
-+--- a/lib/error.c
-++++ b/lib/error.c
-+@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
-+ #endif
-+ 
-+ #include <stdio.h>
-++#include <string.h>
-+ 
-+ #if HAVE_VPRINTF || HAVE_DOPRNT || _LIBC || defined(__cplusplus)
-+ # if __STDC__ || defined(__cplusplus)
-+diff --git a/src/canit.c b/src/canit.c
-+index f947a25..ae91807 100644
-+--- a/src/canit.c
-++++ b/src/canit.c
-+@@ -24,6 +24,7 @@
-+ #define SS_NORMAL 0
-+ #include <stdio.h>
-+ #include <stdlib.h>
-++#include <string.h>
-+ #include <signal.h>
-+ #include <setjmp.h>
-+ #include <ctype.h>
-+diff --git a/src/lrz.c b/src/lrz.c
-+index 2f6a5ad..63e1326 100644
-+--- a/src/lrz.c
-++++ b/src/lrz.c
-+@@ -27,6 +27,7 @@
-+ #define SS_NORMAL 0
-+ #include <stdio.h>
-+ #include <stdlib.h>
-++#include <string.h>
-+ #include <signal.h>
-+ #include <ctype.h>
-+ #include <errno.h>
-+diff --git a/src/lsyslog.c b/src/lsyslog.c
-+index d21ab35..24d8cd1 100644
-+--- a/src/lsyslog.c
-++++ b/src/lsyslog.c
-+@@ -18,6 +18,7 @@
-+   02111-1307, USA.
-+ 
-+ */
-++#define _GNU_SOURCE
-+ #include "config.h"
-+ #ifdef ENABLE_SYSLOG
-+ #include "zglobal.h"
-+diff --git a/src/lsz.c b/src/lsz.c
-+index b9d2545..1598150 100644
-+--- a/src/lsz.c
-++++ b/src/lsz.c
-+@@ -28,6 +28,7 @@
-+ #define SS_NORMAL 0
-+ #include <stdio.h>
-+ #include <stdlib.h>
-++#include <string.h>
-+ #include <signal.h>
-+ #include <setjmp.h>
-+ #include <ctype.h>
-+diff --git a/src/tcp.c b/src/tcp.c
-+index 7e1ba3f..cdf9187 100644
-+--- a/src/tcp.c
-++++ b/src/tcp.c
-+@@ -33,6 +33,7 @@
-+ #include <ctype.h>
-+ #include <stdio.h>
-+ #include <signal.h>
-++#include <string.h>
-+ 
-+ #include "zglobal.h"
-+ #include <stdlib.h>
-+diff --git a/src/zperr.c b/src/zperr.c
-+index 31963de..0b9dc29 100644
-+--- a/src/zperr.c
-++++ b/src/zperr.c
-+@@ -22,6 +22,7 @@
-+ #include "zglobal.h"
-+ #include <stdio.h>
-+ #include <stdlib.h>
-++#include <string.h>
-+ #include <errno.h>
-+ 
-+ #ifdef __STDC__
-+diff --git a/src/zreadline.c b/src/zreadline.c
-+index dd9736b..7bc3736 100644
-+--- a/src/zreadline.c
-++++ b/src/zreadline.c
-+@@ -27,6 +27,7 @@
-+ 
-+ #include <stdlib.h>
-+ #include <stdio.h>
-++#include <string.h>
-+ #include <signal.h>
-+ #include <ctype.h>
-+ #include <errno.h>
-+-- 
-+2.45.2
-+
-diff --git a/package/lrzsz/lrzsz.hash b/package/lrzsz/lrzsz.hash
-index cd8dd6f489..5c2f2ef951 100644
---- a/package/lrzsz/lrzsz.hash
-+++ b/package/lrzsz/lrzsz.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c28b36b14bddb014d9e9c97c52459852f97bd405f89113f30bee45ed92728ff1  lrzsz-0.12.20.tar.gz
-+sha256  4d845f239ddcd86735b5dbf01f3869b072ffb6f6c8aa24c346dc4a3c95453c55  lrzsz-0.12.21rc.tar.gz
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/lrzsz/lrzsz.mk b/package/lrzsz/lrzsz.mk
-index 7247a4bd59..12d52b8ebd 100644
---- a/package/lrzsz/lrzsz.mk
-+++ b/package/lrzsz/lrzsz.mk
-@@ -4,8 +4,8 @@
+ # Hash for license file:
+ sha256  67f82e045cf7acfef853ea0f426575a8359161a0a325e19f02b529a87c4b6c34  LICENSE
+diff --git a/package/libpam-radius-auth/libpam-radius-auth.mk b/package/libpam-radius-auth/libpam-radius-auth.mk
+index 9519aad750..772456ceae 100644
+--- a/package/libpam-radius-auth/libpam-radius-auth.mk
++++ b/package/libpam-radius-auth/libpam-radius-auth.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--LRZSZ_VERSION = 0.12.20
--LRZSZ_SITE = http://www.ohse.de/uwe/releases
-+LRZSZ_VERSION = 0.12.21rc
-+LRZSZ_SITE = http://www.ohse.de/uwe/testing
- LRZSZ_CONF_OPTS = --disable-timesync
- LRZSZ_LICENSE = GPL-2.0+
- LRZSZ_LICENSE_FILES = COPYING
-
---===============7961654719266223162==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-LIBPAM_RADIUS_AUTH_VERSION = 2.0.0
+-LIBPAM_RADIUS_AUTH_SITE = $(call github,FreeRADIUS,pam_radius,release_$(subst .,_,$(LIBPAM_RADIUS_AUTH_VERSION)))
++LIBPAM_RADIUS_AUTH_VERSION = 3.0.0
++LIBPAM_RADIUS_AUTH_SITE = https://github.com/FreeRADIUS/pam_radius/releases/download/release_$(subst .,_,$(LIBPAM_RADIUS_AUTH_VERSION))
++LIBPAM_RADIUS_AUTH_SOURCE = pam_radius-$(LIBPAM_RADIUS_AUTH_VERSION).tar.bz2
+ LIBPAM_RADIUS_AUTH_DEPENDENCIES = linux-pam
+ LIBPAM_RADIUS_AUTH_INSTALL_STAGING = YES
+ LIBPAM_RADIUS_AUTH_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7961654719266223162==--
