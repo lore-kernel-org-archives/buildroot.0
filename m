@@ -4,72 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 638E6D78332
-	for <buildroot@archiver.kernel.org>; Mon,  2 Dec 2024 15:49:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5F38D78333
+	for <buildroot@archiver.kernel.org>; Mon,  2 Dec 2024 16:15:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1CAFD8140A;
-	Mon,  2 Dec 2024 15:49:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D77580FA0;
+	Mon,  2 Dec 2024 16:15:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sqxRYxkVtWqk; Mon,  2 Dec 2024 15:49:17 +0000 (UTC)
+ id 719y68JVMDal; Mon,  2 Dec 2024 16:15:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B08681415
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8222E80FAA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B08681415;
-	Mon,  2 Dec 2024 15:49:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E3F8E1DAA
- for <buildroot@buildroot.org>; Mon,  2 Dec 2024 15:49:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8222E80FAA;
+	Mon,  2 Dec 2024 16:15:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 93BD91DAA
+ for <buildroot@buildroot.org>; Mon,  2 Dec 2024 16:15:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D189C407BC
- for <buildroot@buildroot.org>; Mon,  2 Dec 2024 15:49:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8279C80FAF
+ for <buildroot@buildroot.org>; Mon,  2 Dec 2024 16:15:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2I_K6mC0A7DH for <buildroot@buildroot.org>;
- Mon,  2 Dec 2024 15:49:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EF659406DF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF659406DF
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EF659406DF
- for <buildroot@buildroot.org>; Mon,  2 Dec 2024 15:49:14 +0000 (UTC)
-Received: from localhost.localdomain (unknown
- [IPv6:2a01:e0a:2af:22b0:2ddd:b692:571f:f1a1])
- (Authenticated sender: vjardin@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id DDFF913F8C8;
- Mon,  2 Dec 2024 16:49:07 +0100 (CET)
-From: Vincent Jardin <vjardin@free.fr>
-To: buildroot@buildroot.org
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, Robin Jarry <robin@jarry.cc>,
- Brandon Maier <brandon.maier@gmail.com>, Vincent Jardin <vjardin@free.fr>
-Date: Mon,  2 Dec 2024 16:46:30 +0100
-Message-ID: <20241202154630.76543-3-vjardin@free.fr>
-X-Mailer: git-send-email 2.46.1
-In-Reply-To: <20241202154630.76543-1-vjardin@free.fr>
-References: <iig5bn2go5jmwxxgusoagg4oapd7kmazljykzgemmnuvtz7a74@m5btvmgminf7>
- <20241202154630.76543-1-vjardin@free.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u1FlnHvhPwGu for <buildroot@buildroot.org>;
+ Mon,  2 Dec 2024 16:15:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::12b; helo=mail-lf1-x12b.google.com;
+ envelope-from=alex.bennee@linaro.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6D1E980FA0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D1E980FA0
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
+ [IPv6:2a00:1450:4864:20::12b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6D1E980FA0
+ for <buildroot@buildroot.org>; Mon,  2 Dec 2024 16:15:01 +0000 (UTC)
+Received: by mail-lf1-x12b.google.com with SMTP id
+ 2adb3069b0e04-53de8ecafeeso4836438e87.1
+ for <buildroot@buildroot.org>; Mon, 02 Dec 2024 08:15:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1733156099; x=1733760899;
+ h=content-transfer-encoding:mime-version:message-id:date:user-agent
+ :references:in-reply-to:subject:cc:to:from:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=322bcIsQl+eOHICBE768vcz1SvD7M/P7vC5LGhQDJ6k=;
+ b=QlVheqSlYOOaMmiofqFpWO1ug/N6BoDMOidHPGYLfydycmFrdfcJHKClIHy9rhO6JN
+ N6zJ18+DmnKW+FM4Hp8nW5g2uGPYeAedF9uwmQ5ocagejquXJ7IVJM7fSFDUYoJe6htZ
+ kw3xDKk+mB8aRPcxdPqYB4wDsSJp+N6Fa+XbVr25GlMmf1AAFNWBShPYVXLt5RDJWDpd
+ Dr5I7t358ypHyF5GpNmlcpECLVh75POF/rO0BV4o2TYjmLYyMP+fxcJPaPKa2S8PqWBg
+ QbvKpeUO2djv9iNqFU0Kz5FA9/ohPJjjGQdpK44nkRHM0gI3PytfhvsN97gCc7KXyEIO
+ a0Vg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXDj987pzND1DacidICsQgvVSKRu/EZr5rRUuPEZHF0082Dnp1yYGUK5nGKZq6FyWCynA7qgz7iIO4=@buildroot.org
+X-Gm-Message-State: AOJu0YzryNLA/5Krc7sqhy/rEE/lbibMekd+VkDWgz0uJq+NiIqLMKr3
+ AlB/YMymCNhehhC7RblGAIoUoy8ty/fLgaLsQvxOpEjXqOLi3wRtgK1ctDplG8s=
+X-Gm-Gg: ASbGncvVo804GZBq0oyCnsKWp6e05jy2z2zvSXEDqDipQpwjlXA85EP0SGCLb+iVp8w
+ egp1O1RE+ZlWak3d14rDl9waWVFZssKmaC5c7kMJ0oHCap1Tkv78t2Pk5r4KQtXpblZ1/yKmNoM
+ NU9MPf5BjHL+EB+TyVXKB6wTdMlN9qusztScpvtrH6h4zSA1OFkFgNgZrYCwV0aqwGysm19BOOz
+ g0Ms7OO8YGt1WHi1XIdseRVixnkpqoyz2uzPmOv6mdpg3GO
+X-Google-Smtp-Source: AGHT+IFewAxR2B6TFYCZuQqQN3p2Fjb5VyKK82jPRtU3tlcrfoakGC7D6v8xjTAbl/VFCAu04mMfAA==
+X-Received: by 2002:a05:6512:ac7:b0:53d:e780:4004 with SMTP id
+ 2adb3069b0e04-53df00ff1d2mr13009263e87.36.1733156098693; 
+ Mon, 02 Dec 2024 08:14:58 -0800 (PST)
+Received: from draig.lan ([85.9.250.243]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-434b0dbf95fsm155452675e9.15.2024.12.02.08.14.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 02 Dec 2024 08:14:58 -0800 (PST)
+Received: from draig (localhost [IPv6:::1])
+ by draig.lan (Postfix) with ESMTP id BFB7D5F767;
+ Mon,  2 Dec 2024 16:14:56 +0000 (GMT)
+From: =?utf-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>
+To: "Andy Yan" <andyshrk@163.com>
+Cc: "Bernd Kuhls" <bernd@kuhls.net>,  Eric Le Bihan
+ <eric.le.bihan.dev@free.fr>,  Daniel Lang <dalang@gmx.at>,
+ buildroot@buildroot.org,  Romain Naour <romain.naour@gmail.com>,  "Yann E
+ . MORIN" <yann.morin.1998@free.fr>,  Valentin Korenblit
+ <valentinkorenblit@gmail.com>
+In-Reply-To: <c655577.1b64.192853c1be6.Coremail.andyshrk@163.com> (Andy Yan's
+ message of "Sun, 13 Oct 2024 17:36:02 +0800 (CST)")
+References: <20240922193751.862053-1-bernd@kuhls.net>
+ <20240922193751.862053-5-bernd@kuhls.net>
+ <c80de03.7818.1921db53aa2.Coremail.andyshrk@163.com>
+ <c655577.1b64.192853c1be6.Coremail.andyshrk@163.com>
+User-Agent: mu4e 1.12.7; emacs 29.4
+Date: Mon, 02 Dec 2024 16:14:56 +0000
+Message-ID: <87frn6dptr.fsf@draig.linaro.org>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1733154553;
- bh=PHnh4T3s/6WZscbbqMT8sPtFWYSQmcr/x1X6hXrUjEU=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=COkjNhyS7qypAZp/x/FVT2lxisyv/GMsbI1bRGeRTUJw9yFdzuiha/kPBgB6X07st
- oXJ9R9FAE4QOSInJrb3tUk0hjL89zllZuTmeagcvuHF2yFPP3KQs1HSY8HLGzRNWBR
- lrKx4kDRSvotrJunuYwNTHSDUb5/Bii/3qVUrfgvSQxJedvq74RhvXCwTDEO7Ncq63
- 3r2faDb1JPDpVSibaw2WC91cbvaN6gTJ7p1b5j8bcHXQGklgSpplVqirJBtgqIQHuz
- MDbRe26BrF0YuQpoMr+F/ClFypwY9Qp5ZXQiPGXBFFP29p0NJ20EVEJ6sh6/lZLQfk
- 9aKSir9Dtdhyg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=linaro.org; s=google; t=1733156099; x=1733760899; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:user-agent
+ :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=322bcIsQl+eOHICBE768vcz1SvD7M/P7vC5LGhQDJ6k=;
+ b=Mx/dlsxqlAsDNWytXbI/jTA7kZ3tT2vNi/aA6wIFoG1Prg+aVlgc1WdSN0CRKmvcNW
+ GpHF0dRewSaTspysSBuF9PiKBT3/PQL1GpdzdU+1wrMWUKjYG1MI6QAwy+RAM1f1qnlS
+ jXpsxPIRaXoRL/+ScLFMwGcJuQpwggoHRceTqAsQ2/+LeLqWO+ciTLOch1F1U8Qubok8
+ SyF0NHXOg2IR3KwVVCl2Sgjxw/LSFgGLodlo5ELDI/nqSKey0c4sP8bXEqyPeNFaumwY
+ nXi+v6k9IyjE83jXWpE6cd9ame8dvF0SecNycqyR7YarGtx2OwUQfT3qgUfwaQWM0tbK
+ hwHw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=COkjNhyS
-Subject: [Buildroot] [PATCH v3 2/2] doc/manual/adding-packages-meson.adoc:
- tags
+ header.from=linaro.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256
+ header.s=google header.b=Mx/dlsxq
+Subject: Re: [Buildroot] [PATCH v2 5/6] package/{mesa3d,
+ mesa3d-headers}: bump version to 24.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,42 +121,16 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Described the usage of FOO_MESON_INSTALL_TAGS=YES which decreases
-the footprint of the target since only the runtime will be installed.
-All the other development header files or libraries will be installed
-into the staging folder.
-
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
-Suggested-by: Brandon Maier <brandon.maier@gmail.com>
----
- docs/manual/adding-packages-meson.adoc | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/docs/manual/adding-packages-meson.adoc b/docs/manual/adding-packages-meson.adoc
-index 01891e03cc..b7c987ddd1 100644
---- a/docs/manual/adding-packages-meson.adoc
-+++ b/docs/manual/adding-packages-meson.adoc
-@@ -124,6 +124,11 @@ will therefore only use a few of them.
-   +c_link_args+, +cpp_args+, +cpp_link_args+, +sys_root+, and
-   +pkg_config_libdir+.
- 
-+* +FOO_MESON_INSTALL_TAGS+, can be set to +YES+ to enable meson's `--runtime` and
-+  `--devel` installation modes for the target and staging folders, respectively.
-+  This configuration is necessary to prevent meson from installing development
-+  artifacts into the target folder.
-+
- * +FOO_NINJA_ENV+, to specify additional environment variables to pass to
-   +ninja+, meson companion tool in charge of the build operations. By default,
-   empty.
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+IkFuZHkgWWFuIiA8YW5keXNocmtAMTYzLmNvbT4gd3JpdGVzOgoKPiBIZWxsb++8jAo+ICAgIENh
+biB3ZSBnZXQgdGhpcyBzZXJpZXMgbWVyZ2Vk77yfCgpJJ3ZlIGdvdCBhIGJyYW5jaCB3aXRoIEJl
+cm5kJ3MgcGF0Y2hlcyArIHRoZSBlbmFibGluZyBvZiBWaXJ0SU8gVmVudXMKYW5kIGFkZGluZyB2
+a21hcmsgdG8gdGhlIGJ1aWxkLiBJZiBCZXJuZCdzIG9rIHdpdGggaXQgSSBjYW4gcG9zdCBpdCB0
+bwp0aGUgbGlzdCB0b2RheS4KCi0tIApBbGV4IEJlbm7DqWUKVmlydHVhbGlzYXRpb24gVGVjaCBM
+ZWFkIEAgTGluYXJvCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
+Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
