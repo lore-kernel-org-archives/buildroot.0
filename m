@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9861EE69EBD
-	for <buildroot@archiver.kernel.org>; Tue,  3 Dec 2024 22:09:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7867EE74AFF
+	for <buildroot@archiver.kernel.org>; Tue,  3 Dec 2024 22:10:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43A2A84750;
-	Tue,  3 Dec 2024 22:09:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 394F461142;
+	Tue,  3 Dec 2024 22:10:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WQ8UT0ThdqKO; Tue,  3 Dec 2024 22:09:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VhSNHVU9ZB5q; Tue,  3 Dec 2024 22:10:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CEAD84758
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F23061148
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5CEAD84758;
-	Tue,  3 Dec 2024 22:09:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7C4E62073
- for <buildroot@buildroot.org>; Tue,  3 Dec 2024 22:09:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F23061148;
+	Tue,  3 Dec 2024 22:10:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id EA1FD2073
+ for <buildroot@buildroot.org>; Tue,  3 Dec 2024 22:10:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D9B484750
- for <buildroot@buildroot.org>; Tue,  3 Dec 2024 22:09:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D7C534180F
+ for <buildroot@buildroot.org>; Tue,  3 Dec 2024 22:10:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AHl3Ol--QR2q for <buildroot@buildroot.org>;
- Tue,  3 Dec 2024 22:09:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RGzrQq1BS6Qg for <buildroot@buildroot.org>;
+ Tue,  3 Dec 2024 22:10:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2F7C284745
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F7C284745
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 11FE241885
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11FE241885
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2F7C284745
- for <buildroot@buildroot.org>; Tue,  3 Dec 2024 22:09:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 11FE241885
+ for <buildroot@buildroot.org>; Tue,  3 Dec 2024 22:10:05 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c998.dip0.t-ipconnect.de [79.214.201.152])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C06E0A4C3D79;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id BF554A4C3BD3;
  Tue,  3 Dec 2024 23:09:49 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:35402)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1tIb5Z-0000000011i-09Gs;
+ (envelope-from <bernd@kuhls.net>) id 1tIb5Y-0000000011i-3sop;
  Tue, 03 Dec 2024 22:09:49 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
@@ -49,33 +49,30 @@ Cc: Julien Olivain <ju.o@free.fr>, Romain Naour <romain.naour@gmail.com>,
  Valentin Korenblit <valentinkorenblit@gmail.com>,
  Eric Le Bihan <eric.le.bihan.dev@free.fr>, Daniel Lang <dalang@gmx.at>,
  Adam Duskett <adam.duskett@amarulasolutions.com>
-Date: Tue,  3 Dec 2024 23:09:44 +0100
-Message-Id: <20241203220949.1073051-2-bernd@kuhls.net>
+Date: Tue,  3 Dec 2024 23:09:43 +0100
+Message-Id: <20241203220949.1073051-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241203220949.1073051-1-bernd@kuhls.net>
-References: <20241203220949.1073051-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202406071026; t=1733263789;
- bh=yhC8I2xM7Orbb188jTVQ15WTpYxYPle4I2ZypdeFFqg=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=mBrdk3BbBwcF4jlOh3hrczN3Fxcz486cHOZYzmOm3Kkgbg3bgz08UnONgfJJsjywt
- QzmU9HxDt3gLornrpWVebonn+37mQ4AAU9MsScvcdf3Xtu0+Nai/FJt9idBmvZDf4/
- Q53e4z955XXDZP6WeWcTX3Lb1rwyvBBaSTt0+za1zujvdc55+YIX/jAYaqyJ69vsXK
- eBC9975iX/0vyLLHCwD/Zxyj2EauNJiWjzPBDvwRwLedqgag6XiQSNAdFkIMgxSKZv
- Xm6j65FBb6RLgq1KhZIzI/jisE4bS/up7AnIoPdE3A7083IjckcgMTyvfsLVY3GDG0
- uKagmY4kTOUJA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=gKvw96rX6D77nT0Gva0qaEQZ1goKr0mJ3wj9pfKAE4I=;
+ h=From:To:Cc:Subject:Date:From;
+ b=O8ix2/KZGtrtCAIT01yK3GcI/BU6/qWktCLkBFsfolyiGG/FJD8L6roaaMW5GtEa+
+ vBalviE/xzKXNOBOZU3rXrnv8TB80LGDmu18NKFA2rtXeseObxoNBRfcb/M4IfuosR
+ ZNIkz1k8YzxK+5A/nbNXrGbrTwnXkdfOjuWlp3PDLh+S7gtkU7oukIe+b+vOtLVC5h
+ oIz1bqdG7xk9Dbcqs1xBcd3h0yA9/tHx3UZJ2GfQA0dRhinKVlG5OurlHh2B9eVEME
+ GqHtyFdSOMdFvuPAIIf3Qq/XxC40DUEMMfcqZFABFDjUo8FSJ1l/YMqADqJ6xJ/dQB
+ glTQ5geiEnoiQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202406071026 header.b=mBrdk3Bb
-Subject: [Buildroot] [PATCH 2/7] package/llvm-project/libclc: add host
- variant
+ header.s=kas202406071026 header.b=O8ix2/KZ
+Subject: [Buildroot] [PATCH 1/7] package/libdrm: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,30 +93,39 @@ Needed for mesa3d bump to 24.1.0.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/llvm-project/libclc/libclc.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libdrm/libdrm.mk | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/package/llvm-project/libclc/libclc.mk b/package/llvm-project/libclc/libclc.mk
-index 9f303d6d2f..cfa978a8ac 100644
---- a/package/llvm-project/libclc/libclc.mk
-+++ b/package/llvm-project/libclc/libclc.mk
-@@ -11,6 +11,7 @@ LIBCLC_LICENSE = Apache-2.0 with exceptions or MIT
- LIBCLC_LICENSE_FILES = LICENSE.TXT
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index fcf7f17e78..021a575474 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -116,4 +116,25 @@ else
+ LIBDRM_CONF_OPTS += -Dtests=false
+ endif
  
- LIBCLC_DEPENDENCIES = host-clang host-llvm host-spirv-llvm-translator
-+HOST_LIBCLC_DEPENDENCIES = host-clang host-llvm host-spirv-llvm-translator
- LIBCLC_INSTALL_STAGING = YES
- 
- # CMAKE_*_COMPILER_FORCED=ON skips testing the tools and assumes
-@@ -39,4 +40,8 @@ LIBCLC_CONF_OPTS = \
- 	-DCMAKE_CXX_COMPILER="$(CMAKE_HOST_CXX_COMPILER)" \
- 	-DLLVM_CONFIG="$(HOST_DIR)/bin/llvm-config"
- 
-+HOST_LIBCLC_CONF_OPTS = \
-+	-DLIBCLC_TARGETS_TO_BUILD=spirv64-mesa3d-
++HOST_LIBDRM_CONF_OPTS = \
++	-Damdgpu=disabled \
++	-Dcairo-tests=disabled \
++	-Detnaviv=disabled \
++	-Dexynos=disabled \
++	-Dfreedreno=disabled \
++	-Dfreedreno-kgsl=false \
++	-Dinstall-test-programs=false \
++	-Dintel=disabled \
++	-Dman-pages=disabled \
++	-Dnouveau=disabled \
++	-Domap=disabled \
++	-Dradeon=disabled \
++	-Dtegra=disabled \
++	-Dvc4=disabled \
++	-Dvmwgfx=disabled \
++	-Dtests=false \
++	-Dudev=false \
++	-Dvalgrind=disabled
 +
- $(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+ $(eval $(meson-package))
++$(eval $(host-meson-package))
 -- 
 2.39.5
 
