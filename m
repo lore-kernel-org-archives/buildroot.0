@@ -4,79 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3F4AD49797
-	for <buildroot@archiver.kernel.org>; Tue,  3 Dec 2024 09:19:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60649E69EBD
+	for <buildroot@archiver.kernel.org>; Tue,  3 Dec 2024 22:13:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E3B560A59;
-	Tue,  3 Dec 2024 09:19:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 239916115C;
+	Tue,  3 Dec 2024 22:13:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AK4KdhYgijwH; Tue,  3 Dec 2024 09:19:06 +0000 (UTC)
+ id NYgc-q3_Zgev; Tue,  3 Dec 2024 22:13:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BFFD60A66
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E54961155
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6BFFD60A66;
-	Tue,  3 Dec 2024 09:19:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id CE6461DAA
- for <buildroot@buildroot.org>; Tue,  3 Dec 2024 09:19:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E54961155;
+	Tue,  3 Dec 2024 22:13:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 472B8236E
+ for <buildroot@buildroot.org>; Tue,  3 Dec 2024 22:13:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C8E8760A59
- for <buildroot@buildroot.org>; Tue,  3 Dec 2024 09:19:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 41F084316C
+ for <buildroot@buildroot.org>; Tue,  3 Dec 2024 22:13:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xYeeBix8dar8 for <buildroot@buildroot.org>;
- Tue,  3 Dec 2024 09:19:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=117.135.210.3;
- helo=m16.mail.163.com; envelope-from=andyshrk@163.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C444A60A57
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C444A60A57
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
- by smtp3.osuosl.org (Postfix) with ESMTP id C444A60A57
- for <buildroot@uclibc.org>; Tue,  3 Dec 2024 09:19:01 +0000 (UTC)
-Received: from andyshrk$163.com ( [58.22.7.114] ) by
- ajax-webmail-wmsvr-40-118 (Coremail) ; Tue, 3 Dec 2024 17:18:21 +0800 (CST)
-X-Originating-IP: [58.22.7.114]
-Date: Tue, 3 Dec 2024 17:18:21 +0800 (CST)
-From: "Andy Yan" <andyshrk@163.com>
-To: =?UTF-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>
-Cc: "Bernd Kuhls" <bernd@kuhls.net>, buildroot@uclibc.org
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
- Copyright (c) 2002-2024 www.mailtech.cn 163com
-In-Reply-To: <874j3mdkt6.fsf@draig.linaro.org>
-References: <20240922193751.862053-1-bernd@kuhls.net>
- <20240922193751.862053-5-bernd@kuhls.net>
- <c80de03.7818.1921db53aa2.Coremail.andyshrk@163.com>
- <c655577.1b64.192853c1be6.Coremail.andyshrk@163.com>
- <87frn6dptr.fsf__47548.8251003966$1733156129$gmane$org@draig.linaro.org>
- <pan$30ab5$cc5a9166$89866316$e1ba867c@ID-313208.user.individual.net>
- <874j3mdkt6.fsf@draig.linaro.org>
-X-NTES-SC: AL_Qu2YAf6auE0r5yadYulS8zNM9K56MKvt5LljqcQFePgqqTHL3g4cZnlBM0vW6uKr//YJrSrsOGQhQuHAskj2
-MIME-Version: 1.0
-Message-ID: <1884cc7c.9bbe.1938bd041dd.Coremail.andyshrk@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: digvCgDXHw3dzE5nDvo1AA--.41783W
-X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/1tbiMxaqXmdOxtDEBQACst
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=163.com; 
- s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
- Message-ID; bh=AS88Uf/+UWNqdIbnh0768FwwdxAHdYKtREMhR/6U894=; b=H
- pZK9v2xA8Vb3/l4ddvjPjGekwWxMRnQLYcdrmPtcUueP+TwtSPJe5rj8ShxLm4Aa
- MaeJXqY3u72zLarLbaufbkWcc/SrnBcW8CpZQEJtxm+Gbe0XiPKdnN+LP8kRcQVo
- kbb3qijU6hJBemWmpNO7ngzS/el0tVEsjzO6iGIu74=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=163.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=fail reason="signature verification failed" (1024-bit key,
- unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256
- header.s=s110527 header.b=HpZK9v2x
-Subject: Re: [Buildroot] [PATCH v2 5/6] package/{mesa3d,
- mesa3d-headers}: bump version to 24.2.3
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Gx_GmzzsQumN for <buildroot@buildroot.org>;
+ Tue,  3 Dec 2024 22:13:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
+ helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2C6DB403B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C6DB403B4
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2C6DB403B4
+ for <buildroot@uclibc.org>; Tue,  3 Dec 2024 22:13:12 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1tIb8m-0006Ia-Sa
+ for buildroot@uclibc.org; Tue, 03 Dec 2024 23:13:08 +0100
+X-Injected-Via-Gmane: http://gmane.org/
+To: buildroot@uclibc.org
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Tue, 03 Dec 2024 23:12:51 +0100
+Message-ID: <pan$c6b5b$95487e35$2a481473$a94d875a@ID-313208.user.individual.net>
+References: <20241202174008.1134667-1-bernd@kuhls.net>
+ <20241202174008.1134667-6-bernd@kuhls.net>
+ <00da17b37c509a32a98aadfe3cb74566__20303.3354760677$1733262723$gmane$org@free.fr>
+Mime-Version: 1.0
+User-Agent: Pan/0.154 (Izium; 517acf4)
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=kuhls.net
+Subject: Re: [Buildroot] [PATCH 6/7] package/{mesa3d,
+ mesa3d-headers}: bump version to 24.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,40 +66,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CkhpIEFsbCwKCuWcqCAyMDI0LTEyLTAzIDAyOjAzOjE377yMIkFsZXggQmVubsOpZSIgPGFsZXgu
-YmVubmVlQGxpbmFyby5vcmc+IOWGmemBk++8mgo+QmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5l
-dD4gd3JpdGVzOgo+Cj4+IEFtIE1vbiwgMDIgRGVjIDIwMjQgMTY6MTQ6NTYgKzAwMDAgc2Nocmll
-YiBBbGV4IEJlbm7DqWU6Cj4+Cj4+PiAiQW5keSBZYW4iIDxhbmR5c2hya0AxNjMuY29tPiB3cml0
-ZXM6Cj4+PiAKPj4+PiBIZWxsb++8jAo+Pj4+ICAgIENhbiB3ZSBnZXQgdGhpcyBzZXJpZXMgbWVy
-Z2Vk77yfCj4+PiAKPj4+IEkndmUgZ290IGEgYnJhbmNoIHdpdGggQmVybmQncyBwYXRjaGVzICsg
-dGhlIGVuYWJsaW5nIG9mIFZpcnRJTyBWZW51cwo+Pj4gYW5kIGFkZGluZyB2a21hcmsgdG8gdGhl
-IGJ1aWxkLiBJZiBCZXJuZCdzIG9rIHdpdGggaXQgSSBjYW4gcG9zdCBpdCB0bwo+Pj4gdGhlIGxp
-c3QgdG9kYXkuCj4+Cj4+IEhpIEFuZHksCj4+Cj4+IEkgc2VudCBhIG5ldyBwYXRjaCBzZXJpZXMg
-YnVtcGluZyBtZXNhM2QgdG8gMjQuMy4wIGEgY291cGxlIG9mIG1pbnV0ZXMgCj4+IGFnbzogaHR0
-cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9saXN0Lz9zZXJpZXM9
-NDM0OTM0Cj4+Cj4+IFJ1bi10aW1lIHRlc3Qgd2l0aCBteSBJbnRlbC1iYXNlZCBzeXN0ZW0gYW5k
-IGdibS9lZ2wgd29ya3MsIGRpZCBub3QgYnVpbGQtCj4+IHRlc3QgaXQgd2l0aCB4MTEvd2F5bGFu
-ZCBob3dldmVyLiBQbGVhc2UgYWRkIHlvdXIgcGF0Y2hlcyB0byB0aGlzIG1vc3QgdXAtCj4+IHRv
-LWRhdGUgcGF0Y2ggc2VyaWVzLCB0aGFua3MuCgpJIGd1ZXNzIHRoaXMgcmVmZXJzIHRvIEFsZXgn
-cyBwYXRjaOOAgkFjdHVhbGx5LCBJIGRvbid0IGhhdmUgdGhlIHJlbGV2YW50IHBhdGNoIGhlcmUs
-IApidXQgSSBhbSBpbmRlZWQgbG9va2luZyBmb3J3YXJkIHRvIHRoaXMgc2VyaWVzIG9mIHBhdGNo
-ZXMgYmVpbmcgbWVyZ2VkIHNvb25lci4KQmVjYXVzZSBtZXNhIDI0LjEuMCBpcyB0aGUgZmlyc3Qg
-dmVyc2lvbiB3aGljaCBjYW4gc3VwcG9ydCBBcm0gTWFsaSAxMHRoIGdlbmVyYXRpb24KR1BVIHZh
-bGhhbOOAggoKPgo+SSBoYXZlIHVwZGF0ZXMgdG8gdGhlIFZpcnRJTyBwYXRjaGVzIGFuZCBlbmFi
-bGluZyB2a21hcmsuIFNob3VsZCBJIHBvc3QKPnRob3NlIHNlcGFyYXRlbHkgb3IgY29tYmluZSBh
-bmQgcmUtcG9zdCB3aXRoIHlvdXIgbGF0ZXN0IHNlcmllcz8KPgo+Pgo+PiBSZWdhcmRzLCBCZXJu
-ZAo+Pgo+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+
-PiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4+IGh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo+Cj4t
-LSAKPkFsZXggQmVubsOpZQo+VmlydHVhbGlzYXRpb24gVGVjaCBMZWFkIEAgTGluYXJvCj5fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+YnVpbGRyb290IG1h
-aWxpbmcgbGlzdAo+YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdApfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+Am Tue, 03 Dec 2024 22:51:28 +0100 schrieb Julien Olivain:
+
+> I think this patch should also handle the runtime tests. If _SOFTPIPE is
+> really an equivalent of _SWRAST, it could changed with:
+> 
+>      sed -i 's/SWRAST/SOFTPIPE/g'
+>      support/testing/tests/package/test_*.py
+
+Hi Julien,
+
+done: https://patchwork.ozlabs.org/project/buildroot/list/?series=435155
+
+Due to time constraints on my part I removed the vkmark patch for now from 
+this series to not block the review process.
+
+Regards, Bernd
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
