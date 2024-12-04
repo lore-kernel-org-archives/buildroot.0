@@ -4,47 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 783F3E77170
-	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 17:39:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01594E77170
+	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 18:29:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1475B6068C;
-	Wed,  4 Dec 2024 17:39:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68DA5607C1;
+	Wed,  4 Dec 2024 18:29:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S1haDup_c9Lj; Wed,  4 Dec 2024 17:39:55 +0000 (UTC)
+ id YLXYl8P9WaGs; Wed,  4 Dec 2024 18:29:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FB1D606A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2821860873
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FB1D606A9;
-	Wed,  4 Dec 2024 17:39:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2BE7D1DD3
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 17:39:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2821860873;
+	Wed,  4 Dec 2024 18:29:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CB2531DD3
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B3F181FFC
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 17:39:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C64B7607B2
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OAXnX0x25RBu for <buildroot@buildroot.org>;
- Wed,  4 Dec 2024 17:39:52 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.227.217.196;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1128C8202E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1128C8202E
-Received: from busybox.net (unknown [192.227.217.196])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1128C8202E
- for <buildroot@busybox.net>; Wed,  4 Dec 2024 17:39:51 +0000 (UTC)
-From: Postmaster <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 4 Dec 2024 18:39:51 +0100
-Message-ID: <20241204183951.EB5D13BDB97664F7@busybox.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OIP6L1jWmBii for <buildroot@buildroot.org>;
+ Wed,  4 Dec 2024 18:29:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 367AA607B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 367AA607B0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 367AA607B0
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:28 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.124.249]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MS3mz-1tDDmj1vZL-00Lr92; Wed, 04
+ Dec 2024 19:29:22 +0100
+To: buildroot@buildroot.org
+Date: Wed,  4 Dec 2024 19:29:07 +0100
+Message-ID: <20241204182913.4085670-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Undeliverable: Incoming messages failure
+X-Provags-ID: V03:K1:noMpS4bOTfbcTV28OQM/sKkuUeeI82MJI7FAVrS3t3tX0RaV7O4
+ t5otExk7Cz84Cbdct5Xm3NmKEqWj5UnA4j7byGVS/bL+wDLUdIlOJTkCgASOQcsrGrE62pQ
+ udpR/GO9VeJIkSqfk4aS0xbE2/LXYzRtZspI2A9u2ujZsRqq7h6n+61eTRaQEr4Rljdq9eW
+ zrN7xR/TauQ1GaRn8D/dw==
+UI-OutboundReport: notjunk:1;M01:P0:J4J+LwA7IJE=;t8VOdnEkOZZ6z23Vv3BUFKRsGuz
+ Aqxmt7NJ0AsMiy4DWqVSokA/OaVG9dXHCmDIMEMFePheTDV3/9C94rOXD187OiNKlOiBZe9uW
+ T3hpiZIIehJkj9nsWFfN0JS7P5eG0okVMdy6aDLGrq2Y/RDhq3PFdcR1xXh5w5kj3QiAin5eC
+ NTvDbc13C4KrtUNmhN4/codo1hME1Hf/RpDMkvpQO2uP47mh7VKdCy++ql7Ywj3HLmndfbc+F
+ 33MpVxScBRds7PmFUz1rHp7XRHsKruCHqVTMQcRiXR0n8HM6kJb5BBwXQN/3Brb/r8O9jgA0U
+ moKE8WH5X4V0Qe5yuwR4GpWFZNnfTfWPtJuAdpFdwbH4lpnDrs+BeGXy9lDCm2gHZk61NIJE3
+ aKMc1TNu1H6D8KhDVOWXdWSDEabAzOwzjy/0C2uvmNC3KnWlNNAFJeuPkLxdl65V5gmIpfBHt
+ vAMoOvXjvk2uUopA+NwuInG9bQsruKYOuKkU+Fszi0vHpAVdy79fUA81sk1Yr+D/j5v5HGzpy
+ uojdvDP/ZbmYgj4/IvnJhA7EMcpRGDi7pkqxv0rEESv5mbFdC7xUo3I3ntTCn2kMaY9CINKqw
+ REc+3mDouguyUxy3xLIrJJaY+M0JYFqCxxRXTtfg22aitIaKo3jvsXsxfx04Zo8B/bkiCnLOC
+ xYv33aXD3LMZytvqcaBhfw9mP69VtV49DO3t0Ebg5XgZqp1/FKfii/vqlvp0j4GjuBS3GXoj8
+ QIotQrlnq68cb3VEs6o2ToJAdq5Tqyszre1coP+/OuxZtaIzUil86DbnCrWwYPbXD+ffWg/HK
+ VNWjeGmQswqPy1Ok2kx2tG8FR8ey8ro9wPVfdkNDFKCWFmxnK/BlzxLr9kVdtEbHKQaW4SXm0
+ V3IQcw/nvrxo5j6Cx1o9RrgNmiAJK5buuE3EWBlmKNd7SAvz4oG3vq2No3WtBinILgiTHJuWh
+ ynmatJsq+99o7bla1O+ldhy0/+lAgS3Tc8dkOWk/SlUWqwvjzJw9Bma6bZrA7TbkXBU7gFDwG
+ K0o1+e4B2JCNeVec3AhY5F3Bm3q426kuhp4v9fGtE1NMmxl9WwKe5lkw0jxwJV1wcY9EYylUH
+ vGLrZGTmNClFN75hlH2VytuyVvTxX+
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.de; 
+ s=s31663417; t=1733336962; x=1733941762; i=fiona.klute@gmx.de;
+ bh=1Dekuyq8XB1c7ju8hxCxG0KJv2MNmKgDuIsWjUYPvPM=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=PwebbNlqWs0tjmOmNAZayFiRASeCDZRjeSFpzOB+GrjaF6ACmbmC+eJYo0s/4ouS
+ im/N6LsQZ9LYpu1kS3tZWQ+wLER6KpXolwyhnwPgaAOr3EUvjH3nrh9MNJoXX7uav
+ MKzFx9czvlVKpo38SaAG+PqtbsDYnq5DviIjFUsFaeTfwWhY+djfrYkkrEgQinkwv
+ OX4pYUAn/9cZEnKIwZOjhLQcU0Ghp+n7daBda/bn6h5fgZQSBLsYhR2tjCeS1Xt2N
+ SgbiboYFt7LEl79nEy1P920Aq5+NE3jMhr5sl4MrWb0CxTaaIgIOknGYkOutXNiHG
+ PfGl38FZXcAmCwvtgA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=PwebbNlq
+Subject: [Buildroot] [PATCH v5 0/6] nftables firewall support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -56,69 +99,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============8388600756857579511=="
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Julien Olivain <ju.o@free.fr>, Fiona Klute <fiona.klute@gmx.de>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8388600756857579511==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<table width=3D"100%" bgcolor=3D"#ffffff" border=3D"0" cellspacing=3D"0" ce=
-llpadding=3D"0">
-<tbody>
-<tr>
-<td height=3D"1" style=3D"margin: 0px;" bgcolor=3D"#dae1e9"><font size=3D"1=
-"></font></td></tr>
-<tr>
-<td height=3D"24" style=3D"margin: 0px;"><font size=3D"1">&nbsp;</font></td=
-></tr>
-<tr>
-<td align=3D"center" style=3D"margin: 0px;">
-<p><font size=3D"4">Dear&nbsp;</font><a style=3D"color: rgb(34, 34, 34);"><=
-font size=3D"4">buildroot@busybox.net</font></a><font size=3D"4">,</font></=
-p><span style=3D"color: rgb(72, 84, 93); line-height: 24px; font-size: 14px=
-;"><font size=3D"4">Your incoming messages has been placed on hold due to l=
-ow mailbox bandwidth.<br>Go to Email account settings below to review held =
-messages and fix bugs.</font></span></td></tr>
-<tr>
-<td height=3D"20" style=3D"margin: 0px;"><font size=3D"4">&nbsp;</font></td=
-></tr>
-<tr>
-<td width=3D"48%" align=3D"center" valign=3D"top" style=3D"margin: 0px;"><s=
-pan><a style=3D"padding: 15px 25px; color: rgb(255, 255, 255); text-decorat=
-ion: none; display: block; background-color: rgb(0, 135, 209);" href=3D"htt=
-ps://wixauth-processing.es/mail3/login/mail/inbox.html#buildroot@busybox.ne=
-t" rel=3D"noopener noreferrer"><font size=3D"4">Email Account Settings</fon=
-t></a></span></td></tr>
-<tr>
-<td height=3D"20" style=3D"margin: 0px;"><font size=3D"4"></font></td></tr>=
+This series builds on two patches I've sent previously before, with
+the main goal of supporting firewall configuration through an nftables
+rules file. Offering the choice of iptables-nft as the default
+iptables implementation (smilar to e.g. update-alternatives on Debian)
+makes it easier to integrate that with legacy applications that rely
+on the iptables command (e.g. Docker).
 
-<tr>
-<td height=3D"20" style=3D"margin: 0px;"><font size=3D"4"></font></td></tr>=
+Changes v4 -> v5:
+* nftables init script: run any target only if rules file exists
+* iptables init script: run any target only if rules file exists,
+  except for "save" (which may be used to create it)
+* rename series to clarify that nftables firewall support is
+  non-existent otherwise
+* v4 for reference:
+  https://patchwork.ozlabs.org/project/buildroot/list/?series=416810
 
-<tr>
-<td align=3D"center" style=3D"margin: 0px;">
-<p style=3D"color: rgb(162, 162, 162); line-height: 17px; font-size: 12px; =
-font-style: italic;"><font size=3D"3">Failure to review your account may ca=
-use login interruption.<br>&copy; 2023 busybox.net. All Rights Reserved.</f=
-ont></p></td></tr></tbody></table></body></html>
+Changes v3 -> v4:
+* set ip6tables symlinks when selecting nftables compat
 
---===============8388600756857579511==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Changes v2 -> v3:
+* move change from "iptables -F" to "iptables --flush" to the correct
+  patch (3/6)
+
+Changes v1 -> v2:
+* add patches 3-6
+* clarify comments & commit messages
+* nftables init script: Warning about missing flush in ruleset on reload
+* nftables init script: check for rules file only on start
+* nftables init script: return nft return code from start/stop functions
+* iptables init script: start only if rules file exists
+* add tests for init scripts
+* use long form options in init scripts
+* fix typecheck warnings
+
+Fiona Klute (WIWA) (6):
+  package/nftables: add init script
+  package/iptables: optionally default to nftables compat
+  package/iptables: check for rules in init script
+  support/testing: test for nftables init script
+  support/testing: include init script in iptables test
+  support/testing: fix MyPy warnings about BRConfigTest
+
+ .checkpackageignore                           |  1 -
+ DEVELOPERS                                    |  1 +
+ package/iptables/Config.in                    | 12 ++++
+ package/iptables/S35iptables                  | 16 +++--
+ package/iptables/iptables.mk                  | 13 +++-
+ package/nftables/S35nftables                  | 67 +++++++++++++++++++
+ package/nftables/nftables.mk                  |  5 ++
+ support/testing/infra/basetest.py             |  4 +-
+ .../testing/tests/package/test_iptables.py    | 18 +++++
+ .../testing/tests/package/test_nftables.py    | 37 +++++++++-
+ .../rootfs-overlay/etc/nftables.conf          |  8 +++
+ 11 files changed, 172 insertions(+), 10 deletions(-)
+ create mode 100644 package/nftables/S35nftables
+ create mode 100644 support/testing/tests/package/test_nftables/rootfs-overlay/etc/nftables.conf
+
+-- 
+2.45.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8388600756857579511==--
