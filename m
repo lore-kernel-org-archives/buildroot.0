@@ -1,101 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BF9CE7716D
-	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 06:55:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0E04E7716E
+	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 15:53:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FC9A8494B;
-	Wed,  4 Dec 2024 06:55:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84544605A2;
+	Wed,  4 Dec 2024 15:53:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ng2Yhcaia2w0; Wed,  4 Dec 2024 06:55:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e_FNmvdpvmMp; Wed,  4 Dec 2024 15:53:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDF7784934
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99114607B6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CDF7784934;
-	Wed,  4 Dec 2024 06:55:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7C4921DAA
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 06:55:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 99114607B6;
+	Wed,  4 Dec 2024 15:53:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4A5871DD1
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 15:53:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68F0684936
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 06:55:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 355114023A
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 15:53:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RzewxgIP3sfs for <buildroot@buildroot.org>;
- Wed,  4 Dec 2024 06:55:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uvGCAvWREHsE for <buildroot@buildroot.org>;
+ Wed,  4 Dec 2024 15:53:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::433; helo=mail-pf1-x433.google.com;
- envelope-from=baxiche@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BF68B84934
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF68B84934
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com
- [IPv6:2607:f8b0:4864:20::433])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BF68B84934
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 06:55:00 +0000 (UTC)
-Received: by mail-pf1-x433.google.com with SMTP id
- d2e1a72fcca58-7252fba4de1so5629044b3a.0
- for <buildroot@buildroot.org>; Tue, 03 Dec 2024 22:55:00 -0800 (PST)
+ client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
+ envelope-from=becher.jannik@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 19FFE400F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19FFE400F6
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 19FFE400F6
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 15:53:48 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-aa503cced42so1008704066b.3
+ for <buildroot@buildroot.org>; Wed, 04 Dec 2024 07:53:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1733295300; x=1733900100;
+ d=1e100.net; s=20230601; t=1733327627; x=1733932427;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=1/EytXJSe6/JoSxfeGl/BPFEVd+ba1v6gqLsJREjfqY=;
- b=sJwdhKD/JFAiTrk0OT9u+TdytIEjRMss29VrFfbKYQHAkwPmVEuMsODV9PUbc4IvOW
- 26yX89XwbLnIg+5o2+cJOvspl4UmiPxbDE+GaRGcfjxCkYd93LzMN6qC0OeLCSEzQuXR
- 1E+I9/DTp/ba6P+tOgpyRfkXsSV7ri3x55Jj4Xy3pW2/ndDgggOUGA4McnScnz1eI3je
- G9zSqjZWo6oyIR9JflQua8i7Q81uDjywGDVGJJI6TMP98CRPa2W35dPbxbKtuOsLsElS
- Dh2vkLjeE7PGcT68FeIzpbF1TR5Gix/2vDN3tAfV+8G79K9pZGOehtJ29+j9IhF1zMam
- NKZQ==
-X-Gm-Message-State: AOJu0Yzyx+VDuOITGfyoQKRpLApq/kxVoKopK2q7SwOWJ7FMkKOlfUJ2
- EBdUHhIJR5280iklQFymTLhyd4zmu0nqCRm9b5UxYW0ew9d1i+KWbzy491f2
-X-Gm-Gg: ASbGncssNrv6kJjGh41rzKBB3pVcsTZEZvuualiz3AL0s/kbN7C4AcMJziW5cN0L1z7
- NTIeTdTDEkSuyJK58JvsBqXUFNrUEbCCWCSHxH/demdwKCLfgZjBVDF5EdrZ8TT8pQWoHN2eX/r
- 027bbDjHgNDMsao8TuQFJBYT41Lw23sfkHRxt2jSwqy+4eWVS+0kHQLN8xKs/xpDUGKtL1g+YfR
- Bzn17XhcNSIM9/S4YMXFcQmvPbgxc+xkeRETxq9IoCfKjeT4pNGo4W85UVMlcfwwzLCbwBliDzV
- 2iWQGzOYPjBTNRALK/rqK1TKwSeWCA==
-X-Google-Smtp-Source: AGHT+IG+NS0EmcGb866jtDiAYVaORVyxcbDk2gJDjcN0dYgcfIJRgNiBe24LgONQTRrMcHGva/BnTA==
-X-Received: by 2002:a05:6a00:1a87:b0:71e:4cff:2654 with SMTP id
- d2e1a72fcca58-7257fa5e52emr7873566b3a.6.1733295299813; 
- Tue, 03 Dec 2024 22:54:59 -0800 (PST)
-Received: from localhost.localdomain (1-171-151-18.dynamic-ip.hinet.net.
- [1.171.151.18]) by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-72541762eb5sm11973717b3a.27.2024.12.03.22.54.58
- (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
- Tue, 03 Dec 2024 22:54:59 -0800 (PST)
-From: baxiche su <baxiche@gmail.com>
+ bh=Y2rbQIntEhvzFMM5W3IkS5PDW06zfI1gbA5ncHeVMfc=;
+ b=YD9umJhFN7J0+k/N/018N/x3VwXR58YPqCrigSGtVJGJKor0VhbsP6SEhLhhPER7+h
+ r6EcrGHi/7GnF8c6FVXS88ocJJBHheGG2Nbt2qYeuMeaxyuJR6DtTvRf0nrtUxK3l1wh
+ KTBfAiPRdQ509ThrD9MdDCukfF8Hh982UNULM5zToYmp5WaEAfs87jalJdcjyeW4RyMf
+ 4sAFrCJQXyPfCF1Yt7r+YHxKRiFvw+doccNZM0q6xb2vSChEJowQU6qFnx1JwmHKLb80
+ SVNeS/ASQJrAqRgtpluhJr4A9u2TBsfszGoAOlouYSqFJzhOfmOMpKonaJU2EDOp+eDh
+ tDsQ==
+X-Gm-Message-State: AOJu0Yy6G11mqQijk29+VeRroMNZqrdMRh8v++o67nz3YBfOYSbO4dmx
+ q02DDQZcbYgHPZKZjdRK4/llQu7ZOiZ+NEFmO9xG0atGYYzPe/mD5w9b5FTWKI8=
+X-Gm-Gg: ASbGncu2gwXitOLHoJ5KX4U7voEnn+XL8d+urpaEpCrrZuAaeLevNShv6FdUE60ICMe
+ hNtKxUGzIRnF/wFsxfh6r7+deat2xUfnTfxmRZbTCughA/kh3jmkJfXqBxQ7BG4B9cGeORPybtj
+ fJja3mIeJAaDtEuBfAXuceDr+VGO+ZY39/1/EAv2xJ+cmNI+a5aRwYXI+hBsAw4fr/PmIsFp4cF
+ SAP7w9FyMMeUPVmsstaosLRvBvSuK8mkwRjTQt78EamoD+MHf40EDgk8Jozn45PUNcaYYV8R9+r
+ HQ/7oADqDdzxi0HirJ8rQfI=
+X-Google-Smtp-Source: AGHT+IGq4zIR1mwwGMQmB/xtTtHMO9lmdhdxhgqm7Qoe3loxp1O5jW3YDsGefaNFqT8tCQj9AVmB+Q==
+X-Received: by 2002:a17:906:23e9:b0:aa5:fd7:cd7a with SMTP id
+ a640c23a62f3a-aa5f7d667eemr519158166b.21.1733327626515; 
+ Wed, 04 Dec 2024 07:53:46 -0800 (PST)
+Received: from localhost.localdomain (p5492bafd.dip0.t-ipconnect.de.
+ [84.146.186.253]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-aa5996de782sm743518866b.56.2024.12.04.07.53.45
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 04 Dec 2024 07:53:46 -0800 (PST)
+From: Jannik Becher <becher.jannik@gmail.com>
 To: buildroot@buildroot.org
-Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Bernd Kuhls <bernd@kuhls.net>, baxiche <baxiche@gmail.com>
-Date: Wed,  4 Dec 2024 14:54:54 +0800
-Message-ID: <20241204065454.35581-1-baxiche@gmail.com>
-X-Mailer: git-send-email 2.45.1
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Julien Olivain <ju.o@free.fr>, Jannik Becher <becher.jannik@gmail.com>
+Date: Wed,  4 Dec 2024 16:53:41 +0100
+Message-ID: <20241204155342.185278-1-becher.jannik@gmail.com>
+X-Mailer: git-send-email 2.47.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1733295300; x=1733900100; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1733327627; x=1733932427; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=1/EytXJSe6/JoSxfeGl/BPFEVd+ba1v6gqLsJREjfqY=;
- b=JizaZryxvFMq4QhMcjyI5XI7JcbLuSpF6KDsNJ6ynzh78GKcBKGWvVnqsU1jYUeWnR
- J5CahrkMaB2pX20OlNeseQKUJWzuRoHAMfOBs7KpgvE7Mz4Cvbwwr79lwcc4Q6WAX6ZP
- apVkVoKrdkDPaSeT4xSADl86COcunRL2u0/vVQEJaUis2mneYtWelzc9HbS/gznoBEsG
- xn7/2GtWus7uXw8/4HMw/hIDB/Co4tXmGuxdqO4BULxkNFDM4usxhvCkk1QQcEZmNnGl
- ycxVmAX+2fGVNBZdVGQ9dExqZLViSRy+9qo9krzNAzjtm+UvoWO97MdEJFgAIV+kdZnb
- EgrA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=Y2rbQIntEhvzFMM5W3IkS5PDW06zfI1gbA5ncHeVMfc=;
+ b=gxxES0+FkDCYlfyyqiFPp+cmzjh0UjQ2rr97nSFsEKObtMJDLWmhKKfE/4NBoN87Xf
+ ofjHv5fYExvJ+Kyh9Ugl2Y6FZvG1FSPzHrBpHRXJYBmiUtyqcKzhilbbsK/CL15TwjPZ
+ dswKfWOknekeahaF+vQmosPFlaSqmb8i2j1vvYQm3kwCxsOcdyL1kjWLq0psHwvY6CMU
+ m/ugfXPaDJbn/oVu5SAQMWsYfWl30+MHLImfd3DIVEpWDUGaerD7tYCLKk+2aBcaGPmj
+ MBVbLW5mQJIotxttlPNAv4KgXkXVmlmV4sFZNGXZMskeuhBFZkVnR6WwdMo6YPBzJ0pp
+ vjig==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=JizaZryx
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: add vulkan dependency
+ header.s=20230601 header.b=gxxES0+F
+Subject: [Buildroot] [PATCH 1/2] package/igh-ethercat: bump version to 1.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,33 +112,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: baxiche <baxiche@gmail.com>
-
-Vulkan decoding and encoding support requires Vulkan headers.
-
-Signed-off-by: baxiche <baxiche@gmail.com>
+Signed-off-by: Jannik Becher <becher.jannik@gmail.com>
 ---
- package/ffmpeg/ffmpeg.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/igh-ethercat/igh-ethercat.hash | 2 +-
+ package/igh-ethercat/igh-ethercat.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 1e18b5e2da..ef3d62d017 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -281,6 +281,13 @@ else
- FFMPEG_CONF_OPTS += --disable-vdpau
- endif
+diff --git a/package/igh-ethercat/igh-ethercat.hash b/package/igh-ethercat/igh-ethercat.hash
+index 67a152c6ae..0c3a8bb07d 100644
+--- a/package/igh-ethercat/igh-ethercat.hash
++++ b/package/igh-ethercat/igh-ethercat.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  7e4d8f3497c0bc0b64a151c0d074349fe7614767563642d6fedb19567eafa1e1  igh-ethercat-f5dc109176400f540a8682a2c9ee20d411d14d61.tar.gz
++sha256  844e9846a30b8bed0ae7f1e9a70b724b8980a21ef61c2bdf8fa219c9745c1958  igh-ethercat-1.6.2.tar.gz
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
+index 5b618ab54a..374f8891e5 100644
+--- a/package/igh-ethercat/igh-ethercat.mk
++++ b/package/igh-ethercat/igh-ethercat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_VULKAN_HEADERS),y)
-+FFMPEG_CONF_OPTS += --enable-vulkan
-+FFMPEG_DEPENDENCIES += vulkan-headers
-+else
-+FFMPEG_CONF_OPTS += --disable-vulkan
-+endif
-+
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- FFMPEG_CONF_OPTS += --enable-omx --enable-omx-rpi \
- 	--extra-cflags=-I$(STAGING_DIR)/usr/include/IL
+-IGH_ETHERCAT_VERSION = f5dc109176400f540a8682a2c9ee20d411d14d61
++IGH_ETHERCAT_VERSION = 1.6.2
+ IGH_ETHERCAT_SITE = $(call gitlab,etherlab.org,ethercat,$(IGH_ETHERCAT_VERSION))
+ IGH_ETHERCAT_LICENSE = GPL-2.0 (IgH EtherCAT master), LGPL-2.1 (libraries)
+ IGH_ETHERCAT_LICENSE_FILES = COPYING COPYING.LESSER
 -- 
 2.47.1
 
