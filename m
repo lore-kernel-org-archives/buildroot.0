@@ -4,90 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01594E77170
-	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 18:29:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DF58E77170
+	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 18:29:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 68DA5607C1;
-	Wed,  4 Dec 2024 18:29:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0807060B2E;
+	Wed,  4 Dec 2024 18:29:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YLXYl8P9WaGs; Wed,  4 Dec 2024 18:29:32 +0000 (UTC)
+ id ilyB9bkL49Ph; Wed,  4 Dec 2024 18:29:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2821860873
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0F36608A5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2821860873;
-	Wed,  4 Dec 2024 18:29:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id CB2531DD3
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0F36608A5;
+	Wed,  4 Dec 2024 18:29:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D49D41DD1
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C64B7607B2
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B68AB84440
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OIP6L1jWmBii for <buildroot@buildroot.org>;
- Wed,  4 Dec 2024 18:29:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 46Tr1QaZNImi for <buildroot@buildroot.org>;
+ Wed,  4 Dec 2024 18:29:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 367AA607B0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 367AA607B0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 367AA607B0
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 90DFE84437
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90DFE84437
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 90DFE84437
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:31 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.124.249]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MS3mz-1tDDmj1vZL-00Lr92; Wed, 04
- Dec 2024 19:29:22 +0100
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MNKhs-1szhFu2oZe-00YjJl; Wed, 04
+ Dec 2024 19:29:24 +0100
 To: buildroot@buildroot.org
-Date: Wed,  4 Dec 2024 19:29:07 +0100
-Message-ID: <20241204182913.4085670-1-fiona.klute@gmx.de>
+Date: Wed,  4 Dec 2024 19:29:13 +0100
+Message-ID: <20241204182913.4085670-7-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241204182913.4085670-1-fiona.klute@gmx.de>
+References: <20241204182913.4085670-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:noMpS4bOTfbcTV28OQM/sKkuUeeI82MJI7FAVrS3t3tX0RaV7O4
- t5otExk7Cz84Cbdct5Xm3NmKEqWj5UnA4j7byGVS/bL+wDLUdIlOJTkCgASOQcsrGrE62pQ
- udpR/GO9VeJIkSqfk4aS0xbE2/LXYzRtZspI2A9u2ujZsRqq7h6n+61eTRaQEr4Rljdq9eW
- zrN7xR/TauQ1GaRn8D/dw==
-UI-OutboundReport: notjunk:1;M01:P0:J4J+LwA7IJE=;t8VOdnEkOZZ6z23Vv3BUFKRsGuz
- Aqxmt7NJ0AsMiy4DWqVSokA/OaVG9dXHCmDIMEMFePheTDV3/9C94rOXD187OiNKlOiBZe9uW
- T3hpiZIIehJkj9nsWFfN0JS7P5eG0okVMdy6aDLGrq2Y/RDhq3PFdcR1xXh5w5kj3QiAin5eC
- NTvDbc13C4KrtUNmhN4/codo1hME1Hf/RpDMkvpQO2uP47mh7VKdCy++ql7Ywj3HLmndfbc+F
- 33MpVxScBRds7PmFUz1rHp7XRHsKruCHqVTMQcRiXR0n8HM6kJb5BBwXQN/3Brb/r8O9jgA0U
- moKE8WH5X4V0Qe5yuwR4GpWFZNnfTfWPtJuAdpFdwbH4lpnDrs+BeGXy9lDCm2gHZk61NIJE3
- aKMc1TNu1H6D8KhDVOWXdWSDEabAzOwzjy/0C2uvmNC3KnWlNNAFJeuPkLxdl65V5gmIpfBHt
- vAMoOvXjvk2uUopA+NwuInG9bQsruKYOuKkU+Fszi0vHpAVdy79fUA81sk1Yr+D/j5v5HGzpy
- uojdvDP/ZbmYgj4/IvnJhA7EMcpRGDi7pkqxv0rEESv5mbFdC7xUo3I3ntTCn2kMaY9CINKqw
- REc+3mDouguyUxy3xLIrJJaY+M0JYFqCxxRXTtfg22aitIaKo3jvsXsxfx04Zo8B/bkiCnLOC
- xYv33aXD3LMZytvqcaBhfw9mP69VtV49DO3t0Ebg5XgZqp1/FKfii/vqlvp0j4GjuBS3GXoj8
- QIotQrlnq68cb3VEs6o2ToJAdq5Tqyszre1coP+/OuxZtaIzUil86DbnCrWwYPbXD+ffWg/HK
- VNWjeGmQswqPy1Ok2kx2tG8FR8ey8ro9wPVfdkNDFKCWFmxnK/BlzxLr9kVdtEbHKQaW4SXm0
- V3IQcw/nvrxo5j6Cx1o9RrgNmiAJK5buuE3EWBlmKNd7SAvz4oG3vq2No3WtBinILgiTHJuWh
- ynmatJsq+99o7bla1O+ldhy0/+lAgS3Tc8dkOWk/SlUWqwvjzJw9Bma6bZrA7TbkXBU7gFDwG
- K0o1+e4B2JCNeVec3AhY5F3Bm3q426kuhp4v9fGtE1NMmxl9WwKe5lkw0jxwJV1wcY9EYylUH
- vGLrZGTmNClFN75hlH2VytuyVvTxX+
+X-Provags-ID: V03:K1:qX67tEQZYXYbdsJ0wfb5Ep4BpyVlvV4xqzdByH+ZKM6McXik1MN
+ wmVh9w4A10GdfYFklDUtMHO4+gHniCn2vDpkJUsVTTaWzwoKOp7dyHpfg45ePqxYc0AP1m3
+ cY8dN4nVhsjj6ftuSk2hhwor82UCZ67JccB8lrZDEzmD5+tpVDoV0dWQk8TqOJbCU3Z5cRx
+ f9ZErL8734x8jdPl3wf9Q==
+UI-OutboundReport: notjunk:1;M01:P0:AWjK9GSDfJ4=;mzoTznsgRjj/eclGBlDNDNAEj30
+ g+R4n3RcuRtAVFhyCmPoQrBiFAQs4NNjl02t7k9UI8x5dA+XnSMj2w7qlXpik+VXOCCKsLgVx
+ 4iWp7A8nCT0lLLuENaDNyHXY8zhLmELO5lHczJw9/AkbhJ8Y200cz/G6ANTBhLej5Skw5q0+V
+ SM/8eCdH0x1Oa/BDS+kRtyiSimpa9J5zEo6t/8E3BX6yimZQ7scO0O6SzmmR4LG9FhC41EbKv
+ GI3xmSc5qjBJ3Rik8+l4kBLBtUIXzvYSgX1YMLxszp7bFhpaCc8NG1uwAlUPbE5N6hsI12CPU
+ YYEr09ezOQwacRWBequeqjBb3EQceO67Y2rXWV1MXz00VKZVHLo/W3VSBxi1ioFwhJPs7Htwk
+ jACZqzIjasOPjyvLUpzmtwu3nu6oIMak4hLC0w9fg65x71OdCSvSN4y/tA4B2bV1fePSDdwt6
+ OfnoBLVUaRrU4+04771TxEKbzUM83Rqhc06+puWNd+D3919K3lXLahYXg8GvzgOU7VfhhFkp4
+ RLnlkA6lKwdGahfuxIbrFOTljL8Owt9SIs1KGX2SAcVxQKSLuIxyqpWd+1uXDAce9UnPH349Z
+ TDDAyIf1yGNWlZds5k9ejuOBo2ygDAE0JsjWwEZHFxo0aUrw4BvSafX/IYizzbt2C6Ad7ef8v
+ /dUkaGHa3jjZ961MrNXMMQ/b2zSFODNMKPM6nV1At0tyl5AqwifYHeo4+GWdEpfi6PGPI5SvN
+ xjLx4slVmg7F2BwmW5DIMeQSGt4aDSTntzU3jOI6AJZmwkkomNLdhOOlpLIhLN+E2j1QrhsR2
+ eXLtp/i96GoR3ID4c7yupYgVzafGswtqtDuhdAhKdTRhTjYk29dCXmYIL8bNRFnSoLhKCW/i0
+ +M8D5GSMp7KmaOHQKtsQ4TLfchL9zjT6hTMPC9dTA9vZOI4VCtVkvDBB/nzHLNFnq1OrAF3SM
+ Y33TPjcCUj/zDNy6aG0yiDMnYFa0QLEXXWHW6yoEB/TEoJxeoB3l5FBhZReqEo1RwuLvjafVP
+ SAfmJMbmgig7DY1vkqnQ0IVU7d9oqKAMfLSnnqFVHo1myLOXUeXCey8IrbPOneec/QK47JNNf
+ mlHuhWdFr78I4yLQq1ph78CR7SG7Yz
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1733336962; x=1733941762; i=fiona.klute@gmx.de;
- bh=1Dekuyq8XB1c7ju8hxCxG0KJv2MNmKgDuIsWjUYPvPM=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
+ s=s31663417; t=1733336964; x=1733941764; i=fiona.klute@gmx.de;
+ bh=mQN83VIy5NdC1eMw45hZxdwCVw/EQHm1OzSG+gjkAGE=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=PwebbNlqWs0tjmOmNAZayFiRASeCDZRjeSFpzOB+GrjaF6ACmbmC+eJYo0s/4ouS
- im/N6LsQZ9LYpu1kS3tZWQ+wLER6KpXolwyhnwPgaAOr3EUvjH3nrh9MNJoXX7uav
- MKzFx9czvlVKpo38SaAG+PqtbsDYnq5DviIjFUsFaeTfwWhY+djfrYkkrEgQinkwv
- OX4pYUAn/9cZEnKIwZOjhLQcU0Ghp+n7daBda/bn6h5fgZQSBLsYhR2tjCeS1Xt2N
- SgbiboYFt7LEl79nEy1P920Aq5+NE3jMhr5sl4MrWb0CxTaaIgIOknGYkOutXNiHG
- PfGl38FZXcAmCwvtgA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=Yk0kNvouitV+C1EI3nHs8ypV/EC1C46ttAbwqZhHdkx4Y73LPmt33camAZrytOEb
+ TvSXIp6N5AfPieVdmo6s7WJZaafolPLgCr4jYsnCNjHqeEwrRqYoRJ4ma9KiRUT4C
+ r81Hx9r9dhyR2WHxen9xqSTGd1PdGg+3B8ey/8u16pp1yq8p7qN/LSSVh07rV/Gww
+ OScRlzLPjpVr8vWrljE5VXuakPWVMbA74oGE5l1kMp6/huoKRwhav/xruzQNrHulx
+ HxmiY5xPDZlRncGVr7P9no6888B+H5yE9UXgKKDrPSFEUAGLUu+5UwQKjPv9bP9HW
+ bC7q0wVWuoIFrhzd0A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=PwebbNlq
-Subject: [Buildroot] [PATCH v5 0/6] nftables firewall support
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=Yk0kNvou
+Subject: [Buildroot] [PATCH v5 6/6] support/testing: fix MyPy warnings about
+ BRConfigTest
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,63 +112,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-This series builds on two patches I've sent previously before, with
-the main goal of supporting firewall configuration through an nftables
-rules file. Offering the choice of iptables-nft as the default
-iptables implementation (smilar to e.g. update-alternatives on Debian)
-makes it easier to integrate that with legacy applications that rely
-on the iptables command (e.g. Docker).
+This removes warnings in editors/IDEs with MyPy typechecking
+integration. Test classes override "config" with strings (different
+type than None).
 
-Changes v4 -> v5:
-* nftables init script: run any target only if rules file exists
-* iptables init script: run any target only if rules file exists,
-  except for "save" (which may be used to create it)
-* rename series to clarify that nftables firewall support is
-  non-existent otherwise
-* v4 for reference:
-  https://patchwork.ozlabs.org/project/buildroot/list/?series=416810
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+---
+I haven't seen any other type annotations in the testing code, if
+they're not welcome please just drop this patch from the
+series. Personally I think they're good to avoid bugs.
 
-Changes v3 -> v4:
-* set ip6tables symlinks when selecting nftables compat
+ support/testing/infra/basetest.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Changes v2 -> v3:
-* move change from "iptables -F" to "iptables --flush" to the correct
-  patch (3/6)
-
-Changes v1 -> v2:
-* add patches 3-6
-* clarify comments & commit messages
-* nftables init script: Warning about missing flush in ruleset on reload
-* nftables init script: check for rules file only on start
-* nftables init script: return nft return code from start/stop functions
-* iptables init script: start only if rules file exists
-* add tests for init scripts
-* use long form options in init scripts
-* fix typecheck warnings
-
-Fiona Klute (WIWA) (6):
-  package/nftables: add init script
-  package/iptables: optionally default to nftables compat
-  package/iptables: check for rules in init script
-  support/testing: test for nftables init script
-  support/testing: include init script in iptables test
-  support/testing: fix MyPy warnings about BRConfigTest
-
- .checkpackageignore                           |  1 -
- DEVELOPERS                                    |  1 +
- package/iptables/Config.in                    | 12 ++++
- package/iptables/S35iptables                  | 16 +++--
- package/iptables/iptables.mk                  | 13 +++-
- package/nftables/S35nftables                  | 67 +++++++++++++++++++
- package/nftables/nftables.mk                  |  5 ++
- support/testing/infra/basetest.py             |  4 +-
- .../testing/tests/package/test_iptables.py    | 18 +++++
- .../testing/tests/package/test_nftables.py    | 37 +++++++++-
- .../rootfs-overlay/etc/nftables.conf          |  8 +++
- 11 files changed, 172 insertions(+), 10 deletions(-)
- create mode 100644 package/nftables/S35nftables
- create mode 100644 support/testing/tests/package/test_nftables/rootfs-overlay/etc/nftables.conf
-
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 1ae6232da8..4f020e8a93 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -24,8 +24,8 @@ MINIMAL_CONFIG = \
+ 
+ class BRConfigTest(unittest.TestCase):
+     """Test up to the configure stage."""
+-    config = None
+-    br2_external = list()
++    config: str
++    br2_external: list[str] = list()
+     downloaddir = None
+     outputdir = None
+     logtofile = True
 -- 
 2.45.2
 
