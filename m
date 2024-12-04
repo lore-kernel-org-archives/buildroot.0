@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E388E7716D
-	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 20:04:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B372E7716D
+	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 20:11:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C917D407ED;
-	Wed,  4 Dec 2024 20:04:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4635B84660;
+	Wed,  4 Dec 2024 20:11:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xVRQO2kirkWe; Wed,  4 Dec 2024 20:04:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ojrh15pAnUhq; Wed,  4 Dec 2024 20:11:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 974FC407FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A29984662
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 974FC407FD;
-	Wed,  4 Dec 2024 20:04:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A29984662;
+	Wed,  4 Dec 2024 20:11:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 54E072073
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 20:04:38 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id F3F9C1DD9
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 20:11:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 35A7F407ED
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 20:04:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BFAE941440
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 20:11:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gucpB44TQ-Wa for <buildroot@buildroot.org>;
- Wed,  4 Dec 2024 20:04:36 +0000 (UTC)
+ id 6zIw1kwmUPhF for <buildroot@buildroot.org>;
+ Wed,  4 Dec 2024 20:11:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C56B1407E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF2264143E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C56B1407E9
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 20:04:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF2264143E
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 20:11:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AEA2A86845; Wed,  4 Dec 2024 20:04:36 +0000 (UTC)
+ id B5C7F86888; Wed,  4 Dec 2024 20:11:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Dec 2024 21:01:36 +0100
+Date: Wed, 4 Dec 2024 21:07:29 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0c44722b0ca6c1ab7d0f7af6a703361f553e4747
-X-Git-Newrev: 4033902ad095bdeb6a32c827a6275b49ad61a3bb
+X-Git-Oldrev: 4033902ad095bdeb6a32c827a6275b49ad61a3bb
+X-Git-Newrev: a0964a91579a4b1135a96588c7bfcae4663d8678
 X-Patchwork-Hint: ignore
-Message-Id: <20241204200436.AEA2A86845@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/musl: Fix -ztext build failures on
- microblaze
+Message-Id: <20241204201130.B5C7F86888@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-psycopg2: add config
+ dependencies from postgresql
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,88 +61,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4249152405713545829=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4249152405713545829==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=4033902ad095bdeb6a32c827a6275b49ad61a3bb
+commit: https://git.buildroot.net/buildroot/commit/?id=a0964a91579a4b1135a96588c7bfcae4663d8678
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The particular combination of LVM2 (which enables -PIE), musl-libc with
-dynamic linking (and thus -ztext, banning TEXTRELs), and microblaze
-leads to an error because a TEXTREL is produced in musl-libc's Scrt1.o.
+Also update site url to https://github.com/psycopg/psycopg2/
 
-The upstream patch added in this commit fixes (or works around) the
-problem.
-
-Fixes: http://autobuild.buildroot.net/results/5bb283eff4b4a2b17d1028bbe0b3e1bea8fbeba8/
-Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- ...visibility-for-C-entry-point-function-_st.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ package/python-psycopg2/Config.in | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/musl/0003-use-hidden-visibility-for-C-entry-point-function-_st.patch b/package/musl/0003-use-hidden-visibility-for-C-entry-point-function-_st.patch
-new file mode 100644
-index 0000000000..6359565cd7
---- /dev/null
-+++ b/package/musl/0003-use-hidden-visibility-for-C-entry-point-function-_st.patch
-@@ -0,0 +1,42 @@
-+From 9c78557af0a5e521cdb46a4ca7630f2987d2523e Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Sat, 10 Aug 2024 19:49:24 -0400
-+Subject: [PATCH] use hidden visibility for C entry point function _start_c
-+
-+the file-level crt_arch.h asm fragments generally make direct
-+(non-PLT) calls from _start to _start_c, which is only valid when
-+there is a local, non-interposable definition for _start_c. generally,
-+the linker is expected to know that local definitions in a main
-+executable (as opposed to shared library) output are non-interposable,
-+making this work, but historically there have been linker bugs in this
-+area, and microblaze is reportedly still broken, flagging the
-+relocation for the call as a textrel.
-+
-+the equivalent _dlstart_c, called from the same crt_arch.h asm
-+fragments, has always used hidden visibility without problem, and
-+semantically it should be hidden, so make it hidden. this ensures the
-+direct call is always valid regardless of whether the linker properly
-+special-cases main executable output.
-+
-+Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=9c78557af0a5e521cdb46a4ca7630f2987d2523e
-+Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
-+---
-+ crt/crt1.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/crt/crt1.c b/crt/crt1.c
-+index 8fe8ab5d..10601215 100644
-+--- a/crt/crt1.c
-++++ b/crt/crt1.c
-+@@ -11,7 +11,7 @@ weak void _fini();
-+ int __libc_start_main(int (*)(), int, char **,
-+ 	void (*)(), void(*)(), void(*)());
-+
-+-void _start_c(long *p)
-++hidden void _start_c(long *p)
-+ {
-+ 	int argc = p[0];
-+ 	char **argv = (void *)(p+1);
-+--
-+2.45.2
-+
-
---===============4249152405713545829==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/python-psycopg2/Config.in b/package/python-psycopg2/Config.in
+index 4aa86c7690..6b07b0c06c 100644
+--- a/package/python-psycopg2/Config.in
++++ b/package/python-psycopg2/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_PYTHON_PSYCOPG2
+ 	bool "python-psycopg2"
++	depends on BR2_USE_MMU # postgresql
+ 	depends on BR2_USE_WCHAR # postgresql
++	depends on !BR2_STATIC_LIBS # postgresql
+ 	depends on !BR2_OPTIMIZE_FAST # postgresql
+ 	select BR2_PACKAGE_POSTGRESQL
+ 	help
+@@ -21,10 +23,11 @@ config BR2_PACKAGE_PYTHON_PSYCOPG2
+ 	  customized thanks to a flexible objects adaptation system.
+ 	  Psycopg 2 is both Unicode and Python 3 friendly.
+ 
+-	  http://initd.org/psycopg/
++	  https://github.com/psycopg/psycopg2/
+ 
+-comment "python-psycopg2 needs a toolchain w/ wchar"
+-	depends on !BR2_USE_WCHAR
++comment "python-psycopg2 needs a toolchain w/ dynamic library, wchar"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
+ 
+ comment "python-psycopg2 can't be built with Optimize for fast"
+ 	depends on BR2_OPTIMIZE_FAST
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4249152405713545829==--
