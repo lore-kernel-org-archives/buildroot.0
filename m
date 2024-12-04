@@ -4,98 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0E04E7716E
-	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 15:53:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75D3FE7716E
+	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 15:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84544605A2;
-	Wed,  4 Dec 2024 15:53:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76C006085B;
+	Wed,  4 Dec 2024 15:53:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e_FNmvdpvmMp; Wed,  4 Dec 2024 15:53:52 +0000 (UTC)
+ id 2i8774YnOPMe; Wed,  4 Dec 2024 15:53:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99114607B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C674E60B51
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 99114607B6;
-	Wed,  4 Dec 2024 15:53:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A5871DD1
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 15:53:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C674E60B51;
+	Wed,  4 Dec 2024 15:53:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 73631D8F
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 15:53:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 355114023A
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 15:53:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 543A14031D
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 15:53:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uvGCAvWREHsE for <buildroot@buildroot.org>;
- Wed,  4 Dec 2024 15:53:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LvmT33KZd3Va for <buildroot@buildroot.org>;
+ Wed,  4 Dec 2024 15:53:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
+ client-ip=2a00:1450:4864:20::52f; helo=mail-ed1-x52f.google.com;
  envelope-from=becher.jannik@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 19FFE400F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19FFE400F6
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 19FFE400F6
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 15:53:48 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-aa503cced42so1008704066b.3
- for <buildroot@buildroot.org>; Wed, 04 Dec 2024 07:53:48 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 075B940305
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 075B940305
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 075B940305
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 15:53:50 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id
+ 4fb4d7f45d1cf-5d0d71d7f00so7094155a12.3
+ for <buildroot@buildroot.org>; Wed, 04 Dec 2024 07:53:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1733327627; x=1733932427;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Y2rbQIntEhvzFMM5W3IkS5PDW06zfI1gbA5ncHeVMfc=;
- b=YD9umJhFN7J0+k/N/018N/x3VwXR58YPqCrigSGtVJGJKor0VhbsP6SEhLhhPER7+h
- r6EcrGHi/7GnF8c6FVXS88ocJJBHheGG2Nbt2qYeuMeaxyuJR6DtTvRf0nrtUxK3l1wh
- KTBfAiPRdQ509ThrD9MdDCukfF8Hh982UNULM5zToYmp5WaEAfs87jalJdcjyeW4RyMf
- 4sAFrCJQXyPfCF1Yt7r+YHxKRiFvw+doccNZM0q6xb2vSChEJowQU6qFnx1JwmHKLb80
- SVNeS/ASQJrAqRgtpluhJr4A9u2TBsfszGoAOlouYSqFJzhOfmOMpKonaJU2EDOp+eDh
- tDsQ==
-X-Gm-Message-State: AOJu0Yy6G11mqQijk29+VeRroMNZqrdMRh8v++o67nz3YBfOYSbO4dmx
- q02DDQZcbYgHPZKZjdRK4/llQu7ZOiZ+NEFmO9xG0atGYYzPe/mD5w9b5FTWKI8=
-X-Gm-Gg: ASbGncu2gwXitOLHoJ5KX4U7voEnn+XL8d+urpaEpCrrZuAaeLevNShv6FdUE60ICMe
- hNtKxUGzIRnF/wFsxfh6r7+deat2xUfnTfxmRZbTCughA/kh3jmkJfXqBxQ7BG4B9cGeORPybtj
- fJja3mIeJAaDtEuBfAXuceDr+VGO+ZY39/1/EAv2xJ+cmNI+a5aRwYXI+hBsAw4fr/PmIsFp4cF
- SAP7w9FyMMeUPVmsstaosLRvBvSuK8mkwRjTQt78EamoD+MHf40EDgk8Jozn45PUNcaYYV8R9+r
- HQ/7oADqDdzxi0HirJ8rQfI=
-X-Google-Smtp-Source: AGHT+IGq4zIR1mwwGMQmB/xtTtHMO9lmdhdxhgqm7Qoe3loxp1O5jW3YDsGefaNFqT8tCQj9AVmB+Q==
-X-Received: by 2002:a17:906:23e9:b0:aa5:fd7:cd7a with SMTP id
- a640c23a62f3a-aa5f7d667eemr519158166b.21.1733327626515; 
- Wed, 04 Dec 2024 07:53:46 -0800 (PST)
+ d=1e100.net; s=20230601; t=1733327629; x=1733932429;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=0mQwb5txUSxp3E60PYG2Lhcsz4xshvhgCiKsWyqd/2U=;
+ b=CVXfSaLmvMloHPtxYSD48xVeYEPtmq7PFqeOXpFtb55JvZwAKbW58Knfa72yw2yaxu
+ Xgi70HLQCTjp3nuVcMn08ubTPWs8wkTRrSMO7b7kK3H/KEr7zEdpFv9zEJzKhSe4qR4P
+ lc4CEGpnpSrkfEqvWv2r6N+NRd3IU98lj7nPtT8t/bzSqD0DpYyZLNstziOIWd9iEIiw
+ o71J0FcXUTd4OhbYyHjxbPZBDvaPq2iACrWV2AmMNypl9kQM89jt9AQ3LXn/vAlID/cN
+ ZG0QG1rS5lrYrdt40LZ0VdbwbOLczDOxDXOLsZNEK9RmGmW5M7bea/or59It1Qxi+d8p
+ bazQ==
+X-Gm-Message-State: AOJu0Yyag+8Vg7cDqCv5OBhQP9SESv8d3ZAtZdDBogfsftmxJeT95JWU
+ Bvkz8lv51TIHOGpAQiO62vrbZ3eYPvCKE19992JIRCi+f911329MBogWhNiqzjo=
+X-Gm-Gg: ASbGncsgK/1UmxOCHLii8l3WRIJMYPuXftIUw8bVBAocXyhAbdGsTr1lSJvttXoVaCh
+ 8IzfbapLHlsUSGrD1lQ/ktmGwKnd0+u7NMWCefqE6iK++AErXIJSMtYnXQUrQvm3Esvp8VpWLrw
+ /DyQ29PBZL4tPQ81oUgFNjMw+g9/xK83LsfLM/LMfU9HnMBoYitdFmTvY4YugQA/pR2ULv9XPMB
+ NakN9Zk4g3QfX5T8UgV94caHNz9DoNjMpSYWByv0hIresAR0/D5Jk8BxUXgtuQ1SIZW83wdZARn
+ rrhSiO5Tmo6iNH2AtgSzy5w=
+X-Google-Smtp-Source: AGHT+IGb5Mbz7yHKwEYbPcy/duAV2yArjhSPcQB4KS3lvmp0n6+/c0yFpTXoi9IVchPBap45lozsXQ==
+X-Received: by 2002:a17:906:2182:b0:aa6:19f3:d083 with SMTP id
+ a640c23a62f3a-aa619f3d189mr69105266b.30.1733327628616; 
+ Wed, 04 Dec 2024 07:53:48 -0800 (PST)
 Received: from localhost.localdomain (p5492bafd.dip0.t-ipconnect.de.
  [84.146.186.253]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-aa5996de782sm743518866b.56.2024.12.04.07.53.45
+ a640c23a62f3a-aa5996de782sm743518866b.56.2024.12.04.07.53.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 04 Dec 2024 07:53:46 -0800 (PST)
+ Wed, 04 Dec 2024 07:53:48 -0800 (PST)
 From: Jannik Becher <becher.jannik@gmail.com>
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Julien Olivain <ju.o@free.fr>, Jannik Becher <becher.jannik@gmail.com>
-Date: Wed,  4 Dec 2024 16:53:41 +0100
-Message-ID: <20241204155342.185278-1-becher.jannik@gmail.com>
+Date: Wed,  4 Dec 2024 16:53:42 +0100
+Message-ID: <20241204155342.185278-2-becher.jannik@gmail.com>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20241204155342.185278-1-becher.jannik@gmail.com>
+References: <20241204155342.185278-1-becher.jannik@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1733327627; x=1733932427; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Y2rbQIntEhvzFMM5W3IkS5PDW06zfI1gbA5ncHeVMfc=;
- b=gxxES0+FkDCYlfyyqiFPp+cmzjh0UjQ2rr97nSFsEKObtMJDLWmhKKfE/4NBoN87Xf
- ofjHv5fYExvJ+Kyh9Ugl2Y6FZvG1FSPzHrBpHRXJYBmiUtyqcKzhilbbsK/CL15TwjPZ
- dswKfWOknekeahaF+vQmosPFlaSqmb8i2j1vvYQm3kwCxsOcdyL1kjWLq0psHwvY6CMU
- m/ugfXPaDJbn/oVu5SAQMWsYfWl30+MHLImfd3DIVEpWDUGaerD7tYCLKk+2aBcaGPmj
- MBVbLW5mQJIotxttlPNAv4KgXkXVmlmV4sFZNGXZMskeuhBFZkVnR6WwdMo6YPBzJ0pp
- vjig==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1733327629; x=1733932429; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=0mQwb5txUSxp3E60PYG2Lhcsz4xshvhgCiKsWyqd/2U=;
+ b=bNJWGxYA3oevy1lYBvmAcZXNWiPTzzRGYOtw0nwHu4pkZfcRB436oDvV4eEa37cxtU
+ Q6rFMHDHCv86kvhFspqDjFJGZ94NY0hi8f59l9YQWaTtYzJ/G5NDAwdEjfYAuVFtGm3M
+ lPbkcI2/mihh+bH6sr9qNLQ7wGkA/y2rRAD44L1Ez0tAbl+yrEkgvrvQkLMT8SuPXsHA
+ HQKXLFBxBd0WFBJ8kAmILXOcFOzEA4RvH0WUT27GuffIKxD9nM3omfwJ549KLmTSHHOJ
+ EroOWNDploaqy/0jVeybJeQRzxiaiDTsvD24+Bj4YeFHayArelqPp7GlZwB1Af7hsC0W
+ nokg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=gxxES0+F
-Subject: [Buildroot] [PATCH 1/2] package/igh-ethercat: bump version to 1.6.2
+ header.s=20230601 header.b=bNJWGxYA
+Subject: [Buildroot] [PATCH 2/2] package/igh-ethercat: add configuration
+ options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,35 +116,140 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Add configuration options and description for EtherAT userlib, clitool,
+tty and additional drivers.
+
 Signed-off-by: Jannik Becher <becher.jannik@gmail.com>
 ---
- package/igh-ethercat/igh-ethercat.hash | 2 +-
- package/igh-ethercat/igh-ethercat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/igh-ethercat/Config.in       | 77 ++++++++++++++++++++++++++--
+ package/igh-ethercat/igh-ethercat.mk | 14 ++++-
+ 2 files changed, 84 insertions(+), 7 deletions(-)
 
-diff --git a/package/igh-ethercat/igh-ethercat.hash b/package/igh-ethercat/igh-ethercat.hash
-index 67a152c6ae..0c3a8bb07d 100644
---- a/package/igh-ethercat/igh-ethercat.hash
-+++ b/package/igh-ethercat/igh-ethercat.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  7e4d8f3497c0bc0b64a151c0d074349fe7614767563642d6fedb19567eafa1e1  igh-ethercat-f5dc109176400f540a8682a2c9ee20d411d14d61.tar.gz
-+sha256  844e9846a30b8bed0ae7f1e9a70b724b8980a21ef61c2bdf8fa219c9745c1958  igh-ethercat-1.6.2.tar.gz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+diff --git a/package/igh-ethercat/Config.in b/package/igh-ethercat/Config.in
+index e600ef5fcd..49be9d13bc 100644
+--- a/package/igh-ethercat/Config.in
++++ b/package/igh-ethercat/Config.in
+@@ -11,19 +11,86 @@ config BR2_PACKAGE_IGH_ETHERCAT
+ 
+ if BR2_PACKAGE_IGH_ETHERCAT
+ 
++config BR2_PACKAGE_IGH_ETHERCAT_CLITOOL
++	bool "Enable CLI Tool"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Enable the EtherCAT CLI tool for testing and diagnostics.
++
++config BR2_PACKAGE_IGH_ETHERCAT_USERLIB
++	bool "Enable User Space Library"
++	help
++	  Install the EtherCAT user space library.
++
++config BR2_PACKAGE_IGH_ETHERCAT_TTY
++	bool "Enable TTY Driver"
++	help
++	  Enable the EtherCAT TTY driver for serial communication
++	  support.
++
++config BR2_PACKAGE_IGH_ETHERCAT_GENERIC
++	bool "Enable Generic Driver"
++	help
++	  Enable the generic EtherCAT master driver.
++
+ config BR2_PACKAGE_IGH_ETHERCAT_8139TOO
+-	bool "8139too driver"
++	bool "8139too Driver"
++	help
++	  Enable Realtek 8139too-based EtherCAT driver.
+ 
+ config BR2_PACKAGE_IGH_ETHERCAT_E100
+-	bool "e100 driver"
++	bool "e100 Driver"
++	help
++	  Enable Intel e100-based EtherCAT driver.
+ 
+ config BR2_PACKAGE_IGH_ETHERCAT_E1000
+-	bool "e1000 driver"
++	bool "e1000 Driver"
++	help
++	  Enable Intel e1000-based EtherCAT driver.
+ 
+ config BR2_PACKAGE_IGH_ETHERCAT_E1000E
+-	bool "e1000e driver"
++	bool "e1000e Driver"
++	help
++	  Enable Intel e1000e-based EtherCAT driver.
++
++config BR2_PACKAGE_IGH_ETHERCAT_GENET
++	bool "genet Driver"
++	help
++	  Enable Broadcom GENET-based EtherCAT driver.
++
++config BR2_PACKAGE_IGH_ETHERCAT_IGB
++	bool "igb Driver"
++	help
++	  Enable Intel igb-based EtherCAT driver.
++
++config BR2_PACKAGE_IGH_ETHERCAT_IGC
++	bool "igc Driver"
++	help
++	  Enable Intel igc-based EtherCAT driver.
+ 
+ config BR2_PACKAGE_IGH_ETHERCAT_R8169
+-	bool "r8169 driver"
++	bool "r8169 Driver"
++	help
++	  Enable Realtek r8169-based EtherCAT driver.
++
++config BR2_PACKAGE_IGH_ETHERCAT_STMMAC_PCI
++	bool "stmmac-pci Driver"
++	help
++	  Enable Synopsys STMMAC PCI-based EtherCAT driver.
++
++config BR2_PACKAGE_IGH_ETHERCAT_STMMAC
++	bool "stmmac Driver"
++	help
++	  Enable Synopsys STMMAC-based EtherCAT driver.
++
++config BR2_PACKAGE_IGH_ETHERCAT_DWMAC_INTEL
++	bool "dwmac-intel Driver"
++	help
++	  Enable Intel DesignWare MAC-based EtherCAT driver.
++
++config BR2_PACKAGE_IGH_ETHERCAT_CCAT
++	bool "ccat Driver"
++	help
++	  Enable CCAT-based EtherCAT driver.
+ 
+ endif
 diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
-index 5b618ab54a..374f8891e5 100644
+index 374f8891e5..0fcba65cf5 100644
 --- a/package/igh-ethercat/igh-ethercat.mk
 +++ b/package/igh-ethercat/igh-ethercat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -15,12 +15,22 @@ IGH_ETHERCAT_INSTALL_STAGING = YES
  
--IGH_ETHERCAT_VERSION = f5dc109176400f540a8682a2c9ee20d411d14d61
-+IGH_ETHERCAT_VERSION = 1.6.2
- IGH_ETHERCAT_SITE = $(call gitlab,etherlab.org,ethercat,$(IGH_ETHERCAT_VERSION))
- IGH_ETHERCAT_LICENSE = GPL-2.0 (IgH EtherCAT master), LGPL-2.1 (libraries)
- IGH_ETHERCAT_LICENSE_FILES = COPYING COPYING.LESSER
+ IGH_ETHERCAT_CONF_OPTS = \
+ 	--with-linux-dir=$(LINUX_DIR) \
+-	$(if $(BR2_INSTALL_LIBSTDCPP),--enable-tool,--disable-tool) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_USERLIB),--enable-userlib,--disable-userlib) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_CLITOOL),--enable-tool,--disable-tool) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_TTY),--enable-tty,--disable-tty) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_GENERIC),--enable-generic,--disable-generic) \
+ 	$(if $(BR2_PACKAGE_IGH_ETHERCAT_8139TOO),--enable-8139too,--disable-8139too) \
+ 	$(if $(BR2_PACKAGE_IGH_ETHERCAT_E100),--enable-e100,--disable-e100) \
+ 	$(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,--disable-e1000) \
+ 	$(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e) \
+-	$(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_GENET),--enable-genet,--disable-genet) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_IGB),--enable-igb,--disable-igb) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_IGC),--enable-igc,--disable-igc) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_STMMAC_PCI),--enable-stmmac-pci,--disable-stmmac-pci) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_STMMAC),--enable-stmmac,--disable-stmmac) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_DWMAC_INTEL),--enable-dwmac-intel,--disable-dwmac-intel) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_CCAT),--enable-ccat,--disable-ccat)
+ 
+ $(eval $(kernel-module))
+ $(eval $(autotools-package))
 -- 
 2.47.1
 
