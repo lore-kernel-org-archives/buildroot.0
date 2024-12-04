@@ -1,76 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CCC0E7716D
-	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 20:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF6CEE7716F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 20:48:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 319D56088C;
-	Wed,  4 Dec 2024 20:48:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E3471841AA;
+	Wed,  4 Dec 2024 20:48:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H8rtbvsdQrFL; Wed,  4 Dec 2024 20:48:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kg7Pb1mB8vzX; Wed,  4 Dec 2024 20:48:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2DA96087C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF148841AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E2DA96087C;
-	Wed,  4 Dec 2024 20:48:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F3261DD1
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 20:48:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BF148841AF;
+	Wed,  4 Dec 2024 20:48:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 513DC1DD9
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 20:48:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 34535407AC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 74F18407AB
  for <buildroot@buildroot.org>; Wed,  4 Dec 2024 20:48:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LcTpFzh9LjSK for <buildroot@buildroot.org>;
+ id WNgcx1cb00T0 for <buildroot@buildroot.org>;
  Wed,  4 Dec 2024 20:48:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
  helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 39495407AB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39495407AB
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D68964078E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D68964078E
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 39495407AB
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 20:48:12 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 8EE57240006;
- Wed,  4 Dec 2024 20:48:10 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D68964078E
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 20:48:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 48EF1240004;
+ Wed,  4 Dec 2024 20:48:09 +0000 (UTC)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed,  4 Dec 2024 21:48:02 +0100
-Message-ID: <20241204204806.159596-4-thomas.petazzoni@bootlin.com>
+Date: Wed,  4 Dec 2024 21:48:00 +0100
+Message-ID: <20241204204806.159596-2-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241204204806.159596-1-thomas.petazzoni@bootlin.com>
 References: <20241204204806.159596-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1733345290;
+ d=bootlin.com; s=gm1; t=1733345289;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=mmnGPWMYAMMs4U4Ejtpkfvux+AhzPzQQa/+cOQVTdtM=;
- b=l0S9sFI9wcpiavZGJUW6qOCxsjvW/p4NUHYXXxg4KQU2NCWZK9mn4/ChlhmqoMHNNc4wCm
- sjj3qt6eHd0a1NHp3Ia5qqgNop+Qypnli8nkzmbsnsjNC4ytLTc7PDQKVDP0gDZkNiVkUu
- TtJ6mrpAqXB4/DDKUUbKvEkVy1TOMFGjIn3qqLZJdUGNP6jFKIPHa0DeQWxZy4drRzZygC
- NSAP9VqiB6tP2NYCLpKDZKkw7n2j0q0uLtkoeB4MmXIkwGEr/HhfFFCAONQy7EW5JraO4T
- aLHisRg8YVaIUZVgn4nFV+B3fTCfFoRcr7aAl9k+b0xthUt6o9oACOx7ZWghDQ==
+ bh=pPloPNW6nvOqLIEgngGVGNhBXa5sHssY+0V9qafVweQ=;
+ b=DXPF3sAz0Vku8EQQD5+EokpmXh26fhQoGxBYUODOfgPQoOqL/Z60wE2xpVMg/2NlMptVsV
+ FmYtSYA3/3s8b1A2PakHdsRF3sC8C2KcIH92CNjQef8/X058yewpkovU4dHTXoML6I/AFL
+ ZpvCz2vVxhMVpxsIsI/BeF9LQc7dvCUeVwScM17cpMWuKOintiYvxM7DqIat37bt0nmG1M
+ uq5OiIDKt+WVATlYULs7I+QqtmvwRr5cYzhRyL3Y7H3EH3rlXyTXDakARdgWkv73uiIeGF
+ LU8AXeC2+q3dOlsOoGJR6R+Jx7qetqY0ieuRz4Dcu6Qrfs3Nw8mSQIc1Skh/sA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=l0S9sFI9
-Subject: [Buildroot] [PATCH 3/3] package/android-tools: fix b64_pton() issue
- with GCC >= 14.x
+ header.s=gm1 header.b=DXPF3sAz
+Subject: [Buildroot] [PATCH 1/3] package/android-tools: convert all patches
+ to Git-formatted patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,160 +81,595 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhlIGFuZHJvaWQtdG9vbHMgY29kZSBiYXNlIHVzZXMgdGhlIF9fYjY0X3B0b24oKSBmdW5jdGlv
-biwgd2hpY2gKaXNuJ3QgcHJvdmlkZWQgYnkgYWxsIEMgbGlicmFyaWVzLiBTbyB0aGUgRGViaWFu
-IHBhdGNoCmRlYmlhbi9wYXRjaGVzL2FkZF9hZGJkLnBhdGNoIGFkZHMgYW4gaW1wbGVtZW50YXRp
-b24gb2YgYjY0X3B0b24oKSwKYnV0IGRvZXNuJ3QgYWN0dWFsbHkgdXNlIGl0LCBub3IgZGVmaW5l
-cyBhIHByb3RvdHlwZSBmb3IgaXQuIE91cgpleGlzdGluZyBwYXRjaCAwMDAzLUZpeC1idWlsZC1p
-c3N1ZS13aXRoLXVjbGliYy5wYXRjaCBzd2l0Y2hlcyB0aGUKY29kZSB0byB1c2UgdGhlIGI2NF9w
-dG9uKCkgZnVuY3Rpb24uLi4gYnV0IHN0aWxsIHdpdGhvdXQgcHJvdmlkaW5nIGEKcHJvdG90eXBl
-LCBjYXVzaW5nIHRoZSBmb2xsb3dpbmcgYnVpbGQgZmFpbHVyZXMgd2l0aCBHQ0MgPj0gMTQueDoK
-CmFkYl9hdXRoX2NsaWVudC5jOjc1OjE1OiBlcnJvcjogaW1wbGljaXQgZGVjbGFyYXRpb24gb2Yg
-ZnVuY3Rpb24gJ2I2NF9wdG9uJwoKVG8gZml4IHRoaXMsIHdlIHJld29yayAwMDAzLUZpeC1idWls
-ZC1pc3N1ZS13aXRoLXVjbGliYy5wYXRjaCBpbnRvIGEKcGF0Y2ggdGhhdDoKCiAoMSkgUmVuYW1l
-cyBiNjRfcHRvbigpIHRvIGFkYl9iNjRfcHRvbigpIHRvIG1ha2Ugc3VyZSBpdCB3b24ndCBjbGFz
-aAogICAgIHdpdGggaW1wbGVtZW50YXRpb25zIHByb3ZpZGVkIGJ5IHNvbWUgQyBsaWJyYXJpZXMs
-IGFuZCBhZGp1c3RzCiAgICAgdGhlIGNhbGwgc2l0ZXMgYWNjb3JkaW5nbHkuCgogKDIpIEFkZHMg
-YSBwcm90b3R5cGUgZGVmaW5pdGlvbiBvZiBhZGJfYjY0X3B0b24oKSBpbiBwbGFjZXMgd2hlcmUK
-ICAgICB0aGlzIGZ1bmN0aW9uIGlzIHVzZWQuCgpGaXhlczoKCiAgaHR0cDovL2F1dG9idWlsZC5i
-dWlsZHJvb3QubmV0L3Jlc3VsdHMvYjI1YjI1MzM3YzdhZDg5YzMzZjhiZDIwYjY0Njg1MGJkOTkz
-ZWM1M2FlOS8KCkV2ZW4gdGhvdWdoIEdDQyAxNC54IHN1cHBvcnQgd2FzIG1lcmdlZCBpbiBCdWls
-ZHJvb3QgaW4gTWF5IDIwMjQsIHRoaXMKcGFydGljdWxhciBiNjRfcHRvbigpIG9ubHkgc3RhcnRl
-ZCBhcHBlYXJpbmcgb24gSnVseSAxNSAyMDI0LCB3aXRoIHRoZQpmaXJzdCBvY2N1cmVuY2UgYmVp
-bmc6CgogIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzLzFjYmU4N2JiZTNj
-NTZmMjg0NDRiM2FhYmExYmExZDA1Zjk0N2QzNmUvCgpJbmRlZWQsIGl0J3Mgbm90IGJlZm9yZSBK
-dWx5IDE1IDIwMjQgdGhhdCB3ZSBtZXJnZWQgY29tbWl0CmQyMDFmMmY1Y2QwZDFlMDM4OTQzMGNk
-YTc4YWRlYWQzNzk3N2E2Y2QgKCJwYWNrYWdlL2FuZHJvaWQtdG9vbHM6IGFkZApwYXRjaGVzIHRv
-IGZpeCBidWlsZCB3aXRoIEdDQyAxNC54IiksIHdoaWNoIGZpeGVkIG90aGVyIEdDQyAxNC54Cmlz
-c3Vlcywgd2hpY2ggd2VyZSBoaWRpbmcgdGhpcyBiNjRfcHRvbigpIHByb2JsZW0uCgpTaWduZWQt
-b2ZmLWJ5OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgot
-LS0KIC5jaGVja3BhY2thZ2VpZ25vcmUgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxIC0K
-IC4uLjAwMDMtQWRqdXN0LWJhc2U2NC1mdW5jdGlvbi1oYW5kbGluZy5wYXRjaCB8IDk2ICsrKysr
-KysrKysrKysrKysrKysKIC4uLi8wMDAzLUZpeC1idWlsZC1pc3N1ZS13aXRoLXVjbGliYy5wYXRj
-aCAgICB8IDQwIC0tLS0tLS0tCiAzIGZpbGVzIGNoYW5nZWQsIDk2IGluc2VydGlvbnMoKyksIDQx
-IGRlbGV0aW9ucygtKQogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvYW5kcm9pZC10b29scy8w
-MDAzLUFkanVzdC1iYXNlNjQtZnVuY3Rpb24taGFuZGxpbmcucGF0Y2gKIGRlbGV0ZSBtb2RlIDEw
-MDY0NCBwYWNrYWdlL2FuZHJvaWQtdG9vbHMvMDAwMy1GaXgtYnVpbGQtaXNzdWUtd2l0aC11Y2xp
-YmMucGF0Y2gKCmRpZmYgLS1naXQgYS8uY2hlY2twYWNrYWdlaWdub3JlIGIvLmNoZWNrcGFja2Fn
-ZWlnbm9yZQppbmRleCAxMWU0MTBiNGVhLi4wZGNjYTVlYmM3IDEwMDY0NAotLS0gYS8uY2hlY2tw
-YWNrYWdlaWdub3JlCisrKyBiLy5jaGVja3BhY2thZ2VpZ25vcmUKQEAgLTI3MSw3ICsyNzEsNiBA
-QCBwYWNrYWdlL2FtMzN4LWNtMy8wMDA0LU1ha2VmaWxlLWFkZC1mbm8tYnVpbHRpbi5wYXRjaCBs
-aWJfcGF0Y2guVXBzdHJlYW0KIHBhY2thZ2UvYW0zM3gtY20zL1M5My1hbTMzNXgtcG0tZmlybXdh
-cmUtbG9hZCBsaWJfc3lzdi5WYXJpYWJsZXMKIHBhY2thZ2UvYW5kcm9pZC10b29scy8wMDAxLUZp
-eC1tYWtlZmlsZXMtZm9yLW91dC1vZi10cmVlLWJ1aWxkLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVh
-bQogcGFja2FnZS9hbmRyb2lkLXRvb2xzLzAwMDItRml4LWFkYmQtZm9yLW5vbi1VYnVudHUtc3lz
-dGVtcy5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KLXBhY2thZ2UvYW5kcm9pZC10b29scy8wMDAz
-LUZpeC1idWlsZC1pc3N1ZS13aXRoLXVjbGliYy5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KIHBh
-Y2thZ2UvYW5kcm9pZC10b29scy8wMDA0LUZpeC1idWlsZC1pc3N1ZS13aXRoLW11c2wucGF0Y2gg
-bGliX3BhdGNoLlVwc3RyZWFtCiBwYWNrYWdlL2FuZHJvaWQtdG9vbHMvMDAwNS1tYWtlZmlsZXMt
-dXNlLXBrZ2NvbmYtdG8tZ2V0LWxpYnMtZGVwcy5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KIHBh
-Y2thZ2UvYW5kcm9pZC10b29scy8wMDA2LUZpeC1idWlsZC1vbi1iaWctZW5kaWFuLXN5c3RlbXMu
-cGF0Y2ggbGliX3BhdGNoLlVwc3RyZWFtCmRpZmYgLS1naXQgYS9wYWNrYWdlL2FuZHJvaWQtdG9v
-bHMvMDAwMy1BZGp1c3QtYmFzZTY0LWZ1bmN0aW9uLWhhbmRsaW5nLnBhdGNoIGIvcGFja2FnZS9h
-bmRyb2lkLXRvb2xzLzAwMDMtQWRqdXN0LWJhc2U2NC1mdW5jdGlvbi1oYW5kbGluZy5wYXRjaApu
-ZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi4zMGE2ZTY4MGI5Ci0tLSAvZGV2
-L251bGwKKysrIGIvcGFja2FnZS9hbmRyb2lkLXRvb2xzLzAwMDMtQWRqdXN0LWJhc2U2NC1mdW5j
-dGlvbi1oYW5kbGluZy5wYXRjaApAQCAtMCwwICsxLDk2IEBACitGcm9tIDk0NmRiYjAwZmU0YjJh
-NzVjNjg4YTQ3MGZjMGMzOTI0YWEwMThhMjQgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9t
-OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgorRGF0ZTog
-U3VuLCAxNCBKdWwgMjAyNCAxMTozOTo0OSArMDIwMAorU3ViamVjdDogW1BBVENIXSBBZGp1c3Qg
-YmFzZTY0IGZ1bmN0aW9uIGhhbmRsaW5nCitNSU1FLVZlcnNpb246IDEuMAorQ29udGVudC1UeXBl
-OiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04CitDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4
-Yml0CisKK0luIG9yZGVyIHRvIHN1cHBvcnQgbGliY3MgdGhhdCBkbyBub3QgcHJvdmlkZSBiNjRf
-cHRvbigpLCBvbmUgb2YgdGhlCitEZWJpYW4gcGF0Y2hlcyBhZGRzIGEgY29weSBvZiBiNjRfcHRv
-bigpIGFuZCBiNjRfbnRvcCgpLiBIb3dldmVyLCBubworcHJvdG90eXBlIGlzIGFkZGVkIGZvciB0
-aG9zZSBmdW5jdGlvbnMsIGNhdXNpbmcgYW4gImltcGxpY2l0CitkZWNsYXJhdGlvbiIgd2Fybmlu
-Zy4uLiBvciBlcnJvciBkZXBlbmRpbmcgb24gdGhlIGNvbXBpbGVyIHZlcnNpb24KK3VzZWQ6CisK
-K2NvcmUvYWRiZC9hZGJfYXV0aF9jbGllbnQuYzo3NToxNTogZXJyb3I6IGltcGxpY2l0IGRlY2xh
-cmF0aW9uIG9mIGZ1bmN0aW9uIOKAmGI2NF9wdG9u4oCZIFstV2ltcGxpY2l0LWZ1bmN0aW9uLWRl
-Y2xhcmF0aW9uXQorCitUaGlzIHBhdGNoIGFkZHMgYXBwcm9wcmlhdGUgcHJvdG90eXBlcywgYnV0
-IHdoaWxlIGF0IGl0LCBhbHNvIHJlbmFtZXMKK3RoZSBpbnRlcm5hbCBjb3B5IG9mIGI2NF8qKCkg
-ZnVuY3Rpb25zIHRvIGhhdmUgYW4gYWRiXyBwcmVmaXggaW4gb3JkZXIKK3RvIGNsYXJpZnkgdGhp
-bmdzIGFuZCBub3QgY2xhc2ggd2l0aCBkZWZpbml0aW9ucyBwb3RlbnRpYWxseSBjb21pbmcKK2Zy
-b20gdGhlIEMgbGlicmFyeS4KKworVXBzdHJlYW06IE4vQSwgd2UncmUgdG9vIGZhciBmcm9tIHVw
-c3RyZWFtCitTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25p
-QGJvb3RsaW4uY29tPgorLS0tCisgY29yZS9hZGIvYWRiX2F1dGhfY2xpZW50LmMgIHwgMyArKy0K
-KyBjb3JlL2FkYmQvYWRiX2F1dGhfY2xpZW50LmMgfCAzICsrLQorIGNvcmUvYWRiZC9iYXNlNjQu
-YyAgICAgICAgICB8IDQgKystLQorIDMgZmlsZXMgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCA0
-IGRlbGV0aW9ucygtKQorCitkaWZmIC0tZ2l0IGEvY29yZS9hZGIvYWRiX2F1dGhfY2xpZW50LmMg
-Yi9jb3JlL2FkYi9hZGJfYXV0aF9jbGllbnQuYworaW5kZXggMGI0OTEzZS4uMjViOTgyOCAxMDA2
-NDQKKy0tLSBhL2NvcmUvYWRiL2FkYl9hdXRoX2NsaWVudC5jCisrKysgYi9jb3JlL2FkYi9hZGJf
-YXV0aF9jbGllbnQuYworQEAgLTQ1LDYgKzQ1LDcgQEAgc3RhdGljIGNoYXIgKmtleV9wYXRoc1td
-ID0geworIHN0YXRpYyBmZGV2ZW50IGxpc3RlbmVyX2ZkZTsKKyBzdGF0aWMgaW50IGZyYW1ld29y
-a19mZCA9IC0xOworIAorK2V4dGVybiBpbnQgYWRiX2I2NF9wdG9uKGNoYXIgY29uc3QgKnNyYywg
-dV9jaGFyICp0YXJnZXQsIHNpemVfdCB0YXJnc2l6ZSk7CisgCisgc3RhdGljIHZvaWQgcmVhZF9r
-ZXlzKGNvbnN0IGNoYXIgKmZpbGUsIHN0cnVjdCBsaXN0bm9kZSAqbGlzdCkKKyB7CitAQCAtNzIs
-NyArNzMsNyBAQCBzdGF0aWMgdm9pZCByZWFkX2tleXMoY29uc3QgY2hhciAqZmlsZSwgc3RydWN0
-IGxpc3Rub2RlICpsaXN0KQorICAgICAgICAgaWYgKHNlcCkKKyAgICAgICAgICAgICAqc2VwID0g
-J1wwJzsKKyAKKy0gICAgICAgIHJldCA9IF9fYjY0X3B0b24oYnVmLCAodV9jaGFyICopJmtleS0+
-a2V5LCBzaXplb2Yoa2V5LT5rZXkpICsgNCk7CisrICAgICAgICByZXQgPSBhZGJfYjY0X3B0b24o
-YnVmLCAodV9jaGFyICopJmtleS0+a2V5LCBzaXplb2Yoa2V5LT5rZXkpICsgNCk7CisgICAgICAg
-ICBpZiAocmV0ICE9IHNpemVvZihrZXktPmtleSkpIHsKKyAgICAgICAgICAgICBEKCIlczogSW52
-YWxpZCBiYXNlNjQgZGF0YSByZXQ9JWRcbiIsIGZpbGUsIHJldCk7CisgICAgICAgICAgICAgZnJl
-ZShrZXkpOworZGlmZiAtLWdpdCBhL2NvcmUvYWRiZC9hZGJfYXV0aF9jbGllbnQuYyBiL2NvcmUv
-YWRiZC9hZGJfYXV0aF9jbGllbnQuYworaW5kZXggMGI0OTEzZS4uMjViOTgyOCAxMDA2NDQKKy0t
-LSBhL2NvcmUvYWRiZC9hZGJfYXV0aF9jbGllbnQuYworKysrIGIvY29yZS9hZGJkL2FkYl9hdXRo
-X2NsaWVudC5jCitAQCAtNDUsNiArNDUsNyBAQCBzdGF0aWMgY2hhciAqa2V5X3BhdGhzW10gPSB7
-Cisgc3RhdGljIGZkZXZlbnQgbGlzdGVuZXJfZmRlOworIHN0YXRpYyBpbnQgZnJhbWV3b3JrX2Zk
-ID0gLTE7CisgCisrZXh0ZXJuIGludCBhZGJfYjY0X3B0b24oY2hhciBjb25zdCAqc3JjLCB1X2No
-YXIgKnRhcmdldCwgc2l6ZV90IHRhcmdzaXplKTsKKyAKKyBzdGF0aWMgdm9pZCByZWFkX2tleXMo
-Y29uc3QgY2hhciAqZmlsZSwgc3RydWN0IGxpc3Rub2RlICpsaXN0KQorIHsKK0BAIC03Miw3ICs3
-Myw3IEBAIHN0YXRpYyB2b2lkIHJlYWRfa2V5cyhjb25zdCBjaGFyICpmaWxlLCBzdHJ1Y3QgbGlz
-dG5vZGUgKmxpc3QpCisgICAgICAgICBpZiAoc2VwKQorICAgICAgICAgICAgICpzZXAgPSAnXDAn
-OworIAorLSAgICAgICAgcmV0ID0gX19iNjRfcHRvbihidWYsICh1X2NoYXIgKikma2V5LT5rZXks
-IHNpemVvZihrZXktPmtleSkgKyA0KTsKKysgICAgICAgIHJldCA9IGFkYl9iNjRfcHRvbihidWYs
-ICh1X2NoYXIgKikma2V5LT5rZXksIHNpemVvZihrZXktPmtleSkgKyA0KTsKKyAgICAgICAgIGlm
-IChyZXQgIT0gc2l6ZW9mKGtleS0+a2V5KSkgeworICAgICAgICAgICAgIEQoIiVzOiBJbnZhbGlk
-IGJhc2U2NCBkYXRhIHJldD0lZFxuIiwgZmlsZSwgcmV0KTsKKyAgICAgICAgICAgICBmcmVlKGtl
-eSk7CitkaWZmIC0tZ2l0IGEvY29yZS9hZGJkL2Jhc2U2NC5jIGIvY29yZS9hZGJkL2Jhc2U2NC5j
-CitpbmRleCA3MjcwNzAzLi45MWZjMWIyIDEwMDY0NAorLS0tIGEvY29yZS9hZGJkL2Jhc2U2NC5j
-CisrKysgYi9jb3JlL2FkYmQvYmFzZTY0LmMKK0BAIC0xMzQsNyArMTM0LDcgQEAgc3RhdGljIGNv
-bnN0IGNoYXIgUGFkNjQgPSAnPSc7CisgICAgKi8KKyAKKyBpbnQKKy1iNjRfbnRvcChzcmMsIHNy
-Y2xlbmd0aCwgdGFyZ2V0LCB0YXJnc2l6ZSkKKythZGJfYjY0X250b3Aoc3JjLCBzcmNsZW5ndGgs
-IHRhcmdldCwgdGFyZ3NpemUpCisgCXVfY2hhciBjb25zdCAqc3JjOworIAlzaXplX3Qgc3JjbGVu
-Z3RoOworIAljaGFyICp0YXJnZXQ7CitAQCAtMjEyLDcgKzIxMiw3IEBAIGI2NF9udG9wKHNyYywg
-c3JjbGVuZ3RoLCB0YXJnZXQsIHRhcmdzaXplKQorICAqLworIAorIGludAorLWI2NF9wdG9uKHNy
-YywgdGFyZ2V0LCB0YXJnc2l6ZSkKKythZGJfYjY0X3B0b24oc3JjLCB0YXJnZXQsIHRhcmdzaXpl
-KQorIAljaGFyIGNvbnN0ICpzcmM7CisgCXVfY2hhciAqdGFyZ2V0OworIAlzaXplX3QgdGFyZ3Np
-emU7CistLSAKKzIuNDcuMAorCmRpZmYgLS1naXQgYS9wYWNrYWdlL2FuZHJvaWQtdG9vbHMvMDAw
-My1GaXgtYnVpbGQtaXNzdWUtd2l0aC11Y2xpYmMucGF0Y2ggYi9wYWNrYWdlL2FuZHJvaWQtdG9v
-bHMvMDAwMy1GaXgtYnVpbGQtaXNzdWUtd2l0aC11Y2xpYmMucGF0Y2gKZGVsZXRlZCBmaWxlIG1v
-ZGUgMTAwNjQ0CmluZGV4IGE5NTEyNzE4NzMuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9hbmRy
-b2lkLXRvb2xzLzAwMDMtRml4LWJ1aWxkLWlzc3VlLXdpdGgtdWNsaWJjLnBhdGNoCisrKyAvZGV2
-L251bGwKQEAgLTEsNDAgKzAsMCBAQAotRnJvbSAwODJlZTgwZDM1MjRmYTM0NzQ2NDRjMDliNDQx
-ZDdmNzk0NzY3NWNjIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogR2FyeSBCaXNzb24g
-PGdhcnkuYmlzc29uQGJvdW5kYXJ5ZGV2aWNlcy5jb20+Ci1EYXRlOiBTdW4sIDEgRGVjIDIwMjQg
-MTU6NDM6NTYgKzAxMDAKLVN1YmplY3Q6IFtQQVRDSF0gRml4IGJ1aWxkIGlzc3VlIHdpdGggdWNs
-aWJjCi0KLVNpZ25lZC1vZmYtYnk6IEdhcnkgQmlzc29uIDxnYXJ5LmJpc3NvbkBib3VuZGFyeWRl
-dmljZXMuY29tPgotLS0tCi0gY29yZS9hZGIvYWRiX2F1dGhfY2xpZW50LmMgIHwgMiArLQotIGNv
-cmUvYWRiZC9hZGJfYXV0aF9jbGllbnQuYyB8IDIgKy0KLSAyIGZpbGVzIGNoYW5nZWQsIDIgaW5z
-ZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKLQotZGlmZiAtLWdpdCBhL2NvcmUvYWRiL2FkYl9h
-dXRoX2NsaWVudC5jIGIvY29yZS9hZGIvYWRiX2F1dGhfY2xpZW50LmMKLWluZGV4IDBiNDkxM2Uu
-LjA2OGQ4MzcgMTAwNjQ0Ci0tLS0gYS9jb3JlL2FkYi9hZGJfYXV0aF9jbGllbnQuYwotKysrIGIv
-Y29yZS9hZGIvYWRiX2F1dGhfY2xpZW50LmMKLUBAIC03Miw3ICs3Miw3IEBAIHN0YXRpYyB2b2lk
-IHJlYWRfa2V5cyhjb25zdCBjaGFyICpmaWxlLCBzdHJ1Y3QgbGlzdG5vZGUgKmxpc3QpCi0gICAg
-ICAgICBpZiAoc2VwKQotICAgICAgICAgICAgICpzZXAgPSAnXDAnOwotIAotLSAgICAgICAgcmV0
-ID0gX19iNjRfcHRvbihidWYsICh1X2NoYXIgKikma2V5LT5rZXksIHNpemVvZihrZXktPmtleSkg
-KyA0KTsKLSsgICAgICAgIHJldCA9IGI2NF9wdG9uKGJ1ZiwgKHVfY2hhciAqKSZrZXktPmtleSwg
-c2l6ZW9mKGtleS0+a2V5KSArIDQpOwotICAgICAgICAgaWYgKHJldCAhPSBzaXplb2Yoa2V5LT5r
-ZXkpKSB7Ci0gICAgICAgICAgICAgRCgiJXM6IEludmFsaWQgYmFzZTY0IGRhdGEgcmV0PSVkXG4i
-LCBmaWxlLCByZXQpOwotICAgICAgICAgICAgIGZyZWUoa2V5KTsKLWRpZmYgLS1naXQgYS9jb3Jl
-L2FkYmQvYWRiX2F1dGhfY2xpZW50LmMgYi9jb3JlL2FkYmQvYWRiX2F1dGhfY2xpZW50LmMKLWlu
-ZGV4IDBiNDkxM2UuLjA2OGQ4MzcgMTAwNjQ0Ci0tLS0gYS9jb3JlL2FkYmQvYWRiX2F1dGhfY2xp
-ZW50LmMKLSsrKyBiL2NvcmUvYWRiZC9hZGJfYXV0aF9jbGllbnQuYwotQEAgLTcyLDcgKzcyLDcg
-QEAgc3RhdGljIHZvaWQgcmVhZF9rZXlzKGNvbnN0IGNoYXIgKmZpbGUsIHN0cnVjdCBsaXN0bm9k
-ZSAqbGlzdCkKLSAgICAgICAgIGlmIChzZXApCi0gICAgICAgICAgICAgKnNlcCA9ICdcMCc7Ci0g
-Ci0tICAgICAgICByZXQgPSBfX2I2NF9wdG9uKGJ1ZiwgKHVfY2hhciAqKSZrZXktPmtleSwgc2l6
-ZW9mKGtleS0+a2V5KSArIDQpOwotKyAgICAgICAgcmV0ID0gYjY0X3B0b24oYnVmLCAodV9jaGFy
-ICopJmtleS0+a2V5LCBzaXplb2Yoa2V5LT5rZXkpICsgNCk7Ci0gICAgICAgICBpZiAocmV0ICE9
-IHNpemVvZihrZXktPmtleSkpIHsKLSAgICAgICAgICAgICBEKCIlczogSW52YWxpZCBiYXNlNjQg
-ZGF0YSByZXQ9JWRcbiIsIGZpbGUsIHJldCk7Ci0gICAgICAgICAgICAgZnJlZShrZXkpOwotLS0g
-Ci0yLjQ3LjAKLQotLSAKMi40Ny4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+This will make it easier to modify the patch series moving forward. No
+functional changes.
+
+On one patch, we added the SoB from Giulio, which was missing. Giulio
+was the original contributor of the patch, and nobody touched it since
+it was introduced.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                           |  8 +--
+ ...-Fix-makefiles-for-out-of-tree-build.patch |  7 ++-
+ ...0002-Fix-adbd-for-non-Ubuntu-systems.patch |  9 ++-
+ .../0003-Fix-build-issue-with-uclibc.patch    |  8 ++-
+ .../0004-Fix-build-issue-with-musl.patch      | 25 ++++----
+ ...efiles-use-pkgconf-to-get-libs-deps.patch} | 47 +++++++++------
+ ...006-Fix-build-on-big-endian-systems.patch} | 20 +++++--
+ ...clude-cdefs.h-wherever-it-is-needed.patch} | 18 ++++--
+ ...smacros.h-to-compile-with-glibc-2.28.patch | 42 -------------
+ ...minor-major-build-failure-due-to-gli.patch | 59 +++++++++++++++++++
+ ...les-for-out-of-tree-ext4_utils-build.patch |  4 +-
+ ...atch-for-openssl-1.1.0-compatibility.patch |  4 +-
+ ...stboot.c-reorder-functions-to-avoid-.patch |  4 +-
+ ...parse_read.c-add-missing-output_file.patch |  4 +-
+ ...s-make_ext4fs_main.c-disable-Android.patch |  4 +-
+ ...014-core-adbd-adb.c-open-code-capset.patch |  4 +-
+ ...b.c-include-correct-header-for-prctl.patch |  4 +-
+ 17 files changed, 162 insertions(+), 109 deletions(-)
+ rename package/android-tools/{0005-Use-pkgconf-to-get-libs-deps.patch => 0005-makefiles-use-pkgconf-to-get-libs-deps.patch} (57%)
+ rename package/android-tools/{0006-fix-big-endian-build.patch => 0006-Fix-build-on-big-endian-systems.patch} (75%)
+ rename package/android-tools/{0007-include-cdefs-h-when-needed.patch => 0007-Include-cdefs.h-wherever-it-is-needed.patch} (71%)
+ delete mode 100644 package/android-tools/0008-Include-sysmacros.h-to-compile-with-glibc-2.28.patch
+ create mode 100644 package/android-tools/0008-usb_linux.c-fix-minor-major-build-failure-due-to-gli.patch
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index b793026881..11e410b4ea 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -273,10 +273,10 @@ package/android-tools/0001-Fix-makefiles-for-out-of-tree-build.patch lib_patch.U
+ package/android-tools/0002-Fix-adbd-for-non-Ubuntu-systems.patch lib_patch.Upstream
+ package/android-tools/0003-Fix-build-issue-with-uclibc.patch lib_patch.Upstream
+ package/android-tools/0004-Fix-build-issue-with-musl.patch lib_patch.Upstream
+-package/android-tools/0005-Use-pkgconf-to-get-libs-deps.patch lib_patch.Upstream
+-package/android-tools/0006-fix-big-endian-build.patch lib_patch.Upstream
+-package/android-tools/0007-include-cdefs-h-when-needed.patch lib_patch.Upstream
+-package/android-tools/0008-Include-sysmacros.h-to-compile-with-glibc-2.28.patch lib_patch.Sob lib_patch.Upstream
++package/android-tools/0005-makefiles-use-pkgconf-to-get-libs-deps.patch lib_patch.Upstream
++package/android-tools/0006-Fix-build-on-big-endian-systems.patch lib_patch.Upstream
++package/android-tools/0007-Include-cdefs.h-wherever-it-is-needed.patch lib_patch.Upstream
++package/android-tools/0008-usb_linux.c-fix-minor-major-build-failure-due-to-gli.patch lib_patch.Upstream
+ package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch lib_patch.Upstream
+ package/android-tools/0010-adb-added-patch-for-openssl-1.1.0-compatibility.patch lib_patch.Upstream
+ package/aoetools/0001-Change-shell-script-interpreter-from-bin-bash-to-bin.patch lib_patch.Upstream
+diff --git a/package/android-tools/0001-Fix-makefiles-for-out-of-tree-build.patch b/package/android-tools/0001-Fix-makefiles-for-out-of-tree-build.patch
+index af0723620f..ad047657a1 100644
+--- a/package/android-tools/0001-Fix-makefiles-for-out-of-tree-build.patch
++++ b/package/android-tools/0001-Fix-makefiles-for-out-of-tree-build.patch
+@@ -1,4 +1,7 @@
+-[PATCH] Fix makefiles for out-of-tree build
++From 1fe49c34aa3e32e801af5c56293ec71ff6e7e2bc Mon Sep 17 00:00:00 2001
++From: Gary Bisson <gary.bisson@boundarydevices.com>
++Date: Sun, 1 Dec 2024 15:43:17 +0100
++Subject: [PATCH] Fix makefiles for out-of-tree build
+ 
+ Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+ ---
+@@ -158,5 +161,5 @@ index 9e8b751..94a069b 100644
+  LIBS+= -lz -lselinux
+  
+ -- 
+-2.5.1
++2.47.0
+ 
+diff --git a/package/android-tools/0002-Fix-adbd-for-non-Ubuntu-systems.patch b/package/android-tools/0002-Fix-adbd-for-non-Ubuntu-systems.patch
+index 35f6c8a3be..7f39e6662b 100644
+--- a/package/android-tools/0002-Fix-adbd-for-non-Ubuntu-systems.patch
++++ b/package/android-tools/0002-Fix-adbd-for-non-Ubuntu-systems.patch
+@@ -1,4 +1,7 @@
+-[PATCH] Fix adbd for non-Ubuntu systems
++From d433d5c340f3b36de58ea8550fd140dbdaea13b4 Mon Sep 17 00:00:00 2001
++From: Gary Bisson <gary.bisson@boundarydevices.com>
++Date: Sun, 1 Dec 2024 15:43:33 +0100
++Subject: [PATCH] Fix adbd for non-Ubuntu systems
+ 
+ Remove glib/dbus dependencies and partially restore services.c to be
+ closer to the original source code in order to run on systems without
+@@ -7,7 +10,7 @@ sudo.
+ Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+ ---
+  core/adbd/adb.c          |   1 -
+- core/adbd/services.c     | 160 ++++-------------------------------------------
++ core/adbd/services.c     | 160 +++------------------------------------
+  debian/makefiles/adbd.mk |   4 +-
+  3 files changed, 14 insertions(+), 151 deletions(-)
+ 
+@@ -260,5 +263,5 @@ index 49dab8c..22c1816 100644
+  OBJS= $(patsubst %, %.o, $(basename $(SRCS)))
+  
+ -- 
+-2.5.1
++2.47.0
+ 
+diff --git a/package/android-tools/0003-Fix-build-issue-with-uclibc.patch b/package/android-tools/0003-Fix-build-issue-with-uclibc.patch
+index 95517c307b..a951271873 100644
+--- a/package/android-tools/0003-Fix-build-issue-with-uclibc.patch
++++ b/package/android-tools/0003-Fix-build-issue-with-uclibc.patch
+@@ -1,7 +1,11 @@
+-[PATCH] Fix build issue with uclibc
++From 082ee80d3524fa3474644c09b441d7f7947675cc Mon Sep 17 00:00:00 2001
++From: Gary Bisson <gary.bisson@boundarydevices.com>
++Date: Sun, 1 Dec 2024 15:43:56 +0100
++Subject: [PATCH] Fix build issue with uclibc
+ 
+ Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+ ---
++ core/adb/adb_auth_client.c  | 2 +-
+  core/adbd/adb_auth_client.c | 2 +-
+  2 files changed, 2 insertions(+), 2 deletions(-)
+ 
+@@ -32,5 +36,5 @@ index 0b4913e..068d837 100644
+              D("%s: Invalid base64 data ret=%d\n", file, ret);
+              free(key);
+ -- 
+-2.6.1
++2.47.0
+ 
+diff --git a/package/android-tools/0004-Fix-build-issue-with-musl.patch b/package/android-tools/0004-Fix-build-issue-with-musl.patch
+index 964eb87a6d..affd75b259 100644
+--- a/package/android-tools/0004-Fix-build-issue-with-musl.patch
++++ b/package/android-tools/0004-Fix-build-issue-with-musl.patch
+@@ -1,4 +1,7 @@
+-[PATCH] Fix build issue with musl
++From d14ca3e3362448590adaebacb76d4d8046f9b556 Mon Sep 17 00:00:00 2001
++From: Gary Bisson <gary.bisson@boundarydevices.com>
++Date: Sun, 1 Dec 2024 15:44:16 +0100
++Subject: [PATCH] Fix build issue with musl
+ 
+ arpa/nameser.h doesn't use the same macro name to avoid several
+ inclusions.
+@@ -8,19 +11,12 @@ TEMP_FAILURE_RETRY macro.
+ 
+ Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+ ---
+- core/adbd/arpa_nameser.h              | 12 +++++++++---
+- core/adbd/base64.c                    |  1 -
+- core/adbd/framebuffer_service.c       |  1 +
+- core/adbd/qemu_pipe.h                 |  1 -
+- core/include/cutils/android_reboot.h  |  8 ++++++--
+- core/include/cutils/bitops.h          | 10 ++++++----
+- core/include/cutils/partition_utils.h |  8 ++++++--
+- extras/ext4_utils/sha1.c              |  3 ---
+- extras/ext4_utils/sha1.h              | 13 ++++++-------
+- 9 files changed, 34 insertions(+), 23 deletions(-)
++ core/adbd/arpa_nameser.h        | 3 +++
++ core/adbd/framebuffer_service.c | 1 +
++ 2 files changed, 4 insertions(+)
+ 
+ diff --git a/core/adbd/arpa_nameser.h b/core/adbd/arpa_nameser.h
+-index 438dc04..b2a28d6 100644
++index 438dc04..f3d2fee 100644
+ --- a/core/adbd/arpa_nameser.h
+ +++ b/core/adbd/arpa_nameser.h
+ @@ -52,6 +52,8 @@
+@@ -32,7 +28,7 @@ index 438dc04..b2a28d6 100644
+  
+  #define BIND_4_COMPAT
+  
+-@@ -574,4 +579,5 @@ __END_DECLS
++@@ -574,4 +576,5 @@ __END_DECLS
+  #define  XLOG(...)   do {} while (0)
+  #endif
+  
+@@ -51,4 +47,5 @@ index 20c08d2..48e0241 100644
+  #include <sys/ioctl.h>
+  #include <sys/mman.h>
+ -- 
+-2.6.1
++2.47.0
++
+diff --git a/package/android-tools/0005-Use-pkgconf-to-get-libs-deps.patch b/package/android-tools/0005-makefiles-use-pkgconf-to-get-libs-deps.patch
+similarity index 57%
+rename from package/android-tools/0005-Use-pkgconf-to-get-libs-deps.patch
+rename to package/android-tools/0005-makefiles-use-pkgconf-to-get-libs-deps.patch
+index 63ea1fb6a4..8136ac832d 100644
+--- a/package/android-tools/0005-Use-pkgconf-to-get-libs-deps.patch
++++ b/package/android-tools/0005-makefiles-use-pkgconf-to-get-libs-deps.patch
+@@ -1,4 +1,7 @@
+-makefiles: use pkgconf to get libs deps
++From 10f3f6fb75da72f155e72794d6647e4fa21a87d0 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Sun, 1 Dec 2024 15:45:01 +0100
++Subject: [PATCH] makefiles: use pkgconf to get libs deps
+ 
+ LIBS lists library dependencies without taking into account static linking
+ that need ordered listing and more libraries listed since differently from
+@@ -10,26 +13,36 @@ needed libraries are listed during linking.
+ 
+ Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+ ---
+-diff -urpN android-tools-4.2.2+git20130218.orig/debian/makefiles/adbd.mk android-tools-4.2.2+git20130218/debian/makefiles/adbd.mk
+---- android-tools-4.2.2+git20130218.orig/debian/makefiles/adbd.mk	2019-04-08 16:05:02.967710428 +0200
+-+++ android-tools-4.2.2+git20130218/debian/makefiles/adbd.mk	2019-04-08 16:30:42.463084426 +0200
++ debian/makefiles/adb.mk  | 2 +-
++ debian/makefiles/adbd.mk | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/debian/makefiles/adb.mk b/debian/makefiles/adb.mk
++index 654b9f1..a03c93a 100644
++--- a/debian/makefiles/adb.mk
+++++ b/debian/makefiles/adb.mk
++@@ -41,7 +41,7 @@ CPPFLAGS+= -DHAVE_TERMIO_H
++ CPPFLAGS+= -I$(SRCDIR)/core/adb
++ CPPFLAGS+= -I$(SRCDIR)/core/include
++ 
++-LIBS+= -lc -lpthread -lz -lcrypto
+++LIBS+= -lc -lpthread -lz `pkg-config --libs libcrypto`
++ 
++ OBJS= $(SRCS:.c=.o)
++ 
++diff --git a/debian/makefiles/adbd.mk b/debian/makefiles/adbd.mk
++index 22c1816..a8eee3a 100644
++--- a/debian/makefiles/adbd.mk
+++++ b/debian/makefiles/adbd.mk
+ @@ -44,7 +44,7 @@ CPPFLAGS+= -DADBD_NON_ANDROID
+  CPPFLAGS+= -I$(SRCDIR)/core/adbd
+  CPPFLAGS+= -I$(SRCDIR)/core/include
+-
++ 
+ -LIBS+= -lc -lpthread -lz -lcrypto -lcrypt
+ +LIBS+= -lc -lpthread -lz `pkg-config --libs libcrypto` -lcrypt
+-
++ 
+  OBJS= $(patsubst %, %.o, $(basename $(SRCS)))
++ 
++-- 
++2.47.0
+ 
+-diff -urpN android-tools-4.2.2+git20130218.orig/debian/makefiles/adb.mk android-tools-4.2.2+git20130218/debian/makefiles/adb.mk
+---- android-tools-4.2.2+git20130218.orig/debian/makefiles/adb.mk	2019-04-08 16:05:02.959701400 +0200
+-+++ android-tools-4.2.2+git20130218/debian/makefiles/adb.mk	2019-04-08 16:31:06.529426250 +0200
+-@@ -41,7 +41,7 @@ CPPFLAGS+= -DHAVE_TERMIO_H
+- CPPFLAGS+= -I$(SRCDIR)/core/adb
+- CPPFLAGS+= -I$(SRCDIR)/core/include
+-
+--LIBS+= -lc -lpthread -lz -lcrypto
+-+LIBS+= -lc -lpthread -lz `pkg-config --libs libcrypto`
+-
+- OBJS= $(SRCS:.c=.o)
+diff --git a/package/android-tools/0006-fix-big-endian-build.patch b/package/android-tools/0006-Fix-build-on-big-endian-systems.patch
+similarity index 75%
+rename from package/android-tools/0006-fix-big-endian-build.patch
+rename to package/android-tools/0006-Fix-build-on-big-endian-systems.patch
+index c35fdcb8c4..d7fcb1cf0f 100644
+--- a/package/android-tools/0006-fix-big-endian-build.patch
++++ b/package/android-tools/0006-Fix-build-on-big-endian-systems.patch
+@@ -1,4 +1,7 @@
+-Fix build on big endian systems
++From 8f7e9458dbfca969d3edc9cf409b3439e98f4c5a Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 1 Dec 2024 15:45:26 +0100
++Subject: [PATCH] Fix build on big endian systems
+ 
+ The usb_linux_client.c file defines cpu_to_le16/32 by using the C
+ library htole16/32 function calls. However, cpu_to_le16/32 are used
+@@ -14,9 +17,13 @@ To solve this, we simply open-code cpu_to_le16/32 in a way that allows
+ them to be used when initializing structures.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ core/adb/usb_linux_client.c  | 11 +++++++++--
++ core/adbd/usb_linux_client.c | 11 +++++++++--
++ 2 files changed, 18 insertions(+), 4 deletions(-)
+ 
+-Index: b/core/adb/usb_linux_client.c
+-===================================================================
++diff --git a/core/adb/usb_linux_client.c b/core/adb/usb_linux_client.c
++index fb1dad0..a981e96 100644
+ --- a/core/adb/usb_linux_client.c
+ +++ b/core/adb/usb_linux_client.c
+ @@ -34,8 +34,15 @@
+@@ -37,8 +44,8 @@ Index: b/core/adb/usb_linux_client.c
+  
+  struct usb_handle
+  {
+-Index: b/core/adbd/usb_linux_client.c
+-===================================================================
++diff --git a/core/adbd/usb_linux_client.c b/core/adbd/usb_linux_client.c
++index 33875a8..0e4d200 100644
+ --- a/core/adbd/usb_linux_client.c
+ +++ b/core/adbd/usb_linux_client.c
+ @@ -34,8 +34,15 @@
+@@ -59,3 +66,6 @@ Index: b/core/adbd/usb_linux_client.c
+  
+  struct usb_handle
+  {
++-- 
++2.47.0
++
+diff --git a/package/android-tools/0007-include-cdefs-h-when-needed.patch b/package/android-tools/0007-Include-cdefs.h-wherever-it-is-needed.patch
+similarity index 71%
+rename from package/android-tools/0007-include-cdefs-h-when-needed.patch
+rename to package/android-tools/0007-Include-cdefs.h-wherever-it-is-needed.patch
+index da4ee13a17..d4e483c6d7 100644
+--- a/package/android-tools/0007-include-cdefs-h-when-needed.patch
++++ b/package/android-tools/0007-Include-cdefs.h-wherever-it-is-needed.patch
+@@ -1,4 +1,7 @@
+-Include cdefs.h wherever it is needed
++From d3f0157bf2ac1afc9a810ccbe188110df724129d Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 1 Dec 2024 15:46:15 +0100
++Subject: [PATCH] Include cdefs.h wherever it is needed
+ 
+ cdefs.h is included from within a lot of glibc headers, so it almost
+ invariably and automagically gets pulled in with glibc.
+@@ -11,12 +14,12 @@ So we must include it when we are going to use macros it provides.
+ 
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ ---
+- core/adbd/services.c                  |  1 +
+- core/libcutils/android_reboot.c       |  1 +
+- 2 files changed, 2 insertions(+), 0 deletion(-)
++ core/adbd/services.c            | 1 +
++ core/libcutils/android_reboot.c | 1 +
++ 2 files changed, 2 insertions(+)
+ 
+ diff --git a/core/adbd/services.c b/core/adbd/services.c
+-index 20c08d2..48e0241 100644
++index 5adcefe..6de1951 100644
+ --- a/core/adbd/services.c
+ +++ b/core/adbd/services.c
+ @@ -20,6 +20,7 @@
+@@ -28,7 +31,7 @@ index 20c08d2..48e0241 100644
+  #include "sysdeps.h"
+  
+ diff --git a/core/libcutils/android_reboot.c b/core/libcutils/android_reboot.c
+-index 20c08d2..48e0241 100644
++index 79c05f8..9386006 100644
+ --- a/core/libcutils/android_reboot.c
+ +++ b/core/libcutils/android_reboot.c
+ @@ -23,6 +23,7 @@
+@@ -39,3 +42,6 @@ index 20c08d2..48e0241 100644
+  
+  #include <cutils/android_reboot.h>
+  
++-- 
++2.47.0
++
+diff --git a/package/android-tools/0008-Include-sysmacros.h-to-compile-with-glibc-2.28.patch b/package/android-tools/0008-Include-sysmacros.h-to-compile-with-glibc-2.28.patch
+deleted file mode 100644
+index 77b457f604..0000000000
+--- a/package/android-tools/0008-Include-sysmacros.h-to-compile-with-glibc-2.28.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-usb_linux.c: fix minor()/major() build failure due to glibc 2.28
+-
+-glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
+-and therefore <sys/sysmacros.h> must be included explicitly when
+-major()/minor() are used.
+-
+-This commit adds a patch to directly include <sys/sysmacros.h> into
+-all usb_linux.c files where minor() and major() macros are used.
+-
+-diff -urpN host-android-tools-4.2.2+git20130218.orig/core/adb/usb_linux.c host-android-tools-4.2.2+git20130218/core/adb/usb_linux.c
+---- host-android-tools-4.2.2+git20130218.orig/core/adb/usb_linux.c	2013-02-18 15:49:03.000000000 +0100
+-+++ host-android-tools-4.2.2+git20130218/core/adb/usb_linux.c	2018-09-09 11:47:16.476292546 +0200
+-@@ -20,6 +20,7 @@
+- #include <string.h>
+- 
+- #include <sys/ioctl.h>
+-+#include <sys/sysmacros.h>
+- #include <sys/types.h>
+- #include <sys/time.h>
+- #include <dirent.h>
+-diff -urpN host-android-tools-4.2.2+git20130218.orig/core/adbd/usb_linux.c host-android-tools-4.2.2+git20130218/core/adbd/usb_linux.c
+---- host-android-tools-4.2.2+git20130218.orig/core/adbd/usb_linux.c	2018-09-09 02:32:57.154503866 +0200
+-+++ host-android-tools-4.2.2+git20130218/core/adbd/usb_linux.c	2018-09-09 11:47:28.148353880 +0200
+-@@ -20,6 +20,7 @@
+- #include <string.h>
+- 
+- #include <sys/ioctl.h>
+-+#include <sys/sysmacros.h>
+- #include <sys/types.h>
+- #include <sys/time.h>
+- #include <dirent.h>
+-diff -urpN host-android-tools-4.2.2+git20130218.orig/core/fastboot/usb_linux.c host-android-tools-4.2.2+git20130218/core/fastboot/usb_linux.c
+---- host-android-tools-4.2.2+git20130218.orig/core/fastboot/usb_linux.c	2013-02-18 15:49:03.000000000 +0100
+-+++ host-android-tools-4.2.2+git20130218/core/fastboot/usb_linux.c	2018-09-09 11:46:53.028169154 +0200
+-@@ -33,6 +33,7 @@
+- 
+- #include <sys/ioctl.h>
+- #include <sys/stat.h>
+-+#include <sys/sysmacros.h>
+- #include <sys/types.h>
+- #include <dirent.h>
+- #include <fcntl.h>
+diff --git a/package/android-tools/0008-usb_linux.c-fix-minor-major-build-failure-due-to-gli.patch b/package/android-tools/0008-usb_linux.c-fix-minor-major-build-failure-due-to-gli.patch
+new file mode 100644
+index 0000000000..38b3b9a482
+--- /dev/null
++++ b/package/android-tools/0008-usb_linux.c-fix-minor-major-build-failure-due-to-gli.patch
+@@ -0,0 +1,59 @@
++From 99c20bd08065d9c78d81ba7aa48a2a113ab28c26 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Sun, 1 Dec 2024 15:46:50 +0100
++Subject: [PATCH] usb_linux.c: fix minor()/major() build failure due to glibc
++ 2.28
++
++glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
++and therefore <sys/sysmacros.h> must be included explicitly when
++major()/minor() are used.
++
++This commit adds a patch to directly include <sys/sysmacros.h> into
++all usb_linux.c files where minor() and major() macros are used.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ core/adb/usb_linux.c      | 1 +
++ core/adbd/usb_linux.c     | 1 +
++ core/fastboot/usb_linux.c | 1 +
++ 3 files changed, 3 insertions(+)
++
++diff --git a/core/adb/usb_linux.c b/core/adb/usb_linux.c
++index 7bf2057..f748267 100644
++--- a/core/adb/usb_linux.c
+++++ b/core/adb/usb_linux.c
++@@ -20,6 +20,7 @@
++ #include <string.h>
++ 
++ #include <sys/ioctl.h>
+++#include <sys/sysmacros.h>
++ #include <sys/types.h>
++ #include <sys/time.h>
++ #include <dirent.h>
++diff --git a/core/adbd/usb_linux.c b/core/adbd/usb_linux.c
++index 7bf2057..f748267 100644
++--- a/core/adbd/usb_linux.c
+++++ b/core/adbd/usb_linux.c
++@@ -20,6 +20,7 @@
++ #include <string.h>
++ 
++ #include <sys/ioctl.h>
+++#include <sys/sysmacros.h>
++ #include <sys/types.h>
++ #include <sys/time.h>
++ #include <dirent.h>
++diff --git a/core/fastboot/usb_linux.c b/core/fastboot/usb_linux.c
++index b7a9ca3..2dac62b 100644
++--- a/core/fastboot/usb_linux.c
+++++ b/core/fastboot/usb_linux.c
++@@ -33,6 +33,7 @@
++ 
++ #include <sys/ioctl.h>
++ #include <sys/stat.h>
+++#include <sys/sysmacros.h>
++ #include <sys/types.h>
++ #include <dirent.h>
++ #include <fcntl.h>
++-- 
++2.47.0
++
+diff --git a/package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch b/package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch
+index 80ea1ec1fe..94216102cf 100644
+--- a/package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch
++++ b/package/android-tools/0009-Fix-makefiles-for-out-of-tree-ext4_utils-build.patch
+@@ -1,4 +1,4 @@
+-From d24abbec201975a5eb7f8589614cfb424b8c80b6 Mon Sep 17 00:00:00 2001
++From 3c4319da20fab4e48ec02e28f5b013b4a33b5fe4 Mon Sep 17 00:00:00 2001
+ From: Alex Kaplan <kaplan2539@gmail.com>
+ Date: Sat, 10 Nov 2018 19:50:51 -0800
+ Subject: [PATCH] Fix makefiles for out-of-tree ext4_utils build
+@@ -44,5 +44,5 @@ index cb64916..c5904bf 100644
+  LIBS+= -lz -lselinux
+  
+ -- 
+-2.7.4
++2.47.0
+ 
+diff --git a/package/android-tools/0010-adb-added-patch-for-openssl-1.1.0-compatibility.patch b/package/android-tools/0010-adb-added-patch-for-openssl-1.1.0-compatibility.patch
+index 2de338368f..96ca5b737a 100644
+--- a/package/android-tools/0010-adb-added-patch-for-openssl-1.1.0-compatibility.patch
++++ b/package/android-tools/0010-adb-added-patch-for-openssl-1.1.0-compatibility.patch
+@@ -1,4 +1,4 @@
+-From bb3da0e32be4f2260940edf3ee0f88103dfd0dcc Mon Sep 17 00:00:00 2001
++From 79bf5cdee607241434e0d1c5b72e724eb1d20102 Mon Sep 17 00:00:00 2001
+ From: Eneas U de Queiroz <cote2004-github@yahoo.com>
+ Date: Tue, 5 Feb 2019 01:12:19 +0200
+ Subject: [PATCH] adb: added patch for openssl 1.1.0 compatibility
+@@ -43,5 +43,5 @@ index 9039d42..debd2ef 100644
+  out:
+      BN_free(n0inv);
+ -- 
+-2.14.1
++2.47.0
+ 
+diff --git a/package/android-tools/0011-core-fastboot-fastboot.c-reorder-functions-to-avoid-.patch b/package/android-tools/0011-core-fastboot-fastboot.c-reorder-functions-to-avoid-.patch
+index b5592e6992..17a7619bf0 100644
+--- a/package/android-tools/0011-core-fastboot-fastboot.c-reorder-functions-to-avoid-.patch
++++ b/package/android-tools/0011-core-fastboot-fastboot.c-reorder-functions-to-avoid-.patch
+@@ -1,4 +1,4 @@
+-From 9724d78fda4eb023f83d2fd30e665b436d7a7f97 Mon Sep 17 00:00:00 2001
++From 6919b6619a9c744d2220f7af6e211c50662ba94b Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Date: Sun, 14 Jul 2024 11:41:10 +0200
+ Subject: [PATCH] core/fastboot/fastboot.c: reorder functions to avoid implicit
+@@ -50,5 +50,5 @@ index 3de6d7d..9b2c86f 100644
+  {
+      if (match_fastboot_with_serial(info, NULL) == 0) {
+ -- 
+-2.45.2
++2.47.0
+ 
+diff --git a/package/android-tools/0012-core-libsparse-sparse_read.c-add-missing-output_file.patch b/package/android-tools/0012-core-libsparse-sparse_read.c-add-missing-output_file.patch
+index 9a6a77eceb..9e35a4782d 100644
+--- a/package/android-tools/0012-core-libsparse-sparse_read.c-add-missing-output_file.patch
++++ b/package/android-tools/0012-core-libsparse-sparse_read.c-add-missing-output_file.patch
+@@ -1,4 +1,4 @@
+-From 2812c2005cfa4bfc5741651c8310e36f28c0327e Mon Sep 17 00:00:00 2001
++From 72b9e79c81a237f1839afb4fdee680eafdd180d9 Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Date: Sun, 14 Jul 2024 11:41:56 +0200
+ Subject: [PATCH] core/libsparse/sparse_read.c: add missing output_file.h
+@@ -33,5 +33,5 @@ index 704bcfa..0a8f838 100644
+  #if defined(__APPLE__) && defined(__MACH__)
+  #define lseek64 lseek
+ -- 
+-2.45.2
++2.47.0
+ 
+diff --git a/package/android-tools/0013-extras-ext4_utils-make_ext4fs_main.c-disable-Android.patch b/package/android-tools/0013-extras-ext4_utils-make_ext4fs_main.c-disable-Android.patch
+index c11e88bf07..b6902982f7 100644
+--- a/package/android-tools/0013-extras-ext4_utils-make_ext4fs_main.c-disable-Android.patch
++++ b/package/android-tools/0013-extras-ext4_utils-make_ext4fs_main.c-disable-Android.patch
+@@ -1,4 +1,4 @@
+-From 83f9bed233b86dd2bbf603611b13b673caeccb69 Mon Sep 17 00:00:00 2001
++From 01e86db8460d873aec15d658bfc717b026c0545f Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Date: Sun, 14 Jul 2024 11:46:51 +0200
+ Subject: [PATCH] extras/ext4_utils/make_ext4fs_main.c: disable
+@@ -50,5 +50,5 @@ index 17d3735..cb58011 100644
+  	if (!sehnd && mountpoint) {
+  		sehnd = selinux_android_file_context_handle();
+ -- 
+-2.45.2
++2.47.0
+ 
+diff --git a/package/android-tools/0014-core-adbd-adb.c-open-code-capset.patch b/package/android-tools/0014-core-adbd-adb.c-open-code-capset.patch
+index 1496b8bca4..36a9208c60 100644
+--- a/package/android-tools/0014-core-adbd-adb.c-open-code-capset.patch
++++ b/package/android-tools/0014-core-adbd-adb.c-open-code-capset.patch
+@@ -1,4 +1,4 @@
+-From 2b5060146b0890f7f1a63ef891af1358b8cdf9bc Mon Sep 17 00:00:00 2001
++From 850fd3f4a0384ebe492a466a9b1149060619aacb Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Date: Sun, 14 Jul 2024 12:57:22 +0200
+ Subject: [PATCH] core/adbd/adb.c: open code capset()
+@@ -48,5 +48,5 @@ index 7fe6445..98b1de1 100644
+          D("Local port disabled\n");
+      } else {
+ -- 
+-2.45.2
++2.47.0
+ 
+diff --git a/package/android-tools/0015-core-adbd-adb.c-include-correct-header-for-prctl.patch b/package/android-tools/0015-core-adbd-adb.c-include-correct-header-for-prctl.patch
+index cfbefecb26..0a35dbcc74 100644
+--- a/package/android-tools/0015-core-adbd-adb.c-include-correct-header-for-prctl.patch
++++ b/package/android-tools/0015-core-adbd-adb.c-include-correct-header-for-prctl.patch
+@@ -1,4 +1,4 @@
+-From c14070011e070d8674cf3578708cbae433090a47 Mon Sep 17 00:00:00 2001
++From 8f351150de38641c8ce2e9b7f9a5cba29ccd8f7e Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Date: Sun, 14 Jul 2024 13:00:02 +0200
+ Subject: [PATCH] core/adbd/adb.c: include correct header for prctl()
+@@ -30,5 +30,5 @@ index 98b1de1..10f420b 100644
+  #else
+  #include "usb_vendors.h"
+ -- 
+-2.45.2
++2.47.0
+ 
+-- 
+2.47.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
