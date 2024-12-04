@@ -1,96 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A1F7E7716D
-	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 18:29:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A84CCE77171
+	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 18:29:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2DA7412AC;
-	Wed,  4 Dec 2024 18:29:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58128607E2;
+	Wed,  4 Dec 2024 18:29:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n_TqysSoJwsS; Wed,  4 Dec 2024 18:29:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o6a08ztVJZtd; Wed,  4 Dec 2024 18:29:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE2134130D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2443660B51
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE2134130D;
-	Wed,  4 Dec 2024 18:29:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 14BCA1DDB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2443660B51;
+	Wed,  4 Dec 2024 18:29:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 33BF01DD3
  for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 02A464130D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 17FB360901
  for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eZgdGBTEZIhs for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v15sefpqYR-1 for <buildroot@buildroot.org>;
  Wed,  4 Dec 2024 18:29:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9F27F412AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F27F412AC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 864A1607B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 864A1607B2
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9F27F412AC
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 864A1607B2
  for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:31 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.124.249]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MnaoZ-1u2ARV1JxN-00ZfCU; Wed, 04
- Dec 2024 19:29:24 +0100
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MsHns-1tdAnh0tC6-013gQH; Wed, 04
+ Dec 2024 19:29:23 +0100
 To: buildroot@buildroot.org
-Date: Wed,  4 Dec 2024 19:29:12 +0100
-Message-ID: <20241204182913.4085670-6-fiona.klute@gmx.de>
+Date: Wed,  4 Dec 2024 19:29:09 +0100
+Message-ID: <20241204182913.4085670-3-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241204182913.4085670-1-fiona.klute@gmx.de>
 References: <20241204182913.4085670-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:cQMlyh/P6UCXVvzJI/ajaRoPUJ5tKC4Ga6iVzHgqgSgnCtKZ4v1
- Q0284p7pKFWkRyaMNA7gGWHADfTvm7AmsZ5Guu+Ib4KQ+P4fZRMuhFY3ksEH2tBmUBsgN18
- 0Su+nPha7i54QsWFb9laJOiDtuFBA+LUkI5MsZb5qtjAj3QoL/Mre2N165CX5KyBGvkUj7m
- VzJWW+sXXtQkl4dQ0sogg==
-UI-OutboundReport: notjunk:1;M01:P0:9shwe/jfxRA=;CIVj+JXKsFlUdzygFpexz84lSGY
- tzYavJ+/eVzB54wbTgiHky9P1FoYAh/dsIMgRrIpmS6ViwB5oV1wnaT3v9T7gMtFYnrnmuR9H
- mJ8x7Spe1j8bLjjgazikZg06Cl8x3glgah3z1C022/WFNas3fivW9vw3hY0YXFzejj3gka35D
- M2TnnC9CQDtbON8hzdKaA3dRaY3vJ6xvgXIBy91VKP/izg07vPCzakOcQxMgrJILIHyh2v4VK
- +BeCjSoKapfWNlFu4uT2F/4zQKZtPs4ZDx+tvUAl9qf0HQ41SecnyaQ24X8IM5zwLdEX76Bdq
- ZSsCasWSVNfbm8NfgMY4VUeQQWlwC/ugPA4hAnd8p1kvWBxLALR/1qadmHf0e0NS4owagEcW8
- z+xoAwzQwjRJVqCYSvSmj4UX+5hwgx/plvueqrb/uRfmcmzv3rU4+x8qyekeytGGxjg0fagWQ
- uA9jJ/gppXOOA/F1rfzOvUSUiTq+MRVtOpbJtZXcusOaCJyOejlgj1CPOEWmeX2o+Viy5cDWL
- 70sVrU8/ReOBjD3VG2VgtB5JfkVwxxCZiMyuz76gm2lBaRW1Yo9LobpqZO5TBRHMTF7zbVTyc
- 9APpZGbj/nA1xoPmNRExxhKPElFNjt1QUHdsGaZ7+5+L8NpAMBWwPqRcPkc03HzsKfgLVLblO
- FDpiTq6dSehV0oNReI0ggDIfXXybN/4IORnEyJTb5pwrgH4bIlEZdJQKrXFQtK9H+Bt0e0XnC
- Ql7w7rnv5QIPUazHvWaUmDbJxnQO/00n0uueJjMKIU+hD8+ehXamwgKUe1++rjewHOMkLD1n1
- WrhL6p29x8qxmVVzIhhmE5TEi12oRy4KOxmLzs9fxpsJrVRQZOWVOMEuaFNUn+7aEcxSEUbEU
- mtAjDBR+BiZyX1+sqWZ+Hiyc6cOz5L63HpRkO3sSofz6H1rUlVj1286MZ9mFgv3w9c9gm9tzl
- SRQdKZAByLULfz4xYmHRclTklZkf9I3CP/aS4AyE9cjBe9AiuKtFO7fCa6DDvnQvITLeba/AA
- UU4hgQSN2ekBiB88jmWDz8O/uyYyp1N1Locgn4fFEIUH3ZCnSaACHHG3MQ2I/tjz9ctZOsBA2
- BeX47DaQ4WzvvaDRZh7tLZ0xth9F1G
+X-Provags-ID: V03:K1:9RWkEPrlwMAPmHh47uliClR9EEgng0DfrjQ63F7MVv/7C+TOt6j
+ ozE/TnG11m9zH2nHXV2ydjMu3SAFqIgGLqYvIFc4qTB8LqLjkYNXKtNlb7pVpwHjqUQWO+R
+ PkZWyYzbRRRxZOyHMD7QMLmCenyA35LP2QsaiMcZZ8+beSRDwqNoAaLp8tiiYJxib9c/XJZ
+ Vg7sQUpVJ75AB0lpalQHg==
+UI-OutboundReport: notjunk:1;M01:P0:Cph3ivsHXpA=;drUX7bJuQHMiQ3uT5seNWgj8tAn
+ W0eY3QDA7X44LKyusTkE6h1iW9ZkZTWi7Ys6uhc4jxlUgocrKquUzVg2/g7fRa/q6CUd5FdSI
+ tjsiwtPlGX1mHraJTqp7k4sygZE1ffLx9KGhpwZMTk3ERTCfmfEFrM0BC4JkJfz7dKZEFnV5l
+ lNgUWjm6LWIpDNb4nV7DDFOvzYNy2gGFHXxlL7Vu5eH4JN6HwUYVMZyN42yQftW1Q1eyzraRY
+ /J1VVzDBlEdtrSganeiyi+IQ+l/3olW67dMeKNsJKah4s+s2rz5Nf3dQlNL9QJ14zl/R2uAi4
+ K2rwvSiYOt+5A7sJ05UTTrLV063qWzYErbsb5O2SaWo4GIiwY/E3uFUjMwEA0Y9Ofq5RQFIjn
+ Trkq2UKfcyZqAHCJLBcil/o+zXtzAdMKj4tf0hXvVEyxSA249SOm7sjPYo3xYBUyNkBEAa5r1
+ IT7PAK+SA7elQwdZu2mBJcSJFG1kNsfLIUKsfqbotgOg65jwE9+qOiSHp8SOy49LD3vM0JimH
+ BwRMv4zx4ufBBEhQZWzkEB1L05x6TUDV7Qse6vzic3VTxV9hUVEaV35fTkWEPTd53Snbrkb/V
+ +P64uZh4CkPVK3tAYANoCsUCm/uFTa0lKuk/hg6uVVEyYh/DJBAusVg6fnCn+fu3gfFjZnuNY
+ XlxSOIJHpFjLfNEMla23j3pbNUoM44w62rxwRYMs3jaipvWgumer4XVoHDaIBMwKlLX0SIsEw
+ xxz3CAkuaYfnA83CvfDfW1acxJOxY2QS0qyQLTEifJA9dUgpUSW3jIl3OLqsU5C/GrUgH3T8y
+ PBrh7rj/uQHWaeFHJezU+v49Nkx5ELwBrrPKl7m1igLMwQzIocd71g+dVHPvL2A6h9ngumX2l
+ n6L/ziyHgqXnAcwCPfF37QOIqTxrS2smumtFiX9HKjsskNO9ijNzP4NgOGRSMa6+q3nroW+22
+ +1Yv//95E6Jvloyr2PYOMnifiQpjAZziYo9GZFbpzbXXcwm6y/cdGXtIeD58Yyx/Ku/d88VxU
+ d8oFdp8285mxeERMQWGgA58QbrWPS6iOQYbpSsP9f0yqvnFfOvvfGR/jjRd/vi8EQcIN1WDZX
+ zT2uPpl+cOS0cgNuikRJP7D/8xjY4I
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1733336964; x=1733941764; i=fiona.klute@gmx.de;
- bh=Wzj+BtLvoZJX+sM6IKjX2VtFwfjGvCJ+14Ipggpzg9w=;
+ s=s31663417; t=1733336963; x=1733941763; i=fiona.klute@gmx.de;
+ bh=Jfc5qThGxO4e5pO2LePq+NoR/1Z+YCTJzsT978XdSjk=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
  References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=CPZjLnRgN+1BkF1VkuRvPqr5G17jYvUo6WaLG3Y8aNH0YYFp75tcQA7k4pihKOae
- fGRRzUZR96N1OlTXti9Cw5B7amqphiHXw3AhUSEev41mMryz+LIWXiU3oh1iPzc1L
- 2+b1zTFrKVLU35tois9ozwk5gk+V/oK3My625Nua19DGuoWyYU2t8SnBw1rsQi/tx
- l3v4LgwYWoKprs00G6/dSk8V4KC+Gx1Xm+MJ13+cf+x/v9n4siLQ6DnBuNEccCoA4
- paEy2ma1GC2tyqC1LFRtscocDmg6eEr9sMZnyCuKch4Q7I5YahJB1vbII7KxFZ0HF
- TQ0O5fd/icucUPFdqw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=DRrPOaQnsyU11Zkeywt03NmpynzmsvR/IKnTh0Dfmhf11DEvZkZ4IprpiXKmWiM1
+ dsro8dXS3rgRo2MN1bXCpyncXNkiNqmOMy0plTAVIG13AveScInLEjuPuCIx4NDdU
+ gYjHXgPeu4SJ2zNqGUoCij8xbHYljavtKzCFxM8M683jJP84kudajKBxW6QKXrARl
+ QJ1gzqJVgE+RT2ePngngWeVIuViVnjrlvHX5NtlA/wpohd5mUZOYCvn76lYmpvTUf
+ QwhvsacXmiYXpntqyb8XQp2VMkoZ9nTVSXA4qGZxofnhRkrQiEJ+hXmJ4YQbgJ4SP
+ paG2EFs4kKKj1dk/Cg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=CPZjLnRg
-Subject: [Buildroot] [PATCH v5 5/6] support/testing: include init script in
- iptables test
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=DRrPOaQn
+Subject: [Buildroot] [PATCH v5 2/6] package/iptables: optionally default to
+ nftables compat
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,56 +112,70 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Check a save/start/stop cycle based on the rules created by direct
-commands in the pre-existing test.
+For an nftables-based firewall setup it may be desirable to use
+iptables-nft as the "iptables" binary, in particular to better
+integrate legacy applications that do not support nftables directly
+and call iptables. If the BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT option
+introduced by this patch is enabled, iptables, iptables-restore, and
+iptables-save are symlinked to the -nft version of iptables. The
+-legacy options can still be called directly if desired.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
-Changes v2 -> v3:
-* remove change to init script that belongs in patch 3
+Changes v3 -> v4:
+* set ip6tables symlinks when selecting nftables compat
 
- support/testing/tests/package/test_iptables.py | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Changes v1 -> v2:
+* clarify commit message
 
-diff --git a/support/testing/tests/package/test_iptables.py b/support/testing/tests/package/test_iptables.py
-index 924a483ddb..6e4db0ac06 100644
---- a/support/testing/tests/package/test_iptables.py
-+++ b/support/testing/tests/package/test_iptables.py
-@@ -11,6 +11,7 @@ class TestIptables(infra.basetest.BRTest):
-         """
-         BR2_aarch64=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_INIT_BUSYBOX=y
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-@@ -70,9 +71,26 @@ class TestIptables(infra.basetest.BRTest):
-         _, exit_code = self.emulator.run(ping_test_cmd)
-         self.assertNotEqual(exit_code, 0)
+ package/iptables/Config.in   | 12 ++++++++++++
+ package/iptables/iptables.mk | 12 ++++++++++++
+ 2 files changed, 24 insertions(+)
+
+diff --git a/package/iptables/Config.in b/package/iptables/Config.in
+index e6b12603e0..ef02c26242 100644
+--- a/package/iptables/Config.in
++++ b/package/iptables/Config.in
+@@ -24,6 +24,18 @@ config BR2_PACKAGE_IPTABLES_NFTABLES
+ 	help
+ 	  Build nftables compat utilities.
  
-+        # Save the current rules to test the init script later.
-+        self.assertRunOk("/etc/init.d/S35iptables save")
++if BR2_PACKAGE_IPTABLES_NFTABLES
 +
-         # We delete our only rule #1 in the INPUT chain.
-         self.assertRunOk("iptables --delete INPUT 1")
++config BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT
++	bool "use nftables compat by default"
++	help
++	  Make the nftables compat variant of iptables, iptables-save,
++	  and iptables-restore the default. This only adjusts symlinks
++	  in /usr/sbin, the legacy variants can still be called
++	  directly.
++
++endif
++
+ comment "nftables compat needs a toolchain w/ wchar, dynamic library, headers >= 3.12"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
+ 		!BR2_USE_WCHAR || BR2_STATIC_LIBS
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 6712136962..dbf7fbf5e1 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -62,4 +62,16 @@ define IPTABLES_INSTALL_INIT_SYSV
+ 	touch $(TARGET_DIR)/etc/iptables.conf
+ endef
  
-         # Since we deleted the rule, the ping test command which was
-         # supposed to fail earlier is now supposed to succeed.
-         self.assertRunOk(ping_test_cmd)
++ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT),y)
++define IPTABLES_MAKE_NFTABLES_DEFAULT
++	ln -sf xtables-nft-multi $(TARGET_DIR)/usr/sbin/iptables
++	ln -sf xtables-nft-multi $(TARGET_DIR)/usr/sbin/iptables-restore
++	ln -sf xtables-nft-multi $(TARGET_DIR)/usr/sbin/iptables-save
++	ln -sf xtables-nft-multi $(TARGET_DIR)/usr/sbin/ip6tables
++	ln -sf xtables-nft-multi $(TARGET_DIR)/usr/sbin/ip6tables-restore
++	ln -sf xtables-nft-multi $(TARGET_DIR)/usr/sbin/ip6tables-save
++endef
++IPTABLES_POST_INSTALL_TARGET_HOOKS += IPTABLES_MAKE_NFTABLES_DEFAULT
++endif
 +
-+        # Load the rules as saved before.
-+        self.assertRunOk("/etc/init.d/S35iptables start")
-+
-+        # Ping to 127.0.0.2 is expected to fail again.
-+        _, exit_code = self.emulator.run(ping_test_cmd)
-+        self.assertNotEqual(exit_code, 0)
-+
-+        # And flush the rules again.
-+        self.assertRunOk("/etc/init.d/S35iptables stop")
-+
-+        # Since we deleted the rule, the ping test command which was
-+        # supposed to fail earlier is now supposed to succeed.
-+        self.assertRunOk(ping_test_cmd)
+ $(eval $(autotools-package))
 -- 
 2.45.2
 
