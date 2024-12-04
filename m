@@ -1,95 +1,108 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 106E2E77171
-	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 18:29:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8937DE77170
+	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 19:40:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D32A46090A;
-	Wed,  4 Dec 2024 18:29:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2983C413C2;
+	Wed,  4 Dec 2024 19:40:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RzVRHDkLSPEX; Wed,  4 Dec 2024 18:29:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bt67OHAhnM9k; Wed,  4 Dec 2024 19:40:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBC5C60E49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D51D5413C5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBC5C60E49;
-	Wed,  4 Dec 2024 18:29:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 770421DD3
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D51D5413C5;
+	Wed,  4 Dec 2024 19:40:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE8591DD9
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 19:40:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 50AF460AF9
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D78884552
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 19:40:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EleRMdSL8Sjn for <buildroot@buildroot.org>;
- Wed,  4 Dec 2024 18:29:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B79E160812
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B79E160812
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B79E160812
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 18:29:31 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.lan ([85.22.124.249]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MGQnP-1tQsl42QrF-006v1O; Wed, 04
- Dec 2024 19:29:23 +0100
-To: buildroot@buildroot.org
-Date: Wed,  4 Dec 2024 19:29:10 +0100
-Message-ID: <20241204182913.4085670-4-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241204182913.4085670-1-fiona.klute@gmx.de>
-References: <20241204182913.4085670-1-fiona.klute@gmx.de>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l3rE3ywaEo22 for <buildroot@buildroot.org>;
+ Wed,  4 Dec 2024 19:40:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AA4518454D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA4518454D
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AA4518454D
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 19:40:21 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-385ed7f6605so79847f8f.3
+ for <buildroot@buildroot.org>; Wed, 04 Dec 2024 11:40:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1733341220; x=1733946020;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=kAGenpAXCUBGDTRen8cLyhsipFSg3OUFcbMUBAwK8YQ=;
+ b=hNm9kYui2NdNSndumLsrFUynLy/zfhPBKuCuU48OIv3jA4jvg5WKX34sza8ybkovUr
+ 2QnoVxG9Ngr6HlFv5vAfYqhAHTFiZb56Ew30567oAE/+WHXAXjkscfXIkolBm1B3sfAX
+ 7i84EIw71cMJJr0DsSKmfzH7oN/cKTK6MpISs1owNAN+UdwwHzJkE6X6q6iTW7uSHwZZ
+ fp9HtNjKX5kvCLhI1aj1m/BbDyRzkHe2t/uX3b8n1fOCBtjVtRM4vAAERT8dVteOPx6D
+ CWkQWm4zIbK5qLfQdU8eVl2VubJXC+FQ4mf4bb/3mU1sNGAAyaqPqBmklWVj2JMjnVsn
+ cH2Q==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVfmG3vjil2pUPRaGSEqC1IiYnv0/vH3gltJR9RQRfyPgxELjeMIQJ5R8TrwjFbhxHRYDrbVpgzx30=@buildroot.org
+X-Gm-Message-State: AOJu0YwXhV0wYE0xobPdqQ4IrEHjgSbOmuu2bGKFLXaENhMJQIgLI3Y5
+ 1c0qKCp+xIhgoEdd0OJ7XiRgstOw2BUkKgU+dSPR2vRLzLojCgS0+743cRfx0h2V3XJ8D4otRAm
+ 5
+X-Gm-Gg: ASbGncsK4r/7+/CBpnoRVKAK4nE2mATeO+gX5dYOL36S7kcQnGWOPo9HJXLF3xw6S4d
+ ghFC9bsnzT3NMrkd6k/GPIKzisTVmdv3kHc4n+4eWLo/ikqENP+bxTjAVIe/blW/ynMDzhMRwPq
+ JGoI/HJs+EGG7BK0gTjqrCg+sDMfvk1AzVR8fl45DanhJZokXkwfWNn+ovVYEwDGUbV5LhPRbYJ
+ ZuSi5dmG6Uer7zWLh73ZTngjQEuPZWiCN5dObWE7Kao/qZDLED3BA4kcXme2zVscOMVlGVcAo3s
+ /iTgdvpRjUjM/RxIhnq1kFPrj4R/F3cI6BTbxps/JoGZiMR9C9rtA/ME3xi9Ugq3CduTa6DhcPJ
+ k710l
+X-Google-Smtp-Source: AGHT+IFxgoZcOHqkMw5jyeGAun9UQQd/OB9m7bc7xXEg/wbpzZDjeRz+YUYR5lXzJ6rWAbxl8Ell8g==
+X-Received: by 2002:a5d:5f45:0:b0:385:e4a7:def9 with SMTP id
+ ffacd0b85a97d-385fd532811mr5642326f8f.50.1733341219383; 
+ Wed, 04 Dec 2024 11:40:19 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-385d7f103e0sm17454912f8f.19.2024.12.04.11.40.18
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 04 Dec 2024 11:40:18 -0800 (PST)
+Message-ID: <b1ad8feb-56aa-49d0-a1d3-4e7941f6ce53@mind.be>
+Date: Wed, 4 Dec 2024 20:40:15 +0100
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:N8hSj5Fx296mBjJjjWJOemKuCnWUlvEbQQOgk6qtu39CRH7h7F2
- ZLJyjotxOtquprGrYCTAIn8ZIMEBwz/WeqlymKeMSaVBbBEDESBxi9Cnm2APHntR92JHPwK
- kLwHAI4ppW8/i15raIWE+FOwc6/qgEor3YWwBDfgQC+WhmJbZ8XOc8mib+eZW+y4vThJ2pn
- 9kxdqydLmQY70VDWG5NgQ==
-UI-OutboundReport: notjunk:1;M01:P0:iG93v612B2o=;PfgDk8JIAIt9Rfgmlq4sGdHcSVy
- bQtfLCDgkobtoEqebcylVKf1L5fzAzmzRgeaMHccu7YmYnoocE8mezWR77lZb8JzNUevXjojI
- 6Au+TY0mAKRBiiJXHZd6Zj6nWNER9OpYVW6+BpBunUwmhDIgkT0mvBHU/L3ZDr2yCsOMq7dFk
- lJ+7hcBeAQsTV9VSZ4NWDLjulbxwYue48AFSILiXBZMWdHDN+SEkVplxK/ZE+YKDYTYybsg13
- 5j27RtfZBgj1KrEa58YOJl1jLFW/qEZf6EMLwacg2UC22U15X2Hy4LEAZhyLV3DrcLjGa59u6
- XWpzEXQtlus4GSjz4M6/n4LBCb1mDkLz+3fAXPEhQh1yuJptIlxsPpK2VPsNdNskNscXan+ns
- ko4oZI62LKB5jiQtFaTYqJQDnSdLOY4cJ0F+l+sTRadOMV6Lcb7SKct7pFzkmhvRsQIY6FWvD
- bfHHLB9hrOibB+tYDBcG68aMtNK5+B0Ous+e080JlzGZnrDdwN7GS5LU8oWiObE2o5g0XZiYp
- 7XSMOJoiwRdOCbfYIGCRtAH5ol/e6Mz9+2Towco9W3V9EKaiTMW488OK4pJeesfBM5Wk/Ervy
- 1saVpUM/wyaX9LW/xkx87AjaHy53UL1g91vPyApNNZ5uSbrJ5ZQWFfVhuAutW3n/npkB6MVay
- EnMd+kgqj2Wd64qXcllZOiLWRG5993gaPmrHg3ESHeI6vGeV9W1pJYZLxjlZX1HC7qLybGuEV
- yPk9wvqPvRAn1CkpRSOHxWYfgQT6e/WWZgJvljN5TkIC2ld4wkQeiN0+c7Drsh8FcJF2zVIwg
- tMFT1u9Km6D4sJ0qxxx55+YXDB+awftWOlkvKACqLrN8HBlf/tuulpNRHAmIKJz+2Cd2aj0Jh
- e5u8dCQ963ufCaRtoGdWSqNxU9DKQG+e1l2hgLvpEV/OEKkLxTQpvNsliwwDA20gy+zkTvVHI
- i3ACSd5u/lETCYi5q75fGnbUD4AjDJm7ZRxed75Yld9/Fu1r8Js6TKkL0xmxAJqB6VvU0feUi
- 8lCCKaPQFryERRoeEuZpAILG+TXjdxZ2fefJN5k5kSuGNpGsXkVMqAhSc6RWmqwi0kZ0uSoeZ
- f964LecPz92qPcVQF1cp1+xFCLLCAI
+User-Agent: Mozilla Thunderbird
+To: Patricia Holden <pholden@nklabs.com>, buildroot@buildroot.org
+References: <CAJ6EmCfeCT6uAJ-F9x4+MmWbiik2Jp162oWDiinb7urth5eO-A@mail.gmail.com>
+Content-Language: en-GB
+In-Reply-To: <CAJ6EmCfeCT6uAJ-F9x4+MmWbiik2Jp162oWDiinb7urth5eO-A@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1733336963; x=1733941763; i=fiona.klute@gmx.de;
- bh=kxlReBV+pCRqJl1RtN0A0p2gocOCn8NK3o4RiC8lHts=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=pRx9ppEtekSVPf6rf7suA3Y+kzYl8Hh3RQJCGJ20l2p0lTPZKbFKu5gxiDYu1wGT
- 5/zXhojgARMY48P5lc6Co8ieH0RzfRBoimOgVeC3Yz1mTf7VTBi0d6N4CPNXvSVTs
- E9qU3hPrMowSJt5gY1avo+gsTWhuQz+7I4e0uzg0HmcbyNC9kbKTKQr98iiKlG0Up
- 7lAJohVqpMkKQ2CLdfkSmfg9z64rAw8vlJxQUIrTdWhHHrpy1ZGE8KbLClqC5ZMhX
- zxn3dFts4zAPdAHQucaz06TC3v46gF7DdbWB/huBtWWZj+sllX/XKVi22FLsibN3V
- J90Vd+sPAGvoArnkbQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=mind.be; s=google; t=1733341220; x=1733946020; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=kAGenpAXCUBGDTRen8cLyhsipFSg3OUFcbMUBAwK8YQ=;
+ b=Avu4IJe/JxXLTXBmSq/hyd4ouI8LZKUVUsjC5s4npFf0MYfZaM/V4+U4EDfQmJXL3W
+ b+E0ePELCEKekc9hkNDQ7ZJBTgduARAkXtYjj+IKRhRlVb5EMF+6CJdp8mXAuBomff0g
+ wSNwe3+y8324rBBd0gOVvaxsXoFpPLW/O1uc5+Gv5Dxux1q/rjmRJRnjB+Z8XBi6W4Dp
+ oabphmxEdEHglxwaMyqq6XvLXcI0CflY2wiwPa5m8nWLn4RUU5TyK7Kw++Mn16NA/Zzt
+ GXBn5lC3gSCA3qaLoNATiDG7W6CJ0YAfWCJI1nSf39pOIRvuD4m7aumdglAcr9KzDK9Z
+ 5E/Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=pRx9ppEt
-Subject: [Buildroot] [PATCH v5 3/6] package/iptables: check for rules in
- init script
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=Avu4IJe/
+Subject: Re: [Buildroot] python-gevent package failing for me
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,116 +114,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: Julien Olivain <ju.o@free.fr>, Fiona Klute <fiona.klute@gmx.de>,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-
-Instead of installing an empty rules file, the init script now checks
-if the rules file exists and does nothing if it doesn't. The "save"
-action is exempt from that limit because it may be used to create the
-rules file.
-
-Also fix the shellcheck warning about the unused IPTABLES_ARGS
-variable, and use long form options for iptables commands.
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
----
-Changes v4 -> v5:
-* iptables init script: run any target only if rules file exists,
-  except for "save" (which may be used to create it)
-
-Changes v2 -> v3:
-* replace "iptables -F" with "iptables --flush"
-
- .checkpackageignore          |  1 -
- package/iptables/S35iptables | 16 +++++++++++-----
- package/iptables/iptables.mk |  1 -
- 3 files changed, 11 insertions(+), 7 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index b793026881..767e3bb21d 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -612,7 +612,6 @@ package/ipmitool/0002-Fix-enterprise-numbers-URL.patch lib_patch.Upstream
- package/ipmitool/0003-Do-not-require-the-IANA-PEN-registry-file.patch lib_patch.Upstream
- package/ipmitool/0004-configure.ac-allow-disabling-registry-downloads.patch lib_patch.Upstream
- package/iprutils/0001-configure.ac-add-AC_USE_SYSTEM_EXTENSIONS.patch lib_patch.Upstream
--package/iptables/S35iptables Shellcheck
- package/irda-utils/0001-daemon.patch lib_patch.Sob lib_patch.Upstream
- package/irda-utils/0002-nommu.patch lib_patch.Sob lib_patch.Upstream
- package/irda-utils/0003-subdir.patch lib_patch.Sob lib_patch.Upstream
-diff --git a/package/iptables/S35iptables b/package/iptables/S35iptables
-index a2de29d222..fc42fc9a8c 100644
---- a/package/iptables/S35iptables
-+++ b/package/iptables/S35iptables
-@@ -2,11 +2,18 @@
- 
- DAEMON="iptables"
- 
--IPTABLES_ARGS=""
-+IPTABLES_CONF="/etc/iptables.conf"
-+
-+# Run only if IPTABLES_CONF exists, except when the action is "save"
-+# (which creates it).
-+if [ ! -f "${IPTABLES_CONF}" ] && [ "$1" != "save" ]; then
-+	echo "${IPTABLES_CONF} does not exist, nothing to do."
-+	exit 0
-+fi
- 
- start() {
- 	printf 'Starting %s: ' "$DAEMON"
--	iptables-restore /etc/iptables.conf
-+	iptables-restore "$IPTABLES_CONF"
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
-@@ -18,7 +25,7 @@ start() {
- 
- stop() {
- 	printf 'Stopping %s: ' "$DAEMON"
--	iptables -F
-+	iptables --flush
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
-@@ -30,13 +37,12 @@ stop() {
- 
- restart() {
- 	stop
--	sleep 1
- 	start
- }
- 
- save() {
- 	printf 'Saving %s: ' "$DAEMON"
--	iptables-save -f /etc/iptables.conf
-+	iptables-save --file "$IPTABLES_CONF"
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index dbf7fbf5e1..e7495c1085 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -59,7 +59,6 @@ endef
- define IPTABLES_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/iptables/S35iptables \
- 		$(TARGET_DIR)/etc/init.d/S35iptables
--	touch $(TARGET_DIR)/etc/iptables.conf
- endef
- 
- ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT),y)
--- 
-2.45.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAyMC8xMS8yMDI0IDIyOjI0LCBQYXRyaWNpYSBIb2xkZW4gd3JvdGU6Cj4gSSdtIHdvcmtp
+bmcgd2l0aCB0aGUgbGF0ZXN0IGRyb3AsIDIwMjQuMTEtcmMxLsKgIEkgbmVlZCB0byBoYXZlIHB5
+dGhvbi1nZXZlbnRzIAo+IHBhY2thZ2Ugc28gSSBhZGRlZCB0aGUgZm9sbG93aW5nOgo+IAo+IENv
+bmZpZy5pbjoKPiAKPiBjb25maWcgQlIyX1BBQ0tBR0VfUFlUSE9OX0dFVkVOVAo+IGJvb2wgInB5
+dGhvbi1nZXZlbnQiCj4gc2VsZWN0IEJSMl9QQUNLQUdFX1BZVEhPTl9HUkVFTkxFVAo+IGhlbHAK
+PiAgwqBHRXZlbnQgZXZlbnQgbG9vcCBmb3IgcHl0aG9uMy4xMQo+IAo+IGh0dHBzOi8vcHlwaS5v
+cmcvcHJvamVjdC9nZXZlbnQvIDxodHRwczovL3B5cGkub3JnL3Byb2plY3QvZ2V2ZW50Lz4KPiAK
+PiBweXRob24tZ2V2ZW50cy5tayA8aHR0cDovL3B5dGhvbi1nZXZlbnRzLm1rPjoKPiAKPiAjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIwo+ICMKPiAjIHB5dGhvbi1nZXZlbnQKPiAjCj4gIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMKPiAKPiBQWVRIT05fR0VWRU5UX1ZFUlNJT04gPSAyNC4xMS4xCj4gUFlU
+SE9OX0dFVkVOVF9TSVRFID0gaHR0cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3JnL3BhY2thZ2Vz
+L2FiLzc1LyAKPiBhNTNmMWNiNzMyNDIwZjVlNWQ3OWIyNTYzZmMzNTA0ZDIyMTE1ZTdlY2ZlNzk2
+NmU1Y2Y5YjM1ODJhZTcgPGh0dHBzOi8vIAo+IGZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2Fn
+ZXMvYWIvNzUvIAo+IGE1M2YxY2I3MzI0MjBmNWU1ZDc5YjI1NjNmYzM1MDRkMjIxMTVlN2VjZmU3
+OTY2ZTVjZjliMzU4MmFlNz4KPiBQWVRIT05fR0VWRU5UX1NPVVJDRSA9IGdldmVudC0kKFBZVEhP
+Tl9HRVZFTlRfVkVSU0lPTikudGFyLmd6Cj4gUFlUSE9OX0dFVkVOVF9TRVRVUF9UWVBFID0gc2V0
+dXB0b29scwo+IFBZVEhPTl9HRVZFTlRfTElDRU5TRSA9IE1JVAo+IFBZVEhPTl9HRVZFTlRfTElD
+RU5TRV9GSUxFUyA9IExJQ0VOU0UKPiBQWVRIT05fR0VWRU5UX0VOViA9IEdFVkVOVFNFVFVQX0VN
+QkVEX0xJQkVWPTAgR0VWRU5UU0VUVVBfRU1CRURfQ0FSRVM9MAo+IFBZVEhPTl9HRVZFTlRfREVQ
+RU5ERU5DSUVTID0gbGliZXYgYy1hcmVzCj4gCj4gJChldmFsICQocHl0aG9uLXBhY2thZ2UpKQo+
+IAo+IEkgYW0gZ2V0dGluZyB0aGUgZm9sbG93aW5nIGVycm9yIHdoZW4gYnVpbGRpbmcgd2l0aCB0
+aGlzIHBhY2thZ2U6Cj4gCj4gCj4gRVJST1IgTWlzc2luZyBkZXBlbmRlbmNpZXM6Cj4gY2ZmaT49
+MS4xNy4xOyBwbGF0Zm9ybV9weXRob25faW1wbGVtZW50YXRpb24gPT0gIkNQeXRob24iCj4gbWFr
+ZVsxXTogKioqIFtwYWNrYWdlL3BrZy1nZW5lcmljLm1rOjI4OSA8aHR0cDovL3BrZy1nZW5lcmlj
+Lm1rOjI4OT46IC9ob21lLyAKPiBwaG9sZGVuL1Byb2plY3RzL0JSMjAyNC0xMS9lZHZvdGVrLWVk
+dm9jeWNsZXIzL2J1aWxkcm9vdC0yMDI0LjExLXJjMS9vdXRwdXQvIAo+IGJ1aWxkL3B5dGhvbi1n
+ZXZlbnQtMjQuMTEuMS8uc3RhbXBfYnVpbHRdIEVycm9yIDEKPiBtYWtlOiAqKiogW01ha2VmaWxl
+OjgzOiBfYWxsXSBFcnJvciAyCgogIEhhdmUgeW91IHRyaWVkIGFkZGluZyBweXRob24tY2ZmaSB0
+byBQWVRIT05fR0VWRU5UX0RFUEVOREVOQ0lFUz8KCiAgUmVnYXJkcywKICBBcm5vdXQKCj4gCj4g
+VGhlcmUgaXMgYSBjb21tZW50IGluIHRoZSBweXRob24tZ2V2ZW50cyBkZXNjcmlwdGlvbiBhYm91
+dCB0aGlzIGVycm9yOgo+IAo+ICAgKiBJZiB5b3Ugc2VlIHxWYWx1ZUVycm9yOiAoIkV4cGVjdGVk
+ICcsJyBvciBlbmQtb2YtbGlzdCBpbiIsICJjZmZpID49IDEuMTEuNSA7Cj4gICAgIHN5c19wbGF0
+Zm9ybSA9PSAnd2luMzInIGFuZCBwbGF0Zm9ybV9weXRob25faW1wbGVtZW50YXRpb24gPT0gJ0NQ
+eXRob24nIiwKPiAgICAgJ2F0JywgIiA7IHN5c19wbGF0Zm9ybSA9PSAnd2luMzInIGFuZCBwbGF0
+Zm9ybV9weXRob25faW1wbGVtZW50YXRpb24gPT0KPiAgICAgJ0NQeXRob24nIil8LCB0aGUgdmVy
+c2lvbiBvZiBzZXR1cHRvb2xzIGlzIHRvbyBvbGQuIEluc3RhbGwgYSBtb3JlIHJlY2VudAo+ICAg
+ICB2ZXJzaW9uIG9mIHNldHVwdG9vbHMuCj4gCj4gCj4gCj4gSGF2ZSB5b3UgcnVuIGludG8gdGhp
+cyBwcm9ibGVtP8KgIERvIHlvdSBoYXZlIGEgcGF0Y2ggZm9yIHB5dGhvbi1nZXZlbnRzIGZvciAK
+PiBCUjIwMjQuMTEtcmMxPwo+IAo+IFRoYW5rcyEKPiAKPiBfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
+L2xpc3RpbmZvL2J1aWxkcm9vdAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
+ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
