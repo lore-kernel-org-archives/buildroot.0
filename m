@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BB15E77170
-	for <buildroot@archiver.kernel.org>; Thu,  5 Dec 2024 19:49:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6F5BE77170
+	for <buildroot@archiver.kernel.org>; Thu,  5 Dec 2024 19:49:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C57C04139E;
-	Thu,  5 Dec 2024 19:49:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB79C413A6;
+	Thu,  5 Dec 2024 19:49:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bmm9OKCFoeUL; Thu,  5 Dec 2024 19:49:45 +0000 (UTC)
+ id 1bgUcsPdvwhY; Thu,  5 Dec 2024 19:49:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D1F6413A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0484D41424
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D1F6413A6;
-	Thu,  5 Dec 2024 19:49:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1EF63AE8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0484D41424;
+	Thu,  5 Dec 2024 19:49:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3C2CE1FDB
  for <buildroot@buildroot.org>; Thu,  5 Dec 2024 19:49:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F3DCF413A6
- for <buildroot@buildroot.org>; Thu,  5 Dec 2024 19:49:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E041400E7
+ for <buildroot@buildroot.org>; Thu,  5 Dec 2024 19:49:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FvotwOM38t5l for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K-f1dXQ8dG9j for <buildroot@buildroot.org>;
  Thu,  5 Dec 2024 19:49:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D27734139E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB6B440176
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D27734139E
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB6B440176
  for <buildroot@buildroot.org>; Thu,  5 Dec 2024 19:49:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BBADC86986; Thu,  5 Dec 2024 19:49:42 +0000 (UTC)
+ id C669D86988; Thu,  5 Dec 2024 19:49:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 4 Dec 2024 21:20:09 +0100
+Date: Wed, 4 Dec 2024 21:48:02 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 04d2c8689ef866a80a1e831bc3752ec57019fdf1
-X-Git-Newrev: 312215ad6bc45a46b4ea5b3dc1826014b9c155de
+X-Git-Oldrev: 312215ad6bc45a46b4ea5b3dc1826014b9c155de
+X-Git-Newrev: eec3a1108a65ab8de4a313a7f34205c5d5ad8f2b
 X-Patchwork-Hint: ignore
-Message-Id: <20241205194942.BBADC86986@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/igh-ethercat: bump
- version to 1.6.2
+Message-Id: <20241205194942.C669D86988@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/igh-ethercat: add
+ configuration options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,103 +65,144 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=312215ad6bc45a46b4ea5b3dc1826014b9c155de
+commit: https://git.buildroot.net/buildroot/commit/?id=eec3a1108a65ab8de4a313a7f34205c5d5ad8f2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit removes the package patch, included in this release.
+Add configuration options and description for EtherCAT userlib, clitool,
+tty and additional drivers.
 
 Signed-off-by: Jannik Becher <becher.jannik@gmail.com>
-[Julien:
-  - fix package hash
-  - remove package patch
-]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...0001-Remove-dev_base_lock-for-linux-6.9.0.patch | 51 ----------------------
- package/igh-ethercat/igh-ethercat.hash             |  2 +-
- package/igh-ethercat/igh-ethercat.mk               |  2 +-
- 3 files changed, 2 insertions(+), 53 deletions(-)
+ package/igh-ethercat/Config.in       | 77 +++++++++++++++++++++++++++++++++---
+ package/igh-ethercat/igh-ethercat.mk | 14 ++++++-
+ 2 files changed, 84 insertions(+), 7 deletions(-)
 
-diff --git a/package/igh-ethercat/0001-Remove-dev_base_lock-for-linux-6.9.0.patch b/package/igh-ethercat/0001-Remove-dev_base_lock-for-linux-6.9.0.patch
-deleted file mode 100644
-index a71edb7be6..0000000000
---- a/package/igh-ethercat/0001-Remove-dev_base_lock-for-linux-6.9.0.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 09eb1b9f73d677d10d18039305b9d974e52cc6d5 Mon Sep 17 00:00:00 2001
--From: Nicola Fontana <ntd@entidi.it>
--Date: Mon, 3 Jun 2024 12:45:48 +0200
--Subject: [PATCH] Remove dev_base_lock for linux >= 6.9.0
--
--Kernel commit 1b3ef46cb7f2618cc0b507393220a69810f6da12 removed
--`dev_base_lock` from v6.9 onward.
--
--Use the alternate iterator `for_each_netdev_rcu` introduced by commit
--c6d14c84566d6b70ad9dc1618db0dec87cca9300 in 2.6.33+.
--
--Upstream: https://gitlab.com/etherlab.org/ethercat/-/commit/95c25b50711ca7e1f990bdcbca8fa713c942ab01
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- devices/generic.c | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/devices/generic.c b/devices/generic.c
--index 4d4d9bbd..f30f1e17 100644
----- a/devices/generic.c
--+++ b/devices/generic.c
--@@ -420,14 +420,14 @@ int __init ec_gen_init_module(void)
--     INIT_LIST_HEAD(&generic_devices);
--     INIT_LIST_HEAD(&descs);
-- 
---    read_lock(&dev_base_lock);
---    for_each_netdev(&init_net, netdev) {
--+    rcu_read_lock();
--+    for_each_netdev_rcu(&init_net, netdev) {
--         if (netdev->type != ARPHRD_ETHER)
--             continue;
--         desc = kmalloc(sizeof(ec_gen_interface_desc_t), GFP_ATOMIC);
--         if (!desc) {
--             ret = -ENOMEM;
---            read_unlock(&dev_base_lock);
--+            rcu_read_unlock();
--             goto out_err;
--         }
--         strncpy(desc->name, netdev->name, IFNAMSIZ);
--@@ -436,7 +436,7 @@ int __init ec_gen_init_module(void)
--         memcpy(desc->dev_addr, netdev->dev_addr, ETH_ALEN);
--         list_add_tail(&desc->list, &descs);
--     }
---    read_unlock(&dev_base_lock);
--+    rcu_read_unlock();
-- 
--     list_for_each_entry_safe(desc, next, &descs, list) {
--         ret = offer_device(desc);
---- 
--2.45.2
--
-diff --git a/package/igh-ethercat/igh-ethercat.hash b/package/igh-ethercat/igh-ethercat.hash
-index 67a152c6ae..c655f9ac79 100644
---- a/package/igh-ethercat/igh-ethercat.hash
-+++ b/package/igh-ethercat/igh-ethercat.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  7e4d8f3497c0bc0b64a151c0d074349fe7614767563642d6fedb19567eafa1e1  igh-ethercat-f5dc109176400f540a8682a2c9ee20d411d14d61.tar.gz
-+sha256  6c8ce954f9c27de95ecce508fecfcc48767742f7cbbe967187dac6e817df2e70  igh-ethercat-1.6.2.tar.gz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+diff --git a/package/igh-ethercat/Config.in b/package/igh-ethercat/Config.in
+index e600ef5fcd..49be9d13bc 100644
+--- a/package/igh-ethercat/Config.in
++++ b/package/igh-ethercat/Config.in
+@@ -11,19 +11,86 @@ config BR2_PACKAGE_IGH_ETHERCAT
+ 
+ if BR2_PACKAGE_IGH_ETHERCAT
+ 
++config BR2_PACKAGE_IGH_ETHERCAT_CLITOOL
++	bool "Enable CLI Tool"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Enable the EtherCAT CLI tool for testing and diagnostics.
++
++config BR2_PACKAGE_IGH_ETHERCAT_USERLIB
++	bool "Enable User Space Library"
++	help
++	  Install the EtherCAT user space library.
++
++config BR2_PACKAGE_IGH_ETHERCAT_TTY
++	bool "Enable TTY Driver"
++	help
++	  Enable the EtherCAT TTY driver for serial communication
++	  support.
++
++config BR2_PACKAGE_IGH_ETHERCAT_GENERIC
++	bool "Enable Generic Driver"
++	help
++	  Enable the generic EtherCAT master driver.
++
+ config BR2_PACKAGE_IGH_ETHERCAT_8139TOO
+-	bool "8139too driver"
++	bool "8139too Driver"
++	help
++	  Enable Realtek 8139too-based EtherCAT driver.
+ 
+ config BR2_PACKAGE_IGH_ETHERCAT_E100
+-	bool "e100 driver"
++	bool "e100 Driver"
++	help
++	  Enable Intel e100-based EtherCAT driver.
+ 
+ config BR2_PACKAGE_IGH_ETHERCAT_E1000
+-	bool "e1000 driver"
++	bool "e1000 Driver"
++	help
++	  Enable Intel e1000-based EtherCAT driver.
+ 
+ config BR2_PACKAGE_IGH_ETHERCAT_E1000E
+-	bool "e1000e driver"
++	bool "e1000e Driver"
++	help
++	  Enable Intel e1000e-based EtherCAT driver.
++
++config BR2_PACKAGE_IGH_ETHERCAT_GENET
++	bool "genet Driver"
++	help
++	  Enable Broadcom GENET-based EtherCAT driver.
++
++config BR2_PACKAGE_IGH_ETHERCAT_IGB
++	bool "igb Driver"
++	help
++	  Enable Intel igb-based EtherCAT driver.
++
++config BR2_PACKAGE_IGH_ETHERCAT_IGC
++	bool "igc Driver"
++	help
++	  Enable Intel igc-based EtherCAT driver.
+ 
+ config BR2_PACKAGE_IGH_ETHERCAT_R8169
+-	bool "r8169 driver"
++	bool "r8169 Driver"
++	help
++	  Enable Realtek r8169-based EtherCAT driver.
++
++config BR2_PACKAGE_IGH_ETHERCAT_STMMAC_PCI
++	bool "stmmac-pci Driver"
++	help
++	  Enable Synopsys STMMAC PCI-based EtherCAT driver.
++
++config BR2_PACKAGE_IGH_ETHERCAT_STMMAC
++	bool "stmmac Driver"
++	help
++	  Enable Synopsys STMMAC-based EtherCAT driver.
++
++config BR2_PACKAGE_IGH_ETHERCAT_DWMAC_INTEL
++	bool "dwmac-intel Driver"
++	help
++	  Enable Intel DesignWare MAC-based EtherCAT driver.
++
++config BR2_PACKAGE_IGH_ETHERCAT_CCAT
++	bool "ccat Driver"
++	help
++	  Enable CCAT-based EtherCAT driver.
+ 
+ endif
 diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
-index 5b618ab54a..374f8891e5 100644
+index 374f8891e5..0fcba65cf5 100644
 --- a/package/igh-ethercat/igh-ethercat.mk
 +++ b/package/igh-ethercat/igh-ethercat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -15,12 +15,22 @@ IGH_ETHERCAT_INSTALL_STAGING = YES
  
--IGH_ETHERCAT_VERSION = f5dc109176400f540a8682a2c9ee20d411d14d61
-+IGH_ETHERCAT_VERSION = 1.6.2
- IGH_ETHERCAT_SITE = $(call gitlab,etherlab.org,ethercat,$(IGH_ETHERCAT_VERSION))
- IGH_ETHERCAT_LICENSE = GPL-2.0 (IgH EtherCAT master), LGPL-2.1 (libraries)
- IGH_ETHERCAT_LICENSE_FILES = COPYING COPYING.LESSER
+ IGH_ETHERCAT_CONF_OPTS = \
+ 	--with-linux-dir=$(LINUX_DIR) \
+-	$(if $(BR2_INSTALL_LIBSTDCPP),--enable-tool,--disable-tool) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_USERLIB),--enable-userlib,--disable-userlib) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_CLITOOL),--enable-tool,--disable-tool) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_TTY),--enable-tty,--disable-tty) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_GENERIC),--enable-generic,--disable-generic) \
+ 	$(if $(BR2_PACKAGE_IGH_ETHERCAT_8139TOO),--enable-8139too,--disable-8139too) \
+ 	$(if $(BR2_PACKAGE_IGH_ETHERCAT_E100),--enable-e100,--disable-e100) \
+ 	$(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,--disable-e1000) \
+ 	$(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e) \
+-	$(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_GENET),--enable-genet,--disable-genet) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_IGB),--enable-igb,--disable-igb) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_IGC),--enable-igc,--disable-igc) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_STMMAC_PCI),--enable-stmmac-pci,--disable-stmmac-pci) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_STMMAC),--enable-stmmac,--disable-stmmac) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_DWMAC_INTEL),--enable-dwmac-intel,--disable-dwmac-intel) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_CCAT),--enable-ccat,--disable-ccat)
+ 
+ $(eval $(kernel-module))
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
