@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34150C282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65770C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:35:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 060F26FC4D;
-	Fri, 28 Feb 2025 16:35:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BF904F16D;
+	Fri, 28 Feb 2025 16:35:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 08S7Iie9qC2j; Fri, 28 Feb 2025 16:35:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2JlWMoCoZB49; Fri, 28 Feb 2025 16:35:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FB076FBF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 805C442E6B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0FB076FBF5;
-	Fri, 28 Feb 2025 16:35:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7E359711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 805C442E6B;
+	Fri, 28 Feb 2025 16:35:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1BE5D1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6B83E40AED
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 25BAF41999
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H-kggcc8Nmrl for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xz_LXieroqbV for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A1BB40413
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73003419B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A1BB40413
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 73003419B1
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5661F818ED; Fri, 28 Feb 2025 16:30:16 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 65759874C1; Fri, 28 Feb 2025 16:29:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 23 Jan 2025 22:07:07 +0100
+Date: Wed, 4 Dec 2024 22:53:12 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c87726dd336b7f9a1cebd26a327e47aa25d8b4d2
-X-Git-Newrev: bb10ce004991a21ee56bc887bc4f5c943bb12f7d
+X-Git-Oldrev: c4a56d3f6d45898c889b68f1ab785dcabcce31bf
+X-Git-Newrev: f6fa3324eb3f1966b51965b3ae1b2740d05e38a6
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163017.5661F818ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/swupdate: bump to
- security version 2024.12.1
+Message-Id: <20250228162932.65759874C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/polkit: disable PIDFD
+ when systemd is not available
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,55 +58,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb10ce004991a21ee56bc887bc4f5c943bb12f7d
+commit: https://git.buildroot.net/buildroot/commit/?id=f6fa3324eb3f1966b51965b3ae1b2740d05e38a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix a high severity bug with the raw handler
+Since the Polkit version bump 125, TestPolkitInitd fail due to an
+upstream issue related to the new PIDFD support introduced in
+Polkit 124 [1].
 
-For release note, see:
-https://github.com/sbabic/swupdate/releases/tag/2024.12.1
+The PIDFD issue only affect OS without systemd.
 
-The security fix (and only new commit) in this point release is:
-https://github.com/sbabic/swupdate/commit/434815b94d73c20b5461b954c4e62144ca29aa8f
+Only enable PIDFD support when systemd is available until
+upstream fix the issue.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Julien: fix commit title typo, add link to security commit fix]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992596
+
+[1] https://github.com/polkit-org/polkit/issues/451
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/swupdate/swupdate.hash | 2 +-
- package/swupdate/swupdate.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...sable-PIDFD-when-systemd-is-not-available.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index 847c5a1098..00e7d0b623 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  528c61769456d7740a9ba1d045f25f7587203e2a2e71a9a67998f0e13e2db149  swupdate-2024.12.tar.gz
-+sha256  8470e9e0540d0e3299d8dd57b4a230f3b640dd4491e8ba705755d6bc75569832  swupdate-2024.12.1.tar.gz
- sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
- sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
- sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index fe6ef2dd6d..647a6f071b 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SWUPDATE_VERSION = 2024.12
-+SWUPDATE_VERSION = 2024.12.1
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
- SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
+diff --git a/package/polkit/0001-meson-disable-PIDFD-when-systemd-is-not-available.patch b/package/polkit/0001-meson-disable-PIDFD-when-systemd-is-not-available.patch
+new file mode 100644
+index 0000000000..621b1feef7
+--- /dev/null
++++ b/package/polkit/0001-meson-disable-PIDFD-when-systemd-is-not-available.patch
+@@ -0,0 +1,53 @@
++From 51a1c5b5ab616fe0243b40baddb4864199bbe624 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@smile.fr>
++Date: Sat, 2 Nov 2024 23:33:16 +0100
++Subject: [PATCH] meson: disable PIDFD when systemd is not available
++
++Since the Polkit version bump 125, TestPolkitInitd fail due to an
++upstream issue related to the new PIDFD support introduced in
++Polkit 124 [1].
++
++The PIDFD issue only affect OS without systemd.
++
++Only enable PIDFD support when systemd is available until
++upstream fix the issue.
++
++Fixes:
++https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992596
++
++[1] https://github.com/polkit-org/polkit/issues/451
++
++Upstream: Not applicable
++
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ meson.build | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index 302c189..5c247f4 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -202,8 +202,6 @@ if enable_logind
++ endif
++ config_data.set('HAVE_LIBSYSTEMD', enable_logind)
++ 
++-config_data.set('HAVE_PIDFD_OPEN', cc.get_define('SYS_pidfd_open', prefix: '#include <sys/syscall.h>') != '')
++-
++ # systemd unit / sysuser / tmpfiles.d file installation directories
++ systemdsystemunitdir = get_option('systemdsystemunitdir')
++ systemd_dep = dependency('systemd', required : false)
++@@ -222,6 +220,10 @@ else
++   tmpfiles_dir = '/usr/lib/tmpfiles.d'
++ endif
++ 
+++# PIDFD is broken with sysvinit based OS since 124 release
+++# https://github.com/polkit-org/polkit/issues/451
+++config_data.set('HAVE_PIDFD_OPEN', systemd_dep.found() and cc.get_define('SYS_pidfd_open', prefix: '#include <sys/syscall.h>') != '')
+++
++ # User for running polkitd
++ polkitd_user = get_option('polkitd_user')
++ config_data.set_quoted('POLKITD_USER', polkitd_user)
++-- 
++2.45.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
