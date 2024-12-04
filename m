@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 096BAE7716D
-	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 21:48:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58ABCE7716D
+	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 21:48:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5E0C60639;
-	Wed,  4 Dec 2024 21:48:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A302D403FF;
+	Wed,  4 Dec 2024 21:48:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pJIKVrBWGIrs; Wed,  4 Dec 2024 21:48:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED54A405CA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED54A405CA;
+	Wed,  4 Dec 2024 21:48:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 77B65AE8
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 21:48:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B856D60697
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 21:48:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yx_O3hWR7sEt; Wed,  4 Dec 2024 21:48:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7C7860697
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7C7860697;
-	Wed,  4 Dec 2024 21:48:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 96062AE8
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 21:48:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 84B8183C7D
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 21:48:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bklt0u58gPQq for <buildroot@buildroot.org>;
+ id BEO32lV0fH1u for <buildroot@buildroot.org>;
  Wed,  4 Dec 2024 21:48:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FA4B82675
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 625D2607B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4FA4B82675
+ by smtp3.osuosl.org (Postfix) with ESMTP id 625D2607B1
  for <buildroot@buildroot.org>; Wed,  4 Dec 2024 21:48:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4932B86924; Wed,  4 Dec 2024 21:48:26 +0000 (UTC)
+ id 579B386925; Wed,  4 Dec 2024 21:48:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Dec 2024 22:42:52 +0100
+Date: Wed, 4 Dec 2024 22:44:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3ee745782a0802b1479eb6a8f678b6a261775295
-X-Git-Newrev: ee65a2119aba93692970ae83e083974ef865c15b
+X-Git-Oldrev: ee65a2119aba93692970ae83e083974ef865c15b
+X-Git-Newrev: 1eec67d164c7087aa0bed30599681e908fb2fb41
 X-Patchwork-Hint: ignore
-Message-Id: <20241204214826.4932B86924@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/android-tools: fix build issue on
- mips64 and powerpc64
+Message-Id: <20241204214826.579B386925@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/android-tools: fix b64_pton()
+ issue with GCC >= 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,126 +61,221 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1270767313481722243=="
+Content-Type: multipart/mixed; boundary="===============5720947320417301467=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1270767313481722243==
+--===============5720947320417301467==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee65a2119aba93692970ae83e083974ef865c15b
+commit: https://git.buildroot.net/buildroot/commit/?id=1eec67d164c7087aa0bed30599681e908fb2fb41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The kernel headers on mips64 and powerpc64 were historically "broken",
-defining u64 as an "unsigned long" instead of "unsigned long
-long". This has been fixed in the upstream Linux kernel by introducing
-the __SANE_USERSPACE_TYPES__ definition.
+The android-tools code base uses the __b64_pton() function, which
+isn't provided by all C libraries. So the Debian patch
+debian/patches/add_adbd.patch adds an implementation of b64_pton(),
+but doesn't actually use it, nor defines a prototype for it. Our
+existing patch 0003-Fix-build-issue-with-uclibc.patch switches the
+code to use the b64_pton() function... but still without providing a
+prototype, causing the following build failures with GCC >= 14.x:
 
-Our commit a2e178d6b45dfc5b8d1d50fcbbfc0bec5ebf1ae2 ("android-tools:
-disable on some architecture with old kernel headers") already
-disabled building fastboot on powerpc64 and mips64 systems that have
-too old kernel headers. However, it turns out that even with the new
-kernel headers, there are build issues because
-__SANE_USERSPACE_TYPES__ isn't defined everywhere it should be in the
-android-tools code base. The Debian patche
-debian/patches/ppc64el-ftbfs.patch adds some definitions, but it's
-missing one file, and in another the definition comes too late.
+adb_auth_client.c:75:15: error: implicit declaration of function 'b64_pton'
 
-This commit adds an extra patch that fixes this up, and makes fastboot
-build properly on mips64 and powerpc64.
+To fix this, we rework 0003-Fix-build-issue-with-uclibc.patch into a
+patch that:
+
+ (1) Renames b64_pton() to adb_b64_pton() to make sure it won't clash
+     with implementations provided by some C libraries, and adjusts
+     the call sites accordingly.
+
+ (2) Adds a prototype definition of adb_b64_pton() in places where
+     this function is used.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/8528ff876e695f79bdfe64f5330d9d51eeef66cb/ (powerpc64)
-  http://autobuild.buildroot.net/results/36ac6af73b618c28d1636093da333f7ebd9d6cfe/ (mips64)
+  http://autobuild.buildroot.net/results/b25b25337c7ad89c33f8bd20b646850bd993ec53ae9/
 
-This issue has been occurring as far as Feb 2021, with the first
-occurence apparently being:
+Even though GCC 14.x support was merged in Buildroot in May 2024, this
+particular b64_pton() only started appearing on July 15 2024, with the
+first occurence being:
 
-  http://autobuild.buildroot.net/results/d9521b4bfeafb1140c21745dbfe28d476a9b71ec/
+  http://autobuild.buildroot.net/results/1cbe87bbe3c56f28444b3aaba1ba1d05f947d36e/
+
+Indeed, it's not before July 15 2024 that we merged commit
+d201f2f5cd0d1e0389430cda78adead37977a6cd ("package/android-tools: add
+patches to fix build with GCC 14.x"), which fixed other GCC 14.x
+issues, which were hiding this b64_pton() problem.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- ..._utils-make_ext4fs.c-define-__SANE_USERSP.patch | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ .checkpackageignore                                |  1 -
+ .../0003-Adjust-base64-function-handling.patch     | 96 ++++++++++++++++++++++
+ .../0003-Fix-build-issue-with-uclibc.patch         | 40 ---------
+ 3 files changed, 96 insertions(+), 41 deletions(-)
 
-diff --git a/package/android-tools/0016-extras-ext4_utils-make_ext4fs.c-define-__SANE_USERSP.patch b/package/android-tools/0016-extras-ext4_utils-make_ext4fs.c-define-__SANE_USERSP.patch
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 11e410b4ea..0dcca5ebc7 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -271,7 +271,6 @@ package/am33x-cm3/0004-Makefile-add-fno-builtin.patch lib_patch.Upstream
+ package/am33x-cm3/S93-am335x-pm-firmware-load lib_sysv.Variables
+ package/android-tools/0001-Fix-makefiles-for-out-of-tree-build.patch lib_patch.Upstream
+ package/android-tools/0002-Fix-adbd-for-non-Ubuntu-systems.patch lib_patch.Upstream
+-package/android-tools/0003-Fix-build-issue-with-uclibc.patch lib_patch.Upstream
+ package/android-tools/0004-Fix-build-issue-with-musl.patch lib_patch.Upstream
+ package/android-tools/0005-makefiles-use-pkgconf-to-get-libs-deps.patch lib_patch.Upstream
+ package/android-tools/0006-Fix-build-on-big-endian-systems.patch lib_patch.Upstream
+diff --git a/package/android-tools/0003-Adjust-base64-function-handling.patch b/package/android-tools/0003-Adjust-base64-function-handling.patch
 new file mode 100644
-index 0000000000..5f3650cc77
+index 0000000000..30a6e680b9
 --- /dev/null
-+++ b/package/android-tools/0016-extras-ext4_utils-make_ext4fs.c-define-__SANE_USERSP.patch
-@@ -0,0 +1,68 @@
-+From 5db9529436f13b8c073a0310da3a1107f84645da Mon Sep 17 00:00:00 2001
++++ b/package/android-tools/0003-Adjust-base64-function-handling.patch
+@@ -0,0 +1,96 @@
++From 946dbb00fe4b2a75c688a470fc0c3924aa018a24 Mon Sep 17 00:00:00 2001
 +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Wed, 4 Dec 2024 20:51:22 +0100
-+Subject: [PATCH] extras/ext4_utils/make_ext4fs.c: define
-+ __SANE_USERSPACE_TYPES__
++Date: Sun, 14 Jul 2024 11:39:49 +0200
++Subject: [PATCH] Adjust base64 function handling
 +MIME-Version: 1.0
 +Content-Type: text/plain; charset=UTF-8
 +Content-Transfer-Encoding: 8bit
 +
-+The Debian patch ppc64el-ftbfs.patch is already defining
-+__SANE_USERSPACE_TYPES__ in a few files to solve a conflict between
-+kernel header definitions and local definition of some types, on
-+powerpc64 and mips64.
++In order to support libcs that do not provide b64_pton(), one of the
++Debian patches adds a copy of b64_pton() and b64_ntop(). However, no
++prototype is added for those functions, causing an "implicit
++declaration" warning... or error depending on the compiler version
++used:
 +
-+However, the Debian patch lacks an update to ext4_utils.c, and has the
-+definition too late in make_ext4fs.c. This commit therefore fixes
-+those two remaining issues, fixing:
++core/adbd/adb_auth_client.c:75:15: error: implicit declaration of function ‘b64_pton’ [-Wimplicit-function-declaration]
 +
-+error: conflicting types for ‘u64’; have ‘long unsigned int’
++This patch adds appropriate prototypes, but while at it, also renames
++the internal copy of b64_*() functions to have an adb_ prefix in order
++to clarify things and not clash with definitions potentially coming
++from the C library.
 +
 +Upstream: N/A, we're too far from upstream
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ extras/ext4_utils/ext4_utils.c  | 5 ++++-
-+ extras/ext4_utils/make_ext4fs.c | 4 ++++
-+ 2 files changed, 8 insertions(+), 1 deletion(-)
++ core/adb/adb_auth_client.c  | 3 ++-
++ core/adbd/adb_auth_client.c | 3 ++-
++ core/adbd/base64.c          | 4 ++--
++ 3 files changed, 6 insertions(+), 4 deletions(-)
 +
-+diff --git a/extras/ext4_utils/ext4_utils.c b/extras/ext4_utils/ext4_utils.c
-+index e95f5cc..9f6836f 100644
-+--- a/extras/ext4_utils/ext4_utils.c
-++++ b/extras/ext4_utils/ext4_utils.c
-+@@ -14,6 +14,10 @@
-+  * limitations under the License.
++diff --git a/core/adb/adb_auth_client.c b/core/adb/adb_auth_client.c
++index 0b4913e..25b9828 100644
++--- a/core/adb/adb_auth_client.c
+++++ b/core/adb/adb_auth_client.c
++@@ -45,6 +45,7 @@ static char *key_paths[] = {
++ static fdevent listener_fde;
++ static int framework_fd = -1;
++ 
+++extern int adb_b64_pton(char const *src, u_char *target, size_t targsize);
++ 
++ static void read_keys(const char *file, struct listnode *list)
++ {
++@@ -72,7 +73,7 @@ static void read_keys(const char *file, struct listnode *list)
++         if (sep)
++             *sep = '\0';
++ 
++-        ret = __b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
+++        ret = adb_b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
++         if (ret != sizeof(key->key)) {
++             D("%s: Invalid base64 data ret=%d\n", file, ret);
++             free(key);
++diff --git a/core/adbd/adb_auth_client.c b/core/adbd/adb_auth_client.c
++index 0b4913e..25b9828 100644
++--- a/core/adbd/adb_auth_client.c
+++++ b/core/adbd/adb_auth_client.c
++@@ -45,6 +45,7 @@ static char *key_paths[] = {
++ static fdevent listener_fde;
++ static int framework_fd = -1;
++ 
+++extern int adb_b64_pton(char const *src, u_char *target, size_t targsize);
++ 
++ static void read_keys(const char *file, struct listnode *list)
++ {
++@@ -72,7 +73,7 @@ static void read_keys(const char *file, struct listnode *list)
++         if (sep)
++             *sep = '\0';
++ 
++-        ret = __b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
+++        ret = adb_b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
++         if (ret != sizeof(key->key)) {
++             D("%s: Invalid base64 data ret=%d\n", file, ret);
++             free(key);
++diff --git a/core/adbd/base64.c b/core/adbd/base64.c
++index 7270703..91fc1b2 100644
++--- a/core/adbd/base64.c
+++++ b/core/adbd/base64.c
++@@ -134,7 +134,7 @@ static const char Pad64 = '=';
++    */
++ 
++ int
++-b64_ntop(src, srclength, target, targsize)
+++adb_b64_ntop(src, srclength, target, targsize)
++ 	u_char const *src;
++ 	size_t srclength;
++ 	char *target;
++@@ -212,7 +212,7 @@ b64_ntop(src, srclength, target, targsize)
 +  */
 + 
-++#if defined(__linux__)
-++#define __SANE_USERSPACE_TYPES__
-++#endif
-++
-+ #include "ext4_utils.h"
-+ #include "uuid.h"
-+ #include "allocate.h"
-+@@ -36,7 +40,6 @@
-+ #endif
-+ 
-+ #if defined(__linux__)
-+-#define __SANE_USERSPACE_TYPES__
-+ #include <linux/fs.h>
-+ #elif defined(__APPLE__) && defined(__MACH__)
-+ #include <sys/disk.h>
-+diff --git a/extras/ext4_utils/make_ext4fs.c b/extras/ext4_utils/make_ext4fs.c
-+index 3124aed..332a213 100644
-+--- a/extras/ext4_utils/make_ext4fs.c
-++++ b/extras/ext4_utils/make_ext4fs.c
-+@@ -14,6 +14,10 @@
-+  * limitations under the License.
-+  */
-+ 
-++#if defined(__linux__)
-++#define __SANE_USERSPACE_TYPES__
-++#endif
-++
-+ #include "make_ext4fs.h"
-+ #include "ext4_utils.h"
-+ #include "allocate.h"
++ int
++-b64_pton(src, target, targsize)
+++adb_b64_pton(src, target, targsize)
++ 	char const *src;
++ 	u_char *target;
++ 	size_t targsize;
 +-- 
 +2.47.0
 +
+diff --git a/package/android-tools/0003-Fix-build-issue-with-uclibc.patch b/package/android-tools/0003-Fix-build-issue-with-uclibc.patch
+deleted file mode 100644
+index a951271873..0000000000
+--- a/package/android-tools/0003-Fix-build-issue-with-uclibc.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 082ee80d3524fa3474644c09b441d7f7947675cc Mon Sep 17 00:00:00 2001
+-From: Gary Bisson <gary.bisson@boundarydevices.com>
+-Date: Sun, 1 Dec 2024 15:43:56 +0100
+-Subject: [PATCH] Fix build issue with uclibc
+-
+-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+----
+- core/adb/adb_auth_client.c  | 2 +-
+- core/adbd/adb_auth_client.c | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/core/adb/adb_auth_client.c b/core/adb/adb_auth_client.c
+-index 0b4913e..068d837 100644
+---- a/core/adb/adb_auth_client.c
+-+++ b/core/adb/adb_auth_client.c
+-@@ -72,7 +72,7 @@ static void read_keys(const char *file, struct listnode *list)
+-         if (sep)
+-             *sep = '\0';
+- 
+--        ret = __b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
+-+        ret = b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
+-         if (ret != sizeof(key->key)) {
+-             D("%s: Invalid base64 data ret=%d\n", file, ret);
+-             free(key);
+-diff --git a/core/adbd/adb_auth_client.c b/core/adbd/adb_auth_client.c
+-index 0b4913e..068d837 100644
+---- a/core/adbd/adb_auth_client.c
+-+++ b/core/adbd/adb_auth_client.c
+-@@ -72,7 +72,7 @@ static void read_keys(const char *file, struct listnode *list)
+-         if (sep)
+-             *sep = '\0';
+- 
+--        ret = __b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
+-+        ret = b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
+-         if (ret != sizeof(key->key)) {
+-             D("%s: Invalid base64 data ret=%d\n", file, ret);
+-             free(key);
+--- 
+-2.47.0
+-
 
---===============1270767313481722243==
+--===============5720947320417301467==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -191,4 +286,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1270767313481722243==--
+--===============5720947320417301467==--
