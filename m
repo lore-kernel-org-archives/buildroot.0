@@ -1,59 +1,108 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 852D4E7716D
-	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 07:43:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44A81E7716B
+	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 14:36:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3610B84750;
-	Wed,  4 Dec 2024 07:43:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C228440B5B;
+	Wed,  4 Dec 2024 14:36:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uLw1d62MolGI; Wed,  4 Dec 2024 07:43:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TQQo1lL46N60; Wed,  4 Dec 2024 14:36:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53C6E8486B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C55D408B7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 53C6E8486B;
-	Wed,  4 Dec 2024 07:43:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D6E871DC8
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 07:43:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C55D408B7;
+	Wed,  4 Dec 2024 14:36:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D44F51DC8
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 14:36:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A414C60F3E
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 07:43:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AF96440D5B
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 14:36:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B0VjOpIp-4Ey for <buildroot@buildroot.org>;
- Wed,  4 Dec 2024 07:43:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
- helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D916860F72
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D916860F72
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D916860F72
- for <buildroot@uclibc.org>; Wed,  4 Dec 2024 07:43:11 +0000 (UTC)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1tIk2O-000228-PP
- for buildroot@uclibc.org; Wed, 04 Dec 2024 08:43:08 +0100
-X-Injected-Via-Gmane: http://gmane.org/
-To: buildroot@uclibc.org
-From: Bernd Kuhls <bernd@kuhls.net>
-Date: Wed, 04 Dec 2024 08:42:10 +0100
-Message-ID: <pan$195e7$fd7fefb7$b25efed4$ee4a9dda@ID-313208.user.individual.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aE08-ztKDB_1 for <buildroot@buildroot.org>;
+ Wed,  4 Dec 2024 14:36:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::535; helo=mail-ed1-x535.google.com;
+ envelope-from=alex.bennee@linaro.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6281541310
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6281541310
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6281541310
+ for <buildroot@uclibc.org>; Wed,  4 Dec 2024 14:36:08 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id
+ 4fb4d7f45d1cf-5ceb03aadb1so8322805a12.0
+ for <buildroot@uclibc.org>; Wed, 04 Dec 2024 06:36:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1733322966; x=1733927766;
+ h=content-transfer-encoding:mime-version:message-id:date:user-agent
+ :references:in-reply-to:subject:cc:to:from:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=mjv6ky7Pp4vKVoyhYD0wI9abiOF/KoiQS9DZ1A8UE5o=;
+ b=KjLxBVxBf01obJd49WkXaMnYzYZbYwh593Y8fhKbQkqdAAQIeOvBptoQWD8pVMGQ02
+ UDSkA6Q67bCc2a+06cYXwj2ZnwQC1D0s0VNh8U/2ezYHec5YgB6bQa/f7OS1+46mMQ+V
+ iNJqk6wQK3P/eltOOrLlbWYA+6n711DjUUCqEYeNyPepNoHWnPocZeftdcEHMQoWS7ns
+ eUOParT6KiQfU4Z2l2OuxiCvG3exlQZp473H15kCmqWQAy+AK8ACPePw7OyJWWkEVaHC
+ JHin6joquBYAPVvsx/KMQwU+Q9ra956lzrVruoxIfMQPwbzDUVpphWkajEb1g6Z7Gm54
+ ILow==
+X-Gm-Message-State: AOJu0YyHPbKkImp2MggWBheQ2aRCaYSANXLXhKLJIopdLzjPSNYlzozN
+ yVzpZORYNmEf1DL8dqHsBNEJQzd8Zv1XmF6evNaRp6GgClltzeEZegyic0s84ok=
+X-Gm-Gg: ASbGncuwuYCbvfpFohCeV93x9oxz2hOpqo4JmzE9NNqbzk8GH9QgqtMXpGI4eyGmuLD
+ Ctv6HDWZ6wRIIecgpg4D42xWzlfYYxBtP7+pTXQXbpTCFumqUmNm13O1QQh/Q4oe8IcOKFXc8dO
+ kBcL72j0j9Os63rYJSuLVbOI7CiKebwv2JbohbwOkm8pJnpImqZCpe9uTwczxy7M1kpCVPScSyM
+ kxYWD0SQD/Z14vu+2dKeih4YETwQn67mV72caYshtY1S6Ve
+X-Google-Smtp-Source: AGHT+IEAMkvY87y7eCM3I66KsTvMmqYTq+oEbSHsVa1Mhzc1PnzkmRSLsKQfqo2SLjhG0H8N96pjdg==
+X-Received: by 2002:a05:6402:27c6:b0:5d0:8e70:cf74 with SMTP id
+ 4fb4d7f45d1cf-5d10cb5524emr6807629a12.9.1733322964579; 
+ Wed, 04 Dec 2024 06:36:04 -0800 (PST)
+Received: from draig.lan ([85.9.250.243]) by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-5d0d5d175ecsm4515099a12.56.2024.12.04.06.36.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 04 Dec 2024 06:36:04 -0800 (PST)
+Received: from draig (localhost [IPv6:::1])
+ by draig.lan (Postfix) with ESMTP id 4BEFB5F77C;
+ Wed,  4 Dec 2024 14:36:03 +0000 (GMT)
+From: =?utf-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@uclibc.org
+In-Reply-To: <pan$195e7$fd7fefb7$b25efed4$ee4a9dda@ID-313208.user.individual.net>
+ (Bernd Kuhls's message of "Wed, 04 Dec 2024 08:42:10 +0100")
 References: <20241202190647.1211779-1-bernd@kuhls.net>
  <20241202190647.1211779-8-bernd@kuhls.net>
  <c2be6e5c80cb8a212f3c60c7d7414dd1@free.fr>
  <87ldwwbc1j.fsf__10394.9673286238$1733267303$gmane$org@draig.linaro.org>
-Mime-Version: 1.0
-User-Agent: Pan/0.154 (Izium; 517acf4)
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=kuhls.net
+ <pan$195e7$fd7fefb7$b25efed4$ee4a9dda@ID-313208.user.individual.net>
+User-Agent: mu4e 1.12.7; emacs 29.4
+Date: Wed, 04 Dec 2024 14:36:03 +0000
+Message-ID: <87a5dbbjn0.fsf@draig.linaro.org>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=linaro.org; s=google; t=1733322966; x=1733927766; darn=uclibc.org;
+ h=content-transfer-encoding:mime-version:message-id:date:user-agent
+ :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=mjv6ky7Pp4vKVoyhYD0wI9abiOF/KoiQS9DZ1A8UE5o=;
+ b=ZrWjAo9eSRT1jvbp4fXnNWXQSOpEd6EVqAsZuoqg8lcz2axRpfq9clVdPl9LIy2CSi
+ ztBWphFPIpBX1gXbN6QFhGVCBNuGbPRHdp072+1LqjcaD1la8R4SMPdswmHQHVXuWB4Z
+ TVZN8ty3/GInAPgidEhgz9QSaxoLWDCZyoLpdaMea4+zhzq+7dnVHxSzQcHyUTsq+5jh
+ jyx0S1xp0y30l0v32ot0+kUG0SYqJCCibJ2HUyE0HxNDnK95byGVy9IabGDboiarkRI2
+ ICamAHqX2exaaFUG7Tx2QIFF97GGpkJujfmvOmBQ3JZ8Z+/WkysvcuRq6GHeGBywG9ok
+ tDmg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=linaro.org
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256
+ header.s=google header.b=ZrWjAo9e
 Subject: Re: [Buildroot] [PATCH 8/8] package/vkmark: add vkmark benchmarking
  tool
 X-BeenThere: buildroot@buildroot.org
@@ -72,22 +121,26 @@ Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QW0gVHVlLCAwMyBEZWMgMjAyNCAyMzowNzo1MiArMDAwMCBzY2hyaWViIEFsZXggQmVubsOpZToK
-Cj4gVGhpcyB3YXMgYWxyZWFkeSBmaXhlZCBpbjoKPiAKPiAgIFN1YmplY3Q6IFtQQVRDSCAwLzJd
-IEVuYWJsZSB2ZW51cyBhbmQgYWRkIHZrbWFyayBEYXRlOiBNb24sICAyIERlYwo+ICAgMjAyNCAx
-ODoyMDo1OSArMDAwMCBNZXNzYWdlLUlkOgo+ICAgPDIwMjQxMjAyMTgyMTAxLjQxMDMyMC0xLWFs
-ZXguYmVubmVlQGxpbmFyby5vcmc+CgpIaSBBbGV4LAoKdGhlc2UgZXJyb3JzIHdlcmUgbm90IGZp
-eGVkIGJ5IHlvdXIgdXBkYXRlZCBwYXRjaDoKCiAgICAgcGFja2FnZS92a21hcmsvQ29uZmlnLmlu
-OjI2OiBhdHRyaWJ1dGVzIG9yZGVyOiB0eXBlLCBkZWZhdWx0LCAKZGVwZW5kcyBvbiwgc2VsZWN0
-LCBoZWxwIChodHRwczovL25pZ2h0bHkuYnVpbGRyb290Lm9yZy8jX2NvbmZpZ19maWxlcykKCiAg
-ICAgcGFja2FnZS92a21hcmsvQ29uZmlnLmluOjI5OiBhdHRyaWJ1dGVzIG9yZGVyOiB0eXBlLCBk
-ZWZhdWx0LCAKZGVwZW5kcyBvbiwgc2VsZWN0LCBoZWxwIChodHRwczovL25pZ2h0bHkuYnVpbGRy
-b290Lm9yZy8jX2NvbmZpZ19maWxlcykKCkFsc28gdGhlIGRlcGVuZGVuY3kKCglkZXBlbmRzIG9u
-IEJSMl9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzRfOSAKCmNhbiBiZSBkcm9wcGVkIGJlY2F1c2UK
-CglkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzcgIyBhc3NpbXAKCmV4aXN0
-cy4KClRoZSBkZXBlbmRlbmN5CgoJZGVwZW5kcyBvbiBCUjJfSU5TVEFMTF9MSUJTVERDUFAKCmlz
-IHByZXNlbnQgdHdpY2UuCgpTaG91bGQgIUJSMl9VU0VfV0NIQVIgYmUgYWRkZWQgdG8gdGhlIGNv
-bW1lbnQ/CgpSZWdhcmRzLCBCZXJuZAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+QmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4gd3JpdGVzOgoKPiBBbSBUdWUsIDAzIERlYyAy
+MDI0IDIzOjA3OjUyICswMDAwIHNjaHJpZWIgQWxleCBCZW5uw6llOgo+Cj4+IFRoaXMgd2FzIGFs
+cmVhZHkgZml4ZWQgaW46Cj4+IAo+PiAgIFN1YmplY3Q6IFtQQVRDSCAwLzJdIEVuYWJsZSB2ZW51
+cyBhbmQgYWRkIHZrbWFyayBEYXRlOiBNb24sICAyIERlYwo+PiAgIDIwMjQgMTg6MjA6NTkgKzAw
+MDAgTWVzc2FnZS1JZDoKPj4gICA8MjAyNDEyMDIxODIxMDEuNDEwMzIwLTEtYWxleC5iZW5uZWVA
+bGluYXJvLm9yZz4KPgo+IEhpIEFsZXgsCj4KPiB0aGVzZSBlcnJvcnMgd2VyZSBub3QgZml4ZWQg
+YnkgeW91ciB1cGRhdGVkIHBhdGNoOgo+Cj4gICAgICBwYWNrYWdlL3ZrbWFyay9Db25maWcuaW46
+MjY6IGF0dHJpYnV0ZXMgb3JkZXI6IHR5cGUsIGRlZmF1bHQsIAo+IGRlcGVuZHMgb24sIHNlbGVj
+dCwgaGVscCAoaHR0cHM6Ly9uaWdodGx5LmJ1aWxkcm9vdC5vcmcvI19jb25maWdfZmlsZXMpCj4K
+PiAgICAgIHBhY2thZ2UvdmttYXJrL0NvbmZpZy5pbjoyOTogYXR0cmlidXRlcyBvcmRlcjogdHlw
+ZSwgZGVmYXVsdCwgCj4gZGVwZW5kcyBvbiwgc2VsZWN0LCBoZWxwCj4gICAgICAoaHR0cHM6Ly9u
+aWdodGx5LmJ1aWxkcm9vdC5vcmcvI19jb25maWdfZmlsZXMpCgpXaGF0IHRlc3QgZGV0ZWN0cyB0
+aGVzZT8KCkkgcmFuOgoKICB1dGlscy9kb2NrZXItcnVuIG1ha2UgY2hlY2stcGFja2FnZQoKYW5k
+IHRoYXQgd2FzIGNsZWFuLgoKPgo+IEFsc28gdGhlIGRlcGVuZGVuY3kKPgo+IAlkZXBlbmRzIG9u
+IEJSMl9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzRfOSAKPgo+IGNhbiBiZSBkcm9wcGVkIGJlY2F1
+c2UKPgo+IAlkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzcgIyBhc3NpbXAK
+Pgo+IGV4aXN0cy4KPgo+IFRoZSBkZXBlbmRlbmN5Cj4KPiAJZGVwZW5kcyBvbiBCUjJfSU5TVEFM
+TF9MSUJTVERDUFAKPgo+IGlzIHByZXNlbnQgdHdpY2UuCgpGaXhlZC4KCgo+IFNob3VsZCAhQlIy
+X1VTRV9XQ0hBUiBiZSBhZGRlZCB0byB0aGUgY29tbWVudD8KCkhvdyBkbyB5b3UgbWVhbj8gV2Ug
+bmVlZCB3Y2hhci4KCi0tIApBbGV4IEJlbm7DqWUKVmlydHVhbGlzYXRpb24gVGVjaCBMZWFkIEAg
+TGluYXJvCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
+aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
+cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
