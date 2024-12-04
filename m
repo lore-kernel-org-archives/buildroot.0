@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82729E7716D
-	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 22:01:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B00C4E77171
+	for <buildroot@archiver.kernel.org>; Wed,  4 Dec 2024 22:01:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 444C680B6D;
-	Wed,  4 Dec 2024 22:01:10 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uagmxAebDbEV; Wed,  4 Dec 2024 22:01:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F85D81331
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F85D81331;
-	Wed,  4 Dec 2024 22:01:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E874AE8
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 22:01:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B6F960744
- for <buildroot@buildroot.org>; Wed,  4 Dec 2024 22:01:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66ACB60697;
+	Wed,  4 Dec 2024 22:01:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ox_OGdqf5vlE for <buildroot@buildroot.org>;
+ id 1zALxHSiun40; Wed,  4 Dec 2024 22:01:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72DA06084B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72DA06084B;
+	Wed,  4 Dec 2024 22:01:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 380CF1FDB
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 22:01:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 33210400FF
+ for <buildroot@buildroot.org>; Wed,  4 Dec 2024 22:01:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JAMlh8SeoR2H for <buildroot@buildroot.org>;
  Wed,  4 Dec 2024 22:01:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 368B760697
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2BD1140B9C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 368B760697
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2BD1140B9C
  for <buildroot@buildroot.org>; Wed,  4 Dec 2024 22:01:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 20AC486930; Wed,  4 Dec 2024 22:01:06 +0000 (UTC)
+ id 113898692F; Wed,  4 Dec 2024 22:01:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Dec 2024 22:53:12 +0100
+Date: Wed, 4 Dec 2024 22:49:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c4a56d3f6d45898c889b68f1ab785dcabcce31bf
-X-Git-Newrev: f6fa3324eb3f1966b51965b3ae1b2740d05e38a6
+X-Git-Oldrev: 1eec67d164c7087aa0bed30599681e908fb2fb41
+X-Git-Newrev: c4a56d3f6d45898c889b68f1ab785dcabcce31bf
 X-Patchwork-Hint: ignore
-Message-Id: <20241204220106.20AC486930@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/polkit: disable PIDFD when systemd
- is not available
+Message-Id: <20241204220106.113898692F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnutls: fix configure options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,88 +65,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6fa3324eb3f1966b51965b3ae1b2740d05e38a6
+commit: https://git.buildroot.net/buildroot/commit/?id=c4a56d3f6d45898c889b68f1ab785dcabcce31bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the Polkit version bump 125, TestPolkitInitd fail due to an
-upstream issue related to the new PIDFD support introduced in
-Polkit 124 [1].
+Two configure option names have been changed since version 3.7.5 [1]:
 
-The PIDFD issue only affect OS without systemd.
-
-Only enable PIDFD support when systemd is available until
-upstream fix the issue.
+> Old: --without-libbrotli --without-libzstd (also --with-*)
+> New: --without-brotli --without-zstd (also --with-*)
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992596
 
-[1] https://github.com/polkit-org/polkit/issues/451
+  configure: WARNING: unrecognized options: [...] --without-libbrotli, --without-libzstd
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+[1]: https://gitlab.com/gnutls/gnutls/-/commit/6b794e49d1a14e43f9e08023f958364712c3c89a
+
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- ...sable-PIDFD-when-systemd-is-not-available.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ package/gnutls/gnutls.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/polkit/0001-meson-disable-PIDFD-when-systemd-is-not-available.patch b/package/polkit/0001-meson-disable-PIDFD-when-systemd-is-not-available.patch
-new file mode 100644
-index 0000000000..621b1feef7
---- /dev/null
-+++ b/package/polkit/0001-meson-disable-PIDFD-when-systemd-is-not-available.patch
-@@ -0,0 +1,53 @@
-+From 51a1c5b5ab616fe0243b40baddb4864199bbe624 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@smile.fr>
-+Date: Sat, 2 Nov 2024 23:33:16 +0100
-+Subject: [PATCH] meson: disable PIDFD when systemd is not available
-+
-+Since the Polkit version bump 125, TestPolkitInitd fail due to an
-+upstream issue related to the new PIDFD support introduced in
-+Polkit 124 [1].
-+
-+The PIDFD issue only affect OS without systemd.
-+
-+Only enable PIDFD support when systemd is available until
-+upstream fix the issue.
-+
-+Fixes:
-+https://gitlab.com/buildroot.org/buildroot/-/jobs/8199992596
-+
-+[1] https://github.com/polkit-org/polkit/issues/451
-+
-+Upstream: Not applicable
-+
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ meson.build | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 302c189..5c247f4 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -202,8 +202,6 @@ if enable_logind
-+ endif
-+ config_data.set('HAVE_LIBSYSTEMD', enable_logind)
-+ 
-+-config_data.set('HAVE_PIDFD_OPEN', cc.get_define('SYS_pidfd_open', prefix: '#include <sys/syscall.h>') != '')
-+-
-+ # systemd unit / sysuser / tmpfiles.d file installation directories
-+ systemdsystemunitdir = get_option('systemdsystemunitdir')
-+ systemd_dep = dependency('systemd', required : false)
-+@@ -222,6 +220,10 @@ else
-+   tmpfiles_dir = '/usr/lib/tmpfiles.d'
-+ endif
-+ 
-++# PIDFD is broken with sysvinit based OS since 124 release
-++# https://github.com/polkit-org/polkit/issues/451
-++config_data.set('HAVE_PIDFD_OPEN', systemd_dep.found() and cc.get_define('SYS_pidfd_open', prefix: '#include <sys/syscall.h>') != '')
-++
-+ # User for running polkitd
-+ polkitd_user = get_option('polkitd_user')
-+ config_data.set_quoted('POLKITD_USER', polkitd_user)
-+-- 
-+2.45.0
-+
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index a5012b1b21..2584f843ad 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -62,11 +62,11 @@ HOST_GNUTLS_CONF_OPTS = \
+ 	--without-tpm \
+ 	--without-tpm2 \
+ 	--disable-openssl-compatibility \
+-	--without-libbrotli \
++	--without-brotli \
+ 	--without-idn \
+ 	--without-p11-kit \
+ 	--without-zlib \
+-	--without-libzstd
++	--without-zstd
+ 
+ ifeq ($(BR2_PACKAGE_GNUTLS_OPENSSL),y)
+ GNUTLS_LICENSE += , GPL-3.0+ (gnutls-openssl library)
+@@ -77,10 +77,10 @@ GNUTLS_CONF_OPTS += --disable-openssl-compatibility
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_BROTLI),y)
+-GNUTLS_CONF_OPTS += --with-libbrotli
++GNUTLS_CONF_OPTS += --with-brotli
+ GNUTLS_DEPENDENCIES += brotli
+ else
+-GNUTLS_CONF_OPTS += --without-libbrotli
++GNUTLS_CONF_OPTS += --without-brotli
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
+@@ -110,10 +110,10 @@ GNUTLS_CONF_OPTS += --without-zlib
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_ZSTD),y)
+-GNUTLS_CONF_OPTS += --with-libzstd
++GNUTLS_CONF_OPTS += --with-zstd
+ GNUTLS_DEPENDENCIES += zstd
+ else
+-GNUTLS_CONF_OPTS += --without-libzstd
++GNUTLS_CONF_OPTS += --without-zstd
+ endif
+ 
+ # Provide a default CA cert location
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
