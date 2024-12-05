@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CCEEE77178
-	for <buildroot@archiver.kernel.org>; Thu,  5 Dec 2024 16:58:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92C54E77170
+	for <buildroot@archiver.kernel.org>; Thu,  5 Dec 2024 17:07:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31B1F60FEF;
-	Thu,  5 Dec 2024 16:58:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 52A64610B8;
+	Thu,  5 Dec 2024 17:07:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G6z0RVjK4zEi; Thu,  5 Dec 2024 16:58:44 +0000 (UTC)
+ id JVVAMTvXiJDZ; Thu,  5 Dec 2024 17:07:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D61EA60F72
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39B0E610C6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D61EA60F72;
-	Thu,  5 Dec 2024 16:58:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F91A1DD9
- for <buildroot@buildroot.org>; Thu,  5 Dec 2024 16:58:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39B0E610C6;
+	Thu,  5 Dec 2024 17:07:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DAE9D1DD1
+ for <buildroot@buildroot.org>; Thu,  5 Dec 2024 17:07:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EBED960F6C
- for <buildroot@buildroot.org>; Thu,  5 Dec 2024 16:58:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5B114156E
+ for <buildroot@buildroot.org>; Thu,  5 Dec 2024 17:07:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ADzR-iO2EtHM for <buildroot@buildroot.org>;
- Thu,  5 Dec 2024 16:58:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TuHOB7Lgwbds for <buildroot@buildroot.org>;
+ Thu,  5 Dec 2024 17:07:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA77A60F74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81C374155B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BA77A60F74
- for <buildroot@buildroot.org>; Thu,  5 Dec 2024 16:58:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 81C374155B
+ for <buildroot@buildroot.org>; Thu,  5 Dec 2024 17:07:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A6EDF8695A; Thu,  5 Dec 2024 16:58:38 +0000 (UTC)
+ id 7912786967; Thu,  5 Dec 2024 17:07:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Dec 2024 17:55:32 +0100
+Date: Thu, 5 Dec 2024 18:06:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 80f25d47060dea19b8f3b5fd84b6238375c54729
-X-Git-Newrev: fee18cca535f6f08e8d94bb13450e65adbcb7a27
+X-Git-Oldrev: fee18cca535f6f08e8d94bb13450e65adbcb7a27
+X-Git-Newrev: 0901a670a88e039e08d47442dfe3c34ffd43a26f
 X-Patchwork-Hint: ignore
-Message-Id: <20241205165838.A6EDF8695A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/procps-ng: fix pidfd_open checking
+Message-Id: <20241205170722.7912786967@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2024.11-rc3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,237 +64,133 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fee18cca535f6f08e8d94bb13450e65adbcb7a27
+commit: https://git.buildroot.net/buildroot/commit/?id=0901a670a88e039e08d47442dfe3c34ffd43a26f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/02a2b1d9ece040c529308800403f0230ead4ed3e/
-
-The previous build setup would check for pidfd_open using
-AC_CHECK_FUNC and would be incorrectly reported as true.
-
-Backport patch from upstream:
-[1] https://gitlab.com/procps-ng/procps/-/commit/2507bc475782ff5e0541d37c780dff1e293c9553
-[2] https://gitlab.com/procps-ng/procps/-/commit/587efb47df7ddbfda4e6abdd1e7792a2531a238f
-[3] https://gitlab.com/procps-ng/procps/-/commit/5acbb5dc1587d688de646d739a97251eb893bbb0
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0003-build-sys-Fix-pidfd_open-checking.patch   | 99 ++++++++++++++++++++++
- ...4-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch | 37 ++++++++
- ...p-Include-sys-syscall.h-if-making-pidwait.patch | 41 +++++++++
- package/procps-ng/procps-ng.mk                     |  2 +
- 4 files changed, 179 insertions(+)
+ CHANGES                    |  9 +++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ 4 files changed, 41 insertions(+), 11 deletions(-)
 
-diff --git a/package/procps-ng/0003-build-sys-Fix-pidfd_open-checking.patch b/package/procps-ng/0003-build-sys-Fix-pidfd_open-checking.patch
-new file mode 100644
-index 0000000000..fc7e092347
---- /dev/null
-+++ b/package/procps-ng/0003-build-sys-Fix-pidfd_open-checking.patch
-@@ -0,0 +1,99 @@
-+From f37d178d5c25c547835d054fbb1eda32c25034b3 Mon Sep 17 00:00:00 2001
-+From: Craig Small <csmall@dropbear.xyz>
-+Date: Mon, 30 Sep 2024 17:26:01 +1000
-+Subject: [PATCH] build-sys: Fix pidfd_open checking
+diff --git a/CHANGES b/CHANGES
+index 59fdfd15c4..6951720a8b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,12 @@
++2024.11-rc3, released Decemmber 5th, 2024
 +
-+The previous build setup would check for pidfd_open using
-+AC_CHECK_FUNC and would be incorrectly reported as true.
++	Fixes all over the tree.
 +
-+Also, if pidfd_open() and __NR_pidfd_open were not present,
-+pidwait would silently not be built.
++	Updated/fixed packages: alsa-lib, android-tools, bats-core,
++	doxygen, frr, gnutls, libvpl, linux-tools, lmbench, lrzsz,
++	musl, nfs-utils, opkg, polkit, postgresql, procps-ng,
++	python-psycopg2, quagga, rt-tests, rust, sexpect
 +
-+So, changes:
-+ compile a small programin using pidfd_open to test it properly
-+ conditionally try to find NR_pidfd_open if the function fails
-+ complain if neither are present
-+ have --disable-pidwait configure option so you are explicit in
-+ not wanting and knowing you wont get pidwait
-+
-+References:
-+ #352
-+ commit d9c3e3676d86094abaa239b3218f57bf49d70b4f
-+ commit 17f94796a9b3c4f1ff28829107a82107dcb362b4
-+
-+Signed-off-by: Craig Small <csmall@dropbear.xyz>
-+
-+Upstream: https://gitlab.com/procps-ng/procps/-/commit/2507bc475782ff5e0541d37c780dff1e293c9553
-+
-+Signed-off-by: Scott Fan <fancp2007@gmail.com>
-+[Scott: backported to version 4.0.4]
-+---
-+ configure.ac | 45 ++++++++++++++++++++++++++++++---------------
-+ 1 file changed, 30 insertions(+), 15 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index fec27e3f..0719fcd1 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -170,21 +170,6 @@ AC_TRY_COMPILE([#include <errno.h>],
-+ 		AC_MSG_RESULT(yes),
-+ 		AC_MSG_RESULT(no))
-+ 
-+-AC_CHECK_FUNC([pidfd_open], [enable_pidwait=yes], [
-+-  AC_MSG_CHECKING([for __NR_pidfd_open])
-+-  AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-+-#include <sys/syscall.h>
-+-#ifndef __NR_pidfd_open
-+-#error __NR_pidfd_open not defined
-+-#endif
-+-    ])], [enable_pidwait=yes], [enable_pidwait=no])
-+-  AC_MSG_RESULT([$enable_pidwait])
-+-])
-+-if test "$enable_pidwait" = yes; then
-+-  AC_DEFINE([ENABLE_PIDWAIT], [1], [Enable pidwait])
-+-fi
-+-AM_CONDITIONAL([BUILD_PIDWAIT], [test x$enable_pidwait = xyes])
-+-
-+ dnl watch8bit must be before the AC_ARG_WITH set as it sets up ncurses
-+ AC_SUBST([WITH_WATCH8BIT])
-+ AC_ARG_ENABLE([watch8bit],
-+@@ -321,6 +306,36 @@ AC_ARG_ENABLE([pidof],
-+ )
-+ AM_CONDITIONAL(BUILD_PIDOF, test "x$enable_pidof" = xyes)
-+ 
-++# If pidwait is enabled, we need either pidfd_open() or __NR_pidfd_open need to be defined
-++# Cannot use AC_CHECK_FUNC as it (incorrectly) passes with pidfd_open missing
-++AC_ARG_ENABLE([pidwait],
-++  AS_HELP_STRING([--disable-pidwait], [do not build pidwait]),
-++  [], [
-++    enable_pidwait=yes
-++    AC_DEFINE(ENABLE_PIDWAIT, 1, [enable pidwait])
-++  ]
-++)
-++AM_CONDITIONAL(BUILD_PIDWAIT, test "x$enable_pidwait" = xyes)
-++AC_MSG_CHECKING([for pidfd_open()])
-++AC_LINK_IFELSE([AC_LANG_PROGRAM([], [[ [pidfd_open(1,1)]]])],
-++  have_pidfd_open=yes; AC_MSG_RESULT([yes]) ,
-++  have_pidfd_open=no; AC_MSG_RESULT([no])
-++  )
-++
-++AS_IF([[test "x$enable_pidwait" = xyes -a "x$have_pidfd_open" = xno]],
-++   AC_MSG_CHECKING([for __NR_pidfd_open])
-++   AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-++#include <sys/syscall.h>
-++#ifndef __NR_pidfd_open
-++#error __NR_pidfd_open not defined
-++#endif
-++      ])],
-++      AC_MSG_RESULT([yes]),
-++      AC_MSG_RESULT([no])
-++      AC_MSG_ERROR([Neither pidfd_open or __NR_pidfd_open found. Disable pidwait with configure option --disable-pidwait])
-++    )
-++   ,[])
-++
-+ AC_ARG_ENABLE([kill],
-+   AS_HELP_STRING([--disable-kill], [do not build kill]),
-+   [], [enable_kill=yes]
-+-- 
-+2.43.0
-+
-diff --git a/package/procps-ng/0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch b/package/procps-ng/0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch
-new file mode 100644
-index 0000000000..aa65df7706
---- /dev/null
-+++ b/package/procps-ng/0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch
-@@ -0,0 +1,37 @@
-+From 1e2d53e1d86cb75e8f39b42b9a5c409e5d3261ed Mon Sep 17 00:00:00 2001
-+From: oli-ben <24815225-oli-ben@users.noreply.gitlab.com>
-+Date: Wed, 27 Nov 2024 20:17:11 +0000
-+Subject: [PATCH] build-sys: Fix define of HAVE_PIDFD_OPEN
-+
-+Fix cross-compilation issues when using GCC-12.3
-+* configure fails to detect that the sysroot does support the pidfd_open
-+  syscall wrapper
-+* configure fails to define HAVE_PIDFD_OPEN which is used in pgrep.c,
-+  so it fails building, because __NR_pidfd_open is then undefined
-+
-+Upstream: https://gitlab.com/procps-ng/procps/-/commit/587efb47df7ddbfda4e6abdd1e7792a2531a238f
-+
-+Signed-off-by: Scott Fan <fancp2007@gmail.com>
-+[Scott: backported to version 4.0.4]
-+---
-+ configure.ac | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 0719fcd1..6242a8f8 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -317,8 +317,8 @@ AC_ARG_ENABLE([pidwait],
-+ )
-+ AM_CONDITIONAL(BUILD_PIDWAIT, test "x$enable_pidwait" = xyes)
-+ AC_MSG_CHECKING([for pidfd_open()])
-+-AC_LINK_IFELSE([AC_LANG_PROGRAM([], [[ [pidfd_open(1,1)]]])],
-+-  have_pidfd_open=yes; AC_MSG_RESULT([yes]) ,
-++AC_LINK_IFELSE([AC_LANG_PROGRAM([], [[pidfd_open(1,1)]])],
-++  have_pidfd_open=yes; AC_DEFINE(HAVE_PIDFD_OPEN, 1, [pidfd_open is defined]) AC_MSG_RESULT([yes]),
-+   have_pidfd_open=no; AC_MSG_RESULT([no])
-+   )
-+ 
-+-- 
-+2.43.0
-+
-diff --git a/package/procps-ng/0005-pgrep-Include-sys-syscall.h-if-making-pidwait.patch b/package/procps-ng/0005-pgrep-Include-sys-syscall.h-if-making-pidwait.patch
-new file mode 100644
-index 0000000000..74f93c8e49
---- /dev/null
-+++ b/package/procps-ng/0005-pgrep-Include-sys-syscall.h-if-making-pidwait.patch
-@@ -0,0 +1,41 @@
-+From 81ded587d2484b6f470f2d5c837c5591491377ce Mon Sep 17 00:00:00 2001
-+From: Craig Small <csmall@dropbear.xyz>
-+Date: Thu, 28 Nov 2024 07:20:42 +1100
-+Subject: [PATCH] pgrep: Include sys/syscall.h if making pidwait
-+
-+sys/syscall.h would only be included if pidwait was made
-+and we found pidfd_open() The previous commit fixed the
-+finding part, but in fact we want sys/syscall.h either
-+way because syscall() is defined there too.
-+
-+Most of the time the header is included by other headers
-+but adding it explicitly means if that header is removed or
-+changed it still works.
-+
-+Signed-off-by: Craig Small <csmall@dropbear.xyz>
-+
-+Upstream: https://gitlab.com/procps-ng/procps/-/commit/5acbb5dc1587d688de646d739a97251eb893bbb0
-+
-+Signed-off-by: Scott Fan <fancp2007@gmail.com>
-+[Scott: backported to version 4.0.4]
-+---
-+ src/pgrep.c | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/src/pgrep.c b/src/pgrep.c
-+index d8e57dff..a2607532 100644
-+--- a/src/pgrep.c
-++++ b/src/pgrep.c
-+@@ -44,9 +44,7 @@
-+ 
-+ #ifdef ENABLE_PIDWAIT
-+ #include <sys/epoll.h>
-+-#ifndef HAVE_PIDFD_OPEN
-+ #include <sys/syscall.h>
-+-#endif /* !HAVE_PIDFD_OPEN */
-+ #endif
-+ 
-+ /* EXIT_SUCCESS is 0 */
-+-- 
-+2.43.0
-+
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index c5185c2c8a..9200b6faa6 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -16,6 +16,8 @@ PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
+ 2024.11-rc2, released November 23rd, 2024
  
- # Applying 0001-build-sys-Add-systemd-elogind-to-w.patch touches Makefile.am
- # Applying 0002-fix-ncurses-h-include.patch touches configure.ac
-+# Applying 0003-build-sys-Fix-pidfd_open-checking.patch touches configure.ac
-+# Applying 0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch touches configure.ac
- PROCPS_NG_AUTORECONF = YES
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index c6ea6269a1..2787cd38fc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
  
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ # Set and export the version string
+-export BR2_VERSION := 2024.11-rc2
++export BR2_VERSION := 2024.11-rc3
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1732356000
++BR2_VERSION_EPOCH = 1733418000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 0d4bad5afb..9be40f5d58 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -76,37 +76,37 @@
+ 	</div>
+       </div>
+ 
+-      <h3 style="text-align: center;">Latest release candidate: <b>2024.11-rc2</b></h3>
++      <h3 style="text-align: center;">Latest release candidate: <b>2024.11-rc3</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2024.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.11-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2024.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.11-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2024.11-rc2.tar.gz">buildroot-2024.11-rc2.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2024.11-rc2.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2024.11-rc3.tar.gz">buildroot-2024.11-rc3.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2024.11-rc3.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2024.11-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.11-rc3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2024.11-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.11-rc3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2024.11-rc2.tar.xz">buildroot-2024.11-rc2.tar.xz</a></h3>
+-	  <p><a href="/downloads/buildroot-2024.11-rc2.tar.xz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2024.11-rc3.tar.xz">buildroot-2024.11-rc3.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2024.11-rc3.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 646c107680..103e77650a 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2024.11-rc3 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 December 2024</small></p>
++      </div>
++      <div class="timeline-body">
++        <p>Another week, another release candidate with more cleanups and build fixes. See the
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2024.11-rc3/CHANGES">CHANGES</a>
++	  file for more details.</p>
++
++	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2024.11-rc3.tar.xz">2024.11-rc3
++	  release</a>, and report any problems found to the
++         <a href="support.html">mailing list</a> or
++         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
