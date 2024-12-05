@@ -4,92 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81120E7716D
-	for <buildroot@archiver.kernel.org>; Thu,  5 Dec 2024 14:37:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E676BE7716C
+	for <buildroot@archiver.kernel.org>; Thu,  5 Dec 2024 14:37:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C3BD415AB;
-	Thu,  5 Dec 2024 14:37:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65D8A415A2;
+	Thu,  5 Dec 2024 14:37:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8xogd7NQD23B; Thu,  5 Dec 2024 14:37:24 +0000 (UTC)
+ id TXyjqgZXhuNP; Thu,  5 Dec 2024 14:37:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACF76415B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72423415BA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACF76415B0;
-	Thu,  5 Dec 2024 14:37:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6112D1DD9
- for <buildroot@buildroot.org>; Thu,  5 Dec 2024 14:37:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72423415BA;
+	Thu,  5 Dec 2024 14:37:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1C7A7AE8
+ for <buildroot@buildroot.org>; Thu,  5 Dec 2024 14:37:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 42439811E5
- for <buildroot@buildroot.org>; Thu,  5 Dec 2024 14:37:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4FA62415D2
+ for <buildroot@buildroot.org>; Thu,  5 Dec 2024 14:37:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uLxz-YUhxcgh for <buildroot@buildroot.org>;
- Thu,  5 Dec 2024 14:37:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GWZaSdiJnaOD for <buildroot@buildroot.org>;
+ Thu,  5 Dec 2024 14:37:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C31F180B10
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C31F180B10
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C31F180B10
- for <buildroot@buildroot.org>; Thu,  5 Dec 2024 14:37:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C4672415B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4672415B2
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C4672415B2
+ for <buildroot@buildroot.org>; Thu,  5 Dec 2024 14:37:23 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.30.37]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MWzjt-1t7wap4BQX-00Nnmd; Thu, 05
- Dec 2024 15:37:07 +0100
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N4QsY-1tl9hC293O-00tHum; Thu, 05
+ Dec 2024 15:37:08 +0100
 To: buildroot@buildroot.org
 Cc: Grzegorz Blach <grzegorz@blach.pl>, Marcin Bis <marcin@bis.org.pl>,
  Fiona Klute <fiona.klute@gmx.de>
-Date: Thu,  5 Dec 2024 15:36:47 +0100
-Message-ID: <20241205143650.3262372-1-fiona.klute@gmx.de>
+Date: Thu,  5 Dec 2024 15:36:48 +0100
+Message-ID: <20241205143650.3262372-2-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241205143650.3262372-1-fiona.klute@gmx.de>
+References: <20241205143650.3262372-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:dvXoBVoXt7bh9NCrmokacMi6yHNAPscxZ8nZDDPrHan4cWq5sEg
- yqE1yQj/1g5b7AHFChdSSS01SW5V2ySrkUAefYFu8ZbGxOstY1gRFINppLyc7SXXFuKQhTg
- lguDxfBkUpKL5/eDzFNnA4AR7GFjvIbbs+h5rppnsvzc8vnzYpTtw9b9jz10Lf3YbwX2Gx/
- niVFgxZDiD/RKDn/UG63Q==
-UI-OutboundReport: notjunk:1;M01:P0:w5akBAVHD5Y=;hmy7L24e5XMQgHqa8mufSCEvrfx
- OV0r8vrViObUOFC2C5nhNZNnTQ4NcyeGlWSfdGADxsZ+GtkIh0II/AK35jmrpug3MqQ3Ukedk
- QIHqemVaWmi+S2rpKTqEJEWA7m50NOWxyYDCjmgtkB6lmHdatP7BkWgG8nAz1vm3IMaPDyNE5
- QeE6FOY56UwXzprC9SmYC8pvgtgIoW5+tsip6ICxPr7QYnXYk4lWPe6FjUMNuxDcTy0ctULzU
- VNBNnPp3ple+fQ+9F2SX9uLgiZGUStB81Xv12aWTvrWXfMR6kidk8lqtCs4KOtOQVrl7y5oKU
- 6MvrJuiet1xmBbJ0fCFWA7rcLAssy4MTmnEm4+9GFAkkyiYBpb8NXqU7Jbx2lR2TX7onJzgbP
- 2SRbYiXYPSu+UmBEZoyc0xaGCJ25BCBKqE1jeNzDNTBlCjtjHOQp3VyWjBuChT/AjHFOloJO/
- QXG7pwaGO84nrDWBFUF9ubRDogRJJJJLJ7BtE2GYi+DDT5lgaKsrYMetsKh9fgUhTzXVhNtU/
- wz713g34K/4JfcHfDq68n7HP915jrSG4Qws6+A5jZX9JyUmMFEbILUF5axn8+w8oCJU/FbZtT
- hB7YtOwfpdPJBVUGUPBboAeOV4tYsdhjJnMMlwLQznG5+veIgrJOANEiGWJrvw5w7ESV5ryDU
- 6UajaMS4Heve9fIlipSPNCMJUFXvBzDYCVKP6g9DQvXlDBRCndVbuesg61ZJZyWF/uE1KpPfN
- I8C0pn23b6hQMI4Jm8wpP9k5xJ4WW9dFheOUucUhXKqQykjgGAN0EQvzfANLwnbLzgTcB2lLp
- bL1dqaYhpMIXwhAOYjSK5n8//+M532RSL0W4+7hjU/9STaOgstak65h17pdG/1ELQYJZ48jpn
- XZPRYEbsnOHgl1Oyh/htJdFpek9NwmuBQMTeSnXLuvGcpW8q1aYZpMh90N2+pROTLaFkp2Q7f
- RVrHJ41Aqdo70WUXfN4FLlID/Y1pzN4wix0U62BxCv/KOHIJzJ4ZLnB/Ncg3HQ0e2jeB8tOdg
- 4rJGxqiLtoGhHQpYcUw39lIc6oyovfLGv5x47kdvK6/5DlT1WQuuS6j+nX6I3304lKPUzpn3g
- 05NdocHToSVgN9ZVCVi8+HhcnqOpQA
+X-Provags-ID: V03:K1:+oMqc2FevdDtGqIujmpum3Lf4WhhuxbHWarLiRvStah2fmgw6uK
+ Ti9rX8tu0pHH9x3TgptUeUG5aFtlDUfDBh73YeGSdRUSZo+xuFnZJonoGLXJ/CQ923L2lhC
+ Jt5d+DyEI8nzC5Jgdzdhj9jgXoyYqmbuTlgaka32jah+8zlZRtXvTbVS380aHXxxCaLoZfv
+ ZoFodxgAGvn42JqC5T03w==
+UI-OutboundReport: notjunk:1;M01:P0:Np5slkzwA3U=;esCkwOPe4ajKqM3zPBiJAffmWCb
+ 0OIVgyVaehGz1iw4bXlnE4QPcG4lruhRnEHZ5ZwrF70S7x+1bfGLA4rOrJhG+bemnLMa2FivG
+ 1LiCFsRECrLhoVJdnxeIVB+WsWPhTd/OWhYJFZmtj0VY4E59drGfeEcUQuVIqJWjJfSJW55Wa
+ KvKrb2C6sClhBT4t2RYw6+lcKQV9NZ2lcbIFG5fqOuN9wBF+SF9lGxvp4p6ZrPjIDnX8iOf6n
+ mOk8YYAbKIYc2Jk6ZB8ym2hSIo1EPeeGIFoqh/8qM64zgB8RBxYBJsY3Q24kV+VP92wZmkG+v
+ LW5meZ0qOYI/ZkwSsYmRRQVkpou79TPtgUv206PADmWBb9LmAKw4DUvSL29eRALnckSrtq7li
+ PxK1kiFgTEQIP+mZZ1cNHlPFAyl8ROGVUywSNNVhlJTjadONTiGYNlauHrxnu2oPeM38lcHvM
+ pAlLvws+b5/z9W68pfLh6CMLXKUMOlmLpbnhTbHMZOystEebupmu7TlaRBbsRCfPGaGC4JWWq
+ N2YJBLcd4bNRSQc6v7KaB6gE/NUAN0N+3aD0MBbkdNGRgCCs3wzWHZP0YIb08ZHm9v7JY4QZc
+ UJr82OMmjVLysgG8Hmd3GQNck0Kost7i5ik3cKAznH1MEWUhuDOQksoSm8e8zTzAJJF26jhaO
+ lSaEhODyLKjcdHVoed1DGkIcql+aogRk9ZK/y+MQ5+QujHI5rTtPXKwLQjDpLomEACGvna43p
+ OH1rNOVqxBNp0DyWPIvaj03r6W0aiJUj9aAbkNmLyZC01FFYXtxYqeJ09pP7Tbn0Wa1z83wVK
+ 65T5H3g9EJjngZ86d6c4lJqU/bX7pgJ+QyZQpjU25Egs7T452bsPrE12U5+SwJWi7pc2clNJp
+ bWjiLO7zi8oPXJRvSKg4spO+qq1Sa+p9rFH6kYGHbTHuJCSWsPQPcN/UJ0oblYAZ2gVedJ5uM
+ cKD1e4MgAwU0xURQ7s/yfip5DBKkxP7XlBmHFcKZ7/gZYa8pe5ZqDIW47Mh+cVuzKj80cCu1M
+ GmgEJ6CUoo93nVEF5jZM3l5lCB6XixI+sSZpknarPhxpherqccbM8taWyIIkvP4aRT3H36od2
+ kLNVxxbiWo5x2c6h1sGaFwsW02s7Ph
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1733409427; x=1734014227; i=fiona.klute@gmx.de;
- bh=wfJkzcR/fFB0RMGQUzSD6ZCHYuFVh3Zg+xdJz8hmJpI=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
+ s=s31663417; t=1733409428; x=1734014228; i=fiona.klute@gmx.de;
+ bh=GU+3igM4oNFrKipAv3tDOeyzVqg2N/xXho6LI+K0qTw=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=LHNGA3SZKWs47zXo81+TmqLHBE9yPhASBOt57vWJzp16z9UlIfhdsaULse43keho
- VLYMcfN3f4kM8R4nKB1m5Z2YEspsCTOOsxi2bwa/hPDLItXnn2LSPmCU9oamPRM+2
- z2G0yRdO7yScxQzr6qFiIWSiY3HcL5168d36bvwPr3/KuxtxjiuvhuuoTR/52V0Pi
- mx4+wZ+pkz3KIQ25xn1hxnR+rrJiJNQtGBRpzH/ILNfVInEGm3MWLnfvFkV41sbfG
- VmFVurlVJsyk2KYmupz7x2tGSdwn+k3HZ0HFCGXNSXEWZ2utkVk3QBQetwJyaKPwX
- whO0+5Eq11DMFWSAUA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=rDa0b6nz15ogzpeUXPY9gkgFSJMObjcdjM9+N1L8oBZdjaqSDdqJSA5eVBYnvcD8
+ fcrhdPFO9H0IQ2FtHeys2YcsLTpZ4QsEtvaTi9TRNxYLwbB46f9ftI+Hv0bwqL1ho
+ ggZ6URb41tIDwOQhPmmhB4E2KtrRCkchDhaO7ccUtUPtV7PtzYVuc9mjXGYbs/p7y
+ 9up+vBwMEXvbR1KfQxiTy/DH7HG287K5i2jhEOFCWynb11KnB8Oj2sLeO4mPIz6PJ
+ QJdjJdXYIXrlgeP/htZMZUbi7INtWcb4iGFsFYF+RTBIY7BgVSIbAtvzU73NyUbOO
+ Y0VfJefzyuxM08ckYw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=LHNGA3SZ
-Subject: [Buildroot] [PATCH 1/4] package/bluez5_utils{,
- -headers}: bump version to 5.79
+ header.a=rsa-sha256 header.s=s31663417 header.b=rDa0b6nz
+Subject: [Buildroot] [PATCH 2/4] package/bluez5_utils: fix dbusconfdir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,96 +111,30 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Upstream changelog:
-https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?h=5.79&id=0845b8f6ef2ac004b1c953cf4fe4ca3458cd8e36
+Since D-Bus 1.14.0 installing default policies into sysconfdir (/etc)
+is deprecated, they should go into datadir (/usr/share) instead
+[1]. Follow that policy.
 
-Patch for musl compatibility taken from upstream "master".
+[1] https://gitlab.freedesktop.org/dbus/dbus/-/blob/8f1e00427f7048f8b24c3a1cfca8903254fe00d4/NEWS#L274-283
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- .../bluez5_utils-headers.mk                   |  2 +-
- ...0001-gdbus-define-MAX_INPUT-for-musl.patch | 33 +++++++++++++++++++
- package/bluez5_utils/bluez5_utils.hash        |  2 +-
- package/bluez5_utils/bluez5_utils.mk          |  2 +-
- 4 files changed, 36 insertions(+), 3 deletions(-)
- create mode 100644 package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
+ package/bluez5_utils/bluez5_utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-index 1fd4e0fff3..7acf62b226 100644
---- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
-+++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Keep the version and patches in sync with bluez5_utils
--BLUEZ5_UTILS_HEADERS_VERSION = 5.78
-+BLUEZ5_UTILS_HEADERS_VERSION = 5.79
- BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
-diff --git a/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch b/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
-new file mode 100644
-index 0000000000..dc823e9277
---- /dev/null
-+++ b/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
-@@ -0,0 +1,33 @@
-+From 9d69dba21f1e46b34cdd8ae27fec11d0803907ee Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Gu=C3=B0ni=20M=C3=A1r=20Gilbert?= <gudni.m.g@gmail.com>
-+Date: Sat, 2 Nov 2024 16:10:18 +0000
-+Subject: [PATCH] gdbus: define MAX_INPUT for musl
-+
-+This is the same solution as was done in src/shared/util.c
-+
-+Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=9d69dba21f1e46b34cdd8ae27fec11d0803907ee
-+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-+---
-+ gdbus/object.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/gdbus/object.c b/gdbus/object.c
-+index 84f116bf1..7b0476f1a 100644
-+--- a/gdbus/object.c
-++++ b/gdbus/object.c
-+@@ -20,6 +20,12 @@
-+ #include <dbus/dbus.h>
-+ 
-+ #include "gdbus.h"
-++
-++/* define MAX_INPUT for musl */
-++#ifndef MAX_INPUT
-++#define MAX_INPUT _POSIX_MAX_INPUT
-++#endif
-++
-+ #include "src/shared/util.h"
-+ 
-+ #define info(fmt...)
-+-- 
-+2.45.2
-+
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index 41e39e0b5c..9b39b19c08 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256  830fed1915c5d375b8de0f5e6f45fcdea0dcc5ff5ffb3d31db6ed0f00d73c5e3  bluez-5.78.tar.xz
-+sha256  4164a5303a9f71c70f48c03ff60be34231b568d93a9ad5e79928d34e6aa0ea8a  bluez-5.79.tar.xz
- # Locally computed
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
 diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 717c10e870..1695aeb210 100644
+index 1695aeb210..7725fb94bf 100644
 --- a/package/bluez5_utils/bluez5_utils.mk
 +++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+@@ -28,7 +28,7 @@ BLUEZ5_UTILS_CONF_OPTS = \
+ 	--disable-lsan \
+ 	--disable-ubsan \
+ 	--disable-pie \
+-	--with-dbusconfdir=/etc
++	--with-dbusconfdir=/usr/share
  
- # Keep the version and patches in sync with bluez5_utils-headers
--BLUEZ5_UTILS_VERSION = 5.78
-+BLUEZ5_UTILS_VERSION = 5.79
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_OBEX),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-obex
 -- 
 2.45.2
 
