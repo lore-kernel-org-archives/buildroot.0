@@ -1,96 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E676BE7716C
-	for <buildroot@archiver.kernel.org>; Thu,  5 Dec 2024 14:37:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F115CE7716C
+	for <buildroot@archiver.kernel.org>; Thu,  5 Dec 2024 15:01:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 65D8A415A2;
-	Thu,  5 Dec 2024 14:37:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98F826079B;
+	Thu,  5 Dec 2024 15:01:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TXyjqgZXhuNP; Thu,  5 Dec 2024 14:37:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3Ry_kmd4a7_r; Thu,  5 Dec 2024 15:01:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72423415BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8E4060849
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72423415BA;
-	Thu,  5 Dec 2024 14:37:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C7A7AE8
- for <buildroot@buildroot.org>; Thu,  5 Dec 2024 14:37:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8E4060849;
+	Thu,  5 Dec 2024 15:01:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 694241FDB
+ for <buildroot@buildroot.org>; Thu,  5 Dec 2024 15:01:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4FA62415D2
- for <buildroot@buildroot.org>; Thu,  5 Dec 2024 14:37:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 533FB41C3D
+ for <buildroot@buildroot.org>; Thu,  5 Dec 2024 15:01:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GWZaSdiJnaOD for <buildroot@buildroot.org>;
- Thu,  5 Dec 2024 14:37:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NuWgtOyZN_Gg for <buildroot@buildroot.org>;
+ Thu,  5 Dec 2024 15:01:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C4672415B2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4672415B2
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C4672415B2
- for <buildroot@buildroot.org>; Thu,  5 Dec 2024 14:37:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C460841C31
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C460841C31
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C460841C31
+ for <buildroot@buildroot.org>; Thu,  5 Dec 2024 15:01:28 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.lan ([85.22.30.37]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N4QsY-1tl9hC293O-00tHum; Thu, 05
- Dec 2024 15:37:08 +0100
+Received: from haruka.lan ([85.22.30.37]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N3se2-1tjRQ328O0-00sA04; Thu, 05
+ Dec 2024 16:01:23 +0100
 To: buildroot@buildroot.org
-Cc: Grzegorz Blach <grzegorz@blach.pl>, Marcin Bis <marcin@bis.org.pl>,
- Fiona Klute <fiona.klute@gmx.de>
-Date: Thu,  5 Dec 2024 15:36:48 +0100
-Message-ID: <20241205143650.3262372-2-fiona.klute@gmx.de>
+Date: Thu,  5 Dec 2024 16:01:13 +0100
+Message-ID: <20241205150114.3474074-1-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241205143650.3262372-1-fiona.klute@gmx.de>
-References: <20241205143650.3262372-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:+oMqc2FevdDtGqIujmpum3Lf4WhhuxbHWarLiRvStah2fmgw6uK
- Ti9rX8tu0pHH9x3TgptUeUG5aFtlDUfDBh73YeGSdRUSZo+xuFnZJonoGLXJ/CQ923L2lhC
- Jt5d+DyEI8nzC5Jgdzdhj9jgXoyYqmbuTlgaka32jah+8zlZRtXvTbVS380aHXxxCaLoZfv
- ZoFodxgAGvn42JqC5T03w==
-UI-OutboundReport: notjunk:1;M01:P0:Np5slkzwA3U=;esCkwOPe4ajKqM3zPBiJAffmWCb
- 0OIVgyVaehGz1iw4bXlnE4QPcG4lruhRnEHZ5ZwrF70S7x+1bfGLA4rOrJhG+bemnLMa2FivG
- 1LiCFsRECrLhoVJdnxeIVB+WsWPhTd/OWhYJFZmtj0VY4E59drGfeEcUQuVIqJWjJfSJW55Wa
- KvKrb2C6sClhBT4t2RYw6+lcKQV9NZ2lcbIFG5fqOuN9wBF+SF9lGxvp4p6ZrPjIDnX8iOf6n
- mOk8YYAbKIYc2Jk6ZB8ym2hSIo1EPeeGIFoqh/8qM64zgB8RBxYBJsY3Q24kV+VP92wZmkG+v
- LW5meZ0qOYI/ZkwSsYmRRQVkpou79TPtgUv206PADmWBb9LmAKw4DUvSL29eRALnckSrtq7li
- PxK1kiFgTEQIP+mZZ1cNHlPFAyl8ROGVUywSNNVhlJTjadONTiGYNlauHrxnu2oPeM38lcHvM
- pAlLvws+b5/z9W68pfLh6CMLXKUMOlmLpbnhTbHMZOystEebupmu7TlaRBbsRCfPGaGC4JWWq
- N2YJBLcd4bNRSQc6v7KaB6gE/NUAN0N+3aD0MBbkdNGRgCCs3wzWHZP0YIb08ZHm9v7JY4QZc
- UJr82OMmjVLysgG8Hmd3GQNck0Kost7i5ik3cKAznH1MEWUhuDOQksoSm8e8zTzAJJF26jhaO
- lSaEhODyLKjcdHVoed1DGkIcql+aogRk9ZK/y+MQ5+QujHI5rTtPXKwLQjDpLomEACGvna43p
- OH1rNOVqxBNp0DyWPIvaj03r6W0aiJUj9aAbkNmLyZC01FFYXtxYqeJ09pP7Tbn0Wa1z83wVK
- 65T5H3g9EJjngZ86d6c4lJqU/bX7pgJ+QyZQpjU25Egs7T452bsPrE12U5+SwJWi7pc2clNJp
- bWjiLO7zi8oPXJRvSKg4spO+qq1Sa+p9rFH6kYGHbTHuJCSWsPQPcN/UJ0oblYAZ2gVedJ5uM
- cKD1e4MgAwU0xURQ7s/yfip5DBKkxP7XlBmHFcKZ7/gZYa8pe5ZqDIW47Mh+cVuzKj80cCu1M
- GmgEJ6CUoo93nVEF5jZM3l5lCB6XixI+sSZpknarPhxpherqccbM8taWyIIkvP4aRT3H36od2
- kLNVxxbiWo5x2c6h1sGaFwsW02s7Ph
+X-Provags-ID: V03:K1:+JpRJ9YPHqy2CgY2Gjwq4N8ooUM0OkdnsiBg0JIs1LaeL0ZzAB8
+ fI1ebWPH31kUGyUQ3ncQz/VLexfWGtTLS35mHA6NEfldjloyLZSP0S+hgBQ7VlLwlkfUhNY
+ HXezD/jlr//w+CYera+xp57K1ptBBFa1bKZY9KLkLoDnNYh8b+zc9qLnGi9oMlBM4csFyHC
+ h/uHXmOxIdfwWVBnaMeJw==
+UI-OutboundReport: notjunk:1;M01:P0:Hj+CKRa+Ihk=;HHzXHuhnhmg/uxnLct3I0NDLEmg
+ m+XZc4mGdq7Q+ZMTIHSN2QijDd+CDRjV8e0Xmfh8SvnSTo1+TJMioiZEqFw6pFWpk2GwlyGGE
+ s07UnTW7KCicscOnX8wwiBi8mQJNwukGZPQiHxb9CEMd4wfjArMbTYPy9ndcd6gzShqtdgQpP
+ r7rk6maR8eY0eW5UGwcVxfJqMIkvpSZdJsewtB6DXnpsZHhkq0bon44ybCwF2vAB7R1MRfNbc
+ J9yey1hFKytnRyR08NwhN+XiN5m916QufRKoMygVbtuQ7RAHT66ABe2kGVNsc+lrT+6iJ8FYn
+ 6RR7c3MAFCcyBBqM0slnx0sK5QcxUi9R6W4FuiYPJGhqVLnKGB5p/lZwKtz+SiYWy/NU7uvpc
+ cZ3ol1epuT5MMwtMicMeUQf12SH39f+u00llhnTRuuksm6e8UTlrX2tnJqKIeiI+87dbnPYRb
+ XZqWQQgCJB+gOy3UPRxYZz/MyYhkjjA1HTTFphWDfsd44zW/uAjYI4eLQFHfOz4UKIWZzAqQ9
+ ihi4PrROLhr9iO0VBEE5yq5KpdhS8bYEUG3M6A6B+qaBUNJxm8LmoOYTKSp3xvjurhDyF3T6H
+ tUw6wyBFqONh40mglGsy7ncpkcbykdfWJ13Yy6mhEjGIjBNd85hghus1I9JI8n2lhxHKzwoMq
+ 0QhSJ2AJC1XHPJcld0cTHdaNaOM5x66bZOXT9Bk+nVr0YaPZb4U6kWF1OQbbhftAxjiTGf8iU
+ dawaumPSLKuWuqvlPY/BOAqmB6fuJ45wYzHpQazpnBnWKIpWo6f+2njq8GuM8NW7xw0+psZZ4
+ 7umd2R6DUUaEkkYFBUegCZ+WTAEzvi6XHxR8b1hrkwZPiVjd3wiUqje7wT0cVHBKMe8jbv/R4
+ GY0BH1W7Af0Lo5yifOZOVr9kTRnQmovedbWa3Y7yQAtx+AUJI+xFUJSAceZNxUFy7Pto7s5Oo
+ 94AUQerDKsqST5Hfsayi6zCEQNWS+cj9RDS3xooVJj3p/EIyTBE6X2f5CnhWKfc4s/fUHzLqK
+ Hqk6/ijthNRx53Qwzg/ZMCOtb74j7I6YsF4tzYxZ1KZd6Ux6XPAHOuoNzMam5wKOWua8tssZw
+ wX8r9sCBfJmJJ9JFriZZxBEkPSGCYc
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1733409428; x=1734014228; i=fiona.klute@gmx.de;
- bh=GU+3igM4oNFrKipAv3tDOeyzVqg2N/xXho6LI+K0qTw=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Transfer-Encoding:cc:
+ s=s31663417; t=1733410884; x=1734015684; i=fiona.klute@gmx.de;
+ bh=YEy/YH9C2rLaQrkOmmNJ/KotHQgPLLngzQnLNTbDUic=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=rDa0b6nz15ogzpeUXPY9gkgFSJMObjcdjM9+N1L8oBZdjaqSDdqJSA5eVBYnvcD8
- fcrhdPFO9H0IQ2FtHeys2YcsLTpZ4QsEtvaTi9TRNxYLwbB46f9ftI+Hv0bwqL1ho
- ggZ6URb41tIDwOQhPmmhB4E2KtrRCkchDhaO7ccUtUPtV7PtzYVuc9mjXGYbs/p7y
- 9up+vBwMEXvbR1KfQxiTy/DH7HG287K5i2jhEOFCWynb11KnB8Oj2sLeO4mPIz6PJ
- QJdjJdXYIXrlgeP/htZMZUbi7INtWcb4iGFsFYF+RTBIY7BgVSIbAtvzU73NyUbOO
- Y0VfJefzyuxM08ckYw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=h9K/z6gkEFo1fGH7ig3rPqssjJ3u4oTd/DlaWatqPsBNbyyuy6bwFI5asJrNBHQh
+ wa4rVBq3qrUP/skIpcb0bdrSrBGH1n0Vvr1kf+PHeOCAwSSTIbHxLkHIONTnluyeI
+ keVXiruwz/CFnwC7EcZyQwPMHzDfT0hH/uyuH9tW93xCeA1wRR7vnU4N/FFY3yhQ7
+ SsLGg3cfyl449bXJVV1+9pQge5aDPwQn2NsBgVm0qdw4gDTAgB3BMxIGD60qbP9/z
+ FkQgLEp+WUaCpQmrlX7FHpN085l4rd638Yp7qnaG4fk/5cf/mkH/BKrtIZeqCdoEr
+ np+DbTi5a6N6REYt5Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=rDa0b6nz
-Subject: [Buildroot] [PATCH 2/4] package/bluez5_utils: fix dbusconfdir
+ header.a=rsa-sha256 header.s=s31663417 header.b=h9K/z6gk
+Subject: [Buildroot] [PATCH 1/2] package/dnsmasq: install D-Bus policy to
+ datadir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,6 +101,8 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Fiona Klute via buildroot <buildroot@buildroot.org>
 Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Bernd Kuhls <bernd@kuhls.net>, "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>,
+ Sergey Matyukevich <geomatsi@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -119,22 +118,22 @@ is deprecated, they should go into datadir (/usr/share) instead
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- package/bluez5_utils/bluez5_utils.mk | 2 +-
+ package/dnsmasq/dnsmasq.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 1695aeb210..7725fb94bf 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -28,7 +28,7 @@ BLUEZ5_UTILS_CONF_OPTS = \
- 	--disable-lsan \
- 	--disable-ubsan \
- 	--disable-pie \
--	--with-dbusconfdir=/etc
-+	--with-dbusconfdir=/usr/share
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 9f342cb049..5dd7ed5c21 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -70,7 +70,7 @@ DNSMASQ_COPTS += -DHAVE_DBUS
  
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_OBEX),y)
- BLUEZ5_UTILS_CONF_OPTS += --enable-obex
+ define DNSMASQ_INSTALL_DBUS
+ 	$(INSTALL) -m 0644 -D $(@D)/dbus/dnsmasq.conf \
+-		$(TARGET_DIR)/etc/dbus-1/system.d/dnsmasq.conf
++		$(TARGET_DIR)/usr/share/dbus-1/system.d/dnsmasq.conf
+ endef
+ endif
+ 
 -- 
 2.45.2
 
