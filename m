@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B07A5C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:32:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 910EDC282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:32:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 605634EEB0;
-	Fri, 28 Feb 2025 16:32:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2753E4EED1;
+	Fri, 28 Feb 2025 16:32:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bNtBbrmMOcrR; Fri, 28 Feb 2025 16:32:24 +0000 (UTC)
+ id BBxbpO4pMizx; Fri, 28 Feb 2025 16:32:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BC1B42E4B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E9BA42F6D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BC1B42E4B;
-	Fri, 28 Feb 2025 16:31:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E9BA42F6D;
+	Fri, 28 Feb 2025 16:31:09 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8484068
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1023268
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 138BB80A6F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5AFBC80A86
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Acy9wAnksCBb for <buildroot@buildroot.org>;
+ id PjTSFcGAt7mB for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:29:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FBF780AB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77B8180ACC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2FBF780AB8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 77B8180ACC
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2CEE487A7D; Fri, 28 Feb 2025 16:29:32 +0000 (UTC)
+ id 73E7C87A71; Fri, 28 Feb 2025 16:29:32 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Dec 2024 22:42:52 +0100
+Date: Thu, 5 Dec 2024 16:52:49 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3ee745782a0802b1479eb6a8f678b6a261775295
-X-Git-Newrev: ee65a2119aba93692970ae83e083974ef865c15b
+X-Git-Oldrev: f6fa3324eb3f1966b51965b3ae1b2740d05e38a6
+X-Git-Newrev: 80f25d47060dea19b8f3b5fd84b6238375c54729
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162932.2CEE487A7D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/android-tools: fix
- build issue on mips64 and powerpc64
+Message-Id: <20250228162932.73E7C87A71@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lmbench: fix build by
+ adjusting LDLIBS logic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,137 +59,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7369102593425095699=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7369102593425095699==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=ee65a2119aba93692970ae83e083974ef865c15b
+commit: https://git.buildroot.net/buildroot/commit/?id=80f25d47060dea19b8f3b5fd84b6238375c54729
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The kernel headers on mips64 and powerpc64 were historically "broken",
-defining u64 as an "unsigned long" instead of "unsigned long
-long". This has been fixed in the upstream Linux kernel by introducing
-the __SANE_USERSPACE_TYPES__ definition.
+The lmbench package (largely unmaintained upstream, last release in
+2006) uses a home-grown build system. The scripts/build script sets
+LDLIBS to -lm and Buildroot's makefile changes that to:
 
-Our commit a2e178d6b45dfc5b8d1d50fcbbfc0bec5ebf1ae2 ("android-tools:
-disable on some architecture with old kernel headers") already
-disabled building fastboot on powerpc64 and mips64 systems that have
-too old kernel headers. However, it turns out that even with the new
-kernel headers, there are build issues because
-__SANE_USERSPACE_TYPES__ isn't defined everywhere it should be in the
-android-tools code base. The Debian patche
-debian/patches/ppc64el-ftbfs.patch adds some definitions, but it's
-missing one file, and in another the definition comes too late.
+LDLIBS+=-lm
 
-This commit adds an extra patch that fixes this up, and makes fastboot
-build properly on mips64 and powerpc64.
+Except that when Buildroot passes LDLIBS="`$(PKG_CONFIG_HOST_BINARY)
+--libs libtirpc`", the LDLIBS variable ends up being equal to:
+
+       -ltirpc-lm
+
+Yes, without any space between -ltirpc and -lm.
+
+Due to this, the checks in scripts/build that use ${LDLIBS} all fail,
+and in particular the test that checks when socklen_t is a known type
+fails, causing lmbench to provide its own definition, which clashes
+with the C library headers definition, and therefore causing build
+failures such as:
+
+bench.h:81:13: error: conflicting types for 'socklen_t'; have 'int'
+
+This commit fixes that by adjusting scripts/build using a patch to
+properly allow passing additional ${LDLIBS} value, with the needed
+space to separate the value from -lm.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/8528ff876e695f79bdfe64f5330d9d51eeef66cb/ (powerpc64)
-  http://autobuild.buildroot.net/results/36ac6af73b618c28d1636093da333f7ebd9d6cfe/ (mips64)
+  http://autobuild.buildroot.net/results/f1715de95b46a1d08143e529bd4574bc7dbcfb3e/
 
-This issue has been occurring as far as Feb 2021, with the first
-occurence apparently being:
-
-  http://autobuild.buildroot.net/results/d9521b4bfeafb1140c21745dbfe28d476a9b71ec/
+We have been unable to determine exactly when this issue was
+introduced. The first build failure we could find is the one
+referenced above, which dates back from Aug 19, 2024. Since this date,
+lmbench has been consistently failing on a very regular
+basis. However, prior to Aug 19, 2024, the previous failure was from
+December 2022, and was unrelated. It is unclear what changed in Aug
+2024 to cause this issue to surface. The one thing that changed right
+before commit ce3dedc2 (first failing commit) are changes to
+genrandconfig, which ensures all autobuilders now generated fully
+random configurations instead of configurations based on a
+well-defined list of arch/toolchain configurations. But even with
+this, this lmbench issue should have appeared earlier, and we have
+been unable to find a scientific explanation.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ..._utils-make_ext4fs.c-define-__SANE_USERSP.patch | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ ...ipts-build-make-it-possible-to-set-LDLIBS.patch | 30 ++++++++++++++++++++++
+ package/lmbench/lmbench.mk                         |  1 -
+ 2 files changed, 30 insertions(+), 1 deletion(-)
 
-diff --git a/package/android-tools/0016-extras-ext4_utils-make_ext4fs.c-define-__SANE_USERSP.patch b/package/android-tools/0016-extras-ext4_utils-make_ext4fs.c-define-__SANE_USERSP.patch
+diff --git a/package/lmbench/0005-scripts-build-make-it-possible-to-set-LDLIBS.patch b/package/lmbench/0005-scripts-build-make-it-possible-to-set-LDLIBS.patch
 new file mode 100644
-index 0000000000..5f3650cc77
+index 0000000000..6d5599763e
 --- /dev/null
-+++ b/package/android-tools/0016-extras-ext4_utils-make_ext4fs.c-define-__SANE_USERSP.patch
-@@ -0,0 +1,68 @@
-+From 5db9529436f13b8c073a0310da3a1107f84645da Mon Sep 17 00:00:00 2001
++++ b/package/lmbench/0005-scripts-build-make-it-possible-to-set-LDLIBS.patch
+@@ -0,0 +1,30 @@
++From 2c7ff6989bc6161d8a2cc823d3aa7c9cb1deca80 Mon Sep 17 00:00:00 2001
 +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Wed, 4 Dec 2024 20:51:22 +0100
-+Subject: [PATCH] extras/ext4_utils/make_ext4fs.c: define
-+ __SANE_USERSPACE_TYPES__
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++Date: Wed, 4 Dec 2024 22:59:31 +0100
++Subject: [PATCH] scripts/build: make it possible to set LDLIBS
 +
-+The Debian patch ppc64el-ftbfs.patch is already defining
-+__SANE_USERSPACE_TYPES__ in a few files to solve a conflict between
-+kernel header definitions and local definition of some types, on
-+powerpc64 and mips64.
++LDLIBS is currently unconditionnally set to '-lm', but doesn't allow
++the user to provide additional libraries to link with.
 +
-+However, the Debian patch lacks an update to ext4_utils.c, and has the
-+definition too late in make_ext4fs.c. This commit therefore fixes
-+those two remaining issues, fixing:
-+
-+error: conflicting types for ‘u64’; have ‘long unsigned int’
-+
-+Upstream: N/A, we're too far from upstream
++Upstream: dead, last release in 2006
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ extras/ext4_utils/ext4_utils.c  | 5 ++++-
-+ extras/ext4_utils/make_ext4fs.c | 4 ++++
-+ 2 files changed, 8 insertions(+), 1 deletion(-)
++ scripts/build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/extras/ext4_utils/ext4_utils.c b/extras/ext4_utils/ext4_utils.c
-+index e95f5cc..9f6836f 100644
-+--- a/extras/ext4_utils/ext4_utils.c
-++++ b/extras/ext4_utils/ext4_utils.c
-+@@ -14,6 +14,10 @@
-+  * limitations under the License.
-+  */
++diff --git a/scripts/build b/scripts/build
++index 60b755c..4820d80 100755
++--- a/scripts/build
+++++ b/scripts/build
++@@ -18,7 +18,7 @@ done
 + 
-++#if defined(__linux__)
-++#define __SANE_USERSPACE_TYPES__
-++#endif
-++
-+ #include "ext4_utils.h"
-+ #include "uuid.h"
-+ #include "allocate.h"
-+@@ -36,7 +40,6 @@
-+ #endif
++ trap 'rm -f ${BASE}$$.s ${BASE}$$.c ${BASE}$$.o ${BASE}$$; exit 1' 1 2 15
 + 
-+ #if defined(__linux__)
-+-#define __SANE_USERSPACE_TYPES__
-+ #include <linux/fs.h>
-+ #elif defined(__APPLE__) && defined(__MACH__)
-+ #include <sys/disk.h>
-+diff --git a/extras/ext4_utils/make_ext4fs.c b/extras/ext4_utils/make_ext4fs.c
-+index 3124aed..332a213 100644
-+--- a/extras/ext4_utils/make_ext4fs.c
-++++ b/extras/ext4_utils/make_ext4fs.c
-+@@ -14,6 +14,10 @@
-+  * limitations under the License.
-+  */
++-LDLIBS=-lm
+++LDLIBS="${LDLIBS} -lm"
 + 
-++#if defined(__linux__)
-++#define __SANE_USERSPACE_TYPES__
-++#endif
-++
-+ #include "make_ext4fs.h"
-+ #include "ext4_utils.h"
-+ #include "allocate.h"
++ # check for HP-UX's ANSI compiler
++ echo "main(int ac, char *av[]) { int i; }" > ${BASE}$$.c
 +-- 
 +2.47.0
 +
-
---===============7369102593425095699==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index b0f99ff106..3d942779ad 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -26,7 +26,6 @@ LMBENCH_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
+ 
+ define LMBENCH_CONFIGURE_CMDS
+ 	sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
+-	sed -i 's/LDLIBS=/LDLIBS+=/g' $(@D)/scripts/build
+ 	sed -i '/cd .*doc/d' $(@D)/src/Makefile
+ 	sed -i '/include/d' $(@D)/src/Makefile
+ 	touch $@
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7369102593425095699==--
