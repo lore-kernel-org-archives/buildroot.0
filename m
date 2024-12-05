@@ -1,106 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41ABDE7716C
-	for <buildroot@archiver.kernel.org>; Thu,  5 Dec 2024 07:50:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3601CE7716D
+	for <buildroot@archiver.kernel.org>; Thu,  5 Dec 2024 14:37:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7DB28460F;
-	Thu,  5 Dec 2024 07:50:15 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YKOCmvKXkL53; Thu,  5 Dec 2024 07:50:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FDE78460A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3FDE78460A;
-	Thu,  5 Dec 2024 07:50:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 069311DD9
- for <buildroot@buildroot.org>; Thu,  5 Dec 2024 07:50:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C677A60B97
- for <buildroot@buildroot.org>; Thu,  5 Dec 2024 07:50:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD25161114;
+	Thu,  5 Dec 2024 14:37:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2-ndHkzKOVqw for <buildroot@buildroot.org>;
- Thu,  5 Dec 2024 07:50:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DEAA860B95
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEAA860B95
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DEAA860B95
- for <buildroot@buildroot.org>; Thu,  5 Dec 2024 07:50:11 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-434a95095efso10223415e9.0
- for <buildroot@buildroot.org>; Wed, 04 Dec 2024 23:50:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1733385009; x=1733989809;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=3MXahRjhvVexe38LeHbsF2ljZcBP+F4xT/OR/9zuOSQ=;
- b=To9Bh+YAg5vPXSijdRrPEdBBEtQzGGxv24yjvJ3wh8Tgey6fJcd7Bxd+b594sXysIo
- gKnQPvoq6hs9fx4kMs9e8BXgomlIyPDvtGr1cUs9ijuHi2dnqB4wCAUsjIMOpLcZ735k
- RGvX3Rip40xp8pwzUgVqcIlzV5cR0sTf5EZODMy2R1kDWi3RKJk6Bz/1HYR/AqAi7t3i
- d/zAMZLkDnFFW3kAIHIgHH5/ZM5TA1swOKeJglVsmhAoQG6qEJJLL5eyIvdSqkCMlT7d
- 4BXx11wfWpjpP4OQ/gLy6nmk7LONQF/mjPG3SuDsOLTDkp4KQlT78mjBBC33o3wVwu4B
- fFSA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXTElp87ubeszDotL3N+wF/Yts3oFI9EBqhIgx17QirHt8yAS7187uIKvaq+QFqUC3m+jlyJiILLAo=@buildroot.org
-X-Gm-Message-State: AOJu0YymRtqrxsmMR2keL1A+nr2pRuRFbO3GqhBuIyCN5VtUoT5YXs9B
- ds53YDV4QnT4j9HYD/Do9rdZgfHJ8PWYDVVx7VyAjSp/zSJcJBPP3WEFg1YdmUwr54jiu+M0Z3Z
- o
-X-Gm-Gg: ASbGncv7Taectq8b6v/iLtuDvtS0sUhFfwP8/LsYFB1M3uLMCt4oMqNxr4OF/FGQQ+8
- itgYQbqfjbrHL/5EyBjNfLvv0UnznLJ+757ALQAHSRxUwAvhOCieQ8gzqdyDWp958bM0F9G0zlb
- 5KdCfyVKkA+lM9j53ic0aKFqVi2esRtdRSL9eT+xZWUdjCjYK5uFFoRiVVNNerZxEcHwTMKPWa+
- 25D1lcfZcd94Mk0Ki4MoZVva/4qbSTjF8lGA1jSTU9z0Tg7ROd/7vDcD41P3U2W/vCgmhHSgEgy
- 0KVLdWgFAQ==
-X-Google-Smtp-Source: AGHT+IHUh5qWP7GeHyHVZpCHv4m4wdC0ZPe/Z+1rcwS7TDtPb5HvNgPUa4WpFZhEI+tInRzZ6XnZ2g==
-X-Received: by 2002:a5d:588d:0:b0:386:586:b39d with SMTP id
- ffacd0b85a97d-3861bb4c8bdmr1591317f8f.6.1733385008937; 
- Wed, 04 Dec 2024 23:50:08 -0800 (PST)
-Received: from [192.168.6.174] (213.211.177.222.static.edpnet.net.
- [213.211.177.222]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3862276153csm1184903f8f.111.2024.12.04.23.50.07
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 04 Dec 2024 23:50:08 -0800 (PST)
-Message-ID: <822901a9-8307-4ba5-a5a9-39d96c30b346@mind.be>
-Date: Thu, 5 Dec 2024 08:50:05 +0100
+ id IGgPyn4JSX7i; Thu,  5 Dec 2024 14:37:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD6F7610C6
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD6F7610C6;
+	Thu,  5 Dec 2024 14:37:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BF6621DD9
+ for <buildroot@buildroot.org>; Thu,  5 Dec 2024 14:37:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC0E661114
+ for <buildroot@buildroot.org>; Thu,  5 Dec 2024 14:37:16 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TtZgoeqJ49aj for <buildroot@buildroot.org>;
+ Thu,  5 Dec 2024 14:37:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 79ED7605BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79ED7605BA
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 79ED7605BA
+ for <buildroot@buildroot.org>; Thu,  5 Dec 2024 14:37:15 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.30.37]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M72sJ-1tIMQc1Iad-00DRuX; Thu, 05
+ Dec 2024 15:37:09 +0100
+To: buildroot@buildroot.org
+Cc: Grzegorz Blach <grzegorz@blach.pl>, Marcin Bis <marcin@bis.org.pl>,
+ Fiona Klute <fiona.klute@gmx.de>
+Date: Thu,  5 Dec 2024 15:36:50 +0100
+Message-ID: <20241205143650.3262372-4-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241205143650.3262372-1-fiona.klute@gmx.de>
+References: <20241205143650.3262372-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Julio Merino <julio@meroh.net>, buildroot@buildroot.org
-References: <52f63db5-124e-4be0-8ebf-3c177b9f9b03@app.fastmail.com>
- <ff363f21-4fc5-4ac5-a9f6-f866ad6e523b@mind.be>
- <471d7c48-a310-47c2-b0c8-775dd4b25741@app.fastmail.com>
-Content-Language: en-GB
-In-Reply-To: <471d7c48-a310-47c2-b0c8-775dd4b25741@app.fastmail.com>
+X-Provags-ID: V03:K1:soRNXC0eFVYM9QcHPPe5ORGh6RMIzigmugGYrd2vMvE9t8h4m/7
+ G8ROeWJyNNJmY07hyRsyRHYElyOnxZarl2ZmyvK6tPKPayh7y0U674E4ugVDCPSH7tLJ83o
+ gtP1fcUAjcfLZgCToIBlcZK9tb4cTyUGY8S9ybga6ORoxcPZ0UTgQ6KN47p+0VkblRGgmZ0
+ rNkAMOxfa986HCS2p+x5w==
+UI-OutboundReport: notjunk:1;M01:P0:lbMuO0A8b04=;e8dEohka6p0ZjEPfQ7Ni8ywegt8
+ 1XYitAoey7hIAa/leyyOt7lARHYPsXL8dAAM5xdDlMDcnsUIy4G/GLqBsUYhO9w6kdUaWG6w7
+ um6okDTMJszyAntZuD6PmwoXdTDyqGlxOgwbh0gKPsl2FcnDVxn5qytVtgU0RthXxZIEiMc0u
+ fOagYKmhhMwgGJ/OaDoi7MUQoUX8IrZ6oJzszXsTGSkMgDxsZkSwamzTnMqzI1OcbZrokELVf
+ +0asHu2yvtnbvhOWR+EMOHFT3nifLAn5DqVFQCtIr8dpk2vD0ASACH41r8F5sRqcKD7O+ZO3z
+ hTfTN92pL92FqEUgOn8EOp4QlxvsakCTxUwpfSbuiY/jSEUei1FuWxN6s3Vdt6P2zNsFBJ4FM
+ h2JIEXmi0/xECUBecxENTTUqBa9f4kGyQzkfLK+gwgFp5nopob8/OBQuGZ56uTor/0fG/d4hO
+ 33JAeYt1wXaQNBz23BMlPfC6pU8MUJtAtDRxTNtpz3QN37P42E9ZRA73S2i3OO7zgeA6cS6TW
+ nX/n0K8z4/IWncCgF/C3CvE5IgmHAP4uV6PenMtcQvA5fs5KZKv9iv7afORjPHI8r0GsTZHqG
+ 59469Ratta1qAzaWld9eX5KzCZj0lx708kzThBdWYpCXr2n3C6/SVVt3Kn7sfFWGicLgIr+oD
+ nXwWMFkNNx0MtnZfd7JcopBySvbt3HnQsJ4pFJUUcEzkBqb/qp/pSj3dLxz74z5h7hXQSX+D4
+ 1ndtNcIUBOrsMhpp5GuuH1GFtKtJXnKghvIdw42b+OYRvUaygqqO2lg67pdqmJ2DZMO5oZBqC
+ op5tu+OZM8Ih3QOmhYSLjPernGtcVdINj4RWcvrWEy+rAJzwXzo/KmCDDpljBp1J+3Bg5dI3m
+ dmzQ3YwgmKLFwe6KQWSgZHs852r+ywPQelL/sasUyzpB2O2f0/6f8A9RuPzawk8h5FZGq2nRU
+ tXfs0IjFHpv+8JNF8On0/E1sgNy4bxXGbyteYsuvDYVU6t4L2fPD22uMkOg43pqaFj3uOf00p
+ P0DpFsammzHnWder2ujEuNdsrMm8JEJVZ9gDmKP9usKa+GwJDatFrzNz0DzB4J9LgFz7sDLC3
+ Kb72sPIzVaSQs6ibpBbSczupAYj91N
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1733385009; x=1733989809; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=3MXahRjhvVexe38LeHbsF2ljZcBP+F4xT/OR/9zuOSQ=;
- b=MAlvKysvtqsKVdA3zs5tYtLxChJHUuUDz2vJr05cnHmPgdZj9dMzgnGye0Ox2ZzNn9
- UDfbwNFhNqbFuxL/+WTz+n5umogjmomnazbSN09YnirbSWEMJY9f1t5cePa3y05O8K2I
- lca5vJbRDTxRFRKEQN7i2C+1FPTarcit6kuIfb48u1Fd5ucFT155J82fqWN00g86q7hT
- BkD83wrPWAxftBvv0JuW/8QW/zJnyYk1JUvxdUb4PbY2M27xj2GWGwUuv6+53TuMtSG9
- cLKmx/qx86lxBtFrSFUUvD3T9SGGQC4j/W9vD4nM3czDgs+LBABtQ/uQkTgFRfddyJC4
- 9YAQ==
+ d=gmx.de; 
+ s=s31663417; t=1733409429; x=1734014229; i=fiona.klute@gmx.de;
+ bh=VTOQQx/Hfq3+NDmh6xrSo83G668sHlhdxKUq66+aiyQ=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=KeewCXqO4ZiWUDDjjs/aLNUs+tR3gZJ4npIgsFaRWSL5UYf0b2+y0zSBpugbCJgh
+ FjFhQa7CPmwnzm5BsD5jJBfli0zi+uMzkoYy2w5dvgQJsQzgYp8NRzCeQz3xvMVof
+ mNFpqoFmERYWDLPMnaRQihvpUGIP2I7EQnYPSMNtfdUEQNCq0qhRrZvX6Zug8ePTP
+ WD+NbGozji8JoWiTmRb/HOaN0r6of3ODqEBwfBh7anZUpdeCWetKS1GDAO96gCCm+
+ 1mTLMVBMa92ph5b57ANPt/76qv6IH1D0SnHO73TdMoZcSN103DU40Vt/P6Y0o7M5a
+ HTZU3NTuqqXQEi3rVA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=MAlvKysv
-Subject: Re: [Buildroot] How do I generate the vendored Cargo sources?
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=KeewCXqO
+Subject: [Buildroot] [PATCH 4/4] package/bluez5_utils: tidy up the init
+ script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,40 +103,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
+* use long-form options
+* consistently use start-stop-daemon with --exec
+* wait for process to be gone and delete PID file on stop
 
-On 04/12/2024 21:07, Julio Merino wrote:
-> On Wed, Dec 4, 2024, at 11:48, Arnout Vandecappelle wrote:
->> On 28/11/2024 04:11, Julio Merino wrote:
->>> Hello,
->>>
->>> I'm exploring creating a package in Buildroot that uses Rust for building. The process seems very easy, and I think I've got everything in place... but I do not know how to handle the "cargo2.tar.gz" file and I cannot find any information about this in the documentation.
->>>
->>> As I understand it, this cargo2.tar.gz file is a "vendored" copy of the upstream sources with all Cargo dependencies bundled and locked at specific versions to guarantee reproducible builds.
->>>
->>> So my question is: how do I generate such tarball given just the upstream tarball?
->>
->>    If you use the cargo package infrastructure [1], this is handled
->> automatically
->> for you.
-> 
-> It wasn't. I copy/pasted the existing ripgrep package, which uses the infrastructure (right?), but then... attempting to build the package resulted in errors due to the "cargo2.tar.gz" file being missing. I was expecting it to be auto-generated on the first build attempt, but that didn't happen. Should it have?
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+---
+ package/bluez5_utils/S40bluetoothd | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-  Yes it should. Something else must be wrong in the package .mk file.
+diff --git a/package/bluez5_utils/S40bluetoothd b/package/bluez5_utils/S40bluetoothd
+index ee4abe8b63..04f3f5ee94 100644
+--- a/package/bluez5_utils/S40bluetoothd
++++ b/package/bluez5_utils/S40bluetoothd
+@@ -11,7 +11,8 @@ BLUETOOTHD_ARGS="-n"
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+ 	# shellcheck disable=SC2086 # we need the word splitting
+-	start-stop-daemon -S -q -m -b -p "$PIDFILE" -x "/usr/libexec/bluetooth/$DAEMON" \
++	start-stop-daemon --start --background --make-pidfile \
++		--pidfile "$PIDFILE" --exec "/usr/libexec/bluetooth/$DAEMON" \
+ 		-- $BLUETOOTHD_ARGS
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+@@ -24,25 +25,32 @@ start() {
+ 
+ stop() {
+ 	printf 'Stopping %s: ' "$DAEMON"
+-	start-stop-daemon -K -q -p "$PIDFILE"
++	start-stop-daemon --stop --pidfile "$PIDFILE" \
++		--exec "/usr/libexec/bluetooth/$DAEMON"
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
+ 	else
+ 		echo "FAIL"
++		return "$status"
+ 	fi
++	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
++		--exec "/usr/libexec/bluetooth/$DAEMON"; do
++		sleep 0.1
++	done
++	rm -f "$PIDFILE"
+ 	return "$status"
+ }
+ 
+ restart() {
+ 	stop
+-	sleep 1
+ 	start
+ }
+ 
+ reload() {
+ 	printf 'Reloading %s: ' "$DAEMON"
+-	start-stop-daemon -K -s HUP -q -p "$PIDFILE"
++	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
++		--exec "/usr/libexec/bluetooth/$DAEMON"
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
+-- 
+2.45.2
 
-  Or perhaps something went wrong during the vendoring, and the vendoring script 
-doesn't handle errors correctly. For instance, I'm not sure what will happen 
-when there's no Cargo.toml file.
-
-  Regards,
-  Arnout
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
