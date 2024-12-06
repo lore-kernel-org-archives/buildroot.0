@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F15F9E77173
-	for <buildroot@archiver.kernel.org>; Fri,  6 Dec 2024 11:50:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CE8DE77173
+	for <buildroot@archiver.kernel.org>; Fri,  6 Dec 2024 11:52:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A84F461210;
-	Fri,  6 Dec 2024 11:50:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7E9E612F2;
+	Fri,  6 Dec 2024 11:52:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 70s1Z_4u8QIm; Fri,  6 Dec 2024 11:50:55 +0000 (UTC)
+ id fnE_FRwP5bxr; Fri,  6 Dec 2024 11:52:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A645E612D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA0EB612F7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A645E612D9;
-	Fri,  6 Dec 2024 11:50:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 99A39ED2
- for <buildroot@buildroot.org>; Fri,  6 Dec 2024 11:50:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA0EB612F7;
+	Fri,  6 Dec 2024 11:52:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6C021ED2
+ for <buildroot@buildroot.org>; Fri,  6 Dec 2024 11:52:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 77B71407B6
- for <buildroot@buildroot.org>; Fri,  6 Dec 2024 11:50:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4BAF0407C2
+ for <buildroot@buildroot.org>; Fri,  6 Dec 2024 11:52:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dltZcqdDOkmq for <buildroot@buildroot.org>;
- Fri,  6 Dec 2024 11:50:52 +0000 (UTC)
+ id wRH4nrUAER-4 for <buildroot@buildroot.org>;
+ Fri,  6 Dec 2024 11:52:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A480407AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 509E5407B6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A480407AA
- for <buildroot@buildroot.org>; Fri,  6 Dec 2024 11:50:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 509E5407B6
+ for <buildroot@buildroot.org>; Fri,  6 Dec 2024 11:52:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5F7A086A3C; Fri,  6 Dec 2024 11:50:52 +0000 (UTC)
+ id 4B7AC86A30; Fri,  6 Dec 2024 11:52:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Dec 2024 12:48:58 +0100
-X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: bec0de73acf747b2360ad776d5affc435a51b83a
-X-Git-Newrev: 73f2172fd60655904bad4ced597000a41ddc7699
+Date: Fri, 6 Dec 2024 12:44:31 +0100
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: ba7bd5efd05008cc0cbbdee1e80754c829bc7baf
+X-Git-Newrev: 9bd1746ee41a864a2bd6c9679e6cfa3cc456e8b1
 X-Patchwork-Hint: ignore
-Message-Id: <20241206115052.5F7A086A3C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/frr: security
+Message-Id: <20241206115200.4B7AC86A30@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/frr: security
  bump to version 8.5.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73f2172fd60655904bad4ced597000a41ddc7699
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9bd1746ee41a864a2bd6c9679e6cfa3cc456e8b1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 8.5.5 fixes the following security issues:
 
@@ -101,7 +101,7 @@ index 4a61084bae..86575dae8c 100644
 +sha256  5f3a32e66efdf2628548165d10327688847443c342788b31c4ea98368cfacbf8  frr-8.5.6.tar.gz
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
 diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-index 1b7d66fc68..8141020cb0 100644
+index a4b4bccaf9..c794d91a4e 100644
 --- a/package/frr/frr.mk
 +++ b/package/frr/frr.mk
 @@ -4,7 +4,7 @@
