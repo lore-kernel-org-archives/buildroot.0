@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 166C8E7717B
-	for <buildroot@archiver.kernel.org>; Fri,  6 Dec 2024 22:54:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCA2CE77179
+	for <buildroot@archiver.kernel.org>; Fri,  6 Dec 2024 22:54:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D6E7680DFE;
-	Fri,  6 Dec 2024 22:54:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C0B060625;
+	Fri,  6 Dec 2024 22:54:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F5f29BxaHwo3; Fri,  6 Dec 2024 22:54:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZJVPDEevPBaU; Fri,  6 Dec 2024 22:54:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFA3380E1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1272B60614
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BFA3380E1D;
-	Fri,  6 Dec 2024 22:54:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D4150ECA
- for <buildroot@buildroot.org>; Fri,  6 Dec 2024 22:54:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1272B60614;
+	Fri,  6 Dec 2024 22:54:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5CBB3ED7
+ for <buildroot@buildroot.org>; Fri,  6 Dec 2024 22:54:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A68E080E0C
- for <buildroot@buildroot.org>; Fri,  6 Dec 2024 22:54:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 903474010D
+ for <buildroot@buildroot.org>; Fri,  6 Dec 2024 22:54:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4MvjNzMyNxY9 for <buildroot@buildroot.org>;
- Fri,  6 Dec 2024 22:54:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G1SjT7VwQ3ba for <buildroot@buildroot.org>;
+ Fri,  6 Dec 2024 22:54:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95D0780DFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22BA84018E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 95D0780DFE
- for <buildroot@buildroot.org>; Fri,  6 Dec 2024 22:54:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 22BA84018E
+ for <buildroot@buildroot.org>; Fri,  6 Dec 2024 22:54:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8B58086ADF; Fri,  6 Dec 2024 22:54:02 +0000 (UTC)
+ id 1DC8E86AE0; Fri,  6 Dec 2024 22:54:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Dec 2024 22:59:50 +0100
+Date: Fri, 6 Dec 2024 23:43:14 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: a1e5061463540b5d2d9286b10e711dc7a9fe55bf
-X-Git-Newrev: 8bf55f1da7094cd39de93d9a44d16219bb3d13c0
+X-Git-Oldrev: b8e9a352d2d733332f9be4ee971a840c1b9cef29
+X-Git-Newrev: fa11dff8480a0bd4003ed1aa7335b50afd359a1a
 X-Patchwork-Hint: ignore
-Message-Id: <20241206225402.8B58086ADF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/musl: Fix -ztext
- build failures on microblaze
+Message-Id: <20241206225403.1DC8E86AE0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/android-tools:
+ fix b64_pton() issue with GCC >= 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,82 +60,223 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2767242665236275553=="
+Content-Type: multipart/mixed; boundary="===============2943193264322871014=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2767242665236275553==
+--===============2943193264322871014==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bf55f1da7094cd39de93d9a44d16219bb3d13c0
+commit: https://git.buildroot.net/buildroot/commit/?id=fa11dff8480a0bd4003ed1aa7335b50afd359a1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-The particular combination of LVM2 (which enables -PIE), musl-libc with
-dynamic linking (and thus -ztext, banning TEXTRELs), and microblaze
-leads to an error because a TEXTREL is produced in musl-libc's Scrt1.o.
+The android-tools code base uses the __b64_pton() function, which
+isn't provided by all C libraries. So the Debian patch
+debian/patches/add_adbd.patch adds an implementation of b64_pton(),
+but doesn't actually use it, nor defines a prototype for it. Our
+existing patch 0003-Fix-build-issue-with-uclibc.patch switches the
+code to use the b64_pton() function... but still without providing a
+prototype, causing the following build failures with GCC >= 14.x:
 
-The upstream patch added in this commit fixes (or works around) the
-problem.
+adb_auth_client.c:75:15: error: implicit declaration of function 'b64_pton'
 
-Fixes: http://autobuild.buildroot.net/results/5bb283eff4b4a2b17d1028bbe0b3e1bea8fbeba8/
-Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
+To fix this, we rework 0003-Fix-build-issue-with-uclibc.patch into a
+patch that:
+
+ (1) Renames b64_pton() to adb_b64_pton() to make sure it won't clash
+     with implementations provided by some C libraries, and adjusts
+     the call sites accordingly.
+
+ (2) Adds a prototype definition of adb_b64_pton() in places where
+     this function is used.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/b25b25337c7ad89c33f8bd20b646850bd993ec53ae9/
+
+Even though GCC 14.x support was merged in Buildroot in May 2024, this
+particular b64_pton() only started appearing on July 15 2024, with the
+first occurrence being:
+
+  http://autobuild.buildroot.net/results/1cbe87bbe3c56f28444b3aaba1ba1d05f947d36e/
+
+Indeed, it's not before July 15 2024 that we merged commit
+d201f2f5cd0d1e0389430cda78adead37977a6cd ("package/android-tools: add
+patches to fix build with GCC 14.x"), which fixed other GCC 14.x
+issues, which were hiding this b64_pton() problem.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 4033902ad095bdeb6a32c827a6275b49ad61a3bb)
+(cherry picked from commit 1eec67d164c7087aa0bed30599681e908fb2fb41)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...visibility-for-C-entry-point-function-_st.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ .checkpackageignore                                |  1 -
+ .../0003-Adjust-base64-function-handling.patch     | 96 ++++++++++++++++++++++
+ .../0003-Fix-build-issue-with-uclibc.patch         | 40 ---------
+ 3 files changed, 96 insertions(+), 41 deletions(-)
 
-diff --git a/package/musl/0003-use-hidden-visibility-for-C-entry-point-function-_st.patch b/package/musl/0003-use-hidden-visibility-for-C-entry-point-function-_st.patch
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 8b56337a35..68ac8d252c 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -131,7 +131,6 @@ package/am33x-cm3/0004-Makefile-add-fno-builtin.patch Upstream
+ package/am33x-cm3/S93-am335x-pm-firmware-load Variables
+ package/android-tools/0001-Fix-makefiles-for-out-of-tree-build.patch Upstream
+ package/android-tools/0002-Fix-adbd-for-non-Ubuntu-systems.patch Upstream
+-package/android-tools/0003-Fix-build-issue-with-uclibc.patch Upstream
+ package/android-tools/0004-Fix-build-issue-with-musl.patch Upstream
+ package/android-tools/0005-makefiles-use-pkgconf-to-get-libs-deps.patch Upstream
+ package/android-tools/0006-Fix-build-on-big-endian-systems.patch Upstream
+diff --git a/package/android-tools/0003-Adjust-base64-function-handling.patch b/package/android-tools/0003-Adjust-base64-function-handling.patch
 new file mode 100644
-index 0000000000..6359565cd7
+index 0000000000..30a6e680b9
 --- /dev/null
-+++ b/package/musl/0003-use-hidden-visibility-for-C-entry-point-function-_st.patch
-@@ -0,0 +1,42 @@
-+From 9c78557af0a5e521cdb46a4ca7630f2987d2523e Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Sat, 10 Aug 2024 19:49:24 -0400
-+Subject: [PATCH] use hidden visibility for C entry point function _start_c
++++ b/package/android-tools/0003-Adjust-base64-function-handling.patch
+@@ -0,0 +1,96 @@
++From 946dbb00fe4b2a75c688a470fc0c3924aa018a24 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 14 Jul 2024 11:39:49 +0200
++Subject: [PATCH] Adjust base64 function handling
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+the file-level crt_arch.h asm fragments generally make direct
-+(non-PLT) calls from _start to _start_c, which is only valid when
-+there is a local, non-interposable definition for _start_c. generally,
-+the linker is expected to know that local definitions in a main
-+executable (as opposed to shared library) output are non-interposable,
-+making this work, but historically there have been linker bugs in this
-+area, and microblaze is reportedly still broken, flagging the
-+relocation for the call as a textrel.
++In order to support libcs that do not provide b64_pton(), one of the
++Debian patches adds a copy of b64_pton() and b64_ntop(). However, no
++prototype is added for those functions, causing an "implicit
++declaration" warning... or error depending on the compiler version
++used:
 +
-+the equivalent _dlstart_c, called from the same crt_arch.h asm
-+fragments, has always used hidden visibility without problem, and
-+semantically it should be hidden, so make it hidden. this ensures the
-+direct call is always valid regardless of whether the linker properly
-+special-cases main executable output.
++core/adbd/adb_auth_client.c:75:15: error: implicit declaration of function ‘b64_pton’ [-Wimplicit-function-declaration]
 +
-+Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=9c78557af0a5e521cdb46a4ca7630f2987d2523e
-+Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
++This patch adds appropriate prototypes, but while at it, also renames
++the internal copy of b64_*() functions to have an adb_ prefix in order
++to clarify things and not clash with definitions potentially coming
++from the C library.
++
++Upstream: N/A, we're too far from upstream
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ crt/crt1.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ core/adb/adb_auth_client.c  | 3 ++-
++ core/adbd/adb_auth_client.c | 3 ++-
++ core/adbd/base64.c          | 4 ++--
++ 3 files changed, 6 insertions(+), 4 deletions(-)
 +
-+diff --git a/crt/crt1.c b/crt/crt1.c
-+index 8fe8ab5d..10601215 100644
-+--- a/crt/crt1.c
-++++ b/crt/crt1.c
-+@@ -11,7 +11,7 @@ weak void _fini();
-+ int __libc_start_main(int (*)(), int, char **,
-+ 	void (*)(), void(*)(), void(*)());
-+
-+-void _start_c(long *p)
-++hidden void _start_c(long *p)
++diff --git a/core/adb/adb_auth_client.c b/core/adb/adb_auth_client.c
++index 0b4913e..25b9828 100644
++--- a/core/adb/adb_auth_client.c
+++++ b/core/adb/adb_auth_client.c
++@@ -45,6 +45,7 @@ static char *key_paths[] = {
++ static fdevent listener_fde;
++ static int framework_fd = -1;
++ 
+++extern int adb_b64_pton(char const *src, u_char *target, size_t targsize);
++ 
++ static void read_keys(const char *file, struct listnode *list)
 + {
-+ 	int argc = p[0];
-+ 	char **argv = (void *)(p+1);
-+--
-+2.45.2
++@@ -72,7 +73,7 @@ static void read_keys(const char *file, struct listnode *list)
++         if (sep)
++             *sep = '\0';
++ 
++-        ret = __b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
+++        ret = adb_b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
++         if (ret != sizeof(key->key)) {
++             D("%s: Invalid base64 data ret=%d\n", file, ret);
++             free(key);
++diff --git a/core/adbd/adb_auth_client.c b/core/adbd/adb_auth_client.c
++index 0b4913e..25b9828 100644
++--- a/core/adbd/adb_auth_client.c
+++++ b/core/adbd/adb_auth_client.c
++@@ -45,6 +45,7 @@ static char *key_paths[] = {
++ static fdevent listener_fde;
++ static int framework_fd = -1;
++ 
+++extern int adb_b64_pton(char const *src, u_char *target, size_t targsize);
++ 
++ static void read_keys(const char *file, struct listnode *list)
++ {
++@@ -72,7 +73,7 @@ static void read_keys(const char *file, struct listnode *list)
++         if (sep)
++             *sep = '\0';
++ 
++-        ret = __b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
+++        ret = adb_b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
++         if (ret != sizeof(key->key)) {
++             D("%s: Invalid base64 data ret=%d\n", file, ret);
++             free(key);
++diff --git a/core/adbd/base64.c b/core/adbd/base64.c
++index 7270703..91fc1b2 100644
++--- a/core/adbd/base64.c
+++++ b/core/adbd/base64.c
++@@ -134,7 +134,7 @@ static const char Pad64 = '=';
++    */
++ 
++ int
++-b64_ntop(src, srclength, target, targsize)
+++adb_b64_ntop(src, srclength, target, targsize)
++ 	u_char const *src;
++ 	size_t srclength;
++ 	char *target;
++@@ -212,7 +212,7 @@ b64_ntop(src, srclength, target, targsize)
++  */
++ 
++ int
++-b64_pton(src, target, targsize)
+++adb_b64_pton(src, target, targsize)
++ 	char const *src;
++ 	u_char *target;
++ 	size_t targsize;
++-- 
++2.47.0
 +
+diff --git a/package/android-tools/0003-Fix-build-issue-with-uclibc.patch b/package/android-tools/0003-Fix-build-issue-with-uclibc.patch
+deleted file mode 100644
+index a951271873..0000000000
+--- a/package/android-tools/0003-Fix-build-issue-with-uclibc.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 082ee80d3524fa3474644c09b441d7f7947675cc Mon Sep 17 00:00:00 2001
+-From: Gary Bisson <gary.bisson@boundarydevices.com>
+-Date: Sun, 1 Dec 2024 15:43:56 +0100
+-Subject: [PATCH] Fix build issue with uclibc
+-
+-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+----
+- core/adb/adb_auth_client.c  | 2 +-
+- core/adbd/adb_auth_client.c | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/core/adb/adb_auth_client.c b/core/adb/adb_auth_client.c
+-index 0b4913e..068d837 100644
+---- a/core/adb/adb_auth_client.c
+-+++ b/core/adb/adb_auth_client.c
+-@@ -72,7 +72,7 @@ static void read_keys(const char *file, struct listnode *list)
+-         if (sep)
+-             *sep = '\0';
+- 
+--        ret = __b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
+-+        ret = b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
+-         if (ret != sizeof(key->key)) {
+-             D("%s: Invalid base64 data ret=%d\n", file, ret);
+-             free(key);
+-diff --git a/core/adbd/adb_auth_client.c b/core/adbd/adb_auth_client.c
+-index 0b4913e..068d837 100644
+---- a/core/adbd/adb_auth_client.c
+-+++ b/core/adbd/adb_auth_client.c
+-@@ -72,7 +72,7 @@ static void read_keys(const char *file, struct listnode *list)
+-         if (sep)
+-             *sep = '\0';
+- 
+--        ret = __b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
+-+        ret = b64_pton(buf, (u_char *)&key->key, sizeof(key->key) + 4);
+-         if (ret != sizeof(key->key)) {
+-             D("%s: Invalid base64 data ret=%d\n", file, ret);
+-             free(key);
+--- 
+-2.47.0
+-
 
---===============2767242665236275553==
+--===============2943193264322871014==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -146,4 +287,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2767242665236275553==--
+--===============2943193264322871014==--
