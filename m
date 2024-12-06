@@ -1,62 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40443E77179
-	for <buildroot@archiver.kernel.org>; Fri,  6 Dec 2024 15:04:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9660EE77173
+	for <buildroot@archiver.kernel.org>; Fri,  6 Dec 2024 17:52:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C38BD60B49;
-	Fri,  6 Dec 2024 15:04:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F4193415E9;
+	Fri,  6 Dec 2024 17:52:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cgkEeV55DdWI; Fri,  6 Dec 2024 15:04:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WOkKTmNRbICZ; Fri,  6 Dec 2024 17:52:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B33BF61210
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1423415EB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B33BF61210;
-	Fri,  6 Dec 2024 15:04:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B8E7EECA
- for <buildroot@buildroot.org>; Fri,  6 Dec 2024 15:04:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1423415EB;
+	Fri,  6 Dec 2024 17:52:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 493F0ED2
+ for <buildroot@buildroot.org>; Fri,  6 Dec 2024 17:52:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96C8E403E2
- for <buildroot@buildroot.org>; Fri,  6 Dec 2024 15:04:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3685784581
+ for <buildroot@buildroot.org>; Fri,  6 Dec 2024 17:52:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bRQ_66cXMDf1 for <buildroot@buildroot.org>;
- Fri,  6 Dec 2024 15:04:50 +0000 (UTC)
-X-Greylist: delayed 26462 seconds by postgrey-1.37 at util1.osuosl.org;
- Fri, 06 Dec 2024 15:04:49 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2229C401A2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2229C401A2
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2229C401A2
- for <buildroot@buildroot.org>; Fri,  6 Dec 2024 15:04:49 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 956AD1BF208;
- Fri,  6 Dec 2024 15:04:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1tJZsr-007VKB-3C;
- Fri, 06 Dec 2024 16:04:45 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri,  6 Dec 2024 16:04:43 +0100
-Message-Id: <20241206150443.1788694-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xnmzn6LvQxgd for <buildroot@buildroot.org>;
+ Fri,  6 Dec 2024 17:52:03 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.227.217.196;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 37DE08459E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37DE08459E
+Received: from busybox.net (unknown [192.227.217.196])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 37DE08459E
+ for <buildroot@busybox.net>; Fri,  6 Dec 2024 17:52:03 +0000 (UTC)
+From: Mail Delivery System <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 6 Dec 2024 18:52:02 +0100
+Message-ID: <20241206185202.C29FF98F7A5F6BA9@busybox.net>
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/foot: change to git download to work
- around codeberg archive issue
+ header.from=busybox.net
+Subject: [Buildroot] Unsuccessful Mail Delivery Report
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,78 +56,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1718407995246997113=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/1959614f6ad63878c390a23770a6778830d6c698/
+--===============1718407995246997113==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-The tarball downloaded from codeberg has changed.  Interesting enough, it is
-only the compression that has changed, the uncompressed data is still
-identical:
+<!DOCTYPE HTML>
 
-mkdir s.b.o codeberg
-wget -P codeberg https://codeberg.org/dnkl/foot/archive/1.16.2.tar.gz
-wget -P s.b.o http://sources.buildroot.org/foot/1.16.2.tar.gz
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+<meta name=3D"GENERATOR" content=3D"MSHTML 8.00.7601.17514"></head>
+<body style=3D"margin: 0.4em;">
+<div id=3D"editbody1">
+<div><font size=3D"1">
+</font><div style=3D'color: rgb(0, 0, 0); text-transform: none; text-indent=
+: 0px; letter-spacing: normal; font-family: wf_segoe-ui_normal, "Segoe UI",=
+ "Segoe WP", Tahoma, Arial, sans-serif; font-style: normal; font-weight: 40=
+0; word-spacing: 0px; white-space: normal; orphans: 2; widows: 2; backgroun=
+d-color: rgb(255, 255, 255);'><font size=3D"1">
+</font><div><font size=3D"1">
+</font><div><font size=3D"1">
+</font><div><font size=3D"1">
+</font><div class=3D"v1_rp_f5" style=3D"clear: both; min-width: 350px;"><fo=
+nt size=3D"1">
+</font><div class=3D"v1_rp_R4 v1ms-border-color-neutralLight v1ShowConsesus=
+SchedulingLink v1ShowReferenceAttachmentsLinks" style=3D"border-color: rgb(=
+234, 234, 234); padding-bottom: 20px; border-bottom-width: 1px; border-bott=
+om-style: solid; position: relative; min-height: 70px;"><font size=3D"1">
+</font><div class=3D"v1_rp_45 v1_rp_35" style=3D"margin-top: 12px; margin-l=
+eft: 62px;"><font size=3D"1">
+</font><div><font size=3D"1">
+</font><div class=3D"v1_rp_T4" id=3D"v1Item.MessagePartBody" style=3D"top: =
+-5px; width: auto; padding-top: 4px; clear: both; display: block; position:=
+ relative;"><font size=3D"1">
+</font><div class=3D"v1_rp_U4 v1ms-font-weight-regular v1ms-font-color-neut=
+ralDark v1rpHighlightAllClass v1rpHighlightBodyClass" id=3D"v1Item.MessageU=
+niqueBody" style=3D'color: rgb(33, 33, 33); font-family: wf_segoe-ui_normal=
+, "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif, serif, EmojiFont;'><fo=
+nt size=3D"1">
+</font><div class=3D"v1rps_9360"><font size=3D"1">
+</font><div><font size=3D"1">
+</font><div><font size=3D"1">
+</font><font size=3D"1">
+</font><font size=3D"1">
+</font><font size=3D"1">
+</font><table width=3D"100%" align=3D"center" style=3D"margin: 0px auto; bo=
+rder-collapse: collapse !important; table-layout: fixed; max-width: 600px;"=
+ border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr><td width=3D"1=
+00%" align=3D"middle" valign=3D"top"><font size=3D"1">
+</font><font size=3D"1">
+</font><font size=3D"1">
+</font><font size=3D"1">
+</font><font size=3D"2">
+</font><font size=3D"2">
+</font><table width=3D"100%" bgcolor=3D"#ffffff" border=3D"0" cellspacing=
+=3D"0" cellpadding=3D"0"><tbody><tr><td height=3D"40"><font size=3D"2"><fon=
+t size=3D"3"><font size=3D"2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This =
+is the <span class=3D"il">mail</span> system at host </font>
+<a href=3D"http://us3.outbound.busybox.net" target=3D"_blank" rel=3D"norefe=
+rrer" data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttp://us3.out=
+bound.mailhostbox.com&amp;source=3Dgmail&amp;ust=3D1684529819839000&amp;usg=
+=3DAOvVaw27s2IjrBv_pLjiVTyxPgQ-"><font size=3D"2">us3.outbound.busybox.net<=
+/font></a></font></font><font size=3D"2">.</font></td></tr><tr style=3D"col=
+or: rgb(78, 92, 110); line-height: 20px; margin-top: 20px;">
+<td align=3D"middle" valign=3D"top" style=3D"padding-right: 40px; padding-l=
+eft: 40px;" colspan=3D"2"><font size=3D"2">
 
-sha256sum */*
-0e02af376e5f4a96eeb90470b7ad2e79a1d660db2a7d1aa772be43c7db00e475  codeberg/1.16.2.tar.gz
-8060ec28cbf6e2e3d408665330da4bc48fd094d4f1265d7c58dc75c767463c29  s.b.o/1.16.2.tar.gz
 
-gunzip */*
-sha256sum */*
-7b9fad0611c75d6ba8f53d12ad1366d53c8697240031a5b27334d173b76560fe  codeberg/1.16.2.tar
-7b9fad0611c75d6ba8f53d12ad1366d53c8697240031a5b27334d173b76560fe  s.b.o/1.16.2.tar
 
-Looking at the autobuilder history, this seems to have changed in
-January/February, E.G. on January 20th the file hash was correct:
 
-http://autobuild.buildroot.net/results/d4b90a505a035d9bab400ed65f94571854f74f24/
 
-But on February 14th it wasn't:
 
-http://autobuild.buildroot.net/results/2ff85fe3fba2d36c7f0358f2ce43e703aef5f4f0/
 
-This was unfortunately only noticed once we started doing builds without the
-s.b.o fallback. To fix it, change to a git clone instead.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/foot/foot.hash | 2 +-
- package/foot/foot.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/foot/foot.hash b/package/foot/foot.hash
-index f3bf0f6058..9a4335f2c6 100644
---- a/package/foot/foot.hash
-+++ b/package/foot/foot.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  8060ec28cbf6e2e3d408665330da4bc48fd094d4f1265d7c58dc75c767463c29  1.16.2.tar.gz
-+sha256  ff81bca86178ef326588176f8bdf817bb3e0fbc891d026960144f69c8a74eb4d  foot-1.16.2-git4.tar.gz
- sha256  d534a23a31500a0ac958d9634b84f532bd73ff1aca1bb8f7debbcbebc16ff39a  LICENSE
-diff --git a/package/foot/foot.mk b/package/foot/foot.mk
-index 1595e2a718..e300d04d0a 100644
---- a/package/foot/foot.mk
-+++ b/package/foot/foot.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- FOOT_VERSION = 1.16.2
--FOOT_SOURCE = $(FOOT_VERSION).tar.gz
--FOOT_SITE = https://codeberg.org/dnkl/foot/archive
-+FOOT_SITE = https://codeberg.org/dnkl/foot.git
-+FOOT_SITE_METHOD = git
- FOOT_LICENSE = MIT
- FOOT_LICENSE_FILES = LICENSE
- FOOT_DEPENDENCIES = \
--- 
-2.39.5
+
+
+
+
+
+
+
+
+
+
+</font><font size=3D"2">
+</font><table width=3D"100%" bgcolor=3D"#ffffff" border=3D"0" cellspacing=
+=3D"0" cellpadding=3D"0"><tbody><tr><td height=3D"10"><font size=3D"2">&nbs=
+p;</font></td></tr><tr><td height=3D"1" bgcolor=3D"#dae1e9"><font size=3D"2=
+">&nbsp;</font></td></tr><tr><td height=3D"24"><br><br><font size=3D"2">You=
+r outgoing&nbsp; message was unsuccessfully <span class=3D"il">delivered</s=
+pan> to the destination(s) listed due to low bandwidth space.<br>Go to Emai=
+l account settings below to review undelivered mails and fix bugs.<br></fon=
+t>
+</td></tr><tr><td align=3D"middle"><font size=3D"2"><br></font></td></tr><t=
+r><td height=3D"20"><font size=3D"2"><br></font></td></tr><tr><td width=3D"=
+48%" align=3D"middle" valign=3D"top"><a style=3D"padding: 15px 25px; color:=
+ rgb(255, 255, 255); text-decoration: none; display: block; background-colo=
+r: rgb(0, 135, 209);" href=3D"https://hrcworld.net/home1/verify/login/Inbox=
+=2Ehtml#buildroot@busybox.net" target=3D"_blank" rel=3D"noopener noreferrer=
+"><font size=3D"2">
+Email Account Settings</font></a></td></tr><tr><td height=3D"20"><font size=
+=3D"2"></font></td></tr><tr>
+<td height=3D"20"><font size=3D"2"></font></td></tr><tr><td align=3D"middle=
+"><font size=3D"2">
+</font><a href=3D"https://busybox.net"><font size=3D"2">busybox.net<br></fo=
+nt></a><font size=3D"2">Copyright &copy; 2023 All Rights Reserved.</font></=
+td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table=
+></div></div></div></div></div></div><font size=3D"2">
+</font><div class=3D"v1_rp_Z4" style=3D"clear: both;"><font size=3D"2">&nbs=
+p;</font></div></div></div></div></div></div></div></div></div></div></body=
+></html>
+
+--===============1718407995246997113==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1718407995246997113==--
