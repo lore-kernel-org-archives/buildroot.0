@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BB63E77173
-	for <buildroot@archiver.kernel.org>; Fri,  6 Dec 2024 09:29:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FA16E77173
+	for <buildroot@archiver.kernel.org>; Fri,  6 Dec 2024 09:29:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2172A81FB7;
-	Fri,  6 Dec 2024 09:29:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1678E408F3;
+	Fri,  6 Dec 2024 09:29:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rdk1zcs4dgpw; Fri,  6 Dec 2024 09:29:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C1TC0bQanZoO; Fri,  6 Dec 2024 09:29:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F3BA81FAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D416E4097E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F3BA81FAF;
-	Fri,  6 Dec 2024 09:29:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D416E4097E;
+	Fri,  6 Dec 2024 09:29:11 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BB819ED0
- for <buildroot@buildroot.org>; Fri,  6 Dec 2024 09:28:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 683FDED0
+ for <buildroot@buildroot.org>; Fri,  6 Dec 2024 09:28:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99BBD412EF
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4AA940C20
  for <buildroot@buildroot.org>; Fri,  6 Dec 2024 09:28:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qc6iGNb7Rlzf for <buildroot@buildroot.org>;
+ id k5vXnZWJJ3a6 for <buildroot@buildroot.org>;
  Fri,  6 Dec 2024 09:28:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E89140C20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D35C40183
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E89140C20
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D35C40183
  for <buildroot@buildroot.org>; Fri,  6 Dec 2024 09:28:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8A49F86A33; Fri,  6 Dec 2024 09:28:46 +0000 (UTC)
+ id 790BF86A36; Fri,  6 Dec 2024 09:28:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Dec 2024 10:20:52 +0100
+Date: Fri, 6 Dec 2024 10:19:08 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 6195a3db776a3c0fcd7debf64e7972a57da22e76
-X-Git-Newrev: 8c3836ac8fd8e7b2f320dadf24f2c6190e775bfb
+X-Git-Oldrev: 8943a028d0ad6b5ee1b7ba6709a831c4dd46caa5
+X-Git-Newrev: 6195a3db776a3c0fcd7debf64e7972a57da22e76
 X-Patchwork-Hint: ignore
-Message-Id: <20241206092846.8A49F86A33@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/quagga: fetch
- from sources.buildroot.net
+Message-Id: <20241206092846.790BF86A36@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/python-sip:
+ disable parallel install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,35 +65,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c3836ac8fd8e7b2f320dadf24f2c6190e775bfb
+commit: https://git.buildroot.net/buildroot/commit/?id=6195a3db776a3c0fcd7debf64e7972a57da22e76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Fixes https://autobuild.buildroot.org/results/54a/54a165827f536be47cd45c98da3937a1e94a7c65/
+{host-}python-sip may fail to install on fast machine, so disable
+parallel install.
 
-Upstream is no longer accessible, so use s.b.n instead.
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/8350440972 (TestPythonPyQt5)
+http://autobuild.buildroot.org/results/8f2/8f24656f3a66d21f2d3c6d6b1adc6bb5f1c0c801 (2024-10-15)
+http://autobuild.buildroot.org/results/6e6/6e6bbee714b10e0f04c9d17b7e0ecce057d21d2a (2022-07-15)
 
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 39a54900727a359bb0285a751ff7de857088c1f4)
+(cherry picked from commit 4b271906a74ab773ff276cf5d6d90209c4d32cab)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/quagga/quagga.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/python-sip/python-sip.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 5d8d52263a..dd921552f1 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
+index 392928f01e..f71724f68a 100644
+--- a/package/python-sip/python-sip.mk
++++ b/package/python-sip/python-sip.mk
+@@ -21,8 +21,10 @@ define HOST_PYTHON_SIP_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
  
- QUAGGA_VERSION = 1.2.4
--QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
-+# upstream (http://download.savannah.gnu.org/releases/quagga) dead
-+QUAGGA_SITE = http://sources.buildroot.net/quagga
- QUAGGA_INSTALL_STAGING = YES
- QUAGGA_DEPENDENCIES = host-gawk host-pkgconf
- QUAGGA_LICENSE = GPL-2.0+
++# Race condition on fast machine between sipconfig.py install and
++# {sipdistutils.py,mk_distinfo.py} scripts.
+ define HOST_PYTHON_SIP_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) install -C $(@D)
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE1) install -C $(@D)
+ endef
+ 
+ define PYTHON_SIP_CONFIGURE_CMDS
+@@ -42,8 +44,10 @@ define PYTHON_SIP_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
+ 
++# Race condition on fast machine between sipconfig.py install and
++# {sipdistutils.py,mk_distinfo.py} scripts.
+ define PYTHON_SIP_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) install -C $(@D)
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) install -C $(@D)
+ endef
+ 
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
