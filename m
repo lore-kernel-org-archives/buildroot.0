@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84AD0E77173
-	for <buildroot@archiver.kernel.org>; Fri,  6 Dec 2024 19:55:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA262E77179
+	for <buildroot@archiver.kernel.org>; Fri,  6 Dec 2024 19:55:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3110461343;
-	Fri,  6 Dec 2024 19:55:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 954E16134B;
+	Fri,  6 Dec 2024 19:55:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8u4YHDGl2eEy; Fri,  6 Dec 2024 19:55:38 +0000 (UTC)
+ id EpwWITHUhkqT; Fri,  6 Dec 2024 19:55:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC84261306
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DED861398
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC84261306;
-	Fri,  6 Dec 2024 19:55:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0DED861398;
+	Fri,  6 Dec 2024 19:55:41 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C5F4ED2
- for <buildroot@buildroot.org>; Fri,  6 Dec 2024 19:55:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 55E29ED2
+ for <buildroot@buildroot.org>; Fri,  6 Dec 2024 19:55:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 17CEF40118
- for <buildroot@buildroot.org>; Fri,  6 Dec 2024 19:55:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1A140402F6
+ for <buildroot@buildroot.org>; Fri,  6 Dec 2024 19:55:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aadUoTjcv9XP for <buildroot@buildroot.org>;
+ id KgHaW6gjumjd for <buildroot@buildroot.org>;
  Fri,  6 Dec 2024 19:55:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19C1840339
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E49B8400D9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 19C1840339
- for <buildroot@buildroot.org>; Fri,  6 Dec 2024 19:55:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E49B8400D9
+ for <buildroot@buildroot.org>; Fri,  6 Dec 2024 19:55:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 01EEB86A8E; Fri,  6 Dec 2024 19:55:30 +0000 (UTC)
+ id D0795869A6; Fri,  6 Dec 2024 19:55:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Dec 2024 20:51:47 +0100
+Date: Fri, 6 Dec 2024 20:49:50 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 7bd02e75ae32b44079c447a4e50e497a001f3694
-X-Git-Newrev: a1e5061463540b5d2d9286b10e711dc7a9fe55bf
+X-Git-Oldrev: 9bd1746ee41a864a2bd6c9679e6cfa3cc456e8b1
+X-Git-Newrev: 6c060f3d1adfd1157b337b023919ab8146b1b467
 X-Patchwork-Hint: ignore
-Message-Id: <20241206195530.01EEB86A8E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/linux-tools:
- perf: Disable shellcheck
+Message-Id: <20241206195529.D0795869A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x]
+ board/zynqmp/kria/readme.txt: add usb start
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,39 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1e5061463540b5d2d9286b10e711dc7a9fe55bf
+commit: https://git.buildroot.net/buildroot/commit/?id=6c060f3d1adfd1157b337b023919ab8146b1b467
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-The use of shellcheck within perf is not a functional requirement and it can
-lead to build failures where the perf makefile attempts to link in empty
-.shellcheck_log files:
+When halting the boot process in u-boot, the 'usb start' command does not
+automatically run.  Since the SD card is connected over a USB to SD card
+bridge on the kd240 and kr260 boards, the readme.txt instructions should
+document that the 'usb start' command needs to be manually enterred when
+following the reflashing instructions.  Otherwise, the command to read the
+boot.bin and u-boot.itb files from the SD card will fail.
 
-https://lore.kernel.org/r/fb078045-dc05-426e-b21e-72ffae3e8e1b@gmail.com
-
-Disable shellcheck since we do not need it at all.
-
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0c44722b0ca6c1ab7d0f7af6a703361f553e4747)
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit e02e59d124647af71b30eb224a78b53e77db61f5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-tools/linux-tool-perf.mk.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ board/zynqmp/kria/readme.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
-index 65aba2e9fe..df3030439e 100644
---- a/package/linux-tools/linux-tool-perf.mk.in
-+++ b/package/linux-tools/linux-tool-perf.mk.in
-@@ -28,7 +28,8 @@ PERF_MAKE_FLAGS = \
- 	NO_LIBPERL=1 \
- 	NO_LIBPYTHON=1 \
- 	NO_LIBBIONIC=1 \
--	NO_LIBTRACEEVENT=1
-+	NO_LIBTRACEEVENT=1 \
-+	NO_SHELLCHECK=1
+diff --git a/board/zynqmp/kria/readme.txt b/board/zynqmp/kria/readme.txt
+index 96009804b3..31025ed19b 100644
+--- a/board/zynqmp/kria/readme.txt
++++ b/board/zynqmp/kria/readme.txt
+@@ -101,12 +101,14 @@ Flashing boot.bin:
  
- # We need to pass an argument to ld for setting the emulation when
- # building for MIPS architecture, otherwise the default one will always
+ KD240 / KR260 Flashing Instructions:
+ Flashing u-boot.itb:
++    $ usb start
+     $ sf probe
+     $ fatload usb 0 0x1000000 u-boot.itb
+     $ sf erase 0xf80000 +$filesize
+     $ sf write 0x1000000 0xf80000 $filesize
+ 
+ Flashing boot.bin:
++    $ usb start
+     $ sf probe
+     $ fatload usb 0 0x1000000 boot.bin
+     $ sf erase 0x200000 +$filesize
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
