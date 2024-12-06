@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B37ACE77173
-	for <buildroot@archiver.kernel.org>; Fri,  6 Dec 2024 09:29:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A64DCE77179
+	for <buildroot@archiver.kernel.org>; Fri,  6 Dec 2024 09:29:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F52681FC7;
-	Fri,  6 Dec 2024 09:29:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72FB941107;
+	Fri,  6 Dec 2024 09:29:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5ZgeLT9jVFjO; Fri,  6 Dec 2024 09:29:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wRGvTRxuGN1h; Fri,  6 Dec 2024 09:29:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6A9B840D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2735641200
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6A9B840D9;
-	Fri,  6 Dec 2024 09:29:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2735641200;
+	Fri,  6 Dec 2024 09:29:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BC4C5ECA
- for <buildroot@buildroot.org>; Fri,  6 Dec 2024 09:28:49 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5F8B5ED0
+ for <buildroot@buildroot.org>; Fri,  6 Dec 2024 09:28:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D1A1E42F4D
+ by smtp2.osuosl.org (Postfix) with ESMTP id EBB6C40183
  for <buildroot@buildroot.org>; Fri,  6 Dec 2024 09:28:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oHmKU_CJaLOn for <buildroot@buildroot.org>;
- Fri,  6 Dec 2024 09:28:46 +0000 (UTC)
+ id u0Om_dnM90H1 for <buildroot@buildroot.org>;
+ Fri,  6 Dec 2024 09:28:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B574B41377
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D52DB40EC9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B574B41377
+ by smtp2.osuosl.org (Postfix) with ESMTP id D52DB40EC9
  for <buildroot@buildroot.org>; Fri,  6 Dec 2024 09:28:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B0EFC86A33; Fri,  6 Dec 2024 09:28:46 +0000 (UTC)
+ id CDECA86A33; Fri,  6 Dec 2024 09:28:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Dec 2024 10:23:22 +0100
+Date: Fri, 6 Dec 2024 10:26:03 +0100
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 4d1a8585527506c4ff3281aab05dd86364ffc114
-X-Git-Newrev: 5f79065db562251d329f5c1e5fd9d6dd1575513f
+X-Git-Oldrev: 4f2555ecc5670c603f05eb22981e656c96de5f6f
+X-Git-Newrev: bec0de73acf747b2360ad776d5affc435a51b83a
 X-Patchwork-Hint: ignore
-Message-Id: <20241206092846.B0EFC86A33@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] {linux,
- linux-headers}: bump 6.{1, 6, 11}.x series
+Message-Id: <20241206092846.CDECA86A33@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] support/testing: improve
+ mosquitto test reliability
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,48 +65,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f79065db562251d329f5c1e5fd9d6dd1575513f
+commit: https://git.buildroot.net/buildroot/commit/?id=bec0de73acf747b2360ad776d5affc435a51b83a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5d49bc51e032b0d512741618dbec6596eac9d452)
-[Peter: drop 6.11.x bump]
+The mosquitto runtime test can randomly fail on slow
+runners, see [1].
+
+This commit improves this test in the following ways:
+
+- the mosquitto_sub subscriber process is now started in a subshell
+to suppress the job control messages (to prevent any spurious
+messages when the job stops),
+
+- the standard error is redirected to /dev/null, to prevent the
+printing of any messages,
+
+- the mosquitto_pub publisher process is started later, by increasing
+the sleep time,
+
+- finally, a new sleep time is introduced between the mosquitto_pub
+publisher process and the check of the mosquitto_sub subscriber, to
+make sure it will have time to write its output and exit.
+
+Fixes: [1]
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/8453386454
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 07a444d08804b3a453e4d01686ba0bef990070ca)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ support/testing/tests/package/test_mosquitto.py | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index ed473b0d05..65c535e937 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,7 +1,7 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  55e5bcbc68d66776fc46896291f0a24844beb57817345a854d65e3d055fa423e  linux-6.10.14.tar.xz
--sha256  e2c35611775534941b9d4dd871f3ae5b988b6594dc9033b5ca784366e07d9336  linux-6.6.62.tar.xz
--sha256  010784bd7161c32c4cd68a423d4dcb14e4587677d238b2825a31fe012869224c  linux-6.1.118.tar.xz
-+sha256  d1054ab4803413efe2850f50f1a84349c091631ec50a1cf9e891d1b1f9061835  linux-6.6.63.tar.xz
-+sha256  aecdaf39d0a844a81ce4c67d9daff8979e938bb690df4f679fbbb494fe423278  linux-6.1.119.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  8a4b2a47ccc9b208b2b6ed9a216ea1a5eb12852c723bec1a04de9e671a1d7da8  linux-5.15.173.tar.xz
- sha256  cd1850ef3b771886df4e0b4c4eb07033864abab2bb553a20fd9e3cdc23584b47  linux-5.10.230.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index a4db815791..ce44b5ee97 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -427,8 +427,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.286"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.230"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.173"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.118"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.62"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.1.119"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.63"	if BR2_KERNEL_HEADERS_6_6
- 	default "6.10.14"	if BR2_KERNEL_HEADERS_6_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+diff --git a/support/testing/tests/package/test_mosquitto.py b/support/testing/tests/package/test_mosquitto.py
+index ba10b30b00..6b256e5e27 100644
+--- a/support/testing/tests/package/test_mosquitto.py
++++ b/support/testing/tests/package/test_mosquitto.py
+@@ -25,13 +25,19 @@ class TestMosquitto(infra.basetest.BRTest):
+         msg = "Hello Buildroot!"
+ 
+         # We subscribe to a topic and write one message to a log file.
+-        self.assertRunOk(f"mosquitto_sub -t {topic} -C 1 > {log} &")
++        cmd = f"( mosquitto_sub -t {topic} -C 1 > {log} 2> /dev/null & )"
++        self.assertRunOk(cmd)
+ 
+-        time.sleep(1)
++        # We give some time to the subscriber process to settle.
++        time.sleep(5)
+ 
+         # We publish a message.
+         self.assertRunOk(f"mosquitto_pub -t {topic} -m '{msg}'")
+ 
++        # We give some more time to the subscriber process to write
++        # the log and quit.
++        time.sleep(5)
++
+         # We check the log file contains our message.
+         out, ret = self.emulator.run(f"cat {log}")
+         self.assertEqual(ret, 0)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
