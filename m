@@ -4,50 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC2C6E7717B
-	for <buildroot@archiver.kernel.org>; Sat,  7 Dec 2024 13:55:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01884E7717B
+	for <buildroot@archiver.kernel.org>; Sat,  7 Dec 2024 14:31:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D2DB80EDD;
-	Sat,  7 Dec 2024 13:55:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1A1381A6F;
+	Sat,  7 Dec 2024 14:31:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VGhAjS7gLD8K; Sat,  7 Dec 2024 13:55:45 +0000 (UTC)
+ id 1pCmLDeg-snk; Sat,  7 Dec 2024 14:31:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B9CA80EE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A52E481A92
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B9CA80EE1;
-	Sat,  7 Dec 2024 13:55:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B6B96ED7
- for <buildroot@buildroot.org>; Sat,  7 Dec 2024 13:55:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A52E481A92;
+	Sat,  7 Dec 2024 14:31:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DC3E7ED2
+ for <buildroot@buildroot.org>; Sat,  7 Dec 2024 14:31:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A4266402D1
- for <buildroot@buildroot.org>; Sat,  7 Dec 2024 13:55:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C9584408EA
+ for <buildroot@buildroot.org>; Sat,  7 Dec 2024 14:31:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vWcezeGN6AgQ for <buildroot@buildroot.org>;
- Sat,  7 Dec 2024 13:55:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E858402C2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E858402C2
- for <buildroot@buildroot.org>; Sat,  7 Dec 2024 13:55:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 56F0886A49; Sat,  7 Dec 2024 13:55:42 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0Yr8doqSDhSv for <buildroot@buildroot.org>;
+ Sat,  7 Dec 2024 14:31:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 27F37408EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27F37408EC
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 27F37408EC
+ for <buildroot@buildroot.org>; Sat,  7 Dec 2024 14:31:12 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b472.dip0.t-ipconnect.de [84.161.180.114])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id EE696A4C2724
+ for <buildroot@buildroot.org>; Sat,  7 Dec 2024 15:31:08 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:56976)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98)
+ (envelope-from <bernd@kuhls.net>) id 1tJvpr-000000002wQ-0qMw
+ for buildroot@buildroot.org; Sat, 07 Dec 2024 14:31:07 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 7 Dec 2024 14:51:43 +0100
-X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 6c47fca27ebc2249dc10f29a195b8a66c316aa79
-X-Git-Newrev: 49568ff31adf5149455db70972123c1faa06cf4e
-X-Patchwork-Hint: ignore
-Message-Id: <20241207135542.56F0886A49@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/bluez-alsa: Fix
- compilation with GCC 14 on musl
+Date: Sat,  7 Dec 2024 15:31:07 +0100
+Message-Id: <20241207143107.3468122-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
+MIME-Version: 1.0
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202412041019; t=1733581868;
+ bh=pMuyj2SiF4WuZ618wZj2+gH/KOsukfDHn8TrjdGqqPc=;
+ h=From:To:Subject:Date:From;
+ b=A/71LOyNM9TiaJ1DFXP2wpQ9o8jSTga/YOfOnE7C2RJaCu2C3oZaOpbZYdQdMPUOD
+ xhIcwVziiRlp0lQkeP4v6BnmB+VoTzyLz5QiThPMHvrXye0FKFrC/B3rFrAjNdIWgL
+ 1PmSuKYl/OE3C1oGSHON0Gr+f57GRsfHGJTrGNT3Dzs0s2qIFYPzws8EcdQJKfpn5n
+ Rt8c9yofmtDG01cVIhEkmCmDoymOxGQTXRtfh/0AXz75/BN0z0nCziujzz5gHzfxVX
+ GdjVKYJCEgoXvFl38iw2YePQLVBYfAObK7DyGFiiTGF3KEy+V4hfAgshnEbhH06QmP
+ N+fScYkWxcK5w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202412041019 header.b=A/71LOyN
+Subject: [Buildroot] [PATCH 1/1] {linux,
+ linux-headers}: bump 4.19.x / 6.11.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,124 +81,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49568ff31adf5149455db70972123c1faa06cf4e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
-
-bluez-alsa 4.1.1 uses the glibc basename() function, which is not
-available on musl.  On GCC < 14, it would probably compile with a
-warning, but GCC 14 now rejects this.
-
-Backport an upstream fix to switch to the posix basename() on musl.
-
-Fixes: https://autobuild.buildroot.org/results/8ada292393185328677b58a69c9e370c3118880f
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...Fix-compilation-on-strict-POSIX-platforms.patch | 90 ++++++++++++++++++++++
- 1 file changed, 90 insertions(+)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 4 ++--
+ package/linux-headers/Config.in.host | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/bluez-alsa/0001-Fix-compilation-on-strict-POSIX-platforms.patch b/package/bluez-alsa/0001-Fix-compilation-on-strict-POSIX-platforms.patch
-new file mode 100644
-index 0000000000..b1c8bfaab0
---- /dev/null
-+++ b/package/bluez-alsa/0001-Fix-compilation-on-strict-POSIX-platforms.patch
-@@ -0,0 +1,90 @@
-+From ef85a335ad8919930f62d80ae99a74a5e766fc3b Mon Sep 17 00:00:00 2001
-+From: Arkadiusz Bokowy <arkadiusz.bokowy@gmail.com>
-+Date: Sun, 25 Aug 2024 08:42:39 +0200
-+Subject: [PATCH] Fix compilation on strict POSIX platforms
-+
-+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-+Upstream: https://github.com/arkq/bluez-alsa/commit/070ed35ac5cef8138ed4
-+---
-+ src/main.c            | 2 +-
-+ test/mock/mock.c      | 2 +-
-+ utils/aplay/aplay.c   | 1 +
-+ utils/cli/cli.c       | 1 +
-+ utils/rfcomm/rfcomm.c | 1 +
-+ 5 files changed, 5 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/main.c b/src/main.c
-+index e93cb33..597ac01 100644
-+--- a/src/main.c
-++++ b/src/main.c
-+@@ -13,12 +13,12 @@
-+ #endif
-+ 
-+ #include <getopt.h>
-++#include <libgen.h>
-+ #include <signal.h>
-+ #include <stdbool.h>
-+ #include <stdint.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+-#include <string.h>
-+ #include <strings.h>
-+ #include <time.h>
-+ 
-+diff --git a/test/mock/mock.c b/test/mock/mock.c
-+index 83a8ab5..b5bcedd 100644
-+--- a/test/mock/mock.c
-++++ b/test/mock/mock.c
-+@@ -16,12 +16,12 @@
-+ #include <assert.h>
-+ #include <errno.h>
-+ #include <getopt.h>
-++#include <libgen.h>
-+ #include <signal.h>
-+ #include <stdbool.h>
-+ #include <stdint.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+-#include <string.h>
-+ #include <strings.h>
-+ #include <sys/stat.h>
-+ 
-+diff --git a/utils/aplay/aplay.c b/utils/aplay/aplay.c
-+index 999d1ef..49b0d65 100644
-+--- a/utils/aplay/aplay.c
-++++ b/utils/aplay/aplay.c
-+@@ -15,6 +15,7 @@
-+ #include <assert.h>
-+ #include <errno.h>
-+ #include <getopt.h>
-++#include <libgen.h>
-+ #include <math.h>
-+ #include <poll.h>
-+ #include <pthread.h>
-+diff --git a/utils/cli/cli.c b/utils/cli/cli.c
-+index d480ef1..299c44c 100644
-+--- a/utils/cli/cli.c
-++++ b/utils/cli/cli.c
-+@@ -13,6 +13,7 @@
-+ #endif
-+ 
-+ #include <getopt.h>
-++#include <libgen.h>
-+ #include <stdarg.h>
-+ #include <stdbool.h>
-+ #include <stdint.h>
-+diff --git a/utils/rfcomm/rfcomm.c b/utils/rfcomm/rfcomm.c
-+index 9eba57f..20c1214 100644
-+--- a/utils/rfcomm/rfcomm.c
-++++ b/utils/rfcomm/rfcomm.c
-+@@ -15,6 +15,7 @@
-+ #include <ctype.h>
-+ #include <errno.h>
-+ #include <getopt.h>
-++#include <libgen.h>
-+ #include <poll.h>
-+ #include <stdbool.h>
-+ #include <stdint.h>
-+-- 
-+2.45.2
-+
+diff --git a/linux/Config.in b/linux/Config.in
+index 92aeda5e6f..63078d686e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -134,7 +134,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.11.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.11.11" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 0135a14119..6002478854 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  4bc184915290629d61f935aa1eb1b6e711b8e47d8f289a39f0d584ecbdb4fe77  linux-6.11.10.tar.xz
++sha256  62148e7e17f54c4a5ab5e75ad4882682c54bee818948be61a5963234fc0849fc  linux-6.11.11.tar.xz
+ sha256  d1054ab4803413efe2850f50f1a84349c091631ec50a1cf9e891d1b1f9061835  linux-6.6.63.tar.xz
+ sha256  aecdaf39d0a844a81ce4c67d9daff8979e938bb690df4f679fbbb494fe423278  linux-6.1.119.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+@@ -7,7 +7,7 @@ sha256  8a4b2a47ccc9b208b2b6ed9a216ea1a5eb12852c723bec1a04de9e671a1d7da8  linux-
+ sha256  cd1850ef3b771886df4e0b4c4eb07033864abab2bb553a20fd9e3cdc23584b47  linux-5.10.230.tar.xz
+ sha256  180754f3df0e8d7f206625255b3f5a6e1f441feec83336df42613ca8f6b1887c  linux-5.4.286.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  90e140ad2d07da88b43d5930cfda7bffc5c121660e9d8a86d96a9efe4d87ffe6  linux-4.19.324.tar.xz
++sha256  607bed7de5cda31a443df4c8a78dbe5e8a9ad31afde2a4d28fe99ab4730e8de1  linux-4.19.325.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 9cf31c484d..e8f7515894 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -428,13 +428,13 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.19.324"	if BR2_KERNEL_HEADERS_4_19
++	default "4.19.325"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.4.286"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.230"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.173"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.119"	if BR2_KERNEL_HEADERS_6_1
+ 	default "6.6.63"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.11.10"	if BR2_KERNEL_HEADERS_6_11
++	default "6.11.11"	if BR2_KERNEL_HEADERS_6_11
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
