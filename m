@@ -1,53 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10D01E7717F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 07:04:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E66BE77173
+	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 08:16:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B04B48110C;
-	Sun,  8 Dec 2024 07:04:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id COs2kHmbvobg; Sun,  8 Dec 2024 07:04:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95D2181112
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 95D2181112;
-	Sun,  8 Dec 2024 07:04:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 73DE7ED2
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 07:04:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4193A60796
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 07:04:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27284607DC;
+	Sun,  8 Dec 2024 08:16:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RM9SyHrsKV8v for <buildroot@buildroot.org>;
- Sun,  8 Dec 2024 07:04:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E58E6058C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3E58E6058C
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 07:04:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 282FE86B41; Sun,  8 Dec 2024 07:04:39 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 9mbgLdgNljPy; Sun,  8 Dec 2024 08:16:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22D38607C7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 22D38607C7;
+	Sun,  8 Dec 2024 08:16:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4EBFD979
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 08:16:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2634081167
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 08:16:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DJiz_jWi-UpZ for <buildroot@buildroot.org>;
+ Sun,  8 Dec 2024 08:16:16 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
+ helo=serv15.avernis.de; envelope-from=br015@umbiko.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1B1A481164
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B1A481164
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1B1A481164
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 08:16:14 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id 9390FBDE075B;
+ Sun,  8 Dec 2024 09:16:10 +0100 (CET)
+From: Andreas Ziegler <br015@umbiko.net>
 To: buildroot@buildroot.org
-Date: Sat, 7 Dec 2024 23:22:15 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5f18745057a8bd2e0a3dc40d77ea382c5f6e41f0
-X-Git-Newrev: 6561a5d773d8e159556e2b911b315e3b5a0b89b1
-X-Patchwork-Hint: ignore
-Message-Id: <20241208070439.282FE86B41@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: improve weston test
- reliability
+Cc: Andreas Ziegler <br015@umbiko.net>
+Date: Sun,  8 Dec 2024 09:15:38 +0100
+Message-ID: <20241208081538.1245226-1-br015@umbiko.net>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Virus-Scanned: clamav-milter 1.0.7 at serv15.avernis.de
+X-Virus-Status: Clean
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=umbiko.net; s=mail; 
+ t=1733645771; bh=HuzeBjQ3k9DnsHMoNPZl/DFxRh5fIcWAJO6csrhmWYI=;
+ h=From:To:Cc:Subject:Date;
+ b=CY1ADl3TCOd0BcmE03S7EMYMKY39114ST8n2w5oafX1WRKLbcLfyYxg31IF4bn+88
+ wOazeTQg1jrjwTCk+IBPTyTGtU8I+YDj9wSN7TMlxpO7/ZqOwuXr5B5iDQFXqddjxL
+ ADwvRNg1WDuQ/Lcm1xmnRYOm+Gr/zGadCvfFi99Y=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=umbiko.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=CY1ADl3T
+Subject: [Buildroot] [PATCH 1/1] package/mpd: update version to 0.23.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,158 +73,190 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6561a5d773d8e159556e2b911b315e3b5a0b89b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Version 0.23.16 change log:
 
-The weston runtime test is unreliable, depending on the execution speed
-of its runner. Example of failure is [1], and success is [2]. This
-commit improves the test in several ways, to make it more robust to
-execution speed variations:
+* database
+  - fix integer overflows with 64-bit inode numbers
+* filter
+  - ffmpeg: fix for filters producing no output
+* support libfmt 11
+* support ICU 76
 
-- The command started in background (weston, weston-simple-egl) are
-  now started in a subshell. This suppresses the job control messages
-  when they are stopped. Those messages could interfere with the parsing
-  of the output;
+Adapt 0001-src-event-meson.build-add-atomic-dependency-for-spar.patch to
+silence check-package warnings
+Remove 0002-lib-fmt-support-build-with-libfmt-11.0.0.patch, changes were
+applied upstream
 
-- Wait time are moved outside the emulator;
+$ utils/check-package package/mpd/*
+916 lines processed
+0 warnings generated
 
-- The kernel argument vt.global_cursor_default=0 is added, to make sure
-  cursors are globally disabled, since the test use vkms display CRCs;
+$ echo "BR2_PACKAGE_MPD=y" > ~/output/mpd.config
+$ utils/test-pkg -c ~/output/mpd.config -d ~/output -p mpd
+                    bootlin-armv5-uclibc [1/6]: OK
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: SKIPPED
+                     bootlin-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                             arm-aarch64 [6/6]: OK
+6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
 
-- The memory of the emulator is increased to 512M. This test uses cpio
-  initramfs, and the filesystem size increased;
-
-- The vkms driver emulates a "vsync" event, but can generate a warning
-  when the system is too slow. This warning is printed on the console by
-  the klogd daemon in its default configuration. This commit adds the
-  overlay file /etc/default/klogd to limit only kernel emergency
-  messages to be printed on the console. This change fixes the failure
-  seen in [1] ;
-
-- Some sleep time values were adjusted to run on a "performant" idle
-  host. Those values are not suitable in all situations. In the
-  meantime a generic retry mechanism is added in the test infra, this
-  commit adds a retry logic inspired from the test_flutter runtime
-  test.
-
-Fixes: [1]
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/8562483474
-[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/8435236652
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 ---
- support/testing/tests/package/test_weston.py       | 36 ++++++++++++++++------
- .../package/test_weston/overlay/etc/default/klogd  |  1 +
- 2 files changed, 27 insertions(+), 10 deletions(-)
+ ...build-add-atomic-dependency-for-spar.patch |  6 +-
+ ...fmt-support-build-with-libfmt-11.0.0.patch | 93 -------------------
+ package/mpd/mpd.hash                          |  2 +-
+ package/mpd/mpd.mk                            |  2 +-
+ 4 files changed, 6 insertions(+), 97 deletions(-)
+ delete mode 100644 package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch
 
-diff --git a/support/testing/tests/package/test_weston.py b/support/testing/tests/package/test_weston.py
-index f37a73565f..2ed59a7f15 100644
---- a/support/testing/tests/package/test_weston.py
-+++ b/support/testing/tests/package/test_weston.py
-@@ -40,11 +40,11 @@ class TestWeston(infra.basetest.BRTest, GraphicsBase):
-     def start_weston(self):
-         self.assertRunOk("export XDG_RUNTIME_DIR=/tmp")
+diff --git a/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
+index 390cf12583..28a82da30a 100644
+--- a/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
++++ b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
+@@ -9,9 +9,11 @@ Linking with libatomic is needed on sparc otherwise build fails on:
+ Fixes:
+  - http://autobuild.buildroot.org/results/7a9fdb7e323892fb6ed85a2441054303e889c089
  
--        cmd = "weston"
-+        cmd = "( weston"
-         cmd += " --config=/etc/weston.ini"
-         cmd += " --continue-without-input"
-         cmd += " --log=/tmp/weston.log"
--        cmd += " &> /dev/null &"
-+        cmd += " &> /dev/null & )"
-         self.assertRunOk(cmd)
++Upstream: not sent (the same kind of patch for ncmpc was
++refused: https://github.com/MusicPlayerDaemon/ncmpc/pull/45)
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: not sent (the same kind of patch for ncmpc was
+-refused: https://github.com/MusicPlayerDaemon/ncmpc/pull/45)]
++[Andreas: adapt upstream formatting]
++Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+ ---
+  src/event/meson.build | 4 ++++
+  1 file changed, 4 insertions(+)
+diff --git a/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch b/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch
+deleted file mode 100644
+index e0a361fee2..0000000000
+--- a/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch
++++ /dev/null
+@@ -1,93 +0,0 @@
+-From 1402869715e3efca87942d79c3173a6b21a6925d Mon Sep 17 00:00:00 2001
+-From: Rudi Heitbaum <rudi@heitbaum.com>
+-Date: Fri, 5 Jul 2024 14:27:45 +0000
+-Subject: [PATCH] lib/fmt: support build with libfmt-11.0.0
+-
+-Upstream libfmt commit fmtlib/fmt@d707292
+-now requires the format function to be const.
+-
+-Adjust the function prototype so it is const and can compile.
+-
+-Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
+-
+-Context: https://github.com/MusicPlayerDaemon/MPD/issues/2071
+-Pull request: https://github.com/MusicPlayerDaemon/MPD/pull/2069
+-
+-Fixes: http://autobuild.buildroot.net/results/73514ea76a5960f59b4c50e2074571b10e4682d4
+-Fixes: http://autobuild.buildroot.net/results/a58ddbdfe35bd19021e65db0b8b8cc4c1c884d51
+-
+-Rebase for mpd-0.23.15
+-
+-Upstream: https://github.com/MusicPlayerDaemon/MPD/commit/3648475f871c33daa9e598c102a16e5a1a4d4dfc
+-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+----
+- src/lib/ffmpeg/LibFmt.hxx            | 2 +-
+- src/lib/fmt/AudioFormatFormatter.hxx | 4 ++--
+- src/lib/fmt/ExceptionFormatter.hxx   | 2 +-
+- src/lib/fmt/PathFormatter.hxx        | 2 +-
+- 4 files changed, 5 insertions(+), 5 deletions(-)
+-
+-diff --git a/src/lib/ffmpeg/LibFmt.hxx b/src/lib/ffmpeg/LibFmt.hxx
+-index aa068711f..dee83ed2d 100644
+---- a/src/lib/ffmpeg/LibFmt.hxx
+-+++ b/src/lib/ffmpeg/LibFmt.hxx
+-@@ -29,7 +29,7 @@
+- struct fmt::formatter<AVSampleFormat> : formatter<string_view>
+- {
+- 	template<typename FormatContext>
+--	auto format(const AVSampleFormat format, FormatContext &ctx) {
+-+	auto format(const AVSampleFormat format, FormatContext &ctx) const {
+- 		const char *name = av_get_sample_fmt_name(format);
+- 		if (name == nullptr)
+- 			name = "?";
+-diff --git a/src/lib/fmt/AudioFormatFormatter.hxx b/src/lib/fmt/AudioFormatFormatter.hxx
+-index e0ffb6216..8da98efd4 100644
+---- a/src/lib/fmt/AudioFormatFormatter.hxx
+-+++ b/src/lib/fmt/AudioFormatFormatter.hxx
+-@@ -39,7 +39,7 @@
+- struct fmt::formatter<SampleFormat> : formatter<string_view>
+- {
+- 	template<typename FormatContext>
+--	auto format(const SampleFormat format, FormatContext &ctx) {
+-+	auto format(const SampleFormat format, FormatContext &ctx) const {
+- 		return formatter<string_view>::format(sample_format_to_string(format),
+- 						      ctx);
+- 	}
+-@@ -49,7 +49,7 @@
+- struct fmt::formatter<AudioFormat> : formatter<string_view>
+- {
+- 	template<typename FormatContext>
+--	auto format(const AudioFormat &af, FormatContext &ctx) {
+-+	auto format(const AudioFormat &af, FormatContext &ctx) const {
+- 		return formatter<string_view>::format(ToString(af).c_str(),
+- 						      ctx);
+- 	}
+-diff --git a/src/lib/fmt/ExceptionFormatter.hxx b/src/lib/fmt/ExceptionFormatter.hxx
+-index 3f342df67..f08b3bb22 100644
+---- a/src/lib/fmt/ExceptionFormatter.hxx
+-+++ b/src/lib/fmt/ExceptionFormatter.hxx
+-@@ -38,7 +38,7 @@
+- struct fmt::formatter<std::exception_ptr> : formatter<string_view>
+- {
+- 	template<typename FormatContext>
+--	auto format(std::exception_ptr e, FormatContext &ctx) {
+-+	auto format(std::exception_ptr e, FormatContext &ctx) const {
+- 		return formatter<string_view>::format(GetFullMessage(e), ctx);
+- 	}
+- };
+-diff --git a/src/lib/fmt/PathFormatter.hxx b/src/lib/fmt/PathFormatter.hxx
+-index e5ae89dec..add06df81 100644
+---- a/src/lib/fmt/PathFormatter.hxx
+-+++ b/src/lib/fmt/PathFormatter.hxx
+-@@ -29,7 +29,7 @@
+- struct fmt::formatter<Path> : formatter<string_view>
+- {
+- 	template<typename FormatContext>
+--	auto format(Path path, FormatContext &ctx) {
+-+	auto format(Path path, FormatContext &ctx) const {
+- 		return formatter<string_view>::format(path.ToUTF8(), ctx);
+- 	}
+- };
+--- 
+-2.43.0
+-
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index fe3d449cc5..c18a80a9d0 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  550132239ad1acf82ccf8905b56cc13dc2c81a4489b96fba7731b3049907661a  mpd-0.23.15.tar.xz
++sha256  9668e36df80de485683c962d02845bf314d8a08e6141af7afeff76401e32b2c1  mpd-0.23.16.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index e320ad9dec..fd528aaa87 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-         self.assertRunOk("export WAYLAND_DISPLAY=wayland-1")
-@@ -57,7 +57,8 @@ class TestWeston(infra.basetest.BRTest, GraphicsBase):
-         time.sleep(4)
- 
-     def stop_weston(self):
--        cmd = "killall weston && sleep 3"
-+        cmd = "killall weston"
-+        time.sleep(3)
-         self.assertRunOk(cmd)
- 
-     def test_run(self):
-@@ -65,14 +66,23 @@ class TestWeston(infra.basetest.BRTest, GraphicsBase):
-         kern = os.path.join(self.builddir, "images", "Image")
-         self.emulator.boot(arch="aarch64",
-                            kernel=kern,
--                           kernel_cmdline=["console=ttyAMA0"],
-+                           kernel_cmdline=["console=ttyAMA0", "vt.global_cursor_default=0"],
-                            options=["-M", "virt",
-                                     "-cpu", "cortex-a57",
-                                     "-smp", "4",
--                                    "-m", "256M",
-+                                    "-m", "512M",
-                                     "-initrd", img])
-         self.emulator.login()
- 
-+        # This test uses the vkms DRM Kernel driver. This driver can
-+        # generate kernel warning messages in some cases (e.g. "vblank
-+        # timer overrun"). Those messages can happen on slow test
-+        # runners. This warning is not an issue in this test: it is
-+        # not checking performance here; it just checks the rendering
-+        # pipeline is functional. For that reason, this test adds the
-+        # file "/etc/default/klogd" to only show emergency messages
-+        # (level value 0) on the console.
-+
-         # Check the weston binary can execute
-         self.assertRunOk("weston --version")
- 
-@@ -96,14 +106,17 @@ class TestWeston(infra.basetest.BRTest, GraphicsBase):
-         # animation is derived from the system time). Since all the
-         # rendering (client application and compositor) is in
-         # software, we sleep a bit to let those program to settle.
--        self.assertRunOk("weston-simple-egl >/dev/null 2>&1 &")
--        time.sleep(8)
-+        self.assertRunOk("( weston-simple-egl >/dev/null 2>&1 & )")
- 
-         # Since the weston-simple-egl client is supposed to run and
-         # display something, we are now supposed to measure a
-         # different display CRC than the one we measured when the
-         # desktop was empty.
--        crc = self.get_n_fb_crc(count=1)[0]
-+        for i in range(600):
-+            crc = self.get_n_fb_crc(count=1)[0]
-+            if crc != weston_desktop_crc:
-+                break
-+            time.sleep(1)
-         self.assertNotEqual(crc, weston_desktop_crc)
- 
-         # While weston-simple-egl is running, we check the VKMS DRM
-@@ -121,12 +134,15 @@ class TestWeston(infra.basetest.BRTest, GraphicsBase):
-         # We stop weston-simple-egl, and sleep a bit to let Weston do
-         # its cleanup and desktop repaint refresh...
-         self.assertRunOk("killall weston-simple-egl")
--        time.sleep(4)
- 
-         # After we stopped the application, we should have the initial
-         # weston desktop background. The CRC we measure now should be
-         # the same as the one we saved earlier.
--        crc = self.get_n_fb_crc(count=1)[0]
-+        for i in range(600):
-+            crc = self.get_n_fb_crc(count=1)[0]
-+            if crc == weston_desktop_crc:
-+                break
-+            time.sleep(1)
-         self.assertEqual(crc, weston_desktop_crc)
- 
-         self.stop_weston()
-diff --git a/support/testing/tests/package/test_weston/overlay/etc/default/klogd b/support/testing/tests/package/test_weston/overlay/etc/default/klogd
-new file mode 100644
-index 0000000000..b4209f50b5
---- /dev/null
-+++ b/support/testing/tests/package/test_weston/overlay/etc/default/klogd
-@@ -0,0 +1 @@
-+KLOGD_ARGS="-c 1"
+ MPD_VERSION_MAJOR = 0.23
+-MPD_VERSION = $(MPD_VERSION_MAJOR).15
++MPD_VERSION = $(MPD_VERSION_MAJOR).16
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost fmt
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
