@@ -4,49 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13A55E77173
-	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 20:52:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDA47E77173
+	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 21:21:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B4FE403D0;
-	Sun,  8 Dec 2024 20:52:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E041406E2;
+	Sun,  8 Dec 2024 21:21:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UyaL7gguVBqd; Sun,  8 Dec 2024 20:52:22 +0000 (UTC)
+ id 2mfp-1QgaNPK; Sun,  8 Dec 2024 21:21:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 638BF403D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 755E0406E4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 638BF403D2;
-	Sun,  8 Dec 2024 20:52:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7D570979
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 20:52:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 755E0406E4;
+	Sun,  8 Dec 2024 21:21:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 05258979
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 21:21:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6E041400E5
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 20:52:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E5F1D406E4
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 21:21:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u7Zjdg6rxsoP for <buildroot@buildroot.org>;
- Sun,  8 Dec 2024 20:52:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ueEYRARAm0Yk for <buildroot@buildroot.org>;
+ Sun,  8 Dec 2024 21:21:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27CA7400D1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 27CA7400D1
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 20:52:19 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0CFA982890; Sun,  8 Dec 2024 20:52:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 18E1A406E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18E1A406E2
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 18E1A406E2
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 21:21:53 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 65C881C0003
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 21:21:50 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1tKOir-00C4f4-2T
+ for buildroot@buildroot.org; Sun, 08 Dec 2024 22:21:49 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Dec 2024 21:51:20 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 25ba1643728bce6b8c5d76ee0080b5fe8734d849
-X-Git-Newrev: d37527ba498c34508b9f3fede34135686c94581e
-X-Patchwork-Hint: ignore
-Message-Id: <20241208205219.0CFA982890@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] Update for 2024.02.9
+Date: Sun, 08 Dec 2024 22:21:49 +0100
+Message-ID: <87zfl5zx8y.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] Buildroot 2024.02.9 released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,78 +65,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d37527ba498c34508b9f3fede34135686c94581e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                  | 18 ++++++++++++++++++
- Makefile                 |  4 ++--
- support/misc/Vagrantfile |  2 +-
- 3 files changed, 21 insertions(+), 3 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 527d344c9c..23b490d60b 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,21 @@
-+2024.02.9, released December 8th, 2024
-+
-+	Important / security related fixes.
-+
-+	Updated/fixed packages: alsa-lib, android-tools, babeld,
-+	bmap-tools, boost, ebtables, expat, fbv, foot, frr, gamin,
-+	gnutls, intel-microcode, irssi, libcurl, libkrb5, libmodbus,
-+	libvpl, linux-tools, lmbench, mbedtls, mosquitto, musl,
-+	musl-compat-headers, nfs-utils, ntp, php, postgresql,
-+	procps-ng, python-psycopg2, python-sip, qt6base, quagga,
-+	rt-tests, sshguard, systemd, tiff, x11vnc
-+
-+	Issues resolved:
-+	- procps-ng: builderror in 2024.08
-+	  https://gitlab.com/buildroot.org/buildroot/-/issues/38
-+	- fbv package download link is broken in long term support branch
-+	  https://gitlab.com/buildroot.org/buildroot/-/issues/73
-+
- 2024.02.8, released November 14th, 2024
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 9702aadf3d..0546a9b1a9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -90,9 +90,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2024.02.8
-+export BR2_VERSION := 2024.02.9
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1731601000
-+BR2_VERSION_EPOCH = 1733691000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 91a801bc16..07959ea064 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2024.02.8'
-+RELEASE='2024.02.9'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpCdWlsZHJvb3QgaXMgYSBzaW1wbGUgdG9vbCBmb3IgY3JlYXRpbmcgY29tcGxldGUgZW1i
+ZWRkZWQgTGludXggc3lzdGVtcwooaHR0cHM6Ly9idWlsZHJvb3Qub3JnKS4KCkJ1aWxkcm9vdCAy
+MDI0LjAyLjkgaXMgcmVsZWFzZWQgLSBHbyBkb3dubG9hZCBpdCBhdDoKCmh0dHBzOi8vYnVpbGRy
+b290Lm9yZy9kb3dubG9hZHMvYnVpbGRyb290LTIwMjQuMDIuOS50YXIuZ3oKCm9yCgpodHRwczov
+L2J1aWxkcm9vdC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDI0LjAyLjkudGFyLnh6CgpPciBn
+ZXQgaXQgZnJvbSBHaXQ6CgpodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJv
+b3QuZ2l0ICgyMDI0LjAyLjkgdGFnKQoKQnVpbGRyb290IDIwMjQuMDIuOSBpcyBhIGJ1Z2ZpeCBy
+ZWxlYXNlIG9uIHRoZSBjdXJyZW50IGxvbmcgdGVybQpyZWxlYXNlLCBmaXhpbmcgYSBudW1iZXIg
+b2YgaW1wb3J0YW50IC8gc2VjdXJpdHkgcmVsYXRlZCBpc3N1ZXMKZGlzY292ZXJlZCBzaW5jZSB0
+aGUgMjAyNC4wMi44IHJlbGVhc2UuCgotIFNlY3VyaXR5IGZpeGVzIGZvciBleHBhdCwgZnJyLCBp
+bnRlbC1taWNyb2NvZGUsIGxpYmN1cmwsIGxpYmtyYjUsCiAgbWJlZHRscywgcGhwLCBwb3N0Z3Jl
+c3FsLCB0aWZmCgotIEZpeGVzIGZvciBkb3dubG9hZC9jb21waWxhdGlvbi9ydW50aW1lL2xpY2Vu
+c2UgaXNzdWVzIGluIGFsc2EtbGliLAogIGFuZHJvaWQtdG9vbHMsIGJhYmVsZCwgYm1hcC10b29s
+cywgYm9vc3QsIGVidGFibGVzLCBmYnYsIGZvb3QsIGdhbWluLAogIGdudXRscywgaXJzc2ksIGxp
+Ym1vZGJ1cywgbGlidnBsLCBsaW51eC10b29scywgbG1iZW5jaCwgbW9zcXVpdHRvLAogIG11c2ws
+IG11c2wtY29tcGF0LWhlYWRlcnMsIG5mcy11dGlscywgbnRwLCBwcm9jcHMtbmcsIHB5dGhvbi1w
+c3ljb3BnMiwKICBweXRob24tc2lwLCBxdDZiYXNlLCBxdWFnZ2EsIHJ0LXRlc3RzLCBzc2hndWFy
+ZCwgc3lzdGVtZCwgeDExdm5jCgpGb3IgbW9yZSBkZXRhaWxzLCBzZWUgdGhlIENIQU5HRVMgZmls
+ZToKCmh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2Jsb2IvMjAy
+NC4wMi45L0NIQU5HRVMKClVzZXJzIG9mIHRoZSBhZmZlY3RlZCBwYWNrYWdlcyBhcmUgc3Ryb25n
+bHkgZW5jb3VyYWdlZCB0byB1cGdyYWRlLgoKTWFueSB0aGFua3MgdG8gYWxsIHRoZSBwZW9wbGUg
+Y29udHJpYnV0aW5nIHRvIHRoaXMgcmVsZWFzZToKCmdpdCBzaG9ydGxvZyAtcyAtbiAyMDI0LjAy
+LjguLgoKICAgICA5ICBCZXJuZCBLdWhscwogICAgIDkgIEp1bGllbiBPbGl2YWluCiAgICAgOSAg
+UGV0ZXIgS29yc2dhYXJkCiAgICAgOCAgVGhvbWFzIFBldGF6em9uaQogICAgIDMgIFNjb3R0IEZh
+bgogICAgIDMgIFRJQU4gWXVhbmhhbwogICAgIDIgIEJyYW5kb24gTWFpZXIKICAgICAyICBDaGVy
+bmlhZXYgQW5kcmVpCiAgICAgMiAgRnJhbmNvaXMgUGVycmFkCiAgICAgMiAgTWF4aW0gS29jaGV0
+a292CiAgICAgMiAgWWFubiBFLiBNT1JJTgogICAgIDEgIEFuc3NpIEhhbm51bGEKICAgICAxICBC
+YXJ1Y2ggU2lhY2gKICAgICAxICBGaW9uYSBLbHV0ZSAoV0lXQSkKICAgICAxICBGbG9yaWFuIEZh
+aW5lbGxpCiAgICAgMSAgSGFubmFoIEtpZWtlbnMKICAgICAxICBKLiBOZXVzY2jDpGZlcgogICAg
+IDEgIExQIEMKICAgICAxICBNaWNoYWVsIE5vc3Rob2ZmCiAgICAgMSAgTmVhbCBGcmFnZXIKICAg
+ICAxICBSb21haW4gTmFvdXIKICAgICAxICBUaG9tYXMgRGV2b29nZHQKICAgICAxICBWbGFkaW1p
+ciBPbHRlYW4KICAgICAxICBZdSBDaGllbiBQZXRlciBMaW4KCi0tIApCeWUsIFBldGVyIEtvcnNn
+YWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
