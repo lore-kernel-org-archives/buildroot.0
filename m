@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1983CE77180
-	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 14:53:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDEA4E77173
+	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 14:53:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C8202605CE;
-	Sun,  8 Dec 2024 14:53:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wd4S6oZnHP0R; Sun,  8 Dec 2024 14:53:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D13B5605D0
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D13B5605D0;
-	Sun,  8 Dec 2024 14:53:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 24B07979
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 14:53:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04F2F4018F
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 14:53:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9EF6D4021C;
+	Sun,  8 Dec 2024 14:53:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GMB-dEzjIrFV for <buildroot@buildroot.org>;
+ id k23TwFDu3aEi; Sun,  8 Dec 2024 14:53:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD60540196
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD60540196;
+	Sun,  8 Dec 2024 14:53:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 788DE6F
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 14:53:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59F094024F
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 14:53:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qkJz6eGkEy4P for <buildroot@buildroot.org>;
  Sun,  8 Dec 2024 14:53:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F061F40196
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 255F34017B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F061F40196
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 14:53:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 255F34017B
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 14:53:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E691486BBB; Sun,  8 Dec 2024 14:53:16 +0000 (UTC)
+ id 106E586BBF; Sun,  8 Dec 2024 14:53:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Dec 2024 15:43:37 +0100
+Date: Sun, 8 Dec 2024 15:44:50 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: ecec8f8f32c60874ff0f09a5e1768be205d85040
-X-Git-Newrev: 84754f5c877207a9c62f3d1f4f972055ef6d1c7a
+X-Git-Oldrev: 64ee690875174d55ab5dba27163c3ae932a4bc51
+X-Git-Newrev: be24ec40cde1468194ec505212ad65f125fe4fdd
 X-Patchwork-Hint: ignore
-Message-Id: <20241208145316.E691486BBB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/gnutls: fix
- configure options
+Message-Id: <20241208145317.106E586BBF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/foot: change to
+ git download to work around codeberg archive issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,73 +65,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84754f5c877207a9c62f3d1f4f972055ef6d1c7a
+commit: https://git.buildroot.net/buildroot/commit/?id=be24ec40cde1468194ec505212ad65f125fe4fdd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Two configure option names have been changed since version 3.7.5 [1]:
-
-> Old: --without-libbrotli --without-libzstd (also --with-*)
-> New: --without-brotli --without-zstd (also --with-*)
-
 Fixes:
+http://autobuild.buildroot.net/results/1959614f6ad63878c390a23770a6778830d6c698/
 
-  configure: WARNING: unrecognized options: [...] --without-libbrotli, --without-libzstd
+The tarball downloaded from codeberg has changed.  Interesting enough, it is
+only the compression that has changed, the uncompressed data is still
+identical:
 
-[1]: https://gitlab.com/gnutls/gnutls/-/commit/6b794e49d1a14e43f9e08023f958364712c3c89a
+mkdir s.b.o codeberg
+wget -P codeberg https://codeberg.org/dnkl/foot/archive/1.16.2.tar.gz
+wget -P s.b.o http://sources.buildroot.org/foot/1.16.2.tar.gz
 
-Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit c4a56d3f6d45898c889b68f1ab785dcabcce31bf)
+sha256sum */*
+0e02af376e5f4a96eeb90470b7ad2e79a1d660db2a7d1aa772be43c7db00e475  codeberg/1.16.2.tar.gz
+8060ec28cbf6e2e3d408665330da4bc48fd094d4f1265d7c58dc75c767463c29  s.b.o/1.16.2.tar.gz
+
+gunzip */*
+sha256sum */*
+7b9fad0611c75d6ba8f53d12ad1366d53c8697240031a5b27334d173b76560fe  codeberg/1.16.2.tar
+7b9fad0611c75d6ba8f53d12ad1366d53c8697240031a5b27334d173b76560fe  s.b.o/1.16.2.tar
+
+Looking at the autobuilder history, this seems to have changed in
+January/February, E.G. on January 20th the file hash was correct:
+
+http://autobuild.buildroot.net/results/d4b90a505a035d9bab400ed65f94571854f74f24/
+
+But on February 14th it wasn't:
+
+http://autobuild.buildroot.net/results/2ff85fe3fba2d36c7f0358f2ce43e703aef5f4f0/
+
+This was unfortunately only noticed once we started doing builds without the
+s.b.o fallback. To fix it, change to a git clone instead.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 28c982b5f4ea6f4e619ab02ab62407d764f7d9f3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/foot/foot.hash | 2 +-
+ package/foot/foot.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 04cecb5ce2..96e59134b2 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -58,11 +58,11 @@ HOST_GNUTLS_CONF_OPTS = \
- 	--without-libz-prefix \
- 	--without-tpm \
- 	--disable-openssl-compatibility \
--	--without-libbrotli \
-+	--without-brotli \
- 	--without-idn \
- 	--without-p11-kit \
- 	--without-zlib \
--	--without-libzstd
-+	--without-zstd
+diff --git a/package/foot/foot.hash b/package/foot/foot.hash
+index f3bf0f6058..9a4335f2c6 100644
+--- a/package/foot/foot.hash
++++ b/package/foot/foot.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8060ec28cbf6e2e3d408665330da4bc48fd094d4f1265d7c58dc75c767463c29  1.16.2.tar.gz
++sha256  ff81bca86178ef326588176f8bdf817bb3e0fbc891d026960144f69c8a74eb4d  foot-1.16.2-git4.tar.gz
+ sha256  d534a23a31500a0ac958d9634b84f532bd73ff1aca1bb8f7debbcbebc16ff39a  LICENSE
+diff --git a/package/foot/foot.mk b/package/foot/foot.mk
+index 1595e2a718..e300d04d0a 100644
+--- a/package/foot/foot.mk
++++ b/package/foot/foot.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_GNUTLS_OPENSSL),y)
- GNUTLS_LICENSE += , GPL-3.0+ (gnutls-openssl library)
-@@ -73,10 +73,10 @@ GNUTLS_CONF_OPTS += --disable-openssl-compatibility
- endif
- 
- ifeq ($(BR2_PACKAGE_BROTLI),y)
--GNUTLS_CONF_OPTS += --with-libbrotli
-+GNUTLS_CONF_OPTS += --with-brotli
- GNUTLS_DEPENDENCIES += brotli
- else
--GNUTLS_CONF_OPTS += --without-libbrotli
-+GNUTLS_CONF_OPTS += --without-brotli
- endif
- 
- ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
-@@ -106,10 +106,10 @@ GNUTLS_CONF_OPTS += --without-zlib
- endif
- 
- ifeq ($(BR2_PACKAGE_ZSTD),y)
--GNUTLS_CONF_OPTS += --with-libzstd
-+GNUTLS_CONF_OPTS += --with-zstd
- GNUTLS_DEPENDENCIES += zstd
- else
--GNUTLS_CONF_OPTS += --without-libzstd
-+GNUTLS_CONF_OPTS += --without-zstd
- endif
- 
- # Provide a default CA cert location
+ FOOT_VERSION = 1.16.2
+-FOOT_SOURCE = $(FOOT_VERSION).tar.gz
+-FOOT_SITE = https://codeberg.org/dnkl/foot/archive
++FOOT_SITE = https://codeberg.org/dnkl/foot.git
++FOOT_SITE_METHOD = git
+ FOOT_LICENSE = MIT
+ FOOT_LICENSE_FILES = LICENSE
+ FOOT_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
