@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7993EE77180
-	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 14:50:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AD19E77173
+	for <buildroot@archiver.kernel.org>; Sun,  8 Dec 2024 14:53:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40755608F1;
-	Sun,  8 Dec 2024 14:50:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C24AC40192;
+	Sun,  8 Dec 2024 14:53:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UEMzyPJecNKq; Sun,  8 Dec 2024 14:50:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 11w9pJ0pQwqn; Sun,  8 Dec 2024 14:53:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15A30606F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96A814018F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15A30606F1;
-	Sun,  8 Dec 2024 14:50:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1149D6F
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 14:50:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96A814018F;
+	Sun,  8 Dec 2024 14:53:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 00B85EE0
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 14:53:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA08F400BD
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 14:50:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DFE2580A8B
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 14:53:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tHOwC_dUWvFK for <buildroot@buildroot.org>;
- Sun,  8 Dec 2024 14:50:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id I2knsLcNJEa8 for <buildroot@buildroot.org>;
+ Sun,  8 Dec 2024 14:53:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7CCE4017B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F236C80A53
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7CCE4017B
- for <buildroot@buildroot.org>; Sun,  8 Dec 2024 14:50:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F236C80A53
+ for <buildroot@buildroot.org>; Sun,  8 Dec 2024 14:53:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9594886B96; Sun,  8 Dec 2024 14:50:30 +0000 (UTC)
+ id D8B1186BBA; Sun,  8 Dec 2024 14:53:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Dec 2024 15:47:24 +0100
-X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: ab80a90f62448d14cc4495602d9ee44bfc2bfc93
-X-Git-Newrev: bb5b5055eedb5535ada672b8a459ad32bd2880e2
+Date: Sun, 8 Dec 2024 15:43:22 +0100
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: b4554306d2c1d2702a87de73bfdb64c2b5775e29
+X-Git-Newrev: ecec8f8f32c60874ff0f09a5e1768be205d85040
 X-Patchwork-Hint: ignore
-Message-Id: <20241208145030.9594886B96@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] support/testing: improve
- weston test reliability
+Message-Id: <20241208145316.D8B1186BBA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/gnutls: bump to
+ version 3.8.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,154 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb5b5055eedb5535ada672b8a459ad32bd2880e2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ecec8f8f32c60874ff0f09a5e1768be205d85040
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-The weston runtime test is unreliable, depending on the execution speed
-of its runner. Example of failure is [1], and success is [2]. This
-commit improves the test in several ways, to make it more robust to
-execution speed variations:
-
-- The command started in background (weston, weston-simple-egl) are
-  now started in a subshell. This suppresses the job control messages
-  when they are stopped. Those messages could interfere with the parsing
-  of the output;
-
-- Wait time are moved outside the emulator;
-
-- The kernel argument vt.global_cursor_default=0 is added, to make sure
-  cursors are globally disabled, since the test use vkms display CRCs;
-
-- The memory of the emulator is increased to 512M. This test uses cpio
-  initramfs, and the filesystem size increased;
-
-- The vkms driver emulates a "vsync" event, but can generate a warning
-  when the system is too slow. This warning is printed on the console by
-  the klogd daemon in its default configuration. This commit adds the
-  overlay file /etc/default/klogd to limit only kernel emergency
-  messages to be printed on the console. This change fixes the failure
-  seen in [1] ;
-
-- Some sleep time values were adjusted to run on a "performant" idle
-  host. Those values are not suitable in all situations. In the
-  meantime a generic retry mechanism is added in the test infra, this
-  commit adds a retry logic inspired from the test_flutter runtime
-  test.
-
-Fixes: [1]
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/8562483474
-[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/8435236652
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6561a5d773d8e159556e2b911b315e3b5a0b89b1)
+(cherry picked from commit 10f892b19d9ede510bc448f4fb4346231b9afa41)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_weston.py       | 36 ++++++++++++++++------
- .../package/test_weston/overlay/etc/default/klogd  |  1 +
- 2 files changed, 27 insertions(+), 10 deletions(-)
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/testing/tests/package/test_weston.py b/support/testing/tests/package/test_weston.py
-index f37a73565f..2ed59a7f15 100644
---- a/support/testing/tests/package/test_weston.py
-+++ b/support/testing/tests/package/test_weston.py
-@@ -40,11 +40,11 @@ class TestWeston(infra.basetest.BRTest, GraphicsBase):
-     def start_weston(self):
-         self.assertRunOk("export XDG_RUNTIME_DIR=/tmp")
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 35e842546e..6712d1f6ef 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.7.tar.xz.sig
+-sha256  fe302f2b6ad5a564bcb3678eb61616413ed5277aaf8e7bf7cdb9a95a18d9f477  gnutls-3.8.7.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.8.tar.xz.sig
++sha256  ac4f020e583880b51380ed226e59033244bc536cad2623f2e26f5afa2939d8fb  gnutls-3.8.8.tar.xz
+ # Locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  doc/COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index bb6c0dc1f9..04cecb5ce2 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -6,7 +6,7 @@
  
--        cmd = "weston"
-+        cmd = "( weston"
-         cmd += " --config=/etc/weston.ini"
-         cmd += " --continue-without-input"
-         cmd += " --log=/tmp/weston.log"
--        cmd += " &> /dev/null &"
-+        cmd += " &> /dev/null & )"
-         self.assertRunOk(cmd)
- 
-         self.assertRunOk("export WAYLAND_DISPLAY=wayland-1")
-@@ -57,7 +57,8 @@ class TestWeston(infra.basetest.BRTest, GraphicsBase):
-         time.sleep(4)
- 
-     def stop_weston(self):
--        cmd = "killall weston && sleep 3"
-+        cmd = "killall weston"
-+        time.sleep(3)
-         self.assertRunOk(cmd)
- 
-     def test_run(self):
-@@ -65,14 +66,23 @@ class TestWeston(infra.basetest.BRTest, GraphicsBase):
-         kern = os.path.join(self.builddir, "images", "Image")
-         self.emulator.boot(arch="aarch64",
-                            kernel=kern,
--                           kernel_cmdline=["console=ttyAMA0"],
-+                           kernel_cmdline=["console=ttyAMA0", "vt.global_cursor_default=0"],
-                            options=["-M", "virt",
-                                     "-cpu", "cortex-a57",
-                                     "-smp", "4",
--                                    "-m", "256M",
-+                                    "-m", "512M",
-                                     "-initrd", img])
-         self.emulator.login()
- 
-+        # This test uses the vkms DRM Kernel driver. This driver can
-+        # generate kernel warning messages in some cases (e.g. "vblank
-+        # timer overrun"). Those messages can happen on slow test
-+        # runners. This warning is not an issue in this test: it is
-+        # not checking performance here; it just checks the rendering
-+        # pipeline is functional. For that reason, this test adds the
-+        # file "/etc/default/klogd" to only show emergency messages
-+        # (level value 0) on the console.
-+
-         # Check the weston binary can execute
-         self.assertRunOk("weston --version")
- 
-@@ -96,14 +106,17 @@ class TestWeston(infra.basetest.BRTest, GraphicsBase):
-         # animation is derived from the system time). Since all the
-         # rendering (client application and compositor) is in
-         # software, we sleep a bit to let those program to settle.
--        self.assertRunOk("weston-simple-egl >/dev/null 2>&1 &")
--        time.sleep(8)
-+        self.assertRunOk("( weston-simple-egl >/dev/null 2>&1 & )")
- 
-         # Since the weston-simple-egl client is supposed to run and
-         # display something, we are now supposed to measure a
-         # different display CRC than the one we measured when the
-         # desktop was empty.
--        crc = self.get_n_fb_crc(count=1)[0]
-+        for i in range(600):
-+            crc = self.get_n_fb_crc(count=1)[0]
-+            if crc != weston_desktop_crc:
-+                break
-+            time.sleep(1)
-         self.assertNotEqual(crc, weston_desktop_crc)
- 
-         # While weston-simple-egl is running, we check the VKMS DRM
-@@ -121,12 +134,15 @@ class TestWeston(infra.basetest.BRTest, GraphicsBase):
-         # We stop weston-simple-egl, and sleep a bit to let Weston do
-         # its cleanup and desktop repaint refresh...
-         self.assertRunOk("killall weston-simple-egl")
--        time.sleep(4)
- 
-         # After we stopped the application, we should have the initial
-         # weston desktop background. The CRC we measure now should be
-         # the same as the one we saved earlier.
--        crc = self.get_n_fb_crc(count=1)[0]
-+        for i in range(600):
-+            crc = self.get_n_fb_crc(count=1)[0]
-+            if crc == weston_desktop_crc:
-+                break
-+            time.sleep(1)
-         self.assertEqual(crc, weston_desktop_crc)
- 
-         self.stop_weston()
-diff --git a/support/testing/tests/package/test_weston/overlay/etc/default/klogd b/support/testing/tests/package/test_weston/overlay/etc/default/klogd
-new file mode 100644
-index 0000000000..b4209f50b5
---- /dev/null
-+++ b/support/testing/tests/package/test_weston/overlay/etc/default/klogd
-@@ -0,0 +1 @@
-+KLOGD_ARGS="-c 1"
+ # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
+ GNUTLS_VERSION_MAJOR = 3.8
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
