@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46679C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:37:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CABDC282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:37:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CB4A4363A;
-	Fri, 28 Feb 2025 16:37:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D75924EF7D;
+	Fri, 28 Feb 2025 16:37:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KLEelBePfLCB; Fri, 28 Feb 2025 16:36:59 +0000 (UTC)
+ id me6AxWEN-0iT; Fri, 28 Feb 2025 16:37:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B12924EFE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFDB042CF7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B12924EFE7;
-	Fri, 28 Feb 2025 16:36:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFDB042CF7;
+	Fri, 28 Feb 2025 16:37:04 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D7FA68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 12EAD68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5A9A9424C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 690FA424C3
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TmdQOFHEf3WN for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
+ id pQqHvQvQb8RG for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1B94419C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3C1C418F7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D1B94419C6
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E3C1C418F7
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CEAB3844AB; Fri, 28 Feb 2025 16:29:36 +0000 (UTC)
+ id DFCC382621; Fri, 28 Feb 2025 16:29:35 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 11 Dec 2024 14:27:19 +0100
+Date: Mon, 9 Dec 2024 23:34:57 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f22d4076370a9ac513e17662cc7ce56d5c3ca992
-X-Git-Newrev: 5144d2d7aeafcbff1e0c5bf5ad3fc4bb44ca0089
+X-Git-Oldrev: 0c6b8c989fcca8d057f7598f28eff377a018ed2f
+X-Git-Newrev: 2e8cd8199c5024cf419336d509c8714cf560e8b4
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162936.CEAB3844AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/aarch64_efi: bump
- Linux to 6.11.11
+Message-Id: <20250228162935.DFCC382621@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/xdriver_xf86-video-qxl: fix 'appropriate' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,67 +59,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8207012069652587084=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8207012069652587084==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=5144d2d7aeafcbff1e0c5bf5ad3fc4bb44ca0089
+commit: https://git.buildroot.net/buildroot/commit/?id=2e8cd8199c5024cf419336d509c8714cf560e8b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump Linux kernel version to 6.11.11 and update the hash accordingly.
+Found by codespell.
 
-Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
-Cc: Dick Olsson <hi@senzilla.io>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/aarch64-efi/patches/linux/linux.hash | 2 +-
- configs/aarch64_efi_defconfig              | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/aarch64-efi/patches/linux/linux.hash b/board/aarch64-efi/patches/linux/linux.hash
-index 20941a269b..50983eb42b 100644
---- a/board/aarch64-efi/patches/linux/linux.hash
-+++ b/board/aarch64-efi/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  524858852f5869a9ef17de8b1e6e7faf05bcb2c462bc96b3c24dbf82ede373cf  linux-6.10.12.tar.xz
-+sha256  62148e7e17f54c4a5ab5e75ad4882682c54bee818948be61a5963234fc0849fc  linux-6.11.11.tar.xz
-diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
-index 9f284ff74b..3aa649cf9c 100644
---- a/configs/aarch64_efi_defconfig
-+++ b/configs/aarch64_efi_defconfig
-@@ -1,5 +1,5 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
- BR2_GLOBAL_PATCH_DIR="board/aarch64-efi/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/aarch64-efi/post-image.sh support/scripts/ge
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/aarch64-efi/genimage-efi.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.11"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
-
---===============8207012069652587084==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
+index db0bbbaf65..616566f9ab 100644
+--- a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
++++ b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
+@@ -19,7 +19,7 @@ XDRIVER_XF86_VIDEO_QXL_DEPENDENCIES = \
+ 	xorgproto \
+ 	xserver_xorg-server
+ 
+-# configure doesn't look for drm headers in the appropiate place, so help it
++# configure doesn't look for drm headers in the appropriate place, so help it
+ # libdrm is only useful with udev for KMS
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ XDRIVER_XF86_VIDEO_QXL_CONF_ENV += REQUIRED_MODULES=libdrm
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8207012069652587084==--
