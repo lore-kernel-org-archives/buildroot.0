@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E7F8C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:36:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE1F6C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:36:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 016476FBFE;
-	Fri, 28 Feb 2025 16:36:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B05EB6FBF9;
+	Fri, 28 Feb 2025 16:36:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4PBqmGxtbcCE; Fri, 28 Feb 2025 16:36:50 +0000 (UTC)
+ id jIn58dqoTx_y; Fri, 28 Feb 2025 16:36:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3AA76FC06
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B108B6FCB7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3AA76FC06;
-	Fri, 28 Feb 2025 16:36:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B108B6FCB7;
+	Fri, 28 Feb 2025 16:36:54 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0ABF368
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 29B491DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0A6F842471
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C72D41A30
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TfRJt43idBV6 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
+ id G6wYIgA_-CVL for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B036941A30
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1486C41A20
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B036941A30
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1486C41A20
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A308086D17; Fri, 28 Feb 2025 16:29:36 +0000 (UTC)
+ id 0C5FE86D17; Fri, 28 Feb 2025 16:29:36 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 11 Dec 2024 14:10:33 +0100
+Date: Mon, 9 Dec 2024 23:48:38 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c12008448e6d0f78774b386fb0f66a14c3064eed
-X-Git-Newrev: 65f268e21cbe450e1addb64cca1b9de73c420076
+X-Git-Oldrev: 21e5a9a96b1c25a7d3a5e92fd405afb6aafde605
+X-Git-Newrev: e405092b58b1b066e66dedde7307c6acbad53ad7
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162936.A308086D17@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/arm-gnu-toolchain: add
- BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_SUPPORTS
+Message-Id: <20250228162936.0C5FE86D17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rtl8192eu: bump to
+ 2024-12-03 version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,51 +59,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65f268e21cbe450e1addb64cca1b9de73c420076
+commit: https://git.buildroot.net/buildroot/commit/?id=e405092b58b1b066e66dedde7307c6acbad53ad7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-ARM gnu toolchain for bare metal arm32 target is only available for
-x86_64 and aarch64 hosts. Introduce a new option to disable packages
-using this toolchain on unsupported hosts.
+This version allows to build with Linux 6.13.
 
-[Romain: improve commit log]
-Signed-off-by: Bryce Johnson <bryce@redpinelabs.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/Config.in.host                   | 1 +
- package/arm-gnu-toolchain/Config.in.host | 4 ++++
- 2 files changed, 5 insertions(+)
+ package/rtl8192eu/rtl8192eu.hash | 2 +-
+ package/rtl8192eu/rtl8192eu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 191833d94d..e06824ad6b 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -6,6 +6,7 @@ menu "Host utilities"
- 	source "package/amlogic-boot-fip/Config.in.host"
- 	source "package/andes-spi-burn/Config.in.host"
- 	source "package/android-tools/Config.in.host"
-+	source "package/arm-gnu-toolchain/Config.in.host"
- 	source "package/asn1c/Config.in.host"
- 	source "package/babeltrace2/Config.in.host"
- 	source "package/bmap-tools/Config.in.host"
-diff --git a/package/arm-gnu-toolchain/Config.in.host b/package/arm-gnu-toolchain/Config.in.host
-new file mode 100644
-index 0000000000..dfd30e5223
---- /dev/null
-+++ b/package/arm-gnu-toolchain/Config.in.host
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_SUPPORTS
-+	bool "host arm-gnu-toolchain"
-+	default y if BR2_HOSTARCH = "aarch64"
-+	default y if BR2_HOSTARCH = "x86_64"
+diff --git a/package/rtl8192eu/rtl8192eu.hash b/package/rtl8192eu/rtl8192eu.hash
+index a8b7cb9358..250cd556b1 100644
+--- a/package/rtl8192eu/rtl8192eu.hash
++++ b/package/rtl8192eu/rtl8192eu.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  8da0f54bd9ae094b5f61fe3c4dd207b2df62b4286970e2828f7c5ce1146447fb  rtl8192eu-56f672a8b9572c743148f2e60068fd341d52d5a3.tar.gz
++sha256  dbd565edc8d52a1429d8551795fb4da3ca44cf27867466010e0e6d00c86aef5c  rtl8192eu-6755ce9c15bbcb5dcffbca7f6f08e661ccdaacdb.tar.gz
+diff --git a/package/rtl8192eu/rtl8192eu.mk b/package/rtl8192eu/rtl8192eu.mk
+index 0f00d301a8..9cd88060ce 100644
+--- a/package/rtl8192eu/rtl8192eu.mk
++++ b/package/rtl8192eu/rtl8192eu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTL8192EU_VERSION = 56f672a8b9572c743148f2e60068fd341d52d5a3
++RTL8192EU_VERSION = 6755ce9c15bbcb5dcffbca7f6f08e661ccdaacdb
+ RTL8192EU_SITE = $(call github,clnhub,rtl8192eu-linux,$(RTL8192EU_VERSION))
+ RTL8192EU_LICENSE = GPL-2.0
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
