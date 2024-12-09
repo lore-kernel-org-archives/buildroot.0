@@ -1,51 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D233C282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:36:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E553C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:36:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20B0A6FB5D;
-	Fri, 28 Feb 2025 16:36:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E6C234031D;
+	Fri, 28 Feb 2025 16:36:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iaAVVJyEKb6u; Fri, 28 Feb 2025 16:36:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xe0oack-paTR; Fri, 28 Feb 2025 16:36:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A1896FC53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4955402A6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A1896FC53;
-	Fri, 28 Feb 2025 16:36:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 745221DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4955402A6;
+	Fri, 28 Feb 2025 16:36:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 114E168
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 94A3B83C77
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E502424B0
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NvC92asz4oyw for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9vOSXV7yBVyL for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF19C83C63
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01B9541A1F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF19C83C63
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 01B9541A1F
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DB7C286780; Fri, 28 Feb 2025 16:30:34 +0000 (UTC)
+ id EDA36844AB; Fri, 28 Feb 2025 16:29:35 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 14:49:19 +0100
+Date: Mon, 9 Dec 2024 23:35:00 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9fcfec83410c470bc38d6d43461fead1832d9cef
-X-Git-Newrev: 892d1ae27fa394eb8b7a4e455c26a6efcc00457b
+X-Git-Oldrev: 2e8cd8199c5024cf419336d509c8714cf560e8b4
+X-Git-Newrev: 21e5a9a96b1c25a7d3a5e92fd405afb6aafde605
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163034.DB7C286780@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: remove Chris Dimich
+Message-Id: <20250228162935.EDA36844AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/xen: fix 'available'
+ typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,64 +59,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4847505381074059671=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4847505381074059671==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=892d1ae27fa394eb8b7a4e455c26a6efcc00457b
+commit: https://git.buildroot.net/buildroot/commit/?id=21e5a9a96b1c25a7d3a5e92fd405afb6aafde605
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Chris email address at boundarydevices is bouncing:
+Found by codespell.
 
-Chris Dimich is no longer with Ezurio. Please contact Gary Bisson by
-email at Gary.Bisson@ezurio.com. Thank you!"
-
-Move his package to Gary Bisson as suggested.
-
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/xen/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1264c26fbd..aca1b3d04b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -602,9 +602,6 @@ F:	package/alsa-plugins/
- N:	Changming Huang <jerry.huang@nxp.com>
- F:	package/qoriq-cadence-dp-firmware/
+diff --git a/package/xen/Config.in b/package/xen/Config.in
+index af6acd3530..577066666d 100644
+--- a/package/xen/Config.in
++++ b/package/xen/Config.in
+@@ -13,7 +13,7 @@ if BR2_PACKAGE_XEN
+ config BR2_PACKAGE_XEN_HYPERVISOR
+ 	bool "Xen hypervisor"
+ 	help
+-	  The Xen binaries are avaliable in /usr/lib/xen/ See
++	  The Xen binaries are available in /usr/lib/xen/ See
+ 	  http://wiki.xenproject.org/wiki/Getting_Started for using
+ 	  the Xen hypervisor.
  
--N:	Chris Dimich <chris.dimich@boundarydevices.com>
--F:	package/freescale-imx/imx-vpu-hantro-daemon/
--
- N:	Chris Packham <judge.packham@gmail.com>
- F:	package/coremark/
- F:	package/coremark-pro/
-@@ -1222,6 +1219,7 @@ N:	Gary Bisson <bisson.gary@gmail.com>
- F:	board/boundarydevices/
- F:	configs/nitrogen*
- F:	package/freescale-imx/
-+F:	package/freescale-imx/imx-vpu-hantro-daemon/
- F:	package/gstreamer1/gst1-imx/
- F:	package/libimxvpuapi/
- F:	package/mfgtools/
-
---===============4847505381074059671==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4847505381074059671==--
