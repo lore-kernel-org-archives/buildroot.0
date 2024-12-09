@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9797EC282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:37:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DE9AC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:37:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67E924F2ED;
-	Fri, 28 Feb 2025 16:37:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3956E4F015;
+	Fri, 28 Feb 2025 16:37:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1LR8vAghYFyC; Fri, 28 Feb 2025 16:37:27 +0000 (UTC)
+ id R2zIJNIwBiD0; Fri, 28 Feb 2025 16:37:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0168B4F2FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1340D419F5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0168B4F2FD;
-	Fri, 28 Feb 2025 16:37:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1340D419F5;
+	Fri, 28 Feb 2025 16:37:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 05D5068
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:57 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0419F1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1E65424DF
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF996424E1
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rb9nEQIIagVq for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:41 +0000 (UTC)
+ id w-J6mWRKkOZU for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4CAE42474
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E208419B6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E4CAE42474
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E208419B6
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC2EC839E7; Fri, 28 Feb 2025 16:29:37 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 8957282621; Fri, 28 Feb 2025 16:29:35 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 12 Dec 2024 12:25:05 +0100
+Date: Mon, 9 Dec 2024 23:34:36 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9cae12c3f68758103d1fd425d5b0823fa4aa2162
-X-Git-Newrev: a91e20ff411b9641c64ed1224e25e5be49c4efa8
+X-Git-Oldrev: 10c218ea7805c0384cf28ab95350dcc2dd821f79
+X-Git-Newrev: ee93f20f96b2f27ef4c512bf591f55ed4518b82a
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162937.DC2EC839E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/intel-mediadriver:
- bump version to 24.4.4
+Message-Id: <20250228162935.8957282621@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ti-sgx-demos: fix
+ 'available' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,38 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a91e20ff411b9641c64ed1224e25e5be49c4efa8
+commit: https://git.buildroot.net/buildroot/commit/?id=ee93f20f96b2f27ef4c512bf591f55ed4518b82a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Found by codespell.
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index 565dd4ee68..9bceeb1aa5 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  cbc2ccdae2cf84bd1e36a9d5acec4861922ae68f849e89ddcc2f2c5579bd6022  intel-media-24.4.1.tar.gz
-+sha256  3000723faf4dc56eb8276f402c4aa798459bbce860b408a0c480d863b28130ed  intel-media-24.4.4.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index d4d9e53427..b0c8360a9a 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/ti-sgx-demos/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/ti-sgx-demos/Config.in b/package/ti-sgx-demos/Config.in
+index ec7b8e6038..f45ccd8d01 100644
+--- a/package/ti-sgx-demos/Config.in
++++ b/package/ti-sgx-demos/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_TI_SGX_DEMOS
+ 	depends on BR2_PACKAGE_TI_SGX_UM
+ 	help
+ 	  These SGX powervr demo applications from Imagination
+-	  Technologies are availabe as binaries only.  The binaries
++	  Technologies are available as binaries only.  The binaries
+ 	  are compiled for the TI SGX implementation.
  
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 24.4.1
-+INTEL_MEDIADRIVER_VERSION = 24.4.4
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+ 	  https://git.ti.com/cgit/graphics/img-pvr-sdk
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
