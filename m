@@ -4,50 +4,139 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93686E7717D
-	for <buildroot@archiver.kernel.org>; Mon,  9 Dec 2024 09:02:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C755EE77173
+	for <buildroot@archiver.kernel.org>; Mon,  9 Dec 2024 09:12:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4601D80B13;
-	Mon,  9 Dec 2024 09:02:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A72F81087;
+	Mon,  9 Dec 2024 09:12:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3e6ReIfMhSIN; Mon,  9 Dec 2024 09:02:34 +0000 (UTC)
+ id tyItUG_ZSKHU; Mon,  9 Dec 2024 09:12:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 450EA80B8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0152C81083
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 450EA80B8F;
-	Mon,  9 Dec 2024 09:02:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 007B3ED2
- for <buildroot@buildroot.org>; Mon,  9 Dec 2024 09:02:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0152C81083;
+	Mon,  9 Dec 2024 09:12:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16638979
+ for <buildroot@buildroot.org>; Mon,  9 Dec 2024 09:12:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E2437403CD
- for <buildroot@buildroot.org>; Mon,  9 Dec 2024 09:02:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E598B81076
+ for <buildroot@buildroot.org>; Mon,  9 Dec 2024 09:12:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hJdCpxuPIqz6 for <buildroot@buildroot.org>;
- Mon,  9 Dec 2024 09:02:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D82BF403C1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D82BF403C1
- for <buildroot@buildroot.org>; Mon,  9 Dec 2024 09:02:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C572386ADF; Mon,  9 Dec 2024 09:02:31 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 9 Dec 2024 10:00:34 +0100
-X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 563852c4362c5128ecaae6deb8057b395681e087
-X-Git-Newrev: 4bffec37bb500ad2d7163fdce51a23d05fedfaf1
-X-Patchwork-Hint: ignore
-Message-Id: <20241209090231.C572386ADF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/mosquitto: bump
- to version 2.0.20
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iwgz_YzOayMt for <buildroot@buildroot.org>;
+ Mon,  9 Dec 2024 09:12:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 72B1581083
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72B1581083
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 72B1581083
+ for <buildroot@buildroot.org>; Mon,  9 Dec 2024 09:11:59 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.7.2] ([85.22.114.177]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M3UUy-1tK1qI1jow-00AT1Z; Mon, 09
+ Dec 2024 10:11:56 +0100
+Message-ID: <20290651-fb25-49f0-925e-6fd74d0bc1be@gmx.de>
+Date: Mon, 9 Dec 2024 10:11:55 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
+References: <20241209082722.3049825-1-peter@korsgaard.com>
+ <20241209082722.3049825-12-peter@korsgaard.com>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
+ ppqPES8FiSl+M00Xe5icsLsi4mkBujgbuSDiugjNyqeOH5iqtg69xTd/r5DRMqt0K93GzmIj
+ 7ipWA+fomAMyX9FK3cHLBgoSLeb+Qj28W1cH94NGmpKtBxCkKfT+mjWvYUEwVdviMymdCAJj
+ Iabr/QJ3KVZ7UPWr29IJ9Dv+SwW7VRjhXVQ5IwSBMDaTnzDOUILTxnHptB9ojn7t6bFhub9w
+ xWXJQCsNkp+nUDESRwBeNLm4G5D3NFYVTg4qOQYLI/k/H1N3NEgaDuZ81NfhQJTIFVx+h0eT
+ pjuQ4vATShJWea6N7ilLlyw7K81uuQoFB6VcG5hlAQWMejuHI4UBb+35r7fIFsy95ZwjxKqE
+ QVS8P7lBKoihXpjcxRZiynx/Gm2nXm9ZmY3fG0fuLp9PQK9SpM9gQr/nbqguBoRoiBzONM9H
+ pnxibwqgskVKzunZOXZeqyPNTC63wYcQXhidWxB9s+pBHP9FR+qht//8ivI29aTukrj3WWSU
+ Q2S9ejpSyELLhPT9/gbeDzP0dYdSBiQjfd5AYHcMYQ0fSG9Tb1GyMsvh4OhTY7QwDz+1zT3x
+ EzB0I1wpKu6m20C7nriWnJTCwXE6XMX7xViv6h8ev+uUHLoMEwARAQABzSBGaW9uYSBLbHV0
+ ZSA8ZmlvbmEua2x1dGVAZ214LmRlPsLBlAQTAQgAPgIbIwULCQgHAwUVCgkICwUWAgMBAAIe
+ AQIXgBYhBOTTE4/i2fL6gVL9ke6nJs4hI1pYBQJkNTaZBQkNK+tyAAoJEO6nJs4hI1pY3qwQ
+ AKdoJJHZpRu+C0hd10k6bcn5dr8ibqgsMHBJtFJuGylEsgF9ipWz1rMDWDbGVrL1jXywfwpR
+ WSeFzCleJq4D0hZ5n+u+zb3Gy8fj/o3K/bXriam9kR4GfMVUATG5m9lBudrrWAdI1qlWxnmP
+ WUvRSlAlA++de7mw15guDiYlIl0QvWWFgY+vf0lR2bQirmra645CDlnkrEVJ3K/UZGB0Yx67
+ DfIGQswEQhnKlyv0t2VAXj96MeYmz5a7WxHqw+/8+ppuT6hfNnO6p8dUCJGx7sGGN0hcO0jN
+ kDmX7NvGTEpGAbSQuN2YxtjYppKQYF/macmcwm6q17QzXyoQahhevntklUsXH9VWX3Q7mIli
+ jMivx6gEa5s9PsXSYkh9e6LhRIAUpnlqGtedpozaAdfzUWPz2qkMSdaRwvsQ27z5oFZ0dCOV
+ Od39G1/bWlY+104Dt7zECn3NBewzJvhHAqmAoIRKbYqRGkwTTAVNzAgx+u72PoO5/SaOrTqd
+ PIsW5+d/qlrQ49LwwxG8YYdynNZfqlgc90jls+n+l3tf35OQiehVYvXFqbY7RffUk39JtjwC
+ MfKqZgBTjNAHYgb+dSa7oWI8q6l26hdjtqZG+OmOZEQIZp+qLNnb0j781S59NhEVBYwZAujL
+ hLJgYGgcQ/06orkrVJl7DICPoCU/bLUO8dbfzsFNBGQ1Nr0BEADTlcWyLC5GoRfQoYsgyPgO
+ Z4ANz31xoQf4IU4i24b9oC7BBFDE+WzfsK5hNUqLADeSJo5cdTCXw5Vw3eSSBSoDP0Q9OUdi
+ PNEbbblZ/tSaLadCm4pyh1e+/lHI4j2TjKmIO4vw0K59Kmyv44mW38KJkLmGuZDg5fHQrA9G
+ 4oZLnBUBhBQkPQvcbwImzWWuyGA+jDEoE2ncmpWnMHoc4Lzpn1zxGNQlDVRUNnRCwkeclm55
+ Dz4juffDWqWcC2NrY5KkjZ1+UtPjWMzRKlmItYlHF1vMqdWAskA6QOJNE//8TGsBGAPrwD7G
+ cv4RIesk3Vl2IClyZWgJ67pOKbLhu/jz5x6wshFhB0yleOp94I/MY8OmbgdyVpnO7F5vqzb1
+ LRmfSPHu0D8zwDQyg3WhUHVaKQ54TOmZ0Sjl0cTJRZMyOmwRZUEawel6ITgO+QQS147IE7uh
+ Wa6IdWKNQ+LGLocAlTAi5VpMv+ne15JUsMQrHTd03OySOqtEstZz2FQV5jSS1JHivAmfH0xG
+ fwxY6aWLK2PIFgyQkdwWJHIaacj0Vg6Kc1/IWIrM0m3yKQLJEaL5WsCv7BRfEtd5SEkl9wDI
+ pExHHdTplCI9qoCmiQPYaZM5uPuirA5taUCJEmW9moVszl6nCdBesG2rgH5mvgPCMAwsPOz9
+ 7n+uBiMk0ZSyTQARAQABwsF8BBgBCAAmFiEE5NMTj+LZ8vqBUv2R7qcmziEjWlgFAmQ1Nr0C
+ GwwFCQPCZwAACgkQ7qcmziEjWlgY/w//Y4TYQCWQ5eWuIbGCekeXFy8dSuP+lhhvDRpOCqKt
+ Wd9ywr4j6rhxdS7FIcaSLZa6IKrpypcURLXRG++bfqm9K+0HDnDHEVpaVOn7SfLaPUZLD288
+ y8rOce3+iW3x50qtC7KCS+7mFaWN+2hrAFkLSkHWIywiNfkys0QQ+4pZxKovIORun+HtsZFr
+ pBfZzHtXx1K9KsPq9qVjRbKdCQliRvAukIeTXxajOKHloi8yJosVMBWoIloXALjwCJPR1pBK
+ E9lDhI5F5y0YEd1E8Hamjsj35yS44zCd/NMnYUMUm+3IGvX1GT23si0H9wI/e4p3iNU7n0MM
+ r9aISP5j5U+qUz+HRrLLJR7pGut/kprDe2r3b00/nttlWyuRSm+8+4+pErj8l7moAMNtKbIX
+ RQTOT31dfRQRDQM2E35nXMh0Muw2uUJrldrBBPwjK2YQKklpTPTomxPAnYRY8LVVCwwPy8Xx
+ MCTaUC2HWAAsiG90beT7JkkKKgMLS9DxmX9BN5Cm18Azckexy+vMg79LCcfw/gocQ4+lQn4/
+ 3BjqSuHfj+dXG+qcQ9pgB5+4/812hHog78dKT2r8l3ax3mHZCDTAC9Ks3LQU9/pMBm6K6nnL
+ a4ASpGZSg2zLGIT0gnzi5h8EcIu9J1BFq6zRPZIjxBlhswF6J0BXjlDVe/3JzmeTTts=
+In-Reply-To: <20241209082722.3049825-12-peter@korsgaard.com>
+X-Provags-ID: V03:K1:JCLBAORxk7SHOumjYAS+ykkEMq48TNrpSlEU6/+w3LymLkRDR+w
+ ihFos3cyVLOLZJhGFgFuEEKg0frVBFg1nmOBE1y9zPyL6KV7smffiIzkXvN5cfETYkk/2T2
+ 3D8MXYlh8JJ19sPNvo2s2dSd0Xx7FPMcTj6+FtrcUIcThq148oYSG9b+C/wXIES2z3JPYJ+
+ HpsV0QrW56srmEkyZcqkA==
+UI-OutboundReport: notjunk:1;M01:P0:vB6f0M+KN0o=;o3e9YTU2UR48xojiQjcvB+a2dQ6
+ fkY6prz0kVF8gojwqKxs/nJgQktDxV7Ku+jRNEy+QQZ6LM5jWRsoJzRAe5g6N036Bz4LmfTKc
+ t3bLg/5Ho231Hgy3fQlrZ0aLsbj5PBDaaphDujb9jEgYCm213ZhHomb5tEfo9W/wkxk1LLA16
+ 8Lk+XxmOD65Kw0lRybkNXohXi955i9ljHRARmjwiC2RKD00PrgMlVkxaZVyC0Yy5zWmLeXAno
+ YBkfbYhaEb1PlDKipu92W+w/3St7xpVGcsYIdVaFPg1WM/DsLNPIhnDL7gsk8iBBNx42qXsCK
+ Tm7GfUCSTgVOTxWiJSip2bkszCG2MADli6MtBtZBbUBJXGt6B3Gu93JCjy9GMpG77M/0Wt+hk
+ nLck10oUsQ3IIGQQ92+I3nvUyGJm8nilhYQqBiaUTwNjJO4xoxVQ+S+c4Z0U1TFqg7U6jGdG5
+ AOWgr5FAIMV2iCmkvV4eAwp5VWjqqfxR1knmE9zxotcpHavqCFoOMKZrwSgwy0GGl+3rB3zjn
+ xBt00aPDrDBpj6VbieP3br4ZnxaIYLWPhoCepYasyZnFsp6s0bbjKQ3t3iO8imUv3t5p0bcH/
+ Q4yaY2C00/C3wNYbC9iA8jCojBzy0mHSGBVah352EMNukSlmOf+qj9oOxsVhwiPEeB+X7WDCY
+ Mws+2Zcud1ZLeRdJEcp4VHCj5AyDrd6KtDZAm0W1E0Bhfz7KYzqciZTyYtUdv7Y73eY6Nxb+F
+ wtG6t/jhlqz1aL40yBg2s6Cd0B+cTVm6AgMaqszBg1DT0kifarSxmlLlkt4FEpllURIL8Yr+R
+ f1N/5+7Kczt/lwyA2i0Wm18lT8cSquvr3d2FwgyjuG6dW9gHReCXdvXZc84liUP/dLhZULak9
+ ru0DBns8h1BSIzYc4H/vRPD+Zds/yWXW6WhP5bzbrXf5GTIJfjrs8Q8vgyVooL+3EzsYir3Nn
+ 9CusKxIG+8/wzTEC31KRFe3AZcailGzGYXeS3h4h849MnA/jvzdN0wt95XcRPK+kUKuh8FDU9
+ TvgYOJ6dm8HJqmVCsPdLPFP3v4PitXzLH01NqiNyE8SaMMlkZD6fcJ2bmKzMGJraWp1/JizRR
+ oxBVIW8K8WmP0COnr5m0PU2q/j8rGq
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.de; 
+ s=s31663417; t=1733735516; x=1734340316; i=fiona.klute@gmx.de;
+ bh=vjOExfhlU1S+T7yw+T5KETKBgQA/cAQRNdw0HVyFaO0=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=sRwyKebrDn2nba1blr3xHdfzTWlbPtFhpbsbY724xAEN4FxJ1pt2eywgsfcS4Nr9
+ LNlai0R0UVS8NlIWAG6zmgg4XtGvTieTb+ME4u1Zx1cBEYToFRBmvGvEgLfmEfPfp
+ VNDd2VV6UUd0WxZRFaumXsx9Xk268QepgR8bpcj0fleQ5ohHfTjR3abov3r/6SnY1
+ tPn6Ax8xXKdz/sZHZMCEtReDZPsP9hzZEbkhI8opnXdhOv0kE7mbdvGR+2mA1A6Sg
+ 3gbktmgg4xwA46N3lrlGPbeGYp9x+VsqLrUfMzdO9lF99mMtLv1kSTcHeYJUlvPiw
+ 3pAOS8B/jDH0O5zwgA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=sRwyKebr
+Subject: Re: [Buildroot] [PATCH 12/23] package/python-pyasynchat: fix
+ 'library' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +148,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bffec37bb500ad2d7163fdce51a23d05fedfaf1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
+Am 09.12.24 um 09:27 schrieb Peter Korsgaard:
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2a74b3b7c490d051a5ab8efddecfe0716fb17fc3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Acked-by: Fiona Klute <fiona.klute@gmx.de>
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 34f50906c1..f644f688b9 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking gpg signature
--# from https://mosquitto.org/files/source/mosquitto-2.0.19.tar.gz.asc
--sha256  33af3637f119a61c509c01d2f8f6cc3d8be76f49e850132f2860af142abf82a9  mosquitto-2.0.19.tar.gz
-+# from https://mosquitto.org/files/source/mosquitto-2.0.20.tar.gz.asc
-+sha256  ebd07d89d2a446a7f74100ad51272e4a8bf300b61634a7812e19f068f2759de8  mosquitto-2.0.20.tar.gz
- 
- # License files
- sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index dc7db75bb5..1b06809b9e 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 2.0.19
-+MOSQUITTO_VERSION = 2.0.20
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
+Thanks!
+
+> ---
+>   package/python-pyasynchat/Config.in | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/python-pyasynchat/Config.in b/package/python-pyasynchat/Config.in
+> index bf11cc5b39..17204a1b30 100644
+> --- a/package/python-pyasynchat/Config.in
+> +++ b/package/python-pyasynchat/Config.in
+> @@ -5,7 +5,7 @@ config BR2_PACKAGE_PYTHON_PYASYNCHAT
+>   	  Make asynchat available for Python 3.12 onwards.
+>
+>   	  This is a compatibility package using the code removed from
+> -	  the standard libary, upstream does not intend any
+> +	  the standard library, upstream does not intend any
+>   	  maintenance.
+>
+>   	  https://github.com/simonrob/pyasynchat
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
