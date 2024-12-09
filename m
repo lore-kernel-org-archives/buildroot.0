@@ -4,75 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F0F5E7717D
-	for <buildroot@archiver.kernel.org>; Mon,  9 Dec 2024 22:52:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EEFCE7717D
+	for <buildroot@archiver.kernel.org>; Mon,  9 Dec 2024 23:00:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3CCD3605AE;
-	Mon,  9 Dec 2024 22:52:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8603C60742;
+	Mon,  9 Dec 2024 23:00:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3flSM_zj7VW3; Mon,  9 Dec 2024 22:52:52 +0000 (UTC)
+ id LaeFwWZsS733; Mon,  9 Dec 2024 23:00:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51738605B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2AB960612
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51738605B0;
-	Mon,  9 Dec 2024 22:52:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A17E6F
- for <buildroot@buildroot.org>; Mon,  9 Dec 2024 22:52:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2AB960612;
+	Mon,  9 Dec 2024 23:00:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8CB6E6F
+ for <buildroot@buildroot.org>; Mon,  9 Dec 2024 23:00:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 37B7F605B0
- for <buildroot@buildroot.org>; Mon,  9 Dec 2024 22:52:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6CC9140433
+ for <buildroot@buildroot.org>; Mon,  9 Dec 2024 23:00:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VoR2sR8iBFOu for <buildroot@buildroot.org>;
- Mon,  9 Dec 2024 22:52:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 43E7A605AE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43E7A605AE
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 43E7A605AE
- for <buildroot@buildroot.org>; Mon,  9 Dec 2024 22:52:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MrOGuLLxH5-U for <buildroot@buildroot.org>;
+ Mon,  9 Dec 2024 23:00:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 41BA840012
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41BA840012
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 41BA840012
+ for <buildroot@buildroot.org>; Mon,  9 Dec 2024 23:00:43 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.1])
  (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 1CBCB19F58A;
- Mon,  9 Dec 2024 23:52:45 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:43610])
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 0055A13F89A;
+ Tue, 10 Dec 2024 00:00:40 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:39488])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 09 Dec 2024 23:52:45 +0100
+ with HTTP (HTTP/1.0 POST); Tue, 10 Dec 2024 00:00:40 +0100
 MIME-Version: 1.0
-Date: Mon, 09 Dec 2024 23:52:45 +0100
+Date: Tue, 10 Dec 2024 00:00:40 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
-In-Reply-To: <20241207201936.103809-1-giulio.benetti@benettiengineering.com>
-References: <20241207201936.103809-1-giulio.benetti@benettiengineering.com>
+To: Michel Alex <Alex.Michel@wiedemann-group.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <AS1P250MB0608DDF2C7AAE3742461CCE8A93C2@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
+References: <AS1P250MB0608DDF2C7AAE3742461CCE8A93C2@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
 User-Agent: Webmail Free/1.6.9
-Message-ID: <24da891859b2444d6044c3bb22c18a40@free.fr>
+Message-ID: <9cc0240afe241598135828919f7dfb0f@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1733784768;
- bh=D5Fo/2c9mvG1Rg19AES2GmnZXMkgCT8R3y0sDExc79Q=;
+ d=free.fr; s=smtp-20201208; t=1733785242;
+ bh=tHGw2eqEIE8E4jakLhXeoOoGi6Y/vX1Xdlvj7CqrEtQ=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=DOC675LeN8OXZjeq0uG0Rq5833iiYFR0qO1JMthY8aw/LfDUu3zmpvvoEXYS8Au63
- jnlOylbByhkBPb6c+CYFrjtRvKpfz5f2qBNCPS5umdq8DzLOmuyFLSKoUbIdpLzzvf
- k6uUc9mkiVtCEytlt0LYhYciPr8dNYV+Gqsknk8d8JhYDCra618QplS7+pARgAocti
- buw/jrljsm0ihtY7FOEMK9MbbbqdAeFXnCjDv6RE6AWnyp062vVC0Ek4rNJ9viziUH
- YVlNxvNINE5JSCt+kvpBC40XCNVmIoO7wrYvsRY8eEL5eUl8jtyFIL0BrFAhjzAHOE
- 0KCErr3EYEibw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=p0PbN7xcCULl0rovcB65UB1iPY9zrxc2l7B44oXJgEx1tgWA5xf/0DYQrChHDG97a
+ jGX+mcA9BmlIrXaaoIqm8fZPXtHoeLOs/6GziLRJqeydVQxY906G/wVcek2yjHnU4t
+ 1bQoVBGDwETYYMfHsdLiodeLKz/rzaQHDSY5xij9tiovYejMg1zh26Kg+zK+tEQ9+o
+ bV8wHBxQJAZLu/XrkI197q8X4VRm7VItLEnQktdmwYD89XEkSgG2lpv2OHN5xQ2BG3
+ 4LhriwFwylpm7c2cGPohZ5V6JdezU9AkkjNY08A8FYZYzxg1gtg5Rli6b/irWrQ5KM
+ f6MikP16YhbQA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=DOC675Le
-Subject: Re: [Buildroot] [PATCH] package/rtl8192eu: bump to 2024-12-03
- version
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=p0PbN7xc
+Subject: Re: [Buildroot] [PATCH 1/2] package/libzenoh-c: bump to version
+ 1.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,74 +88,57 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Giulio,
-
-On 07/12/2024 21:19, Giulio Benetti wrote:
-> This version allows to build with Linux 6.13.
+On 09/12/2024 13:24, Michel Alex wrote:
+> https://github.com/eclipse-zenoh/zenoh-c/releases/tag/1.0.4
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
 
-Applied to master, thanks.
-
-I fixed a check-package error.
+Series applied to master, thanks.
 
 > ---
->  package/rtl8192eu/rtl8192eu.hash | 2 +-
->  package/rtl8192eu/rtl8192eu.mk   | 2 +-
+>  package/libzenoh-c/libzenoh-c.hash | 2 +-
+>  package/libzenoh-c/libzenoh-c.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/rtl8192eu/rtl8192eu.hash 
-> b/package/rtl8192eu/rtl8192eu.hash
-> index a8b7cb9358..3e70d36d57 100644
-> --- a/package/rtl8192eu/rtl8192eu.hash
-> +++ b/package/rtl8192eu/rtl8192eu.hash
-> @@ -1,2 +1,2 @@
+> diff --git a/package/libzenoh-c/libzenoh-c.hash 
+> b/package/libzenoh-c/libzenoh-c.hash
+> index da4596e4dc..058909eaec 100644
+> --- a/package/libzenoh-c/libzenoh-c.hash
+> +++ b/package/libzenoh-c/libzenoh-c.hash
+> @@ -1,3 +1,3 @@
 >  # Locally computed
 > -sha256  
-> 8da0f54bd9ae094b5f61fe3c4dd207b2df62b4286970e2828f7c5ce1146447fb  
-> rtl8192eu-56f672a8b9572c743148f2e60068fd341d52d5a3.tar.gz
+> 6e3419a3ef9c1d0c65a2749728e332cbc5a8da2ba3dfbc24f310fa8735fb5949  
+> libzenoh-c-1.0.2-cargo2.tar.gz
 > +sha256  
-> dbd565edc8d52a1429d8551795fb4da3ca44cf27867466010e0e6d00c86aef5c  
-> rtl8192eu-6755ce9c15bbcb5dcffbca7f6f08e661ccdaacdb.tar.gz
-> \ No newline at end of file
-
-The command:
-
-     utils/docker-run make check-package
-
-reports here:
-
-     package/rtl8192eu/rtl8192eu.hash:2: missing newline at end of file
-
-I fixed it before applying.
-
-> diff --git a/package/rtl8192eu/rtl8192eu.mk 
-> b/package/rtl8192eu/rtl8192eu.mk
-> index 0f00d301a8..9cd88060ce 100644
-> --- a/package/rtl8192eu/rtl8192eu.mk
-> +++ b/package/rtl8192eu/rtl8192eu.mk
+> 12401035b4652eaa95d5835db85f6597358f3245c2646abb3986291104be566c  
+> libzenoh-c-1.0.4-cargo2.tar.gz
+>  sha256  
+> 01a44774f7b1a453595c7c6d7f7308284ba6a1059dc49e14dad6647e1d44a338  
+> LICENSE
+> diff --git a/package/libzenoh-c/libzenoh-c.mk 
+> b/package/libzenoh-c/libzenoh-c.mk
+> index a697146049..6112eda842 100644
+> --- a/package/libzenoh-c/libzenoh-c.mk
+> +++ b/package/libzenoh-c/libzenoh-c.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  
 > ################################################################################
 > 
-> -RTL8192EU_VERSION = 56f672a8b9572c743148f2e60068fd341d52d5a3
-> +RTL8192EU_VERSION = 6755ce9c15bbcb5dcffbca7f6f08e661ccdaacdb
->  RTL8192EU_SITE = $(call 
-> github,clnhub,rtl8192eu-linux,$(RTL8192EU_VERSION))
->  RTL8192EU_LICENSE = GPL-2.0
-> 
+> -LIBZENOH_C_VERSION = 1.0.2
+> +LIBZENOH_C_VERSION = 1.0.4
+>  LIBZENOH_C_SITE = $(call 
+> github,eclipse-zenoh,zenoh-c,$(LIBZENOH_C_VERSION))
+>  LIBZENOH_C_LICENSE = Apache-2.0 or EPL-2.0
+>  LIBZENOH_C_LICENSE_FILES = LICENSE
 > --
-> 2.39.5
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
 > https://lists.buildroot.org/mailman/listinfo/buildroot
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
