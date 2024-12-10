@@ -4,96 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7FE5E77182
-	for <buildroot@archiver.kernel.org>; Tue, 10 Dec 2024 16:23:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30763E7717F
+	for <buildroot@archiver.kernel.org>; Tue, 10 Dec 2024 20:43:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5DE2380F43;
-	Tue, 10 Dec 2024 16:23:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A68BB80D6C;
+	Tue, 10 Dec 2024 20:43:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HnqgXEGaarxe; Tue, 10 Dec 2024 16:23:26 +0000 (UTC)
+ id DSMNUdlFL7wz; Tue, 10 Dec 2024 20:43:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47ED680F5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6BB380D83
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47ED680F5D;
-	Tue, 10 Dec 2024 16:23:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 13822ED2
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 16:23:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6BB380D83;
+	Tue, 10 Dec 2024 20:43:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3BA666F
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 20:43:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 01D21403B9
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 16:23:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A18B6090C
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 20:43:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XSgHRSY34iBP for <buildroot@buildroot.org>;
- Tue, 10 Dec 2024 16:23:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5E3AC403B5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E3AC403B5
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5E3AC403B5
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 16:23:20 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.lan ([85.22.124.199]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MbRfl-1tsRxD0OoD-00cgkX; Tue, 10
- Dec 2024 17:23:06 +0100
-To: buildroot@buildroot.org
-Cc: Fiona Klute <fiona.klute@gmx.de>, Grzegorz Blach <grzegorz@blach.pl>,
- Marcin Bis <marcin@bis.org.pl>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Dec 2024 17:22:41 +0100
-Message-ID: <20241210162243.1541113-3-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241210162243.1541113-1-fiona.klute@gmx.de>
-References: <20241210162243.1541113-1-fiona.klute@gmx.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N6ceP26zDQw1 for <buildroot@buildroot.org>;
+ Tue, 10 Dec 2024 20:43:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::12d; helo=mail-lf1-x12d.google.com;
+ envelope-from=geomatsi@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3267C608F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3267C608F2
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
+ [IPv6:2a00:1450:4864:20::12d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3267C608F2
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 20:43:19 +0000 (UTC)
+Received: by mail-lf1-x12d.google.com with SMTP id
+ 2adb3069b0e04-53df19bf6a9so6927629e87.1
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 12:43:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1733863397; x=1734468197;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=qWgzsTy/IZIFXMik+St/lW6yARO9N3WOPleCyD5fZVU=;
+ b=v58YtIXvMzmwDcByXNJFcw73b7EjiuvQLhIdGQehjFcNYpxbK8YMZhAgZf1HkEB2HK
+ kFlj5ADCnBSNSOTzA8fy7PN+zL6puCoxZ2GGvraKX7mdlXfIhVCSX07SFMu4FmiU9M7Y
+ kIprA98cmrp1vB4Z+8eAa1LAdj+k7IFOi4weRsI0P8aFOBOIWVSIlPl9XJtIvnP12yNK
+ GE5Q+Hm+7V20C3XNbv5yH89tC49apNt0b0aerBLkvI2f3PHQQSSQgZv7woywCfRTrYfe
+ wrj+7XETq+lYW0mKtBA5oYBroTRLeN+xudTmLCTjdlA590EurfyTctZR7cG9GaseRk19
+ 7PuA==
+X-Gm-Message-State: AOJu0YwRkKLN/Fq8elqYwc1Eg7GajwW4zIfysKBcGpalX/AUZujeN9pt
+ jB2ntWtlhP+dGlFe3TPj/Ovhj/YIooRNNtpj79iqfKpkWp64JwQ2
+X-Gm-Gg: ASbGnctq8apZz3zncAzYmz/LFvVOxLkiPrINVDqY4yFi9oGTk+Us/hzCWUSnfbJQ3Vr
+ elF70ysyHYuH/b2fhIYMI3TbMAEttz7qi+BvywcnqsI46FKuXfdbixvzxBUjhq/sit27jxK/3TF
+ tOhpambFPRlqtHY/qB2A8x8Ep1HlGSdJ+r3JbF+khFZRCwBiWcMNzIRhbl1uwWMCdiy04Y2IAEV
+ ho6MraXKlqqA69oF5ho2EQGZIpxor9eBCorg5GyVxdZ8w==
+X-Google-Smtp-Source: AGHT+IHRTfQDECUfCjTHucQ5X8Paj6Af/CckUFOCAQ0ZsMBYnShf+Y4dac7vn/QVo+h6hs64ZGGoHQ==
+X-Received: by 2002:a05:6512:b03:b0:540:1fd6:4e34 with SMTP id
+ 2adb3069b0e04-5402a5e48f6mr69217e87.23.1733863396678; 
+ Tue, 10 Dec 2024 12:43:16 -0800 (PST)
+Received: from curiosity ([5.188.167.4]) by smtp.gmail.com with ESMTPSA id
+ 2adb3069b0e04-540299b2538sm71107e87.103.2024.12.10.12.43.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 10 Dec 2024 12:43:14 -0800 (PST)
+Date: Tue, 10 Dec 2024 23:43:11 +0300
+From: Sergey Matyukevich <geomatsi@gmail.com>
+To: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Cc: buildroot@buildroot.org
+Message-ID: <Z1in3yM7ddVMYEqq@curiosity>
+References: <20241208214748.524923-1-geomatsi@gmail.com>
+ <dcbd3f77-e737-41a2-9f23-87141d0bdf9b@grenoble.cnrs.fr>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:/0/MMVUlu2wESktdIYcQiwYPZpu1V0BqGGxgSlZIEmEdxm7dFDL
- mYtqejQrobXtMdgkej7j1oXwXLZMkxolprxSm3pARRwPsRpUJ0PQYrVBzHL8Qb2fVcvhVwh
- GtHaiY0xNVh9K/BAdQkSARJB7tvUK0h3b1aFzvUsu0Uh3JPAnugblLpYyioRyvVBAUxC8gb
- 228vnEZhD2g/20EZYlDxQ==
-UI-OutboundReport: notjunk:1;M01:P0:uxrkyuYq54s=;x4xZPA/k+Q4ijZ/LX+H7oxK/1pd
- PS3ctm7aywvd7UTnZrZoXD4F8XYqieI2QFWyanzuyA9KU3HhAju0Hxmx7e+HH5Xzrhl/KoBf8
- E0BNhM9rCcPknNXdCbzpoFdbWbRxyMnKD/wKap3g8iQVg7yoRanDs4HNeHzXwdnD48xX4JH5t
- Qr3mxyT3NXhxZUSVQyyEQn5U2jrFTiXCWJ8zCON3wMOUZus6KkbhTOUmzockTiZTvBNSl6Lrw
- AZHi/bjzgruVE/0i5GpkX0J9HuKzOKHsvmly0jsfhDQjzXZZXRm3LhwBp8/blBIFEfyZyFE2a
- Rj4nr4TbAUsWwCE5+Q+xee4k9ckW2gd0m3NN8+t1Fw7irPEhvSqAoNsseyn6kslRlDoUAV8Dn
- 09zbxqIXjDKdYqEisW1m/TaHKcF2Ke6E1oHe9eHrE92w8LbaRl1K0GVnXewzXOqd4eMxBubYR
- YhcHVvzIHXHaIkDSR797PmqbjfROLtZnknfygciPc2so2zQMm6+vAGGCjyCiJZzks/DH8nuOV
- 38ovL/EUDcBuMzecKAN4E6Tq4xKu+51jM4JPBmndKCuax7P7HWjcEgSeqLEUw6We9flOOpnc/
- vBV4UdPQvO7/2PmiaofAnrmOothgzESCVSQJPFS1Zpfl2rPSrwFNjduBfCjJ1ATaeCOrQbeCU
- x/Jf9c6SySAX39elU58UBsHrXMdX1HdLE3W6BeBRfBVPkSlI1Bqi84HbPSKBrErFNUlBexrxM
- xUYM2kqTazAHqzDkcWFB5lDAvGvoSanCylRiA2t8yFI1EgC+kK+9xnTpC5QiH0DMB7DNWMYB6
- jpCETfLAwKgmVFsEY9znW0B/U3xaeoIWVRvvWmXPJjRIGUAakmfHagqwA1rc2VhXbDWW65jQN
- E+yug8zbfdM3sM+xNeA64UstefsvhQLwCZfOFTXKnxYO2QSZuB3FT4V8D70+EWfn84+ft02zJ
- bD8MyI9te0ZfVy3ua/TTRUnF7H5c9raZoONIEDe19fcCZNjSTx1Su6VrRe/yKi3v0Lpap2gRH
- SftLvd2HZAkbJIa7IPBaVzt2mPZ5fUaNk3TX7418JXUyHv9V152UzsvEda6huTcTkcYEV/cjV
- jQ0wkGIqVVK5R35eEmtTaVmNKE33Na
+Content-Disposition: inline
+In-Reply-To: <dcbd3f77-e737-41a2-9f23-87141d0bdf9b@grenoble.cnrs.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1733847786; x=1734452586; i=fiona.klute@gmx.de;
- bh=Cn8Wt7g2jMXWm5wXd43H/a/nXO4vI43wku2z/V93aqE=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=ZqImolNG+p3RaOWrHou7Jg6JuCW/9EAtAdsX4fyHHESX3vzsvmnoy0uwySt2VWfs
- 4IE4FJb3SrJLZR+lmB5G79OVekwCj4fvNpFP9pB0acIjDbJTxglhxXHmMinqnlUla
- YSIm90Bx+dgbiNqSogfqEO7ijLYNPiH7joWeFMyub46yzeVp/teIeQLPVyDxKciA8
- JLB/dHGpXSSjQHGHqctgAiQnbyGlhRO3o2xstzdwM+Jgg4in5CgMHsQ3aNgOSVUTO
- uzTCjXjVgup1OwyY+yUgPPcu3dvcoT0n60Eu4bmFZZgME6RZhH/zOmi9MAs5f9y0w
- scpY/poWWoTPV/HErA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=ZqImolNG
-Subject: [Buildroot] [PATCH v2 3/4] package/bluez5_utils: install datafiles
- with correct permissions
+ d=gmail.com; s=20230601; t=1733863397; x=1734468197; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+ bh=qWgzsTy/IZIFXMik+St/lW6yARO9N3WOPleCyD5fZVU=;
+ b=HXYyKvnDTx03/DMwQ/VxqnragcFX5mdfDWa3YvbiPSWeMLqKC7U1b62BMpk3W0DV/U
+ 1Wcy+OZ5Q4I55OMHEn4CHJOEt3Q5c2wClqHBBlzMHOjvSfZax3x3HFdYgmWptjgSBeUU
+ eSPMjKCvaIxL8Mf97uPOufOXN702mAUta4YReS3yAvmk+uUHwmbtnJKAo29l5vvZx4c9
+ ujcljoS/aYphAeBeyNkcfOwHiqL2M7jFsipKldWF92ugcLN2Gp+EqYGYZSwlj91bQi0F
+ K9Xn7qCAhCHggutkWQASROHPl1Y8oxYGfQBembg+vZ0OLPWnULDqJgkDCdNra7uSca1i
+ 5jmg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=HXYyKvnD
+Subject: Re: [Buildroot] [PATCH 0/3] {linux,
+ linux-headers}: add support for 6.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,105 +107,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+Hi Edgar,
 
-The datafiles include the dbus policy, without which bluetoothd fails
-to start (unless it is provided by other means):
+On Mon, Dec 09, 2024 at 09:11:40AM +0100, Edgar Bonet wrote:
+> Hello everybody!
+> 
+> Sergey Matyukevich wrote:
+> > I have been waiting for the new LTS Linux v6.12 in Buildroot to start
+> > sending Christmas updates for some of my OrangePi boards. Now v6.12.3
+> > is already available, but the latest kernel is still have 6.11.x. So I
+> > decided to undertake a copy-paste exercise using the latest kernel and
+> > headers update series by Bernd.
+> 
+> Nice!
+> 
+> Note, however, that there is an issue with Linux v6.12: the kernel build
+> process won't build the device trees provided by Buildroot. The issue
+> has been raised by Chris Packham both on the Buildroot mailing list[1]
+> and on the kernel mailing list.[2] I think this should be fixed before
+> bumping "latest kernel" to v6.12.
+> 
+> In the kernel thread, there is this solution suggested by Masahiro
+> Yamada:
+> 
+> > I have [the yet-to-upstream device tree files] in the proper directory
+> > location, and add
+> >
+> >   dtb-$(CONFIG_ARCH_FOO)  += foo-downstream-custom1.dtb
+> >   dtb-$(CONFIG_ARCH_FOO)  += foo-downstream-custom2.dtb
+> >     ...
+> >
+> > just like how they would look when they were upstreamed.
+> 
+> Maybe this approach could be adapted to Buildroot?
 
-# /usr/libexec/bluetooth/bluetoothd -n
-bluetoothd[1011]: Bluetooth daemon 5.78
-D-Bus setup failed: Connection ":1.7" is not allowed to own the service "org.bluez" due to security policies in the configuration file
-bluetoothd[1011]: src/main.c:main() Unable to get on D-Bus
+IIUC at the moment Buildroot includes the following configurations that
+make use of BR2_LINUX_KERNEL_CUSTOM_DTS_PATH:
+- acmesystems_acqua_a5_256mb_defconfig (v6.6)
+- acmesystems_acqua_a5_512mb_defconfig (v6.6)
+- octavo_osd32mp1_brk_defconfig (v5.10)
+- octavo_osd32mp1_red_defconfig (v5.10)
+- s6lx9_microboard_defconfig (v4.4.7)
 
-The installation issue 1a8676aa6e4b0e372a1a744eac6e53c90c03bf0e was
-meant to fix is the result of upstream incorrectly installing
-/etc/bluetooth with 0555 (strictly read-only) permissions.
+Kernel version from each config is specified in parentheses. Adding new
+v6.12 kernel is not going to break any of those boards right away.
 
-Fixes: 1a8676aa6e4b0e372a1a744eac6e53c90c03bf0e
+However if the build rule for drop-in dtbs will not be re-enabled (which
+seems likely), migration to new kernels will be a problem for those boards.
+I don't see how BR2_LINUX_KERNEL_CUSTOM_DTS_PATH can be supported in this
+case w/o patching new kernels. Probably it makes sense to convert those
+out-of-tree dts files into proper kernel patches ?
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
----
-Changes v1 -> v2:
-* Path has been accepted upstream, update patch file and upstream URL.
-
- ...eave-config-files-writable-for-owner.patch | 35 +++++++++++++++++++
- package/bluez5_utils/bluez5_utils.mk          |  4 ++-
- 2 files changed, 38 insertions(+), 1 deletion(-)
- create mode 100644 package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch
-
-diff --git a/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch b/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch
-new file mode 100644
-index 0000000000..09ebe5edf1
---- /dev/null
-+++ b/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch
-@@ -0,0 +1,35 @@
-+From b1fd409960001a77cda2a09ecc00147ebd9c3667 Mon Sep 17 00:00:00 2001
-+From: Fiona Klute <fiona.klute@gmx.de>
-+Date: Mon, 9 Dec 2024 16:40:43 +0100
-+Subject: [PATCH BlueZ] build: Leave config files writable for owner
-+
-+This is needed for builds running as non-root users, so the build
-+process and any distribution tools can create/move/delete files in the
-+config directory without adjusting permissions separately. Limiting
-+writes from the running service needs to be done in the systemd unit
-+(already the case) or init script.
-+
-+See also: https://lore.kernel.org/linux-bluetooth/4d1206df-598b-4a68-8655-74981b62ecca@gmx.de/T/
-+Reviewed-by: Bastien Nocera <hadess@hadess.net>
-+Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=b1fd409960001a77cda2a09ecc00147ebd9c3667
-+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-+---
-+ Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 297d0774c..29018a91c 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -32,7 +32,7 @@ confdir = $(sysconfdir)/bluetooth
-+ statedir = $(localstatedir)/lib/bluetooth
-+ 
-+ bluetoothd-fix-permissions:
-+-	install -dm555 $(DESTDIR)$(confdir)
-++	install -dm755 $(DESTDIR)$(confdir)
-+ 	install -dm700 $(DESTDIR)$(statedir)
-+ 
-+ if DATAFILES
-+-- 
-+2.45.2
-+
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 7725fb94bf..e3b47e1e80 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -13,6 +13,9 @@ BLUEZ5_UTILS_LICENSE = GPL-2.0+, LGPL-2.1+
- BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
- BLUEZ5_UTILS_CPE_ID_VENDOR = bluez
- BLUEZ5_UTILS_CPE_ID_PRODUCT = bluez
-+# required because 0002-Leave-config-files-writable-for-owner.patch
-+# modifies Makefile.am
-+BLUEZ5_UTILS_AUTORECONF = YES
- 
- BLUEZ5_UTILS_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_BLUEZ5_UTILS_HEADERS),bluez5_utils-headers) \
-@@ -22,7 +25,6 @@ BLUEZ5_UTILS_DEPENDENCIES = \
- BLUEZ5_UTILS_CONF_OPTS = \
- 	--enable-library \
- 	--disable-cups \
--	--disable-datafiles \
- 	--disable-manpages \
- 	--disable-asan \
- 	--disable-lsan \
--- 
-2.45.2
-
+Regards,
+Sergey
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
