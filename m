@@ -4,76 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF1EDE7717F
-	for <buildroot@archiver.kernel.org>; Tue, 10 Dec 2024 21:07:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EE7CE7717F
+	for <buildroot@archiver.kernel.org>; Tue, 10 Dec 2024 21:48:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BCCD403A1;
-	Tue, 10 Dec 2024 21:07:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BD6D40359;
+	Tue, 10 Dec 2024 21:48:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2VoMy_MXXSDf; Tue, 10 Dec 2024 21:07:07 +0000 (UTC)
+ id Ao8eeI9pgicD; Tue, 10 Dec 2024 21:48:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6341040704
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8BE44030A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6341040704;
-	Tue, 10 Dec 2024 21:07:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3CE89ED2
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 21:07:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8BE44030A;
+	Tue, 10 Dec 2024 21:48:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C11EC6F
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 21:48:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B10A40694
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 21:07:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA07180D70
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 21:48:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4IgxB8_50Arb for <buildroot@buildroot.org>;
- Tue, 10 Dec 2024 21:07:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EF48E406AD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF48E406AD
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EF48E406AD
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 21:07:04 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id EF09619F5A7;
- Tue, 10 Dec 2024 22:06:54 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:55146])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 10 Dec 2024 22:06:54 +0100
-MIME-Version: 1.0
-Date: Tue, 10 Dec 2024 22:06:54 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hF_vwgbLrBx5 for <buildroot@buildroot.org>;
+ Tue, 10 Dec 2024 21:48:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA7EA80D55
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DA7EA80D55
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 21:48:11 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D0B3A86C64; Tue, 10 Dec 2024 21:48:11 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Neal Frager <neal.frager@amd.com>
-Cc: buildroot@buildroot.org, luca.ceresoli@bootlin.com,
- brandon.maier@collins.com, thomas.petazzoni@bootlin.com,
- romain.naour@smile.fr, michal.simek@amd.com, yann.morin.1998@free.fr
-In-Reply-To: <20241210081440.1423417-1-neal.frager@amd.com>
-References: <20241210081440.1423417-1-neal.frager@amd.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <dba6a47ebe4fa924c5ae8bba4b3cf7e2@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1733864822;
- bh=h+PcIHmdEiTtUCT7A+hPqm5LeN3p3m3oVj0F5jlpSGo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=mAKuKb3b3jwBMgBOeBtAB6zWdd/mKq6swfXt1TjoCfTR1keGz3A7WUQFm7zUe8ll0
- xANjZZO077xO4HQi6rsTOhPJ1CAfk83L1itI96z8WAH/IHb1WVLFIn8WR3krPD1n1o
- 3rTEyzppVWvolSucGO6pyQ6A8pc8KX48iDzWxjbf8WwhGY2zoD9jNMEJcs7+xX29nU
- X42BKeuIfBDZ3qOxt/aAfIFMDkY2xFRJ9mMJyXRTnYfJCug73RZAGB6W4AhtCauRkv
- FIFWXdHXP20V1jVRUVbhCupeyOoHi4Qz3jtZGBBNuDpGDhL67KM4mo5T0sh4WX8t0O
- 3STaY2waMg23A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=mAKuKb3b
-Subject: Re: [Buildroot] [PATCH v1 1/1] board/versal/post-build.sh: link to
- board/zynqmp/post-build.sh
+To: buildroot@buildroot.org
+Date: Tue, 10 Dec 2024 22:41:07 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5d800afa97273fb3f0f0d218871d83e35bee8dd5
+X-Git-Newrev: 82917f238e24d7ab71b5a5e43cbdc428ef452768
+X-Patchwork-Hint: ignore
+Message-Id: <20241210214811.D0B3A86C64@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swupdate: bump to version 2024.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,62 +58,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10/12/2024 09:14, Neal Frager via buildroot wrote:
-> The board/versal/post-build.sh and board/zynqmp/post-build.sh files are
-> identical.  So this patch removes the board/versal/post-build.sh script 
-> and
-> replaces it with a link to the board/zynqmp/post-build.sh script.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=82917f238e24d7ab71b5a5e43cbdc428ef452768
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+For release note, see:
+https://github.com/sbabic/swupdate/releases/tag/2024.12
 
-> ---
->  board/versal/post-build.sh | 16 +---------------
->  1 file changed, 1 insertion(+), 15 deletions(-)
->  mode change 100755 => 120000 board/versal/post-build.sh
-> 
-> diff --git a/board/versal/post-build.sh b/board/versal/post-build.sh
-> deleted file mode 100755
-> index faa75a0de3..0000000000
-> --- a/board/versal/post-build.sh
-> +++ /dev/null
-> @@ -1,15 +0,0 @@
-> -#!/bin/sh
-> -
-> -# genimage will need to find the extlinux.conf
-> -# in the binaries directory
-> -
-> -CONSOLE="$2"
-> -ROOT="$3"
-> -
-> -mkdir -p "${BINARIES_DIR}"
-> -cat <<-__HEADER_EOF > "${BINARIES_DIR}/extlinux.conf"
-> -	label linux
-> -	  kernel /Image
-> -	  devicetree /system.dtb
-> -	  append console=${CONSOLE} root=/dev/${ROOT} rw rootwait
-> -	__HEADER_EOF
-> diff --git a/board/versal/post-build.sh b/board/versal/post-build.sh
-> new file mode 120000
-> index 0000000000..0130ff23d2
-> --- /dev/null
-> +++ b/board/versal/post-build.sh
-> @@ -0,0 +1 @@
-> +../zynqmp/post-build.sh
-> \ No newline at end of file
-> --
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Julien: add link to release note]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/swupdate/swupdate.hash | 2 +-
+ package/swupdate/swupdate.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
+index ac28acb1f4..847c5a1098 100644
+--- a/package/swupdate/swupdate.hash
++++ b/package/swupdate/swupdate.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  2736045e885ad6c5dcba8dcc6c7582d0b76ef29a3d6ab7c4080908356e35e3b2  swupdate-2024.05.2.tar.gz
++sha256  528c61769456d7740a9ba1d045f25f7587203e2a2e71a9a67998f0e13e2db149  swupdate-2024.12.tar.gz
+ sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
+ sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
+ sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 75e4af5db4..fe6ef2dd6d 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SWUPDATE_VERSION = 2024.05.2
++SWUPDATE_VERSION = 2024.12
+ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+ SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
+ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
