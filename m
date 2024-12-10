@@ -4,83 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9E36E7717F
-	for <buildroot@archiver.kernel.org>; Tue, 10 Dec 2024 15:42:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D44AE77180
+	for <buildroot@archiver.kernel.org>; Tue, 10 Dec 2024 16:23:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A7F080DB5;
-	Tue, 10 Dec 2024 15:42:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4195F80B95;
+	Tue, 10 Dec 2024 16:23:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z8Fb52zycRvY; Tue, 10 Dec 2024 15:42:50 +0000 (UTC)
+ id muil4hQ02NuG; Tue, 10 Dec 2024 16:23:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3496F80D9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A44780C00
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3496F80D9F;
-	Tue, 10 Dec 2024 15:42:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 27AD4ED2
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 15:42:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A44780C00;
+	Tue, 10 Dec 2024 16:23:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D9D9DED2
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 16:23:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1024780D9E
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 15:42:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BA6F9403B9
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 16:23:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SdXTmM6cEZzg for <buildroot@buildroot.org>;
- Tue, 10 Dec 2024 15:42:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.59.59;
- helo=send220.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DEE6780D1D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEE6780D1D
-Received: from send220.i.mail.ru (send220.i.mail.ru [95.163.59.59])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DEE6780D1D
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 15:42:45 +0000 (UTC)
-Received: by exim-smtp-598667c6b5-t6m4j with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1tL2Nl-00000000DQG-41rB; Tue, 10 Dec 2024 18:42:42 +0300
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IMA_Fjo_fPmg for <buildroot@buildroot.org>;
+ Tue, 10 Dec 2024 16:23:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8663F403B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8663F403B5
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8663F403B5
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 16:23:12 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.124.199]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mo6qp-1txNdI0jCV-00qNqx; Tue, 10
+ Dec 2024 17:22:59 +0100
 To: buildroot@buildroot.org
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Tue, 10 Dec 2024 18:42:40 +0300
-Message-ID: <20241210154240.1380886-1-fido_max@inbox.ru>
+Cc: Fiona Klute <fiona.klute@gmx.de>, Grzegorz Blach <grzegorz@blach.pl>,
+ Marcin Bis <marcin@bis.org.pl>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 10 Dec 2024 17:22:39 +0100
+Message-ID: <20241210162243.1541113-1-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Mailru-Src: smtp
-X-7564579A: 646B95376F6C166E
-X-77F55803: 4F1203BC0FB41BD9B739379E53DE709585AD0E3AD12D25CAAC728D94BFE54185182A05F538085040B869FC875806B0743DE06ABAFEAF67057C6B080D155015856EDBBE88E6DFA98FD599AB4818251001
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE728A881FD0F09D355EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006375E5376F82D9E62E48638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D885060523EDFADF2A2D37918CDC6AD8AF284D3555531E61AA20879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C0C7E80E60854EA9278941B15DA834481FA18204E546F3947C17119E5299B287EEF6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F790063767B9C6E70FBE8DD8389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F3BBE47FD9DD3FB595F5C1EE8F4F765FC72CEEB2601E22B093A03B725D353964B2FFDA4F57982C5F435872C767BF85DA227C277FBC8AE2E8BDCE939D40DBB93CA75ECD9A6C639B01B4E70A05D1297E1BBCB5012B2E24CD356
-X-87b9d050: 1
-X-C1DE0DAB: 0D63561A33F958A58A64E3B7EEB3D59D5002B1117B3ED696A36FD618DE2281FB406406D89DD9EB8A823CB91A9FED034534781492E4B8EEADF4F3DF47829F65C7C79554A2A72441328621D336A7BC284946AD531847A6065A535571D14F44ED41
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF102AC1AD4B95E5FEFD71CDF2E2814FC802AFE10DF1F45BFDDEEF07421C379A7F46C06E59B4E81405A0626FDB23E8EA70815EEEBA9CD4CB103884AF983B2682B899F1F92BFBB8D38F111DC66A97D0BFE2913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojwdtfQel0s3ky+Y2poaCoQg==
-X-Mailru-Sender: 689FA8AB762F739381B31377CF4CA21962BC0FB6A72FBAB0539FF2E3F78588B8ACB0A91446A0B2F090DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; 
- s=mail4; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:
- To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
- Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
- Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
- List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
- X-Cloud-Ids:Disposition-Notification-To;
- bh=OEk4fSqaqTrWjU0SVgdFn9oKQQGdcRbRN3eIR8wm1B4=; t=1733845366; x=1733935366; 
- b=P4F0D3kv/mv2Ljwy4s3rg3p49HD0hDr5A+2zfrmRw5c6BlbGQ8DhfKKP+sd+fYr+ZxJHBMxdqHj
- ephZ4Vm5CXtkYksfuQpiPqlrtatWXtzX7vvqQzlRaafnVvCxhW8NhTG+ZFgJt/ZhKgkKroCtYuoEL
- nGrZphDnBfNS8g+iH1JVjv0zSIaV2PMh1q2q/69/UiX5SJnhdW5o94WxQaIGbtXofFU2W+aeXaSrn
- BOQj5cW/9leSolyghRW8FCOp8AfjB4SVjHK7YqNM1yehtWSR80nJ3Z9Q7TY6U7++BW0nKZOh9ubFx
- 3NMwX/ifrAnfS0mU0EN5VpiX2xa9BZCjt6ZA==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=inbox.ru
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Provags-ID: V03:K1:yOuaSuOKYdxJUhVNqwoNy5g7fqHUf+EBs0L7XaQux4/3DykqRpZ
+ hRimTHHLkb5741ewIGvdtHAh+IjXthdngJPZLtgcFMVk1BvqzQyYfvKm9cH4yPYOzlva6vD
+ jvj1Dl2zREk8vGgU0uEYM4ozu3cCs163Zg6ZL8HoYEqgbWyB7jCmZxnFi+nwBE2V8P5X0jT
+ atvKgevv8ddd1G0TzPKPw==
+UI-OutboundReport: notjunk:1;M01:P0:NOaPMaofvc8=;ovn4IsE6jbID/lEUOqELzAxIKrT
+ TXOUva9QWobn05gxYvYAvZ5IdfDUkler4FVMi5iGH0tIuorSVueT4QQ7h1HM6sKmNsIujmKaU
+ DM2YOTpGUPZq3yw3m97pZwMrDVzTDUBRjVz/OkqcS09MiksduDyV6Uzbk8zdu963hvxJ/PPGp
+ nGZeC9DDzxDsUHwFTdozmIpXorhXQIMgZAQaxKBtdBr4WZTEhpAsmI03uYrLA9SWzv2tmjqa/
+ nTl4EX8GI/Jnkhgq7Vtj9ursBkxycz6ZgC+iD0UXq3Y1x5TUpgZdd3B8uQA4eqDvY5BA+aLHL
+ 5zG1ucdjA+ofPyl4NZWOnUQXh5C62BjIzCIkmE8qAb8lLI3YGhJGU3eRCh2AIZoUZgY5LcgBU
+ ZHY3LL5ygrERRc0NeTG6pL13ukF8JHmoBHKl4ioqUNRG5WFktm5TDXovXDs//SwAino31JGZ7
+ QPrDyJ1Ui+MsI0M7iHTL+wmOYzIznEXyn9lUlHQz203OyyqdHa9W3MNgDAVejBmKtb4xi62ns
+ BlZK77pnmWrPXibGWj4/LguPAAvp8GTpz6dWu1SNugpGGEhgzoSA9BbNq/7jbHCRFaqaIJhpL
+ zC3mojuIqqhh7F0PvnBjB9G3QxRrKgZDVH7oD+n4vX9kt/TJcTSJG+0YRoE2ekFr6HXlpQ8uu
+ JfYsIn2g/3mNQoRIEiK3OknZj5K92AequwBNH9G4NXwcjKKqOv6mqnm/BKfgPla/8raNZXfOM
+ DAIP9/BCueQHum7ToAB3n8d/9cKbbz30pLTSVird92gbcaTXuLzTaBOhz4SSjtHPrPEbjaBhM
+ m7uegXq/ZYd3bw2gcBgBUBt6qWgQMbTwWTBm3lxPflPZIJKyFZR3VWiQppbkHZiE/nGQNgAZq
+ gAJWfmUrJC6mPXWxSRcit9kprDrPop+DrkZIrgtGIWjvhPuSlPGucNjZ5MDIo1dzrE9Js1nXo
+ JIMz/LaTvPwuT035+2er4fukQhJunI9rZvDTR+Onmr1FjIsWVhUKhX1CcC8RHQwjN4DxcS8fv
+ ThIGAP0LCx7t/n6kTLjaL39aqho7VF3XhzBFyVsZkGSLmsZtTHLIZbWQKQFxYh5LEbv8iHYEW
+ BwNzvuB5LCDXqi1UsQ4XYIXplfXfZ1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.de; 
+ s=s31663417; t=1733847779; x=1734452579; i=fiona.klute@gmx.de;
+ bh=wfJkzcR/fFB0RMGQUzSD6ZCHYuFVh3Zg+xdJz8hmJpI=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=rhFjqMkp8lNcZ59dp3OHSKqFCjdN24UFwNpcIvYFwVHgTMRq3HsGh5nfUTR6HOR3
+ WzEc3pX1xHXQ4KTWsPq21nVIrnLW42JS2iiGE8+Q5/Kb+pKxFnRR2TcfzeTFlu9mU
+ XVFPkGhxeQWUP7PPRvIYqBA3jF5xHAQwYn/mT2XLaxRAla7wNyLt3KUEc7Tuzs87e
+ STbiaQD1saY8c86ku7DIQszxRPnXqg5dvr1MdF2mb8hPuxiTAJURzERncDGcZFJe6
+ w3Nowl+Khrfq/J4f7avZQ3BNwILmmak4vc5GRZeK0RgrUKby9XdHnrIRaiyfGcGgJ
+ u+aeQura/dgJnTYU/w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
- header.s=mail4 header.b=P4F0D3kv
-X-Mailman-Original-Authentication-Results: exim-smtp-598667c6b5-t6m4j;
- auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: add patch to disable
- docs build
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=rhFjqMkp
+Subject: [Buildroot] [PATCH v2 1/4] package/bluez5_utils{,
+ -headers}: bump version to 5.79
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,73 +104,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-docbook package is needed for building docs. Build fails without it
-if xmllint is found on host:
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-I/O error : Attempt to load network entity: http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd
-../doc/src/sgml/postgres.sgml:22: warning: failed to load external entity "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
-]>
-  ^
-../doc/src/sgml/postgres.sgml:24: element book: validity error : No declaration for attribute id of element book
-<book id="postgres">
-                   ^
+Upstream changelog:
+https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?h=5.79&id=0845b8f6ef2ac004b1c953cf4fe4ca3458cd8e36
 
-So disable docs build.
+Patch for musl compatibility taken from upstream "master".
 
-Fixes: https://autobuild.buildroot.org/results/711c101d9a4807fcb59cff2b7c89454f96cc3e2d/
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- ...ld-drop-docs-build-from-world-target.patch | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/postgresql/0001-meson.build-drop-docs-build-from-world-target.patch
+ .../bluez5_utils-headers.mk                   |  2 +-
+ ...0001-gdbus-define-MAX_INPUT-for-musl.patch | 33 +++++++++++++++++++
+ package/bluez5_utils/bluez5_utils.hash        |  2 +-
+ package/bluez5_utils/bluez5_utils.mk          |  2 +-
+ 4 files changed, 36 insertions(+), 3 deletions(-)
+ create mode 100644 package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
 
-diff --git a/package/postgresql/0001-meson.build-drop-docs-build-from-world-target.patch b/package/postgresql/0001-meson.build-drop-docs-build-from-world-target.patch
+diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+index 1fd4e0fff3..7acf62b226 100644
+--- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
++++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils
+-BLUEZ5_UTILS_HEADERS_VERSION = 5.78
++BLUEZ5_UTILS_HEADERS_VERSION = 5.79
+ BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
+diff --git a/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch b/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
 new file mode 100644
-index 0000000000..92ddbf7da6
+index 0000000000..dc823e9277
 --- /dev/null
-+++ b/package/postgresql/0001-meson.build-drop-docs-build-from-world-target.patch
-@@ -0,0 +1,34 @@
-+From 304889951e5fd2b40864770ef2432c83b68c0c1a Mon Sep 17 00:00:00 2001
-+From: Maxim Kochetkov <fido_max@inbox.ru>
-+Date: Tue, 10 Dec 2024 13:55:09 +0300
-+Subject: [PATCH 1/1] meson.build: drop docs build from "world" target
++++ b/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
+@@ -0,0 +1,33 @@
++From 9d69dba21f1e46b34cdd8ae27fec11d0803907ee Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Gu=C3=B0ni=20M=C3=A1r=20Gilbert?= <gudni.m.g@gmail.com>
++Date: Sat, 2 Nov 2024 16:10:18 +0000
++Subject: [PATCH] gdbus: define MAX_INPUT for musl
 +
-+"world" target is used to compile all the PG extensions and
-+plugins. There is no way to disable documentation builds for
-+"world" target. However documentation needs a lot of extra
-+xml/sgml/docbook tools, schemas etc...
-+So let's just drop docs tarets.
++This is the same solution as was done in src/shared/util.c
 +
-+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
++Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=9d69dba21f1e46b34cdd8ae27fec11d0803907ee
++Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 +---
-+ meson.build | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ gdbus/object.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
 +
-+diff --git a/meson.build b/meson.build
-+index 005dc9f353..2504a3c8f5 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -3588,8 +3588,8 @@ alias_target('pl', pl_targets)
-+ alias_target('contrib', contrib_targets)
-+ alias_target('testprep', testprep_targets)
++diff --git a/gdbus/object.c b/gdbus/object.c
++index 84f116bf1..7b0476f1a 100644
++--- a/gdbus/object.c
+++++ b/gdbus/object.c
++@@ -20,6 +20,12 @@
++ #include <dbus/dbus.h>
 + 
-+-alias_target('world', all_built, docs)
-+-alias_target('install-world', install_quiet, installdocs)
-++alias_target('world', all_built)
-++alias_target('install-world', install_quiet)
++ #include "gdbus.h"
+++
+++/* define MAX_INPUT for musl */
+++#ifndef MAX_INPUT
+++#define MAX_INPUT _POSIX_MAX_INPUT
+++#endif
+++
++ #include "src/shared/util.h"
 + 
-+ run_target('help',
-+   command: [
++ #define info(fmt...)
 +-- 
 +2.45.2
 +
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index 41e39e0b5c..9b39b19c08 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256  830fed1915c5d375b8de0f5e6f45fcdea0dcc5ff5ffb3d31db6ed0f00d73c5e3  bluez-5.78.tar.xz
++sha256  4164a5303a9f71c70f48c03ff60be34231b568d93a9ad5e79928d34e6aa0ea8a  bluez-5.79.tar.xz
+ # Locally computed
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 717c10e870..1695aeb210 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils-headers
+-BLUEZ5_UTILS_VERSION = 5.78
++BLUEZ5_UTILS_VERSION = 5.79
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
 -- 
 2.45.2
 
