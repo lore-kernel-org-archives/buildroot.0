@@ -4,98 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30763E7717F
-	for <buildroot@archiver.kernel.org>; Tue, 10 Dec 2024 20:43:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5FCFE7717F
+	for <buildroot@archiver.kernel.org>; Tue, 10 Dec 2024 20:52:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A68BB80D6C;
-	Tue, 10 Dec 2024 20:43:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 329CA80ADD;
+	Tue, 10 Dec 2024 20:52:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DSMNUdlFL7wz; Tue, 10 Dec 2024 20:43:22 +0000 (UTC)
+ id oanTkAqzkm9N; Tue, 10 Dec 2024 20:52:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6BB380D83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E56B580AF8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6BB380D83;
-	Tue, 10 Dec 2024 20:43:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3BA666F
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 20:43:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E56B580AF8;
+	Tue, 10 Dec 2024 20:52:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CBADD6F
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 20:52:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2A18B6090C
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 20:43:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B86040176
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 20:52:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N6ceP26zDQw1 for <buildroot@buildroot.org>;
- Tue, 10 Dec 2024 20:43:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12d; helo=mail-lf1-x12d.google.com;
- envelope-from=geomatsi@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3267C608F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3267C608F2
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
- [IPv6:2a00:1450:4864:20::12d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3267C608F2
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 20:43:19 +0000 (UTC)
-Received: by mail-lf1-x12d.google.com with SMTP id
- 2adb3069b0e04-53df19bf6a9so6927629e87.1
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 12:43:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1733863397; x=1734468197;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=qWgzsTy/IZIFXMik+St/lW6yARO9N3WOPleCyD5fZVU=;
- b=v58YtIXvMzmwDcByXNJFcw73b7EjiuvQLhIdGQehjFcNYpxbK8YMZhAgZf1HkEB2HK
- kFlj5ADCnBSNSOTzA8fy7PN+zL6puCoxZ2GGvraKX7mdlXfIhVCSX07SFMu4FmiU9M7Y
- kIprA98cmrp1vB4Z+8eAa1LAdj+k7IFOi4weRsI0P8aFOBOIWVSIlPl9XJtIvnP12yNK
- GE5Q+Hm+7V20C3XNbv5yH89tC49apNt0b0aerBLkvI2f3PHQQSSQgZv7woywCfRTrYfe
- wrj+7XETq+lYW0mKtBA5oYBroTRLeN+xudTmLCTjdlA590EurfyTctZR7cG9GaseRk19
- 7PuA==
-X-Gm-Message-State: AOJu0YwRkKLN/Fq8elqYwc1Eg7GajwW4zIfysKBcGpalX/AUZujeN9pt
- jB2ntWtlhP+dGlFe3TPj/Ovhj/YIooRNNtpj79iqfKpkWp64JwQ2
-X-Gm-Gg: ASbGnctq8apZz3zncAzYmz/LFvVOxLkiPrINVDqY4yFi9oGTk+Us/hzCWUSnfbJQ3Vr
- elF70ysyHYuH/b2fhIYMI3TbMAEttz7qi+BvywcnqsI46FKuXfdbixvzxBUjhq/sit27jxK/3TF
- tOhpambFPRlqtHY/qB2A8x8Ep1HlGSdJ+r3JbF+khFZRCwBiWcMNzIRhbl1uwWMCdiy04Y2IAEV
- ho6MraXKlqqA69oF5ho2EQGZIpxor9eBCorg5GyVxdZ8w==
-X-Google-Smtp-Source: AGHT+IHRTfQDECUfCjTHucQ5X8Paj6Af/CckUFOCAQ0ZsMBYnShf+Y4dac7vn/QVo+h6hs64ZGGoHQ==
-X-Received: by 2002:a05:6512:b03:b0:540:1fd6:4e34 with SMTP id
- 2adb3069b0e04-5402a5e48f6mr69217e87.23.1733863396678; 
- Tue, 10 Dec 2024 12:43:16 -0800 (PST)
-Received: from curiosity ([5.188.167.4]) by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-540299b2538sm71107e87.103.2024.12.10.12.43.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 10 Dec 2024 12:43:14 -0800 (PST)
-Date: Tue, 10 Dec 2024 23:43:11 +0300
-From: Sergey Matyukevich <geomatsi@gmail.com>
-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Cc: buildroot@buildroot.org
-Message-ID: <Z1in3yM7ddVMYEqq@curiosity>
-References: <20241208214748.524923-1-geomatsi@gmail.com>
- <dcbd3f77-e737-41a2-9f23-87141d0bdf9b@grenoble.cnrs.fr>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <dcbd3f77-e737-41a2-9f23-87141d0bdf9b@grenoble.cnrs.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1733863397; x=1734468197; darn=buildroot.org;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
- bh=qWgzsTy/IZIFXMik+St/lW6yARO9N3WOPleCyD5fZVU=;
- b=HXYyKvnDTx03/DMwQ/VxqnragcFX5mdfDWa3YvbiPSWeMLqKC7U1b62BMpk3W0DV/U
- 1Wcy+OZ5Q4I55OMHEn4CHJOEt3Q5c2wClqHBBlzMHOjvSfZax3x3HFdYgmWptjgSBeUU
- eSPMjKCvaIxL8Mf97uPOufOXN702mAUta4YReS3yAvmk+uUHwmbtnJKAo29l5vvZx4c9
- ujcljoS/aYphAeBeyNkcfOwHiqL2M7jFsipKldWF92ugcLN2Gp+EqYGYZSwlj91bQi0F
- K9Xn7qCAhCHggutkWQASROHPl1Y8oxYGfQBembg+vZ0OLPWnULDqJgkDCdNra7uSca1i
- 5jmg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=HXYyKvnD
-Subject: Re: [Buildroot] [PATCH 0/3] {linux,
- linux-headers}: add support for 6.12
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fEy4nCazsyK2 for <buildroot@buildroot.org>;
+ Tue, 10 Dec 2024 20:52:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC8F4400BF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id AC8F4400BF
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 20:52:36 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 963DA86C4C; Tue, 10 Dec 2024 20:52:36 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 10 Dec 2024 21:48:10 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6fcdb64599da880fc59c1808271308c2a681d273
+X-Git-Newrev: a4b43fee63a26db65a60c93e2657b2a8d3df6c83
+X-Patchwork-Hint: ignore
+Message-Id: <20241210205236.963DA86C4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/giblib: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,64 +58,285 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Edgar,
+commit: https://git.buildroot.net/buildroot/commit/?id=a4b43fee63a26db65a60c93e2657b2a8d3df6c83
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Dec 09, 2024 at 09:11:40AM +0100, Edgar Bonet wrote:
-> Hello everybody!
-> 
-> Sergey Matyukevich wrote:
-> > I have been waiting for the new LTS Linux v6.12 in Buildroot to start
-> > sending Christmas updates for some of my OrangePi boards. Now v6.12.3
-> > is already available, but the latest kernel is still have 6.11.x. So I
-> > decided to undertake a copy-paste exercise using the latest kernel and
-> > headers update series by Bernd.
-> 
-> Nice!
-> 
-> Note, however, that there is an issue with Linux v6.12: the kernel build
-> process won't build the device trees provided by Buildroot. The issue
-> has been raised by Chris Packham both on the Buildroot mailing list[1]
-> and on the kernel mailing list.[2] I think this should be fixed before
-> bumping "latest kernel" to v6.12.
-> 
-> In the kernel thread, there is this solution suggested by Masahiro
-> Yamada:
-> 
-> > I have [the yet-to-upstream device tree files] in the proper directory
-> > location, and add
-> >
-> >   dtb-$(CONFIG_ARCH_FOO)  += foo-downstream-custom1.dtb
-> >   dtb-$(CONFIG_ARCH_FOO)  += foo-downstream-custom2.dtb
-> >     ...
-> >
-> > just like how they would look when they were upstreamed.
-> 
-> Maybe this approach could be adapted to Buildroot?
+giblib was introduced as a dependency of a feh package that
+no longer depends on it. It was removed in commit:
+https://github.com/derf/feh/commit/68037c4d220302a9f7ab250b3a220a5f64217244
+included in feh version 2.12.
 
-IIUC at the moment Buildroot includes the following configurations that
-make use of BR2_LINUX_KERNEL_CUSTOM_DTS_PATH:
-- acmesystems_acqua_a5_256mb_defconfig (v6.6)
-- acmesystems_acqua_a5_512mb_defconfig (v6.6)
-- octavo_osd32mp1_brk_defconfig (v5.10)
-- octavo_osd32mp1_red_defconfig (v5.10)
-- s6lx9_microboard_defconfig (v4.4.7)
+Besides, it is no longer maintained and the download URL is no
+longer accessible.
 
-Kernel version from each config is specified in parentheses. Adding new
-v6.12 kernel is not going to break any of those boards right away.
+Fixes:
+https://autobuild.buildroot.org/results/983f1d4c01f826877c4b372713bf271412973a42/
+https://autobuild.buildroot.org/results/0a124034687d55bd8931fef8ef0f20bb56a631f1/
 
-However if the build rule for drop-in dtbs will not be re-enabled (which
-seems likely), migration to new kernels will be a problem for those boards.
-I don't see how BR2_LINUX_KERNEL_CUSTOM_DTS_PATH can be supported in this
-case w/o patching new kernels. Probably it makes sense to convert those
-out-of-tree dts files into proper kernel patches ?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Julien:
+  - remove .checkpackageignore entry
+  - remove package/Config.in entry
+  - add link to feh commit removing dependency
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .checkpackageignore                            |   1 -
+ Config.in.legacy                               |   7 ++
+ DEVELOPERS                                     |   1 -
+ package/Config.in                              |   1 -
+ package/giblib/0001-fix-imlib2-detection.patch | 127 -------------------------
+ package/giblib/Config.in                       |  13 ---
+ package/giblib/giblib.hash                     |   3 -
+ package/giblib/giblib.mk                       |  19 ----
+ 8 files changed, 7 insertions(+), 165 deletions(-)
 
-Regards,
-Sergey
+diff --git a/.checkpackageignore b/.checkpackageignore
+index e15281aa2d..2b63d235f3 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -540,7 +540,6 @@ package/genpart/0001-fix-return-code.patch lib_patch.Upstream
+ package/genromfs/0001-build-system.patch lib_patch.Sob lib_patch.Upstream
+ package/gensio/0001-Fix-missing-EVP_PKEY_ED25519-build-error-on-libressl.patch lib_patch.Upstream
+ package/gerbera/S99gerbera lib_sysv.Indent
+-package/giblib/0001-fix-imlib2-detection.patch lib_patch.Upstream
+ package/git-crypt/0001-fix-build-with-libressl-3.5.0.patch lib_patch.Upstream
+ package/glorytun/0001-Add-support-for-Apple-silicon.patch lib_patch.Upstream
+ package/glorytun/0002-aegis256.c-fix-aarch64-build-with-uclibc.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 2ef1e19516..05ed773f65 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2025.02"
+ 
++config BR2_PACKAGE_GIBLIB
++	bool "giblib has been removed"
++	select BR2_LEGACY
++	help
++	  The giblib package was removed as it is not maintained
++	  anymore and the upstream URL is gone.
++
+ config BR2_PACKAGE_FCONFIG
+ 	bool "fconfig has been removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 646002850f..047dc4a88f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3384,7 +3384,6 @@ F:	package/can-utils/
+ F:	package/circus/
+ F:	package/dhcpcd/
+ F:	package/feh/
+-F:	package/giblib/
+ F:	package/hostapd/
+ F:	package/imlib2/
+ F:	package/jquery-datetimepicker/
+diff --git a/package/Config.in b/package/Config.in
+index 60cdb179a3..7cfcdf2c58 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1705,7 +1705,6 @@ menu "Graphics"
+ 	source "package/gd/Config.in"
+ 	source "package/gdk-pixbuf/Config.in"
+ 	source "package/gdk-pixbuf-xlib/Config.in"
+-	source "package/giblib/Config.in"
+ 	source "package/giflib/Config.in"
+ 	source "package/granite/Config.in"
+ 	source "package/graphene/Config.in"
+diff --git a/package/giblib/0001-fix-imlib2-detection.patch b/package/giblib/0001-fix-imlib2-detection.patch
+deleted file mode 100644
+index 2323107941..0000000000
+--- a/package/giblib/0001-fix-imlib2-detection.patch
++++ /dev/null
+@@ -1,127 +0,0 @@
+-configure.ac + Makefile.am: fix the imlib2 detection
+-
+-Although imlib2 is correctly checked for, the variables used to get
+-the CFLAGS and LIBS are wrong (perhaps a remnant of the pre-imlib2
+-era, when giblib was using imlib).
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-diff --git a/configure.ac b/configure.ac
+-index 6807d86..c8874f0 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -18,16 +18,10 @@ AM_MAINTAINER_MODE
+- AM_WITH_DMALLOC
+- 
+- AC_PATH_GENERIC(imlib2, 1.0.0, [
+--  AC_SUBST(IMLIB_LIBS)
+--  AC_SUBST(IMLIB_CFLAGS) ],
+-+  AC_SUBST(IMLIB2_LIBS)
+-+  AC_SUBST(IMLIB2_CFLAGS) ],
+-   AC_MSG_ERROR(Cannot find imlib2: Is imlib2-config in the path?) )
+- 
+--dnl the above doesn't work for some reason :/
+--IMLIB_LIBS=`imlib2-config --libs`
+--IMLIB_CFLAGS=`imlib2-config --cflags`
+--AC_SUBST(IMLIB_LIBS)
+--AC_SUBST(IMLIB_CFLAGS)
+--
+- LIBS="$LIBS -lm"
+- CFLAGS="$CFLAGS -Wall"
+- 
+-@@ -48,7 +42,7 @@ $PACKAGE $VERSION
+- Configuration:
+- --------------
+- 
+--Imlib2 libs:	$IMLIB_LIBS
+--Imlib2 cflags:  $IMLIB_CFLAGS
+-+Imlib2 libs:	$IMLIB2_LIBS
+-+Imlib2 cflags:  $IMLIB2_CFLAGS
+- CFLAGS:			$CFLAGS
+- "
+-diff --git a/configure.in b/configure.in
+-index 432cb16..6999095 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -17,16 +17,10 @@ AM_MAINTAINER_MODE
+- AM_WITH_DMALLOC
+- 
+- AC_PATH_GENERIC(imlib2, 1.0.0, [
+--  AC_SUBST(IMLIB_LIBS)
+--  AC_SUBST(IMLIB_CFLAGS) ],
+-+  AC_SUBST(IMLIB2_LIBS)
+-+  AC_SUBST(IMLIB2_CFLAGS) ],
+-   AC_MSG_ERROR(Cannot find imlib2: Is imlib2-config in the path?) )
+- 
+--dnl the above doesn't work for some reason :/
+--IMLIB_LIBS=`imlib2-config --libs`
+--IMLIB_CFLAGS=`imlib2-config --cflags`
+--AC_SUBST(IMLIB_LIBS)
+--AC_SUBST(IMLIB_CFLAGS)
+--
+- LIBS="$LIBS -lm"
+- CFLAGS="$CFLAGS -Wall"
+- 
+-@@ -45,7 +39,7 @@ $PACKAGE $VERSION
+- Configuration:
+- --------------
+- 
+--Imlib2 libs:	$IMLIB_LIBS
+--Imlib2 cflags:  $IMLIB_CFLAGS
+-+Imlib2 libs:	$IMLIB2_LIBS
+-+Imlib2 cflags:  $IMLIB2_CFLAGS
+- CFLAGS:			$CFLAGS
+- "
+-diff --git a/giblib-config.in b/giblib-config.in
+-index f3a7db6..cef1620 100644
+---- a/giblib-config.in
+-+++ b/giblib-config.in
+-@@ -42,11 +42,11 @@ while test $# -gt 0; do
+-       if test @includedir@ != /usr/include ; then
+-         includes=-I@includedir@
+-       fi
+--      echo $includes -I$prefix/include/giblib @IMLIB_CFLAGS@
+-+      echo $includes -I$prefix/include/giblib @IMLIB2_CFLAGS@
+-       ;;
+-     --libs)
+-       libdirs=-L@libdir@
+--      echo $libdirs -lgiblib @LDFLAGS@ @IMLIB_LIBS@
+-+      echo $libdirs -lgiblib @LDFLAGS@ @IMLIB2_LIBS@
+-       ;;
+-     *)
+-       echo "${usage}" 1>&2
+-diff --git a/giblib.pc.in b/giblib.pc.in
+-index df520ae..783e6e1 100644
+---- a/giblib.pc.in
+-+++ b/giblib.pc.in
+-@@ -6,6 +6,6 @@ includedir=@includedir@
+- Name: giblib
+- Description: wrapper library for imlib2, and other stuff
+- Version: @VERSION@
+--Libs: -L${libdir} -lgiblib @LDFLAGS@ @IMLIB_LIBS@
+--Cflags: -I${includedir} -I${includedir}/giblib @IMLIB_CFLAGS@
+-+Libs: -L${libdir} -lgiblib @LDFLAGS@ @IMLIB2_LIBS@
+-+Cflags: -I${includedir} -I${includedir}/giblib @IMLIB2_CFLAGS@
+- 
+-diff --git a/giblib/Makefile.am b/giblib/Makefile.am
+-index d1edc09..49d8ac4 100644
+---- a/giblib/Makefile.am
+-+++ b/giblib/Makefile.am
+-@@ -3,7 +3,7 @@ MAINTAINERCLEANFILES = Makefile.in
+- 
+- INCLUDES = \
+- -I. -I$(top_srcdir) \
+---DPREFIX=\""$(prefix)"\" @IMLIB_CFLAGS@
+-+-DPREFIX=\""$(prefix)"\" @IMLIB2_CFLAGS@
+- 
+- lib_LTLIBRARIES = libgiblib.la
+- 
+-@@ -24,7 +24,7 @@ libgiblib_la_SOURCES = \
+-     gib_utils.c gib_utils.h \
+- 	gib_queue.c gib_queue.h
+- 
+--libgiblib_la_LIBADD = @IMLIB_LIBS@
+-+libgiblib_la_LIBADD = @IMLIB2_LIBS@
+- libgiblib_la_DEPENDENCIES = giblib_config.h
+- libgiblib_la_LDFLAGS = -version-info 1:6:0
+- 
+diff --git a/package/giblib/Config.in b/package/giblib/Config.in
+deleted file mode 100644
+index f50271ac53..0000000000
+--- a/package/giblib/Config.in
++++ /dev/null
+@@ -1,13 +0,0 @@
+-config BR2_PACKAGE_GIBLIB
+-	bool "giblib"
+-	depends on BR2_PACKAGE_XORG7
+-	depends on !BR2_STATIC_LIBS
+-	select BR2_PACKAGE_IMLIB2
+-	select BR2_PACKAGE_IMLIB2_X
+-	help
+-	  Giblib is a simple library which wraps imlib2.
+-
+-	  http://linuxbrit.co.uk/giblib/
+-
+-comment "giblib support needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
+diff --git a/package/giblib/giblib.hash b/package/giblib/giblib.hash
+deleted file mode 100644
+index 0c83a55457..0000000000
+--- a/package/giblib/giblib.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  176611c4d88d742ea4013991ad54c2f9d2feefbc97a28434c0f48922ebaa8bac  giblib-1.2.4.tar.gz
+-sha256  8601e2dacede853fe325f7fd3a11f93b1753d576db60426f1b0ff4e68f41ff07  COPYING
+diff --git a/package/giblib/giblib.mk b/package/giblib/giblib.mk
+deleted file mode 100644
+index b0a962001d..0000000000
+--- a/package/giblib/giblib.mk
++++ /dev/null
+@@ -1,19 +0,0 @@
+-################################################################################
+-#
+-# giblib
+-#
+-################################################################################
+-
+-GIBLIB_VERSION = 1.2.4
+-GIBLIB_SITE = http://linuxbrit.co.uk/downloads
+-GIBLIB_INSTALL_STAGING = YES
+-GIBLIB_DEPENDENCIES = imlib2
+-GIBLIB_AUTORECONF = YES
+-GIBLIB_CONF_OPTS = \
+-	--with-imlib2-prefix=$(STAGING_DIR)/usr \
+-	--with-imlib2-exec-prefix=$(STAGING_DIR)/usr
+-GIBLIB_CONFIG_SCRIPTS = giblib-config
+-GIBLIB_LICENSE = MIT
+-GIBLIB_LICENSE_FILES = COPYING
+-
+-$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
