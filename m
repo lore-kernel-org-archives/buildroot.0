@@ -1,99 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 304BAE7717F
-	for <buildroot@archiver.kernel.org>; Tue, 10 Dec 2024 16:23:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7FE5E77182
+	for <buildroot@archiver.kernel.org>; Tue, 10 Dec 2024 16:23:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CED9E403B5;
-	Tue, 10 Dec 2024 16:23:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5DE2380F43;
+	Tue, 10 Dec 2024 16:23:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lt8XN7wY7hPj; Tue, 10 Dec 2024 16:23:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HnqgXEGaarxe; Tue, 10 Dec 2024 16:23:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B552B403B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47ED680F5D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B552B403B9;
-	Tue, 10 Dec 2024 16:23:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D4D6ED2
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 16:23:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47ED680F5D;
+	Tue, 10 Dec 2024 16:23:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13822ED2
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 16:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4DAAE403B9
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 16:23:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 01D21403B9
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 16:23:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hcQ8QIE5GT3c for <buildroot@buildroot.org>;
- Tue, 10 Dec 2024 16:23:19 +0000 (UTC)
+ id XSgHRSY34iBP for <buildroot@buildroot.org>;
+ Tue, 10 Dec 2024 16:23:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D6485403B5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6485403B5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5E3AC403B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E3AC403B5
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D6485403B5
- for <buildroot@buildroot.org>; Tue, 10 Dec 2024 16:23:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5E3AC403B5
+ for <buildroot@buildroot.org>; Tue, 10 Dec 2024 16:23:20 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.124.199]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MXGvG-1t7Cok2rVu-00Xtd4; Tue, 10
- Dec 2024 17:23:08 +0100
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MbRfl-1tsRxD0OoD-00cgkX; Tue, 10
+ Dec 2024 17:23:06 +0100
 To: buildroot@buildroot.org
 Cc: Fiona Klute <fiona.klute@gmx.de>, Grzegorz Blach <grzegorz@blach.pl>,
  Marcin Bis <marcin@bis.org.pl>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Dec 2024 17:22:42 +0100
-Message-ID: <20241210162243.1541113-4-fiona.klute@gmx.de>
+Date: Tue, 10 Dec 2024 17:22:41 +0100
+Message-ID: <20241210162243.1541113-3-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241210162243.1541113-1-fiona.klute@gmx.de>
 References: <20241210162243.1541113-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:hVmECmR1OGofmFYllmIGXDsASLLJ/Q2fEBAMIXPqhhDh5qnfnnY
- jbCBP7YpJjsavvGEVXjgXeswxJcM6SbZOqK0YqHdRBCX3jvL101vQ+ZRZZjCveeCTLQ+RqG
- Oa/ywleG0Oamh72ZW2kP4+aDefyRPfkmBX4UyuXHp0AKyXx/xusbEa8nNwTyXTaprLU+ihL
- haiX4z++88e+8iXkveiLA==
-UI-OutboundReport: notjunk:1;M01:P0:wi5M/S+wj1k=;BPKD9qVJYwA8g0isM45iZTOrRkr
- ocJA273KSpXwg14GxGdcIb6/QH2IfzZsEPMbiJYdH0APV9HBBQXgSfuPMGKuIi8zRWNoU98SA
- zQKYl3fncWhStJvs5T2LprJtgERe19RXTuiL09QSSaW/2yxjVbcx7wVtNjd/JEjQREXFfDw7L
- h17ZtdAupa8cjVSM8/o0tmphfFqYqjomuYwZ7+sgLwldotdcg3K82yHdxZ3uzlteVyHh7EOve
- xp3yUctGnlk9VNIlu4OE00D/qbUIW3Y+8kcfFOLx7XAM1PXf5ZfGb1QF41sFCuhiP8xjip8iP
- ldKLxPuHe0f8+toRGIaQMfELsEnmm7XCbJ3Lh1woU5XFVMTndeDqyMdBqVFzI440wh8AgZ+I6
- FaaP+Dc6Bfa/OEtp9WqR6fTdYOoVm/InhnCdtTSBVyUoPkcASRXNOJXRD778dfyBzVdFTrl6e
- fC1p2lQtU2V+G96T/SAg9sFIOJRrMK7tOWCBngQzOH/K067ngqtlKod+gvIdMt4v1Sa4/CoAy
- rib2B32sA0RCNxLxzZOaMmfYWfDqe8knSguk4EiqYMrKJCIDVgVgNDq7twZIpJO/sI00/a11t
- Opcb9O17U/1AqGEtqy7f0m5SCYASpFmMnHsOQdzTad9WfYK9oBQe0hElUO6b1vueYMkgpPb5e
- AHX9O6XJ5tFdzpj0d/hzGJUpivvFBztv/hfnvGVRuqeVsJwXg549DJLf+SxrdjKyTA4MkwwIv
- VyW94VumefyTp/OZhxuGDUQWPakyk0ITAWI8+69vUhOnhRPqo7oC9Dk8enCkSZkqPIqj8qq4K
- FuETGo3XtRT4u8GZ1NLSqhVVyOlthA7hsJ0X9qro+ztNAbe4z/Yv96LaXfYSJo7jLuNAkK4nS
- czT7MW15an7unF3Wpb1R+M//9zk92+VdzMd5C++ALChg5fLqi91xFbZ1nFjz+dO9/5B4HSXTF
- 6/ZurDd83wYKuvttDDpNsDueCFY4OUsUn8RdKPcSS6NXbzodrWvRUg3v/vKGSIkAsAkqxSvuR
- 2r3l/K1wkAiKYlJGefPzh9urQzwazivEWNLtVmlHaGco2HgPUN72mrn6MXL/tOVfYdgIrjJNI
- +O8rqLEBgAWfeH8HzWGIm8IzaqiMow
+X-Provags-ID: V03:K1:/0/MMVUlu2wESktdIYcQiwYPZpu1V0BqGGxgSlZIEmEdxm7dFDL
+ mYtqejQrobXtMdgkej7j1oXwXLZMkxolprxSm3pARRwPsRpUJ0PQYrVBzHL8Qb2fVcvhVwh
+ GtHaiY0xNVh9K/BAdQkSARJB7tvUK0h3b1aFzvUsu0Uh3JPAnugblLpYyioRyvVBAUxC8gb
+ 228vnEZhD2g/20EZYlDxQ==
+UI-OutboundReport: notjunk:1;M01:P0:uxrkyuYq54s=;x4xZPA/k+Q4ijZ/LX+H7oxK/1pd
+ PS3ctm7aywvd7UTnZrZoXD4F8XYqieI2QFWyanzuyA9KU3HhAju0Hxmx7e+HH5Xzrhl/KoBf8
+ E0BNhM9rCcPknNXdCbzpoFdbWbRxyMnKD/wKap3g8iQVg7yoRanDs4HNeHzXwdnD48xX4JH5t
+ Qr3mxyT3NXhxZUSVQyyEQn5U2jrFTiXCWJ8zCON3wMOUZus6KkbhTOUmzockTiZTvBNSl6Lrw
+ AZHi/bjzgruVE/0i5GpkX0J9HuKzOKHsvmly0jsfhDQjzXZZXRm3LhwBp8/blBIFEfyZyFE2a
+ Rj4nr4TbAUsWwCE5+Q+xee4k9ckW2gd0m3NN8+t1Fw7irPEhvSqAoNsseyn6kslRlDoUAV8Dn
+ 09zbxqIXjDKdYqEisW1m/TaHKcF2Ke6E1oHe9eHrE92w8LbaRl1K0GVnXewzXOqd4eMxBubYR
+ YhcHVvzIHXHaIkDSR797PmqbjfROLtZnknfygciPc2so2zQMm6+vAGGCjyCiJZzks/DH8nuOV
+ 38ovL/EUDcBuMzecKAN4E6Tq4xKu+51jM4JPBmndKCuax7P7HWjcEgSeqLEUw6We9flOOpnc/
+ vBV4UdPQvO7/2PmiaofAnrmOothgzESCVSQJPFS1Zpfl2rPSrwFNjduBfCjJ1ATaeCOrQbeCU
+ x/Jf9c6SySAX39elU58UBsHrXMdX1HdLE3W6BeBRfBVPkSlI1Bqi84HbPSKBrErFNUlBexrxM
+ xUYM2kqTazAHqzDkcWFB5lDAvGvoSanCylRiA2t8yFI1EgC+kK+9xnTpC5QiH0DMB7DNWMYB6
+ jpCETfLAwKgmVFsEY9znW0B/U3xaeoIWVRvvWmXPJjRIGUAakmfHagqwA1rc2VhXbDWW65jQN
+ E+yug8zbfdM3sM+xNeA64UstefsvhQLwCZfOFTXKnxYO2QSZuB3FT4V8D70+EWfn84+ft02zJ
+ bD8MyI9te0ZfVy3ua/TTRUnF7H5c9raZoONIEDe19fcCZNjSTx1Su6VrRe/yKi3v0Lpap2gRH
+ SftLvd2HZAkbJIa7IPBaVzt2mPZ5fUaNk3TX7418JXUyHv9V152UzsvEda6huTcTkcYEV/cjV
+ jQ0wkGIqVVK5R35eEmtTaVmNKE33Na
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1733847788; x=1734452588; i=fiona.klute@gmx.de;
- bh=VTOQQx/Hfq3+NDmh6xrSo83G668sHlhdxKUq66+aiyQ=;
+ s=s31663417; t=1733847786; x=1734452586; i=fiona.klute@gmx.de;
+ bh=Cn8Wt7g2jMXWm5wXd43H/a/nXO4vI43wku2z/V93aqE=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
  References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=oTfi9pc5XQRVdYN5S3GIFrBNEKdxAr8O6YOcaAwdZuhLzEBIE0+zZvwm9F0P4ahz
- aCCRdD6kwuwh89Fe2SRm2vbScZdL9pKIsBqckghSFWBfSGHaJexKt6RC1jlIMMKMA
- XuqYuCLlpPVcvi7nkhotpYGIQdEUlzawoQqgoBuAB6ad736uNzshy2iYqxr3/9WMv
- 69Naj1F8ywcY2NcknycxpRNv2L8SJYxR0HglM5z0piF4YjGswU0Ergu5A9602fyEV
- wic2yyLpI5aDABY0y4AjusbtgAgpCCG4FWaRyYA79T0O56sCmSpapyX52JtNuLNP5
- McDngXvWtX/LoqoHVA==
+ b=ZqImolNG+p3RaOWrHou7Jg6JuCW/9EAtAdsX4fyHHESX3vzsvmnoy0uwySt2VWfs
+ 4IE4FJb3SrJLZR+lmB5G79OVekwCj4fvNpFP9pB0acIjDbJTxglhxXHmMinqnlUla
+ YSIm90Bx+dgbiNqSogfqEO7ijLYNPiH7joWeFMyub46yzeVp/teIeQLPVyDxKciA8
+ JLB/dHGpXSSjQHGHqctgAiQnbyGlhRO3o2xstzdwM+Jgg4in5CgMHsQ3aNgOSVUTO
+ uzTCjXjVgup1OwyY+yUgPPcu3dvcoT0n60Eu4bmFZZgME6RZhH/zOmi9MAs5f9y0w
+ scpY/poWWoTPV/HErA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=oTfi9pc5
-Subject: [Buildroot] [PATCH v2 4/4] package/bluez5_utils: tidy up the init
- script
+ header.a=rsa-sha256 header.s=s31663417 header.b=ZqImolNG
+Subject: [Buildroot] [PATCH v2 3/4] package/bluez5_utils: install datafiles
+ with correct permissions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,65 +114,93 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-* use long-form options
-* consistently use start-stop-daemon with --exec
-* wait for process to be gone and delete PID file on stop
+The datafiles include the dbus policy, without which bluetoothd fails
+to start (unless it is provided by other means):
+
+# /usr/libexec/bluetooth/bluetoothd -n
+bluetoothd[1011]: Bluetooth daemon 5.78
+D-Bus setup failed: Connection ":1.7" is not allowed to own the service "org.bluez" due to security policies in the configuration file
+bluetoothd[1011]: src/main.c:main() Unable to get on D-Bus
+
+The installation issue 1a8676aa6e4b0e372a1a744eac6e53c90c03bf0e was
+meant to fix is the result of upstream incorrectly installing
+/etc/bluetooth with 0555 (strictly read-only) permissions.
+
+Fixes: 1a8676aa6e4b0e372a1a744eac6e53c90c03bf0e
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- package/bluez5_utils/S40bluetoothd | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+Changes v1 -> v2:
+* Path has been accepted upstream, update patch file and upstream URL.
 
-diff --git a/package/bluez5_utils/S40bluetoothd b/package/bluez5_utils/S40bluetoothd
-index ee4abe8b63..04f3f5ee94 100644
---- a/package/bluez5_utils/S40bluetoothd
-+++ b/package/bluez5_utils/S40bluetoothd
-@@ -11,7 +11,8 @@ BLUETOOTHD_ARGS="-n"
- start() {
- 	printf 'Starting %s: ' "$DAEMON"
- 	# shellcheck disable=SC2086 # we need the word splitting
--	start-stop-daemon -S -q -m -b -p "$PIDFILE" -x "/usr/libexec/bluetooth/$DAEMON" \
-+	start-stop-daemon --start --background --make-pidfile \
-+		--pidfile "$PIDFILE" --exec "/usr/libexec/bluetooth/$DAEMON" \
- 		-- $BLUETOOTHD_ARGS
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
-@@ -24,25 +25,32 @@ start() {
+ ...eave-config-files-writable-for-owner.patch | 35 +++++++++++++++++++
+ package/bluez5_utils/bluez5_utils.mk          |  4 ++-
+ 2 files changed, 38 insertions(+), 1 deletion(-)
+ create mode 100644 package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch
+
+diff --git a/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch b/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch
+new file mode 100644
+index 0000000000..09ebe5edf1
+--- /dev/null
++++ b/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch
+@@ -0,0 +1,35 @@
++From b1fd409960001a77cda2a09ecc00147ebd9c3667 Mon Sep 17 00:00:00 2001
++From: Fiona Klute <fiona.klute@gmx.de>
++Date: Mon, 9 Dec 2024 16:40:43 +0100
++Subject: [PATCH BlueZ] build: Leave config files writable for owner
++
++This is needed for builds running as non-root users, so the build
++process and any distribution tools can create/move/delete files in the
++config directory without adjusting permissions separately. Limiting
++writes from the running service needs to be done in the systemd unit
++(already the case) or init script.
++
++See also: https://lore.kernel.org/linux-bluetooth/4d1206df-598b-4a68-8655-74981b62ecca@gmx.de/T/
++Reviewed-by: Bastien Nocera <hadess@hadess.net>
++Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=b1fd409960001a77cda2a09ecc00147ebd9c3667
++Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
++---
++ Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 297d0774c..29018a91c 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -32,7 +32,7 @@ confdir = $(sysconfdir)/bluetooth
++ statedir = $(localstatedir)/lib/bluetooth
++ 
++ bluetoothd-fix-permissions:
++-	install -dm555 $(DESTDIR)$(confdir)
+++	install -dm755 $(DESTDIR)$(confdir)
++ 	install -dm700 $(DESTDIR)$(statedir)
++ 
++ if DATAFILES
++-- 
++2.45.2
++
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 7725fb94bf..e3b47e1e80 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -13,6 +13,9 @@ BLUEZ5_UTILS_LICENSE = GPL-2.0+, LGPL-2.1+
+ BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
+ BLUEZ5_UTILS_CPE_ID_VENDOR = bluez
+ BLUEZ5_UTILS_CPE_ID_PRODUCT = bluez
++# required because 0002-Leave-config-files-writable-for-owner.patch
++# modifies Makefile.am
++BLUEZ5_UTILS_AUTORECONF = YES
  
- stop() {
- 	printf 'Stopping %s: ' "$DAEMON"
--	start-stop-daemon -K -q -p "$PIDFILE"
-+	start-stop-daemon --stop --pidfile "$PIDFILE" \
-+		--exec "/usr/libexec/bluetooth/$DAEMON"
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
- 	else
- 		echo "FAIL"
-+		return "$status"
- 	fi
-+	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
-+		--exec "/usr/libexec/bluetooth/$DAEMON"; do
-+		sleep 0.1
-+	done
-+	rm -f "$PIDFILE"
- 	return "$status"
- }
- 
- restart() {
- 	stop
--	sleep 1
- 	start
- }
- 
- reload() {
- 	printf 'Reloading %s: ' "$DAEMON"
--	start-stop-daemon -K -s HUP -q -p "$PIDFILE"
-+	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
-+		--exec "/usr/libexec/bluetooth/$DAEMON"
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
+ BLUEZ5_UTILS_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_BLUEZ5_UTILS_HEADERS),bluez5_utils-headers) \
+@@ -22,7 +25,6 @@ BLUEZ5_UTILS_DEPENDENCIES = \
+ BLUEZ5_UTILS_CONF_OPTS = \
+ 	--enable-library \
+ 	--disable-cups \
+-	--disable-datafiles \
+ 	--disable-manpages \
+ 	--disable-asan \
+ 	--disable-lsan \
 -- 
 2.45.2
 
