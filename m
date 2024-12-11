@@ -4,56 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CD7EE77180
-	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 12:46:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCF40E7717D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 13:24:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3144160A7B;
-	Wed, 11 Dec 2024 12:46:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77C0B60A64;
+	Wed, 11 Dec 2024 13:24:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Aamk75SFPxxe; Wed, 11 Dec 2024 12:46:55 +0000 (UTC)
+ id p07K8MgvYlS1; Wed, 11 Dec 2024 13:24:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4887660BC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A372D60AFA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4887660BC5;
-	Wed, 11 Dec 2024 12:46:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5FD2F6F
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 12:46:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A372D60AFA;
+	Wed, 11 Dec 2024 13:24:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DEBF3962
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 13:24:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A6C260BD0
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 12:46:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D9F5F80C4B
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 13:24:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yWyCbu9inrqY for <buildroot@buildroot.org>;
- Wed, 11 Dec 2024 12:46:52 +0000 (UTC)
-X-Greylist: delayed 397 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 11 Dec 2024 12:46:51 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 30ACC60BD2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30ACC60BD2
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.140.110.172;
- helo=foss.arm.com; envelope-from=vincent.stehle@arm.com; receiver=<UNKNOWN> 
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
- by smtp3.osuosl.org (Postfix) with ESMTP id 30ACC60BD2
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 12:46:51 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4F933169E;
- Wed, 11 Dec 2024 04:40:41 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.57.2.4])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A3F1B3F5A1;
- Wed, 11 Dec 2024 04:40:12 -0800 (PST)
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
-To: buildroot@buildroot.org
-Date: Wed, 11 Dec 2024 13:40:08 +0100
-Message-ID: <20241211124009.2234768-1-vincent.stehle@arm.com>
-X-Mailer: git-send-email 2.45.2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SCEwZw0CozLx for <buildroot@buildroot.org>;
+ Wed, 11 Dec 2024 13:24:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::c2f; helo=mail-oo1-xc2f.google.com;
+ envelope-from=andreynech@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 51BE880B2A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51BE880B2A
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com
+ [IPv6:2607:f8b0:4864:20::c2f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 51BE880B2A
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 13:24:36 +0000 (UTC)
+Received: by mail-oo1-xc2f.google.com with SMTP id
+ 006d021491bc7-5f29db2614eso345039eaf.0
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 05:24:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1733923475; x=1734528275;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=SeZ0yQOrbvtk6snrdEej4pWo0wosYvxlgNCV7Ekpx50=;
+ b=YA24ZsD2NDSL/IBC79M1V6NAXevXytaHef4tVrD9ypgH4cBnIw2lWRHvOzlYiIKN+J
+ RIn/Xs8mOi7YQnbg6hMMRnjynpAG7RCTvXTYO0Q3n0xZfiOUw+GSKakbXc1LHhAh7p6J
+ vjEWsk3Giz8siSS1MNo4UX/HwGV+htBMIYRzSZsmHwfc79EEQmBuMthJSjLSpq4swIxR
+ 3RmZNd4rrpyID0fZrXp5WlN9HJhFzEjaf3zi7ZA+Qq44snT28V3ofApYrxkeSn7694AH
+ 6o/lw9XrN1TUyVOaxBZTo0lD1VqN0Res0Q0H7u+buCqx/SEzCdm4O9nmT+Tuhlh7uDkb
+ ZYog==
+X-Gm-Message-State: AOJu0YwnPvb357RPefk/0KAt/8AFUKCvD/nd5xeudThVuiCMNzYJQ/KK
+ xhJtTqZc0cqBDbNYNO8dPuZD1ztPI7N/j9G5R46f2gq6xE17LeX0bKfjENkI/cgy7akL4ItIRNv
+ TBUxoTq9yekH5oXGG/M1bB2Tiu4gW8A==
+X-Gm-Gg: ASbGncuRS97oTuS4BEPJSZGoW3/ldKrWvHVmhS8iwA81HlexEu9tITcUwpALra9BgKG
+ D6qbPV5oh5X+4i4t51vnNzhAZ1C55jLSZtV8=
+X-Google-Smtp-Source: AGHT+IGH1Zq7Z3m+WZ6OHXBjVkQ45NvipWLhXg3tVPMEAh7mDoU8xPd/IdOtJ0/Zzrp2OR7i0qj4JgYMVpEAcotx4os=
+X-Received: by 2002:a05:6820:164:b0:5f2:dcb6:74f8 with SMTP id
+ 006d021491bc7-5f2dcb676d9mr1165579eaf.0.1733923475025; Wed, 11 Dec 2024
+ 05:24:35 -0800 (PST)
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+From: Andrey Nechypurenko <andreynech@gmail.com>
+Date: Wed, 11 Dec 2024 14:24:24 +0100
+Message-ID: <CAOiXNkBXaWBGL7D2FAbs+HQ-CQvF6Gt3Xw3s3Zr8T8Br5AvoBA@mail.gmail.com>
+To: buildroot <buildroot@buildroot.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1733923475; x=1734528275; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=SeZ0yQOrbvtk6snrdEej4pWo0wosYvxlgNCV7Ekpx50=;
+ b=aNP4E+5koJz6SIDymE3xRPjm7HUseb0gXpDWc00/RU/Z7T7QnmAaORHZOjg8A8H1PV
+ wWJmFqUuDIF2cZ3NZEZ3fXTtWANJGyq6vKPjjGGa2fSQnz+xuZczB2jX7B7pmqAM64W/
+ bVmddlA6GqVj/bbtOGD4vLWk/AFSlsXrif8IDhaUkQCYkz5A+qKBNatLduZ58EM9OAoH
+ c6muGvlark0JGtWb7F3rEo4JTypQX254Vm0pE/zacsTUhzO1eo53/UJpSsEmcDO68531
+ 1YCzmgM0vKZzdOw/mAonMySc81qGSq+vV8C6pvh25IuYr+fpsRexn71IQyuHVe9Ow4LU
+ s8Yg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=arm.com
-Subject: [Buildroot] [PATCH] configs/aarch64_efi: bump Linux to 6.11.11
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=aNP4E+5k
+Subject: [Buildroot] Problem compiling grpc package with BR 2024.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,47 +95,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QnVtcCBMaW51eCBrZXJuZWwgdmVyc2lvbiB0byA2LjExLjExIGFuZCB1cGRhdGUgdGhlIGhhc2gg
-YWNjb3JkaW5nbHkuCgpTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3Rl
-aGxlQGFybS5jb20+CkNjOiBEaWNrIE9sc3NvbiA8aGlAc2VuemlsbGEuaW8+Ci0tLQoKSGksCgpU
-aGlzIGhhcyBiZWVuIHRlc3RlZCBvbiB0aGUgZm9sbG93aW5nIHN5c3RlbXM6CgogICAgICAgICAg
-IFFlbXUgRUJCUiAgRGV2aWNldHJlZQogICAgICAgICAgIFFlbXUgU0JTQSAgQUNQSQogICAgICAg
-ICAgIFJELU4yIEZWUCAgQUNQSQogICAgIGkuTVg4TSBQbHVzIEVWSyAgRGV2aWNldHJlZQogICBD
-b3JzdG9uZS0xMDAwIEZWUCAgRGV2aWNldHJlZQogIEZWUCBCYXNlIFJldkMgRUJCUiAgRGV2aWNl
-dHJlZQoKQmVzdCByZWdhcmRzLApWaW5jZW50LgoKIGJvYXJkL2FhcmNoNjQtZWZpL3BhdGNoZXMv
-bGludXgvbGludXguaGFzaCB8IDIgKy0KIGNvbmZpZ3MvYWFyY2g2NF9lZmlfZGVmY29uZmlnICAg
-ICAgICAgICAgICB8IDQgKystLQogMiBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDMg
-ZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvYm9hcmQvYWFyY2g2NC1lZmkvcGF0Y2hlcy9saW51
-eC9saW51eC5oYXNoIGIvYm9hcmQvYWFyY2g2NC1lZmkvcGF0Y2hlcy9saW51eC9saW51eC5oYXNo
-CmluZGV4IDIwOTQxYTI2OWIuLjUwOTgzZWI0MmIgMTAwNjQ0Ci0tLSBhL2JvYXJkL2FhcmNoNjQt
-ZWZpL3BhdGNoZXMvbGludXgvbGludXguaGFzaAorKysgYi9ib2FyZC9hYXJjaDY0LWVmaS9wYXRj
-aGVzL2xpbnV4L2xpbnV4Lmhhc2gKQEAgLTEsMiArMSwyIEBACiAjIEZyb20gaHR0cHM6Ly93d3cu
-a2VybmVsLm9yZy9wdWIvbGludXgva2VybmVsL3Y2Lngvc2hhMjU2c3Vtcy5hc2MKLXNoYTI1NiAg
-NTI0ODU4ODUyZjU4NjlhOWVmMTdkZThiMWU2ZTdmYWYwNWJjYjJjNDYyYmM5NmIzYzI0ZGJmODJl
-ZGUzNzNjZiAgbGludXgtNi4xMC4xMi50YXIueHoKK3NoYTI1NiAgNjIxNDhlN2UxN2Y1NGM0YTVh
-YjVlNzVhZDQ4ODI2ODJjNTRiZWU4MTg5NDhiZTYxYTU5NjMyMzRmYzA4NDlmYyAgbGludXgtNi4x
-MS4xMS50YXIueHoKZGlmZiAtLWdpdCBhL2NvbmZpZ3MvYWFyY2g2NF9lZmlfZGVmY29uZmlnIGIv
-Y29uZmlncy9hYXJjaDY0X2VmaV9kZWZjb25maWcKaW5kZXggOWYyODRmZjc0Yi4uM2FhNjQ5Y2Y5
-YyAxMDA2NDQKLS0tIGEvY29uZmlncy9hYXJjaDY0X2VmaV9kZWZjb25maWcKKysrIGIvY29uZmln
-cy9hYXJjaDY0X2VmaV9kZWZjb25maWcKQEAgLTEsNSArMSw1IEBACiBCUjJfYWFyY2g2ND15Ci1C
-UjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTA9eQorQlIyX1BBQ0tBR0Vf
-SE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzExPXkKIEJSMl9HTE9CQUxfUEFUQ0hfRElSPSJi
-b2FyZC9hYXJjaDY0LWVmaS9wYXRjaGVzIgogQlIyX0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hF
-Uz15CiBCUjJfUk9PVEZTX0RFVklDRV9DUkVBVElPTl9EWU5BTUlDX0VVREVWPXkKQEAgLTcsNyAr
-Nyw3IEBAIEJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL2FhcmNoNjQtZWZpL3Bv
-c3QtaW1hZ2Uuc2ggc3VwcG9ydC9zY3JpcHRzL2dlCiBCUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FS
-R1M9Ii1jIGJvYXJkL2FhcmNoNjQtZWZpL2dlbmltYWdlLWVmaS5jZmciCiBCUjJfTElOVVhfS0VS
-TkVMPXkKIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQotQlIyX0xJTlVYX0tFUk5F
-TF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xMC4xMiIKK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9N
-X1ZFUlNJT05fVkFMVUU9IjYuMTEuMTEiCiBCUjJfTElOVVhfS0VSTkVMX1VTRV9BUkNIX0RFRkFV
-TFRfQ09ORklHPXkKIEJSMl9MSU5VWF9LRVJORUxfTkVFRFNfSE9TVF9PUEVOU1NMPXkKIEJSMl9M
-SU5VWF9LRVJORUxfTkVFRFNfSE9TVF9QWVRIT04zPXkKLS0gCjIuNDUuMgoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hi Buildrooters,
+
+I am trying to move our project from the older Buildroot version to
+2024.11 and facing a problem compiling the grpc package. As far as I
+can tell, it is caused by incompatibility with the version of Abseil
+library (missing absl::StrXXX functions, etc.).
+
+It looks like 2024.08 does not have this problem. So my question is if
+someone else is facing this issue and if there is a solution for it?
+
+Thank you,
+Andrey.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
