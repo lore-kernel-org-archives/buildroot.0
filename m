@@ -1,73 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43D39E7717D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 19:28:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F55CE7717D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 19:29:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0060881FBA;
-	Wed, 11 Dec 2024 19:28:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3362061145;
+	Wed, 11 Dec 2024 19:29:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xBtOjxQ3mL3v; Wed, 11 Dec 2024 19:28:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SqFlrzY3mLPF; Wed, 11 Dec 2024 19:29:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1859E81FBE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40AC561148
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1859E81FBE;
-	Wed, 11 Dec 2024 19:28:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A0918962
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:28:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40AC561148;
+	Wed, 11 Dec 2024 19:29:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 731AAED7
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:29:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8ADF742F61
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:28:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 53F1140B35
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:29:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kNSJzzbelwhA for <buildroot@buildroot.org>;
- Wed, 11 Dec 2024 19:28:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ovi3iEeZoYiC for <buildroot@buildroot.org>;
+ Wed, 11 Dec 2024 19:29:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 35C6240104
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35C6240104
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 13B804093A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13B804093A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 35C6240104
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:28:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 13B804093A
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:29:14 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b472.dip0.t-ipconnect.de [84.161.180.114])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 5BAA5A4C2545
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 20:28:34 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37262)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 2D45FA4C2545
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 20:29:13 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37222)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1tLSNt-0000000050r-2oz8
- for buildroot@buildroot.org; Wed, 11 Dec 2024 19:28:34 +0000
+ (envelope-from <bernd@kuhls.net>) id 1tLSOW-0000000056t-29VA
+ for buildroot@buildroot.org; Wed, 11 Dec 2024 19:29:12 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 11 Dec 2024 20:28:33 +0100
-Message-Id: <20241211192833.1661364-1-bernd@kuhls.net>
+Date: Wed, 11 Dec 2024 20:29:12 +0100
+Message-Id: <20241211192912.1671782-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202412041019; t=1733945314;
- bh=7+0tAwuolXHX9bHQ+VzNNbxWTGC8LlXu//eY5gpmXN8=;
+ s=kas202412041019; t=1733945353;
+ bh=9F5IM9P4uTxFJATF5kw+qzQ1tFbnQR/Tplgx5FkiYcU=;
  h=From:To:Subject:Date:From;
- b=dweUhhgqg7igchqiCFzOaANFx5jWD4l1PROmMiqPa7PNDu/sHzdk15ndNI5Wv/vQz
- nSiLG1HK1PpeoQxuzBW825Aken+2xuAhuDmX/lTkzTpq3yj9pt3vGeC4UGWF9fQWwC
- pn1cPAaZ2+5aj8mlZjnlxNrpdO51jWGr/IQw3pTiBqHlQzHlQsMMYYmaHyM+WCmlwz
- xuTZ080hbsvGKOZwtneWgbvot4mY7FGxvrICPOc/VY2oVsA9uOgwjRm6O7whaVk+xT
- 3i1Tntk1xkWiEdBhmvlwrawjuRIvXkiD6wvoIGiRD9hnppJo77iumUiueXQ8gIiR8L
- oiCNNdqpgeNpA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=mn2/J/e7EpRegpCptpp0/OVusIgAslEaJHEEURjatAIDIXpje+JC2J44bIUOVvxxf
+ 2G7gPKWY/u36ozEWXoOdlw+gEbrYsqalga4pmw1SHrBJaJJ+DmXfNgjKNAABcSwnVK
+ zvxd/bynvVSOTjM1jMu6vC9UmNtphJBK1toUhphD1Afg9gvyVqmmnUdgeUvPZ8UAcv
+ IwIeURN6zhgXz3H5nYqqQIw2PwZ8xqGAy53CcQmV4OB7WHNIwlmL13nh3TTpqELNQP
+ mLvrYKgb8q9Sr7bGTjG7xidjREDAFmh+U4/XyiVeQnjZEKovM+0xfjHli//AdF2Ixr
+ sGh9asWq4B/0g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202412041019 header.b=dweUhhgq
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.20.6
+ header.a=rsa-sha256 header.s=kas202412041019 header.b=mn2/J/e7
+Subject: [Buildroot] [PATCH 1/1] package/wget: bump version to 1.25.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,38 +84,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://www.samba.org/samba/history/samba-4.20.6.html
+Release notes:
+https://lists.gnu.org/archive/html/bug-wget/2024-11/msg00002.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/wget/wget.hash | 8 ++++----
+ package/wget/wget.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 2c867a03bf..cf97560e54 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index a0561d8d0a..da71b49d09 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.gnu.org/archive/html/bug-wget/2024-03/msg00008.html
+-sha1  01659f427c2e90c7c943805db69ea00f5da79b07  wget-1.24.5.tar.lz
++# From https://lists.gnu.org/archive/html/bug-wget/2024-11/msg00002.html
++sha1  ca79e61fbf1d32133f60ef7c7d476b250b6da423  wget-1.25.0.tar.lz
  # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.20.5.tar.asc
--sha256  0697a8a57ff8b268cc268d508ee4f9ec86fd82350e84eba47a709242b71f6962  samba-4.20.5.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.20.6.tar.asc
-+sha256  8fe37f9e7817b6583fa55a0a15568b8e6be8875513741312ef805484b102ccf7  samba-4.20.6.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 4cece4b477..e5b348a3b7 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+-# https://ftp.gnu.org/gnu/wget/wget-1.24.5.tar.lz.sig
++# https://ftp.gnu.org/gnu/wget/wget-1.25.0.tar.lz.sig
+ # with key 6B98F637D879C5236E277C5C64FF90AAE8C70AF9
+-sha256  57a107151e4ef94fdf94affecfac598963f372f13293ed9c74032105390b36ee  wget-1.24.5.tar.lz
++sha256  19225cc756b0a088fc81148dc6a40a0c8f329af7fd8483f1c7b2fe50f4e08a1f  wget-1.25.0.tar.lz
+ # Locally calculated
+ sha256  f7dc7522e7e1be9227f3dc8de8b39a4d1d2471968c893af15f00c1a2076a0eec  COPYING
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index d2a3a38e50..e3143647d7 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.20.5
-+SAMBA4_VERSION = 4.20.6
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-WGET_VERSION = 1.24.5
++WGET_VERSION = 1.25.0
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
 -- 
 2.39.5
 
