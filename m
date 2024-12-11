@@ -4,107 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11D64E7717D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 17:03:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C889AE77182
+	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 17:28:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B623B840EA;
-	Wed, 11 Dec 2024 17:03:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72CB980DBC;
+	Wed, 11 Dec 2024 17:28:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZCCPA7-4V0gV; Wed, 11 Dec 2024 17:03:57 +0000 (UTC)
+ id DAZcA2yQsldD; Wed, 11 Dec 2024 17:28:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6413840E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9492080DCC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6413840E2;
-	Wed, 11 Dec 2024 17:03:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 57879ED2
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:03:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9492080DCC;
+	Wed, 11 Dec 2024 17:28:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id F021D962
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:28:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4509C40728
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:03:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB05540519
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:28:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uMYH6S9NNPIh for <buildroot@buildroot.org>;
- Wed, 11 Dec 2024 17:03:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=148.163.156.1;
- helo=mx0a-001b2d01.pphosted.com; envelope-from=arbab@linux.ibm.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 63863406E9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63863406E9
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com
- [148.163.156.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 63863406E9
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:03:53 +0000 (UTC)
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
- by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BBCqAYK007279
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:03:52 GMT
-Received: from ppma13.dal12v.mail.ibm.com
- (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
- by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43cdv8xq82-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:03:52 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
- by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BBEFekb023047
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:03:51 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
- by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 43d2wk2cxc-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:03:51 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com
- [10.39.53.228])
- by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
- 4BBH3pqE25231910
- (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:03:51 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id EF3F958065
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:03:50 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id D98165804B
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:03:50 +0000 (GMT)
-Received: from arbab-laptop.localdomain (unknown [9.53.178.221])
- by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTPS
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:03:50 +0000 (GMT)
-Received: by arbab-laptop.localdomain (Postfix, from userid 152845)
- id 11C98175941; Wed, 11 Dec 2024 11:03:50 -0600 (CST)
-From: Reza Arbab <arbab@linux.ibm.com>
-To: buildroot@buildroot.org
-Date: Wed, 11 Dec 2024 11:03:41 -0600
-Message-ID: <20241211170341.450579-1-arbab@linux.ibm.com>
-X-Mailer: git-send-email 2.43.5
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1zHpTx4c93Rw for <buildroot@buildroot.org>;
+ Wed, 11 Dec 2024 17:28:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::a2f; helo=mail-vk1-xa2f.google.com;
+ envelope-from=tommyclee101908sun@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F2CA7403E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2CA7403E2
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com
+ [IPv6:2607:f8b0:4864:20::a2f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F2CA7403E2
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:28:02 +0000 (UTC)
+Received: by mail-vk1-xa2f.google.com with SMTP id
+ 71dfb90a1353d-51640f7bbd3so1218090e0c.2
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 09:28:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1733938081; x=1734542881;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=3QzdHbwJShskkuTW0TcWZXPqQX1asCIjYEmHpEu5x+M=;
+ b=eXXsGX3b5AcsVdVcVzvcs8jPN39bYdaPaV7uWz7jZyNnhS0sPN1VvhAW92VDW5cBce
+ a2WSgxkbSpAkznmVNdRoXKTrfUhj3QADx/qsK82L7c4ibJDs6Sjyg3Sq2M84Mo+f8qJf
+ xLKDvmR/xLMQI5QXmuTfJrUH8S+TkOMXq/x9mb4uS8zxe4SSLl6rCJkJVv0AVcaLRcXE
+ +pgFwmTlAfnDMA5s+E9cc+znujf8JcgRs9BCSWrOV4wuzb0AmRwZkWdtnyBElAWmw0SJ
+ b0UkLdNYd48yHV/WBKhE/FmdsrBiqwoOuBgyitiLESDYNoVxnZ496gRtrSA7X+P5chdP
+ Vx5A==
+X-Gm-Message-State: AOJu0YwNjMA9IWcED0F+ANyk0Z9pIaF1SN2i+JGQIEkzjwGK8flUgpHV
+ PL052UQmImHk+YTwtZAlB9tYeKY3VHv9mBl9cQO79vfyD31n2BXQIW+OzxCYkVabUeLZUeDu8M8
+ FUCPso4nDTYrTFUoTr8dTjIzwXzJQMaWw
+X-Gm-Gg: ASbGnctdoHNc9iYGt7EY/SvdqgtrPDNbOCFbEPtMyIC0m5vDr0uAfOEBA5gHhyrhz3p
+ gmrhCwsaR3BRTFUhU8ixSY+imhIlE9c63KeA3
+X-Google-Smtp-Source: AGHT+IFGbTivP7tEE2jpKOi9vGgl+OZoPDaLQ9pXznl7Ix9z1ArRxWCNXISu7xpded/zQEIhM4+hFNCVNKPuvyIdtUs=
+X-Received: by 2002:a05:6122:65a4:b0:518:8753:34a6 with SMTP id
+ 71dfb90a1353d-518a3c456d7mr3853999e0c.10.1733938081442; Wed, 11 Dec 2024
+ 09:28:01 -0800 (PST)
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: U2TAicKm2SsRG-rDPJIyOZqVAnShhnix
-X-Proofpoint-ORIG-GUID: U2TAicKm2SsRG-rDPJIyOZqVAnShhnix
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501
- impostorscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015 mlxscore=0
- malwarescore=0 adultscore=0 phishscore=0 suspectscore=0 mlxlogscore=727
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412110122
+From: Tommy Lee <tommyclee101908sun@gmail.com>
+Date: Wed, 11 Dec 2024 09:27:50 -0800
+Message-ID: <CAGJPcGYG2eOTcC8XeKmj30KcVc1PbpN7GpkmotJd-WZQkEG_8g@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ibm.com; h=
- content-transfer-encoding:date:from:message-id:mime-version
- :subject:to; s=pp1; bh=FajqBqwus3toIUQ3uiKtuHUD/ysgcg5w/ZvxI30z4
- m8=; b=fq8dnbyFmckpnE4X+5I9agsHC1+Oqtp213NMwWkMUgOgHjvG/fNgwVEb4
- yPj93DAyyQ5AP9C7+fuo3B8oXykbpcChd0eENL/GvRkACEtT+1I0ngtXZadbqzNX
- E8DnS8VvGWoHmTxpujDTWaZb82GVIAJ49rTpSGZOqTNWN6SBgAOxI7zToRGLdcrT
- /UVvv9nCTRPJsOyuAphGvLP7h/AhEnhcAJ1bTCRdlz/ZwVSUVYC1aBa3PABq78ks
- WlsvklgyqAt2uDtZ40nwOkSte+znSaxFdyFagqJZsl7zL/0Q6YlU7mb5bcfm+lJC
- r9SS5yv2imgORXCJjHtlSgOtPgWWg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=linux.ibm.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com
- header.a=rsa-sha256 header.s=pp1 header.b=fq8dnbyF
-Subject: [Buildroot] [PATCH] package/skeleton: create lib64 symlink on s390x
+ d=gmail.com; s=20230601; t=1733938081; x=1734542881; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=3QzdHbwJShskkuTW0TcWZXPqQX1asCIjYEmHpEu5x+M=;
+ b=FSE45Q5fA2JkxtZ5AcGrQpgqyPRQzkWKD0TqsiFtD36eypZvcs6st2SqFPZhItvN7s
+ DRbLkr/fPX3gqrhght5DslT88EjB05QkWbf9GmtXza+ncM2E01tLbdv0b1JP2ufdHveC
+ S+7L5vmOiUzCzPBE9RQf7LtDQkLfgSwQ4t8y/Q2pwWVe7GWdAxwvPYYBat/8sXsTayCB
+ iFWBjAv8C1Zn2FrNCC/KJShRSj6uDLNni8VLRn7ufs+j5zMoq7kjlkXiX5Nwc5kPH4Us
+ c7OYqwXA1zzQrXRe3v3L0VpV3FshXbJo+xLKTbQeSCh0aWg5rNGTbtCgdC9lvMDDlGo/
+ RHIA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=FSE45Q5f
+Subject: [Buildroot] The buildroot release which has the gdbserver
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,53 +96,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4114511782864382438=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Building on a s390x host, we currently end up with:
+--===============4114511782864382438==
+Content-Type: multipart/alternative; boundary="00000000000068330b062901ebaf"
 
-  output/host/lib
-  output/host/lib32 -> lib
-  output/host/lib64
+--00000000000068330b062901ebaf
+Content-Type: text/plain; charset="UTF-8"
 
-host-libopenssl installs to lib64, but since the kernel build doesn't
-explicitly search there, it breaks:
+Hi Buildroot,
+I am glad to be a new member on the Buildroot list.
+Please tell me whether I should send my buildroot technical issue to
+buildroot@buildroot.org.
+Thanks,
+Tommy
 
-  >>> linux 6.6.32 Building
-  [...]
-    HOSTCC  scripts/sign-file
-  /usr/bin/ld: cannot find -lcrypto: No such file or directory
-  collect2: error: ld returned 1 exit status
+--00000000000068330b062901ebaf
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fix this by creating a lib64 link instead of lib32, so we get:
+<div dir=3D"ltr"><div><div class=3D"gmail_default" style=3D""><span style=
+=3D"font-size:xx-large"></span>Hi Buildroot,</div><div class=3D"gmail_defau=
+lt" style=3D"">I am glad to be a new member on the Buildroot list.=C2=A0</d=
+iv><div class=3D"gmail_default" style=3D"">Please tell me whether I should=
+=C2=A0send my buildroot technical issue to=C2=A0</div><span style=3D"color:=
+rgba(0,0,0,0.87);font-family:Roboto,RobotoDraft,Helvetica,Arial,sans-serif;=
+background-color:rgb(248,250,253)">buildroot@buildroot.o<span class=3D"gmai=
+l_default" style=3D"">rg.</span></span></div><div><div dir=3D"ltr" class=3D=
+"gmail_signature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div>=
+<div dir=3D"ltr"><div>Thanks,</div><div>Tommy<br></div></div></div></div></=
+div></div></div>
 
-  output/host/lib
-  output/host/lib64 -> lib
+--00000000000068330b062901ebaf--
 
-Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
----
- package/skeleton/skeleton.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 1bb397119153..dc754f12448a 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -23,7 +23,7 @@ define HOST_SKELETON_INSTALL_CMDS
- 	$(Q)mkdir -p $(HOST_DIR)/lib
- 	$(Q)mkdir -p $(HOST_DIR)/include
- 	$(Q)case $(HOSTARCH) in \
--		(*64) ln -snf lib $(HOST_DIR)/lib64;; \
-+		(*64|s390x) ln -snf lib $(HOST_DIR)/lib64;; \
- 		(*)   ln -snf lib $(HOST_DIR)/lib32;; \
- 	esac
- endef
--- 
-2.47.1
+--===============4114511782864382438==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4114511782864382438==--
