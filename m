@@ -1,75 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32002E7717D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 19:12:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 600A0E7717D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 19:13:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D240C413EB;
-	Wed, 11 Dec 2024 19:12:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1980B80F12;
+	Wed, 11 Dec 2024 19:13:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WW4vZ7ImOm_i; Wed, 11 Dec 2024 19:12:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bpd8NpzkU7_j; Wed, 11 Dec 2024 19:13:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8EDA41480
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C32480F88
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8EDA41480;
-	Wed, 11 Dec 2024 19:12:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 17E89ED2
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:12:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C32480F88;
+	Wed, 11 Dec 2024 19:13:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8F5F9962
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:13:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ECED541C6F
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:12:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E20F41CA6
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:13:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sHWeTZo8p9TG for <buildroot@buildroot.org>;
- Wed, 11 Dec 2024 19:12:29 +0000 (UTC)
+ id BlELYPCgWgo1 for <buildroot@buildroot.org>;
+ Wed, 11 Dec 2024 19:13:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8755D4311B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8755D4311B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 407CC40184
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 407CC40184
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8755D4311B
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:12:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 407CC40184
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:13:34 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b472.dip0.t-ipconnect.de [84.161.180.114])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 2E2FCA4C2545;
- Wed, 11 Dec 2024 20:12:26 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:53574)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 51F41A4C2545;
+ Wed, 11 Dec 2024 20:13:32 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35714)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1tLS8H-000000002cB-2Abp;
- Wed, 11 Dec 2024 19:12:25 +0000
+ (envelope-from <bernd@kuhls.net>) id 1tLS9L-000000002mD-2Kkc;
+ Wed, 11 Dec 2024 19:13:31 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Wed, 11 Dec 2024 20:12:25 +0100
-Message-Id: <20241211191225.1349792-1-bernd@kuhls.net>
+Cc: Joachim Wiberg <troglobit@gmail.com>
+Date: Wed, 11 Dec 2024 20:13:31 +0100
+Message-Id: <20241211191331.1380127-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202412041019; t=1733944346;
- bh=RinBcYJu5fQaXJlr39QdAgFgytLlxWS+7bX1215xZq0=;
+ s=kas202412041019; t=1733944412;
+ bh=bA8KENJmJ06gPyZA0oswkV8oYwmxtDcrQDkAdzdLCnk=;
  h=From:To:Cc:Subject:Date:From;
- b=D17djx7huPnHm5SeTH0ZiHGyI0hIW7AslJzmFloraZ4DvWtymt5TLbdvwmGZAmu2R
- oyACj3S7lpcVoKM7D0+qNGvBIGQkZM+K4idjreyMKYKbhAl/CEU2+Yrb4JtB+UHq3p
- OoVyMSNBqyfvMoibLf6Cqw2EhFN7sMJESehU1g+jiyYnk5yOwO1nDSWz3H5KkDgXVn
- 2Lh04ChowUT6eo1DdAC80Ny3eoiWiXx9uTlKyIMYJaaj5Z5a600DJXMIFe9ao+yWhm
- xuZBRxgOzwhgbhqqohwoAo37VvYTlYQObdtarVSbnyANAriqoUOJCy56bq99+n3QLN
- xs4Nql6EBu0YA==
+ b=htT9a4ESaqROo9PdybX0imQQ0uWue4hQQe9vZtX7aCVfUaSEKG52JmONN61yEESBq
+ 7ejsVDMZHIvF4w92y0jhCnckqdysGNyIqt1xNStlk4HhE8ZObMiEppKnlTOSbWCNtC
+ kSYrXQ2PpCkci5/mT+oPDZ1OBxcgDfMDpHbGT3lwewpxBL5CW0NT1uLkKcZC+sBRkM
+ QaZCk6qDlZl0gKZ9tMqpxRcVD8jpGb1b6F1D3OYHIgv4v39WOJxZiJS1BexJdkD0OP
+ hSgF/6ttTFxuW7RKeUFaDcGOy27DhdP3z03XvMIAvvXd8v5kxKAeSFQj9J26WwuJ2R
+ eWMsyxGwEWJVw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202412041019 header.b=D17djx7h
-Subject: [Buildroot] [PATCH 1/1] package/libxml2: bump version to 2.13.5
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202412041019 header.b=htT9a4ES
+Subject: [Buildroot] [PATCH 1/1] package/mrouted: bump version to 4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,38 +86,39 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.5.news
+https://github.com/troglobit/mrouted/releases/tag/4.6
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libxml2/libxml2.hash | 4 ++--
- package/libxml2/libxml2.mk   | 2 +-
+ package/mrouted/mrouted.hash | 4 ++--
+ package/mrouted/mrouted.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index ed6c20e948..eb92ad4324 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.4.sha256sum
--sha256  65d042e1c8010243e617efb02afda20b85c2160acdbfbcb5b26b80cec6515650  libxml2-2.13.4.tar.xz
-+# From https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.5.sha256sum
-+sha256  74fc163217a3964257d3be39af943e08861263c4231f9ef5b496b6f6d4c7b2b6  libxml2-2.13.5.tar.xz
- # License files, locally calculated
- sha256  c99aae1afe013e50b8b3701e089222b351258043c3025b64053a233fd25b4be7  Copyright
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 8a5d703da6..a8cb86ab2f 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/mrouted/mrouted.hash b/package/mrouted/mrouted.hash
+index 7516a1329c..aabfd19f33 100644
+--- a/package/mrouted/mrouted.hash
++++ b/package/mrouted/mrouted.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/troglobit/mrouted/releases/
+-sha256  99e1a1ca45e4e6c05b3cf379fd59a239aeabd9512656114528ad5e172d3c8ba8  mrouted-4.5.tar.gz
++# From https://github.com/troglobit/mrouted/releases/download/4.6/mrouted-4.6.tar.gz.sha256
++sha256  49443c47b5b28a5ab65d796f3495d72a94c1c95e54333cb11fe04075006b576b  mrouted-4.6.tar.gz
+ 
+ # Locally calculated
+ sha256  834f45ed282fd010f354ecc0a50538af519a1cfcc4d2866de3be06982fa9ed29  LICENSE
+diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
+index 7b5f5039f6..077afac2b9 100644
+--- a/package/mrouted/mrouted.mk
++++ b/package/mrouted/mrouted.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBXML2_VERSION_MAJOR = 2.13
--LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).4
-+LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).5
- LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
- LIBXML2_SITE = \
- 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
+-MROUTED_VERSION = 4.5
++MROUTED_VERSION = 4.6
+ MROUTED_SITE = \
+ 	https://github.com/troglobit/mrouted/releases/download/$(MROUTED_VERSION)
+ MROUTED_DEPENDENCIES = host-bison
 -- 
 2.39.5
 
