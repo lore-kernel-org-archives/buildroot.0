@@ -1,76 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7830E77180
-	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 19:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF0D9E7717D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 19:28:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 87A586111B;
-	Wed, 11 Dec 2024 19:26:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A2531402DB;
+	Wed, 11 Dec 2024 19:28:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A7s55SF5JUAm; Wed, 11 Dec 2024 19:26:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 97yaLnBiLP55; Wed, 11 Dec 2024 19:28:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91B1B61114
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61AFF402C2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 91B1B61114;
-	Wed, 11 Dec 2024 19:26:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 75A50ED7
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:26:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61AFF402C2;
+	Wed, 11 Dec 2024 19:28:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0C522962
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:28:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5702561114
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:26:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DD05341CA6
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:28:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HMA1mnReVcWh for <buildroot@buildroot.org>;
- Wed, 11 Dec 2024 19:26:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8Ldc5yBaN5gp for <buildroot@buildroot.org>;
+ Wed, 11 Dec 2024 19:28:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8B9E66110C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B9E66110C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A6E0E40104
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6E0E40104
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8B9E66110C
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:26:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A6E0E40104
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 19:28:00 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b472.dip0.t-ipconnect.de [84.161.180.114])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 67F27A4C3C9F
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 20:26:06 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:40064)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B6DBFA4C2545;
+ Wed, 11 Dec 2024 20:27:58 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35838)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1tLSLV-000000004dq-2wR7
- for buildroot@buildroot.org; Wed, 11 Dec 2024 19:26:06 +0000
+ (envelope-from <bernd@kuhls.net>) id 1tLSNK-000000004vV-00BK;
+ Wed, 11 Dec 2024 19:27:58 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 11 Dec 2024 20:26:05 +0100
-Message-Id: <20241211192605.1631785-3-bernd@kuhls.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 11 Dec 2024 20:27:58 +0100
+Message-Id: <20241211192758.1653472-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241211192605.1631785-1-bernd@kuhls.net>
-References: <20241211192605.1631785-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +++++
+X-Spam: Yes
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202412041019; t=1733945166;
- bh=lrFuJr/c6mJQGtM7o4pdsqv/nhMvVvmGL9AWBbovycI=;
- h=From:To:Subject:Date:In-Reply-To:References:From;
- b=X4a8btmvE2124mW4wzjhPgV4bVCCHMMFpiCE9n4UzBTVSj4N4avFEw9LSItiXPRKV
- gFBZ5Q2S+Pc3+zQDiajiVk4/gDPoa4rd298ZoOYAn15qlWAKHRfNk36ZTq9UpTOv6c
- WwZ1sMtUaG+t1OeVWwOvKJG4Kavzbnn3IodT1C1kEbO8+mFTOrBnad140UyDW5HC8d
- Vfl9r5ZE/jo1hYBmdHXyXlQ07jThjQciJyIy1VGQ1KT4VOgUYlMJYRE0aK8MzoFumf
- /eczo/MIL2wwvpYTccF23nlhKJRFkuIjOFdEi1OPC0DhF8A0UTyJj+BPReNQ6M0n8Z
- hT5I/XRmB+wHA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=kas202412041019; t=1733945278;
+ bh=FwkdqS6IK4TQix6mwk8gNBsocI4GvWY7cGp7iyCNHNg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=aL9kInGah9o7hC7WGAHrKbkhl0kZnDLnDIddJWCC6w1Z1RwXdrR7fVIOXdlhLoiUX
+ RYFDmU9vK7a3rXAuE64U6jlcarFbCbk7j82wmhQGjiMURFr9CAGbNyA06uTTaiIuuP
+ s88BSBd7pajQ4//Kvlm3OpEFls499X/Ri3YH7Xi05jgqWNmSm8Z1mxiKMq03i47Azw
+ DsHPgxo4bR5QO67amGRf0fxc0RHorIbhy9Lgvqu4FsJ/+SseU/k6RLKn8sDRpJiJGb
+ mLDcXAF7ZsJ8lFtg1LJat5khcOcKJWNEZbJ0zsejRlXpsNusttZvXC0AkqFJIHS1rQ
+ 2lwhGNEFKFNUw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202412041019 header.b=X4a8btmv
-Subject: [Buildroot] [PATCH 3/3] package/intel-vpl-gpu-rt: bump version to
- 24.4.4
+ header.a=rsa-sha256 header.s=kas202412041019 header.b=aL9kInGa
+Subject: [Buildroot] [PATCH 1/1] package/cmake: bump version to 3.31.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,34 +86,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Release notes:
+https://cmake.org/cmake/help/v3.31/release/3.31.html
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash | 2 +-
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cmake/Config.in.host | 5 +++++
+ package/cmake/cmake.hash     | 4 ++--
+ package/cmake/cmake.mk       | 4 ++--
+ 3 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-index 381e8e6487..0f62867991 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ec11fbe64a84b15e98ef376a7e6de5fe15f5afda59711a7e1c145ee2268af41d  intel-vpl-gpu-rt-24.4.1.tar.gz
-+sha256  2ee3517e4015ab333230a6ef921159164c1dc912dcae412d2901308c53a53ab8  intel-vpl-gpu-rt-24.4.4.tar.gz
- sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-index 735bc910d0..5848efc131 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/cmake/Config.in.host b/package/cmake/Config.in.host
+index 389300f31f..b30ce03a1c 100644
+--- a/package/cmake/Config.in.host
++++ b/package/cmake/Config.in.host
+@@ -59,10 +59,15 @@ config BR2_HOST_CMAKE_AT_LEAST_3_30
+ 	bool
+ 	select BR2_HOST_CMAKE_AT_LEAST_3_29
+ 
++config BR2_HOST_CMAKE_AT_LEAST_3_31
++	bool
++	select BR2_HOST_CMAKE_AT_LEAST_3_30
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_HOST_CMAKE_AT_LEAST
+ 	string
++	default "3.31"	if BR2_HOST_CMAKE_AT_LEAST_3_31
+ 	default "3.30"	if BR2_HOST_CMAKE_AT_LEAST_3_30
+ 	default "3.29"	if BR2_HOST_CMAKE_AT_LEAST_3_29
+ 	default "3.28"	if BR2_HOST_CMAKE_AT_LEAST_3_28
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index f80b942103..f214c21925 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,5 +1,5 @@
+-# From https://cmake.org/files/v3.30/cmake-3.30.5-SHA-256.txt
+-sha256  9f55e1a40508f2f29b7e065fa08c29f82c402fa0402da839fffe64a25755a86d  cmake-3.30.5.tar.gz
++# From https://cmake.org/files/v3.31/cmake-3.31.1-SHA-256.txt
++sha256  c4fc2a9bd0cd5f899ccb2fb81ec422e175090bc0de5d90e906dd453b53065719  cmake-3.31.1.tar.gz
+ 
+ # Locally calculated
+ sha256  0676e30827684487aa0ea8f72f01e9460a6320fa34a2888df0ad1dd3e8a06eb8  Copyright.txt
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 0c5d46c23d..7fc1f0181d 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,8 +5,8 @@
  ################################################################################
  
--INTEL_VPL_GPU_RT_VERSION = 24.4.1
-+INTEL_VPL_GPU_RT_VERSION = 24.4.4
- INTEL_VPL_GPU_RT_SITE = $(call github,intel,vpl-gpu-rt,intel-onevpl-$(INTEL_VPL_GPU_RT_VERSION))
- INTEL_VPL_GPU_RT_LICENSE = MIT
- INTEL_VPL_GPU_RT_LICENSE_FILES = LICENSE
+ # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
+-CMAKE_VERSION_MAJOR = 3.30
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).5
++CMAKE_VERSION_MAJOR = 3.31
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3-Clause
+ CMAKE_LICENSE_FILES = Copyright.txt
 -- 
 2.39.5
 
