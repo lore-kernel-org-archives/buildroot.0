@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2492BC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:37:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75ADDC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:37:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E971B4F352;
-	Fri, 28 Feb 2025 16:37:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CD266FBE6;
+	Fri, 28 Feb 2025 16:37:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7XTmlKPtMX1X; Fri, 28 Feb 2025 16:37:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gb1QS5qCtqG6; Fri, 28 Feb 2025 16:37:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E6F04F353
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 225316FC12
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E6F04F353;
-	Fri, 28 Feb 2025 16:37:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 225316FC12;
+	Fri, 28 Feb 2025 16:37:51 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 063BF68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 234881DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 889A44198C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 97B7141A74
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9SV1DQSoF33t for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:41 +0000 (UTC)
+ id XyhQ05o-QkJc for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC575417FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3709C419E2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BC575417FC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3709C419E2
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8169839E7; Fri, 28 Feb 2025 16:29:37 +0000 (UTC)
+ id 31703844AB; Fri, 28 Feb 2025 16:29:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 11 Dec 2024 17:50:52 +0100
+Date: Wed, 11 Dec 2024 16:22:56 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9ccc0f5642cf173bcc8d51f778331acfea9dbde8
-X-Git-Newrev: ed9da089449c53519be02204f97c3452abba5cc3
+X-Git-Oldrev: 51858c4a34f73c52ac9ff36ba7facf8a8ab9b711
+X-Git-Newrev: 7cc2d8b183fdd3fd52454d916ea8eac6f1136925
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162937.B8169839E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- support/testing/infra/emulator.py: add qemu version in run log
+Message-Id: <20250228162937.31703844AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/cubieboard2: bump
+ Linux to 6.11.11 and U-Boot to 2024.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,77 +66,109 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed9da089449c53519be02204f97c3452abba5cc3
+commit: https://git.buildroot.net/buildroot/commit/?id=7cc2d8b183fdd3fd52454d916ea8eac6f1136925
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In some specific situations, there is subtle bugs which depends on a
-specific Qemu emulator version and the code it runs.
+The boot.vfat image size is not enough now. The new zImage file
+is over 10M, so it is expanded to 16M.
 
-For example, EDK2 on Aarch64 could work with specific versions of Qemu,
-EDK2 and ATF. See commit cc0823c2d "boot/edk2: bump to version
-edk2-stable202405" [1].
+This commit also adds the custom version package hashes, and
+the corresponding ".checkpackageignore" entry is also removed.
 
-Also, some Qemu bugs made the guest OS crash. See for example commit
-9534b9c00 "package/qemu: fix qemu 9.x issue for AArch32 Secure
-PL1&0" [2].
-
-Commit 0d4177598 "support/testing/infra/emulator.py: add build host
-dir to qemu search path" added the ability for a runtime test to
-select host-qemu in order to use it. It is also possible for a user
-to use the "utils/run-tests" script on its host system providing its
-own version of Qemu. The Buildroot CI can also use its Qemu version
-included in the reference Docker image.
-
-This means the Qemu emulator for running a runtime test can be from
-several sources:
-- Buildroot Docker reference image,
-- Buildroot host-qemu package version,
-- Developer host OS qemu version.
-
-Those versions can also change in time.
-
-In order to help debugging of those subtle emulator bugs, this commit
-adds a recording of the actual Qemu version used to run a test.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/cc0823c2d14321b91b94801834050331f5ea28e1
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/9534b9c00c23cfd69a4e122c26fca9d3da93d329
-[3] https://gitlab.com/buildroot.org/buildroot/-/commit/0d4177598ce7e73f2b97ac58c21fb177343643e3
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- support/testing/infra/emulator.py | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ .checkpackageignore                                            |  1 -
+ board/cubietech/cubieboard2/genimage.cfg                       |  2 +-
+ .../cubieboard2/patches/linux-headers/linux-headers.hash       |  1 +
+ board/cubietech/cubieboard2/patches/linux/linux.hash           |  2 ++
+ board/cubietech/cubieboard2/patches/uboot/uboot.hash           |  2 ++
+ configs/cubieboard2_defconfig                                  | 10 ++++++----
+ 6 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 238e123302..ef5be2a19e 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -116,15 +116,21 @@ class Emulator(object):
-         ldavg_str = f"{ldavg[0]:.2f}, {ldavg[1]:.2f}, {ldavg[2]:.2f}"
-         self.logfile.write(f"> host loadavg: {ldavg_str}\n")
-         self.logfile.write(f"> timeout multiplier: {self.timeout_multiplier}\n")
--        self.logfile.write("> starting qemu with '%s'\n" % " ".join(qemu_cmd))
-+        self.logfile.write(f"> emulator using {qemu_cmd[0]} version:\n")
-         host_bin = os.path.join(self.builddir, "host", "bin")
-         br_path = host_bin + os.pathsep + os.environ["PATH"]
-+        qemu_env = {"QEMU_AUDIO_DRV": "none",
-+                    "PATH": br_path}
-+        pexpect.run(f"{qemu_cmd[0]} --version",
-+                    encoding='utf-8',
-+                    logfile=self.logfile,
-+                    env=qemu_env)
-+        self.logfile.write("> starting qemu with '%s'\n" % " ".join(qemu_cmd))
-         self.qemu = pexpect.spawn(qemu_cmd[0], qemu_cmd[1:],
-                                   timeout=5 * self.timeout_multiplier,
-                                   encoding='utf-8',
-                                   codec_errors='replace',
--                                  env={"QEMU_AUDIO_DRV": "none",
--                                       "PATH": br_path})
-+                                  env=qemu_env)
-         # We want only stdout into the log to avoid double echo
-         self.qemu.logfile_read = self.logfile
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 2b63d235f3..42efd60b50 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -137,7 +137,6 @@ configs/beelink_gs1_defconfig lib_defconfig.ForceCheckHash
+ configs/broadcom_northstar_defconfig lib_defconfig.ForceCheckHash
+ configs/canaan_kd233_defconfig lib_defconfig.ForceCheckHash
+ configs/ci20_defconfig lib_defconfig.ForceCheckHash
+-configs/cubieboard2_defconfig lib_defconfig.ForceCheckHash
+ configs/engicam_imx6qdl_icore_defconfig lib_defconfig.ForceCheckHash
+ configs/engicam_imx6qdl_icore_qt5_defconfig lib_defconfig.ForceCheckHash
+ configs/engicam_imx6qdl_icore_rqs_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/cubietech/cubieboard2/genimage.cfg b/board/cubietech/cubieboard2/genimage.cfg
+index 0ba74d6be3..f8a8ec05c8 100644
+--- a/board/cubietech/cubieboard2/genimage.cfg
++++ b/board/cubietech/cubieboard2/genimage.cfg
+@@ -10,7 +10,7 @@ image boot.vfat {
+ 		}
+ 	}
  
+-	size = 10M
++	size = 16M
+ }
+ 
+ image sdcard.img {
+diff --git a/board/cubietech/cubieboard2/patches/linux-headers/linux-headers.hash b/board/cubietech/cubieboard2/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/cubietech/cubieboard2/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/cubietech/cubieboard2/patches/linux/linux.hash b/board/cubietech/cubieboard2/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..4759f8354e
+--- /dev/null
++++ b/board/cubietech/cubieboard2/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  62148e7e17f54c4a5ab5e75ad4882682c54bee818948be61a5963234fc0849fc  linux-6.11.11.tar.xz
+diff --git a/board/cubietech/cubieboard2/patches/uboot/uboot.hash b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..904fa56c02
+--- /dev/null
++++ b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
+diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
+index 14d080d2d4..42344eaf9e 100644
+--- a/configs/cubieboard2_defconfig
++++ b/configs/cubieboard2_defconfig
+@@ -1,23 +1,25 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
++BR2_GLOBAL_PATCH_DIR="board/cubietech/cubieboard2/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="Cubieboard2"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Cubieboard2!"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/cubietech/cubieboard2/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.11"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.11"
+ BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-cubieboard2"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun7i-a20-cubieboard2"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
