@@ -4,62 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FBE3E7717D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 08:11:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8441BE7717D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 08:11:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 27CCB40B7F;
-	Wed, 11 Dec 2024 08:11:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E43240B93;
+	Wed, 11 Dec 2024 08:11:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WSJRS5YXYBrh; Wed, 11 Dec 2024 08:11:42 +0000 (UTC)
+ id kwLa-lLAoFtN; Wed, 11 Dec 2024 08:11:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 248C640B8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0831540CD7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 248C640B8F;
-	Wed, 11 Dec 2024 08:11:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EC2186F
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 08:11:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0831540CD7;
+	Wed, 11 Dec 2024 08:11:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8285EED2
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 08:11:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D94AA40B8F
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 08:11:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6362A60BD9
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 08:11:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6iqbzxVOmAVY for <buildroot@buildroot.org>;
- Wed, 11 Dec 2024 08:11:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 822-KdAP6QiT for <buildroot@buildroot.org>;
+ Wed, 11 Dec 2024 08:11:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 43F1940B7F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43F1940B7F
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 43F1940B7F
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 08:11:36 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D97BA60008;
- Wed, 11 Dec 2024 08:11:32 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tLHoi-000DFK-0C;
- Wed, 11 Dec 2024 09:11:32 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD5B360C05
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD5B360C05
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 08:11:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B8E0986C79; Wed, 11 Dec 2024 08:11:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Christian Stewart <christian@aperture.us>
-Cc: buildroot@buildroot.org,  Vincent Fazio <vfazio@xes-inc.com>,  Julien
- Olivain <ju.o@free.fr>,  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20241211004940.14204-1-christian@aperture.us>
-Date: Wed, 11 Dec 2024 09:11:32 +0100
-In-Reply-To: <20241211004940.14204-1-christian@aperture.us> (Christian
- Stewart's message of "Tue, 10 Dec 2024 16:49:40 -0800")
-Message-ID: <87frmuzljf.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/mmc-utils: fix hash mismatch
- for readme file
+To: buildroot@buildroot.org
+Date: Wed, 11 Dec 2024 09:10:22 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cf3dd3e365d5287cecf08a1b35394236be297148
+X-Git-Newrev: c12008448e6d0f78774b386fb0f66a14c3064eed
+X-Patchwork-Hint: ignore
+Message-Id: <20241211081152.B8E0986C79@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mmc-utils: fix hash mismatch for
+ readme file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,28 +59,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Christian" == Christian Stewart <christian@aperture.us> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c12008448e6d0f78774b386fb0f66a14c3064eed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Commit b03dc5: package/mmc-utils: bump to 523d8f3cfb21
- > The README hash changed causing a build failure:
+Commit b03dc5: package/mmc-utils: bump to 523d8f3cfb21
 
- > https://github.com/skiffos/SkiffOS/actions/runs/12266361526/job/34224344838#step:8:60617
+The README hash changed causing a build failure:
 
- > Update the hash for the README.md file to fix the issue.
+https://github.com/skiffos/SkiffOS/actions/runs/12266361526/job/34224344838#step:8:60617
 
- > Reproduce: make mmc-utils-legal-info
+Update the hash for the README.md file to fix the issue.
 
- > Signed-off-by: Christian Stewart <christian@aperture.us>
+Reproduce: make mmc-utils-legal-info
 
-Committed, thanks.
+Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mmc-utils/mmc-utils.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mmc-utils/mmc-utils.hash b/package/mmc-utils/mmc-utils.hash
+index 48bfd7bc04..3da95d8070 100644
+--- a/package/mmc-utils/mmc-utils.hash
++++ b/package/mmc-utils/mmc-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256  1ae5706ce56bfedda94a01e87c5151ac750fb849987aeb74ff89d70f43556131  mmc-utils-523d8f3cfb219d800f45860892e742e3a355f1bb-git4.tar.gz
+-sha256  4207d81122a02555f78c5a11b61c83a331ee03dc933e1ef9dd932ef9b434d12d  README
++sha256  49cd65f67b516078ff7e0dbe639972dad21ed3858246e3969fc8a8fc2a4dca66  README
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
