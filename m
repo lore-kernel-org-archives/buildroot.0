@@ -1,52 +1,108 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2017E77182
-	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 13:43:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6E61E77180
+	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 13:43:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F12BD8121A;
-	Wed, 11 Dec 2024 13:43:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pmQSBnGAUziQ; Wed, 11 Dec 2024 13:43:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B6F6811DD
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B6F6811DD;
-	Wed, 11 Dec 2024 13:43:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3A533962
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 13:43:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C0884133A
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 13:43:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 566CD4091A;
+	Wed, 11 Dec 2024 13:43:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qaG4kLHBX4mf for <buildroot@buildroot.org>;
- Wed, 11 Dec 2024 13:43:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A39A5408AF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A39A5408AF
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 13:43:07 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9792986CD9; Wed, 11 Dec 2024 13:43:07 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 11 Dec 2024 14:35:13 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5144d2d7aeafcbff1e0c5bf5ad3fc4bb44ca0089
-X-Git-Newrev: 8ad137d76222f26fd32fdbab0c188ad6b6287d7d
-X-Patchwork-Hint: ignore
-Message-Id: <20241211134307.9792986CD9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {toolchain,
- linux-headers}: add support for 6.12 headers
+ id MrigqUK4KQqm; Wed, 11 Dec 2024 13:43:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 089C24130D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 089C24130D;
+	Wed, 11 Dec 2024 13:43:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 675C4ED2
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 13:43:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5CE1A4133C
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 13:43:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eyNROIXxHMuK for <buildroot@buildroot.org>;
+ Wed, 11 Dec 2024 13:43:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::342; helo=mail-wm1-x342.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 56E2741341
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56E2741341
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com
+ [IPv6:2a00:1450:4864:20::342])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 56E2741341
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 13:43:11 +0000 (UTC)
+Received: by mail-wm1-x342.google.com with SMTP id
+ 5b1f17b1804b1-434f30ba149so24538325e9.0
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 05:43:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1733924589; x=1734529389;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=6yrvbOyfzCx5vOSQ/PfU416oyCflQJmelW8oyHY4aUw=;
+ b=dQ7h1vcPAydcjFwroK/KI/LL96pCx6A4mGwza6Q6hl1H622E59Mo+Ua5Cn0kxipTxM
+ tFsEkRFevWkfBasbUQPJnW5oFvft2Sy6pm3kaC+g5ZC3BuE39MHKNe2PlBj3ozXlmAON
+ Xsm6xIx/0LYeZ0iOc2vcSs5qepweCixokwlyF0D6YvVCfm9ewi/Ijen9lmC73kInWmtF
+ GgAUQLCir/hBPDM1ZqnnDij+5djmCeOrmVzImJ6rcxMdzzITLW4qRa7DDg72I2eI44KN
+ vqs3OqcCc+N1IM9+2HULq24rivurkSOmdxNu9txkE4IWfYIAb7P7gghCMJhtHaoVyOGb
+ e9jg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUZMFXZ/Ns9AW5o6OGu5yV1aQ2tWBdE01QLYW3sCClUEKSVDZsjmXvk5pw40323StQt0Mj4icSdNVY=@buildroot.org
+X-Gm-Message-State: AOJu0YzkdfY8SJVIJwRtCINRs8r3mS2gzQ5y9QG1LrYjOx+ii31zBEXu
+ vH1ndQm8gmi4jmfl1QA3hVYFPKXZ0K6lmAOGYMRmU8Tupliwszk4mvKH5F+I6yraL78RWcU7lkw
+ g03xQYA==
+X-Gm-Gg: ASbGncsoTedo2RJ3SzrylDe03mVCi1M72k4Pm7yKdpTRl2EyRzr1+RAiS/u1hkD38BG
+ XQdy4q9u/n3XzKapykifWGRhwT8CCS8H+j2ZbOb/SoJQcHpHbBx4yXrchypt46CD6ts+WU9/oM8
+ dm4ozSfRmpcrLg26TDIf5o/+SbABRraGs3dTm6bEfIWQmjzvQ+23V/dcz/563RT/ytyh4zBdNzE
+ IiDfEyjqXTdOwURmvX1pk3/IiZvBkNfkhmVp9BW3Cg2Kce9cpg8V24dEkNV03NIvAcORV94qU88
+ NVMPHDgQ0T/YmFfALicwBq+MDLphs48HqYsAzAKLTg==
+X-Google-Smtp-Source: AGHT+IEmT0/PzYsmKHw47vxTkaSRrrutYm5nboftI9MLiS4dyhcEYRHHlWU8VyPep6RgpZfaS6/RkA==
+X-Received: by 2002:a05:600c:3b09:b0:434:f270:a4f0 with SMTP id
+ 5b1f17b1804b1-4361c3efb35mr20495045e9.21.1733924589251; 
+ Wed, 11 Dec 2024 05:43:09 -0800 (PST)
+Received: from [10.5.90.20]
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4361f6d878asm13496605e9.2.2024.12.11.05.43.08
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 11 Dec 2024 05:43:08 -0800 (PST)
+Message-ID: <675c239b-5d11-4f07-be59-86f6f046da1d@smile.fr>
+Date: Wed, 11 Dec 2024 14:43:08 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Bernd Kuhls <bernd@kuhls.net>
+References: <20241208214748.524923-1-geomatsi@gmail.com>
+Content-Language: fr, en-US
+In-Reply-To: <20241208214748.524923-1-geomatsi@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1733924589; x=1734529389; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=6yrvbOyfzCx5vOSQ/PfU416oyCflQJmelW8oyHY4aUw=;
+ b=CWsi7WgPNCMvn8ZCll9hjsuun9MtJgsd1MtL129IM5spLYfIAL84H4ySBVb+jfN01V
+ pW12Y/cgnalCGUjYSia08qcXrkgmJqc9WY4Hmo8IuKL4cHFdpIcsmvxFPsU+S73OepVf
+ dnS21Pnr1AD/7qGR5P5xKdbBIN3r0Pfy8nkmU=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=CWsi7WgP
+Subject: Re: [Buildroot] [PATCH 0/3] {linux,
+ linux-headers}: add support for 6.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,124 +116,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ad137d76222f26fd32fdbab0c188ad6b6287d7d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-And add (and default to) 6.12 to linux-headers.
-
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- linux/linux.hash                                            |  1 +
- package/linux-headers/Config.in.host                        | 13 +++++++++++--
- toolchain/Config.in                                         |  5 +++++
- .../toolchain-external-custom/Config.in.options             |  6 +++++-
- 4 files changed, 22 insertions(+), 3 deletions(-)
-
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 6002478854..67bdc32372 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  c89809cc777d50f1ea484a118630281a26383707a0e752c96fd834f6e765deae  linux-6.12.3.tar.xz
- sha256  62148e7e17f54c4a5ab5e75ad4882682c54bee818948be61a5963234fc0849fc  linux-6.11.11.tar.xz
- sha256  d1054ab4803413efe2850f50f1a84349c091631ec50a1cf9e891d1b1f9061835  linux-6.6.63.tar.xz
- sha256  aecdaf39d0a844a81ce4c67d9daff8979e938bb690df4f679fbbb494fe423278  linux-6.1.119.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e8f7515894..0b517534c7 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -3,7 +3,7 @@ comment "Kernel Header Options"
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_6_11
-+	default BR2_KERNEL_HEADERS_6_12
- 	help
- 	  Select the kernel version to get headers from.
- 
-@@ -51,6 +51,10 @@ config BR2_KERNEL_HEADERS_6_6
- config BR2_KERNEL_HEADERS_6_11
- 	bool "Linux 6.11.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11
-+
-+config BR2_KERNEL_HEADERS_6_12
-+	bool "Linux 6.12.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
- 	select BR2_KERNEL_HEADERS_LATEST
- 
- config BR2_KERNEL_HEADERS_VERSION
-@@ -129,8 +133,12 @@ choice
- 	  If your kernel headers are more recent than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12
-+	bool "6.12.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11
--	bool "6.11.x or later"
-+	bool "6.11.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10
-@@ -435,6 +443,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "6.1.119"	if BR2_KERNEL_HEADERS_6_1
- 	default "6.6.63"	if BR2_KERNEL_HEADERS_6_6
- 	default "6.11.11"	if BR2_KERNEL_HEADERS_6_11
-+	default "6.12.3"	if BR2_KERNEL_HEADERS_6_12
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index c2522aca7f..87160af3d7 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -660,6 +660,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_10
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_10
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11
- 	select BR2_TOOLCHAIN_HEADERS_LATEST
- 
- # This should be selected by the latest version, above, to indicate that
-@@ -673,6 +677,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "6.12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
- 	default "6.11" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11
- 	default "6.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_10
- 	default "6.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_9
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index fcffeb6b77..2dc04747b3 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -166,8 +166,12 @@ choice
- 	  If your toolchain uses headers newer than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_12
-+	bool "6.12.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_11
--	bool "6.11.x or later"
-+	bool "6.11.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_10
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gU2VyZ2V5LAoKTGUgMDgvMTIvMjAyNCDDoCAyMjo0NiwgU2VyZ2V5IE1hdHl1a2V2aWNo
+IGEgw6ljcml0wqA6Cj4gSGkgVGhvbWFzLCBCZXJuZCwgYW5kIGFsbAo+IAo+IEkgaGF2ZSBiZWVu
+IHdhaXRpbmcgZm9yIHRoZSBuZXcgTFRTIExpbnV4IHY2LjEyIGluIEJ1aWxkcm9vdCB0byBzdGFy
+dAo+IHNlbmRpbmcgQ2hyaXN0bWFzIHVwZGF0ZXMgZm9yIHNvbWUgb2YgbXkgT3JhbmdlUGkgYm9h
+cmRzLiBOb3cgdjYuMTIuMwo+IGlzIGFscmVhZHkgYXZhaWxhYmxlLCBidXQgdGhlIGxhdGVzdCBr
+ZXJuZWwgaXMgc3RpbGwgaGF2ZSA2LjExLnguCj4gU28gSSBkZWNpZGVkIHRvIHVuZGVydGFrZSBh
+IGNvcHktcGFzdGUgZXhlcmNpc2UgdXNpbmcgdGhlIGxhdGVzdCBrZXJuZWwKPiBhbmQgaGVhZGVy
+cyB1cGRhdGUgc2VyaWVzIGJ5IEJlcm5kLiBIb3BlIEkgZGlkbid0IG1pc3MgYSB0aGluZyB0YWtp
+bmcKPiBpbnRvIGFjY291bnQgdGhhdCB0aGlzIGlzIGEgbmV3IExUUy4KCkV2ZXJ5dGhpbmcgc2Vl
+bXMgZ29vZCBzbyBmYXIgOikKCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpCZXN0IHJlZ2Fy
+ZHMsClJvbWFpbgoKCj4gCj4gUmVnYXJkcywKPiBTZXJnZXkKPiAKPiBTZXJnZXkgTWF0eXVrZXZp
+Y2ggKDMpOgo+ICAge3Rvb2xjaGFpbiwgbGludXgtaGVhZGVyc306IGFkZCBzdXBwb3J0IGZvciA2
+LjEyIGhlYWRlcnMKPiAgIGxpbnV4OiBidW1wIGxhdGVzdCB2ZXJzaW9uIHRvIDYuMTIKPiAgIHBh
+Y2thZ2UvbGludXgtaGVhZGVyczogZHJvcCA2LjExLnggb3B0aW9uCj4gCj4gIENvbmZpZy5pbi5s
+ZWdhY3kgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA3ICsrKysrKysKPiAgbGlu
+dXgvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDYgKysrLS0t
+Cj4gIGxpbnV4L2xpbnV4Lmhhc2ggICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAy
+ICstCj4gIHBhY2thZ2UvbGludXgtaGVhZGVycy9Db25maWcuaW4uaG9zdCAgICAgICAgICAgICB8
+IDE2ICsrKysrKysrKystLS0tLS0KPiAgdG9vbGNoYWluL0NvbmZpZy5pbiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDUgKysrKysKPiAgLi4uL3Rvb2xjaGFpbi1leHRlcm5hbC1jdXN0
+b20vQ29uZmlnLmluLm9wdGlvbnMgIHwgIDYgKysrKystCj4gIDYgZmlsZXMgY2hhbmdlZCwgMzEg
+aW5zZXJ0aW9ucygrKSwgMTEgZGVsZXRpb25zKC0pCj4gCgpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
+bmZvL2J1aWxkcm9vdAo=
