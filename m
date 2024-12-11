@@ -4,61 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68C1EE7717F
-	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 19:49:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EA0BE7717F
+	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 20:12:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F8F540B25;
-	Thu, 12 Dec 2024 19:49:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DAA7941586;
+	Thu, 12 Dec 2024 20:12:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GoMkzvi22eL2; Thu, 12 Dec 2024 19:49:55 +0000 (UTC)
+ id wXVKF_EPTBsK; Thu, 12 Dec 2024 20:11:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21B1C41550
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF0BB415BA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 21B1C41550;
-	Thu, 12 Dec 2024 19:49:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4F321114A
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 19:49:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF0BB415BA;
+	Thu, 12 Dec 2024 20:11:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5DF4B1146
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 20:11:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22F4F400B5
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 19:49:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3DE5F606BB
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 20:11:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kj4jbTcnr6KN for <buildroot@buildroot.org>;
- Thu, 12 Dec 2024 19:49:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3191640137
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3191640137
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3191640137
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 19:49:50 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4E5F5FF804;
- Thu, 12 Dec 2024 19:49:47 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tLpBy-0041L1-1T;
- Thu, 12 Dec 2024 20:49:46 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-References: <20241211004940.14204-1-christian@aperture.us>
- <878qsm7lwt.fsf@tarshish>
-Date: Thu, 12 Dec 2024 20:49:46 +0100
-In-Reply-To: <878qsm7lwt.fsf@tarshish> (Baruch Siach via buildroot's message
- of "Wed, 11 Dec 2024 08:50:58 +0200")
-Message-ID: <875xnowujp.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cacRq2mILJcd for <buildroot@buildroot.org>;
+ Thu, 12 Dec 2024 20:11:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.102;
+ helo=smtpcmd10102.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 53E006062E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53E006062E
+Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 53E006062E
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 20:11:53 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id LpXLtteFZ0w3ULpXLtHIXW; Thu, 12 Dec 2024 21:11:51 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 11 Dec 2024 22:09:34 +0100
+Message-Id: <20241211210934.179268-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/mmc-utils: fix hash mismatch
- for readme file
+X-CMAE-Envelope: MS4xfH0gPQfIHRQIHUnSs9utvtzpCeJv0IS9FD/rvbMFlWlLA/DNJu6e7+LfP79ia6ohLkeZJz8/YapKr2JtowYpcjXd8zeDZ/abx6q21/0+xy0k03k+voPg
+ aYrWpOsVT5vEnCAK7i9U5cwBvp7LJQvwqmsMEmeC2S24WsUcPMnfUKYiLy8O/MhLG+uhqZl2NB/ZeJT+H0x1iQEQ1ZYuxrzvy/+UwwABWELguA9dNTpqlDKC
+ eJLiKBxoifWhDL1pJPV1XbPajVm4/fPJ9RQfvToekXrXV8fRN6OsQ10IDdW+OekuvPvdgy9B8aIbJFv2bop9GQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1734034311; bh=8Tf6kC4sakC4odUP4TC+HOjiECBCaRMtce0uSMkLTj4=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=bAeFV6E6LF9sQ3QbQBYma+uLAvhqpgXK4jK70ofkr8aN43f2AfUxh6WCnhKRUkgMF
+ MEsysi1mGcGarhK+mLkPFjRXG4c1oYeqMVkAqwHACTd6c1guFtmusHvaddKjgijqsE
+ TtfiPpd9e2twFCYxGx3PokH3p7oqcIBapOMFqRYQtqCiA307koTZBHNkb6SW3uw+gH
+ M//p98iCRVRVbwkmgGRmxg2NW2ll6yhSja7fr1U+UAvBB2EEqOBDGoMBccr7vCMggM
+ 3RG0lh3BGAV8BC9zut88S9zBl/zzwjqjNdKb08o2WAtLeTt74B1dLad26FtyCGVDay
+ RQvknMkuH0bVw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=bAeFV6E6
+Subject: [Buildroot] [PATCH] package/nfs-utils: bump version to 2.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,32 +79,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Julien Olivain <ju.o@free.fr>, Christian Stewart <christian@aperture.us>,
- Vincent Fazio <vfazio@xes-inc.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Baruch" == Baruch Siach via buildroot <buildroot@buildroot.org> writes:
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/nfs-utils/nfs-utils.hash | 4 ++--
+ package/nfs-utils/nfs-utils.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Hi Christian,
- > On Tue, Dec 10 2024, Christian Stewart via buildroot wrote:
- >> Commit b03dc5: package/mmc-utils: bump to 523d8f3cfb21
- >> 
- >> The README hash changed causing a build failure:
- >> 
- >> https://github.com/skiffos/SkiffOS/actions/runs/12266361526/job/34224344838#step:8:60617
- >> 
- >> Update the hash for the README.md file to fix the issue.
-
- > The patch updates README hash. Is that a typo?
-
-Ups, I missed your comment - Sorry about that.
-
+diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
+index b4ecbd0aec..ff3f03799d 100644
+--- a/package/nfs-utils/nfs-utils.hash
++++ b/package/nfs-utils/nfs-utils.hash
+@@ -1,4 +1,4 @@
+-# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.1/sha256sums.asc
+-sha256  a0be95b08396908048583fcf6b34a7c1ab49d53e8a12eb28673ccfd2eff0c505  nfs-utils-2.8.1.tar.xz
++# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.2/sha256sums.asc
++sha256  a39bbea76ac0ab9e6e8699caf3c308b6b310c20d458e8fa8606196d358e7fb15  nfs-utils-2.8.2.tar.xz
+ # Locally computed
+ sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index 4b008042ce..60e9c26695 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NFS_UTILS_VERSION = 2.8.1
++NFS_UTILS_VERSION = 2.8.2
+ NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+ NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+ NFS_UTILS_LICENSE = GPL-2.0+
 -- 
-Bye, Peter Korsgaard
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
