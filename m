@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06033E7717D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 16:16:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96C98E77180
+	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 16:16:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A0FD41386;
-	Wed, 11 Dec 2024 16:16:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FC0F4133E;
+	Wed, 11 Dec 2024 16:16:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WOrsLVRdJeXV; Wed, 11 Dec 2024 16:16:01 +0000 (UTC)
+ id vh9QjvqIDvly; Wed, 11 Dec 2024 16:16:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A726041346
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC40341388
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A726041346;
-	Wed, 11 Dec 2024 16:16:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C74B86F
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 16:15:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC40341388;
+	Wed, 11 Dec 2024 16:16:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 17FEFED2
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 16:15:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B4A596110B
+ by smtp2.osuosl.org (Postfix) with ESMTP id F03AE4063B
  for <buildroot@buildroot.org>; Wed, 11 Dec 2024 16:15:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nhcDAhOaUjRW for <buildroot@buildroot.org>;
- Wed, 11 Dec 2024 16:15:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 23hgCXxYsp_1 for <buildroot@buildroot.org>;
+ Wed, 11 Dec 2024 16:15:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB9696110F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED10941C93
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB9696110F
+ by smtp2.osuosl.org (Postfix) with ESMTP id ED10941C93
  for <buildroot@buildroot.org>; Wed, 11 Dec 2024 16:15:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3EC486D4A; Wed, 11 Dec 2024 16:15:56 +0000 (UTC)
+ id D20DA86D4B; Wed, 11 Dec 2024 16:15:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 11 Dec 2024 17:12:21 +0100
+Date: Wed, 11 Dec 2024 17:12:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0f9da3934b9fc1425db49526ab7735a601ac1edb
-X-Git-Newrev: b0a1b0bab1238271ca99d6a453101d6b128b027a
+X-Git-Oldrev: b0a1b0bab1238271ca99d6a453101d6b128b027a
+X-Git-Newrev: bfa2dbc2d679b88d8166359ec916590050fb5802
 X-Patchwork-Hint: ignore
-Message-Id: <20241211161556.C3EC486D4A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/octave: update _SITE to use
+Message-Id: <20241211161556.D20DA86D4B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freeipmi: update _SITE to use
  BR2_GNU_MIRROR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -66,39 +66,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0a1b0bab1238271ca99d6a453101d6b128b027a
+commit: https://git.buildroot.net/buildroot/commit/?id=bfa2dbc2d679b88d8166359ec916590050fb5802
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The octave package is distributed on the GNU project servers. See [1]
-and [2]. Buildroot has the BR2_GNU_MIRROR configuration which can
-be used for that purpose. See [3].
+The freeipmi package is distributed on the GNU project servers.
+See [1] and [2]. Buildroot has the BR2_GNU_MIRROR configuration
+which can be used for that purpose. See [3].
 
 For consistency with all other GNU packages, this commit updates
 the _SITE to use BR2_GNU_MIRROR.
 
-[1] https://www.octave.org/download
+[1] https://www.gnu.org/software/freeipmi/download.html
 [2] https://www.gnu.org/prep/ftp.html
 [3] https://gitlab.com/buildroot.org/buildroot/-/blob/2024.08.2/Config.in#L286
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/octave/octave.mk | 2 +-
+ package/freeipmi/freeipmi.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/octave/octave.mk b/package/octave/octave.mk
-index 2e2fe0f989..34d9288c75 100644
---- a/package/octave/octave.mk
-+++ b/package/octave/octave.mk
+diff --git a/package/freeipmi/freeipmi.mk b/package/freeipmi/freeipmi.mk
+index e28f63f715..fbbfd536e4 100644
+--- a/package/freeipmi/freeipmi.mk
++++ b/package/freeipmi/freeipmi.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- OCTAVE_VERSION = 9.2.0
--OCTAVE_SITE = https://ftp.gnu.org/gnu/octave
-+OCTAVE_SITE = $(BR2_GNU_MIRROR)/octave
- OCTAVE_SOURCE = octave-$(OCTAVE_VERSION).tar.lz
- OCTAVE_LICENSE = GPL-3.0+
- OCTAVE_LICENSE_FILES = COPYING
+ FREEIPMI_VERSION = 1.6.14
+-FREEIPMI_SITE = https://ftp.gnu.org/gnu/freeipmi
++FREEIPMI_SITE = $(BR2_GNU_MIRROR)/freeipmi
+ FREEIPMI_LICENSE = GPL-3.0+, BSD-like (sunbmc)
+ FREEIPMI_LICENSE_FILES = \
+ 	COPYING COPYING.bmc-watchdog COPYING.ipmiconsole COPYING.ipmi-dcmi \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
