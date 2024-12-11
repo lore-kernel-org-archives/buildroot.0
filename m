@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46D60E7717D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 15:49:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B23E2E77180
+	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 15:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EAEBD4069A;
-	Wed, 11 Dec 2024 15:49:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15462406DB;
+	Wed, 11 Dec 2024 15:49:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2Aj9o9rZ-Ply; Wed, 11 Dec 2024 15:49:23 +0000 (UTC)
+ id KatR3Aldw33E; Wed, 11 Dec 2024 15:49:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB989406AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03D03406F0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB989406AF;
-	Wed, 11 Dec 2024 15:49:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 716EC962
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03D03406F0;
+	Wed, 11 Dec 2024 15:49:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8A781F9D
  for <buildroot@buildroot.org>; Wed, 11 Dec 2024 15:49:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6C5E3406AF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B31160F27
  for <buildroot@buildroot.org>; Wed, 11 Dec 2024 15:49:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yx9WL795nmjj for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1OaJLJQ90nJ9 for <buildroot@buildroot.org>;
  Wed, 11 Dec 2024 15:49:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9162F4069A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9680260E80
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9162F4069A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9680260E80
  for <buildroot@buildroot.org>; Wed, 11 Dec 2024 15:49:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 78E7486D20; Wed, 11 Dec 2024 15:49:20 +0000 (UTC)
+ id 8357286D21; Wed, 11 Dec 2024 15:49:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 11 Dec 2024 16:46:32 +0100
+Date: Wed, 11 Dec 2024 16:46:43 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4f6a924fa8e1a1b5d94acd5529eeb7feb9af94e5
-X-Git-Newrev: dcb4d360eceb3c6f66dbee54759326ec7541b632
+X-Git-Oldrev: dcb4d360eceb3c6f66dbee54759326ec7541b632
+X-Git-Newrev: 722cba476f994339e37d022081c38977fcf3fe5d
 X-Patchwork-Hint: ignore
-Message-Id: <20241211154920.78E7486D20@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/cubietech/cubieboard1: use lowercase
- keywords in extlinux.conf file
+Message-Id: <20241211154920.8357286D21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/cubieboard1: bump Linux version to
+ 6.11.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,32 +66,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcb4d360eceb3c6f66dbee54759326ec7541b632
+commit: https://git.buildroot.net/buildroot/commit/?id=722cba476f994339e37d022081c38977fcf3fe5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This commit also updates the label name, and the unnecessary "default"
-entry is also removed.
 
 Signed-off-by: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- .../cubieboard1/rootfs_overlay/boot/extlinux/extlinux.conf       | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ board/cubietech/cubieboard1/patches/linux/linux.hash | 2 +-
+ configs/cubieboard1_defconfig                        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/cubietech/cubieboard1/rootfs_overlay/boot/extlinux/extlinux.conf b/board/cubietech/cubieboard1/rootfs_overlay/boot/extlinux/extlinux.conf
-index 2fde683f38..5b071dce84 100644
---- a/board/cubietech/cubieboard1/rootfs_overlay/boot/extlinux/extlinux.conf
-+++ b/board/cubietech/cubieboard1/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -1,5 +1,4 @@
--DEFAULT linux
--LABEL linux
--  KERNEL /boot/zImage
--  DEVICETREE /boot/sun4i-a10-cubieboard.dtb
--  APPEND console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p1 rootwait
-+label cubieboard-buildroot
-+  kernel /boot/zImage
-+  devicetree /boot/sun4i-a10-cubieboard.dtb
-+  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p1 rootwait
+diff --git a/board/cubietech/cubieboard1/patches/linux/linux.hash b/board/cubietech/cubieboard1/patches/linux/linux.hash
+index 42d02c9f78..4759f8354e 100644
+--- a/board/cubietech/cubieboard1/patches/linux/linux.hash
++++ b/board/cubietech/cubieboard1/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  c954f60197008f1e1f32a1e77293903cf3801d2543ec4bf521f5651eb7f133ce  linux-6.11.6.tar.xz
++sha256  62148e7e17f54c4a5ab5e75ad4882682c54bee818948be61a5963234fc0849fc  linux-6.11.11.tar.xz
+diff --git a/configs/cubieboard1_defconfig b/configs/cubieboard1_defconfig
+index c3dede47b8..6d189bcf95 100644
+--- a/configs/cubieboard1_defconfig
++++ b/configs/cubieboard1_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/cubietech/cubieboard1/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.11"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun4i-a10-cubieboard"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
