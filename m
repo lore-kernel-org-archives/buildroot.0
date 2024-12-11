@@ -4,87 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C889AE77182
-	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 17:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63932E7717D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Dec 2024 17:43:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 72CB980DBC;
-	Wed, 11 Dec 2024 17:28:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1561380CFF;
+	Wed, 11 Dec 2024 17:43:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DAZcA2yQsldD; Wed, 11 Dec 2024 17:28:05 +0000 (UTC)
+ id U2Ay8GajgApu; Wed, 11 Dec 2024 17:43:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9492080DCC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3331280DA0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9492080DCC;
-	Wed, 11 Dec 2024 17:28:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3331280DA0;
+	Wed, 11 Dec 2024 17:43:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id F021D962
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:28:03 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id EC97BED7
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:43:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EB05540519
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:28:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C7C6741C59
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:43:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1zHpTx4c93Rw for <buildroot@buildroot.org>;
- Wed, 11 Dec 2024 17:28:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::a2f; helo=mail-vk1-xa2f.google.com;
- envelope-from=tommyclee101908sun@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F2CA7403E2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2CA7403E2
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com
- [IPv6:2607:f8b0:4864:20::a2f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F2CA7403E2
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:28:02 +0000 (UTC)
-Received: by mail-vk1-xa2f.google.com with SMTP id
- 71dfb90a1353d-51640f7bbd3so1218090e0c.2
- for <buildroot@buildroot.org>; Wed, 11 Dec 2024 09:28:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1733938081; x=1734542881;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=3QzdHbwJShskkuTW0TcWZXPqQX1asCIjYEmHpEu5x+M=;
- b=eXXsGX3b5AcsVdVcVzvcs8jPN39bYdaPaV7uWz7jZyNnhS0sPN1VvhAW92VDW5cBce
- a2WSgxkbSpAkznmVNdRoXKTrfUhj3QADx/qsK82L7c4ibJDs6Sjyg3Sq2M84Mo+f8qJf
- xLKDvmR/xLMQI5QXmuTfJrUH8S+TkOMXq/x9mb4uS8zxe4SSLl6rCJkJVv0AVcaLRcXE
- +pgFwmTlAfnDMA5s+E9cc+znujf8JcgRs9BCSWrOV4wuzb0AmRwZkWdtnyBElAWmw0SJ
- b0UkLdNYd48yHV/WBKhE/FmdsrBiqwoOuBgyitiLESDYNoVxnZ496gRtrSA7X+P5chdP
- Vx5A==
-X-Gm-Message-State: AOJu0YwNjMA9IWcED0F+ANyk0Z9pIaF1SN2i+JGQIEkzjwGK8flUgpHV
- PL052UQmImHk+YTwtZAlB9tYeKY3VHv9mBl9cQO79vfyD31n2BXQIW+OzxCYkVabUeLZUeDu8M8
- FUCPso4nDTYrTFUoTr8dTjIzwXzJQMaWw
-X-Gm-Gg: ASbGnctdoHNc9iYGt7EY/SvdqgtrPDNbOCFbEPtMyIC0m5vDr0uAfOEBA5gHhyrhz3p
- gmrhCwsaR3BRTFUhU8ixSY+imhIlE9c63KeA3
-X-Google-Smtp-Source: AGHT+IFGbTivP7tEE2jpKOi9vGgl+OZoPDaLQ9pXznl7Ix9z1ArRxWCNXISu7xpded/zQEIhM4+hFNCVNKPuvyIdtUs=
-X-Received: by 2002:a05:6122:65a4:b0:518:8753:34a6 with SMTP id
- 71dfb90a1353d-518a3c456d7mr3853999e0c.10.1733938081442; Wed, 11 Dec 2024
- 09:28:01 -0800 (PST)
+ id OtowOKudek8q for <buildroot@buildroot.org>;
+ Wed, 11 Dec 2024 17:42:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.bonnefille@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6F5A94052F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F5A94052F
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6F5A94052F
+ for <buildroot@buildroot.org>; Wed, 11 Dec 2024 17:42:58 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0D45920002;
+ Wed, 11 Dec 2024 17:42:52 +0000 (UTC)
+Date: Wed, 11 Dec 2024 18:42:50 +0100
 MIME-Version: 1.0
-From: Tommy Lee <tommyclee101908sun@gmail.com>
-Date: Wed, 11 Dec 2024 09:27:50 -0800
-Message-ID: <CAGJPcGYG2eOTcC8XeKmj30KcVc1PbpN7GpkmotJd-WZQkEG_8g@mail.gmail.com>
+Message-Id: <20241211-add_gdb_hash-v1-1-eb02d192b6c1@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIABnPWWcC/x3MQQqAIBBA0avErBPSbNNVIkSdMWdj4UAE4d2Tl
+ m/x/wtClUlgHV6odLPwWTr0OEDMvhykGLvBTMZqo7XyiO7A4LKXrGYb4pIQKS4IPbkqJX7+3ba
+ 39gHUbdNQXgAAAA==
+X-Change-ID: 20241211-add_gdb_hash-34bc5fddec5d
 To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>, 
+ Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: thomas.bonnefille@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1733938081; x=1734542881; darn=buildroot.org;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=3QzdHbwJShskkuTW0TcWZXPqQX1asCIjYEmHpEu5x+M=;
- b=FSE45Q5fA2JkxtZ5AcGrQpgqyPRQzkWKD0TqsiFtD36eypZvcs6st2SqFPZhItvN7s
- DRbLkr/fPX3gqrhght5DslT88EjB05QkWbf9GmtXza+ncM2E01tLbdv0b1JP2ufdHveC
- S+7L5vmOiUzCzPBE9RQf7LtDQkLfgSwQ4t8y/Q2pwWVe7GWdAxwvPYYBat/8sXsTayCB
- iFWBjAv8C1Zn2FrNCC/KJShRSj6uDLNni8VLRn7ufs+j5zMoq7kjlkXiX5Nwc5kPH4Us
- c7OYqwXA1zzQrXRe3v3L0VpV3FshXbJo+xLKTbQeSCh0aWg5rNGTbtCgdC9lvMDDlGo/
- RHIA==
+ d=bootlin.com; s=gm1; t=1733938973;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=zrTNczHOcQAFEy1jbI/H6RB+SNNMxQ72p8TkzD2TaZ0=;
+ b=eqTPstt70n6ZqR1VNE4M+elvtWNeLLRyZ/x6/VmRGO6oKRJYgsmlaTcaCUThvkBfw6wcvc
+ qlYgkPCqXWIO/u4TDzDximPZz13+UClSJwpBxionu+2bWNHuPDS0yv7lCBhnaDCvBpN9dO
+ nZhWfGkys/4CFcSLCdoJp9lhdJMfPB3HSMd3kGsNCfVLxTMnI15lFaBFK0CGeBtlee4yom
+ nyr4jvj7At+l1TsBf7eM5o7Pafi5bWT2YXy8j7oJWPQFL6ugCLtlq5q6PdcUwRjapCmnkk
+ vIGzFR80NG2YuWHIX0W8HTpEGhYlv/R6KjBYXZngy180MJL0DYH3L+a36rxgkg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=FSE45Q5f
-Subject: [Buildroot] The buildroot release which has the gdbserver
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=eqTPstt7
+Subject: [Buildroot] [PATCH] package/gdb: add hash of licence files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,50 +83,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============4114511782864382438=="
+From: Thomas Bonnefille via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4114511782864382438==
-Content-Type: multipart/alternative; boundary="00000000000068330b062901ebaf"
+Adds sha512 hash of the license files for GDB.
 
---00000000000068330b062901ebaf
-Content-Type: text/plain; charset="UTF-8"
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+---
+ package/gdb/gdb.hash | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Hi Buildroot,
-I am glad to be a new member on the Buildroot list.
-Please tell me whether I should send my buildroot technical issue to
-buildroot@buildroot.org.
-Thanks,
-Tommy
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index 6cf55a675dae3d373f9b32f795aec469049464f0..0fcfd314a01bef78b971a0fa52bf50e7c44a3dca 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -5,3 +5,9 @@ sha512  0217434073023a8b8316088bf3ee95d53a1b6a7897f6269095429016a8900f9a05e130c3
+ 
+ # Locally calculated (fetched from Github)
+ sha512  3518b47d5c11d1fb478ee152bde1719363f9391db73f3b9f5491217c17742bef8ebca6a51a40302dfaa9476c5a32a8b8f70a4bf64289422dea5f750ae53ab88d  gdb-arc-2023.09-release.tar.gz
++
++# Locally calculated (fetched from gcc.gnu.org)
++sha512 cb0a4f39c66d8d6bf668b2e989fc7741b5da50a48cf69921556e87c8d2ab648d23189628e5a26d7b86b9db47c8593e0e4bc6e9881ec03ca8d2ed62d8bd761e84  COPYING
++sha512 7633623b66b5e686bb94dd96a7cdb5a7e5ee00e87004fab416a5610d59c62badaf512a2e26e34e2455b7ed6b76690d2cd47464836d7d85d78b51d50f7e933d5c  COPYING3
++sha512 12291afdbc1daf063a0829e93fbd95fb8eac599cfb962408dd900ce261dc1117d3ae2b7fd27b90c3ed69e57c4398a0b678b0ffd1df8ba7c1ed02d0280825d3af  COPYING3.LIB
++sha512 85385eef52429877ad2fbf4cdffaad6e7e587aa030985c53ebbab329e3ba83dae5a72c3940941061f2160d506743abfef062b8d20ccd98d976edf8c94eccd77f  COPYING.LIB
 
---00000000000068330b062901ebaf
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+---
+base-commit: c12008448e6d0f78774b386fb0f66a14c3064eed
+change-id: 20241211-add_gdb_hash-34bc5fddec5d
 
-<div dir=3D"ltr"><div><div class=3D"gmail_default" style=3D""><span style=
-=3D"font-size:xx-large"></span>Hi Buildroot,</div><div class=3D"gmail_defau=
-lt" style=3D"">I am glad to be a new member on the Buildroot list.=C2=A0</d=
-iv><div class=3D"gmail_default" style=3D"">Please tell me whether I should=
-=C2=A0send my buildroot technical issue to=C2=A0</div><span style=3D"color:=
-rgba(0,0,0,0.87);font-family:Roboto,RobotoDraft,Helvetica,Arial,sans-serif;=
-background-color:rgb(248,250,253)">buildroot@buildroot.o<span class=3D"gmai=
-l_default" style=3D"">rg.</span></span></div><div><div dir=3D"ltr" class=3D=
-"gmail_signature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div>=
-<div dir=3D"ltr"><div>Thanks,</div><div>Tommy<br></div></div></div></div></=
-div></div></div>
-
---00000000000068330b062901ebaf--
-
---===============4114511782864382438==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Best regards,
+-- 
+Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4114511782864382438==--
