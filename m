@@ -4,58 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B117E7717F
-	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 19:43:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68C1EE7717F
+	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 19:49:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7951406B3;
-	Thu, 12 Dec 2024 19:43:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F8F540B25;
+	Thu, 12 Dec 2024 19:49:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G6YBAWF-W20g; Thu, 12 Dec 2024 19:43:23 +0000 (UTC)
+ id GoMkzvi22eL2; Thu, 12 Dec 2024 19:49:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7CBE40896
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21B1C41550
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7CBE40896;
-	Thu, 12 Dec 2024 19:43:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21B1C41550;
+	Thu, 12 Dec 2024 19:49:55 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9DC941146
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 19:43:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F321114A
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 19:49:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9844740137
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 19:43:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 22F4F400B5
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 19:49:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kRPz3l1Tjbuf for <buildroot@buildroot.org>;
- Thu, 12 Dec 2024 19:43:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id Kj4jbTcnr6KN for <buildroot@buildroot.org>;
+ Thu, 12 Dec 2024 19:49:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3948A400B5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3948A400B5
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3948A400B5
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 19:43:20 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0D51A40003;
- Thu, 12 Dec 2024 19:43:17 +0000 (UTC)
-Message-ID: <4c90bcf1-de49-4a19-8747-254020b14f10@korsgaard.com>
-Date: Thu, 12 Dec 2024 20:43:17 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20241208164230.87048-1-christian@aperture.us>
-Content-Language: en-US
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3191640137
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3191640137
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3191640137
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 19:49:50 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4E5F5FF804;
+ Thu, 12 Dec 2024 19:49:47 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1tLpBy-0041L1-1T;
+ Thu, 12 Dec 2024 20:49:46 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20241208164230.87048-1-christian@aperture.us>
+To: Baruch Siach via buildroot <buildroot@buildroot.org>
+References: <20241211004940.14204-1-christian@aperture.us>
+ <878qsm7lwt.fsf@tarshish>
+Date: Thu, 12 Dec 2024 20:49:46 +0100
+In-Reply-To: <878qsm7lwt.fsf@tarshish> (Baruch Siach via buildroot's message
+ of "Wed, 11 Dec 2024 08:50:58 +0200")
+Message-ID: <875xnowujp.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/go: bump to version 1.23.4
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/mmc-utils: fix hash mismatch
+ for readme file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -67,24 +70,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Julien Olivain <ju.o@free.fr>, Christian Stewart <christian@aperture.us>,
+ Vincent Fazio <vfazio@xes-inc.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/8/24 17:42, Christian Stewart wrote:
-> go1.23.4 (released 2024-12-03) includes fixes to the compiler, the runtime, the trace command, and the syscall package.
-> 
-> https://go.dev/doc/devel/release#go1.23.4
-> https://github.com/golang/go/issues?q=milestone%3AGo1.23.4+label%3ACherryPickApproved
-> 
-> Signed-off-by: Christian Stewart <christian@aperture.us>
+>>>>> "Baruch" == Baruch Siach via buildroot <buildroot@buildroot.org> writes:
 
-Committed to 2024.11.x, thanks.
+ > Hi Christian,
+ > On Tue, Dec 10 2024, Christian Stewart via buildroot wrote:
+ >> Commit b03dc5: package/mmc-utils: bump to 523d8f3cfb21
+ >> 
+ >> The README hash changed causing a build failure:
+ >> 
+ >> https://github.com/skiffos/SkiffOS/actions/runs/12266361526/job/34224344838#step:8:60617
+ >> 
+ >> Update the hash for the README.md file to fix the issue.
+
+ > The patch updates README hash. Is that a typo?
+
+Ups, I missed your comment - Sorry about that.
 
 -- 
 Bye, Peter Korsgaard
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
