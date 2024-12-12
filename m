@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3522E77180
-	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 21:20:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84D54E7717F
+	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 21:20:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15D436FBEB;
-	Thu, 12 Dec 2024 21:20:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 183216FC30;
+	Thu, 12 Dec 2024 21:20:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 24Twl1bfUDjv; Thu, 12 Dec 2024 21:20:42 +0000 (UTC)
+ id 7E9sxKYziNnD; Thu, 12 Dec 2024 21:20:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFC1961427
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B917B6FCA7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFC1961427;
-	Thu, 12 Dec 2024 21:19:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5B27675
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:19:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B917B6FCA7;
+	Thu, 12 Dec 2024 21:20:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E086C1146
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:20:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4403B43354
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:19:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF7EF43803
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:20:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TOXQoeSpcioo for <buildroot@buildroot.org>;
- Thu, 12 Dec 2024 21:19:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 514734357F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 514734357F
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:17:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C22886DE9; Thu, 12 Dec 2024 21:17:39 +0000 (UTC)
+ id lbmGUPhNjPOw for <buildroot@buildroot.org>;
+ Thu, 12 Dec 2024 21:20:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D3E27438B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3E27438B8
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D3E27438B8
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:18:12 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 722E320041D;
+ Thu, 12 Dec 2024 22:17:51 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:34756])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 12 Dec 2024 22:17:51 +0100
+MIME-Version: 1.0
+Date: Thu, 12 Dec 2024 22:17:51 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 12 Dec 2024 22:02:27 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 918416bf9aa17417d965a64ddf09d0b4a8fa651b
-X-Git-Newrev: a237ec1123b3343951980a750533e261e1f0e0d7
-X-Patchwork-Hint: ignore
-Message-Id: <20241212211739.9C22886DE9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sdbus-cpp: bump to version 2.1.0
+To: Michael Nosthoff <buildroot@heine.tech>
+Cc: buildroot@buildroot.org, Sergey Bobrenok <bobrofon@gmail.com>
+In-Reply-To: <20241212193855.141489-2-buildroot@heine.tech>
+References: <20241212193855.141489-2-buildroot@heine.tech>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <ed976a90e2f1c72175e5bf24fb72f228@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1734038273;
+ bh=g3y32KcZ2wzafDbX53+JvCG1t15iWB9pGluNh7aTfBI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=i+MMVpbLzqII95Hv2zSSk0xXNepgCJYsvJZ7oqBvjtZV+lGvQqXgtEWIOZYJZ+Sft
+ FNbKgDQ7qkgbaZJkX/YYmHw9v4P3ZRwj4eR/X5U56aQ86GTO3z0YtE+76Vg1L4eWHh
+ AO2ysNIQK8tuwV/cthxWzkoBGpNBTlpAYuTmjZhOrggXwPKLGrUC8JmR6a84IVIeED
+ ddSFuVIwFPYcaGg7Vl7cssQgdhDrhSIRYP1Qpzy69jix/5BKM3V/NrPC5uJzUdp0ru
+ T4zW+Jem2s6za7Eb1o8ecIHu/Lju1VJRZ0541I6q0Sivyu2a9USOIoQAdVhzjiaDOb
+ H9KK/QU7ISSpA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=i+MMVpbL
+Subject: Re: [Buildroot] [PATCH v2] package/sdbus-cpp: bump to version 2.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,49 +82,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a237ec1123b3343951980a750533e261e1f0e0d7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/12/2024 20:38, Michael Nosthoff via buildroot wrote:
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
-For change log, see:
-https://github.com/Kistler-Group/sdbus-cpp/releases/tag/v2.1.0
+Applied to master, thanks.
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-[Julien: add change log link]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/sdbus-cpp/sdbus-cpp.hash | 2 +-
- package/sdbus-cpp/sdbus-cpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/sdbus-cpp/sdbus-cpp.hash b/package/sdbus-cpp/sdbus-cpp.hash
-index 1350fc6781..1160f3f2bb 100644
---- a/package/sdbus-cpp/sdbus-cpp.hash
-+++ b/package/sdbus-cpp/sdbus-cpp.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  88af4569161a0d0192f0f4a94582a1af4e75722499d06984fb7f91f638f5afb3  sdbus-cpp-2.0.0.tar.gz
-+sha256  6025e5dc6cddd532ff960d14e68ced5f42a1916b23a73fea6bcb437f06992eaf  sdbus-cpp-2.1.0.tar.gz
- sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  COPYING
- sha256  a1c9e75e25d8f2ce18017c88978edab2f0dbc7814ad0697d4ff2e5e59959f657  COPYING-LGPL-Exception
-diff --git a/package/sdbus-cpp/sdbus-cpp.mk b/package/sdbus-cpp/sdbus-cpp.mk
-index 2994f079c9..a01bcd22c6 100644
---- a/package/sdbus-cpp/sdbus-cpp.mk
-+++ b/package/sdbus-cpp/sdbus-cpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SDBUS_CPP_VERSION = 2.0.0
-+SDBUS_CPP_VERSION = 2.1.0
- SDBUS_CPP_SITE = $(call github,Kistler-Group,sdbus-cpp,v$(SDBUS_CPP_VERSION))
- SDBUS_CPP_INSTALL_STAGING = YES
- SDBUS_CPP_DEPENDENCIES = host-pkgconf systemd
+> ---
+>  package/sdbus-cpp/sdbus-cpp.hash | 2 +-
+>  package/sdbus-cpp/sdbus-cpp.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/sdbus-cpp/sdbus-cpp.hash 
+> b/package/sdbus-cpp/sdbus-cpp.hash
+> index 1350fc6781..1160f3f2bb 100644
+> --- a/package/sdbus-cpp/sdbus-cpp.hash
+> +++ b/package/sdbus-cpp/sdbus-cpp.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed:
+> -sha256  
+> 88af4569161a0d0192f0f4a94582a1af4e75722499d06984fb7f91f638f5afb3  
+> sdbus-cpp-2.0.0.tar.gz
+> +sha256  
+> 6025e5dc6cddd532ff960d14e68ced5f42a1916b23a73fea6bcb437f06992eaf  
+> sdbus-cpp-2.1.0.tar.gz
+>  sha256  
+> 20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  
+> COPYING
+>  sha256  
+> a1c9e75e25d8f2ce18017c88978edab2f0dbc7814ad0697d4ff2e5e59959f657  
+> COPYING-LGPL-Exception
+> diff --git a/package/sdbus-cpp/sdbus-cpp.mk 
+> b/package/sdbus-cpp/sdbus-cpp.mk
+> index 2994f079c9..a01bcd22c6 100644
+> --- a/package/sdbus-cpp/sdbus-cpp.mk
+> +++ b/package/sdbus-cpp/sdbus-cpp.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  
+> ################################################################################
+> 
+> -SDBUS_CPP_VERSION = 2.0.0
+> +SDBUS_CPP_VERSION = 2.1.0
+>  SDBUS_CPP_SITE = $(call 
+> github,Kistler-Group,sdbus-cpp,v$(SDBUS_CPP_VERSION))
+>  SDBUS_CPP_INSTALL_STAGING = YES
+>  SDBUS_CPP_DEPENDENCIES = host-pkgconf systemd
+> --
+> 2.43.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
