@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7D51E7717F
-	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 21:32:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1E3AE77180
+	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 21:33:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE1266179B;
-	Thu, 12 Dec 2024 21:32:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD7B9605A4;
+	Thu, 12 Dec 2024 21:33:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aIso0shgovqa; Thu, 12 Dec 2024 21:32:58 +0000 (UTC)
+ id Tlj9K3cYEoRR; Thu, 12 Dec 2024 21:33:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B85A261ACC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21F216FA39
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B85A261ACC;
-	Thu, 12 Dec 2024 21:32:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6CDA01146
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:32:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 21F216FA39;
+	Thu, 12 Dec 2024 21:33:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 103C41146
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:32:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C31A242472
+ by smtp2.osuosl.org (Postfix) with ESMTP id D5D2D43551
  for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:32:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ce64tPHmffHd for <buildroot@buildroot.org>;
- Thu, 12 Dec 2024 21:32:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xHBqyo1leh1x for <buildroot@buildroot.org>;
+ Thu, 12 Dec 2024 21:32:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B43F42483
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13E984335B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B43F42483
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13E984335B
  for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:32:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6B9AC86E70; Thu, 12 Dec 2024 21:32:25 +0000 (UTC)
+ id 0144F86E72; Thu, 12 Dec 2024 21:32:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Dec 2024 22:29:29 +0100
+Date: Thu, 12 Dec 2024 22:29:21 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 1dbb5fc616c241d4d89db6f7effc7e8fd881cb3a
-X-Git-Newrev: a5e50d8fdb4c22f2fa877724ef94c82492193158
+X-Git-Oldrev: 3418020093354af97717e2c41585e65f5ae5478f
+X-Git-Newrev: 393c0a1cbe3052fbe61238638bc03762fb9234bd
 X-Patchwork-Hint: ignore
-Message-Id: <20241212213225.6B9AC86E70@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/tcf-agent: fix
- 'will not' and 'unmodified' typos
+Message-Id: <20241212213225.0144F86E72@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/openvpn: fix
+ 'accommodate' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,32 +65,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5e50d8fdb4c22f2fa877724ef94c82492193158
+commit: https://git.buildroot.net/buildroot/commit/?id=393c0a1cbe3052fbe61238638bc03762fb9234bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
 Found by codespell.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 10c218ea7805c0384cf28ab95350dcc2dd821f79)
+(cherry picked from commit b253ae3054b8b21238e2f57803f780e7bc04daf1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tcf-agent/tcf-agent.mk | 2 +-
+ package/openvpn/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tcf-agent/tcf-agent.mk b/package/tcf-agent/tcf-agent.mk
-index cc998d82d6..e90334c783 100644
---- a/package/tcf-agent/tcf-agent.mk
-+++ b/package/tcf-agent/tcf-agent.mk
-@@ -15,7 +15,7 @@ TCF_AGENT_DEPENDENCIES = util-linux
- TCF_AGENT_SUBDIR = agent
- 
- # there is not much purpose for the shared lib,
--# if wont be used (unmodifed) outside the tcf-agent application
-+# it will not be used (unmodified) outside the tcf-agent application
- TCF_AGENT_CONF_OPTS = \
- 	-DBUILD_SHARED_LIBS=OFF \
- 	-DTCF_MACHINE=$(call qstrip,$(BR2_PACKAGE_TCF_AGENT_ARCH))
+diff --git a/package/openvpn/Config.in b/package/openvpn/Config.in
+index 5aa2386d36..77afc9eaf4 100644
+--- a/package/openvpn/Config.in
++++ b/package/openvpn/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_OPENVPN
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  OpenVPN is a full-featured SSL VPN solution which can
+-	  accomodate a wide range of configurations, including road
++	  accommodate a wide range of configurations, including road
+ 	  warrior access, home/office/campus telecommuting, WiFi
+ 	  security, secure branch office linking, and enterprise-scale
+ 	  remote access solutions with load balancing, failover, and
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
