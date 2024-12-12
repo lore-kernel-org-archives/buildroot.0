@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CECCBE7717F
-	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 21:33:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7FF7E7717F
+	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 21:33:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E784616C5;
-	Thu, 12 Dec 2024 21:33:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B69C7616EB;
+	Thu, 12 Dec 2024 21:33:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RIQupt__ZLBS; Thu, 12 Dec 2024 21:33:31 +0000 (UTC)
+ id qRC2ga8hSLM1; Thu, 12 Dec 2024 21:33:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A73296FBCB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFF5870372
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A73296FBCB;
-	Thu, 12 Dec 2024 21:33:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFF5870372;
+	Thu, 12 Dec 2024 21:33:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 14DAA75
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:32:37 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 44E21115A
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:32:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8030742414
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:32:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8CBCE4248C
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:32:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RuufEOb8Hc6k for <buildroot@buildroot.org>;
+ id wLRPLF4c9hfe for <buildroot@buildroot.org>;
  Thu, 12 Dec 2024 21:32:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C413842490
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B154F4248D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C413842490
+ by smtp4.osuosl.org (Postfix) with ESMTP id B154F4248D
  for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:32:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C10CE86E73; Thu, 12 Dec 2024 21:32:25 +0000 (UTC)
+ id AE92D86E70; Thu, 12 Dec 2024 21:32:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Dec 2024 22:29:35 +0100
+Date: Thu, 12 Dec 2024 22:29:34 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 87f5d3da4a0431abcd5fd64590d1b4382b493a53
-X-Git-Newrev: 6fdd6d16f7577b85de9500e3dad067e46b80d193
+X-Git-Oldrev: 97f589743bbfb2e998686c3b00fc06c96bac5859
+X-Git-Newrev: c63ec66b74fd26b438c866a07787dcede7e54a9d
 X-Patchwork-Hint: ignore
-Message-Id: <20241212213225.C10CE86E73@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/xen: fix
- 'available' typo
+Message-Id: <20241212213225.AE92D86E70@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/wilc-firmware:
+ fix 'acceptable' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,32 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fdd6d16f7577b85de9500e3dad067e46b80d193
+commit: https://git.buildroot.net/buildroot/commit/?id=c63ec66b74fd26b438c866a07787dcede7e54a9d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
 Found by codespell.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 21e5a9a96b1c25a7d3a5e92fd405afb6aafde605)
+(cherry picked from commit 0c6b8c989fcca8d057f7598f28eff377a018ed2f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xen/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/wilc-firmware/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xen/Config.in b/package/xen/Config.in
-index af6acd3530..577066666d 100644
---- a/package/xen/Config.in
-+++ b/package/xen/Config.in
-@@ -13,7 +13,7 @@ if BR2_PACKAGE_XEN
- config BR2_PACKAGE_XEN_HYPERVISOR
- 	bool "Xen hypervisor"
- 	help
--	  The Xen binaries are avaliable in /usr/lib/xen/ See
-+	  The Xen binaries are available in /usr/lib/xen/ See
- 	  http://wiki.xenproject.org/wiki/Getting_Started for using
- 	  the Xen hypervisor.
+diff --git a/package/wilc-firmware/Config.in b/package/wilc-firmware/Config.in
+index 72a9c73206..813a75ecf2 100644
+--- a/package/wilc-firmware/Config.in
++++ b/package/wilc-firmware/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_WILC1000_FIRMWARE
  
+ 	  These binary blobs are provided directly from Microchip.
+ 	  Ideally, the firmware version should match driver version.
+-	  Generally, the latest firmware would be acceptible regardless
++	  Generally, the latest firmware would be acceptable regardless
+ 	  of driver version.
+ 
+ 	  These will be installed to /lib/firmware/mchp/
+@@ -26,7 +26,7 @@ config BR2_PACKAGE_WILC3000_FIRMWARE
+ 
+ 	  These binary blobs are provided directly from Microchip.
+ 	  Ideally, the firmware version should match driver version.
+-	  Generally, the latest firmware would be acceptible regardless
++	  Generally, the latest firmware would be acceptable regardless
+ 	  of driver version.
+ 
+ 	  These will be installed to /lib/firmware/mchp/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
