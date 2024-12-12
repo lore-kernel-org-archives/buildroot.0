@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D21DE77180
-	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 21:34:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29639E7717F
+	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 21:34:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 565916FC78;
-	Thu, 12 Dec 2024 21:34:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA2CD84AED;
+	Thu, 12 Dec 2024 21:34:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y8VlhowgbZ3C; Thu, 12 Dec 2024 21:34:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L-UYsXt392-I; Thu, 12 Dec 2024 21:34:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E29EA703CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFCCD84894
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E29EA703CF;
-	Thu, 12 Dec 2024 21:34:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C54D675
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:33:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFCCD84894;
+	Thu, 12 Dec 2024 21:34:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1DB7275
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:33:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4872341E97
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A12584667
  for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:33:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZteeQEaHSSvZ for <buildroot@buildroot.org>;
- Thu, 12 Dec 2024 21:33:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u8Wn_WRun7Aj for <buildroot@buildroot.org>;
+ Thu, 12 Dec 2024 21:33:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D7B141971
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05B8D84A8D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D7B141971
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:33:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 05B8D84A8D
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:33:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4902786ED3; Thu, 12 Dec 2024 21:33:37 +0000 (UTC)
+ id 02AF086ED2; Thu, 12 Dec 2024 21:33:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Dec 2024 21:06:04 +0100
+Date: Thu, 12 Dec 2024 21:19:07 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 0f835efc9c041fc87eb38cf8ff992e474f794a02
-X-Git-Newrev: e39cad09150e06ca4513c06567fafed5da31d776
+X-Git-Oldrev: 7596ec2b6922978526c6f8c1242130f76107ddb6
+X-Git-Newrev: 996554d0bcd89bf3b62b4d7a621fd358a373fb0b
 X-Patchwork-Hint: ignore
-Message-Id: <20241212213337.4902786ED3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/go: bump version
- to 1.22.10
+Message-Id: <20241212213338.02AF086ED2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/transmission: fix
+ 'environment' and 'RECOMMENDED' typos
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,42 +65,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e39cad09150e06ca4513c06567fafed5da31d776
+commit: https://git.buildroot.net/buildroot/commit/?id=996554d0bcd89bf3b62b4d7a621fd358a373fb0b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-go1.22.9 (released 2024-11-06) includes fixes to the linker.
-
-go1.22.10 (released 2024-12-03) includes fixes to the runtime and the
-syscall package.
+Found by codespell.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 9a46343df311961a8efb2a5e75c179eaa40b9a59)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/transmission/S92transmission | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 40cb5c801a..4b5b14d479 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  df12c23ebf19dea0f4bf46a22cbeda4a3eca6f474f318390ce774974278440b8  go1.22.8.src.tar.gz
-+sha256  1e94fd48be750d1fafb4d9b3b6dd31a6e9d2735d339bf2462bc97b64ca4c1037  go1.22.10.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 745bc16864..ed15ae9fd5 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
+index 85ff40ec16..1c24c16d98 100644
+--- a/package/transmission/S92transmission
++++ b/package/transmission/S92transmission
+@@ -16,11 +16,11 @@
+ # http://trac.transmissionbt.com/wiki/ConfigFiles
+ # For a guide on how set the preferences, visit:
+ # http://trac.transmissionbt.com/wiki/EditConfigFiles
+-# For the available environement variables, visit:
++# For the available environment variables, visit:
+ # http://trac.transmissionbt.com/wiki/EnvironmentVariables
  #
- ################################################################################
- 
--GO_VERSION = 1.22.8
-+GO_VERSION = 1.22.10
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+ # The name of the user that should run Transmission.
+-# It's RECOMENDED to run Transmission in it's own user,
++# It's RECOMMENDED to run Transmission in it's own user,
+ # by default, this is set to 'transmission'.
+ # For the sake of security you shouldn't set a password
+ # on this user
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
