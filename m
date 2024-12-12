@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19E15C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:32:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7835C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:32:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 858494EF23;
-	Fri, 28 Feb 2025 16:32:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0DC634EF32;
+	Fri, 28 Feb 2025 16:32:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s2c1hJPPKehp; Fri, 28 Feb 2025 16:32:42 +0000 (UTC)
+ id RND-cl-tyL6n; Fri, 28 Feb 2025 16:32:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9034642F3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63FA442D1B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9034642F3E;
-	Fri, 28 Feb 2025 16:31:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 088A068
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63FA442D1B;
+	Fri, 28 Feb 2025 16:31:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 11624711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B430A4195D
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 678EE6FB21
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SnMzhV6dwjcE for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hEp3uJ3dgVIK for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4A734196F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 067E16FACE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D4A734196F
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 067E16FACE
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D10D88769C; Fri, 28 Feb 2025 16:29:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 0157B85E77; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 24 Nov 2024 19:41:43 +0100
+Date: Thu, 12 Dec 2024 22:19:49 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5d49bc51e032b0d512741618dbec6596eac9d452
-X-Git-Newrev: ed590a22e24bdc714d75005f7fe7a3ad3b001c4d
+X-Git-Oldrev: a237ec1123b3343951980a750533e261e1f0e0d7
+X-Git-Newrev: e284c13d3e69dc6dd4667cac8e424c2fcdfd754d
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162930.D10D88769C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/doxygen: fix _SITE
- download URL
+Message-Id: <20250228162939.0157B85E77@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/azure-iot-sdk-c: bump
+ to version LTS_08_2024
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,42 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed590a22e24bdc714d75005f7fe7a3ad3b001c4d
+commit: https://git.buildroot.net/buildroot/commit/?id=e284c13d3e69dc6dd4667cac8e424c2fcdfd754d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Doxygen source archive download fails with a HTTP 404 Not Found
-error.
+Release notes:
+https://github.com/Azure/azure-iot-sdk-c/releases/tag/LTS_08_2024
 
-The doxygen download page [1] mention that older versions can be
-downloaded on SourceForge at [2].
-
-This commit fixes the issue by changing _SITE to this new URL.
-
-Fixes:
-https://autobuild.buildroot.org/results/253450bf374ce858fe12712059c435fc773d52f8
-
-[1] https://www.doxygen.nl/download.html
-[2] https://sourceforge.net/projects/doxygen/files/
-
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/doxygen/doxygen.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/azure-iot-sdk-c/azure-iot-sdk-c.hash | 2 +-
+ package/azure-iot-sdk-c/azure-iot-sdk-c.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
-index b24c527a20..b3bcb34097 100644
---- a/package/doxygen/doxygen.mk
-+++ b/package/doxygen/doxygen.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
+index fdc1acc624..cc6b6589ad 100644
+--- a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
++++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  73bf42846089152d298d4a3810df274820aa84013943676eb71a7d4131a4a769  azure-iot-sdk-c-LTS_08_2023-git4.tar.gz
++sha256  3dbb005bfadc6162906d4ba3c8599b4ec39025d474fc5337546f7447584041bc  azure-iot-sdk-c-LTS_08_2024-git4.tar.gz
  
- DOXYGEN_VERSION = 1.8.18
- DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
--DOXYGEN_SITE = http://doxygen.nl/files
-+DOXYGEN_SITE = https://sourceforge.net/projects/doxygen/files/rel-$(DOXYGEN_VERSION)
- DOXYGEN_LICENSE = GPL-2.0
- DOXYGEN_LICENSE_FILES = LICENSE
- DOXYGEN_CPE_ID_VENDOR = doxygen
+ # Hash for license files:
+ sha256  be2e9913fad9ff33607287c728f392579e2a6cc83e51b203ef6274c41db02ee7  LICENSE
+diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+index 4d0ecb077f..909b3d6b83 100644
+--- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
++++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AZURE_IOT_SDK_C_VERSION = LTS_08_2023
++AZURE_IOT_SDK_C_VERSION = LTS_08_2024
+ AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
+ AZURE_IOT_SDK_C_SITE_METHOD = git
+ AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
