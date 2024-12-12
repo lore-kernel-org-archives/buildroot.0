@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75ADDC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:37:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB4BCC282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:37:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3CD266FBE6;
-	Fri, 28 Feb 2025 16:37:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D00142D42;
+	Fri, 28 Feb 2025 16:37:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gb1QS5qCtqG6; Fri, 28 Feb 2025 16:37:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7fkHWI-8F5Dq; Fri, 28 Feb 2025 16:37:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 225316FC12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6320A4F359
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 225316FC12;
-	Fri, 28 Feb 2025 16:37:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6320A4F359;
+	Fri, 28 Feb 2025 16:37:53 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 234881DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:05 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 181EE711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 97B7141A74
+ by smtp4.osuosl.org (Postfix) with ESMTP id BAFD7419E2
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XyhQ05o-QkJc for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
+ id ww5ANQC8zogt for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3709C419E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B1404247D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3709C419E2
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B1404247D
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 31703844AB; Fri, 28 Feb 2025 16:29:37 +0000 (UTC)
+ id 479F8820F8; Fri, 28 Feb 2025 16:29:38 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Dec 2024 16:22:56 +0100
+Date: Thu, 12 Dec 2024 12:28:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 51858c4a34f73c52ac9ff36ba7facf8a8ab9b711
-X-Git-Newrev: 7cc2d8b183fdd3fd52454d916ea8eac6f1136925
+X-Git-Oldrev: 45f46779f18c3e6462a91a62ce1f43a21a1b6b03
+X-Git-Newrev: 14a7a93472dd1ecd8dd5f30edd13a86c705dab12
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162937.31703844AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/cubieboard2: bump
- Linux to 6.11.11 and U-Boot to 2024.10
+Message-Id: <20250228162938.479F8820F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/zfs: bump version to
+ 2.2.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,118 +59,139 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4603136895427158759=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7cc2d8b183fdd3fd52454d916ea8eac6f1136925
+--===============4603136895427158759==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=14a7a93472dd1ecd8dd5f30edd13a86c705dab12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The boot.vfat image size is not enough now. The new zImage file
-is over 10M, so it is expanded to 16M.
+Removed backported patch:
+- https://github.com/openzfs/zfs/commit/bd949b10bed3d99e3b40249d9c8d74a0b4304774.patch
 
-This commit also adds the custom version package hashes, and
-the corresponding ".checkpackageignore" entry is also removed.
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                            |  1 -
- board/cubietech/cubieboard2/genimage.cfg                       |  2 +-
- .../cubieboard2/patches/linux-headers/linux-headers.hash       |  1 +
- board/cubietech/cubieboard2/patches/linux/linux.hash           |  2 ++
- board/cubietech/cubieboard2/patches/uboot/uboot.hash           |  2 ++
- configs/cubieboard2_defconfig                                  | 10 ++++++----
- 6 files changed, 12 insertions(+), 6 deletions(-)
+ ...S-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch | 70 ----------------------
+ package/zfs/zfs.hash                               |  4 +-
+ package/zfs/zfs.mk                                 |  2 +-
+ 3 files changed, 3 insertions(+), 73 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 2b63d235f3..42efd60b50 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -137,7 +137,6 @@ configs/beelink_gs1_defconfig lib_defconfig.ForceCheckHash
- configs/broadcom_northstar_defconfig lib_defconfig.ForceCheckHash
- configs/canaan_kd233_defconfig lib_defconfig.ForceCheckHash
- configs/ci20_defconfig lib_defconfig.ForceCheckHash
--configs/cubieboard2_defconfig lib_defconfig.ForceCheckHash
- configs/engicam_imx6qdl_icore_defconfig lib_defconfig.ForceCheckHash
- configs/engicam_imx6qdl_icore_qt5_defconfig lib_defconfig.ForceCheckHash
- configs/engicam_imx6qdl_icore_rqs_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/cubietech/cubieboard2/genimage.cfg b/board/cubietech/cubieboard2/genimage.cfg
-index 0ba74d6be3..f8a8ec05c8 100644
---- a/board/cubietech/cubieboard2/genimage.cfg
-+++ b/board/cubietech/cubieboard2/genimage.cfg
-@@ -10,7 +10,7 @@ image boot.vfat {
- 		}
- 	}
+diff --git a/package/zfs/0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch b/package/zfs/0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch
+deleted file mode 100644
+index 64972c4f57..0000000000
+--- a/package/zfs/0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch
++++ /dev/null
+@@ -1,70 +0,0 @@
+-From 2ccefd4aff98cf355c7d13b3f92bb4d390dfa522 Mon Sep 17 00:00:00 2001
+-From: Tino Reichardt <milky-zfs@mcmilk.de>
+-Date: Sun, 4 Aug 2024 11:58:13 +0200
+-Subject: [PATCH] ZTS: small fix for SEEK_DATA/SEEK_HOLE tests
+-
+-Some libc's like uClibc lag the proper definition of SEEK_DATA
+-and SEEK_HOLE. Since we have only two files in ZTS which use
+-these definitons, let's define them by hand:
+-
+-```
+-#ifndef SEEK_DATA
+-#define SEEK_DATA 3
+-#endif
+-#ifndef SEEK_HOLE
+-#define SEEK_HOLE 4
+-#endif
+-```
+-
+-There should be no failures, because:
+-- FreeBSD has support for SEEK_DATA/SEEK_HOLE since FreeBSD 8
+-- Linux has it since Linux 3.1
+-- the libc will submit the parameters unchanged to the kernel
+-
+-Signed-off-by: Tino Reichardt <milky-zfs@mcmilk.de>
+-Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+-Upstream: https://github.com/openzfs/zfs/commit/bd949b10bed3d99e3b40249d9c8d74a0b4304774
+----
+- tests/zfs-tests/cmd/mmap_seek.c                       | 10 ++++++++++
+- tests/zfs-tests/tests/functional/cp_files/seekflood.c |  7 +++++++
+- 2 files changed, 17 insertions(+)
+-
+-diff --git a/tests/zfs-tests/cmd/mmap_seek.c b/tests/zfs-tests/cmd/mmap_seek.c
+-index 7be92d109565..2d250554a13f 100644
+---- a/tests/zfs-tests/cmd/mmap_seek.c
+-+++ b/tests/zfs-tests/cmd/mmap_seek.c
+-@@ -35,6 +35,16 @@
+- #include <linux/fs.h>
+- #endif
+- 
+-+/* some older uClibc's lack the defines, so we'll manually define them */
+-+#ifdef	__UCLIBC__
+-+#ifndef	SEEK_DATA
+-+#define	SEEK_DATA 3
+-+#endif
+-+#ifndef	SEEK_HOLE
+-+#define	SEEK_HOLE 4
+-+#endif
+-+#endif
+-+
+- static void
+- seek_data(int fd, off_t offset, off_t expected)
+- {
+-diff --git a/tests/zfs-tests/tests/functional/cp_files/seekflood.c b/tests/zfs-tests/tests/functional/cp_files/seekflood.c
+-index 02c2c8e6eca5..f832db85970d 100644
+---- a/tests/zfs-tests/tests/functional/cp_files/seekflood.c
+-+++ b/tests/zfs-tests/tests/functional/cp_files/seekflood.c
+-@@ -36,6 +36,13 @@
+- #include <sys/stat.h>
+- #include <sys/wait.h>
+- 
+-+/* some older uClibc's lack the defines, so we'll manually define them */
+-+#ifdef	__UCLIBC__
+-+#ifndef	SEEK_DATA
+-+#define	SEEK_DATA 3
+-+#endif
+-+#endif
+-+
+- #define	DATASIZE	(4096)
+- char data[DATASIZE];
+- 
+diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
+index 50e53910fa..ce1e010d6d 100644
+--- a/package/zfs/zfs.hash
++++ b/package/zfs/zfs.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/openzfs/zfs/releases/download/zfs-2.2.4/zfs-2.2.4.sha256.asc
+-sha256  c92e02103ac5dd77bf01d7209eabdca55c7b3356aa747bb2357ec4222652a2a7  zfs-2.2.6.tar.gz
++# From https://github.com/openzfs/zfs/releases/download/zfs-2.2.7/zfs-2.2.7.sha256.asc
++sha256  b2b8e3bfabf2a6407a0132243726cb6762547a5bd095b1b1f37eaf2a9d8f7672  zfs-2.2.7.tar.gz
  
--	size = 10M
-+	size = 16M
- }
+ # Hash for license files:
+ sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
+diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
+index 9cecd499ed..b86214e751 100644
+--- a/package/zfs/zfs.mk
++++ b/package/zfs/zfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- image sdcard.img {
-diff --git a/board/cubietech/cubieboard2/patches/linux-headers/linux-headers.hash b/board/cubietech/cubieboard2/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/cubietech/cubieboard2/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/cubietech/cubieboard2/patches/linux/linux.hash b/board/cubietech/cubieboard2/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..4759f8354e
---- /dev/null
-+++ b/board/cubietech/cubieboard2/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  62148e7e17f54c4a5ab5e75ad4882682c54bee818948be61a5963234fc0849fc  linux-6.11.11.tar.xz
-diff --git a/board/cubietech/cubieboard2/patches/uboot/uboot.hash b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..904fa56c02
---- /dev/null
-+++ b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
-index 14d080d2d4..42344eaf9e 100644
---- a/configs/cubieboard2_defconfig
-+++ b/configs/cubieboard2_defconfig
-@@ -1,23 +1,25 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
-+BR2_GLOBAL_PATCH_DIR="board/cubietech/cubieboard2/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_HOSTNAME="Cubieboard2"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Cubieboard2!"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/cubietech/cubieboard2/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.11"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.11"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-cubieboard2"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun7i-a20-cubieboard2"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-ZFS_VERSION = 2.2.6
++ZFS_VERSION = 2.2.7
+ ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
+ ZFS_SELINUX_MODULES = zfs
+ ZFS_LICENSE = CDDL
+
+--===============4603136895427158759==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4603136895427158759==--
