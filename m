@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF265E77180
-	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 11:34:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40F27E77180
+	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 11:34:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F55361405;
-	Thu, 12 Dec 2024 11:34:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 111A061379;
+	Thu, 12 Dec 2024 11:34:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fmG8QYTAASDz; Thu, 12 Dec 2024 11:34:05 +0000 (UTC)
+ id 6SGJHIhCCEfb; Thu, 12 Dec 2024 11:34:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 073A0613AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D66FC6140D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 073A0613AB;
-	Thu, 12 Dec 2024 11:34:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 78FEF1146
+	by smtp3.osuosl.org (Postfix) with ESMTP id D66FC6140D;
+	Thu, 12 Dec 2024 11:34:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B39661146
  for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0AE056134C
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5D65681E81
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xpqz9IV5yPVi for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v6AdpVhYH49X for <buildroot@buildroot.org>;
  Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51D416133F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83C2581E37
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51D416133F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 83C2581E37
  for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4D86786DE5; Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
+ id 7FCBA86DE6; Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Dec 2024 12:30:53 +0100
+Date: Thu, 12 Dec 2024 12:32:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e2994d2b082a503fc63eca21b21e5fdc9d401020
-X-Git-Newrev: 0ab7094cf39d68625ad36347bc576daa769d7cfd
+X-Git-Oldrev: 0a7bd72accb48cdde8ce2e8b7be8a42381f65b35
+X-Git-Newrev: b0229c300d669217df50ce821737cc940376845c
 X-Patchwork-Hint: ignore
-Message-Id: <20241212113326.4D86786DE5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
- version to 21.5.7-Omega
+Message-Id: <20241212113326.7FCBA86DE6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/alsa-lib: bump version to 1.2.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,40 +64,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ab7094cf39d68625ad36347bc576daa769d7cfd
+commit: https://git.buildroot.net/buildroot/commit/?id=b0229c300d669217df50ce821737cc940376845c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Changelog:
+https://www.alsa-project.org/wiki/Changes_v1.2.12_v1.2.13#alsa-lib
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
+ package/alsa-lib/alsa-lib.hash | 2 +-
+ package/alsa-lib/alsa-lib.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index a80c87124b..a2b0664fcd 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  8bd781ba3012966f6ef45a085d6e09d7feee1cefe582d96563c7661affb68551  kodi-inputstream-adaptive-21.5.6-Omega.tar.gz
-+sha256  e0fb99e4e8d1612300eb0e7c4122a37d41a42a4e8da21162fc6477ecc2398962  kodi-inputstream-adaptive-21.5.7-Omega.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 96ae071745..01b46fad05 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index 9c993c05ae..0533df7954 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  4868cd908627279da5a634f468701625be8cc251d84262c7e5b6a218391ad0d2  alsa-lib-1.2.12.tar.bz2
++sha256  8c4ff37553cbe89618e187e4c779f71a9bb2a8b27b91f87ed40987cc9233d8f6  alsa-lib-1.2.13.tar.bz2
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+ sha256  bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 1dc25ea4a8..6272fa69df 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.6-Omega
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.7-Omega
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
+-ALSA_LIB_VERSION = 1.2.12
++ALSA_LIB_VERSION = 1.2.13
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
+ ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
