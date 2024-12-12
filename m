@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0152EE77182
-	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 21:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AB72E77182
+	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 21:32:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0AAA61AF8;
-	Thu, 12 Dec 2024 21:32:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B4B184458;
+	Thu, 12 Dec 2024 21:32:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dIamgfV2_jUC; Thu, 12 Dec 2024 21:32:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qMnfPoDhyUqG; Thu, 12 Dec 2024 21:32:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB3D861B00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C4CD845E3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB3D861B00;
-	Thu, 12 Dec 2024 21:32:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 90F1A1146
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:32:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C4CD845E3;
+	Thu, 12 Dec 2024 21:32:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4156475
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:32:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F56342428
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE84580D27
  for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:32:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i6wLVVDLsK04 for <buildroot@buildroot.org>;
- Thu, 12 Dec 2024 21:32:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZH5JxssDufzb for <buildroot@buildroot.org>;
+ Thu, 12 Dec 2024 21:32:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FA8442472
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA72B80C86
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3FA8442472
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA72B80C86
  for <buildroot@buildroot.org>; Thu, 12 Dec 2024 21:32:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3688281963; Thu, 12 Dec 2024 21:32:25 +0000 (UTC)
+ id B79AC86E72; Thu, 12 Dec 2024 21:32:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Dec 2024 22:29:25 +0100
+Date: Thu, 12 Dec 2024 22:29:35 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 34e8241f05df34571186260d65beb2ad1495462e
-X-Git-Newrev: 27a1f1efc9e9f895da33ff086b8c5d1ed2845305
+X-Git-Oldrev: c63ec66b74fd26b438c866a07787dcede7e54a9d
+X-Git-Newrev: 87f5d3da4a0431abcd5fd64590d1b4382b493a53
 X-Patchwork-Hint: ignore
-Message-Id: <20241212213225.3688281963@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/pkg-golang: fix
- 'unknown' typo
+Message-Id: <20241212213225.B79AC86E72@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x]
+ package/xdriver_xf86-video-qxl: fix 'appropriate' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,32 +65,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27a1f1efc9e9f895da33ff086b8c5d1ed2845305
+commit: https://git.buildroot.net/buildroot/commit/?id=87f5d3da4a0431abcd5fd64590d1b4382b493a53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
 Found by codespell.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit bd1f401ecda59758a1a9dea5dbcea64c487d736c)
+(cherry picked from commit 2e8cd8199c5024cf419336d509c8714cf560e8b4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-golang.mk | 2 +-
+ package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index 8e27602d41..33cf9bfb1a 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -102,7 +102,7 @@ endif
+diff --git a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
+index db0bbbaf65..616566f9ab 100644
+--- a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
++++ b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
+@@ -19,7 +19,7 @@ XDRIVER_XF86_VIDEO_QXL_DEPENDENCIES = \
+ 	xorgproto \
+ 	xserver_xorg-server
  
- # Due to vendoring, it is pretty likely that not all licenses are
- # listed in <pkg>_LICENSE. If the license is unset, it is "unknown"
--# so adding unknowns to some unknown is still some other unkown,
-+# so adding unknowns to some unknown is still some other unknown,
- # so don't append the blurb in that case.
- ifneq ($$($(2)_LICENSE),)
- $(2)_LICENSE += , vendored dependencies licenses probably not listed
+-# configure doesn't look for drm headers in the appropiate place, so help it
++# configure doesn't look for drm headers in the appropriate place, so help it
+ # libdrm is only useful with udev for KMS
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ XDRIVER_XF86_VIDEO_QXL_CONF_ENV += REQUIRED_MODULES=libdrm
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
