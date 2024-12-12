@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03777E77180
-	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 11:33:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30B66E77180
+	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 11:33:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF8DA613AF;
-	Thu, 12 Dec 2024 11:33:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1C3F613C8;
+	Thu, 12 Dec 2024 11:33:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U1s1nEUFKQ-e; Thu, 12 Dec 2024 11:33:47 +0000 (UTC)
+ id GMNM1slpDWeK; Thu, 12 Dec 2024 11:33:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 881EA613D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77332613CA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 881EA613D4;
-	Thu, 12 Dec 2024 11:33:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 272871146
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77332613CA;
+	Thu, 12 Dec 2024 11:33:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BAF98113C
  for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF8036132B
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A8E0815CC
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sdFunfHdFUfQ for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dyzyWXAVSNu7 for <buildroot@buildroot.org>;
  Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 311026133E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EEBB81B71
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 311026133E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2EEBB81B71
  for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2CA1086DE5; Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
+ id 1CD4486DE7; Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Dec 2024 12:30:08 +0100
+Date: Thu, 12 Dec 2024 12:28:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 14a7a93472dd1ecd8dd5f30edd13a86c705dab12
-X-Git-Newrev: e6695ad3f867bf6efc380bbde46b88d11a16f38b
+X-Git-Oldrev: 45f46779f18c3e6462a91a62ce1f43a21a1b6b03
+X-Git-Newrev: 14a7a93472dd1ecd8dd5f30edd13a86c705dab12
 X-Patchwork-Hint: ignore
-Message-Id: <20241212113326.2CA1086DE5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libxml2: bump version to 2.13.5
+Message-Id: <20241212113326.1CD4486DE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zfs: bump version to 2.2.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,49 +59,138 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3734928210392396614=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6695ad3f867bf6efc380bbde46b88d11a16f38b
+--===============3734928210392396614==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=14a7a93472dd1ecd8dd5f30edd13a86c705dab12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.5.news
+Removed backported patch:
+- https://github.com/openzfs/zfs/commit/bd949b10bed3d99e3b40249d9c8d74a0b4304774.patch
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxml2/libxml2.hash | 4 ++--
- package/libxml2/libxml2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...S-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch | 70 ----------------------
+ package/zfs/zfs.hash                               |  4 +-
+ package/zfs/zfs.mk                                 |  2 +-
+ 3 files changed, 3 insertions(+), 73 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index ed6c20e948..eb92ad4324 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.4.sha256sum
--sha256  65d042e1c8010243e617efb02afda20b85c2160acdbfbcb5b26b80cec6515650  libxml2-2.13.4.tar.xz
-+# From https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.5.sha256sum
-+sha256  74fc163217a3964257d3be39af943e08861263c4231f9ef5b496b6f6d4c7b2b6  libxml2-2.13.5.tar.xz
- # License files, locally calculated
- sha256  c99aae1afe013e50b8b3701e089222b351258043c3025b64053a233fd25b4be7  Copyright
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 8a5d703da6..a8cb86ab2f 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/zfs/0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch b/package/zfs/0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch
+deleted file mode 100644
+index 64972c4f57..0000000000
+--- a/package/zfs/0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch
++++ /dev/null
+@@ -1,70 +0,0 @@
+-From 2ccefd4aff98cf355c7d13b3f92bb4d390dfa522 Mon Sep 17 00:00:00 2001
+-From: Tino Reichardt <milky-zfs@mcmilk.de>
+-Date: Sun, 4 Aug 2024 11:58:13 +0200
+-Subject: [PATCH] ZTS: small fix for SEEK_DATA/SEEK_HOLE tests
+-
+-Some libc's like uClibc lag the proper definition of SEEK_DATA
+-and SEEK_HOLE. Since we have only two files in ZTS which use
+-these definitons, let's define them by hand:
+-
+-```
+-#ifndef SEEK_DATA
+-#define SEEK_DATA 3
+-#endif
+-#ifndef SEEK_HOLE
+-#define SEEK_HOLE 4
+-#endif
+-```
+-
+-There should be no failures, because:
+-- FreeBSD has support for SEEK_DATA/SEEK_HOLE since FreeBSD 8
+-- Linux has it since Linux 3.1
+-- the libc will submit the parameters unchanged to the kernel
+-
+-Signed-off-by: Tino Reichardt <milky-zfs@mcmilk.de>
+-Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+-Upstream: https://github.com/openzfs/zfs/commit/bd949b10bed3d99e3b40249d9c8d74a0b4304774
+----
+- tests/zfs-tests/cmd/mmap_seek.c                       | 10 ++++++++++
+- tests/zfs-tests/tests/functional/cp_files/seekflood.c |  7 +++++++
+- 2 files changed, 17 insertions(+)
+-
+-diff --git a/tests/zfs-tests/cmd/mmap_seek.c b/tests/zfs-tests/cmd/mmap_seek.c
+-index 7be92d109565..2d250554a13f 100644
+---- a/tests/zfs-tests/cmd/mmap_seek.c
+-+++ b/tests/zfs-tests/cmd/mmap_seek.c
+-@@ -35,6 +35,16 @@
+- #include <linux/fs.h>
+- #endif
+- 
+-+/* some older uClibc's lack the defines, so we'll manually define them */
+-+#ifdef	__UCLIBC__
+-+#ifndef	SEEK_DATA
+-+#define	SEEK_DATA 3
+-+#endif
+-+#ifndef	SEEK_HOLE
+-+#define	SEEK_HOLE 4
+-+#endif
+-+#endif
+-+
+- static void
+- seek_data(int fd, off_t offset, off_t expected)
+- {
+-diff --git a/tests/zfs-tests/tests/functional/cp_files/seekflood.c b/tests/zfs-tests/tests/functional/cp_files/seekflood.c
+-index 02c2c8e6eca5..f832db85970d 100644
+---- a/tests/zfs-tests/tests/functional/cp_files/seekflood.c
+-+++ b/tests/zfs-tests/tests/functional/cp_files/seekflood.c
+-@@ -36,6 +36,13 @@
+- #include <sys/stat.h>
+- #include <sys/wait.h>
+- 
+-+/* some older uClibc's lack the defines, so we'll manually define them */
+-+#ifdef	__UCLIBC__
+-+#ifndef	SEEK_DATA
+-+#define	SEEK_DATA 3
+-+#endif
+-+#endif
+-+
+- #define	DATASIZE	(4096)
+- char data[DATASIZE];
+- 
+diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
+index 50e53910fa..ce1e010d6d 100644
+--- a/package/zfs/zfs.hash
++++ b/package/zfs/zfs.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/openzfs/zfs/releases/download/zfs-2.2.4/zfs-2.2.4.sha256.asc
+-sha256  c92e02103ac5dd77bf01d7209eabdca55c7b3356aa747bb2357ec4222652a2a7  zfs-2.2.6.tar.gz
++# From https://github.com/openzfs/zfs/releases/download/zfs-2.2.7/zfs-2.2.7.sha256.asc
++sha256  b2b8e3bfabf2a6407a0132243726cb6762547a5bd095b1b1f37eaf2a9d8f7672  zfs-2.2.7.tar.gz
+ 
+ # Hash for license files:
+ sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
+diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
+index 9cecd499ed..b86214e751 100644
+--- a/package/zfs/zfs.mk
++++ b/package/zfs/zfs.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBXML2_VERSION_MAJOR = 2.13
--LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).4
-+LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).5
- LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
- LIBXML2_SITE = \
- 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
+-ZFS_VERSION = 2.2.6
++ZFS_VERSION = 2.2.7
+ ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
+ ZFS_SELINUX_MODULES = zfs
+ ZFS_LICENSE = CDDL
+
+--===============3734928210392396614==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3734928210392396614==--
