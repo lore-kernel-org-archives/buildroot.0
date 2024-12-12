@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42493C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:39:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A81DC282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:39:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10A8A4F51F;
-	Fri, 28 Feb 2025 16:39:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C58A4F0BA;
+	Fri, 28 Feb 2025 16:39:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OIDnQXok3M53; Fri, 28 Feb 2025 16:39:14 +0000 (UTC)
+ id G8skQySsXqQH; Fri, 28 Feb 2025 16:39:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F33B14F51B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0A6C4F526
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F33B14F51B;
-	Fri, 28 Feb 2025 16:39:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0A6C4F526;
+	Fri, 28 Feb 2025 16:39:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10C1768
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FBA61DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F322F42533
+ by smtp4.osuosl.org (Postfix) with ESMTP id E388042531
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VW_np_x2i-oY for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
+ id VH1XhtBx8Gid for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 713A7424B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DAD74247F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 713A7424B3
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5DAD74247F
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6D2C8820F8; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 587D6844AB; Fri, 28 Feb 2025 16:29:38 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 Dec 2024 21:05:47 +0100
+Date: Thu, 12 Dec 2024 12:30:08 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4533795cdec704ffef78ffb3ef0acf559794ae21
-X-Git-Newrev: 668084d5cb035373af07d4237839cc9ec0e44601
+X-Git-Oldrev: 14a7a93472dd1ecd8dd5f30edd13a86c705dab12
+X-Git-Newrev: e6695ad3f867bf6efc380bbde46b88d11a16f38b
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162940.6D2C8820F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/xr819-xradio: bump
- version
+Message-Id: <20250228162938.587D6844AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libxml2: bump version
+ to 2.13.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=668084d5cb035373af07d4237839cc9ec0e44601
+commit: https://git.buildroot.net/buildroot/commit/?id=e6695ad3f867bf6efc380bbde46b88d11a16f38b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Pull driver fixes for v6.9+ kernels.
+Release notes:
+https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.5.news
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xr819-xradio/xr819-xradio.hash | 2 +-
- package/xr819-xradio/xr819-xradio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libxml2/libxml2.hash | 4 ++--
+ package/libxml2/libxml2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
-index 388a3a3cd4..aec440c97a 100644
---- a/package/xr819-xradio/xr819-xradio.hash
-+++ b/package/xr819-xradio/xr819-xradio.hash
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index ed6c20e948..eb92ad4324 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
 @@ -1,4 +1,4 @@
- # Locally computed
--sha256  8bc3d745ed08b7f3a9c0413c2635d0faf647362b41494d04edc98709b869deef  xr819-xradio-3a1f77fb2db248b7d18d93b67b16e0d6c91db184.tar.gz
-+sha256  09cd694a9424e9fd61fbb323d52a9f721e0b2d364ccb40ed854a79bd927f5df2  xr819-xradio-180aafb14191c78c1529d5a28ca58c7c9dcf2c55.tar.gz
- # Locally computed
- sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
-diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
-index 8b576a347a..8a76570693 100644
---- a/package/xr819-xradio/xr819-xradio.mk
-+++ b/package/xr819-xradio/xr819-xradio.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.4.sha256sum
+-sha256  65d042e1c8010243e617efb02afda20b85c2160acdbfbcb5b26b80cec6515650  libxml2-2.13.4.tar.xz
++# From https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.5.sha256sum
++sha256  74fc163217a3964257d3be39af943e08861263c4231f9ef5b496b6f6d4c7b2b6  libxml2-2.13.5.tar.xz
+ # License files, locally calculated
+ sha256  c99aae1afe013e50b8b3701e089222b351258043c3025b64053a233fd25b4be7  Copyright
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 8a5d703da6..a8cb86ab2f 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XR819_XRADIO_VERSION = 3a1f77fb2db248b7d18d93b67b16e0d6c91db184
-+XR819_XRADIO_VERSION = 180aafb14191c78c1529d5a28ca58c7c9dcf2c55
- XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
- XR819_XRADIO_LICENSE = GPL-2.0
- XR819_XRADIO_LICENSE_FILES = LICENSE
+ LIBXML2_VERSION_MAJOR = 2.13
+-LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).4
++LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).5
+ LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
+ LIBXML2_SITE = \
+ 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
