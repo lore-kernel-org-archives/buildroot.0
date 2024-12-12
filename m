@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EB88E77180
-	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 11:33:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67C44E7717F
+	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 11:33:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 078B16137B;
-	Thu, 12 Dec 2024 11:33:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 356DC61398;
+	Thu, 12 Dec 2024 11:33:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n_AoJ_SX_BYN; Thu, 12 Dec 2024 11:33:35 +0000 (UTC)
+ id jHj-OcJ0AqSi; Thu, 12 Dec 2024 11:33:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF98561389
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 170B1613A3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF98561389;
-	Thu, 12 Dec 2024 11:33:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 05DEA1146
+	by smtp3.osuosl.org (Postfix) with ESMTP id 170B1613A3;
+	Thu, 12 Dec 2024 11:33:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0AAC8114A
  for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D89C66134E
+ by smtp4.osuosl.org (Postfix) with ESMTP id DFFCE408C4
  for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NEoXAkm51pmb for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id I1MTs5vM2jFf for <buildroot@buildroot.org>;
  Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F38A6132B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5812408BD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0F38A6132B
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E5812408BD
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EFD0C86DE5; Thu, 12 Dec 2024 11:33:25 +0000 (UTC)
+ id D099886DE6; Thu, 12 Dec 2024 11:33:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Dec 2024 12:27:24 +0100
+Date: Thu, 12 Dec 2024 12:25:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f2355c6702d91eb1d5c428d2c8d204922e101ee9
-X-Git-Newrev: 295b2c4f8ecaf0b6e03725a6c8412795e91888c8
+X-Git-Oldrev: a91e20ff411b9641c64ed1224e25e5be49c4efa8
+X-Git-Newrev: 8572a9cb4b502a6da86da41179fd0f3597396a1a
 X-Patchwork-Hint: ignore
-Message-Id: <20241212113325.EFD0C86DE5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wget: bump version to 1.25.0
+Message-Id: <20241212113325.D099886DE6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-vpl-gpu-rt: bump version to
+ 24.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,49 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=295b2c4f8ecaf0b6e03725a6c8412795e91888c8
+commit: https://git.buildroot.net/buildroot/commit/?id=8572a9cb4b502a6da86da41179fd0f3597396a1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes:
-https://lists.gnu.org/archive/html/bug-wget/2024-11/msg00002.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wget/wget.hash | 8 ++++----
- package/wget/wget.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash | 2 +-
+ package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wget/wget.hash b/package/wget/wget.hash
-index a0561d8d0a..da71b49d09 100644
---- a/package/wget/wget.hash
-+++ b/package/wget/wget.hash
-@@ -1,8 +1,8 @@
--# From https://lists.gnu.org/archive/html/bug-wget/2024-03/msg00008.html
--sha1  01659f427c2e90c7c943805db69ea00f5da79b07  wget-1.24.5.tar.lz
-+# From https://lists.gnu.org/archive/html/bug-wget/2024-11/msg00002.html
-+sha1  ca79e61fbf1d32133f60ef7c7d476b250b6da423  wget-1.25.0.tar.lz
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/wget/wget-1.24.5.tar.lz.sig
-+# https://ftp.gnu.org/gnu/wget/wget-1.25.0.tar.lz.sig
- # with key 6B98F637D879C5236E277C5C64FF90AAE8C70AF9
--sha256  57a107151e4ef94fdf94affecfac598963f372f13293ed9c74032105390b36ee  wget-1.24.5.tar.lz
-+sha256  19225cc756b0a088fc81148dc6a40a0c8f329af7fd8483f1c7b2fe50f4e08a1f  wget-1.25.0.tar.lz
- # Locally calculated
- sha256  f7dc7522e7e1be9227f3dc8de8b39a4d1d2471968c893af15f00c1a2076a0eec  COPYING
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index d2a3a38e50..e3143647d7 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
+diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
+index 381e8e6487..0f62867991 100644
+--- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
++++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ec11fbe64a84b15e98ef376a7e6de5fe15f5afda59711a7e1c145ee2268af41d  intel-vpl-gpu-rt-24.4.1.tar.gz
++sha256  2ee3517e4015ab333230a6ef921159164c1dc912dcae412d2901308c53a53ab8  intel-vpl-gpu-rt-24.4.4.tar.gz
+ sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
+diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+index 735bc910d0..5848efc131 100644
+--- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
++++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WGET_VERSION = 1.24.5
-+WGET_VERSION = 1.25.0
- WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- WGET_DEPENDENCIES = host-pkgconf
+-INTEL_VPL_GPU_RT_VERSION = 24.4.1
++INTEL_VPL_GPU_RT_VERSION = 24.4.4
+ INTEL_VPL_GPU_RT_SITE = $(call github,intel,vpl-gpu-rt,intel-onevpl-$(INTEL_VPL_GPU_RT_VERSION))
+ INTEL_VPL_GPU_RT_LICENSE = MIT
+ INTEL_VPL_GPU_RT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
