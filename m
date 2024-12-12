@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AB3FE7717F
-	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 11:33:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3FDCE77180
+	for <buildroot@archiver.kernel.org>; Thu, 12 Dec 2024 11:33:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A198961364;
-	Thu, 12 Dec 2024 11:33:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A069E6136C;
+	Thu, 12 Dec 2024 11:33:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pzvTRVusYhxj; Thu, 12 Dec 2024 11:33:28 +0000 (UTC)
+ id D65M92Vt7CSf; Thu, 12 Dec 2024 11:33:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2D2761349
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CF7961338
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2D2761349;
-	Thu, 12 Dec 2024 11:33:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id EC410113C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5CF7961338;
+	Thu, 12 Dec 2024 11:33:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F0ACE1148
  for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CD9664045E
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB40182048
  for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KETkMjR0FPg8 for <buildroot@buildroot.org>;
- Thu, 12 Dec 2024 11:33:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UszVpwCTVPy5 for <buildroot@buildroot.org>;
+ Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D03D0404FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 115DC815CC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D03D0404FC
- for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 115DC815CC
+ for <buildroot@buildroot.org>; Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF8A886DE4; Thu, 12 Dec 2024 11:33:25 +0000 (UTC)
+ id 0B1D386DE6; Thu, 12 Dec 2024 11:33:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Dec 2024 12:24:50 +0100
+Date: Thu, 12 Dec 2024 12:27:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ed9da089449c53519be02204f97c3452abba5cc3
-X-Git-Newrev: 9cae12c3f68758103d1fd425d5b0823fa4aa2162
+X-Git-Oldrev: 295b2c4f8ecaf0b6e03725a6c8412795e91888c8
+X-Git-Newrev: 45f46779f18c3e6462a91a62ce1f43a21a1b6b03
 X-Patchwork-Hint: ignore
-Message-Id: <20241212113325.AF8A886DE4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-gmmlib: bump version to
- 22.5.5
+Message-Id: <20241212113326.0B1D386DE6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fetchmail: bump version to 6.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,38 +64,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9cae12c3f68758103d1fd425d5b0823fa4aa2162
+commit: https://git.buildroot.net/buildroot/commit/?id=45f46779f18c3e6462a91a62ce1f43a21a1b6b03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes:
+https://sourceforge.net/p/fetchmail/mailman/message/58835491/
+https://sourceforge.net/p/fetchmail/mailman/message/58840916/
+
+Updated license hash due to copyright year bump:
+https://sourceforge.net/p/fetchmail/git/ci/62a11ca4064e5b59e57ca7a8fce08c82af259731/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-gmmlib/intel-gmmlib.hash | 2 +-
- package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/fetchmail/fetchmail.hash | 6 +++---
+ package/fetchmail/fetchmail.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-index 1accd2e205..9c2f3526bb 100644
---- a/package/intel-gmmlib/intel-gmmlib.hash
-+++ b/package/intel-gmmlib/intel-gmmlib.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  dbf7cc401de7ff386306a23c1c61b3cf7bd86a4d9001b3a1d16a81e6b0e3ab2b  intel-gmmlib-22.5.2.tar.gz
-+sha256  08db696071510b7e03aa2d9fb7375c6c35f7c327ecd6747424c664c622bb4377  intel-gmmlib-22.5.5.tar.gz
- sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
-diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-index 3698d2fff0..81aa1a9af8 100644
---- a/package/intel-gmmlib/intel-gmmlib.mk
-+++ b/package/intel-gmmlib/intel-gmmlib.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index 12612ecc48..52ad4856ca 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/p/fetchmail/mailman/message/58797299/
+-sha256  75109a1f307b538155fa05f5ef298e8298cb4deae95aed24c16b38d36ff0a186  fetchmail-6.4.39.tar.xz
++# From https://sourceforge.net/p/fetchmail/mailman/message/58840916/
++sha256  ca3fdb95141c277aca109be77f4d45b47e03ee010043058dd90bc182db518d4a  fetchmail-6.5.1.tar.xz
+ # Locally computed:
+-sha256  6d87443b61041067a5eddb2cabf8aebff15b8b40771ad6b5e4754e607ec21b39  COPYING
++sha256  1d5eb054414ceb75e018e2830d2c2b61d3ac0df02d5376330766237a091ea771  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index a9239d0855..077f395760 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--INTEL_GMMLIB_VERSION = 22.5.2
-+INTEL_GMMLIB_VERSION = 22.5.5
- INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
- INTEL_GMMLIB_LICENSE = MIT
- INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
+-FETCHMAIL_VERSION_MAJOR = 6.4
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).39
++FETCHMAIL_VERSION_MAJOR = 6.5
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).1
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+ FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
