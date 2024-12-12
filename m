@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7300C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:38:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98D9DC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:38:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E4BA4F437;
-	Fri, 28 Feb 2025 16:38:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A3F94F42D;
+	Fri, 28 Feb 2025 16:38:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WtF7fmvZ7pAw; Fri, 28 Feb 2025 16:38:27 +0000 (UTC)
+ id Ssj2uOFAggo2; Fri, 28 Feb 2025 16:38:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DBC34F421
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 204D1419DC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7DBC34F421;
-	Fri, 28 Feb 2025 16:38:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 204D1419DC;
+	Fri, 28 Feb 2025 16:38:31 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1796868
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 13B9F68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 083AB42506
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1FD9341A03
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cqJ5HSutnHsa for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
+ id 5ZY7veJZGhpt for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81C5B41A03
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6C1641812
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 81C5B41A03
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D6C1641812
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7D9BA844AB; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id D2D8A820F8; Fri, 28 Feb 2025 16:29:38 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Dec 2024 23:06:18 +0100
+Date: Thu, 12 Dec 2024 12:56:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2dc0482b0770ebe2353e3827b85c6980e3912bdb
-X-Git-Newrev: 96e7f24164de9fc3df84c511e456b3840b631a29
+X-Git-Oldrev: 845884d9c5709ab0b26458530c57b76e2a026963
+X-Git-Newrev: 918416bf9aa17417d965a64ddf09d0b4a8fa651b
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162939.7D9BA844AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-changelog-chug:
- add new package
+Message-Id: <20250228162938.D2D8A820F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/feh: bump to version
+ 3.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,81 +65,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96e7f24164de9fc3df84c511e456b3840b631a29
+commit: https://git.buildroot.net/buildroot/commit/?id=918416bf9aa17417d965a64ddf09d0b4a8fa651b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-changelog-chug is a parser for project Change Log documents.
+For change log, see [1].
 
-This package is required to build the new version of
-the python-daemon module.
+This commit also adds the "file" package optional dependency, for
+libmagic. This support was introduced in commit [2].
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+This commit also updates the project home page and download site URL
+to use https.
+
+Finally, the LICENSE file hash is updated to reflect change in [3].
+
+[1] https://github.com/derf/feh/blob/3.10.3/ChangeLog
+[2] https://github.com/derf/feh/commit/4affafe91579799efd83f4c8e05c291eeb684c9c
+[3] https://github.com/derf/feh/commit/1197dafc110fb0a2e322b977d2dced15456bf7df
+
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                                       |  1 +
- package/python-changelog-chug/Config.in                 |  6 ++++++
- .../python-changelog-chug/python-changelog-chug.hash    |  5 +++++
- package/python-changelog-chug/python-changelog-chug.mk  | 17 +++++++++++++++++
- 4 files changed, 29 insertions(+)
+ package/feh/Config.in |  2 +-
+ package/feh/feh.hash  |  4 ++--
+ package/feh/feh.mk    | 11 +++++++++--
+ 3 files changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 7cfcdf2c58..5fa344c321 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1045,6 +1045,7 @@ menu "External python modules"
- 	source "package/python-cchardet/Config.in"
- 	source "package/python-certifi/Config.in"
- 	source "package/python-cffi/Config.in"
-+	source "package/python-changelog-chug/Config.in"
- 	source "package/python-channels/Config.in"
- 	source "package/python-channels-redis/Config.in"
- 	source "package/python-characteristic/Config.in"
-diff --git a/package/python-changelog-chug/Config.in b/package/python-changelog-chug/Config.in
-new file mode 100644
-index 0000000000..5eb9beca55
---- /dev/null
-+++ b/package/python-changelog-chug/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_CHANGELOG_CHUG
-+	bool "python-changelog-chug"
-+	help
-+	  changelog-chug is a parser for project Change Log documents.
+diff --git a/package/feh/Config.in b/package/feh/Config.in
+index 7a348a1507..6f0bdd3242 100644
+--- a/package/feh/Config.in
++++ b/package/feh/Config.in
+@@ -10,4 +10,4 @@ config BR2_PACKAGE_FEH
+ 	help
+ 	  feh is an X11 image viewer aimed mostly at console users.
+ 
+-	  http://feh.finalrewind.org/
++	  https://feh.finalrewind.org/
+diff --git a/package/feh/feh.hash b/package/feh/feh.hash
+index f74b8fa335..f86a7ef6d7 100644
+--- a/package/feh/feh.hash
++++ b/package/feh/feh.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  57ab1ca61f57c96595878069f550d36f518530f88fa31b74cc39cd739f9258b6  feh-3.7.1.tar.bz2
+-sha256  2c3a31327dc3cc3331aa6e759d378e4f66d0ece7174a0d5aa137f3cba4bf0509  COPYING
++sha256  5426e2799770217af1e01c2e8c182d9ca8687d84613321d8ab4a66fe4041e9c8  feh-3.10.3.tar.bz2
++sha256  881f1b901b5b99bce372fd9498106724a1ea52450f7bfc6fc1cce6736a2faf4d  COPYING
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index df03deedde..be3b67aff9 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -4,14 +4,21 @@
+ #
+ ################################################################################
+ 
+-FEH_VERSION = 3.7.1
++FEH_VERSION = 3.10.3
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+-FEH_SITE = http://feh.finalrewind.org
++FEH_SITE = https://feh.finalrewind.org
+ FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
+ FEH_LICENSE = MIT
+ FEH_LICENSE_FILES = COPYING
+ FEH_CPE_ID_VALID = YES
+ 
++ifeq ($(BR2_PACKAGE_FILE),y)
++FEH_DEPENDENCIES += file
++FEH_MAKE_OPTS += magic=1
++else
++FEH_MAKE_OPTS += magic=0
++endif
 +
-+	  https://pypi.org/project/changelog-chug
-diff --git a/package/python-changelog-chug/python-changelog-chug.hash b/package/python-changelog-chug/python-changelog-chug.hash
-new file mode 100644
-index 0000000000..848a74cf37
---- /dev/null
-+++ b/package/python-changelog-chug/python-changelog-chug.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/changelog-chug/json
-+md5  4ccd595cfa9e929bfa04b7e64de3663c  changelog_chug-0.0.3.tar.gz
-+sha256  98ee1e8be75b6e9d512c35292c3c293a124541a4ec2014a6ec3cf33a3d265d2d  changelog_chug-0.0.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256  aa0c846d25b7f2bf4ee44e607666bc318eea1ad5bf6f8cfdf50fc350d1085c1c  COPYING
-diff --git a/package/python-changelog-chug/python-changelog-chug.mk b/package/python-changelog-chug/python-changelog-chug.mk
-new file mode 100644
-index 0000000000..ae5ed7287d
---- /dev/null
-+++ b/package/python-changelog-chug/python-changelog-chug.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# python-changelog-chug
-+#
-+################################################################################
-+
-+PYTHON_CHANGELOG_CHUG_VERSION = 0.0.3
-+PYTHON_CHANGELOG_CHUG_SOURCE = changelog_chug-$(PYTHON_CHANGELOG_CHUG_VERSION).tar.gz
-+PYTHON_CHANGELOG_CHUG_SITE = https://files.pythonhosted.org/packages/fc/6d/f08e0f600f88c69923c692d486096ca7d2eae5d657516ec134fb45ed0ab0
-+PYTHON_CHANGELOG_CHUG_SETUP_TYPE = setuptools
-+PYTHON_CHANGELOG_CHUG_LICENSE = AGPL-3.0+
-+PYTHON_CHANGELOG_CHUG_LICENSE_FILES = COPYING
-+PYTHON_CHANGELOG_CHUG_DEPENDENCIES = host-python-semver host-python-docutils
-+HOST_PYTHON_CHANGELOG_CHUG_DEPENDENCIES = host-python-semver host-python-docutils
-+
-+$(eval $(python-package))
-+$(eval $(host-python-package))
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ FEH_DEPENDENCIES += libcurl
+ FEH_MAKE_OPTS += curl=1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
