@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B233C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:38:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A98B0C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:38:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF6C74F3F6;
-	Fri, 28 Feb 2025 16:38:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 756DF485B0;
+	Fri, 28 Feb 2025 16:38:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qYH81xvuRM8h; Fri, 28 Feb 2025 16:38:20 +0000 (UTC)
+ id TbILMWtiDfY4; Fri, 28 Feb 2025 16:38:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94A684F3F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F0D44256C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94A684F3F8;
-	Fri, 28 Feb 2025 16:38:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F0D44256C;
+	Fri, 28 Feb 2025 16:38:24 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 16A1E68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2E884711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9849A424FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id B3E8E4249A
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yaiVMq1DmL3Y for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:43 +0000 (UTC)
+ id b_DySm2au-Wj for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41B394249A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76FF9419AD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41B394249A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 76FF9419AD
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 361D6820F8; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
+ id 6BA3F820F8; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 13 Dec 2024 19:11:12 +0100
+Date: Fri, 13 Dec 2024 23:06:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: af8d12953cb41a0b66395488562dc249c6c96b00
-X-Git-Newrev: f7530d2bce00301882b7b71995144caafbe04feb
+X-Git-Oldrev: 7b87f8cb21e58ae007d370c899f1f5c41a29ff97
+X-Git-Newrev: 2dc0482b0770ebe2353e3827b85c6980e3912bdb
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162939.361D6820F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/alsa-lib: Make
- sequencer dependent on rawmidi
+Message-Id: <20250228162939.6BA3F820F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-semver: enable
+ host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,74 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7530d2bce00301882b7b71995144caafbe04feb
+commit: https://git.buildroot.net/buildroot/commit/?id=2dc0482b0770ebe2353e3827b85c6980e3912bdb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add upstream patch and adjust dependency to fix build error.
+The host variant is required to build the python-changelog-chug
+package.
 
-Fixes:
-http://autobuild.buildroot.net/results/9a5/9a53d3c1411699f581e3a90d7f517fcb6b9e3de0/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...igure-Make-sequencer-dependent-on-rawmidi.patch | 35 ++++++++++++++++++++++
- package/alsa-lib/Config.in                         |  1 +
- 2 files changed, 36 insertions(+)
+ package/python-semver/python-semver.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/alsa-lib/0002-configure-Make-sequencer-dependent-on-rawmidi.patch b/package/alsa-lib/0002-configure-Make-sequencer-dependent-on-rawmidi.patch
-new file mode 100644
-index 0000000000..fb1d18df36
---- /dev/null
-+++ b/package/alsa-lib/0002-configure-Make-sequencer-dependent-on-rawmidi.patch
-@@ -0,0 +1,35 @@
-+From: Takashi Iwai <tiwai@suse.de>
-+Date: Sun, 24 Nov 2024 08:32:29 +0000 (+0100)
-+Subject: configure: Make sequencer dependent on rawmidi
-+X-Git-Url: https://git.alsa-project.org/?p=alsa-lib.git;a=commitdiff_plain;h=6880219ad4ba55ae8a94a34b7a987b3369f7c96f
-+
-+configure: Make sequencer dependent on rawmidi
-+
-+The sequencer feature requires rawmidi implicitly, and it became more
-+obvious with UMP support.  Add the dependency check to configure
-+script.
-+
-+Signed-off-by: Takashi Iwai <tiwai@suse.de>
-+
-+Upstream: https://git.alsa-project.org/?p=alsa-lib.git;a=commitdiff;h=6880219ad4ba55ae8a94a34b7a987b3369f7c96f
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+
-+diff --git a/configure.ac b/configure.ac
-+index 1cd22a59..69aeb978 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -483,6 +483,12 @@ fi
-+ AC_SUBST(PYTHON_LIBS)
-+ AC_SUBST(PYTHON_INCLUDES)
-+ 
-++if test "$build_rawmidi" != "yes"; then
-++  if test "$build_seq" = "yes"; then
-++    AC_ERROR([Cannot enable sequencer without rawmidi])
-++  fi
-++fi
-++
-+ AM_CONDITIONAL([BUILD_MIXER], [test x$build_mixer = xyes])
-+ AM_CONDITIONAL([BUILD_PCM], [test x$build_pcm = xyes])
-+ AM_CONDITIONAL([BUILD_RAWMIDI], [test x$build_rawmidi = xyes])
-diff --git a/package/alsa-lib/Config.in b/package/alsa-lib/Config.in
-index 6df03afe0e..360122f97f 100644
---- a/package/alsa-lib/Config.in
-+++ b/package/alsa-lib/Config.in
-@@ -65,6 +65,7 @@ config BR2_PACKAGE_ALSA_LIB_HWDEP
- config BR2_PACKAGE_ALSA_LIB_SEQ
- 	bool "seq"
- 	default y
-+	select BR2_PACKAGE_ALSA_LIB_RAWMIDI
+diff --git a/package/python-semver/python-semver.mk b/package/python-semver/python-semver.mk
+index 29d7ba46b1..65faa8a851 100644
+--- a/package/python-semver/python-semver.mk
++++ b/package/python-semver/python-semver.mk
+@@ -11,5 +11,7 @@ PYTHON_SEMVER_SETUP_TYPE = setuptools
+ PYTHON_SEMVER_LICENSE = BSD-3-Clause
+ PYTHON_SEMVER_LICENSE_FILES = LICENSE.txt
+ PYTHON_SEMVER_DEPENDENCIES = host-python-setuptools-scm
++HOST_PYTHON_SEMVER_DEPENDENCIES = host-python-setuptools-scm
  
- config BR2_PACKAGE_ALSA_LIB_UCM
- 	bool "ucm"
+ $(eval $(python-package))
++$(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
