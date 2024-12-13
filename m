@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C57CC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:31:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B8BAC282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:31:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45A1B4144E;
-	Fri, 28 Feb 2025 16:31:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09A2060871;
+	Fri, 28 Feb 2025 16:31:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ov8QhRae01-e; Fri, 28 Feb 2025 16:31:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3V1ywNRPWSsM; Fri, 28 Feb 2025 16:31:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8911417FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0993A6FBE9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C8911417FF;
-	Fri, 28 Feb 2025 16:30:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0993A6FBE9;
+	Fri, 28 Feb 2025 16:31:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 202C694F
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F7DF94F
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 192DF8030C
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6778D80C29
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZiXvo2oIcShv for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:31 +0000 (UTC)
+ id fTnWxHx-C8Mf for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F49380A6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB9D180A6F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F49380A6F
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB9D180A6F
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4C87187A71; Fri, 28 Feb 2025 16:29:31 +0000 (UTC)
+ id 9C1B786D17; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 3 Dec 2024 21:17:38 +0100
+Date: Fri, 13 Dec 2024 23:28:02 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0fd5860280c2172da28aec50dfd29b7a080f6c6c
-X-Git-Newrev: 773a89d41465387791350d31f51a602322734aeb
+X-Git-Oldrev: 3a3f1f542c16f6c09445e353895052259f6c0ded
+X-Git-Newrev: 166387d2f521c7833611e7c4108b430ce3989bae
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162931.4C87187A71@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: drop Yann's entries
+Message-Id: <20250228162939.9C1B786D17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/rock5b: update to
+ linux 6.12.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,77 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=773a89d41465387791350d31f51a602322734aeb
+commit: https://git.buildroot.net/buildroot/commit/?id=166387d2f521c7833611e7c4108b430ce3989bae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-As it happens, I am unable to keep maintaining those entries, and it is
-misleading to others about whether they should Cc me on their changes.
+Update to Linux 6.12, which also happens to be a LTS release.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Niklas Cassel <cassel@kernel.org>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS | 48 ------------------------------------------------
- 1 file changed, 48 deletions(-)
+ board/radxa/rock5b/patches/linux/linux.hash | 2 +-
+ configs/rock5b_defconfig                    | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c2b6b1dda5..aedd736772 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3365,54 +3365,6 @@ F:	package/casync/
- F:	package/gloox/
- F:	package/tpm2-pkcs11/
- 
--N:	Yann E. MORIN <yann.morin.1998@free.fr>
--F:	fs/squashfs/
--F:	package/asterisk/
--F:	package/cegui/
--F:	package/dahdi-linux/
--F:	package/dahdi-tools/
--F:	package/dbus-broker/
--F:	package/dtc/
--F:	package/dtv-scan-tables/
--F:	package/freerdp/
--F:	package/keyutils/
--F:	package/libbsd/
--F:	package/libedit/
--F:	package/libgsm/
--F:	package/libiberty/
--F:	package/libinput/
--F:	package/libiscsi/
--F:	package/libpri/
--F:	package/libseccomp/
--F:	package/libss7/
--F:	package/linux-firmware/
--F:	package/linux-tools/
--F:	package/matchbox*
--F:	package/mesa3d-headers/
--F:	package/nbd/
--F:	package/nut/
--F:	package/nvidia-driver/
--F:	package/python-pyparsing/
--F:	package/pkg-download.mk
--F:	package/pkg-waf.mk
--F:	package/slirp/
--F:	package/snappy/
--F:	package/spice/
--F:	package/spice-protocol/
--F:	package/systemd/
--F:	package/systemd-bootchart/
--F:	package/tmux/
--F:	package/tvheadend/
--F:	package/usbredir/
--F:	package/vde2/
--F:	package/w_scan/
--F:	package/wayland/
--F:	package/weston/
--F:	package/wtfutil/
--F:	package/zisofs-tools/
--F:	support/download/
--F:	support/testing/tests/graphics_base.py
--
- N:	Yann E. MORIN <yann.morin@orange.com>
- F:	.editorconfig
- F:	package/gpsd/
+diff --git a/board/radxa/rock5b/patches/linux/linux.hash b/board/radxa/rock5b/patches/linux/linux.hash
+index 005667b1f1..d00eed9a49 100644
+--- a/board/radxa/rock5b/patches/linux/linux.hash
++++ b/board/radxa/rock5b/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  057263d0afc17d5253794afd3d239ba4da4aa734b22fa36c1665f41b95449b73  linux-6.11.3.tar.xz
++sha256  6f35f821433d8421be7167990747c7c4a0c451958fb96883446301af13d71152  linux-6.12.4.tar.xz
+diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
+index 38b5aad206..f898e86c8c 100644
+--- a/configs/rock5b_defconfig
++++ b/configs/rock5b_defconfig
+@@ -1,6 +1,6 @@
+ BR2_aarch64=y
+ BR2_cortex_a76_a55=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/radxa/rock5b/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="rock5b"
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rock5b/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.4"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/radxa/rock5b/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
