@@ -4,76 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59A45E7717D
-	for <buildroot@archiver.kernel.org>; Fri, 13 Dec 2024 10:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48EB5E7717D
+	for <buildroot@archiver.kernel.org>; Fri, 13 Dec 2024 10:19:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC15960809;
-	Fri, 13 Dec 2024 10:03:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFA6B608FC;
+	Fri, 13 Dec 2024 10:19:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oRR6nkYSEY-v; Fri, 13 Dec 2024 10:03:49 +0000 (UTC)
+ id m-stqR3A0-Py; Fri, 13 Dec 2024 10:19:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7CCD60814
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F903608D8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7CCD60814;
-	Fri, 13 Dec 2024 10:03:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id AA19E75
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 10:03:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F903608D8;
+	Fri, 13 Dec 2024 10:19:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C1F3F1146
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 10:19:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E7F760814
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 10:03:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9CF40413BC
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 10:19:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FOEAQ-ZxcbD6 for <buildroot@buildroot.org>;
- Fri, 13 Dec 2024 10:03:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2604:1380:4641:c500::1; helo=dfw.source.kernel.org;
- envelope-from=mwalle@kernel.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D7BCE60809
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7BCE60809
-Received: from dfw.source.kernel.org (dfw.source.kernel.org
- [IPv6:2604:1380:4641:c500::1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D7BCE60809
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 10:03:45 +0000 (UTC)
-Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
- by dfw.source.kernel.org (Postfix) with ESMTP id 5F9445C6937;
- Fri, 13 Dec 2024 10:03:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0C25C4CED0;
- Fri, 13 Dec 2024 10:03:43 +0000 (UTC)
-Date: Fri, 13 Dec 2024 11:03:40 +0100
-Message-Id: <D6AHJX8GO6HT.3K4SPRXLX14U4@kernel.org>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>, "Kilian Zinnecker"
- <kilian.zinnecker@mail.de>, "Damien Le Moal" <dlemoal@kernel.org>, "Thomas
- Petazzoni" <thomas.petazzoni@bootlin.com>, "Niklas Cassel"
- <cassel@kernel.org>
-To: "Niklas Cassel" <Niklas.Cassel@wdc.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 36TLZpoYsH-n for <buildroot@buildroot.org>;
+ Fri, 13 Dec 2024 10:19:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=159.69.201.130;
+ helo=mail.3ffe.de; envelope-from=michael@walle.cc; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 26D9B4135A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26D9B4135A
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 26D9B4135A
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 10:19:10 +0000 (UTC)
+Received: from localhost (unknown [213.135.10.150])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits)
+ server-digest SHA256) (No client certificate requested)
+ by mail.3ffe.de (Postfix) with ESMTPSA id D300414B;
+ Fri, 13 Dec 2024 11:11:12 +0100 (CET)
+Date: Fri, 13 Dec 2024 11:11:10 +0100
+Message-Id: <D6AHPO6PLTAA.3JA4YPDT3G8B5@walle.cc>
+Cc: <buildroot@buildroot.org>
+To: "Sergey Matyukevich" <geomatsi@gmail.com>, "Edgar Bonet"
+ <bonet@grenoble.cnrs.fr>
 X-Mailer: aerc 0.16.0
-References: <20241213083430.4121422-1-niklas.cassel@wdc.com>
- <D6AG261DAIGT.19EZJ5IUQQ16R@kernel.org> <Z1v5werOKAXaX2iW@ryzen>
- <D6AGYGCVAEYN.F84LYRW2DRTV@kernel.org> <Z1wC0zRgrhS0jl52@ryzen>
-In-Reply-To: <Z1wC0zRgrhS0jl52@ryzen>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=kernel.org; s=k20201202; t=1734084224;
- bh=RWfwUKE8QgPv4k6B0Cs5uSryIMGaElV2tO5lvEMtj4o=;
- h=Date:Subject:Cc:From:To:References:In-Reply-To:From;
- b=eF5Hdmnn85wN7Q4rfTmHade913Hi4Km0G99M48X5M4GA9oINfRQ7H2Ul9ospNBB86
- xZY5sNk+Ev+mFgP4npAy6wXApbG3+L0YsX3xjNtSaN8/KnOipAdrVmKeDxtRoMzXvl
- FEBiD2VogjQIaRIAJiR8uL251nrU1SjPLsQXWrh5Xi+jnAPrdEXmpFcxSwrS8ytPFn
- xLgdK8FIjSzNnAo3effD7Y8WpXW2kJeAULNhr1fGgXtcXTSNs+sJJmngmo2BTeIYEW
- l+iHwaGb/L2n0Dex1X28tuwppRTTsA1bUk7PLG7eSBXvmxFvJ/cjPU5/kfKg0qnX6D
- EFxzdeJwUb1DQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+References: <20241208214748.524923-1-geomatsi@gmail.com>
+ <dcbd3f77-e737-41a2-9f23-87141d0bdf9b@grenoble.cnrs.fr>
+ <Z1in3yM7ddVMYEqq@curiosity>
+In-Reply-To: <Z1in3yM7ddVMYEqq@curiosity>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=walle.cc; s=mail2022082101; t=1734084672;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:content-type:content-type:in-reply-to:in-reply-to:
+ references:references; bh=8U/jhQkS4wbU+MDa7IO56zvM4scujRnkNI69Qvdzz/E=;
+ b=Wge+NPr/BkVob6GBNSK/RI4BpSEi8jtUqDj0MEPN5IjI6LL+e0QhwQyprdTBHDp6z3obrZ
+ yoCcdMDv+DToSOdrNiJYyn89EkgOVJHU3DXktiN70pu+hQQNmosphJdFCM06i7MnHVUoki
+ IuMjLImbHfCMdUZZhFjpNqPGEENybtZgnSdqCnhNgp8/iciaIo8SBCWhHFQfeR0sfVxr5w
+ rfbOKtp9OkCbNouofHo+f6iZu3pnuFEtyGl8OlWQfPneiQx5JYUjz7pecx2xERET/j+MEy
+ 5if+ytKL1ncbwRJoYL+Ncf6YZxh7liQgwub77MnbodifPWNkFkOWNKxuVj8h5g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=kernel.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=walle.cc
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
- header.s=k20201202 header.b=eF5Hdmnn
-Subject: Re: [Buildroot] [PATCH v3 1/2] linux: add support for device tree
- overlays
+ unprotected) header.d=walle.cc header.i=@walle.cc header.a=rsa-sha256
+ header.s=mail2022082101 header.b=Wge+NPr/
+Subject: Re: [Buildroot] [PATCH 0/3] {linux,
+ linux-headers}: add support for 6.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,70 +83,55 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Michael Walle via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Walle <mwalle@kernel.org>
+Reply-To: Michael Walle <michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8150265125143645237=="
+Content-Type: multipart/mixed; boundary="===============1860283023772108377=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8150265125143645237==
+--===============1860283023772108377==
 Content-Type: multipart/signed;
- boundary=11990468e83b5343393d49e358b9a7677e41efaccc4a0ad6a239b434bb92;
+ boundary=3c2accdf0b3857046b5cc2b413d64f22926abc2ccfec2ad1d4f0f30cd473;
  micalg=pgp-sha384; protocol="application/pgp-signature"
 
---11990468e83b5343393d49e358b9a7677e41efaccc4a0ad6a239b434bb92
+--3c2accdf0b3857046b5cc2b413d64f22926abc2ccfec2ad1d4f0f30cd473
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
 
-Hi Niklas,
+Hi,
 
-> > But I've just tested both compiling .dts and .dtso from within a
-> > vendor directory and it seems to be working on next-20241213 (?).
+> IIUC at the moment Buildroot includes the following configurations that
+> make use of BR2_LINUX_KERNEL_CUSTOM_DTS_PATH:
+> - acmesystems_acqua_a5_256mb_defconfig (v6.6)
+> - acmesystems_acqua_a5_512mb_defconfig (v6.6)
+> - octavo_osd32mp1_brk_defconfig (v5.10)
+> - octavo_osd32mp1_red_defconfig (v5.10)
+> - s6lx9_microboard_defconfig (v4.4.7)
 >
-> If you say that copying to arch/<arch>/dts/<vendor>/ is still working, th=
-en
-> most likely it is only copying to arch/<arch>/dts that is no longer worki=
-ng.
+> Kernel version from each config is specified in parentheses. Adding new
+> v6.12 kernel is not going to break any of those boards right away.
 
-Copying it to dts/ was wrong for arch's which had a subdir structure
-anyway.
-
->
-> I still think that this patch can be merged as is.
->
-> Once the BR2_LINUX_KERNEL_CUSTOM_DTS_PATH mess has been sorted, someone c=
-ould
-> add support for out-of-tree device tree overlays, if anyone wants/needs t=
-hat.
-
-Well, that was actually the intention of my patch :)
-
-> Adding support for in-tree device tree overlays now, does not make life h=
-arder
-> for anyone if they want to add support for out-of-tree device tree overla=
-ys in
-> the future.
-
-Agreed.
+What about buildroot externals? I'd presume they'll make extensive
+use of this very feature.
 
 -michael
 
---11990468e83b5343393d49e358b9a7677e41efaccc4a0ad6a239b434bb92
+--3c2accdf0b3857046b5cc2b413d64f22926abc2ccfec2ad1d4f0f30cd473
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iKgEABMJADAWIQTIVZIcOo5wfU/AngkSJzzuPgIf+AUCZ1wGfBIcbXdhbGxlQGtl
-cm5lbC5vcmcACgkQEic87j4CH/jzbwGA+BkDRe6wfyOc3qSY9xzriB2nRZigcuHj
-+mjdYPN5bgg0cmzNCXMcmPk1kifFI3zXAX90MnT05CH+aKMWyAt+Fl/U84jzwcny
-VpupeDPrTWsePiiEz/ZRQdHiv9336bY3LqI=
-=a3yL
+iKcEABMJAC8WIQTIVZIcOo5wfU/AngkSJzzuPgIf+AUCZ1wIPxEcbWljaGFlbEB3
+YWxsZS5jYwAKCRASJzzuPgIf+MGJAX0YAHXuSezRmNHD3vtJh9AV+4Ni51aJAAan
+kUi7YJO0H5AKH1ik/maOvaqtOjiGJ6YBgKfiK2RF7E4d2s3crLfbM6TKDc7O3Nl7
+4M9cdIoChl3gKsc10sOaZeZgqIILVWBlyw==
+=ll8k
 -----END PGP SIGNATURE-----
 
---11990468e83b5343393d49e358b9a7677e41efaccc4a0ad6a239b434bb92--
+--3c2accdf0b3857046b5cc2b413d64f22926abc2ccfec2ad1d4f0f30cd473--
 
---===============8150265125143645237==
+--===============1860283023772108377==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -160,4 +142,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8150265125143645237==--
+--===============1860283023772108377==--
