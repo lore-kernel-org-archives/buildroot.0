@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F028CE77183
-	for <buildroot@archiver.kernel.org>; Fri, 13 Dec 2024 22:46:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31CF8E7717F
+	for <buildroot@archiver.kernel.org>; Fri, 13 Dec 2024 23:20:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7CE940557;
-	Fri, 13 Dec 2024 22:46:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC5CD84555;
+	Fri, 13 Dec 2024 23:20:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i9VylpautUuq; Fri, 13 Dec 2024 23:20:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D697884564
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D697884564;
+	Fri, 13 Dec 2024 23:20:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2940075
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 23:20:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 111B241588
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 23:20:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XBnc1exCAKek; Fri, 13 Dec 2024 22:46:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D3CB40558
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D3CB40558;
-	Fri, 13 Dec 2024 22:46:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C2B231146
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 22:45:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9FA324031D
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 22:45:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KrEsT5rIwDfk for <buildroot@buildroot.org>;
- Fri, 13 Dec 2024 22:45:55 +0000 (UTC)
+ id rG7LETBQ3PcG for <buildroot@buildroot.org>;
+ Fri, 13 Dec 2024 23:20:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A87A740111
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21A2A41586
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A87A740111
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 22:45:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 21A2A41586
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 23:20:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 941FB86F95; Fri, 13 Dec 2024 22:45:55 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 0D10386FA3; Fri, 13 Dec 2024 23:20:27 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 13 Dec 2024 23:44:45 +0100
-X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: de3a8734f13e80467638a82f3f8673c35889fc6c
-X-Git-Newrev: 0f5fc9b06576f7cb5330c4d9d46f1cffcf88ef7e
+Date: Fri, 13 Dec 2024 23:28:02 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3a3f1f542c16f6c09445e353895052259f6c0ded
+X-Git-Newrev: 166387d2f521c7833611e7c4108b430ce3989bae
 X-Patchwork-Hint: ignore
-Message-Id: <20241213224555.941FB86F95@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x]
- support/testing/tests/package/test_fwts.py: switch to neoverse-n1 cpu
+Message-Id: <20241213232027.0D10386FA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/rock5b: update to linux 6.12.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,54 +64,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f5fc9b06576f7cb5330c4d9d46f1cffcf88ef7e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=166387d2f521c7833611e7c4108b430ce3989bae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The SBSA Reference Platform was updated to use the neoverse-n1 cpu
-(armv8.2a) in Qemu v8.1 [1].
+Update to Linux 6.12, which also happens to be a LTS release.
 
-Commit c58a2a968 "configs/qemu_aarch64_sbsa_defconfig: switch to
-neoverse-n1 (armv8.2a)" [2] reflected this change in
-qemu_aarch64_sbsa_defconfig.
-
-This commit updates the test_fwts runtime test the same way.
-
-This update is possible with the help of commits [3] and [4].
-
-[1] https://gitlab.com/qemu-project/qemu/-/commit/1877272bad7b08b67312503ee66184279876c7bd
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/c58a2a9687c045379c0f768c8c6c1c1a41842a85
-[3] https://gitlab.com/buildroot.org/buildroot/-/commit/0d4177598ce7e73f2b97ac58c21fb177343643e3
-[4] https://gitlab.com/buildroot.org/buildroot/-/commit/027ddcbff65bb9dc1799d89fc140a33e81d35421
-
+Signed-off-by: Niklas Cassel <cassel@kernel.org>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit c2f91e90468ee942f68440a20153f8668012eea6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_fwts.py | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ board/radxa/rock5b/patches/linux/linux.hash | 2 +-
+ configs/rock5b_defconfig                    | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/testing/tests/package/test_fwts.py b/support/testing/tests/package/test_fwts.py
-index 6e2b6f50ba..4df13b60f9 100644
---- a/support/testing/tests/package/test_fwts.py
-+++ b/support/testing/tests/package/test_fwts.py
-@@ -7,6 +7,7 @@ class TestFwts(infra.basetest.BRTest):
-     config = \
-         """
-         BR2_aarch64=y
-+        BR2_neoverse_n1=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-         BR2_TARGET_ROOTFS_EXT2=y
-@@ -66,7 +67,7 @@ class TestFwts(infra.basetest.BRTest):
-         flash1 = os.path.join(self.builddir, "images", "SBSA_FLASH1.fd")
-         self.emulator.boot(arch="aarch64",
-                            options=["-M", "sbsa-ref",
--                                    "-cpu", "cortex-a57",
-+                                    "-cpu", "neoverse-n1",
-                                     "-m", "512M",
-                                     "-pflash", flash0,
-                                     "-pflash", flash1,
+diff --git a/board/radxa/rock5b/patches/linux/linux.hash b/board/radxa/rock5b/patches/linux/linux.hash
+index 005667b1f1..d00eed9a49 100644
+--- a/board/radxa/rock5b/patches/linux/linux.hash
++++ b/board/radxa/rock5b/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  057263d0afc17d5253794afd3d239ba4da4aa734b22fa36c1665f41b95449b73  linux-6.11.3.tar.xz
++sha256  6f35f821433d8421be7167990747c7c4a0c451958fb96883446301af13d71152  linux-6.12.4.tar.xz
+diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
+index 38b5aad206..f898e86c8c 100644
+--- a/configs/rock5b_defconfig
++++ b/configs/rock5b_defconfig
+@@ -1,6 +1,6 @@
+ BR2_aarch64=y
+ BR2_cortex_a76_a55=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/radxa/rock5b/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="rock5b"
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rock5b/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.4"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/radxa/rock5b/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
