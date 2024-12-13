@@ -4,84 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71E7BE7717F
-	for <buildroot@archiver.kernel.org>; Fri, 13 Dec 2024 19:13:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 515C1E7717F
+	for <buildroot@archiver.kernel.org>; Fri, 13 Dec 2024 20:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 183916066F;
-	Fri, 13 Dec 2024 19:13:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB2726145F;
+	Fri, 13 Dec 2024 20:51:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pPhQhIY_Eguj; Fri, 13 Dec 2024 19:13:04 +0000 (UTC)
+ id 6fmNl--f4QLm; Fri, 13 Dec 2024 20:51:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19E1E6063A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2A5961485
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19E1E6063A;
-	Fri, 13 Dec 2024 19:13:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B32975
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 19:13:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E2A5961485;
+	Fri, 13 Dec 2024 20:51:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EA0BFECE
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 20:51:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0843F810AF
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 19:13:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D7DD86145F
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 20:51:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NnrPCyGVAhhS for <buildroot@buildroot.org>;
- Fri, 13 Dec 2024 19:13:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.249;
- helo=lelv0142.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F3DF68112B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3DF68112B
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F3DF68112B
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 19:13:00 +0000 (UTC)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
- by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4BDG7T1S066139;
- Fri, 13 Dec 2024 10:07:29 -0600
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
- by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4BDG7TeV052187
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Fri, 13 Dec 2024 10:07:29 -0600
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 13
- Dec 2024 10:07:29 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 13 Dec 2024 10:07:29 -0600
-Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
- by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4BDG7Tfj047805;
- Fri, 13 Dec 2024 10:07:29 -0600
-Date: Fri, 13 Dec 2024 10:07:29 -0600
-To: Romain Naour <romain.naour@smile.fr>
-CC: <buildroot@buildroot.org>, Anand Gadiyar <gadiyar@ti.com>, Xuanhao Shi
- <X15000177@gmail.com>
-Message-ID: <20241213160729.x5q7w7e3zkrk5e2p@bryanbrattlof.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-References: <20241210-uboot-bump-v1-1-baeb59feef61@ti.com>
- <998274a1-2a12-4929-83cc-d866a89a1e93@smile.fr>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <998274a1-2a12-4929-83cc-d866a89a1e93@smile.fr>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1734106049;
- bh=RPhNv9xzdHPSS4CW0fy5FWkO3Vq1sviQEnFx7vpTX3k=;
- h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=Fjc5cMOJRAV4kewaRmMjRzZlW5DJ/Z2lilOIatwIMDfn3bF2znY3xBbiaYgH24sTP
- zIOdSCJuEtcnCfsRSBIql7/wiwf2kbozo3ULR5A/n0HK0c0uO2bEnzDWRA+KkXucd6
- HjfZLcFS6fbPJYwfDJAPWlSsSQgEahXJZnvKC14Q=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=Fjc5cMOJ
-Subject: Re: [Buildroot] [PATCH] boot/ti-k3-r5-loader: add host-gnutls to
- dependencies
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3JmCpId8hWkM for <buildroot@buildroot.org>;
+ Fri, 13 Dec 2024 20:51:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE5A46071A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id EE5A46071A
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 20:51:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E241086F61; Fri, 13 Dec 2024 20:51:09 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 13 Dec 2024 21:00:52 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bb27353014fecb656a1ce71c445c7d3c885d7d84
+X-Git-Newrev: 7b87f8cb21e58ae007d370c899f1f5c41a29ff97
+X-Patchwork-Hint: ignore
+Message-Id: <20241213205109.E241086F61@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cmake: bump version to 3.31.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,36 +58,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
-Reply-To: Bryan Brattlof <bb@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgUm9tYWluIQoKT24gRGVjZW1iZXIgMTEsIDIwMjQgdGh1cyBzYXlldGggUm9tYWluIE5hb3Vy
-IHZpYSBidWlsZHJvb3Q6Cj4gSGVsbG8gQnJ5YW4sIEFsbCwKPiAKPiBMZSAxMS8xMi8yMDI0IMOg
-IDAwOjMyLCBCcnlhbiBCcmF0dGxvZiB2aWEgYnVpbGRyb290IGEgw6ljcml0wqA6Cj4gPiBOZXdl
-ciB2ZXJzaW9ucyBvZiBVLUJvb3QgbWF5IHJlcXVpcmUgdGhlIEdudVRMUyBsaWJyYXJ5IHRvIGJl
-IGluc3RhbGxlZAo+ID4gb24gdGhlIGhvc3QgbWFjaGluZSBkdXJpbmcgdGhlIEVGSSBjYXBzdWxl
-IGNyZWF0aW9uIHBoYXNlIG9mIHRoZSBVLUJvb3QKPiA+IGJ1aWxkLiBBZGQgaG9zdC1nbnV0bHMg
-dG8gdGhlIGxpc3Qgb2YgZGVwZW5kZW5jaWVzLgo+IAo+IFlvdXIgcmVwbHkgWzFdIGFib3V0IG1r
-ZWZpY2Fwc3VsZSB0b29sIHVzZWQgdG8gYnVpbGQgdGlib290My5iaW4gaW1hZ2VzIHdhcwo+IHBy
-b2JhYmx5IGEgZ29vZCBpbmZvIHRvIGtlZXAgaW4gdGhlIGNvbW1pdCBsb2cuCj4gCgpBaCB5ZWFo
-IEknbGwgZWxhYm9yYXRlIG9uIHRoYXQgYSBiaXQgZm9yIHYyCgo+Cj4gSW5kZWVkLCBzaW5jZSB1
-LWJvb3QgMjAyNC4xMCB0aGUgbWtlZmljYXBzdWxlIGlzIG5vdyBtYW5kYXRvcnkgb3RoZXJ3aXNl
-IGJpbm1hbgo+IGZhaWwgKHRlc3RlZCB3aXRoIHRoZSBiZWFnbGVib2FyZGFpNjQgZGVmY29uZGlm
-IHdpdGggdS1ib290IDIwMjQuMTApOgo+IAo+ICAgQklOTUFOICAuYmlubWFuX3N0YW1wCj4gICBJ
-bWFnZSAnY2Fwc3VsZS10aWJvb3QzJyBoYXMgbWlzc2luZyBiaW50b29scyBhbmQgaXMgbm9uLWZ1
-bmN0aW9uYWw6IG1rZWZpY2Fwc3VsZQo+IAo+ICAgSW1hZ2UgJ2NhcHN1bGUtc3lzZncnIGhhcyBt
-aXNzaW5nIGJpbnRvb2xzIGFuZCBpcyBub24tZnVuY3Rpb25hbDogbWtlZmljYXBzdWxlCj4gCj4g
-ICBTb21lIGltYWdlcyBhcmUgaW52YWxpZAo+IAo+IEknbSBub3Qgc3VyZSB3ZSB3YW50IHRvIGtl
-ZXAgdGhlIGFiaWxpdHkgdG8gZGlzYWJsZSBob3N0LWdudXRscyBkZXBlbmRlbmN5IGZvcgo+IHRp
-LWszLXI1LWxvYWRlciBzaW5jZSBvbmx5IHZlcnNpb24gdXAgdG8gMjAyNC4xMCBkb2Vzbid0IG5l
-ZWQgbWtlZmljYXBzdWxlIHRvb2wKPiBmb3IgVEkgSzMgU29Dcy4KPiAKClRoYXQgd29ya3Mgd2l0
-aCBtZS4gZ251dGxzIGlzIHNvIHNtYWxsIGl0J3MgcmVhbGx5IG5vdCB3b3J0aCB0aGUgCmNvbXBs
-ZXhpdHkgaWYgcGVvcGxlIGV4cGxpY2l0bHkgcmVtb3ZlIEVGSSBjYXBzdWxlcyBvbiBUSSBjaGlw
-cyBmcm9tIApVLUJvb3QuIAoKVGhhbmtzIGZvciB0aGUgcmV2aWV3IQoKfkJyeWFuCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=7b87f8cb21e58ae007d370c899f1f5c41a29ff97
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes:
+https://cmake.org/cmake/help/v3.31/release/3.31.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/cmake/Config.in.host | 5 +++++
+ package/cmake/cmake.hash     | 4 ++--
+ package/cmake/cmake.mk       | 4 ++--
+ 3 files changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/package/cmake/Config.in.host b/package/cmake/Config.in.host
+index 389300f31f..b30ce03a1c 100644
+--- a/package/cmake/Config.in.host
++++ b/package/cmake/Config.in.host
+@@ -59,10 +59,15 @@ config BR2_HOST_CMAKE_AT_LEAST_3_30
+ 	bool
+ 	select BR2_HOST_CMAKE_AT_LEAST_3_29
+ 
++config BR2_HOST_CMAKE_AT_LEAST_3_31
++	bool
++	select BR2_HOST_CMAKE_AT_LEAST_3_30
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_HOST_CMAKE_AT_LEAST
+ 	string
++	default "3.31"	if BR2_HOST_CMAKE_AT_LEAST_3_31
+ 	default "3.30"	if BR2_HOST_CMAKE_AT_LEAST_3_30
+ 	default "3.29"	if BR2_HOST_CMAKE_AT_LEAST_3_29
+ 	default "3.28"	if BR2_HOST_CMAKE_AT_LEAST_3_28
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index f80b942103..f214c21925 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,5 +1,5 @@
+-# From https://cmake.org/files/v3.30/cmake-3.30.5-SHA-256.txt
+-sha256  9f55e1a40508f2f29b7e065fa08c29f82c402fa0402da839fffe64a25755a86d  cmake-3.30.5.tar.gz
++# From https://cmake.org/files/v3.31/cmake-3.31.1-SHA-256.txt
++sha256  c4fc2a9bd0cd5f899ccb2fb81ec422e175090bc0de5d90e906dd453b53065719  cmake-3.31.1.tar.gz
+ 
+ # Locally calculated
+ sha256  0676e30827684487aa0ea8f72f01e9460a6320fa34a2888df0ad1dd3e8a06eb8  Copyright.txt
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 0c5d46c23d..7fc1f0181d 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
+-CMAKE_VERSION_MAJOR = 3.30
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).5
++CMAKE_VERSION_MAJOR = 3.31
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3-Clause
+ CMAKE_LICENSE_FILES = Copyright.txt
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
