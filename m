@@ -1,75 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CA15E77180
-	for <buildroot@archiver.kernel.org>; Fri, 13 Dec 2024 11:59:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04876E7717F
+	for <buildroot@archiver.kernel.org>; Fri, 13 Dec 2024 11:59:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 331464148D;
-	Fri, 13 Dec 2024 11:59:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C342860839;
+	Fri, 13 Dec 2024 11:59:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mrTWcnA3SFtm; Fri, 13 Dec 2024 11:59:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bma5H3h_PCxd; Fri, 13 Dec 2024 11:59:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFDDD414EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAC5660E00
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DFDDD414EE;
-	Fri, 13 Dec 2024 11:59:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4163C1146
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 11:58:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DAC5660E00;
+	Fri, 13 Dec 2024 11:59:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B08AECD
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 11:59:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 235FB81F85
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 11:58:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59BB240146
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 11:59:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wk7StHd_aIps for <buildroot@buildroot.org>;
- Fri, 13 Dec 2024 11:58:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fnPsP0oselcL for <buildroot@buildroot.org>;
+ Fri, 13 Dec 2024 11:59:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::235; helo=mail-lj1-x235.google.com;
+ client-ip=2a00:1450:4864:20::22b; helo=mail-lj1-x22b.google.com;
  envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F0B1B81F57
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0B1B81F57
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com
- [IPv6:2a00:1450:4864:20::235])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F0B1B81F57
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 11:58:56 +0000 (UTC)
-Received: by mail-lj1-x235.google.com with SMTP id
- 38308e7fff4ca-30229d5b229so14643991fa.0
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 03:58:56 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 64A4E40003
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64A4E40003
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com
+ [IPv6:2a00:1450:4864:20::22b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 64A4E40003
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 11:59:00 +0000 (UTC)
+Received: by mail-lj1-x22b.google.com with SMTP id
+ 38308e7fff4ca-3022484d4e4so17826061fa.1
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 03:59:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1734091135; x=1734695935;
+ d=1e100.net; s=20230601; t=1734091138; x=1734695938;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=vsudPsPzJy8oK8aJgXxFbASds6xmJJkTl7FcorcS7P8=;
- b=T9ZYCvSgwBdFZxvOfBD6UuZXfzub8eD5DUgkaSufd4klGEeybHZ8mXkp2Lw+PdN++y
- DPOBIvcbf28sM13sSyE0eXGym+ZxRucZ0TrRexDzALcNfBekmeU9Z75emqn87ZXZ/a3g
- 2Sz+RFbbijDfHMwUKRnDOdMnf2g0z4LGtLr4WP+Kzc0qctxYxAPZ4qCQRWaYus11Dz6r
- Yj1gcrTz39H/VZ0B/TkebU1oQ2xUvxqODsr10AI+YY3epAvd1voz9AbHrkXY2Dmtjf2h
- rPzzM4/Q9zXiEt1ybr9RDEeVo/Cynw7hOQGzuZQEY9xTn9zTYM1huv5QuvDHcLHGbMW1
- 3cag==
-X-Gm-Message-State: AOJu0Yx4plPAp1rDdNrB9ZlWANCvBAWsUFzkzyaWClraKkvm/4ueyH/1
- szPAPQiwwDfDo5wQjcl9lj2Fpbo0Grjb9DBRJCpoOIbNL8UGRP28tbP2VQ==
-X-Gm-Gg: ASbGncvTLPjQsJN0uzSoRoUhSEzRN54oB9FxSNZXZhCwdTzJ3T8grlIkpXXPdjOKBT5
- rEzsthe246tIYvUqv4kCBkezl6BF8BaAnkalkORpjf1aG7O2tDTP9/psA4GQtOVdjG1KMY4v9qR
- Efm78/p3kVix8TDVgwQzEyoq+yWogIoRIuwyOin25jp6X2w+L95o/XM6azpFEAEFvAI//cV/A2N
- 3BLowkl8rEYe/OeduRP54haPrr4OvgUUqZLw7wu1vCc4NyoiMV4+WapcLE/HKspBvFtPNOWnv1a
- 8txH840tMQG5SHs=
-X-Google-Smtp-Source: AGHT+IFvrfo0gMu4kSukiEGwUhIEeAKOR424CBVvBkL+Z/kjMW0fGk8tG4WZrPRIODhIw0gDN3f0/w==
-X-Received: by 2002:a2e:be9f:0:b0:302:34d6:eeea with SMTP id
- 38308e7fff4ca-3025447f0d7mr8419901fa.3.1734091134521; 
- Fri, 13 Dec 2024 03:58:54 -0800 (PST)
+ bh=+nwfe9zrM5w9knJE+MQ/jsy60bOI3z9Qm+0UoGW17GE=;
+ b=IyVwBSUqokUzvgdgPXWjo/Y3y6Z3GyBd/e7Klxr+oNT0ku8Dxd/nCSQDkNRxiTPIWV
+ qeQs8WELaOcgqYh7Kxb0aIXBWOmzGjXcHZSKb9r3a1WcaqoTrXJbzzozOT9TXLU5njIx
+ Gb2yi6v0Sh0vTa/ynmMsy/fNaBS1Nwv71Dk2OO5I6H4Ij/ae7BhCA0OZdITRZMzhfU3L
+ NOZ5AmQUH4PcV6FEpMDZVcMceNwP9irATcF7KPRkovndfrXoGoRpqmjNDIUfStUiav0L
+ a96F4/FvULRxW3ASVm2FmuSnkmo0KM5jlyXNvkrBQH2NC6fiuf/jYT4OEQouW7sOF2s6
+ fl8w==
+X-Gm-Message-State: AOJu0Ywvfo+zEXUMs/CpoBT/PGOVFdUCEz/Lj5ahJ0IGuzbKKOsRoonj
+ dILuP6BI8tf8OriaqpRteFUOv8cxf9IBUIjb5RbKrD8D1fDM/6iTPdNAqw==
+X-Gm-Gg: ASbGncvLd/XMyw+qoP+s3vFBmG+TXdnGNSF3GIOa1mLKGK/1dlXSNupUiuFbvXOV6P+
+ wXIH3hEKglNKnDvrZM7BOSJqxhUi8Y+RNECI6mWUEVNb9ZUgwF/yetM9u5RMGbU0dsbWkRIWNpw
+ B9vOGYP0iMgTTdv5rC+O5ORBFUTgyzYyOylorABefaeyKXqwo9PZdZEeO93ZF+rPI+5Vr7BJdd9
+ eySrB0OO3MVq4M/Qq2KkYg54ZDKSeT9+MLGwsJqW4Mye45MJBe7GRdycw95Kj9E3lPu9V0+eT+A
+ vW+nipPGIQLcHho=
+X-Google-Smtp-Source: AGHT+IGY4H0W4eqZ7dsTDw9ATdaDXfY/4f7zsqUlXUD2hP9uz8bQ/flDsUAGjSj6YL0NByze+yDyFg==
+X-Received: by 2002:a2e:bb94:0:b0:300:377d:2c36 with SMTP id
+ 38308e7fff4ca-302544c9099mr5727481fa.40.1734091138045; 
+ Fri, 13 Dec 2024 03:58:58 -0800 (PST)
 Received: from precision7530-arch-roy.lan
  ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
  by smtp.gmail.com with ESMTPSA id
- 38308e7fff4ca-30038ce97b4sm20610651fa.118.2024.12.13.03.58.51
+ 38308e7fff4ca-30038ce97b4sm20610651fa.118.2024.12.13.03.58.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Dec 2024 03:58:53 -0800 (PST)
+ Fri, 13 Dec 2024 03:58:56 -0800 (PST)
 From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
 Cc: Christian Hitz <christian@klarinett.li>,
@@ -78,31 +78,31 @@ Cc: Christian Hitz <christian@klarinett.li>,
  Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Jesse Van Gavere <jesseevg@gmail.com>
-Date: Fri, 13 Dec 2024 12:58:14 +0100
-Message-ID: <20241213115820.655993-7-roykollensvendsen@gmail.com>
+Date: Fri, 13 Dec 2024 12:58:15 +0100
+Message-ID: <20241213115820.655993-8-roykollensvendsen@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20241213115820.655993-1-roykollensvendsen@gmail.com>
 References: <20241213115820.655993-1-roykollensvendsen@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1734091135; x=1734695935; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1734091138; x=1734695938; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=vsudPsPzJy8oK8aJgXxFbASds6xmJJkTl7FcorcS7P8=;
- b=cpEj0F4JRIEFFLX8tD/0WO1MVGGMRhd57mEgC3e+s3H+68dkKxPoVNxWUjOlau5+9S
- sJcglBovYG/61dugX/M8zv0Vtt3M6PNOFtO6sEkzDjzCncP/9PnJuX1ouqJFBRcqsufG
- RJ5/GQddJfYl7vVFFqbGCgtpFKtIjFH82CBdDSxrtfQnn78xu31p15YFRC8ijm8fApAN
- TRqOTAwF11q7K2hjRYuIslXpcqkUdOdS9IAtEhu3Cv4/tEZdr5MuosOaX469bFRZNqzU
- B4W+gHMNJZZ2Gg35tmj08g90MkdYtweXv46cxFNbFSDffCZU0+FWtjyEZT5NzvWfc087
- l6Aw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=+nwfe9zrM5w9knJE+MQ/jsy60bOI3z9Qm+0UoGW17GE=;
+ b=HF2CnP67g+b+tpuQ4vd9mkNju5uW4KBPKCGDmWeo42GhvcnI6TTSfGuKy5tUwQewog
+ GqyZo+0MMBxyyecWR5SM96GbgAhZHxFUwityvscEU4FFC8kMJPZeySFOOXoTIpFBO9dZ
+ lwPg7XJUSy+yunE6zTiCBn9vMOk3r0ORa8VYsHLig4h5t8nfZDHE3tGp92ZXd94cNtvM
+ 92PbLlamTcEDP03iYrNqUC/RcvLm9G4SBDag++QZrCghsk1ddl2qUdwbRHTjtIDjR01Y
+ 3QNf0PrTmTsCX4LXwJBFUi2hwE6WfL7s0RFf5FwJsu3Dwpsw/jHmcjbKfj6Bww9PmGGi
+ 0KdA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=cpEj0F4J
-Subject: [Buildroot] [PATCH 7/8] package/qt6/qt6graphs: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=HF2CnP67
+Subject: [Buildroot] [PATCH 8/8] package/qt6/qt6opcua: fix 'qt6opcua' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,85 +121,22 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 ---
- package/qt6/Config.in                |  1 +
- package/qt6/qt6graphs/Config.in      |  8 ++++++++
- package/qt6/qt6graphs/qt6graphs.hash |  5 +++++
- package/qt6/qt6graphs/qt6graphs.mk   | 27 +++++++++++++++++++++++++++
- 4 files changed, 41 insertions(+)
- create mode 100644 package/qt6/qt6graphs/Config.in
- create mode 100644 package/qt6/qt6graphs/qt6graphs.hash
- create mode 100644 package/qt6/qt6graphs/qt6graphs.mk
+ package/qt6/qt6opcua/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index 2a5f5a4511..80c417809d 100644
---- a/package/qt6/Config.in
-+++ b/package/qt6/Config.in
-@@ -47,6 +47,7 @@ source "package/qt6/qt6base/Config.in"
- source "package/qt6/qt6charts/Config.in"
- source "package/qt6/qt6core5compat/Config.in"
- source "package/qt6/qt6declarative/Config.in"
-+source "package/qt6/qt6graphs/Config.in"
- source "package/qt6/qt6languageserver/Config.in"
- source "package/qt6/qt6mqtt/Config.in"
- source "package/qt6/qt6opcua/Config.in"
-diff --git a/package/qt6/qt6graphs/Config.in b/package/qt6/qt6graphs/Config.in
-new file mode 100644
-index 0000000000..a99f25d6de
---- /dev/null
-+++ b/package/qt6/qt6graphs/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_QT6GRAPHS
-+	bool "qt6graphs"
-+	select BR2_PACKAGE_QT6DECLARATIVE
-+	select BR2_PACKAGE_QT6QUICK3D
-+	help
-+	  This package corresponds to the Qt Graphs module:
-+
-+	  https://doc.qt.io/qt-6/qtgraphs-index.html
-diff --git a/package/qt6/qt6graphs/qt6graphs.hash b/package/qt6/qt6graphs/qt6graphs.hash
-new file mode 100644
-index 0000000000..59d35d9e66
---- /dev/null
-+++ b/package/qt6/qt6graphs/qt6graphs.hash
-@@ -0,0 +1,5 @@
-+# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtgraphs-everywhere-src-6.8.1.tar.xz.sha256
-+sha256  1e46e3de69936835652ab40ef8caf5824ea71e26871274561fb65ec142d54a80  qtgraphs-everywhere-src-6.8.1.tar.xz
-+
-+# Hashes for license files
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-diff --git a/package/qt6/qt6graphs/qt6graphs.mk b/package/qt6/qt6graphs/qt6graphs.mk
-new file mode 100644
-index 0000000000..488d5acde2
---- /dev/null
-+++ b/package/qt6/qt6graphs/qt6graphs.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# qt6graphs
-+#
-+################################################################################
-+
-+QT6GRAPHS_VERSION = $(QT6_VERSION)
-+QT6GRAPHS_SITE = $(QT6_SITE)
-+QT6GRAPHS_SOURCE = qtgraphs-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6GRAPHS_VERSION).tar.xz
-+QT6GRAPHS_INSTALL_STAGING = YES
-+QT6GRAPHS_SUPPORTS_IN_SOURCE_BUILD = NO
-+QT6GRAPHS_CMAKE_BACKEND = ninja
-+QT6GRAPHS_LICENSE = GPL-3.0
-+QT6GRAPHS_LICENSE_FILES = LICENSES/GPL-3.0-only.txt
-+
-+QT6GRAPHS_CONF_OPTS = \
-+	-DQT_HOST_PATH=$(HOST_DIR) \
-+	-DBUILD_WITH_PCH=OFF \
-+	-DQT_BUILD_EXAMPLES=OFF \
-+	-DQT_BUILD_TESTS=OFF
-+
-+QT6GRAPHS_DEPENDENCIES = \
-+	qt6base \
-+	qt6declarative \
-+	qt6quick3d
-+
-+$(eval $(cmake-package))
+diff --git a/package/qt6/qt6opcua/Config.in b/package/qt6/qt6opcua/Config.in
+index 68b73f7c50..9b5359dd4c 100644
+--- a/package/qt6/qt6opcua/Config.in
++++ b/package/qt6/qt6opcua/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_QT6OPCUA
+ 	bool "qt6opcua"
+ 	select BR2_PACKAGE_QT6BASE_NETWORK
+-	# qt6opcuda needs host-qt6opcua, and host-qt6opcua needs
++	# qt6opcua needs host-qt6opcua, and host-qt6opcua needs
+ 	# network support in qt6base.
+ 	select BR2_PACKAGE_HOST_QT6BASE_NETWORK
+ 
 -- 
 2.47.1
 
