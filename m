@@ -4,64 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0B9AE7717D
-	for <buildroot@archiver.kernel.org>; Fri, 13 Dec 2024 05:39:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45E61E7717D
+	for <buildroot@archiver.kernel.org>; Fri, 13 Dec 2024 07:03:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8596F60698;
-	Fri, 13 Dec 2024 05:39:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3AC0606E6;
+	Fri, 13 Dec 2024 07:03:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TuMXVUUQTTp5; Fri, 13 Dec 2024 05:39:15 +0000 (UTC)
+ id sNoWm9FlUE_h; Fri, 13 Dec 2024 07:03:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EE306069A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6684606EA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7EE306069A;
-	Fri, 13 Dec 2024 05:39:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4D3C51146
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 05:39:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6684606EA;
+	Fri, 13 Dec 2024 07:03:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 01441ECD
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 07:03:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 311A16069A
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 05:39:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CE8AE400EC
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 07:03:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kuTpuJ9ZcFnM for <buildroot@buildroot.org>;
- Fri, 13 Dec 2024 05:39:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:4f8:1c1c:816::1;
- helo=server1.martb.eu; envelope-from=contact@martb.dev; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 550F160698
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 550F160698
-Received: from server1.martb.eu (server1.martb.eu [IPv6:2a01:4f8:1c1c:816::1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 550F160698
- for <buildroot@buildroot.org>; Fri, 13 Dec 2024 05:39:12 +0000 (UTC)
-Date: Fri, 13 Dec 2024 06:39:10 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tBV6FLbVqbOw for <buildroot@buildroot.org>;
+ Fri, 13 Dec 2024 07:03:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=68.232.141.245;
+ helo=esa1.hgst.iphmx.com; envelope-from=prvs=07052b375=niklas.cassel@wdc.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 94EA040251
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94EA040251
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 94EA040251
+ for <buildroot@buildroot.org>; Fri, 13 Dec 2024 07:03:12 +0000 (UTC)
+X-CSE-ConnectionGUID: tpoNHO2pQFS/go43Xps1Yw==
+X-CSE-MsgGUID: KtIHub4dS0ipYi1nzQs/wg==
+X-IronPort-AV: E=Sophos;i="6.12,230,1728921600"; d="scan'208";a="34882630"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com)
+ ([199.255.45.14])
+ by ob1.hgst.iphmx.com with ESMTP; 13 Dec 2024 15:03:11 +0800
+IronPort-SDR: 675bceca_ggE9e7Jl3YiIIoNDSYWb98DkGA+DkowhsWZjzLGwpknrWIL
+ CZBLIZx+r2YLzNzaNO04OYmRamwPNRlcGmn6uFg==
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+ by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
+ 12 Dec 2024 22:06:02 -0800
+WDCIronportException: Internal
+Received: from unknown (HELO ryzen.lan) ([10.224.3.233])
+ by uls-op-cesaip01.wdc.com with ESMTP; 12 Dec 2024 23:03:09 -0800
 To: buildroot@buildroot.org
-CC: Marek Belisko <marek.belisko@open-nandra.com>,
- =?ISO-8859-1?Q?Martin_B=F6h?= <contact@martb.dev>
-Message-ID: <FB194E54-666A-488A-8C79-6A3CB933D55B@martb.dev>
+Cc: Kilian Zinnecker <kilian.zinnecker@mail.de>,
+ Damien Le Moal <dlemoal@kernel.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Niklas Cassel <cassel@kernel.org>
+Date: Fri, 13 Dec 2024 08:02:41 +0100
+Message-ID: <20241213070241.3261032-1-niklas.cassel@wdc.com>
+X-Mailer: git-send-email 2.47.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=martb.dev; s=mail; t=1734068349;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=mW1cbZaS7plYW+rngmSiDOHN3xQTWd1EjZ6peOBabvU=;
- b=O/X7at1kDLTmbhywUmAiPJe+pGRSNK0PBycUyKVQJpePtxg2e8Ni8WwuiXDeCX8JxtIYm+
- f1Y9k3rHfBUUJDSXT7cF6h5SXrlSpbvnqckGirS/St3sa9dwOf8evYwP7AoorX4RL89w0H
- 1LsdHu6LGC7IjC99Qq7z9H6Ck52sgBM=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=martb.dev
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=martb.dev header.i=@martb.dev header.a=rsa-sha256
- header.s=mail header.b=O/X7at1k
-X-Mailman-Original-Authentication-Results: ORIGINATING;
- auth=pass smtp.auth=martin@familie-boeh.de smtp.mailfrom=contact@martb.dev
-Subject: [Buildroot] [PATCH 1/1] package/polkit: fix permissions after
- version bump to 125
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+ t=1734073392; x=1765609392;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=epBHc0KQN3mlGyC06tjevF6MYlI9r/YnlbuEwEPfxRA=;
+ b=Tz6FEGEe6Uvv6U8nz3NYmrRsmRX8E5+aBvHer0RmeRhyDX9AndbjYFUt
+ 8Qx7qPhbpIALqVcIyVKZ/LtZEE/LYYtRzXa/loizLXj7as29T6aKyf954
+ zIEqs6wlJ+WSQuFERd5R3z7ym15J/7/Ym/dmmSxHWGAOu4+kX4CYmra1w
+ H5ae+qXMO+7Yhb2DKS9ibd6FUxb+BHPrJYkG/RvHI3Od77eZJhbJeQHNv
+ u7UYKzUEiYbGTFVIXrhuorMAWI7buL8ZHo+gm8zR3eI6HzlPte2nrSAgI
+ 24BDYrgco7/fRiIeJOVBPqaT1u0FUKSVA5RmY6A7ADQLCSeGDZEn6bk9s
+ Q==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=wdc.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=wdc.com header.i=@wdc.com header.a=rsa-sha256
+ header.s=dkim.wdc.com header.b=Tz6FEGEe
+Subject: [Buildroot] [PATCH] configs/rock5b: update to linux 6.12.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -73,90 +92,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Martin_B=C3=B6h_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?ISO-8859-1?Q?Martin_B=F6h?= <contact@martb.dev>
-Content-Type: multipart/mixed; boundary="===============0185111239791484321=="
+From: Niklas Cassel via buildroot <buildroot@buildroot.org>
+Reply-To: Niklas Cassel <niklas.cassel@wdc.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0185111239791484321==
-Content-Type: multipart/alternative;
- boundary=----60A1L9QJ50WV7W29G622BQB9FJ3YVU
-Content-Transfer-Encoding: 7bit
+From: Niklas Cassel <cassel@kernel.org>
 
-------60A1L9QJ50WV7W29G622BQB9FJ3YVU
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Update to Linux 6.12, which also happens to be a LTS release.
 
-From: Martin B=C3=B6h <contact@martb=2Edev>
-
-The service failed to start correctly if any custom rules were installed=
-=2E
-This commit aligns the permissions with the upstream meson build step=2E
-
-Signed-off-by: Martin B=C3=B6h <contact@martb=2Edev>
+Signed-off-by: Niklas Cassel <cassel@kernel.org>
 ---
- package/polkit/polkit=2Emk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ board/radxa/rock5b/patches/linux/linux.hash | 2 +-
+ configs/rock5b_defconfig                    | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/polkit/polkit=2Emk b/package/polkit/polkit=2Emk
-index fb49f6ce2a=2E=2E6cd2aa6042 100644
---- a/package/polkit/polkit=2Emk
-+++ b/package/polkit/polkit=2Emk
-@@ -56,10 +56,10 @@ define POLKIT_USERS
- endef
-=20
- define POLKIT_PERMISSIONS
--	/etc/polkit-1/rules=2Ed d 700 polkitd root - - - - -
--	/usr/share/polkit-1/rules=2Ed d 700 polkitd root - - - - -
--	/usr/bin/pkexec f 4755 root root - - - - -
--	/usr/lib/polkit-1/polkit-agent-helper-1 f 4755 root root - - - - -
-+	/etc/polkit-1/rules=2Ed d 750 root polkitd - - - - -
-+	/usr/share/polkit-1/rules=2Ed d 750 root polkitd - - - - -
-+	/usr/bin/pkexec f 04755 root root - - - - -
-+	/usr/lib/polkit-1/polkit-agent-helper-1 f 04755 root root - - - - -
- endef
-=20
- define POLKIT_INSTALL_INIT_SYSTEMD
---=20
-2=2E47=2E1
-
-
-------60A1L9QJ50WV7W29G622BQB9FJ3YVU
-Content-Type: text/html;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<!DOCTYPE html><html><body><div dir=3D"auto">From: Martin B=C3=B6h &lt;cont=
-act@martb=2Edev&gt;<br><br>The service failed to start correctly if any cus=
-tom rules were installed=2E<br>This commit aligns the permissions with the =
-upstream meson build step=2E<br><br>Signed-off-by: Martin B=C3=B6h &lt;cont=
-act@martb=2Edev&gt;<hr>=C2=A0package/polkit/polkit=2Emk | 8 ++++----<br> 1 =
-file changed, 4 insertions(+), 4 deletions(-)<br><br>diff --git a/package/p=
-olkit/polkit=2Emk b/package/polkit/polkit=2Emk<br>index fb49f6ce2a=2E=2E6cd=
-2aa6042 100644<br>--- a/package/polkit/polkit=2Emk<br>+++ b/package/polkit/=
-polkit=2Emk<br>@@ -56,10 +56,10 @@ define POLKIT_USERS<br> endef<br> <br> d=
-efine POLKIT_PERMISSIONS<br>-	/etc/polkit-1/rules=2Ed d 700 polkitd root - =
-- - - -<br>-	/usr/share/polkit-1/rules=2Ed d 700 polkitd root - - - - -<br>=
--	/usr/bin/pkexec f 4755 root root - - - - -<br>-	/usr/lib/polkit-1/polkit-=
-agent-helper-1 f 4755 root root - - - - -<br>+	/etc/polkit-1/rules=2Ed d 75=
-0 root polkitd - - - - -<br>+	/usr/share/polkit-1/rules=2Ed d 750 root polk=
-itd - - - - -<br>+	/usr/bin/pkexec f 04755 root root - - - - -<br>+	/usr/li=
-b/polkit-1/polkit-agent-helper-1 f 04755 root root - - - - -<br> endef<br> =
-<br> define POLKIT_INSTALL_INIT_SYSTEMD<br><div class=3D'k9mail-signature'>=
--- <br>2=2E47=2E1<br><br></div></div></body></html>
-------60A1L9QJ50WV7W29G622BQB9FJ3YVU--
-
---===============0185111239791484321==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/board/radxa/rock5b/patches/linux/linux.hash b/board/radxa/rock5b/patches/linux/linux.hash
+index 005667b1f1..d00eed9a49 100644
+--- a/board/radxa/rock5b/patches/linux/linux.hash
++++ b/board/radxa/rock5b/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  057263d0afc17d5253794afd3d239ba4da4aa734b22fa36c1665f41b95449b73  linux-6.11.3.tar.xz
++sha256  6f35f821433d8421be7167990747c7c4a0c451958fb96883446301af13d71152  linux-6.12.4.tar.xz
+diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
+index 38b5aad206..f898e86c8c 100644
+--- a/configs/rock5b_defconfig
++++ b/configs/rock5b_defconfig
+@@ -1,6 +1,6 @@
+ BR2_aarch64=y
+ BR2_cortex_a76_a55=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/radxa/rock5b/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="rock5b"
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rock5b/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.4"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/radxa/rock5b/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-- 
+2.47.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0185111239791484321==--
