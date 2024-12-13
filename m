@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1388C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:38:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 977E9C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:39:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4EB64F4BB;
-	Fri, 28 Feb 2025 16:38:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F0834F4C1;
+	Fri, 28 Feb 2025 16:39:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SzbYF4MdvzAe; Fri, 28 Feb 2025 16:38:58 +0000 (UTC)
+ id CTM90x-JLnoz; Fri, 28 Feb 2025 16:39:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B46134F4A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57C344F4B8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B46134F4A8;
-	Fri, 28 Feb 2025 16:38:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57C344F4B8;
+	Fri, 28 Feb 2025 16:39:01 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 128A568
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:26 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 105B21DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22BC74251E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4CE3642524
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zyqLNixofmkN for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
+ id FxjnP8EafXZr for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93AD7424A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28862417FF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 93AD7424A7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 28862417FF
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 90B89820F8; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 24940844AB; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Dec 2024 23:06:21 +0100
+Date: Fri, 13 Dec 2024 14:44:34 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 96e7f24164de9fc3df84c511e456b3840b631a29
-X-Git-Newrev: 3a3f1f542c16f6c09445e353895052259f6c0ded
+X-Git-Oldrev: 73f03390643c1a3d36f8e5e87a236df917526987
+X-Git-Newrev: af8d12953cb41a0b66395488562dc249c6c96b00
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162939.90B89820F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-daemon: bump to
- version 3.1.2
+Message-Id: <20250228162939.24940844AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/tinycompress: bump to
+ version 1.2.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,56 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a3f1f542c16f6c09445e353895052259f6c0ded
+commit: https://git.buildroot.net/buildroot/commit/?id=af8d12953cb41a0b66395488562dc249c6c96b00
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Change PYTHON_DAEMON_SOURCE as package's download name has changed
-from python-daemon to python_daemon.
+For commit log, see:
+https://github.com/alsa-project/tinycompress/commits/v1.2.13/
 
-Fixes:
-https://autobuild.buildroot.org/results/be73c9a41b3ad3dea8a924ab98f6fe804e6808fa/
-https://autobuild.buildroot.org/results/4cb684c6e8758b728d54ea367d1f279b2065bd83/
+This commit also adds in the hash file a commit with the pgp signature
+source and key id used for the verification.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-daemon/python-daemon.hash | 4 ++--
- package/python-daemon/python-daemon.mk   | 7 ++++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/tinycompress/tinycompress.hash | 4 +++-
+ package/tinycompress/tinycompress.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-daemon/python-daemon.hash b/package/python-daemon/python-daemon.hash
-index 695b8fb9b3..f2834279ce 100644
---- a/package/python-daemon/python-daemon.hash
-+++ b/package/python-daemon/python-daemon.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/python-daemon/json
--md5  4c369b8c6d3de956d8f9dfb2c872c284  python-daemon-3.0.1.tar.gz
--sha256  6c57452372f7eaff40934a1c03ad1826bf5e793558e87fef49131e6464b4dae5  python-daemon-3.0.1.tar.gz
-+md5  d42ee28735506ea1cb51c348530d6d94  python_daemon-3.1.2.tar.gz
-+sha256  f7b04335adc473de877f5117e26d5f1142f4c9f7cd765408f0877757be5afbf4  python_daemon-3.1.2.tar.gz
- # Locally computed sha256
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.ASF-2
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL-3
-diff --git a/package/python-daemon/python-daemon.mk b/package/python-daemon/python-daemon.mk
-index f4d4205a31..ef380bfe3b 100644
---- a/package/python-daemon/python-daemon.mk
-+++ b/package/python-daemon/python-daemon.mk
-@@ -4,11 +4,12 @@
+diff --git a/package/tinycompress/tinycompress.hash b/package/tinycompress/tinycompress.hash
+index f86b75f346..1a2b2c0203 100644
+--- a/package/tinycompress/tinycompress.hash
++++ b/package/tinycompress/tinycompress.hash
+@@ -1,5 +1,7 @@
+ # Locally calculated after checking pgp signature
+-sha256  ebbe788c28328e7cca245aaf9194a5ad0dc91e9e0dc883c2cf9feb6d42c9f3fc  tinycompress-1.2.11.tar.bz2
++# from https://www.alsa-project.org/files/pub/tinycompress/tinycompress-1.2.13.tar.bz2.sig
++# with key F04DF50737AC1A884C4B3D718380596DA6E59C91
++sha256  0efe6cbd7bff31983e0d416df0436767665cc4cd70d278c06ce0e83e0eeab5db  tinycompress-1.2.13.tar.bz2
+ 
+ # Locally calculated
+ sha256  912ea37a4435594a3b3c35f04efa4b5b7af2e68a05f5319c16c881711a31e4b7  COPYING
+diff --git a/package/tinycompress/tinycompress.mk b/package/tinycompress/tinycompress.mk
+index fabd5884b2..b5764ea293 100644
+--- a/package/tinycompress/tinycompress.mk
++++ b/package/tinycompress/tinycompress.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DAEMON_VERSION = 3.0.1
--PYTHON_DAEMON_SITE = https://files.pythonhosted.org/packages/84/50/97b81327fccbb70eb99f3c95bd05a0c9d7f13fb3f4cfd975885110d1205a
-+PYTHON_DAEMON_VERSION = 3.1.2
-+PYTHON_DAEMON_SOURCE = python_daemon-$(PYTHON_DAEMON_VERSION).tar.gz
-+PYTHON_DAEMON_SITE = https://files.pythonhosted.org/packages/3d/37/4f10e37bdabc058a32989da2daf29e57dc59dbc5395497f3d36d5f5e2694
- PYTHON_DAEMON_LICENSE = Apache-2.0 (library), GPL-3.0+ (test, build)
- PYTHON_DAEMON_LICENSE_FILES = LICENSE.ASF-2 LICENSE.GPL-3
- PYTHON_DAEMON_SETUP_TYPE = setuptools
--PYTHON_DAEMON_DEPENDENCIES = host-python-docutils
-+PYTHON_DAEMON_DEPENDENCIES = host-python-changelog-chug host-python-docutils
- 
- $(eval $(python-package))
+-TINYCOMPRESS_VERSION = 1.2.11
++TINYCOMPRESS_VERSION = 1.2.13
+ TINYCOMPRESS_SOURCE = tinycompress-$(TINYCOMPRESS_VERSION).tar.bz2
+ TINYCOMPRESS_SITE = https://www.alsa-project.org/files/pub/tinycompress
+ TINYCOMPRESS_LICENSE = BSD-3-Clause and LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
