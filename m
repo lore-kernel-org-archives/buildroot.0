@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA50FC282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:40:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 399EAC282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:40:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 395E94F68B;
-	Fri, 28 Feb 2025 16:40:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4621F4F69C;
+	Fri, 28 Feb 2025 16:40:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mkiaLqfu1vyO; Fri, 28 Feb 2025 16:40:39 +0000 (UTC)
+ id ZY2ZuUGnTh7K; Fri, 28 Feb 2025 16:40:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D804B4F682
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B22A24F690
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D804B4F682;
-	Fri, 28 Feb 2025 16:40:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B22A24F690;
+	Fri, 28 Feb 2025 16:40:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 115E668
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A4731DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5EE604256B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7040F424C6
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 00SN4WuZgI6c for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:48 +0000 (UTC)
+ id qwpUWSjmDq_V for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9760D424C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B002424B5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9760D424C6
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B002424B5
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9417D844AB; Fri, 28 Feb 2025 16:29:41 +0000 (UTC)
+ id 87CA2820F8; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 15 Dec 2024 18:07:54 +0100
+Date: Sat, 14 Dec 2024 22:44:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a9813b64735055dc216bbfac8d372fb33b486388
-X-Git-Newrev: 48a0f551cd1744ab9fdaa78e81121bca4266a20d
+X-Git-Oldrev: 3ef5975b795271a723b694160c8d50c62d518e8e
+X-Git-Newrev: 6ee9c706179076ec1d7772debb6390631da184ce
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162941.9417D844AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/perl-uri: bump version
- to 5.31
+Message-Id: <20250228162940.87CA2820F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/orangepi_one: bump BSP
+ versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,103 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48a0f551cd1744ab9fdaa78e81121bca4266a20d
+commit: https://git.buildroot.net/buildroot/commit/?id=6ee9c706179076ec1d7772debb6390631da184ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog: https://github.com/libwww-perl/URI/blob/master/Changes
+Switch to the new Linux LTS release 6.12.3 and to the latest U-Boot
+2024.10. Add hashes for Linux kernel/headers and U-Boot. Finally,
+add BR2_TARGET_UBOOT_NEEDS_GNUTLS option required by new U-Boot.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+[Julien:
+  - add BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+  - remove .checkpackageignore entry
+  - change linux.hash comment to use upstream hashes
+  - add missing BR2_GLOBAL_PATCH_DIR
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/perl-uri/perl-uri.hash | 4 ++--
- package/perl-uri/perl-uri.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .checkpackageignore                                              | 1 -
+ .../orangepi-one/patches/linux-headers/linux-headers.hash        | 1 +
+ board/orangepi/orangepi-one/patches/linux/linux.hash             | 2 ++
+ board/orangepi/orangepi-one/patches/uboot/uboot.hash             | 2 ++
+ configs/orangepi_one_defconfig                                   | 9 ++++++---
+ 5 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index fb70f0c266..889c02e9a1 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from https://cpan.metacpan.org/
--md5  34cf48b69c4fbcc40cfebac94af39424  URI-5.29.tar.gz
--sha256  a34b9f626c3ff1e20c0d4a23ec5c8b7ae1de1fb674ecefed7e46791388137372  URI-5.29.tar.gz
-+md5  b5388d5b86e1870a80ad95c153bf41fd  URI-5.31.tar.gz
-+sha256  b9c4d58b2614b8611ae03a95a6d60ed996f4b311ef3cd5a937b92f1825ecc564  URI-5.31.tar.gz
- 
- # computed by scancpan
- sha256  a1730c55839ce3c9182c92e3387ba8f683ad6ab8b4a3257553a20c4db194c2cf  LICENSE
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
-index d02a729dc2..40775d19f9 100644
---- a/package/perl-uri/perl-uri.mk
-+++ b/package/perl-uri/perl-uri.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_URI_VERSION = 5.29
-+PERL_URI_VERSION = 5.31
- PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
- PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_URI_LICENSE = Artistic-1.0-Perl or GPL-1.0+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index f8997bac55..e886d631a6 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -201,7 +201,6 @@ configs/olimex_a64_olinuxino_defconfig lib_defconfig.ForceCheckHash
+ configs/olpc_xo175_defconfig lib_defconfig.ForceCheckHash
+ configs/olpc_xo1_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_lite2_defconfig lib_defconfig.ForceCheckHash
+-configs/orangepi_one_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_one_plus_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_pc2_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_pc_plus_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/orangepi/orangepi-one/patches/linux-headers/linux-headers.hash b/board/orangepi/orangepi-one/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/orangepi/orangepi-one/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/orangepi/orangepi-one/patches/linux/linux.hash b/board/orangepi/orangepi-one/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..aea771e7bf
+--- /dev/null
++++ b/board/orangepi/orangepi-one/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  c89809cc777d50f1ea484a118630281a26383707a0e752c96fd834f6e765deae  linux-6.12.3.tar.xz
+diff --git a/board/orangepi/orangepi-one/patches/uboot/uboot.hash b/board/orangepi/orangepi-one/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..904fa56c02
+--- /dev/null
++++ b/board/orangepi/orangepi-one/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
+diff --git a/configs/orangepi_one_defconfig b/configs/orangepi_one_defconfig
+index 167527235e..aef7eb6c77 100644
+--- a/configs/orangepi_one_defconfig
++++ b/configs/orangepi_one_defconfig
+@@ -1,7 +1,9 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
++BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-one/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_One"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi One"
+ BR2_SYSTEM_DHCP="eth0"
+@@ -10,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-h3-orangepi-one"
+@@ -22,11 +24,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_one"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
