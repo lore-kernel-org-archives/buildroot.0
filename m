@@ -4,74 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B43CCE77180
-	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 18:50:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D71CE7716A
+	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 18:55:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80B47606C7;
-	Sat, 14 Dec 2024 18:50:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 192CC6060C;
+	Sat, 14 Dec 2024 18:55:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 55Xd8ztFfUty; Sat, 14 Dec 2024 18:50:33 +0000 (UTC)
+ id iaBMY2v27rZ7; Sat, 14 Dec 2024 18:55:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F16A606FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14D7E6062B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F16A606FA;
-	Sat, 14 Dec 2024 18:50:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 626F9C5
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 18:50:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14D7E6062B;
+	Sat, 14 Dec 2024 18:55:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A5E48C5
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 18:55:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4FD47400F6
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 18:50:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 90A6B400F6
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 18:55:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aD3LSSGJ6oef for <buildroot@buildroot.org>;
- Sat, 14 Dec 2024 18:50:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8CFCA40042
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CFCA40042
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8CFCA40042
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 18:50:29 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 36DE1780372;
- Sat, 14 Dec 2024 19:50:24 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:42442])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 14 Dec 2024 19:50:24 +0100
-MIME-Version: 1.0
-Date: Sat, 14 Dec 2024 19:50:24 +0100
+ id Ed76KrqJVMKR for <buildroot@buildroot.org>;
+ Sat, 14 Dec 2024 18:55:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8378140042
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8378140042
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 18:55:14 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7625386FD1; Sat, 14 Dec 2024 18:55:14 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20241214161137.3283154-1-bernd@kuhls.net>
-References: <20241214161137.3283154-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <5644605f34c6a8627008f1ccb2301419@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734202226;
- bh=B5lLXj9eYGaBKxElKNbOfI5fAEf+RB5t2PyCWLrGLgM=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=h44JNyBUexbDr4SdWCSw+W/GczvGTIfjiGZDOKpS5xHuPNLH+dOYFRiCV4BU4zmyY
- bDxCw3AJaPbgqFnWM4VmpVFDR9rwru60yoA9Q5e+ODCNhcCsovW5GnU3wmD8C+xYLO
- 1VVxv6pGa/qthpCYUj5AApoZBcIOw04PVRJkwwgOwG17cXhIkWTCbJCKdqXKFfjrah
- 9WE5u9FOwJRsDGKovx0YIFXmRQTZeeJd3PxOd/Fks6rOfx9iJpeKWAvpsXHZK68LWs
- 8k9ugQmOAPyP5ioDNO+sN9uaUhUMNuO/gX/V13v/ex++0QRWlrAr2KF6tvYzlgdP3l
- B4QSZ4BNI9Kzw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=h44JNyBU
-Subject: Re: [Buildroot] [PATCH 1/1] package/cmake: bump version to 3.31.2
+To: buildroot@buildroot.org
+Date: Sat, 14 Dec 2024 19:51:41 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 52666fe10672b1fb23beb8f88754106dfaa7575a
+X-Git-Newrev: c2c1c27d1144713dc7e64e7b27bc39bfbad5b72b
+X-Patchwork-Hint: ignore
+Message-Id: <20241214185514.7625386FD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-django: security bump to
+ version 5.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,90 +59,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/12/2024 17:11, Bernd Kuhls wrote:
-> Release notes:
-> https://www.kitware.com/cmake-3-31-2-available-for-download/
-> 
-> Rebased patch.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=c2c1c27d1144713dc7e64e7b27bc39bfbad5b72b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Fixes the following security issues:
 
-> ---
->  package/cmake/0001-rename-cmake-rootfile.patch | 4 ++--
->  package/cmake/cmake.hash                       | 4 ++--
->  package/cmake/cmake.mk                         | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/cmake/0001-rename-cmake-rootfile.patch 
-> b/package/cmake/0001-rename-cmake-rootfile.patch
-> index 7e6e0a8cf7..c73e0dfe02 100644
-> --- a/package/cmake/0001-rename-cmake-rootfile.patch
-> +++ b/package/cmake/0001-rename-cmake-rootfile.patch
-> @@ -12,7 +12,7 @@ This buildroot-specific patch makes sure ctest looks 
-> also for
-> 
->  [Vincent: tweak patch for 3.6.3]
->  [James: tweak patch for 3.15.4]
-> -[Bernd: tweak patch for 3.27.0]
-> +[Bernd: tweak patch for 3.27.0 & 3.31.2]
-> 
->  Signed-off-by: Davide Viti <zinosat@tiscali.it>
->  Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> @@ -26,7 +26,7 @@ diff --git a/Source/cmake.cxx b/Source/cmake.cxx
->  index 3772f09985..c317e4af38 100644
->  --- a/Source/cmake.cxx
->  +++ b/Source/cmake.cxx
-> -@@ -1891,7 +1891,12 @@ int cmake::AddCMakePaths()
-> +@@ -1896,7 +1896,12 @@ int cmake::AddCMakePaths()
->                         cmStateEnums::INTERNAL);
->   #endif
->     if (!cmSystemTools::FileExists(
-> diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-> index f214c21925..89c2662091 100644
-> --- a/package/cmake/cmake.hash
-> +++ b/package/cmake/cmake.hash
-> @@ -1,5 +1,5 @@
-> -# From https://cmake.org/files/v3.31/cmake-3.31.1-SHA-256.txt
-> -sha256  
-> c4fc2a9bd0cd5f899ccb2fb81ec422e175090bc0de5d90e906dd453b53065719  
-> cmake-3.31.1.tar.gz
-> +# From https://cmake.org/files/v3.31/cmake-3.31.2-SHA-256.txt
-> +sha256  
-> 42abb3f48f37dbd739cdfeb19d3712db0c5935ed5c2aef6c340f9ae9114238a2  
-> cmake-3.31.2.tar.gz
-> 
->  # Locally calculated
->  sha256  
-> 0676e30827684487aa0ea8f72f01e9460a6320fa34a2888df0ad1dd3e8a06eb8  
-> Copyright.txt
-> diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-> index 7fc1f0181d..1032ec6e39 100644
-> --- a/package/cmake/cmake.mk
-> +++ b/package/cmake/cmake.mk
-> @@ -6,7 +6,7 @@
-> 
->  # When updating the version, please also update 
-> BR2_HOST_CMAKE_AT_LEAST_X_Y
->  CMAKE_VERSION_MAJOR = 3.31
-> -CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
-> +CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
->  CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
->  CMAKE_LICENSE = BSD-3-Clause
->  CMAKE_LICENSE_FILES = Copyright.txt
-> --
-> 2.39.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+CVE-2024-53907: Potential denial-of-service in
+django.utils.html.strip_tags()
+
+The strip_tags() method and striptags template filter are subject to a
+potential denial-of-service attack via certain inputs containing large
+sequences of nested incomplete HTML entities.
+
+CVE-2024-53908: Potential SQL injection in HasKey(lhs, rhs) on Oracle
+
+Direct usage of the django.db.models.fields.json.HasKey lookup on Oracle is
+subject to SQL injection if untrusted data is used as a lhs value.
+Applications that use the jsonfield.has_key lookup through the __ syntax are
+unaffected.
+
+https://www.djangoproject.com/weblog/2024/dec/04/security-releases/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 656d9eee9a..53c4ceead3 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  3f556d14e7999a9700a27a325efc0833  Django-5.1.3.tar.gz
+-sha256  c0fa0e619c39325a169208caef234f90baa925227032ad3f44842ba14d75234a  Django-5.1.3.tar.gz
++md5  03ec3e0f2d6cbcb9eb11c629ca1c538b  Django-5.1.4.tar.gz
++sha256  de450c09e91879fa5a307f696e57c851955c910a438a35e6b4c895e86bedc82a  Django-5.1.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 6588acc31d..4facc6b6c4 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 5.1.3
++PYTHON_DJANGO_VERSION = 5.1.4
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c6/85/ba2c2b83ba8b95354f99ed8344405d9571109ce0175028876209d6b93fba
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/d3/e8/536555596dbb79f6e77418aeb40bdc1758c26725aba31919ba449e6d5e6a
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
