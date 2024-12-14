@@ -4,74 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D24BBE77180
-	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 13:04:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35881E7716A
+	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 13:40:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88DCF846C9;
-	Sat, 14 Dec 2024 13:04:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE0628487A;
+	Sat, 14 Dec 2024 13:40:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tqMfV8XF0GnA; Sat, 14 Dec 2024 13:04:11 +0000 (UTC)
+ id RaenTMIyeQhC; Sat, 14 Dec 2024 13:40:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 788C4846CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05FCF84879
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 788C4846CA;
-	Sat, 14 Dec 2024 13:04:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 05FCF84879;
+	Sat, 14 Dec 2024 13:40:10 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 271FDCE
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 13:04:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E063FCE
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 13:40:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 217624130C
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 13:04:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD59D4194D
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 13:40:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SEnlKAJgDPrI for <buildroot@buildroot.org>;
- Sat, 14 Dec 2024 13:04:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F0B4341301
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0B4341301
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F0B4341301
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 13:04:07 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c577.dip0.t-ipconnect.de [79.214.197.119])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 506BCA4C3E1C
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 14:03:53 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:40160)
- by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1tMRoG-000000002Je-3rSU
- for buildroot@buildroot.org; Sat, 14 Dec 2024 13:03:53 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id 4dZa3y7WAEs7 for <buildroot@buildroot.org>;
+ Sat, 14 Dec 2024 13:40:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0EA624177F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EA624177F
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0EA624177F
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 13:40:06 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4A84F1C0004;
+ Sat, 14 Dec 2024 13:40:03 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1tMSNG-00DWrV-2M;
+ Sat, 14 Dec 2024 14:40:02 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 Dec 2024 14:03:52 +0100
-Message-Id: <20241214130352.344022-2-bernd@kuhls.net>
+Date: Sat, 14 Dec 2024 14:39:59 +0100
+Message-Id: <20241214134000.3224571-1-peter@korsgaard.com>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241214130352.344022-1-bernd@kuhls.net>
-References: <20241214130352.344022-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202412041019; t=1734181433;
- bh=jID9ig/noy03NviXMnruct8pogiKHbr4ZMiY4Z2z7E8=;
- h=From:To:Subject:Date:In-Reply-To:References:From;
- b=a0aPfKAyA12nX9X3UlTBdnN1uh1iYwzkY4ZpERUYbRfRV59a5uGK5tcF17MUwwFOT
- iIY1etQO/5aUVNnV+j4oUEA3UpdDJ4tH06o08d3b++peH8s2wCvGlh65TDe8kFlAl3
- 9pFtCNt2WGTX00kD80KB8eeH3lzDqTBYTZ1JZWsqzmIS+cSiINv2gfGatoTB4irYnk
- M+HEMOk/vejTnmRmo4cLv7CZcJe317WgNm+ejtGzWaXTn8s9vkKWo5fTssHvqo5t1E
- RnzmZtIsxookI51EZ3R9jMA/PWj8zi2qriuVCKGfcVTFLK95+EDuFB5P4P4lEgrrXR
- x+H3+aWghA5Uw==
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202412041019 header.b=a0aPfKAy
-Subject: [Buildroot] [PATCH 2/2] {linux, linux-headers}: bump 6.{6,
- 12}.x series
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH] package/subversion: security bump to version
+ 1.14.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,54 +71,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+Fixes the following security vulnerabilities:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f537dd7adf..d8ae3469e7 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -134,7 +134,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+CVE-2024-46901: mod_dav_svn denial-of-service via control characters in
+paths
+
+It has been discovered that the patch for CVE-2013-1968 was incomplete
+and unintentionally left mod_dav_svn vulnerable to control characters
+in filenames.
+
+https://subversion.apache.org/security/CVE-2024-46901-advisory.txt
+
+Subversion 1.14.4 also fixed a Windows-only vulnerability:
+https://subversion.apache.org/security/CVE-2024-45720-advisory.txt
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/subversion/subversion.hash | 4 ++--
+ package/subversion/subversion.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
+index 2710e9e3f3..5950e9dccf 100644
+--- a/package/subversion/subversion.hash
++++ b/package/subversion/subversion.hash
+@@ -1,5 +1,5 @@
+-# From https://www.apache.org/dist/subversion/subversion-1.14.3.tar.bz2.sha512
+-sha512  40b172492005fd3b0cd9e457b4444af8ea5d8ff8fc161a9a0c6dc3a7314c6ad4ff75a4676f68a1919ae6273ae03e34d04eba8c1c37b8c0b4ec70d6731b527b41  subversion-1.14.3.tar.bz2
++# From https://www.apache.org/dist/subversion/subversion-1.14.5.tar.bz2.sha512
++sha512  e4800564d0cc68be98f19aa58d89181de83f237f0ccff10824d9237f8c65eb0071f7176ac54e9e8f8ecbf685849bd3e94be48f678f4c23ed6a5fd7fb6edd0321  subversion-1.14.5.tar.bz2
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.12.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.12.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 18051600cb..f33d37957f 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  c89809cc777d50f1ea484a118630281a26383707a0e752c96fd834f6e765deae  linux-6.12.3.tar.xz
--sha256  d1054ab4803413efe2850f50f1a84349c091631ec50a1cf9e891d1b1f9061835  linux-6.6.63.tar.xz
-+sha256  6f35f821433d8421be7167990747c7c4a0c451958fb96883446301af13d71152  linux-6.12.4.tar.xz
-+sha256  7ae1476e8b4c86e7754e581d45d6fbce5932bfefce934758a2907d6d79eca3e0  linux-6.6.65.tar.xz
- sha256  aecdaf39d0a844a81ce4c67d9daff8979e938bb690df4f679fbbb494fe423278  linux-6.1.119.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  8a4b2a47ccc9b208b2b6ed9a216ea1a5eb12852c723bec1a04de9e671a1d7da8  linux-5.15.173.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 1bcfb9c861..51972158d6 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -432,8 +432,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.10.230"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.173"	if BR2_KERNEL_HEADERS_5_15
- 	default "6.1.119"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.63"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.3"	if BR2_KERNEL_HEADERS_6_12
-+	default "6.6.65"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.4"	if BR2_KERNEL_HEADERS_6_12
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ # Locally calculated
+ sha256  484aff0cfbb81155a10f903ed756e27e9fc65578c245a295bae295c4bb51eaad  LICENSE
+diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
+index bc0b9b45ab..b3daf013f0 100644
+--- a/package/subversion/subversion.mk
++++ b/package/subversion/subversion.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUBVERSION_VERSION = 1.14.3
++SUBVERSION_VERSION = 1.14.5
+ SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
+ SUBVERSION_SITE = https://downloads.apache.org/subversion
+ SUBVERSION_LICENSE = Apache-2.0
 -- 
 2.39.5
 
