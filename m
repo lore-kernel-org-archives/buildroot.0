@@ -4,73 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B84BEE7716A
-	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 19:02:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3F94E7716A
+	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 19:13:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84D5B60664;
-	Sat, 14 Dec 2024 19:02:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 563BF60705;
+	Sat, 14 Dec 2024 19:13:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HfQ8sZ-n1KNJ; Sat, 14 Dec 2024 19:02:34 +0000 (UTC)
+ id xToSZY1orkoC; Sat, 14 Dec 2024 19:13:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81504605E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55AF96067B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81504605E7;
-	Sat, 14 Dec 2024 19:02:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B1B40C5
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:02:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55AF96067B;
+	Sat, 14 Dec 2024 19:13:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EFC70D0
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:13:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A0876600C7
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:02:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB1EC40102
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:13:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 57wRZemCNpSO for <buildroot@buildroot.org>;
- Sat, 14 Dec 2024 19:02:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 85CEF605CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85CEF605CA
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 85CEF605CA
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:02:31 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 95CE42003C1;
- Sat, 14 Dec 2024 20:02:28 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:56938])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 14 Dec 2024 20:02:28 +0100
-MIME-Version: 1.0
-Date: Sat, 14 Dec 2024 20:02:28 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IWFQOURwLX5w for <buildroot@buildroot.org>;
+ Sat, 14 Dec 2024 19:13:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE10540015
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE10540015
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:13:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C52FB86FE1; Sat, 14 Dec 2024 19:13:52 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241214161213.3283227-1-bernd@kuhls.net>
-References: <20241214161213.3283227-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <0592c80c1ca0ca61dcbdb3dbb506e959@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734202949;
- bh=zzKJW+iusiIrCeFuLgyG11aISjEpaR0hsikrDS+j3gw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=vAh701p4wNougxmSBt7NHua/CG9QOsfQ46L3QnGPjvsfsUmGHuoMWJJvbE1J5cUT4
- xrlSQEB2jYkbPDEmxhJpF2IV56KpErlMMhIg6GuAWmUxPrJ7eEfPwhR+MTarLV4kf3
- +8BMtxUFJoSmdJ6W3m+q9xzSvGlHfweqmVX36+/7Zl8ZbpxtH/zt1fBYVnEYFqHPwV
- fpLHw6qJi/sagdIs86dr6PZIPmHZQGr39AHucMTNmUvmAKY6wmaYfI8kzrmeTiC/xa
- EItpNiwJ7lik4LXSUoA9uQ3zOcNzct69qqW8s64IpdT6D6zBekmUyiO0jcFZ7vH2Om
- BD0SccyhDChmA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=vAh701p4
-Subject: Re: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.47.2
+To: buildroot@buildroot.org
+Date: Sat, 14 Dec 2024 20:06:03 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0f3465c1ad9cdabab0fc25265fa2701e88eeacfc
+X-Git-Newrev: b0d02f3ab572adeefa8cb970da75e73050bcd3bd
+X-Patchwork-Hint: ignore
+Message-Id: <20241214191352.C52FB86FE1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: bump version to
+ 20241210
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,61 +59,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/12/2024 17:12, Bernd Kuhls wrote:
-> Release notes: https://sqlite.org/releaselog/3_47_2.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=b0d02f3ab572adeefa8cb970da75e73050bcd3bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Updating the hash of the WHENCE file, due to firmware additions and
+firmware changes, but no changes to the redistribution/licensing
+conditions.
 
-> ---
->  package/sqlite/sqlite.hash | 2 +-
->  package/sqlite/sqlite.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-> index ba2c0956d8..788e89f99d 100644
-> --- a/package/sqlite/sqlite.hash
-> +++ b/package/sqlite/sqlite.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  
-> 83eb21a6f6a649f506df8bd3aab85a08f7556ceed5dbd8dea743ea003fc3a957  
-> sqlite-autoconf-3470000.tar.gz
-> +sha256  
-> f1b2ee412c28d7472bc95ba996368d6f0cdcf00362affdadb27ed286c179540b  
-> sqlite-autoconf-3470200.tar.gz
->  sha256  
-> 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  
-> tea/license.terms
-> diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-> index e6d681e501..30505a9dbc 100644
-> --- a/package/sqlite/sqlite.mk
-> +++ b/package/sqlite/sqlite.mk
-> @@ -4,8 +4,8 @@
->  #
->  
-> ################################################################################
-> 
-> -SQLITE_VERSION = 3.47.0
-> -SQLITE_TAR_VERSION = 3470000
-> +SQLITE_VERSION = 3.47.2
-> +SQLITE_TAR_VERSION = 3470200
->  SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
->  SQLITE_SITE = https://www.sqlite.org/2024
->  SQLITE_LICENSE = blessing
-> --
-> 2.39.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/linux-firmware/linux-firmware.hash | 4 ++--
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 97004505c6..9125352475 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
+-sha256  943fbd19883cf8eadf89e0b22422549db056557b1ecd30a56400615971369671  linux-firmware-20240909.tar.xz
++sha256  2bb035708576d076f97d4196a1c22e0a4d33fbb0210d05428d0bf4f243e99af5  linux-firmware-20241210.tar.xz
+ 
+ # Hash for license files
+ sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
+@@ -40,6 +40,6 @@ sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENS
+ sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSE.qcom
+ sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSE.radeon
+ sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSE.sdma_firmware
+-sha256  d6a8d8b935d275e4092a0ec578eb430f9ef70bec34165d18bcabfa4a81f65724  WHENCE
++sha256  feb7f80e7805e0c88b1ea7588410822710e5c3c5cd5b685f75327a4d35798447  WHENCE
+ sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  qcom/NOTICE.txt
+ sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENCE.e100
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 9ffd52dff5..76bc6127f7 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_FIRMWARE_VERSION = 20240909
++LINUX_FIRMWARE_VERSION = 20241210
+ LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
+ LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
+ LINUX_FIRMWARE_INSTALL_IMAGES = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
