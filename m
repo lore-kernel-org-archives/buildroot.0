@@ -1,78 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68FC0E7716A
-	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 19:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47478E7716A
+	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 20:04:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 266FF815E7;
-	Sat, 14 Dec 2024 19:58:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 516EA608DD;
+	Sat, 14 Dec 2024 20:04:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ajlj6dZca8-V; Sat, 14 Dec 2024 19:58:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jrYHR9_lF3mg; Sat, 14 Dec 2024 20:03:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B6D88164A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7E7E608F3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B6D88164A;
-	Sat, 14 Dec 2024 19:58:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D2628CE
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:58:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7E7E608F3;
+	Sat, 14 Dec 2024 20:03:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D5C25CE
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 20:03:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B24FE40499
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:58:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B6B0B608DD
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 20:03:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 360Q5cC9f8XL for <buildroot@buildroot.org>;
- Sat, 14 Dec 2024 19:58:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E0FCB40474
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0FCB40474
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E0FCB40474
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:58:06 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 3E91113F8A2;
- Sat, 14 Dec 2024 20:58:02 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:59496])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 14 Dec 2024 20:58:02 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2HdGxZNd5UhV for <buildroot@buildroot.org>;
+ Sat, 14 Dec 2024 20:03:55 +0000 (UTC)
+X-Greylist: delayed 399 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sat, 14 Dec 2024 20:03:52 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 16CDB608DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16CDB608DB
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=51.210.94.138;
+ helo=smtpout1.mo533.mail-out.ovh.net; envelope-from=clement@clementramirez.fr;
+ receiver=<UNKNOWN> 
+Received: from smtpout1.mo533.mail-out.ovh.net
+ (smtpout1.mo533.mail-out.ovh.net [51.210.94.138])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 16CDB608DB
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 20:03:52 +0000 (UTC)
+Received: from director3.derp.mail-out.ovh.net
+ (director3.derp.mail-out.ovh.net [152.228.215.222])
+ by mo533.mail-out.ovh.net (Postfix) with ESMTPS id 4Y9cRq22BFz1T1m
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:57:11 +0000 (UTC)
+Received: from director3.derp.mail-out.ovh.net
+ (director3.derp.mail-out.ovh.net. [127.0.0.1])
+ by director3.derp.mail-out.ovh.net (inspect_sender_mail_agent) with SMTP
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:57:11 +0000 (UTC)
+Received: from DAG3EX1.emp3.local (unknown [10.111.182.102])
+ by director3.derp.mail-out.ovh.net (Postfix) with ESMTPS id 4Y9cRq0g83z86Jr
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:57:11 +0000 (UTC)
+Received: from localhost.localdomain (93.8.28.88) by DAG3EX1.emp3.local
+ (172.16.2.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sat, 14 Dec
+ 2024 20:57:10 +0100
+From: Clement Ramirez <clement@clementramirez.fr>
+To: <buildroot@buildroot.org>
+CC: Clement Ramirez <clement@clementramirez.fr>
+Date: Sat, 14 Dec 2024 20:56:49 +0100
+Message-ID: <20241214195649.917315-1-clement@clementramirez.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date: Sat, 14 Dec 2024 20:58:02 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241213223056.2551262-1-peter@korsgaard.com>
-References: <20241213223056.2551262-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <4fc673e087b4a23495cec097aa9d69f8@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734206283;
- bh=1Ip/5SpC+Vrotxafw7J2TcuiB32ZUU8Zj+gX/BfjAC0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Zyc6b++IGJ/v/iGVBxAeizhdWkJRYf3roXTM28cwQmIohxEAPhfsA3Rb5opK0YMjf
- D8+5y3HjMzOGw9VlZdwhGwzdHKLKNNIeuLBpByTaPoe8q56D9ngMizVVTWawzrQs3B
- 4NWA+0QiZrNgttasX4qIxmdyh1I+dHZLGrqItK6rXNyjI0RVPeuTY9IHBg0kFRVqgc
- 19llcwnvk9jafUuviZ6OCMzD7aNx5z2CxV6yGivhS5orof0W3MXmueUxOo3yG/T2df
- U4PbbxhMBtGu6k2SLZNU0JCFpgGtWkTGH3kZLrhRvr6AgE46cqoflU4MEYLC2rLAA+
- u7OMv2loeydyg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Originating-IP: [93.8.28.88]
+X-ClientProxiedBy: DAG3EX2.emp3.local (172.16.2.32) To DAG3EX1.emp3.local
+ (172.16.2.31)
+X-Ovh-Tracer-Id: 16363547773122824821
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrkeelgddufedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffoggfgtghisehtkeertdertddtnecuhfhrohhmpeevlhgvmhgvnhhtucftrghmihhrvgiiuceotghlvghmvghnthestghlvghmvghnthhrrghmihhrvgiirdhfrheqnecuggftrfgrthhtvghrnhepjeegveejfeeuueeltdevffdtleetjeduhefgkeefleffgeevgfffgeeufeeuffeknecuffhomhgrihhnpegsuhhshigsohigrdhnvghtnecukfhppeduvdejrddtrddtrddupdelfedrkedrvdekrdekkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomheptghlvghmvghnthestghlvghmvghnthhrrghmihhrvgiirdhfrhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehfeefmgdpmhhouggvpehsmhhtphhouhht
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; d=clementramirez.fr;
+ s=ovhemp1147278-selector1; c=relaxed/relaxed; t=1734206230;
+ h=from:to:subject:date; bh=gGa4WXx/ONkcW9/7xztswb5fDx53uFyKRa6wyR+nL6U=;
+ b=IqGdN65qtmsMqjoYIRdjBBkDLII54QkEedoW3Kr+rPjpWZs7W4co+yHFGK4rGVj1wx/406o7OESrsXhV49NcztBeHkFykiUrzACt+gXHxX9WD+rLFnFdnvStGpWJ9qVssCfoHTP+I/a65TjXzo3JCPUhGIZE0HV6hQKM1ejV7TB0ZMOtMV8MhASysFcwIxUcN9VJnQO0FFAsxyQPllm48l+Lw4Em3KlukZYTftkcV0FrG8z17HXEzPbYBZEva+7BE839EolexbHCDPyx3n2XIq0kYzpsjz9cOL2bjviNAuvcZqjZjjJvtuu69bUrat2U9spULjSdwohsi2ndJzzZMw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=clementramirez.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Zyc6b++I
-Subject: Re: [Buildroot] [PATCH] package/dahdi-linux: add patch to support
- Linux 6.11+
+ unprotected) header.d=clementramirez.fr header.i=@clementramirez.fr
+ header.a=rsa-sha256 header.s=ovhemp1147278-selector1 header.b=IqGdN65q
+Subject: [Buildroot] [PATCH] package/busybox bump version to 1.37.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,152 +92,290 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 13/12/2024 23:30, Peter Korsgaard wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/23f0f7386f7d430c402b24f3b58b1c20c1c8344a/
-> 
-> Linux commit d69d8048459 "driver core: have match() callback in struct
-> bus_type take a const *", which was added in 6.11-rc1, changed the 
-> interface
-> for sysfs match callback to accept a const struct device_driver, 
-> breaking
-> the build of dahdi-linux:
-> 
->  CC [M]  build/dahdi-linux-3.3.0/drivers/dahdi/dahdi-sysfs.o
-> build/dahdi-linux-3.3.0/drivers/dahdi/dahdi-sysfs.c:275:27: error: 
-> initialization
->    of "int (*)(struct device *, const struct device_driver *)" from 
-> incompatible
->    pointer type "int (*)(struct device *, struct device_driver *)"
->    [-Werror=incompatible-pointer-types]
->   275 |         .match          = span_match,
-> 
-> Add a patch submitted upstream to fix that.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This new release of busybox fixies CVE-2023-42363 [0].
 
-Applied to master, thanks.
+git tag --contains fb08d43d44d1fea1f741fafb9aa7e1958a5f69aa
+1_37_0
 
-> ---
->  ...const-struct-device_device-if-needed.patch | 82 +++++++++++++++++++
->  1 file changed, 82 insertions(+)
->  create mode 100644 
-> package/dahdi-linux/0003-xpp-sysfs-Use-const-struct-device_device-if-needed.patch
-> 
-> diff --git 
-> a/package/dahdi-linux/0003-xpp-sysfs-Use-const-struct-device_device-if-needed.patch 
-> b/package/dahdi-linux/0003-xpp-sysfs-Use-const-struct-device_device-if-needed.patch
-> new file mode 100644
-> index 0000000000..becb82a6d2
-> --- /dev/null
-> +++ 
-> b/package/dahdi-linux/0003-xpp-sysfs-Use-const-struct-device_device-if-needed.patch
-> @@ -0,0 +1,82 @@
-> +From ce9de5d1bf9d21c088b01ce9da6f7ff02b0d863d Mon Sep 17 00:00:00 2001
-> +From: InterLinked1 <24227567+InterLinked1@users.noreply.github.com>
-> +Date: Mon, 23 Sep 2024 08:04:54 -0400
-> +Subject: [PATCH] xpp, sysfs: Use const struct device_device if needed.
-> +
-> +Kernel commit d69d804845985c29ab5be5a4b3b1f4787893daf8
-> +changed struct device_driver to be const, so make the
-> +arguments const on kernels 6.11 and newer.
-> +
-> +Resolves: #63
-> +
-> +Upstream: https://github.com/asterisk/dahdi-linux/pull/64
-> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> +---
-> + drivers/dahdi/dahdi-sysfs-chan.c | 4 ++++
-> + drivers/dahdi/dahdi-sysfs.c      | 4 ++++
-> + drivers/dahdi/xpp/xbus-sysfs.c   | 8 ++++++++
-> + 3 files changed, 16 insertions(+)
-> +
-> +diff --git a/drivers/dahdi/dahdi-sysfs-chan.c 
-> b/drivers/dahdi/dahdi-sysfs-chan.c
-> +index 09d7317..35b7bd4 100644
-> +--- a/drivers/dahdi/dahdi-sysfs-chan.c
-> ++++ b/drivers/dahdi/dahdi-sysfs-chan.c
-> +@@ -220,7 +220,11 @@ static void chan_release(struct device *dev)
-> + 	chan_dbg(DEVICES, chan, "SYSFS\n");
-> + }
-> +
-> ++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 11, 0)
-> ++static int chan_match(struct device *dev, const struct device_driver 
-> *driver)
-> ++#else
-> + static int chan_match(struct device *dev, struct device_driver 
-> *driver)
-> ++#endif /* LINUX_VERSION_CODE */
-> + {
-> + 	struct dahdi_chan *chan;
-> +
-> +diff --git a/drivers/dahdi/dahdi-sysfs.c b/drivers/dahdi/dahdi-sysfs.c
-> +index 7477ebc..246514c 100644
-> +--- a/drivers/dahdi/dahdi-sysfs.c
-> ++++ b/drivers/dahdi/dahdi-sysfs.c
-> +@@ -42,7 +42,11 @@ module_param(tools_rootdir, charp, 0444);
-> + MODULE_PARM_DESC(tools_rootdir,
-> + 		"root directory of all tools paths (default /)");
-> +
-> ++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 11, 0)
-> ++static int span_match(struct device *dev, const struct device_driver 
-> *driver)
-> ++#else
-> + static int span_match(struct device *dev, struct device_driver 
-> *driver)
-> ++#endif /* LINUX_VERSION_CODE */
-> + {
-> + 	return 1;
-> + }
-> +diff --git a/drivers/dahdi/xpp/xbus-sysfs.c 
-> b/drivers/dahdi/xpp/xbus-sysfs.c
-> +index 177048b..f78a15e 100644
-> +--- a/drivers/dahdi/xpp/xbus-sysfs.c
-> ++++ b/drivers/dahdi/xpp/xbus-sysfs.c
-> +@@ -397,7 +397,11 @@ static struct attribute *xbus_dev_attrs[] = {
-> + ATTRIBUTE_GROUPS(xbus_dev);
-> + #endif
-> +
-> ++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 11, 0)
-> ++static int astribank_match(struct device *dev, const struct 
-> device_driver *driver)
-> ++#else
-> + static int astribank_match(struct device *dev, struct device_driver 
-> *driver)
-> ++#endif /* LINUX_VERSION_CODE */
-> + {
-> + 	DBG(DEVICES, "SYSFS MATCH: dev->bus_id = %s, driver->name = %s\n",
-> + 	    dev_name(dev), driver->name);
-> +@@ -771,7 +775,11 @@ static DEVICE_ATTR_READER(refcount_xpd_show, dev, 
-> buf)
-> + 	return len;
-> + }
-> +
-> ++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 11, 0)
-> ++static int xpd_match(struct device *dev, const struct device_driver 
-> *driver)
-> ++#else
-> + static int xpd_match(struct device *dev, struct device_driver 
-> *driver)
-> ++#endif /* LINUX_VERSION_CODE */
-> + {
-> + 	struct xpd_driver *xpd_driver;
-> + 	xpd_t *xpd;
-> +--
-> +2.39.5
-> +
-> --
-> 2.39.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+In addtion to this, because of this version's bump, some patches needed
+to be dropped because they are now upstream.
+This is the case for both patches 0005, 0006 and 0008 which have been
+introduced by commit [1], [2] and [3] on the Busybox release.
+
+The patch 0007, strongly linked to [1] and [2] commits has not been
+removed because the possibility to detect and build the getrandom()
+function depending on the c library used, has not been introduced
+upstream yet.
+
+[0] https://git.busybox.net/busybox/commit/?id=fb08d43d44d1fea1f741fafb9aa7e1958a5f69aa
+[1] https://git.busybox.net/busybox/commit/?id=200a9669fbf6f06894e4243cccc9fc11a1a6073a
+[2] https://git.busybox.net/busybox/commit/?id=cb57abb46f06f4ede8d9ccbdaac67377fdf416cf
+[3] https://git.busybox.net/busybox/commit/?id=93e0898c663a533082b5f3c2e7dcce93ec47076d
+
+Signed-off-by: Clement Ramirez <clement@clementramirez.fr>
+---
+ ...r-glibc-2.24-not-providing-getrandom.patch |  39 -------
+ ...glibc-2.24-not-providing-random-head.patch |  60 ----------
+ ...CH-and-SIGCHLD-in-hush-interrupting-.patch | 103 ------------------
+ package/busybox/busybox.hash                  |   2 +-
+ package/busybox/busybox.mk                    |   2 +-
+ 5 files changed, 2 insertions(+), 204 deletions(-)
+ delete mode 100644 package/busybox/0005-seedrng-fix-for-glibc-2.24-not-providing-getrandom.patch
+ delete mode 100644 package/busybox/0006-seedrng-fix-for-glibc-2.24-not-providing-random-head.patch
+ delete mode 100644 package/busybox/0008-shell-fix-SIGWINCH-and-SIGCHLD-in-hush-interrupting-.patch
+
+diff --git a/package/busybox/0005-seedrng-fix-for-glibc-2.24-not-providing-getrandom.patch b/package/busybox/0005-seedrng-fix-for-glibc-2.24-not-providing-getrandom.patch
+deleted file mode 100644
+index 4a194612b4..0000000000
+--- a/package/busybox/0005-seedrng-fix-for-glibc-2.24-not-providing-getrandom.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 200a9669fbf6f06894e4243cccc9fc11a1a6073a Mon Sep 17 00:00:00 2001
+-From: Denys Vlasenko <vda.linux@googlemail.com>
+-Date: Mon, 10 Apr 2023 17:26:04 +0200
+-Subject: [PATCH] seedrng: fix for glibc <= 2.24 not providing getrandom()
+-
+-Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
+-Upstream: https://git.busybox.net/busybox/commit/?id=200a9669fbf6f06894e4243cccc9fc11a1a6073a
+----
+- miscutils/seedrng.c | 14 ++++++++++++++
+- 1 file changed, 14 insertions(+)
+-
+-diff --git a/miscutils/seedrng.c b/miscutils/seedrng.c
+-index 967741dc7..7cc855141 100644
+---- a/miscutils/seedrng.c
+-+++ b/miscutils/seedrng.c
+-@@ -45,6 +45,20 @@
+- #include <sys/random.h>
+- #include <sys/file.h>
+- 
+-+/* Fix up glibc <= 2.24 not having getrandom() */
+-+#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ <= 24
+-+#include <sys/syscall.h>
+-+# define getrandom(...) bb_getrandom(__VA_ARGS__)
+-+static ssize_t getrandom(void *buffer, size_t length, unsigned flags)
+-+{
+-+# if defined(__NR_getrandom)
+-+	return syscall(__NR_getrandom, buffer, length, flags);
+-+# else
+-+	return ENOSYS;
+-+# endif
+-+}
+-+#endif
+-+
+- #ifndef GRND_INSECURE
+- #define GRND_INSECURE 0x0004 /* Apparently some headers don't ship with this yet. */
+- #endif
+--- 
+-2.39.1
+-
+diff --git a/package/busybox/0006-seedrng-fix-for-glibc-2.24-not-providing-random-head.patch b/package/busybox/0006-seedrng-fix-for-glibc-2.24-not-providing-random-head.patch
+deleted file mode 100644
+index d729884805..0000000000
+--- a/package/busybox/0006-seedrng-fix-for-glibc-2.24-not-providing-random-head.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From cb57abb46f06f4ede8d9ccbdaac67377fdf416cf Mon Sep 17 00:00:00 2001
+-From: Thomas Devoogdt <thomas@devoogdt.com>
+-Date: Mon, 10 Apr 2023 19:58:15 +0200
+-Subject: [PATCH] seedrng: fix for glibc <= 2.24 not providing random header
+-
+- - dropped the wrong define (not sure why it was there)
+- - <sys/random.h> not available if glibc <= 2.24
+- - GRND_NONBLOCK not defined if <sys/random.h> not included
+- - ret < 0 && errno == ENOSYS has to be true to get creditable set
+-
+-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+-Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
+-Upstream: https://git.busybox.net/busybox/commit/?id=cb57abb46f06f4ede8d9ccbdaac67377fdf416cf
+----
+- miscutils/seedrng.c | 14 ++++++++++----
+- 1 file changed, 10 insertions(+), 4 deletions(-)
+-
+-diff --git a/miscutils/seedrng.c b/miscutils/seedrng.c
+-index 7cc855141..3bf6e2ea7 100644
+---- a/miscutils/seedrng.c
+-+++ b/miscutils/seedrng.c
+-@@ -42,25 +42,31 @@
+- #include "libbb.h"
+- 
+- #include <linux/random.h>
+--#include <sys/random.h>
+- #include <sys/file.h>
+- 
+- /* Fix up glibc <= 2.24 not having getrandom() */
+- #if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ <= 24
+- #include <sys/syscall.h>
+--# define getrandom(...) bb_getrandom(__VA_ARGS__)
+- static ssize_t getrandom(void *buffer, size_t length, unsigned flags)
+- {
+- # if defined(__NR_getrandom)
+- 	return syscall(__NR_getrandom, buffer, length, flags);
+- # else
+--	return ENOSYS;
+-+	errno = ENOSYS;
+-+	return -1;
+- # endif
+- }
+-+#else
+-+#include <sys/random.h>
+-+#endif
+-+
+-+/* Apparently some headers don't ship with this yet. */
+-+#ifndef GRND_NONBLOCK
+-+#define GRND_NONBLOCK 0x0001
+- #endif
+- 
+- #ifndef GRND_INSECURE
+--#define GRND_INSECURE 0x0004 /* Apparently some headers don't ship with this yet. */
+-+#define GRND_INSECURE 0x0004
+- #endif
+- 
+- #define DEFAULT_SEED_DIR         "/var/lib/seedrng"
+--- 
+-2.39.1
+-
+diff --git a/package/busybox/0008-shell-fix-SIGWINCH-and-SIGCHLD-in-hush-interrupting-.patch b/package/busybox/0008-shell-fix-SIGWINCH-and-SIGCHLD-in-hush-interrupting-.patch
+deleted file mode 100644
+index 8ebb487ec6..0000000000
+--- a/package/busybox/0008-shell-fix-SIGWINCH-and-SIGCHLD-in-hush-interrupting-.patch
++++ /dev/null
+@@ -1,103 +0,0 @@
+-From 93e0898c663a533082b5f3c2e7dcce93ec47076d Mon Sep 17 00:00:00 2001
+-From: Denys Vlasenko <vda.linux@googlemail.com>
+-Date: Thu, 26 Jan 2023 12:56:33 +0100
+-Subject: [PATCH] shell: fix SIGWINCH and SIGCHLD (in hush) interrupting line
+- input, closes 15256
+-
+-function                                             old     new   delta
+-record_pending_signo                                  32      63     +31
+-lineedit_read_key                                    231     224      -7
+-------------------------------------------------------------------------------
+-(add/remove: 0/0 grow/shrink: 1/1 up/down: 31/-7)              Total: 24 bytes
+-
+-Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
+-Upstream: https://git.busybox.net/busybox/commit/?id=93e0898c663a533082b5f3c2e7dcce93ec47076d
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- libbb/lineedit.c | 17 ++++++++++-------
+- shell/ash.c      |  3 ++-
+- shell/hush.c     | 10 ++++++++--
+- 3 files changed, 20 insertions(+), 10 deletions(-)
+-
+-diff --git a/libbb/lineedit.c b/libbb/lineedit.c
+-index d6b2e76ff..b942f540a 100644
+---- a/libbb/lineedit.c
+-+++ b/libbb/lineedit.c
+-@@ -2180,7 +2180,8 @@ static int lineedit_read_key(char *read_key_buffer, int timeout)
+- 		 * "\xff\n",pause,"ls\n" invalid and thus won't lose "ls".
+- 		 *
+- 		 * If LI_INTERRUPTIBLE, return -1 if got EINTR in poll()
+--		 * inside read_key, or if bb_got_signal != 0 (IOW: if signal
+-+		 * inside read_key and bb_got_signal became != 0,
+-+		 * or if bb_got_signal != 0 (IOW: if signal
+- 		 * arrived before poll() is reached).
+- 		 *
+- 		 * Note: read_key sets errno to 0 on success.
+-@@ -2197,14 +2198,16 @@ static int lineedit_read_key(char *read_key_buffer, int timeout)
+- 			IF_FEATURE_EDITING_WINCH(S.ok_to_redraw = 0;)
+- 			if (errno != EINTR)
+- 				break;
+-+			/* It was EINTR. Repeat read_key() unless... */
+- 			if (state->flags & LI_INTERRUPTIBLE) {
+--				/* LI_INTERRUPTIBLE bails out on EINTR,
+--				 * but nothing really guarantees that bb_got_signal
+--				 * is nonzero. Follow the least surprise principle:
+-+				/* LI_INTERRUPTIBLE bails out on EINTR
+-+				 * if bb_got_signal became nonzero.
+-+				 * (It may stay zero: for example, our SIGWINCH
+-+				 * handler does not set it. This is used for signals
+-+				 * which should not interrupt line editing).
+- 				 */
+--				if (bb_got_signal == 0)
+--					bb_got_signal = 255;
+--				goto ret;
+-+				if (bb_got_signal != 0)
+-+					goto ret; /* will return -1 */
+- 			}
+- 		}
+- 
+-diff --git a/shell/ash.c b/shell/ash.c
+-index 18ccc1329..5f8c8ea19 100644
+---- a/shell/ash.c
+-+++ b/shell/ash.c
+-@@ -10821,7 +10821,8 @@ preadfd(void)
+-  again:
+- 		/* For shell, LI_INTERRUPTIBLE is set:
+- 		 * read_line_input will abort on either
+--		 * getting EINTR in poll(), or if it sees bb_got_signal != 0
+-+		 * getting EINTR in poll() and bb_got_signal became != 0,
+-+		 * or if it sees bb_got_signal != 0
+- 		 * (IOW: if signal arrives before poll() is reached).
+- 		 * Interactive testcases:
+- 		 * (while kill -INT $$; do sleep 1; done) &
+-diff --git a/shell/hush.c b/shell/hush.c
+-index d111f0cc5..f064b8fd2 100644
+---- a/shell/hush.c
+-+++ b/shell/hush.c
+-@@ -1946,7 +1946,12 @@ static void record_pending_signo(int sig)
+- {
+- 	sigaddset(&G.pending_set, sig);
+- #if ENABLE_FEATURE_EDITING
+--	bb_got_signal = sig; /* for read_line_input: "we got a signal" */
+-+	if (sig != SIGCHLD
+-+	 || (G_traps && G_traps[SIGCHLD] && G_traps[SIGCHLD][0])
+-+	 /* ^^^ if SIGCHLD, interrupt line reading only if it has a trap */
+-+	) {
+-+		bb_got_signal = sig; /* for read_line_input: "we got a signal" */
+-+	}
+- #endif
+- #if ENABLE_HUSH_FAST
+- 	if (sig == SIGCHLD) {
+-@@ -2669,7 +2674,8 @@ static int get_user_input(struct in_str *i)
+- 		} else {
+- 			/* For shell, LI_INTERRUPTIBLE is set:
+- 			 * read_line_input will abort on either
+--			 * getting EINTR in poll(), or if it sees bb_got_signal != 0
+-+			 * getting EINTR in poll() and bb_got_signal became != 0,
+-+			 * or if it sees bb_got_signal != 0
+- 			 * (IOW: if signal arrives before poll() is reached).
+- 			 * Interactive testcases:
+- 			 * (while kill -INT $$; do sleep 1; done) &
+--- 
+-2.30.2
+-
+diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+index 6eba365ecc..c2f8627115 100644
+--- a/package/busybox/busybox.hash
++++ b/package/busybox/busybox.hash
+@@ -1,5 +1,5 @@
+ # From https://busybox.net/downloads/busybox-1.36.1.tar.bz2.sha256
+-sha256  b8cc24c9574d809e7279c3be349795c5d5ceb6fdf19ca709f80cde50e47de314  busybox-1.36.1.tar.bz2
++sha256  3311dff32e746499f4df0d5df04d7eb396382d7e108bb9250e7b519b837043a4  busybox-1.37.0.tar.bz2
+ # Locally computed
+ sha256  bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
+ sha256  b5a136ed67798e51fe2e0ca0b2a21cb01b904ff0c9f7d563a6292e276607e58f  archival/libarchive/bz/LICENSE
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 942875ee0e..cbd39a5e22 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BUSYBOX_VERSION = 1.36.1
++BUSYBOX_VERSION = 1.37.0
+ BUSYBOX_SITE = https://www.busybox.net/downloads
+ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPL-2.0, bzip2-1.0.4
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
