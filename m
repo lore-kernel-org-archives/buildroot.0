@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C39D9C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:38:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E1BFC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:38:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7DE6C4F422;
-	Fri, 28 Feb 2025 16:38:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11CED4F44E;
+	Fri, 28 Feb 2025 16:38:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2dLgsi6zcC7D; Fri, 28 Feb 2025 16:38:34 +0000 (UTC)
+ id RdCBpu1WE7cW; Fri, 28 Feb 2025 16:38:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2880D4F441
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1F8E4EFFA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2880D4F441;
-	Fri, 28 Feb 2025 16:38:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A1F8E4EFFA;
+	Fri, 28 Feb 2025 16:38:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1008068
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0332F68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3512441812
+ by smtp4.osuosl.org (Postfix) with ESMTP id 60D9F4250D
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7Sdda_7Iy-ft for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
+ id 08jas9T7_TYL for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C58F42478
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF94C424AA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C58F42478
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF94C424AA
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F1DF6844AB; Fri, 28 Feb 2025 16:29:37 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id BBAE3844AB; Fri, 28 Feb 2025 16:29:39 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 12 Dec 2024 12:25:14 +0100
+Date: Sat, 14 Dec 2024 15:01:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a91e20ff411b9641c64ed1224e25e5be49c4efa8
-X-Git-Newrev: 8572a9cb4b502a6da86da41179fd0f3597396a1a
+X-Git-Oldrev: 9975d28aa3ffbda2b727979b2e322fc8986d6d1b
+X-Git-Newrev: 4338deaae58a68e397c7375476745778eb7b732f
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162937.F1DF6844AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/intel-vpl-gpu-rt: bump
- version to 24.4.4
+Message-Id: <20250228162939.BBAE3844AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libcurl: security bump
+ to version 8.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,38 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8572a9cb4b502a6da86da41179fd0f3597396a1a
+commit: https://git.buildroot.net/buildroot/commit/?id=4338deaae58a68e397c7375476745778eb7b732f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash | 2 +-
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes the following security vulnerability:
 
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-index 381e8e6487..0f62867991 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ec11fbe64a84b15e98ef376a7e6de5fe15f5afda59711a7e1c145ee2268af41d  intel-vpl-gpu-rt-24.4.1.tar.gz
-+sha256  2ee3517e4015ab333230a6ef921159164c1dc912dcae412d2901308c53a53ab8  intel-vpl-gpu-rt-24.4.4.tar.gz
- sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-index 735bc910d0..5848efc131 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+CVE-2024-11053: netrc and redirect credential leak
+https://curl.se/docs/CVE-2024-11053.html
+
+Changelog: https://curl.se/ch/8.11.1.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 93a0f85dee..c2ddee2cc2 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.11.0.tar.xz.asc
++# https://curl.se/download/curl-8.11.1.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  db59cf0d671ca6e7f5c2c5ec177084a33a79e04c97e71cf183a5cdea235054eb  curl-8.11.0.tar.xz
++sha256  c7ca7db48b0909743eaef34250da02c19bc61d4f1dcedd6603f109409536ab56  curl-8.11.1.tar.xz
+ sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 1022abac85..845bf43418 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_VPL_GPU_RT_VERSION = 24.4.1
-+INTEL_VPL_GPU_RT_VERSION = 24.4.4
- INTEL_VPL_GPU_RT_SITE = $(call github,intel,vpl-gpu-rt,intel-onevpl-$(INTEL_VPL_GPU_RT_VERSION))
- INTEL_VPL_GPU_RT_LICENSE = MIT
- INTEL_VPL_GPU_RT_LICENSE_FILES = LICENSE
+-LIBCURL_VERSION = 8.11.0
++LIBCURL_VERSION = 8.11.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
