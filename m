@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11CDAC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:40:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F3D6C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:40:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D6FC424E4;
-	Fri, 28 Feb 2025 16:40:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 610B14F114;
+	Fri, 28 Feb 2025 16:40:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kHDq1JUxYuNO; Fri, 28 Feb 2025 16:40:15 +0000 (UTC)
+ id Zc0L-hElPVjc; Fri, 28 Feb 2025 16:40:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ED8142E5A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EAFF4F623
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2ED8142E5A;
-	Fri, 28 Feb 2025 16:40:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9EAFF4F623;
+	Fri, 28 Feb 2025 16:40:15 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 112051DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0BACE1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B363442561
+ by smtp4.osuosl.org (Postfix) with ESMTP id C1D4A419B7
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3vw-TFBIGOUJ for <buildroot@buildroot.org>;
+ id H2JgUyYwlATZ for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6956419B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38D9E41A1C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6956419B7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 38D9E41A1C
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B28B1820F8; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
+ id 33A7E820F8; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 15 Dec 2024 11:43:53 +0100
+Date: Sat, 14 Dec 2024 20:25:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b9120736a7e1e6c6e685d70a5a93e4d861422d70
-X-Git-Newrev: a4b34375194297713de2fc3bf96feed4a97a111b
+X-Git-Oldrev: 03ec8aad1e5f535b39224c3e37b82b7c39e781dd
+X-Git-Newrev: afa2af1c674712163b0a57213ac065ae7e12ff86
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162940.B28B1820F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/orangepi_pc_plus: bump
- BSP versions
+Message-Id: <20250228162940.33A7E820F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libdrm: bump version
+ to 2.4.124
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,97 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4b34375194297713de2fc3bf96feed4a97a111b
+commit: https://git.buildroot.net/buildroot/commit/?id=afa2af1c674712163b0a57213ac065ae7e12ff86
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Switch to the new Linux LTS release 6.12.3 and to U-Boot 2024.10.
-Force check of hashes for Linux kernel, headers, U-Boot. Finally,
-add BR2_TARGET_UBOOT_NEEDS_GNUTLS option required by new U-Boot.
+Release notes:
+https://lists.x.org/archives/xorg-announce/2024-December/003562.html
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                                              | 1 -
- .../orangepi-pc-plus/patches/linux-headers/linux-headers.hash    | 1 +
- board/orangepi/orangepi-pc-plus/patches/linux/linux.hash         | 2 ++
- board/orangepi/orangepi-pc-plus/patches/uboot/uboot.hash         | 2 ++
- configs/orangepi_pc_plus_defconfig                               | 9 ++++++---
- 5 files changed, 11 insertions(+), 4 deletions(-)
+ package/libdrm/libdrm.hash | 6 +++---
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index e886d631a6..3e4704a577 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -203,7 +203,6 @@ configs/olpc_xo1_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_lite2_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_one_plus_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_pc2_defconfig lib_defconfig.ForceCheckHash
--configs/orangepi_pc_plus_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_zero3_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_zero_plus2_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_zero_plus_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/orangepi/orangepi-pc-plus/patches/linux-headers/linux-headers.hash b/board/orangepi/orangepi-pc-plus/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/orangepi/orangepi-pc-plus/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/orangepi/orangepi-pc-plus/patches/linux/linux.hash b/board/orangepi/orangepi-pc-plus/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..aea771e7bf
---- /dev/null
-+++ b/board/orangepi/orangepi-pc-plus/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  c89809cc777d50f1ea484a118630281a26383707a0e752c96fd834f6e765deae  linux-6.12.3.tar.xz
-diff --git a/board/orangepi/orangepi-pc-plus/patches/uboot/uboot.hash b/board/orangepi/orangepi-pc-plus/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..904fa56c02
---- /dev/null
-+++ b/board/orangepi/orangepi-pc-plus/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-diff --git a/configs/orangepi_pc_plus_defconfig b/configs/orangepi_pc_plus_defconfig
-index 1eb54cb43e..878c7294de 100644
---- a/configs/orangepi_pc_plus_defconfig
-+++ b/configs/orangepi_pc_plus_defconfig
-@@ -1,7 +1,9 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-pc-plus/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC_Plus"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC Plus"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-@@ -11,7 +13,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.3"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-pc-plus/linux-extras.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -32,11 +34,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc_plus"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
- BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index aec9f58749..3ef978775d 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2024-August/003528.html
+-sha256  a2b98567a149a74b0f50e91e825f9c0315d86e7be9b74394dae8b298caadb79e  libdrm-2.4.123.tar.xz
+-sha512  d3e6ba26bbd609fd87ca131690547eeb6a903c0a8c28b7f5cd5d0947619da09f31daf7bf4b6c38bf5e5dc173e2ccba476338ef682d8cf06d6b71ba73fc9b948d  libdrm-2.4.123.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2024-December/003562.html
++sha256  ac36293f61ca4aafaf4b16a2a7afff312aa4f5c37c9fbd797de9e3c0863ca379  libdrm-2.4.124.tar.xz
++sha512  0408c3ae5780c57d19321a9a7b046d656e252b2f48e520b2beb18f83495bea39c445deb9a9a6795b46194051c2ea4da476e08c63972daf841064099df6dff365  libdrm-2.4.124.tar.xz
+ 
+ # Hash for license file
+ sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index fcf7f17e78..9d463ca01e 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.123
++LIBDRM_VERSION = 2.4.124
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
