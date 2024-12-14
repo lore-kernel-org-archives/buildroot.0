@@ -1,76 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FDD1E7716A
-	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 21:59:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26C84E7716A
+	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 22:08:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4DAD9409EE;
-	Sat, 14 Dec 2024 21:59:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E38B081F8A;
+	Sat, 14 Dec 2024 22:08:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BL_cfB57FQFv; Sat, 14 Dec 2024 21:59:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id skRaXagAz1wl; Sat, 14 Dec 2024 22:08:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21123408EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0F9281F8B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 21123408EA;
-	Sat, 14 Dec 2024 21:59:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E714CE
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 21:59:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0F9281F8B;
+	Sat, 14 Dec 2024 22:08:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 90E7BC5
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 22:08:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C4AF40168
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 21:59:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7F1DD6061B
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 22:08:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xId5hIBcpYyq for <buildroot@buildroot.org>;
- Sat, 14 Dec 2024 21:59:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 136694011D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 136694011D
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 136694011D
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 21:59:17 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id boVJrDYO03Gj for <buildroot@buildroot.org>;
+ Sat, 14 Dec 2024 22:08:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9CE5960623
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CE5960623
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9CE5960623
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 22:08:41 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 0914F5FFB7;
- Sat, 14 Dec 2024 22:59:14 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:48404])
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id CDDAA19F522;
+ Sat, 14 Dec 2024 23:08:37 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:37922])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 14 Dec 2024 22:59:14 +0100
+ with HTTP (HTTP/1.0 POST); Sat, 14 Dec 2024 23:08:37 +0100
 MIME-Version: 1.0
-Date: Sat, 14 Dec 2024 22:59:14 +0100
+Date: Sat, 14 Dec 2024 23:08:37 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241214204456.2666262-1-bernd@kuhls.net>
-References: <20241214204456.2666262-1-bernd@kuhls.net>
+To: =?UTF-8?Q?Martin_B=C3=B6h?= <contact@martb.dev>
+Cc: buildroot@buildroot.org, Marek Belisko <marek.belisko@open-nandra.com>
+In-Reply-To: <FB194E54-666A-488A-8C79-6A3CB933D55B@martb.dev>
+References: <FB194E54-666A-488A-8C79-6A3CB933D55B@martb.dev>
 User-Agent: Webmail Free/1.6.9
-Message-ID: <0a5dbe154474075385e8eab4c89e61cb@free.fr>
+Message-ID: <2c1a4807c31ec8e2863a6852736cea6d@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734213556;
- bh=zY+s4mDfJDQa04IkUOxBfX0DPKC5MeR/21HNDZeTt0E=;
+ d=free.fr; s=smtp-20201208; t=1734214120;
+ bh=TL0KRZanPQk70FtEYHYFvKFdmWnuxqjYmeT5OAGdoVo=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ReNZNmJCQ6tllpWpi6XLDczOS6SDg1XdDGhhxgt5xnlF50xBe3KBnqCh8Em1rAck+
- 3aSSAAVeaFw6uKIwBZV/rJYlb1q96tTAbmsfff8CgB5AvUEayNrUBkroFk0c5fWHDp
- 21pLiy5I6dBQV2W9zT1tph4g0VXUWLaIYGPDv58ajDHxS9STPUY1VV3htzI2CicjUu
- MK0gi0usZL7hgYn696wfFTl1hM3kTxoOvkbLEmz8DnKmzWHBuqsTD23dHQoOZRIwh8
- dFF+rbRRwbNczn2RFR81Yrf8Q0zGXHc2esvz+jsj0a/KshHMx7fui5vrFFdvCPU9q2
- 7SPsUE9XyPMSw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=lzqxclKT8qiEpiSK6Lp3Bz7swPC2ivJThdYK0TPzSIgRhnt/WD5rlA6EM70E7aQVr
+ mQS3x03org67vFc1mMlSbvMs65PIoafhA1j2DHqwKFEsWQ9ycmbt9QG6+bPg1+8i2X
+ 2xOUG3+AruRDxCEvd/yoeW/Ht4ZBib44c9LdtFB05R6tOiBOvtOssybk5wremg9ARh
+ aipQF20vK2htcmDEbfZkVjFLIjqTuIsFUl6+XCV6shcUArsC9D4lDk/PrXk50UQQz4
+ bSMM9jdpIFiinySG/QYuMCJDVjn2nPLARRoHAWdvjgzza9dF+PNbJFHtFs+DtVeV5N
+ uQ85OowFQVHzw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ReNZNmJC
-Subject: Re: [Buildroot] [PATCH 1/1] package/libdeflate: bump version to 1.22
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=lzqxclKT
+Subject: Re: [Buildroot] [PATCH 1/1] package/polkit: fix permissions after
+ version bump to 125
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,70 +83,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/12/2024 21:44, Bernd Kuhls wrote:
-> Changelog:
-> https://github.com/ebiggers/libdeflate/blob/master/NEWS.md
-> 
-> Updated license hash due to upstream commit:
-> https://github.com/ebiggers/libdeflate/commit/439f30117684c7859e0b1d4d8c57306b9ad71fd4
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-
-Applied to master, thanks.
-
-> ---
->  package/libdeflate/libdeflate.hash | 4 ++--
->  package/libdeflate/libdeflate.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libdeflate/libdeflate.hash 
-> b/package/libdeflate/libdeflate.hash
-> index 46afa96635..bb97c76c3d 100644
-> --- a/package/libdeflate/libdeflate.hash
-> +++ b/package/libdeflate/libdeflate.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  
-> ed1454166ced78913ff3809870a4005b7170a6fd30767dc478a09b96847b9c2a  
-> libdeflate-1.20.tar.gz
-> -sha256  
-> 5d246dd2537307b80fed9ba5fdddf5d0fe7a8f023393a071182b9daed56b40fe  
-> COPYING
-> +sha256  
-> 7f343c7bf2ba46e774d8a632bf073235e1fd27723ef0a12a90f8947b7fe851d6  
-> libdeflate-1.22.tar.gz
-> +sha256  
-> 4ad69099cb4374836fd27583d9991e2838cd86b6e4666ab26b2d32582c91e73a  
-> COPYING
-> diff --git a/package/libdeflate/libdeflate.mk 
-> b/package/libdeflate/libdeflate.mk
-> index 4597dc5a8c..823ff442fd 100644
-> --- a/package/libdeflate/libdeflate.mk
-> +++ b/package/libdeflate/libdeflate.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
-> 
-> -LIBDEFLATE_VERSION = 1.20
-> +LIBDEFLATE_VERSION = 1.22
->  LIBDEFLATE_SITE = $(call 
-> github,ebiggers,libdeflate,v$(LIBDEFLATE_VERSION))
->  LIBDEFLATE_LICENSE = MIT
->  LIBDEFLATE_LICENSE_FILES = COPYING
-> --
-> 2.39.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgTWFydGluLAoKT24gMTMvMTIvMjAyNCAwNjozOSwgTWFydGluIELDtmggdmlhIGJ1aWxkcm9v
+dCB3cm90ZToKPiBGcm9tOiBNYXJ0aW4gQsO2aCA8Y29udGFjdEBtYXJ0Yi5kZXY+Cj4gCj4gVGhl
+IHNlcnZpY2UgZmFpbGVkIHRvIHN0YXJ0IGNvcnJlY3RseSBpZiBhbnkgY3VzdG9tIHJ1bGVzIHdl
+cmUKPiBpbnN0YWxsZWQuCj4gVGhpcyBjb21taXQgYWxpZ25zIHRoZSBwZXJtaXNzaW9ucyB3aXRo
+IHRoZSB1cHN0cmVhbSBtZXNvbiBidWlsZCBzdGVwLgo+IAo+IFNpZ25lZC1vZmYtYnk6IE1hcnRp
+biBCw7ZoIDxjb250YWN0QG1hcnRiLmRldj4KPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4g
+IHBhY2thZ2UvcG9sa2l0L3BvbGtpdC5tayB8IDggKysrKy0tLS0KPiAxIGZpbGUgY2hhbmdlZCwg
+NCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdl
+L3BvbGtpdC9wb2xraXQubWsgYi9wYWNrYWdlL3BvbGtpdC9wb2xraXQubWsKPiBpbmRleCBmYjQ5
+ZjZjZTJhLi42Y2QyYWE2MDQyIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcG9sa2l0L3BvbGtpdC5t
+awo+ICsrKyBiL3BhY2thZ2UvcG9sa2l0L3BvbGtpdC5tawo+IEBAIC01NiwxMCArNTYsMTAgQEAg
+ZGVmaW5lIFBPTEtJVF9VU0VSUwo+IGVuZGVmCj4gCj4gZGVmaW5lIFBPTEtJVF9QRVJNSVNTSU9O
+Uwo+IC0gL2V0Yy9wb2xraXQtMS9ydWxlcy5kIGQgNzAwIHBvbGtpdGQgcm9vdCAtIC0gLSAtIC0K
+PiAtIC91c3Ivc2hhcmUvcG9sa2l0LTEvcnVsZXMuZCBkIDcwMCBwb2xraXRkIHJvb3QgLSAtIC0g
+LSAtCj4gLSAvdXNyL2Jpbi9wa2V4ZWMgZiA0NzU1IHJvb3Qgcm9vdCAtIC0gLSAtIC0KPiAtIC91
+c3IvbGliL3BvbGtpdC0xL3BvbGtpdC1hZ2VudC1oZWxwZXItMSBmIDQ3NTUgcm9vdCByb290IC0g
+LSAtIC0gLQo+ICsgL2V0Yy9wb2xraXQtMS9ydWxlcy5kIGQgNzUwIHJvb3QgcG9sa2l0ZCAtIC0g
+LSAtIC0KPiArIC91c3Ivc2hhcmUvcG9sa2l0LTEvcnVsZXMuZCBkIDc1MCByb290IHBvbGtpdGQg
+LSAtIC0gLSAtCgpJIHVuZGVyc3RhbmQgdGhvc2UgdHdvIGRpcmVjdG9yaWVzIG5lZWRzIHRob3Nl
+IHVwZGF0ZXMsIGR1ZSB0byB1cHN0cmVhbQpjaGFuZ2VzIHN1Y2ggYXM6Cmh0dHBzOi8vZ2l0aHVi
+LmNvbS9wb2xraXQtb3JnL3BvbGtpdC9jb21taXQvYjYxNjlmMzExM2IzY2U1ZWQ4MjJlNjZhZGNj
+OTYyODUwYzI0NjYwYQoKPiArIC91c3IvYmluL3BrZXhlYyBmIDA0NzU1IHJvb3Qgcm9vdCAtIC0g
+LSAtIC0KPiArIC91c3IvbGliL3BvbGtpdC0xL3BvbGtpdC1hZ2VudC1oZWxwZXItMSBmIDA0NzU1
+IHJvb3Qgcm9vdCAtIC0gLSAtIC0KCldoeSBkaWQgeW91IHVwZGF0ZWQgL3Vzci9iaW4vcGtleGVj
+IGFuZCAKL3Vzci9saWIvcG9sa2l0LTEvcG9sa2l0LWFnZW50LWhlbHBlci0xCnRvIHJlcGxhY2Ug
+NDc1NSBieSAwNDc1NT8gKHRoZXJlIGlzIG5vIGp1c3RpZmljYXRpb24gaW4gdGhlIGNvbW1pdCBs
+b2cpLgoKPiBlbmRlZgo+IAo+IGRlZmluZSBQT0xLSVRfSU5TVEFMTF9JTklUX1NZU1RFTUQKPiAt
+LQo+IDIuNDcuMQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4g
+aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgpC
+ZXN0IHJlZ2FyZHMsCgpKdWxpZW4uCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
+Cg==
