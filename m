@@ -1,75 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 720CAE7716A
-	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 20:45:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A38C5E7716A
+	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 20:45:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3646384642;
-	Sat, 14 Dec 2024 20:45:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 871pUxBVydsL; Sat, 14 Dec 2024 20:45:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 426538464C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 426538464C;
-	Sat, 14 Dec 2024 20:45:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id C2838D0
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 20:45:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A1413606FA
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 20:45:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64EF4606E0;
+	Sat, 14 Dec 2024 20:45:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id apBEZvfG_kQl for <buildroot@buildroot.org>;
- Sat, 14 Dec 2024 20:45:04 +0000 (UTC)
+ id Gj0aAzl0PtHf; Sat, 14 Dec 2024 20:45:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FA81606FA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FA81606FA;
+	Sat, 14 Dec 2024 20:45:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id EF4A4D0
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 20:45:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CFFE241294
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 20:45:17 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XLg3sIY6HkAZ for <buildroot@buildroot.org>;
+ Sat, 14 Dec 2024 20:45:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A98AF606E0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A98AF606E0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C46AA411D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C46AA411D0
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A98AF606E0
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 20:45:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C46AA411D0
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 20:45:16 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c243.dip0.t-ipconnect.de [79.214.194.67])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 9AF8FA4C3E36;
- Sat, 14 Dec 2024 21:44:13 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42442)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E35A7A4C3B8B
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 21:44:56 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47036)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1tMYzk-000000004eK-3Z4T;
- Sat, 14 Dec 2024 20:44:13 +0000
+ (envelope-from <bernd@kuhls.net>) id 1tMZ0S-000000004lQ-0Qw5
+ for buildroot@buildroot.org; Sat, 14 Dec 2024 20:44:56 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Dec 2024 21:44:13 +0100
-Message-Id: <20241214204413.2666219-5-bernd@kuhls.net>
+Date: Sat, 14 Dec 2024 21:44:56 +0100
+Message-Id: <20241214204456.2666262-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241214204413.2666219-1-bernd@kuhls.net>
-References: <20241214204413.2666219-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: +++++++
+X-Spam: Yes
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202412041019; t=1734209053;
- bh=4mhwTClzbSSDJqnyai9rJ33gZB3CAATSp2fePXz1WKI=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=JRedK1bMpGqRprU3nb7c4kJrNti8iDgRAEXF2l2jBmxQS5HPwLPoBEyWukWtmwUQl
- ApL/awyr923werUxIjQ2XB6d4+rfYU2uZDcBb33tLJCzWvL6aVDivyCv5L96y3jEO4
- UIu418cNtihUEdaNgzPIldyN4q/+DM3++yE93VBmwhUw4A5y3MjhRHNcafzjf92dFe
- 61dzTC1I6sPE8KhiZdz4M1QGZdYWwmusqfSDIPgw6dHsLGIMOO2e8E9mehsup7A36o
- De+4Q66bv4CNYF+rUCGLa52+yXmfexPUYZ+zIAv7DhgbGV2BVevxlClDvex6+aYVqt
- HP5ZOPiDAT+HQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=kas202412041019; t=1734209096;
+ bh=HqIyeG3BNCDo6a4B2aRW8Vj6Hxv2rbj2U57r3nI4h8Q=;
+ h=From:To:Subject:Date:From;
+ b=jGkUzb+I6iPaqM2DODrYOXR+mdh5epTto5gVrii2pqnvqdQSGsacTVhLJf3pIwKjL
+ jpYX6knXvvLl5RyFri8RyzcKiIB0oq+lOov3AsdmVQj9H8EvyLzYbPmF/8wBA4o9um
+ QybRMhCYVUAOfZe6968/0obF8A/P/ccSGm0aVsa3xcpr8guHz3HfZypUOLbWjhqNeG
+ GvHg4B4fxPgc71ErhdEswvy7k0kTrghcTn2zs5TjzgV2L8zv/XyyumjXOYW16jo8dI
+ lSOYj3d7hJv6hcQcQx0S12HLN2sktFEPUHQWuQ3Xj0s8d8huJCvpNkme3YUK2x5xMA
+ Od3d1HqOCIr7g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202412041019 header.b=JRedK1bM
-Subject: [Buildroot] [PATCH 5/5] package/perl-uri: bump version to 5.31
+ header.a=rsa-sha256 header.s=kas202412041019 header.b=jGkUzb+I
+Subject: [Buildroot] [PATCH 1/1] package/libdeflate: bump version to 1.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,40 +85,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://github.com/libwww-perl/URI/blob/master/Changes
+Changelog:
+https://github.com/ebiggers/libdeflate/blob/master/NEWS.md
+
+Updated license hash due to upstream commit:
+https://github.com/ebiggers/libdeflate/commit/439f30117684c7859e0b1d4d8c57306b9ad71fd4
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/perl-uri/perl-uri.hash | 4 ++--
- package/perl-uri/perl-uri.mk   | 2 +-
+ package/libdeflate/libdeflate.hash | 4 ++--
+ package/libdeflate/libdeflate.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index fb70f0c266..889c02e9a1 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from https://cpan.metacpan.org/
--md5  34cf48b69c4fbcc40cfebac94af39424  URI-5.29.tar.gz
--sha256  a34b9f626c3ff1e20c0d4a23ec5c8b7ae1de1fb674ecefed7e46791388137372  URI-5.29.tar.gz
-+md5  b5388d5b86e1870a80ad95c153bf41fd  URI-5.31.tar.gz
-+sha256  b9c4d58b2614b8611ae03a95a6d60ed996f4b311ef3cd5a937b92f1825ecc564  URI-5.31.tar.gz
- 
- # computed by scancpan
- sha256  a1730c55839ce3c9182c92e3387ba8f683ad6ab8b4a3257553a20c4db194c2cf  LICENSE
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
-index d02a729dc2..40775d19f9 100644
---- a/package/perl-uri/perl-uri.mk
-+++ b/package/perl-uri/perl-uri.mk
+diff --git a/package/libdeflate/libdeflate.hash b/package/libdeflate/libdeflate.hash
+index 46afa96635..bb97c76c3d 100644
+--- a/package/libdeflate/libdeflate.hash
++++ b/package/libdeflate/libdeflate.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ed1454166ced78913ff3809870a4005b7170a6fd30767dc478a09b96847b9c2a  libdeflate-1.20.tar.gz
+-sha256  5d246dd2537307b80fed9ba5fdddf5d0fe7a8f023393a071182b9daed56b40fe  COPYING
++sha256  7f343c7bf2ba46e774d8a632bf073235e1fd27723ef0a12a90f8947b7fe851d6  libdeflate-1.22.tar.gz
++sha256  4ad69099cb4374836fd27583d9991e2838cd86b6e4666ab26b2d32582c91e73a  COPYING
+diff --git a/package/libdeflate/libdeflate.mk b/package/libdeflate/libdeflate.mk
+index 4597dc5a8c..823ff442fd 100644
+--- a/package/libdeflate/libdeflate.mk
++++ b/package/libdeflate/libdeflate.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_URI_VERSION = 5.29
-+PERL_URI_VERSION = 5.31
- PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
- PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_URI_LICENSE = Artistic-1.0-Perl or GPL-1.0+
+-LIBDEFLATE_VERSION = 1.20
++LIBDEFLATE_VERSION = 1.22
+ LIBDEFLATE_SITE = $(call github,ebiggers,libdeflate,v$(LIBDEFLATE_VERSION))
+ LIBDEFLATE_LICENSE = MIT
+ LIBDEFLATE_LICENSE_FILES = COPYING
 -- 
 2.39.5
 
