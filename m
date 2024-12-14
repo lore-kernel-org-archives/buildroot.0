@@ -4,61 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D03E6E7716A
-	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 11:05:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A0D1E77180
+	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 11:11:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F6C6615E6;
-	Sat, 14 Dec 2024 11:05:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 57A6E60655;
+	Sat, 14 Dec 2024 11:11:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gpr16RaxzN8d; Sat, 14 Dec 2024 11:04:59 +0000 (UTC)
+ id 2uSaZxSkFu7N; Sat, 14 Dec 2024 11:11:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E6F060A48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4752360A48
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E6F060A48;
-	Sat, 14 Dec 2024 11:04:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 643EECD
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 11:04:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4752360A48;
+	Sat, 14 Dec 2024 11:11:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5ECA2C5
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 11:11:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 461FE8149B
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 11:04:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3260A608C8
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 11:11:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QZhkK0cWpewp for <buildroot@buildroot.org>;
- Sat, 14 Dec 2024 11:04:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zx-594x_sDIB for <buildroot@buildroot.org>;
+ Sat, 14 Dec 2024 11:11:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2D4FB8148E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D4FB8148E
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2D4FB8148E
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 11:04:56 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 11EFEE0003;
- Sat, 14 Dec 2024 11:04:53 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tMPx7-00BSp1-17;
- Sat, 14 Dec 2024 12:04:53 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B18160655
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5B18160655
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 11:11:08 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 50B9586F7E; Sat, 14 Dec 2024 11:11:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org,  Pierre-Jean Texier <texier.pj2@gmail.com>
-References: <20241211191225.1349792-1-bernd@kuhls.net>
- <87frmtxho7.fsf@dell.be.48ers.dk>
-Date: Sat, 14 Dec 2024 12:04:53 +0100
-In-Reply-To: <87frmtxho7.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Thu, 12 Dec 2024 12:30:16 +0100")
-Message-ID: <878qsittii.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libxml2: bump version to 2.13.5
+To: buildroot@buildroot.org
+Date: Sat, 14 Dec 2024 09:51:20 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: 93a2581bfd985e0cdcc86b3da4836cc1ccd47b91
+X-Git-Newrev: ef3398862165948288e5751ce9ceaceb4a20cbb1
+X-Patchwork-Hint: ignore
+Message-Id: <20241214111108.50B9586F7E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/octave: update
+ _SITE to use BR2_GNU_MIRROR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,25 +59,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ef3398862165948288e5751ce9ceaceb4a20cbb1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
- >> Release notes:
- >> https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.5.news
+The octave package is distributed on the GNU project servers. See [1]
+and [2]. Buildroot has the BR2_GNU_MIRROR configuration which can
+be used for that purpose. See [3].
 
- >> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+For consistency with all other GNU packages, this commit updates
+the _SITE to use BR2_GNU_MIRROR.
 
- > Committed, thanks.
+[1] https://www.octave.org/download
+[2] https://www.gnu.org/prep/ftp.html
+[3] https://gitlab.com/buildroot.org/buildroot/-/blob/2024.08.2/Config.in#L286
 
-Committed to 2024.11.x given the bugfixes, thanks.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit b0a1b0bab1238271ca99d6a453101d6b128b027a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/octave/octave.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/octave/octave.mk b/package/octave/octave.mk
+index 2e2fe0f989..34d9288c75 100644
+--- a/package/octave/octave.mk
++++ b/package/octave/octave.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ OCTAVE_VERSION = 9.2.0
+-OCTAVE_SITE = https://ftp.gnu.org/gnu/octave
++OCTAVE_SITE = $(BR2_GNU_MIRROR)/octave
+ OCTAVE_SOURCE = octave-$(OCTAVE_VERSION).tar.lz
+ OCTAVE_LICENSE = GPL-3.0+
+ OCTAVE_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
