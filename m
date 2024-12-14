@@ -1,77 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27016E7716A
-	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 14:12:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C33DBE7716A
+	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 14:14:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFDE9402B5;
-	Sat, 14 Dec 2024 14:12:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8BCA384623;
+	Sat, 14 Dec 2024 14:14:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i6yt5zD2msnI; Sat, 14 Dec 2024 14:12:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9llQn_ngHNak; Sat, 14 Dec 2024 14:14:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B59340347
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B2CA84620
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B59340347;
-	Sat, 14 Dec 2024 14:12:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C08D1C5
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 14:12:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B2CA84620;
+	Sat, 14 Dec 2024 14:14:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C012C5
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 14:14:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ACB404004A
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 14:12:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57A3860611
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 14:14:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vUJrJVowreJf for <buildroot@buildroot.org>;
- Sat, 14 Dec 2024 14:12:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 78FF9400DD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78FF9400DD
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 78FF9400DD
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 14:12:50 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 8C80F19F58A;
- Sat, 14 Dec 2024 15:12:47 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:48730])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 14 Dec 2024 15:12:47 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IYetJ26f-WiQ for <buildroot@buildroot.org>;
+ Sat, 14 Dec 2024 14:14:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 32DE8600BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32DE8600BB
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 32DE8600BB
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 14:14:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5BE841C0002;
+ Sat, 14 Dec 2024 14:14:33 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1tMSue-00DuLv-26;
+ Sat, 14 Dec 2024 15:14:32 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sat, 14 Dec 2024 15:14:30 +0100
+Message-Id: <20241214141430.3314872-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-Date: Sat, 14 Dec 2024 15:12:47 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241214114808.2934481-1-peter@korsgaard.com>
-References: <20241214114808.2934481-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <6b4f687ccfba83e50f826b9f5790739c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734185568;
- bh=oQidbNOlRX/prSujFSghXS1+g2t0shQ6aVSQuoEhK+w=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Rhl7bhJknJiOT8QxFDSFwdL2Xc8he01DAtsHFr5quXks3CdUNqI4zctH3tn7cxah6
- V6tp5iMuY/oiVO2rBvJSgZpgI19yXAtSeicGCEIHoxcKUNSwfxIFe3xQ2lmSgABeQj
- DP3MIXzq2OvGxcQsXYxOIeDZFJ7sVkXog9GF2KYqbeTVFKHK9qSKtmfCVTW676vSUP
- CZ7Lm+0S0QqNcl8/CnsVj07ioqDt6RzyjLiYcsp3LqqZEBG7qmPq8a2OPGyzc2P6QS
- kqHZ+1vibTofnZFXzi/F/jhszXHAvu4kOCjfsMa+JldN9I1+1grdQtx0Z5Q/rS+3X4
- qyYDVmod3hlDQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Rhl7bhJk
-Subject: Re: [Buildroot] [PATCH] package/wireshark: security bump to version
- 4.2.9
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH] package/python-django: security bump to version
+ 5.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,54 +66,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Oli Vogt <oli.vogt.pub01@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMTQvMTIvMjAyNCAxMjo0OCwgUGV0ZXIgS29yc2dhYXJkIHdyb3RlOgo+IEZpeGVzIHRoZSBm
-b2xsb3dpbmcgdnVsbmVyYWJpbGl0aWVzOgo+IAo+IDQuMi45Ogo+IAo+IENWRS0yMDI0LTExNTk1
-OiB3bnBhLXNlYy0yMDI0LTE0IMK3IEZpdmVDbyBSQVAgZGlzc2VjdG9yIGluZmluaXRlIGxvb3AK
-PiBodHRwczovL3d3dy53aXJlc2hhcmsub3JnL3NlY3VyaXR5L3ducGEtc2VjLTIwMjQtMTQKPiAK
-PiBDVkUtMjAyNC0xMTU5Njogd25wYS1zZWMtMjAyNC0xNSDCtyBFQ01QIGRpc3NlY3RvciBjcmFz
-aAo+IGh0dHBzOi8vd3d3LndpcmVzaGFyay5vcmcvc2VjdXJpdHkvd25wYS1zZWMtMjAyNC0xNQo+
-IAo+IDQuMi44Ogo+IAo+IENWRS0yMDI0LTk3ODE6IHducGEtc2VjLTIwMjQtMTMgwrcgQXBwbGVU
-YWxrIGFuZCBSRUxPQUQgRnJhbWluZyAKPiBkaXNzZWN0b3IKPiBjcmFzaGVzCj4gaHR0cHM6Ly93
-d3cud2lyZXNoYXJrLm9yZy9zZWN1cml0eS93bnBhLXNlYy0yMDI0LTEzCj4gCj4gNC4yLjc6Cj4g
-Cj4gQ1ZFLTIwMjQtODI1MDogd25wYS1zZWMtMjAyNC0xMSDCtyBOVExNU1NQIGRpc3NlY3RvciBj
-cmFzaAo+IGh0dHBzOi8vd3d3LndpcmVzaGFyay5vcmcvc2VjdXJpdHkvd25wYS1zZWMtMjAyNC0x
-MQo+IAo+IFNpZ25lZC1vZmYtYnk6IFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJAa29yc2dhYXJkLmNv
-bT4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgo+IC0tLQo+ICBwYWNrYWdlL3dpcmVzaGFy
-ay93aXJlc2hhcmsuaGFzaCB8IDYgKysrLS0tCj4gIHBhY2thZ2Uvd2lyZXNoYXJrL3dpcmVzaGFy
-ay5tayAgIHwgMiArLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxl
-dGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS93aXJlc2hhcmsvd2lyZXNoYXJrLmhh
-c2ggCj4gYi9wYWNrYWdlL3dpcmVzaGFyay93aXJlc2hhcmsuaGFzaAo+IGluZGV4IDA2MTE5ODYx
-ZjIuLjY0MmJjNTg2NmQgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS93aXJlc2hhcmsvd2lyZXNoYXJr
-Lmhhc2gKPiArKysgYi9wYWNrYWdlL3dpcmVzaGFyay93aXJlc2hhcmsuaGFzaAo+IEBAIC0xLDYg
-KzEsNiBAQAo+IC0jIEZyb20gCj4gaHR0cHM6Ly93d3cud2lyZXNoYXJrLm9yZy9kb3dubG9hZC9z
-cmMvYWxsLXZlcnNpb25zL1NJR05BVFVSRVMtNC4yLjYudHh0Cj4gLXNoYTEgIGRiMDM3NGRjZTM2
-MGI5OWQ4YWJiOWEzZjM0NzFmM2ZjOThkNmQwOTkgIHdpcmVzaGFyay00LjIuNi50YXIueHoKPiAt
-c2hhMjU2ICAKPiA1ZWM2MDI4ZGYyOTA2OGQ4ODljOTg0ODliZjE5NGE4ODRiMDA4MzExMDZmZWEx
-ZTkyMWZlYTNjNjVmMjAwM2Y1ICAKPiB3aXJlc2hhcmstNC4yLjYudGFyLnh6Cj4gKyMgRnJvbSAK
-PiBodHRwczovL3d3dy53aXJlc2hhcmsub3JnL2Rvd25sb2FkL3NyYy9hbGwtdmVyc2lvbnMvU0lH
-TkFUVVJFUy00LjIuOS50eHQKPiArc2hhMSAgZDFhYmJlMTEwNDUxZGFiOWU1N2M5ZWUxZmUwODky
-ZTBkNmE3ZDUxNSAgd2lyZXNoYXJrLTQuMi45LnRhci54ego+ICtzaGEyNTYgIAo+IDYyYzJiNjY1
-MmQ3ZjlhNTA2Njg4NjdiZDU3YjIxNjA5YzlhOWI2OTUwZjI2ZTdmMzBhMjRiMmRlMGU3MmRlZDMg
-IAo+IHdpcmVzaGFyay00LjIuOS50YXIueHoKPiAKPiAgIyBMb2NhbGx5IGNhbGN1bGF0ZWQKPiAg
-c2hhMjU2ICAKPiA4MTc3Zjk3NTEzMjEzNTI2ZGYyY2Y2MTg0ZDhmZjk4NmM2NzVhZmI1MTRkNGU2
-OGE0MDQwMTA1MjFiODgwNjQzICAKPiBDT1BZSU5HCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvd2ly
-ZXNoYXJrL3dpcmVzaGFyay5tayAKPiBiL3BhY2thZ2Uvd2lyZXNoYXJrL3dpcmVzaGFyay5tawo+
-IGluZGV4IDI0MjQzMDE5NGYuLmJhZGU2OGYyNTggMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS93aXJl
-c2hhcmsvd2lyZXNoYXJrLm1rCj4gKysrIGIvcGFja2FnZS93aXJlc2hhcmsvd2lyZXNoYXJrLm1r
-Cj4gQEAgLTQsNyArNCw3IEBACj4gICMKPiAgCj4gIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiAK
-PiAtV0lSRVNIQVJLX1ZFUlNJT04gPSA0LjIuNgo+ICtXSVJFU0hBUktfVkVSU0lPTiA9IDQuMi45
-Cj4gIFdJUkVTSEFSS19TT1VSQ0UgPSB3aXJlc2hhcmstJChXSVJFU0hBUktfVkVSU0lPTikudGFy
-Lnh6Cj4gIFdJUkVTSEFSS19TSVRFID0gaHR0cHM6Ly93d3cud2lyZXNoYXJrLm9yZy9kb3dubG9h
-ZC9zcmMvYWxsLXZlcnNpb25zCj4gIFdJUkVTSEFSS19MSUNFTlNFID0gd2lyZXNoYXJrIGxpY2Vu
-c2UKPiAtLQo+IDIuMzkuNQo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
-bGRyb290Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
-aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
-cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Fixes the following security issues:
+
+CVE-2024-53907: Potential denial-of-service in
+django.utils.html.strip_tags()
+
+The strip_tags() method and striptags template filter are subject to a
+potential denial-of-service attack via certain inputs containing large
+sequences of nested incomplete HTML entities.
+
+CVE-2024-53908: Potential SQL injection in HasKey(lhs, rhs) on Oracle
+
+Direct usage of the django.db.models.fields.json.HasKey lookup on Oracle is
+subject to SQL injection if untrusted data is used as a lhs value.
+Applications that use the jsonfield.has_key lookup through the __ syntax are
+unaffected.
+
+https://www.djangoproject.com/weblog/2024/dec/04/security-releases/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 656d9eee9a..53c4ceead3 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  3f556d14e7999a9700a27a325efc0833  Django-5.1.3.tar.gz
+-sha256  c0fa0e619c39325a169208caef234f90baa925227032ad3f44842ba14d75234a  Django-5.1.3.tar.gz
++md5  03ec3e0f2d6cbcb9eb11c629ca1c538b  Django-5.1.4.tar.gz
++sha256  de450c09e91879fa5a307f696e57c851955c910a438a35e6b4c895e86bedc82a  Django-5.1.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 6588acc31d..4facc6b6c4 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 5.1.3
++PYTHON_DJANGO_VERSION = 5.1.4
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c6/85/ba2c2b83ba8b95354f99ed8344405d9571109ce0175028876209d6b93fba
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/d3/e8/536555596dbb79f6e77418aeb40bdc1758c26725aba31919ba449e6d5e6a
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+-- 
+2.39.5
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
