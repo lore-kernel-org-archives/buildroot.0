@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 823A1E7716A
-	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 11:11:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BEB7E7716A
+	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 11:11:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 45D1360A48;
-	Sat, 14 Dec 2024 11:11:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D04E561652;
+	Sat, 14 Dec 2024 11:11:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DxFLg1WmnBVO; Sat, 14 Dec 2024 11:11:38 +0000 (UTC)
+ id TM8heyrghyrk; Sat, 14 Dec 2024 11:11:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42D8761652
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB39561689
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 42D8761652;
-	Sat, 14 Dec 2024 11:11:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB39561689;
+	Sat, 14 Dec 2024 11:11:40 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 07528CD
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 11:11:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D86BCD
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 11:11:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1E8B981ECC
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB62081EC0
  for <buildroot@buildroot.org>; Sat, 14 Dec 2024 11:11:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BbmrLxNUFOBd for <buildroot@buildroot.org>;
- Sat, 14 Dec 2024 11:11:09 +0000 (UTC)
+ id 0bEDstS2Hxcp for <buildroot@buildroot.org>;
+ Sat, 14 Dec 2024 11:11:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0859845DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A089181EDA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C0859845DA
+ by smtp1.osuosl.org (Postfix) with ESMTP id A089181EDA
  for <buildroot@buildroot.org>; Sat, 14 Dec 2024 11:11:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BC40F86F7E; Sat, 14 Dec 2024 11:11:08 +0000 (UTC)
+ id 9D37786F7F; Sat, 14 Dec 2024 11:11:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 Dec 2024 12:04:34 +0100
+Date: Sat, 14 Dec 2024 12:01:02 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 51abb348460e25eed9e8ede92e45651f49cb59ac
-X-Git-Newrev: 0e4a69312573a9c418f55be6766d9aec8a925878
+X-Git-Oldrev: cce222910d766b5e20a37c55be9d69f9d538ea0b
+X-Git-Newrev: 28778fc2c847b2d1a4b266b8fb296075287549aa
 X-Patchwork-Hint: ignore
-Message-Id: <20241214111108.BC40F86F7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/libxml2: bump
- version to 2.13.5
+Message-Id: <20241214111108.9D37786F7F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/wget: security
+ bump version to 1.25.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,45 +65,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e4a69312573a9c418f55be6766d9aec8a925878
+commit: https://git.buildroot.net/buildroot/commit/?id=28778fc2c847b2d1a4b266b8fb296075287549aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
 Release notes:
-https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.5.news
+https://lists.gnu.org/archive/html/bug-wget/2024-11/msg00002.html
+
+Fixes the following vulnerabilities:
+
+- CVE-2024-38428: url.c in GNU Wget through 1.24.5 mishandles semicolons in
+  the userinfo subcomponent of a URI, and thus there may be insecure
+  behavior in which data that was supposed to be in the userinfo
+  subcomponent is misinterpreted to be part of the host subcomponent.
+
+  https://nvd.nist.gov/vuln/detail/CVE-2024-38428
+
+- CVE-2024-10524: Applications that use Wget to access a remote resource
+  using shorthand URLs and pass arbitrary user credentials in the URL are
+  vulnerable.  In these cases attackers can enter crafted credentials which
+  will cause Wget to access an arbitrary host.
+
+  https://www.openwall.com/lists/oss-security/2024/11/18/6
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e6695ad3f867bf6efc380bbde46b88d11a16f38b)
+(cherry picked from commit 295b2c4f8ecaf0b6e03725a6c8412795e91888c8)
+[Peter: mark as security bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxml2/libxml2.hash | 4 ++--
- package/libxml2/libxml2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/wget/wget.hash | 8 ++++----
+ package/wget/wget.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index ed6c20e948..eb92ad4324 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.4.sha256sum
--sha256  65d042e1c8010243e617efb02afda20b85c2160acdbfbcb5b26b80cec6515650  libxml2-2.13.4.tar.xz
-+# From https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.5.sha256sum
-+sha256  74fc163217a3964257d3be39af943e08861263c4231f9ef5b496b6f6d4c7b2b6  libxml2-2.13.5.tar.xz
- # License files, locally calculated
- sha256  c99aae1afe013e50b8b3701e089222b351258043c3025b64053a233fd25b4be7  Copyright
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 8a5d703da6..a8cb86ab2f 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index a0561d8d0a..da71b49d09 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.gnu.org/archive/html/bug-wget/2024-03/msg00008.html
+-sha1  01659f427c2e90c7c943805db69ea00f5da79b07  wget-1.24.5.tar.lz
++# From https://lists.gnu.org/archive/html/bug-wget/2024-11/msg00002.html
++sha1  ca79e61fbf1d32133f60ef7c7d476b250b6da423  wget-1.25.0.tar.lz
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/wget/wget-1.24.5.tar.lz.sig
++# https://ftp.gnu.org/gnu/wget/wget-1.25.0.tar.lz.sig
+ # with key 6B98F637D879C5236E277C5C64FF90AAE8C70AF9
+-sha256  57a107151e4ef94fdf94affecfac598963f372f13293ed9c74032105390b36ee  wget-1.24.5.tar.lz
++sha256  19225cc756b0a088fc81148dc6a40a0c8f329af7fd8483f1c7b2fe50f4e08a1f  wget-1.25.0.tar.lz
+ # Locally calculated
+ sha256  f7dc7522e7e1be9227f3dc8de8b39a4d1d2471968c893af15f00c1a2076a0eec  COPYING
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index d2a3a38e50..e3143647d7 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBXML2_VERSION_MAJOR = 2.13
--LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).4
-+LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).5
- LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
- LIBXML2_SITE = \
- 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
+-WGET_VERSION = 1.24.5
++WGET_VERSION = 1.25.0
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
