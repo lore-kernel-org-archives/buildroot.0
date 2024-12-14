@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3A37E7716A
-	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 08:58:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD8B9E77180
+	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 08:58:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 40B20410B1;
-	Sat, 14 Dec 2024 08:58:25 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c1RUiSGvLYl6; Sat, 14 Dec 2024 08:58:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AD22410B4
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0AD22410B4;
-	Sat, 14 Dec 2024 08:58:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A7694C5
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 08:58:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7FADE844FB
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 08:58:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6EBA1844FA;
+	Sat, 14 Dec 2024 08:58:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xLl4I8WM8oHE for <buildroot@buildroot.org>;
- Sat, 14 Dec 2024 08:58:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id GnhlNqyDT_Ru; Sat, 14 Dec 2024 08:58:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E636844FB
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E636844FB;
+	Sat, 14 Dec 2024 08:58:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 80551CD
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 08:58:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E501844FB
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 08:58:29 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1G6Hns9H-ZLv for <buildroot@buildroot.org>;
+ Sat, 14 Dec 2024 08:58:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 02746844FA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02746844FA
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 02746844FA
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 08:58:20 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D062C40002;
- Sat, 14 Dec 2024 08:58:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3ECCF844FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3ECCF844FA
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3ECCF844FA
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 08:58:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3DB4520002;
+ Sat, 14 Dec 2024 08:58:25 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tMNyb-00BJjb-0l;
- Sat, 14 Dec 2024 09:58:17 +0100
+ (envelope-from <peter@korsgaard.com>) id 1tMNyi-00BJlo-1w;
+ Sat, 14 Dec 2024 09:58:24 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-References: <20241117123839.536725-1-ju.o@free.fr>
-Date: Sat, 14 Dec 2024 09:58:17 +0100
-In-Reply-To: <20241117123839.536725-1-ju.o@free.fr> (Julien Olivain's message
- of "Sun, 17 Nov 2024 13:38:39 +0100")
-Message-ID: <878qsivdxy.fsf@dell.be.48ers.dk>
+Cc: buildroot@buildroot.org,  Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20241117124504.539423-1-ju.o@free.fr>
+Date: Sat, 14 Dec 2024 09:58:24 +0100
+In-Reply-To: <20241117124504.539423-1-ju.o@free.fr> (Julien Olivain's message
+ of "Sun, 17 Nov 2024 13:45:04 +0100")
+Message-ID: <874j36vdxr.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH next 1/1] package/octave: update _SITE to
+Subject: Re: [Buildroot] [PATCH next 1/1] package/freeipmi: update _SITE to
  use BR2_GNU_MIRROR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -77,14 +77,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
- > The octave package is distributed on the GNU project servers. See [1]
- > and [2]. Buildroot has the BR2_GNU_MIRROR configuration which can
- > be used for that purpose. See [3].
+ > The freeipmi package is distributed on the GNU project servers.
+ > See [1] and [2]. Buildroot has the BR2_GNU_MIRROR configuration
+ > which can be used for that purpose. See [3].
 
  > For consistency with all other GNU packages, this commit updates
  > the _SITE to use BR2_GNU_MIRROR.
 
- > [1] https://www.octave.org/download
+ > [1] https://www.gnu.org/software/freeipmi/download.html
  > [2] https://www.gnu.org/prep/ftp.html
  > [3] https://gitlab.com/buildroot.org/buildroot/-/blob/2024.08.2/Config.in#L286
 
