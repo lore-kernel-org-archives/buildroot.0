@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2299E7716A
-	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 19:23:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FA2DE7716A
+	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 19:23:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5389D605C5;
-	Sat, 14 Dec 2024 19:23:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B25060655;
+	Sat, 14 Dec 2024 19:23:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wkFPh16VG04g; Sat, 14 Dec 2024 19:23:10 +0000 (UTC)
+ id 5ITgS5TrMjmf; Sat, 14 Dec 2024 19:23:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F7536060B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5083E6068B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F7536060B;
-	Sat, 14 Dec 2024 19:23:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5DF35D0
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:23:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5083E6068B;
+	Sat, 14 Dec 2024 19:23:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7B923D0
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:23:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4CCE76060B
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:23:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6936C40102
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:23:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DyL1CVl5zjcJ for <buildroot@buildroot.org>;
- Sat, 14 Dec 2024 19:23:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B497605C5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B497605C5
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:23:08 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E18186FE6; Sat, 14 Dec 2024 19:23:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uTAUamGePUie for <buildroot@buildroot.org>;
+ Sat, 14 Dec 2024 19:23:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 40A0C40015
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40A0C40015
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 40A0C40015
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 19:23:32 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 8207178034D;
+ Sat, 14 Dec 2024 20:23:28 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:34610])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 14 Dec 2024 20:23:28 +0100
+MIME-Version: 1.0
+Date: Sat, 14 Dec 2024 20:23:28 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 14 Dec 2024 20:18:36 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b0d02f3ab572adeefa8cb970da75e73050bcd3bd
-X-Git-Newrev: 03ec8aad1e5f535b39224c3e37b82b7c39e781dd
-X-Patchwork-Hint: ignore
-Message-Id: <20241214192308.5E18186FE6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libvpx: bump version to 1.15.0
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Spenser Gilliland <spenser@gillilanding.com>
+In-Reply-To: <20241214160956.3283057-1-bernd@kuhls.net>
+References: <20241214160956.3283057-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <a59502ac7aea715ec24ce9f92305c89f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1734204210;
+ bh=g5UNCq4PlGMjNpZl/pKPAVowV6WQUdCv0Ufuxs9k2yY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=c8eAHmD/Qjl3/anXUp4CTliJBt9XpMgTKYD17O5zfjlnQRBllGecL5dgymFoPmgEt
+ Zzh9Td/7wKa+W+0EeUq1EQ3mUdEBiZVIKEU/jCPjaTNSylYV1R6mcWY3nzAoMWFH9E
+ 3ODZoQ/H5hxxNCwcsI4WSsrk6Q9Y/ty7yHCBmjeY4JiwX+a125r+nmoJFbDCR+IIDC
+ MsyIDUxS169VNdw+nJ7/yFqHdYsnvkq5nO1Ssvs06PudBVE7w8QnVDd26GpZ0oXRqG
+ kWMU36la4Z+PkpX6Z0N3ClCcfsLCqRE3XAOeISacCztSXxK5J7CTp2Eq7ZEmnGH1Qs
+ Htr1VRCbJIvdQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=c8eAHmD/
+Subject: Re: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,50 +82,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03ec8aad1e5f535b39224c3e37b82b7c39e781dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 14/12/2024 17:09, Bernd Kuhls wrote:
+> Release notes:
+> https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.15.0
+> https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.14.1
+> https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.14.0
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Release notes:
-https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.15.0
-https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.14.1
-https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.14.0
+Applied to master, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libvpx/libvpx.hash | 2 +-
- package/libvpx/libvpx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
-index 7cda8cc2eb..ce88265d9e 100644
---- a/package/libvpx/libvpx.hash
-+++ b/package/libvpx/libvpx.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  00dae80465567272abd077f59355f95ac91d7809a2d3006f9ace2637dd429d14  libvpx-1.13.1.tar.gz
-+sha256  e935eded7d81631a538bfae703fd1e293aad1c7fd3407ba00440c95105d2011e  libvpx-1.15.0.tar.gz
- sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
- sha256  cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index 9092ca6a8e..25144f3892 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVPX_VERSION = 1.13.1
-+LIBVPX_VERSION = 1.15.0
- LIBVPX_SITE = $(call github,webmproject,libvpx,v$(LIBVPX_VERSION))
- LIBVPX_LICENSE = BSD-3-Clause
- LIBVPX_LICENSE_FILES = LICENSE PATENTS
+> ---
+>  package/libvpx/libvpx.hash | 2 +-
+>  package/libvpx/libvpx.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
+> index 7cda8cc2eb..ce88265d9e 100644
+> --- a/package/libvpx/libvpx.hash
+> +++ b/package/libvpx/libvpx.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed:
+> -sha256  
+> 00dae80465567272abd077f59355f95ac91d7809a2d3006f9ace2637dd429d14  
+> libvpx-1.13.1.tar.gz
+> +sha256  
+> e935eded7d81631a538bfae703fd1e293aad1c7fd3407ba00440c95105d2011e  
+> libvpx-1.15.0.tar.gz
+>  sha256  
+> 8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  
+> LICENSE
+>  sha256  
+> cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  
+> PATENTS
+> diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
+> index 9092ca6a8e..25144f3892 100644
+> --- a/package/libvpx/libvpx.mk
+> +++ b/package/libvpx/libvpx.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  
+> ################################################################################
+> 
+> -LIBVPX_VERSION = 1.13.1
+> +LIBVPX_VERSION = 1.15.0
+>  LIBVPX_SITE = $(call github,webmproject,libvpx,v$(LIBVPX_VERSION))
+>  LIBVPX_LICENSE = BSD-3-Clause
+>  LIBVPX_LICENSE_FILES = LICENSE PATENTS
+> --
+> 2.39.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
