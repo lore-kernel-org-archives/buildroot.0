@@ -4,57 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C33DBE7716A
-	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 14:14:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C33A4E7716A
+	for <buildroot@archiver.kernel.org>; Sat, 14 Dec 2024 16:10:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8BCA384623;
-	Sat, 14 Dec 2024 14:14:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0740384810;
+	Sat, 14 Dec 2024 16:10:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9llQn_ngHNak; Sat, 14 Dec 2024 14:14:38 +0000 (UTC)
+ id HBdZvA3IR_c6; Sat, 14 Dec 2024 16:10:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B2CA84620
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 952B6845BE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B2CA84620;
-	Sat, 14 Dec 2024 14:14:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 952B6845BE;
+	Sat, 14 Dec 2024 16:10:02 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5C012C5
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 14:14:37 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BDDF0C5
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 16:10:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 57A3860611
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 14:14:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC355605E1
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 16:10:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IYetJ26f-WiQ for <buildroot@buildroot.org>;
- Sat, 14 Dec 2024 14:14:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 32DE8600BB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32DE8600BB
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 32DE8600BB
- for <buildroot@buildroot.org>; Sat, 14 Dec 2024 14:14:35 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5BE841C0002;
- Sat, 14 Dec 2024 14:14:33 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1tMSue-00DuLv-26;
- Sat, 14 Dec 2024 15:14:32 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+ id iNTTKZb-oAXB for <buildroot@buildroot.org>;
+ Sat, 14 Dec 2024 16:10:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 482656081D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 482656081D
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 482656081D
+ for <buildroot@buildroot.org>; Sat, 14 Dec 2024 16:09:59 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c577.dip0.t-ipconnect.de [79.214.197.119])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 66382A4C3BB5;
+ Sat, 14 Dec 2024 17:09:56 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:41072)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98)
+ (envelope-from <bernd@kuhls.net>) id 1tMUiK-000000004xH-0Goo;
+ Sat, 14 Dec 2024 16:09:56 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Dec 2024 15:14:30 +0100
-Message-Id: <20241214141430.3314872-1-peter@korsgaard.com>
+Cc: Spenser Gilliland <spenser@gillilanding.com>
+Date: Sat, 14 Dec 2024 17:09:56 +0100
+Message-Id: <20241214160956.3283057-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
+X-Spamd-Bar: +++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202412041019; t=1734192596;
+ bh=QcAIFZWpJ0WhZfUdK0YwqZ/PCMMaoLgLBUBn6Ggizb4=;
+ h=From:To:Cc:Subject:Date:From;
+ b=LMr0FLZJdWTrs36krK3xnTEDFw2kdf0kaeSE6dDmyUQLh8LEvqVmZo3nhCTGaaygx
+ +PUQJmkJz2gQ4xn/CQkmjf2mqpIU5r+sJCIO2SZT9V6HxPKNS0Oi+7Hs6wS+YD2kxc
+ jcxXPs/lPPoRsT4CFAC5xdeGLI1u9kSHjqENH1ETzbGQBN/h7K+vCOjHoIb5KTD2pT
+ zhTko+/NPwnjLEH5Gc4NvJSsX0TlRwIcU5SWXNaYtI3IYyqOZX6FwI7ENQORi4QZs9
+ EzgUdIvkxNrj1CeHO2m+SMmDauhH+WDjcFGL8JzlEFukrDUTR1HRLM3pXU5qPkurz5
+ P4sayxCamgiXQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/python-django: security bump to version
- 5.1.4
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202412041019 header.b=LMr0FLZJ
+Subject: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,66 +81,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Oli Vogt <oli.vogt.pub01@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
+Release notes:
+https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.15.0
+https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.14.1
+https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.14.0
 
-CVE-2024-53907: Potential denial-of-service in
-django.utils.html.strip_tags()
-
-The strip_tags() method and striptags template filter are subject to a
-potential denial-of-service attack via certain inputs containing large
-sequences of nested incomplete HTML entities.
-
-CVE-2024-53908: Potential SQL injection in HasKey(lhs, rhs) on Oracle
-
-Direct usage of the django.db.models.fields.json.HasKey lookup on Oracle is
-subject to SQL injection if untrusted data is used as a lhs value.
-Applications that use the jsonfield.has_key lookup through the __ syntax are
-unaffected.
-
-https://www.djangoproject.com/weblog/2024/dec/04/security-releases/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libvpx/libvpx.hash | 2 +-
+ package/libvpx/libvpx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 656d9eee9a..53c4ceead3 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  3f556d14e7999a9700a27a325efc0833  Django-5.1.3.tar.gz
--sha256  c0fa0e619c39325a169208caef234f90baa925227032ad3f44842ba14d75234a  Django-5.1.3.tar.gz
-+md5  03ec3e0f2d6cbcb9eb11c629ca1c538b  Django-5.1.4.tar.gz
-+sha256  de450c09e91879fa5a307f696e57c851955c910a438a35e6b4c895e86bedc82a  Django-5.1.4.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 6588acc31d..4facc6b6c4 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
+index 7cda8cc2eb..ce88265d9e 100644
+--- a/package/libvpx/libvpx.hash
++++ b/package/libvpx/libvpx.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  00dae80465567272abd077f59355f95ac91d7809a2d3006f9ace2637dd429d14  libvpx-1.13.1.tar.gz
++sha256  e935eded7d81631a538bfae703fd1e293aad1c7fd3407ba00440c95105d2011e  libvpx-1.15.0.tar.gz
+ sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
+ sha256  cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
+diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
+index 9092ca6a8e..25144f3892 100644
+--- a/package/libvpx/libvpx.mk
++++ b/package/libvpx/libvpx.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 5.1.3
-+PYTHON_DJANGO_VERSION = 5.1.4
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c6/85/ba2c2b83ba8b95354f99ed8344405d9571109ce0175028876209d6b93fba
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/d3/e8/536555596dbb79f6e77418aeb40bdc1758c26725aba31919ba449e6d5e6a
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+-LIBVPX_VERSION = 1.13.1
++LIBVPX_VERSION = 1.15.0
+ LIBVPX_SITE = $(call github,webmproject,libvpx,v$(LIBVPX_VERSION))
+ LIBVPX_LICENSE = BSD-3-Clause
+ LIBVPX_LICENSE_FILES = LICENSE PATENTS
 -- 
 2.39.5
 
