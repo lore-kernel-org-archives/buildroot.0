@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B9B9C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:39:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9E6BC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:39:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E87774F5D5;
-	Fri, 28 Feb 2025 16:39:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79DAC4F5EC;
+	Fri, 28 Feb 2025 16:39:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JYiApdmxvFGd; Fri, 28 Feb 2025 16:39:51 +0000 (UTC)
+ id acxqLxvseK3L; Fri, 28 Feb 2025 16:39:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8BA04F5DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AF364F5FA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C8BA04F5DF;
-	Fri, 28 Feb 2025 16:39:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6AF364F5FA;
+	Fri, 28 Feb 2025 16:39:53 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A97068
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E5011DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 29E0C41883
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4D9D642556
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jiV1HThl_g5P for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:48 +0000 (UTC)
+ id J36y7y6LvPHo for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48863424C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAE53424BC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 48863424C0
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EAE53424BC
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 44CE5844AB; Fri, 28 Feb 2025 16:29:41 +0000 (UTC)
+ id E811F844AB; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 15 Dec 2024 17:51:35 +0100
+Date: Sun, 15 Dec 2024 16:10:50 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9f4a95e5c6e18413e913236f8e7d44cedecc2b2a
-X-Git-Newrev: b98d283f86b2ad280e11f8d4b1f4559beb3698d9
+X-Git-Oldrev: 4d2561e01ffcc0a0a80fe2fa009e7c0401738385
+X-Git-Newrev: 1f4b4ccde7ceb379010aeb93458792202622d64b
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162941.44CE5844AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libvpx: needs NPTL
+Message-Id: <20250228162940.E811F844AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/opensc: security bump
+ to version 0.26.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,73 +65,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b98d283f86b2ad280e11f8d4b1f4559beb3698d9
+commit: https://git.buildroot.net/buildroot/commit/?id=1f4b4ccde7ceb379010aeb93458792202622d64b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Buildroot commit 03ec8aad1e5f535b39224c3e37b82b7c39e781dd bumped
-libvpx to version 1.15.0 which includes a commit adding a call to
-pthread_setname_np:
-https://chromium.googlesource.com/webm/libvpx/+/8cf26c12842b6de94539dc7389e33733ef3ba50b%5E%21/
+Fixes the following security vulnerabilities:
 
-Also add reverse dependencies when needed. This patch depends on the
-webkit patches which are part of this series.
+0.25.0:
 
-Fixes:
-https://autobuild.buildroot.org/results/078340144f4b18b64a4ef9df1fba21564eba2562/
+CVE-2023-5992: Side-channel leaks while stripping encryption PKCS#1.5
+padding in OpenSC
+https://github.com/OpenSC/OpenSC/wiki/CVE-2023-5992
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+CVE-2024-1454: Potential use-after-free in AuthentIC driver during card
+enrollment in pkcs15init
+https://github.com/OpenSC/OpenSC/wiki/CVE-2024-1454
+
+0.26.0:
+
+CVE-2024-45615: Usage of uninitialized values in libopensc and pkcs15init
+https://github.com/advisories/GHSA-3q68-hm47-94vg
+
+CVE-2024-45616: Uninitialized values after incorrect check or usage of APDU
+response values in libopensc
+https://github.com/advisories/GHSA-2mjg-798r-mxwh
+
+CVE-2024-45617: Uninitialized values after incorrect or missing checking
+return values of functions in libopensc
+https://github.com/advisories/GHSA-cf2w-h975-2fpg
+
+CVE-2024-45618: Uninitialized values after incorrect or missing checking
+return values of functions in pkcs15init
+https://github.com/advisories/GHSA-f2v6-mw6x-qmwc
+
+CVE-2024-45619: Incorrect handling length of buffers or files in libopensc
+https://github.com/advisories/GHSA-9vxw-3j77-cj78
+
+CVE-2024-45620: Incorrect handling of the length of buffers or files in
+pkcs15init
+https://github.com/advisories/GHSA-9c2g-6v5v-57qg
+
+CVE-2024-8443: Heap buffer overflow in OpenPGP driver when generating key
+https://github.com/advisories/GHSA-mgc5-p43f-72pc
+
+Release notes:
+https://github.com/OpenSC/OpenSC/releases/tag/0.26.0
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/gstreamer1/gst1-plugins-good/Config.in | 2 +-
- package/libvpx/Config.in                       | 6 +++---
- package/qt5/qt5webengine/Config.in             | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/opensc/opensc.hash | 2 +-
+ package/opensc/opensc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 3cf227b78d..6a738faa00 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -419,7 +419,7 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_TWOLAME
+diff --git a/package/opensc/opensc.hash b/package/opensc/opensc.hash
+index 232222062c..e12d2d4bfa 100644
+--- a/package/opensc/opensc.hash
++++ b/package/opensc/opensc.hash
+@@ -1,5 +1,5 @@
+ # Computed locally from https://https://github.com/OpenSC/OpenSC/releases/
+-sha256  24d03c69287291da32a30c4c38a304ad827f56cb85d83619e1f5403ab6480ef8  opensc-0.24.0.tar.gz
++sha256  837baead45e1505260d868871056150ede6e73d35460a470f2595a9e5e75f82b  opensc-0.26.0.tar.gz
  
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
- 	bool "vpx (webm)"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libvpx
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libvpx
- 	select BR2_PACKAGE_LIBVPX
- 	help
- 	  VP8 plugin
-diff --git a/package/libvpx/Config.in b/package/libvpx/Config.in
-index 6b0400c0a2..f0fb69115e 100644
---- a/package/libvpx/Config.in
-+++ b/package/libvpx/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_LIBVPX
- 	bool "libvpx"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_setname_np()
- 	help
- 	  A high-quality, open video format that's freely available to
- 	  everyone. Supports the VP8 and VP9 formats.
+ # Computed locally
+ sha256  376b54d4c5f4aa99421823fa4da93e3ab73096fce2400e89858632aa7da24a14  COPYING
+diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
+index 008de9d4c2..11d1507d45 100644
+--- a/package/opensc/opensc.mk
++++ b/package/opensc/opensc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://webmproject.org
- 
--comment "libvpx needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "libvpx needs a toolchain w/ NPTL"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index 28786bd2c8..6179591399 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -25,7 +25,7 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # qt5base-icu
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libvpx
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
- 	depends on BR2_PACKAGE_HAS_LIBEGL # qt5base-eglfs
+-OPENSC_VERSION = 0.24.0
++OPENSC_VERSION = 0.26.0
+ OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
+ OPENSC_LICENSE = LGPL-2.1+
+ OPENSC_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
