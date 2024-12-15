@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E97FEE7716A
-	for <buildroot@archiver.kernel.org>; Sun, 15 Dec 2024 10:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A975DE7716A
+	for <buildroot@archiver.kernel.org>; Sun, 15 Dec 2024 12:22:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B7CB2611A9;
-	Sun, 15 Dec 2024 10:56:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58765846F9;
+	Sun, 15 Dec 2024 12:22:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v1f_q1T_8MIZ; Sun, 15 Dec 2024 10:56:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W8eC0giGXpdT; Sun, 15 Dec 2024 12:22:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6D64611C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 597BD846FD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C6D64611C3;
-	Sun, 15 Dec 2024 10:56:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id C06D7CE
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 10:56:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 597BD846FD;
+	Sun, 15 Dec 2024 12:22:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C44F69
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:22:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AE7C3611BD
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 10:56:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 38F72846FD
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:22:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 29jU_uPb3PW4 for <buildroot@buildroot.org>;
- Sun, 15 Dec 2024 10:56:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A0493611A9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0493611A9
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A0493611A9
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 10:56:32 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c243.dip0.t-ipconnect.de [79.214.194.67])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 47FDDA4C3E8F;
- Sun, 15 Dec 2024 11:55:38 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:54102)
- by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1tMmHh-000000007l0-1la8;
- Sun, 15 Dec 2024 10:55:38 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t5-QouE9nBjm for <buildroot@buildroot.org>;
+ Sun, 15 Dec 2024 12:22:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60CD3846F7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 60CD3846F7
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:22:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4799987075; Sun, 15 Dec 2024 12:22:06 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 15 Dec 2024 11:55:37 +0100
-Message-Id: <20241215105537.1396270-5-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241215105537.1396270-1-bernd@kuhls.net>
-References: <20241215105537.1396270-1-bernd@kuhls.net>
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202412041019; t=1734260138;
- bh=HkEXRLvl46Cko+tPOxv5Z4oMa/GEMgBt+rG8iPO1W04=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=PvhR0dOpTFUV2O+Nr1En+LumDJMwaVlGKE4B0quhE+ZAG65WXuOxRPgxtEHH/vvai
- q4CzFXgf26kIo/8YFz4OKdpzPp8H3esWSrqsQ5uK54xGfc4t41G6H5htZrLYtYpjYm
- IuyAm3rWMM6fqHoadFtkE+5NUVqCNsGWJLXeMFnFZyHFvBGpZciLwyIWfZk0SWbL2f
- ZfgMI57q+8kWxh0Vtn5peuCsfxqE/4ZRSWp9RhrIyxSUd+d3sRark67o07BZ2sNZUq
- WsbQHG6CgbSiArQxqK/nKoN30CgUFpsq0OImkGW36Sn/R8BeYpN3ZhX/wqweruAB7M
- 9T+jiI8JKjnVQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202412041019 header.b=PvhR0dOp
-Subject: [Buildroot] [PATCH 5/5] package/libvpx: needs NPTL
+Date: Sun, 15 Dec 2024 11:43:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b9120736a7e1e6c6e685d70a5a93e4d861422d70
+X-Git-Newrev: a4b34375194297713de2fc3bf96feed4a97a111b
+X-Patchwork-Hint: ignore
+Message-Id: <20241215122206.4799987075@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/orangepi_pc_plus: bump BSP versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,81 +58,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Spenser Gilliland <spenser@gillilanding.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Julien Corjon <corjon.j@ecagroup.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 03ec8aad1e5f535b39224c3e37b82b7c39e781dd bumped
-libvpx to version 1.15.0 which includes a commit adding a call to
-pthread_setname_np:
-https://chromium.googlesource.com/webm/libvpx/+/8cf26c12842b6de94539dc7389e33733ef3ba50b%5E%21/
+commit: https://git.buildroot.net/buildroot/commit/?id=a4b34375194297713de2fc3bf96feed4a97a111b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add reverse dependencies when needed. This patch depends on the
-webkit patches which are part of this series.
+Switch to the new Linux LTS release 6.12.3 and to U-Boot 2024.10.
+Force check of hashes for Linux kernel, headers, U-Boot. Finally,
+add BR2_TARGET_UBOOT_NEEDS_GNUTLS option required by new U-Boot.
 
-Fixes:
-https://autobuild.buildroot.org/results/078340144f4b18b64a4ef9df1fba21564eba2562/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/gstreamer1/gst1-plugins-good/Config.in | 2 +-
- package/libvpx/Config.in                       | 6 +++---
- package/qt5/qt5webengine/Config.in             | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ .checkpackageignore                                              | 1 -
+ .../orangepi-pc-plus/patches/linux-headers/linux-headers.hash    | 1 +
+ board/orangepi/orangepi-pc-plus/patches/linux/linux.hash         | 2 ++
+ board/orangepi/orangepi-pc-plus/patches/uboot/uboot.hash         | 2 ++
+ configs/orangepi_pc_plus_defconfig                               | 9 ++++++---
+ 5 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 3cf227b78d..6a738faa00 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -419,7 +419,7 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_TWOLAME
- 
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
- 	bool "vpx (webm)"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libvpx
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libvpx
- 	select BR2_PACKAGE_LIBVPX
- 	help
- 	  VP8 plugin
-diff --git a/package/libvpx/Config.in b/package/libvpx/Config.in
-index 6b0400c0a2..f0fb69115e 100644
---- a/package/libvpx/Config.in
-+++ b/package/libvpx/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_LIBVPX
- 	bool "libvpx"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_setname_np()
- 	help
- 	  A high-quality, open video format that's freely available to
- 	  everyone. Supports the VP8 and VP9 formats.
- 
- 	  http://webmproject.org
- 
--comment "libvpx needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "libvpx needs a toolchain w/ NPTL"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index 28786bd2c8..6179591399 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -25,7 +25,7 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # qt5base-icu
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libvpx
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
- 	depends on BR2_PACKAGE_HAS_LIBEGL # qt5base-eglfs
--- 
-2.39.5
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index e886d631a6..3e4704a577 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -203,7 +203,6 @@ configs/olpc_xo1_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_lite2_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_one_plus_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_pc2_defconfig lib_defconfig.ForceCheckHash
+-configs/orangepi_pc_plus_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_zero3_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_zero_plus2_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_zero_plus_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/orangepi/orangepi-pc-plus/patches/linux-headers/linux-headers.hash b/board/orangepi/orangepi-pc-plus/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/orangepi/orangepi-pc-plus/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/orangepi/orangepi-pc-plus/patches/linux/linux.hash b/board/orangepi/orangepi-pc-plus/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..aea771e7bf
+--- /dev/null
++++ b/board/orangepi/orangepi-pc-plus/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  c89809cc777d50f1ea484a118630281a26383707a0e752c96fd834f6e765deae  linux-6.12.3.tar.xz
+diff --git a/board/orangepi/orangepi-pc-plus/patches/uboot/uboot.hash b/board/orangepi/orangepi-pc-plus/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..904fa56c02
+--- /dev/null
++++ b/board/orangepi/orangepi-pc-plus/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
+diff --git a/configs/orangepi_pc_plus_defconfig b/configs/orangepi_pc_plus_defconfig
+index 1eb54cb43e..878c7294de 100644
+--- a/configs/orangepi_pc_plus_defconfig
++++ b/configs/orangepi_pc_plus_defconfig
+@@ -1,7 +1,9 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
++BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-pc-plus/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC_Plus"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC Plus"
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+@@ -11,7 +13,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-pc-plus/linux-extras.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -32,11 +34,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc_plus"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
