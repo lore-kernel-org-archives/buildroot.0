@@ -4,77 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DABFCE7716A
-	for <buildroot@archiver.kernel.org>; Sun, 15 Dec 2024 17:05:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C7EAE7716A
+	for <buildroot@archiver.kernel.org>; Sun, 15 Dec 2024 17:05:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E56B6080A;
-	Sun, 15 Dec 2024 17:05:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDF2D60838;
+	Sun, 15 Dec 2024 17:05:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gv5w84gXlYpR; Sun, 15 Dec 2024 17:05:25 +0000 (UTC)
+ id hiJj9PeTwc4m; Sun, 15 Dec 2024 17:05:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64DA460838
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F271460840
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64DA460838;
-	Sun, 15 Dec 2024 17:05:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 25F27C5
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:05:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F271460840;
+	Sun, 15 Dec 2024 17:05:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B5539CE
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:05:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 06C9781E06
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:05:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 939A760838
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:05:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WEe36_yRDAew for <buildroot@buildroot.org>;
- Sun, 15 Dec 2024 17:05:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DCE0C81E02
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCE0C81E02
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DCE0C81E02
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:05:22 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 5736F78035B;
- Sun, 15 Dec 2024 18:05:13 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:35496])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 15 Dec 2024 18:05:13 +0100
-MIME-Version: 1.0
-Date: Sun, 15 Dec 2024 18:05:13 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dtiUI4ex1_GJ for <buildroot@buildroot.org>;
+ Sun, 15 Dec 2024 17:05:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6C7B60852
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B6C7B60852
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:05:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A43EC87092; Sun, 15 Dec 2024 17:05:29 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Adrian Perez de Castro <aperez@igalia.com>,
- Spenser Gilliland <spenser@gillilanding.com>, Giulio Benetti
- <giulio.benetti@benettiengineering.com>, Julien Corjon
- <corjon.j@ecagroup.com>
-In-Reply-To: <20241215105537.1396270-1-bernd@kuhls.net>
-References: <20241215105537.1396270-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <668671053e273c969069da45916e349f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734282319;
- bh=+kGHYOOvlTisz7Isv1jjF8s1oqMOKxBNOWd/dtmt4O8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Kgn5zDvRQy3nvTdo2kN2ljONGuUNh8p4vXZbyqxInzQJ9QNq7ifgklnN1AQ90P0zO
- BGUFzxrFnaiofJzwvU6HExUSgvw9asQdRUgpycEQEIjtPZJjtv/Kufy5Zr0FiTd/Sy
- E7Y/Cm7ovPHhmTuNBZ/G8QlQvG8kXDenOPWeyP1zWECSoyr5Ce51+EX+gtRH4SLZ1X
- /BHsIB//6NWqsjNE3Ah9dziEVO1wS/Rz2dePP/Dc0fo8NqgVNVDq2ugc1ibJmUKseD
- IQiQEVJWJfXLZWLVdWY8wUjWoyFbJg3xPjgAIRHfAoJF2HJMRfxIRiK77r6rk5XqrY
- 3h1kGTzWal5/Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Kgn5zDvR
-Subject: Re: [Buildroot] [PATCH 1/5] package/webkitgtk: disable libdrm usage
- when not available
+To: buildroot@buildroot.org
+Date: Sun, 15 Dec 2024 17:51:25 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 865457e76201f663cf81b09486485fbee961423d
+X-Git-Newrev: 4a2ec46014687faf91c3db8f9f768a00133c3f36
+X-Patchwork-Hint: ignore
+Message-Id: <20241215170529.A43EC87092@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/webkitgtk: multimedia support
+ needs gst1-plugins-bad
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,88 +59,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 15/12/2024 11:55, Bernd Kuhls wrote:
-> Fixes build error
-> 
-> -- Could NOT find LibDRM (missing: LibDRM_INCLUDE_DIR LibDRM_LIBRARY)
-> CMake Error at Source/cmake/OptionsGTK.cmake:320 (message):
->   libdrm is required for USE_LIBDRM
-> Call Stack (most recent call first):
->   Source/cmake/WebKitCommon.cmake:237 (include)
->   CMakeLists.txt:21 (include)
-> 
-> with this defconfig:
-> 
-> BR2_arm=y
-> BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> BR2_PTHREADS=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PER_PACKAGE_DIRECTORIES=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_RPI_USERLAND=y
-> BR2_PACKAGE_LIBGTK3=y
-> BR2_PACKAGE_WEBKITGTK=y
-> 
-> due to libdrm being enabled by default:
-> https://github.com/WebKit/WebKit/blob/f736325e66bfa8e85f85387299448476f3e1fb3c/Source/cmake/OptionsGTK.cmake#L59
-> 
-> This is a port of buildroot commit 
-> 65f8174648a3df922892cfac1ad15279d1bffde3
-> for the wpewebkit package, quoting its commit message:
-> 
->     Pass USE_LIBDRM=OFF to the wpewebkit CMake configuration step when 
-> the
->     libdrm package has not been selected.
-> 
->     WPE WebKit can be built without libdrm support, and it will still 
-> work
->     with backends that use other platform-specific methods to handle
->     graphics buffers and/or presenting content onto an output. For 
-> example
->     this is the case with wpebackend-rdk configured to use 
-> rpi-userland,
->     which uses dispmanx to produce the output instead of DRM/KMS.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=4a2ec46014687faf91c3db8f9f768a00133c3f36
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+Fixes build error
 
-> ---
->  package/webkitgtk/webkitgtk.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/webkitgtk/webkitgtk.mk 
-> b/package/webkitgtk/webkitgtk.mk
-> index 19740b3b4e..9328327ac2 100644
-> --- a/package/webkitgtk/webkitgtk.mk
-> +++ b/package/webkitgtk/webkitgtk.mk
-> @@ -92,6 +92,13 @@ else
->  WEBKITGTK_CONF_OPTS += -DUSE_LIBBACKTRACE=OFF
->  endif
-> 
-> +ifeq ($(BR2_PACKAGE_LIBDRM),y)
-> +WEBKITGTK_CONF_OPTS += -DUSE_LIBDRM=ON
-> +WEBKITGTK_DEPENDENCIES += libdrm
-> +else
-> +WEBKITGTK_CONF_OPTS += -DUSE_LIBDRM=OFF
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBJXL),y)
->  WEBKITGTK_CONF_OPTS += -DUSE_JPEGXL=ON
->  WEBKITGTK_DEPENDENCIES += libjxl
-> --
-> 2.39.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+--   Package 'gstreamer-webrtc-1.0' not found
+-- Found GStreamer: GSTREAMER_INCLUDE_DIRS;GSTREAMER_LIBRARIES;GSTREAMER_VERSION;GSTREAMER_BASE_INCLUDE_DIRS;GSTREAMER_BASE_LIBRARIES;GSTREAMER_APP_INCLUDE_DIRS;GSTREAMER_APP_LIBRARIES;GSTREAMER_PBUTILS_INCLUDE_DIRS;GSTREAMER_PBUTILS_LIBRARIES;GSTREAMER_VIDEO_INCLUDE_DIRS;GSTREAMER_VIDEO_LIBRARIES;GSTREAMER_MPEGTS_INCLUDE_DIRS;GSTREAMER_MPEGTS_LIBRARIES;GSTREAMER_TAG_INCLUDE_DIRS;GSTREAMER_TAG_LIBRARIES;GSTREAMER_GL_INCLUDE_DIRS;GSTREAMER_GL_LIBRARIES;GSTREAMER_AUDIO_INCLUDE_DIRS;GSTREAMER_AUDIO_LIBRARIES;GSTREAMER_FFT_INCLUDE_DIRS;GSTREAMER_FFT_LIBRARIES;GSTREAMER_TRANSCODER_INCLUDE_DIRS;GSTREAMER_TRANSCODER_LIBRARIES (Required is at least version "1.18.4")
+CMake Error at Source/cmake/GStreamerChecks.cmake:62 (message):
+  GStreamerTranscoder >= 1.20 is needed for USE_GSTREAMER_TRANSCODER.
+Call Stack (most recent call first):
+  Source/cmake/OptionsGTK.cmake:478 (include)
+  Source/cmake/WebKitCommon.cmake:237 (include)
+  CMakeLists.txt:21 (include)
+
+using this defconfig
+
+BR2_arm=y
+BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_PTHREADS=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PER_PACKAGE_DIRECTORIES=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_RPI_USERLAND=y
+BR2_PACKAGE_LIBGTK3=y
+BR2_PACKAGE_WEBKITGTK=y
+BR2_PACKAGE_WEBKITGTK_MULTIMEDIA=y
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/webkitgtk/webkitgtk.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 9328327ac2..ecdb3c788c 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -47,7 +47,7 @@ WEBKITGTK_CONF_OPTS += \
+ 	-DENABLE_VIDEO=ON \
+ 	-DENABLE_WEB_AUDIO=ON \
+ 	-DENABLE_WEB_CODECS=ON
+-WEBKITGTK_DEPENDENCIES += gstreamer1 gst1-libav gst1-plugins-base
++WEBKITGTK_DEPENDENCIES += gstreamer1 gst1-libav gst1-plugins-bad gst1-plugins-base
+ else
+ WEBKITGTK_CONF_OPTS += \
+ 	-DENABLE_VIDEO=OFF \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
