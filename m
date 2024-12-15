@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F239CE7716A
-	for <buildroot@archiver.kernel.org>; Sun, 15 Dec 2024 17:33:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D46AE7717F
+	for <buildroot@archiver.kernel.org>; Sun, 15 Dec 2024 17:33:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 95C3D80CED;
-	Sun, 15 Dec 2024 17:33:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4AC2C40612;
+	Sun, 15 Dec 2024 17:33:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rmf9b-ZzC9c5; Sun, 15 Dec 2024 17:33:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DbOSd1RzsWDE; Sun, 15 Dec 2024 17:33:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFF9381469
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14AC54060F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFF9381469;
-	Sun, 15 Dec 2024 17:33:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E2334C5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14AC54060F;
+	Sun, 15 Dec 2024 17:33:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E5B2FDD
  for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:33:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFF3A6067A
+ by smtp4.osuosl.org (Postfix) with ESMTP id D0C3F4060F
  for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:33:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yzU6qRk6hmTH for <buildroot@buildroot.org>;
- Sun, 15 Dec 2024 17:33:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LZPRBegReFcR for <buildroot@buildroot.org>;
+ Sun, 15 Dec 2024 17:33:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02E2860585
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6CB340612
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 02E2860585
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:33:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D6CB340612
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:33:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DEFE8870EF; Sun, 15 Dec 2024 17:33:44 +0000 (UTC)
+ id BC3EA870ED; Sun, 15 Dec 2024 17:33:44 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 15 Dec 2024 18:07:47 +0100
+Date: Sun, 15 Dec 2024 18:07:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: efe3cec740cf32aa664d371bc78a748dafe99e34
-X-Git-Newrev: c46ffc8a0c503adbce0e9897bcd39f2202734fce
+X-Git-Oldrev: b98d283f86b2ad280e11f8d4b1f4559beb3698d9
+X-Git-Newrev: 4d250ed4018fc13159a69e3af7f40ac64c178319
 X-Patchwork-Hint: ignore
-Message-Id: <20241215173344.DEFE8870EF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-mailtools: bump version to
- 2.22
+Message-Id: <20241215173344.BC3EA870ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-html-tagset: bump version to
+ 3.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,47 +65,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c46ffc8a0c503adbce0e9897bcd39f2202734fce
+commit: https://git.buildroot.net/buildroot/commit/?id=4d250ed4018fc13159a69e3af7f40ac64c178319
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/markov2/perl5-MailTools/releases/tag/v2.22
-
-Updated license hash due to version bump.
+Updated license filename and hash due to markdown conversion and updates
+to copyright years:
+https://github.com/libwww-perl/HTML-Tagset/commits/dev/README.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/perl-mailtools/perl-mailtools.hash | 6 +++---
- package/perl-mailtools/perl-mailtools.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-html-tagset/perl-html-tagset.hash | 6 +++---
+ package/perl-html-tagset/perl-html-tagset.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-mailtools/perl-mailtools.hash b/package/perl-mailtools/perl-mailtools.hash
-index 317e020ac2..f34f98ae2e 100644
---- a/package/perl-mailtools/perl-mailtools.hash
-+++ b/package/perl-mailtools/perl-mailtools.hash
+diff --git a/package/perl-html-tagset/perl-html-tagset.hash b/package/perl-html-tagset/perl-html-tagset.hash
+index 648f75f649..2940ed6e59 100644
+--- a/package/perl-html-tagset/perl-html-tagset.hash
++++ b/package/perl-html-tagset/perl-html-tagset.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  69ee516d40011e7e92b77c6f06c0dc01  MailTools-2.21.tar.gz
--sha256  4ad9bd6826b6f03a2727332466b1b7d29890c8d99a32b4b3b0a8d926ee1a44cb  MailTools-2.21.tar.gz
-+md5  f41236db9af81d68e1ce8ecc401747f3  MailTools-2.22.tar.gz
-+sha256  3bf68bb212298fa699a52749dddff35583a74f36a92ca89c843b854f29d87c77  MailTools-2.22.tar.gz
+-md5  d2bfa18fe1904df7f683e96611e87437  HTML-Tagset-3.20.tar.gz
+-sha256  adb17dac9e36cd011f5243881c9739417fd102fce760f8de4e9be4c7131108e2  HTML-Tagset-3.20.tar.gz
++md5  f8db8974f5e7fe7df2a58263a7b00552  HTML-Tagset-3.24.tar.gz
++sha256  eb89e145a608ed1f8f141a57472ee5f69e67592a432dcd2e8b1dbb445f2b230b  HTML-Tagset-3.24.tar.gz
  
  # computed by scancpan
--sha256  f7558badc4f4875df247bcccb50a8f369bfe4a2c19361f1df7b26ddf6aaaaf6b  README
-+sha256  cd861812aad88a61059bea4c9d17a5b6010d97774286bb5e9378cded6523289e  README
-diff --git a/package/perl-mailtools/perl-mailtools.mk b/package/perl-mailtools/perl-mailtools.mk
-index 900ee41ff5..4a3ab85cf1 100644
---- a/package/perl-mailtools/perl-mailtools.mk
-+++ b/package/perl-mailtools/perl-mailtools.mk
-@@ -4,7 +4,7 @@
+-sha256  275cc182d78ac2db6856442c5d334c925350fb56fe83ee3577f5850317423419  README
++sha256  ffe7dd5ca8da47fbbd00d35f57b2f17fffcc2b2eb91417d1e3df68fa1841262c  README.md
+diff --git a/package/perl-html-tagset/perl-html-tagset.mk b/package/perl-html-tagset/perl-html-tagset.mk
+index c6b5f69134..c1a9210087 100644
+--- a/package/perl-html-tagset/perl-html-tagset.mk
++++ b/package/perl-html-tagset/perl-html-tagset.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PERL_MAILTOOLS_VERSION = 2.21
-+PERL_MAILTOOLS_VERSION = 2.22
- PERL_MAILTOOLS_SOURCE = MailTools-$(PERL_MAILTOOLS_VERSION).tar.gz
- PERL_MAILTOOLS_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MA/MARKOV
- PERL_MAILTOOLS_LICENSE = Artistic or GPL-1.0+
+-PERL_HTML_TAGSET_VERSION = 3.20
++PERL_HTML_TAGSET_VERSION = 3.24
+ PERL_HTML_TAGSET_SOURCE = HTML-Tagset-$(PERL_HTML_TAGSET_VERSION).tar.gz
+ PERL_HTML_TAGSET_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PE/PETDANCE
+ PERL_HTML_TAGSET_LICENSE = Artistic or GPL-1.0+
+-PERL_HTML_TAGSET_LICENSE_FILES = README
++PERL_HTML_TAGSET_LICENSE_FILES = README.md
+ PERL_HTML_TAGSET_DISTNAME = HTML-Tagset
+ 
+ $(eval $(perl-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
