@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A0EFE7717F
-	for <buildroot@archiver.kernel.org>; Sun, 15 Dec 2024 17:05:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93297E7716A
+	for <buildroot@archiver.kernel.org>; Sun, 15 Dec 2024 17:05:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 38FC960840;
-	Sun, 15 Dec 2024 17:05:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55C704077D;
+	Sun, 15 Dec 2024 17:05:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 09RMNyqCAXL7; Sun, 15 Dec 2024 17:05:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GBwu3uzCh3Kb; Sun, 15 Dec 2024 17:05:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 779D360876
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DDE84071F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 779D360876;
-	Sun, 15 Dec 2024 17:05:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0DDE84071F;
+	Sun, 15 Dec 2024 17:05:47 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 96B97CE
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:05:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A8266C5
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:05:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BFE8081E06
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:05:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 92B8C80B84
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:05:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qmA1zc6qKR_H for <buildroot@buildroot.org>;
+ id S3kF0CxV8RYt for <buildroot@buildroot.org>;
  Sun, 15 Dec 2024 17:05:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B32CE81E02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D41F681E10
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B32CE81E02
+ by smtp1.osuosl.org (Postfix) with ESMTP id D41F681E10
  for <buildroot@buildroot.org>; Sun, 15 Dec 2024 17:05:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ADA29870C3; Sun, 15 Dec 2024 17:05:29 +0000 (UTC)
+ id C167C870C5; Sun, 15 Dec 2024 17:05:29 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 15 Dec 2024 17:51:28 +0100
+Date: Sun, 15 Dec 2024 17:51:35 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4a2ec46014687faf91c3db8f9f768a00133c3f36
-X-Git-Newrev: 054e5c4d22e9e235d1818baa1333ca4abace50ea
+X-Git-Oldrev: 9f4a95e5c6e18413e913236f8e7d44cedecc2b2a
+X-Git-Newrev: b98d283f86b2ad280e11f8d4b1f4559beb3698d9
 X-Patchwork-Hint: ignore
-Message-Id: <20241215170529.ADA29870C3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/webkitgtk: needs NPTL
+Message-Id: <20241215170529.C167C870C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libvpx: needs NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,65 +64,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=054e5c4d22e9e235d1818baa1333ca4abace50ea
+commit: https://git.buildroot.net/buildroot/commit/?id=b98d283f86b2ad280e11f8d4b1f4559beb3698d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes build error
+Buildroot commit 03ec8aad1e5f535b39224c3e37b82b7c39e781dd bumped
+libvpx to version 1.15.0 which includes a commit adding a call to
+pthread_setname_np:
+https://chromium.googlesource.com/webm/libvpx/+/8cf26c12842b6de94539dc7389e33733ef3ba50b%5E%21/
 
-/home/buildroot/buildroot/output/build/webkitgtk-2.44.2/Source/WTF/wtf/StackBounds.cpp: In static member function 'static WTF::StackBounds WTF::StackBounds::newThreadStackBounds(WTF::PlatformThreadHandle)':
-/home/buildroot/buildroot/output/build/webkitgtk-2.44.2/Source/WTF/wtf/StackBounds.cpp:117:5: error: 'pthread_getattr_np' was not declared in this scope; did you mean 'pthread_attr_t'?
-  117 |     pthread_getattr_np(thread, &sattr);
+Also add reverse dependencies when needed. This patch depends on the
+webkit patches which are part of this series.
 
-using this defconfig (and libvpx bump to 1.15.0 reverted)
-
-BR2_arm=y
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PTHREADS=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PER_PACKAGE_DIRECTORIES=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_RPI_USERLAND=y
-BR2_PACKAGE_LIBGTK3=y
-BR2_PACKAGE_WEBKITGTK=y
-
-A backport of this patch should be considered because the code is
-present since 2011:
-https://github.com/WebKit/WebKit/blame/03f678fac7076e4d69318bfaae065e4c0eab0f9e/Source/WTF/wtf/StackBounds.cpp#L117
+Fixes:
+https://autobuild.buildroot.org/results/078340144f4b18b64a4ef9df1fba21564eba2562/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/webkitgtk/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/gstreamer1/gst1-plugins-good/Config.in | 2 +-
+ package/libvpx/Config.in                       | 6 +++---
+ package/qt5/qt5webengine/Config.in             | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index e6ab405cd5..dca62cf0f8 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -16,11 +16,11 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index 3cf227b78d..6a738faa00 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -419,7 +419,7 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_TWOLAME
  
--comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 10, host gcc >= 4.9"
-+comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 10, host gcc >= 4.9"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-+		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
- 		!BR2_HOST_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
-@@ -32,7 +32,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup3
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	depends on BR2_USE_WCHAR # icu, libsoup3
- 	depends on BR2_PACKAGE_LIBGTK3
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
+ 	bool "vpx (webm)"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libvpx
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libvpx
+ 	select BR2_PACKAGE_LIBVPX
+ 	help
+ 	  VP8 plugin
+diff --git a/package/libvpx/Config.in b/package/libvpx/Config.in
+index 6b0400c0a2..f0fb69115e 100644
+--- a/package/libvpx/Config.in
++++ b/package/libvpx/Config.in
+@@ -1,11 +1,11 @@
+ config BR2_PACKAGE_LIBVPX
+ 	bool "libvpx"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_setname_np()
+ 	help
+ 	  A high-quality, open video format that's freely available to
+ 	  everyone. Supports the VP8 and VP9 formats.
+ 
+ 	  http://webmproject.org
+ 
+-comment "libvpx needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "libvpx needs a toolchain w/ NPTL"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
+index 28786bd2c8..6179591399 100644
+--- a/package/qt5/qt5webengine/Config.in
++++ b/package/qt5/qt5webengine/Config.in
+@@ -25,7 +25,7 @@ config BR2_PACKAGE_QT5WEBENGINE
+ 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # qt5base-icu
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libvpx
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
+ 	depends on BR2_PACKAGE_HAS_LIBEGL # qt5base-eglfs
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
