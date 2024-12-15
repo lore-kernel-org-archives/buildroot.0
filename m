@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99FECE7716A
-	for <buildroot@archiver.kernel.org>; Sun, 15 Dec 2024 16:07:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 580EDE7716A
+	for <buildroot@archiver.kernel.org>; Sun, 15 Dec 2024 16:07:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3BDD66085F;
-	Sun, 15 Dec 2024 16:07:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 157BE6086D;
+	Sun, 15 Dec 2024 16:07:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YCJK-CdtX9vY; Sun, 15 Dec 2024 16:07:15 +0000 (UTC)
+ id lrQg4nmIrEui; Sun, 15 Dec 2024 16:07:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22A046085B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D1586063C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22A046085B;
-	Sun, 15 Dec 2024 16:07:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 64139C5
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 16:07:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D1586063C;
+	Sun, 15 Dec 2024 16:07:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 77282D1
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 16:07:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4558840B02
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 16:07:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6408340751
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 16:07:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UaYIp-cfnGwu for <buildroot@buildroot.org>;
- Sun, 15 Dec 2024 16:07:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74C8040B13
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 74C8040B13
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 16:07:10 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E12A087093; Sun, 15 Dec 2024 16:07:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Appg1D6EHZ8r for <buildroot@buildroot.org>;
+ Sun, 15 Dec 2024 16:07:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 69DCE4073D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69DCE4073D
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 69DCE4073D
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 16:07:28 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 7CF2419F5BE;
+ Sun, 15 Dec 2024 17:07:24 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:50284])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 15 Dec 2024 17:07:24 +0100
+MIME-Version: 1.0
+Date: Sun, 15 Dec 2024 17:07:24 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 15 Dec 2024 16:25:31 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1f4b4ccde7ceb379010aeb93458792202622d64b
-X-Git-Newrev: 6744f0e9368d940f22a58b5981d9659e1a63f206
-X-Patchwork-Hint: ignore
-Message-Id: <20241215160709.E12A087093@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fluent-bit: bump to 3.2.2
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20241215144807.221081-1-thomas@devoogdt.com>
+References: <20241215144807.221081-1-thomas@devoogdt.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <6e1cc6fb6c510ad216ba0c6112b4ee23@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1734278845;
+ bh=7GPONc6RgnNG6zuslSGMBZ9cBxQycYhKpgW2NoH/ut8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=VtrS0Y3wIeU1Oovcnfvm+4ly4a4iOdTnmUWFrTAdWuLwA8+pVhFWIeayMMcbsdaiM
+ VRNfhhaJyFCP5SAVp++0pmDZmzqVPobPmmtKgJlBdA9aEOxH6FLR6zuBuIcvRy+Sck
+ Ja8yMoVLsn1qAcRq1gcTIFzc4IpXW0uOXp+8BMo3CRqHzS2Ci06QNO6059gKLjV701
+ 0HUzAoYCUrfOLR0n7q6Oj9jOwwtO2zrpAahpfubyhiOV0PjrBBuqbRtAa6sz20xUMc
+ hwjyRrzgUA+jb8YYWUeTcAQr5MUMJhLvcPU3ynJUSr6Yxpg2I1hh47CTwd+yT+oWGJ
+ F6+FgWlNgzu6w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=VtrS0Y3w
+Subject: Re: [Buildroot] [PATCH v1] package/fluent-bit: bump to 3.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,626 +82,486 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8448897652817249388=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8448897652817249388==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=6744f0e9368d940f22a58b5981d9659e1a63f206
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-News:
-
-https://fluentbit.io/announcements/v3.2.2/
-https://fluentbit.io/announcements/v3.2.1/
-https://fluentbit.io/announcements/v3.2.0/
-https://fluentbit.io/announcements/v3.1.10/
-https://fluentbit.io/announcements/v3.1.9/
-https://fluentbit.io/announcements/v3.1.8/
-https://fluentbit.io/announcements/v3.1.7/
-https://fluentbit.io/announcements/v3.1.6/
-https://fluentbit.io/announcements/v3.1.5/
-https://fluentbit.io/announcements/v3.1.4/
-
-Support has been added for (some) system provided libraries,
-see:
- - https://github.com/fluent/fluent-bit/pull/7286
- - https://github.com/fluent/fluent-bit/pull/8930
-
-The c-ares and nghttp2 package are always needed, so use
-the buildroot shipped versions. Also allow the usage of
-libbacktrace and jemalloc.
-
-A bunch of new compile fixes have been added,
-all of them are proposed upstream for review.
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...d-use-the-system-provided-LuaJIT-if-found.patch | 62 ---------------
- ...ka-CMakeLists.txt-allow-compilation-with.patch} | 12 ++-
- ...d-disable-cxx-support-for-librdkafka-7741.patch | 27 +++++++
- ...txt-disable-cxx-support-for-librdkafka-77.patch | 29 -------
- ...-CMakeLists.txt-do-not-require-a-CXX-comp.patch | 91 ++++++++++++++++++++++
- ...cmake-CMakeLists.txt-do-not-require-a-CXX.patch | 37 +++++++++
- ...ing-write-gs-base-with-cmake-variable-30.patch} |  4 +-
- ...out-_kafka-CMakeLists.txt-fix-cross-compi.patch | 48 ++++++++++++
- ...ib-cprofiles-fix-wrong-pointer-assignment.patch | 81 +++++++++++++++++++
- package/fluent-bit/Config.in                       |  2 +
- package/fluent-bit/fluent-bit.hash                 |  2 +-
- package/fluent-bit/fluent-bit.mk                   | 29 +++++--
- 12 files changed, 318 insertions(+), 106 deletions(-)
-
-diff --git a/package/fluent-bit/0001-build-use-the-system-provided-LuaJIT-if-found.patch b/package/fluent-bit/0001-build-use-the-system-provided-LuaJIT-if-found.patch
-deleted file mode 100644
-index aca6401ac8..0000000000
---- a/package/fluent-bit/0001-build-use-the-system-provided-LuaJIT-if-found.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From 8d6f6cfb07a8fe32dc0b9577e1b2f1ee1b67b736 Mon Sep 17 00:00:00 2001
--From: Thomas Devoogdt <thomas@devoogdt.com>
--Date: Fri, 28 Apr 2023 10:25:16 +0200
--Subject: [PATCH] build: use the system provided LuaJIT if found
--
--e.g. buildroot has logic to build luajit,
--so if pkg_check_modules can find a suitable version,
--then use that one if -DFLB_PREFER_SYSTEM_LIBS=Yes.
--
--Upstream: https://github.com/fluent/fluent-bit/pull/7286
--Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-----
-- CMakeLists.txt     | 12 +++++++++++-
-- src/CMakeLists.txt |  2 +-
-- 2 files changed, 12 insertions(+), 2 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 2da792d53..3229420c6 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -128,6 +128,7 @@ option(FLB_TESTS_INTERNAL_FUZZ "Enable internal fuzz tests"    No)
-- option(FLB_TESTS_OSSFUZZ       "Enable OSS-Fuzz build"         No)
-- option(FLB_MTRACE              "Enable mtrace support"         No)
-- option(FLB_POSIX_TLS           "Force POSIX thread storage"    No)
--+option(FLB_PREFER_SYSTEM_LIBS  "Prefer system installed libraries" No)
-- option(FLB_INOTIFY             "Enable inotify support"       Yes)
-- option(FLB_SQLDB               "Enable SQL embedded DB"       Yes)
-- option(FLB_HTTP_SERVER         "Enable HTTP Server"           Yes)
--@@ -1023,7 +1024,16 @@ endif()
-- # LuaJIT (Scripting Support)
-- # ==========================
-- if(FLB_LUAJIT)
---  include(cmake/luajit.cmake)
--+  if(FLB_PREFER_SYSTEM_LIBS)
--+    find_package(PkgConfig)
--+    pkg_check_modules(LUAJIT luajit>=2.1.0)
--+  endif()
--+  if(LUAJIT_FOUND)
--+    include_directories(${LUAJIT_INCLUDE_DIRS})
--+  else()
--+    include(cmake/luajit.cmake)
--+    set(LUAJIT_LIBRARIES "libluajit")
--+  endif()
--   FLB_DEFINITION(FLB_HAVE_LUAJIT)
-- endif()
-- 
--diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index b6233d9f7..67baec456 100644
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -221,7 +221,7 @@ endif()
-- if(FLB_LUAJIT)
--   set(extra_libs
--     ${extra_libs}
---    "libluajit")
--+    ${LUAJIT_LIBRARIES})
-- endif()
-- 
-- if(FLB_SQLDB)
---- 
--2.34.1
--
-diff --git a/package/fluent-bit/0002-lib-librdkafka-CMakeLists.txt-allow-compilation-with.patch b/package/fluent-bit/0001-lib-librdkafka-CMakeLists.txt-allow-compilation-with.patch
-similarity index 92%
-rename from package/fluent-bit/0002-lib-librdkafka-CMakeLists.txt-allow-compilation-with.patch
-rename to package/fluent-bit/0001-lib-librdkafka-CMakeLists.txt-allow-compilation-with.patch
-index fd3d9ce722..e144642c93 100644
---- a/package/fluent-bit/0002-lib-librdkafka-CMakeLists.txt-allow-compilation-with.patch
-+++ b/package/fluent-bit/0001-lib-librdkafka-CMakeLists.txt-allow-compilation-with.patch
-@@ -1,4 +1,4 @@
--From 29be5275f6f7e15aca768e9b235998abc5a604e2 Mon Sep 17 00:00:00 2001
-+From c44256c95f5703dd627413f17c6ad250073898d9 Mon Sep 17 00:00:00 2001
- From: Thomas Devoogdt <thomas.devoogdt@barco.com>
- Date: Tue, 25 Jul 2023 09:10:41 +0200
- Subject: [PATCH] lib: librdkafka: CMakeLists.txt: allow compilation without
-@@ -7,13 +7,11 @@ Subject: [PATCH] lib: librdkafka: CMakeLists.txt: allow compilation without
- e.g. fluent-bit is a c-only library, so allow compilation without cxx
- 
- Upstream: https://github.com/confluentinc/librdkafka/pull/4366
--Upstream: https://github.com/fluent/fluent-bit/pull/7765
-+Upstream: https://github.com/fluent/fluent-bit/pull/9277
- Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
--[Fabrice: update for 3.1.3]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-- lib/librdkafka-2.3.0/CMakeLists.txt          | 18 ++++++++++--
-- lib/librdkafka-2.3.0/examples/CMakeLists.txt | 31 +++++++++++++-------
-+ lib/librdkafka-2.4.0/CMakeLists.txt          | 18 ++++++++++--
-+ lib/librdkafka-2.4.0/examples/CMakeLists.txt | 31 +++++++++++++-------
-  2 files changed, 35 insertions(+), 14 deletions(-)
- 
- diff --git a/lib/librdkafka-2.4.0/CMakeLists.txt b/lib/librdkafka-2.4.0/CMakeLists.txt
-@@ -116,5 +114,5 @@ index 8c0079abe..c9336b729 100644
- +    endif()
-  endif(NOT WIN32)
- -- 
--2.34.1
-+2.43.0
- 
-diff --git a/package/fluent-bit/0002-build-disable-cxx-support-for-librdkafka-7741.patch b/package/fluent-bit/0002-build-disable-cxx-support-for-librdkafka-7741.patch
-new file mode 100644
-index 0000000000..ec8be4dfc6
---- /dev/null
-+++ b/package/fluent-bit/0002-build-disable-cxx-support-for-librdkafka-7741.patch
-@@ -0,0 +1,27 @@
-+From 0dc955cd15cc0b09a1d557131fae59842cb2bbd8 Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+Date: Tue, 25 Jul 2023 10:00:36 +0200
-+Subject: [PATCH] build: disable cxx support for librdkafka #7741
-+
-+Fluent-bit is c only, so no need to compile cxx.
-+This fixes also a compile error in buildroot.
-+
-+Upstream: https://github.com/fluent/fluent-bit/pull/9277
-+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+---
-+ cmake/kafka.cmake | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/cmake/kafka.cmake b/cmake/kafka.cmake
-+index 3a0ebfed2..af0e2f460 100644
-+--- a/cmake/kafka.cmake
-++++ b/cmake/kafka.cmake
-+@@ -1,4 +1,5 @@
-+ # kafka cmake
-++FLB_OPTION(RDKAFKA_BUILD_CXX      Off)
-+ FLB_OPTION(RDKAFKA_BUILD_STATIC    On)
-+ FLB_OPTION(RDKAFKA_BUILD_EXAMPLES Off)
-+ FLB_OPTION(RDKAFKA_BUILD_TESTS    Off)
-+-- 
-+2.43.0
-+
-diff --git a/package/fluent-bit/0003-CMakeLists.txt-disable-cxx-support-for-librdkafka-77.patch b/package/fluent-bit/0003-CMakeLists.txt-disable-cxx-support-for-librdkafka-77.patch
-deleted file mode 100644
-index c96a7bdaa0..0000000000
---- a/package/fluent-bit/0003-CMakeLists.txt-disable-cxx-support-for-librdkafka-77.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 7f3fc55b734db2d28af63c393b52bc238af9f20a Mon Sep 17 00:00:00 2001
--From: Thomas Devoogdt <thomas.devoogdt@barco.com>
--Date: Tue, 25 Jul 2023 10:00:36 +0200
--Subject: [PATCH] CMakeLists.txt: disable cxx support for librdkafka #7741
--
--Fluent-bit is c only, so no need to compile cxx.
--This fixes also a compile error in buildroot.
--
--Upstream: https://github.com/fluent/fluent-bit/pull/7765
--Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-----
-- CMakeLists.txt | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 3229420c6..2694f189f 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -979,6 +979,7 @@ if(FLB_BACKTRACE)
-- endif()
-- 
-- if(FLB_IN_KAFKA OR FLB_OUT_KAFKA)
--+    FLB_OPTION(RDKAFKA_BUILD_CXX      Off)
--     FLB_OPTION(RDKAFKA_BUILD_STATIC    On)
--     FLB_OPTION(RDKAFKA_BUILD_EXAMPLES Off)
--     FLB_OPTION(RDKAFKA_BUILD_TESTS    Off)
---- 
--2.34.1
--
-diff --git a/package/fluent-bit/0003-lib-nghttp2-CMakeLists.txt-do-not-require-a-CXX-comp.patch b/package/fluent-bit/0003-lib-nghttp2-CMakeLists.txt-do-not-require-a-CXX-comp.patch
-new file mode 100644
-index 0000000000..b68062de4f
---- /dev/null
-+++ b/package/fluent-bit/0003-lib-nghttp2-CMakeLists.txt-do-not-require-a-CXX-comp.patch
-@@ -0,0 +1,91 @@
-+From 8a9aed874fc41973d007f5145eca85e261f2bb35 Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas@devoogdt.com>
-+Date: Sun, 25 Aug 2024 20:09:21 +0200
-+Subject: [PATCH] lib: nghttp2: CMakeLists.txt: do not require a CXX compiler
-+
-+Upstream: https://github.com/nghttp2/nghttp2/commit/d9d266124c9f851bab7927321da6637d930367e2
-+Upstream: https://github.com/fluent/fluent-bit/pull/9277
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ lib/nghttp2/CMakeLists.txt | 50 ++++++++++++++++++++------------------
-+ 1 file changed, 26 insertions(+), 24 deletions(-)
-+
-+diff --git a/lib/nghttp2/CMakeLists.txt b/lib/nghttp2/CMakeLists.txt
-+index ee4cb0a4a..90c00b1dd 100644
-+--- a/lib/nghttp2/CMakeLists.txt
-++++ b/lib/nghttp2/CMakeLists.txt
-+@@ -24,7 +24,7 @@
-+ 
-+ cmake_minimum_required(VERSION 3.0)
-+ # XXX using 1.8.90 instead of 1.9.0-DEV
-+-project(nghttp2 VERSION 1.58.90)
-++project(nghttp2 VERSION 1.58.90 LANGUAGES C)
-+ 
-+ # See versioning rule:
-+ #  https://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
-+@@ -122,29 +122,31 @@ else()
-+   set(HINT_NORETURN)
-+ endif()
-+ 
-+-include(ExtractValidFlags)
-+-foreach(_cxx1x_flag -std=c++14)
-+-  extract_valid_cxx_flags(_cxx1x_flag_supported ${_cxx1x_flag})
-+-  if(_cxx1x_flag_supported)
-+-    set(CXX1XCXXFLAGS ${_cxx1x_flag})
-+-    break()
-+-  endif()
-+-endforeach()
-++if(NOT ENABLE_LIB_ONLY)
-++  include(ExtractValidFlags)
-++  foreach(_cxx1x_flag -std=c++14)
-++    extract_valid_cxx_flags(_cxx1x_flag_supported ${_cxx1x_flag})
-++    if(_cxx1x_flag_supported)
-++      set(CXX1XCXXFLAGS ${_cxx1x_flag})
-++      break()
-++    endif()
-++  endforeach()
-+ 
-+-include(CMakePushCheckState)
-+-include(CheckCXXSourceCompiles)
-+-cmake_push_check_state()
-+-set(CMAKE_REQUIRED_DEFINITIONS "${CXX1XCXXFLAGS}")
-+-# Check that std::future is available.
-+-check_cxx_source_compiles("
-+-#include <vector>
-+-#include <future>
-+-int main() { std::vector<std::future<int>> v; }" HAVE_STD_FUTURE)
-+-# Check that std::map::emplace is available for g++-4.7.
-+-check_cxx_source_compiles("
-+-#include <map>
-+-int main() { std::map<int, int>().emplace(1, 2); }" HAVE_STD_MAP_EMPLACE)
-+-cmake_pop_check_state()
-++  include(CMakePushCheckState)
-++  include(CheckCXXSourceCompiles)
-++  cmake_push_check_state()
-++  set(CMAKE_REQUIRED_DEFINITIONS "${CXX1XCXXFLAGS}")
-++  # Check that std::future is available.
-++  check_cxx_source_compiles("
-++  #include <vector>
-++  #include <future>
-++  int main() { std::vector<std::future<int>> v; }" HAVE_STD_FUTURE)
-++  # Check that std::map::emplace is available for g++-4.7.
-++  check_cxx_source_compiles("
-++  #include <map>
-++  int main() { std::map<int, int>().emplace(1, 2); }" HAVE_STD_MAP_EMPLACE)
-++  cmake_pop_check_state()
-++endif()
-+ 
-+ 
-+ # Checks for libraries.
-+@@ -177,7 +179,7 @@ endif()
-+ # openssl (for src)
-+ include(CheckSymbolExists)
-+ set(HAVE_OPENSSL    ${OPENSSL_FOUND})
-+-if(OPENSSL_FOUND)
-++if(NOT ENABLE_LIB_ONLY AND OPENSSL_FOUND)
-+   set(OPENSSL_INCLUDE_DIRS  ${OPENSSL_INCLUDE_DIR})
-+   cmake_push_check_state()
-+   set(CMAKE_REQUIRED_INCLUDES   "${OPENSSL_INCLUDE_DIR}")
-+-- 
-+2.43.0
-+
-diff --git a/package/fluent-bit/0004-lib-luajit-cmake-CMakeLists.txt-do-not-require-a-CXX.patch b/package/fluent-bit/0004-lib-luajit-cmake-CMakeLists.txt-do-not-require-a-CXX.patch
-new file mode 100644
-index 0000000000..c9c5662405
---- /dev/null
-+++ b/package/fluent-bit/0004-lib-luajit-cmake-CMakeLists.txt-do-not-require-a-CXX.patch
-@@ -0,0 +1,37 @@
-+From ac870a2e2de899bcc8b6818b97404479da6d0663 Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas@devoogdt.com>
-+Date: Sun, 25 Aug 2024 20:10:27 +0200
-+Subject: [PATCH] lib: luajit-cmake: CMakeLists.txt: do not require a CXX
-+ compiler
-+
-+Upstream: https://github.com/fluent/fluent-bit/pull/9277
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ lib/luajit-cmake/CMakeLists.txt | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/lib/luajit-cmake/CMakeLists.txt b/lib/luajit-cmake/CMakeLists.txt
-+index 7baf878c7..051a800f5 100644
-+--- a/lib/luajit-cmake/CMakeLists.txt
-++++ b/lib/luajit-cmake/CMakeLists.txt
-+@@ -13,7 +13,7 @@ endif()
-+ 
-+ get_directory_property(hasParent PARENT_DIRECTORY)
-+ if(LUAJIT_DIR)
-+-  project(luajit)
-++  project(luajit LANGUAGES C)
-+   include(LuaJIT.cmake)
-+   if (hasParent)
-+     set(LUA_TARGET $<TARGET_FILE:luajit> PARENT_SCOPE)
-+@@ -24,7 +24,7 @@ if(LUAJIT_DIR)
-+     endif()
-+   endif()
-+ elseif(LUA_DIR)
-+-  project(lua)
-++  project(lua LANGUAGES C)
-+   include(lua.cmake)
-+   if (hasParent)
-+     set(LUA_TARGET $<TARGET_FILE:lua> PARENT_SCOPE)
-+-- 
-+2.43.0
-+
-diff --git a/package/fluent-bit/0004-Enhance-setting-write-gs-base-with-cmake-variable-30.patch b/package/fluent-bit/0005-Enhance-setting-write-gs-base-with-cmake-variable-30.patch
-similarity index 98%
-rename from package/fluent-bit/0004-Enhance-setting-write-gs-base-with-cmake-variable-30.patch
-rename to package/fluent-bit/0005-Enhance-setting-write-gs-base-with-cmake-variable-30.patch
-index 9cdab4c47a..4446238bd3 100644
---- a/package/fluent-bit/0004-Enhance-setting-write-gs-base-with-cmake-variable-30.patch
-+++ b/package/fluent-bit/0005-Enhance-setting-write-gs-base-with-cmake-variable-30.patch
-@@ -1,4 +1,4 @@
--From 7eacb2ab839e74cb07038398def5e3cc198448d4 Mon Sep 17 00:00:00 2001
-+From e17ce6ddcb4dc1cd3081eabfb94a1cdc224f4d69 Mon Sep 17 00:00:00 2001
- From: Wenyong Huang <wenyong.huang@intel.com>
- Date: Tue, 23 Jan 2024 12:21:20 +0800
- Subject: [PATCH] Enhance setting write gs base with cmake variable (#3066)
-@@ -95,5 +95,5 @@ index e73ebc85f..a61a522f3 100644
-  endif ()
-  if (WAMR_CONFIGUABLE_BOUNDS_CHECKS EQUAL 1)
- -- 
--2.34.1
-+2.43.0
- 
-diff --git a/package/fluent-bit/0006-plugins-in-out-_kafka-CMakeLists.txt-fix-cross-compi.patch b/package/fluent-bit/0006-plugins-in-out-_kafka-CMakeLists.txt-fix-cross-compi.patch
-new file mode 100644
-index 0000000000..4083753a3e
---- /dev/null
-+++ b/package/fluent-bit/0006-plugins-in-out-_kafka-CMakeLists.txt-fix-cross-compi.patch
-@@ -0,0 +1,48 @@
-+From 7e8bb790cba0619af9e8d80e947f7cda0910caaa Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas@devoogdt.com>
-+Date: Sat, 16 Nov 2024 19:46:28 +0100
-+Subject: [PATCH] plugins/{in,out}_kafka/CMakeLists.txt: fix cross compile
-+ error
-+
-+KAFKA_INCLUDEDIR is not set if FLB_PREFER_SYSTEM_LIB_KAFKA is not used,
-+when cross-compiling, it just translates to -I/librdkafka, which is not allowed.
-+Fix this by only including KAFKA_INCLUDEDIR if really set.
-+
-+x86_64-linux-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/librdkafka'
-+
-+Upstream: https://github.com/fluent/fluent-bit/pull/9600
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ plugins/in_kafka/CMakeLists.txt  | 4 +++-
-+ plugins/out_kafka/CMakeLists.txt | 4 +++-
-+ 2 files changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/plugins/in_kafka/CMakeLists.txt b/plugins/in_kafka/CMakeLists.txt
-+index ede0831f9..02e2dc786 100644
-+--- a/plugins/in_kafka/CMakeLists.txt
-++++ b/plugins/in_kafka/CMakeLists.txt
-+@@ -3,5 +3,7 @@ set(src
-+   )
-+ 
-+ FLB_PLUGIN(in_kafka "${src}" ${KAFKA_LIBRARIES})
-+-target_include_directories(flb-plugin-in_kafka PUBLIC ${KAFKA_INCLUDEDIR}/librdkafka)
-++if(DEFINED KAFKA_INCLUDEDIR)
-++  target_include_directories(flb-plugin-in_kafka PUBLIC ${KAFKA_INCLUDEDIR}/librdkafka)
-++endif()
-+ target_link_libraries(flb-plugin-in_kafka -lpthread)
-+diff --git a/plugins/out_kafka/CMakeLists.txt b/plugins/out_kafka/CMakeLists.txt
-+index 01c96529b..54b14fc2a 100644
-+--- a/plugins/out_kafka/CMakeLists.txt
-++++ b/plugins/out_kafka/CMakeLists.txt
-+@@ -5,5 +5,7 @@ set(src
-+   kafka.c)
-+ 
-+ FLB_PLUGIN(out_kafka "${src}" ${KAFKA_LIBRARIES})
-+-target_include_directories(flb-plugin-out_kafka PUBLIC ${KAFKA_INCLUDEDIR}/librdkafka)
-++if(DEFINED KAFKA_INCLUDEDIR)
-++  target_include_directories(flb-plugin-out_kafka PUBLIC ${KAFKA_INCLUDEDIR}/librdkafka)
-++endif()
-+ target_link_libraries(flb-plugin-out_kafka -lpthread)
-+-- 
-+2.43.0
-+
-diff --git a/package/fluent-bit/0007-lib-cprofiles-fix-wrong-pointer-assignment.patch b/package/fluent-bit/0007-lib-cprofiles-fix-wrong-pointer-assignment.patch
-new file mode 100644
-index 0000000000..033b5d428a
---- /dev/null
-+++ b/package/fluent-bit/0007-lib-cprofiles-fix-wrong-pointer-assignment.patch
-@@ -0,0 +1,81 @@
-+From 6f474716432ca3ddae2ce989d9cdcdc9145c3959 Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas@devoogdt.com>
-+Date: Sat, 16 Nov 2024 20:55:37 +0100
-+Subject: [PATCH] lib: cprofiles: fix wrong pointer assignment
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The wrong struct types were used. Typo?
-+
-+/home/thomas/br-test-pkg/bootlin-armv7-glibc/build/fluent-bit-3.2.0/lib/cprofiles/src/cprof_profile.c: In function ‘cprof_profile_destroy’:
-+/home/thomas/br-test-pkg/bootlin-armv7-glibc/build/fluent-bit-3.2.0/lib/cprofiles/src/cprof_profile.c:160:18: error: assignment to ‘struct cprof_mapping *’ from incompatible pointer type ‘struct cprof_location *’ [-Wincompatible-pointer-types]
-+  160 |         location = cfl_list_entry(iterator,
-+      |                  ^
-+/home/thomas/br-test-pkg/bootlin-armv7-glibc/build/fluent-bit-3.2.0/lib/cprofiles/src/cprof_profile.c:166:32: error: passing argument 1 of ‘cprof_location_destroy’ from incompatible pointer type [-Wincompatible-pointer-types]
-+  166 |         cprof_location_destroy(location);
-+      |                                ^~~~~~~~
-+      |                                |
-+      |                                struct cprof_mapping *
-+In file included from /home/thomas/br-test-pkg/bootlin-armv7-glibc/build/fluent-bit-3.2.0/lib/cprofiles/src/cprof_profile.c:21:
-+/home/thomas/br-test-pkg/bootlin-armv7-glibc/build/fluent-bit-3.2.0/lib/cprofiles/include/cprofiles/cprofiles.h:304:52: note: expected ‘struct cprof_location *’ but argument is of type ‘struct cprof_mapping *’
-+  304 | void cprof_location_destroy(struct cprof_location *instance);
-+      |                             ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
-+
-+Upstream: https://github.com/fluent/cprofiles/pull/3
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ lib/cprofiles/src/cprof_encode_text.c | 6 +++---
-+ lib/cprofiles/src/cprof_profile.c     | 4 ++--
-+ 2 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/lib/cprofiles/src/cprof_encode_text.c b/lib/cprofiles/src/cprof_encode_text.c
-+index 218a72b5b..ab2d6247d 100644
-+--- a/lib/cprofiles/src/cprof_encode_text.c
-++++ b/lib/cprofiles/src/cprof_encode_text.c
-+@@ -1909,7 +1909,7 @@ static int encode_cprof_resource_profiles(
-+                 struct cprof_resource_profiles *instance) {
-+     int result;
-+     struct cfl_list             *iterator;
-+-    struct cprof_scope_profile *scope_profile;
-++    struct cprof_scope_profiles *scope_profiles;
-+ 
-+     result = encode_string(context,
-+                             CFL_TRUE,
-+@@ -1958,11 +1958,11 @@ static int encode_cprof_resource_profiles(
-+ 
-+         cfl_list_foreach(iterator,
-+                          &instance->scope_profiles) {
-+-            scope_profile = cfl_list_entry(
-++            scope_profiles = cfl_list_entry(
-+                                 iterator,
-+                                 struct cprof_scope_profiles, _head);
-+ 
-+-            result = encode_cprof_scope_profiles(context, scope_profile);
-++            result = encode_cprof_scope_profiles(context, scope_profiles);
-+ 
-+             if (result != CPROF_ENCODE_TEXT_SUCCESS) {
-+                 return result;
-+diff --git a/lib/cprofiles/src/cprof_profile.c b/lib/cprofiles/src/cprof_profile.c
-+index 66d62b361..931457ef7 100644
-+--- a/lib/cprofiles/src/cprof_profile.c
-++++ b/lib/cprofiles/src/cprof_profile.c
-+@@ -98,7 +98,7 @@ void cprof_profile_destroy(struct cprof_profile *instance)
-+     struct cfl_list             *iterator_backup;
-+     struct cprof_attribute_unit *attribute_unit;
-+     struct cprof_value_type     *value_type;
-+-    struct cprof_mapping        *location;
-++    struct cprof_location       *location;
-+     struct cprof_function       *function;
-+     struct cfl_list             *iterator;
-+     struct cprof_mapping        *mapping;
-+@@ -307,4 +307,4 @@ int cprof_profile_add_comment(struct cprof_profile *profile, int64_t comment)
-+     profile->comments_count++;
-+ 
-+     return 0;
-+-}
-+\ No newline at end of file
-++}
-+-- 
-+2.43.0
-+
-diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
-index 697cb1bf15..420e40c9c4 100644
---- a/package/fluent-bit/Config.in
-+++ b/package/fluent-bit/Config.in
-@@ -3,7 +3,9 @@ config BR2_PACKAGE_FLUENT_BIT
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	select BR2_PACKAGE_C_ARES
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_NGHTTP2
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBOPENSSL_ENGINES # needed by bundled librdkafka
-diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
-index a3dbf5f544..57e5272ec0 100644
---- a/package/fluent-bit/fluent-bit.hash
-+++ b/package/fluent-bit/fluent-bit.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4c745066223811047e3911c19db118eadec579ca62ef833a1b1fb573acd8cb85  fluent-bit-3.1.3.tar.gz
-+sha256  3abcd7eda1a26fe79f1d715491bafcca77d0186cc46d1d8465157790358f827d  fluent-bit-3.2.2.tar.gz
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index 10e639a3d5..31f62db7c7 100644
---- a/package/fluent-bit/fluent-bit.mk
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -4,13 +4,15 @@
- #
- ################################################################################
- 
--FLUENT_BIT_VERSION = 3.1.3
-+FLUENT_BIT_VERSION = 3.2.2
- FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
- FLUENT_BIT_LICENSE = Apache-2.0
- FLUENT_BIT_LICENSE_FILES = LICENSE
- FLUENT_BIT_CPE_ID_VENDOR = treasuredata
- FLUENT_BIT_CPE_ID_PRODUCT = fluent_bit
--FLUENT_BIT_DEPENDENCIES = host-bison host-flex libyaml openssl
-+FLUENT_BIT_DEPENDENCIES = c-ares host-bison host-flex libyaml nghttp2 openssl
-+
-+FLUENT_BIT_CMAKE_BACKEND = ninja
- 
- FLUENT_BIT_CONF_OPTS += \
- 	-DFLB_DEBUG=No \
-@@ -18,8 +20,8 @@ FLUENT_BIT_CONF_OPTS += \
- 	-DFLB_SECURITY=No \
- 	-DFLB_EXAMPLES=No \
- 	-DFLB_CHUNK_TRACE=No \
--	-DFLB_PREFER_SYSTEM_LIBS=Yes \
--	-DFLB_BACKTRACE=No
-+	-DFLB_PREFER_SYSTEM_LIB_CARES=Yes \
-+	-DFLB_PREFER_SYSTEM_LIB_NGHTTP2=Yes
- 
- ifeq ($(BR2_PACKAGE_FLUENT_BIT_WASM),y)
- FLUENT_BIT_WAMR_ARCH = $(call qstrip,$(BR2_PACKAGE_FLUENT_BIT_WASM_ARCH))
-@@ -37,8 +39,25 @@ else
- FLUENT_BIT_CONF_OPTS += -DFLB_WASM=No
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBBACKTRACE),y)
-+FLUENT_BIT_CONF_OPTS += -DFLB_BACKTRACE=Yes \
-+	-DFLB_PREFER_SYSTEM_LIB_BACKTRACE=Yes
-+FLUENT_BIT_DEPENDENCIES += libbacktrace
-+else
-+FLUENT_BIT_CONF_OPTS += -DFLB_BACKTRACE=No
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JEMALLOC),y)
-+FLUENT_BIT_CONF_OPTS += -DFLB_JEMALLOC=Yes \
-+	-DFLB_PREFER_SYSTEM_LIB_JEMALLOC=Yes
-+FLUENT_BIT_DEPENDENCIES += jemalloc
-+else
-+FLUENT_BIT_CONF_OPTS += -DFLB_JEMALLOC=No
-+endif
-+
- ifeq ($(BR2_PACKAGE_LUAJIT),y)
--FLUENT_BIT_CONF_OPTS += -DFLB_LUAJIT=Yes
-+FLUENT_BIT_CONF_OPTS += -DFLB_LUAJIT=Yes \
-+	-DFLB_PREFER_SYSTEM_LIB_LUAJIT=Yes
- FLUENT_BIT_DEPENDENCIES += luajit
- else
- FLUENT_BIT_CONF_OPTS += -DFLB_LUAJIT=No
-
---===============8448897652817249388==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8448897652817249388==--
+T24gMTUvMTIvMjAyNCAxNTo0OCwgVGhvbWFzIERldm9vZ2R0IHdyb3RlOgo+IE5ld3M6Cj4gCj4g
+aHR0cHM6Ly9mbHVlbnRiaXQuaW8vYW5ub3VuY2VtZW50cy92My4yLjIvCj4gaHR0cHM6Ly9mbHVl
+bnRiaXQuaW8vYW5ub3VuY2VtZW50cy92My4yLjEvCj4gaHR0cHM6Ly9mbHVlbnRiaXQuaW8vYW5u
+b3VuY2VtZW50cy92My4yLjAvCj4gaHR0cHM6Ly9mbHVlbnRiaXQuaW8vYW5ub3VuY2VtZW50cy92
+My4xLjEwLwo+IGh0dHBzOi8vZmx1ZW50Yml0LmlvL2Fubm91bmNlbWVudHMvdjMuMS45Lwo+IGh0
+dHBzOi8vZmx1ZW50Yml0LmlvL2Fubm91bmNlbWVudHMvdjMuMS44Lwo+IGh0dHBzOi8vZmx1ZW50
+Yml0LmlvL2Fubm91bmNlbWVudHMvdjMuMS43Lwo+IGh0dHBzOi8vZmx1ZW50Yml0LmlvL2Fubm91
+bmNlbWVudHMvdjMuMS42Lwo+IGh0dHBzOi8vZmx1ZW50Yml0LmlvL2Fubm91bmNlbWVudHMvdjMu
+MS41Lwo+IGh0dHBzOi8vZmx1ZW50Yml0LmlvL2Fubm91bmNlbWVudHMvdjMuMS40Lwo+IAo+IFN1
+cHBvcnQgaGFzIGJlZW4gYWRkZWQgZm9yIChzb21lKSBzeXN0ZW0gcHJvdmlkZWQgbGlicmFyaWVz
+LAo+IHNlZToKPiAgLSBodHRwczovL2dpdGh1Yi5jb20vZmx1ZW50L2ZsdWVudC1iaXQvcHVsbC83
+Mjg2Cj4gIC0gaHR0cHM6Ly9naXRodWIuY29tL2ZsdWVudC9mbHVlbnQtYml0L3B1bGwvODkzMAo+
+IAo+IFRoZSBjLWFyZXMgYW5kIG5naHR0cDIgcGFja2FnZSBhcmUgYWx3YXlzIG5lZWRlZCwgc28g
+dXNlCj4gdGhlIGJ1aWxkcm9vdCBzaGlwcGVkIHZlcnNpb25zLiBBbHNvIGFsbG93IHRoZSB1c2Fn
+ZSBvZgo+IGxpYmJhY2t0cmFjZSBhbmQgamVtYWxsb2MuCj4gCj4gQSBidW5jaCBvZiBuZXcgY29t
+cGlsZSBmaXhlcyBoYXZlIGJlZW4gYWRkZWQsCj4gYWxsIG9mIHRoZW0gYXJlIHByb3Bvc2VkIHVw
+c3RyZWFtIGZvciByZXZpZXcuCj4gCj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIERldm9vZ2R0IDx0
+aG9tYXNAZGV2b29nZHQuY29tPgoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KCj4gLS0tCj4g
+IC4uLi10aGUtc3lzdGVtLXByb3ZpZGVkLUx1YUpJVC1pZi1mb3VuZC5wYXRjaCB8IDYyIC0tLS0t
+LS0tLS0tLS0KPiAgLi4uYWtlTGlzdHMudHh0LWFsbG93LWNvbXBpbGF0aW9uLXdpdGgucGF0Y2h9
+IHwgMTIgKy0tCj4gIC4uLmFibGUtY3h4LXN1cHBvcnQtZm9yLWxpYnJka2Fma2EtNzc0MS5wYXRj
+aCB8IDI3ICsrKysrKwo+ICAuLi5pc2FibGUtY3h4LXN1cHBvcnQtZm9yLWxpYnJka2Fma2EtNzcu
+cGF0Y2ggfCAyOSAtLS0tLS0KPiAgLi4uZUxpc3RzLnR4dC1kby1ub3QtcmVxdWlyZS1hLUNYWC1j
+b21wLnBhdGNoIHwgOTEgKysrKysrKysrKysrKysrKysrKwo+ICAuLi4tQ01ha2VMaXN0cy50eHQt
+ZG8tbm90LXJlcXVpcmUtYS1DWFgucGF0Y2ggfCAzNyArKysrKysrKwo+ICAuLi5yaXRlLWdzLWJh
+c2Utd2l0aC1jbWFrZS12YXJpYWJsZS0zMC5wYXRjaH0gfCAgNCArLQo+ICAuLi5rYWZrYS1DTWFr
+ZUxpc3RzLnR4dC1maXgtY3Jvc3MtY29tcGkucGF0Y2ggfCA0OCArKysrKysrKysrCj4gIC4uLnJv
+ZmlsZXMtZml4LXdyb25nLXBvaW50ZXItYXNzaWdubWVudC5wYXRjaCB8IDgxICsrKysrKysrKysr
+KysrKysrCj4gIHBhY2thZ2UvZmx1ZW50LWJpdC9Db25maWcuaW4gICAgICAgICAgICAgICAgICB8
+ICAyICsKPiAgcGFja2FnZS9mbHVlbnQtYml0L2ZsdWVudC1iaXQuaGFzaCAgICAgICAgICAgIHwg
+IDIgKy0KPiAgcGFja2FnZS9mbHVlbnQtYml0L2ZsdWVudC1iaXQubWsgICAgICAgICAgICAgIHwg
+MjkgKysrKystCj4gIDEyIGZpbGVzIGNoYW5nZWQsIDMxOCBpbnNlcnRpb25zKCspLCAxMDYgZGVs
+ZXRpb25zKC0pCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCAKPiBwYWNrYWdlL2ZsdWVudC1iaXQvMDAw
+MS1idWlsZC11c2UtdGhlLXN5c3RlbS1wcm92aWRlZC1MdWFKSVQtaWYtZm91bmQucGF0Y2gKPiAg
+cmVuYW1lIAo+IHBhY2thZ2UvZmx1ZW50LWJpdC97MDAwMi1saWItbGlicmRrYWZrYS1DTWFrZUxp
+c3RzLnR4dC1hbGxvdy1jb21waWxhdGlvbi13aXRoLnBhdGNoIAo+ID0+IDAwMDEtbGliLWxpYnJk
+a2Fma2EtQ01ha2VMaXN0cy50eHQtYWxsb3ctY29tcGlsYXRpb24td2l0aC5wYXRjaH0gCj4gKDky
+JSkKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IAo+IHBhY2thZ2UvZmx1ZW50LWJpdC8wMDAyLWJ1aWxk
+LWRpc2FibGUtY3h4LXN1cHBvcnQtZm9yLWxpYnJka2Fma2EtNzc0MS5wYXRjaAo+ICBkZWxldGUg
+bW9kZSAxMDA2NDQgCj4gcGFja2FnZS9mbHVlbnQtYml0LzAwMDMtQ01ha2VMaXN0cy50eHQtZGlz
+YWJsZS1jeHgtc3VwcG9ydC1mb3ItbGlicmRrYWZrYS03Ny5wYXRjaAo+ICBjcmVhdGUgbW9kZSAx
+MDA2NDQgCj4gcGFja2FnZS9mbHVlbnQtYml0LzAwMDMtbGliLW5naHR0cDItQ01ha2VMaXN0cy50
+eHQtZG8tbm90LXJlcXVpcmUtYS1DWFgtY29tcC5wYXRjaAo+ICBjcmVhdGUgbW9kZSAxMDA2NDQg
+Cj4gcGFja2FnZS9mbHVlbnQtYml0LzAwMDQtbGliLWx1YWppdC1jbWFrZS1DTWFrZUxpc3RzLnR4
+dC1kby1ub3QtcmVxdWlyZS1hLUNYWC5wYXRjaAo+ICByZW5hbWUgCj4gcGFja2FnZS9mbHVlbnQt
+Yml0L3swMDA0LUVuaGFuY2Utc2V0dGluZy13cml0ZS1ncy1iYXNlLXdpdGgtY21ha2UtdmFyaWFi
+bGUtMzAucGF0Y2ggCj4gPT4gMDAwNS1FbmhhbmNlLXNldHRpbmctd3JpdGUtZ3MtYmFzZS13aXRo
+LWNtYWtlLXZhcmlhYmxlLTMwLnBhdGNofSAKPiAoOTglKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQg
+Cj4gcGFja2FnZS9mbHVlbnQtYml0LzAwMDYtcGx1Z2lucy1pbi1vdXQtX2thZmthLUNNYWtlTGlz
+dHMudHh0LWZpeC1jcm9zcy1jb21waS5wYXRjaAo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgCj4gcGFj
+a2FnZS9mbHVlbnQtYml0LzAwMDctbGliLWNwcm9maWxlcy1maXgtd3JvbmctcG9pbnRlci1hc3Np
+Z25tZW50LnBhdGNoCj4gCj4gZGlmZiAtLWdpdCAKPiBhL3BhY2thZ2UvZmx1ZW50LWJpdC8wMDAx
+LWJ1aWxkLXVzZS10aGUtc3lzdGVtLXByb3ZpZGVkLUx1YUpJVC1pZi1mb3VuZC5wYXRjaCAKPiBi
+L3BhY2thZ2UvZmx1ZW50LWJpdC8wMDAxLWJ1aWxkLXVzZS10aGUtc3lzdGVtLXByb3ZpZGVkLUx1
+YUpJVC1pZi1mb3VuZC5wYXRjaAo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IGFj
+YTY0MDFhYzguLjAwMDAwMDAwMDAKPiAtLS0gCj4gYS9wYWNrYWdlL2ZsdWVudC1iaXQvMDAwMS1i
+dWlsZC11c2UtdGhlLXN5c3RlbS1wcm92aWRlZC1MdWFKSVQtaWYtZm91bmQucGF0Y2gKPiArKysg
+L2Rldi9udWxsCj4gQEAgLTEsNjIgKzAsMCBAQAo+IC1Gcm9tIDhkNmY2Y2ZiMDdhOGZlMzJkYzBi
+OTU3N2UxYjJmMWVlMWI2N2I3MzYgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gLUZyb206IFRo
+b21hcyBEZXZvb2dkdCA8dGhvbWFzQGRldm9vZ2R0LmNvbT4KPiAtRGF0ZTogRnJpLCAyOCBBcHIg
+MjAyMyAxMDoyNToxNiArMDIwMAo+IC1TdWJqZWN0OiBbUEFUQ0hdIGJ1aWxkOiB1c2UgdGhlIHN5
+c3RlbSBwcm92aWRlZCBMdWFKSVQgaWYgZm91bmQKPiAtCj4gLWUuZy4gYnVpbGRyb290IGhhcyBs
+b2dpYyB0byBidWlsZCBsdWFqaXQsCj4gLXNvIGlmIHBrZ19jaGVja19tb2R1bGVzIGNhbiBmaW5k
+IGEgc3VpdGFibGUgdmVyc2lvbiwKPiAtdGhlbiB1c2UgdGhhdCBvbmUgaWYgLURGTEJfUFJFRkVS
+X1NZU1RFTV9MSUJTPVllcy4KPiAtCj4gLVVwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5jb20vZmx1
+ZW50L2ZsdWVudC1iaXQvcHVsbC83Mjg2Cj4gLVNpZ25lZC1vZmYtYnk6IFRob21hcyBEZXZvb2dk
+dCA8dGhvbWFzQGRldm9vZ2R0LmNvbT4KPiAtLS0tCj4gLSBDTWFrZUxpc3RzLnR4dCAgICAgfCAx
+MiArKysrKysrKysrKy0KPiAtIHNyYy9DTWFrZUxpc3RzLnR4dCB8ICAyICstCj4gLSAyIGZpbGVz
+IGNoYW5nZWQsIDEyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gLQo+IC1kaWZmIC0t
+Z2l0IGEvQ01ha2VMaXN0cy50eHQgYi9DTWFrZUxpc3RzLnR4dAo+IC1pbmRleCAyZGE3OTJkNTMu
+LjMyMjk0MjBjNiAxMDA2NDQKPiAtLS0tIGEvQ01ha2VMaXN0cy50eHQKPiAtKysrIGIvQ01ha2VM
+aXN0cy50eHQKPiAtQEAgLTEyOCw2ICsxMjgsNyBAQCBvcHRpb24oRkxCX1RFU1RTX0lOVEVSTkFM
+X0ZVWlogIkVuYWJsZSBpbnRlcm5hbCAKPiBmdXp6IHRlc3RzIiAgICBObykKPiAtIG9wdGlvbihG
+TEJfVEVTVFNfT1NTRlVaWiAgICAgICAiRW5hYmxlIE9TUy1GdXp6IGJ1aWxkIiAgICAgICAgIE5v
+KQo+IC0gb3B0aW9uKEZMQl9NVFJBQ0UgICAgICAgICAgICAgICJFbmFibGUgbXRyYWNlIHN1cHBv
+cnQiICAgICAgICAgTm8pCj4gLSBvcHRpb24oRkxCX1BPU0lYX1RMUyAgICAgICAgICAgIkZvcmNl
+IFBPU0lYIHRocmVhZCBzdG9yYWdlIiAgICBObykKPiAtK29wdGlvbihGTEJfUFJFRkVSX1NZU1RF
+TV9MSUJTICAiUHJlZmVyIHN5c3RlbSBpbnN0YWxsZWQgbGlicmFyaWVzIiAKPiBObykKPiAtIG9w
+dGlvbihGTEJfSU5PVElGWSAgICAgICAgICAgICAiRW5hYmxlIGlub3RpZnkgc3VwcG9ydCIgICAg
+ICAgWWVzKQo+IC0gb3B0aW9uKEZMQl9TUUxEQiAgICAgICAgICAgICAgICJFbmFibGUgU1FMIGVt
+YmVkZGVkIERCIiAgICAgICBZZXMpCj4gLSBvcHRpb24oRkxCX0hUVFBfU0VSVkVSICAgICAgICAg
+IkVuYWJsZSBIVFRQIFNlcnZlciIgICAgICAgICAgIFllcykKPiAtQEAgLTEwMjMsNyArMTAyNCwx
+NiBAQCBlbmRpZigpCj4gLSAjIEx1YUpJVCAoU2NyaXB0aW5nIFN1cHBvcnQpCj4gLSAjID09PT09
+PT09PT09PT09PT09PT09PT09PT09Cj4gLSBpZihGTEJfTFVBSklUKQo+IC0tICBpbmNsdWRlKGNt
+YWtlL2x1YWppdC5jbWFrZSkKPiAtKyAgaWYoRkxCX1BSRUZFUl9TWVNURU1fTElCUykKPiAtKyAg
+ICBmaW5kX3BhY2thZ2UoUGtnQ29uZmlnKQo+IC0rICAgIHBrZ19jaGVja19tb2R1bGVzKExVQUpJ
+VCBsdWFqaXQ+PTIuMS4wKQo+IC0rICBlbmRpZigpCj4gLSsgIGlmKExVQUpJVF9GT1VORCkKPiAt
+KyAgICBpbmNsdWRlX2RpcmVjdG9yaWVzKCR7TFVBSklUX0lOQ0xVREVfRElSU30pCj4gLSsgIGVs
+c2UoKQo+IC0rICAgIGluY2x1ZGUoY21ha2UvbHVhaml0LmNtYWtlKQo+IC0rICAgIHNldChMVUFK
+SVRfTElCUkFSSUVTICJsaWJsdWFqaXQiKQo+IC0rICBlbmRpZigpCj4gLSAgIEZMQl9ERUZJTklU
+SU9OKEZMQl9IQVZFX0xVQUpJVCkKPiAtIGVuZGlmKCkKPiAtCj4gLWRpZmYgLS1naXQgYS9zcmMv
+Q01ha2VMaXN0cy50eHQgYi9zcmMvQ01ha2VMaXN0cy50eHQKPiAtaW5kZXggYjYyMzNkOWY3Li42
+N2JhZWM0NTYgMTAwNjQ0Cj4gLS0tLSBhL3NyYy9DTWFrZUxpc3RzLnR4dAo+IC0rKysgYi9zcmMv
+Q01ha2VMaXN0cy50eHQKPiAtQEAgLTIyMSw3ICsyMjEsNyBAQCBlbmRpZigpCj4gLSBpZihGTEJf
+TFVBSklUKQo+IC0gICBzZXQoZXh0cmFfbGlicwo+IC0gICAgICR7ZXh0cmFfbGlic30KPiAtLSAg
+ICAibGlibHVhaml0IikKPiAtKyAgICAke0xVQUpJVF9MSUJSQVJJRVN9KQo+IC0gZW5kaWYoKQo+
+IC0KPiAtIGlmKEZMQl9TUUxEQikKPiAtLS0KPiAtMi4zNC4xCj4gLQo+IGRpZmYgLS1naXQgCj4g
+YS9wYWNrYWdlL2ZsdWVudC1iaXQvMDAwMi1saWItbGlicmRrYWZrYS1DTWFrZUxpc3RzLnR4dC1h
+bGxvdy1jb21waWxhdGlvbi13aXRoLnBhdGNoIAo+IGIvcGFja2FnZS9mbHVlbnQtYml0LzAwMDEt
+bGliLWxpYnJka2Fma2EtQ01ha2VMaXN0cy50eHQtYWxsb3ctY29tcGlsYXRpb24td2l0aC5wYXRj
+aAo+IHNpbWlsYXJpdHkgaW5kZXggOTIlCj4gcmVuYW1lIGZyb20gCj4gcGFja2FnZS9mbHVlbnQt
+Yml0LzAwMDItbGliLWxpYnJka2Fma2EtQ01ha2VMaXN0cy50eHQtYWxsb3ctY29tcGlsYXRpb24t
+d2l0aC5wYXRjaAo+IHJlbmFtZSB0byAKPiBwYWNrYWdlL2ZsdWVudC1iaXQvMDAwMS1saWItbGli
+cmRrYWZrYS1DTWFrZUxpc3RzLnR4dC1hbGxvdy1jb21waWxhdGlvbi13aXRoLnBhdGNoCj4gaW5k
+ZXggZmQzZDljZTcyMi4uZTE0NDY0MmM5MyAxMDA2NDQKPiAtLS0gCj4gYS9wYWNrYWdlL2ZsdWVu
+dC1iaXQvMDAwMi1saWItbGlicmRrYWZrYS1DTWFrZUxpc3RzLnR4dC1hbGxvdy1jb21waWxhdGlv
+bi13aXRoLnBhdGNoCj4gKysrIAo+IGIvcGFja2FnZS9mbHVlbnQtYml0LzAwMDEtbGliLWxpYnJk
+a2Fma2EtQ01ha2VMaXN0cy50eHQtYWxsb3ctY29tcGlsYXRpb24td2l0aC5wYXRjaAo+IEBAIC0x
+LDQgKzEsNCBAQAo+IC1Gcm9tIDI5YmU1Mjc1ZjZmN2UxNWFjYTc2OGU5YjIzNTk5OGFiYzVhNjA0
+ZTIgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb20gYzQ0MjU2Yzk1ZjU3MDNkZDYyNzQx
+M2YxN2M2YWQyNTAwNzM4OThkOSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAgRnJvbTogVGhv
+bWFzIERldm9vZ2R0IDx0aG9tYXMuZGV2b29nZHRAYmFyY28uY29tPgo+ICBEYXRlOiBUdWUsIDI1
+IEp1bCAyMDIzIDA5OjEwOjQxICswMjAwCj4gIFN1YmplY3Q6IFtQQVRDSF0gbGliOiBsaWJyZGth
+ZmthOiBDTWFrZUxpc3RzLnR4dDogYWxsb3cgY29tcGlsYXRpb24gCj4gd2l0aG91dAo+IEBAIC03
+LDEzICs3LDExIEBAIFN1YmplY3Q6IFtQQVRDSF0gbGliOiBsaWJyZGthZmthOiBDTWFrZUxpc3Rz
+LnR4dDogCj4gYWxsb3cgY29tcGlsYXRpb24gd2l0aG91dAo+ICBlLmcuIGZsdWVudC1iaXQgaXMg
+YSBjLW9ubHkgbGlicmFyeSwgc28gYWxsb3cgY29tcGlsYXRpb24gd2l0aG91dCBjeHgKPiAKPiAg
+VXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9jb25mbHVlbnRpbmMvbGlicmRrYWZrYS9wdWxs
+LzQzNjYKPiAtVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9mbHVlbnQvZmx1ZW50LWJpdC9w
+dWxsLzc3NjUKPiArVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9mbHVlbnQvZmx1ZW50LWJp
+dC9wdWxsLzkyNzcKPiAgU2lnbmVkLW9mZi1ieTogVGhvbWFzIERldm9vZ2R0IDx0aG9tYXMuZGV2
+b29nZHRAYmFyY28uY29tPgo+IC1bRmFicmljZTogdXBkYXRlIGZvciAzLjEuM10KPiAtU2lnbmVk
+LW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Cj4g
+IC0tLQo+IC0gbGliL2xpYnJka2Fma2EtMi4zLjAvQ01ha2VMaXN0cy50eHQgICAgICAgICAgfCAx
+OCArKysrKysrKysrLS0KPiAtIGxpYi9saWJyZGthZmthLTIuMy4wL2V4YW1wbGVzL0NNYWtlTGlz
+dHMudHh0IHwgMzEgCj4gKysrKysrKysrKysrKy0tLS0tLS0KPiArIGxpYi9saWJyZGthZmthLTIu
+NC4wL0NNYWtlTGlzdHMudHh0ICAgICAgICAgIHwgMTggKysrKysrKysrKy0tCj4gKyBsaWIvbGli
+cmRrYWZrYS0yLjQuMC9leGFtcGxlcy9DTWFrZUxpc3RzLnR4dCB8IDMxIAo+ICsrKysrKysrKysr
+KystLS0tLS0tCj4gICAyIGZpbGVzIGNoYW5nZWQsIDM1IGluc2VydGlvbnMoKyksIDE0IGRlbGV0
+aW9ucygtKQo+IAo+ICBkaWZmIC0tZ2l0IGEvbGliL2xpYnJka2Fma2EtMi40LjAvQ01ha2VMaXN0
+cy50eHQgCj4gYi9saWIvbGlicmRrYWZrYS0yLjQuMC9DTWFrZUxpc3RzLnR4dAo+IEBAIC0xMTYs
+NSArMTE0LDUgQEAgaW5kZXggOGMwMDc5YWJlLi5jOTMzNmI3MjkgMTAwNjQ0Cj4gICsgICAgZW5k
+aWYoKQo+ICAgZW5kaWYoTk9UIFdJTjMyKQo+ICAtLQo+IC0yLjM0LjEKPiArMi40My4wCj4gCj4g
+ZGlmZiAtLWdpdCAKPiBhL3BhY2thZ2UvZmx1ZW50LWJpdC8wMDAyLWJ1aWxkLWRpc2FibGUtY3h4
+LXN1cHBvcnQtZm9yLWxpYnJka2Fma2EtNzc0MS5wYXRjaCAKPiBiL3BhY2thZ2UvZmx1ZW50LWJp
+dC8wMDAyLWJ1aWxkLWRpc2FibGUtY3h4LXN1cHBvcnQtZm9yLWxpYnJka2Fma2EtNzc0MS5wYXRj
+aAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uZWM4YmU0ZGZjNgo+
+IC0tLSAvZGV2L251bGwKPiArKysgCj4gYi9wYWNrYWdlL2ZsdWVudC1iaXQvMDAwMi1idWlsZC1k
+aXNhYmxlLWN4eC1zdXBwb3J0LWZvci1saWJyZGthZmthLTc3NDEucGF0Y2gKPiBAQCAtMCwwICsx
+LDI3IEBACj4gK0Zyb20gMGRjOTU1Y2QxNWNjMGIwOWExZDU1NzEzMWZhZTU5ODQyY2IyYmJkOCBN
+b24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogVGhvbWFzIERldm9vZ2R0IDx0aG9tYXMu
+ZGV2b29nZHRAYmFyY28uY29tPgo+ICtEYXRlOiBUdWUsIDI1IEp1bCAyMDIzIDEwOjAwOjM2ICsw
+MjAwCj4gK1N1YmplY3Q6IFtQQVRDSF0gYnVpbGQ6IGRpc2FibGUgY3h4IHN1cHBvcnQgZm9yIGxp
+YnJka2Fma2EgIzc3NDEKPiArCj4gK0ZsdWVudC1iaXQgaXMgYyBvbmx5LCBzbyBubyBuZWVkIHRv
+IGNvbXBpbGUgY3h4Lgo+ICtUaGlzIGZpeGVzIGFsc28gYSBjb21waWxlIGVycm9yIGluIGJ1aWxk
+cm9vdC4KPiArCj4gK1Vwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5jb20vZmx1ZW50L2ZsdWVudC1i
+aXQvcHVsbC85Mjc3Cj4gK1NpZ25lZC1vZmYtYnk6IFRob21hcyBEZXZvb2dkdCA8dGhvbWFzLmRl
+dm9vZ2R0QGJhcmNvLmNvbT4KPiArLS0tCj4gKyBjbWFrZS9rYWZrYS5jbWFrZSB8IDEgKwo+ICsg
+MSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCj4gKwo+ICtkaWZmIC0tZ2l0IGEvY21ha2Uv
+a2Fma2EuY21ha2UgYi9jbWFrZS9rYWZrYS5jbWFrZQo+ICtpbmRleCAzYTBlYmZlZDIuLmFmMGUy
+ZjQ2MCAxMDA2NDQKPiArLS0tIGEvY21ha2Uva2Fma2EuY21ha2UKPiArKysrIGIvY21ha2Uva2Fm
+a2EuY21ha2UKPiArQEAgLTEsNCArMSw1IEBACj4gKyAjIGthZmthIGNtYWtlCj4gKytGTEJfT1BU
+SU9OKFJES0FGS0FfQlVJTERfQ1hYICAgICAgT2ZmKQo+ICsgRkxCX09QVElPTihSREtBRktBX0JV
+SUxEX1NUQVRJQyAgICBPbikKPiArIEZMQl9PUFRJT04oUkRLQUZLQV9CVUlMRF9FWEFNUExFUyBP
+ZmYpCj4gKyBGTEJfT1BUSU9OKFJES0FGS0FfQlVJTERfVEVTVFMgICAgT2ZmKQo+ICstLQo+ICsy
+LjQzLjAKPiArCj4gZGlmZiAtLWdpdCAKPiBhL3BhY2thZ2UvZmx1ZW50LWJpdC8wMDAzLUNNYWtl
+TGlzdHMudHh0LWRpc2FibGUtY3h4LXN1cHBvcnQtZm9yLWxpYnJka2Fma2EtNzcucGF0Y2ggCj4g
+Yi9wYWNrYWdlL2ZsdWVudC1iaXQvMDAwMy1DTWFrZUxpc3RzLnR4dC1kaXNhYmxlLWN4eC1zdXBw
+b3J0LWZvci1saWJyZGthZmthLTc3LnBhdGNoCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4g
+aW5kZXggYzk2YTdiZGFhMC4uMDAwMDAwMDAwMAo+IC0tLSAKPiBhL3BhY2thZ2UvZmx1ZW50LWJp
+dC8wMDAzLUNNYWtlTGlzdHMudHh0LWRpc2FibGUtY3h4LXN1cHBvcnQtZm9yLWxpYnJka2Fma2Et
+NzcucGF0Y2gKPiArKysgL2Rldi9udWxsCj4gQEAgLTEsMjkgKzAsMCBAQAo+IC1Gcm9tIDdmM2Zj
+NTViNzM0ZGIyZDI4YWY2M2MzOTNiNTJiYzIzOGFmOWYyMGEgTW9uIFNlcCAxNyAwMDowMDowMCAy
+MDAxCj4gLUZyb206IFRob21hcyBEZXZvb2dkdCA8dGhvbWFzLmRldm9vZ2R0QGJhcmNvLmNvbT4K
+PiAtRGF0ZTogVHVlLCAyNSBKdWwgMjAyMyAxMDowMDozNiArMDIwMAo+IC1TdWJqZWN0OiBbUEFU
+Q0hdIENNYWtlTGlzdHMudHh0OiBkaXNhYmxlIGN4eCBzdXBwb3J0IGZvciBsaWJyZGthZmthIAo+
+ICM3NzQxCj4gLQo+IC1GbHVlbnQtYml0IGlzIGMgb25seSwgc28gbm8gbmVlZCB0byBjb21waWxl
+IGN4eC4KPiAtVGhpcyBmaXhlcyBhbHNvIGEgY29tcGlsZSBlcnJvciBpbiBidWlsZHJvb3QuCj4g
+LQo+IC1VcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL2ZsdWVudC9mbHVlbnQtYml0L3B1bGwv
+Nzc2NQo+IC1TaWduZWQtb2ZmLWJ5OiBUaG9tYXMgRGV2b29nZHQgPHRob21hcy5kZXZvb2dkdEBi
+YXJjby5jb20+Cj4gLS0tLQo+IC0gQ01ha2VMaXN0cy50eHQgfCAxICsKPiAtIDEgZmlsZSBjaGFu
+Z2VkLCAxIGluc2VydGlvbigrKQo+IC0KPiAtZGlmZiAtLWdpdCBhL0NNYWtlTGlzdHMudHh0IGIv
+Q01ha2VMaXN0cy50eHQKPiAtaW5kZXggMzIyOTQyMGM2Li4yNjk0ZjE4OWYgMTAwNjQ0Cj4gLS0t
+LSBhL0NNYWtlTGlzdHMudHh0Cj4gLSsrKyBiL0NNYWtlTGlzdHMudHh0Cj4gLUBAIC05NzksNiAr
+OTc5LDcgQEAgaWYoRkxCX0JBQ0tUUkFDRSkKPiAtIGVuZGlmKCkKPiAtCj4gLSBpZihGTEJfSU5f
+S0FGS0EgT1IgRkxCX09VVF9LQUZLQSkKPiAtKyAgICBGTEJfT1BUSU9OKFJES0FGS0FfQlVJTERf
+Q1hYICAgICAgT2ZmKQo+IC0gICAgIEZMQl9PUFRJT04oUkRLQUZLQV9CVUlMRF9TVEFUSUMgICAg
+T24pCj4gLSAgICAgRkxCX09QVElPTihSREtBRktBX0JVSUxEX0VYQU1QTEVTIE9mZikKPiAtICAg
+ICBGTEJfT1BUSU9OKFJES0FGS0FfQlVJTERfVEVTVFMgICAgT2ZmKQo+IC0tLQo+IC0yLjM0LjEK
+PiAtCj4gZGlmZiAtLWdpdCAKPiBhL3BhY2thZ2UvZmx1ZW50LWJpdC8wMDAzLWxpYi1uZ2h0dHAy
+LUNNYWtlTGlzdHMudHh0LWRvLW5vdC1yZXF1aXJlLWEtQ1hYLWNvbXAucGF0Y2ggCj4gYi9wYWNr
+YWdlL2ZsdWVudC1iaXQvMDAwMy1saWItbmdodHRwMi1DTWFrZUxpc3RzLnR4dC1kby1ub3QtcmVx
+dWlyZS1hLUNYWC1jb21wLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAw
+MDAwMDAwLi5iNjgwNjJkZTRmCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyAKPiBiL3BhY2thZ2UvZmx1
+ZW50LWJpdC8wMDAzLWxpYi1uZ2h0dHAyLUNNYWtlTGlzdHMudHh0LWRvLW5vdC1yZXF1aXJlLWEt
+Q1hYLWNvbXAucGF0Y2gKPiBAQCAtMCwwICsxLDkxIEBACj4gK0Zyb20gOGE5YWVkODc0ZmM0MTk3
+M2QwMDdmNTE0NWVjYTg1ZTI2MWYyYmIzNSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJv
+bTogVGhvbWFzIERldm9vZ2R0IDx0aG9tYXNAZGV2b29nZHQuY29tPgo+ICtEYXRlOiBTdW4sIDI1
+IEF1ZyAyMDI0IDIwOjA5OjIxICswMjAwCj4gK1N1YmplY3Q6IFtQQVRDSF0gbGliOiBuZ2h0dHAy
+OiBDTWFrZUxpc3RzLnR4dDogZG8gbm90IHJlcXVpcmUgYSBDWFggCj4gY29tcGlsZXIKPiArCj4g
+K1Vwc3RyZWFtOiAKPiBodHRwczovL2dpdGh1Yi5jb20vbmdodHRwMi9uZ2h0dHAyL2NvbW1pdC9k
+OWQyNjYxMjRjOWY4NTFiYWI3OTI3MzIxZGE2NjM3ZDkzMDM2N2UyCj4gK1Vwc3RyZWFtOiBodHRw
+czovL2dpdGh1Yi5jb20vZmx1ZW50L2ZsdWVudC1iaXQvcHVsbC85Mjc3Cj4gK1NpZ25lZC1vZmYt
+Ynk6IFRob21hcyBEZXZvb2dkdCA8dGhvbWFzQGRldm9vZ2R0LmNvbT4KPiArLS0tCj4gKyBsaWIv
+bmdodHRwMi9DTWFrZUxpc3RzLnR4dCB8IDUwIAo+ICsrKysrKysrKysrKysrKysrKysrLS0tLS0t
+LS0tLS0tLS0tLS0tCj4gKyAxIGZpbGUgY2hhbmdlZCwgMjYgaW5zZXJ0aW9ucygrKSwgMjQgZGVs
+ZXRpb25zKC0pCj4gKwo+ICtkaWZmIC0tZ2l0IGEvbGliL25naHR0cDIvQ01ha2VMaXN0cy50eHQg
+Yi9saWIvbmdodHRwMi9DTWFrZUxpc3RzLnR4dAo+ICtpbmRleCBlZTRjYjBhNGEuLjkwYzAwYjFk
+ZCAxMDA2NDQKPiArLS0tIGEvbGliL25naHR0cDIvQ01ha2VMaXN0cy50eHQKPiArKysrIGIvbGli
+L25naHR0cDIvQ01ha2VMaXN0cy50eHQKPiArQEAgLTI0LDcgKzI0LDcgQEAKPiArCj4gKyBjbWFr
+ZV9taW5pbXVtX3JlcXVpcmVkKFZFUlNJT04gMy4wKQo+ICsgIyBYWFggdXNpbmcgMS44LjkwIGlu
+c3RlYWQgb2YgMS45LjAtREVWCj4gKy1wcm9qZWN0KG5naHR0cDIgVkVSU0lPTiAxLjU4LjkwKQo+
+ICsrcHJvamVjdChuZ2h0dHAyIFZFUlNJT04gMS41OC45MCBMQU5HVUFHRVMgQykKPiArCj4gKyAj
+IFNlZSB2ZXJzaW9uaW5nIHJ1bGU6Cj4gKyAjICAKPiBodHRwczovL3d3dy5nbnUub3JnL3NvZnR3
+YXJlL2xpYnRvb2wvbWFudWFsL2h0bWxfbm9kZS9VcGRhdGluZy12ZXJzaW9uLWluZm8uaHRtbAo+
+ICtAQCAtMTIyLDI5ICsxMjIsMzEgQEAgZWxzZSgpCj4gKyAgIHNldChISU5UX05PUkVUVVJOKQo+
+ICsgZW5kaWYoKQo+ICsKPiArLWluY2x1ZGUoRXh0cmFjdFZhbGlkRmxhZ3MpCj4gKy1mb3JlYWNo
+KF9jeHgxeF9mbGFnIC1zdGQ9YysrMTQpCj4gKy0gIGV4dHJhY3RfdmFsaWRfY3h4X2ZsYWdzKF9j
+eHgxeF9mbGFnX3N1cHBvcnRlZCAke19jeHgxeF9mbGFnfSkKPiArLSAgaWYoX2N4eDF4X2ZsYWdf
+c3VwcG9ydGVkKQo+ICstICAgIHNldChDWFgxWENYWEZMQUdTICR7X2N4eDF4X2ZsYWd9KQo+ICst
+ICAgIGJyZWFrKCkKPiArLSAgZW5kaWYoKQo+ICstZW5kZm9yZWFjaCgpCj4gKytpZihOT1QgRU5B
+QkxFX0xJQl9PTkxZKQo+ICsrICBpbmNsdWRlKEV4dHJhY3RWYWxpZEZsYWdzKQo+ICsrICBmb3Jl
+YWNoKF9jeHgxeF9mbGFnIC1zdGQ9YysrMTQpCj4gKysgICAgZXh0cmFjdF92YWxpZF9jeHhfZmxh
+Z3MoX2N4eDF4X2ZsYWdfc3VwcG9ydGVkICR7X2N4eDF4X2ZsYWd9KQo+ICsrICAgIGlmKF9jeHgx
+eF9mbGFnX3N1cHBvcnRlZCkKPiArKyAgICAgIHNldChDWFgxWENYWEZMQUdTICR7X2N4eDF4X2Zs
+YWd9KQo+ICsrICAgICAgYnJlYWsoKQo+ICsrICAgIGVuZGlmKCkKPiArKyAgZW5kZm9yZWFjaCgp
+Cj4gKwo+ICstaW5jbHVkZShDTWFrZVB1c2hDaGVja1N0YXRlKQo+ICstaW5jbHVkZShDaGVja0NY
+WFNvdXJjZUNvbXBpbGVzKQo+ICstY21ha2VfcHVzaF9jaGVja19zdGF0ZSgpCj4gKy1zZXQoQ01B
+S0VfUkVRVUlSRURfREVGSU5JVElPTlMgIiR7Q1hYMVhDWFhGTEFHU30iKQo+ICstIyBDaGVjayB0
+aGF0IHN0ZDo6ZnV0dXJlIGlzIGF2YWlsYWJsZS4KPiArLWNoZWNrX2N4eF9zb3VyY2VfY29tcGls
+ZXMoIgo+ICstI2luY2x1ZGUgPHZlY3Rvcj4KPiArLSNpbmNsdWRlIDxmdXR1cmU+Cj4gKy1pbnQg
+bWFpbigpIHsgc3RkOjp2ZWN0b3I8c3RkOjpmdXR1cmU8aW50Pj4gdjsgfSIgSEFWRV9TVERfRlVU
+VVJFKQo+ICstIyBDaGVjayB0aGF0IHN0ZDo6bWFwOjplbXBsYWNlIGlzIGF2YWlsYWJsZSBmb3Ig
+ZysrLTQuNy4KPiArLWNoZWNrX2N4eF9zb3VyY2VfY29tcGlsZXMoIgo+ICstI2luY2x1ZGUgPG1h
+cD4KPiArLWludCBtYWluKCkgeyBzdGQ6Om1hcDxpbnQsIGludD4oKS5lbXBsYWNlKDEsIDIpOyB9
+IiAKPiBIQVZFX1NURF9NQVBfRU1QTEFDRSkKPiArLWNtYWtlX3BvcF9jaGVja19zdGF0ZSgpCj4g
+KysgIGluY2x1ZGUoQ01ha2VQdXNoQ2hlY2tTdGF0ZSkKPiArKyAgaW5jbHVkZShDaGVja0NYWFNv
+dXJjZUNvbXBpbGVzKQo+ICsrICBjbWFrZV9wdXNoX2NoZWNrX3N0YXRlKCkKPiArKyAgc2V0KENN
+QUtFX1JFUVVJUkVEX0RFRklOSVRJT05TICIke0NYWDFYQ1hYRkxBR1N9IikKPiArKyAgIyBDaGVj
+ayB0aGF0IHN0ZDo6ZnV0dXJlIGlzIGF2YWlsYWJsZS4KPiArKyAgY2hlY2tfY3h4X3NvdXJjZV9j
+b21waWxlcygiCj4gKysgICNpbmNsdWRlIDx2ZWN0b3I+Cj4gKysgICNpbmNsdWRlIDxmdXR1cmU+
+Cj4gKysgIGludCBtYWluKCkgeyBzdGQ6OnZlY3RvcjxzdGQ6OmZ1dHVyZTxpbnQ+PiB2OyB9IiBI
+QVZFX1NURF9GVVRVUkUpCj4gKysgICMgQ2hlY2sgdGhhdCBzdGQ6Om1hcDo6ZW1wbGFjZSBpcyBh
+dmFpbGFibGUgZm9yIGcrKy00LjcuCj4gKysgIGNoZWNrX2N4eF9zb3VyY2VfY29tcGlsZXMoIgo+
+ICsrICAjaW5jbHVkZSA8bWFwPgo+ICsrICBpbnQgbWFpbigpIHsgc3RkOjptYXA8aW50LCBpbnQ+
+KCkuZW1wbGFjZSgxLCAyKTsgfSIgCj4gSEFWRV9TVERfTUFQX0VNUExBQ0UpCj4gKysgIGNtYWtl
+X3BvcF9jaGVja19zdGF0ZSgpCj4gKytlbmRpZigpCj4gKwo+ICsKPiArICMgQ2hlY2tzIGZvciBs
+aWJyYXJpZXMuCj4gK0BAIC0xNzcsNyArMTc5LDcgQEAgZW5kaWYoKQo+ICsgIyBvcGVuc3NsIChm
+b3Igc3JjKQo+ICsgaW5jbHVkZShDaGVja1N5bWJvbEV4aXN0cykKPiArIHNldChIQVZFX09QRU5T
+U0wgICAgJHtPUEVOU1NMX0ZPVU5EfSkKPiArLWlmKE9QRU5TU0xfRk9VTkQpCj4gKytpZihOT1Qg
+RU5BQkxFX0xJQl9PTkxZIEFORCBPUEVOU1NMX0ZPVU5EKQo+ICsgICBzZXQoT1BFTlNTTF9JTkNM
+VURFX0RJUlMgICR7T1BFTlNTTF9JTkNMVURFX0RJUn0pCj4gKyAgIGNtYWtlX3B1c2hfY2hlY2tf
+c3RhdGUoKQo+ICsgICBzZXQoQ01BS0VfUkVRVUlSRURfSU5DTFVERVMgICAiJHtPUEVOU1NMX0lO
+Q0xVREVfRElSfSIpCj4gKy0tCj4gKzIuNDMuMAo+ICsKPiBkaWZmIC0tZ2l0IAo+IGEvcGFja2Fn
+ZS9mbHVlbnQtYml0LzAwMDQtbGliLWx1YWppdC1jbWFrZS1DTWFrZUxpc3RzLnR4dC1kby1ub3Qt
+cmVxdWlyZS1hLUNYWC5wYXRjaCAKPiBiL3BhY2thZ2UvZmx1ZW50LWJpdC8wMDA0LWxpYi1sdWFq
+aXQtY21ha2UtQ01ha2VMaXN0cy50eHQtZG8tbm90LXJlcXVpcmUtYS1DWFgucGF0Y2gKPiBuZXcg
+ZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmM5YzU2NjI0MDUKPiAtLS0gL2Rl
+di9udWxsCj4gKysrIAo+IGIvcGFja2FnZS9mbHVlbnQtYml0LzAwMDQtbGliLWx1YWppdC1jbWFr
+ZS1DTWFrZUxpc3RzLnR4dC1kby1ub3QtcmVxdWlyZS1hLUNYWC5wYXRjaAo+IEBAIC0wLDAgKzEs
+MzcgQEAKPiArRnJvbSBhYzg3MGEyZTJkZTg5OWJjYzhiNjgxOGI5NzQwNDQ3OWRhNmQwNjYzIE1v
+biBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiBUaG9tYXMgRGV2b29nZHQgPHRob21hc0Bk
+ZXZvb2dkdC5jb20+Cj4gK0RhdGU6IFN1biwgMjUgQXVnIDIwMjQgMjA6MTA6MjcgKzAyMDAKPiAr
+U3ViamVjdDogW1BBVENIXSBsaWI6IGx1YWppdC1jbWFrZTogQ01ha2VMaXN0cy50eHQ6IGRvIG5v
+dCByZXF1aXJlIGEgCj4gQ1hYCj4gKyBjb21waWxlcgo+ICsKPiArVXBzdHJlYW06IGh0dHBzOi8v
+Z2l0aHViLmNvbS9mbHVlbnQvZmx1ZW50LWJpdC9wdWxsLzkyNzcKPiArU2lnbmVkLW9mZi1ieTog
+VGhvbWFzIERldm9vZ2R0IDx0aG9tYXNAZGV2b29nZHQuY29tPgo+ICstLS0KPiArIGxpYi9sdWFq
+aXQtY21ha2UvQ01ha2VMaXN0cy50eHQgfCA0ICsrLS0KPiArIDEgZmlsZSBjaGFuZ2VkLCAyIGlu
+c2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gKwo+ICtkaWZmIC0tZ2l0IGEvbGliL2x1YWpp
+dC1jbWFrZS9DTWFrZUxpc3RzLnR4dCAKPiBiL2xpYi9sdWFqaXQtY21ha2UvQ01ha2VMaXN0cy50
+eHQKPiAraW5kZXggN2JhZjg3OGM3Li4wNTFhODAwZjUgMTAwNjQ0Cj4gKy0tLSBhL2xpYi9sdWFq
+aXQtY21ha2UvQ01ha2VMaXN0cy50eHQKPiArKysrIGIvbGliL2x1YWppdC1jbWFrZS9DTWFrZUxp
+c3RzLnR4dAo+ICtAQCAtMTMsNyArMTMsNyBAQCBlbmRpZigpCj4gKwo+ICsgZ2V0X2RpcmVjdG9y
+eV9wcm9wZXJ0eShoYXNQYXJlbnQgUEFSRU5UX0RJUkVDVE9SWSkKPiArIGlmKExVQUpJVF9ESVIp
+Cj4gKy0gIHByb2plY3QobHVhaml0KQo+ICsrICBwcm9qZWN0KGx1YWppdCBMQU5HVUFHRVMgQykK
+PiArICAgaW5jbHVkZShMdWFKSVQuY21ha2UpCj4gKyAgIGlmIChoYXNQYXJlbnQpCj4gKyAgICAg
+c2V0KExVQV9UQVJHRVQgJDxUQVJHRVRfRklMRTpsdWFqaXQ+IFBBUkVOVF9TQ09QRSkKPiArQEAg
+LTI0LDcgKzI0LDcgQEAgaWYoTFVBSklUX0RJUikKPiArICAgICBlbmRpZigpCj4gKyAgIGVuZGlm
+KCkKPiArIGVsc2VpZihMVUFfRElSKQo+ICstICBwcm9qZWN0KGx1YSkKPiArKyAgcHJvamVjdChs
+dWEgTEFOR1VBR0VTIEMpCj4gKyAgIGluY2x1ZGUobHVhLmNtYWtlKQo+ICsgICBpZiAoaGFzUGFy
+ZW50KQo+ICsgICAgIHNldChMVUFfVEFSR0VUICQ8VEFSR0VUX0ZJTEU6bHVhPiBQQVJFTlRfU0NP
+UEUpCj4gKy0tCj4gKzIuNDMuMAo+ICsKPiBkaWZmIC0tZ2l0IAo+IGEvcGFja2FnZS9mbHVlbnQt
+Yml0LzAwMDQtRW5oYW5jZS1zZXR0aW5nLXdyaXRlLWdzLWJhc2Utd2l0aC1jbWFrZS12YXJpYWJs
+ZS0zMC5wYXRjaCAKPiBiL3BhY2thZ2UvZmx1ZW50LWJpdC8wMDA1LUVuaGFuY2Utc2V0dGluZy13
+cml0ZS1ncy1iYXNlLXdpdGgtY21ha2UtdmFyaWFibGUtMzAucGF0Y2gKPiBzaW1pbGFyaXR5IGlu
+ZGV4IDk4JQo+IHJlbmFtZSBmcm9tIAo+IHBhY2thZ2UvZmx1ZW50LWJpdC8wMDA0LUVuaGFuY2Ut
+c2V0dGluZy13cml0ZS1ncy1iYXNlLXdpdGgtY21ha2UtdmFyaWFibGUtMzAucGF0Y2gKPiByZW5h
+bWUgdG8gCj4gcGFja2FnZS9mbHVlbnQtYml0LzAwMDUtRW5oYW5jZS1zZXR0aW5nLXdyaXRlLWdz
+LWJhc2Utd2l0aC1jbWFrZS12YXJpYWJsZS0zMC5wYXRjaAo+IGluZGV4IDljZGFiNGM0N2EuLjQ0
+NDYyMzhiZDMgMTAwNjQ0Cj4gLS0tIAo+IGEvcGFja2FnZS9mbHVlbnQtYml0LzAwMDQtRW5oYW5j
+ZS1zZXR0aW5nLXdyaXRlLWdzLWJhc2Utd2l0aC1jbWFrZS12YXJpYWJsZS0zMC5wYXRjaAo+ICsr
+KyAKPiBiL3BhY2thZ2UvZmx1ZW50LWJpdC8wMDA1LUVuaGFuY2Utc2V0dGluZy13cml0ZS1ncy1i
+YXNlLXdpdGgtY21ha2UtdmFyaWFibGUtMzAucGF0Y2gKPiBAQCAtMSw0ICsxLDQgQEAKPiAtRnJv
+bSA3ZWFjYjJhYjgzOWU3NGNiMDcwMzgzOThkZWY1ZTNjYzE5ODQ0OGQ0IE1vbiBTZXAgMTcgMDA6
+MDA6MDAgMjAwMQo+ICtGcm9tIGUxN2NlNmRkY2I0ZGMxY2QzMDgxZWFiZmI5NGExY2RjMjI0ZjRk
+NjkgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gIEZyb206IFdlbnlvbmcgSHVhbmcgPHdlbnlv
+bmcuaHVhbmdAaW50ZWwuY29tPgo+ICBEYXRlOiBUdWUsIDIzIEphbiAyMDI0IDEyOjIxOjIwICsw
+ODAwCj4gIFN1YmplY3Q6IFtQQVRDSF0gRW5oYW5jZSBzZXR0aW5nIHdyaXRlIGdzIGJhc2Ugd2l0
+aCBjbWFrZSB2YXJpYWJsZSAKPiAoIzMwNjYpCj4gQEAgLTk1LDUgKzk1LDUgQEAgaW5kZXggZTcz
+ZWJjODVmLi5hNjFhNTIyZjMgMTAwNjQ0Cj4gICBlbmRpZiAoKQo+ICAgaWYgKFdBTVJfQ09ORklH
+VUFCTEVfQk9VTkRTX0NIRUNLUyBFUVVBTCAxKQo+ICAtLQo+IC0yLjM0LjEKPiArMi40My4wCj4g
+Cj4gZGlmZiAtLWdpdCAKPiBhL3BhY2thZ2UvZmx1ZW50LWJpdC8wMDA2LXBsdWdpbnMtaW4tb3V0
+LV9rYWZrYS1DTWFrZUxpc3RzLnR4dC1maXgtY3Jvc3MtY29tcGkucGF0Y2ggCj4gYi9wYWNrYWdl
+L2ZsdWVudC1iaXQvMDAwNi1wbHVnaW5zLWluLW91dC1fa2Fma2EtQ01ha2VMaXN0cy50eHQtZml4
+LWNyb3NzLWNvbXBpLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAw
+MDAwLi40MDgzNzUzYTNlCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyAKPiBiL3BhY2thZ2UvZmx1ZW50
+LWJpdC8wMDA2LXBsdWdpbnMtaW4tb3V0LV9rYWZrYS1DTWFrZUxpc3RzLnR4dC1maXgtY3Jvc3Mt
+Y29tcGkucGF0Y2gKPiBAQCAtMCwwICsxLDQ4IEBACj4gK0Zyb20gN2U4YmI3OTBjYmEwNjE5YWY5
+ZThkODBlOTQ3ZjdjZGEwOTEwY2FhYSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTog
+VGhvbWFzIERldm9vZ2R0IDx0aG9tYXNAZGV2b29nZHQuY29tPgo+ICtEYXRlOiBTYXQsIDE2IE5v
+diAyMDI0IDE5OjQ2OjI4ICswMTAwCj4gK1N1YmplY3Q6IFtQQVRDSF0gcGx1Z2lucy97aW4sb3V0
+fV9rYWZrYS9DTWFrZUxpc3RzLnR4dDogZml4IGNyb3NzIAo+IGNvbXBpbGUKPiArIGVycm9yCj4g
+Kwo+ICtLQUZLQV9JTkNMVURFRElSIGlzIG5vdCBzZXQgaWYgRkxCX1BSRUZFUl9TWVNURU1fTElC
+X0tBRktBIGlzIG5vdCAKPiB1c2VkLAo+ICt3aGVuIGNyb3NzLWNvbXBpbGluZywgaXQganVzdCB0
+cmFuc2xhdGVzIHRvIC1JL2xpYnJka2Fma2EsIHdoaWNoIGlzIAo+IG5vdCBhbGxvd2VkLgo+ICtG
+aXggdGhpcyBieSBvbmx5IGluY2x1ZGluZyBLQUZLQV9JTkNMVURFRElSIGlmIHJlYWxseSBzZXQu
+Cj4gKwo+ICt4ODZfNjQtbGludXgtZ2NjOiBFUlJPUjogdW5zYWZlIGhlYWRlci9saWJyYXJ5IHBh
+dGggdXNlZCBpbiAKPiBjcm9zcy1jb21waWxhdGlvbjogJy1JL2xpYnJka2Fma2EnCj4gKwo+ICtV
+cHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL2ZsdWVudC9mbHVlbnQtYml0L3B1bGwvOTYwMAo+
+ICtTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgRGV2b29nZHQgPHRob21hc0BkZXZvb2dkdC5jb20+Cj4g
+Ky0tLQo+ICsgcGx1Z2lucy9pbl9rYWZrYS9DTWFrZUxpc3RzLnR4dCAgfCA0ICsrKy0KPiArIHBs
+dWdpbnMvb3V0X2thZmthL0NNYWtlTGlzdHMudHh0IHwgNCArKystCj4gKyAyIGZpbGVzIGNoYW5n
+ZWQsIDYgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPiArCj4gK2RpZmYgLS1naXQgYS9w
+bHVnaW5zL2luX2thZmthL0NNYWtlTGlzdHMudHh0IAo+IGIvcGx1Z2lucy9pbl9rYWZrYS9DTWFr
+ZUxpc3RzLnR4dAo+ICtpbmRleCBlZGUwODMxZjkuLjAyZTJkYzc4NiAxMDA2NDQKPiArLS0tIGEv
+cGx1Z2lucy9pbl9rYWZrYS9DTWFrZUxpc3RzLnR4dAo+ICsrKysgYi9wbHVnaW5zL2luX2thZmth
+L0NNYWtlTGlzdHMudHh0Cj4gK0BAIC0zLDUgKzMsNyBAQCBzZXQoc3JjCj4gKyAgICkKPiArCj4g
+KyBGTEJfUExVR0lOKGluX2thZmthICIke3NyY30iICR7S0FGS0FfTElCUkFSSUVTfSkKPiArLXRh
+cmdldF9pbmNsdWRlX2RpcmVjdG9yaWVzKGZsYi1wbHVnaW4taW5fa2Fma2EgUFVCTElDIAo+ICR7
+S0FGS0FfSU5DTFVERURJUn0vbGlicmRrYWZrYSkKPiArK2lmKERFRklORUQgS0FGS0FfSU5DTFVE
+RURJUikKPiArKyAgdGFyZ2V0X2luY2x1ZGVfZGlyZWN0b3JpZXMoZmxiLXBsdWdpbi1pbl9rYWZr
+YSBQVUJMSUMgCj4gJHtLQUZLQV9JTkNMVURFRElSfS9saWJyZGthZmthKQo+ICsrZW5kaWYoKQo+
+ICsgdGFyZ2V0X2xpbmtfbGlicmFyaWVzKGZsYi1wbHVnaW4taW5fa2Fma2EgLWxwdGhyZWFkKQo+
+ICtkaWZmIC0tZ2l0IGEvcGx1Z2lucy9vdXRfa2Fma2EvQ01ha2VMaXN0cy50eHQgCj4gYi9wbHVn
+aW5zL291dF9rYWZrYS9DTWFrZUxpc3RzLnR4dAo+ICtpbmRleCAwMWM5NjUyOWIuLjU0YjE0ZmMy
+YSAxMDA2NDQKPiArLS0tIGEvcGx1Z2lucy9vdXRfa2Fma2EvQ01ha2VMaXN0cy50eHQKPiArKysr
+IGIvcGx1Z2lucy9vdXRfa2Fma2EvQ01ha2VMaXN0cy50eHQKPiArQEAgLTUsNSArNSw3IEBAIHNl
+dChzcmMKPiArICAga2Fma2EuYykKPiArCj4gKyBGTEJfUExVR0lOKG91dF9rYWZrYSAiJHtzcmN9
+IiAke0tBRktBX0xJQlJBUklFU30pCj4gKy10YXJnZXRfaW5jbHVkZV9kaXJlY3RvcmllcyhmbGIt
+cGx1Z2luLW91dF9rYWZrYSBQVUJMSUMgCj4gJHtLQUZLQV9JTkNMVURFRElSfS9saWJyZGthZmth
+KQo+ICsraWYoREVGSU5FRCBLQUZLQV9JTkNMVURFRElSKQo+ICsrICB0YXJnZXRfaW5jbHVkZV9k
+aXJlY3RvcmllcyhmbGItcGx1Z2luLW91dF9rYWZrYSBQVUJMSUMgCj4gJHtLQUZLQV9JTkNMVURF
+RElSfS9saWJyZGthZmthKQo+ICsrZW5kaWYoKQo+ICsgdGFyZ2V0X2xpbmtfbGlicmFyaWVzKGZs
+Yi1wbHVnaW4tb3V0X2thZmthIC1scHRocmVhZCkKPiArLS0KPiArMi40My4wCj4gKwo+IGRpZmYg
+LS1naXQgCj4gYS9wYWNrYWdlL2ZsdWVudC1iaXQvMDAwNy1saWItY3Byb2ZpbGVzLWZpeC13cm9u
+Zy1wb2ludGVyLWFzc2lnbm1lbnQucGF0Y2ggCj4gYi9wYWNrYWdlL2ZsdWVudC1iaXQvMDAwNy1s
+aWItY3Byb2ZpbGVzLWZpeC13cm9uZy1wb2ludGVyLWFzc2lnbm1lbnQucGF0Y2gKPiBuZXcgZmls
+ZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjAzM2I1ZDQyOGEKPiAtLS0gL2Rldi9u
+dWxsCj4gKysrIAo+IGIvcGFja2FnZS9mbHVlbnQtYml0LzAwMDctbGliLWNwcm9maWxlcy1maXgt
+d3JvbmctcG9pbnRlci1hc3NpZ25tZW50LnBhdGNoCj4gQEAgLTAsMCArMSw4MSBAQAo+ICtGcm9t
+IDZmNDc0NzE2NDMyY2EzZGRhZTJjZTk4OWQ5Y2RjZGM5MTQ1YzM5NTkgTW9uIFNlcCAxNyAwMDow
+MDowMCAyMDAxCj4gK0Zyb206IFRob21hcyBEZXZvb2dkdCA8dGhvbWFzQGRldm9vZ2R0LmNvbT4K
+PiArRGF0ZTogU2F0LCAxNiBOb3YgMjAyNCAyMDo1NTozNyArMDEwMAo+ICtTdWJqZWN0OiBbUEFU
+Q0hdIGxpYjogY3Byb2ZpbGVzOiBmaXggd3JvbmcgcG9pbnRlciBhc3NpZ25tZW50Cj4gK01JTUUt
+VmVyc2lvbjogMS4wCj4gK0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAo+
+ICtDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0Cj4gKwo+ICtUaGUgd3Jvbmcgc3RydWN0
+IHR5cGVzIHdlcmUgdXNlZC4gVHlwbz8KPiArCj4gKy9ob21lL3Rob21hcy9ici10ZXN0LXBrZy9i
+b290bGluLWFybXY3LWdsaWJjL2J1aWxkL2ZsdWVudC1iaXQtMy4yLjAvbGliL2Nwcm9maWxlcy9z
+cmMvY3Byb2ZfcHJvZmlsZS5jOiAKPiBJbiBmdW5jdGlvbiDigJhjcHJvZl9wcm9maWxlX2Rlc3Ry
+b3nigJk6Cj4gKy9ob21lL3Rob21hcy9ici10ZXN0LXBrZy9ib290bGluLWFybXY3LWdsaWJjL2J1
+aWxkL2ZsdWVudC1iaXQtMy4yLjAvbGliL2Nwcm9maWxlcy9zcmMvY3Byb2ZfcHJvZmlsZS5jOjE2
+MDoxODogCj4gZXJyb3I6IGFzc2lnbm1lbnQgdG8g4oCYc3RydWN0IGNwcm9mX21hcHBpbmcgKuKA
+mSBmcm9tIGluY29tcGF0aWJsZSBwb2ludGVyIAo+IHR5cGUg4oCYc3RydWN0IGNwcm9mX2xvY2F0
+aW9uICrigJkgWy1XaW5jb21wYXRpYmxlLXBvaW50ZXItdHlwZXNdCj4gKyAgMTYwIHwgICAgICAg
+ICBsb2NhdGlvbiA9IGNmbF9saXN0X2VudHJ5KGl0ZXJhdG9yLAo+ICsgICAgICB8ICAgICAgICAg
+ICAgICAgICAgXgo+ICsvaG9tZS90aG9tYXMvYnItdGVzdC1wa2cvYm9vdGxpbi1hcm12Ny1nbGli
+Yy9idWlsZC9mbHVlbnQtYml0LTMuMi4wL2xpYi9jcHJvZmlsZXMvc3JjL2Nwcm9mX3Byb2ZpbGUu
+YzoxNjY6MzI6IAo+IGVycm9yOiBwYXNzaW5nIGFyZ3VtZW50IDEgb2Yg4oCYY3Byb2ZfbG9jYXRp
+b25fZGVzdHJveeKAmSBmcm9tIGluY29tcGF0aWJsZSAKPiBwb2ludGVyIHR5cGUgWy1XaW5jb21w
+YXRpYmxlLXBvaW50ZXItdHlwZXNdCj4gKyAgMTY2IHwgICAgICAgICBjcHJvZl9sb2NhdGlvbl9k
+ZXN0cm95KGxvY2F0aW9uKTsKPiArICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgXn5+fn5+fn4KPiArICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfAo+
+ICsgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgY3Byb2ZfbWFw
+cGluZyAqCj4gK0luIGZpbGUgaW5jbHVkZWQgZnJvbSAKPiAvaG9tZS90aG9tYXMvYnItdGVzdC1w
+a2cvYm9vdGxpbi1hcm12Ny1nbGliYy9idWlsZC9mbHVlbnQtYml0LTMuMi4wL2xpYi9jcHJvZmls
+ZXMvc3JjL2Nwcm9mX3Byb2ZpbGUuYzoyMToKPiArL2hvbWUvdGhvbWFzL2JyLXRlc3QtcGtnL2Jv
+b3RsaW4tYXJtdjctZ2xpYmMvYnVpbGQvZmx1ZW50LWJpdC0zLjIuMC9saWIvY3Byb2ZpbGVzL2lu
+Y2x1ZGUvY3Byb2ZpbGVzL2Nwcm9maWxlcy5oOjMwNDo1MjogCj4gbm90ZTogZXhwZWN0ZWQg4oCY
+c3RydWN0IGNwcm9mX2xvY2F0aW9uICrigJkgYnV0IGFyZ3VtZW50IGlzIG9mIHR5cGUgCj4g4oCY
+c3RydWN0IGNwcm9mX21hcHBpbmcgKuKAmQo+ICsgIDMwNCB8IHZvaWQgY3Byb2ZfbG9jYXRpb25f
+ZGVzdHJveShzdHJ1Y3QgY3Byb2ZfbG9jYXRpb24gKmluc3RhbmNlKTsKPiArICAgICAgfCAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgfn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5efn5+fn5+fgo+
+ICsKPiArVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9mbHVlbnQvY3Byb2ZpbGVzL3B1bGwv
+Mwo+ICtTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgRGV2b29nZHQgPHRob21hc0BkZXZvb2dkdC5jb20+
+Cj4gKy0tLQo+ICsgbGliL2Nwcm9maWxlcy9zcmMvY3Byb2ZfZW5jb2RlX3RleHQuYyB8IDYgKysr
+LS0tCj4gKyBsaWIvY3Byb2ZpbGVzL3NyYy9jcHJvZl9wcm9maWxlLmMgICAgIHwgNCArKy0tCj4g
+KyAyIGZpbGVzIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKPiArCj4g
+K2RpZmYgLS1naXQgYS9saWIvY3Byb2ZpbGVzL3NyYy9jcHJvZl9lbmNvZGVfdGV4dC5jIAo+IGIv
+bGliL2Nwcm9maWxlcy9zcmMvY3Byb2ZfZW5jb2RlX3RleHQuYwo+ICtpbmRleCAyMThhNzJiNWIu
+LmFiMmQ2MjQ3ZCAxMDA2NDQKPiArLS0tIGEvbGliL2Nwcm9maWxlcy9zcmMvY3Byb2ZfZW5jb2Rl
+X3RleHQuYwo+ICsrKysgYi9saWIvY3Byb2ZpbGVzL3NyYy9jcHJvZl9lbmNvZGVfdGV4dC5jCj4g
+K0BAIC0xOTA5LDcgKzE5MDksNyBAQCBzdGF0aWMgaW50IGVuY29kZV9jcHJvZl9yZXNvdXJjZV9w
+cm9maWxlcygKPiArICAgICAgICAgICAgICAgICBzdHJ1Y3QgY3Byb2ZfcmVzb3VyY2VfcHJvZmls
+ZXMgKmluc3RhbmNlKSB7Cj4gKyAgICAgaW50IHJlc3VsdDsKPiArICAgICBzdHJ1Y3QgY2ZsX2xp
+c3QgICAgICAgICAgICAgKml0ZXJhdG9yOwo+ICstICAgIHN0cnVjdCBjcHJvZl9zY29wZV9wcm9m
+aWxlICpzY29wZV9wcm9maWxlOwo+ICsrICAgIHN0cnVjdCBjcHJvZl9zY29wZV9wcm9maWxlcyAq
+c2NvcGVfcHJvZmlsZXM7Cj4gKwo+ICsgICAgIHJlc3VsdCA9IGVuY29kZV9zdHJpbmcoY29udGV4
+dCwKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDRkxfVFJVRSwKPiArQEAgLTE5NTgs
+MTEgKzE5NTgsMTEgQEAgc3RhdGljIGludCBlbmNvZGVfY3Byb2ZfcmVzb3VyY2VfcHJvZmlsZXMo
+Cj4gKwo+ICsgICAgICAgICBjZmxfbGlzdF9mb3JlYWNoKGl0ZXJhdG9yLAo+ICsgICAgICAgICAg
+ICAgICAgICAgICAgICAgICZpbnN0YW5jZS0+c2NvcGVfcHJvZmlsZXMpIHsKPiArLSAgICAgICAg
+ICAgIHNjb3BlX3Byb2ZpbGUgPSBjZmxfbGlzdF9lbnRyeSgKPiArKyAgICAgICAgICAgIHNjb3Bl
+X3Byb2ZpbGVzID0gY2ZsX2xpc3RfZW50cnkoCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIGl0ZXJhdG9yLAo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1
+Y3QgY3Byb2Zfc2NvcGVfcHJvZmlsZXMsIF9oZWFkKTsKPiArCj4gKy0gICAgICAgICAgICByZXN1
+bHQgPSBlbmNvZGVfY3Byb2Zfc2NvcGVfcHJvZmlsZXMoY29udGV4dCwgCj4gc2NvcGVfcHJvZmls
+ZSk7Cj4gKysgICAgICAgICAgICByZXN1bHQgPSBlbmNvZGVfY3Byb2Zfc2NvcGVfcHJvZmlsZXMo
+Y29udGV4dCwgCj4gc2NvcGVfcHJvZmlsZXMpOwo+ICsKPiArICAgICAgICAgICAgIGlmIChyZXN1
+bHQgIT0gQ1BST0ZfRU5DT0RFX1RFWFRfU1VDQ0VTUykgewo+ICsgICAgICAgICAgICAgICAgIHJl
+dHVybiByZXN1bHQ7Cj4gK2RpZmYgLS1naXQgYS9saWIvY3Byb2ZpbGVzL3NyYy9jcHJvZl9wcm9m
+aWxlLmMgCj4gYi9saWIvY3Byb2ZpbGVzL3NyYy9jcHJvZl9wcm9maWxlLmMKPiAraW5kZXggNjZk
+NjJiMzYxLi45MzE0NTdlZjcgMTAwNjQ0Cj4gKy0tLSBhL2xpYi9jcHJvZmlsZXMvc3JjL2Nwcm9m
+X3Byb2ZpbGUuYwo+ICsrKysgYi9saWIvY3Byb2ZpbGVzL3NyYy9jcHJvZl9wcm9maWxlLmMKPiAr
+QEAgLTk4LDcgKzk4LDcgQEAgdm9pZCBjcHJvZl9wcm9maWxlX2Rlc3Ryb3koc3RydWN0IGNwcm9m
+X3Byb2ZpbGUgCj4gKmluc3RhbmNlKQo+ICsgICAgIHN0cnVjdCBjZmxfbGlzdCAgICAgICAgICAg
+ICAqaXRlcmF0b3JfYmFja3VwOwo+ICsgICAgIHN0cnVjdCBjcHJvZl9hdHRyaWJ1dGVfdW5pdCAq
+YXR0cmlidXRlX3VuaXQ7Cj4gKyAgICAgc3RydWN0IGNwcm9mX3ZhbHVlX3R5cGUgICAgICp2YWx1
+ZV90eXBlOwo+ICstICAgIHN0cnVjdCBjcHJvZl9tYXBwaW5nICAgICAgICAqbG9jYXRpb247Cj4g
+KysgICAgc3RydWN0IGNwcm9mX2xvY2F0aW9uICAgICAgICpsb2NhdGlvbjsKPiArICAgICBzdHJ1
+Y3QgY3Byb2ZfZnVuY3Rpb24gICAgICAgKmZ1bmN0aW9uOwo+ICsgICAgIHN0cnVjdCBjZmxfbGlz
+dCAgICAgICAgICAgICAqaXRlcmF0b3I7Cj4gKyAgICAgc3RydWN0IGNwcm9mX21hcHBpbmcgICAg
+ICAgICptYXBwaW5nOwo+ICtAQCAtMzA3LDQgKzMwNyw0IEBAIGludCBjcHJvZl9wcm9maWxlX2Fk
+ZF9jb21tZW50KHN0cnVjdCBjcHJvZl9wcm9maWxlIAo+ICpwcm9maWxlLCBpbnQ2NF90IGNvbW1l
+bnQpCj4gKyAgICAgcHJvZmlsZS0+Y29tbWVudHNfY291bnQrKzsKPiArCj4gKyAgICAgcmV0dXJu
+IDA7Cj4gKy19Cj4gK1wgTm8gbmV3bGluZSBhdCBlbmQgb2YgZmlsZQo+ICsrfQo+ICstLQo+ICsy
+LjQzLjAKPiArCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvZmx1ZW50LWJpdC9Db25maWcuaW4gCj4g
+Yi9wYWNrYWdlL2ZsdWVudC1iaXQvQ29uZmlnLmluCj4gaW5kZXggNjk3Y2IxYmYxNS4uNDIwZTQw
+YzljNCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2ZsdWVudC1iaXQvQ29uZmlnLmluCj4gKysrIGIv
+cGFja2FnZS9mbHVlbnQtYml0L0NvbmZpZy5pbgo+IEBAIC0zLDcgKzMsOSBAQCBjb25maWcgQlIy
+X1BBQ0tBR0VfRkxVRU5UX0JJVAo+ICAJZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19USFJF
+QURTCj4gIAlkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1NZTkNfNAo+ICAJZGVwZW5kcyBv
+biAhQlIyX1NUQVRJQ19MSUJTICMgZGxmY24uaAo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0NfQVJF
+Uwo+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX01VU0xfRlRTIGlmICFCUjJfVE9PTENIQUlOX1VTRVNf
+R0xJQkMKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9OR0hUVFAyCj4gIAlzZWxlY3QgQlIyX1BBQ0tB
+R0VfT1BFTlNTTAo+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX09QRU5TU0xfRk9SQ0VfTElCT1BFTlNT
+TAo+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQk9QRU5TU0xfRU5HSU5FUyAjIG5lZWRlZCBieSBi
+dW5kbGVkIGxpYnJka2Fma2EKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9mbHVlbnQtYml0L2ZsdWVu
+dC1iaXQuaGFzaCAKPiBiL3BhY2thZ2UvZmx1ZW50LWJpdC9mbHVlbnQtYml0Lmhhc2gKPiBpbmRl
+eCBhM2RiZjVmNTQ0Li41N2U1MjcyZWMwIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvZmx1ZW50LWJp
+dC9mbHVlbnQtYml0Lmhhc2gKPiArKysgYi9wYWNrYWdlL2ZsdWVudC1iaXQvZmx1ZW50LWJpdC5o
+YXNoCj4gQEAgLTEsMyArMSwzIEBACj4gICMgTG9jYWxseSBjb21wdXRlZAo+IC1zaGEyNTYgIAo+
+IDRjNzQ1MDY2MjIzODExMDQ3ZTM5MTFjMTlkYjExOGVhZGVjNTc5Y2E2MmVmODMzYTFiMWZiNTcz
+YWNkOGNiODUgIAo+IGZsdWVudC1iaXQtMy4xLjMudGFyLmd6Cj4gK3NoYTI1NiAgCj4gM2FiY2Q3
+ZWRhMWEyNmZlNzlmMWQ3MTU0OTFiYWZjY2E3N2QwMTg2Y2M0NmQxZDg0NjUxNTc3OTAzNThmODI3
+ZCAgCj4gZmx1ZW50LWJpdC0zLjIuMi50YXIuZ3oKPiAgc2hhMjU2ICAKPiAwZDU0MmUwYzg4MDRl
+MzlhYTdmMzdlYjAwZGE1YTc2MjE0OWRjNjgyZDc4Mjk0NTEyODdlMTFiOTM4ZTk0NTk0ICAKPiBM
+SUNFTlNFCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvZmx1ZW50LWJpdC9mbHVlbnQtYml0Lm1rIAo+
+IGIvcGFja2FnZS9mbHVlbnQtYml0L2ZsdWVudC1iaXQubWsKPiBpbmRleCAxMGU2MzlhM2Q1Li4z
+MWY2MmRiN2M3IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvZmx1ZW50LWJpdC9mbHVlbnQtYml0Lm1r
+Cj4gKysrIGIvcGFja2FnZS9mbHVlbnQtYml0L2ZsdWVudC1iaXQubWsKPiBAQCAtNCwxMyArNCwx
+NSBAQAo+ICAjCj4gIAo+ICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gCj4gLUZMVUVOVF9CSVRf
+VkVSU0lPTiA9IDMuMS4zCj4gK0ZMVUVOVF9CSVRfVkVSU0lPTiA9IDMuMi4yCj4gIEZMVUVOVF9C
+SVRfU0lURSA9ICQoY2FsbCAKPiBnaXRodWIsZmx1ZW50LGZsdWVudC1iaXQsdiQoRkxVRU5UX0JJ
+VF9WRVJTSU9OKSkKPiAgRkxVRU5UX0JJVF9MSUNFTlNFID0gQXBhY2hlLTIuMAo+ICBGTFVFTlRf
+QklUX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCj4gIEZMVUVOVF9CSVRfQ1BFX0lEX1ZFTkRPUiA9
+IHRyZWFzdXJlZGF0YQo+ICBGTFVFTlRfQklUX0NQRV9JRF9QUk9EVUNUID0gZmx1ZW50X2JpdAo+
+IC1GTFVFTlRfQklUX0RFUEVOREVOQ0lFUyA9IGhvc3QtYmlzb24gaG9zdC1mbGV4IGxpYnlhbWwg
+b3BlbnNzbAo+ICtGTFVFTlRfQklUX0RFUEVOREVOQ0lFUyA9IGMtYXJlcyBob3N0LWJpc29uIGhv
+c3QtZmxleCBsaWJ5YW1sIG5naHR0cDIgCj4gb3BlbnNzbAo+ICsKPiArRkxVRU5UX0JJVF9DTUFL
+RV9CQUNLRU5EID0gbmluamEKPiAKPiAgRkxVRU5UX0JJVF9DT05GX09QVFMgKz0gXAo+ICAJLURG
+TEJfREVCVUc9Tm8gXAo+IEBAIC0xOCw4ICsyMCw4IEBAIEZMVUVOVF9CSVRfQ09ORl9PUFRTICs9
+IFwKPiAgCS1ERkxCX1NFQ1VSSVRZPU5vIFwKPiAgCS1ERkxCX0VYQU1QTEVTPU5vIFwKPiAgCS1E
+RkxCX0NIVU5LX1RSQUNFPU5vIFwKPiAtCS1ERkxCX1BSRUZFUl9TWVNURU1fTElCUz1ZZXMgXAo+
+IC0JLURGTEJfQkFDS1RSQUNFPU5vCj4gKwktREZMQl9QUkVGRVJfU1lTVEVNX0xJQl9DQVJFUz1Z
+ZXMgXAo+ICsJLURGTEJfUFJFRkVSX1NZU1RFTV9MSUJfTkdIVFRQMj1ZZXMKPiAKPiAgaWZlcSAo
+JChCUjJfUEFDS0FHRV9GTFVFTlRfQklUX1dBU00pLHkpCj4gIEZMVUVOVF9CSVRfV0FNUl9BUkNI
+ID0gJChjYWxsIAo+IHFzdHJpcCwkKEJSMl9QQUNLQUdFX0ZMVUVOVF9CSVRfV0FTTV9BUkNIKSkK
+PiBAQCAtMzcsOCArMzksMjUgQEAgZWxzZQo+ICBGTFVFTlRfQklUX0NPTkZfT1BUUyArPSAtREZM
+Ql9XQVNNPU5vCj4gIGVuZGlmCj4gCj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTElCQkFDS1RSQUNF
+KSx5KQo+ICtGTFVFTlRfQklUX0NPTkZfT1BUUyArPSAtREZMQl9CQUNLVFJBQ0U9WWVzIFwKPiAr
+CS1ERkxCX1BSRUZFUl9TWVNURU1fTElCX0JBQ0tUUkFDRT1ZZXMKPiArRkxVRU5UX0JJVF9ERVBF
+TkRFTkNJRVMgKz0gbGliYmFja3RyYWNlCj4gK2Vsc2UKPiArRkxVRU5UX0JJVF9DT05GX09QVFMg
+Kz0gLURGTEJfQkFDS1RSQUNFPU5vCj4gK2VuZGlmCj4gKwo+ICtpZmVxICgkKEJSMl9QQUNLQUdF
+X0pFTUFMTE9DKSx5KQo+ICtGTFVFTlRfQklUX0NPTkZfT1BUUyArPSAtREZMQl9KRU1BTExPQz1Z
+ZXMgXAo+ICsJLURGTEJfUFJFRkVSX1NZU1RFTV9MSUJfSkVNQUxMT0M9WWVzCj4gK0ZMVUVOVF9C
+SVRfREVQRU5ERU5DSUVTICs9IGplbWFsbG9jCj4gK2Vsc2UKPiArRkxVRU5UX0JJVF9DT05GX09Q
+VFMgKz0gLURGTEJfSkVNQUxMT0M9Tm8KPiArZW5kaWYKPiArCj4gIGlmZXEgKCQoQlIyX1BBQ0tB
+R0VfTFVBSklUKSx5KQo+IC1GTFVFTlRfQklUX0NPTkZfT1BUUyArPSAtREZMQl9MVUFKSVQ9WWVz
+Cj4gK0ZMVUVOVF9CSVRfQ09ORl9PUFRTICs9IC1ERkxCX0xVQUpJVD1ZZXMgXAo+ICsJLURGTEJf
+UFJFRkVSX1NZU1RFTV9MSUJfTFVBSklUPVllcwo+ICBGTFVFTlRfQklUX0RFUEVOREVOQ0lFUyAr
+PSBsdWFqaXQKPiAgZWxzZQo+ICBGTFVFTlRfQklUX0NPTkZfT1BUUyArPSAtREZMQl9MVUFKSVQ9
+Tm8KPiAtLQo+IDIuNDMuMAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
+aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
+cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
