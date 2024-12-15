@@ -4,62 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28712E7716A
-	for <buildroot@archiver.kernel.org>; Sun, 15 Dec 2024 12:37:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAEC4E7716A
+	for <buildroot@archiver.kernel.org>; Sun, 15 Dec 2024 12:42:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8D9F4033D;
-	Sun, 15 Dec 2024 12:37:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74EE4407C9;
+	Sun, 15 Dec 2024 12:42:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AzbbrVtMSEzQ; Sun, 15 Dec 2024 12:37:49 +0000 (UTC)
+ id eWL3_uQXEUCx; Sun, 15 Dec 2024 12:42:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 562534055D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3309A407DB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 562534055D;
-	Sun, 15 Dec 2024 12:37:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 25E6ECE
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:37:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3309A407DB;
+	Sun, 15 Dec 2024 12:42:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 78B2ACE
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:42:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 06F1881119
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:37:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 43D7A40441
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:42:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g4soUhm4Biq6 for <buildroot@buildroot.org>;
- Sun, 15 Dec 2024 12:37:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:4f8:1c1c:816::1;
- helo=server1.martb.eu; envelope-from=contact@martb.dev; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BD0308110A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD0308110A
-Received: from server1.martb.eu (server1.martb.eu [IPv6:2a01:4f8:1c1c:816::1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BD0308110A
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:37:46 +0000 (UTC)
-Date: Sun, 15 Dec 2024 13:37:44 +0100
-To: buildroot@buildroot.org
-Message-ID: <6D5E6E40-0231-44F4-A526-51FC10FAFE58@martb.dev>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id esgpHqNbaXYI for <buildroot@buildroot.org>;
+ Sun, 15 Dec 2024 12:42:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:660:530d:201::44; helo=mailgw-out1.grenoble.cnrs.fr;
+ envelope-from=bonet@grenoble.cnrs.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 17E5240237
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17E5240237
+Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
+ [IPv6:2001:660:530d:201::44])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 17E5240237
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:42:22 +0000 (UTC)
+Received: from [IPV6:2a01:e0a:12:eba0:c850:17a3:bd5c:2f64] (unknown
+ [IPv6:2a01:e0a:12:eba0:c850:17a3:bd5c:2f64])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 71AA1BFD8D;
+ Sun, 15 Dec 2024 13:42:19 +0100 (CET)
+Message-ID: <44d4f592-d2ab-4f19-82d0-b0dd1790e208@grenoble.cnrs.fr>
+Date: Sun, 15 Dec 2024 13:42:18 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Chris Packham <judge.packham@gmail.com>,
+ buildroot <buildroot@buildroot.org>
+References: <CAFOYHZDQmMRuK76TpOSAOFPdqAb4gpw=LNKfmpu=sqAD1EMhFg@mail.gmail.com>
+Content-Language: en-US
+Cc: Sergey Matyukevich <geomatsi@gmail.com>, Michael Walle
+ <mwalle@kernel.org>, Biagio Montaruli <biagio.hkr@gmail.com>
+From: Edgar Bonet <bonet@grenoble.cnrs.fr>
+In-Reply-To: <CAFOYHZDQmMRuK76TpOSAOFPdqAb4gpw=LNKfmpu=sqAD1EMhFg@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=martb.dev; s=mail; t=1734266264;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=v2lrStw1cAapp0Zi8MhocSKKft5A4Jsr8hz9zeIdgtw=;
- b=ZcCe1Gnuu6eexfxgN3qXIPVOaSSAvIX6/B19tVg4XD626Z8zYi5vDSEKhdoht/4s+z/saX
- NQsPP5AKkZTUWz2BlF9LbD0q9qXm7ccIOC+VMaH5x49Uo/etTXiQNuezPonQqMSTnmCom0
- DCfeEQV/Kk/qFdbCloYMPaK1vZEgcmM=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=martb.dev
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=martb.dev header.i=@martb.dev header.a=rsa-sha256
- header.s=mail header.b=ZcCe1Gnu
-X-Mailman-Original-Authentication-Results: ORIGINATING;
- auth=pass smtp.auth=martin@familie-boeh.de smtp.mailfrom=contact@martb.dev
-Subject: Re: [Buildroot] [PATCH 1/1] package/polkit: fix permissions after
- version bump to 125
+ d=grenoble.cnrs.fr; 
+ s=202106-grenoble.cnrs.fr; t=1734266539;
+ bh=rBDy2yvh2GVzeF1lyBPC/lnK7+1/I6GCLkidAkvi0Dc=;
+ h=Date:Subject:To:References:Cc:From:In-Reply-To:From;
+ b=PL8uoJIJzomRF3kGvFLYBe6zxQvlAT/6zT2AxEVuW3payLLssTQ10EtqFTfRR9DXE
+ 7IhxxeIkNFdzZXeIrFdAVjqrFis0Jma8U2+OuZa0LWpJ6GsdVzg5rMdWz7ezLcWjwN
+ bGJ1GGjCCG8r5SWrDTqyLz7ieCTd1Gw/O4DGDAxZNpmUTbv+CfXQTgfb3q+kb7dEcn
+ PKsdAFK5l0dSatJhb57EnT3zbND3nyeTXvp34El4/2XI05uY2JyMr6WKzPCMVdd68i
+ 9GODrcYKR0jWrnT2Cy8plCpDrbDRr4sQYqbEpunrXuWJaUo5TKTkUA0MBnWYRpirrg
+ KwPDvfJUbexkg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=grenoble.cnrs.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
+ header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=PL8uoJIJ
+Subject: Re: [Buildroot] Linux and out of tree DTBs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,156 +87,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Martin_B=C3=B6h_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?ISO-8859-1?Q?Martin_B=F6h?= <contact@martb.dev>
-Content-Type: multipart/mixed; boundary="===============5835408043510798569=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5835408043510798569==
-Content-Type: multipart/alternative;
- boundary=----D4WCIGUUU15LTPDPQ9P2NHOMCV2DZY
-Content-Transfer-Encoding: 7bit
+Hello Buildroot users!
 
-------D4WCIGUUU15LTPDPQ9P2NHOMCV2DZY
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Hey Julien!
-
-I modified it to 0xxx because of the post build step message found here:
-
-https://github=2Ecom/polkit-org/polkit/blob/c1369cd4ffb975e177035392837ff9=
-1373774407/meson_post_install=2Epy#L62
-
-Kind regards
-Martin
-
-
-On 14 Dec 2024 23:08, Julien Olivain <ju=2Eo@free=2Efr> wrote:
+On 2024-10-20, Chris Packham wrote:
+> I just found that as of Linux 6.12 we won't be able to copy
+> out-of-tree dts files into the kernel source and run `make foo.dtb`.
+> I know buildroot relies on this as does the build system we use at
+> $dayjob.
 >
-> Hi Martin,=20
+> I proposed a change that would restore support for this but this has
+> been rejected because "This is not a use-case in upstream"[1].
 >
-> On 13/12/2024 06:39, Martin B=C3=B6h via buildroot wrote:=20
-> > From: Martin B=C3=B6h <contact@martb=2Edev>=20
-> >=20
-> > The service failed to start correctly if any custom rules were=20
-> > installed=2E=20
-> > This commit aligns the permissions with the upstream meson build step=
-=2E=20
-> >=20
-> > Signed-off-by: Martin B=C3=B6h <contact@martb=2Edev>=20
-> > -------------------------=20
-> >=C2=A0 package/polkit/polkit=2Emk | 8 ++++----=20
-> > 1 file changed, 4 insertions(+), 4 deletions(-)=20
-> >=20
-> > diff --git a/package/polkit/polkit=2Emk b/package/polkit/polkit=2Emk=
-=20
-> > index fb49f6ce2a=2E=2E6cd2aa6042 100644=20
-> > --- a/package/polkit/polkit=2Emk=20
-> > +++ b/package/polkit/polkit=2Emk=20
-> > @@ -56,10 +56,10 @@ define POLKIT_USERS=20
-> > endef=20
-> >=20
-> > define POLKIT_PERMISSIONS=20
-> > - /etc/polkit-1/rules=2Ed d 700 polkitd root - - - - -=20
-> > - /usr/share/polkit-1/rules=2Ed d 700 polkitd root - - - - -=20
-> > - /usr/bin/pkexec f 4755 root root - - - - -=20
-> > - /usr/lib/polkit-1/polkit-agent-helper-1 f 4755 root root - - - - -=
-=20
-> > + /etc/polkit-1/rules=2Ed d 750 root polkitd - - - - -=20
-> > + /usr/share/polkit-1/rules=2Ed d 750 root polkitd - - - - -=20
->
-> I understand those two directories needs those updates, due to upstream=
-=20
-> changes such as:=20
-> https://github=2Ecom/polkit-org/polkit/commit/b6169f3113b3ce5ed822e66adc=
-c962850c24660a=20
->
-> > + /usr/bin/pkexec f 04755 root root - - - - -=20
-> > + /usr/lib/polkit-1/polkit-agent-helper-1 f 04755 root root - - - - -=
-=20
->
-> Why did you updated /usr/bin/pkexec and=20
-> /usr/lib/polkit-1/polkit-agent-helper-1=20
-> to replace 4755 by 04755? (there is no justification in the commit log)=
-=2E=20
->
-> > endef=20
-> >=20
-> > define POLKIT_INSTALL_INIT_SYSTEMD=20
-> > --=20
-> > 2=2E47=2E1=20
-> > _______________________________________________=20
-> > buildroot mailing list=20
-> > buildroot@buildroot=2Eorg=20
-> > https://lists=2Ebuildroot=2Eorg/mailman/listinfo/buildroot=20
->
-> Best regards,=20
->
-> Julien=2E=20
+> So before I try to convince the upstream maintainer to change their
+> mind. Has anyone looked at an alternative for handling out of tree
+> dtbs?
 
+There has been a bit of discussion on this topic here.[1] The proposed
+solutions involve dropping the DTS into a vendor subdir of
+$(LINUX_ARCH_PATH)/boot/dts. However, this would require either:
 
+ * adding a new config option to let the user select the appropriate
+   vendor subdir
 
-------D4WCIGUUU15LTPDPQ9P2NHOMCV2DZY
-Content-Type: text/html;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+ * patching $(LINUX_ARCH_PATH)/boot/dts/Makefile if we would want to
+   create a custom "buildroot" subdir.
 
-<!DOCTYPE html><html><body><div dir=3D"auto">Hey Julien!<br><br>I modified =
-it to 0xxx because of the post build step message found here:<br><br><a hre=
-f=3D"https://github=2Ecom/polkit-org/polkit/blob/c1369cd4ffb975e17703539283=
-7ff91373774407/meson_post_install=2Epy#L62">https://github=2Ecom/polkit-org=
-/polkit/blob/c1369cd4ffb975e177035392837ff91373774407/meson_post_install=2E=
-py#L62</a><br><br>Kind regards<br>Martin<br><br><br>On 14 Dec 2024 23:08, J=
-ulien Olivain &lt;ju=2Eo@free=2Efr&gt; wrote:<br>&gt;<br>&gt; Hi Martin, <b=
-r>&gt;<br>&gt; On 13/12/2024 06:39, Martin B=C3=B6h via buildroot wrote: <b=
-r>&gt; &gt; From: Martin B=C3=B6h &lt;contact@martb=2Edev&gt; <br>&gt; &gt;=
- <br>&gt; &gt; The service failed to start correctly if any custom rules we=
-re <br>&gt; &gt; installed=2E <br>&gt; &gt; This commit aligns the permissi=
-ons with the upstream meson build step=2E <br>&gt; &gt; <br>&gt; &gt; Signe=
-d-off-by: Martin B=C3=B6h &lt;contact@martb=2Edev&gt; <br>&gt; &gt; -------=
------------------- <br>&gt; &gt;=C2=A0 package/polkit/polkit=2Emk | 8 ++++-=
---- <br>&gt; &gt; 1 file changed, 4 insertions(+), 4 deletions(-) <br>&gt; =
-&gt; <br>&gt; &gt; diff --git a/package/polkit/polkit=2Emk b/package/polkit=
-/polkit=2Emk <br>&gt; &gt; index fb49f6ce2a=2E=2E6cd2aa6042 100644 <br>&gt;=
- &gt; --- a/package/polkit/polkit=2Emk <br>&gt; &gt; +++ b/package/polkit/p=
-olkit=2Emk <br>&gt; &gt; @@ -56,10 +56,10 @@ define POLKIT_USERS <br>&gt; &=
-gt; endef <br>&gt; &gt; <br>&gt; &gt; define POLKIT_PERMISSIONS <br>&gt; &g=
-t; - /etc/polkit-1/rules=2Ed d 700 polkitd root - - - - - <br>&gt; &gt; - /=
-usr/share/polkit-1/rules=2Ed d 700 polkitd root - - - - - <br>&gt; &gt; - /=
-usr/bin/pkexec f 4755 root root - - - - - <br>&gt; &gt; - /usr/lib/polkit-1=
-/polkit-agent-helper-1 f 4755 root root - - - - - <br>&gt; &gt; + /etc/polk=
-it-1/rules=2Ed d 750 root polkitd - - - - - <br>&gt; &gt; + /usr/share/polk=
-it-1/rules=2Ed d 750 root polkitd - - - - - <br>&gt;<br>&gt; I understand t=
-hose two directories needs those updates, due to upstream <br>&gt; changes =
-such as: <br>&gt; <a href=3D"https://github=2Ecom/polkit-org/polkit/commit/=
-b6169f3113b3ce5ed822e66adcc962850c24660a">https://github=2Ecom/polkit-org/p=
-olkit/commit/b6169f3113b3ce5ed822e66adcc962850c24660a</a>=C2=A0<br>&gt;<br>=
-&gt; &gt; + /usr/bin/pkexec f 04755 root root - - - - - <br>&gt; &gt; + /us=
-r/lib/polkit-1/polkit-agent-helper-1 f 04755 root root - - - - - <br>&gt;<b=
-r>&gt; Why did you updated /usr/bin/pkexec and <br>&gt; /usr/lib/polkit-1/p=
-olkit-agent-helper-1 <br>&gt; to replace 4755 by 04755? (there is no justif=
-ication in the commit log)=2E <br>&gt;<br>&gt; &gt; endef <br>&gt; &gt; <br=
->&gt; &gt; define POLKIT_INSTALL_INIT_SYSTEMD <br>&gt; &gt; -- <br>&gt; &gt=
-; 2=2E47=2E1 <br>&gt; &gt; _______________________________________________ =
-<br>&gt; &gt; buildroot mailing list <br>&gt; &gt; buildroot@buildroot=2Eor=
-g <br>&gt; &gt; <a href=3D"https://lists=2Ebuildroot=2Eorg/mailman/listinfo=
-/buildroot">https://lists=2Ebuildroot=2Eorg/mailman/listinfo/buildroot</a>=
-=C2=A0<br>&gt;<br>&gt; Best regards, <br>&gt;<br>&gt; Julien=2E <br><br><br=
-></div></body></html>
-------D4WCIGUUU15LTPDPQ9P2NHOMCV2DZY--
+Both these approaches would bring a breaking change for users having
+custom defconfigs outside the Buildroot tree, as they would have to
+adjust the path of included .dtsi files.
 
---===============5835408043510798569==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+I tried another approach that doesn't require new config options, nor
+does it break existing out-of-tree configurations: patch the top
+dts/Makefile in order to compile the DTS we are dropping there. This may
+not be the cleanest approach, as it breaks the one-dir-per-vendor layout
+used by the kernel. However, it turns out to be a trivial change to the
+Makefile: just append
 
+    dtb-y += foo.dtb
+
+at the end.
+
+The patch implementing this is a simple one-liner, see below.
+
+Any comments before I send this as proper patch?
+
+Regards,
+
+Edgar.
+
+[1] See thread starting from
+    https://lists.buildroot.org/pipermail/buildroot/2024-December/768587.html
+
+------------------------------------------------------------------ >8 --
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 1d3d8fffa6..35f358c56f 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -517,6 +517,7 @@ define LINUX_BUILD_CMDS
+        $(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
+        $(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
+                cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
++               echo "dtb-y += $(notdir $(dts:%.dts=%.dtb))" >> $(LINUX_ARCH_PATH)/boot/dts/Makefile
+        )
+        $(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all
+        $(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5835408043510798569==--
