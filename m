@@ -1,53 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89F06E7716A
-	for <buildroot@archiver.kernel.org>; Sun, 15 Dec 2024 12:22:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA09BE7716A
+	for <buildroot@archiver.kernel.org>; Sun, 15 Dec 2024 12:22:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F11A8472B;
-	Sun, 15 Dec 2024 12:22:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 730F5605BD;
+	Sun, 15 Dec 2024 12:22:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ByTSluP_xnQ5; Sun, 15 Dec 2024 12:22:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NpfOXzS86d86; Sun, 15 Dec 2024 12:22:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CAD98474E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79F4360604
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2CAD98474E;
-	Sun, 15 Dec 2024 12:22:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7D5DFD1
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:22:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 79F4360604;
+	Sun, 15 Dec 2024 12:22:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4501C69
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:22:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB5A940992
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:22:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3189B4023E
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:22:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8-xQmAmueirt for <buildroot@buildroot.org>;
- Sun, 15 Dec 2024 12:22:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 798E6405A8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 798E6405A8
- for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:22:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6532287077; Sun, 15 Dec 2024 12:22:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i8SrmCn66HXO for <buildroot@buildroot.org>;
+ Sun, 15 Dec 2024 12:22:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 005EE40223
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 005EE40223
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 005EE40223
+ for <buildroot@buildroot.org>; Sun, 15 Dec 2024 12:22:42 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 95DE72003CC;
+ Sun, 15 Dec 2024 13:22:37 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:46426])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 15 Dec 2024 13:22:37 +0100
+MIME-Version: 1.0
+Date: Sun, 15 Dec 2024 13:22:37 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 15 Dec 2024 11:44:02 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9c016ee148fbe466634369e877e7c26e961e1aa2
-X-Git-Newrev: bc31bb7cf2f8a62dff57a8d5ac41771df29c88e5
-X-Patchwork-Hint: ignore
-Message-Id: <20241215122206.6532287077@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/orangepi_zero_plus2: update BSP
- versions
+To: Sergey Matyukevich <geomatsi@gmail.com>
+Cc: buildroot@buildroot.org, Jagan Teki <jagan@amarulasolutions.com>
+In-Reply-To: <20241215101353.3214256-1-geomatsi@gmail.com>
+References: <20241215101353.3214256-1-geomatsi@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <0cce07dac3bbb1aecafdd5d59743b4e3@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1734265359;
+ bh=OVObqHcNfQQDkcz46UTrjJnkylU/e9wcfPCp3wHimmU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=pq1Y6WgdWMFybpR2ULtPhPDK4qqLvkO5RCgW4socbcoF/XwlF2fTsGFc2RT8G/IfW
+ cykJObusmcNW8hSqW2JJA4XPZ9MMyg+2q/7QPqtNP00EMe9dVV27ApodM1/smFM5pY
+ HjR4uX6ySxRlGsfW3qsS163/NG8dZc2+UCssZx1Is0aaK1aUs0dpvGFa+2ndgpdj4K
+ Qhm1iZhlQc7hXS5Z/2sydobaaDAxFUGDaWOX4r5oWJeDyTUVmdqR78QZcE8+DEjQbH
+ Ub2Ij8FQv7B+HRV1048uDb/CC9SEzqEPP7zhj8iXesbhgeDcMJJ6Z44bZ/PHZFM4xP
+ GqfqnJwUfi64Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=pq1Y6Wgd
+Subject: Re: [Buildroot] [PATCH 0/4] orangepi/linksprite: bsp updates,
+ part II
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,122 +83,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc31bb7cf2f8a62dff57a8d5ac41771df29c88e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 15/12/2024 11:12, Sergey Matyukevich wrote:
+> Hi All,
+> 
+> These patches update BSP components for the following boards:
+> - OrangePi PC Plus
+> - OrangePi Zero Plus2
+> - OrangePi Zero 2W
+> - Linksprite pcDuino
+> 
+> For all the boards the following updates have been applied:
+> - Linux v6.12.3
+> - U-Boot 2024.10
+> - ATF 2024.11 (for arm64 only)
+> 
+> Besides, forced check of hashes for BSP components has been enabled.
 
-Switch to the new Linux LTS release 6.12.3. Switch to U-Boot 2024.10 and
-ATF 2.11. Force check of hashes for Linux kernel, headers, U-Boot, ATF.
-Increase ext2 partition size to fit new software versions. Finally, add
-BR2_TARGET_UBOOT_NEEDS_GNUTLS option required by new U-Boot.
+Series applied to master, thanks.
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .checkpackageignore                                         |  1 -
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash  |  2 ++
- .../patches/linux-headers/linux-headers.hash                |  1 +
- board/orangepi/orangepi-zero-plus2/patches/linux/linux.hash |  2 ++
- board/orangepi/orangepi-zero-plus2/patches/uboot/uboot.hash |  2 ++
- configs/orangepi_zero_plus2_defconfig                       | 13 ++++++++-----
- 6 files changed, 15 insertions(+), 6 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 7711bbb7f8..41c970efa6 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -203,7 +203,6 @@ configs/orangepi_lite2_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_one_plus_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_pc2_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_zero3_defconfig lib_defconfig.ForceCheckHash
--configs/orangepi_zero_plus2_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_zero_plus_defconfig lib_defconfig.ForceCheckHash
- configs/pc_x86_64_bios_defconfig lib_defconfig.ForceCheckHash
- configs/pc_x86_64_efi_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/orangepi/orangepi-zero-plus2/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/orangepi/orangepi-zero-plus2/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..8b77e1f165
---- /dev/null
-+++ b/board/orangepi/orangepi-zero-plus2/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  c0f23ccc71c49989e9ad238acf334473c17b7c88f79a20c829c3d443e3794a22  arm-trusted-firmware-v2.11-git4.tar.gz
-diff --git a/board/orangepi/orangepi-zero-plus2/patches/linux-headers/linux-headers.hash b/board/orangepi/orangepi-zero-plus2/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/orangepi/orangepi-zero-plus2/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/orangepi/orangepi-zero-plus2/patches/linux/linux.hash b/board/orangepi/orangepi-zero-plus2/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..aea771e7bf
---- /dev/null
-+++ b/board/orangepi/orangepi-zero-plus2/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  c89809cc777d50f1ea484a118630281a26383707a0e752c96fd834f6e765deae  linux-6.12.3.tar.xz
-diff --git a/board/orangepi/orangepi-zero-plus2/patches/uboot/uboot.hash b/board/orangepi/orangepi-zero-plus2/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..904fa56c02
---- /dev/null
-+++ b/board/orangepi/orangepi-zero-plus2/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
-index 84227cb392..2b7ad2064d 100644
---- a/configs/orangepi_zero_plus2_defconfig
-+++ b/configs/orangepi_zero_plus2_defconfig
-@@ -1,6 +1,8 @@
- BR2_aarch64=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero-plus2/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Zero Plus2"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
-@@ -9,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.3"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero-plus2/linux-extras.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -26,19 +28,20 @@ BR2_PACKAGE_WPA_SUPPLICANT=y
- BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-+BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.11"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero_plus2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+> Regards,
+> Sergey
+> 
+> 
+> Sergey Matyukevich (4):
+>   configs/orangepi_pc_plus: bump BSP versions
+>   configs/linksprite_pcduino: bump BSP versions
+>   configs/orangepi_zero_plus2: update BSP versions
+>   configs/orangepi_zero2w: update BSP versions
+> 
+>  .checkpackageignore                                 |  3 ---
+>  .../patches/linux-headers/linux-headers.hash        |  1 +
+>  board/linksprite/pcduino/patches/linux/linux.hash   |  2 ++
+>  board/linksprite/pcduino/patches/uboot/uboot.hash   |  2 ++
+>  .../patches/linux-headers/linux-headers.hash        |  1 +
+>  .../orangepi-pc-plus/patches/linux/linux.hash       |  2 ++
+>  .../orangepi-pc-plus/patches/uboot/uboot.hash       |  2 ++
+>  .../arm-trusted-firmware/arm-trusted-firmware.hash  |  2 ++
+>  .../patches/linux-headers/linux-headers.hash        |  1 +
+>  .../orangepi-zero-plus2/patches/linux/linux.hash    |  2 ++
+>  .../orangepi-zero-plus2/patches/uboot/uboot.hash    |  2 ++
+>  .../arm-trusted-firmware/arm-trusted-firmware.hash  |  4 ++--
+>  .../orangepi-zero2w/patches/linux/linux.hash        |  4 ++--
+>  .../orangepi-zero2w/patches/uboot/uboot.hash        |  2 +-
+>  configs/linksprite_pcduino_defconfig                |  9 ++++++---
+>  configs/orangepi_pc_plus_defconfig                  |  9 ++++++---
+>  configs/orangepi_zero2w_defconfig                   |  9 +++++----
+>  configs/orangepi_zero_plus2_defconfig               | 13 ++++++++-----
+>  18 files changed, 47 insertions(+), 23 deletions(-)
+>  create mode 120000 
+> board/linksprite/pcduino/patches/linux-headers/linux-headers.hash
+>  create mode 100644 board/linksprite/pcduino/patches/linux/linux.hash
+>  create mode 100644 board/linksprite/pcduino/patches/uboot/uboot.hash
+>  create mode 120000 
+> board/orangepi/orangepi-pc-plus/patches/linux-headers/linux-headers.hash
+>  create mode 100644 
+> board/orangepi/orangepi-pc-plus/patches/linux/linux.hash
+>  create mode 100644 
+> board/orangepi/orangepi-pc-plus/patches/uboot/uboot.hash
+>  create mode 100644 
+> board/orangepi/orangepi-zero-plus2/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+>  create mode 120000 
+> board/orangepi/orangepi-zero-plus2/patches/linux-headers/linux-headers.hash
+>  create mode 100644 
+> board/orangepi/orangepi-zero-plus2/patches/linux/linux.hash
+>  create mode 100644 
+> board/orangepi/orangepi-zero-plus2/patches/uboot/uboot.hash
+> 
+> --
+> 2.47.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
