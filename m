@@ -4,74 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9045E7717F
-	for <buildroot@archiver.kernel.org>; Mon, 16 Dec 2024 21:16:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3A51E7717F
+	for <buildroot@archiver.kernel.org>; Mon, 16 Dec 2024 21:17:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4DA42612DF;
-	Mon, 16 Dec 2024 21:16:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAB0D61325;
+	Mon, 16 Dec 2024 21:17:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xhe3gkJrqM-X; Mon, 16 Dec 2024 21:16:11 +0000 (UTC)
+ id jQgikNpFSMqm; Mon, 16 Dec 2024 21:17:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40E16612FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF39A612FE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40E16612FA;
-	Mon, 16 Dec 2024 21:16:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 64A8EC5
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 21:16:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF39A612FE;
+	Mon, 16 Dec 2024 21:17:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C09E6C5
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 21:17:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 454984142C
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 21:16:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9F03B84953
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 21:17:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2C4xPK0Rnn5B for <buildroot@buildroot.org>;
- Mon, 16 Dec 2024 21:16:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D709D41427
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D709D41427
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D709D41427
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 21:16:07 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 1183A19F5B2;
- Mon, 16 Dec 2024 22:16:04 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:60160])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 16 Dec 2024 22:16:04 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wsOqRYD3Q-fe for <buildroot@buildroot.org>;
+ Mon, 16 Dec 2024 21:17:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.bonnefille@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2DF778494A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DF778494A
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2DF778494A
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 21:17:03 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BAF70E0003;
+ Mon, 16 Dec 2024 21:17:00 +0000 (UTC)
+Date: Mon, 16 Dec 2024 22:16:44 +0100
 MIME-Version: 1.0
-Date: Mon, 16 Dec 2024 22:16:04 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: yegorslists@googlemail.com
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241216102249.282732-1-yegorslists@googlemail.com>
-References: <20241216102249.282732-1-yegorslists@googlemail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <aed6e8583c5bf2d04523ce07c3283d9e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734383766;
- bh=iqtTSunkkRqan3Op77HCGPSJjF8aTaI+umF/1iQNtt4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=M2U0Mv1hu5N+DLhbWeusfG8gq08IRFOp/uPY1ckGUoTiFqDbQh5KrAOCQHxhVFmcM
- eVGqWePvTLy+5X1x/qIvofNmqIjTAmtyL3IjCR0PHDX4nTlXo8EWYumxOfeWPOq/IH
- 6f1apGQZ9Iq32YpAiQEbxy3ldUbhy1dw/6Vau1hd0sPkFxLjxRLADtwRCfk95LKUl0
- Sy1j1AKB25qmvkFB+6PQCT0g7rjnv0wCDX96G8gRseTngINQhLmXimk/njX2iU6cEz
- Zb0LSikM2RcMI4XhjIC1fcmRDcu6mKhOTp5yEz1py0ukC76T6lIiTvemTv/rwFkhoT
- U7BLNALVttE1A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+Message-Id: <20241216-add_gdb_hash-v2-1-4eeb897a9f25@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIALuYYGcC/3XMQQrCMBCF4auUWRvpxFbQlfeQUpLMtBnQRpISl
+ JK7G7t3+T943waJo3CCa7NB5CxJwlJDHxpw3iwzK6HaoFvdoUZUhmicyY7eJK9OnXX9RMSuJ6i
+ XV+RJ3jt3H2p7SWuIn13P+Fv/QBkVKratJrxoe3Z4syGsD1mOLjxhKKV8AfauiL2qAAAA
+X-Change-ID: 20241211-add_gdb_hash-34bc5fddec5d
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>, 
+ Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: thomas.bonnefille@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1734383821;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=q6346dC8ECxoFoQSLpARb2arIXXEqi8u0N+WTCkMCr4=;
+ b=NmK5rgAyC2tE0o7Gib14AWVjfLN5ByiEAiWMWdrFY8Ct0s6O7K5KsAbUgczDts7rryaZ+0
+ lZRHK/SQ3wfNhWxDxHq4HERgWGhXcDP8dakdP4qtLVO4Plez7dcq3Q7wg8BxdqrpOEiT//
+ ZbUzikrVYfrpaJRvgnJVMl81rk6bMbsw5WjiZs/N1gEdbfOBr342yf4o90TM8TjlN5iwi5
+ gpGL/Iq5KEmoRV3xzb5KSspNQE55SEks7Z/1SMJdzrAsWLrvd36fdOc002ch1wEKNe1eTH
+ wKH5TZg3XLkvGBF8H9nNqa/zNSBCR8Cr6d5kH7A+VoTJqqBlmUSSJB187Z4qCw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=M2U0Mv1h
-Subject: Re: [Buildroot] [PATCH v2] package/python-m2crypto: remove package
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=NmK5rgAy
+Subject: [Buildroot] [PATCH v2] package/gdb: add hash of licence files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,147 +83,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Bonnefille via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/12/2024 11:22, yegorslists@googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> The python-m2crypto package was removed as it is in maintained
-> only mode and is not recommended for new projects.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Adds sha256 hash of the license files for GDB.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+---
+Changes in v2:
+- Use sha256 instead of sha512
+- Add one more whitespace between the type of hash and the hash of the
+  file
+- Link to v1: https://lore.kernel.org/r/20241211-add_gdb_hash-v1-1-eb02d192b6c1@bootlin.com
+---
+ package/gdb/gdb.hash | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> ---
-> Changes v1 -> v2:
->     - also remove the python-m2crypto entry from the DEVELOPERS file 
-> (Baruch Siach)
-> 
->  Config.in.legacy                             |  7 +++++++
->  DEVELOPERS                                   |  3 ---
->  package/Config.in                            |  1 -
->  package/python-m2crypto/Config.in            |  9 ---------
->  package/python-m2crypto/python-m2crypto.hash |  5 -----
->  package/python-m2crypto/python-m2crypto.mk   | 18 ------------------
->  6 files changed, 7 insertions(+), 36 deletions(-)
->  delete mode 100644 package/python-m2crypto/Config.in
->  delete mode 100644 package/python-m2crypto/python-m2crypto.hash
->  delete mode 100644 package/python-m2crypto/python-m2crypto.mk
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 066be19a75..2e6dfce5ea 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,13 @@ endif
-> 
->  comment "Legacy options removed in 2025.02"
-> 
-> +config BR2_PACKAGE_PYTHON_M2CRYPTO
-> +	bool "python-m2crypto has been removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  The python-m2crypto package was removed as it is in maintained
-> +	  only mode and is not recommended for new projects.
-> +
->  config BR2_KERNEL_HEADERS_4_19
->  	bool "kernel headers version 4.19.x are no longer supported"
->  	select BR2_LEGACY
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 047dc4a88f..eabbc7eb20 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1351,9 +1351,6 @@ 
-> F:	support/testing/tests/package/sample_python_scipy.py
->  F:	support/testing/tests/package/test_python_pybind.py
->  F:	support/testing/tests/package/test_python_scipy.py
-> 
-> -N:	Gustavo Heinz <gustavo@gsthnz.com>
-> -F:	package/python-m2crypto/
-> -
->  N:	Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
->  F:	board/terasic/de10nano_cyclone5/
->  F:	configs/terasic_de10nano_cyclone5_defconfig
-> diff --git a/package/Config.in b/package/Config.in
-> index 5fa344c321..1541c85e53 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1206,7 +1206,6 @@ menu "External python modules"
->  	source "package/python-logbook/Config.in"
->  	source "package/python-logstash/Config.in"
->  	source "package/python-lxml/Config.in"
-> -	source "package/python-m2crypto/Config.in"
->  	source "package/python-magic-wormhole/Config.in"
->  	source "package/python-magic-wormhole-mailbox-server/Config.in"
->  	source "package/python-magic-wormhole-transit-relay/Config.in"
-> diff --git a/package/python-m2crypto/Config.in 
-> b/package/python-m2crypto/Config.in
-> deleted file mode 100644
-> index af710d5351..0000000000
-> --- a/package/python-m2crypto/Config.in
-> +++ /dev/null
-> @@ -1,9 +0,0 @@
-> -config BR2_PACKAGE_PYTHON_M2CRYPTO
-> -	bool "python-m2crypto"
-> -	select BR2_PACKAGE_OPENSSL
-> -	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
-> -	select BR2_PACKAGE_PYTHON3_SSL # runtime
-> -	help
-> -	  M2Crypto: A Python crypto and SSL toolkit.
-> -
-> -	  https://gitlab.com/m2crypto/m2crypto
-> diff --git a/package/python-m2crypto/python-m2crypto.hash 
-> b/package/python-m2crypto/python-m2crypto.hash
-> deleted file mode 100644
-> index 98307af0cf..0000000000
-> --- a/package/python-m2crypto/python-m2crypto.hash
-> +++ /dev/null
-> @@ -1,5 +0,0 @@
-> -# md5, sha256 from https://pypi.org/pypi/m2crypto/json
-> -md5  75c50150857eb60e4f447b04d13ff507  m2crypto-0.43.0.tar.gz
-> -sha256  
-> 6c2c1c7bb0e8aa768f7ca803da7dbc2666d4003b26bd7adf70233afc59d8cf33  
-> m2crypto-0.43.0.tar.gz
-> -# Locally computed sha256 checksums
-> -sha256  
-> 4eca478396f4b2b020729a111fce3f096456d74500bfd8f2b0388c3c69f997c0  
-> LICENCE
-> diff --git a/package/python-m2crypto/python-m2crypto.mk 
-> b/package/python-m2crypto/python-m2crypto.mk
-> deleted file mode 100644
-> index b5142c9bb2..0000000000
-> --- a/package/python-m2crypto/python-m2crypto.mk
-> +++ /dev/null
-> @@ -1,18 +0,0 @@
-> -################################################################################
-> -#
-> -# python-m2crypto
-> -#
-> -################################################################################
-> -
-> -PYTHON_M2CRYPTO_VERSION = 0.43.0
-> -PYTHON_M2CRYPTO_SOURCE = m2crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
-> -PYTHON_M2CRYPTO_SITE = 
-> https://files.pythonhosted.org/packages/ff/1b/4771f0ecfdd9df6752ae5d0cf040545bb3cfe8a504af87e05c9ac4a6a499
-> -PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
-> -PYTHON_M2CRYPTO_LICENSE = MIT
-> -PYTHON_M2CRYPTO_LICENSE_FILES = LICENCE
-> -PYTHON_M2CRYPTO_CPE_ID_VENDOR = m2crypto_project
-> -PYTHON_M2CRYPTO_CPE_ID_PRODUCT = m2crypto
-> -PYTHON_M2CRYPTO_DEPENDENCIES = openssl host-swig
-> -PYTHON_M2CRYPTO_ENV = OPENSSL_PATH="$(STAGING_DIR)/usr"
-> -
-> -$(eval $(python-package))
-> --
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index 6cf55a675dae3d373f9b32f795aec469049464f0..3d1809a2f97638b7c6a6d01e0c51e9a8b798a9ea 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -5,3 +5,9 @@ sha512  0217434073023a8b8316088bf3ee95d53a1b6a7897f6269095429016a8900f9a05e130c3
+ 
+ # Locally calculated (fetched from Github)
+ sha512  3518b47d5c11d1fb478ee152bde1719363f9391db73f3b9f5491217c17742bef8ebca6a51a40302dfaa9476c5a32a8b8f70a4bf64289422dea5f750ae53ab88d  gdb-arc-2023.09-release.tar.gz
++
++# Locally calculated (fetched from gcc.gnu.org)
++sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING3
++sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING3.LIB
++sha256  56bdea73b6145ef6ac5259b3da390b981d840c24cb03b8e1cbc678de7ecfa18d  COPYING.LIB
+
+---
+base-commit: c12008448e6d0f78774b386fb0f66a14c3064eed
+change-id: 20241211-add_gdb_hash-34bc5fddec5d
+
+Best regards,
+-- 
+Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
