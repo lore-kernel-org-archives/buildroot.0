@@ -4,54 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 261D5E7717F
-	for <buildroot@archiver.kernel.org>; Mon, 16 Dec 2024 09:04:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A414FE7717F
+	for <buildroot@archiver.kernel.org>; Mon, 16 Dec 2024 10:23:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D61E440B3D;
-	Mon, 16 Dec 2024 09:04:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 129C44043D;
+	Mon, 16 Dec 2024 10:23:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Li_uguxacwdq; Mon, 16 Dec 2024 09:04:29 +0000 (UTC)
+ id xQYWFxDSgaFh; Mon, 16 Dec 2024 10:23:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 906EE40B47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF51B40562
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 906EE40B47;
-	Mon, 16 Dec 2024 09:04:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 029E6C5
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 09:04:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF51B40562;
+	Mon, 16 Dec 2024 10:23:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 62D85CE
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 10:23:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E3F9F840EE
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 09:04:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 504D281393
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 10:23:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NTGfnmbHc9id for <buildroot@buildroot.org>;
- Mon, 16 Dec 2024 09:04:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.140.110.172;
- helo=foss.arm.com; envelope-from=vincent.stehle@arm.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F0AB1840C6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0AB1840C6
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
- by smtp1.osuosl.org (Postfix) with ESMTP id F0AB1840C6
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 09:04:26 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B3876113E;
- Mon, 16 Dec 2024 01:04:53 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.34.124.42])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F1D293F720;
- Mon, 16 Dec 2024 01:04:24 -0800 (PST)
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
+ id gpiClw3VlXQY for <buildroot@buildroot.org>;
+ Mon, 16 Dec 2024 10:22:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1111081364
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1111081364
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1111081364
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 10:22:58 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-aa67ac42819so640696566b.0
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 02:22:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1734344576; x=1734949376;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=fY5Rjs73AQWYZpEQe9gIVPddv+PXKAy+1ISFf1XCdfE=;
+ b=pMS8ZWMqMuIDyMzx1d7BueBr8H9jnspgkF7dr8tYVnZhR9KcCnr+a/1IJDrEqftBR/
+ tMxnIVBT81Omrw3QkzKiNFLAXvW0F7BY9MSV9K+tNJMNdO9YTw99FmnQuVwrQVUGXdS3
+ y0aAAIdKjY43wzoYDReTxPXClNHqspGiKfmWV2UkeG5rpsoCoqLFY5Jmp2ifRr5v9/FF
+ WyqdS/WARwdyUw7vHDE2GU4WS1A53a8T9TOe10MYrjLyLIi67Cf70kUNPcHGxg56muoK
+ kW6D0CxOAG0cIIE0BtYEfGLkxQtEnLcTSoqupMPgGPsXC2aDUuLy828T9wVKUPg75BTs
+ gK3A==
+X-Gm-Message-State: AOJu0YzrB8EWht4YZ3OcYrczFFA+7XgfRXN71lV8KrGD+EgLtByS2mAk
+ +1+jKNf9zAVCI06kY+FXO0JlXG4yJoMaqJtOlBnNysl3RRvqlMdb9dIdQA==
+X-Gm-Gg: ASbGncsOfYY3rTnc3c0NyFVV+uA+v5ENhiMdigldK3ZmePPn85d+YXD6CCJgR/R9cu3
+ Oc2EnOA6/SmBehoJlRMVKvBlDoKH1Kc1afgls41L3PLxDW4Rg7ykvCTgMdnezECbB2lUQxRVjeO
+ 8mBh+thkO0o5tsQCMnpBVIhocw4iBon3NoY2/QoeeXomsuQteSajRK8KHbIw7dS/xnHjJ9GWP7R
+ YO4o0/QlMD1m/22Qw81DKE9m4nK5J0oBikuEty05C5+2Kdaz/RiTAwowyv1tVHuQ2KvOFJK03kZ
+ NFwNM9EVrDsMKqKXjSDov8ztXMHl90FEc/EOtA==
+X-Google-Smtp-Source: AGHT+IFJvwUKE364j6xXK0YWvJzknioJGZ3RiX01eEj7iGTCPMb41NmxYCgFDXY9Owx60jveJaWzGQ==
+X-Received: by 2002:a17:906:3112:b0:aa6:82ea:69d6 with SMTP id
+ a640c23a62f3a-aab77907a5fmr1118275766b.18.1734344575602; 
+ Mon, 16 Dec 2024 02:22:55 -0800 (PST)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-aab96359dddsm315112366b.117.2024.12.16.02.22.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 16 Dec 2024 02:22:54 -0800 (PST)
+From: yegorslists@googlemail.com
 To: buildroot@buildroot.org
-Date: Mon, 16 Dec 2024 10:04:21 +0100
-Message-ID: <20241216090421.2867204-1-vincent.stehle@arm.com>
-X-Mailer: git-send-email 2.45.2
+Date: Mon, 16 Dec 2024 11:22:49 +0100
+Message-Id: <20241216102249.282732-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20230601; t=1734344576; x=1734949376; darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=fY5Rjs73AQWYZpEQe9gIVPddv+PXKAy+1ISFf1XCdfE=;
+ b=mTe6XMY044s9xsB+k8fquGI1vQ4EeJvZOoZ2kB1oQbVZVLCpHu34osO56Y4V4B3aNT
+ EeSLGenIyXHtGpTPDSm+nUlgqnOlRdVQSXNSo7DaTWwZSUayIe1fk3FcA6B/H4DwlYe2
+ 1t9ZiQ8B00Yq+VEIq/WhC7jQKYwL/g9FUbFajTBRMxH+Wq7ndOjwk7+Vre4/ToUQmfV0
+ 902ayQpEeu8ibHN1aLhYUvxX/hp/5PVqDpH//STArQnRrX+LgEGroeiX6NaoVQtLeELu
+ 7rOoOH7QC6db2QiO0t9yK2u17R6eL2NwZgOfwNB1LGhc7f6dQK0KHBfjI0VdAnJcCFuL
+ J1Nw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=arm.com
-Subject: [Buildroot] [PATCH] boot/arm-trusted-firmware: bump to v2.12
+ dmarc=pass (p=quarantine dis=none)
+ header.from=googlemail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=mTe6XMY0
+Subject: [Buildroot] [PATCH v2] package/python-m2crypto: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -63,67 +104,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VXBkYXRlIHRydXN0ZWQtZmlybXdhcmUtYSB2ZXJzaW9uIHRvIHYyLjEyIGFuZCBhZGQgYSBoYXNo
-IGZpbGUgYWNjb3JkaW5nbHkuCgpDb21wYXJlZCB0byB2Mi4xMSwgdGhlIGxpY2Vuc2UgaGFzIGNo
-YW5nZWQgd2l0aCB0aGUgYWRkaXRpb25hbCBtZW50aW9uIG9mCmZpbGVzIGZyb20gdGhlIHB5ZGV2
-aWNldHJlZSBwcm9qZWN0IHVuZGVyIEFwYWNoZSAyLjAgbGljZW5zZS4KQXMgd2Ugb25seSBkb2N1
-bWVudCB0aGUgbWFpbiBsaWNlbnNlIG9mIFRGLUEsIEJTRC0zLUNsYXVzZSwgdGhpcyBjaGFuZ2Ug
-aGFzCm5vIGltcGFjdCBmb3IgdXMuCgpTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZp
-bmNlbnQuc3RlaGxlQGFybS5jb20+CkNjOiBEaWNrIE9sc3NvbiA8aGlAc2VuemlsbGEuaW8+CkNj
-OiBTZXJnZXkgTWF0eXVrZXZpY2ggPGdlb21hdHNpQGdtYWlsLmNvbT4KLS0tCgpIaSwKCkFmdGVy
-IGRvaW5nIHNvbWUgdGVzdGluZywgSSB0aGluayBpdCBpcyBzYWZlIHRvIGJ1bXAgb3VyIGRlZmF1
-bHQgdmVyc2lvbiBvZgpURi1BIHRvIHYyLjEyLgoKVGVzdGVkIG9rIHdpdGggdGhlIGZvbGxvd2lu
-ZyBweXRob24gdGVzdHMgKG1vZGlmaWVkIGxvY2FsbHkgdG8gdXNlIFRGLUEKdjIuMTIpOgotIHRl
-c3RzLmJvb3QudGVzdF9hdGYuVGVzdEFURkFsbHdpbm5lciAobm90ZTogdGhpcyB0ZXN0IGlzIGJ1
-aWxkIG9ubHkpCi0gdGVzdHMuYm9vdC50ZXN0X2VkazIuVGVzdEVkazIKLSB0ZXN0cy5ib290LnRl
-c3Rfb3B0ZWVfb3MuVGVzdE9wdGVlCi0gdGVzdHMucGFja2FnZS50ZXN0X2Z3dHMuVGVzdEZ3dHMK
-CkJvb3QtdGVzdGVkIG9rIHdpdGggdGhlIGZvbGxvd2luZyBkZWZjb25maWdzIChtb2RpZmllZCBs
-b2NhbGx5IHRvIHVzZSBURi1BCnYyLjEyKToKLSBhcm1fZnZwX2ViYnIKLSBxZW11X2FhcmNoNjRf
-ZWJicgotIHFlbXVfYWFyY2g2NF9zYnNhCi0gcWVtdV9hcm1fZWJicgotIHFlbXVfYXJtX3ZleHBy
-ZXNzX3R6Ci0gcm9ja3BybzY0CgpCdWlsZC10ZXN0ZWQgb2sgd2l0aCB0aGUgZm9sbG93aW5nIGRl
-ZmNvbmZpZ3MgKG1vZGlmaWVkIGxvY2FsbHkgdG8gdXNlIFRGLUEKdjIuMTIpOgotIGlteDhtbl9i
-c2hfc21tX3MyCi0gaW14OG1uX2JzaF9zbW1fczJfcHJvCi0ga29udHJvbl9ibF9pbXg4bW0KLSBv
-bGltZXhfYTY0X29saW51eGlubwotIG9yYW5nZXBpX3BjMgotIG9yYW5nZXBpX3plcm8ydwotIG9y
-YW5nZXBpX3plcm9fcGx1cwotIHBpbmU2NAotIHJvY19wY19yazMzOTkKLSBzdG0zMm1wMTU3YV9k
-azEKLSBzdG0zMm1wMTU3Y19kazIKLSBzdG0zMm1wMTU3Y19vZHlzc2V5CgpCZXN0IHJlZ2FyZHMs
-ClZpbmNlbnQuCgogYm9vdC9hcm0tdHJ1c3RlZC1maXJtd2FyZS9Db25maWcuaW4gICAgICAgICAg
-ICAgICAgICAgICAgIHwgNCArKy0tCiBib290L2FybS10cnVzdGVkLWZpcm13YXJlL3YyLjEyL2Fy
-bS10cnVzdGVkLWZpcm13YXJlLmhhc2ggfCAzICsrKwogMiBmaWxlcyBjaGFuZ2VkLCA1IGluc2Vy
-dGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCiBjcmVhdGUgbW9kZSAxMDA2NDQgYm9vdC9hcm0tdHJ1
-c3RlZC1maXJtd2FyZS92Mi4xMi9hcm0tdHJ1c3RlZC1maXJtd2FyZS5oYXNoCgpkaWZmIC0tZ2l0
-IGEvYm9vdC9hcm0tdHJ1c3RlZC1maXJtd2FyZS9Db25maWcuaW4gYi9ib290L2FybS10cnVzdGVk
-LWZpcm13YXJlL0NvbmZpZy5pbgppbmRleCA0YTVjN2RjODljLi5jOGRlZWRlOWNkIDEwMDY0NAot
-LS0gYS9ib290L2FybS10cnVzdGVkLWZpcm13YXJlL0NvbmZpZy5pbgorKysgYi9ib290L2FybS10
-cnVzdGVkLWZpcm13YXJlL0NvbmZpZy5pbgpAQCAtMTQsNyArMTQsNyBAQCBjaG9pY2UKIAkgIFNl
-bGVjdCB0aGUgc3BlY2lmaWMgQVRGIHZlcnNpb24geW91IHdhbnQgdG8gdXNlCiAKIGNvbmZpZyBC
-UjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0xBVEVTVF9WRVJTSU9OCi0JYm9vbCAidjIu
-MTEiCisJYm9vbCAidjIuMTIiCiAKIGNvbmZpZyBCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1X
-QVJFX0xBVEVTVF9MVFNfMl8xMF9WRVJTSU9OCiAJYm9vbCAibGF0ZXN0IGx0cy12Mi4xMC54IgpA
-QCAtNTIsNyArNTIsNyBAQCBjb25maWcgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9D
-VVNUT01fVkVSU0lPTl9WQUxVRQogCiBjb25maWcgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJN
-V0FSRV9WRVJTSU9OCiAJc3RyaW5nCi0JZGVmYXVsdCAidjIuMTEiCQlpZiBCUjJfVEFSR0VUX0FS
-TV9UUlVTVEVEX0ZJUk1XQVJFX0xBVEVTVF9WRVJTSU9OCisJZGVmYXVsdCAidjIuMTIiCQlpZiBC
-UjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0xBVEVTVF9WRVJTSU9OCiAJZGVmYXVsdCAi
-bHRzLXYyLjEwLjUiCWlmIEJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfTEFURVNUX0xU
-U18yXzEwX1ZFUlNJT04KIAlkZWZhdWx0ICJsdHMtdjIuOC4yMCIJaWYgQlIyX1RBUkdFVF9BUk1f
-VFJVU1RFRF9GSVJNV0FSRV9MQVRFU1RfTFRTXzJfOF9WRVJTSU9OCiAJZGVmYXVsdCAiY3VzdG9t
-IglpZiBCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0NVU1RPTV9UQVJCQUxMCmRpZmYg
-LS1naXQgYS9ib290L2FybS10cnVzdGVkLWZpcm13YXJlL3YyLjEyL2FybS10cnVzdGVkLWZpcm13
-YXJlLmhhc2ggYi9ib290L2FybS10cnVzdGVkLWZpcm13YXJlL3YyLjEyL2FybS10cnVzdGVkLWZp
-cm13YXJlLmhhc2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uNTVlYTUx
-NTQ4MQotLS0gL2Rldi9udWxsCisrKyBiL2Jvb3QvYXJtLXRydXN0ZWQtZmlybXdhcmUvdjIuMTIv
-YXJtLXRydXN0ZWQtZmlybXdhcmUuaGFzaApAQCAtMCwwICsxLDMgQEAKKyMgTG9jYWxseSBjYWxj
-dWxhdGVkCitzaGEyNTYgIDA2YjM1YTM1OTZiODQxN2JmNjZmN2JmZGQ3YWNkMTgxYmNiNTNmYzM2
-ZGMxMzIxNjIyN2I1Y2FlMTU0ZTAyMTkgIGFybS10cnVzdGVkLWZpcm13YXJlLXYyLjEyLWdpdDQu
-dGFyLmd6CitzaGEyNTYgIGIyYzc5NjM1Nzk3YmFmY2RlODRjNmVkYWRhZGRlMjkwYjlkNWUwNWRl
-YjNlYTE2YTg0NzIxMGZkMmNhODM2NjkgIGRvY3MvbGljZW5zZS5yc3QKLS0gCjIuNDUuMgoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+From: Yegor Yefremov <yegorslists@googlemail.com>
+
+The python-m2crypto package was removed as it is in maintained
+only mode and is not recommended for new projects.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes v1 -> v2:
+    - also remove the python-m2crypto entry from the DEVELOPERS file (Baruch Siach)
+
+ Config.in.legacy                             |  7 +++++++
+ DEVELOPERS                                   |  3 ---
+ package/Config.in                            |  1 -
+ package/python-m2crypto/Config.in            |  9 ---------
+ package/python-m2crypto/python-m2crypto.hash |  5 -----
+ package/python-m2crypto/python-m2crypto.mk   | 18 ------------------
+ 6 files changed, 7 insertions(+), 36 deletions(-)
+ delete mode 100644 package/python-m2crypto/Config.in
+ delete mode 100644 package/python-m2crypto/python-m2crypto.hash
+ delete mode 100644 package/python-m2crypto/python-m2crypto.mk
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 066be19a75..2e6dfce5ea 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2025.02"
+ 
++config BR2_PACKAGE_PYTHON_M2CRYPTO
++	bool "python-m2crypto has been removed"
++	select BR2_LEGACY
++	help
++	  The python-m2crypto package was removed as it is in maintained
++	  only mode and is not recommended for new projects.
++
+ config BR2_KERNEL_HEADERS_4_19
+ 	bool "kernel headers version 4.19.x are no longer supported"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 047dc4a88f..eabbc7eb20 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1351,9 +1351,6 @@ F:	support/testing/tests/package/sample_python_scipy.py
+ F:	support/testing/tests/package/test_python_pybind.py
+ F:	support/testing/tests/package/test_python_scipy.py
+ 
+-N:	Gustavo Heinz <gustavo@gsthnz.com>
+-F:	package/python-m2crypto/
+-
+ N:	Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+ F:	board/terasic/de10nano_cyclone5/
+ F:	configs/terasic_de10nano_cyclone5_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index 5fa344c321..1541c85e53 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1206,7 +1206,6 @@ menu "External python modules"
+ 	source "package/python-logbook/Config.in"
+ 	source "package/python-logstash/Config.in"
+ 	source "package/python-lxml/Config.in"
+-	source "package/python-m2crypto/Config.in"
+ 	source "package/python-magic-wormhole/Config.in"
+ 	source "package/python-magic-wormhole-mailbox-server/Config.in"
+ 	source "package/python-magic-wormhole-transit-relay/Config.in"
+diff --git a/package/python-m2crypto/Config.in b/package/python-m2crypto/Config.in
+deleted file mode 100644
+index af710d5351..0000000000
+--- a/package/python-m2crypto/Config.in
++++ /dev/null
+@@ -1,9 +0,0 @@
+-config BR2_PACKAGE_PYTHON_M2CRYPTO
+-	bool "python-m2crypto"
+-	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
+-	select BR2_PACKAGE_PYTHON3_SSL # runtime
+-	help
+-	  M2Crypto: A Python crypto and SSL toolkit.
+-
+-	  https://gitlab.com/m2crypto/m2crypto
+diff --git a/package/python-m2crypto/python-m2crypto.hash b/package/python-m2crypto/python-m2crypto.hash
+deleted file mode 100644
+index 98307af0cf..0000000000
+--- a/package/python-m2crypto/python-m2crypto.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# md5, sha256 from https://pypi.org/pypi/m2crypto/json
+-md5  75c50150857eb60e4f447b04d13ff507  m2crypto-0.43.0.tar.gz
+-sha256  6c2c1c7bb0e8aa768f7ca803da7dbc2666d4003b26bd7adf70233afc59d8cf33  m2crypto-0.43.0.tar.gz
+-# Locally computed sha256 checksums
+-sha256  4eca478396f4b2b020729a111fce3f096456d74500bfd8f2b0388c3c69f997c0  LICENCE
+diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
+deleted file mode 100644
+index b5142c9bb2..0000000000
+--- a/package/python-m2crypto/python-m2crypto.mk
++++ /dev/null
+@@ -1,18 +0,0 @@
+-################################################################################
+-#
+-# python-m2crypto
+-#
+-################################################################################
+-
+-PYTHON_M2CRYPTO_VERSION = 0.43.0
+-PYTHON_M2CRYPTO_SOURCE = m2crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
+-PYTHON_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/ff/1b/4771f0ecfdd9df6752ae5d0cf040545bb3cfe8a504af87e05c9ac4a6a499
+-PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
+-PYTHON_M2CRYPTO_LICENSE = MIT
+-PYTHON_M2CRYPTO_LICENSE_FILES = LICENCE
+-PYTHON_M2CRYPTO_CPE_ID_VENDOR = m2crypto_project
+-PYTHON_M2CRYPTO_CPE_ID_PRODUCT = m2crypto
+-PYTHON_M2CRYPTO_DEPENDENCIES = openssl host-swig
+-PYTHON_M2CRYPTO_ENV = OPENSSL_PATH="$(STAGING_DIR)/usr"
+-
+-$(eval $(python-package))
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
