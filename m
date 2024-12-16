@@ -4,77 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9128E7717F
-	for <buildroot@archiver.kernel.org>; Mon, 16 Dec 2024 22:10:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09FD2E7717F
+	for <buildroot@archiver.kernel.org>; Mon, 16 Dec 2024 22:19:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C0E04088D;
-	Mon, 16 Dec 2024 22:10:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B96E440956;
+	Mon, 16 Dec 2024 22:19:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fs-pPn5zuOna; Mon, 16 Dec 2024 22:10:18 +0000 (UTC)
+ id hK5aBV-7x16Y; Mon, 16 Dec 2024 22:19:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25469407ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FB9740965
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25469407ED;
-	Mon, 16 Dec 2024 22:10:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 90C3AC5
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 22:10:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FB9740965;
+	Mon, 16 Dec 2024 22:19:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 63481E3
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 22:19:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71D88607A0
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 22:10:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4D9DB40184
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 22:19:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 00ueaSKmXDDf for <buildroot@buildroot.org>;
- Mon, 16 Dec 2024 22:10:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KqLnraWqFexF for <buildroot@buildroot.org>;
+ Mon, 16 Dec 2024 22:19:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5CD5F6059E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CD5F6059E
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5CD5F6059E
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 22:10:14 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4AA2340004;
- Mon, 16 Dec 2024 22:10:12 +0000 (UTC)
-Date: Mon, 16 Dec 2024 23:10:11 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: "Thomas Bonnefille" <thomas.bonnefille@bootlin.com>
-Cc: <buildroot@buildroot.org>, =?UTF-8?B?TWlxdcOobA==?= Raynal
- <miquel.raynal@bootlin.com>
-Message-ID: <20241216231011.39e908c6@windsurf>
-In-Reply-To: <D6DFB2M8HLES.RY7H0ZIZNUBO@bootlin.com>
-References: <20241216-fix_gcc14_libsha1-v2-1-ceb3588e6866@bootlin.com>
- <20241216213605.17b86ffb@windsurf>
- <D6DFB2M8HLES.RY7H0ZIZNUBO@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1734387012;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=6x0kPrfC33/NuoCwKXgAtwwt1XCyTLMkyx4AcOd1e0s=;
- b=G3CXkkU3EsrtmWST34tnZpJAG5zcjPgdA9y8eURxcL0HsKZK943tFN9fLDhfhzz+eLP4qr
- fPh8ko+GhlncmUJPHntQ5OxfdeXMJ8GprjP0up5DzXY4derAbO0MACfhTcXoFU/Je+ue79
- WgrfKqubCHha3+4zQVrzuzNJ2UcLHG/YzA6d3LPyXTDdk5KHmtlohsLl6nscHKA7aVuUJR
- 3XI+zIZrXvpksA7TZl01hnnKQtnC9TbUPI41YIQuaJZHK56kI2dLclDlQaqzo5n4S+AEQB
- WLwRIUy/PkAUd9GBlPvInCVdEHyhR0IDXDeBWiKJOOQUZYNnsQp9l5xUFqM3HQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=G3CXkkU3
-Subject: Re: [Buildroot] [PATCH v2] package/libsha1: Fix gcc14 compilation
- in libsha1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 563D740191
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 563D740191
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 22:19:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3770B87174; Mon, 16 Dec 2024 22:19:24 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 16 Dec 2024 23:11:05 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5202ddc77734c80a0cdaa77a1d51e05e61fc5819
+X-Git-Newrev: 73ee32843ad376005fe0de1c8ac47945b4225c36
+X-Patchwork-Hint: ignore
+Message-Id: <20241216221924.3770B87174@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/open62541: bump to version 1.3.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,47 +58,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 16 Dec 2024 21:56:04 +0100
-"Thomas Bonnefille" <thomas.bonnefille@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=73ee32843ad376005fe0de1c8ac47945b4225c36
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > But more importantly: https://github.com/pseiderer/libsha1/ isn't
-> > "upstream". Upstream for this package is
-> > https://github.com/dottedmag/libsha1. So we're interested in seeing
-> > the change having been submitted or accepted by the real upstream, not
-> > just a commit in some "random" Github repository (even though Peter
-> > Seiderer is a well known Buildroot contributor!)  
-> 
-> Ok so a link to the pull-request is probably better here according to BR
-> documentation.
-> (https://github.com/dottedmag/libsha1/pull/1)
+For release notes since 1.3.12, see:
+https://github.com/open62541/open62541/releases/tag/v1.3.15
+https://github.com/open62541/open62541/releases/tag/v1.3.14
+https://github.com/open62541/open62541/releases/tag/v1.3.13
 
-Yes, that's the reference we want indeed.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Julien: add link to release notes]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/open62541/open62541.hash | 2 +-
+ package/open62541/open62541.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> However, in this case the PR may not be merged soon given the date of
-> the last commit applied to the upstream package.
-
-Gah, indeed. I tried quickly to find another "upstream", but there
-doesn't seem to be an obvious upstream alternative. This package is
-used by xwayland and xserver_xorg-server as a minimal alternative to a
-full-blown crypto library like OpenSSL or libgcrypt.
-
-I think for now, your change with Upstream:
-https://github.com/dottedmag/libsha1/pull/1 is going to be good enough.
-We can always separately decide if we want to drop this package
-entirely.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
+index 01ea652f92..3beead1a20 100644
+--- a/package/open62541/open62541.hash
++++ b/package/open62541/open62541.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  dab44ad50b10cc5f9e9e1f44f0510e0c5f7a8226c6bba821babafc5a79acdc2d  open62541-v1.3.12-git4.tar.gz
++sha256  a8719f299505b144bd68bf557ad0b023fa28faf8862ff2d0b171381c8bd278c3  open62541-v1.3.15-git4.tar.gz
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
+diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
+index 92ce3b852b..0d1abf724a 100644
+--- a/package/open62541/open62541.mk
++++ b/package/open62541/open62541.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPEN62541_VERSION = v1.3.12
++OPEN62541_VERSION = v1.3.15
+ OPEN62541_SITE_METHOD = git
+ OPEN62541_SITE = https://github.com/open62541/open62541.git
+ OPEN62541_GIT_SUBMODULES = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
