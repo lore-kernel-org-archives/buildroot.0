@@ -4,74 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6852E7717F
-	for <buildroot@archiver.kernel.org>; Mon, 16 Dec 2024 20:27:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8E97E7717F
+	for <buildroot@archiver.kernel.org>; Mon, 16 Dec 2024 20:36:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29440408D4;
-	Mon, 16 Dec 2024 20:27:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E00240928;
+	Mon, 16 Dec 2024 20:36:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xzidle5eeaSg; Mon, 16 Dec 2024 20:27:36 +0000 (UTC)
+ id WVQ-koe2e5gA; Mon, 16 Dec 2024 20:36:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE86E408F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A03EF4069F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE86E408F9;
-	Mon, 16 Dec 2024 20:27:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 37659E3
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 20:27:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A03EF4069F;
+	Mon, 16 Dec 2024 20:36:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DB608C5
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 20:36:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F93A408F9
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 20:27:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B364360B42
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 20:36:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vdNsU90QEqxt for <buildroot@buildroot.org>;
- Mon, 16 Dec 2024 20:27:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7B2CC408D4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B2CC408D4
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7B2CC408D4
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 20:27:31 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 7D3795FF88;
- Mon, 16 Dec 2024 21:27:26 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:52578])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 16 Dec 2024 21:27:26 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GmjkW9_JCZIo for <buildroot@buildroot.org>;
+ Mon, 16 Dec 2024 20:36:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 635C460EC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 635C460EC9
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 635C460EC9
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 20:36:09 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3F939FF803;
+ Mon, 16 Dec 2024 20:36:06 +0000 (UTC)
+Date: Mon, 16 Dec 2024 21:36:05 +0100
+To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Cc: buildroot@buildroot.org, =?UTF-8?B?TWlxdcOobA==?= Raynal
+ <miquel.raynal@bootlin.com>
+Message-ID: <20241216213605.17b86ffb@windsurf>
+In-Reply-To: <20241216-fix_gcc14_libsha1-v2-1-ceb3588e6866@bootlin.com>
+References: <20241216-fix_gcc14_libsha1-v2-1-ceb3588e6866@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Date: Mon, 16 Dec 2024 21:27:26 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Cc: buildroot@buildroot.org, Petr Kulhavy <brain@jikos.cz>
-In-Reply-To: <20241216074520.361061-1-heiko.thiery@gmail.com>
-References: <20241216074520.361061-1-heiko.thiery@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <42979075ec8e400f6959e4398268f548@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734380849;
- bh=qbTElZtuTEREN/hfyTdQ91FMsB6dTzM5xYMD58gVw8s=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=KwEdg6BwUcs6Dg9FnSus5QC+XKx6zeeBlgMPjqqFeQWOd9y7QWlybtY8I24Iag9ij
- jUjNI6+lOFUiwGELSokUZvrlcAfkLrIiWU+ziCzLcF+ZocuTmMYFdq/gvi1gNQX090
- tUWlioW8up2H5kDLb6agoWm5QsZW70a/dWgcDlEagloUNiQoZfaIM//MN6gMgFOT8E
- P03DJet3fMvf1sqdqNFTc5RV6EfQnopCHEUvS6+vLuaoBklxBOcA9GX4065Jg1a3Cc
- QNWwNvH8YANfYQl3C0AoIun4zpjR2/mEJoy6V8ugo8qqISOpeivcHbO0YAvx/ZJF3h
- uIUfGBxjzh0YA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1734381366;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=kypTcodseKF9xJ7tZyRLgaWQE+ToceEs5p3EHX52Q4c=;
+ b=QM7YTzXWn0IagHXa9/6xPhDtCVMmeQw78tfUkgpVvZDO82x7b3vHZ+AAJzg4GL8tJSVsj1
+ Xi14s4wXHD2lfNYmR8WRTvQbXzT98QYhVqAaVU1LiOD+IT2ALzRUcrPyRVV73wyowcnZBR
+ QPC7t+pR7iQojjdDe1TN2iKDtjs22WaNoVZUUjGanPZLq6Sv0IKaH9GRrUSndi0pxBNoc9
+ 9eFOX+VGXUPKmo8WrVYagA5UKCmZ7tjR8a39zHqzx+2o4zR4EKQ6m2gSZqUhlHkEtyr49f
+ ScQA3Yfvj6sKiNatTlIaRkkQj9ke2QNFBF2JHnLbcU8XTyaAaITMxqle6eLntA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=KwEdg6Bw
-Subject: Re: [Buildroot] [PATCH] package/linuxptp: bump version to 4.4
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=QM7YTzXW
+Subject: Re: [Buildroot] [PATCH v2] package/libsha1: Fix gcc14 compilation
+ in libsha1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,97 +83,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Heiko,
-
-Thanks for the patch!  I have few comments, see below.
-
-On 16/12/2024 08:45, Heiko Thiery wrote:
-> The released package is no longer available under sourceforge. So we
-> switch to github.
-
-Could you add in the commit log references to release announces, such as
-[1] and [2] please? (this helps during patch reviews to understand
-the amount of changes we introduce; it can also help future debug 
-sessions).
-
-Also, since the homepage of this package seems to have changed, could 
-you
-also update the URL in "package/linuxptp/Config.in"? For now, it seems 
-the
-github page [3] will be sufficient.
-
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
->  package/linuxptp/linuxptp.hash | 2 +-
->  package/linuxptp/linuxptp.mk   | 5 ++---
->  2 files changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/linuxptp/linuxptp.hash 
-> b/package/linuxptp/linuxptp.hash
-> index 1d5c590ea7..1aae52abb1 100644
-> --- a/package/linuxptp/linuxptp.hash
-> +++ b/package/linuxptp/linuxptp.hash
-> @@ -1,5 +1,5 @@
->  # Locally computed:
-> -sha256  
-> 70e38e5d2764e0217443da6f14e8846fe401a472293ac138d8419c07a665447a  
-> linuxptp-4.2.tgz
-> +sha256  
-> 61757bc0a58d789b8fcbdddf56c88a0230597184a70dcb2ac05b4c6b619f7d5c  
-> linuxptp-4.4.tar.gz
-> 
->  # Hash for license file:
->  sha256  
-> 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  
-> COPYING
-> diff --git a/package/linuxptp/linuxptp.mk 
-> b/package/linuxptp/linuxptp.mk
-> index eea41f0baf..ff2eb45785 100644
-> --- a/package/linuxptp/linuxptp.mk
-> +++ b/package/linuxptp/linuxptp.mk
-> @@ -4,9 +4,8 @@
->  #
->  
-> ################################################################################
-> 
-> -LINUXPTP_VERSION = 4.2
-> -LINUXPTP_SOURCE = linuxptp-$(LINUXPTP_VERSION).tgz
-> -LINUXPTP_SITE = http://downloads.sourceforge.net/linuxptp
-> +LINUXPTP_VERSION = 4.4
-> +LINUXPTP_SITE = $(call 
-> github,richardcochran,linuxptp,v$(LINUXPTP_VERSION))
-
- From the release announce [1], it seems the "official" download site is
-more [4].
-
-Can you send an updated v2 patch using this site and tarball, please?
-
->  LINUXPTP_LICENSE = GPL-2.0+
->  LINUXPTP_LICENSE_FILES = COPYING
->  LINUXPTP_CPE_ID_VALID = YES
-> --
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
-Best regards,
-
-Julien.
-
-[1] 
-https://lists.nwtime.org/sympa/arc/linuxptp-devel/2024-09/msg00020.html
-[2] https://www.nwtime.org/news/linuxptp-4.4-released/
-[3] https://github.com/nwtime/linuxptp
-[4] https://downloads.nwtime.org/linuxptp
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLAoKT24gTW9uLCAxNiBEZWMgMjAyNCAxODo0ODoyOSArMDEwMApUaG9tYXMg
+Qm9ubmVmaWxsZSA8dGhvbWFzLmJvbm5lZmlsbGVAYm9vdGxpbi5jb20+IHdyb3RlOgoKPiBHQ0Mx
+NCByZW1vdmVkIHRoZSBpbXBsaWNpdCBpbnQgc3VwcG9ydC4KPiBUaGlzIGNvbW1pdCBhZGRzIGEg
+cGF0Y2ggdG8gbGlic2hhMSB0byBmaXggYW4gaW1wbGljaXQgaW50IGRlY2xhcmF0aW9uCj4gYXMg
+cmVjb21tZW5kZWQuCj4gCj4gTGluazogaHR0cHM6Ly9nY2MuZ251Lm9yZy9nY2MtMTQvcG9ydGlu
+Z190by5odG1sCj4gCj4gRml4ZXM6Cj4gICAgIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5l
+dC9yZXN1bHRzLzg3ZGM5YmE5NjkwY2JiNmE4Mjg3NTczNGNlOWNiOGRiYWY4NzhlNDYvCj4gCj4g
+U2lnbmVkLW9mZi1ieTogVGhvbWFzIEJvbm5lZmlsbGUgPHRob21hcy5ib25uZWZpbGxlQGJvb3Rs
+aW4uY29tPgoKVGhhbmtzIGZvciB0aGUgbmV3IGl0ZXJhdGlvbiEgSXQgZml4ZXMgdGhlIGlzc3Vl
+cyBJIHBvaW50ZWQgb3V0LCBidXQgSQpoYXZlIG1vcmUgcXVlc3Rpb25zL2NvbW1lbnRzLgoKPiAr
+Rml4ZXM6Cj4gKwo+ICsgIHRlc3QuYzoxNDo4OiBlcnJvcjogdHlwZSBkZWZhdWx0cyB0byDigJhp
+bnTigJkgaW4gZGVjbGFyYXRpb24gb2Yg4oCYbnVtX3Rlc3TigJkgWy1XaW1wbGljaXQtaW50XQo+
+ICsgICAgIDE0IHwgc3RhdGljIG51bV90ZXN0Owo+ICsgICAgICAgIHwgICAgICAgIF5+fn5+fn5+
+Cj4gKwo+ICtVcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL3BzZWlkZXJlci9saWJzaGExL2Nv
+bW1pdC9kNDQ5ZjI2Zjc4MmJlOTFiMzg0N2Y4OGVkMmJkOTM3NTgyYTU3NWI2CgpUaGlzIHNob3Vs
+ZCBpZGVhbGx5Li4uCgo+ICsKPiArU2lnbmVkLW9mZi1ieTogUGV0ZXIgU2VpZGVyZXIgPHBzLnJl
+cG9ydEBnbXgubmV0PgoKLi4uIGdvIGhlcmUsIGkuZSByaWdodCBhZnRlciBQZXRlcidzIFNvQiwg
+YnV0IGJlZm9yZSB5b3VycywgYXMgaXQncyBhbgppbmZvcm1hdGlvbiBhZGRlZCBieSB5b3UuCgpC
+dXQgbW9yZSBpbXBvcnRhbnRseTogaHR0cHM6Ly9naXRodWIuY29tL3BzZWlkZXJlci9saWJzaGEx
+LyBpc24ndAoidXBzdHJlYW0iLiBVcHN0cmVhbSBmb3IgdGhpcyBwYWNrYWdlIGlzCmh0dHBzOi8v
+Z2l0aHViLmNvbS9kb3R0ZWRtYWcvbGlic2hhMS4gU28gd2UncmUgaW50ZXJlc3RlZCBpbiBzZWVp
+bmcKdGhlIGNoYW5nZSBoYXZpbmcgYmVlbiBzdWJtaXR0ZWQgb3IgYWNjZXB0ZWQgYnkgdGhlIHJl
+YWwgdXBzdHJlYW0sIG5vdApqdXN0IGEgY29tbWl0IGluIHNvbWUgInJhbmRvbSIgR2l0aHViIHJl
+cG9zaXRvcnkgKGV2ZW4gdGhvdWdoIFBldGVyClNlaWRlcmVyIGlzIGEgd2VsbCBrbm93biBCdWls
+ZHJvb3QgY29udHJpYnV0b3IhKQoKVGhhbmtzIQoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25p
+LCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5n
+aW5lZXJpbmcgYW5kIHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
+dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QK
