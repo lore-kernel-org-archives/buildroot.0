@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 399EAC282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:40:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9735DC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:40:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4621F4F69C;
-	Fri, 28 Feb 2025 16:40:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B91804F6AC;
+	Fri, 28 Feb 2025 16:40:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZY2ZuUGnTh7K; Fri, 28 Feb 2025 16:40:41 +0000 (UTC)
+ id KTPw8K6ZWP9g; Fri, 28 Feb 2025 16:40:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B22A24F690
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AD594F0F9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B22A24F690;
-	Fri, 28 Feb 2025 16:40:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8AD594F0F9;
+	Fri, 28 Feb 2025 16:40:44 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0A4731DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D87E1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7040F424C6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7B86A4256E
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qwpUWSjmDq_V for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
+ id wCMifFu-r-mp for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B002424B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 268B8424D2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B002424B5
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 268B8424D2
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 87CA2820F8; Fri, 28 Feb 2025 16:29:40 +0000 (UTC)
+ id 1FC25844AB; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 14 Dec 2024 22:44:05 +0100
+Date: Mon, 16 Dec 2024 22:42:53 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3ef5975b795271a723b694160c8d50c62d518e8e
-X-Git-Newrev: 6ee9c706179076ec1d7772debb6390631da184ce
+X-Git-Oldrev: e675ffd964d65067bb115ee1e770ee44ba073958
+X-Git-Newrev: 9ab704699ea70b12478eac87313ec7d1ff902c7a
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162940.87CA2820F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/orangepi_one: bump BSP
- versions
+Message-Id: <20250228162942.1FC25844AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/netatalk: security
+ bump to version 3.1.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,103 +65,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ee9c706179076ec1d7772debb6390631da184ce
+commit: https://git.buildroot.net/buildroot/commit/?id=9ab704699ea70b12478eac87313ec7d1ff902c7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Switch to the new Linux LTS release 6.12.3 and to the latest U-Boot
-2024.10. Add hashes for Linux kernel/headers and U-Boot. Finally,
-add BR2_TARGET_UBOOT_NEEDS_GNUTLS option required by new U-Boot.
+Fixes the following security issues:
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-[Julien:
-  - add BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-  - remove .checkpackageignore entry
-  - change linux.hash comment to use upstream hashes
-  - add missing BR2_GLOBAL_PATCH_DIR
-]
+CVE-2024-38439: Netatalk 3.2.0 has an off-by-one error and resultant
+heap-based buffer overflow because of setting ibuf[PASSWDLEN] to '\0' in
+FPLoginExt in login in etc/uams/uams_pam.c.
+
+https://github.com/advisories/GHSA-pcmr-ff73-xcj5
+
+CVE-2024-38440: Netatalk 3.2.0 has an off-by-one error and resultant
+heap-based buffer overflow because of incorrectly using FPLoginExt in
+BN_bin2bn in etc/uams/uams_dhx_pam.c.
+
+https://github.com/advisories/GHSA-52mm-rqxx-gfq6
+
+CVE-2024-38441: Netatalk 3.2.0 has an off-by-one error and resultant
+heap-based buffer overflow because of setting ibuf[len] to '\0' in FPMapName
+in afp_mapname in etc/afp/directory.c.
+
+https://github.com/advisories/GHSA-j764-4v6h-pqp7
+
+Release notes:
+https://github.com/Netatalk/netatalk/releases/tag/netatalk-3-1-19
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                                              | 1 -
- .../orangepi-one/patches/linux-headers/linux-headers.hash        | 1 +
- board/orangepi/orangepi-one/patches/linux/linux.hash             | 2 ++
- board/orangepi/orangepi-one/patches/uboot/uboot.hash             | 2 ++
- configs/orangepi_one_defconfig                                   | 9 ++++++---
- 5 files changed, 11 insertions(+), 4 deletions(-)
+ package/netatalk/netatalk.hash | 8 ++++----
+ package/netatalk/netatalk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index f8997bac55..e886d631a6 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -201,7 +201,6 @@ configs/olimex_a64_olinuxino_defconfig lib_defconfig.ForceCheckHash
- configs/olpc_xo175_defconfig lib_defconfig.ForceCheckHash
- configs/olpc_xo1_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_lite2_defconfig lib_defconfig.ForceCheckHash
--configs/orangepi_one_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_one_plus_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_pc2_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_pc_plus_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/orangepi/orangepi-one/patches/linux-headers/linux-headers.hash b/board/orangepi/orangepi-one/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/orangepi/orangepi-one/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/orangepi/orangepi-one/patches/linux/linux.hash b/board/orangepi/orangepi-one/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..aea771e7bf
---- /dev/null
-+++ b/board/orangepi/orangepi-one/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  c89809cc777d50f1ea484a118630281a26383707a0e752c96fd834f6e765deae  linux-6.12.3.tar.xz
-diff --git a/board/orangepi/orangepi-one/patches/uboot/uboot.hash b/board/orangepi/orangepi-one/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..904fa56c02
---- /dev/null
-+++ b/board/orangepi/orangepi-one/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-diff --git a/configs/orangepi_one_defconfig b/configs/orangepi_one_defconfig
-index 167527235e..aef7eb6c77 100644
---- a/configs/orangepi_one_defconfig
-+++ b/configs/orangepi_one_defconfig
-@@ -1,7 +1,9 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-one/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_One"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi One"
- BR2_SYSTEM_DHCP="eth0"
-@@ -10,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.3"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-h3-orangepi-one"
-@@ -22,11 +24,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_one"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
- BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/package/netatalk/netatalk.hash b/package/netatalk/netatalk.hash
+index 9ab5d604a8..285484ed2c 100644
+--- a/package/netatalk/netatalk.hash
++++ b/package/netatalk/netatalk.hash
+@@ -1,7 +1,7 @@
+-# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.18/
+-md5  b1caff4e1da534d8ca57d688c7fa3ce1  netatalk-3.1.18.tar.xz
+-sha1  cbd92c95d04cfd4a9f49977970501a623310c2d9  netatalk-3.1.18.tar.xz
++# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.19/
++md5  4861f0c2450ac7a6094e51090e6fdc75  netatalk-3.1.19.tar.xz
++sha1  16900b3b14da9c2f40e1267ecb3e68021cc794b0  netatalk-3.1.19.tar.xz
+ # Locally computed
+-sha256  3941effcc2c4e0dceecabc763fbb8478a2f2fbe0af4a6314983cfea452df8d47  netatalk-3.1.18.tar.xz
++sha256  433fa87ac23bc18a9acb0769b4f7f4047eeb14e02e0607ecd3a051c31859164f  netatalk-3.1.19.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  7599ae145e53be03a08f8b558b2f2e0c828e1630f1843cc04f41981b8cefcd65  COPYRIGHT
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index 53cd53876a..b6f9c3fa59 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NETATALK_VERSION = 3.1.18
++NETATALK_VERSION = 3.1.19
+ NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk-$(subst .,-,$(NETATALK_VERSION))
+ NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.xz
+ NETATALK_CONFIG_SCRIPTS = netatalk-config
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
