@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A207E77183
-	for <buildroot@archiver.kernel.org>; Mon, 16 Dec 2024 21:06:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB75AE7717F
+	for <buildroot@archiver.kernel.org>; Mon, 16 Dec 2024 21:08:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A33BB415F5;
-	Mon, 16 Dec 2024 21:06:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69BD2611F5;
+	Mon, 16 Dec 2024 21:08:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xDrxJTwGQZgg; Mon, 16 Dec 2024 21:08:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DF4A611FA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4DF4A611FA;
+	Mon, 16 Dec 2024 21:08:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 00CAACE
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 21:08:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2B504172F
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 21:08:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n24Li0SQa4jy; Mon, 16 Dec 2024 21:05:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F295415B3
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F295415B3;
-	Mon, 16 Dec 2024 21:05:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id DD55EC5
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 21:05:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA909846AA
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 21:05:57 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GecUs05Bh4Cx for <buildroot@buildroot.org>;
- Mon, 16 Dec 2024 21:05:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA7388474B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA7388474B
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 21:05:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D4CA48713A; Mon, 16 Dec 2024 21:05:56 +0000 (UTC)
+ id d9GAocczhW27 for <buildroot@buildroot.org>;
+ Mon, 16 Dec 2024 21:08:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B00DC41732
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B00DC41732
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B00DC41732
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 21:08:51 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 4F3C919F59C;
+ Mon, 16 Dec 2024 22:08:46 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:46514])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 16 Dec 2024 22:08:46 +0100
+MIME-Version: 1.0
+Date: Mon, 16 Dec 2024 22:08:46 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 16 Dec 2024 21:57:13 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 49a7cf412133daf3d477a000f4449e984da40e21
-X-Git-Newrev: 24615d1502e2293da0bcbc34ad6042ef35e665d1
-X-Patchwork-Hint: ignore
-Message-Id: <20241216210556.D4CA48713A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: bump to v2.12
+To: =?UTF-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>
+Cc: buildroot@buildroot.org, Sergey Matyukevich <geomatsi@gmail.com>
+In-Reply-To: <20241216090421.2867204-1-vincent.stehle@arm.com>
+References: <20241216090421.2867204-1-vincent.stehle@arm.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <847d9076e7ae8227d486d9ef1fe08bb0@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1734383328;
+ bh=4bck8gb+Pw9s17R8oGhrt1OVW/s8i7K3CS4gUXgbISM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=QcpdXD77OE+pVoD2KWe/kr+w3+J4HCTf/7fIB39N++6pb8bkWKozJ7qawlCJV04mG
+ q7BZXDTzjY1EutPI41iV+Dg6m2GbR772PqKu76rEB6ok1A6G2Sgk1RZLc39WG0D8cP
+ UErbyGcG4z//ts/pp3IAKm5LBqBo9u3qXLz1WWzKp8CBZL9JAgsTRoidDKsJtKQQ3Q
+ 2T/Zq64G/hbxqNVdTZyYJPedLvcvybUNosiWDy/mXHMCx5nx/jye5PJyADn9mT32aA
+ uWElzMhrEV9Ub6yvgADF+6eflCsUsaRyAZGB4rrU5aPjFpoB7LjLtwJasw7qZZTJtq
+ FVXxLCTga7zZA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=QcpdXD77
+Subject: Re: [Buildroot] [PATCH] boot/arm-trusted-firmware: bump to v2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,93 +82,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0547248956001753637=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0547248956001753637==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=24615d1502e2293da0bcbc34ad6042ef35e665d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-For change log, see [1].
-
-Update trusted-firmware-a version to v2.12 and add a hash file
-accordingly.
-
-Compared to v2.11, the license has changed with the additional mention
-of files from the pydevicetree project under Apache 2.0 license.
-As we only document the main license of TF-A, BSD-3-Clause, this change
-has no impact for us.
-
-[1] https://git.trustedfirmware.org/plugins/gitiles/TF-A/trusted-firmware-a.git/+/refs/tags/v2.12/docs/change-log.md
-
-Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
-Cc: Dick Olsson <hi@senzilla.io>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
-[Julien:
-  - add link to change log
-  - remove v2.11 hash file
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- boot/arm-trusted-firmware/Config.in                       | 4 ++--
- boot/arm-trusted-firmware/v2.11/arm-trusted-firmware.hash | 3 ---
- boot/arm-trusted-firmware/v2.12/arm-trusted-firmware.hash | 3 +++
- 3 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index 4a5c7dc89c..c8deede9cd 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -14,7 +14,7 @@ choice
- 	  Select the specific ATF version you want to use
- 
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
--	bool "v2.11"
-+	bool "v2.12"
- 
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION
- 	bool "latest lts-v2.10.x"
-@@ -52,7 +52,7 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE
- 
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION
- 	string
--	default "v2.11"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
-+	default "v2.12"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
- 	default "lts-v2.10.5"	if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION
- 	default "lts-v2.8.20"	if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_8_VERSION
- 	default "custom"	if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL
-diff --git a/boot/arm-trusted-firmware/v2.11/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/v2.11/arm-trusted-firmware.hash
-deleted file mode 100644
-index 984978dc11..0000000000
---- a/boot/arm-trusted-firmware/v2.11/arm-trusted-firmware.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  c0f23ccc71c49989e9ad238acf334473c17b7c88f79a20c829c3d443e3794a22  arm-trusted-firmware-v2.11-git4.tar.gz
--sha256  03d5088ff4fbfe989f3c807117356191c263cf27d62ee6916bde8532611728ed  docs/license.rst
-diff --git a/boot/arm-trusted-firmware/v2.12/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/v2.12/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..55ea515481
---- /dev/null
-+++ b/boot/arm-trusted-firmware/v2.12/arm-trusted-firmware.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  06b35a3596b8417bf66f7bfdd7acd181bcb53fc36dc13216227b5cae154e0219  arm-trusted-firmware-v2.12-git4.tar.gz
-+sha256  b2c79635797bafcde84c6edadadde290b9d5e05deb3ea16a847210fd2ca83669  docs/license.rst
-
---===============0547248956001753637==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0547248956001753637==--
+SGkgVmluY2VudCwKCk9uIDE2LzEyLzIwMjQgMTA6MDQsIFZpbmNlbnQgU3RlaGzDqSB3cm90ZToK
+PiBVcGRhdGUgdHJ1c3RlZC1maXJtd2FyZS1hIHZlcnNpb24gdG8gdjIuMTIgYW5kIGFkZCBhIGhh
+c2ggZmlsZSAKPiBhY2NvcmRpbmdseS4KPiAKPiBDb21wYXJlZCB0byB2Mi4xMSwgdGhlIGxpY2Vu
+c2UgaGFzIGNoYW5nZWQgd2l0aCB0aGUgYWRkaXRpb25hbCBtZW50aW9uIAo+IG9mCj4gZmlsZXMg
+ZnJvbSB0aGUgcHlkZXZpY2V0cmVlIHByb2plY3QgdW5kZXIgQXBhY2hlIDIuMCBsaWNlbnNlLgo+
+IEFzIHdlIG9ubHkgZG9jdW1lbnQgdGhlIG1haW4gbGljZW5zZSBvZiBURi1BLCBCU0QtMy1DbGF1
+c2UsIHRoaXMgY2hhbmdlIAo+IGhhcwo+IG5vIGltcGFjdCBmb3IgdXMuCj4gCj4gU2lnbmVkLW9m
+Zi1ieTogVmluY2VudCBTdGVobMOpIDx2aW5jZW50LnN0ZWhsZUBhcm0uY29tPgo+IENjOiBEaWNr
+IE9sc3NvbiA8aGlAc2VuemlsbGEuaW8+Cj4gQ2M6IFNlcmdleSBNYXR5dWtldmljaCA8Z2VvbWF0
+c2lAZ21haWwuY29tPgoKVGhhbmtzIGZvciB0aGUgcGF0Y2ggKGFuZCB0aGUgZXh0ZW5kZWQgdGVz
+dGluZykuIEkgYXBwbGllZCB0byBtYXN0ZXIuCgpJIHJlbW92ZWQgdGhlIGhhc2ggZmlsZSBmb3Ig
+djIuMTEsIHNpbmNlIGl0IGlzIG5vIGxvbmdlciBuZWVkZWQKaGVyZS4gSSBhbHNvIHNlZSB0aGF0
+IGFybV9mdnBfZWJicl9kZWZjb25maWcgdXNlcyBURi1BIHYyLjExIFsxXQpidXQgaXRzIHBhdGNo
+IGRpcmVjdG9yeSBbMl0gZG9lcyBub3QgaW5jbHVkZSBhbiBlbnRyeSBmb3IgaXQuCkkgYmVsaWV2
+ZSBpdCB3YXMgbWlzc2luZyBhbmQgd2FzIHVzaW5nIHRoZSBoYXNoIGZpbGUgSSByZW1vdmVkLgpU
+aGlzIGRlZmNvbmZpZyBtaWdodCBiZSBicm9rZW4gbm93LiBDb3VsZCB5b3UgZG91YmxlIGNoZWNr
+IHRoYXQKcGxlYXNlPyBZb3UgbWlnaHQgbmVlZCB0byBhZGQgYmFjayBhIGhhc2ggZmlsZSBpbiB5
+b3VyIGJvYXJkCnBhdGNoIGRpcmVjdG9yeSAoZXZlbiBpZiBpdCdzIGZvciBhbiB1cGRhdGVkIHYy
+LjEyIHZlcnNpb24pLgoKQmVzdCByZWdhcmRzLAoKSnVsaWVuLgoKWzFdIApodHRwczovL2dpdGxh
+Yi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9ibG9iL21hc3Rlci9jb25maWdzL2FybV9m
+dnBfZWJicl9kZWZjb25maWcjTDIwClsyXSAKaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5v
+cmcvYnVpbGRyb290Ly0vdHJlZS9tYXN0ZXIvYm9hcmQvYXJtL2Z2cC1lYmJyL3BhdGNoZXMKCgo+
+IC0tLQo+IAo+IEhpLAo+IAo+IEFmdGVyIGRvaW5nIHNvbWUgdGVzdGluZywgSSB0aGluayBpdCBp
+cyBzYWZlIHRvIGJ1bXAgb3VyIGRlZmF1bHQgCj4gdmVyc2lvbiBvZgo+IFRGLUEgdG8gdjIuMTIu
+Cj4gCj4gVGVzdGVkIG9rIHdpdGggdGhlIGZvbGxvd2luZyBweXRob24gdGVzdHMgKG1vZGlmaWVk
+IGxvY2FsbHkgdG8gdXNlIFRGLUEKPiB2Mi4xMik6Cj4gLSB0ZXN0cy5ib290LnRlc3RfYXRmLlRl
+c3RBVEZBbGx3aW5uZXIgKG5vdGU6IHRoaXMgdGVzdCBpcyBidWlsZCBvbmx5KQo+IC0gdGVzdHMu
+Ym9vdC50ZXN0X2VkazIuVGVzdEVkazIKPiAtIHRlc3RzLmJvb3QudGVzdF9vcHRlZV9vcy5UZXN0
+T3B0ZWUKPiAtIHRlc3RzLnBhY2thZ2UudGVzdF9md3RzLlRlc3RGd3RzCj4gCj4gQm9vdC10ZXN0
+ZWQgb2sgd2l0aCB0aGUgZm9sbG93aW5nIGRlZmNvbmZpZ3MgKG1vZGlmaWVkIGxvY2FsbHkgdG8g
+dXNlIAo+IFRGLUEKPiB2Mi4xMik6Cj4gLSBhcm1fZnZwX2ViYnIKPiAtIHFlbXVfYWFyY2g2NF9l
+YmJyCj4gLSBxZW11X2FhcmNoNjRfc2JzYQo+IC0gcWVtdV9hcm1fZWJicgo+IC0gcWVtdV9hcm1f
+dmV4cHJlc3NfdHoKPiAtIHJvY2twcm82NAo+IAo+IEJ1aWxkLXRlc3RlZCBvayB3aXRoIHRoZSBm
+b2xsb3dpbmcgZGVmY29uZmlncyAobW9kaWZpZWQgbG9jYWxseSB0byB1c2UgCj4gVEYtQQo+IHYy
+LjEyKToKPiAtIGlteDhtbl9ic2hfc21tX3MyCj4gLSBpbXg4bW5fYnNoX3NtbV9zMl9wcm8KPiAt
+IGtvbnRyb25fYmxfaW14OG1tCj4gLSBvbGltZXhfYTY0X29saW51eGlubwo+IC0gb3JhbmdlcGlf
+cGMyCj4gLSBvcmFuZ2VwaV96ZXJvMncKPiAtIG9yYW5nZXBpX3plcm9fcGx1cwo+IC0gcGluZTY0
+Cj4gLSByb2NfcGNfcmszMzk5Cj4gLSBzdG0zMm1wMTU3YV9kazEKPiAtIHN0bTMybXAxNTdjX2Rr
+Mgo+IC0gc3RtMzJtcDE1N2Nfb2R5c3NleQo+IAo+IEJlc3QgcmVnYXJkcywKPiBWaW5jZW50Lgo+
+IAo+ICBib290L2FybS10cnVzdGVkLWZpcm13YXJlL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAg
+ICAgICAgfCA0ICsrLS0KPiAgYm9vdC9hcm0tdHJ1c3RlZC1maXJtd2FyZS92Mi4xMi9hcm0tdHJ1
+c3RlZC1maXJtd2FyZS5oYXNoIHwgMyArKysKPiAgMiBmaWxlcyBjaGFuZ2VkLCA1IGluc2VydGlv
+bnMoKyksIDIgZGVsZXRpb25zKC0pCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCAKPiBib290L2FybS10
+cnVzdGVkLWZpcm13YXJlL3YyLjEyL2FybS10cnVzdGVkLWZpcm13YXJlLmhhc2gKPiAKPiBkaWZm
+IC0tZ2l0IGEvYm9vdC9hcm0tdHJ1c3RlZC1maXJtd2FyZS9Db25maWcuaW4gCj4gYi9ib290L2Fy
+bS10cnVzdGVkLWZpcm13YXJlL0NvbmZpZy5pbgo+IGluZGV4IDRhNWM3ZGM4OWMuLmM4ZGVlZGU5
+Y2QgMTAwNjQ0Cj4gLS0tIGEvYm9vdC9hcm0tdHJ1c3RlZC1maXJtd2FyZS9Db25maWcuaW4KPiAr
+KysgYi9ib290L2FybS10cnVzdGVkLWZpcm13YXJlL0NvbmZpZy5pbgo+IEBAIC0xNCw3ICsxNCw3
+IEBAIGNob2ljZQo+ICAJICBTZWxlY3QgdGhlIHNwZWNpZmljIEFURiB2ZXJzaW9uIHlvdSB3YW50
+IHRvIHVzZQo+IAo+ICBjb25maWcgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9MQVRF
+U1RfVkVSU0lPTgo+IC0JYm9vbCAidjIuMTEiCj4gKwlib29sICJ2Mi4xMiIKPiAKPiAgY29uZmln
+IEJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfTEFURVNUX0xUU18yXzEwX1ZFUlNJT04K
+PiAgCWJvb2wgImxhdGVzdCBsdHMtdjIuMTAueCIKPiBAQCAtNTIsNyArNTIsNyBAQCBjb25maWcg
+Cj4gQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVkVSU0lPTl9WQUxVRQo+
+IAo+ICBjb25maWcgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9WRVJTSU9OCj4gIAlz
+dHJpbmcKPiAtCWRlZmF1bHQgInYyLjExIgkJaWYgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJN
+V0FSRV9MQVRFU1RfVkVSU0lPTgo+ICsJZGVmYXVsdCAidjIuMTIiCQlpZiBCUjJfVEFSR0VUX0FS
+TV9UUlVTVEVEX0ZJUk1XQVJFX0xBVEVTVF9WRVJTSU9OCj4gIAlkZWZhdWx0ICJsdHMtdjIuMTAu
+NSIJaWYgCj4gQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9MQVRFU1RfTFRTXzJfMTBf
+VkVSU0lPTgo+ICAJZGVmYXVsdCAibHRzLXYyLjguMjAiCWlmIAo+IEJSMl9UQVJHRVRfQVJNX1RS
+VVNURURfRklSTVdBUkVfTEFURVNUX0xUU18yXzhfVkVSU0lPTgo+ICAJZGVmYXVsdCAiY3VzdG9t
+IglpZiBCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0NVU1RPTV9UQVJCQUxMCj4gZGlm
+ZiAtLWdpdCBhL2Jvb3QvYXJtLXRydXN0ZWQtZmlybXdhcmUvdjIuMTIvYXJtLXRydXN0ZWQtZmly
+bXdhcmUuaGFzaCAKPiBiL2Jvb3QvYXJtLXRydXN0ZWQtZmlybXdhcmUvdjIuMTIvYXJtLXRydXN0
+ZWQtZmlybXdhcmUuaGFzaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAw
+MC4uNTVlYTUxNTQ4MQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9ib290L2FybS10cnVzdGVkLWZp
+cm13YXJlL3YyLjEyL2FybS10cnVzdGVkLWZpcm13YXJlLmhhc2gKPiBAQCAtMCwwICsxLDMgQEAK
+PiArIyBMb2NhbGx5IGNhbGN1bGF0ZWQKPiArc2hhMjU2ICAKPiAwNmIzNWEzNTk2Yjg0MTdiZjY2
+ZjdiZmRkN2FjZDE4MWJjYjUzZmMzNmRjMTMyMTYyMjdiNWNhZTE1NGUwMjE5ICAKPiBhcm0tdHJ1
+c3RlZC1maXJtd2FyZS12Mi4xMi1naXQ0LnRhci5nego+ICtzaGEyNTYgIAo+IGIyYzc5NjM1Nzk3
+YmFmY2RlODRjNmVkYWRhZGRlMjkwYjlkNWUwNWRlYjNlYTE2YTg0NzIxMGZkMmNhODM2NjkgIAo+
+IGRvY3MvbGljZW5zZS5yc3QKPiAtLQo+IDIuNDUuMgo+IAo+IF9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1
+aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
+YW4vbGlzdGluZm8vYnVpbGRyb290Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
+Cg==
