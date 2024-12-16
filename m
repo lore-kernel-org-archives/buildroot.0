@@ -1,60 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BC78E7717F
-	for <buildroot@archiver.kernel.org>; Mon, 16 Dec 2024 12:22:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27480E7717F
+	for <buildroot@archiver.kernel.org>; Mon, 16 Dec 2024 12:58:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4F9280B71;
-	Mon, 16 Dec 2024 12:22:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BBE36404C0;
+	Mon, 16 Dec 2024 12:58:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0WvrQoMWqhQK; Mon, 16 Dec 2024 12:22:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id faUU1ONT48ad; Mon, 16 Dec 2024 12:58:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9769280B6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 834484059B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9769280B6E;
-	Mon, 16 Dec 2024 12:22:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 834484059B;
+	Mon, 16 Dec 2024 12:58:10 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9910DC5
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 12:22:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6172ECE
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 12:58:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7162B40B03
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 12:22:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 44F3F402A7
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 12:58:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xO_oOAi2gvVX for <buildroot@buildroot.org>;
- Mon, 16 Dec 2024 12:22:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7240E40592
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7240E40592
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7240E40592
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 12:22:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CD8FA1C0002;
- Mon, 16 Dec 2024 12:22:25 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1tNA7F-000zzW-0L;
- Mon, 16 Dec 2024 13:22:25 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+ id ErSwtaRMLOiu for <buildroot@buildroot.org>;
+ Mon, 16 Dec 2024 12:58:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ envelope-from=tim.gover@raspberrypi.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D3A534000B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3A534000B
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D3A534000B
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 12:58:06 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-385de9f789cso3266016f8f.2
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 04:58:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1734353884; x=1734958684;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=63IX9C6Fxv20CNbH91gahnCeb6qr8Af2gw64iZlOk3Y=;
+ b=KLx0UooJU9pgY1Y3YQbb02b6SlLPxwr80iiPuABEY7VfuVzKD+wJg4SzfWIqOaEOzp
+ d9fiU3LkwSZvjhuvyThLk0nZxnUqM4X6MpP1i8agJsMR4fUQLP0eirJVvUjEU1npHu+G
+ 2PDTmGPnCcMTihsCA3ok4nipUzG6wEMpwpKqntyI22WiPd7r/8ByteGESxVtK6ZYnh8k
+ qO7kOgK95gRiC57TAXeoJZRvSPJPHmZQmwLWnUJhMjqw4vnywSAy3cwlPwcZAqDXDyp3
+ G5z2NjdbLo78jNq7ADsbxd1Fg5QfREYT1rrd+7kAk/SXLOwcx+kuuBA2HOaCEtdmVRda
+ fI2g==
+X-Gm-Message-State: AOJu0Yyim0SyX0reB6Kwc5z3muAy73kaqoll9k1cmdVI1IVJOy7xQArC
+ Re2AWijjJexwdzSTqmovrHQdDTcr8SYjfpAqjJO2RdzbZPkKTf9xgE0fGuJ1UBdBTTDFszERuca
+ rEoY=
+X-Gm-Gg: ASbGncufNuAbpcTk9r8Mdm7d1PGrJjNZTcuI7m/hPzJbid+w6Lln6s4Ugu9QLI529nQ
+ 5PU3O3RjwRiBFWgdb+WQH8rncsyxztplO1wl8sXbeen8fugnEN/sJfEwUztRb/TQKBd9eUa9bwF
+ 0olFt1BSyRx2om2DZHXR058xhVmITGL7qdqvTofQsBL5UFv5Z4T3PtII3aviGAoWIBvY95E9aSY
+ hSO2usoLe7Q1pglMjFxzBuUxlpGjOtQvtFZHijt9VYHrvyUBOZoCHHsI7CR3Ay/nWP+1O0RtHcA
+ 3yLL6PjwAdImxOFsLc321T4FvHvd+P5wKave3MVHknECDaMumMz+4JQCUYk=
+X-Google-Smtp-Source: AGHT+IGTnl0JrB6Y0ph20RW5vdHomQVRwz0IbjByUkF8RxRBXwE3BJtvggOF9sNEK0aB3JIL93V/Pg==
+X-Received: by 2002:a5d:6da4:0:b0:385:fa33:29ed with SMTP id
+ ffacd0b85a97d-3888e0f4553mr9828065f8f.47.1734353884087; 
+ Mon, 16 Dec 2024 04:58:04 -0800 (PST)
+Received: from TIM-G-DELL.pitowers.org
+ (host109-145-9-171.range109-145.btcentralplus.com. [109.145.9.171])
+ by smtp.googlemail.com with ESMTPSA id
+ ffacd0b85a97d-388c8046c05sm8228584f8f.73.2024.12.16.04.58.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 16 Dec 2024 04:58:03 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Mon, 16 Dec 2024 13:22:08 +0100
-Message-Id: <20241216122209.238083-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Tim Gover <tim.gover@raspberrypi.com>
+Date: Mon, 16 Dec 2024 12:57:59 +0000
+Message-Id: <20241216125800.219227-1-tim.gover@raspberrypi.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=raspberrypi.com; s=google; t=1734353884; x=1734958684; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=63IX9C6Fxv20CNbH91gahnCeb6qr8Af2gw64iZlOk3Y=;
+ b=s2seN0y+S88nHZjY+bOtkCuiKhKoCJksItX87yZWHYrQO3l8JM8XpzQE7bMBqZuJF+
+ 9k9mHrFJ4iDjDYEoigpXY+QGtj5XIcxHEUy5kdxU3AnYtulYhz4tQieUEZi7NOf2kUaa
+ P7os8gXOxCkVbNfxOsUOf3zJ35IRltqju1zzxIlVd5d/KkABLK09LbSYdw9E2J/AQFDF
+ OwgdNRkJCUod6qam/XpuAQv/WCkyE+aIkKQvFpi5WOgfMN6kpkENAkftxI+7wn3e4wSc
+ yK6QsVx+VZfezUsdWPpjZpgsYfVvnOY0AFn3luHl42hoQwIDidbtrtJ5hJaidyGB5WBY
+ 9B1g==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/apr: add upstream security fix for
- CVE-2023-49582
+ dmarc=pass (p=reject dis=none)
+ header.from=raspberrypi.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=raspberrypi.com header.i=@raspberrypi.com
+ header.a=rsa-sha256 header.s=google header.b=s2seN0y+
+Subject: [Buildroot] [PATCH 0/1] package/rpi-eeprom new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,123 +108,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>
+From: Tim Gover via buildroot <buildroot@buildroot.org>
+Reply-To: Tim Gover <tim.gover@raspberrypi.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes CVE-2023-49582: Lax permissions set by the Apache Portable Runtime
-library on Unix platforms would allow local users read access to named
-shared memory segments, potentially revealing sensitive application data.
-This issue does not affect non-Unix platforms, or builds with
-APR_USE_SHMEM_SHMGET=1 (apr.h) Users are recommended to upgrade to APR
-version 1.7.5, which fixes this issue.
+Add a new package to make it easier to include the Raspberry
+Pi bootloader configuration and code signing tools.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
-NOTICE: Add patch rather than bumping to 1.7.5 as the patches (0002-/0003-)
-we have reverted to fix apr-build do not apply to 1.7.5 and to make
-backporting to LTS easier.
+Compute Module users often need to enable signed boot in order
+to create products covered by the Cyber Resilience Act.
+A first step in this direction is to make it easy to include
+the Raspberry Pi bootloader via a buildroot package.
 
- .../apr/0004-Merge-r1920082-from-1.8.x.patch  | 71 +++++++++++++++++++
- package/apr/apr.mk                            |  3 +
- 2 files changed, 74 insertions(+)
- create mode 100644 package/apr/0004-Merge-r1920082-from-1.8.x.patch
 
-diff --git a/package/apr/0004-Merge-r1920082-from-1.8.x.patch b/package/apr/0004-Merge-r1920082-from-1.8.x.patch
-new file mode 100644
-index 0000000000..5d198def34
---- /dev/null
-+++ b/package/apr/0004-Merge-r1920082-from-1.8.x.patch
-@@ -0,0 +1,71 @@
-+From 36ea6d5a2bfc480dd8032cc8651e6793552bc2aa Mon Sep 17 00:00:00 2001
-+From: Eric Covener <covener@apache.org>
-+Date: Tue, 20 Aug 2024 21:50:42 +0000
-+Subject: [PATCH] Merge r1920082 from 1.8.x:
-+
-+use 0600 perms for named shared mem consistently
-+
-+
-+
-+
-+git-svn-id: https://svn.apache.org/repos/asf/apr/apr/branches/1.7.x@1920083 13f79535-47bb-0310-9956-ffa450edef68
-+Upstream: https://github.com/apache/apr/commit/36ea6d5a2bfc480dd8032cc8651e6793552bc2aa
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ shmem/unix/shm.c | 18 +++++++-----------
-+ 1 file changed, 7 insertions(+), 11 deletions(-)
-+
-+diff --git a/shmem/unix/shm.c b/shmem/unix/shm.c
-+index 096884d99..ea9b94277 100644
-+--- a/shmem/unix/shm.c
-++++ b/shmem/unix/shm.c
-+@@ -287,10 +287,9 @@ APR_DECLARE(apr_status_t) apr_shm_create(apr_shm_t **m,
-+         status = APR_SUCCESS;
-+     
-+ #if APR_USE_SHMEM_MMAP_TMP
-+-        /* FIXME: Is APR_OS_DEFAULT sufficient? */
-+-        status = apr_file_open(&file, filename, 
-+-                               APR_READ | APR_WRITE | APR_CREATE | APR_EXCL,
-+-                               APR_OS_DEFAULT, pool);
-++        status = apr_file_open(&file, filename,
-++                               APR_FOPEN_READ | APR_FOPEN_WRITE | APR_FOPEN_CREATE | APR_FOPEN_EXCL,
-++                               APR_FPROT_UREAD | APR_FPROT_UWRITE, pool);
-+         if (status != APR_SUCCESS) {
-+             return status;
-+         }
-+@@ -319,8 +318,7 @@ APR_DECLARE(apr_status_t) apr_shm_create(apr_shm_t **m,
-+         }
-+ #endif /* APR_USE_SHMEM_MMAP_TMP */
-+ #if APR_USE_SHMEM_MMAP_SHM
-+-        /* FIXME: SysV uses 0600... should we? */
-+-        tmpfd = shm_open(shm_name, O_RDWR | O_CREAT | O_EXCL, 0644);
-++        tmpfd = shm_open(shm_name, O_RDWR | O_CREAT | O_EXCL, 0600);
-+         if (tmpfd == -1) {
-+             return errno;
-+         }
-+@@ -361,10 +359,9 @@ APR_DECLARE(apr_status_t) apr_shm_create(apr_shm_t **m,
-+ #elif APR_USE_SHMEM_SHMGET
-+         new_m->realsize = reqsize;
-+ 
-+-        /* FIXME: APR_OS_DEFAULT is too permissive, switch to 600 I think. */
-+-        status = apr_file_open(&file, filename, 
-++        status = apr_file_open(&file, filename,
-+                                APR_FOPEN_WRITE | APR_FOPEN_CREATE | APR_FOPEN_EXCL,
-+-                               APR_OS_DEFAULT, pool);
-++                               APR_FPROT_UREAD | APR_FPROT_UWRITE, pool);
-+         if (status != APR_SUCCESS) {
-+             return status;
-+         }
-+@@ -555,8 +552,7 @@ APR_DECLARE(apr_status_t) apr_shm_attach(apr_shm_t **m,
-+ #if APR_USE_SHMEM_MMAP_SHM
-+         const char *shm_name = make_shm_open_safe_name(filename, pool);
-+ 
-+-        /* FIXME: SysV uses 0600... should we? */
-+-        tmpfd = shm_open(shm_name, O_RDWR, 0644);
-++        tmpfd = shm_open(shm_name, O_RDWR, 0600);
-+         if (tmpfd == -1) {
-+             return errno;
-+         }
-+-- 
-+2.39.5
-+
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index d4526a4172..5a41891cef 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -16,6 +16,9 @@ APR_INSTALL_STAGING = YES
- # so we need to autoreconf:
- APR_AUTORECONF = YES
- 
-+# 0004-Merge-r1920082-from-1.8.x.patch
-+APR_IGNORE_CVES += CVE-2023-49582
-+
- APR_CONF_OPTS = --disable-sctp
- 
- # avoid apr_hints.m4 by setting apr_preload_done=yes and set
+Tim Gover (1):
+  package/rpi-eeprom: New package for RPi bootloader tools
+
+ configs/raspberrypi5_defconfig     |  1 +
+ package/Config.in                  |  1 +
+ package/Config.in.host             |  1 +
+ package/rpi-eeprom/Config.in       |  9 +++++++++
+ package/rpi-eeprom/Config.in.host  |  9 +++++++++
+ package/rpi-eeprom/rpi-eeprom.hash |  1 +
+ package/rpi-eeprom/rpi-eeprom.mk   | 27 +++++++++++++++++++++++++++
+ 7 files changed, 49 insertions(+)
+ create mode 100644 package/rpi-eeprom/Config.in
+ create mode 100644 package/rpi-eeprom/Config.in.host
+ create mode 100644 package/rpi-eeprom/rpi-eeprom.hash
+ create mode 100644 package/rpi-eeprom/rpi-eeprom.mk
+
 -- 
-2.39.5
+2.34.1
 
 _______________________________________________
 buildroot mailing list
