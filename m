@@ -4,86 +4,106 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A07A9E77183
-	for <buildroot@archiver.kernel.org>; Mon, 16 Dec 2024 18:17:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8643E7717F
+	for <buildroot@archiver.kernel.org>; Mon, 16 Dec 2024 20:24:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 540F54063B;
-	Mon, 16 Dec 2024 18:17:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78AA8408C7;
+	Mon, 16 Dec 2024 20:24:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LABENifP9mKs; Mon, 16 Dec 2024 18:17:37 +0000 (UTC)
+ id 4PG4zDh1qvD0; Mon, 16 Dec 2024 20:24:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9CCA4056F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EBFA408D4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9CCA4056F;
-	Mon, 16 Dec 2024 18:17:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B8D7BC5
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 18:17:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3EBFA408D4;
+	Mon, 16 Dec 2024 20:24:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AB5DBE3
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 20:24:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9990E608CB
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 18:17:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 99F6D81F12
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 20:24:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0kk0hZkwiPab for <buildroot@buildroot.org>;
- Mon, 16 Dec 2024 18:17:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.47;
- helo=mail-wr1-f47.google.com; envelope-from=thomas.devoogdt@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 603C1600C6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 603C1600C6
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com
- [209.85.221.47])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 603C1600C6
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 18:17:29 +0000 (UTC)
-Received: by mail-wr1-f47.google.com with SMTP id
- ffacd0b85a97d-385e2880606so4140351f8f.3
- for <buildroot@buildroot.org>; Mon, 16 Dec 2024 10:17:29 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3yAXJUqHB58y for <buildroot@buildroot.org>;
+ Mon, 16 Dec 2024 20:24:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 280E881EE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 280E881EE4
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 280E881EE4
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 20:24:05 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-38789e5b6a7so2384357f8f.1
+ for <buildroot@buildroot.org>; Mon, 16 Dec 2024 12:24:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1734373045; x=1734977845;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=6/u+cYahwGGWxbutZtKlZMbh3iLIhoRQcZteRKXmfOQ=;
- b=FquFxZl6cd4PFuxEFTEMVX+GYAjVXvM+4xzNC312CiQqr2U1shVGAP+1y0V1SyjO9e
- amTXO10Gc446EZ4rCk7rpILCMqJa8wtXNCYuBHBRWfu8YtyZUIfazMsDucZdZUjL3TLG
- G7apSNz0Ga5owN24IHC8/RvwqQjcZZhSLZbaCehUWqz7Y08+F5qC7KRW4CHC17aQTdKg
- f4VHjaWam/6+v5V0d8ghziVFu6JdttWf6MDyxZG9UMTP/zoyye5M7OIsh2NvUOsPq38w
- JknsFppORZ0GHGiT/1N0NKyaGc5Bvo5fGTNXfF2D2AOSqwxzp/DZ/M5m4hMTXUr+gh7G
- CN6g==
-X-Gm-Message-State: AOJu0YwAS1gqioSjHxtIblsRX47qGaTUoKDbCVEEKcJN9LvRPFGpFrsH
- yMEWAVCLPjU5Z2WGT6EJUjqpE3iQULzSQdiY2aq11YSydlgLIRKbgcrhMna2
-X-Gm-Gg: ASbGnctVdXbRJB0tmLq2yuL0ldtRDhfX5pAavELhm64nsmtpUJsaazKOTr/EZfSRQ2A
- guG7jvLJuB40AzYJsDF2W8FXE+RaSlpPakDLmhdhjzk01Mwfx8I3BUG9O0faVSt8YyvVGa1E4QB
- eHmI74TJy1pxaQGG/Ytd1JHfw+yC84nAk4Z9oNUdnBFiDF1DmPLRPERsLbrp9g8Aoh+rpsZSH7v
- qEGKNGYsydS/u37ILhogQGoyj6zsCt5F5bKGlvv0/jH1Qq7Q8LabOjlepD/j+of2si2vHrm5qvr
-X-Google-Smtp-Source: AGHT+IFqjAHNPDxpDs5inNgOTe0SMwZCWr9XEhfCxkOIvQ2M9+E9z4eQMQne8Wu6wyuEpLxANFKnkw==
-X-Received: by 2002:a5d:5f87:0:b0:386:33e3:853c with SMTP id
- ffacd0b85a97d-38880ac5f48mr11203132f8f.12.1734373044902; 
- Mon, 16 Dec 2024 10:17:24 -0800 (PST)
-Received: from thomas-Precision-7670.home
- ([2a02:a03f:eb68:2f00:9c94:3a1:94:d6bf])
+ d=1e100.net; s=20230601; t=1734380644; x=1734985444;
+ h=content-transfer-encoding:in-reply-to:cc:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=wVRn8vsvrU2zs4SfkhPo0+3ZUFGBAVbmqK2uHi44ndI=;
+ b=neUXvYfSZ/otpwjBGwtmHPbemXCIooecJTPx8j4Y+6aX44s7OVauYwdBh07W/Qys3V
+ h5W9f3rSQ1RAXgUr3neabvN/8jhb0om+enICnBDFUbZsfBvQYXK6oMbRkqa/x7ye/zOB
+ n4ZBgvJwMzJZFITzh4P/5juyiLLaKfvIYdYdJQt4ywaO3bMHqkde1JptRhzEeLk47j3c
+ Hyn/8uEx0vPDe0+UQT4N0neFV1AQjjm5fNR5mFAWniKoV3ytK3PGryqKacgmQDv2a8Xt
+ 25+TTezOrHJa+FW18DVFValWat7q34C2vlpYmX6BNc7mQDIwY7SnCc0VSqMFej5HPBaG
+ qUOQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUMlAC6RVokMGF0rQzOGKKb2uRBdIEJ5t6AnRnZHZbuJ98BssgqdoVOKGUZjyWW5QWLsZZO8eDrcSA=@buildroot.org
+X-Gm-Message-State: AOJu0Yx3zT0c/6EoDECZs7fFiF62UUST9L+rFloZvBwuKpCD3BVKal06
+ OQ3QtEFUemsokbcTtaAiiadiev7M554XmQWG6EInCpFOX+8fLHU7rCDhN/opkv0KiSgS+VU0HtR
+ 6
+X-Gm-Gg: ASbGncvS3kMy2luC38aPpOgfvkj6L28G+IYerUY1/akE0YSTXvWdtClqssrbrp+M8Pc
+ MNRmhsmZ47mJc5DVR2SovHaQCebsz4+CJWzUEacZ7vROXPTnTjsEaCyudtP9ajke1fX0JeAFqSp
+ C0KvQelnk7aAvlcPsWZ/bSocc8d5WhQBcMqc4JKlpwvCK1f7/1E1uA73zWc/BiFqjJGCwJXQVEp
+ 5ufofg07Dj3UYhAPoB6xIV6PeM+LcIvxzKF14KTHWbsvXd4+/ZBGvdGaIRcx2IXq83L/CfiIias
+ VEkyq1kwcdWJkqBRPqo8h2cPk6TBRYYGqOsfuteGvCFKXQmHn6uqHRmvEZLysi4/gwnA14z5/cn
+ cUWmD4FX1Ltk=
+X-Google-Smtp-Source: AGHT+IFgDeXN+8AqGX02rmkVbQOy1nmWruyErW0TvB85rp4fTz0qAw4gPfn5GVM23nJ8uNs90R4d/A==
+X-Received: by 2002:a05:6000:1fa2:b0:386:3357:2d9d with SMTP id
+ ffacd0b85a97d-3888e0f2de1mr10881963f8f.36.1734380644114; 
+ Mon, 16 Dec 2024 12:24:04 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-aab9608834fsm355109566b.86.2024.12.16.10.17.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 Dec 2024 10:17:24 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: buildroot@buildroot.org
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>
-Date: Mon, 16 Dec 2024 19:17:19 +0100
-Message-ID: <20241216181719.770389-2-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241216181719.770389-1-thomas@devoogdt.com>
-References: <20240917203311.1241557-1-thomas@devoogdt.com>
- <20241216181719.770389-1-thomas@devoogdt.com>
+ ffacd0b85a97d-388c8012112sm9183512f8f.11.2024.12.16.12.24.03
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 16 Dec 2024 12:24:03 -0800 (PST)
+Message-ID: <be38d9eb-4d8d-4da4-bc94-e4093a79c206@mind.be>
+Date: Mon, 16 Dec 2024 21:24:01 +0100
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v3 2/2] package/webkitgtk: bump to 2.46.4
+User-Agent: Mozilla Thunderbird
+To: Andrey Nechypurenko <andreynech@gmail.com>,
+ buildroot <buildroot@buildroot.org>
+References: <CAOiXNkBXaWBGL7D2FAbs+HQ-CQvF6Gt3Xw3s3Zr8T8Br5AvoBA@mail.gmail.com>
+Content-Language: en-GB
+In-Reply-To: <CAOiXNkBXaWBGL7D2FAbs+HQ-CQvF6Gt3Xw3s3Zr8T8Br5AvoBA@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1734380644; x=1734985444; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:cc:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=wVRn8vsvrU2zs4SfkhPo0+3ZUFGBAVbmqK2uHi44ndI=;
+ b=YQyadsNd4n+6N5x5MPLBM4LNtAMHHnJqDeeRu1EKYii/TE73MiGo25UsMhh3q4f47P
+ NPkBdgMpmezXa5meWS+XuN/VCkDPeC4NEr/GmzTSkmavL47fI0iZL8Wcnc1hudWeUcZ/
+ A65U1RIrTK5Td4vcDD7ChxDe4tW8/q/0amrw472CV7BtZqEkfBM8I1S5ZWMkJn1KSCq6
+ Id1J39clgtamhHqhz1ql+kBP4MD0G8+fJ9vvZTy62CLfi/xHuUs6WGSiLMf+MM/uGo1+
+ rSzIgr5rxzT/g55Err4C5n84col1qp0ub7KOUqZYr8z6QzhHjUUMSOITTOsTrZBo/mTM
+ q2BA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=YQyadsNd
+Subject: Re: [Buildroot] Problem compiling grpc package with BR 2024.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,95 +115,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Robert Rose <robertroyrose@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 
-Stable release to the 2.46 series.
 
-Release notes:
+On 11/12/2024 14:24, Andrey Nechypurenko wrote:
+> Hi Buildrooters,
+> 
+> I am trying to move our project from the older Buildroot version to
+> 2024.11 and facing a problem compiling the grpc package. As far as I
+> can tell, it is caused by incompatibility with the version of Abseil
+> library (missing absl::StrXXX functions, etc.).
+> 
+> It looks like 2024.08 does not have this problem. So my question is if
+> someone else is facing this issue and if there is a solution for it?
 
-  https://webkitgtk.org/2024/09/17/webkitgtk2.46.0-released.html
-  https://webkitgtk.org/2024/09/30/webkitgtk2.46.1-released.html
-  https://webkitgtk.org/2024/10/21/webkitgtk2.46.2-released.html
-  https://webkitgtk.org/2024/10/30/webkitgtk2.46.3-released.html
-  https://webkitgtk.org/2024/11/27/webkitgtk2.46.4-released.html
+  You're not the only one, it also happens in the autobuilders[1].
 
-Added BR2_PACKAGE_WEBP_MUX to fix this error:
+  It might be fixed with a version bump. Can you try to apply the existing 
+version bump patch[2] and see if that helps?
 
--- The following WebP libraries were not found:
---  mux (required)
+  Regards,
+  Arnout
 
-Added USE_SYSTEM_SYSPROF_CAPTURE=OFF to fix this error:
+[1] http://autobuild.buildroot.net/?reason=grpc%25
+[2] 
+https://patchwork.ozlabs.org/project/buildroot/patch/20241107191634.378670-3-james.hilliard1@gmail.com/
 
--- Checking for module 'sysprof-capture-4'
---   Package 'sysprof-capture-4', required by 'virtual:world', not found
--- Could NOT find SysProfCapture (missing: SysProfCapture_LIBRARY SysProfCapture_INCLUDE_DIR)
 
-For now, use USE_SKIA=OFF which is the replacement for cairo.
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
----
-v3: only because it applies on top of "package/webkitgtk: bump to 2.44.4"
----
- package/webkitgtk/Config.in      | 1 +
- package/webkitgtk/webkitgtk.hash | 6 +++---
- package/webkitgtk/webkitgtk.mk   | 4 +++-
- 3 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index dca62cf0f8..3594299314 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -53,6 +53,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_WEBP
- 	select BR2_PACKAGE_WEBP_DEMUX
-+	select BR2_PACKAGE_WEBP_MUX
- 	select BR2_PACKAGE_WOFF2
- 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_LIBGTK3_X11
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_LIBGTK3_X11
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 49f758d6a8..96100d4c7c 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,6 +1,6 @@
--# From https://www.webkitgtk.org/releases/webkitgtk-2.44.4.tar.xz.sums
--sha1  3699ff9c9b84e755a0736e72dfd6e5a13151f7d6  webkitgtk-2.44.4.tar.xz
--sha256  2ce4ec1b78413035037aba8326b31ed72696626b7bea7bace5e46ac0d8cbe796  webkitgtk-2.44.4.tar.xz
-+# From https://www.webkitgtk.org/releases/webkitgtk-2.46.4.tar.xz.sums
-+sha1  10d4dbd222acec30b1d20ee3b7d02c0d9727c5a9  webkitgtk-2.46.4.tar.xz
-+sha256  0eff5f0ab0a2872ec87df62bc32e3289c8af625716ac71e94b298d74e0374176  webkitgtk-2.46.4.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 49a532d9aa..ec63d093b7 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.44.4
-+WEBKITGTK_VERSION = 2.46.4
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
-@@ -30,6 +30,8 @@ WEBKITGTK_CONF_OPTS = \
- 	-DUSE_AVIF=OFF \
- 	-DUSE_GTK4=OFF \
- 	-DUSE_LIBHYPHEN=OFF \
-+	-DUSE_SKIA=OFF \
-+	-DUSE_SYSTEM_SYSPROF_CAPTURE=OFF \
- 	-DUSE_WOFF2=ON
- 
- ifeq ($(BR2_PACKAGE_WEBKITGTK_SANDBOX),y)
--- 
-2.43.0
+> 
+> Thank you,
+> Andrey.
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 _______________________________________________
 buildroot mailing list
