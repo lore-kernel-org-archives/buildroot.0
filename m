@@ -1,78 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A65F8E77187
-	for <buildroot@archiver.kernel.org>; Tue, 17 Dec 2024 21:30:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4086BE77187
+	for <buildroot@archiver.kernel.org>; Tue, 17 Dec 2024 21:43:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BB65605C7;
-	Tue, 17 Dec 2024 21:30:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC18B414BC;
+	Tue, 17 Dec 2024 21:43:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aQJO2fFMz1E3; Tue, 17 Dec 2024 21:30:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k14gkRncIXlH; Tue, 17 Dec 2024 21:43:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67994610BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4797414BE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 67994610BD;
-	Tue, 17 Dec 2024 21:30:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A980BC0
- for <buildroot@buildroot.org>; Tue, 17 Dec 2024 21:30:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4797414BE;
+	Tue, 17 Dec 2024 21:43:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A150CE3
+ for <buildroot@buildroot.org>; Tue, 17 Dec 2024 21:43:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A4E6B605C7
- for <buildroot@buildroot.org>; Tue, 17 Dec 2024 21:30:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8F5E161330
+ for <buildroot@buildroot.org>; Tue, 17 Dec 2024 21:43:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WBs4kSbNiNwm for <buildroot@buildroot.org>;
- Tue, 17 Dec 2024 21:30:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AEE1460710
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEE1460710
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AEE1460710
- for <buildroot@buildroot.org>; Tue, 17 Dec 2024 21:30:26 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id A3D9C13F899;
- Tue, 17 Dec 2024 22:30:22 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:60136])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 17 Dec 2024 22:30:22 +0100
-MIME-Version: 1.0
-Date: Tue, 17 Dec 2024 22:30:22 +0100
+ id CqtWWMe36M6x for <buildroot@buildroot.org>;
+ Tue, 17 Dec 2024 21:43:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAE4761324
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id DAE4761324
+ for <buildroot@buildroot.org>; Tue, 17 Dec 2024 21:43:10 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C354887317; Tue, 17 Dec 2024 21:43:10 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Scott Fan <fancp2007@gmail.com>
-Cc: buildroot@buildroot.org, Alexey Brodkin <alexey.brodkin@synopsys.com>
-In-Reply-To: <20241217130042.1120454-1-fancp2007@gmail.com>
-References: <20241217130042.1120454-1-fancp2007@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <5ff19c448b4f3ecd90e9b69c7bb94ef6@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734471024;
- bh=n7gx+pcYjJvKlEjHD85nekjxraAWI/bKzRdEK68IchI=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=jXQy2pTQxqQRo7OUm7oQfWIyw3F0KUQBk3TZjVM4jpluPiWKZ5S+zXJfkewu9CHSz
- Qz0pq/SCAZPUe3Hohzbsv+uD54iw3Yfr1y80l+b6t+xWQkt7Hciv9cArx2PpQlq6hI
- qgDa+FBdycybNpBeE+o4QodNGg9kbvxgrY/Ia3Q904ZqM9mC/tub9LmS4Y0eT5d+Pu
- r7f9/3QIzSBHTcU21x0E7WbFTWY4NvM0Z9nKYks2CvIkNJlukBAdsvWTFvHTDfb7U2
- EQPAf3I4+z181yOXXroQ8PqtG6ltGT1bID0ZLrQz7tv37z9DnZ9IoY+Hhk94KD2YT+
- pHq0K3d2C3YBQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=jXQy2pTQ
-Subject: Re: [Buildroot] [PATCH] configs/cubieboard2_defconfig: bump Linux
- to 6.12.5
+To: buildroot@buildroot.org
+Date: Tue, 17 Dec 2024 22:35:20 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0b428adb66f365d9377ccdfe50a4b5fd6141ab28
+X-Git-Newrev: b0207c1f15c12011782e46233effa61f5acbfcad
+X-Patchwork-Hint: ignore
+Message-Id: <20241217214310.C354887317@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gdb: add hash of licence files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,68 +58,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 17/12/2024 14:00, Scott Fan wrote:
-> Bump Linux kernel version to 6.12.5 and update the hash accordingly.
-> 
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=b0207c1f15c12011782e46233effa61f5acbfcad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Adds sha256 hash of the license files for GDB.
 
-> ---
->  board/cubietech/cubieboard2/patches/linux/linux.hash | 2 +-
->  configs/cubieboard2_defconfig                        | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/board/cubietech/cubieboard2/patches/linux/linux.hash 
-> b/board/cubietech/cubieboard2/patches/linux/linux.hash
-> index 4759f8354e..450cb12423 100644
-> --- a/board/cubietech/cubieboard2/patches/linux/linux.hash
-> +++ b/board/cubietech/cubieboard2/patches/linux/linux.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256  
-> 62148e7e17f54c4a5ab5e75ad4882682c54bee818948be61a5963234fc0849fc  
-> linux-6.11.11.tar.xz
-> +sha256  
-> 39207fce1ce42838e085261bae0af5ce4a0843aa777cfc0f5c49bc7729602bcd  
-> linux-6.12.5.tar.xz
-> diff --git a/configs/cubieboard2_defconfig 
-> b/configs/cubieboard2_defconfig
-> index 9c0e51b37d..c24e7b3428 100644
-> --- a/configs/cubieboard2_defconfig
-> +++ b/configs/cubieboard2_defconfig
-> @@ -1,7 +1,7 @@
->  BR2_arm=y
->  BR2_cortex_a7=y
->  BR2_ARM_FPU_NEON_VFPV4=y
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
->  BR2_GLOBAL_PATCH_DIR="board/cubietech/cubieboard2/patches"
->  BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
->  BR2_ROOTFS_OVERLAY="board/cubietech/cubieboard2/rootfs_overlay"
-> @@ -9,7 +9,7 @@ 
-> BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->  BR2_ROOTFS_POST_SCRIPT_ARGS="-c 
-> board/cubietech/cubieboard2/genimage.cfg"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.11"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.5"
->  BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun7i-a20-cubieboard2"
-> --
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/gdb/gdb.hash | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index 6cf55a675d..3d1809a2f9 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -5,3 +5,9 @@ sha512  0217434073023a8b8316088bf3ee95d53a1b6a7897f6269095429016a8900f9a05e130c3
+ 
+ # Locally calculated (fetched from Github)
+ sha512  3518b47d5c11d1fb478ee152bde1719363f9391db73f3b9f5491217c17742bef8ebca6a51a40302dfaa9476c5a32a8b8f70a4bf64289422dea5f750ae53ab88d  gdb-arc-2023.09-release.tar.gz
++
++# Locally calculated (fetched from gcc.gnu.org)
++sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING3
++sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING3.LIB
++sha256  56bdea73b6145ef6ac5259b3da390b981d840c24cb03b8e1cbc678de7ecfa18d  COPYING.LIB
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
