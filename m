@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B241DC282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:41:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EEDBC282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:41:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 156FE419E4;
-	Fri, 28 Feb 2025 16:41:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7515D4F723;
+	Fri, 28 Feb 2025 16:41:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WTaNKTu_P0z4; Fri, 28 Feb 2025 16:41:05 +0000 (UTC)
+ id jzrEJ2t8_xwW; Fri, 28 Feb 2025 16:41:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C07B4F717
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51A064F151
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C07B4F717;
-	Fri, 28 Feb 2025 16:41:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51A064F151;
+	Fri, 28 Feb 2025 16:41:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2315068
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 15A5D68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B683B419CF
+ by smtp4.osuosl.org (Postfix) with ESMTP id C27B142579
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TZfK9EOVAjoR for <buildroot@buildroot.org>;
+ id 4bljvHfv8FJ6 for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:29:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB956424DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 799A3424DB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AB956424DE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 799A3424DB
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A7BA585E77; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
+ id 74D0C844AB; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 17 Dec 2024 22:17:39 +0100
+Date: Tue, 17 Dec 2024 19:16:30 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c7f654136b21b19bab966db4704075faca6c15fd
-X-Git-Newrev: 0b428adb66f365d9377ccdfe50a4b5fd6141ab28
+X-Git-Oldrev: d427d27aeeaec4ff52e948fdc7d4be3ce0c9e2bb
+X-Git-Newrev: f515f2e7a009f9a12b7be65662bf2d61b914d735
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162942.A7BA585E77@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/cubieboard2_defconfig:
- bump Linux to 6.12.5
+Message-Id: <20250228162942.74D0C844AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/arm/fvp-ebbr: add TF-A
+ hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,63 +60,48 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8568117535847836044=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b428adb66f365d9377ccdfe50a4b5fd6141ab28
+--===============8568117535847836044==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=f515f2e7a009f9a12b7be65662bf2d61b914d735
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump Linux kernel version to 6.12.5 and update the hash accordingly.
+We have no more hash file for TF-A v2.11 in the package directory since
+commit 24615d1502e2 ("boot/arm-trusted-firmware: bump to v2.12"); add
+one in our global patches directory.
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-[Julien: add missing BR2_TARGET_UBOOT_NEEDS_GNUTLS=y]
+This fixes the following warning:
+
+  WARNING: no hash file for arm-trusted-firmware-v2.11-git4.tar.gz
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/cubietech/cubieboard2/patches/linux/linux.hash | 2 +-
- configs/cubieboard2_defconfig                        | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ .../arm/fvp-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/board/cubietech/cubieboard2/patches/linux/linux.hash b/board/cubietech/cubieboard2/patches/linux/linux.hash
-index 4759f8354e..450cb12423 100644
---- a/board/cubietech/cubieboard2/patches/linux/linux.hash
-+++ b/board/cubietech/cubieboard2/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  62148e7e17f54c4a5ab5e75ad4882682c54bee818948be61a5963234fc0849fc  linux-6.11.11.tar.xz
-+sha256  39207fce1ce42838e085261bae0af5ce4a0843aa777cfc0f5c49bc7729602bcd  linux-6.12.5.tar.xz
-diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
-index 9c0e51b37d..bace740ce9 100644
---- a/configs/cubieboard2_defconfig
-+++ b/configs/cubieboard2_defconfig
-@@ -1,7 +1,7 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/cubietech/cubieboard2/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_OVERLAY="board/cubietech/cubieboard2/rootfs_overlay"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/cubietech/cubieboard2/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.11"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.5"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun7i-a20-cubieboard2"
-@@ -24,6 +24,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
- BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/board/arm/fvp-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/arm/fvp-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+new file mode 100644
+index 0000000000..8b77e1f165
+--- /dev/null
++++ b/board/arm/fvp-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  c0f23ccc71c49989e9ad238acf334473c17b7c88f79a20c829c3d443e3794a22  arm-trusted-firmware-v2.11-git4.tar.gz
+
+--===============8568117535847836044==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8568117535847836044==--
