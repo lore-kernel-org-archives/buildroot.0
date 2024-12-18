@@ -1,108 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAD0AE77187
-	for <buildroot@archiver.kernel.org>; Wed, 18 Dec 2024 14:55:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9392DE77187
+	for <buildroot@archiver.kernel.org>; Wed, 18 Dec 2024 16:18:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 49825848D0;
-	Wed, 18 Dec 2024 14:55:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3005560856;
+	Wed, 18 Dec 2024 16:18:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BKZLR5yFfWNr; Wed, 18 Dec 2024 14:55:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ycp6MqFlFkq3; Wed, 18 Dec 2024 16:18:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B7BB84740
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF573606FF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B7BB84740;
-	Wed, 18 Dec 2024 14:55:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7D81AC0
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 14:55:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF573606FF;
+	Wed, 18 Dec 2024 16:18:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 23E3DE3
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 16:18:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 57B5784740
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 14:55:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 126A961405
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 16:18:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ai80PYhFF84C for <buildroot@buildroot.org>;
- Wed, 18 Dec 2024 14:55:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D7OsBVEb_ggx for <buildroot@buildroot.org>;
+ Wed, 18 Dec 2024 16:18:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::343; helo=mail-wm1-x343.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 83C0C820D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83C0C820D9
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com
- [IPv6:2a00:1450:4864:20::343])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 83C0C820D9
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 14:55:36 +0000 (UTC)
-Received: by mail-wm1-x343.google.com with SMTP id
- 5b1f17b1804b1-4361b6f9faeso5846265e9.1
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 06:55:36 -0800 (PST)
+ client-ip=2607:f8b0:4864:20::232; helo=mail-oi1-x232.google.com;
+ envelope-from=andreynech@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EC7F3606FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC7F3606FF
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com
+ [IPv6:2607:f8b0:4864:20::232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EC7F3606FF
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 16:18:17 +0000 (UTC)
+Received: by mail-oi1-x232.google.com with SMTP id
+ 5614622812f47-3eb3c143727so476686b6e.1
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 08:18:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1734533734; x=1735138534;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=cAXm9vUioiNxC2Y1EcaA/GpssouO+htabCJnomPmPrc=;
- b=NHgrdbnZChom+au2ZRpgnLPJzQDC17/ILTsOaVhKdRpS1TWHgEtaBiBi6qjKF27pBE
- JfpEorvLno29/7G5Thhfgyov1UMYDzsjdiq0eTobv7PBp7s155twN9o+UIsExwSmxBf1
- n2HxYvaV8WpHYXYLfJPPBUrqo0Clg9xWVXQ++IOuPylLRhb1nZ3s2TuJlPVmvBb3nK1p
- ognVhu7LnySDW3eMUv1lXI9bRROHX7PGVmnvYiyNXe5/5WeKuqoa+J3sK5KoKP5i00lV
- m9NVXzAq4rNzCKHLEiSA7wtVPkZCxTAMts7oyfeMhK5As9iT55eaMC0Vms91Gk7kMPyG
- AjwA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWhXmKR+xHLnh7A66Afm0S5RQX0VSyoZYND9bpO4nw2kxoaQyZ1hMpROMRsAvIdWL2s/8ma8YqQf4M=@buildroot.org
-X-Gm-Message-State: AOJu0YxkirndhQIkY2F686vKt7Lp5Gu+/6+lfONz1cF6W5f9pV3PWf7p
- DDRsvFWe7IcmKVLLg4JQY0FBW3SRlwx156/1JQtY+0DeOuH2T1pyKjpW0i0slXQ=
-X-Gm-Gg: ASbGnctDbl5WS43u5Ic0aI3C1zWWZ1B5lAwxQai0/loq0hoMbZbuKFsUdJN8+OHB0v0
- VSC+IAEnqB3+EfdvaV+sDdGGm4JTpY7F2tnXYdM7CVyQvetpWkBtEOw/xk7SJdYesxQ5wHCgw1V
- gTTMsM+N65xqOaBy2LB0d9FXVQYuJowbR2mb4msHFsNA4w5lQ0EMT1DatXlIHJGGyFlLti7gblO
- OObgw2cQeGbKdZTTdQa82Knb53v2ThAt8w5SlwQN8idqBHqF2zRaNfxzY6FtQb29UPtZfTORFrN
- jZKvIfYUr6EPvU6OvbxUh44qZm240gUzSerDB5phDPhFzwKaAJUyNqwHVc8iMeqNjpPgGXYUmK4
- 78XiCni06VR4WJuZ3
-X-Google-Smtp-Source: AGHT+IEhJ6ETMNJJDC6Gl+fDnF2HHreoSy+DRse4bYampVK/xYD9APZA31T8FOBoeU4vMH2MQQoA5A==
-X-Received: by 2002:a05:600c:138d:b0:434:f2af:6e74 with SMTP id
- 5b1f17b1804b1-436553e65b7mr28853045e9.15.1734533734237; 
- Wed, 18 Dec 2024 06:55:34 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:949d:5800:e3ef:2d7a:4131:71f?
- (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-43656b441bbsm22480095e9.40.2024.12.18.06.55.33
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 18 Dec 2024 06:55:33 -0800 (PST)
-Message-ID: <3ea35c40-07d1-41d3-b4f9-08bbb0336d24@smile.fr>
-Date: Wed, 18 Dec 2024 15:55:33 +0100
+ d=1e100.net; s=20230601; t=1734538697; x=1735143497;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=AGwcgPhsIZ2yUyP7qhg9RGYsdIwSak2WfXuFazEVnB4=;
+ b=f+OB4/QBvXnPvVEL20h6usDVBDYSLZKm8310x/YzKaTbTbs1FFCBrgAeOD55HGD3h/
+ uWJRE6h+m84eVn1O2ivJPHyqV1BOBmr7ifbBpzQMnAMQktfgLbzHy1eAreeHHh5g35rO
+ zZkvbr4xuLWC6ud98CuDKlqlQYk0s+ed/dFZ+g9mNbgZx/lUKBVCWihO23/VX/cX/IHD
+ mRlf8NucL4LpSQ85MxnfstgAntHY12iMRmyn5wzanL0aZeDWHIlfTIqhWkYDj3i3FZg9
+ PiF1t6BvTjsfzgSSmqGx74kGXy1X6mxk89wstUQGT7eIBA0DHyNCjCC7jT1AGXEyFRXo
+ BmZA==
+X-Gm-Message-State: AOJu0YzZZ1cpT8e4074gtcok/VwsjOn0TQlrajUhJYWIf46D5yeaV+2P
+ vEQKbIu1aWyUL43Tg82Gd4CbGCKHuEOGI/FjSjtyF9aSHeGjMdovBW+hjptqrHUliG1ZHOHCztS
+ COj11GfX+P0K0xpIh+0taj7LwS3E=
+X-Gm-Gg: ASbGnctpuE6Rtlt8OHrHa3nl1qceTMoGaxQraCRNDywACYJcqQuTFWGWwrEJ9747ZgK
+ 63MZjU4gQVU8mMyuaMOfRGFn6QS1DrfwRpQATew==
+X-Google-Smtp-Source: AGHT+IFtlvTAJlH3EwNgTJjKhZWhQp1rJY0dHB2ZdXZNe48TAMIR9GtI10JLr0bTDm4g/41aNGNKfZhb/EF52PDl0Z8=
+X-Received: by 2002:a05:6808:13d3:b0:3ea:3672:e638 with SMTP id
+ 5614622812f47-3eccd0013c3mr2456453b6e.3.1734538696660; Wed, 18 Dec 2024
+ 08:18:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Edgar Bonet <bonet@grenoble.cnrs.fr>,
- Buildroot development <buildroot@buildroot.org>
-Cc: Michael Walle <mwalle@kernel.org>, Chris Packham
- <judge.packham@gmail.com>, Sergey Matyukevich <geomatsi@gmail.com>
-References: <035d6d78-0a31-4083-8fa1-65f5be5f74b5@grenoble.cnrs.fr>
-Content-Language: en-US
-In-Reply-To: <035d6d78-0a31-4083-8fa1-65f5be5f74b5@grenoble.cnrs.fr>
+References: <CAOiXNkBXaWBGL7D2FAbs+HQ-CQvF6Gt3Xw3s3Zr8T8Br5AvoBA@mail.gmail.com>
+ <be38d9eb-4d8d-4da4-bc94-e4093a79c206@mind.be>
+ <CAOiXNkDqh6Q=s4o8u0SapkcajBKE=Sdd-X312N61P6md2v2EVw@mail.gmail.com>
+In-Reply-To: <CAOiXNkDqh6Q=s4o8u0SapkcajBKE=Sdd-X312N61P6md2v2EVw@mail.gmail.com>
+From: Andrey Nechypurenko <andreynech@gmail.com>
+Date: Wed, 18 Dec 2024 17:18:05 +0100
+Message-ID: <CAOiXNkAc2J9q8GkkweddmNQuBS-0L+RuGYvh4Ug94rOX8+C_GQ@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1734533734; x=1735138534; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=cAXm9vUioiNxC2Y1EcaA/GpssouO+htabCJnomPmPrc=;
- b=2nAx/Sjnq1OQCLkKbB4tGooHiaxexENMN/WoZbRX/8JViVoqtztNJMrHlq/zxtppkf
- q1U3zEu2l0QtbXta8rbQvu10SDiLoMqUoU3VJ2bQwxVzGbMFflktxuCyBJL29nevpoCr
- 4Se53V53a5EeU4nG/q7TVG7j6gRMcH+3UveLs=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=2nAx/Sjn
-Subject: Re: [Buildroot] [PATCH v2 1/1] linux: make out-of-tree DTS work
- with newest kernels
+ d=gmail.com; s=20230601; t=1734538697; x=1735143497; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=AGwcgPhsIZ2yUyP7qhg9RGYsdIwSak2WfXuFazEVnB4=;
+ b=lrd2jFQpwe1aNQxHW+yZvwtnzWNeEDr7JyxTy+Ei1acn5iaU6i6WKM/C2NyWPzObQm
+ Dyu9rP/UCGzeWChxilOTO7xylkGuMio142+QbHCD2gnSabGi0Z4/mcessstkrjTnTf8O
+ +rBLmeUQTyADvoTwAcgPKOcy8Q5fKXd2RjY4VNg6b1u6z5DMwxRM96aZ4itDg0uzP2r6
+ CbOJhwwoqAnGpyJtRvmcsx0y7+EyPLQWB8DihunaRrwCQI05WASakTxOIdArS01g4w6O
+ n+LuyXbDOknSaa15ehxIel9KeWzBBQhK+/dJUQ+x+uJc2w25UIE7MbNwYMDXVVbPHCqG
+ cnjA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=lrd2jFQp
+Subject: Re: [Buildroot] Problem compiling grpc package with BR 2024.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,86 +101,141 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Robert Rose <robertroyrose@gmail.com>, buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRWRnYXIsCgpMZSAxNy8xMi8yMDI0IMOgIDEwOjU1LCBFZGdhciBCb25ldCBhIMOpY3Jp
-dMKgOgo+IFNpbmNlIExpbnV4IDYuMTIgKGNvbW1pdCBlN2UyOTQxMzAwZDIsICJrYnVpbGQ6IHNw
-bGl0IGRldmljZSB0cmVlIGJ1aWxkCj4gcnVsZXMgaW50byBzY3JpcHRzL01ha2VmaWxlLmR0YnMi
-KSwgdGhlIGtlcm5lbCBidWlsZCBwcm9jZXNzIGRvZXMgbm90Cj4gYnVpbGQgdGhlIERUQnMgZnJv
-bSB0aGUgc291cmNlIGZpbGVzIGxpc3RlZCBpbgo+IEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0RU
-U19QQVRILlsxXSBUaGlzIGlzIGJlY2F1c2UgaXQgZXhwZWN0cyBhbGwgdGhlCj4gRFRTIGZpbGVz
-IHRvIGxpdmUgaW4gdmVuZG9yLXNwZWNpZmljIHN1YmRpcmVjdG9yaWVzIG9mCj4gYXJjaC8kQVJD
-SC9ib290L2R0cy8gLCB3aGVyZWFzIEJ1aWxkcm9vdCBkcm9wcyB0aGVtIGluIHRoZSB0b3AgZHRz
-Cj4gZGlyZWN0b3J5LgoKTWF5YmUgd2UgY291bGQgYWRkIHNvbWUgYWRkaXRpb25hbCBleHBsYW5h
-dGlvbjoKCkJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0RUU19QQVRIIHdhcyBpbnRyb2R1Y2VkIGlu
-IEJ1aWxkcm9vdCAyMDEyLjA4IFsxXSBhdCB0aGUKdGltZSB0aGUga2VybmVsIGRpZG4ndCBoYXZl
-IGFueSB2ZW5kb3Itc3BlY2lmaWMgc3ViZGlyZWN0b3J5IGluCmFyY2gvJEFSQ0gvYm9vdC9kdHMv
-LgoKdmVuZG9yLXNwZWNpZmljIHN1YmRpcmVjdG9yeSB3YXMgaW50cm9kdWNlZCBpbiBrZXJuZWwg
-djMuMTkgWzJdIGZvciBBUk02NCBhbmQgaW4Ka2VybmVsIHY2LjUgZm9yIEFSTSBbM10uIE5vdGUs
-IG90aGVyIGFyY2ggdGhhbiBBUk0gYW5kIEFSTTY0IGRvZXNuJ3QgYWN0dWFsbHkKdXNlIGEgdmVu
-ZG9yLXNwZWNpZmljIHN1YmRpcmVjdG9yeSAobm90IGV2ZW4gcG93ZXJwYykuCgpZb3VyIGNvbW1l
-bnQgZG9lc24ndCBzZWVtcyB0byBhcHBseSBmb3Igbm9uIEFSTXssNjR9IGFyY2g6CiJUaGlzIGlz
-IGJlY2F1c2UgaXQgZXhwZWN0cyBhbGwgdGhlIERUUyBmaWxlcyB0byBsaXZlIGluIHZlbmRvci1z
-cGVjaWZpYwpzdWJkaXJlY3RvcmllcyBvZiBhcmNoLyRBUkNIL2Jvb3QvZHRzLyIKClsxXQpodHRw
-czovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9jb21taXQvNjlmYzQ5N2Rm
-MGFlNTFiY2M4YTA2N2M4NDk0NDdhYmRlYjNjYjJiZQpbMl0KaHR0cHM6Ly9naXQua2VybmVsLm9y
-Zy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvc3RhYmxlL2xpbnV4LmdpdC9jb21taXQvP2lkPWNh
-NWIzNDEwMGM1NzE2NThlNjA1YzU1NTRhYWMzNzQ2NDk1OTMzMjcKWzNdCmh0dHBzOi8vZ2l0Lmtl
-cm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3N0YWJsZS9saW51eC5naXQvY29tbWl0
-Lz9pZD03MjRiYTY3NTE1MzIwNTVkYjc1OTkyZmM2YWUyMWMzZTMyMmU5NGE3CgoKPiAKPiBGdWxm
-aWxsaW5nIHRoaXMga2VybmVsIGV4cGVjdGF0aW9uIHdvdWxkIHJlcXVpcmUgYSBuZXcgY29uZmln
-dXJhdGlvbgo+IHBhcmFtZXRlciBmb3IgdGhlIG5hbWUgb2YgdGhlIGFwcHJvcHJpYXRlIHZlbmRv
-ciBzdWJkaXJlY3RvcnkuIEl0IHdvdWxkCj4gYWxzbyByZXF1aXJlIGNoYW5naW5nIHRoZSByZWxh
-dGl2ZSBwYXRocyB0byBpbmNsdWRlZCAuZHRzaSBmaWxlcy4KPiAKPiBMZXQncyBhZGQgaW5zdGVh
-ZCBhIHJ1bGUgdG8gdGhlIHRvcCBkdHMvTWFrZWZpbGUgZm9yIGVhY2ggRFRCIHdlIHdhbnQgdG8K
-PiBidWlsZC4gVGhpcyBhdm9pZHMgYnJlYWtpbmcgdXNlcidzIG91dC1vZi10cmVlIGNvbmZpZ3Vy
-YXRpb25zLgo+IAo+IFsxXSBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvcGlwZXJtYWlsL2J1
-aWxkcm9vdC8yMDI0LU9jdG9iZXIvNzY1NDYzLmh0bWwKCk5vdGU6IFlvY3RvIGRvZXNuJ3QgcmVs
-eSBvbiB0aGUga2VybmVsIGJ1aWxkIGluZnJhc3RydWN0dXJlIHRvIGJ1aWxkIHVzZXIKcHJvdmlk
-ZWQgZGV2aWNldHJlZSBbNF0uCgpNYXliZSB3ZSBzaG91bGQgY29uc2lkZXIgYWRkaW5nIGEgbmV3
-IHBhY2thZ2UgaW5mcmFzdHJ1Y3R1cmUgbGlrZSBrZXJuZWwtbW9kdWxlPwoKWzRdCmh0dHBzOi8v
-Z2l0aHViLmNvbS9vcGVuZW1iZWRkZWQvb3BlbmVtYmVkZGVkLWNvcmUvYmxvYi9mNjQyZWRiMDA2
-YThjMTZkYmU0NTY4MWFmZTU0N2VhYmZhZTE3MDczL21ldGEvY2xhc3Nlcy1yZWNpcGUvZGV2aWNl
-dHJlZS5iYmNsYXNzI0w1OUMxLUw1OUM5CgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4gCj4gUmVw
-b3J0ZWQtYnk6IENocmlzIFBhY2toYW0gPGp1ZGdlLnBhY2toYW1AZ21haWwuY29tPgo+IFNpZ25l
-ZC1vZmYtYnk6IEVkZ2FyIEJvbmV0IDxib25ldEBncmVub2JsZS5jbnJzLmZyPgo+IC0tLQo+IENo
-YW5nZXMgdjEgLT4gdjI6Cj4gICAtIGRlZmluZSBhIGhvb2sgZm9yIExJTlVYX1BPU1RfUEFUQ0hf
-SE9PS1MgYW5kIExJTlVYX1BPU1RfUlNZTkNfSE9PS1MKPiAgICAgaW5zdGVhZCBvZiBtb2RpZnlp
-bmcgTElOVVhfQlVJTERfQ01EUwo+ICAgLSB1c2UgJChwYXRzdWJzdCAlLmR0cywlLmR0YiwkKGR0
-cykpIGluc3RlYWQgb2YgJChkdHM6JS5kdHM9JS5kdGIpCj4gYm90aCBjaGFuZ2VzIHN1Z2dlc3Rl
-ZCBieSBBcm5vdXQgVmFuZGVjYXBwZWxsZS4KPiAKPiBJIHJhbiB0aGUgZm9sb3dpbmcgYnVpbGQg
-dGVzdHM6Cj4gCj4gICAgICMgVGVzdCB3aXRoIGFuIG9sZCBrZXJuZWw6IHY2LjYuMzAKPiAgICAg
-bWFrZSBhY21lc3lzdGVtc19hY3F1YV9hNV81MTJtYl9kZWZjb25maWcKPiAgICAgbWFrZSBsaW51
-eAo+IAo+ICAgICAjIFRlc3Qgd2l0aCBhIG5ldyBrZXJuZWw6IHY2LjEyLjUKPiAgICAgbWFrZSBs
-aW51eC1kaXJjbGVhbgo+ICAgICBnaXQgY2hlcnJ5LXBpY2sgMDkzODM0NmNkZSAgIyBidW1wIEFj
-cXVhJ3Mga2VybmVsIHRvIHY2LjEyLjUKPiAgICAgbWFrZSBhY21lc3lzdGVtc19hY3F1YV9hNV81
-MTJtYl9kZWZjb25maWcKPiAgICAgbWFrZSBsaW51eAo+IAo+ICAgICAjIFRlc3QgdGhlIE9WRVJS
-SURFX1NSQ0RJUiBjYXNlLgo+ICAgICBtYWtlIGxpbnV4LWRpcmNsZWFuCj4gICAgIGdpdCAtQyAk
-SE9NRS9zcmMvbGludXggY2hlY2tvdXQgdjYuMTIuNQo+ICAgICBlY2hvICJMSU5VWF9PVkVSUklE
-RV9TUkNESVIgPSAkSE9NRS9zcmMvbGludXgiID4gbG9jYWwubWsKPiAgICAgbWFrZSBhY21lc3lz
-dGVtc19hY3F1YV9hNV81MTJtYl9kZWZjb25maWcKPiAgICAgbWFrZSBsaW51eAo+IAo+ICBsaW51
-eC9saW51eC5tayB8IDExICsrKysrKysrKysrCj4gIDEgZmlsZSBjaGFuZ2VkLCAxMSBpbnNlcnRp
-b25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL2xpbnV4L2xpbnV4Lm1rIGIvbGludXgvbGludXgubWsK
-PiBpbmRleCAxZDNkOGZmZmE2Li5lYjUwOWZkNzQ3IDEwMDY0NAo+IC0tLSBhL2xpbnV4L2xpbnV4
-Lm1rCj4gKysrIGIvbGludXgvbGludXgubWsKPiBAQCAtMzI3LDYgKzMyNywxNyBAQCBkZWZpbmUg
-TElOVVhfVFJZX1BBVENIX1RJTUVDT05TVAo+ICBlbmRlZgo+ICBMSU5VWF9QT1NUX1BBVENIX0hP
-T0tTICs9IExJTlVYX1RSWV9QQVRDSF9USU1FQ09OU1QKPiAgCj4gKyMgS2VybmVscyA2LjEyKyB3
-b24ndCBjb21waWxlIHRoZSBjdXN0b20gRFRTIGZpbGVzIHdlIGRyb3AgaW50bwo+ICsjIGFyY2gv
-JEFSQ0gvYm9vdC9kdHMgdW5sZXNzIHdlIGFkZCBzcGVjaWZpYyBydWxlcyB0byB0aGF0IGRpcmVj
-dG9yeSdzCj4gKyMgTWFrZWZpbGUuCj4gK2RlZmluZSBMSU5VWF9BRERfRFRCX01BS0VfUlVMRVMK
-PiArCSQoZm9yZWFjaCBkdHMsJChjYWxsIHFzdHJpcCwkKEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9N
-X0RUU19QQVRIKSksIFwKPiArCQllY2hvICJkdGIteSArPSAkKHBhdHN1YnN0ICUuZHRzLCUuZHRi
-LCQobm90ZGlyICQoZHRzKSkpIiA+PiAkKExJTlVYX0FSQ0hfUEFUSCkvYm9vdC9kdHMvTWFrZWZp
-bGUKPiArCSkKPiArZW5kZWYKPiArTElOVVhfUE9TVF9QQVRDSF9IT09LUyArPSBMSU5VWF9BRERf
-RFRCX01BS0VfUlVMRVMKPiArTElOVVhfUE9TVF9SU1lOQ19IT09LUyArPSBMSU5VWF9BRERfRFRC
-X01BS0VfUlVMRVMKPiArCj4gIExJTlVYX0tFUk5FTF9DVVNUT01fTE9HT19QQVRIID0gJChjYWxs
-IHFzdHJpcCwkKEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0xPR09fUEFUSCkpCj4gIGlmbmVxICgk
-KExJTlVYX0tFUk5FTF9DVVNUT01fTE9HT19QQVRIKSwpCj4gIExJTlVYX0RFUEVOREVOQ0lFUyAr
-PSBob3N0LWltYWdlbWFnaWNrCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+On Wed, 18 Dec 2024 at 13:09, Andrey Nechypurenko <andreynech@gmail.com> wrote:
+>
+> On Mon, 16 Dec 2024 at 21:24, Arnout Vandecappelle <arnout@mind.be> wrote:
+> >
+> >
+> >
+> > On 11/12/2024 14:24, Andrey Nechypurenko wrote:
+> > > Hi Buildrooters,
+> > >
+> > > I am trying to move our project from the older Buildroot version to
+> > > 2024.11 and facing a problem compiling the grpc package. As far as I
+> > > can tell, it is caused by incompatibility with the version of Abseil
+> > > library (missing absl::StrXXX functions, etc.).
+> > >
+> > > It looks like 2024.08 does not have this problem. So my question is if
+> > > someone else is facing this issue and if there is a solution for it?
+> >
+> >   You're not the only one, it also happens in the autobuilders[1].
+> >
+> >   It might be fixed with a version bump. Can you try to apply the existing
+> > version bump patch[2] and see if that helps?
+> >
+> >   Regards,
+> >   Arnout
+> >
+> > [1] http://autobuild.buildroot.net/?reason=grpc%25
+> > [2]
+> > https://patchwork.ozlabs.org/project/buildroot/patch/20241107191634.378670-3-james.hilliard1@gmail.com/
+>
+> Unfortunately, it still doesn't work. Building host-grpc failed:
+>
+> CMake Error at cmake/protobuf.cmake:58 (find_package):
+>   Could not find a package configuration file provided by "Protobuf" with any
+>   of the following names:
+>
+>     ProtobufConfig.cmake
+>     protobuf-config.cmake
+>
+>   Add the installation prefix of "Protobuf" to CMAKE_PREFIX_PATH or set
+>   "Protobuf_DIR" to a directory containing one of the above files.  If
+>   "Protobuf" provides a separate development package or SDK, be sure it has
+>   been installed.
+> Call Stack (most recent call first):
+>   CMakeLists.txt:387 (include)
+>
+>
+> -- Configuring incomplete, errors occurred!
+
+This problem is caused by the fact that the protobuf package is built with
+autotools and not with cmake. Grpc package was looking for cmake files from
+protobuf and did not find them. I was able to solve this problem by changing
+protobuf package type from autotools to cmake (plus a couple of other minor
+changes). I think this step makes anyway sense, because it looks like the
+newer protobuf versions does not support autotools anymore and moved
+completely to cmake.
+
+With your patch mentioned above and the following changes I was able to
+build the grpc package.
+
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 8cd4e99e06..5fc1a20a5e 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,8 +7,8 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 21.12
+-PROTOBUF_SOURCE = protobuf-cpp-3.$(PROTOBUF_VERSION).tar.gz
++PROTOBUF_VERSION = 29.1
++PROTOBUF_SOURCE = protobuf-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE =
+https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+ PROTOBUF_LICENSE_FILES = LICENSE
+@@ -16,7 +16,8 @@ PROTOBUF_CPE_ID_VENDOR = google
+
+ # N.B. Need to use host protoc during cross compilation.
+ PROTOBUF_DEPENDENCIES = host-protobuf
+-PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/bin/protoc
++PROTOBUF_CONF_OPTS += -Dprotobuf_BUILD_TESTS=OFF
+-Dprotobuf_ABSL_PROVIDER=package
++HOST_PROTOBUF_CONF_OPTS += -Dprotobuf_BUILD_TESTS=OFF
+-Dprotobuf_ABSL_PROVIDER=package
+
+ PROTOBUF_CXXFLAGS = $(TARGET_CXXFLAGS)
+
+@@ -47,5 +48,5 @@ endef
+
+ PROTOBUF_POST_INSTALL_TARGET_HOOKS += PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
+
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
+
+
+After these changes, python-protobuf was failing :-) . So I made the
+following changes which fixes the build error. But honestly I have no idea
+if they are correct :-) .
+
+
+diff --git a/package/python-protobuf/python-protobuf.mk
+b/package/python-protobuf/python-protobuf.mk
+index df90254670..e7a1cdf3fb 100644
+--- a/package/python-protobuf/python-protobuf.mk
++++ b/package/python-protobuf/python-protobuf.mk
+@@ -5,12 +5,12 @@
+ ################################################################################
+
+ PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
+-PYTHON_PROTOBUF_SOURCE = protobuf-python-4.$(PYTHON_PROTOBUF_VERSION).tar.gz
++PYTHON_PROTOBUF_SOURCE = protobuf-$(PYTHON_PROTOBUF_VERSION).tar.gz
+ PYTHON_PROTOBUF_SITE = $(PROTOBUF_SITE)
+ PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
+ PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
+ PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
+ PYTHON_PROTOBUF_SETUP_TYPE = setuptools
+-PYTHON_PROTOBUF_SUBDIR = python
++PYTHON_PROTOBUF_SUBDIR = python/protobuf_distutils
+
+ $(eval $(python-package))
+
+I hope these observations could be helpful for corresponding package
+maintainers to properly fix them.
+
+Regards,
+Andrey.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
