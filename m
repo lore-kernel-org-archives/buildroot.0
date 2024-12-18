@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58810C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:41:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FFC8C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:41:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEF8D4F743;
-	Fri, 28 Feb 2025 16:41:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7001342EE4;
+	Fri, 28 Feb 2025 16:41:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2-qelfsVaRBb; Fri, 28 Feb 2025 16:41:39 +0000 (UTC)
+ id LQj2faTWgrMr; Fri, 28 Feb 2025 16:41:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A2B742EC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 496CC4F7BB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A2B742EC4;
-	Fri, 28 Feb 2025 16:41:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 496CC4F7BB;
+	Fri, 28 Feb 2025 16:41:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 11B4568
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1377468
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 75CE042645
+ by smtp4.osuosl.org (Postfix) with ESMTP id E60B142669
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UqOfZrUJgatQ for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:49 +0000 (UTC)
+ id 87l24mrsWHDT for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1819A41E86
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6A9F424E3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1819A41E86
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6A9F424E3
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0FD8A820F8; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id E160285E77; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 16 Dec 2024 22:29:12 +0100
+Date: Wed, 18 Dec 2024 20:25:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a60c38b381bbb46094f57fe1c252df962fab6673
-X-Git-Newrev: e675ffd964d65067bb115ee1e770ee44ba073958
+X-Git-Oldrev: b797b9e589c70bd69edfb78e214751e8c04eff62
+X-Git-Newrev: ca3cf2bea272bb0e0833c7fd2ec8f0fa28387692
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162942.0FD8A820F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libsndfile: add
- upstream post-1.2.2 security fixes
+Message-Id: <20250228162942.E160285E77@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gnutls: fix autobuild
+ error from 3.8.8 update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,1519 +58,830 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e675ffd964d65067bb115ee1e770ee44ba073958
+commit: https://git.buildroot.net/buildroot/commit/?id=ca3cf2bea272bb0e0833c7fd2ec8f0fa28387692
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following security vulnerabilities:
+Fixes: http://autobuild.buildroot.net/results/317/3178fca15cbb2520336b0678a16a5be5a51a8702//
+Upstream bug report: https://gitlab.com/gnutls/gnutls/-/issues/1604
 
-CVE-2022-33065: Multiple signed integers overflow in function au_read_header
-in src/au.c and in functions mat4_open and mat4_read_header in src/mat4.c in
-Libsndfile, allows an attacker to cause Denial of Service or other
-unspecified impacts.
-
-CVE-2024-50612: libsndfile through 1.2.2 has an ogg_vorbis.c
-vorbis_analysis_wrote out-of-bounds read.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- ...5-fix-int-overflow-in-dataend-calculation.patch |  45 +++
- ...d-int-overflow-while-calculating-data_end.patch |  58 +++
- ...3-avr-fix-int-overflow-in-avr_read_header.patch |  34 ++
- ...t-overflow-warning-in-sample-calculations.patch |  61 +++
- ...nt-overflow-when-counting-header-elements.patch |  39 ++
- ...cam-fix-int-overflow-in-ircam_read_header.patch |  82 ++++
- ...ix-int-overflow-when-calculating-blockwid.patch |  48 +++
- ...n-fix-int-overflow-in-psf_binheader_readf.patch | 181 +++++++++
- ...adpcm-fix-int-overflow-in-signal-estimate.patch | 233 ++++++++++++
- ..._adpcm-fix-int-overflow-in-sf.frames-calc.patch |  39 ++
- .../0011-pcm-fix-int-overflow-in-pcm_init.patch    |  35 ++
- ...rf64-fix-int-overflow-in-rf64_read_header.patch |  40 ++
- ...adpcm-fix-int-overflow-in-ima_reader_init.patch |  55 +++
- ...ter-error-checking-for-vorbis.-Fixes-1035.patch | 411 +++++++++++++++++++++
- package/libsndfile/libsndfile.mk                   |  18 +
- 15 files changed, 1379 insertions(+)
+ ...resent-hybrid-groups-with-an-array-of-IDs.patch | 798 +++++++++++++++++++++
+ 1 file changed, 798 insertions(+)
 
-diff --git a/package/libsndfile/0001-mat4-mat5-fix-int-overflow-in-dataend-calculation.patch b/package/libsndfile/0001-mat4-mat5-fix-int-overflow-in-dataend-calculation.patch
+diff --git a/package/gnutls/0001-groups-represent-hybrid-groups-with-an-array-of-IDs.patch b/package/gnutls/0001-groups-represent-hybrid-groups-with-an-array-of-IDs.patch
 new file mode 100644
-index 0000000000..79d521002c
+index 0000000000..8462d77281
 --- /dev/null
-+++ b/package/libsndfile/0001-mat4-mat5-fix-int-overflow-in-dataend-calculation.patch
-@@ -0,0 +1,45 @@
-+From 0754562e13d2e63a248a1c82f90b30bc0ffe307c Mon Sep 17 00:00:00 2001
-+From: Alex Stewart <alex.stewart@ni.com>
-+Date: Tue, 10 Oct 2023 16:10:34 -0400
-+Subject: [PATCH] mat4/mat5: fix int overflow in dataend calculation
++++ b/package/gnutls/0001-groups-represent-hybrid-groups-with-an-array-of-IDs.patch
+@@ -0,0 +1,798 @@
++From 5ed597eb28c408c5968e6dfb839880ba5fa17ba1 Mon Sep 17 00:00:00 2001
++From: Daiki Ueno <ueno@gnu.org>
++Date: Fri, 6 Dec 2024 09:53:18 +0900
++Subject: [PATCH] groups: represent hybrid groups with an array of IDs
 +
-+The clang sanitizer warns of a possible signed integer overflow when
-+calculating the `dataend` value in `mat4_read_header()`.
++Previously, the supported_groups array contained externally defined
++elements, which is legitimate in C99 but caused error with Clang:
 +
-+```
-+src/mat4.c:323:41: runtime error: signed integer overflow: 205 * -100663296 cannot be represented in type 'int'
-+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior src/mat4.c:323:41 in
-+src/mat4.c:323:48: runtime error: signed integer overflow: 838860800 * 4 cannot be represented in type 'int'
-+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior src/mat4.c:323:48 in
-+```
++  groups.c:93:2: error: initializer element is not a compile-time constant
++          group_x25519,
++          ^~~~~~~~~~~~
 +
-+Cast the offending `rows` and `cols` ints to `sf_count_t` (the type of
-+`dataend` before performing the calculation, to avoid the issue.
++This reworks the array definition of indirection through group
++IDs (gnutls_group_t, i.e., integer).
 +
-+CVE: CVE-2022-33065
-+Fixes: https://github.com/libsndfile/libsndfile/issues/789
-+Fixes: https://github.com/libsndfile/libsndfile/issues/833
++This also makes pqc-hybrid-kx test more exhaustive.
 +
-+Signed-off-by: Alex Stewart <alex.stewart@ni.com>
-+Upstream: https://github.com/libsndfile/libsndfile/commit/0754562e13d2e63a248a1c82f90b30bc0ffe307c
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++Signed-off-by: Daiki Ueno <ueno@gnu.org>
++Upstream: https://gitlab.com/gnutls/gnutls/-/commit/9cc9d5556d258d23a399abfe45715773e719d134
++Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 +---
-+ src/mat4.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ lib/algorithms.h                |   7 ++
++ lib/algorithms/groups.c         | 161 ++++++++++++++++++++------------
++ lib/ext/key_share.c             |  81 ++++++++++++----
++ lib/ext/supported_groups.c      |  45 +++++----
++ lib/gnutls_int.h                |   8 +-
++ lib/includes/gnutls/gnutls.h.in |   4 +-
++ lib/priority.c                  |  25 ++---
++ lib/session.c                   |   6 +-
++ tests/pqc-hybrid-kx.sh          | 101 +++++++++++++++++---
++ 9 files changed, 315 insertions(+), 123 deletions(-)
 +
-+diff --git a/src/mat4.c b/src/mat4.c
-+index 0b1b414b..575683ba 100644
-+--- a/src/mat4.c
-++++ b/src/mat4.c
-+@@ -320,7 +320,7 @@ mat4_read_header (SF_PRIVATE *psf)
-+ 				psf->filelength - psf->dataoffset, psf->sf.channels * psf->sf.frames * psf->bytewidth) ;
-+ 		}
-+ 	else if ((psf->filelength - psf->dataoffset) > psf->sf.channels * psf->sf.frames * psf->bytewidth)
-+-		psf->dataend = psf->dataoffset + rows * cols * psf->bytewidth ;
-++		psf->dataend = psf->dataoffset + (sf_count_t) rows * (sf_count_t) cols * psf->bytewidth ;
++diff --git a/lib/algorithms.h b/lib/algorithms.h
++index 2e1b694c6..c4af571ce 100644
++--- a/lib/algorithms.h
+++++ b/lib/algorithms.h
++@@ -55,6 +55,9 @@
++ #define IS_KEM(x) \
++ 	(((x) == GNUTLS_PK_MLKEM768) || ((x) == GNUTLS_PK_EXP_KYBER768))
 + 
-+ 	psf->datalength = psf->filelength - psf->dataoffset - psf->dataend ;
+++
+++#define IS_GROUP_HYBRID(group) ((group)->ids[0] != GNUTLS_GROUP_INVALID)
+++
++ #define SIG_SEM_PRE_TLS12 (1 << 1)
++ #define SIG_SEM_TLS13 (1 << 2)
++ #define SIG_SEM_DEFAULT (SIG_SEM_PRE_TLS12 | SIG_SEM_TLS13)
++@@ -493,6 +496,10 @@ const gnutls_group_entry_st *_gnutls_tls_id_to_group(unsigned num);
++ const gnutls_group_entry_st *_gnutls_id_to_group(unsigned id);
++ gnutls_group_t _gnutls_group_get_id(const char *name);
 + 
-+-- 
-+2.39.5
-+
-diff --git a/package/libsndfile/0002-au-avoid-int-overflow-while-calculating-data_end.patch b/package/libsndfile/0002-au-avoid-int-overflow-while-calculating-data_end.patch
-new file mode 100644
-index 0000000000..28d8cfff64
---- /dev/null
-+++ b/package/libsndfile/0002-au-avoid-int-overflow-while-calculating-data_end.patch
-@@ -0,0 +1,58 @@
-+From a5afea2e24080ddf5c7b8e26c29cdbd94ae8226b Mon Sep 17 00:00:00 2001
-+From: Alex Stewart <alex.stewart@ni.com>
-+Date: Wed, 11 Oct 2023 16:36:02 -0400
-+Subject: [PATCH] au: avoid int overflow while calculating data_end
-+
-+At several points in au_read_header(), we calculate the functional end
-+of the data segment by adding the (int)au_fmt.dataoffset and the
-+(int)au_fmt.datasize. This can overflow the implicit int_32 return value
-+and cause undefined behavior.
-+
-+Instead, precalculate the value and assign it to a 64-bit
-+(sf_count_t)data_end variable.
-+
-+CVE: CVE-2022-33065
-+Fixes: https://github.com/libsndfile/libsndfile/issues/833
-+
-+Signed-off-by: Alex Stewart <alex.stewart@ni.com>
-+Upstream: https://github.com/libsndfile/libsndfile/commit/a5afea2e24080ddf5c7b8e26c29cdbd94ae8226b
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/au.c | 10 ++++++----
-+ 1 file changed, 6 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/au.c b/src/au.c
-+index 62bd691d..f68f2587 100644
-+--- a/src/au.c
-++++ b/src/au.c
-+@@ -291,6 +291,7 @@ static int
-+ au_read_header (SF_PRIVATE *psf)
-+ {	AU_FMT	au_fmt ;
-+ 	int		marker, dword ;
-++	sf_count_t data_end ;
+++int _gnutls_group_expand(
+++	const gnutls_group_entry_st *group,
+++	const gnutls_group_entry_st *subgroups[MAX_HYBRID_GROUPS + 1]);
+++
++ gnutls_ecc_curve_t _gnutls_ecc_bits_to_curve(gnutls_pk_algorithm_t pk,
++ 					     int bits);
++ #define MAX_ECC_CURVE_SIZE 66
++diff --git a/lib/algorithms/groups.c b/lib/algorithms/groups.c
++index 88d0cf630..2fbe7b8ec 100644
++--- a/lib/algorithms/groups.c
+++++ b/lib/algorithms/groups.c
++@@ -30,30 +30,6 @@
++ /* Supported ECC curves
++  */
 + 
-+ 	memset (&au_fmt, 0, sizeof (au_fmt)) ;
-+ 	psf_binheader_readf (psf, "pm", 0, &marker) ;
-+@@ -317,14 +318,15 @@ au_read_header (SF_PRIVATE *psf)
-+ 		return SFE_AU_EMBED_BAD_LEN ;
-+ 		} ;
-+ 
-++	data_end = (sf_count_t) au_fmt.dataoffset + (sf_count_t) au_fmt.datasize ;
-+ 	if (psf->fileoffset > 0)
-+-	{	psf->filelength = au_fmt.dataoffset + au_fmt.datasize ;
-++	{	psf->filelength = data_end ;
-+ 		psf_log_printf (psf, "  Data Size   : %d\n", au_fmt.datasize) ;
-+ 		}
-+-	else if (au_fmt.datasize == -1 || au_fmt.dataoffset + au_fmt.datasize == psf->filelength)
-++	else if (au_fmt.datasize == -1 || data_end == psf->filelength)
-+ 		psf_log_printf (psf, "  Data Size   : %d\n", au_fmt.datasize) ;
-+-	else if (au_fmt.dataoffset + au_fmt.datasize < psf->filelength)
-+-	{	psf->filelength = au_fmt.dataoffset + au_fmt.datasize ;
-++	else if (data_end < psf->filelength)
-++	{	psf->filelength = data_end ;
-+ 		psf_log_printf (psf, "  Data Size   : %d\n", au_fmt.datasize) ;
-+ 		}
-+ 	else
-+-- 
-+2.39.5
-+
-diff --git a/package/libsndfile/0003-avr-fix-int-overflow-in-avr_read_header.patch b/package/libsndfile/0003-avr-fix-int-overflow-in-avr_read_header.patch
-new file mode 100644
-index 0000000000..f50e4fb552
---- /dev/null
-+++ b/package/libsndfile/0003-avr-fix-int-overflow-in-avr_read_header.patch
-@@ -0,0 +1,34 @@
-+From 2f8eece78cc8b4dce6c95b3045867f0936714db8 Mon Sep 17 00:00:00 2001
-+From: Alex Stewart <alex.stewart@ni.com>
-+Date: Wed, 11 Oct 2023 16:46:29 -0400
-+Subject: [PATCH] avr: fix int overflow in avr_read_header()
-+
-+Pre-cast hdr.frames to sf_count_t, to provide the calculation with
-+enough numeric space to avoid an int-overflow.
-+
-+CVE: CVE-2022-33065
-+Fixes: https://github.com/libsndfile/libsndfile/issues/833
-+
-+Signed-off-by: Alex Stewart <alex.stewart@ni.com>
-+Upstream: https://github.com/libsndfile/libsndfile/commit/2f8eece78cc8b4dce6c95b3045867f0936714db8
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/avr.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/avr.c b/src/avr.c
-+index 6c78ff69..1bc1ffc9 100644
-+--- a/src/avr.c
-++++ b/src/avr.c
-+@@ -162,7 +162,7 @@ avr_read_header (SF_PRIVATE *psf)
-+ 	psf->endian = SF_ENDIAN_BIG ;
-+ 
-+  	psf->dataoffset = AVR_HDR_SIZE ;
-+-	psf->datalength = hdr.frames * (hdr.rez / 8) ;
-++	psf->datalength = (sf_count_t) hdr.frames * (hdr.rez / 8) ;
-+ 
-+ 	if (psf->fileoffset > 0)
-+ 		psf->filelength = AVR_HDR_SIZE + psf->datalength ;
-+-- 
-+2.39.5
-+
-diff --git a/package/libsndfile/0004-sds-fix-int-overflow-warning-in-sample-calculations.patch b/package/libsndfile/0004-sds-fix-int-overflow-warning-in-sample-calculations.patch
-new file mode 100644
-index 0000000000..c93b1006d7
---- /dev/null
-+++ b/package/libsndfile/0004-sds-fix-int-overflow-warning-in-sample-calculations.patch
-@@ -0,0 +1,61 @@
-+From 2e9f71dd5d5c85b5bd4a0573d1fa05b5b89b33a7 Mon Sep 17 00:00:00 2001
-+From: Alex Stewart <alex.stewart@ni.com>
-+Date: Wed, 11 Oct 2023 16:54:21 -0400
-+Subject: [PATCH] sds: fix int overflow warning in sample calculations
-+
-+The sds_*byte_read() functions compose their uint_32 sample buffers by
-+shifting 7bit samples into a 32bit wide buffer, and adding them
-+together. Because the 7bit samples are stored in 32bit ints, code
-+fuzzers become concerned that the addition operation can overflow and
-+cause undefined behavior.
-+
-+Instead, bitwise-OR the bytes together - which should accomplish the
-+same arithmetic operation, without risking an int-overflow.
-+
-+CVE: CVE-2022-33065
-+Fixes: https://github.com/libsndfile/libsndfile/issues/833
-+
-+Signed-off-by: Alex Stewart <alex.stewart@ni.com>
-+
-+Do the same for the 3byte and 4byte read functions.
-+
-+Upstream: https://github.com/libsndfile/libsndfile/commit/2e9f71dd5d5c85b5bd4a0573d1fa05b5b89b33a7
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/sds.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/sds.c b/src/sds.c
-+index 6bc76171..2a0f164c 100644
-+--- a/src/sds.c
-++++ b/src/sds.c
-+@@ -454,7 +454,7 @@ sds_2byte_read (SF_PRIVATE *psf, SDS_PRIVATE *psds)
-+ 
-+ 	ucptr = psds->read_data + 5 ;
-+ 	for (k = 0 ; k < 120 ; k += 2)
-+-	{	sample = arith_shift_left (ucptr [k], 25) + arith_shift_left (ucptr [k + 1], 18) ;
-++	{	sample = arith_shift_left (ucptr [k], 25) | arith_shift_left (ucptr [k + 1], 18) ;
-+ 		psds->read_samples [k / 2] = (int) (sample - 0x80000000) ;
-+ 		} ;
-+ 
-+@@ -498,7 +498,7 @@ sds_3byte_read (SF_PRIVATE *psf, SDS_PRIVATE *psds)
-+ 
-+ 	ucptr = psds->read_data + 5 ;
-+ 	for (k = 0 ; k < 120 ; k += 3)
-+-	{	sample = (((uint32_t) ucptr [k]) << 25) + (ucptr [k + 1] << 18) + (ucptr [k + 2] << 11) ;
-++	{	sample = (((uint32_t) ucptr [k]) << 25) | (ucptr [k + 1] << 18) | (ucptr [k + 2] << 11) ;
-+ 		psds->read_samples [k / 3] = (int) (sample - 0x80000000) ;
-+ 		} ;
-+ 
-+@@ -542,7 +542,7 @@ sds_4byte_read (SF_PRIVATE *psf, SDS_PRIVATE *psds)
-+ 
-+ 	ucptr = psds->read_data + 5 ;
-+ 	for (k = 0 ; k < 120 ; k += 4)
-+-	{	sample = (((uint32_t) ucptr [k]) << 25) + (ucptr [k + 1] << 18) + (ucptr [k + 2] << 11) + (ucptr [k + 3] << 4) ;
-++	{	sample = (((uint32_t) ucptr [k]) << 25) | (ucptr [k + 1] << 18) | (ucptr [k + 2] << 11) | (ucptr [k + 3] << 4) ;
-+ 		psds->read_samples [k / 4] = (int) (sample - 0x80000000) ;
-+ 		} ;
-+ 
-+-- 
-+2.39.5
-+
-diff --git a/package/libsndfile/0005-aiff-fix-int-overflow-when-counting-header-elements.patch b/package/libsndfile/0005-aiff-fix-int-overflow-when-counting-header-elements.patch
-new file mode 100644
-index 0000000000..5efb6f2368
---- /dev/null
-+++ b/package/libsndfile/0005-aiff-fix-int-overflow-when-counting-header-elements.patch
-@@ -0,0 +1,39 @@
-+From 187451dbd3c044f9a76b6c1d950d458de0103180 Mon Sep 17 00:00:00 2001
-+From: Alex Stewart <alex.stewart@ni.com>
-+Date: Wed, 11 Oct 2023 17:26:51 -0400
-+Subject: [PATCH] aiff: fix int overflow when counting header elements
-+
-+aiff_read_basc_chunk() tries to count the AIFF header size by keeping
-+track of the bytes returned by psf_binheader_readf(). Though improbable,
-+it is technically possible for these added bytes to exceed the int-sized
-+`count` accumulator.
-+
-+Use a 64-bit sf_count_t type for `count`, to ensure that it always has
-+enough numeric space.
-+
-+CVE: CVE-2022-33065
-+Fixes: https://github.com/libsndfile/libsndfile/issues/833
-+
-+Signed-off-by: Alex Stewart <alex.stewart@ni.com>
-+Upstream: https://github.com/libsndfile/libsndfile/commit/187451dbd3c044f9a76b6c1d950d458de0103180
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/aiff.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/aiff.c b/src/aiff.c
-+index ac3655e9..6d8f1bc8 100644
-+--- a/src/aiff.c
-++++ b/src/aiff.c
-+@@ -1702,7 +1702,7 @@ static int
-+ aiff_read_basc_chunk (SF_PRIVATE * psf, int datasize)
-+ {	const char * type_str ;
-+ 	basc_CHUNK bc ;
-+-	int count ;
-++	sf_count_t count ;
-+ 
-+ 	count = psf_binheader_readf (psf, "E442", &bc.version, &bc.numBeats, &bc.rootNote) ;
-+ 	count += psf_binheader_readf (psf, "E222", &bc.scaleType, &bc.sigNumerator, &bc.sigDenominator) ;
-+-- 
-+2.39.5
-+
-diff --git a/package/libsndfile/0006-ircam-fix-int-overflow-in-ircam_read_header.patch b/package/libsndfile/0006-ircam-fix-int-overflow-in-ircam_read_header.patch
-new file mode 100644
-index 0000000000..b240a38e2f
---- /dev/null
-+++ b/package/libsndfile/0006-ircam-fix-int-overflow-in-ircam_read_header.patch
-@@ -0,0 +1,82 @@
-+From 5d5319300587e3d4a146332a2f48674ceb8a0257 Mon Sep 17 00:00:00 2001
-+From: Alex Stewart <alex.stewart@ni.com>
-+Date: Wed, 11 Oct 2023 17:43:02 -0400
-+Subject: [PATCH] ircam: fix int overflow in ircam_read_header()
-+
-+When reading the IRCAM header, it is possible for the calculated
-+blockwidth to exceed the bounds of a signed int32.
-+
-+Use a 64bit sf_count_t to store the blockwidth.
-+
-+CVE: CVE-2022-33065
-+Fixes: https://github.com/libsndfile/libsndfile/issues/833
-+
-+Signed-off-by: Alex Stewart <alex.stewart@ni.com>
-+Upstream: https://github.com/libsndfile/libsndfile/commit/5d5319300587e3d4a146332a2f48674ceb8a0257
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/common.h |  2 +-
-+ src/ircam.c  | 10 +++++-----
-+ 2 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/common.h b/src/common.h
-+index cd9ac8b0..01f6ae09 100644
-+--- a/src/common.h
-++++ b/src/common.h
-+@@ -439,7 +439,7 @@ typedef struct sf_private_tag
-+ 	sf_count_t		datalength ;	/* Length in bytes of the audio data. */
-+ 	sf_count_t		dataend ;		/* Offset to file tailer. */
-+ 
-+-	int				blockwidth ;	/* Size in bytes of one set of interleaved samples. */
-++	sf_count_t		blockwidth ;	/* Size in bytes of one set of interleaved samples. */
-+ 	int				bytewidth ;		/* Size in bytes of one sample (one channel). */
-+ 
-+ 	void			*dither ;
-+diff --git a/src/ircam.c b/src/ircam.c
-+index 8e7cdba8..3d73ba44 100644
-+--- a/src/ircam.c
-++++ b/src/ircam.c
-+@@ -171,35 +171,35 @@ ircam_read_header	(SF_PRIVATE *psf)
-+ 	switch (encoding)
-+ 	{	case IRCAM_PCM_16 :
-+ 				psf->bytewidth = 2 ;
-+-				psf->blockwidth = psf->sf.channels * psf->bytewidth ;
-++				psf->blockwidth = (sf_count_t) psf->sf.channels * psf->bytewidth ;
-+ 
-+ 				psf->sf.format = SF_FORMAT_IRCAM | SF_FORMAT_PCM_16 ;
-+ 				break ;
-+ 
-+ 		case IRCAM_PCM_32 :
-+ 				psf->bytewidth = 4 ;
-+-				psf->blockwidth = psf->sf.channels * psf->bytewidth ;
-++				psf->blockwidth = (sf_count_t) psf->sf.channels * psf->bytewidth ;
-+ 
-+ 				psf->sf.format = SF_FORMAT_IRCAM | SF_FORMAT_PCM_32 ;
-+ 				break ;
-+ 
-+ 		case IRCAM_FLOAT :
-+ 				psf->bytewidth = 4 ;
-+-				psf->blockwidth = psf->sf.channels * psf->bytewidth ;
-++				psf->blockwidth = (sf_count_t) psf->sf.channels * psf->bytewidth ;
-+ 
-+ 				psf->sf.format = SF_FORMAT_IRCAM | SF_FORMAT_FLOAT ;
-+ 				break ;
-+ 
-+ 		case IRCAM_ALAW :
-+ 				psf->bytewidth = 1 ;
-+-				psf->blockwidth = psf->sf.channels * psf->bytewidth ;
-++				psf->blockwidth = (sf_count_t) psf->sf.channels * psf->bytewidth ;
-+ 
-+ 				psf->sf.format = SF_FORMAT_IRCAM | SF_FORMAT_ALAW ;
-+ 				break ;
-+ 
-+ 		case IRCAM_ULAW :
-+ 				psf->bytewidth = 1 ;
-+-				psf->blockwidth = psf->sf.channels * psf->bytewidth ;
-++				psf->blockwidth = (sf_count_t) psf->sf.channels * psf->bytewidth ;
-+ 
-+ 				psf->sf.format = SF_FORMAT_IRCAM | SF_FORMAT_ULAW ;
-+ 				break ;
-+-- 
-+2.39.5
-+
-diff --git a/package/libsndfile/0007-mat4-mat5-fix-int-overflow-when-calculating-blockwid.patch b/package/libsndfile/0007-mat4-mat5-fix-int-overflow-when-calculating-blockwid.patch
-new file mode 100644
-index 0000000000..ef4d6c0f04
---- /dev/null
-+++ b/package/libsndfile/0007-mat4-mat5-fix-int-overflow-when-calculating-blockwid.patch
-@@ -0,0 +1,48 @@
-+From 39f2a4ffe5ab77d1cadc2057c2db046a9a3d5d65 Mon Sep 17 00:00:00 2001
-+From: Alex Stewart <alex.stewart@ni.com>
-+Date: Wed, 11 Oct 2023 16:12:22 -0400
-+Subject: [PATCH] mat4/mat5: fix int overflow when calculating blockwidth
-+
-+Pre-cast the components of the blockwidth calculation to sf_count_t to
-+avoid overflowing integers during calculation.
-+
-+CVE: CVE-2022-33065
-+Fixes: https://github.com/libsndfile/libsndfile/issues/833
-+
-+Signed-off-by: Alex Stewart <alex.stewart@ni.com>
-+Upstream: https://github.com/libsndfile/libsndfile/commit/39f2a4ffe5ab77d1cadc2057c2db046a9a3d5d65
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/mat4.c | 2 +-
-+ src/mat5.c | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/mat4.c b/src/mat4.c
-+index 575683ba..9f046f0c 100644
-+--- a/src/mat4.c
-++++ b/src/mat4.c
-+@@ -104,7 +104,7 @@ mat4_open	(SF_PRIVATE *psf)
-+ 
-+ 	psf->container_close = mat4_close ;
-+ 
-+-	psf->blockwidth = psf->bytewidth * psf->sf.channels ;
-++	psf->blockwidth = (sf_count_t) psf->bytewidth * psf->sf.channels ;
-+ 
-+ 	switch (subformat)
-+ 	{	case SF_FORMAT_PCM_16 :
-+diff --git a/src/mat5.c b/src/mat5.c
-+index da5a6eca..20f0ea64 100644
-+--- a/src/mat5.c
-++++ b/src/mat5.c
-+@@ -114,7 +114,7 @@ mat5_open	(SF_PRIVATE *psf)
-+ 
-+ 	psf->container_close = mat5_close ;
-+ 
-+-	psf->blockwidth = psf->bytewidth * psf->sf.channels ;
-++	psf->blockwidth = (sf_count_t) psf->bytewidth * psf->sf.channels ;
-+ 
-+ 	switch (subformat)
-+ 	{	case SF_FORMAT_PCM_U8 :
-+-- 
-+2.39.5
-+
-diff --git a/package/libsndfile/0008-common-fix-int-overflow-in-psf_binheader_readf.patch b/package/libsndfile/0008-common-fix-int-overflow-in-psf_binheader_readf.patch
-new file mode 100644
-index 0000000000..c9b6ff18f2
---- /dev/null
-+++ b/package/libsndfile/0008-common-fix-int-overflow-in-psf_binheader_readf.patch
-@@ -0,0 +1,181 @@
-+From 6be8906740cdca067f12920bb4a63f728485aff0 Mon Sep 17 00:00:00 2001
-+From: Alex Stewart <alex.stewart@ni.com>
-+Date: Mon, 16 Oct 2023 12:37:47 -0400
-+Subject: [PATCH] common: fix int overflow in psf_binheader_readf()
-+
-+The psf_binheader_readf() function attempts to count and return the
-+number of bytes traversed in the header. During this accumulation, it is
-+possible to overflow the int-sized byte_count variable.
-+
-+Avoid this overflow by checking that the accumulated bytes do not exceed
-+INT_MAX and throwing an error if they do. This implies that files with
-+multi-gigabyte headers threaten to produce this error, but I imagine
-+those files don't really exist - and this error is better than the
-+undefined behavior which would have resulted previously.
-+
-+CVE: CVE-2022-33065
-+Fixes: https://github.com/libsndfile/libsndfile/issues/833
-+
-+Signed-off-by: Alex Stewart <alex.stewart@ni.com>
-+Upstream: https://github.com/libsndfile/libsndfile/commit/6be8906740cdca067f12920bb4a63f728485aff0
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/common.c | 36 ++++++++++++++++++++++++------------
-+ 1 file changed, 24 insertions(+), 12 deletions(-)
-+
-+diff --git a/src/common.c b/src/common.c
-+index b877aa86..8982379a 100644
-+--- a/src/common.c
-++++ b/src/common.c
-+@@ -18,6 +18,7 @@
-+ 
-+ #include <config.h>
-+ 
-++#include <limits.h>
-+ #include <stdarg.h>
-+ #include <string.h>
-+ #if HAVE_UNISTD_H
-+@@ -990,6 +991,7 @@ psf_binheader_readf (SF_PRIVATE *psf, char const *format, ...)
-+ 	double			*doubleptr ;
-+ 	char			c ;
-+ 	int				byte_count = 0, count = 0 ;
-++	int				read_bytes = 0 ;
-+ 
-+ 	if (! format)
-+ 		return psf_ftell (psf) ;
-+@@ -998,6 +1000,7 @@ psf_binheader_readf (SF_PRIVATE *psf, char const *format, ...)
-+ 
-+ 	while ((c = *format++))
++-#ifdef HAVE_LIBOQS
++-static const gnutls_group_entry_st group_mlkem768 = {
++-	.name = "MLKEM768",
++-	.id = GNUTLS_GROUP_INVALID,
++-	.curve = GNUTLS_ECC_CURVE_INVALID,
++-	.pk = GNUTLS_PK_MLKEM768,
++-};
++-
++-static const gnutls_group_entry_st group_kyber768 = {
++-	.name = "KYBER768",
++-	.id = GNUTLS_GROUP_INVALID,
++-	.curve = GNUTLS_ECC_CURVE_INVALID,
++-	.pk = GNUTLS_PK_EXP_KYBER768,
++-};
++-#endif
++-
++-static const gnutls_group_entry_st group_x25519 = {
++-	.name = "X25519",
++-	.id = GNUTLS_GROUP_X25519,
++-	.curve = GNUTLS_ECC_CURVE_X25519,
++-	.tls_id = 29,
++-	.pk = GNUTLS_PK_ECDH_X25519,
++-};
++-
++ static const gnutls_group_entry_st supported_groups[] = {
 + 	{
-++		read_bytes = 0 ;
-+ 		if (psf->header.indx + 16 >= psf->header.len && psf_bump_header_allocation (psf, 16))
-+ 			break ;
-+ 
-+@@ -1014,7 +1017,7 @@ psf_binheader_readf (SF_PRIVATE *psf, char const *format, ...)
-+ 					intptr = va_arg (argptr, unsigned int*) ;
-+ 					*intptr = 0 ;
-+ 					ucptr = (unsigned char*) intptr ;
-+-					byte_count += header_read (psf, ucptr, sizeof (int)) ;
-++					read_bytes = header_read (psf, ucptr, sizeof (int)) ;
-+ 					*intptr = GET_MARKER (ucptr) ;
-+ 					break ;
-+ 
-+@@ -1022,7 +1025,7 @@ psf_binheader_readf (SF_PRIVATE *psf, char const *format, ...)
-+ 					intptr = va_arg (argptr, unsigned int*) ;
-+ 					*intptr = 0 ;
-+ 					ucptr = (unsigned char*) intptr ;
-+-					byte_count += header_read (psf, sixteen_bytes, sizeof (sixteen_bytes)) ;
-++					read_bytes = header_read (psf, sixteen_bytes, sizeof (sixteen_bytes)) ;
-+ 					{	int k ;
-+ 						intdata = 0 ;
-+ 						for (k = 0 ; k < 16 ; k++)
-+@@ -1034,14 +1037,14 @@ psf_binheader_readf (SF_PRIVATE *psf, char const *format, ...)
-+ 			case '1' :
-+ 					charptr = va_arg (argptr, char*) ;
-+ 					*charptr = 0 ;
-+-					byte_count += header_read (psf, charptr, sizeof (char)) ;
-++					read_bytes = header_read (psf, charptr, sizeof (char)) ;
-+ 					break ;
-+ 
-+ 			case '2' : /* 2 byte value with the current endian-ness */
-+ 					shortptr = va_arg (argptr, unsigned short*) ;
-+ 					*shortptr = 0 ;
-+ 					ucptr = (unsigned char*) shortptr ;
-+-					byte_count += header_read (psf, ucptr, sizeof (short)) ;
-++					read_bytes = header_read (psf, ucptr, sizeof (short)) ;
-+ 					if (psf->rwf_endian == SF_ENDIAN_BIG)
-+ 						*shortptr = GET_BE_SHORT (ucptr) ;
-+ 					else
-+@@ -1051,7 +1054,7 @@ psf_binheader_readf (SF_PRIVATE *psf, char const *format, ...)
-+ 			case '3' : /* 3 byte value with the current endian-ness */
-+ 					intptr = va_arg (argptr, unsigned int*) ;
-+ 					*intptr = 0 ;
-+-					byte_count += header_read (psf, sixteen_bytes, 3) ;
-++					read_bytes = header_read (psf, sixteen_bytes, 3) ;
-+ 					if (psf->rwf_endian == SF_ENDIAN_BIG)
-+ 						*intptr = GET_BE_3BYTE (sixteen_bytes) ;
-+ 					else
-+@@ -1062,7 +1065,7 @@ psf_binheader_readf (SF_PRIVATE *psf, char const *format, ...)
-+ 					intptr = va_arg (argptr, unsigned int*) ;
-+ 					*intptr = 0 ;
-+ 					ucptr = (unsigned char*) intptr ;
-+-					byte_count += header_read (psf, ucptr, sizeof (int)) ;
-++					read_bytes = header_read (psf, ucptr, sizeof (int)) ;
-+ 					if (psf->rwf_endian == SF_ENDIAN_BIG)
-+ 						*intptr = psf_get_be32 (ucptr, 0) ;
-+ 					else
-+@@ -1072,7 +1075,7 @@ psf_binheader_readf (SF_PRIVATE *psf, char const *format, ...)
-+ 			case '8' : /* 8 byte value with the current endian-ness */
-+ 					countptr = va_arg (argptr, sf_count_t *) ;
-+ 					*countptr = 0 ;
-+-					byte_count += header_read (psf, sixteen_bytes, 8) ;
-++					read_bytes = header_read (psf, sixteen_bytes, 8) ;
-+ 					if (psf->rwf_endian == SF_ENDIAN_BIG)
-+ 						countdata = psf_get_be64 (sixteen_bytes, 0) ;
-+ 					else
-+@@ -1083,7 +1086,7 @@ psf_binheader_readf (SF_PRIVATE *psf, char const *format, ...)
-+ 			case 'f' : /* Float conversion */
-+ 					floatptr = va_arg (argptr, float *) ;
-+ 					*floatptr = 0.0 ;
-+-					byte_count += header_read (psf, floatptr, sizeof (float)) ;
-++					read_bytes = header_read (psf, floatptr, sizeof (float)) ;
-+ 					if (psf->rwf_endian == SF_ENDIAN_BIG)
-+ 						*floatptr = float32_be_read ((unsigned char*) floatptr) ;
-+ 					else
-+@@ -1093,7 +1096,7 @@ psf_binheader_readf (SF_PRIVATE *psf, char const *format, ...)
-+ 			case 'd' : /* double conversion */
-+ 					doubleptr = va_arg (argptr, double *) ;
-+ 					*doubleptr = 0.0 ;
-+-					byte_count += header_read (psf, doubleptr, sizeof (double)) ;
-++					read_bytes = header_read (psf, doubleptr, sizeof (double)) ;
-+ 					if (psf->rwf_endian == SF_ENDIAN_BIG)
-+ 						*doubleptr = double64_be_read ((unsigned char*) doubleptr) ;
-+ 					else
-+@@ -1117,7 +1120,7 @@ psf_binheader_readf (SF_PRIVATE *psf, char const *format, ...)
-+ 					charptr = va_arg (argptr, char*) ;
-+ 					count = va_arg (argptr, size_t) ;
-+ 					memset (charptr, 0, count) ;
-+-					byte_count += header_read (psf, charptr, count) ;
-++					read_bytes = header_read (psf, charptr, count) ;
-+ 					break ;
-+ 
-+ 			case 'G' :
-+@@ -1128,7 +1131,7 @@ psf_binheader_readf (SF_PRIVATE *psf, char const *format, ...)
-+ 					if (psf->header.indx + count >= psf->header.len && psf_bump_header_allocation (psf, count))
-+ 						break ;
-+ 
-+-					byte_count += header_gets (psf, charptr, count) ;
-++					read_bytes = header_gets (psf, charptr, count) ;
-+ 					break ;
-+ 
-+ 			case 'z' :
-+@@ -1152,7 +1155,7 @@ psf_binheader_readf (SF_PRIVATE *psf, char const *format, ...)
-+ 			case 'j' :	/* Seek to position from current position. */
-+ 					count = va_arg (argptr, size_t) ;
-+ 					header_seek (psf, count, SEEK_CUR) ;
-+-					byte_count += count ;
-++					read_bytes = count ;
-+ 					break ;
-+ 
-+ 			case '!' : /* Clear buffer, forcing re-read. */
-+@@ -1164,8 +1167,17 @@ psf_binheader_readf (SF_PRIVATE *psf, char const *format, ...)
-+ 				psf->error = SFE_INTERNAL ;
-+ 				break ;
-+ 			} ;
-++
-++		if (read_bytes > 0 && byte_count > (INT_MAX - read_bytes))
-++		{	psf_log_printf (psf, "Header size exceeds INT_MAX. Aborting.", c) ;
-++			psf->error = SFE_INTERNAL ;
-++			break ;
-++		} else
-++		{	byte_count += read_bytes ;
-+ 		} ;
-+ 
-++		} ;	/*end while*/
-++
-+ 	va_end (argptr) ;
-+ 
-+ 	return byte_count ;
-+-- 
-+2.39.5
-+
-diff --git a/package/libsndfile/0009-nms_adpcm-fix-int-overflow-in-signal-estimate.patch b/package/libsndfile/0009-nms_adpcm-fix-int-overflow-in-signal-estimate.patch
-new file mode 100644
-index 0000000000..266fa661b1
---- /dev/null
-+++ b/package/libsndfile/0009-nms_adpcm-fix-int-overflow-in-signal-estimate.patch
-@@ -0,0 +1,233 @@
-+From 71565532463b22c24824101845a533a67bff4c9c Mon Sep 17 00:00:00 2001
-+From: Alex Stewart <alex.stewart@ni.com>
-+Date: Thu, 19 Oct 2023 14:07:19 -0400
-+Subject: [PATCH] nms_adpcm: fix int overflow in signal estimate
-+
-+It is possible (though functionally incorrect) for the signal estimate
-+calculation in nms_adpcm_update() to overflow the int value of s_e,
-+resulting in undefined behavior.
-+
-+Since adpcm state signal values are never practically larger than
-+16 bits, use smaller numeric sizes throughout the file to avoid the
-+overflow.
-+
-+CVE: CVE-2022-33065
-+Fixes: https://github.com/libsndfile/libsndfile/issues/833
-+
-+Authored-by: Arthur Taylor <art@ified.ca>
-+Signed-off-by: Alex Stewart <alex.stewart@ni.com>
-+Upstream: https://github.com/libsndfile/libsndfile/commit/71565532463b22c24824101845a533a67bff4c9c
-+[Peter: adjust for 1.2.2]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/nms_adpcm.c | 81 ++++++++++++++++++++++++-------------------------
-+ 1 file changed, 40 insertions(+), 41 deletions(-)
-+
-+diff --git a/src/nms_adpcm.c b/src/nms_adpcm.c
-+index 5999be1f..dca85f0b 100644
-+--- a/src/nms_adpcm.c
-++++ b/src/nms_adpcm.c
-+@@ -48,36 +48,36 @@
-+ /* Variable names from ITU G.726 spec */
-+ struct nms_adpcm_state
-+ {	/* Log of the step size multiplier. Operated on by codewords. */
-+-	int yl ;
-++	short yl ;
-+ 
-+ 	/* Quantizer step size multiplier. Generated from yl. */
-+-	int y ;
-++	short y ;
-+ 
-+ 	/* Coefficents of the pole predictor */
-+-	int a [2] ;
-++	short a [2] ;
-+ 
-+ 	/* Coefficents of the zero predictor  */
-+-	int b [6] ;
-++	short b [6] ;
-+ 
-+ 	/* Previous quantized deltas (multiplied by 2^14) */
-+-	int d_q [7] ;
-++	short d_q [7] ;
-+ 
-+ 	/* d_q [x] + s_ez [x], used by the pole-predictor for signs only. */
-+-	int p [3] ;
-++	short p [3] ;
-+ 
-+ 	/* Previous reconstructed signal values. */
-+-	int s_r [2] ;
-++	short s_r [2] ;
-+ 
-+ 	/* Zero predictor components of the signal estimate. */
-+-	int s_ez ;
-++	short s_ez ;
-+ 
-+ 	/* Signal estimate, (including s_ez). */
-+-	int s_e ;
-++	short s_e ;
-+ 
-+ 	/* The most recent codeword (enc:generated, dec:inputted) */
-+-	int Ik ;
-++	char Ik ;
-+ 
-+-	int parity ;
-++	char parity ;
-+ 
-+ 	/*
-+ 	** Offset into code tables for the bitrate.
-+@@ -109,7 +109,7 @@ typedef struct
-+ } NMS_ADPCM_PRIVATE ;
-+ 
-+ /* Pre-computed exponential interval used in the antilog approximation. */
-+-static unsigned int table_expn [] =
-++static unsigned short table_expn [] =
-+ {	0x4000, 0x4167, 0x42d5, 0x444c,	0x45cb, 0x4752, 0x48e2, 0x4a7a,
-+ 	0x4c1b, 0x4dc7, 0x4f7a, 0x5138,	0x52ff, 0x54d1, 0x56ac, 0x5892,
-+ 	0x5a82, 0x5c7e, 0x5e84, 0x6096,	0x62b4, 0x64dd, 0x6712, 0x6954,
-+@@ -117,21 +117,21 @@ static unsigned int table_expn [] =
-+ } ;
-+ 
-+ /* Table mapping codewords to scale factor deltas. */
-+-static int table_scale_factor_step [] =
-++static short table_scale_factor_step [] =
-+ {	0x0,	0x0,	0x0,	0x0,	0x4b0,	0x0,	0x0,	0x0,	/* 2-bit */
-+ 	-0x3c,	0x0,	0x90,	0x0,	0x2ee,	0x0,	0x898,	0x0,	/* 3-bit */
-+ 	-0x30,	0x12,	0x6b,	0xc8,	0x188,	0x2e0,	0x551,	0x1150,	/* 4-bit */
-+ } ;
-+ 
-+ /* Table mapping codewords to quantized delta interval steps. */
-+-static unsigned int table_step [] =
-++static unsigned short table_step [] =
-+ {	0x73F,	0,		0,		0,		0x1829,	0,		0,		0,		/* 2-bit */
-+ 	0x3EB,	0,		0xC18,	0,		0x1581,	0,		0x226E,	0,		/* 3-bit */
-+ 	0x20C,	0x635,	0xA83,	0xF12,	0x1418,	0x19E3,	0x211A,	0x2BBA,	/* 4-bit */
-+ } ;
-+ 
-+ /* Binary search lookup table for quantizing using table_step. */
-+-static int table_step_search [] =
-++static short table_step_search [] =
-+ {	0,		0x1F6D,	0,		-0x1F6D,	0,		0,			0,			0, /* 2-bit */
-+ 	0x1008,	0x1192,	0,		-0x219A,	0x1656,	-0x1656,	0,			0, /* 3-bit */
-+ 	0x872,	0x1277,	-0x8E6,	-0x232B,	0xD06,	-0x17D7,	-0x11D3,	0, /* 4-bit */
-+@@ -179,23 +179,23 @@ static sf_count_t nms_adpcm_seek (SF_PRIVATE *psf, int mode, sf_count_t offset)
-+ ** Maps [1,20480] to [1,1024] in an exponential relationship. This is
-+ ** approximately ret = b^exp where b = e^(ln(1024)/ln(20480)) ~= 1.0003385
-+ */
-+-static inline int
-+-nms_adpcm_antilog (int exp)
-+-{	int ret ;
-++static inline short
-++nms_adpcm_antilog (short exp)
-++{	int_fast32_t r ;
-+ 
-+-	ret = 0x1000 ;
-+-	ret += (((exp & 0x3f) * 0x166b) >> 12) ;
-+-	ret *= table_expn [(exp & 0x7c0) >> 6] ;
-+-	ret >>= (26 - (exp >> 11)) ;
-++	r = 0x1000 ;
-++	r += (((int_fast32_t) (exp & 0x3f) * 0x166b) >> 12) ;
-++	r *= table_expn [(exp & 0x7c0) >> 6] ;
-++	r >>= (26 - (exp >> 11)) ;
-+ 
-+-	return ret ;
-++	return (short) r ;
-+ } /* nms_adpcm_antilog */
-+ 
-+ static void
-+ nms_adpcm_update (struct nms_adpcm_state *s)
-+ {	/* Variable names from ITU G.726 spec */
-+-	int a1ul ;
-+-	int fa1 ;
-++	short a1ul, fa1 ;
-++	int_fast32_t se ;
-+ 	int i ;
-+ 
-+ 	/* Decay and Modify the scale factor in the log domain based on the codeword. */
-+@@ -222,7 +222,7 @@ nms_adpcm_update (struct nms_adpcm_state *s)
-+ 	else if (fa1 > 256)
-+ 		fa1 = 256 ;
-+ 
-+-	s->a [0] = (0xff * s->a [0]) >> 8 ;
-++	s->a [0] = (s->a [0] * 0xff) >> 8 ;
-+ 	if (s->p [0] != 0 && s->p [1] != 0 && ((s->p [0] ^ s->p [1]) < 0))
-+ 		s->a [0] -= 192 ;
-+ 	else
-+@@ -230,7 +230,7 @@ nms_adpcm_update (struct nms_adpcm_state *s)
-+ 		fa1 = -fa1 ;
-+ 		}
-+ 
-+-	s->a [1] = fa1 + ((0xfe * s->a [1]) >> 8) ;
-++	s->a [1] = fa1 + ((s->a [1] * 0xfe) >> 8) ;
-+ 	if (s->p [0] != 0 && s->p [2] != 0 && ((s->p [0] ^ s->p [2]) < 0))
-+ 		s->a [1] -= 128 ;
-+ 	else
-+@@ -250,19 +250,18 @@ nms_adpcm_update (struct nms_adpcm_state *s)
-+ 			s->a [0] = a1ul ;
-+ 		} ;
-+ 
-+-	/* Compute the zero predictor estimate. Rotate past deltas too. */
-+-	s->s_ez = 0 ;
-++	/* Compute the zero predictor estimate and rotate past deltas. */
-++	se = 0 ;
-+ 	for (i = 5 ; i >= 0 ; i--)
-+-	{	s->s_ez += s->d_q [i] * s->b [i] ;
-++	{	se += (int_fast32_t) s->d_q [i] * s->b [i] ;
-+ 		s->d_q [i + 1] = s->d_q [i] ;
-+ 		} ;
-++	s->s_ez = se >> 14 ;
-+ 
-+-	/* Compute the signal estimate. */
-+-	s->s_e = s->a [0] * s->s_r [0] + s->a [1] * s->s_r [1] + s->s_ez ;
-+-
-+-	/* Return to scale */
-+-	s->s_ez >>= 14 ;
-+-	s->s_e >>= 14 ;
-++	/* Complete the signal estimate. */
-++	se += (int_fast32_t) s->a [0] * s->s_r [0] ;
-++	se += (int_fast32_t) s->a [1] * s->s_r [1] ;
-++	s->s_e = se >> 14 ;
-+ 
-+ 	/* Rotate members to prepare for next iteration. */
-+ 	s->s_r [1] = s->s_r [0] ;
-+@@ -274,7 +273,7 @@ nms_adpcm_update (struct nms_adpcm_state *s)
-+ static int16_t
-+ nms_adpcm_reconstruct_sample (struct nms_adpcm_state *s, uint8_t I)
-+ {	/* Variable names from ITU G.726 spec */
-+-	int dqx ;
-++	int_fast32_t dqx ;
-+ 
-+ 	/*
-+ 	** The ordering of the 12-bit right-shift is a precision loss. It agrees
-+@@ -308,17 +307,17 @@ nms_adpcm_codec_init (struct nms_adpcm_state *s, enum nms_enc_type type)
-+ /*
-+ ** nms_adpcm_encode_sample()
-+ **
-+-** Encode a linear 16-bit pcm sample into a 2,3, or 4 bit NMS-ADPCM codeword
-++** Encode a linear 16-bit pcm sample into a 2, 3, or 4 bit NMS-ADPCM codeword
-+ ** using and updating the predictor state.
-+ */
-+ static uint8_t
-+ nms_adpcm_encode_sample (struct nms_adpcm_state *s, int16_t sl)
-+ {	/* Variable names from ITU G.726 spec */
-+-	int d ;
-++	int_fast32_t d ;
-+ 	uint8_t I ;
-+ 
-+ 	/* Down scale the sample from 16 => ~14 bits. */
-+-	sl = (sl * 0x1fdf) / 0x7fff ;
-++	sl = ((int_fast32_t) sl * 0x1fdf) / 0x7fff ;
-+ 
-+ 	/* Compute estimate, and delta from actual value */
-+ 	nms_adpcm_update (s) ;
-+@@ -407,7 +406,7 @@ nms_adpcm_encode_sample (struct nms_adpcm_state *s, int16_t sl)
-+ */
-+ static int16_t
-+ nms_adpcm_decode_sample (struct nms_adpcm_state *s, uint8_t I)
-+-{	int sl ;
-++{	int_fast32_t sl ;
-+ 
-+ 	nms_adpcm_update (s) ;
-+ 	sl = nms_adpcm_reconstruct_sample (s, I) ;
-+-- 
-+2.39.5
-+
-diff --git a/package/libsndfile/0010-nms_adpcm-fix-int-overflow-in-sf.frames-calc.patch b/package/libsndfile/0010-nms_adpcm-fix-int-overflow-in-sf.frames-calc.patch
-new file mode 100644
-index 0000000000..0763a53de4
---- /dev/null
-+++ b/package/libsndfile/0010-nms_adpcm-fix-int-overflow-in-sf.frames-calc.patch
-@@ -0,0 +1,39 @@
-+From 3fb27a2c93a11dd3321b0b13140d89ebb39060cb Mon Sep 17 00:00:00 2001
-+From: Alex Stewart <alex.stewart@ni.com>
-+Date: Tue, 17 Oct 2023 11:50:53 -0400
-+Subject: [PATCH] nms_adpcm: fix int overflow in sf.frames calc
-+
-+When calculating sf.frames from the blocks_total PNMS variable, it is
-+theoretically possible to overflow the blocks_total int boundaries,
-+leading to undefined behavior.
-+
-+Cast blocks_total to a long-sized sf_count_t before the calculation, to
-+provide it with enough numeric space and because that is the final
-+typing regardless.
-+
-+CVE: CVE-2022-33065
-+Fixes: https://github.com/libsndfile/libsndfile/issues/833
-+
-+Signed-off-by: Alex Stewart <alex.stewart@ni.com>
-+Upstream: https://github.com/libsndfile/libsndfile/commit/3fb27a2c93a11dd3321b0b13140d89ebb39060cb
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/nms_adpcm.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/nms_adpcm.c b/src/nms_adpcm.c
-+index dca85f0b..61d171c7 100644
-+--- a/src/nms_adpcm.c
-++++ b/src/nms_adpcm.c
-+@@ -1090,7 +1090,7 @@ nms_adpcm_init (SF_PRIVATE *psf)
-+ 	else
-+ 		pnms->blocks_total = psf->datalength / (pnms->shortsperblock * sizeof (short)) ;
-+ 
-+-	psf->sf.frames		= pnms->blocks_total * NMS_SAMPLES_PER_BLOCK ;
-++	psf->sf.frames		= (sf_count_t) pnms->blocks_total * NMS_SAMPLES_PER_BLOCK ;
-+ 	psf->codec_close	= nms_adpcm_close ;
-+ 	psf->seek			= nms_adpcm_seek ;
-+ 
-+-- 
-+2.39.5
-+
-diff --git a/package/libsndfile/0011-pcm-fix-int-overflow-in-pcm_init.patch b/package/libsndfile/0011-pcm-fix-int-overflow-in-pcm_init.patch
-new file mode 100644
-index 0000000000..aa30090a69
---- /dev/null
-+++ b/package/libsndfile/0011-pcm-fix-int-overflow-in-pcm_init.patch
-@@ -0,0 +1,35 @@
-+From 09f8f8d5544d98a5a2d28504c02314a2a816ac37 Mon Sep 17 00:00:00 2001
-+From: Alex Stewart <alex.stewart@ni.com>
-+Date: Tue, 17 Oct 2023 11:57:23 -0400
-+Subject: [PATCH] pcm: fix int overflow in pcm_init()
-+
-+Cast the int-sized bytewidth variable to a long-sized sf_count_t type
-+prior to calculating the blockwidth, to provide the calculation with
-+enough numeric space and sf_count_t is the final typing regardless.
-+
-+CVE: CVE-2022-33065
-+Fixes: https://github.com/libsndfile/libsndfile/issues/833
-+
-+Signed-off-by: Alex Stewart <alex.stewart@ni.com>
-+Upstream: https://github.com/libsndfile/libsndfile/commit/09f8f8d5544d98a5a2d28504c02314a2a816ac37
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/pcm.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/pcm.c b/src/pcm.c
-+index bdf46183..a42e4868 100644
-+--- a/src/pcm.c
-++++ b/src/pcm.c
-+@@ -127,7 +127,7 @@ pcm_init (SF_PRIVATE *psf)
-+ 		return SFE_INTERNAL ;
-+ 		} ;
-+ 
-+-	psf->blockwidth = psf->bytewidth * psf->sf.channels ;
-++	psf->blockwidth = (sf_count_t) psf->bytewidth * psf->sf.channels ;
-+ 
-+ 	if ((SF_CODEC (psf->sf.format)) == SF_FORMAT_PCM_S8)
-+ 		chars = SF_CHARS_SIGNED ;
-+-- 
-+2.39.5
-+
-diff --git a/package/libsndfile/0012-rf64-fix-int-overflow-in-rf64_read_header.patch b/package/libsndfile/0012-rf64-fix-int-overflow-in-rf64_read_header.patch
-new file mode 100644
-index 0000000000..8d39986260
---- /dev/null
-+++ b/package/libsndfile/0012-rf64-fix-int-overflow-in-rf64_read_header.patch
-@@ -0,0 +1,40 @@
-+From 49704025956f03751d3436a0bb42287cd7f434b6 Mon Sep 17 00:00:00 2001
-+From: Alex Stewart <alex.stewart@ni.com>
-+Date: Tue, 17 Oct 2023 12:01:00 -0400
-+Subject: [PATCH] rf64: fix int overflow in rf64_read_header()
-+
-+When checking for mismatches between the filelength and riff_size, it is
-+possible to overflow the temporary riff_size value used in the
-+comparison by adding a static offset; which is probably fine, but it is
-+offensive to overflow fuzzers.
-+
-+Since filelength is always a positive value, simply move the offset to
-+the other side of the comparison operator as a negative value, avoid the
-+possibility of an overflow.
-+
-+CVE: CVE-2022-33065
-+Fixes: https://github.com/libsndfile/libsndfile/issues/833
-+
-+Signed-off-by: Alex Stewart <alex.stewart@ni.com>
-+Upstream: https://github.com/libsndfile/libsndfile/commit/49704025956f03751d3436a0bb42287cd7f434b6
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/rf64.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/rf64.c b/src/rf64.c
-+index 123db445..c60399fb 100644
-+--- a/src/rf64.c
-++++ b/src/rf64.c
-+@@ -242,7 +242,7 @@ rf64_read_header (SF_PRIVATE *psf, int *blockalign, int *framesperblock)
-+ 							} ;
-+ 						} ;
-+ 
-+-					if (psf->filelength != riff_size + 8)
-++					if (psf->filelength - 8 != riff_size)
-+ 						psf_log_printf (psf, "  Riff size : %D (should be %D)\n", riff_size, psf->filelength - 8) ;
-+ 					else
-+ 						psf_log_printf (psf, "  Riff size : %D\n", riff_size) ;
-+-- 
-+2.39.5
-+
-diff --git a/package/libsndfile/0013-ima_adpcm-fix-int-overflow-in-ima_reader_init.patch b/package/libsndfile/0013-ima_adpcm-fix-int-overflow-in-ima_reader_init.patch
-new file mode 100644
-index 0000000000..ee324158c4
---- /dev/null
-+++ b/package/libsndfile/0013-ima_adpcm-fix-int-overflow-in-ima_reader_init.patch
-@@ -0,0 +1,55 @@
-+From 9a829113c88a51e57c1e46473e90609e4b7df151 Mon Sep 17 00:00:00 2001
-+From: Alex Stewart <alex.stewart@ni.com>
-+Date: Tue, 17 Oct 2023 12:19:12 -0400
-+Subject: [PATCH] ima_adpcm: fix int overflow in ima_reader_init()
-+
-+When calculating sf.frames, pre-cast samplesperblock to sf_count_t, to
-+provide the calculation with enough numeric space to avoid overflows.
-+
-+Other changes in this commit are syntactic, and only to satisfy the git
-+pre-commit syntax checker.
-+
-+CVE: CVE-2022-33065
-+Fixes: https://github.com/libsndfile/libsndfile/issues/833
-+
-+Signed-off-by: Alex Stewart <alex.stewart@ni.com>
-+Upstream: https://github.com/libsndfile/libsndfile/commit/9a829113c88a51e57c1e46473e90609e4b7df151
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/ima_adpcm.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/ima_adpcm.c b/src/ima_adpcm.c
-+index bc61f4e5..7464d1b3 100644
-+--- a/src/ima_adpcm.c
-++++ b/src/ima_adpcm.c
-+@@ -187,7 +187,7 @@ ima_reader_init (SF_PRIVATE *psf, int blockalign, int samplesperblock)
-+ 	**	to avoid having to branch when pulling apart the nibbles.
-+ 	*/
-+ 	count = ((samplesperblock - 2) | 7) + 2 ;
-+-	pimasize = sizeof (IMA_ADPCM_PRIVATE) + psf->sf.channels * (blockalign + samplesperblock + sizeof(short) * count) ;
-++	pimasize = sizeof (IMA_ADPCM_PRIVATE) + psf->sf.channels * (blockalign + samplesperblock + sizeof (short) * count) ;
-+ 
-+ 	if (! (pima = calloc (1, pimasize)))
-+ 		return SFE_MALLOC_FAILED ;
-+@@ -238,7 +238,7 @@ ima_reader_init (SF_PRIVATE *psf, int blockalign, int samplesperblock)
-+ 		case SF_FORMAT_AIFF :
-+ 				psf_log_printf (psf, "still need to check block count\n") ;
-+ 				pima->decode_block = aiff_ima_decode_block ;
-+-				psf->sf.frames = pima->samplesperblock * pima->blocks / pima->channels ;
-++				psf->sf.frames = (sf_count_t) pima->samplesperblock * pima->blocks / pima->channels ;
-+ 				break ;
-+ 
-+ 		default :
-+@@ -391,7 +391,7 @@ aiff_ima_encode_block (SF_PRIVATE *psf, IMA_ADPCM_PRIVATE *pima)
-+ static int
-+ wavlike_ima_decode_block (SF_PRIVATE *psf, IMA_ADPCM_PRIVATE *pima)
-+ {	int		chan, k, predictor, blockindx, indx, indxstart, diff ;
-+-	short	step, bytecode, stepindx [2] = { 0 };
-++	short	step, bytecode, stepindx [2] = { 0 } ;
-+ 
-+ 	pima->blockcount ++ ;
-+ 	pima->samplecount = 0 ;
-+-- 
-+2.39.5
-+
-diff --git a/package/libsndfile/0014-src-ogg-better-error-checking-for-vorbis.-Fixes-1035.patch b/package/libsndfile/0014-src-ogg-better-error-checking-for-vorbis.-Fixes-1035.patch
-new file mode 100644
-index 0000000000..dd9f157811
---- /dev/null
-+++ b/package/libsndfile/0014-src-ogg-better-error-checking-for-vorbis.-Fixes-1035.patch
-@@ -0,0 +1,411 @@
-+From 4755f5bd7854611d92ad0f1295587b439f9950ba Mon Sep 17 00:00:00 2001
-+From: Arthur Taylor <art@ified.ca>
-+Date: Fri, 15 Nov 2024 19:46:53 -0800
-+Subject: [PATCH] src/ogg: better error checking for vorbis. Fixes #1035
-+
-+Upstream: https://github.com/libsndfile/libsndfile/commit/4755f5bd7854611d92ad0f1295587b439f9950ba
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/ogg.c        |  12 ++--
-+ src/ogg_opus.c   |  17 +++--
-+ src/ogg_vorbis.c | 170 ++++++++++++++++++++++++++---------------------
-+ 3 files changed, 114 insertions(+), 85 deletions(-)
-+
-+diff --git a/src/ogg.c b/src/ogg.c
-+index 529941af..e2d679d4 100644
-+--- a/src/ogg.c
-++++ b/src/ogg.c
-+@@ -211,12 +211,16 @@ ogg_read_first_page (SF_PRIVATE *psf, OGG_PRIVATE *odata)
-+ 
-+ int
-+ ogg_write_page (SF_PRIVATE *psf, ogg_page *page)
-+-{	int bytes ;
-++{	int n ;
-+ 
-+-	bytes = psf_fwrite (page->header, 1, page->header_len, psf) ;
-+-	bytes += psf_fwrite (page->body, 1, page->body_len, psf) ;
-++	n = psf_fwrite (page->header, 1, page->header_len, psf) ;
-++	if (n == page->header_len)
-++		n += psf_fwrite (page->body, 1, page->body_len, psf) ;
-+ 
-+-	return bytes == page->header_len + page->body_len ;
-++	if (n != page->body_len + page->header_len)
-++		return -1 ;
-++
-++	return n ;
-+ } /* ogg_write_page */
-+ 
-+ sf_count_t
-+diff --git a/src/ogg_opus.c b/src/ogg_opus.c
-+index 511653ec..e01224b9 100644
-+--- a/src/ogg_opus.c
-++++ b/src/ogg_opus.c
-+@@ -827,15 +827,16 @@ ogg_opus_write_header (SF_PRIVATE *psf, int UNUSED (calc_length))
-+ 
-+ 	/* The first page MUST only contain the header, so flush it out now */
-+ 	ogg_stream_packetin (&odata->ostream, &op) ;
-+-	for ( ; (nn = ogg_stream_flush (&odata->ostream, &odata->opage)) ; )
-+-	{	if (! (nn = ogg_write_page (psf, &odata->opage)))
-++	while (ogg_stream_flush (&odata->ostream, &odata->opage))
-++	{	nn = ogg_write_page (psf, &odata->opage) ;
-++		if (nn < 0)
-+ 		{	psf_log_printf (psf, "Opus : Failed to write header!\n") ;
-+ 			if (psf->error)
-+ 				return psf->error ;
-+ 			return SFE_INTERNAL ;
-+ 			} ;
-+ 		psf->dataoffset += nn ;
-+-		}
-++		} ;
-+ 
-+ 	/*
-+ 	** Metadata Tags (manditory)
-+@@ -850,15 +851,16 @@ ogg_opus_write_header (SF_PRIVATE *psf, int UNUSED (calc_length))
-+ 	vorbiscomment_write_tags (psf, &op, &opustags_ident, opus_get_version_string (), - (OGG_OPUS_COMMENT_PAD)) ;
-+ 	op.packetno = 2 ;
-+ 	ogg_stream_packetin (&odata->ostream, &op) ;
-+-	for ( ; (nn = ogg_stream_flush (&odata->ostream, &odata->opage)) ; )
-+-	{	if (! (nn = ogg_write_page (psf, &odata->opage)))
-++	while (ogg_stream_flush (&odata->ostream, &odata->opage))
-++	{	nn = ogg_write_page (psf, &odata->opage) ;
-++		if (nn < 0)
-+ 		{	psf_log_printf (psf, "Opus : Failed to write comments!\n") ;
-+ 			if (psf->error)
-+ 				return psf->error ;
-+ 			return SFE_INTERNAL ;
-+ 			} ;
-+ 		psf->dataoffset += nn ;
-+-		}
-++		} ;
-+ 
-+ 	return 0 ;
-+ } /* ogg_opus_write_header */
-+@@ -1132,7 +1134,8 @@ ogg_opus_write_out (SF_PRIVATE *psf, OGG_PRIVATE *odata, OPUS_PRIVATE *oopus)
-+ 		if (nbytes > 0)
-+ 		{	oopus->u.encode.last_segments -= ogg_page_segments (&odata->opage) ;
-+ 			oopus->pg_pos = oopus->pkt_pos ;
-+-			ogg_write_page (psf, &odata->opage) ;
-++			if (ogg_write_page (psf, &odata->opage) < 0)
-++				return -1 ;
-+ 			}
-+ 		else
-+ 			break ;
-+diff --git a/src/ogg_vorbis.c b/src/ogg_vorbis.c
-+index add12396..fae252ca 100644
-+--- a/src/ogg_vorbis.c
-++++ b/src/ogg_vorbis.c
-+@@ -82,28 +82,6 @@
-+ /* How many seconds in the future to not bother bisection searching for. */
-+ #define VORBIS_SEEK_THRESHOLD 2
-+ 
-+-typedef int convert_func (SF_PRIVATE *psf, int, void *, int, int, float **) ;
-+-
-+-static int	vorbis_read_header (SF_PRIVATE *psf) ;
-+-static int	vorbis_write_header (SF_PRIVATE *psf, int calc_length) ;
-+-static int	vorbis_close (SF_PRIVATE *psf) ;
-+-static int	vorbis_command (SF_PRIVATE *psf, int command, void *data, int datasize) ;
-+-static int	vorbis_byterate (SF_PRIVATE *psf) ;
-+-static int	vorbis_calculate_granulepos (SF_PRIVATE *psf, uint64_t *gp_out) ;
-+-static int	vorbis_skip (SF_PRIVATE *psf, uint64_t target_gp) ;
-+-static int	vorbis_seek_trysearch (SF_PRIVATE *psf, uint64_t target_gp) ;
-+-static sf_count_t	vorbis_seek (SF_PRIVATE *psf, int mode, sf_count_t offset) ;
-+-static sf_count_t	vorbis_read_s (SF_PRIVATE *psf, short *ptr, sf_count_t len) ;
-+-static sf_count_t	vorbis_read_i (SF_PRIVATE *psf, int *ptr, sf_count_t len) ;
-+-static sf_count_t	vorbis_read_f (SF_PRIVATE *psf, float *ptr, sf_count_t len) ;
-+-static sf_count_t	vorbis_read_d (SF_PRIVATE *psf, double *ptr, sf_count_t len) ;
-+-static sf_count_t	vorbis_write_s (SF_PRIVATE *psf, const short *ptr, sf_count_t len) ;
-+-static sf_count_t	vorbis_write_i (SF_PRIVATE *psf, const int *ptr, sf_count_t len) ;
-+-static sf_count_t	vorbis_write_f (SF_PRIVATE *psf, const float *ptr, sf_count_t len) ;
-+-static sf_count_t	vorbis_write_d (SF_PRIVATE *psf, const double *ptr, sf_count_t len) ;
-+-static sf_count_t	vorbis_read_sample (SF_PRIVATE *psf, void *ptr, sf_count_t lens, convert_func *transfn) ;
-+-static int	vorbis_rnull (SF_PRIVATE *psf, int samples, void *vptr, int off , int channels, float **pcm) ;
-+-
-+ typedef struct
-+ {	int id ;
-+ 	const char *name ;
-+@@ -145,6 +123,45 @@ typedef struct
-+ 	sf_count_t last_page ;
-+ } VORBIS_PRIVATE ;
-+ 
-++typedef int convert_func (SF_PRIVATE *psf, int, void *, int, int, float **) ;
-++
-++static int	vorbis_read_header (SF_PRIVATE *psf) ;
-++static int	vorbis_write_header (SF_PRIVATE *psf, int calc_length) ;
-++static int	vorbis_close (SF_PRIVATE *psf) ;
-++static int	vorbis_command (SF_PRIVATE *psf, int command, void *data, int datasize) ;
-++static int	vorbis_byterate (SF_PRIVATE *psf) ;
-++static int	vorbis_calculate_granulepos (SF_PRIVATE *psf, uint64_t *gp_out) ;
-++static int	vorbis_skip (SF_PRIVATE *psf, uint64_t target_gp) ;
-++static int	vorbis_seek_trysearch (SF_PRIVATE *psf, uint64_t target_gp) ;
-++static sf_count_t	vorbis_seek (SF_PRIVATE *psf, int mode, sf_count_t offset) ;
-++static sf_count_t	vorbis_read_s (SF_PRIVATE *psf, short *ptr, sf_count_t len) ;
-++static sf_count_t	vorbis_read_i (SF_PRIVATE *psf, int *ptr, sf_count_t len) ;
-++static sf_count_t	vorbis_read_f (SF_PRIVATE *psf, float *ptr, sf_count_t len) ;
-++static sf_count_t	vorbis_read_d (SF_PRIVATE *psf, double *ptr, sf_count_t len) ;
-++static sf_count_t	vorbis_write_s (SF_PRIVATE *psf, const short *ptr, sf_count_t len) ;
-++static sf_count_t	vorbis_write_i (SF_PRIVATE *psf, const int *ptr, sf_count_t len) ;
-++static sf_count_t	vorbis_write_f (SF_PRIVATE *psf, const float *ptr, sf_count_t len) ;
-++static sf_count_t	vorbis_write_d (SF_PRIVATE *psf, const double *ptr, sf_count_t len) ;
-++static sf_count_t	vorbis_read_sample (SF_PRIVATE *psf, void *ptr, sf_count_t lens, convert_func *transfn) ;
-++static int	vorbis_write_samples (SF_PRIVATE *psf, OGG_PRIVATE *odata, VORBIS_PRIVATE *vdata, int in_frames) ;
-++static int	vorbis_rnull (SF_PRIVATE *psf, int samples, void *vptr, int off , int channels, float **pcm) ;
-++static void	vorbis_log_error (SF_PRIVATE *psf, int error) ;
-++
-++
-++static void
-++vorbis_log_error(SF_PRIVATE *psf, int error) {
-++	switch (error)
-++	{	case 0: return;
-++		case OV_EIMPL:		psf->error = SFE_UNIMPLEMENTED ; break ;
-++		case OV_ENOTVORBIS:	psf->error = SFE_MALFORMED_FILE ; break ;
-++		case OV_EBADHEADER:	psf->error = SFE_MALFORMED_FILE ; break ;
-++		case OV_EVERSION:	psf->error = SFE_UNSUPPORTED_ENCODING ; break ;
-++		case OV_EFAULT:
-++		case OV_EINVAL:
-++		default: psf->error = SFE_INTERNAL ;
-++		} ;
-++} ;
-++
-+ static int
-+ vorbis_read_header (SF_PRIVATE *psf)
-+ {	OGG_PRIVATE *odata = (OGG_PRIVATE *) psf->container_data ;
-+@@ -380,7 +397,6 @@ vorbis_write_header (SF_PRIVATE *psf, int UNUSED (calc_length))
-+ 	{	ogg_packet header ;
-+ 		ogg_packet header_comm ;
-+ 		ogg_packet header_code ;
-+-		int result ;
-+ 
-+ 		vorbis_analysis_headerout (&vdata->vdsp, &vdata->vcomment, &header, &header_comm, &header_code) ;
-+ 		ogg_stream_packetin (&odata->ostream, &header) ; /* automatically placed in its own page */
-+@@ -390,9 +406,9 @@ vorbis_write_header (SF_PRIVATE *psf, int UNUSED (calc_length))
-+ 		/* This ensures the actual
-+ 		 * audio data will start on a new page, as per spec
-+ 		 */
-+-		while ((result = ogg_stream_flush (&odata->ostream, &odata->opage)) != 0)
-+-		{	ogg_write_page (psf, &odata->opage) ;
-+-			} ;
-++		while (ogg_stream_flush (&odata->ostream, &odata->opage))
-++			if (ogg_write_page (psf, &odata->opage) < 0)
-++				return -1 ;
++ 		.name = "SECP192R1",
++@@ -90,7 +66,13 @@ static const gnutls_group_entry_st supported_groups[] = {
++ 		.tls_id = 25,
++ 		.pk = GNUTLS_PK_ECDSA,
++ 	},
++-	group_x25519,
+++	{
+++		.name = "X25519",
+++		.id = GNUTLS_GROUP_X25519,
+++		.curve = GNUTLS_ECC_CURVE_X25519,
+++		.tls_id = 29,
+++		.pk = GNUTLS_PK_ECDH_X25519,
+++	},
++ #ifdef ENABLE_GOST
++ 	/* draft-smyshlyaev-tls12-gost-suites-06, Section 6 */
++ 	{
++@@ -191,24 +173,33 @@ static const gnutls_group_entry_st supported_groups[] = {
++ 	  .tls_id = 0x104 },
++ #endif
++ #ifdef HAVE_LIBOQS
+++	{
+++		.name = "MLKEM768",
+++		.id = GNUTLS_GROUP_EXP_MLKEM768,
+++		.pk = GNUTLS_PK_MLKEM768,
+++		/* absense of .tls_id means that this group alone cannot be used in TLS */
+++	},
+++	{
+++		.name = "KYBER768",
+++		.id = GNUTLS_GROUP_EXP_KYBER768,
+++		.pk = GNUTLS_PK_EXP_KYBER768,
+++		/* absense of .tls_id means that this group alone cannot be used in TLS */
+++	},
++ 	{ .name = "SECP256R1-MLKEM768",
++ 	  .id = GNUTLS_GROUP_EXP_SECP256R1_MLKEM768,
++-	  .curve = GNUTLS_ECC_CURVE_SECP256R1,
++-	  .pk = GNUTLS_PK_ECDSA,
++-	  .tls_id = 0x11EB,
++-	  .next = &group_mlkem768 },
+++	  .ids = { GNUTLS_GROUP_SECP256R1, GNUTLS_GROUP_EXP_MLKEM768,
+++		   GNUTLS_GROUP_INVALID },
+++	  .tls_id = 0x11EB },
++ 	{ .name = "X25519-MLKEM768",
++ 	  .id = GNUTLS_GROUP_EXP_X25519_MLKEM768,
++-	  .curve = GNUTLS_ECC_CURVE_INVALID,
++-	  .pk = GNUTLS_PK_MLKEM768,
++-	  .tls_id = 0x11EC,
++-	  .next = &group_x25519 },
+++	  .ids = { GNUTLS_GROUP_EXP_MLKEM768, GNUTLS_GROUP_X25519,
+++		   GNUTLS_GROUP_INVALID },
+++	  .tls_id = 0x11EC },
++ 	{ .name = "X25519-KYBER768",
++ 	  .id = GNUTLS_GROUP_EXP_X25519_KYBER768,
++-	  .curve = GNUTLS_ECC_CURVE_X25519,
++-	  .pk = GNUTLS_PK_ECDH_X25519,
++-	  .tls_id = 0x6399,
++-	  .next = &group_kyber768 },
+++	  .ids = { GNUTLS_GROUP_X25519, GNUTLS_GROUP_EXP_KYBER768,
+++		   GNUTLS_GROUP_INVALID },
+++	  .tls_id = 0x6399 },
++ #endif
++ 	{ 0, 0, 0 }
++ };
++@@ -221,14 +212,46 @@ static const gnutls_group_entry_st supported_groups[] = {
++ 		}                                                  \
 + 	}
 + 
-+ 	return 0 ;
-+@@ -402,6 +418,7 @@ static int
-+ vorbis_close (SF_PRIVATE *psf)
-+ {	OGG_PRIVATE* odata = psf->container_data ;
-+ 	VORBIS_PRIVATE *vdata = psf->codec_data ;
-++	int ret = 0 ;
-+ 
-+ 	if (odata == NULL || vdata == NULL)
-+ 		return 0 ;
-+@@ -412,34 +429,14 @@ vorbis_close (SF_PRIVATE *psf)
-+ 	if (psf->file.mode == SFM_WRITE)
-+ 	{
-+ 		if (psf->write_current <= 0)
-+-			vorbis_write_header (psf, 0) ;
-++			ret = vorbis_write_header (psf, 0) ;
-+ 
-+-		vorbis_analysis_wrote (&vdata->vdsp, 0) ;
-+-		while (vorbis_analysis_blockout (&vdata->vdsp, &vdata->vblock) == 1)
-+-		{
-+-
-+-		/* analysis, assume we want to use bitrate management */
-+-			vorbis_analysis (&vdata->vblock, NULL) ;
-+-			vorbis_bitrate_addblock (&vdata->vblock) ;
-+-
-+-			while (vorbis_bitrate_flushpacket (&vdata->vdsp, &odata->opacket))
-+-			{	/* weld the packet into the bitstream */
-+-				ogg_stream_packetin (&odata->ostream, &odata->opacket) ;
-+-
-+-				/* write out pages (if any) */
-+-				while (!odata->eos)
-+-				{	int result = ogg_stream_pageout (&odata->ostream, &odata->opage) ;
-+-					if (result == 0) break ;
-+-					ogg_write_page (psf, &odata->opage) ;
-+-
-+-		/* this could be set above, but for illustrative purposes, I do
-+-		   it here (to show that vorbis does know where the stream ends) */
-+-
-+-					if (ogg_page_eos (&odata->opage)) odata->eos = 1 ;
-+-				}
-+-			}
-+-		}
-+-	}
-++		if (ret == 0)
-++		{	/* A write of zero samples tells Vorbis the stream is done and to
-++			   flush. */
-++			ret = vorbis_write_samples (psf, odata, vdata, 0) ;
-++			} ;
-++		} ;
-+ 
-+ 	/* ogg_page and ogg_packet structs always point to storage in
-+ 	   libvorbis.  They are never freed or manipulated directly */
-+@@ -449,7 +446,7 @@ vorbis_close (SF_PRIVATE *psf)
-+ 	vorbis_comment_clear (&vdata->vcomment) ;
-+ 	vorbis_info_clear (&vdata->vinfo) ;
-+ 
-+-	return 0 ;
-++	return ret ;
-+ } /* vorbis_close */
-+ 
-+ int
-+@@ -688,33 +685,40 @@ vorbis_read_d (SF_PRIVATE *psf, double *ptr, sf_count_t lens)
-+ /*==============================================================================
-+ */
-+ 
-+-static void
-++static int
-+ vorbis_write_samples (SF_PRIVATE *psf, OGG_PRIVATE *odata, VORBIS_PRIVATE *vdata, int in_frames)
-+-{
-+-	vorbis_analysis_wrote (&vdata->vdsp, in_frames) ;
-++{	int ret ;
+++static inline const gnutls_group_entry_st *group_to_entry(gnutls_group_t group)
+++{
+++	if (group == 0)
+++		return NULL;
 ++
-++	if ((ret = vorbis_analysis_wrote (&vdata->vdsp, in_frames)) != 0)
-++		return ret ;
-+ 
-+ 	/*
-+ 	**	Vorbis does some data preanalysis, then divvies up blocks for
-+ 	**	more involved (potentially parallel) processing. Get a single
-+ 	**	block for encoding now.
-+ 	*/
-+-	while (vorbis_analysis_blockout (&vdata->vdsp, &vdata->vblock) == 1)
-++	while ((ret = vorbis_analysis_blockout (&vdata->vdsp, &vdata->vblock)) == 1)
-+ 	{
-+ 		/* analysis, assume we want to use bitrate management */
-+-		vorbis_analysis (&vdata->vblock, NULL) ;
-+-		vorbis_bitrate_addblock (&vdata->vblock) ;
-++		if ((ret = vorbis_analysis (&vdata->vblock, NULL)) != 0)
-++			return ret ;
-++		if ((ret = vorbis_bitrate_addblock (&vdata->vblock)) != 0)
-++			return ret ;
-+ 
-+-		while (vorbis_bitrate_flushpacket (&vdata->vdsp, &odata->opacket))
-++		while ((ret = vorbis_bitrate_flushpacket (&vdata->vdsp, &odata->opacket)) == 1)
-+ 		{
-+ 			/* weld the packet into the bitstream */
-+-			ogg_stream_packetin (&odata->ostream, &odata->opacket) ;
-++			if ((ret = ogg_stream_packetin (&odata->ostream, &odata->opacket)) != 0)
-++				return ret ;
-+ 
-+ 			/* write out pages (if any) */
-+ 			while (!odata->eos)
-+-			{	int result = ogg_stream_pageout (&odata->ostream, &odata->opage) ;
-+-				if (result == 0)
-++			{	ret = ogg_stream_pageout (&odata->ostream, &odata->opage) ;
-++				if (ret == 0)
-+ 					break ;
-+-				ogg_write_page (psf, &odata->opage) ;
+++	GNUTLS_GROUP_LOOP(if (p->id == group) { return p; });
 ++
-++				if (ogg_write_page (psf, &odata->opage) < 0)
-++					return -1 ;
-+ 
-+ 				/*	This could be set above, but for illustrative purposes, I do
-+ 				**	it here (to show that vorbis does know where the stream ends) */
-+@@ -722,16 +726,22 @@ vorbis_write_samples (SF_PRIVATE *psf, OGG_PRIVATE *odata, VORBIS_PRIVATE *vdata
-+ 					odata->eos = 1 ;
-+ 				} ;
-+ 			} ;
-++		if (ret != 0)
-++			return ret ;
-+ 		} ;
-++	if (ret != 0)
-++		return ret ;
-+ 
-+ 	vdata->gp += in_frames ;
+++	return NULL;
+++}
 ++
-++	return 0 ;
-+ } /* vorbis_write_data */
-+ 
-+ 
-+ static sf_count_t
-+ vorbis_write_s (SF_PRIVATE *psf, const short *ptr, sf_count_t lens)
+++static inline bool
+++group_is_supported_standalone(const gnutls_group_entry_st *group)
+++{
+++	return group->pk != 0 && _gnutls_pk_exists(group->pk) &&
+++	       (group->curve == 0 ||
+++		_gnutls_ecc_curve_is_supported(group->curve));
+++}
+++
+++static inline bool group_is_supported(const gnutls_group_entry_st *group)
+++{
+++	if (!IS_GROUP_HYBRID(group))
+++		return group_is_supported_standalone(group);
+++
+++	for (size_t i = 0;
+++	     i < MAX_HYBRID_GROUPS && group->ids[i] != GNUTLS_GROUP_INVALID;
+++	     i++) {
+++		const gnutls_group_entry_st *p = group_to_entry(group->ids[i]);
+++		if (!p || !group_is_supported_standalone(p))
+++			return false;
+++	}
+++
+++	return true;
+++}
+++
++ /* Returns the TLS id of the given curve
++  */
++ const gnutls_group_entry_st *_gnutls_tls_id_to_group(unsigned num)
 + {
-+-	int i, m, j = 0 ;
-++	int i, m, j = 0, ret ;
-+ 	OGG_PRIVATE *odata = (OGG_PRIVATE *) psf->container_data ;
-+ 	VORBIS_PRIVATE *vdata = (VORBIS_PRIVATE *) psf->codec_data ;
-+ 	int in_frames = lens / psf->sf.channels ;
-+@@ -740,14 +750,17 @@ vorbis_write_s (SF_PRIVATE *psf, const short *ptr, sf_count_t lens)
-+ 		for (m = 0 ; m < psf->sf.channels ; m++)
-+ 			buffer [m][i] = (float) (ptr [j++]) / 32767.0f ;
++ 	GNUTLS_GROUP_LOOP(
++-		if (p->tls_id == num &&
++-		    (p->curve == 0 ||
++-		     _gnutls_ecc_curve_is_supported(p->curve))) { return p; });
+++		if (p->tls_id == num && group_is_supported(p)) { return p; });
 + 
-+-	vorbis_write_samples (psf, odata, vdata, in_frames) ;
-++	if ((ret = vorbis_write_samples (psf, odata, vdata, in_frames)))
-++	{	vorbis_log_error (psf, ret) ;
-++		return 0 ;
-++		} ;
++ 	return NULL;
++ }
++@@ -239,10 +262,7 @@ const gnutls_group_entry_st *_gnutls_id_to_group(unsigned id)
++ 		return NULL;
 + 
-+ 	return lens ;
-+ } /* vorbis_write_s */
++ 	GNUTLS_GROUP_LOOP(
++-		if (p->id == id && (p->curve == 0 ||
++-				    _gnutls_ecc_curve_is_supported(p->curve))) {
++-			return p;
++-		});
+++		if (p->id == id && group_is_supported(p)) { return p; });
 + 
-+ static sf_count_t
-+ vorbis_write_i (SF_PRIVATE *psf, const int *ptr, sf_count_t lens)
-+-{	int i, m, j = 0 ;
-++{	int i, m, j = 0, ret ;
-+ 	OGG_PRIVATE *odata = (OGG_PRIVATE *) psf->container_data ;
-+ 	VORBIS_PRIVATE *vdata = (VORBIS_PRIVATE *) psf->codec_data ;
-+ 	int in_frames = lens / psf->sf.channels ;
-+@@ -756,14 +769,17 @@ vorbis_write_i (SF_PRIVATE *psf, const int *ptr, sf_count_t lens)
-+ 		for (m = 0 ; m < psf->sf.channels ; m++)
-+ 			buffer [m][i] = (float) (ptr [j++]) / 2147483647.0f ;
++ 	return NULL;
++ }
++@@ -261,27 +281,17 @@ const gnutls_group_entry_st *_gnutls_id_to_group(unsigned id)
++  **/
++ const gnutls_group_t *gnutls_group_list(void)
++ {
++-	static gnutls_group_t groups[MAX_ALGOS] = { 0 };
+++	static gnutls_group_t groups[MAX_ALGOS + 1] = { 0 };
 + 
-+-	vorbis_write_samples (psf, odata, vdata, in_frames) ;
-++	if ((ret = vorbis_write_samples (psf, odata, vdata, in_frames)))
-++	{	vorbis_log_error (psf, ret) ;
-++		return 0 ;
-++		} ;
++ 	if (groups[0] == 0) {
++-		int i = 0;
+++		size_t i = 0;
 + 
-+ 	return lens ;
-+ } /* vorbis_write_i */
++-		const gnutls_group_entry_st *p;
++-
++-		for (p = supported_groups; p->name != NULL; p++) {
++-			const gnutls_group_entry_st *pp;
++-
++-			for (pp = p; pp != NULL; pp = pp->next) {
++-				if ((pp->curve != 0 &&
++-				     !_gnutls_ecc_curve_is_supported(
++-					     pp->curve)) ||
++-				    (pp->pk != 0 && !_gnutls_pk_exists(pp->pk)))
++-					break;
++-			}
++-			if (pp == NULL)
+++		for (const gnutls_group_entry_st *p = supported_groups;
+++		     p->name != NULL; p++) {
+++			if (group_is_supported(p))
++ 				groups[i++] = p->id;
++ 		}
++-		groups[i++] = 0;
+++		groups[i++] = GNUTLS_GROUP_INVALID;
++ 	}
 + 
-+ static sf_count_t
-+ vorbis_write_f (SF_PRIVATE *psf, const float *ptr, sf_count_t lens)
-+-{	int i, m, j = 0 ;
-++{	int i, m, j = 0, ret ;
-+ 	OGG_PRIVATE *odata = (OGG_PRIVATE *) psf->container_data ;
-+ 	VORBIS_PRIVATE *vdata = (VORBIS_PRIVATE *) psf->codec_data ;
-+ 	int in_frames = lens / psf->sf.channels ;
-+@@ -772,14 +788,17 @@ vorbis_write_f (SF_PRIVATE *psf, const float *ptr, sf_count_t lens)
-+ 		for (m = 0 ; m < psf->sf.channels ; m++)
-+ 			buffer [m][i] = ptr [j++] ;
++ 	return groups;
++@@ -344,3 +354,34 @@ const char *gnutls_group_get_name(gnutls_group_t group)
 + 
-+-	vorbis_write_samples (psf, odata, vdata, in_frames) ;
-++	if ((ret = vorbis_write_samples (psf, odata, vdata, in_frames)) != 0)
-++	{	vorbis_log_error (psf, ret) ;
-++		return 0 ;
-++		} ;
++ 	return NULL;
++ }
+++
+++/* Expand GROUP into hybrid SUBGROUPS if any, otherwise an array
+++ * containing the GROUP itself. The result will be written to
+++ * SUBGROUPS, which will be NUL-terminated.
+++ */
+++int _gnutls_group_expand(
+++	const gnutls_group_entry_st *group,
+++	const gnutls_group_entry_st *subgroups[MAX_HYBRID_GROUPS + 1])
+++{
+++	size_t pos = 0;
+++
+++	if (IS_GROUP_HYBRID(group)) {
+++		for (size_t i = 0; i < MAX_HYBRID_GROUPS &&
+++				   group->ids[i] != GNUTLS_GROUP_INVALID;
+++		     i++) {
+++			const gnutls_group_entry_st *p =
+++				group_to_entry(group->ids[i]);
+++			/* This shouldn't happen, as GROUP is assumed
+++			 * to be supported before calling this
+++			 * function. */
+++			if (unlikely(!p))
+++				return gnutls_assert_val(
+++					GNUTLS_E_INTERNAL_ERROR);
+++			subgroups[pos++] = p;
+++		}
+++	} else {
+++		subgroups[pos++] = group;
+++	}
+++	subgroups[pos] = NULL;
+++	return 0;
+++}
++diff --git a/lib/ext/key_share.c b/lib/ext/key_share.c
++index 574521157..8fbe2d2bd 100644
++--- a/lib/ext/key_share.c
+++++ b/lib/ext/key_share.c
++@@ -232,6 +232,9 @@ static int client_gen_key_share(gnutls_session_t session,
++ 				gnutls_buffer_st *extdata)
++ {
++ 	unsigned int length_pos;
+++	const gnutls_group_entry_st *groups[MAX_HYBRID_GROUPS + 1] = {
+++		NULL,
+++	};
++ 	int ret;
 + 
-+ 	return lens ;
-+ } /* vorbis_write_f */
++ 	_gnutls_handshake_log("EXT[%p]: sending key share for %s\n", session,
++@@ -247,8 +250,12 @@ static int client_gen_key_share(gnutls_session_t session,
++ 	if (ret < 0)
++ 		return gnutls_assert_val(ret);
 + 
-+ static sf_count_t
-+ vorbis_write_d (SF_PRIVATE *psf, const double *ptr, sf_count_t lens)
-+-{	int i, m, j = 0 ;
-++{	int i, m, j = 0, ret ;
-+ 	OGG_PRIVATE *odata = (OGG_PRIVATE *) psf->container_data ;
-+ 	VORBIS_PRIVATE *vdata = (VORBIS_PRIVATE *) psf->codec_data ;
-+ 	int in_frames = lens / psf->sf.channels ;
-+@@ -788,7 +807,10 @@ vorbis_write_d (SF_PRIVATE *psf, const double *ptr, sf_count_t lens)
-+ 		for (m = 0 ; m < psf->sf.channels ; m++)
-+ 			buffer [m][i] = (float) ptr [j++] ;
++-	for (const gnutls_group_entry_st *p = group; p != NULL; p = p->next) {
++-		ret = client_gen_key_share_single(session, p, extdata);
+++	ret = _gnutls_group_expand(group, groups);
+++	if (ret < 0)
+++		return gnutls_assert_val(ret);
+++
+++	for (size_t i = 0; groups[i]; i++) {
+++		ret = client_gen_key_share_single(session, groups[i], extdata);
++ 		if (ret < 0)
++ 			return gnutls_assert_val(ret);
++ 	}
++@@ -345,6 +352,9 @@ static int server_gen_key_share(gnutls_session_t session,
++ 				gnutls_buffer_st *extdata)
++ {
++ 	unsigned int length_pos;
+++	const gnutls_group_entry_st *groups[MAX_HYBRID_GROUPS + 1] = {
+++		NULL,
+++	};
++ 	int ret;
 + 
-+-	vorbis_write_samples (psf, odata, vdata, in_frames) ;
-++	if ((ret = vorbis_write_samples (psf, odata, vdata, in_frames)) != 0)
-++	{	vorbis_log_error (psf, ret) ;
-++		return 0 ;
-++		} ;
++ 	_gnutls_handshake_log("EXT[%p]: sending key share for %s\n", session,
++@@ -360,8 +370,12 @@ static int server_gen_key_share(gnutls_session_t session,
++ 	if (ret < 0)
++ 		return gnutls_assert_val(ret);
 + 
-+ 	return lens ;
-+ } /* vorbis_write_d */
-+@@ -884,7 +906,7 @@ vorbis_seek_trysearch (SF_PRIVATE *psf, uint64_t target_gp)
-+ 		return 0 ;
++-	for (const gnutls_group_entry_st *p = group; p != NULL; p = p->next) {
++-		ret = server_gen_key_share_single(session, p, extdata);
+++	ret = _gnutls_group_expand(group, groups);
+++	if (ret < 0)
+++		return gnutls_assert_val(ret);
+++
+++	for (size_t i = 0; groups[i]; i++) {
+++		ret = server_gen_key_share_single(session, groups[i], extdata);
++ 		if (ret < 0)
++ 			return gnutls_assert_val(ret);
++ 	}
++@@ -594,13 +608,19 @@ static int server_use_key_share(gnutls_session_t session,
++ 				const uint8_t *data, size_t data_size)
++ {
++ 	gnutls_buffer_st buffer;
+++	const gnutls_group_entry_st *groups[MAX_HYBRID_GROUPS + 1] = {
+++		NULL,
+++	};
+++	int ret;
 + 
-+ 	/*	Search for a position a half large-block before our target. As Vorbis is
-+-	**	lapped, every sample position come from two blocks, the "left" half of
-++	**	lapped, every sample position comes from two blocks, the "left" half of
-+ 	**	one block and the "right" half of the previous block.  The granule
-+ 	**	position of an Ogg page of a Vorbis stream is the sample offset of the
-+ 	**	last finished sample in the stream that can be decoded from a page.  A
++ 	_gnutls_ro_buffer_init(&buffer, data, data_size);
++ 
++-	for (const gnutls_group_entry_st *p = group; p != NULL; p = p->next) {
++-		int ret;
+++	ret = _gnutls_group_expand(group, groups);
+++	if (ret < 0)
+++		return gnutls_assert_val(ret);
++ 
++-		ret = server_use_key_share_single(session, p, &buffer);
+++	for (size_t i = 0; groups[i]; i++) {
+++		ret = server_use_key_share_single(session, groups[i], &buffer);
++ 		if (ret < 0)
++ 			return gnutls_assert_val(ret);
++ 	}
++@@ -775,13 +795,19 @@ static int client_use_key_share(gnutls_session_t session,
++ 				const uint8_t *data, size_t data_size)
++ {
++ 	gnutls_buffer_st buffer;
+++	const gnutls_group_entry_st *groups[MAX_HYBRID_GROUPS + 1] = {
+++		NULL,
+++	};
+++	int ret;
++ 
++ 	_gnutls_ro_buffer_init(&buffer, data, data_size);
++ 
++-	for (const gnutls_group_entry_st *p = group; p != NULL; p = p->next) {
++-		int ret;
+++	ret = _gnutls_group_expand(group, groups);
+++	if (ret < 0)
+++		return gnutls_assert_val(ret);
++ 
++-		ret = client_use_key_share_single(session, p, &buffer);
+++	for (size_t i = 0; groups[i]; i++) {
+++		ret = client_use_key_share_single(session, groups[i], &buffer);
++ 		if (ret < 0)
++ 			return gnutls_assert_val(ret);
++ 	}
++@@ -958,18 +984,39 @@ static int key_share_recv_params(gnutls_session_t session, const uint8_t *data,
++ 	return 0;
++ }
++ 
+++static inline bool pk_types_overlap_single(const gnutls_group_entry_st *a,
+++					   const gnutls_group_entry_st *b)
+++{
+++	return a->pk == b->pk || (IS_ECDHX(a->pk) && IS_ECDHX(b->pk)) ||
+++	       (IS_KEM(a->pk) && IS_KEM(b->pk));
+++}
+++
++ static inline bool pk_types_overlap(const gnutls_group_entry_st *a,
++ 				    const gnutls_group_entry_st *b)
++ {
++-	const gnutls_group_entry_st *pa;
+++	const gnutls_group_entry_st *sa[MAX_HYBRID_GROUPS + 1] = {
+++		NULL,
+++	};
+++	const gnutls_group_entry_st *sb[MAX_HYBRID_GROUPS + 1] = {
+++		NULL,
+++	};
+++	int ret;
+++
+++	ret = _gnutls_group_expand(a, sa);
+++	if (ret < 0) {
+++		gnutls_assert();
+++		return false;
+++	}
++ 
++-	for (pa = a; pa != NULL; pa = pa->next) {
++-		const gnutls_group_entry_st *pb;
+++	ret = _gnutls_group_expand(b, sb);
+++	if (ret < 0) {
+++		gnutls_assert();
+++		return false;
+++	}
++ 
++-		for (pb = b; pb != NULL; pb = pb->next) {
++-			if (pa->pk == pb->pk ||
++-			    (IS_ECDHX(pa->pk) && IS_ECDHX(pb->pk)) ||
++-			    (IS_KEM(pa->pk) && IS_KEM(pb->pk)))
+++	for (size_t i = 0; sa[i]; i++) {
+++		for (size_t j = 0; sb[j]; j++) {
+++			if (pk_types_overlap_single(sa[i], sb[j]))
++ 				return true;
++ 		}
++ 	}
++diff --git a/lib/ext/supported_groups.c b/lib/ext/supported_groups.c
++index 254ec4882..4c31d2f8f 100644
++--- a/lib/ext/supported_groups.c
+++++ b/lib/ext/supported_groups.c
++@@ -106,9 +106,9 @@ static int _gnutls_supported_groups_recv_params(gnutls_session_t session,
++ 	unsigned min_dh;
++ 	unsigned j;
++ 	int serv_ec_idx, serv_dh_idx,
++-		serv_kem_idx; /* index in server's priority listing */
+++		serv_hybrid_idx; /* index in server's priority listing */
++ 	int cli_ec_pos, cli_dh_pos,
++-		cli_kem_pos; /* position in listing sent by client */
+++		cli_hybrid_pos; /* position in listing sent by client */
++ 
++ 	if (session->security_parameters.entity == GNUTLS_CLIENT) {
++ 		/* A client shouldn't receive this extension in TLS1.2. It is
++@@ -134,8 +134,8 @@ static int _gnutls_supported_groups_recv_params(gnutls_session_t session,
++ 		/* we figure what is the minimum DH allowed for this session, if any */
++ 		min_dh = get_min_dh(session);
++ 
++-		serv_ec_idx = serv_dh_idx = serv_kem_idx = -1;
++-		cli_ec_pos = cli_dh_pos = cli_kem_pos = -1;
+++		serv_ec_idx = serv_dh_idx = serv_hybrid_idx = -1;
+++		cli_ec_pos = cli_dh_pos = cli_hybrid_pos = -1;
++ 
++ 		/* This extension is being processed prior to a ciphersuite being selected,
++ 		 * so we cannot rely on ciphersuite information. */
++@@ -180,14 +180,15 @@ static int _gnutls_supported_groups_recv_params(gnutls_session_t session,
++ 								break;
++ 							serv_ec_idx = j;
++ 							cli_ec_pos = i;
++-						} else if (IS_KEM(group->pk)) {
++-							if (serv_kem_idx !=
+++						} else if (IS_GROUP_HYBRID(
+++								   group)) {
+++							if (serv_hybrid_idx !=
++ 								    -1 &&
++ 							    (int)j >
++-								    serv_kem_idx)
+++								    serv_hybrid_idx)
++ 								break;
++-							serv_kem_idx = j;
++-							cli_kem_pos = i;
+++							serv_hybrid_idx = j;
+++							cli_hybrid_pos = i;
++ 						}
++ 					} else {
++ 						if (group->pk == GNUTLS_PK_DH) {
++@@ -200,11 +201,13 @@ static int _gnutls_supported_groups_recv_params(gnutls_session_t session,
++ 								break;
++ 							cli_ec_pos = i;
++ 							serv_ec_idx = j;
++-						} else if (IS_KEM(group->pk)) {
++-							if (cli_kem_pos != -1)
+++						} else if (IS_GROUP_HYBRID(
+++								   group)) {
+++							if (cli_hybrid_pos !=
+++							    -1)
++ 								break;
++-							cli_kem_pos = i;
++-							serv_kem_idx = j;
+++							cli_hybrid_pos = i;
+++							serv_hybrid_idx = j;
++ 						}
++ 					}
++ 					break;
++@@ -212,7 +215,7 @@ static int _gnutls_supported_groups_recv_params(gnutls_session_t session,
++ 			}
++ 		}
++ 
++-		/* serv_{dh,ec,kem}_idx contain the index of the groups we want to use.
+++		/* serv_{dh,ec,hybrid}_idx contain the index of the groups we want to use.
++ 		 */
++ 		if (serv_dh_idx != -1) {
++ 			session->internals.cand_dh_group =
++@@ -236,18 +239,20 @@ static int _gnutls_supported_groups_recv_params(gnutls_session_t session,
++ 			}
++ 		}
++ 
++-		/* KEM can only be used in TLS 1.3, where no separation from
++-		 * ECDH and DH, and thus only cand_group is set here.
+++		/* PQC hybrid key exchange groups can only be used in
+++		 * TLS 1.3, where no distinction between ECDH and DH
+++		 * in the group definitions, and thus only cand_group
+++		 * is set here.
++ 		 */
++-		if (serv_kem_idx != -1) {
+++		if (serv_hybrid_idx != -1) {
++ 			if (session->internals.cand_group == NULL ||
++ 			    (session->internals.priorities->server_precedence &&
++-			     serv_kem_idx < MIN(serv_ec_idx, serv_dh_idx)) ||
+++			     serv_hybrid_idx < MIN(serv_ec_idx, serv_dh_idx)) ||
++ 			    (!session->internals.priorities->server_precedence &&
++-			     cli_kem_pos < MIN(cli_ec_pos, cli_dh_pos))) {
+++			     cli_hybrid_pos < MIN(cli_ec_pos, cli_dh_pos))) {
++ 				session->internals.cand_group =
++ 					session->internals.priorities->groups
++-						.entry[serv_kem_idx];
+++						.entry[serv_hybrid_idx];
++ 			}
++ 		}
++ 
++diff --git a/lib/gnutls_int.h b/lib/gnutls_int.h
++index fb2cacb54..01ef59729 100644
++--- a/lib/gnutls_int.h
+++++ b/lib/gnutls_int.h
++@@ -756,6 +756,8 @@ typedef struct gnutls_cipher_suite_entry_st {
++ 	gnutls_mac_algorithm_t prf;
++ } gnutls_cipher_suite_entry_st;
++ 
+++#define MAX_HYBRID_GROUPS 2
+++
++ typedef struct gnutls_group_entry_st {
++ 	const char *name;
++ 	gnutls_group_t id;
++@@ -765,8 +767,12 @@ typedef struct gnutls_group_entry_st {
++ 	const unsigned *q_bits;
++ 	gnutls_ecc_curve_t curve;
++ 	gnutls_pk_algorithm_t pk;
+++	gnutls_group_t ids[MAX_HYBRID_GROUPS + 1]; /* IDs of subgroups
+++						    * comprising a
+++						    * hybrid group,
+++						    * terminated with
+++						    * GNUTLS_GROUP_INVALID */
++ 	unsigned tls_id; /* The RFC4492 namedCurve ID or TLS 1.3 group ID */
++-	const struct gnutls_group_entry_st *next;
++ } gnutls_group_entry_st;
++ 
++ #define GNUTLS_MAC_FLAG_PREIMAGE_INSECURE \
++diff --git a/lib/includes/gnutls/gnutls.h.in b/lib/includes/gnutls/gnutls.h.in
++index 8b3bb5213..1e44fdd91 100644
++--- a/lib/includes/gnutls/gnutls.h.in
+++++ b/lib/includes/gnutls/gnutls.h.in
++@@ -1147,8 +1147,10 @@ typedef enum {
++ 	GNUTLS_GROUP_EXP_X25519_KYBER768 = 512,
++ 	GNUTLS_GROUP_EXP_SECP256R1_MLKEM768 = 513,
++ 	GNUTLS_GROUP_EXP_X25519_MLKEM768 = 514,
+++	GNUTLS_GROUP_EXP_KYBER768 = 515,
+++	GNUTLS_GROUP_EXP_MLKEM768 = 516,
++ 	GNUTLS_GROUP_EXP_MIN = GNUTLS_GROUP_EXP_X25519_KYBER768,
++-	GNUTLS_GROUP_EXP_MAX = GNUTLS_GROUP_EXP_X25519_MLKEM768
+++	GNUTLS_GROUP_EXP_MAX = GNUTLS_GROUP_EXP_MLKEM768
++ } gnutls_group_t;
++ 
++ /* macros to allow specifying a specific curve in gnutls_privkey_generate()
++diff --git a/lib/priority.c b/lib/priority.c
++index ac4ff2d8c..479dbccd6 100644
++--- a/lib/priority.c
+++++ b/lib/priority.c
++@@ -2566,7 +2566,7 @@ static void add_dh(gnutls_priority_t priority_cache)
++ 	}
++ }
++ 
++-static void add_kem(gnutls_priority_t priority_cache)
+++static void add_hybrid(gnutls_priority_t priority_cache)
++ {
++ 	const gnutls_group_entry_st *ge;
++ 	unsigned i;
++@@ -2579,7 +2579,7 @@ static void add_kem(gnutls_priority_t priority_cache)
++ 			    sizeof(priority_cache->groups.entry) /
++ 				    sizeof(priority_cache->groups.entry[0])) {
++ 			/* do not add groups which do not correspond to enabled ciphersuites */
++-			if (!IS_KEM(ge->pk))
+++			if (!IS_GROUP_HYBRID(ge))
++ 				continue;
++ 			priority_cache->groups
++ 				.entry[priority_cache->groups.size++] = ge;
++@@ -2598,7 +2598,7 @@ static int set_ciphersuite_list(gnutls_priority_t priority_cache)
++ 	const gnutls_sign_entry_st *se;
++ 	unsigned have_ec = 0;
++ 	unsigned have_dh = 0;
++-	unsigned have_kem = 0;
+++	unsigned have_hybrid = 0;
++ 	unsigned tls_sig_sem = 0;
++ 	const version_entry_st *tlsmax = NULL, *vers;
++ 	const version_entry_st *dtlsmax = NULL;
++@@ -2807,9 +2807,9 @@ static int set_ciphersuite_list(gnutls_priority_t priority_cache)
++ 			priority_cache->cs.entry[priority_cache->cs.size++] =
++ 				ce;
++ 
++-			if (!have_kem) {
++-				have_kem = 1;
++-				add_kem(priority_cache);
+++			if (!have_hybrid) {
+++				have_hybrid = 1;
+++				add_hybrid(priority_cache);
++ 			}
++ 		}
++ 	}
++@@ -2851,8 +2851,8 @@ static int set_ciphersuite_list(gnutls_priority_t priority_cache)
++ 		}
++ 	}
++ 
++-	if (have_tls13 && (!have_ec || !have_dh || !have_kem)) {
++-		/* scan groups to determine have_{ec,dh,kem} */
+++	if (have_tls13 && (!have_ec || !have_dh || !have_hybrid)) {
+++		/* scan groups to determine have_{ec,dh,hybrid} */
++ 		for (i = 0; i < priority_cache->_supported_ecc.num_priorities;
++ 		     i++) {
++ 			const gnutls_group_entry_st *ge;
++@@ -2865,12 +2865,13 @@ static int set_ciphersuite_list(gnutls_priority_t priority_cache)
++ 				} else if (ge->prime && !have_dh) {
++ 					add_dh(priority_cache);
++ 					have_dh = 1;
++-				} else if (IS_KEM(ge->pk) && !have_kem) {
++-					add_kem(priority_cache);
++-					have_kem = 1;
+++				} else if (IS_GROUP_HYBRID(ge) &&
+++					   !have_hybrid) {
+++					add_hybrid(priority_cache);
+++					have_hybrid = 1;
++ 				}
++ 
++-				if (have_dh && have_ec && have_kem)
+++				if (have_dh && have_ec && have_hybrid)
++ 					break;
++ 			}
++ 		}
++diff --git a/lib/session.c b/lib/session.c
++index a9049a464..7fcbe4fb4 100644
++--- a/lib/session.c
+++++ b/lib/session.c
++@@ -415,7 +415,11 @@ char *gnutls_session_get_desc(gnutls_session_t session)
++ 				snprintf(kx_name, sizeof(kx_name), "(PSK)");
++ 			}
++ 		} else if (group && sign_str) {
++-			if (group->curve)
+++			if (IS_GROUP_HYBRID(group))
+++				snprintf(kx_name, sizeof(kx_name),
+++					 "(HYBRID-%s)-(%s)", group_name,
+++					 sign_str);
+++			else if (group->curve)
++ 				snprintf(kx_name, sizeof(kx_name),
++ 					 "(ECDHE-%s)-(%s)", group_name,
++ 					 sign_str);
++diff --git a/tests/pqc-hybrid-kx.sh b/tests/pqc-hybrid-kx.sh
++index da936cf04..4984cd4b4 100644
++--- a/tests/pqc-hybrid-kx.sh
+++++ b/tests/pqc-hybrid-kx.sh
++@@ -33,34 +33,113 @@
++ 
++ . "${srcdir}/scripts/common.sh"
++ 
+++# First check any mismatch in the gnutls-cli --list
++ if ! "${CLI}" --list | grep '^Groups: .*GROUP-X25519-KYBER768.*' >/dev/null; then
++     if "${CLI}" --list | grep '^Public Key Systems: .*KYBER768.*' >/dev/null; then
++-	fail "KYBER768 is in Public Key Systems, while GROUP-X25519-KYBER768 is NOT in Groups"
+++	fail '' 'KYBER768 is in Public Key Systems, while GROUP-X25519-KYBER768 is NOT in Groups'
++     fi
++-    exit 77
++ else
++     if ! "${CLI}" --list | grep '^Public Key Systems: .*KYBER768.*' >/dev/null; then
++-	fail "KYBER768 is NOT in Public Key Systems, while GROUP-X25519-KYBER768 is in Groups"
+++	fail '' 'KYBER768 is NOT in Public Key Systems, while GROUP-X25519-KYBER768 is in Groups'
+++    fi
+++fi
+++
+++if ! "${CLI}" --list | grep '^Groups: .*GROUP-\(SECP256R1\|X25519\)-MLKEM768.*' >/dev/null; then
+++    if "${CLI}" --list | grep '^Public Key Systems: .*ML-KEM-768.*' >/dev/null; then
+++	fail '' 'ML-KEM-768 is in Public Key Systems, while GROUP-SECP256R1-MLKEM768 or GROUP-X25519-MLKEM768 is NOT in Groups'
+++    fi
+++else
+++    if ! "${CLI}" --list | grep '^Public Key Systems: .*ML-KEM-768.*' >/dev/null; then
+++	fail '' 'ML-KEM-768 is NOT in Public Key Systems, while GROUP-SECP256R1-MLKEM768 or GROUP-X25519-MLKEM768 is in Groups'
++     fi
++ fi
++ 
+++# If none of those hybrid groups is supported, skip the test
+++if ! "${CLI}" --list | grep '^Groups: .*GROUP-\(X25519-KYBER768\|SECP256R1-MLKEM768\|X25519-MLKEM768\).*' >/dev/null; then
+++    exit 77
+++fi
+++
++ testdir=`create_testdir pqc-hybrid-kx`
++ 
++ KEY="$srcdir/../doc/credentials/x509/key-ecc.pem"
++ CERT="$srcdir/../doc/credentials/x509/cert-ecc.pem"
++ CACERT="$srcdir/../doc/credentials/x509/ca.pem"
++ 
++-eval "${GETPORT}"
++-launch_server --echo --priority NORMAL:-GROUP-ALL:+GROUP-X25519-KYBER768 --x509keyfile="$KEY" --x509certfile="$CERT"
++-PID=$!
++-wait_server ${PID}
+++# Test all supported hybrid groups
+++for group in X25519-KYBER768 SECP256R1-MLKEM768 X25519-MLKEM768; do
+++    if ! "${CLI}" --list | grep "^Groups: .*GROUP-$group.*" >/dev/null; then
+++	echo "$group is not supported, skipping" >&2
+++	continue
+++    fi
+++
+++    eval "${GETPORT}"
+++    launch_server --echo --priority "NORMAL:-GROUP-ALL:+GROUP-$group" --x509keyfile="$KEY" --x509certfile="$CERT"
+++    PID=$!
+++    wait_server ${PID}
+++
+++    ${VALGRIND} "${CLI}" -p "${PORT}" localhost --priority "NORMAL:-GROUP-ALL:+GROUP-$group" --x509cafile="$CACERT" --logfile="$testdir/cli.log" </dev/null
+++    kill ${PID}
+++    wait
+++
+++    grep -- "- Description: (TLS1.3-X.509)-(HYBRID-$group)-(ECDSA-SECP256R1-SHA256)-(AES-256-GCM)" "$testdir/cli.log" || { echo "unexpected handshake description"; cat "$testdir/cli.log"; exit 1; }
+++done
+++
+++# KEM based groups cannot be used standalone
+++for group in KYBER768 MLKEM768; do
+++    if ! "${CLI}" --list | grep "^Groups: .*GROUP-$group.*" >/dev/null; then
+++	"$group is not supported, skipping"
+++	continue
+++    fi
+++
+++    eval "${GETPORT}"
+++    launch_server --echo --priority "NORMAL:-GROUP-ALL:+GROUP-$group" --x509keyfile="$KEY" --x509certfile="$CERT"
+++    PID=$!
+++    wait_server ${PID}
+++
+++    ${VALGRIND} "${CLI}" -p "${PORT}" localhost --priority "NORMAL:-GROUP-ALL:+GROUP-$group" --x509cafile="$CACERT" --logfile="$testdir/cli.log" </dev/null
+++    rc=$?
+++    kill ${PID}
+++    wait
+++
+++    if test $rc -eq 0; then
+++	fail '' 'Handshake succeeded with a standalone KEM group'
+++    fi
+++done
+++
+++# Check if disabling a curve will also disables hybrid groups with it
+++cat <<_EOF_ > "$testdir/test.config"
+++[overrides]
+++
+++disabled-curve = x25519
+++_EOF_
+++
+++for group in X25519-KYBER768 SECP256R1-MLKEM768 X25519-MLKEM768; do
+++    if ! "${CLI}" --list | grep "^Groups: .*GROUP-$group.*" >/dev/null; then
+++	echo "$group is not supported, skipping" >&2
+++	continue
+++    fi
++ 
++-${VALGRIND} "${CLI}" -p "${PORT}" localhost --priority NORMAL:-GROUP-ALL:+GROUP-X25519-KYBER768 --x509cafile="$CACERT" --logfile="$testdir/cli.log" </dev/null
+++    eval "${GETPORT}"
+++    GNUTLS_SYSTEM_PRIORITY_FILE="$testdir/test.config" launch_server --echo --priority "NORMAL:-GROUP-ALL:+GROUP-$group" --x509keyfile="$KEY" --x509certfile="$CERT"
+++    PID=$!
+++    wait_server ${PID}
++ 
++-kill ${PID}
++-wait
+++    ${VALGRIND} "${CLI}" -p "${PORT}" localhost --priority "NORMAL:-GROUP-ALL:+GROUP-$group" --x509cafile="$CACERT" --logfile="$testdir/cli.log" </dev/null
+++    rc=$?
+++    kill ${PID}
+++    wait
++ 
++-grep -- '- Description: (TLS1.3-X.509)-(ECDHE-X25519-KYBER768)-(ECDSA-SECP256R1-SHA256)-(AES-256-GCM)' "$testdir/cli.log" || { echo "unexpected handshake description"; exit 1; }
+++    case "$group" in
+++	X25519*)
+++	    if test $rc -eq 0; then
+++		fail '' 'Handshake succeeded with a hybrid group with X25519'
+++	    fi
+++	    ;;
+++	*)
+++	    grep -- "- Description: (TLS1.3-X.509)-(HYBRID-$group)-(ECDSA-SECP256R1-SHA256)-(AES-256-GCM)" "$testdir/cli.log" || { echo "unexpected handshake description"; cat "$testdir/cli.log"; exit 1; }
+++	    ;;
+++    esac
+++done
++ 
++ rm -rf "$testdir"
++ exit 0
 +-- 
-+2.39.5
++2.47.1
 +
-diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
-index dc23d94cb1..4caba72c4f 100644
---- a/package/libsndfile/libsndfile.mk
-+++ b/package/libsndfile/libsndfile.mk
-@@ -13,6 +13,24 @@ LIBSNDFILE_LICENSE_FILES = COPYING
- LIBSNDFILE_CPE_ID_VALID = YES
- LIBSNDFILE_DEPENDENCIES = host-pkgconf
- 
-+# 0001-mat4-mat5-fix-int-overflow-in-dataend-calculation.patch
-+# 0002-au-avoid-int-overflow-while-calculating-data_end.patch
-+# 0003-avr-fix-int-overflow-in-avr_read_header.patch
-+# 0004-sds-fix-int-overflow-warning-in-sample-calculations.patch
-+# 0005-aiff-fix-int-overflow-when-counting-header-elements.patch
-+# 0006-ircam-fix-int-overflow-in-ircam_read_header.patch
-+# 0007-mat4-mat5-fix-int-overflow-when-calculating-blockwid.patch
-+# 0008-common-fix-int-overflow-in-psf_binheader_readf.patch
-+# 0009-nms_adpcm-fix-int-overflow-in-signal-estimate.patch
-+# 0010-nms_adpcm-fix-int-overflow-in-sf.frames-calc.patch
-+# 0011-pcm-fix-int-overflow-in-pcm_init.patch
-+# 0012-rf64-fix-int-overflow-in-rf64_read_header.patch
-+# 0013-ima_adpcm-fix-int-overflow-in-ima_reader_init.patch
-+LIBSNDFILE_IGNORE_CVES += CVE-2022-33065
-+
-+# 0014-src-ogg-better-error-checking-for-vorbis.-Fixes-1035.patch
-+LIBSNDFILE_IGNORE_CVES += CVE-2024-50612
-+
- LIBSNDFILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- LIBSNDFILE_CONF_OPTS = \
- 	--disable-sqlite \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
