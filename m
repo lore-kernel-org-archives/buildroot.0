@@ -4,73 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F6DBE77187
-	for <buildroot@archiver.kernel.org>; Wed, 18 Dec 2024 21:11:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53C6CE77188
+	for <buildroot@archiver.kernel.org>; Wed, 18 Dec 2024 22:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 452D94246C;
-	Wed, 18 Dec 2024 21:11:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 054EE417AE;
+	Wed, 18 Dec 2024 22:09:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cgpbDJKe3qlj; Wed, 18 Dec 2024 21:11:58 +0000 (UTC)
+ id IHfYIRjpQ_sw; Wed, 18 Dec 2024 22:09:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 045FB4246D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFCF7417AD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 045FB4246D;
-	Wed, 18 Dec 2024 21:11:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4BD6DE3
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 21:11:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFCF7417AD;
+	Wed, 18 Dec 2024 22:09:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E7718C0
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 22:09:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A1E284FD3
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 21:11:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D1E94417AE
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 22:09:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ko0nHrHYzoL1 for <buildroot@buildroot.org>;
- Wed, 18 Dec 2024 21:11:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4E10980DFB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E10980DFB
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4E10980DFB
- for <buildroot@busybox.net>; Wed, 18 Dec 2024 21:11:55 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 07C127803A2;
- Wed, 18 Dec 2024 22:11:50 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:58414])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 18 Dec 2024 22:11:50 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wrrJyQtGuU3X for <buildroot@buildroot.org>;
+ Wed, 18 Dec 2024 22:09:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1303D41787
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1303D41787
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1303D41787
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 22:09:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 35E53FF803;
+ Wed, 18 Dec 2024 22:09:10 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1tO2E9-003CPI-1W;
+ Wed, 18 Dec 2024 23:09:09 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed, 18 Dec 2024 23:09:07 +0100
+Message-Id: <20241218220907.762527-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-Date: Wed, 18 Dec 2024 22:11:50 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Francois Perrad <francois.perrad@gadz.org>
-Cc: buildroot@busybox.net
-In-Reply-To: <20241108173754.1642869-1-francois.perrad@gadz.org>
-References: <20241108173754.1642869-1-francois.perrad@gadz.org>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <87eaff482aa360be1a3827c55ff2d58e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734556312;
- bh=dLncxMYdlHsY1sqwHoCuZjLYv7inbPz1Laxvxhidmm0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=kwlqwOMTD3hCqn0z1lyXN/+WQrIrTnRdLpSYbWQjBeVMbje2GcQ+aLC7vANGw4/kq
- mtKAckCeNJaygo7kHoflJ0dE6XBN1YE5CWFVc6PyKeD6dt5R0Q1EhZxtJVMsh3jjtg
- MSBSSlwAtB4y29DoXMgdkToI02O3bTEylMbdFZrAyltVW1zkf5UyeSS6DgQXS+JgF+
- NA9wjFrAF5/FcP2U2WelDik6DWJY2kVR2col967189Dw+Zu6IJSbOPgJZIyyCg+cf6
- wG3Nf70g0bVn2r/NN0tTOz+PY6x1rosU09VVDuZvY+1VU4FuJBT+9FXSswKWekZtIE
- Go8eE956nUQEw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=kwlqwOMT
-Subject: Re: [Buildroot] [PATCH] package/luaexpat: bump to version 1.5.2
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH] package/dpdk: security bump to version 24.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,66 +65,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Vincent Jardin <vjardin@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 08/11/2024 18:37, Francois Perrad wrote:
-> diff LICENSE:
->     -Copyright (C) 2003-2007 The Kepler Project, 2013-2022 Matthew Wild
->     +Copyright (C) 2003-2007 The Kepler Project, 2013-2024 Matthew Wild
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes the following security issue:
 
-Applied to master, thanks.
+CVE-2024-11614: An out-of-bounds read vulnerability was found in DPDK's
+Vhost library checksum offload feature.  This issue enables an untrusted or
+compromised guest to crash the hypervisor's vSwitch by forging Virtio
+descriptors to cause out-of-bounds reads.  This flaw allows an attacker with
+a malicious VM using a virtio driver to cause the vhost-user side to crash
+by sending a packet with a Tx checksum offload request and an invalid
+csum_start offset.
 
-> ---
->  package/luaexpat/luaexpat.hash | 4 ++--
->  package/luaexpat/luaexpat.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/luaexpat/luaexpat.hash 
-> b/package/luaexpat/luaexpat.hash
-> index 621293a0b..91fc9177c 100644
-> --- a/package/luaexpat/luaexpat.hash
-> +++ b/package/luaexpat/luaexpat.hash
-> @@ -1,3 +1,3 @@
->  # computed by luarocks/buildroot
-> -sha256  
-> eb7abc4cc39dd50eecb30896686bac84e66fd3c0774d0749b391e7ac5d222f45  
-> luaexpat-1.5.1-1.src.rock
-> -sha256  
-> 7e6a727e5b57cca713a2f2633f05d7e0cc1e261cc6a7613bbe266e625b2f14da  
-> luaexpat/LICENSE
-> +sha256  
-> a88ac147d2ceaf168fddedd2245928f35d4c0218094142b054db7e9bae0b5b82  
-> luaexpat-1.5.2-1.src.rock
-> +sha256  
-> 9a169eddcc5b1f05e85659a0ba5403a7e3804bc3b6e60b730251d963e1a9ac10  
-> luaexpat/LICENSE
-> diff --git a/package/luaexpat/luaexpat.mk 
-> b/package/luaexpat/luaexpat.mk
-> index 73675a8ee..86d800d69 100644
-> --- a/package/luaexpat/luaexpat.mk
-> +++ b/package/luaexpat/luaexpat.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
-> 
-> -LUAEXPAT_VERSION = 1.5.1-1
-> +LUAEXPAT_VERSION = 1.5.2-1
->  LUAEXPAT_SUBDIR = luaexpat
->  LUAEXPAT_LICENSE = MIT
->  LUAEXPAT_LICENSE_FILES = $(LUAEXPAT_SUBDIR)/LICENSE
-> --
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+https://www.openwall.com/lists/oss-security/2024/12/17/3
+
+Release notes: http://doc.dpdk.org/guides-24.11/rel_notes/release_24_11.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dpdk/dpdk.hash | 2 +-
+ package/dpdk/dpdk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/dpdk/dpdk.hash b/package/dpdk/dpdk.hash
+index 27c06476e7..e9a22736b0 100644
+--- a/package/dpdk/dpdk.hash
++++ b/package/dpdk/dpdk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  9944f7e5f268e7ac9b4193e2cd54ef6d98f6e1d7dddc967c77ae4f6616d6fbbd  dpdk-24.07.tar.xz
++sha256  bcae7d42c449fc456dfb279feabcbe0599a29bebb2fe2905761e187339d96b8e  dpdk-24.11.1.tar.xz
+ sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  license/bsd-3-clause.txt
+ sha256  e19808bccd90c238fac06da2fc3683e094c64f7ba647e9d86f03a98cf5f2ce05  license/exceptions.txt
+ sha256  6c54c4d44faf3cba829b3d0c21c6955953e758767018fd7244f809b01d4f4845  license/mit.txt
+diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
+index 2200f5fa00..0cbdc67e87 100644
+--- a/package/dpdk/dpdk.mk
++++ b/package/dpdk/dpdk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DPDK_VERSION = 24.07
++DPDK_VERSION = 24.11.1
+ DPDK_SOURCE = dpdk-$(DPDK_VERSION).tar.xz
+ DPDK_SITE = https://fast.dpdk.org/rel
+ DPDK_LICENSE = \
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
