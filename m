@@ -4,75 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08B08E77188
-	for <buildroot@archiver.kernel.org>; Wed, 18 Dec 2024 23:04:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1A64E77188
+	for <buildroot@archiver.kernel.org>; Wed, 18 Dec 2024 23:05:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82E99426A3;
-	Wed, 18 Dec 2024 23:04:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50A45426BE;
+	Wed, 18 Dec 2024 23:05:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TkpFClQj87ct; Wed, 18 Dec 2024 23:04:00 +0000 (UTC)
+ id oTFMl28-qO2c; Wed, 18 Dec 2024 23:05:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E57984269E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29924426BF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E57984269E;
-	Wed, 18 Dec 2024 23:03:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DB78E3
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 23:03:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29924426BF;
+	Wed, 18 Dec 2024 23:05:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9BD86C0
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 23:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF84A42681
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 23:03:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7C3F685161
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 23:05:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i_VepoQcbZ_s for <buildroot@buildroot.org>;
- Wed, 18 Dec 2024 23:03:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3BA124269E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BA124269E
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3BA124269E
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 23:03:55 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y5PQ5uJcQm6R for <buildroot@buildroot.org>;
+ Wed, 18 Dec 2024 23:05:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4ECD08515F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4ECD08515F
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4ECD08515F
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 23:05:08 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id C024813F861;
- Thu, 19 Dec 2024 00:03:50 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:51728])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 19 Dec 2024 00:03:50 +0100
-MIME-Version: 1.0
-Date: Thu, 19 Dec 2024 00:03:50 +0100
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 236D9B0051B;
+ Thu, 19 Dec 2024 00:05:05 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org, Vincent Jardin <vjardin@free.fr>
-In-Reply-To: <20241218220907.762527-1-peter@korsgaard.com>
-References: <20241218220907.762527-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <347c6f7297fe983edb7a5658a19605e0@free.fr>
-X-Sender: ju.o@free.fr
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Thu, 19 Dec 2024 00:04:57 +0100
+Message-ID: <20241218230457.993007-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.47.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734563033;
- bh=g1bcSTvX4kncuyVBhxmgbVFvoRG+ijWHG6HLoUZ5b0A=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ARygTY2vnP28i1jjpdZ7wrScR8uJiZGnB8Wp3P/GuN6F8cXGGCWVClSY1I3cLpJwi
- LPQiD2GjD8rMEVkQ3s8mVLsMRzWkSKo1HfvX4e9JieA2djFamjOYxsxB+YxOOazkf4
- AFwoHcq8sNvs8aJJHIeUS6Xff7X150VLn3uA0T5X6zipCcO3Xbs+quYH9ucLk/S1ne
- EsCajCTZgq9UP10cO3fXCSNjui5n6C07XbfJwk6lMETwRd78kFIO8gffgtUpoeiGhA
- 5A5ycFEjSjFtWhNGdeHB29w9ZTr7k6cdbzPKFyKh8kdJx0e/H8Bf1T9KM/eq/96b9y
- g3PLXTu4mSbdw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1734563106;
+ bh=9f95MHds20v0vzVOxwAqJnLNlTOEQLZB6Rh6mRAZ20M=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ngEQsAIC8m/65nt3+TWA2GlxtTMUlGmDktUmHSEYGRPWsEhtYnyMoWyoTUu2B5spV
+ zCvxpmEebSlPkPQD4IAvBbfpGBrB+gVwLm+7dKf5gUWCoWwK5aqIo77r2si5uI3Agg
+ bXaExYOiBhCFv9nuiDpbuwKifV0DTOY6I4hpFP3Rs+LUe1oKkk/0eIb7kHzQoE8wKK
+ nIVYkwfCi51Y2nST1rYJmXGxAZeXibJmp74UQgyAKDZ3Z7Wr1n0TeE8P3aTLn/kQjd
+ JgjYisFv39ZeauR+cIxc8w/EeaCEAnSVJ5YgB0I+HRIY2354ge8rDIz5KFpYncY7YB
+ wlITih3xFaefQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=ARygTY2v
-Subject: Re: [Buildroot] [PATCH] package/dpdk: security bump to version
- 24.11.1
+ header.s=smtp-20201208 header.b=ngEQsAIC
+Subject: [Buildroot] [PATCH 1/1] support/testing: new patch runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,81 +77,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 18/12/2024 23:09, Peter Korsgaard wrote:
-> Fixes the following security issue:
-> 
-> CVE-2024-11614: An out-of-bounds read vulnerability was found in DPDK's
-> Vhost library checksum offload feature.  This issue enables an 
-> untrusted or
-> compromised guest to crash the hypervisor's vSwitch by forging Virtio
-> descriptors to cause out-of-bounds reads.  This flaw allows an attacker 
-> with
-> a malicious VM using a virtio driver to cause the vhost-user side to 
-> crash
-> by sending a packet with a Tx checksum offload request and an invalid
-> csum_start offset.
-> 
-> https://www.openwall.com/lists/oss-security/2024/12/17/3
-> 
-> Release notes: 
-> http://doc.dpdk.org/guides-24.11/rel_notes/release_24_11.html
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/jobs/8681269389
+---
+ DEVELOPERS                                    |  2 +
+ support/testing/tests/package/test_patch.py   | 44 +++++++++++++++++++
+ .../test_patch/rootfs-overlay/root/file.diff  |  8 ++++
+ .../test_patch/rootfs-overlay/root/file.txt   |  3 ++
+ 4 files changed, 57 insertions(+)
+ create mode 100644 support/testing/tests/package/test_patch.py
+ create mode 100644 support/testing/tests/package/test_patch/rootfs-overlay/root/file.diff
+ create mode 100644 support/testing/tests/package/test_patch/rootfs-overlay/root/file.txt
 
-Applied to master, thanks.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 492eb765e0..f409d22353 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1950,6 +1950,8 @@ F:	support/testing/tests/package/test_ola.py
+ F:	support/testing/tests/package/test_ola/
+ F:	support/testing/tests/package/test_openblas.py
+ F:	support/testing/tests/package/test_parted.py
++F:	support/testing/tests/package/test_patch.py
++F:	support/testing/tests/package/test_patch/
+ F:	support/testing/tests/package/test_pciutils.py
+ F:	support/testing/tests/package/test_perftest.py
+ F:	support/testing/tests/package/test_pigz.py
+diff --git a/support/testing/tests/package/test_patch.py b/support/testing/tests/package/test_patch.py
+new file mode 100644
+index 0000000000..67ecb0497a
+--- /dev/null
++++ b/support/testing/tests/package/test_patch.py
+@@ -0,0 +1,44 @@
++import os
++
++import infra.basetest
++
++
++class TestPatch(infra.basetest.BRTest):
++    rootfs_overlay = \
++        infra.filepath("tests/package/test_patch/rootfs-overlay")
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        f"""
++        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_PATCH=y
++        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check the program can execute. This also checks that we are
++        # not using the patch applet from BusyBox (as it does not
++        # recognize the --version option).
++        self.assertRunOk("patch --version")
++
++        # We check the test file contains our expected string before
++        # the patch.
++        sed_cmd = "sed -n '2p' file.txt"
++        out, ret = self.emulator.run(sed_cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "Hello World!")
++
++        # We apply our test patch...
++        self.assertRunOk("patch -p1 < file.diff")
++
++        # We check the test file contains our expected string after
++        # applying the patch.
++        out, ret = self.emulator.run(sed_cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "Hello Buildroot!")
+diff --git a/support/testing/tests/package/test_patch/rootfs-overlay/root/file.diff b/support/testing/tests/package/test_patch/rootfs-overlay/root/file.diff
+new file mode 100644
+index 0000000000..d53324d84b
+--- /dev/null
++++ b/support/testing/tests/package/test_patch/rootfs-overlay/root/file.diff
+@@ -0,0 +1,8 @@
++diff -Naur a/file.txt b/file.txt
++--- a/file.txt	2024-12-18 23:11:50.863359248 +0100
+++++ b/file.txt	2024-12-18 23:12:26.464561146 +0100
++@@ -1,3 +1,3 @@
++ This is some context...
++-Hello World!
+++Hello Buildroot!
++ ...and this is some more context.
+diff --git a/support/testing/tests/package/test_patch/rootfs-overlay/root/file.txt b/support/testing/tests/package/test_patch/rootfs-overlay/root/file.txt
+new file mode 100644
+index 0000000000..b506c73d9f
+--- /dev/null
++++ b/support/testing/tests/package/test_patch/rootfs-overlay/root/file.txt
+@@ -0,0 +1,3 @@
++This is some context...
++Hello World!
++...and this is some more context.
+-- 
+2.47.1
 
-> ---
->  package/dpdk/dpdk.hash | 2 +-
->  package/dpdk/dpdk.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/dpdk/dpdk.hash b/package/dpdk/dpdk.hash
-> index 27c06476e7..e9a22736b0 100644
-> --- a/package/dpdk/dpdk.hash
-> +++ b/package/dpdk/dpdk.hash
-> @@ -1,5 +1,5 @@
->  # Locally computed
-> -sha256  
-> 9944f7e5f268e7ac9b4193e2cd54ef6d98f6e1d7dddc967c77ae4f6616d6fbbd  
-> dpdk-24.07.tar.xz
-> +sha256  
-> bcae7d42c449fc456dfb279feabcbe0599a29bebb2fe2905761e187339d96b8e  
-> dpdk-24.11.1.tar.xz
->  sha256  
-> 9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  
-> license/bsd-3-clause.txt
->  sha256  
-> e19808bccd90c238fac06da2fc3683e094c64f7ba647e9d86f03a98cf5f2ce05  
-> license/exceptions.txt
->  sha256  
-> 6c54c4d44faf3cba829b3d0c21c6955953e758767018fd7244f809b01d4f4845  
-> license/mit.txt
-> diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
-> index 2200f5fa00..0cbdc67e87 100644
-> --- a/package/dpdk/dpdk.mk
-> +++ b/package/dpdk/dpdk.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
-> 
-> -DPDK_VERSION = 24.07
-> +DPDK_VERSION = 24.11.1
->  DPDK_SOURCE = dpdk-$(DPDK_VERSION).tar.xz
->  DPDK_SITE = https://fast.dpdk.org/rel
->  DPDK_LICENSE = \
-> --
-> 2.39.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
