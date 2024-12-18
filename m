@@ -4,165 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA663E77183
-	for <buildroot@archiver.kernel.org>; Wed, 18 Dec 2024 08:12:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CA82E77187
+	for <buildroot@archiver.kernel.org>; Wed, 18 Dec 2024 08:43:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B35884AED;
-	Wed, 18 Dec 2024 08:12:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DBE67846BD;
+	Wed, 18 Dec 2024 08:43:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kI3vy-G-Q1us; Wed, 18 Dec 2024 08:12:13 +0000 (UTC)
+ id GdhbDPyI8D1y; Wed, 18 Dec 2024 08:43:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8301B84AF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C649D846BF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8301B84AF2;
-	Wed, 18 Dec 2024 08:12:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 05804E3
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 08:12:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C649D846BF;
+	Wed, 18 Dec 2024 08:43:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9F48DE5
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 08:43:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C2606613A4
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 08:12:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8334A409AD
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 08:43:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lwDohs1ext17 for <buildroot@buildroot.org>;
- Wed, 18 Dec 2024 08:12:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:240a::61a;
- helo=nam04-mw2-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EB0B2613AB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB0B2613AB
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam04on2061a.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:240a::61a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EB0B2613AB
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 08:12:10 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eUuzJT9PKcAJS7yN+JCXcAobCG3oCz1wjIhXMNyQgSPVlxsNW3/hZiQMLZqSG7F0QKK62ChavwEDqwGfauoLsQvZV4T4Tiu3SWbg/52a+moJDdAGpmPW5WIOjZxeve/dYV7Ji49++4tRPjN3eGcpYvoSjYM9uCVueNnzXmUmEX4+fbmBjvkjOX5TTvZ+fdEhX3V9EzYiTxjeowzaEs+4VrGObEDDdjvKjr1dwwaDEkdjCVDsJPNvfqCaRWhj09cvPBmpeVXQedh3MOGhnHYnzG4ShCcqqe1Jipu4nWDkYAog3KzB2AHq/r2oO9llwOJgJ2WbVybe5ksu84dm+D5kJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JZtPEtMgAjlWN4H4f25kWNYP6zW+whMG3cozPBTzSro=;
- b=QWhfdH0J+xLIhQg96UQdW/pwisTZL+yqT/Igfbpreb0xrbqfm78B/Ypb+/DR4H/Ryi84+rqGPKo87ZqQikZviFRF+nQWg3ccYTe6RzG/E9ihLCtQ/dY3NvzZbnbzXXFvLISWbN3WdpHHgiLIaaMbjqQ6LYGGkUSTh/XcapBrhakhrqH8FWKtpo8S+elay9wpG9PTHnhcyJ8E9jKIQoTtEj73R4cTKkVgfevIGaiwhSWTZn2C4GooxPqw/PT5jwYW/RjzaHK5d5APg6KJSt8oLgL6jsSGwe7W4m9Dtp6z9ocSsQk+dIm2swRAQwitLcLcWtzmoBRmdZB88kqkZRev/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by DS7PR12MB9525.namprd12.prod.outlook.com (2603:10b6:8:251::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8272.14; Wed, 18 Dec
- 2024 08:12:06 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::e6c1:191b:641d:4d1b]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::e6c1:191b:641d:4d1b%6]) with mapi id 15.20.8272.005; Wed, 18 Dec 2024
- 08:12:06 +0000
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Thread-Topic: [PATCH v1 3/4] configs/zynqmp_kria_kv260_defconfig: bump to
- xilinx-v2024.2
-Thread-Index: AQHbQkSKtlWfmoUmN0SctSPGEEbRO7Lq0m+AgADwB2A=
-Date: Wed, 18 Dec 2024 08:12:06 +0000
-Message-ID: <CH2PR12MB500477CB18DAB3EF269AB9A8F0052@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20241129095304.950313-1-neal.frager@amd.com>
- <20241129095304.950313-3-neal.frager@amd.com> <20241217184539.3f3c0bb4@booty>
-In-Reply-To: <20241217184539.3f3c0bb4@booty>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|DS7PR12MB9525:EE_
-x-ms-office365-filtering-correlation-id: 5eafc56c-74db-4dc7-ed05-08dd1f3ba953
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|1800799024|366016|376014|38070700018|41080700001; 
-x-microsoft-antispam-message-info: =?us-ascii?Q?kKnb7IISofBZM0+Pc0mx9FKuQGODVMgDbjLWVuXN3Yl21EkTnGA4fZ2t/ZxA?=
- =?us-ascii?Q?UHX/9O8hyaylkKd7oARpEGQ4S8AvWZo43wSue5UfY5O6For6Nu5O/8dJdj5t?=
- =?us-ascii?Q?c/uItKPdyvH4iNENXtYyyfOObQ9gYZ+UfoNhchEto07m5lGvucLYg8henDbW?=
- =?us-ascii?Q?ec8S9VtjiG0ch51IHPd1zytEb6byO81TfYgYEPFMZvO6bNKFehKKIHIy7609?=
- =?us-ascii?Q?DphhXJTEWVag4VWtq/jwVlpBB1sxVisoidMHsZY5+WSi/zE86G7U7yNjJQal?=
- =?us-ascii?Q?G2kSYAnOctlYKctHgYx/lQPttuYOnBzOrnmAmJ/z2mo8MWW2q+MM46KXZCcn?=
- =?us-ascii?Q?xdJE9hh6SHuu0R9BqIy58/p5QxivqTlDhj2hwKPYIjAXPM4PrtM+6JFt1HcZ?=
- =?us-ascii?Q?+9mI+HMJYwQry7iyCJBQcWdyxQQ1xybymkPV9EG7waM3x4NxQ+EPOR+OgSvW?=
- =?us-ascii?Q?5hUXu/a3HNItXtiWtD6oqKn1b0aoqD7KhOKJp0XiVn0rNu2fuSXtP8TKY4vT?=
- =?us-ascii?Q?AU0tX70+Pe8ICp6aT459Vre6pkoy1EA5dVCfmgAcXJ2C7sNcD8UuIE2HqHNt?=
- =?us-ascii?Q?MfXeAfyC7YqF4STCUk1qdX2Nap6d7mjTeuGJCqOIjXjbOrFhvpfy9cMTeJXA?=
- =?us-ascii?Q?Xkuvc8SufJH/svW3rbUd/GgRjPD6zuMAiCumsSXcmz785iBf/MNTQKsSJcwp?=
- =?us-ascii?Q?BZDW5V4qlmgd6EPBByCIBe4fZ8DA/+lqNeYDHB1PAh29OTcyZgdB4F7OddnR?=
- =?us-ascii?Q?jk5cpzW/oOIL8vV34xSFtIoHMygmLS7SO+Q/B91XqangWBZC2nuY0t5V9lZO?=
- =?us-ascii?Q?/XRFReWPtGcs7Dbg/mdrXo3DEpW7vfXrvNMqsHWqqhYD8DNrmgHPCyoYrMay?=
- =?us-ascii?Q?8fPqAP5Zir2C7AOCUgUSolWsqe0Ham186xD/ZqdMKJ+Q45laHR8T0fGUVdde?=
- =?us-ascii?Q?IWqV6ZDU0m3AJJJBB2kSFzG9sb6aO3NIOzBymuNa0nVhCg8BbKglvD9rMEJq?=
- =?us-ascii?Q?MHCQDs+8JYCuaNwO3P9L+NOtHOH2+xL8IyHhe/tNtQ0cGIKEd/am9wMVgRQ7?=
- =?us-ascii?Q?C9s6uQvmHuM9fbpCj2twwCFCE/+9UYk4/hC6oKDFX9JJLaIadAdVQoBPbv/Z?=
- =?us-ascii?Q?MEwhFh+3SJcKbRai8Dj2gBBCEPuQfEhbaEz97+0tfL3fhIOuVYyCs+5b/CXs?=
- =?us-ascii?Q?RhRZ3Yc2ukwYduv8z6kD5UsStJFOsPUVtMeo+GxofCpe3G8xdhI/8tQUfeZR?=
- =?us-ascii?Q?AEqCJX5gaKwDOnnuoF38FO32A69WCtAt6WueUr7Xuidnq0jYjwScOqBlBi1P?=
- =?us-ascii?Q?7iuKp6YNqnkWhYB5X9bqOEC+jbUtt8wQeN52WuYlcuuqcloYd1eKvmhdzJXM?=
- =?us-ascii?Q?xDdMXiuOYQepMmCJghMRUDrbG+j2uxSiAsk8X0foou/9DP2/LdkSTG46Sa2A?=
- =?us-ascii?Q?xZqH1kLwGFuiBKcTMuxpCUOl6YfpdnE8w0i8P1IOZWgq+brXYOLOJA=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(1800799024)(366016)(376014)(38070700018)(41080700001); DIR:OUT;
- SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uAUPDKCCexXU32Lfpi3mPtM25CPVj6OyVFgM4eHCM7bL6hxIieilgzbsF+jC?=
- =?us-ascii?Q?ps/L6y4fAi/Wo+vHGR9fn1UTSKNN8+sPa7ulNPtZsTEXPW2hj/xT2a13NoLl?=
- =?us-ascii?Q?0V1dmMFtybyQxxyEnYbQRVVADYz5/5MDt+vOrUDHx8jcijMf00zdgk6AI7lB?=
- =?us-ascii?Q?n8+DRvAoubHoBC69o28hHGi6RGYxd7OHIDFYz+OkVRkAoQx44I/DeZElBLkn?=
- =?us-ascii?Q?QKjhrDsvjMb+yIDe9xBlI+0UwPOC98I4xfHCf39ODJrsU89oPrUqavEOdbK5?=
- =?us-ascii?Q?T6ItOY5qvFUoLRqNTwN+wtlNWB8P93JFzWulJhWFFCw5FW5ZwqEA4E4CbUmg?=
- =?us-ascii?Q?aigHmWOlMyAnYNZ5/yffAwbbrN7PM/SJER4v++7Fl3ZbECiJjQQIjeQbPHcy?=
- =?us-ascii?Q?ULrqvYoFYMgMAjGF308WdTv1FsCRgcxBnYhla1I4FMOh4p3smfADmQRMwgv+?=
- =?us-ascii?Q?PwpyVROoy2aXqLh+mhqxvhWC3YzpComamLhqZUlQpp9DQExPjaIkRsGCqZgh?=
- =?us-ascii?Q?XE8GGKhnAfR24d6PCs1osOkaNAdPuXvjI3Y0od8KlkGwoK15c9lvEjR9UJhY?=
- =?us-ascii?Q?EalTB0gR43ihXPrP9uHqNlttWTv6pHiSiNfplOxhSsmFfoPNzzO3SOwB4l1a?=
- =?us-ascii?Q?+/Qcqif8a5LpR3BmVFCIb17H8IRQUvuL5wSP7unUOAj3K6GSdHQMK6vvYLd+?=
- =?us-ascii?Q?efn1+rqShaH0GRCXNhfZabYCqkc+osfHk32OKJonGiUG2GtHyUtj/RLXyv0Y?=
- =?us-ascii?Q?Ve4zNBmL2UTXD0QBBR5cHy9SAUFDyzlNGIMsbvAHqb/pOOIEXegi01E6uf1/?=
- =?us-ascii?Q?GQNyOp7q38G8sUjUfoJ5qgmc7WyJ+7Gm9OYLiiTAVDPcbRUO8Mz+M2w2baNL?=
- =?us-ascii?Q?j0GfdMBslsJ+tuhl7pSbo8ehMOmKqp0nJQx8yfSZEWtCqjGKWvgBcWcRK6gw?=
- =?us-ascii?Q?ndKu6Us36/jMtkXYaPbsxMQViQija1I3qtyRsXa4LXGlqgrAB0cRsfUcPYXz?=
- =?us-ascii?Q?p3nIFbZqN6PT6pe+QZDaL4Ue3r1fyTpLqWaKlFjPVWZyzQwYuHzyYiwBV5uq?=
- =?us-ascii?Q?bL43tzvIpV7LzgtRB2mF1bHO/0GbpcL1EF03Tc1Tuw4bNlAgU6Sbb5ko/MLd?=
- =?us-ascii?Q?H2jgJCWQysiVvt6GUp1TRhey4AF0xgH0S1AY36VnO30rTIaK8KEiI0IBsiA2?=
- =?us-ascii?Q?vVIRMUlFKWpRcP9lum5nxMe5GmTrhMn+UjUOtauNz1t3nDqbSNTNV3T8WMjo?=
- =?us-ascii?Q?ZJU2YxUF8cSRVZDcU9Ywk/RLRxZjnEJcbTtODC8vEBwNfvXvMex1zWpLMVex?=
- =?us-ascii?Q?ozu0BbvJEtxdv1rlIkpGq5pjPo++4Hq63YWiy4kst8uvgz3XIhWZ6HnvQtzH?=
- =?us-ascii?Q?VbmlwhNQTLK5h/knMBmPmL4+kRVG8QEi0SyjhmOHDmFgXmksvDqdK8TfZh/W?=
- =?us-ascii?Q?nu1AEVTLShTO/RhyitZdGjQg9otmu9h/rzM1Lku7LwTcb5JIqdc2WIuktapD?=
- =?us-ascii?Q?RcuDV9RW5bduMTUWZjU3QLXWUQVAF9oLEL2NIHpdvY3yJVOYQunI9b1wWOGw?=
- =?us-ascii?Q?Rx/+2XHrEGbreu/vdF0=3D?=
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dvyy-kj7vRkO for <buildroot@buildroot.org>;
+ Wed, 18 Dec 2024 08:43:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.45;
+ helo=mail-wr1-f45.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E4CC241605
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4CC241605
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com
+ [209.85.221.45])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E4CC241605
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 08:43:50 +0000 (UTC)
+Received: by mail-wr1-f45.google.com with SMTP id
+ ffacd0b85a97d-3862d16b4f5so331722f8f.0
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 00:43:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1734511428; x=1735116228;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=FdI2QsVeaxdEEVuzOus+4Q7+x2MzdF7sfh/a4kJrP5s=;
+ b=Yo4UAa0yYWiOLepGBk2RF3F0gW81Y0f+i+B+x5wimWEGniKJEkIVe+IRDoZfifcr3i
+ tW4Rzr5gYBCFhRrgJU2ZwFY2zv0K5zNLODup00zeo0YZVgx0YFsfg40EFn6vh+5VNqCZ
+ x6pmSWm0JIUNHrn+kGx5nLvBpN7aPp3WgbBA3NL0Uyvb1NhoC5PRVkQ+DU6/E0xt+vx0
+ mpqr/+iMUbiaQtw7ybhGvRdFu+m7mXP9HexF2rO5titwS/AGjdI4KGTve1lKF55O+t8a
+ 0F/SONaayOnhbW9OZwm05QI7WkPNxu1si9LobzUCImX6k5tTxqWHmuLEO/X55HIuipQl
+ S2zA==
+X-Gm-Message-State: AOJu0YzuxSsLxEOx0GkkulVpjOsumXgKiKLF+iVnspeJeONGWO1z+rbA
+ g16JudFd1rg5FYF/oqwzCIhwg9kFiFkv94Dbdk31iUHUemTwkugUgXisUeAI7Q3Eng==
+X-Gm-Gg: ASbGncviP00Mu/G1MnIc2CgO0ugE6Q31oSjRAH2AnK1LX3jxKwB1pR8DcNtge8htU+a
+ z7asaaVY52yj2LafZVW+8hHaAMjjJkta2p+PBdVnfN5IMlEZ1rcOvTJKspZHoOjxM6KHeu0pO1R
+ DiNuWqhupw+eCsD9OE3cV/WENA/QF2wlqanHiccXNlSaG55At7M1L1W2sYSYD7CnhxpV2wAcNHZ
+ zBzHxsU/2jmiFWdEiz3Twsl7/XPNmJiDv4S0HeXQeRd5xrvgC3ci/te0jgbl6KFko8g90TS/yjF
+ W0mZ2RBA2wpJin8eCSPoFgYFwRbuTFuXsQ==
+X-Google-Smtp-Source: AGHT+IGz+NbiCnQB3dWeO5Ajk9idETK4oBNqNWnCsWToOzGT+Vdqe52wBo5cJa1HNXNtLjlgtI2guw==
+X-Received: by 2002:adf:fa0f:0:b0:386:4570:ee3d with SMTP id
+ ffacd0b85a97d-388e4e79284mr1250999f8f.24.1734511428163; 
+ Wed, 18 Dec 2024 00:43:48 -0800 (PST)
+Received: from thomas-Precision-7670.barco.com (d528f5fdd.static.telenet.be.
+ [82.143.95.221]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-388c80122b6sm13704856f8f.7.2024.12.18.00.43.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 18 Dec 2024 00:43:47 -0800 (PST)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: buildroot@buildroot.org,
+	thomas@devoogdt.com
+Date: Wed, 18 Dec 2024 09:43:37 +0100
+Message-ID: <20241218084337.3775491-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CACXRmJi-K=k+bwwhtVEjAOc6wEJaS1rg_5cDFwMY2nZmR24KVQ@mail.gmail.com>
+References: <CACXRmJi-K=k+bwwhtVEjAOc6wEJaS1rg_5cDFwMY2nZmR24KVQ@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5eafc56c-74db-4dc7-ed05-08dd1f3ba953
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Dec 2024 08:12:06.0480 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XmE9TNVO5+1T2RGEu4b2VTLxInXvnpxAlq7pFCBEkzV1hNnFeM7mdbspNtrbolSz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB9525
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JZtPEtMgAjlWN4H4f25kWNYP6zW+whMG3cozPBTzSro=;
- b=ERUrN7G5k3D36AIs1FenWivt7cZmk8S6j4nTHmgewOqoPm+YGGGz3pqlY6c65kk/daDiT5BG4nTFx6ds1mRn/dUgveqsCtz7UC82FDOeSTOnU2nrO4Mi9TCJnj0LtQdycA3U1hsq/xjozgQ6iISXzy6u9DNTLq93+NzDHNyOCa4=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=ERUrN7G5
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v1 3/4] configs/zynqmp_kria_kv260_defconfig:
- bump to xilinx-v2024.2
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=devoogdt.com
+Subject: [Buildroot] [PATCH v1] package/pkgconf: fix sysroot being prepended
+ twice to the pkgdatadir path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -174,77 +94,140 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "brandon.maier@collins.com" <brandon.maier@collins.com>,
- "ju.o@free.fr" <ju.o@free.fr>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>,
- "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
- Michal" <michal.simek@amd.com>,
- "yann.morin.1998@free.fr" <yann.morin.1998@free.fr>
+Cc: aperez@igalia.com, james.hilliard1@gmail.com, thomas.devoogdt@barco.com,
+ thomas.petazzoni@bootlin.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Luca,
+When building webkit, I got this build error:
 
-> This patch bumps the zynqmp_kria_kv260_defconfig to xilinx-v2024.2 which
-> includes the following updates:
-> 
-> - ATF v2.10
-> - Linux v6.6.40
-> - U-Boot v2024.01
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+>>> webkitgtk 2.46.3 Building
+GIT_DIR=. PATH="/home/thomas/br-test-pkg/bootlin-armv5-uclibc/host/bin:/home/thomas/br-test-pkg/bootlin-armv5-uclibc/host/sbin:/home/thomas/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin"
+ /home/thomas/.local/bin/cmake --build
+/home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.46.3/
+-j25
+ninja: error: '/home/thomas/br-test-pkg/bootlin-armv5-uclibc/host/arm-buildroot-linux-uclibcgnueabi/sysroot/home/thomas/br-test-pkg/bootlin-armv5-uclibc/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/share/wayland-protocols/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml',
+needed by 'WebKitGTK/DerivedSources/pointer-constraints-unstable-v1-protocol.c',
+missing and no known rule to make it
+make[1]: *** [package/pkg-generic.mk:289:
+/home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.46.3/.stamp_built]
+Error 1
+make: *** [Makefile:83: _all] Error 2
 
-> I noticed I am unable to boot a Kria KV260 Vision AI Starter kit after
-> this series. The symptom is the boot process hungs after:
+The sysroot path is prepended twice to the path. This error persists
+since a3b2bc8 "package/pkgconf: bump to version 2.3.0".
 
---- snip ---
+After digging into it, I found out that dropping "pkgdatadir" from the
+patch does fix it. This is, in fact, the same, or similar problem that
+was fixed in 3e74c13 "package/pkgconf: variable pkgdatadir also needs
+sysroot prefixing, wayland patch III" years ago.
 
-> I tested the following versions:
+I was not able to find out which pkgconf commit caused the behavior
+change. Commit a3b2bc8 bumped it from 1.6.3 to 2.3.0, which is a
+considerable big change.
 
-> 1. 2024.11-rc1-36-ga6db4cde0fcb (just before the bump)  -> OK
-> 2. 2024.11-rc1-41-gd33a2cd51a3f (just after the bump)   -> hangs
-> 3. 2024.11-187-gf97b67be7429 (current Buildroot master) -> hangs
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+---
+ ...th-the-sysroot-a-subset-of-variables.patch | 25 ++++++++++---------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
-> Steps I took to test:
-
->  git checkout <commit>
->  git clean -xdf
->  git checkout -- .
->  make zynqmp_kria_kv260_defconfig
->  grep BR2_TARGET_UBOOT_ZYNQMP_PMUFW .config  # => always shows BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
->  utils/brmake
->  ( cd output/images; cp boot.bin sbirt.bin; dd if=u-boot.itb seek=128 bs=4k of=sbirt.bin )
->  # Upgrade sbirt.bin using the SBIRT tool
+diff --git a/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch b/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
+index d25039ade2..986058d400 100644
+--- a/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
++++ b/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
+@@ -1,4 +1,4 @@
+-From c1f9e60f46f2207f9dd07dd290ad5a2da05ad41d Mon Sep 17 00:00:00 2001
++From c912e9bb8d5be414fda74b2019deb2a6d2d041a0 Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Date: Sun, 16 Dec 2018 11:52:18 +0100
+ Subject: [PATCH] Only prefix with the sysroot a subset of variables
+@@ -22,15 +22,17 @@ Buildroot development. All other paths are not prefixed by the sysroot.
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ [Updated to include gobject-introspection paths]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
++[Dropped the pkgdatadir path]
++Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+ ---
+- libpkgconf/tuple.c | 65 ++++++++++++++++++++++++++++++++--------------
+- 1 file changed, 46 insertions(+), 19 deletions(-)
++ libpkgconf/tuple.c | 64 ++++++++++++++++++++++++++++++++--------------
++ 1 file changed, 45 insertions(+), 19 deletions(-)
+ 
+ diff --git a/libpkgconf/tuple.c b/libpkgconf/tuple.c
+-index 83f6a47..a2aa427 100644
++index 83f6a47..d56fcec 100644
+ --- a/libpkgconf/tuple.c
+ +++ b/libpkgconf/tuple.c
+-@@ -178,6 +178,21 @@ dequote(const char *value)
++@@ -178,6 +178,20 @@ dequote(const char *value)
+  	return buf;
+  }
   
->  # The following three lines are not really needed: the problem happens
->  # before actually reading the uSD card:
->  umount /media/$USER/*
->  sudo dd if=output/images/sdcard.img of=/dev/sdb
->  umount /media/$USER/* && sync
+@@ -44,7 +46,6 @@ index 83f6a47..a2aa427 100644
+ +	"includedir",
+ +	"libdir",
+ +	"mapdir",
+-+	"pkgdatadir",
+ +	"sdkdir",
+ +	NULL,
+ +};
+@@ -52,7 +53,7 @@ index 83f6a47..a2aa427 100644
+  static const char *
+  find_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars)
+  {
+-@@ -237,14 +252,20 @@ pkgconf_tuple_add(const pkgconf_client_t *client, pkgconf_list_t *list, const ch
++@@ -237,14 +251,20 @@ pkgconf_tuple_add(const pkgconf_client_t *client, pkgconf_list_t *list, const ch
+  {
+  	char *dequote_value;
+  	pkgconf_tuple_t *tuple = calloc(1, sizeof(pkgconf_tuple_t));
+@@ -74,7 +75,7 @@ index 83f6a47..a2aa427 100644
+  	else
+  		tuple->value = strdup(dequote_value);
+  
+-@@ -294,22 +315,8 @@ pkgconf_tuple_find(const pkgconf_client_t *client, pkgconf_list_t *list, const c
++@@ -294,22 +314,8 @@ pkgconf_tuple_find(const pkgconf_client_t *client, pkgconf_list_t *list, const c
+  	return NULL;
+  }
+  
+@@ -99,7 +100,7 @@ index 83f6a47..a2aa427 100644
+  {
+  	char buf[PKGCONF_BUFSIZE];
+  	const char *ptr;
+-@@ -318,7 +325,7 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
++@@ -318,7 +324,7 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
+  	if (!(client->flags & PKGCONF_PKG_PKGF_FDO_SYSROOT_RULES) &&
+  		(!(flags & PKGCONF_PKG_PROPF_UNINSTALLED) || (client->flags & PKGCONF_PKG_PKGF_PKGCONF1_SYSROOT_RULES)))
+  	{
+@@ -108,7 +109,7 @@ index 83f6a47..a2aa427 100644
+  			bptr += pkgconf_strlcpy(buf, client->sysroot_dir, sizeof buf);
+  	}
+  
+-@@ -381,7 +388,7 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
++@@ -381,7 +387,7 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
+  				{
+  					size_t nlen;
+  
+@@ -117,7 +118,7 @@ index 83f6a47..a2aa427 100644
+  					nlen = pkgconf_strlcpy(bptr, parsekv, remain);
+  					free(parsekv);
+  
+-@@ -432,6 +439,26 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
++@@ -432,6 +438,26 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
+  	return strdup(buf);
+  }
+  
+@@ -145,5 +146,5 @@ index 83f6a47..a2aa427 100644
+   * !doc
+   *
+ -- 
+-2.34.1
++2.43.0
+ 
+-- 
+2.43.0
 
-> Do you have any clues?
-
-Thank you for reporting this!
-
-Unfortunately, it appears that our kria software is not quite as mature as I
-believed.  When I bumped the defconfigs to xilinx_v2024.2, I only actually
-run tested one defconfig per family.  For kria, I tested the kd240 starter kit
-and it boots as expected.  I thought this meant that the kv260 and kr260 would
-be fine by association.
-
-I have just run tested the kv260, and I have duplicated your issue, so we do
-indeed have a problem here.  I am working on it with high priority.
-
-I am going to run test the kr260 now as well.
-
-Best regards,
-Neal Frager
-AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
