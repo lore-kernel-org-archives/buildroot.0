@@ -1,107 +1,108 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4DDFE77188
-	for <buildroot@archiver.kernel.org>; Wed, 18 Dec 2024 19:46:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12954E77187
+	for <buildroot@archiver.kernel.org>; Wed, 18 Dec 2024 19:46:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 31AF984EA7;
-	Wed, 18 Dec 2024 19:46:18 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kuz0NC5iWFIl; Wed, 18 Dec 2024 19:46:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A67284F24
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A67284F24;
-	Wed, 18 Dec 2024 19:46:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 80F2FCE
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 19:46:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 61482419BE
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 19:46:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 415F541E4C;
+	Wed, 18 Dec 2024 19:46:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tswfz7TQRP4I for <buildroot@buildroot.org>;
- Wed, 18 Dec 2024 19:46:14 +0000 (UTC)
+ id TqpdVSETJkd6; Wed, 18 Dec 2024 19:46:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9A27419BE
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9A27419BE;
+	Wed, 18 Dec 2024 19:46:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 669D0C0
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 19:46:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 47BE841A69
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 19:46:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QDtC9J29O7D4 for <buildroot@buildroot.org>;
+ Wed, 18 Dec 2024 19:46:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 91EDF419BC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91EDF419BC
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 91EDF419BC
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 19:46:13 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-3862d161947so27182f8f.3
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 11:46:12 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 66BC441A3D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66BC441A3D
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 66BC441A3D
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 19:46:38 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-3862df95f92so29339f8f.2
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 11:46:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1734551171; x=1735155971;
+ d=1e100.net; s=20230601; t=1734551196; x=1735155996;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :references:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=YvtuklQlKTmtkKJxsjhe0oQa7yxvZkEaxIS+aZ5x7fg=;
- b=EaThJJFjzMLYv2JksfCLi2wNer4fjTi+lYUbiH05Z5FWJU9oRcUzCkMe5n9Z3NLb18
- oE0Up1KwLBDXI5cZdZ+EHxV30xA8vjH7ubkSPmj6ztLatTqo+RSqzIiO3K/9O4XeWR3K
- RzAtBciaE8MmyY72ZQVHU+W0bgSsCkfFXouVwSlDQ/9QMste3X2JqvkFbFVOuGtDJdKu
- YNDckD2qRZq7pC745nDtmcwF8qr2LlpV+IR0MZ0ebhjdAnM3IUBSDVTDla6ebJdTcGvq
- 7cpgK9VZdWvZFeaoz0we2Hpn2nKO65+3hnSJkZ+gw3JPPGzOn/Nm5KHMJO+SgdSb3+Ex
- Webg==
+ bh=qy7UXZsI9bqxKi1LARWLQFByGMDovgA8iaQPPoEyRjo=;
+ b=Gtp20CKdeIxWwsS1xISKnCUnhaLLKh5o/vFlHpHsbnOKrZj2REVegyjYMT35LmGm90
+ txJazEhXxpgIIkdwpq15tdYSj9vbYTs6VJFA+zefvIsY8FpIikipifeqy1fNi6bjs8DC
+ FWd3OIscHxngNvK9twjmU45jYaVGsHdMAB8vt+Hq2bMKcbmkstw4HhMoNk4kBvvb9SJE
+ 9E2rAdGdiKJMmBRmhQpInzJsi7z2ERbJqCjYjVsdbgduvW5f5keCTQlJXyfgBqMLyf+E
+ DTghx4IEOVnS+TJ4qbdhzF0yiy4xDj4Cefy9WZK8//dw7TcjxJgaJvXrBHpDz7uIkPr3
+ TL/w==
 X-Forwarded-Encrypted: i=1;
- AJvYcCV1coRj1cmBBRJslK3N46taFOJDKUsXshTMJ98/iaRi24WbDUGyix3ScJCVn7pBpo71Sny9GpccKm0=@buildroot.org
-X-Gm-Message-State: AOJu0YxJS05f1PJeJ1tVABwbmmntGr0NOZ3/BpAtnanh8NRBlqMa5fqm
- MO1ah9Spq0uxAE3qJVl7HcL104C+svoUU19hU2INnrIWkZOb51jHvzV0pldQKac=
-X-Gm-Gg: ASbGnctEX959ekRVqmzOZ+f3z1Io/Jn26IjwifCNms4zU18wgwoUbKOLhGwuUt+1X9I
- a/N18SATsjB07no3llh19KDOep+qCKNhbRqvDSJW2njMNT5EswZa9+zUjTXKiUPR9b8G1zxX0+9
- 4nM9ZW4Ov7OvpXCzxSD0LTu9m6me/k1Yxmp6RXJmzTIjVDrnuut/hhxO7u/zrVmHDQ3jdcJ3hjA
- J1H586VJVGanHE0slj+SJ7u7bOiNyfhkoyNhBTY4+TsBiiQ2tOWPLlXAVP+UC4Yrh2qfUyQV6FD
- oMmO5Jz+Gl5f0fdI6V1l/xnHi/LPRnJOdQXo9ziZixGsQ3lNbxcqt2u1rk9UnUNkJALGnnL1n+d
- Sd/htoX6VZT4=
-X-Google-Smtp-Source: AGHT+IHz/8WjPEOynTGAMkr4YcNzI2I/GwxgZEcibytrKzV4L7GyP39GMq/YXJP4HPDYEgr8oJlFLQ==
+ AJvYcCX0XiQ3+CJPXkIYdwYjhQTniygN7TpMcIPRTrOCYqFRsxBsbnZoXTvKtW5PB7neAFEbTrCulV52xYI=@buildroot.org
+X-Gm-Message-State: AOJu0Yw6PN1Ive7F3j3D+T8gbfqxouACIuh7UFjcC50MzpNm29NJt6yX
+ Xgn8kuggq5Zqfa3sJK2vHFia9OUsS8KjjIl2FXXNd3TDAA+X8oMNR3nK1zFX3nU8JD9sBB3M/IN
+ f
+X-Gm-Gg: ASbGncuTh7KM1Z+ns99XTZVWNm/xoRUvfaHZPWChMpyvJ4JWqSm2sS6ouAaqYpwuNNG
+ PS9ZdYgG1QAmoX0GNYc6jzs/KII1b557QKhwgbADkPetwiz+jjXY/tj8QBInPvMVBqDORYay95B
+ rKk4RULeXMW2rRVSrRuv2ebO9WW/yjidOe6R4hz/yhpHnEl+gIMaYJCDTb/yrF69yQPCmcmDmJy
+ C6S+/v9og6JWBmz9+xERpRQRDQsVzDMHCBOlYQnln4i8qg9LWNG5ok6xvUPZIxYCXhnssQ2a4Dk
+ CdvI98TngmphWtnmuPn2n38Z0lYZdOV7cAsCcPUmt4nVx7IoeeqETmQeFIItI2p9xENSigDL9ym
+ NDiN5Dny7i0c=
+X-Google-Smtp-Source: AGHT+IFEtphHQoIiW3JJZSWsmqhChZC0OeSq+WMSpDijiFHTiEtLrkQmWd6xhFX3SzSx81rEBIRQKg==
 X-Received: by 2002:a5d:64ee:0:b0:385:ec6e:e872 with SMTP id
- ffacd0b85a97d-388e4da50f7mr4214008f8f.38.1734551171010; 
- Wed, 18 Dec 2024 11:46:11 -0800 (PST)
+ ffacd0b85a97d-388e4da50f7mr4215025f8f.38.1734551196092; 
+ Wed, 18 Dec 2024 11:46:36 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-388c804a2f9sm15030408f8f.77.2024.12.18.11.46.09
+ 5b1f17b1804b1-43656b417afsm29424365e9.36.2024.12.18.11.46.35
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 18 Dec 2024 11:46:10 -0800 (PST)
-Message-ID: <5910c950-46a3-41ad-9a0b-e9debb07f966@mind.be>
-Date: Wed, 18 Dec 2024 20:46:07 +0100
+ Wed, 18 Dec 2024 11:46:35 -0800 (PST)
+Message-ID: <411dab17-a4b6-453b-bba1-01f6a1b93d93@mind.be>
+Date: Wed, 18 Dec 2024 20:46:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-Cc: Alistair Francis <alistair@alistair23.me>
-References: <20241212205619.259476-1-ju.o@free.fr>
+To: Brandon Maier <brandon.maier@collins.com>, buildroot@buildroot.org
+References: <20241213-gnutls-3-8-8-error-v1-1-58cec8c3387c@collins.com>
 Content-Language: en-GB
-In-Reply-To: <20241212205619.259476-1-ju.o@free.fr>
+In-Reply-To: <20241213-gnutls-3-8-8-error-v1-1-58cec8c3387c@collins.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1734551171; x=1735155971; darn=buildroot.org;
+ d=mind.be; s=google; t=1734551196; x=1735155996; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=YvtuklQlKTmtkKJxsjhe0oQa7yxvZkEaxIS+aZ5x7fg=;
- b=BelWbuHpY/zAk/fzNrpgUTmzvd33QGv0bFnhxVf9sR2KBA0cCPlbco3CwqmFfC3ddu
- 14sc/EIskyNExbzwzeAQkxrPP28X6hkxm+k5wFJ6uQ/eQPJrJ2P+00PcIOCVFHXPkg41
- QbhIFTLn5UH6+FMja9i93ni29uoNRuTVyeGkW9oYUKJJOxG+5N1NCBFWQhk/u4wjbEhR
- /MVIEeXNHv1SdK/B4EjyDtA5d0AaNe+atus6vjbaxfod5+nxz8tGdduXtvRSZAOxDfE9
- t1XePk4BVPuDtuP88puBUC/igf6F9LEsomDz9JZBx/DMZ3d2LMba+lcBn5cZJUGV+ng6
- wNTQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=qy7UXZsI9bqxKi1LARWLQFByGMDovgA8iaQPPoEyRjo=;
+ b=PC8HBwA6s3NateSbQKBwM1tJ8VM9HfTNJM4vkfhKxvIZ4lywh45sk8MS/WZRHYTzrq
+ eWDSpfJap69b4HB6FEzq02lCjOztvOauaJQqJBBszoFzlaa4QJ7iHZ6bpJMQ0MGFWZ54
+ C9QyGDqXFQ/RMDaFlTuQI+j+hmBYTcNtx1Uf/xmTYqVdWMktiMut/zPMtOAFTxHa5Py6
+ jbTg4obHFkyJAJ+mBJebCFXDVOTHNbHSXFG7BmcB6qx01vSMLlpwkLch8PKMi96iraGG
+ U6nollKhFkVn+9D8v93Y2HMWYYvE7ZY25tqJM+xXz0Jz+tKeX5lp4NtihlmmHO3xpy2b
+ ASoA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=BelWbuHp
-Subject: Re: [Buildroot] [PATCH 1/1] boot/opensbi: bump to version 1.5
+ header.a=rsa-sha256 header.s=google header.b=PC8HBwA6
+Subject: Re: [Buildroot] [PATCH] package/gnutls: fix autobuild error from
+ 3.8.8 update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,16 +123,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 12/12/2024 21:56, Julien Olivain wrote:
-> For release notes since version 1.3, see:
-> https://github.com/riscv-software-src/opensbi/releases/tag/v1.5
-> https://github.com/riscv-software-src/opensbi/releases/tag/v1.4
+On 13/12/2024 21:57, Brandon Maier via buildroot wrote:
+> Fixes: http://autobuild.buildroot.net/results/317/3178fca15cbb2520336b0678a16a5be5a51a8702//
+> Upstream bug report: https://gitlab.com/gnutls/gnutls/-/issues/1604
 > 
-> This commit also updates the package home page url and the
-> download _SITE to reflect the change of github account from "riscv"
-> to "riscv-software-src".
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 
   Applied to master, thanks.
 
@@ -139,64 +135,819 @@ On 12/12/2024 21:56, Julien Olivain wrote:
   Arnout
 
 > ---
->   boot/opensbi/Config.in    | 6 +++---
->   boot/opensbi/opensbi.hash | 2 +-
->   boot/opensbi/opensbi.mk   | 2 +-
->   3 files changed, 5 insertions(+), 5 deletions(-)
+>   ...resent-hybrid-groups-with-an-array-of-IDs.patch | 798 +++++++++++++++++++++
+>   1 file changed, 798 insertions(+)
 > 
-> diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-> index de2f0aae20..7604be29d9 100644
-> --- a/boot/opensbi/Config.in
-> +++ b/boot/opensbi/Config.in
-> @@ -10,7 +10,7 @@ config BR2_TARGET_OPENSBI
->   	  System-on-Chip vendors to fit a particular hadware
->   	  configuration.
->   
-> -	  https://github.com/riscv/opensbi.git
-> +	  https://github.com/riscv-software-src/opensbi
->   
->   if BR2_TARGET_OPENSBI
->   choice
-> @@ -19,7 +19,7 @@ choice
->   	  Select the specific OpenSBI version you want to use
->   
->   config BR2_TARGET_OPENSBI_LATEST_VERSION
-> -	bool "1.3"
-> +	bool "1.5"
->   
->   config BR2_TARGET_OPENSBI_CUSTOM_VERSION
->   	bool "Custom version"
-> @@ -57,7 +57,7 @@ endif
->   
->   config BR2_TARGET_OPENSBI_VERSION
->   	string
-> -	default "1.3" if BR2_TARGET_OPENSBI_LATEST_VERSION
-> +	default "1.5" if BR2_TARGET_OPENSBI_LATEST_VERSION
->   	default BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE \
->   		if BR2_TARGET_OPENSBI_CUSTOM_VERSION
->   	default "custom" if BR2_TARGET_OPENSBI_CUSTOM_TARBALL
-> diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
-> index 980fb141dc..c69bcf7150 100644
-> --- a/boot/opensbi/opensbi.hash
-> +++ b/boot/opensbi/opensbi.hash
-> @@ -1,3 +1,3 @@
->   # locally computed
-> -sha256  2c0501eb3475f463b15f5b8531996f64604ea49e0e3ed040ecbd1fc27ecd8c5c  opensbi-1.3.tar.gz
-> +sha256  9880485672a3a2c48a81d373df6707517b568402f2d3f9eecbfa9d83f8e6f22f  opensbi-1.5.tar.gz
->   sha256  82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21  COPYING.BSD
-> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-> index dd113a0bf8..0142769a12 100644
-> --- a/boot/opensbi/opensbi.mk
-> +++ b/boot/opensbi/opensbi.mk
-> @@ -16,7 +16,7 @@ OPENSBI_SITE = $(call qstrip,$(BR2_TARGET_OPENSBI_CUSTOM_REPO_URL))
->   OPENSBI_SITE_METHOD = git
->   else
->   # Handle official OpenSBI versions
-> -OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
-> +OPENSBI_SITE = $(call github,riscv-software-src,opensbi,v$(OPENSBI_VERSION))
->   endif
->   
->   OPENSBI_LICENSE = BSD-2-Clause
+> diff --git a/package/gnutls/0001-groups-represent-hybrid-groups-with-an-array-of-IDs.patch b/package/gnutls/0001-groups-represent-hybrid-groups-with-an-array-of-IDs.patch
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..8462d77281b211425a39f120c27febd8bd5f10aa
+> --- /dev/null
+> +++ b/package/gnutls/0001-groups-represent-hybrid-groups-with-an-array-of-IDs.patch
+> @@ -0,0 +1,798 @@
+> +From 5ed597eb28c408c5968e6dfb839880ba5fa17ba1 Mon Sep 17 00:00:00 2001
+> +From: Daiki Ueno <ueno@gnu.org>
+> +Date: Fri, 6 Dec 2024 09:53:18 +0900
+> +Subject: [PATCH] groups: represent hybrid groups with an array of IDs
+> +
+> +Previously, the supported_groups array contained externally defined
+> +elements, which is legitimate in C99 but caused error with Clang:
+> +
+> +  groups.c:93:2: error: initializer element is not a compile-time constant
+> +          group_x25519,
+> +          ^~~~~~~~~~~~
+> +
+> +This reworks the array definition of indirection through group
+> +IDs (gnutls_group_t, i.e., integer).
+> +
+> +This also makes pqc-hybrid-kx test more exhaustive.
+> +
+> +Signed-off-by: Daiki Ueno <ueno@gnu.org>
+> +Upstream: https://gitlab.com/gnutls/gnutls/-/commit/9cc9d5556d258d23a399abfe45715773e719d134
+> +Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+> +---
+> + lib/algorithms.h                |   7 ++
+> + lib/algorithms/groups.c         | 161 ++++++++++++++++++++------------
+> + lib/ext/key_share.c             |  81 ++++++++++++----
+> + lib/ext/supported_groups.c      |  45 +++++----
+> + lib/gnutls_int.h                |   8 +-
+> + lib/includes/gnutls/gnutls.h.in |   4 +-
+> + lib/priority.c                  |  25 ++---
+> + lib/session.c                   |   6 +-
+> + tests/pqc-hybrid-kx.sh          | 101 +++++++++++++++++---
+> + 9 files changed, 315 insertions(+), 123 deletions(-)
+> +
+> +diff --git a/lib/algorithms.h b/lib/algorithms.h
+> +index 2e1b694c6..c4af571ce 100644
+> +--- a/lib/algorithms.h
+> ++++ b/lib/algorithms.h
+> +@@ -55,6 +55,9 @@
+> + #define IS_KEM(x) \
+> + 	(((x) == GNUTLS_PK_MLKEM768) || ((x) == GNUTLS_PK_EXP_KYBER768))
+> +
+> ++
+> ++#define IS_GROUP_HYBRID(group) ((group)->ids[0] != GNUTLS_GROUP_INVALID)
+> ++
+> + #define SIG_SEM_PRE_TLS12 (1 << 1)
+> + #define SIG_SEM_TLS13 (1 << 2)
+> + #define SIG_SEM_DEFAULT (SIG_SEM_PRE_TLS12 | SIG_SEM_TLS13)
+> +@@ -493,6 +496,10 @@ const gnutls_group_entry_st *_gnutls_tls_id_to_group(unsigned num);
+> + const gnutls_group_entry_st *_gnutls_id_to_group(unsigned id);
+> + gnutls_group_t _gnutls_group_get_id(const char *name);
+> +
+> ++int _gnutls_group_expand(
+> ++	const gnutls_group_entry_st *group,
+> ++	const gnutls_group_entry_st *subgroups[MAX_HYBRID_GROUPS + 1]);
+> ++
+> + gnutls_ecc_curve_t _gnutls_ecc_bits_to_curve(gnutls_pk_algorithm_t pk,
+> + 					     int bits);
+> + #define MAX_ECC_CURVE_SIZE 66
+> +diff --git a/lib/algorithms/groups.c b/lib/algorithms/groups.c
+> +index 88d0cf630..2fbe7b8ec 100644
+> +--- a/lib/algorithms/groups.c
+> ++++ b/lib/algorithms/groups.c
+> +@@ -30,30 +30,6 @@
+> + /* Supported ECC curves
+> +  */
+> +
+> +-#ifdef HAVE_LIBOQS
+> +-static const gnutls_group_entry_st group_mlkem768 = {
+> +-	.name = "MLKEM768",
+> +-	.id = GNUTLS_GROUP_INVALID,
+> +-	.curve = GNUTLS_ECC_CURVE_INVALID,
+> +-	.pk = GNUTLS_PK_MLKEM768,
+> +-};
+> +-
+> +-static const gnutls_group_entry_st group_kyber768 = {
+> +-	.name = "KYBER768",
+> +-	.id = GNUTLS_GROUP_INVALID,
+> +-	.curve = GNUTLS_ECC_CURVE_INVALID,
+> +-	.pk = GNUTLS_PK_EXP_KYBER768,
+> +-};
+> +-#endif
+> +-
+> +-static const gnutls_group_entry_st group_x25519 = {
+> +-	.name = "X25519",
+> +-	.id = GNUTLS_GROUP_X25519,
+> +-	.curve = GNUTLS_ECC_CURVE_X25519,
+> +-	.tls_id = 29,
+> +-	.pk = GNUTLS_PK_ECDH_X25519,
+> +-};
+> +-
+> + static const gnutls_group_entry_st supported_groups[] = {
+> + 	{
+> + 		.name = "SECP192R1",
+> +@@ -90,7 +66,13 @@ static const gnutls_group_entry_st supported_groups[] = {
+> + 		.tls_id = 25,
+> + 		.pk = GNUTLS_PK_ECDSA,
+> + 	},
+> +-	group_x25519,
+> ++	{
+> ++		.name = "X25519",
+> ++		.id = GNUTLS_GROUP_X25519,
+> ++		.curve = GNUTLS_ECC_CURVE_X25519,
+> ++		.tls_id = 29,
+> ++		.pk = GNUTLS_PK_ECDH_X25519,
+> ++	},
+> + #ifdef ENABLE_GOST
+> + 	/* draft-smyshlyaev-tls12-gost-suites-06, Section 6 */
+> + 	{
+> +@@ -191,24 +173,33 @@ static const gnutls_group_entry_st supported_groups[] = {
+> + 	  .tls_id = 0x104 },
+> + #endif
+> + #ifdef HAVE_LIBOQS
+> ++	{
+> ++		.name = "MLKEM768",
+> ++		.id = GNUTLS_GROUP_EXP_MLKEM768,
+> ++		.pk = GNUTLS_PK_MLKEM768,
+> ++		/* absense of .tls_id means that this group alone cannot be used in TLS */
+> ++	},
+> ++	{
+> ++		.name = "KYBER768",
+> ++		.id = GNUTLS_GROUP_EXP_KYBER768,
+> ++		.pk = GNUTLS_PK_EXP_KYBER768,
+> ++		/* absense of .tls_id means that this group alone cannot be used in TLS */
+> ++	},
+> + 	{ .name = "SECP256R1-MLKEM768",
+> + 	  .id = GNUTLS_GROUP_EXP_SECP256R1_MLKEM768,
+> +-	  .curve = GNUTLS_ECC_CURVE_SECP256R1,
+> +-	  .pk = GNUTLS_PK_ECDSA,
+> +-	  .tls_id = 0x11EB,
+> +-	  .next = &group_mlkem768 },
+> ++	  .ids = { GNUTLS_GROUP_SECP256R1, GNUTLS_GROUP_EXP_MLKEM768,
+> ++		   GNUTLS_GROUP_INVALID },
+> ++	  .tls_id = 0x11EB },
+> + 	{ .name = "X25519-MLKEM768",
+> + 	  .id = GNUTLS_GROUP_EXP_X25519_MLKEM768,
+> +-	  .curve = GNUTLS_ECC_CURVE_INVALID,
+> +-	  .pk = GNUTLS_PK_MLKEM768,
+> +-	  .tls_id = 0x11EC,
+> +-	  .next = &group_x25519 },
+> ++	  .ids = { GNUTLS_GROUP_EXP_MLKEM768, GNUTLS_GROUP_X25519,
+> ++		   GNUTLS_GROUP_INVALID },
+> ++	  .tls_id = 0x11EC },
+> + 	{ .name = "X25519-KYBER768",
+> + 	  .id = GNUTLS_GROUP_EXP_X25519_KYBER768,
+> +-	  .curve = GNUTLS_ECC_CURVE_X25519,
+> +-	  .pk = GNUTLS_PK_ECDH_X25519,
+> +-	  .tls_id = 0x6399,
+> +-	  .next = &group_kyber768 },
+> ++	  .ids = { GNUTLS_GROUP_X25519, GNUTLS_GROUP_EXP_KYBER768,
+> ++		   GNUTLS_GROUP_INVALID },
+> ++	  .tls_id = 0x6399 },
+> + #endif
+> + 	{ 0, 0, 0 }
+> + };
+> +@@ -221,14 +212,46 @@ static const gnutls_group_entry_st supported_groups[] = {
+> + 		}                                                  \
+> + 	}
+> +
+> ++static inline const gnutls_group_entry_st *group_to_entry(gnutls_group_t group)
+> ++{
+> ++	if (group == 0)
+> ++		return NULL;
+> ++
+> ++	GNUTLS_GROUP_LOOP(if (p->id == group) { return p; });
+> ++
+> ++	return NULL;
+> ++}
+> ++
+> ++static inline bool
+> ++group_is_supported_standalone(const gnutls_group_entry_st *group)
+> ++{
+> ++	return group->pk != 0 && _gnutls_pk_exists(group->pk) &&
+> ++	       (group->curve == 0 ||
+> ++		_gnutls_ecc_curve_is_supported(group->curve));
+> ++}
+> ++
+> ++static inline bool group_is_supported(const gnutls_group_entry_st *group)
+> ++{
+> ++	if (!IS_GROUP_HYBRID(group))
+> ++		return group_is_supported_standalone(group);
+> ++
+> ++	for (size_t i = 0;
+> ++	     i < MAX_HYBRID_GROUPS && group->ids[i] != GNUTLS_GROUP_INVALID;
+> ++	     i++) {
+> ++		const gnutls_group_entry_st *p = group_to_entry(group->ids[i]);
+> ++		if (!p || !group_is_supported_standalone(p))
+> ++			return false;
+> ++	}
+> ++
+> ++	return true;
+> ++}
+> ++
+> + /* Returns the TLS id of the given curve
+> +  */
+> + const gnutls_group_entry_st *_gnutls_tls_id_to_group(unsigned num)
+> + {
+> + 	GNUTLS_GROUP_LOOP(
+> +-		if (p->tls_id == num &&
+> +-		    (p->curve == 0 ||
+> +-		     _gnutls_ecc_curve_is_supported(p->curve))) { return p; });
+> ++		if (p->tls_id == num && group_is_supported(p)) { return p; });
+> +
+> + 	return NULL;
+> + }
+> +@@ -239,10 +262,7 @@ const gnutls_group_entry_st *_gnutls_id_to_group(unsigned id)
+> + 		return NULL;
+> +
+> + 	GNUTLS_GROUP_LOOP(
+> +-		if (p->id == id && (p->curve == 0 ||
+> +-				    _gnutls_ecc_curve_is_supported(p->curve))) {
+> +-			return p;
+> +-		});
+> ++		if (p->id == id && group_is_supported(p)) { return p; });
+> +
+> + 	return NULL;
+> + }
+> +@@ -261,27 +281,17 @@ const gnutls_group_entry_st *_gnutls_id_to_group(unsigned id)
+> +  **/
+> + const gnutls_group_t *gnutls_group_list(void)
+> + {
+> +-	static gnutls_group_t groups[MAX_ALGOS] = { 0 };
+> ++	static gnutls_group_t groups[MAX_ALGOS + 1] = { 0 };
+> +
+> + 	if (groups[0] == 0) {
+> +-		int i = 0;
+> ++		size_t i = 0;
+> +
+> +-		const gnutls_group_entry_st *p;
+> +-
+> +-		for (p = supported_groups; p->name != NULL; p++) {
+> +-			const gnutls_group_entry_st *pp;
+> +-
+> +-			for (pp = p; pp != NULL; pp = pp->next) {
+> +-				if ((pp->curve != 0 &&
+> +-				     !_gnutls_ecc_curve_is_supported(
+> +-					     pp->curve)) ||
+> +-				    (pp->pk != 0 && !_gnutls_pk_exists(pp->pk)))
+> +-					break;
+> +-			}
+> +-			if (pp == NULL)
+> ++		for (const gnutls_group_entry_st *p = supported_groups;
+> ++		     p->name != NULL; p++) {
+> ++			if (group_is_supported(p))
+> + 				groups[i++] = p->id;
+> + 		}
+> +-		groups[i++] = 0;
+> ++		groups[i++] = GNUTLS_GROUP_INVALID;
+> + 	}
+> +
+> + 	return groups;
+> +@@ -344,3 +354,34 @@ const char *gnutls_group_get_name(gnutls_group_t group)
+> +
+> + 	return NULL;
+> + }
+> ++
+> ++/* Expand GROUP into hybrid SUBGROUPS if any, otherwise an array
+> ++ * containing the GROUP itself. The result will be written to
+> ++ * SUBGROUPS, which will be NUL-terminated.
+> ++ */
+> ++int _gnutls_group_expand(
+> ++	const gnutls_group_entry_st *group,
+> ++	const gnutls_group_entry_st *subgroups[MAX_HYBRID_GROUPS + 1])
+> ++{
+> ++	size_t pos = 0;
+> ++
+> ++	if (IS_GROUP_HYBRID(group)) {
+> ++		for (size_t i = 0; i < MAX_HYBRID_GROUPS &&
+> ++				   group->ids[i] != GNUTLS_GROUP_INVALID;
+> ++		     i++) {
+> ++			const gnutls_group_entry_st *p =
+> ++				group_to_entry(group->ids[i]);
+> ++			/* This shouldn't happen, as GROUP is assumed
+> ++			 * to be supported before calling this
+> ++			 * function. */
+> ++			if (unlikely(!p))
+> ++				return gnutls_assert_val(
+> ++					GNUTLS_E_INTERNAL_ERROR);
+> ++			subgroups[pos++] = p;
+> ++		}
+> ++	} else {
+> ++		subgroups[pos++] = group;
+> ++	}
+> ++	subgroups[pos] = NULL;
+> ++	return 0;
+> ++}
+> +diff --git a/lib/ext/key_share.c b/lib/ext/key_share.c
+> +index 574521157..8fbe2d2bd 100644
+> +--- a/lib/ext/key_share.c
+> ++++ b/lib/ext/key_share.c
+> +@@ -232,6 +232,9 @@ static int client_gen_key_share(gnutls_session_t session,
+> + 				gnutls_buffer_st *extdata)
+> + {
+> + 	unsigned int length_pos;
+> ++	const gnutls_group_entry_st *groups[MAX_HYBRID_GROUPS + 1] = {
+> ++		NULL,
+> ++	};
+> + 	int ret;
+> +
+> + 	_gnutls_handshake_log("EXT[%p]: sending key share for %s\n", session,
+> +@@ -247,8 +250,12 @@ static int client_gen_key_share(gnutls_session_t session,
+> + 	if (ret < 0)
+> + 		return gnutls_assert_val(ret);
+> +
+> +-	for (const gnutls_group_entry_st *p = group; p != NULL; p = p->next) {
+> +-		ret = client_gen_key_share_single(session, p, extdata);
+> ++	ret = _gnutls_group_expand(group, groups);
+> ++	if (ret < 0)
+> ++		return gnutls_assert_val(ret);
+> ++
+> ++	for (size_t i = 0; groups[i]; i++) {
+> ++		ret = client_gen_key_share_single(session, groups[i], extdata);
+> + 		if (ret < 0)
+> + 			return gnutls_assert_val(ret);
+> + 	}
+> +@@ -345,6 +352,9 @@ static int server_gen_key_share(gnutls_session_t session,
+> + 				gnutls_buffer_st *extdata)
+> + {
+> + 	unsigned int length_pos;
+> ++	const gnutls_group_entry_st *groups[MAX_HYBRID_GROUPS + 1] = {
+> ++		NULL,
+> ++	};
+> + 	int ret;
+> +
+> + 	_gnutls_handshake_log("EXT[%p]: sending key share for %s\n", session,
+> +@@ -360,8 +370,12 @@ static int server_gen_key_share(gnutls_session_t session,
+> + 	if (ret < 0)
+> + 		return gnutls_assert_val(ret);
+> +
+> +-	for (const gnutls_group_entry_st *p = group; p != NULL; p = p->next) {
+> +-		ret = server_gen_key_share_single(session, p, extdata);
+> ++	ret = _gnutls_group_expand(group, groups);
+> ++	if (ret < 0)
+> ++		return gnutls_assert_val(ret);
+> ++
+> ++	for (size_t i = 0; groups[i]; i++) {
+> ++		ret = server_gen_key_share_single(session, groups[i], extdata);
+> + 		if (ret < 0)
+> + 			return gnutls_assert_val(ret);
+> + 	}
+> +@@ -594,13 +608,19 @@ static int server_use_key_share(gnutls_session_t session,
+> + 				const uint8_t *data, size_t data_size)
+> + {
+> + 	gnutls_buffer_st buffer;
+> ++	const gnutls_group_entry_st *groups[MAX_HYBRID_GROUPS + 1] = {
+> ++		NULL,
+> ++	};
+> ++	int ret;
+> +
+> + 	_gnutls_ro_buffer_init(&buffer, data, data_size);
+> +
+> +-	for (const gnutls_group_entry_st *p = group; p != NULL; p = p->next) {
+> +-		int ret;
+> ++	ret = _gnutls_group_expand(group, groups);
+> ++	if (ret < 0)
+> ++		return gnutls_assert_val(ret);
+> +
+> +-		ret = server_use_key_share_single(session, p, &buffer);
+> ++	for (size_t i = 0; groups[i]; i++) {
+> ++		ret = server_use_key_share_single(session, groups[i], &buffer);
+> + 		if (ret < 0)
+> + 			return gnutls_assert_val(ret);
+> + 	}
+> +@@ -775,13 +795,19 @@ static int client_use_key_share(gnutls_session_t session,
+> + 				const uint8_t *data, size_t data_size)
+> + {
+> + 	gnutls_buffer_st buffer;
+> ++	const gnutls_group_entry_st *groups[MAX_HYBRID_GROUPS + 1] = {
+> ++		NULL,
+> ++	};
+> ++	int ret;
+> +
+> + 	_gnutls_ro_buffer_init(&buffer, data, data_size);
+> +
+> +-	for (const gnutls_group_entry_st *p = group; p != NULL; p = p->next) {
+> +-		int ret;
+> ++	ret = _gnutls_group_expand(group, groups);
+> ++	if (ret < 0)
+> ++		return gnutls_assert_val(ret);
+> +
+> +-		ret = client_use_key_share_single(session, p, &buffer);
+> ++	for (size_t i = 0; groups[i]; i++) {
+> ++		ret = client_use_key_share_single(session, groups[i], &buffer);
+> + 		if (ret < 0)
+> + 			return gnutls_assert_val(ret);
+> + 	}
+> +@@ -958,18 +984,39 @@ static int key_share_recv_params(gnutls_session_t session, const uint8_t *data,
+> + 	return 0;
+> + }
+> +
+> ++static inline bool pk_types_overlap_single(const gnutls_group_entry_st *a,
+> ++					   const gnutls_group_entry_st *b)
+> ++{
+> ++	return a->pk == b->pk || (IS_ECDHX(a->pk) && IS_ECDHX(b->pk)) ||
+> ++	       (IS_KEM(a->pk) && IS_KEM(b->pk));
+> ++}
+> ++
+> + static inline bool pk_types_overlap(const gnutls_group_entry_st *a,
+> + 				    const gnutls_group_entry_st *b)
+> + {
+> +-	const gnutls_group_entry_st *pa;
+> ++	const gnutls_group_entry_st *sa[MAX_HYBRID_GROUPS + 1] = {
+> ++		NULL,
+> ++	};
+> ++	const gnutls_group_entry_st *sb[MAX_HYBRID_GROUPS + 1] = {
+> ++		NULL,
+> ++	};
+> ++	int ret;
+> ++
+> ++	ret = _gnutls_group_expand(a, sa);
+> ++	if (ret < 0) {
+> ++		gnutls_assert();
+> ++		return false;
+> ++	}
+> +
+> +-	for (pa = a; pa != NULL; pa = pa->next) {
+> +-		const gnutls_group_entry_st *pb;
+> ++	ret = _gnutls_group_expand(b, sb);
+> ++	if (ret < 0) {
+> ++		gnutls_assert();
+> ++		return false;
+> ++	}
+> +
+> +-		for (pb = b; pb != NULL; pb = pb->next) {
+> +-			if (pa->pk == pb->pk ||
+> +-			    (IS_ECDHX(pa->pk) && IS_ECDHX(pb->pk)) ||
+> +-			    (IS_KEM(pa->pk) && IS_KEM(pb->pk)))
+> ++	for (size_t i = 0; sa[i]; i++) {
+> ++		for (size_t j = 0; sb[j]; j++) {
+> ++			if (pk_types_overlap_single(sa[i], sb[j]))
+> + 				return true;
+> + 		}
+> + 	}
+> +diff --git a/lib/ext/supported_groups.c b/lib/ext/supported_groups.c
+> +index 254ec4882..4c31d2f8f 100644
+> +--- a/lib/ext/supported_groups.c
+> ++++ b/lib/ext/supported_groups.c
+> +@@ -106,9 +106,9 @@ static int _gnutls_supported_groups_recv_params(gnutls_session_t session,
+> + 	unsigned min_dh;
+> + 	unsigned j;
+> + 	int serv_ec_idx, serv_dh_idx,
+> +-		serv_kem_idx; /* index in server's priority listing */
+> ++		serv_hybrid_idx; /* index in server's priority listing */
+> + 	int cli_ec_pos, cli_dh_pos,
+> +-		cli_kem_pos; /* position in listing sent by client */
+> ++		cli_hybrid_pos; /* position in listing sent by client */
+> +
+> + 	if (session->security_parameters.entity == GNUTLS_CLIENT) {
+> + 		/* A client shouldn't receive this extension in TLS1.2. It is
+> +@@ -134,8 +134,8 @@ static int _gnutls_supported_groups_recv_params(gnutls_session_t session,
+> + 		/* we figure what is the minimum DH allowed for this session, if any */
+> + 		min_dh = get_min_dh(session);
+> +
+> +-		serv_ec_idx = serv_dh_idx = serv_kem_idx = -1;
+> +-		cli_ec_pos = cli_dh_pos = cli_kem_pos = -1;
+> ++		serv_ec_idx = serv_dh_idx = serv_hybrid_idx = -1;
+> ++		cli_ec_pos = cli_dh_pos = cli_hybrid_pos = -1;
+> +
+> + 		/* This extension is being processed prior to a ciphersuite being selected,
+> + 		 * so we cannot rely on ciphersuite information. */
+> +@@ -180,14 +180,15 @@ static int _gnutls_supported_groups_recv_params(gnutls_session_t session,
+> + 								break;
+> + 							serv_ec_idx = j;
+> + 							cli_ec_pos = i;
+> +-						} else if (IS_KEM(group->pk)) {
+> +-							if (serv_kem_idx !=
+> ++						} else if (IS_GROUP_HYBRID(
+> ++								   group)) {
+> ++							if (serv_hybrid_idx !=
+> + 								    -1 &&
+> + 							    (int)j >
+> +-								    serv_kem_idx)
+> ++								    serv_hybrid_idx)
+> + 								break;
+> +-							serv_kem_idx = j;
+> +-							cli_kem_pos = i;
+> ++							serv_hybrid_idx = j;
+> ++							cli_hybrid_pos = i;
+> + 						}
+> + 					} else {
+> + 						if (group->pk == GNUTLS_PK_DH) {
+> +@@ -200,11 +201,13 @@ static int _gnutls_supported_groups_recv_params(gnutls_session_t session,
+> + 								break;
+> + 							cli_ec_pos = i;
+> + 							serv_ec_idx = j;
+> +-						} else if (IS_KEM(group->pk)) {
+> +-							if (cli_kem_pos != -1)
+> ++						} else if (IS_GROUP_HYBRID(
+> ++								   group)) {
+> ++							if (cli_hybrid_pos !=
+> ++							    -1)
+> + 								break;
+> +-							cli_kem_pos = i;
+> +-							serv_kem_idx = j;
+> ++							cli_hybrid_pos = i;
+> ++							serv_hybrid_idx = j;
+> + 						}
+> + 					}
+> + 					break;
+> +@@ -212,7 +215,7 @@ static int _gnutls_supported_groups_recv_params(gnutls_session_t session,
+> + 			}
+> + 		}
+> +
+> +-		/* serv_{dh,ec,kem}_idx contain the index of the groups we want to use.
+> ++		/* serv_{dh,ec,hybrid}_idx contain the index of the groups we want to use.
+> + 		 */
+> + 		if (serv_dh_idx != -1) {
+> + 			session->internals.cand_dh_group =
+> +@@ -236,18 +239,20 @@ static int _gnutls_supported_groups_recv_params(gnutls_session_t session,
+> + 			}
+> + 		}
+> +
+> +-		/* KEM can only be used in TLS 1.3, where no separation from
+> +-		 * ECDH and DH, and thus only cand_group is set here.
+> ++		/* PQC hybrid key exchange groups can only be used in
+> ++		 * TLS 1.3, where no distinction between ECDH and DH
+> ++		 * in the group definitions, and thus only cand_group
+> ++		 * is set here.
+> + 		 */
+> +-		if (serv_kem_idx != -1) {
+> ++		if (serv_hybrid_idx != -1) {
+> + 			if (session->internals.cand_group == NULL ||
+> + 			    (session->internals.priorities->server_precedence &&
+> +-			     serv_kem_idx < MIN(serv_ec_idx, serv_dh_idx)) ||
+> ++			     serv_hybrid_idx < MIN(serv_ec_idx, serv_dh_idx)) ||
+> + 			    (!session->internals.priorities->server_precedence &&
+> +-			     cli_kem_pos < MIN(cli_ec_pos, cli_dh_pos))) {
+> ++			     cli_hybrid_pos < MIN(cli_ec_pos, cli_dh_pos))) {
+> + 				session->internals.cand_group =
+> + 					session->internals.priorities->groups
+> +-						.entry[serv_kem_idx];
+> ++						.entry[serv_hybrid_idx];
+> + 			}
+> + 		}
+> +
+> +diff --git a/lib/gnutls_int.h b/lib/gnutls_int.h
+> +index fb2cacb54..01ef59729 100644
+> +--- a/lib/gnutls_int.h
+> ++++ b/lib/gnutls_int.h
+> +@@ -756,6 +756,8 @@ typedef struct gnutls_cipher_suite_entry_st {
+> + 	gnutls_mac_algorithm_t prf;
+> + } gnutls_cipher_suite_entry_st;
+> +
+> ++#define MAX_HYBRID_GROUPS 2
+> ++
+> + typedef struct gnutls_group_entry_st {
+> + 	const char *name;
+> + 	gnutls_group_t id;
+> +@@ -765,8 +767,12 @@ typedef struct gnutls_group_entry_st {
+> + 	const unsigned *q_bits;
+> + 	gnutls_ecc_curve_t curve;
+> + 	gnutls_pk_algorithm_t pk;
+> ++	gnutls_group_t ids[MAX_HYBRID_GROUPS + 1]; /* IDs of subgroups
+> ++						    * comprising a
+> ++						    * hybrid group,
+> ++						    * terminated with
+> ++						    * GNUTLS_GROUP_INVALID */
+> + 	unsigned tls_id; /* The RFC4492 namedCurve ID or TLS 1.3 group ID */
+> +-	const struct gnutls_group_entry_st *next;
+> + } gnutls_group_entry_st;
+> +
+> + #define GNUTLS_MAC_FLAG_PREIMAGE_INSECURE \
+> +diff --git a/lib/includes/gnutls/gnutls.h.in b/lib/includes/gnutls/gnutls.h.in
+> +index 8b3bb5213..1e44fdd91 100644
+> +--- a/lib/includes/gnutls/gnutls.h.in
+> ++++ b/lib/includes/gnutls/gnutls.h.in
+> +@@ -1147,8 +1147,10 @@ typedef enum {
+> + 	GNUTLS_GROUP_EXP_X25519_KYBER768 = 512,
+> + 	GNUTLS_GROUP_EXP_SECP256R1_MLKEM768 = 513,
+> + 	GNUTLS_GROUP_EXP_X25519_MLKEM768 = 514,
+> ++	GNUTLS_GROUP_EXP_KYBER768 = 515,
+> ++	GNUTLS_GROUP_EXP_MLKEM768 = 516,
+> + 	GNUTLS_GROUP_EXP_MIN = GNUTLS_GROUP_EXP_X25519_KYBER768,
+> +-	GNUTLS_GROUP_EXP_MAX = GNUTLS_GROUP_EXP_X25519_MLKEM768
+> ++	GNUTLS_GROUP_EXP_MAX = GNUTLS_GROUP_EXP_MLKEM768
+> + } gnutls_group_t;
+> +
+> + /* macros to allow specifying a specific curve in gnutls_privkey_generate()
+> +diff --git a/lib/priority.c b/lib/priority.c
+> +index ac4ff2d8c..479dbccd6 100644
+> +--- a/lib/priority.c
+> ++++ b/lib/priority.c
+> +@@ -2566,7 +2566,7 @@ static void add_dh(gnutls_priority_t priority_cache)
+> + 	}
+> + }
+> +
+> +-static void add_kem(gnutls_priority_t priority_cache)
+> ++static void add_hybrid(gnutls_priority_t priority_cache)
+> + {
+> + 	const gnutls_group_entry_st *ge;
+> + 	unsigned i;
+> +@@ -2579,7 +2579,7 @@ static void add_kem(gnutls_priority_t priority_cache)
+> + 			    sizeof(priority_cache->groups.entry) /
+> + 				    sizeof(priority_cache->groups.entry[0])) {
+> + 			/* do not add groups which do not correspond to enabled ciphersuites */
+> +-			if (!IS_KEM(ge->pk))
+> ++			if (!IS_GROUP_HYBRID(ge))
+> + 				continue;
+> + 			priority_cache->groups
+> + 				.entry[priority_cache->groups.size++] = ge;
+> +@@ -2598,7 +2598,7 @@ static int set_ciphersuite_list(gnutls_priority_t priority_cache)
+> + 	const gnutls_sign_entry_st *se;
+> + 	unsigned have_ec = 0;
+> + 	unsigned have_dh = 0;
+> +-	unsigned have_kem = 0;
+> ++	unsigned have_hybrid = 0;
+> + 	unsigned tls_sig_sem = 0;
+> + 	const version_entry_st *tlsmax = NULL, *vers;
+> + 	const version_entry_st *dtlsmax = NULL;
+> +@@ -2807,9 +2807,9 @@ static int set_ciphersuite_list(gnutls_priority_t priority_cache)
+> + 			priority_cache->cs.entry[priority_cache->cs.size++] =
+> + 				ce;
+> +
+> +-			if (!have_kem) {
+> +-				have_kem = 1;
+> +-				add_kem(priority_cache);
+> ++			if (!have_hybrid) {
+> ++				have_hybrid = 1;
+> ++				add_hybrid(priority_cache);
+> + 			}
+> + 		}
+> + 	}
+> +@@ -2851,8 +2851,8 @@ static int set_ciphersuite_list(gnutls_priority_t priority_cache)
+> + 		}
+> + 	}
+> +
+> +-	if (have_tls13 && (!have_ec || !have_dh || !have_kem)) {
+> +-		/* scan groups to determine have_{ec,dh,kem} */
+> ++	if (have_tls13 && (!have_ec || !have_dh || !have_hybrid)) {
+> ++		/* scan groups to determine have_{ec,dh,hybrid} */
+> + 		for (i = 0; i < priority_cache->_supported_ecc.num_priorities;
+> + 		     i++) {
+> + 			const gnutls_group_entry_st *ge;
+> +@@ -2865,12 +2865,13 @@ static int set_ciphersuite_list(gnutls_priority_t priority_cache)
+> + 				} else if (ge->prime && !have_dh) {
+> + 					add_dh(priority_cache);
+> + 					have_dh = 1;
+> +-				} else if (IS_KEM(ge->pk) && !have_kem) {
+> +-					add_kem(priority_cache);
+> +-					have_kem = 1;
+> ++				} else if (IS_GROUP_HYBRID(ge) &&
+> ++					   !have_hybrid) {
+> ++					add_hybrid(priority_cache);
+> ++					have_hybrid = 1;
+> + 				}
+> +
+> +-				if (have_dh && have_ec && have_kem)
+> ++				if (have_dh && have_ec && have_hybrid)
+> + 					break;
+> + 			}
+> + 		}
+> +diff --git a/lib/session.c b/lib/session.c
+> +index a9049a464..7fcbe4fb4 100644
+> +--- a/lib/session.c
+> ++++ b/lib/session.c
+> +@@ -415,7 +415,11 @@ char *gnutls_session_get_desc(gnutls_session_t session)
+> + 				snprintf(kx_name, sizeof(kx_name), "(PSK)");
+> + 			}
+> + 		} else if (group && sign_str) {
+> +-			if (group->curve)
+> ++			if (IS_GROUP_HYBRID(group))
+> ++				snprintf(kx_name, sizeof(kx_name),
+> ++					 "(HYBRID-%s)-(%s)", group_name,
+> ++					 sign_str);
+> ++			else if (group->curve)
+> + 				snprintf(kx_name, sizeof(kx_name),
+> + 					 "(ECDHE-%s)-(%s)", group_name,
+> + 					 sign_str);
+> +diff --git a/tests/pqc-hybrid-kx.sh b/tests/pqc-hybrid-kx.sh
+> +index da936cf04..4984cd4b4 100644
+> +--- a/tests/pqc-hybrid-kx.sh
+> ++++ b/tests/pqc-hybrid-kx.sh
+> +@@ -33,34 +33,113 @@
+> +
+> + . "${srcdir}/scripts/common.sh"
+> +
+> ++# First check any mismatch in the gnutls-cli --list
+> + if ! "${CLI}" --list | grep '^Groups: .*GROUP-X25519-KYBER768.*' >/dev/null; then
+> +     if "${CLI}" --list | grep '^Public Key Systems: .*KYBER768.*' >/dev/null; then
+> +-	fail "KYBER768 is in Public Key Systems, while GROUP-X25519-KYBER768 is NOT in Groups"
+> ++	fail '' 'KYBER768 is in Public Key Systems, while GROUP-X25519-KYBER768 is NOT in Groups'
+> +     fi
+> +-    exit 77
+> + else
+> +     if ! "${CLI}" --list | grep '^Public Key Systems: .*KYBER768.*' >/dev/null; then
+> +-	fail "KYBER768 is NOT in Public Key Systems, while GROUP-X25519-KYBER768 is in Groups"
+> ++	fail '' 'KYBER768 is NOT in Public Key Systems, while GROUP-X25519-KYBER768 is in Groups'
+> ++    fi
+> ++fi
+> ++
+> ++if ! "${CLI}" --list | grep '^Groups: .*GROUP-\(SECP256R1\|X25519\)-MLKEM768.*' >/dev/null; then
+> ++    if "${CLI}" --list | grep '^Public Key Systems: .*ML-KEM-768.*' >/dev/null; then
+> ++	fail '' 'ML-KEM-768 is in Public Key Systems, while GROUP-SECP256R1-MLKEM768 or GROUP-X25519-MLKEM768 is NOT in Groups'
+> ++    fi
+> ++else
+> ++    if ! "${CLI}" --list | grep '^Public Key Systems: .*ML-KEM-768.*' >/dev/null; then
+> ++	fail '' 'ML-KEM-768 is NOT in Public Key Systems, while GROUP-SECP256R1-MLKEM768 or GROUP-X25519-MLKEM768 is in Groups'
+> +     fi
+> + fi
+> +
+> ++# If none of those hybrid groups is supported, skip the test
+> ++if ! "${CLI}" --list | grep '^Groups: .*GROUP-\(X25519-KYBER768\|SECP256R1-MLKEM768\|X25519-MLKEM768\).*' >/dev/null; then
+> ++    exit 77
+> ++fi
+> ++
+> + testdir=`create_testdir pqc-hybrid-kx`
+> +
+> + KEY="$srcdir/../doc/credentials/x509/key-ecc.pem"
+> + CERT="$srcdir/../doc/credentials/x509/cert-ecc.pem"
+> + CACERT="$srcdir/../doc/credentials/x509/ca.pem"
+> +
+> +-eval "${GETPORT}"
+> +-launch_server --echo --priority NORMAL:-GROUP-ALL:+GROUP-X25519-KYBER768 --x509keyfile="$KEY" --x509certfile="$CERT"
+> +-PID=$!
+> +-wait_server ${PID}
+> ++# Test all supported hybrid groups
+> ++for group in X25519-KYBER768 SECP256R1-MLKEM768 X25519-MLKEM768; do
+> ++    if ! "${CLI}" --list | grep "^Groups: .*GROUP-$group.*" >/dev/null; then
+> ++	echo "$group is not supported, skipping" >&2
+> ++	continue
+> ++    fi
+> ++
+> ++    eval "${GETPORT}"
+> ++    launch_server --echo --priority "NORMAL:-GROUP-ALL:+GROUP-$group" --x509keyfile="$KEY" --x509certfile="$CERT"
+> ++    PID=$!
+> ++    wait_server ${PID}
+> ++
+> ++    ${VALGRIND} "${CLI}" -p "${PORT}" localhost --priority "NORMAL:-GROUP-ALL:+GROUP-$group" --x509cafile="$CACERT" --logfile="$testdir/cli.log" </dev/null
+> ++    kill ${PID}
+> ++    wait
+> ++
+> ++    grep -- "- Description: (TLS1.3-X.509)-(HYBRID-$group)-(ECDSA-SECP256R1-SHA256)-(AES-256-GCM)" "$testdir/cli.log" || { echo "unexpected handshake description"; cat "$testdir/cli.log"; exit 1; }
+> ++done
+> ++
+> ++# KEM based groups cannot be used standalone
+> ++for group in KYBER768 MLKEM768; do
+> ++    if ! "${CLI}" --list | grep "^Groups: .*GROUP-$group.*" >/dev/null; then
+> ++	"$group is not supported, skipping"
+> ++	continue
+> ++    fi
+> ++
+> ++    eval "${GETPORT}"
+> ++    launch_server --echo --priority "NORMAL:-GROUP-ALL:+GROUP-$group" --x509keyfile="$KEY" --x509certfile="$CERT"
+> ++    PID=$!
+> ++    wait_server ${PID}
+> ++
+> ++    ${VALGRIND} "${CLI}" -p "${PORT}" localhost --priority "NORMAL:-GROUP-ALL:+GROUP-$group" --x509cafile="$CACERT" --logfile="$testdir/cli.log" </dev/null
+> ++    rc=$?
+> ++    kill ${PID}
+> ++    wait
+> ++
+> ++    if test $rc -eq 0; then
+> ++	fail '' 'Handshake succeeded with a standalone KEM group'
+> ++    fi
+> ++done
+> ++
+> ++# Check if disabling a curve will also disables hybrid groups with it
+> ++cat <<_EOF_ > "$testdir/test.config"
+> ++[overrides]
+> ++
+> ++disabled-curve = x25519
+> ++_EOF_
+> ++
+> ++for group in X25519-KYBER768 SECP256R1-MLKEM768 X25519-MLKEM768; do
+> ++    if ! "${CLI}" --list | grep "^Groups: .*GROUP-$group.*" >/dev/null; then
+> ++	echo "$group is not supported, skipping" >&2
+> ++	continue
+> ++    fi
+> +
+> +-${VALGRIND} "${CLI}" -p "${PORT}" localhost --priority NORMAL:-GROUP-ALL:+GROUP-X25519-KYBER768 --x509cafile="$CACERT" --logfile="$testdir/cli.log" </dev/null
+> ++    eval "${GETPORT}"
+> ++    GNUTLS_SYSTEM_PRIORITY_FILE="$testdir/test.config" launch_server --echo --priority "NORMAL:-GROUP-ALL:+GROUP-$group" --x509keyfile="$KEY" --x509certfile="$CERT"
+> ++    PID=$!
+> ++    wait_server ${PID}
+> +
+> +-kill ${PID}
+> +-wait
+> ++    ${VALGRIND} "${CLI}" -p "${PORT}" localhost --priority "NORMAL:-GROUP-ALL:+GROUP-$group" --x509cafile="$CACERT" --logfile="$testdir/cli.log" </dev/null
+> ++    rc=$?
+> ++    kill ${PID}
+> ++    wait
+> +
+> +-grep -- '- Description: (TLS1.3-X.509)-(ECDHE-X25519-KYBER768)-(ECDSA-SECP256R1-SHA256)-(AES-256-GCM)' "$testdir/cli.log" || { echo "unexpected handshake description"; exit 1; }
+> ++    case "$group" in
+> ++	X25519*)
+> ++	    if test $rc -eq 0; then
+> ++		fail '' 'Handshake succeeded with a hybrid group with X25519'
+> ++	    fi
+> ++	    ;;
+> ++	*)
+> ++	    grep -- "- Description: (TLS1.3-X.509)-(HYBRID-$group)-(ECDSA-SECP256R1-SHA256)-(AES-256-GCM)" "$testdir/cli.log" || { echo "unexpected handshake description"; cat "$testdir/cli.log"; exit 1; }
+> ++	    ;;
+> ++    esac
+> ++done
+> +
+> + rm -rf "$testdir"
+> + exit 0
+> +--
+> +2.47.1
+> +
+> 
+> ---
+> base-commit: bb27353014fecb656a1ce71c445c7d3c885d7d84
+> change-id: 20241213-gnutls-3-8-8-error-4f56201ab288
+> 
+> Best regards,
 
 _______________________________________________
 buildroot mailing list
