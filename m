@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82584C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:41:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 847D3C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:41:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5B6D47169;
-	Fri, 28 Feb 2025 16:41:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1729442EBD;
+	Fri, 28 Feb 2025 16:41:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wQKULfPSUrIY; Fri, 28 Feb 2025 16:41:32 +0000 (UTC)
+ id G-IVQZkKcLIM; Fri, 28 Feb 2025 16:41:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 452BC41687
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C81114F706
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 452BC41687;
-	Fri, 28 Feb 2025 16:41:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C81114F706;
+	Fri, 28 Feb 2025 16:41:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 12D8C711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0613D68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E2D58425A5
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2ADC64263F
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G_zsju4eilKh for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:50 +0000 (UTC)
+ id kknSlVJBPd4B for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9625F424DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2419E42473
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9625F424DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2419E42473
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 91D0E844AB; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
+ id 20E0A820F8; Fri, 28 Feb 2025 16:29:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 17 Dec 2024 21:06:48 +0100
+Date: Wed, 18 Dec 2024 21:24:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fdea0d10dc5f95f4dcf7884177a42f3662d55a8c
-X-Git-Newrev: cf8e9610c51a61cc8913356ba073b67f546c9717
+X-Git-Oldrev: b4bffa0c9bd9521d648d8d8ccad22d1ca3c83bf0
+X-Git-Newrev: fbb4844409fb37b4298815f9e72112e3108758e8
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162942.91D0E844AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/linuxptp: bump version
- to 4.4
+Message-Id: <20250228162943.20E0A820F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nvidia-persistenced:
+ bump to version 560.35.03
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,73 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf8e9610c51a61cc8913356ba073b67f546c9717
+commit: https://git.buildroot.net/buildroot/commit/?id=fbb4844409fb37b4298815f9e72112e3108758e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The released package is no longer available under sourceforge. So we
-switch the download URL to the official download page [1]. Also the info URL
-about the package source is changed to the official LinuxPTP project page [2].
-
-The release note [3] and annoucement on the mailinglist [4] give more
-information about the changes.
-
-[1] http://downloads.nwtime.org/linuxptp/
-[2] https://linuxptp.nwtime.org/about/features/
-[3] https://www.nwtime.org/news/linuxptp-4.4-released/
-[4] https://lists.nwtime.org/sympa/arc/linuxptp-devel/2024-09/msg00020.html
-
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-[Julien:
-  - switch _SITE to https
-  - keep the original _SOURCE using _VERSION
-]
+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/linuxptp/Config.in     | 2 +-
- package/linuxptp/linuxptp.hash | 2 +-
- package/linuxptp/linuxptp.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/nvidia-persistenced/nvidia-persistenced.hash | 2 +-
+ package/nvidia-persistenced/nvidia-persistenced.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linuxptp/Config.in b/package/linuxptp/Config.in
-index c88b7a0619..5f2f267bf1 100644
---- a/package/linuxptp/Config.in
-+++ b/package/linuxptp/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_LINUXPTP
- 	  Linux kernel. Supporting legacy APIs and other platforms is
- 	  not a goal.
- 
--	  http://linuxptp.sourceforge.net/
-+	  https://linuxptp.nwtime.org/about/features/
- 
- comment "linuxptp needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/linuxptp/linuxptp.hash b/package/linuxptp/linuxptp.hash
-index 1d5c590ea7..06ba8eb12b 100644
---- a/package/linuxptp/linuxptp.hash
-+++ b/package/linuxptp/linuxptp.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/nvidia-persistenced/nvidia-persistenced.hash b/package/nvidia-persistenced/nvidia-persistenced.hash
+index 06c71b35f5..dc918f1a95 100644
+--- a/package/nvidia-persistenced/nvidia-persistenced.hash
++++ b/package/nvidia-persistenced/nvidia-persistenced.hash
+@@ -1,3 +1,3 @@
  # Locally computed:
--sha256  70e38e5d2764e0217443da6f14e8846fe401a472293ac138d8419c07a665447a  linuxptp-4.2.tgz
-+sha256  61757bc0a58d789b8fcbdddf56c88a0230597184a70dcb2ac05b4c6b619f7d5c  linuxptp-4.4.tgz
- 
- # Hash for license file:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index eea41f0baf..a537eac4cc 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
-@@ -4,9 +4,9 @@
+-sha256  b84fb8eb86127a725d0134a2c64a64e7844e125dece137e7fe8adf8a33cbe817  nvidia-persistenced-515.48.07.tar.gz
++sha256  e4b85c7ada85010212c45b84582f0af4aaed795335dcc7c0ceea9f274a8b7eb0  nvidia-persistenced-560.35.03.tar.gz
+ sha256  279d814320adc07ca5a4ee101a0b428ddf22a6f3513b8c051f9eb7be47b2e797  COPYING
+diff --git a/package/nvidia-persistenced/nvidia-persistenced.mk b/package/nvidia-persistenced/nvidia-persistenced.mk
+index 662d4d4349..225c26fd3b 100644
+--- a/package/nvidia-persistenced/nvidia-persistenced.mk
++++ b/package/nvidia-persistenced/nvidia-persistenced.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINUXPTP_VERSION = 4.2
-+LINUXPTP_VERSION = 4.4
- LINUXPTP_SOURCE = linuxptp-$(LINUXPTP_VERSION).tgz
--LINUXPTP_SITE = http://downloads.sourceforge.net/linuxptp
-+LINUXPTP_SITE = https://downloads.nwtime.org/linuxptp
- LINUXPTP_LICENSE = GPL-2.0+
- LINUXPTP_LICENSE_FILES = COPYING
- LINUXPTP_CPE_ID_VALID = YES
+-NVIDIA_PERSISTENCED_VERSION = 515.48.07
++NVIDIA_PERSISTENCED_VERSION = 560.35.03
+ NVIDIA_PERSISTENCED_SITE = $(call github,NVIDIA,nvidia-persistenced,$(NVIDIA_PERSISTENCED_VERSION))
+ NVIDIA_PERSISTENCED_LICENSE = MIT
+ NVIDIA_PERSISTENCED_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
