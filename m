@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A544C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:41:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78ABCC282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5427A42EAB;
-	Fri, 28 Feb 2025 16:41:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84D5C4061B;
+	Fri, 28 Feb 2025 16:41:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UfZSi-ztwTuK; Fri, 28 Feb 2025 16:41:24 +0000 (UTC)
+ id 3Hd6wqn3KmUK; Fri, 28 Feb 2025 16:41:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25DE84F78B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67AEE4F794
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25DE84F78B;
-	Fri, 28 Feb 2025 16:41:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 67AEE4F794;
+	Fri, 28 Feb 2025 16:41:26 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D7B01DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2470F1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8680A423D8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 911FA41A35
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u964L-m5mv3S for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:49 +0000 (UTC)
+ id IyDk4UiwXGCZ for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6C1241A35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D88A6424E2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D6C1241A35
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D88A6424E2
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CADD685E77; Fri, 28 Feb 2025 16:29:41 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id D07C785E20; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 16 Dec 2024 21:57:13 +0100
+Date: Wed, 18 Dec 2024 20:25:02 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 49a7cf412133daf3d477a000f4449e984da40e21
-X-Git-Newrev: 24615d1502e2293da0bcbc34ad6042ef35e665d1
+X-Git-Oldrev: edffcbcee95b3e25aca2d7a158311df609c8328d
+X-Git-Newrev: b797b9e589c70bd69edfb78e214751e8c04eff62
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162941.CADD685E77@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot/arm-trusted-firmware:
- bump to v2.12
+Message-Id: <20250228162942.D07C785E20@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/erofs-utils: bump to
+ version 1.8.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,93 +58,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8898949628576508451=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8898949628576508451==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=24615d1502e2293da0bcbc34ad6042ef35e665d1
+commit: https://git.buildroot.net/buildroot/commit/?id=b797b9e589c70bd69edfb78e214751e8c04eff62
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For change log, see [1].
+For a change log since 1.8.2, see:
+https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/tree/ChangeLog?h=v1.8.3
 
-Update trusted-firmware-a version to v2.12 and add a hash file
-accordingly.
-
-Compared to v2.11, the license has changed with the additional mention
-of files from the pydevicetree project under Apache 2.0 license.
-As we only document the main license of TF-A, BSD-3-Clause, this change
-has no impact for us.
-
-[1] https://git.trustedfirmware.org/plugins/gitiles/TF-A/trusted-firmware-a.git/+/refs/tags/v2.12/docs/change-log.md
-
-Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
-Cc: Dick Olsson <hi@senzilla.io>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
-[Julien:
-  - add link to change log
-  - remove v2.11 hash file
-]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- boot/arm-trusted-firmware/Config.in                       | 4 ++--
- boot/arm-trusted-firmware/v2.11/arm-trusted-firmware.hash | 3 ---
- boot/arm-trusted-firmware/v2.12/arm-trusted-firmware.hash | 3 +++
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/erofs-utils/erofs-utils.hash | 2 +-
+ package/erofs-utils/erofs-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index 4a5c7dc89c..c8deede9cd 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -14,7 +14,7 @@ choice
- 	  Select the specific ATF version you want to use
+diff --git a/package/erofs-utils/erofs-utils.hash b/package/erofs-utils/erofs-utils.hash
+index 573da1762d..3b8a5dc3da 100644
+--- a/package/erofs-utils/erofs-utils.hash
++++ b/package/erofs-utils/erofs-utils.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  64b6ff7e899f62480283cee63787f37f0f9c4be7a6bc7a23d734aaa873a6cff4  erofs-utils-1.8.2.tar.gz
++sha256  3c5cc03603ea08ba9ae5e0420eeaea5ff17ed29e2280685310356cbf25304e85  erofs-utils-1.8.3.tar.gz
+ sha256  0df042de29b44887355db86c79708a4489ce6e6666f6e33ad02040293f09e6a2  COPYING
+ sha256  a400f85dd06d230f1b308cde4290a53f345b6e320a376b7904b31c51c2fd4b1a  LICENSES/Apache-2.0
+ sha256  feee3b3157dcdf78d4f50edefbd5dd7adf8b6d52c11bfaaa746a85a373256713  LICENSES/GPL-2.0
+diff --git a/package/erofs-utils/erofs-utils.mk b/package/erofs-utils/erofs-utils.mk
+index 40349c309c..930b40f6f1 100644
+--- a/package/erofs-utils/erofs-utils.mk
++++ b/package/erofs-utils/erofs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
--	bool "v2.11"
-+	bool "v2.12"
- 
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION
- 	bool "latest lts-v2.10.x"
-@@ -52,7 +52,7 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE
- 
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION
- 	string
--	default "v2.11"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
-+	default "v2.12"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
- 	default "lts-v2.10.5"	if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION
- 	default "lts-v2.8.20"	if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_8_VERSION
- 	default "custom"	if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL
-diff --git a/boot/arm-trusted-firmware/v2.11/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/v2.11/arm-trusted-firmware.hash
-deleted file mode 100644
-index 984978dc11..0000000000
---- a/boot/arm-trusted-firmware/v2.11/arm-trusted-firmware.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  c0f23ccc71c49989e9ad238acf334473c17b7c88f79a20c829c3d443e3794a22  arm-trusted-firmware-v2.11-git4.tar.gz
--sha256  03d5088ff4fbfe989f3c807117356191c263cf27d62ee6916bde8532611728ed  docs/license.rst
-diff --git a/boot/arm-trusted-firmware/v2.12/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/v2.12/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..55ea515481
---- /dev/null
-+++ b/boot/arm-trusted-firmware/v2.12/arm-trusted-firmware.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  06b35a3596b8417bf66f7bfdd7acd181bcb53fc36dc13216227b5cae154e0219  arm-trusted-firmware-v2.12-git4.tar.gz
-+sha256  b2c79635797bafcde84c6edadadde290b9d5e05deb3ea16a847210fd2ca83669  docs/license.rst
-
---===============8898949628576508451==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-EROFS_UTILS_VERSION = 1.8.2
++EROFS_UTILS_VERSION = 1.8.3
+ EROFS_UTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot
+ EROFS_UTILS_LICENSE = GPL-2.0+, GPL-2.0+ or Apache-2.0 (liberofs)
+ EROFS_UTILS_LICENSE_FILES = COPYING LICENSES/Apache-2.0 LICENSES/GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8898949628576508451==--
