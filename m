@@ -1,88 +1,171 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CA82E77187
-	for <buildroot@archiver.kernel.org>; Wed, 18 Dec 2024 08:43:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80B1BE77187
+	for <buildroot@archiver.kernel.org>; Wed, 18 Dec 2024 11:03:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBE67846BD;
-	Wed, 18 Dec 2024 08:43:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GdhbDPyI8D1y; Wed, 18 Dec 2024 08:43:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C649D846BF
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C649D846BF;
-	Wed, 18 Dec 2024 08:43:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9F48DE5
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 08:43:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8334A409AD
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 08:43:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 20589401F7;
+	Wed, 18 Dec 2024 11:03:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dvyy-kj7vRkO for <buildroot@buildroot.org>;
- Wed, 18 Dec 2024 08:43:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.45;
- helo=mail-wr1-f45.google.com; envelope-from=thomas.devoogdt@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E4CC241605
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4CC241605
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com
- [209.85.221.45])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E4CC241605
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 08:43:50 +0000 (UTC)
-Received: by mail-wr1-f45.google.com with SMTP id
- ffacd0b85a97d-3862d16b4f5so331722f8f.0
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 00:43:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1734511428; x=1735116228;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=FdI2QsVeaxdEEVuzOus+4Q7+x2MzdF7sfh/a4kJrP5s=;
- b=Yo4UAa0yYWiOLepGBk2RF3F0gW81Y0f+i+B+x5wimWEGniKJEkIVe+IRDoZfifcr3i
- tW4Rzr5gYBCFhRrgJU2ZwFY2zv0K5zNLODup00zeo0YZVgx0YFsfg40EFn6vh+5VNqCZ
- x6pmSWm0JIUNHrn+kGx5nLvBpN7aPp3WgbBA3NL0Uyvb1NhoC5PRVkQ+DU6/E0xt+vx0
- mpqr/+iMUbiaQtw7ybhGvRdFu+m7mXP9HexF2rO5titwS/AGjdI4KGTve1lKF55O+t8a
- 0F/SONaayOnhbW9OZwm05QI7WkPNxu1si9LobzUCImX6k5tTxqWHmuLEO/X55HIuipQl
- S2zA==
-X-Gm-Message-State: AOJu0YzuxSsLxEOx0GkkulVpjOsumXgKiKLF+iVnspeJeONGWO1z+rbA
- g16JudFd1rg5FYF/oqwzCIhwg9kFiFkv94Dbdk31iUHUemTwkugUgXisUeAI7Q3Eng==
-X-Gm-Gg: ASbGncviP00Mu/G1MnIc2CgO0ugE6Q31oSjRAH2AnK1LX3jxKwB1pR8DcNtge8htU+a
- z7asaaVY52yj2LafZVW+8hHaAMjjJkta2p+PBdVnfN5IMlEZ1rcOvTJKspZHoOjxM6KHeu0pO1R
- DiNuWqhupw+eCsD9OE3cV/WENA/QF2wlqanHiccXNlSaG55At7M1L1W2sYSYD7CnhxpV2wAcNHZ
- zBzHxsU/2jmiFWdEiz3Twsl7/XPNmJiDv4S0HeXQeRd5xrvgC3ci/te0jgbl6KFko8g90TS/yjF
- W0mZ2RBA2wpJin8eCSPoFgYFwRbuTFuXsQ==
-X-Google-Smtp-Source: AGHT+IGz+NbiCnQB3dWeO5Ajk9idETK4oBNqNWnCsWToOzGT+Vdqe52wBo5cJa1HNXNtLjlgtI2guw==
-X-Received: by 2002:adf:fa0f:0:b0:386:4570:ee3d with SMTP id
- ffacd0b85a97d-388e4e79284mr1250999f8f.24.1734511428163; 
- Wed, 18 Dec 2024 00:43:48 -0800 (PST)
-Received: from thomas-Precision-7670.barco.com (d528f5fdd.static.telenet.be.
- [82.143.95.221]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-388c80122b6sm13704856f8f.7.2024.12.18.00.43.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 18 Dec 2024 00:43:47 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: buildroot@buildroot.org,
-	thomas@devoogdt.com
-Date: Wed, 18 Dec 2024 09:43:37 +0100
-Message-ID: <20241218084337.3775491-1-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <CACXRmJi-K=k+bwwhtVEjAOc6wEJaS1rg_5cDFwMY2nZmR24KVQ@mail.gmail.com>
-References: <CACXRmJi-K=k+bwwhtVEjAOc6wEJaS1rg_5cDFwMY2nZmR24KVQ@mail.gmail.com>
+ id Aj_B-ybWC4is; Wed, 18 Dec 2024 11:03:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDA4B4024E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BDA4B4024E;
+	Wed, 18 Dec 2024 11:03:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 28EEFE3
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 11:03:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 16CBB80F66
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 11:03:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K3laJRRVt7LM for <buildroot@buildroot.org>;
+ Wed, 18 Dec 2024 11:03:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:240a::61b;
+ helo=nam04-mw2-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3E25480BC8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E25480BC8
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam04on2061b.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:240a::61b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3E25480BC8
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 11:03:34 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xHudhqfuJGKZOu/xcAMQsOJFRX3jpsoDd0Nj+9KCV8kZcLtbc325oLb6KtHlxZVgPxbx6tyj25/gbzyybUWc7jkWOwJny73/mmyL8tb+DRaywAmCYS7ikb8fgvCSt7AFHfalhkTZxWAKK3bltJ0RFFwWd4lsL7jfLIHMOBRv4gOIgoW0JjSkXUavF7ODb9m0bMYA2duPeIRwjPPbKFK9duvKwjfrKQWr+f7LJ7Y9b1cBcrylAsvvvsYkqkPDAK2r3UW3egM468sWPAu+yjwYoF0WcKc2sY2KqtBd83e17SGyEYduyrbxZGnO0BHlaAz/rtNzolKh/XxGuD4NNCyqNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YJrkhVlXq3FxMajhMVzyiKHnre2s9DRkAch7A5w0444=;
+ b=xjAEwy4MBICU3Y4X57mdePjEsIMueu0dr+mG9OBd2FfV5dms0imtd+AVdq9vnIBKQWBqDKcFGWcowOAvWO8DOg11s0UWfeMXuxlwdFC5JRLMn3+whoh8ozyqM1QSosxGw3Z9Fb8yHRBGvyslMTp5SnNrpt00qP6EUglhHpRRRR6a4q3fNI8cIywnfdOdvBbNjeyeliIT/A4aMRHw5mvEgEIJYUo3dvzPuXPkQwbSzt/qK8ssP6rh2cQXrCIIyrJeuQEoMpM7QkfcRfy1Au0CYnK5k839iUXiJwRn1BLgfI+zWuQTTj2Wr0MNZhl7nGaXjRutKQth69jEToLr1N2hYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
+ by SA1PR12MB7342.namprd12.prod.outlook.com (2603:10b6:806:2b3::9)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.21; Wed, 18 Dec
+ 2024 11:03:30 +0000
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::e6c1:191b:641d:4d1b]) by CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::e6c1:191b:641d:4d1b%6]) with mapi id 15.20.8272.005; Wed, 18 Dec 2024
+ 11:03:30 +0000
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Thread-Topic: [PATCH v1 3/4] configs/zynqmp_kria_kv260_defconfig: bump to
+ xilinx-v2024.2
+Thread-Index: AQHbQkSKtlWfmoUmN0SctSPGEEbRO7Lq0m+AgADwB2CAADEGoA==
+Date: Wed, 18 Dec 2024 11:03:30 +0000
+Message-ID: <CH2PR12MB500407840D8CDDEFF4A2D560F0052@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20241129095304.950313-1-neal.frager@amd.com>
+ <20241129095304.950313-3-neal.frager@amd.com> <20241217184539.3f3c0bb4@booty>
+ <CH2PR12MB500477CB18DAB3EF269AB9A8F0052@CH2PR12MB5004.namprd12.prod.outlook.com>
+In-Reply-To: <CH2PR12MB500477CB18DAB3EF269AB9A8F0052@CH2PR12MB5004.namprd12.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|SA1PR12MB7342:EE_
+x-ms-office365-filtering-correlation-id: 5859616f-3bed-4c48-d54b-08dd1f539b42
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|1800799024|376014|366016|38070700018|41080700001; 
+x-microsoft-antispam-message-info: =?us-ascii?Q?2hnbf5oAGcRA62LiI2a/TqAMrvRNyKlS+NvzshTmWzz0e660e1ElkGAFnfAT?=
+ =?us-ascii?Q?6VJCMHQygwI8GT/j06y9RbwHdA9W5x8QYZ31McM7qiKFVQ73avjxCStiuIMq?=
+ =?us-ascii?Q?jtLqEWVNEVDJsu8JEVhYVRH0K7KNYgD+Zou+LPE3hdUDE3K5Ti2cWgxyosMc?=
+ =?us-ascii?Q?07BebtwA3HshEkSX1mCnu0jUMib2N5gbccb1e+bb8IsX/DhXNuoRRABSB8Hq?=
+ =?us-ascii?Q?dvAy/qaLkv/mQY6Fj2uuiFnkW7EQ/i/bttQ8yRbHNois397vsAHGQd2yN44D?=
+ =?us-ascii?Q?0LHVl6apdRRonzFNZktj9lwyWI4UXDnbLecPQoRzQROYgzyviI7VsQM+qo1B?=
+ =?us-ascii?Q?NScv81AX4YJjisxusIOuaWLhqCSMpTV32PPvKVVc7BPCtqaGsD+sTYcNFVeE?=
+ =?us-ascii?Q?CAlL4y2dJGJyKTmY/egUOEJ5/dvQKDxHl7cX9ggeqtPPEQk4S555glf/GOmZ?=
+ =?us-ascii?Q?F7RmkVhye8DzAPUql6dkIwDmZmKCGVTVxCRFdofb4FFrcwtnNNPox9oFyZED?=
+ =?us-ascii?Q?6pQIZ1iLAF2NtbZLLasxYmDI1d1JkPs+EubbH2WABiSK8O9+aHgveHYV2t4T?=
+ =?us-ascii?Q?MDE5ntcbfrfzI9CCjP/Suw2oKEjbVa0Es3t97uq1wmX/GE7OoEGRjZa7Mrti?=
+ =?us-ascii?Q?vlVHpo0iZK3x1UAEC6BanwiIkgY/uYI3Y6FaSbwMoDDmr7n+/obbJNdqlhdF?=
+ =?us-ascii?Q?pz5tbx4jiYCwNWqroeS73Xh9gi1MtREQ0qSMDS5ncucCBo7lKikfmCmEYpGv?=
+ =?us-ascii?Q?J/gg+LowBTmFOVijv+y0mvvcQWRX+cDg+9OiDPkcy1uhaEyETuOsGbjmDuv3?=
+ =?us-ascii?Q?XS/djmzqQ2fpt2jCBTzxM9fRPZ93yyyO2TcryzpBNSHOyyvgk2DXkVEkUlkI?=
+ =?us-ascii?Q?2mT+cDV/L7f6iupiOHQdCquC2yUl4QKDXLp9PH82TbWkmtifGRXZid2sAsUP?=
+ =?us-ascii?Q?1I61MBUgHtncybhreMP7m2fLnyBMOx3B0sovL4fVJvsPS2dQzmx8WG9ZiP3L?=
+ =?us-ascii?Q?Y1bPmGEYFjfnYu72GxzVUtJw+i5tb5530+rblInN22t8wTPIawSOqKoRFeR9?=
+ =?us-ascii?Q?d4sldHIvfwN/37wIL32rJtjA3TBElfYETvF0ozLkU5LJQplKI05hdO9p2dxp?=
+ =?us-ascii?Q?jniosopNANMyLemdQjTsjSRkwtkLQq+xmmCGaie/5llHk93bI2iqQzJLLQX3?=
+ =?us-ascii?Q?Cmb1nGLgFClYX+jZgd1+X2mIg+URkseqwJcFse231lKSWTJar6n4BO89Cl9B?=
+ =?us-ascii?Q?VqwixqhvV9W0RbIT9pCmQdOUqf6GNps8r3Y+hylD6MyocN9OXP2NrIEeJ7SV?=
+ =?us-ascii?Q?HvQe3aFQ4PaXLuFqL4SiOLy5aw/gLadMRxLj1bhgQUPHD/jjOH+2rJsN2TcG?=
+ =?us-ascii?Q?o73XZyeAT2ffR+y0XeGdQ1krDlHxIVSW//Zwm9zM0AW5hOEKNU6TN9v8n7W+?=
+ =?us-ascii?Q?AQgE3A2j+8oPTJhmj0P1M+KDYlHTiCwpn9/lluihhXpo2umz108eRA=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(1800799024)(376014)(366016)(38070700018)(41080700001); DIR:OUT;
+ SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?WiEUcodNt7mpfBHGJxnl+G6CteslxJL6m15zceWtyjpvUfezrE3JkBoVxDd4?=
+ =?us-ascii?Q?O19NHwDETNQLohm281ZYa4E+Va+kgTOyA+iMGkKz2PQupTq93XtKJ7ylNN2Y?=
+ =?us-ascii?Q?BEulTAlZMP3gxQ9jXSX1kITegM46ExbeeMJMVFQrKpw242dZc0vvHMyYU4F5?=
+ =?us-ascii?Q?SUscWje3X/60LNMiP+4MjuiZ1eAosUmlnw2CZq4wuoKHBBulKU7D4rY5FQ9y?=
+ =?us-ascii?Q?6S5Xk/kKoDjDWGvzCEwoqjCqnHbmi8G16xnYuGy3ipfcGyZ4FHMwO6TVA83S?=
+ =?us-ascii?Q?kmyD6rORlI7spFWIKQ0d318N2NOxhq+nxX8ijoZ5VMjHnlirvWoUu/XyQSMe?=
+ =?us-ascii?Q?ZchtZDe0F98gtMaTfLGChsC3yNS6BI/4Tgps+Pef5kqsswYb2t3Tb3+hwjgs?=
+ =?us-ascii?Q?D88si5/zn9OmgwSqzjqjUdLFGPcrGk+B5GRhjvWMi6rlHVL3TXT2dHvo0pUr?=
+ =?us-ascii?Q?Oy2VqllgEexNe81dEdOzndBTVGaOGfhqet/d1rJCN9K/wPr7K1UV/LZ0sNVg?=
+ =?us-ascii?Q?Al9cmEo4+RZurt2cZ6xg9X5Xtj14FlMywqh2gWQr9dfEk7T45YynZRJ/gr/9?=
+ =?us-ascii?Q?qy9nSh2wi6rrhTjWZTY9kIgL1CNS3ldV5XjkTr+R4NcWZqQXvHJQnKrSiVRt?=
+ =?us-ascii?Q?k6ST3P8vk7ChcAjmfsbiLco2gRCWanDOl7Fmo1zC4hcHjoQA0EbyF8dI1rsE?=
+ =?us-ascii?Q?YPrKdNYFA056rtveUND+V+fQcJr911Vj3dbcLyfEgsa/HoNSkEWGfLBSCw/3?=
+ =?us-ascii?Q?SP3NDAxe2OyGucaixJziUbzj5NJoYawleLdt9kQ056MUAcuPIRrTXjGlanQi?=
+ =?us-ascii?Q?+0bvC5MmZzi4WG6e65PpW0rAkl7N8I7Vvb/bCo/mjltk+Vas6Aa9/TBt1kO/?=
+ =?us-ascii?Q?4mHUAZihTqE4D1YngmxMY4Eg/4xWioNdwoRZdQTOXgMxm47pKumivplIfOBM?=
+ =?us-ascii?Q?MsnARBh7JOMIG2IzBYSsJw1mzCQMbSt37R/G/JoGJ6jK92des9A6jHqWzbV6?=
+ =?us-ascii?Q?/l9n5pFyiag2B6SO9h3z7rOYYJQcpfpZTbgRkescAD6qrY6Hs/ihigDj3ggR?=
+ =?us-ascii?Q?2koiNCEd4O9KyDGzeQL5G40bj4mtgVb+oJHA2H54sTfrGbur0P0sc/DXVcC8?=
+ =?us-ascii?Q?TD8bEtpj8tOD37v5MH8tjT/fm6UmlVqCZxuvV2MBJsxoG5NziSbTkgteyJIG?=
+ =?us-ascii?Q?Fp+TAyFo5M+mU15rJk71/yYJQs/2goWC6mHsvbotvKCn/LBTHWG4z60h5vhR?=
+ =?us-ascii?Q?Hzgqg6ZP8y7oslxqH4A4qvtDPD7quHfKCP8kpBh095MX35GMA2s55jVljqVm?=
+ =?us-ascii?Q?u4w0pc26rUlRpQxq7YxMdAwrcKXEdCWFDAQXR4gEBe+aotXKF3isiOFX3rqh?=
+ =?us-ascii?Q?fd8UOCC83Y5rFYaV4yqqinUYAIoz3bTpjC5MGrAHYTpgUl/kyjDitOYO9iPy?=
+ =?us-ascii?Q?ZH4yL4XC6uCG2tGP6mwikrGW6YjYG1IXITjeQ5inMI1E9d1tU1tqLnm2GBD6?=
+ =?us-ascii?Q?5DxenqvkqSuBZGvvdp9WWCT5wjgT45zY/05t2ggk3g40iX1igBE7w+Xq8pL6?=
+ =?us-ascii?Q?tcKlmYMoRJ0BUH/8cYg=3D?=
+Content-Type: multipart/mixed;
+ boundary="_002_CH2PR12MB500407840D8CDDEFF4A2D560F0052CH2PR12MB5004namp_"
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v1] package/pkgconf: fix sysroot being prepended
- twice to the pkgdatadir path
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5859616f-3bed-4c48-d54b-08dd1f539b42
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Dec 2024 11:03:30.3827 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: X+JwdAopGxZ/w+0ZhLeq8xCG6GrXJyQWkT7EbhnhX6TH7bavZNvh2iILoXN8+kp/
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7342
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YJrkhVlXq3FxMajhMVzyiKHnre2s9DRkAch7A5w0444=;
+ b=KQZLRiP40NKl6mERhWkj4oFRvCkrXD17g+mdEZP0POFElvwiLVNvh5na7V6yuR2rWF+2xbbNU/AFRntAOECZv0jJc5fB67JlxqSIpRW6VjTB0ZleGDgpAJxJNAEXZm3/FRbvppWt/TMy1NwExDYBtdbzWvwTSHv3ozitDMJiSQs=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=KQZLRiP4
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v1 3/4] configs/zynqmp_kria_kv260_defconfig:
+ bump to xilinx-v2024.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,141 +177,278 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: aperez@igalia.com, james.hilliard1@gmail.com, thomas.devoogdt@barco.com,
- thomas.petazzoni@bootlin.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "brandon.maier@collins.com" <brandon.maier@collins.com>,
+ "ju.o@free.fr" <ju.o@free.fr>,
+ "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
+ Michal" <michal.simek@amd.com>,
+ "yann.morin.1998@free.fr" <yann.morin.1998@free.fr>
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When building webkit, I got this build error:
+--_002_CH2PR12MB500407840D8CDDEFF4A2D560F0052CH2PR12MB5004namp_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
->>> webkitgtk 2.46.3 Building
-GIT_DIR=. PATH="/home/thomas/br-test-pkg/bootlin-armv5-uclibc/host/bin:/home/thomas/br-test-pkg/bootlin-armv5-uclibc/host/sbin:/home/thomas/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin"
- /home/thomas/.local/bin/cmake --build
-/home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.46.3/
--j25
-ninja: error: '/home/thomas/br-test-pkg/bootlin-armv5-uclibc/host/arm-buildroot-linux-uclibcgnueabi/sysroot/home/thomas/br-test-pkg/bootlin-armv5-uclibc/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/share/wayland-protocols/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml',
-needed by 'WebKitGTK/DerivedSources/pointer-constraints-unstable-v1-protocol.c',
-missing and no known rule to make it
-make[1]: *** [package/pkg-generic.mk:289:
-/home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.46.3/.stamp_built]
-Error 1
-make: *** [Makefile:83: _all] Error 2
+Hello Luca,
 
-The sysroot path is prepended twice to the path. This error persists
-since a3b2bc8 "package/pkgconf: bump to version 2.3.0".
+> This patch bumps the zynqmp_kria_kv260_defconfig to xilinx-v2024.2 which
+> includes the following updates:
+>=20
+> - ATF v2.10
+> - Linux v6.6.40
+> - U-Boot v2024.01
+>=20
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-After digging into it, I found out that dropping "pkgdatadir" from the
-patch does fix it. This is, in fact, the same, or similar problem that
-was fixed in 3e74c13 "package/pkgconf: variable pkgdatadir also needs
-sysroot prefixing, wayland patch III" years ago.
+> I noticed I am unable to boot a Kria KV260 Vision AI Starter kit after
+> this series. The symptom is the boot process hungs after:
 
-I was not able to find out which pkgconf commit caused the behavior
-change. Commit a3b2bc8 bumped it from 1.6.3 to 2.3.0, which is a
-considerable big change.
+> --- snip ---
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
----
- ...th-the-sysroot-a-subset-of-variables.patch | 25 ++++++++++---------
- 1 file changed, 13 insertions(+), 12 deletions(-)
+> I tested the following versions:
 
-diff --git a/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch b/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
-index d25039ade2..986058d400 100644
---- a/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
-+++ b/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
-@@ -1,4 +1,4 @@
--From c1f9e60f46f2207f9dd07dd290ad5a2da05ad41d Mon Sep 17 00:00:00 2001
-+From c912e9bb8d5be414fda74b2019deb2a6d2d041a0 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Date: Sun, 16 Dec 2018 11:52:18 +0100
- Subject: [PATCH] Only prefix with the sysroot a subset of variables
-@@ -22,15 +22,17 @@ Buildroot development. All other paths are not prefixed by the sysroot.
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- [Updated to include gobject-introspection paths]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+[Dropped the pkgdatadir path]
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
- ---
-- libpkgconf/tuple.c | 65 ++++++++++++++++++++++++++++++++--------------
-- 1 file changed, 46 insertions(+), 19 deletions(-)
-+ libpkgconf/tuple.c | 64 ++++++++++++++++++++++++++++++++--------------
-+ 1 file changed, 45 insertions(+), 19 deletions(-)
- 
- diff --git a/libpkgconf/tuple.c b/libpkgconf/tuple.c
--index 83f6a47..a2aa427 100644
-+index 83f6a47..d56fcec 100644
- --- a/libpkgconf/tuple.c
- +++ b/libpkgconf/tuple.c
--@@ -178,6 +178,21 @@ dequote(const char *value)
-+@@ -178,6 +178,20 @@ dequote(const char *value)
-  	return buf;
-  }
-  
-@@ -44,7 +46,6 @@ index 83f6a47..a2aa427 100644
- +	"includedir",
- +	"libdir",
- +	"mapdir",
--+	"pkgdatadir",
- +	"sdkdir",
- +	NULL,
- +};
-@@ -52,7 +53,7 @@ index 83f6a47..a2aa427 100644
-  static const char *
-  find_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars)
-  {
--@@ -237,14 +252,20 @@ pkgconf_tuple_add(const pkgconf_client_t *client, pkgconf_list_t *list, const ch
-+@@ -237,14 +251,20 @@ pkgconf_tuple_add(const pkgconf_client_t *client, pkgconf_list_t *list, const ch
-  {
-  	char *dequote_value;
-  	pkgconf_tuple_t *tuple = calloc(1, sizeof(pkgconf_tuple_t));
-@@ -74,7 +75,7 @@ index 83f6a47..a2aa427 100644
-  	else
-  		tuple->value = strdup(dequote_value);
-  
--@@ -294,22 +315,8 @@ pkgconf_tuple_find(const pkgconf_client_t *client, pkgconf_list_t *list, const c
-+@@ -294,22 +314,8 @@ pkgconf_tuple_find(const pkgconf_client_t *client, pkgconf_list_t *list, const c
-  	return NULL;
-  }
-  
-@@ -99,7 +100,7 @@ index 83f6a47..a2aa427 100644
-  {
-  	char buf[PKGCONF_BUFSIZE];
-  	const char *ptr;
--@@ -318,7 +325,7 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
-+@@ -318,7 +324,7 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
-  	if (!(client->flags & PKGCONF_PKG_PKGF_FDO_SYSROOT_RULES) &&
-  		(!(flags & PKGCONF_PKG_PROPF_UNINSTALLED) || (client->flags & PKGCONF_PKG_PKGF_PKGCONF1_SYSROOT_RULES)))
-  	{
-@@ -108,7 +109,7 @@ index 83f6a47..a2aa427 100644
-  			bptr += pkgconf_strlcpy(buf, client->sysroot_dir, sizeof buf);
-  	}
-  
--@@ -381,7 +388,7 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
-+@@ -381,7 +387,7 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
-  				{
-  					size_t nlen;
-  
-@@ -117,7 +118,7 @@ index 83f6a47..a2aa427 100644
-  					nlen = pkgconf_strlcpy(bptr, parsekv, remain);
-  					free(parsekv);
-  
--@@ -432,6 +439,26 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
-+@@ -432,6 +438,26 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
-  	return strdup(buf);
-  }
-  
-@@ -145,5 +146,5 @@ index 83f6a47..a2aa427 100644
-   * !doc
-   *
- -- 
--2.34.1
-+2.43.0
- 
--- 
-2.43.0
+> 1. 2024.11-rc1-36-ga6db4cde0fcb (just before the bump)  -> OK
+> 2. 2024.11-rc1-41-gd33a2cd51a3f (just after the bump)   -> hangs
+> 3. 2024.11-187-gf97b67be7429 (current Buildroot master) -> hangs
+
+> Steps I took to test:
+
+>  git checkout <commit>
+>  git clean -xdf
+>  git checkout -- .
+>  make zynqmp_kria_kv260_defconfig
+>  grep BR2_TARGET_UBOOT_ZYNQMP_PMUFW .config  # =3D> always shows BR2_TARG=
+ET_UBOOT_ZYNQMP_PMUFW_PREBUILT=3Dy
+>  utils/brmake
+>  ( cd output/images; cp boot.bin sbirt.bin; dd if=3Du-boot.itb seek=3D128=
+ bs=3D4k of=3Dsbirt.bin )
+>  # Upgrade sbirt.bin using the SBIRT tool
+ =20
+>  # The following three lines are not really needed: the problem happens
+>  # before actually reading the uSD card:
+>  umount /media/$USER/*
+>  sudo dd if=3Doutput/images/sdcard.img of=3D/dev/sdb
+>  umount /media/$USER/* && sync
+
+> Do you have any clues?
+
+> Thank you for reporting this!
+
+> Unfortunately, it appears that our kria software is not quite as mature a=
+s I
+> believed.  When I bumped the defconfigs to xilinx_v2024.2, I only actuall=
+y
+> run tested one defconfig per family.  For kria, I tested the kd240 starte=
+r kit
+> and it boots as expected.  I thought this meant that the kv260 and kr260 =
+would
+> be fine by association.
+
+> I have just run tested the kv260, and I have duplicated your issue, so we=
+ do
+> indeed have a problem here.  I am working on it with high priority.
+
+> I am going to run test the kr260 now as well.
+
+Please apply the attached patch to your u-boot build.  It resolves the boot
+issue for me, and I believe it will resolve the issue for you as well.
+
+Once I have your confirmation, I am going to submit this patch both upstrea=
+m
+and to buildroot, so that the kv260 and kr260 boards can boot without an
+issue.
+
+Thank you for catching this problem!
+
+Best regards,
+Neal Frager
+AMD
+
+--_002_CH2PR12MB500407840D8CDDEFF4A2D560F0052CH2PR12MB5004namp_
+Content-Type: application/octet-stream;
+	name="0001-board-xilinx-zynqmp-zynqmp-sm-k26-revA-psu_init_gpl..patch"
+Content-Description:  0001-board-xilinx-zynqmp-zynqmp-sm-k26-revA-psu_init_gpl..patch
+Content-Disposition: attachment;
+	filename="0001-board-xilinx-zynqmp-zynqmp-sm-k26-revA-psu_init_gpl..patch";
+	size=9157; creation-date="Wed, 18 Dec 2024 11:03:23 GMT";
+	modification-date="Wed, 18 Dec 2024 11:03:30 GMT"
+Content-Transfer-Encoding: base64
+
+RnJvbTogTmVhbCBGcmFnZXIgPG5lYWwuZnJhZ2VyQGFtZC5jb20+CkRhdGU6IFdlZCwgMTggRGVj
+IDIwMjQgMTA6NTU6MDIgKzAwMDAKU3ViamVjdDogW1BBVENIXSBib2FyZDogeGlsaW54OiB6eW5x
+bXA6IHp5bnFtcC1zbS1rMjYtcmV2QTogcHN1X2luaXRfZ3BsLmM6CiBmaXggdS1ib290IGJvb3Qg
+Y3Jhc2gKCnUtYm9vdCBjcmFzaGVzIGR1cmluZyBib290IHdpdGggdGhlIGsyNiBzb20uICBUaGlz
+IHBhdGNoIGNvcnJlY3RzIHRoZSBtaW8gYW5kCmNsb2NrIGNvbmZpZ3VyYXRpb25zLCBzbyB0aGF0
+IHUtYm9vdCBib290cyBjb3JyZWN0bHkuCgpTaWduZWQtb2ZmLWJ5OiBOZWFsIEZyYWdlciA8bmVh
+bC5mcmFnZXJAYW1kLmNvbT4KLS0tCiAuLi4venlucW1wL3p5bnFtcC1zbS1rMjYtcmV2QS9wc3Vf
+aW5pdF9ncGwuYyAgfCAxMDAgKysrKysrKystLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgNDQg
+aW5zZXJ0aW9ucygrKSwgNTYgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvYm9hcmQveGlsaW54
+L3p5bnFtcC96eW5xbXAtc20tazI2LXJldkEvcHN1X2luaXRfZ3BsLmMgYi9ib2FyZC94aWxpbngv
+enlucW1wL3p5bnFtcC1zbS1rMjYtcmV2QS9wc3VfaW5pdF9ncGwuYwppbmRleCBlNTU5ODgwN2U4
+Li5mYzhmMGZkOWE0IDEwMDY0NAotLS0gYS9ib2FyZC94aWxpbngvenlucW1wL3p5bnFtcC1zbS1r
+MjYtcmV2QS9wc3VfaW5pdF9ncGwuYworKysgYi9ib2FyZC94aWxpbngvenlucW1wL3p5bnFtcC1z
+bS1rMjYtcmV2QS9wc3VfaW5pdF9ncGwuYwpAQCAtMTcsMTQgKzE3LDE0IEBAIHN0YXRpYyB1bnNp
+Z25lZCBsb25nIHBzdV9wbGxfaW5pdF9kYXRhKHZvaWQpCiAJcHN1X21hc2tfd3JpdGUoMHhGRjVF
+MDAzMCwgMHgwMDAwMDAwOFUsIDB4MDAwMDAwMDBVKTsKIAlwc3VfbWFza193cml0ZSgweEZGNUUw
+MDQ4LCAweDAwMDAzRjAwVSwgMHgwMDAwMDIwMFUpOwogCXBzdV9tYXNrX3dyaXRlKDB4RkY1RTAx
+MDgsIDB4MDEzRjNGMDdVLCAweDAxMDEyMzAwVSk7Ci0JcHN1X21hc2tfd3JpdGUoMHhGRjVFMDAy
+NCwgMHhGRTdGRURFRlUsIDB4N0U0RTJDNjJVKTsKLQlwc3VfbWFza193cml0ZSgweEZGNUUwMDIw
+LCAweDAwNzE3RjAwVSwgMHgwMDAxM0MwMFUpOworCXBzdV9tYXNrX3dyaXRlKDB4RkY1RTAwMjQs
+IDB4RkU3RkVERUZVLCAweDdFNEIwQzgyVSk7CisJcHN1X21hc2tfd3JpdGUoMHhGRjVFMDAyMCwg
+MHgwMDcxN0YwMFUsIDB4MDAwMTVBMDBVKTsKIAlwc3VfbWFza193cml0ZSgweEZGNUUwMDIwLCAw
+eDAwMDAwMDA4VSwgMHgwMDAwMDAwOFUpOwogCXBzdV9tYXNrX3dyaXRlKDB4RkY1RTAwMjAsIDB4
+MDAwMDAwMDFVLCAweDAwMDAwMDAxVSk7CiAJcHN1X21hc2tfd3JpdGUoMHhGRjVFMDAyMCwgMHgw
+MDAwMDAwMVUsIDB4MDAwMDAwMDBVKTsKIAltYXNrX3BvbGwoMHhGRjVFMDA0MCwgMHgwMDAwMDAw
+MVUpOwogCXBzdV9tYXNrX3dyaXRlKDB4RkY1RTAwMjAsIDB4MDAwMDAwMDhVLCAweDAwMDAwMDAw
+VSk7Ci0JcHN1X21hc2tfd3JpdGUoMHhGRjVFMDA0NCwgMHgwMDAwM0YwMFUsIDB4MDAwMDAyMDBV
+KTsKKwlwc3VfbWFza193cml0ZSgweEZGNUUwMDQ0LCAweDAwMDAzRjAwVSwgMHgwMDAwMDMwMFUp
+OwogCXBzdV9tYXNrX3dyaXRlKDB4RkQxQTAwMjQsIDB4RkU3RkVERUZVLCAweDdFNEIwQzYyVSk7
+CiAJcHN1X21hc2tfd3JpdGUoMHhGRDFBMDAyMCwgMHgwMDcxN0YwMFUsIDB4MDAwMTUwMDBVKTsK
+IAlwc3VfbWFza193cml0ZSgweEZEMUEwMDIwLCAweDAwMDAwMDA4VSwgMHgwMDAwMDAwOFUpOwpA
+QCAtNTYsMjcgKzU2LDI5IEBAIHN0YXRpYyB1bnNpZ25lZCBsb25nIHBzdV9wbGxfaW5pdF9kYXRh
+KHZvaWQpCiAKIHN0YXRpYyB1bnNpZ25lZCBsb25nIHBzdV9jbG9ja19pbml0X2RhdGEodm9pZCkK
+IHsKLQlwc3VfbWFza193cml0ZSgweEZGNUUwMDY4LCAweDAxM0YzRjA3VSwgMHgwMTAxMDgwMFUp
+OwotCXBzdV9tYXNrX3dyaXRlKDB4RkY1RTAwNzgsIDB4MDEzRjNGMDdVLCAweDAxMDEwQTAwVSk7
+Ci0JcHN1X21hc2tfd3JpdGUoMHhGRjVFMDEyNCwgMHgwMTNGM0YwN1UsIDB4MDEwMTBBMDBVKTsK
+LQlwc3VfbWFza193cml0ZSgweEZGNUUwMDgwLCAweDAxM0YzRjA3VSwgMHgwMTAxMDUwMFUpOwor
+CXBzdV9tYXNrX3dyaXRlKDB4RkY1RTAwNjgsIDB4MDEzRjNGMDdVLCAweDAxMDEwQzAwVSk7CisJ
+cHN1X21hc2tfd3JpdGUoMHhGRjVFMDA2QywgMHgwMTNGM0YwN1UsIDB4MDEwMTA4MDBVKTsKKwlw
+c3VfbWFza193cml0ZSgweEZGMTgwMzBDLCAweDAwMDAwMDAzVSwgMHgwMDAwMDAwMFUpOworCXBz
+dV9tYXNrX3dyaXRlKDB4RkY1RTAwNzgsIDB4MDEzRjNGMDdVLCAweDAxMDEwRjAwVSk7CisJcHN1
+X21hc2tfd3JpdGUoMHhGRjVFMDEyNCwgMHgwMTNGM0YwN1UsIDB4MDEwMTBGMDBVKTsKKwlwc3Vf
+bWFza193cml0ZSgweEZGNUUwMDgwLCAweDAxM0YzRjA3VSwgMHgwMTAxMDgwMFUpOwogCXBzdV9t
+YXNrX3dyaXRlKDB4RkY1RTAwOTAsIDB4MDEwMDNGMDdVLCAweDAxMDAwMjAwVSk7Ci0JcHN1X21h
+c2tfd3JpdGUoMHhGRjVFMDA5QywgMHgwMTAwM0YwN1UsIDB4MDEwMDA0MDJVKTsKLQlwc3VfbWFz
+a193cml0ZSgweEZGNUUwMEE0LCAweDAxMDAzRjA3VSwgMHgwMTAwMDUwMFUpOwotCXBzdV9tYXNr
+X3dyaXRlKDB4RkY1RTAwQTgsIDB4MDEwMDNGMDdVLCAweDAxMDAwMjAyVSk7Ci0JcHN1X21hc2tf
+d3JpdGUoMHhGRjVFMDBBQywgMHgwMTAwM0YwN1UsIDB4MDEwMDBBMDJVKTsKLQlwc3VfbWFza193
+cml0ZSgweEZGNUUwMEIwLCAweDAxMDAzRjA3VSwgMHgwMTAwMDQwMlUpOwotCXBzdV9tYXNrX3dy
+aXRlKDB4RkY1RTAwQjgsIDB4MDEwMDNGMDdVLCAweDAxMDAwMjAyVSk7Ci0JcHN1X21hc2tfd3Jp
+dGUoMHhGRjVFMDBDMCwgMHgwMTNGM0YwN1UsIDB4MDEwMTBBMDBVKTsKLQlwc3VfbWFza193cml0
+ZSgweEZGNUUwMEM0LCAweDAxM0YzRjA3VSwgMHgwMTAxMEEwMFUpOwotCXBzdV9tYXNrX3dyaXRl
+KDB4RkY1RTAxMDgsIDB4MDEzRjNGMDdVLCAweDAxMDExNDAyVSk7CisJcHN1X21hc2tfd3JpdGUo
+MHhGRjVFMDA5QywgMHgwMTAwM0YwN1UsIDB4MDEwMDA2MDJVKTsKKwlwc3VfbWFza193cml0ZSgw
+eEZGNUUwMEE0LCAweDAxMDAzRjA3VSwgMHgwMTAwMDgwMFUpOworCXBzdV9tYXNrX3dyaXRlKDB4
+RkY1RTAwQTgsIDB4MDEwMDNGMDdVLCAweDAxMDAwMzAyVSk7CisJcHN1X21hc2tfd3JpdGUoMHhG
+RjVFMDBBQywgMHgwMTAwM0YwN1UsIDB4MDEwMDBGMDJVKTsKKwlwc3VfbWFza193cml0ZSgweEZG
+NUUwMEIwLCAweDAxMDAzRjA3VSwgMHgwMTAwMDYwMlUpOworCXBzdV9tYXNrX3dyaXRlKDB4RkY1
+RTAwQjgsIDB4MDEwMDNGMDdVLCAweDAxMDAwMzAyVSk7CisJcHN1X21hc2tfd3JpdGUoMHhGRjVF
+MDBDMCwgMHgwMTNGM0YwN1UsIDB4MDEwMTBGMDBVKTsKKwlwc3VfbWFza193cml0ZSgweEZGNUUw
+MEM0LCAweDAxM0YzRjA3VSwgMHgwMTAxMEYwMFUpOworCXBzdV9tYXNrX3dyaXRlKDB4RkY1RTAx
+MDgsIDB4MDEzRjNGMDdVLCAweDAxMDExRTAyVSk7CiAJcHN1X21hc2tfd3JpdGUoMHhGRjVFMDEw
+NCwgMHgwMDAwMDAwN1UsIDB4MDAwMDAwMDBVKTsKLQlwc3VfbWFza193cml0ZSgweEZGNUUwMTI4
+LCAweDAxMDAzRjA3VSwgMHgwMTAwMEEwMFUpOworCXBzdV9tYXNrX3dyaXRlKDB4RkY1RTAxMjgs
+IDB4MDEwMDNGMDdVLCAweDAxMDAwRjAwVSk7CiAJcHN1X21hc2tfd3JpdGUoMHhGRDFBMDA2MCwg
+MHgwMzAwM0YwN1UsIDB4MDMwMDAxMDBVKTsKIAlwc3VfbWFza193cml0ZSgweEZEMUEwMDY4LCAw
+eDAxMDAzRjA3VSwgMHgwMTAwMDIwMFUpOwogCXBzdV9tYXNrX3dyaXRlKDB4RkQxQTAwNzAsIDB4
+MDEzRjNGMDdVLCAweDAxMDEwNTAwVSk7Ci0JcHN1X21hc2tfd3JpdGUoMHhGRDFBMDA3NCwgMHgw
+MTNGM0YwN1UsIDB4MDEwMTNDMDNVKTsKLQlwc3VfbWFza193cml0ZSgweEZEMUEwMDdDLCAweDAx
+M0YzRjA3VSwgMHgwMTAxMzgwM1UpOworCXBzdV9tYXNrX3dyaXRlKDB4RkQxQTAwNzQsIDB4MDEz
+RjNGMDdVLCAweDAxMDExNjAzVSk7CisJcHN1X21hc2tfd3JpdGUoMHhGRDFBMDA3QywgMHgwMTNG
+M0YwN1UsIDB4MDEwMTE0MDNVKTsKIAlwc3VfbWFza193cml0ZSgweEZEMUEwMDgwLCAweDAwMDAz
+RjA3VSwgMHgwMDAwMDIwMFUpOwogCXBzdV9tYXNrX3dyaXRlKDB4RkQxQTAwODQsIDB4MDcwMDNG
+MDdVLCAweDA3MDAwMTAwVSk7CiAJcHN1X21hc2tfd3JpdGUoMHhGRDFBMDBCOCwgMHgwMTAwM0Yw
+N1UsIDB4MDEwMDAyMDNVKTsKQEAgLTM5Myw0NCArMzk1LDI4IEBAIHN0YXRpYyB1bnNpZ25lZCBs
+b25nIHBzdV9taW9faW5pdF9kYXRhKHZvaWQpCiAJcHN1X21hc2tfd3JpdGUoMHhGRjE4MDAyOCwg
+MHgwMDAwMDBGRVUsIDB4MDAwMDAwODBVKTsKIAlwc3VfbWFza193cml0ZSgweEZGMTgwMDJDLCAw
+eDAwMDAwMEZFVSwgMHgwMDAwMDA4MFUpOwogCXBzdV9tYXNrX3dyaXRlKDB4RkYxODAwMzAsIDB4
+MDAwMDAwRkVVLCAweDAwMDAwMDAwVSk7Ci0JcHN1X21hc2tfd3JpdGUoMHhGRjE4MDAzNCwgMHgw
+MDAwMDBGRVUsIDB4MDAwMDAwMDBVKTsKLQlwc3VfbWFza193cml0ZSgweEZGMTgwMDM4LCAweDAw
+MDAwMEZFVSwgMHgwMDAwMDAwMFUpOwotCXBzdV9tYXNrX3dyaXRlKDB4RkYxODAwM0MsIDB4MDAw
+MDAwRkVVLCAweDAwMDAwMDAwVSk7Ci0JcHN1X21hc2tfd3JpdGUoMHhGRjE4MDA0MCwgMHgwMDAw
+MDBGRVUsIDB4MDAwMDAwMDBVKTsKLQlwc3VfbWFza193cml0ZSgweEZGMTgwMDQ0LCAweDAwMDAw
+MEZFVSwgMHgwMDAwMDAwMFUpOwotCXBzdV9tYXNrX3dyaXRlKDB4RkYxODAwNDgsIDB4MDAwMDAw
+RkVVLCAweDAwMDAwMDAwVSk7Ci0JcHN1X21hc2tfd3JpdGUoMHhGRjE4MDA0QywgMHgwMDAwMDBG
+RVUsIDB4MDAwMDAwMDBVKTsKLQlwc3VfbWFza193cml0ZSgweEZGMTgwMDUwLCAweDAwMDAwMEZF
+VSwgMHgwMDAwMDAwMFUpOwotCXBzdV9tYXNrX3dyaXRlKDB4RkYxODAwNTQsIDB4MDAwMDAwRkVV
+LCAweDAwMDAwMDAwVSk7Ci0JcHN1X21hc2tfd3JpdGUoMHhGRjE4MDA1OCwgMHgwMDAwMDBGRVUs
+IDB4MDAwMDAwMDBVKTsKLQlwc3VfbWFza193cml0ZSgweEZGMTgwMDVDLCAweDAwMDAwMEZFVSwg
+MHgwMDAwMDAwMFUpOworCXBzdV9tYXNrX3dyaXRlKDB4RkYxODAwMzQsIDB4MDAwMDAwRkVVLCAw
+eDAwMDAwMDA4VSk7CisJcHN1X21hc2tfd3JpdGUoMHhGRjE4MDAzOCwgMHgwMDAwMDBGRVUsIDB4
+MDAwMDAwMDhVKTsKKwlwc3VfbWFza193cml0ZSgweEZGMTgwMDNDLCAweDAwMDAwMEZFVSwgMHgw
+MDAwMDAwOFUpOworCXBzdV9tYXNrX3dyaXRlKDB4RkYxODAwNDAsIDB4MDAwMDAwRkVVLCAweDAw
+MDAwMDA4VSk7CisJcHN1X21hc2tfd3JpdGUoMHhGRjE4MDA0NCwgMHgwMDAwMDBGRVUsIDB4MDAw
+MDAwMDhVKTsKKwlwc3VfbWFza193cml0ZSgweEZGMTgwMDQ4LCAweDAwMDAwMEZFVSwgMHgwMDAw
+MDAwOFUpOworCXBzdV9tYXNrX3dyaXRlKDB4RkYxODAwNEMsIDB4MDAwMDAwRkVVLCAweDAwMDAw
+MDA4VSk7CisJcHN1X21hc2tfd3JpdGUoMHhGRjE4MDA1MCwgMHgwMDAwMDBGRVUsIDB4MDAwMDAw
+MDhVKTsKKwlwc3VfbWFza193cml0ZSgweEZGMTgwMDU0LCAweDAwMDAwMEZFVSwgMHgwMDAwMDAw
+OFUpOworCXBzdV9tYXNrX3dyaXRlKDB4RkYxODAwNTgsIDB4MDAwMDAwRkVVLCAweDAwMDAwMDA4
+VSk7CisJcHN1X21hc2tfd3JpdGUoMHhGRjE4MDA1QywgMHgwMDAwMDBGRVUsIDB4MDAwMDAwMDhV
+KTsKIAlwc3VfbWFza193cml0ZSgweEZGMTgwMDYwLCAweDAwMDAwMEZFVSwgMHgwMDAwMDA0MFUp
+OwogCXBzdV9tYXNrX3dyaXRlKDB4RkYxODAwNjQsIDB4MDAwMDAwRkVVLCAweDAwMDAwMDQwVSk7
+CiAJcHN1X21hc2tfd3JpdGUoMHhGRjE4MDA2OCwgMHgwMDAwMDBGRVUsIDB4MDAwMDAwMDhVKTsK
+LQlwc3VfbWFza193cml0ZSgweEZGMTgwMDZDLCAweDAwMDAwMEZFVSwgMHgwMDAwMDAwMFUpOwot
+CXBzdV9tYXNrX3dyaXRlKDB4RkYxODAwNzAsIDB4MDAwMDAwRkVVLCAweDAwMDAwMDAwVSk7Ci0J
+cHN1X21hc2tfd3JpdGUoMHhGRjE4MDA3NCwgMHgwMDAwMDBGRVUsIDB4MDAwMDAwMDBVKTsKLQlw
+c3VfbWFza193cml0ZSgweEZGMTgwMDc4LCAweDAwMDAwMEZFVSwgMHgwMDAwMDAwMFUpOworCXBz
+dV9tYXNrX3dyaXRlKDB4RkYxODAwNkMsIDB4MDAwMDAwRkVVLCAweDAwMDAwMDE4VSk7CisJcHN1
+X21hc2tfd3JpdGUoMHhGRjE4MDA3MCwgMHgwMDAwMDBGRVUsIDB4MDAwMDAwMThVKTsKKwlwc3Vf
+bWFza193cml0ZSgweEZGMTgwMDc0LCAweDAwMDAwMEZFVSwgMHgwMDAwMDAxOFUpOworCXBzdV9t
+YXNrX3dyaXRlKDB4RkYxODAwNzgsIDB4MDAwMDAwRkVVLCAweDAwMDAwMDE4VSk7CiAJcHN1X21h
+c2tfd3JpdGUoMHhGRjE4MDA3QywgMHgwMDAwMDBGRVUsIDB4MDAwMDAwMDhVKTsKLQlwc3VfbWFz
+a193cml0ZSgweEZGMTgwMDgwLCAweDAwMDAwMEZFVSwgMHgwMDAwMDAwOFUpOwotCXBzdV9tYXNr
+X3dyaXRlKDB4RkYxODAwODQsIDB4MDAwMDAwRkVVLCAweDAwMDAwMDA4VSk7CiAJcHN1X21hc2tf
+d3JpdGUoMHhGRjE4MDA5MCwgMHgwMDAwMDBGRVUsIDB4MDAwMDAwQzBVKTsKIAlwc3VfbWFza193
+cml0ZSgweEZGMTgwMDk0LCAweDAwMDAwMEZFVSwgMHgwMDAwMDBDMFUpOwotCXBzdV9tYXNrX3dy
+aXRlKDB4RkYxODAwOTgsIDB4MDAwMDAwRkVVLCAweDAwMDAwMDAwVSk7Ci0JcHN1X21hc2tfd3Jp
+dGUoMHhGRjE4MDA5QywgMHgwMDAwMDBGRVUsIDB4MDAwMDAwMDBVKTsKLQlwc3VfbWFza193cml0
+ZSgweEZGMTgwMEEwLCAweDAwMDAwMEZFVSwgMHgwMDAwMDAwMFUpOwotCXBzdV9tYXNrX3dyaXRl
+KDB4RkYxODAwQTQsIDB4MDAwMDAwRkVVLCAweDAwMDAwMDAwVSk7Ci0JcHN1X21hc2tfd3JpdGUo
+MHhGRjE4MDBBOCwgMHgwMDAwMDBGRVUsIDB4MDAwMDAwMDBVKTsKLQlwc3VfbWFza193cml0ZSgw
+eEZGMTgwMEFDLCAweDAwMDAwMEZFVSwgMHgwMDAwMDAwMFUpOwotCXBzdV9tYXNrX3dyaXRlKDB4
+RkYxODAwQjAsIDB4MDAwMDAwRkVVLCAweDAwMDAwMDAwVSk7Ci0JcHN1X21hc2tfd3JpdGUoMHhG
+RjE4MDBCNCwgMHgwMDAwMDBGRVUsIDB4MDAwMDAwMDBVKTsKLQlwc3VfbWFza193cml0ZSgweEZG
+MTgwMEI4LCAweDAwMDAwMEZFVSwgMHgwMDAwMDAwMFUpOwotCXBzdV9tYXNrX3dyaXRlKDB4RkYx
+ODAwQkMsIDB4MDAwMDAwRkVVLCAweDAwMDAwMDAwVSk7Ci0JcHN1X21hc2tfd3JpdGUoMHhGRjE4
+MDBDMCwgMHgwMDAwMDBGRVUsIDB4MDAwMDAwMDBVKTsKLQlwc3VfbWFza193cml0ZSgweEZGMTgw
+MEM0LCAweDAwMDAwMEZFVSwgMHgwMDAwMDAwMFUpOwotCXBzdV9tYXNrX3dyaXRlKDB4RkYxODAw
+QzgsIDB4MDAwMDAwRkVVLCAweDAwMDAwMDAwVSk7Ci0JcHN1X21hc2tfd3JpdGUoMHhGRjE4MDBD
+QywgMHgwMDAwMDBGRVUsIDB4MDAwMDAwMDBVKTsKLQlwc3VfbWFza193cml0ZSgweEZGMTgwMjA0
+LCAweEZGRkZGRkZGVSwgMHg4NDAwMDAwMFUpOworCXBzdV9tYXNrX3dyaXRlKDB4RkYxODAyMDQs
+IDB4RkZGRkZGRkZVLCAweEQ0MDAwMDAwVSk7CiAJcHN1X21hc2tfd3JpdGUoMHhGRjE4MDIwOCwg
+MHgwMDBGRkZGRlUsIDB4MDAwMDAwMjBVKTsKIAlwc3VfbWFza193cml0ZSgweEZGMTgwMTM4LCAw
+eDAzRkZGRkZGVSwgMHgwMDAwMDAwMFUpOwogCXBzdV9tYXNrX3dyaXRlKDB4RkYxODAxM0MsIDB4
+MDNGRkZGRkZVLCAweDAzRkZGRkZGVSk7CkBAIC00NjUsMjAgKzQ1MSwyMiBAQCBzdGF0aWMgdW5z
+aWduZWQgbG9uZyBwc3VfcGVyaXBoZXJhbHNfcHJlX2luaXRfZGF0YSh2b2lkKQogCiBzdGF0aWMg
+dW5zaWduZWQgbG9uZyBwc3VfcGVyaXBoZXJhbHNfaW5pdF9kYXRhKHZvaWQpCiB7Ci0JcHN1X21h
+c2tfd3JpdGUoMHhGRDFBMDEwMCwgMHgwMDAwODA3Q1UsIDB4MDAwMDAwMDBVKTsKKwlwc3VfbWFz
+a193cml0ZSgweEZEMUEwMTAwLCAweDAwMDE4MDdDVSwgMHgwMDAwMDAwMFUpOwogCXBzdV9tYXNr
+X3dyaXRlKDB4RkY1RTAyMzgsIDB4MDAxQTAwMDBVLCAweDAwMDAwMDAwVSk7CiAJcHN1X21hc2tf
+d3JpdGUoMHhGRjVFMDIzQywgMHgwMDkzQzAxOFUsIDB4MDAwMDAwMDBVKTsKIAlwc3VfbWFza193
+cml0ZSgweEZGNUUwMjM4LCAweDAwMDAwMDAxVSwgMHgwMDAwMDAwMFUpOwogCXBzdV9tYXNrX3dy
+aXRlKDB4RkYxODAzOTAsIDB4MDAwMDAwMDRVLCAweDAwMDAwMDA0VSk7CisJcHN1X21hc2tfd3Jp
+dGUoMHhGRjVFMDIzOCwgMHgwMDAwMDAyMFUsIDB4MDAwMDAwMDBVKTsKKwlwc3VfbWFza193cml0
+ZSgweEZGMTgwMzEwLCAweDAwMDAwMDAxVSwgMHgwMDAwMDAwMVUpOworCXBzdV9tYXNrX3dyaXRl
+KDB4RkYxODAzMjAsIDB4MDAwMDMzODRVLCAweDAwMDAxMjg0VSk7CisJcHN1X21hc2tfd3JpdGUo
+MHhGRjE4MDMxQywgMHgwMDAwN0ZGRVUsIDB4MDAwMDY0NTBVKTsKKwlwc3VfbWFza193cml0ZSgw
+eEZGMTgwMzU4LCAweDAwMDgwMDAwVSwgMHgwMDA4MDAwMFUpOworCXBzdV9tYXNrX3dyaXRlKDB4
+RkYxODAzMjQsIDB4MDAwMDAzQzBVLCAweDAwMDAwMDAwVSk7CiAJcHN1X21hc2tfd3JpdGUoMHhG
+RjVFMDIzOCwgMHgwMDAwMDQwMFUsIDB4MDAwMDAwMDBVKTsKIAlwc3VfbWFza193cml0ZSgweEZG
+NUUwMjM4LCAweDAwMDA4MDAwVSwgMHgwMDAwMDAwMFUpOwogCXBzdV9tYXNrX3dyaXRlKDB4RkY1
+RTAyMzgsIDB4MDAwMDAwMTBVLCAweDAwMDAwMDAwVSk7CiAJcHN1X21hc2tfd3JpdGUoMHhGRjVF
+MDIzOCwgMHgwMDAwNzgwMFUsIDB4MDAwMDAwMDBVKTsKIAlwc3VfbWFza193cml0ZSgweEZGNUUw
+MjM4LCAweDAwMDAwMDA0VSwgMHgwMDAwMDAwMFUpOwotCXBzdV9tYXNrX3dyaXRlKDB4RkYwMTAw
+MzQsIDB4MDAwMDAwRkZVLCAweDAwMDAwMDA2VSk7Ci0JcHN1X21hc2tfd3JpdGUoMHhGRjAxMDAx
+OCwgMHgwMDAwRkZGRlUsIDB4MDAwMDAwN0NVKTsKLQlwc3VfbWFza193cml0ZSgweEZGMDEwMDAw
+LCAweDAwMDAwMUZGVSwgMHgwMDAwMDAxN1UpOwotCXBzdV9tYXNrX3dyaXRlKDB4RkYwMTAwMDQs
+IDB4MDAwMDAzRkZVLCAweDAwMDAwMDIwVSk7CiAJcHN1X21hc2tfd3JpdGUoMHhGRjVFMDIzOCwg
+MHgwMDA0MDAwMFUsIDB4MDAwMDAwMDBVKTsKIAlwc3VfbWFza193cml0ZSgweEZGNEIwMDI0LCAw
+eDAwMDAwMEZGVSwgMHgwMDAwMDBGRlUpOwogCXBzdV9tYXNrX3dyaXRlKDB4RkZDQTUwMDAsIDB4
+MDAwMDFGRkZVLCAweDAwMDAwMDAwVSk7Ci0tIAoyLjI1LjEKCg==
+
+--_002_CH2PR12MB500407840D8CDDEFF4A2D560F0052CH2PR12MB5004namp_
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--_002_CH2PR12MB500407840D8CDDEFF4A2D560F0052CH2PR12MB5004namp_--
