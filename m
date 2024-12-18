@@ -1,154 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 633E2E77187
-	for <buildroot@archiver.kernel.org>; Wed, 18 Dec 2024 06:52:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C98BEE77183
+	for <buildroot@archiver.kernel.org>; Wed, 18 Dec 2024 07:48:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1945E606EE;
-	Wed, 18 Dec 2024 06:52:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A5DD413FB;
+	Wed, 18 Dec 2024 07:48:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UqJWXRyZ2zJu; Wed, 18 Dec 2024 06:52:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Nm0tsXrNpIBh; Wed, 18 Dec 2024 07:48:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B41A61346
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABB94413CD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B41A61346;
-	Wed, 18 Dec 2024 06:52:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ABB94413CD;
+	Wed, 18 Dec 2024 07:48:16 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 09D84E3
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 06:52:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 408F3CE
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 07:48:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EC73761346
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 06:52:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2856A61246
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 07:48:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Iiamckd6Fqcu for <buildroot@buildroot.org>;
- Wed, 18 Dec 2024 06:52:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2415::627;
- helo=nam11-dm6-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 91D39606EE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91D39606EE
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam11on20627.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2415::627])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 91D39606EE
- for <buildroot@buildroot.org>; Wed, 18 Dec 2024 06:52:52 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=enQ65gxJqKkaTuVgLyhB0B9q1ORtGXaC9QNthcF3UtSM4a88zR6RL1+xutsdzNjLSnGTSwRv5JDqqS8zHj5VhraEfFKAxEY/TVlXZFDhvAS0cs3quGoJgTlmMzG516pCaareLmsDZyEiCmkjMVce7OFUunQnLPoIEYEfv0fI49nEXpWH0TL9NKtYWbwNux1D7gqmCGwXyTBgTQVabSTN2osemhKHpNH15K5YhBtqKH+JvgQnyY+yt2gqt5ui8GbOYd0wJ70yxZFt5Rh2ik75QH5NU+rSo8MFKKubtjMknUihhX+Jf7Lkau0Nl0W4pDlypYq3kjXgQfidxXn76GjZzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6+7kN000D7q0VadWrteG5mEMqfbd5o4lOt3z3vqK+pY=;
- b=iZfO1XffoWWEYU+5pilAZBClYrGlvjeaoxxjtPckK//yrGTa7fPx9YDWCxh5VLlOyKRMGntcGEEeCRtdQgnDbnpUknBjvFJKNk4osaunwZmfGDXTjuWraLBhGkcF8YWzi6v0SZh3KtNMqI8eX4pmSHF6KBWVkmRbtNQiHbueN5UmEpxPJNtyog7G5RfVJTYHENjcuXdcpYSr8mTioqlOnaxstw5oDw9t30FwHrQ4CjBZWRz76stHkjGQto9rtt2WwbYzHSi+Y9GlSh2bK4C1OCXjFz+HCaxNIHFYisvS0F+y6lb4IxWOA+eO00P+aivqmn2Ghebz49jA5i7x0W0H8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from SN6PR05CA0033.namprd05.prod.outlook.com (2603:10b6:805:de::46)
- by DS7PR12MB6165.namprd12.prod.outlook.com (2603:10b6:8:9a::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.21; Wed, 18 Dec
- 2024 06:52:48 +0000
-Received: from SA2PEPF0000150A.namprd04.prod.outlook.com
- (2603:10b6:805:de:cafe::3) by SN6PR05CA0033.outlook.office365.com
- (2603:10b6:805:de::46) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8272.8 via Frontend Transport; Wed,
- 18 Dec 2024 06:52:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SA2PEPF0000150A.mail.protection.outlook.com (10.167.242.42) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8251.15 via Frontend Transport; Wed, 18 Dec 2024 06:52:46 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 18 Dec
- 2024 00:52:46 -0600
-Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Wed, 18 Dec 2024 00:52:44 -0600
-To: <buildroot@buildroot.org>
-Date: Wed, 18 Dec 2024 06:52:39 +0000
-Message-ID: <20241218065239.503162-2-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20241218065239.503162-1-neal.frager@amd.com>
-References: <20241218065239.503162-1-neal.frager@amd.com>
+ id pbc0h7Iz7jWP for <buildroot@buildroot.org>;
+ Wed, 18 Dec 2024 07:48:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EE8E861241
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE8E861241
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EE8E861241
+ for <buildroot@buildroot.org>; Wed, 18 Dec 2024 07:48:12 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3DEB440003;
+ Wed, 18 Dec 2024 07:48:09 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1tNomu-001Tuf-1c;
+ Wed, 18 Dec 2024 08:48:08 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed, 18 Dec 2024 08:48:06 +0100
+Message-Id: <20241218074807.353302-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-Received-SPF: None (SATLEXMB04.amd.com: neal.frager@amd.com does not designate
- permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF0000150A:EE_|DS7PR12MB6165:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0fa8813d-0b76-4695-ecec-08dd1f309493
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|376014|1800799024|82310400026|36860700013|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?jFtJyhdXClNo2PuW3jvIAHQHvdepIiHXVjE8JjU7TBBC7wOhmLNRiWgLkrV/?=
- =?us-ascii?Q?74P+mC+e1X7YZ34vkNGKUkAN9iVEShAgC29ABO3LXcOUO3d99SbVlbCDoPBf?=
- =?us-ascii?Q?e0YepZsmy3MT9yqlI7rgAZrwGPVFR0UUIhge6d8unqwFkPn1pwWT3ZGQ+jjD?=
- =?us-ascii?Q?uqefOZdNd9+7pns4rVnuN8mMd1BqINFZZNqqllRR5Q38DSsDokYNP+qTXmY2?=
- =?us-ascii?Q?WOdtpW3/wUpkSVauW/KLvVOG1bAG7YxSJlBtmui3EL7INxLSOt2Ue+3khKwv?=
- =?us-ascii?Q?SJpg71JBRF1hTd9+U49NPQmZ2kw5yrbOzTogX+A0v27EFA9AgJG2wYyBb40q?=
- =?us-ascii?Q?V1GnYXjDXPsneDHUr00x/EhAvse5fcs+VCSpaoTbfsZNeHN4kLOgbhhH5M0p?=
- =?us-ascii?Q?LQgjlf4QW5cKg8dIT6XFF2udveMHO/uqyG3aaLGkynci7OT07PwU8lg3sItL?=
- =?us-ascii?Q?4E5qdXpWjl/qJQwwMaF58Lxmqp5Z/jClj0oJYiEk/CuLMbHH5xvSYlxNaIlu?=
- =?us-ascii?Q?8nE/cvSC/chPKNB4vvBPJVkpPFjERTSgT13Ig6wKK+JJ981D/12v9lm+GnKe?=
- =?us-ascii?Q?XkX70guYzS5VX72+k7I/IVAe8NFSY9PE+LNWRcen56ndbcmU1nMy2egiPNkA?=
- =?us-ascii?Q?t0kJJfWIhWmtLxn65T1KkT1BEHZQ+6jWbKj5z5Ar+enEXxZ1O6AXQznUEHR0?=
- =?us-ascii?Q?+Qv7WW7oHK/bAXdlX0abkn0FDiMtQMX0+lEOwAgm47sNA2hbsaFckTLI8Dyg?=
- =?us-ascii?Q?+vzEw89wgr0kSy+F1SGo3FcTemlvSkWcq0EMSTWgGpX1CtoyateMECtmE113?=
- =?us-ascii?Q?zc16c+eC8KzqEHeCl/C3D/HW8Sx2yMLbkr6HEp2oz1Cr/fQbA6RkhkarltvA?=
- =?us-ascii?Q?JhE4erglEP4SwRGgPadE4lTDmr+l2s6UYKO+2ib5scsRL9+ZNIORxgptulPC?=
- =?us-ascii?Q?MR5NhQYk2jSQCamST+1ffB6ph7s7uWxz/KODlA8mQTeWT66CPHDIu7GvO3zI?=
- =?us-ascii?Q?+xmm7CphI4dxuCNq09Ko39iziZaKpiIxMeK0dIoMCUar1D86ELO0/KrFCvxh?=
- =?us-ascii?Q?YWeC5iE5LURtpFa3xGTaej+59zrN0Apm5pmATgPrunq8FhsyHMJIxaS4vPj/?=
- =?us-ascii?Q?imop5MC0PDolxaqFDMB02yoZwf+xfKLwwWNh+5CQkCU/Hq2PGaWJH40k9Ckb?=
- =?us-ascii?Q?vRceUsyF3YEhczHwm1xdvkL6vs3f6AVx+PkopxcwZHyjjcXsf/laxfGWgiA/?=
- =?us-ascii?Q?6EgC0Cstp3nXU5UK+X3b1B4ns3G6cJqzRstAt0JNG64O8gpsS4ZRnM8JjZBy?=
- =?us-ascii?Q?B8ZYYZkBUfnO+Wa/fbclF+eqh55wol9d39xrJc8T6DGEttR+L75gZXkscw6z?=
- =?us-ascii?Q?96oaRkTvqURAmEjX4u70/gIyG/v6AZwRWtjpJug8LAIMXyTFxaxWjE9BQ4a1?=
- =?us-ascii?Q?R+Ime3Az4vQ9xOeIF8ilX6JgZGXH1eFXMuVt9Gfq5QYZxVBGl7nwKFIowJZq?=
- =?us-ascii?Q?aiv1KY822lSVyKw3Fsulz3y+MhKVLvyVczSC5JS7OES2ak+hU0/SM411WQ?=
- =?us-ascii?Q?=3D=3D?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(376014)(1800799024)(82310400026)(36860700013)(41080700001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2024 06:52:46.7310 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fa8813d-0b76-4695-ecec-08dd1f309493
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF0000150A.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6165
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6+7kN000D7q0VadWrteG5mEMqfbd5o4lOt3z3vqK+pY=;
- b=onSW5FwLF4uHCrnsLuhSUeg82pxlxcNQF/DmyT1z9Stva6GSEpw5p2G3yfcos9NGZtR26GARxb/wErXZ/DwhWA7CGrkfdF1pPMlU3qeyo7LRiGQn+j7/4x7hbXUhaXu23rq24oXJXJrLKkfx1bt1ne8bHFeAMvVJ2lwE+cU8B5c=
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=onSW5FwL
-Subject: [Buildroot] [PATCH v1 2/2] boot/uboot: add qspi.bin file support
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH] package/mongodb: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -160,66 +65,360 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: luca.ceresoli@bootlin.com, brandon.maier@collins.com, ju.o@free.fr,
- thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
- romain.naour@smile.fr, michal.simek@amd.com, yann.morin.1998@free.fr
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-u-boot has introduced a new file called qspi.bin for users who boot from a
-qspi flash device.  It combines the spl/boot.bin and u-boot.itb files into a
-single binary that can be written to the qspi flash.
+The mongodb package has not been updated in close to 3 years (since commit
+49bbf644d4acd "package/mongodb: security bump to version 4.2.18") and the
+4.2.x series is EOL since April 2023:
 
-Here is an example of how binman generates the qspi.bin:
-https://github.com/u-boot/u-boot/commit/a4c98119109a60b9b236996f47065aa8fc0de9ca
+https://www.mongodb.com/legal/support-policy/lifecycles
 
-This patch adds the necessary support for buildroot to install this binary.
+There are no reverse dependencies, so drop the package.  If a maintainer
+steps up to support it, then (a newer version of) the package can be
+re-added later.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/Config.in | 7 +++++++
- boot/uboot/uboot.mk  | 4 ++++
- 2 files changed, 11 insertions(+)
+ Config.in.legacy                              |   6 +
+ DEVELOPERS                                    |   1 -
+ package/Config.in                             |   1 -
+ ...fix-build-with-gcc-7-and-fpermissive.patch |  55 ---------
+ ...c-plan_stats.h-fix-build-with-gcc-11.patch |  44 --------
+ package/mongodb/Config.in                     |  42 -------
+ package/mongodb/mongodb.hash                  |   4 -
+ package/mongodb/mongodb.mk                    | 104 ------------------
+ 8 files changed, 6 insertions(+), 251 deletions(-)
+ delete mode 100644 package/mongodb/0001-ssl_manager.cpp-fix-build-with-gcc-7-and-fpermissive.patch
+ delete mode 100644 package/mongodb/0002-src-mongo-db-exec-plan_stats.h-fix-build-with-gcc-11.patch
+ delete mode 100644 package/mongodb/Config.in
+ delete mode 100644 package/mongodb/mongodb.hash
+ delete mode 100644 package/mongodb/mongodb.mk
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 8648d6eb7e..9a35d29dc4 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -446,6 +446,13 @@ config BR2_TARGET_UBOOT_FORMAT_SD
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 2e6dfce5ea..8e037d9170 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
- 	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
+ comment "Legacy options removed in 2025.02"
  
-+config BR2_TARGET_UBOOT_FORMAT_QSPI
-+	bool "qspi.bin"
++config BR2_PACKAGE_MONGODB
++	bool "mongodb has been removed"
++	select BR2_LEGACY
 +	help
-+	  When booting from qspi flash, u-boot can generate a single
-+	  file for flashing by combining the spl/boot.bin and u-boot.itb
-+	  files into a unified binary.
++	  The mongodb package has been removed as it was unmaintained.
 +
- config BR2_TARGET_UBOOT_FORMAT_STM32
- 	bool "u-boot.stm32"
- 	depends on BR2_arm
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index fd0323bb71..d7cde420ff 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -108,6 +108,10 @@ UBOOT_MAKE_TARGET += u-boot.itb
- endif
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_QSPI),y)
-+UBOOT_BINS += qspi.bin
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
- UBOOT_BINS += u-boot.imx
- UBOOT_MAKE_TARGET += u-boot.imx
+ config BR2_PACKAGE_PYTHON_M2CRYPTO
+ 	bool "python-m2crypto has been removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index eabbc7eb20..492eb765e0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1060,7 +1060,6 @@ F:	package/mbedtls/
+ F:	package/minissdpd/
+ F:	package/minizip/
+ F:	package/minizip-zlib/
+-F:	package/mongodb/
+ F:	package/motion/
+ F:	package/mutt/
+ F:	package/ncmpc/
+diff --git a/package/Config.in b/package/Config.in
+index 1541c85e53..feb4840a7d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1656,7 +1656,6 @@ menu "Database"
+ 	source "package/libpqxx/Config.in"
+ 	source "package/lmdb/Config.in"
+ 	source "package/mariadb/Config.in"
+-	source "package/mongodb/Config.in"
+ 	source "package/postgresql/Config.in"
+ if BR2_PACKAGE_POSTGRESQL
+ 	source "package/osm2pgsql/Config.in"
+diff --git a/package/mongodb/0001-ssl_manager.cpp-fix-build-with-gcc-7-and-fpermissive.patch b/package/mongodb/0001-ssl_manager.cpp-fix-build-with-gcc-7-and-fpermissive.patch
+deleted file mode 100644
+index b4b1746682..0000000000
+--- a/package/mongodb/0001-ssl_manager.cpp-fix-build-with-gcc-7-and-fpermissive.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From 362be06fc16a5ad0f9e9aa90cc763c5242e8e35c Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 9 Feb 2019 12:41:45 +0100
+-Subject: [PATCH] ssl_manager.cpp: fix build with gcc 7 and -fpermissive
+-
+-Change prototype of DERToken::parse function from
+-parse(ConstDataRange cdr, size_t* outLength);
+-to parse(ConstDataRange cdr, uint64_t* outLength);
+-
+-Otherwise, we got the following error:
+-
+-src/mongo/util/net/ssl_manager.cpp: In static member function 'static mongo::StatusWith<mongo::{anonymous}::DERToken> mongo::{anonymous}::DERToken::parse(mongo::ConstDataRange, size_t*)':
+-src/mongo/util/net/ssl_manager.cpp:575:79: error: invalid conversion from 'size_t* {aka unsigned int*}' to 'long unsigned int*' [-fpermissive]
+-  if (mongoUnsignedAddOverflow64(tagAndLengthByteCount, derLength, outLength) ||
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/mongodb/mongo/pull/1296]
+----
+- src/mongo/util/net/ssl_manager.cpp | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/src/mongo/util/net/ssl_manager.cpp b/src/mongo/util/net/ssl_manager.cpp
+-index b93ebe84a4..3511eb5d99 100644
+---- a/src/mongo/util/net/ssl_manager.cpp
+-+++ b/src/mongo/util/net/ssl_manager.cpp
+-@@ -782,7 +782,7 @@ public:
+-      *
+-      * Returns a DERToken which consists of the (tag, length, value) tuple.
+-      */
+--    static StatusWith<DERToken> parse(ConstDataRange cdr, size_t* outLength);
+-+    static StatusWith<DERToken> parse(ConstDataRange cdr, uint64_t* outLength);
+- 
+- private:
+-     DERType _type{DERType::EndOfContent};
+-@@ -799,7 +799,7 @@ struct DataType::Handler<DERToken> {
+-                        size_t length,
+-                        size_t* advanced,
+-                        std::ptrdiff_t debug_offset) {
+--        size_t outLength;
+-+        uint64_t outLength;
+- 
+-         auto swPair = DERToken::parse(ConstDataRange(ptr, length), &outLength);
+- 
+-@@ -844,7 +844,7 @@ StatusWith<std::string> readDERString(ConstDataRangeCursor& cdc) {
+- }
+- 
+- 
+--StatusWith<DERToken> DERToken::parse(ConstDataRange cdr, size_t* outLength) {
+-+StatusWith<DERToken> DERToken::parse(ConstDataRange cdr, uint64_t* outLength) {
+-     const size_t kTagLength = 1;
+-     const size_t kTagLengthAndInitialLengthByteLength = kTagLength + 1;
+- 
+--- 
+-2.14.1
+-
+diff --git a/package/mongodb/0002-src-mongo-db-exec-plan_stats.h-fix-build-with-gcc-11.patch b/package/mongodb/0002-src-mongo-db-exec-plan_stats.h-fix-build-with-gcc-11.patch
+deleted file mode 100644
+index e96a65252c..0000000000
+--- a/package/mongodb/0002-src-mongo-db-exec-plan_stats.h-fix-build-with-gcc-11.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 0941e560850d54160c24778fa66b605714fd5012 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 9 Aug 2021 21:18:50 +0200
+-Subject: [PATCH] src/mongo/db/exec/plan_stats.h: fix build with gcc
+- 11
+-
+-Fix the following build failure with gcc 11:
+-
+-In file included from src/mongo/db/query/plan_cache.h:36,
+-                 from src/mongo/db/catalog/collection_info_cache.h:33,
+-                 from src/mongo/db/catalog/collection.h:42,
+-                 from src/mongo/db/exec/requires_collection_stage.h:32,
+-                 from src/mongo/db/exec/delete.h:32,
+-                 from src/mongo/db/query/internal_plans.h:33,
+-                 from src/mongo/db/query/internal_plans.cpp:32:
+-src/mongo/db/exec/plan_stats.h:214:10: error: 'optional' in namespace 'std' does not name a template type
+-  214 |     std::optional<std::string> replanReason;
+-      |          ^~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/8c0875fa413923504515a83d8b679366418c2444
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: already fixed by
+-https://github.com/mongodb/mongo/commit/e78b2bf6eaa0c43bd76dbb841add167b443d2bb0]
+----
+- src/mongo/db/exec/plan_stats.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/mongo/db/exec/plan_stats.h b/src/mongo/db/exec/plan_stats.h
+-index 43053e27be..813e4edc9e 100644
+---- a/src/mongo/db/exec/plan_stats.h
+-+++ b/src/mongo/db/exec/plan_stats.h
+-@@ -31,6 +31,7 @@
+- 
+- #include <cstdint>
+- #include <cstdlib>
+-+#include <optional>
+- #include <string>
+- #include <vector>
+- 
+--- 
+-2.30.2
+-
+diff --git a/package/mongodb/Config.in b/package/mongodb/Config.in
+deleted file mode 100644
+index 1ea4282573..0000000000
+--- a/package/mongodb/Config.in
++++ /dev/null
+@@ -1,42 +0,0 @@
+-# from https://docs.mongodb.com/manual/installation/#supported-platforms
+-config BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
+-	bool
+-	# ARM needs LDREX/STREX, so ARMv6+
+-	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
+-	default y if BR2_aarch64 || BR2_x86_64
+-	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
+-
+-config BR2_PACKAGE_MONGODB
+-	bool "mongodb"
+-	depends on BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_USES_GLIBC # needs glibc malloc_usable_size
+-	depends on BR2_USE_WCHAR
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+-	select BR2_PACKAGE_BOOST
+-	select BR2_PACKAGE_BOOST_FILESYSTEM
+-	select BR2_PACKAGE_BOOST_IOSTREAMS
+-	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+-	select BR2_PACKAGE_BOOST_SYSTEM
+-	select BR2_PACKAGE_PCRE
+-	select BR2_PACKAGE_PCRE_UTF # runtime
+-	select BR2_PACKAGE_SNAPPY
+-	select BR2_PACKAGE_SQLITE
+-	select BR2_PACKAGE_YAML_CPP
+-	select BR2_PACKAGE_ZLIB
+-	help
+-	  MongoDB is a cross-platform document-oriented database
+-	  (NoSQL).
+-
+-	  It uses JSON-like documents with dynamic schemas (BSON),
+-	  making the integration of data in certain types of
+-	  applications easier and faster.
+-
+-	  https://www.mongodb.org/
+-
+-comment "mongodb needs a glibc toolchain w/ wchar, threads, C++, gcc >= 7"
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+-	depends on BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
+diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+deleted file mode 100644
+index 02da8ad452..0000000000
+--- a/package/mongodb/mongodb.hash
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# Locally computed:
+-sha256  5bbb9567cc1f358ac7d9f37d9fe749862728bdf9f742d1dfc5e35a8b6c2985ba  mongodb-src-r4.2.18.tar.gz
+-sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
+-sha256  09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+deleted file mode 100644
+index 9f6c7d31b8..0000000000
+--- a/package/mongodb/mongodb.mk
++++ /dev/null
+@@ -1,104 +0,0 @@
+-################################################################################
+-#
+-# mongodb
+-#
+-################################################################################
+-
+-MONGODB_VERSION = 4.2.18
+-MONGODB_SITE = https://fastdl.mongodb.org/src
+-MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
+-
+-MONGODB_LICENSE = Apache-2.0 (drivers), SSPL (database)
+-MONGODB_LICENSE_FILES = APACHE-2.0.txt LICENSE-Community.txt
+-
+-MONGODB_CPE_ID_VENDOR = mongodb
+-MONGODB_SELINUX_MODULES = mongodb
+-
+-MONGODB_DEPENDENCIES = \
+-	boost \
+-	host-python-cheetah \
+-	host-python-psutil \
+-	host-python-pyyaml \
+-	host-python-regex \
+-	host-python-requests \
+-	host-scons \
+-	pcre \
+-	snappy \
+-	sqlite \
+-	yaml-cpp \
+-	zlib
+-
+-MONGODB_SCONS_TARGETS = mongod mongos
+-
+-MONGODB_SCONS_ENV = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" \
+-	-j"$(PARALLEL_JOBS)"
+-
+-MONGODB_SCONS_OPTS = \
+-	--disable-minimum-compiler-version-enforcement \
+-	--disable-warnings-as-errors \
+-	--use-system-boost \
+-	--use-system-pcre \
+-	--use-system-snappy \
+-	--use-system-sqlite \
+-	--use-system-yaml \
+-	--use-system-zlib
+-
+-# need to pass mongo version when not building from git repo
+-MONGODB_SCONS_OPTS += MONGO_VERSION=$(MONGODB_VERSION)-
+-
+-# WiredTiger database storage engine only supported on 64 bits
+-ifeq ($(BR2_ARCH_IS_64),y)
+-MONGODB_SCONS_OPTS += --wiredtiger=on
+-else
+-MONGODB_SCONS_OPTS += --wiredtiger=off
+-endif
+-
+-# JavaScript scripting engine and tcmalloc supported only on
+-# x86/x86-64 systems. Mongo target is a shell interface that
+-# depends on the javascript engine, so it will also only be
+-# built on x86/x86-64 systems.
+-ifeq ($(BR2_i386)$(BR2_x86_64),y)
+-MONGODB_SCONS_OPTS += --js-engine=mozjs --allocator=tcmalloc
+-MONGODB_SCONS_TARGETS += mongo
+-else
+-MONGODB_SCONS_OPTS += --js-engine=none --allocator=system
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBCURL),y)
+-MONGODB_DEPENDENCIES += libcurl
+-MONGODB_SCONS_OPTS += \
+-	--enable-free-mon=on \
+-	--enable-http-client=on
+-else
+-MONGODB_SCONS_OPTS += \
+-	--enable-free-mon=off \
+-	--enable-http-client=off
+-endif
+-
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-MONGODB_DEPENDENCIES += openssl
+-MONGODB_SCONS_OPTS += \
+-	--ssl=on \
+-	--ssl-provider=openssl
+-else
+-MONGODB_SCONS_OPTS += --ssl=off
+-endif
+-
+-define MONGODB_BUILD_CMDS
+-	(cd $(@D); \
+-		$(SCONS) \
+-		$(MONGODB_SCONS_ENV) \
+-		$(MONGODB_SCONS_OPTS) \
+-		$(MONGODB_SCONS_TARGETS))
+-endef
+-
+-define MONGODB_INSTALL_TARGET_CMDS
+-	(cd $(@D); \
+-		$(SCONS) \
+-		$(MONGODB_SCONS_ENV) \
+-		$(MONGODB_SCONS_OPTS) \
+-		--prefix=$(TARGET_DIR)/usr \
+-		install)
+-endef
+-
+-$(eval $(generic-package))
 -- 
-2.25.1
+2.39.5
 
 _______________________________________________
 buildroot mailing list
