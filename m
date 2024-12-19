@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE2F1E77184
-	for <buildroot@archiver.kernel.org>; Thu, 19 Dec 2024 08:31:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8B7CE7718B
+	for <buildroot@archiver.kernel.org>; Thu, 19 Dec 2024 08:31:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5973B613B8;
-	Thu, 19 Dec 2024 08:31:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 882D461451;
+	Thu, 19 Dec 2024 08:31:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rFlQR9EG0Soe; Thu, 19 Dec 2024 08:31:32 +0000 (UTC)
+ id 9Pt8BV5vExHh; Thu, 19 Dec 2024 08:31:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73A8F612DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF91261447
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73A8F612DE;
-	Thu, 19 Dec 2024 08:31:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 67F03CE
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF91261447;
+	Thu, 19 Dec 2024 08:31:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B8B616C
  for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:31:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 49B55612DC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 99ADA4151C
  for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:31:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KgHAQoCwmgy0 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D_kbtUwGwWTn for <buildroot@buildroot.org>;
  Thu, 19 Dec 2024 08:31:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8573B612DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95A0C413AD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8573B612DA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 95A0C413AD
  for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:31:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F22A8742E; Thu, 19 Dec 2024 08:31:29 +0000 (UTC)
+ id 8FEE787430; Thu, 19 Dec 2024 08:31:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Dec 2024 09:24:31 +0100
+Date: Thu, 19 Dec 2024 09:24:45 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 5d1912ba3df31775bb7d5852a9b25d8d765d487e
-X-Git-Newrev: cf454846b5947abd61dfb2c5fbe816d2694d6df8
+X-Git-Oldrev: cf454846b5947abd61dfb2c5fbe816d2694d6df8
+X-Git-Newrev: 460cce92473dfa4dbaad3a05f7286554f1d8cca7
 X-Patchwork-Hint: ignore
-Message-Id: <20241219083129.7F22A8742E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/subversion:
- security bump to version 1.14.5
+Message-Id: <20241219083129.8FEE787430@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libcurl: security
+ bump to version 8.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,61 +65,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf454846b5947abd61dfb2c5fbe816d2694d6df8
+commit: https://git.buildroot.net/buildroot/commit/?id=460cce92473dfa4dbaad3a05f7286554f1d8cca7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Fixes the following security vulnerabilities:
+Fixes the following security vulnerability:
 
-CVE-2024-46901: mod_dav_svn denial-of-service via control characters in
-paths
+CVE-2024-11053: netrc and redirect credential leak
+https://curl.se/docs/CVE-2024-11053.html
 
-It has been discovered that the patch for CVE-2013-1968 was incomplete
-and unintentionally left mod_dav_svn vulnerable to control characters
-in filenames.
-
-https://subversion.apache.org/security/CVE-2024-46901-advisory.txt
-
-Subversion 1.14.4 also fixed a Windows-only vulnerability:
-https://subversion.apache.org/security/CVE-2024-45720-advisory.txt
-
-For change log, see:
-https://svn.apache.org/repos/asf/subversion/tags/1.14.5/CHANGES
+Changelog: https://curl.se/ch/8.11.1.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Julien: add link to change log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 9975d28aa3ffbda2b727979b2e322fc8986d6d1b)
+(cherry picked from commit 4338deaae58a68e397c7375476745778eb7b732f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/subversion/subversion.hash | 4 ++--
- package/subversion/subversion.mk   | 2 +-
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
-index 2710e9e3f3..5950e9dccf 100644
---- a/package/subversion/subversion.hash
-+++ b/package/subversion/subversion.hash
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 93a0f85dee..c2ddee2cc2 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
 @@ -1,5 +1,5 @@
--# From https://www.apache.org/dist/subversion/subversion-1.14.3.tar.bz2.sha512
--sha512  40b172492005fd3b0cd9e457b4444af8ea5d8ff8fc161a9a0c6dc3a7314c6ad4ff75a4676f68a1919ae6273ae03e34d04eba8c1c37b8c0b4ec70d6731b527b41  subversion-1.14.3.tar.bz2
-+# From https://www.apache.org/dist/subversion/subversion-1.14.5.tar.bz2.sha512
-+sha512  e4800564d0cc68be98f19aa58d89181de83f237f0ccff10824d9237f8c65eb0071f7176ac54e9e8f8ecbf685849bd3e94be48f678f4c23ed6a5fd7fb6edd0321  subversion-1.14.5.tar.bz2
- 
- # Locally calculated
- sha256  484aff0cfbb81155a10f903ed756e27e9fc65578c245a295bae295c4bb51eaad  LICENSE
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-index bc0b9b45ab..b3daf013f0 100644
---- a/package/subversion/subversion.mk
-+++ b/package/subversion/subversion.mk
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.11.0.tar.xz.asc
++# https://curl.se/download/curl-8.11.1.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  db59cf0d671ca6e7f5c2c5ec177084a33a79e04c97e71cf183a5cdea235054eb  curl-8.11.0.tar.xz
++sha256  c7ca7db48b0909743eaef34250da02c19bc61d4f1dcedd6603f109409536ab56  curl-8.11.1.tar.xz
+ sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 1022abac85..845bf43418 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SUBVERSION_VERSION = 1.14.3
-+SUBVERSION_VERSION = 1.14.5
- SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
- SUBVERSION_SITE = https://downloads.apache.org/subversion
- SUBVERSION_LICENSE = Apache-2.0
+-LIBCURL_VERSION = 8.11.0
++LIBCURL_VERSION = 8.11.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
