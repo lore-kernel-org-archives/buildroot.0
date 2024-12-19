@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C96FE77184
-	for <buildroot@archiver.kernel.org>; Thu, 19 Dec 2024 08:30:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95969E7718A
+	for <buildroot@archiver.kernel.org>; Thu, 19 Dec 2024 08:30:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1045A612DA;
-	Thu, 19 Dec 2024 08:30:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O4Zk9Chn1oeV; Thu, 19 Dec 2024 08:30:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F9B6612DE
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F9B6612DE;
-	Thu, 19 Dec 2024 08:30:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7FD4F6C
- for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:30:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5FE2B84C83
- for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:30:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50621812D4;
+	Thu, 19 Dec 2024 08:30:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X4Eyt_5vRDCg for <buildroot@buildroot.org>;
+ id xxbOkEgg55P9; Thu, 19 Dec 2024 08:30:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58C2F8130C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58C2F8130C;
+	Thu, 19 Dec 2024 08:30:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 90B51CE
+ for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:30:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 70F09414B3
+ for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:30:04 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NC-LsHA9lnjg for <buildroot@buildroot.org>;
  Thu, 19 Dec 2024 08:30:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BFDD812D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 640CD41311
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7BFDD812D4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 640CD41311
  for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:30:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 687E787424; Thu, 19 Dec 2024 08:30:03 +0000 (UTC)
+ id 5D2F787423; Thu, 19 Dec 2024 08:30:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Dec 2024 09:29:09 +0100
+Date: Thu, 19 Dec 2024 09:25:07 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 06b178d1f723103ec35c196b9a858097fbb4719e
-X-Git-Newrev: 0830ce112badc4ae5fe05a6f7ec3e3ffc482bd8f
+X-Git-Oldrev: ba0dafc7e38d5aab605a738fc34d799bed4e3a67
+X-Git-Newrev: 06b178d1f723103ec35c196b9a858097fbb4719e
 X-Patchwork-Hint: ignore
-Message-Id: <20241219083003.687E787424@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/python-django:
- security bump to version 5.1.4
+Message-Id: <20241219083003.5D2F787423@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/wireshark:
+ security bump to version 4.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,71 +60,87 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2407121687734178928=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0830ce112badc4ae5fe05a6f7ec3e3ffc482bd8f
+--===============2407121687734178928==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=06b178d1f723103ec35c196b9a858097fbb4719e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Fixes the following security issues:
+For release notes, see:
+https://www.wireshark.org/docs/relnotes/wireshark-4.2.9.html
 
-CVE-2024-53907: Potential denial-of-service in
-django.utils.html.strip_tags()
+Fixes the following vulnerabilities:
 
-The strip_tags() method and striptags template filter are subject to a
-potential denial-of-service attack via certain inputs containing large
-sequences of nested incomplete HTML entities.
+4.2.9:
 
-CVE-2024-53908: Potential SQL injection in HasKey(lhs, rhs) on Oracle
+CVE-2024-11595: wnpa-sec-2024-14 · FiveCo RAP dissector infinite loop
+https://www.wireshark.org/security/wnpa-sec-2024-14
 
-Direct usage of the django.db.models.fields.json.HasKey lookup on Oracle is
-subject to SQL injection if untrusted data is used as a lhs value.
-Applications that use the jsonfield.has_key lookup through the __ syntax are
-unaffected.
+CVE-2024-11596: wnpa-sec-2024-15 · ECMP dissector crash
+https://www.wireshark.org/security/wnpa-sec-2024-15
 
-https://www.djangoproject.com/weblog/2024/dec/04/security-releases/
+4.2.8:
+
+CVE-2024-9781: wnpa-sec-2024-13 · AppleTalk and RELOAD Framing dissector
+crashes
+https://www.wireshark.org/security/wnpa-sec-2024-13
+
+4.2.7:
+
+CVE-2024-8250: wnpa-sec-2024-11 · NTLMSSP dissector crash
+https://www.wireshark.org/security/wnpa-sec-2024-11
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Julien: add link to release note]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c2c1c27d1144713dc7e64e7b27bc39bfbad5b72b)
+(cherry picked from commit b0d68b7322bcbf87bd465fb300acae941087f559)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 656d9eee9a..53c4ceead3 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  3f556d14e7999a9700a27a325efc0833  Django-5.1.3.tar.gz
--sha256  c0fa0e619c39325a169208caef234f90baa925227032ad3f44842ba14d75234a  Django-5.1.3.tar.gz
-+md5  03ec3e0f2d6cbcb9eb11c629ca1c538b  Django-5.1.4.tar.gz
-+sha256  de450c09e91879fa5a307f696e57c851955c910a438a35e6b4c895e86bedc82a  Django-5.1.4.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 6588acc31d..4facc6b6c4 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 06119861f2..642bc5866d 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.2.6.txt
+-sha1  db0374dce360b99d8abb9a3f3471f3fc98d6d099  wireshark-4.2.6.tar.xz
+-sha256  5ec6028df29068d889c98489bf194a884b00831106fea1e921fea3c65f2003f5  wireshark-4.2.6.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.2.9.txt
++sha1  d1abbe110451dab9e57c9ee1fe0892e0d6a7d515  wireshark-4.2.9.tar.xz
++sha256  62c2b6652d7f9a50668867bd57b21609c9a9b6950f26e7f30a24b2de0e72ded3  wireshark-4.2.9.tar.xz
+ 
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 242430194f..bade68f258 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 5.1.3
-+PYTHON_DJANGO_VERSION = 5.1.4
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c6/85/ba2c2b83ba8b95354f99ed8344405d9571109ce0175028876209d6b93fba
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/d3/e8/536555596dbb79f6e77418aeb40bdc1758c26725aba31919ba449e6d5e6a
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+-WIRESHARK_VERSION = 4.2.6
++WIRESHARK_VERSION = 4.2.9
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
+
+--===============2407121687734178928==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2407121687734178928==--
