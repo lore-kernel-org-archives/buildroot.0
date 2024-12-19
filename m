@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE08DC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:41:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38D97C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:42:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF5EE4F7D4;
-	Fri, 28 Feb 2025 16:41:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 92F834F1D4;
+	Fri, 28 Feb 2025 16:42:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NZ1sDX4DfY58; Fri, 28 Feb 2025 16:41:56 +0000 (UTC)
+ id krT8VNxz-6KM; Fri, 28 Feb 2025 16:41:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E07C4F7E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3809C4F7FB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E07C4F7E9;
-	Fri, 28 Feb 2025 16:41:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3809C4F7FB;
+	Fri, 28 Feb 2025 16:41:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1AB3968
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:26 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 148D068
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43C4E42480
+ by smtp4.osuosl.org (Postfix) with ESMTP id 545DD424E9
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TIBUL-yrCiz6 for <buildroot@buildroot.org>;
+ id 1q1UjEDx-J5O for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:29:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 417B2424E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 501544199A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 417B2424E9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 501544199A
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C41C85E20; Fri, 28 Feb 2025 16:29:43 +0000 (UTC)
+ id 4C651820F8; Fri, 28 Feb 2025 16:29:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 18 Dec 2024 23:49:47 +0100
+Date: Fri, 20 Dec 2024 00:29:19 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 19ec245339e79ebcb2d23295fc9febfc9f55b7bc
-X-Git-Newrev: 3645e3b781be5cedbb0e667caa70455444ce4552
+X-Git-Oldrev: 3645e3b781be5cedbb0e667caa70455444ce4552
+X-Git-Newrev: 83850d1cdd6bd190fdf81b1688973fc242d6c324
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162943.3C41C85E20@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dpdk: security bump to
- version 24.11.1
+Message-Id: <20250228162943.4C651820F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/tailscale: bump to
+ version 1.78.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,54 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3645e3b781be5cedbb0e667caa70455444ce4552
+commit: https://git.buildroot.net/buildroot/commit/?id=83850d1cdd6bd190fdf81b1688973fc242d6c324
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following security issue:
+For change log, see:
+https://tailscale.com/changelog#2024-12-05
 
-CVE-2024-11614: An out-of-bounds read vulnerability was found in DPDK's
-Vhost library checksum offload feature.  This issue enables an untrusted or
-compromised guest to crash the hypervisor's vSwitch by forging Virtio
-descriptors to cause out-of-bounds reads.  This flaw allows an attacker with
-a malicious VM using a virtio driver to cause the vhost-user side to crash
-by sending a packet with a Tx checksum offload request and an invalid
-csum_start offset.
-
-https://www.openwall.com/lists/oss-security/2024/12/17/3
-
-Release notes: http://doc.dpdk.org/guides-24.11/rel_notes/release_24_11.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Julien: add link to change log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/dpdk/dpdk.hash | 2 +-
- package/dpdk/dpdk.mk   | 2 +-
+ package/tailscale/tailscale.hash | 2 +-
+ package/tailscale/tailscale.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dpdk/dpdk.hash b/package/dpdk/dpdk.hash
-index 27c06476e7..e9a22736b0 100644
---- a/package/dpdk/dpdk.hash
-+++ b/package/dpdk/dpdk.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/tailscale/tailscale.hash b/package/tailscale/tailscale.hash
+index a5492684a1..e2d600f03e 100644
+--- a/package/tailscale/tailscale.hash
++++ b/package/tailscale/tailscale.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  9944f7e5f268e7ac9b4193e2cd54ef6d98f6e1d7dddc967c77ae4f6616d6fbbd  dpdk-24.07.tar.xz
-+sha256  bcae7d42c449fc456dfb279feabcbe0599a29bebb2fe2905761e187339d96b8e  dpdk-24.11.1.tar.xz
- sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  license/bsd-3-clause.txt
- sha256  e19808bccd90c238fac06da2fc3683e094c64f7ba647e9d86f03a98cf5f2ce05  license/exceptions.txt
- sha256  6c54c4d44faf3cba829b3d0c21c6955953e758767018fd7244f809b01d4f4845  license/mit.txt
-diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
-index 2200f5fa00..0cbdc67e87 100644
---- a/package/dpdk/dpdk.mk
-+++ b/package/dpdk/dpdk.mk
+-sha256  46b68067a8b91f0e32ea8c23c292b9eb6675fac4c7bba5471a1f787bc3ad7412  tailscale-1.76.1-go2.tar.gz
++sha256  4830cd822a838d5d44fd5eeebd07a2aacaf0255fb3fb7d3852d57659f54e51bc  tailscale-1.78.1-go2.tar.gz
+ sha256  d1ee1c7947d4b2c1963ea214d5324f1d4c89f2f1d0f0224889b4dfb868dad725  LICENSE
+diff --git a/package/tailscale/tailscale.mk b/package/tailscale/tailscale.mk
+index 91290ba4a3..55f8ac4ab9 100644
+--- a/package/tailscale/tailscale.mk
++++ b/package/tailscale/tailscale.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DPDK_VERSION = 24.07
-+DPDK_VERSION = 24.11.1
- DPDK_SOURCE = dpdk-$(DPDK_VERSION).tar.xz
- DPDK_SITE = https://fast.dpdk.org/rel
- DPDK_LICENSE = \
+-TAILSCALE_VERSION = 1.76.1
++TAILSCALE_VERSION = 1.78.1
+ TAILSCALE_SITE = $(call github,tailscale,tailscale,v$(TAILSCALE_VERSION))
+ TAILSCALE_LICENSE = BSD-3-Clause
+ TAILSCALE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
