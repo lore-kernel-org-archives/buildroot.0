@@ -1,103 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92130E77184
-	for <buildroot@archiver.kernel.org>; Thu, 19 Dec 2024 15:22:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF439E77184
+	for <buildroot@archiver.kernel.org>; Thu, 19 Dec 2024 17:34:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5CDA083B15;
-	Thu, 19 Dec 2024 15:22:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 85E10412BB;
+	Thu, 19 Dec 2024 17:34:17 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PJ-5CeEQQMlm; Thu, 19 Dec 2024 17:34:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DA36412BC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DA36412BC;
+	Thu, 19 Dec 2024 17:34:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15DE2730
+ for <buildroot@buildroot.org>; Thu, 19 Dec 2024 17:34:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E96AB83A5E
+ for <buildroot@buildroot.org>; Thu, 19 Dec 2024 17:34:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IRUwM3PT-hGw; Thu, 19 Dec 2024 15:22:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53DCA83B42
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 53DCA83B42;
-	Thu, 19 Dec 2024 15:22:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4AD1B730
- for <buildroot@buildroot.org>; Thu, 19 Dec 2024 15:22:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 35D7D4028D
- for <buildroot@buildroot.org>; Thu, 19 Dec 2024 15:22:10 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PghFxB5Xr3T3 for <buildroot@buildroot.org>;
- Thu, 19 Dec 2024 15:22:09 +0000 (UTC)
+ id o9ZRRqRUvrh4 for <buildroot@buildroot.org>;
+ Thu, 19 Dec 2024 17:34:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
- envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 19BFF400DA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19BFF400DA
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 19BFF400DA
- for <buildroot@buildroot.org>; Thu, 19 Dec 2024 15:22:08 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id
- a640c23a62f3a-aabbb507998so169722866b.2
- for <buildroot@buildroot.org>; Thu, 19 Dec 2024 07:22:08 -0800 (PST)
+ client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E6A2E83A5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6A2E83A5F
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E6A2E83A5F
+ for <buildroot@buildroot.org>; Thu, 19 Dec 2024 17:34:13 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id
+ a640c23a62f3a-aa684b6d9c7so186644666b.2
+ for <buildroot@buildroot.org>; Thu, 19 Dec 2024 09:34:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1734621727; x=1735226527;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=uIpAD1aA0+3TO4uaTTe7Q0TCeJ5FYOSP+OkfJN0HzVs=;
- b=T3kEciXFqSDqSH1QEpHvwCBZ61FHqrX2QGqa0XrJ9nwsVyuSkPu/rvPhdfmGOfrFO2
- Clxqo4ZakaGp1Be+zOsiM37ATqwobCzRODElDQsgTzUnaI35wjDFQNEczng8IFWKKAQo
- 4usbNX8eiDJe0makP9SnX/qSvEl2qanZLOUGIPwcYg6QYC5k/erB+SKRmZSb/kgYhtxj
- nlhWyqxKoazYw4/nCEguKqoUrSy4pVUCF+TQpDCubSOhnUlPH0WDiUlwvift5RdV02O7
- NVwwF8s+4MwMOmZixAmlUugEQEaf0IROL7WlOwLiV4F/qXQXSJsSwqln5ciQGcpnZvQp
- FCSg==
-X-Gm-Message-State: AOJu0YxIJP4kTvpTiaWIUeiJZpg0iVOnirwi4wdX438vK/+ySNrT8ZBS
- QBEeyRp38/q9pCGV/wlZfufyVSSlY4030acqlAO+QjwtbDDtZfhZlHHnZQ==
-X-Gm-Gg: ASbGncviSq/eEhnyYtrPAAsiY83ZdSyQ5g33rJN/OIGuoVNJrPycZjrqoIwfzI+OJmm
- bynRU1Rin5Fx1WlIj4RweylrIeeR8jYyw8SQVOOQGqMkTD71FLapxZPDAlYWGXvEWzbXKFFej2u
- VqTJOnQiGp/fWOqrV/5HN7+blFgY6LMJ6N+3uyPCKPOAQG74xqE3F94ud5r20KNY1uPHQXFQxw1
- rRCzX8ncRydtljX8uLYFy3By/fWDfWjtl9GnwCivXjfDnTa6HmdVyLvgzB0IcMaHnt3av+zpQ==
-X-Google-Smtp-Source: AGHT+IFCnl2OkPkHkAL4Frdo18yCn2M9rEyk1X725jb9R9cizC6XsKV500G6ItT9y5HpJ64Q7gbS+Q==
-X-Received: by 2002:a17:907:7756:b0:aa6:aedb:6030 with SMTP id
- a640c23a62f3a-aabf4972aefmr538108366b.52.1734621726491; 
- Thu, 19 Dec 2024 07:22:06 -0800 (PST)
-Received: from hthiery.kontron.local ([213.135.10.150])
+ d=1e100.net; s=20230601; t=1734629651; x=1735234451;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=EGO/61bcKxidV8PdTOvyLM5UzxOUOV+D8pn44I4Whfs=;
+ b=j9BajUGpPKqX+oen0sVbHRSHs3PyQwe2HsjnyKudt6uZUsseoBVL3VS1CdFONQxhOS
+ G8Ox7xnz87JTdN62VSlhkHg+slaQ3b74hAMHPF/uY+Ge+KkEJ71Aff1gQJl7AnzxKpp+
+ WnlswPSwju3MVzPp1B9QLhcXhHhNouePUrrUmdmFS7y2KQ4JCyRGjWaVLNSFXuhbE9qg
+ ckVwCcTFgYrf0Vi10M4osIBVfN66e3KHWRODD+t28FjSeig92SZwowvZAcK2N65js8Wu
+ bRnGIO6wYhq2YoNAYLQNHK+6GE2vXZPss5SimmP0wRHQ6VNIvb28Ewgl0MoI+21ZMOzu
+ 0ZUA==
+X-Gm-Message-State: AOJu0Yx5XL4ISMzsMRbUasKf27B2sSqeXmJ9YPrPa0aKW0HwkcJhlIWh
+ uha+nXV38tb4but0Z4x1iC784dQRki5O/7jYQUgvbld8tqJxcxWdv3XBhENuSUlsROB4hcL0eKh
+ l
+X-Gm-Gg: ASbGncuTFDHeSeSN1daBckjoMTaWXjimTpeDV+vW4HfpaT85R68dCTBQjh94w4yezX1
+ tWVmxiWucRXKbGm+PSErpZ6nJy7RaQ0dCF7Ny5WquqZWxChT02jzb10xbuU2W9y4iSYLdbSW70k
+ 3vOfuo975wF9bROohw83n+bArwgn1ycYVxcXbDD4d1fCyVsUHthWlq4V3s6mtNAfQvh0viTFa8O
+ +Ue5C/S/OUi/atBrSpVQ8F9EcWPz8kzNOv7FmN6eGIZydVzdY3Tz2j7gTChCSRRAjlpoiPumlyP
+ SILjF+hi6yNkvoS32M+NkJq+Cgd12j+S77ywqZHf4gmk8w==
+X-Google-Smtp-Source: AGHT+IGfgj9Yy/xzEkXypTt/PIdwlClZsmcVvsA6MBFp4QwKiO6aNVYDOujbNWIRhFGvV78JxRQKbg==
+X-Received: by 2002:a17:907:7206:b0:aa6:96ad:f8ff with SMTP id
+ a640c23a62f3a-aac23688ac3mr16980866b.52.1734629651468; 
+ Thu, 19 Dec 2024 09:34:11 -0800 (PST)
+Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.41.87])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-aac0f070a7bsm75504166b.201.2024.12.19.07.22.05
+ a640c23a62f3a-aac0e82eb8fsm87472666b.35.2024.12.19.09.34.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 19 Dec 2024 07:22:05 -0800 (PST)
-From: Heiko Thiery <heiko.thiery@gmail.com>
+ Thu, 19 Dec 2024 09:34:11 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: Fiona Klute <fiona.klute@gmx.de>, Heiko Thiery <heiko.thiery@gmail.com>,
- =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-Date: Thu, 19 Dec 2024 16:21:11 +0100
-Message-Id: <20241219152105.298310-6-heiko.thiery@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20241219152105.298310-1-heiko.thiery@gmail.com>
-References: <20241219152105.298310-1-heiko.thiery@gmail.com>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
+Date: Thu, 19 Dec 2024 18:34:08 +0100
+Message-ID: <20241219173408.3349860-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1734621727; x=1735226527; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=uIpAD1aA0+3TO4uaTTe7Q0TCeJ5FYOSP+OkfJN0HzVs=;
- b=CHb+LpGlfODtVCGmQINzcL4t9XuKr850Z4o4qqGoqM2k4LIvniZfqEhOYk55tP7YpR
- L1Y0o4Ra02tx53cd5HW32BHmTkUmNVj010Ss6zda/TLL6ivpu4n0wCQvS48roXKfU0lv
- p+pClp6lY8LuTQWN78yeFKI6yNNt1jyyOIXblH7w4gQ/nRQyAZE0MReQRgSFlN5sT3wT
- S1x0y81FTR7jyckr7YGZOe+Ck1xPE48crVztXMW934aFecOhyJUCG9ozTJcitQwOxyc7
- Keys6LOIQng3CZKIWkOpq7JvM/UMrmiTsipoLvHGUGWA+NHOXAVTSwJLTCCKhubgVgX6
- JPxw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=amarulasolutions.com; s=google; t=1734629651; x=1735234451;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=EGO/61bcKxidV8PdTOvyLM5UzxOUOV+D8pn44I4Whfs=;
+ b=HrLbgkVPpeeavuhjm4OOmbytrnu3YZANMaFKOkkfPc+zjB/UWCnDA/eQBqUynIwOnN
+ Y/c7d8hq/jRQj+r7S0JzCjWCmldKy123U7FRCMSQJTeiwkFu8AKT825/L6sKTxlodCzP
+ 6BfOf3q9tFGP2VgkcNCi+iyACddATM45H0qWg=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=CHb+LpGl
-Subject: [Buildroot] [PATCH 6/6]
- support/testing/tests/package/test_netopeer2.py: add new test
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=HrLbgkVP
+Subject: [Buildroot] [PATCH 1/1] configs/imx6ulz_bsh_smm_m2: bump U-Boot to
+ 2024.10 and Linux to 6.1.120
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,48 +108,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogSGVpa28gVGhpZXJ5IDxoZWlrby50aGllcnlAZ21haWwuY29tPgotLS0K
-IERFVkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKIC4u
-Li90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9uZXRvcGVlcjIucHkgICB8IDQwICsrKysrKysr
-KysrKysrKysrKysKIDIgZmlsZXMgY2hhbmdlZCwgNDEgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1v
-ZGUgMTAwNjQ0IHN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfbmV0b3BlZXIyLnB5
-CgpkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKaW5kZXggMzUzNDQ1OGE5Ni4u
-MzczZTBlMWY3ZiAxMDA2NDQKLS0tIGEvREVWRUxPUEVSUworKysgYi9ERVZFTE9QRVJTCkBAIC0x
-Mzg5LDYgKzEzODksNyBAQCBGOglwYWNrYWdlL3JhdWMvCiBGOglwYWNrYWdlL3N5c3JlcG8vCiBG
-OglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9zYW1wbGVfcHl0aG9uX3lhbWxsaW50LnB5
-CiBGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3B5dGhvbl95YW1sbGludC5w
-eQorRjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9uZXRvcGVlcjIucHkKIEY6
-CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3Rfc3lzcmVwby5weQogCiBOOglIZXJ2
-w6kgQ29kaW5hIDxoZXJ2ZS5jb2RpbmFAYm9vdGxpbi5jb20+CmRpZmYgLS1naXQgYS9zdXBwb3J0
-L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X25ldG9wZWVyMi5weSBiL3N1cHBvcnQvdGVzdGlu
-Zy90ZXN0cy9wYWNrYWdlL3Rlc3RfbmV0b3BlZXIyLnB5Cm5ldyBmaWxlIG1vZGUgMTAwNjQ0Cmlu
-ZGV4IDAwMDAwMDAwMDAuLmYxNzlkODI1MDQKLS0tIC9kZXYvbnVsbAorKysgYi9zdXBwb3J0L3Rl
-c3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X25ldG9wZWVyMi5weQpAQCAtMCwwICsxLDQwIEBACitp
-bXBvcnQgb3MKK2ltcG9ydCB0aW1lCisKK2ltcG9ydCBpbmZyYS5iYXNldGVzdAorCisKK2NsYXNz
-IFRlc3ROZXRvcGVlcjIoaW5mcmEuYmFzZXRlc3QuQlJUZXN0KToKKyAgICBjb25maWcgPSBpbmZy
-YS5iYXNldGVzdC5CQVNJQ19UT09MQ0hBSU5fQ09ORklHICsgXAorICAgICAgICBmIiIiCisgICAg
-ICAgIEJSMl9UQVJHRVRfUk9PVEZTX0NQSU89eQorICAgICAgICBCUjJfUEFDS0FHRV9ORVRPUEVF
-UjI9eQorICAgICAgICBCUjJfUEFDS0FHRV9ORVRPUEVFUjJfQ0xJPXkKKyAgICAgICAgIiIiCisK
-KyAgICBkZWYgcnVuX25ldG9wZWVyX2NsaV9jbWQoc2VsZiwgY21kcyk6CisgICAgICAgIGNtZCA9
-ICJuZXRvcGVlcjItY2xpIDw8RU9GXG4iCisgICAgICAgIGNtZCArPSAiXG4iLmpvaW4oY21kcykK
-KyAgICAgICAgY21kICs9ICJcbkVPRiIKKyAgICAgICAgc2VsZi5hc3NlcnRSdW5PayhjbWQpCisK
-KyAgICBkZWYgdGVzdF9ydW4oc2VsZik6CisgICAgICAgIGNwaW9fZmlsZSA9IG9zLnBhdGguam9p
-bihzZWxmLmJ1aWxkZGlyLCAiaW1hZ2VzIiwgInJvb3Rmcy5jcGlvIikKKyAgICAgICAgc2VsZi5l
-bXVsYXRvci5ib290KGFyY2g9ImFybXY1IiwKKyAgICAgICAgICAgICAgICAgICAgICAgICAgIGtl
-cm5lbD0iYnVpbHRpbiIsCisgICAgICAgICAgICAgICAgICAgICAgICAgICBvcHRpb25zPVsiLWlu
-aXRyZCIsIGNwaW9fZmlsZV0pCisgICAgICAgIHNlbGYuZW11bGF0b3IubG9naW4oKQorCisgICAg
-ICAgICMgVGhlIGRhZW1vbiB0YWtlcyBzb21lIHRpbWUgdG8gc3RhcnR1cAorICAgICAgICB0aW1l
-LnNsZWVwKDIpCisKKyAgICAgICAgIyBDaGVjayBpZiB0aGUgRGFlbW9uIGlzIHJ1bm5pbmcKKyAg
-ICAgICAgc2VsZi5hc3NlcnRSdW5PaygibHMgL3Zhci9ydW4vbmV0b3BlZXIyLXNlcnZlci5waWQi
-KQorICAgICAgICBzZWxmLmFzc2VydFJ1bk9rKCJwcyBhdXggfCBncmVwIFtuXWV0b3BlZXIyLXNl
-cnZlciIpCisKKyAgICAgICAgIyBSdW4gQ0xJCisgICAgICAgIGhlbHBfY29tbWFuZCA9IFsKKyAg
-ICAgICAgICAgICJoZWxwIiwKKyAgICAgICAgICAgICJxdWl0IiwKKyAgICAgICAgXQorICAgICAg
-ICBzZWxmLnJ1bl9uZXRvcGVlcl9jbGlfY21kKGhlbHBfY29tbWFuZCkKLS0gCjIuMzkuMgoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+- Bump Linux kernel to 6.1.120
+- Bump U-Boot to 2024.10 and add the dependency on GnuTLS and
+  util-linux (for uuid)
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash | 2 +-
+ configs/imx6ulz_bsh_smm_m2_defconfig                  | 6 ++++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash b/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash
+index c0b3bcdd0404..904fa56c02a3 100644
+--- a/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash
++++ b/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  e00e6c6f014e046101739d08d06f328811cebcf5ae101348f409cbbd55ce6900  u-boot-2023.10.tar.bz2
++sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
+diff --git a/configs/imx6ulz_bsh_smm_m2_defconfig b/configs/imx6ulz_bsh_smm_m2_defconfig
+index 29177c475656..f12dc8383d80 100644
+--- a/configs/imx6ulz_bsh_smm_m2_defconfig
++++ b/configs/imx6ulz_bsh_smm_m2_defconfig
+@@ -9,7 +9,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/bsh/imx6ulz-bsh-smm-m2/post-build.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.68"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.120"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/bsh/imx6ulz-bsh-smm-m2/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -28,10 +28,12 @@ BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6ulz_smm_m2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
++BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-with-spl.imx"
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
