@@ -1,75 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40C38E77184
-	for <buildroot@archiver.kernel.org>; Thu, 19 Dec 2024 08:18:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC2C6E77184
+	for <buildroot@archiver.kernel.org>; Thu, 19 Dec 2024 08:27:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3F9260E39;
-	Thu, 19 Dec 2024 08:18:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74322811C0;
+	Thu, 19 Dec 2024 08:27:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r6SfW6xalOVj; Thu, 19 Dec 2024 08:18:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1UisNBISI95a; Thu, 19 Dec 2024 08:27:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBB626124B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3464811C1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBB626124B;
-	Thu, 19 Dec 2024 08:18:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A3464811C1;
+	Thu, 19 Dec 2024 08:27:40 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B945ECE
- for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:18:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CE5D26C
+ for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:27:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A65C960E39
- for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:18:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B3E75612D6
+ for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:27:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p3WUjmkY38u2 for <buildroot@buildroot.org>;
- Thu, 19 Dec 2024 08:18:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id 7TEVpR9PKtpg for <buildroot@buildroot.org>;
+ Thu, 19 Dec 2024 08:27:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3430360E21
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3430360E21
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3430360E21
- for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:18:22 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1962019206; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 19 Dec 2024 08:18:15 +0000 (UTC)
-Message-ID: <3ce8e3d1-5fcb-4386-bb91-fdcb49d3ca85@korsgaard.com>
-Date: Thu, 19 Dec 2024 09:18:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Vincent Jardin <vjardin@free.fr>, Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-References: <20241218220907.762527-1-peter@korsgaard.com>
- <347c6f7297fe983edb7a5658a19605e0@free.fr>
- <193ddef0750.2856.ffe91ee9dc07baa0c1c4561a0e181c1b@free.fr>
-Content-Language: en-US
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A66D3612DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A66D3612DE
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A66D3612DE
+ for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:27:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8179760004
+ for <buildroot@buildroot.org>; Thu, 19 Dec 2024 08:27:34 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1tOBsc-003xz9-01
+ for buildroot@buildroot.org; Thu, 19 Dec 2024 09:27:34 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <193ddef0750.2856.ffe91ee9dc07baa0c1c4561a0e181c1b@free.fr>
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=Q9LfwlNabYRH7KbOOfaQXKC9oI/+2pg5V1nammntuIKYH493TDNcj25+Yi08c5xAH7cGto39HzxrpKtBdBqUfcA5s5zKqASquy9/QU09un9fnImWyeIXNyvk2r+76sZUfwHV0rLsaCpXR389W3wgCpDUwTJmiknPDkxb1rkb/zXgj8ndzHFEF8QRKYTovKfCl3mp5AOe7dDafvD7y3gMlcHXC0omwGuRyRq1ueT9hl4GDkysrc+RhkjUJtG+VjNXTf2Q0YTYoXR5ozPbGbxITSKNv5vzdVuMjA+JAb4UOmtt+3I9rcm2r10uRrsqitqCU68TMoX0n7/V+sS7h8ZRSQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=4+RPEXcaKq4nT0FBPAzQP35cEAOXyy/XqdmTkvVxNuM=;
- h=Feedback-ID:Received:Date:Subject:To:From; 
+To: buildroot@buildroot.org
+References: <20241214134000.3224571-1-peter@korsgaard.com>
+Date: Thu, 19 Dec 2024 09:27:33 +0100
+In-Reply-To: <20241214134000.3224571-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 14 Dec 2024 14:39:59 +0100")
+Message-ID: <87zfkshybu.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=Q9LfwlNa
-Subject: Re: [Buildroot] [PATCH] package/dpdk: security bump to version
- 24.11.1
+Subject: Re: [Buildroot] [PATCH] package/subversion: security bump to
+ version 1.14.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,27 +69,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMTIvMTkvMjQgMDk6MDAsIFZpbmNlbnQgSmFyZGluIHdyb3RlOgo+IEhpIEp1bGllbiBhbmQg
-UGV0ZXIsCj4gCj4gVGhhbmssIHlvdSBoYXZlIGJlZW4gcXVpY2sgb24gaXQuIEZvciBteSBhbmQg
-bWF5YmUgc29tZSBvdGhlciBwZW9wbGUgb2YgCj4gdGhlIEJ1aWxkcm9vdCBjb21tdW5pdHksCj4g
-IMKgIMKgLSBob3cgZGlkIHlvdSB0cmFjayBhbmQgZGV0ZWN0IHF1aWNrbHkgdGhlIG5lZWRlZCBD
-VkUgb24gYSBwYWNrYWdlID8gCj4gRG8geW91IGhhdmUgYSBzcGVjaWZpYyBub3RpZmljYXRpb24v
-YWxlcnQgc2NyaXB0ID8KCldlIGRvIGhhdmUgdGhlIENWRSBpbmZvcm1hdGlvbiBpbiB0aGUgcGFj
-a2FnZSBzdGF0czoKCmh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9zdGF0cy9tYXN0ZXIu
-aHRtbAoKQW5kIHRoZSBwZW9wbGUgbGlzdGVkIGluIERFVkVMT1BFUlMgc2hvdWxkIGdldCBhIG1h
-aWwgd2hlbiB0aGVpciAKcGFja2FnZXMgaGF2ZSBhIENWRSBsaXN0ZWQsIGJ1dCBpbiB0aGlzIHNw
-ZWNpZmljIGNhc2UgSSBzaW1wbHkgc2F3IHRoZSAKYWR2aXNvcnkgYXMgSSBhbSBzdWJzY3JpYmVk
-IHRvIHRoZSBvc3Mtc2VjdXJpdHkgbGlzdDoKCmh0dHBzOi8vd3d3Lm9wZW53YWxsLmNvbS9saXN0
-cy9vc3Mtc2VjdXJpdHkvMjAyNC8xMi8xNy8zCgo+ICDCoCDCoCAtIHdoZW4gZG8geW91IG5lZWQg
-YW4gYWNrJ3Qgb2YgdGhlIGRldmVsZXBlciBvZiBhIHBhY2thZ2UgPyBJZiBuZWVkZWQuCgpJZGVh
-bGx5IGV2ZXJ5IHRpbWUgdGhlcmUgaXMgYSBwYXRjaCBwcm9wb3NlZCBmb3IgYSBwYWNrYWdlIHlv
-dSBtYWludGFpbiwgCmJ1dCBoZXJlIHRoZSBwYXRjaCB3YXMgdmVyeSBzaW1wbGUgc28gSnVsaWVu
-IGp1c3QgYXBwbGllZCBpdC4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
-CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
-bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+
+ > Fixes the following security vulnerabilities:
+ > CVE-2024-46901: mod_dav_svn denial-of-service via control characters in
+ > paths
+
+ > It has been discovered that the patch for CVE-2013-1968 was incomplete
+ > and unintentionally left mod_dav_svn vulnerable to control characters
+ > in filenames.
+
+ > https://subversion.apache.org/security/CVE-2024-46901-advisory.txt
+
+ > Subversion 1.14.4 also fixed a Windows-only vulnerability:
+ > https://subversion.apache.org/security/CVE-2024-45720-advisory.txt
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2024.02.x and 2024.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
