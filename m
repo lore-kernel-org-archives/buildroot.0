@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC2E2C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:42:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34031C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:42:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A63641970;
-	Fri, 28 Feb 2025 16:42:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3300842DD9;
+	Fri, 28 Feb 2025 16:42:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s0_F1Jawsyze; Fri, 28 Feb 2025 16:42:14 +0000 (UTC)
+ id lqgUzLBDj93F; Fri, 28 Feb 2025 16:42:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C84994F82D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B84C4F839
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C84994F82D;
-	Fri, 28 Feb 2025 16:42:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B84C4F839;
+	Fri, 28 Feb 2025 16:42:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 067E868
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 10F0868
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F0917426BA
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4D8694251B
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8K8IFYSPJypD for <buildroot@buildroot.org>;
+ id gRpVF9APhHjA for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:29:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD045424F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D71040DCB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD045424F1
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D71040DCB
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C577685E77; Fri, 28 Feb 2025 16:29:43 +0000 (UTC)
+ id 181FA84487; Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 20 Dec 2024 20:53:31 +0100
+Date: Fri, 20 Dec 2024 22:55:53 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 38ea793bd2a2cf5d60a6887ad15e03eff58d84f9
-X-Git-Newrev: 6b2e3b2ce548f54db17818c9bac4bcd65b8bc9b5
+X-Git-Oldrev: 635c5f8a7dfa39bdd0413b48ae2752fc41bb6fac
+X-Git-Newrev: ed59c2b7aa088b44d5d402bf4ddf454a99e45587
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162943.C577685E77@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libgpg-error: bump to
- version 1.51
+Message-Id: <20250228162944.181FA84487@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/proj: add an option to
+ build and install apps
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,46 +65,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b2e3b2ce548f54db17818c9bac4bcd65b8bc9b5
+commit: https://git.buildroot.net/buildroot/commit/?id=ed59c2b7aa088b44d5d402bf4ddf454a99e45587
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For the changelog, see:
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=log;h=libgpg-error-1.51
+The proj package includes command line applications. Those have always
+been disabled in Buildroot. Those applications can be useful for
+scripting, and also for runtime testing the libraries.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Julien: add link to change log]
+This commit adds a package Kconfig option to enable those apps.
+
+Tested-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Acked-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libgpg-error/libgpg-error.hash | 4 ++--
- package/libgpg-error/libgpg-error.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/proj/Config.in | 12 ++++++++++++
+ package/proj/proj.mk   |  2 +-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
-index be5202584d..957f96edcf 100644
---- a/package/libgpg-error/libgpg-error.hash
-+++ b/package/libgpg-error/libgpg-error.hash
-@@ -1,6 +1,6 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  6790fc3d6e7bbd7576654b43971bbe15e953ccc4  libgpg-error-1.50.tar.bz2
--sha256  69405349e0a633e444a28c5b35ce8f14484684518a508dc48a089992fe93e20a  libgpg-error-1.50.tar.bz2
-+sha1  0a9386ff70a5d1f771771bf0b8db2b956e292f13  libgpg-error-1.51.tar.bz2
-+sha256  be0f1b2db6b93eed55369cdf79f19f72750c8c7c39fc20b577e724545427e6b2  libgpg-error-1.51.tar.bz2
+diff --git a/package/proj/Config.in b/package/proj/Config.in
+index 6d172e2ee9..86966a4d10 100644
+--- a/package/proj/Config.in
++++ b/package/proj/Config.in
+@@ -14,6 +14,18 @@ config BR2_PACKAGE_PROJ
  
- # Locally calculated
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index 8dff6a612d..3f327e3054 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ 	  http://proj4.org/
  
--LIBGPG_ERROR_VERSION = 1.50
-+LIBGPG_ERROR_VERSION = 1.51
- LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
- LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
- LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
++if BR2_PACKAGE_PROJ
++
++config BR2_PACKAGE_PROJ_APPS
++	bool "build apps"
++	select BR2_PACKAGE_LIBCURL
++	help
++	  Build and install proj command line apps. Those command line
++	  applications are: cct, cs2cs, geod, gie, invgeod, invproj,
++	  proj, projinfo, projsync.
++
++endif
++
+ comment "proj needs a toolchain w/ C++, gcc >= 4.7, NPTL, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index 19b5f1012e..361c1e50b1 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
+@@ -20,7 +20,7 @@ PROJ_CXXFLAGS += -O0
+ endif
+ 
+ PROJ_CONF_OPTS = \
+-	-DBUILD_APPS=OFF \
++	-DBUILD_APPS=$(if $(BR2_PACKAGE_PROJ_APPS),ON,OFF) \
+ 	-DCMAKE_C_FLAGS="$(PROJ_CFLAGS)" \
+ 	-DCMAKE_CXX_FLAGS="$(PROJ_CXXFLAGS)"
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
