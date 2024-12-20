@@ -1,94 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1CDDE7718B
-	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 13:31:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF430E7718D
+	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 13:31:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6AA7C424DF;
-	Fri, 20 Dec 2024 13:31:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7386183BE0;
+	Fri, 20 Dec 2024 13:31:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f3OlnG685nEx; Fri, 20 Dec 2024 13:31:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D5FA83D57
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8D5FA83D57;
+	Fri, 20 Dec 2024 13:31:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A0013920
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 13:31:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 81259424DF
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 13:31:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0I_BOFsQADnx; Fri, 20 Dec 2024 13:31:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 231EC424E0
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 231EC424E0;
-	Fri, 20 Dec 2024 13:31:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C6683920
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 13:31:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B2E65409FB
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 13:31:10 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rBogIPAra0xk for <buildroot@buildroot.org>;
- Fri, 20 Dec 2024 13:31:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
+ id C8coXl7DxMWE for <buildroot@buildroot.org>;
+ Fri, 20 Dec 2024 13:31:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.238;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6677140A82
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6677140A82
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6677140A82
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1D8BB424E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D8BB424E0
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.238])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1D8BB424E0
  for <buildroot@buildroot.org>; Fri, 20 Dec 2024 13:31:09 +0000 (UTC)
-X-CSE-ConnectionGUID: vw3tC5RGR/OQt+O4IimG/g==
-X-CSE-MsgGUID: eIPKOh3MTbiKXdDWp6mmew==
-Received: from unknown (HELO opfedv1rlp0e.nor.fr.ftgroup) ([x.x.x.x]) by
+X-CSE-ConnectionGUID: bsTn2KkpQTOM50tp4wIVkw==
+X-CSE-MsgGUID: RzNHrGT+TIOhIPIbCKiROQ==
+Received: from unknown (HELO opfedv1rlp0f.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
  20 Dec 2024 14:31:08 +0100
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0e.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Dec 2024 14:31:08 +0100
+ ([x.x.x.x]) by opfedv1rlp0f.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Dec 2024 14:31:07 +0100
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Fri, 20 Dec 2024 14:31:07 +0100
+ Fri, 20 Dec 2024 14:31:05 +0100
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Fri, 20 Dec 2024 14:31:06 +0100
-X-CSE-ConnectionGUID: +lFMhbU8RIGDKnOyEf50Ug==
-X-CSE-MsgGUID: DJYzQdM+Qri+78ygtORd6g==
-X-IronPort-AV: E=Sophos;i="6.12,250,1728943200"; d="scan'208";a="231590012"
+ Fri, 20 Dec 2024 14:31:05 +0100
+X-CSE-ConnectionGUID: 2OPqKOa0QwivqAOY2+z9Dw==
+X-CSE-MsgGUID: ZXa8pw1BRCWdaMFLQGn/aA==
+X-IronPort-AV: E=Sophos;i="6.12,250,1728943200"; d="scan'208";a="231208064"
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
 CC: <yann.morin@orange.com>
-Date: Fri, 20 Dec 2024 14:31:01 +0100
-Message-ID: <d4046a8cba40f184e97f878ed96676d44af9c04a.1734701459.git.yann.morin@orange.com>
+Date: Fri, 20 Dec 2024 14:31:00 +0100
+Message-ID: <66affdb182eb8f587dea7762cee43f0c203a7ba0.1734701459.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1734701459.git.yann.morin@orange.com>
 References: <cover.1734701459.git.yann.morin@orange.com>
 MIME-Version: 1.0
 X-Originating-IP: [10.115.27.51]
-X-ClientProxiedBy: OPE16NORMBX406.corporate.adroot.infra.ftgroup
- (10.115.27.15) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX108.corporate.adroot.infra.ftgroup (10.115.27.5)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1734701469; x=1766237469;
+ t=1734701470; x=1766237470;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=qZolSWnS/k9Dv00GK5/FNvMmElwVbKtq23c/92KSq2k=;
- b=QI2bbFX5nTjzSEazrBDCrzaZQmCDvzzpRp/VufuEfZuCMciWa5SmzSmd
- ISrfr/T5MZPNWMSd+yuky989Eam7mfn1lxVA+OLeSrJjoDT1ctJU1Qovy
- QCbxndUf7zP3TqE4BcyGpcY7dJzo0YpGQMmuINGu+hM22EBFlsue9uOSA
- XeD4K+ZGyfaGSmh5O4g4ApE6cFipKwS+/6KvJ1cpcxWuAQusdu2ou00qv
- LsHLsu26mWogSH343Fvk1YwV1I6Vuy/6IdAAkgXDk5kcHxdFcSbOV/4S7
- Co85BY1usWPG8bN7tqBS3BEE6+cZnq6rvPsLJ0UWokscbM26a7MFzdL2V
- Q==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=BVi+00O69TYNK/wSCsNnXo8JseOhj9dJsRDfvmnp6rs=;
+ b=n6I3StLz5+UI6gFU7R7gDioehDuM3zmpFgJcPOD7iSYebOoI2fQ9KkJD
+ g0aCM+WvnRBBw13vKiVMFpsc6orwsEbsQE5zdlyJnL0XZGANxsjX3MDVj
+ SqUuY4G8Ekt3gp6aaQYsJpI2rsuiejFo1k+q8ivr6f3fjqztpNzBOLdX2
+ 2B3n/ZFdMr7/EPXe9nc+qm7/evnNB1XFboVEd3HoeVYRDa/AuMBCIOI7f
+ YCthx1YlIy5+qmJVYRd6pWQNWM35u1x0qjQXixR2PVlLO1rxJhIkDPtSu
+ Yci/qNcTPgfBCLI70/yfQGJPCeDj8HNSrR/Lo3R9EU/Li/nmSUiHUnQL7
+ g==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=QI2bbFX5
-Subject: [Buildroot] [PATCH 3/5] utils/get-developers: read patch from stdin
- when it's not a tty
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=n6I3StLz
+Subject: [Buildroot] [PATCH 2/5] utils/get-developers: use parser.error
+ rather than canned print+return
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,33 +108,26 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-It is very common that gt-developers be used with its stdin a pipe from
-git-show:
-    git show |./utils-get-developers -
-
-In this case, the '-' is superfluous: we can very easilit deduce that
-the user wants to read stdin as the patch.
-
-So, ifno otehr action was requested, and stdin is not a tty, use it as
-the source of the patch, and thus '-' is then no longer required.
-
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 ---
- utils/get-developers | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ utils/get-developers | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/utils/get-developers b/utils/get-developers
-index 8e5796beaf..b45e617bff 100755
+index 33980366d6..8e5796beaf 100755
 --- a/utils/get-developers
 +++ b/utils/get-developers
-@@ -42,7 +42,9 @@ def __main__():
+@@ -40,11 +40,9 @@ def __main__():
+     if len(args.patches) != 0:
+         action += 1
      if action > 1:
-         parser.error("Cannot do more than one action")
+-        print("Cannot do more than one action")
+-        return
++        parser.error("Cannot do more than one action")
      if action == 0:
--        parser.error("No action specified")
-+        if sys.stdin.isatty():
-+            parser.error("No action specified")
-+        args.patches.append(sys.stdin)
+-        print("No action specified")
+-        return
++        parser.error("No action specified")
  
      devs = getdeveloperlib.parse_developers(args.filename)
      if devs is None:
