@@ -4,92 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8730E7718B
-	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 13:31:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 567CEE77188
+	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 15:11:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47CE54250B;
-	Fri, 20 Dec 2024 13:31:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E934D4154B;
+	Fri, 20 Dec 2024 15:11:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Q_voFEt6835; Fri, 20 Dec 2024 13:31:24 +0000 (UTC)
+ id TMiw1ZXygXw6; Fri, 20 Dec 2024 15:11:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEDC8424ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C89D0417F6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DEDC8424ED;
-	Fri, 20 Dec 2024 13:31:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D0176C
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 13:31:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C89D0417F6;
+	Fri, 20 Dec 2024 15:11:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EBD32920
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 15:11:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F10E1605F5
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 13:31:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D9C6A607EC
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 15:11:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cKtKzv4EM36w for <buildroot@buildroot.org>;
- Fri, 20 Dec 2024 13:31:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.239;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ id jotmNrLw4jhJ for <buildroot@buildroot.org>;
+ Fri, 20 Dec 2024 15:11:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.103.80.155;
+ helo=mx.kolabnow.com; envelope-from=zgyarmati@zgyarmati.de;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B0CB6605EC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0CB6605EC
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B0CB6605EC
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 13:31:14 +0000 (UTC)
-X-CSE-ConnectionGUID: kjYMEXFCTuCPoHYUXXW0/Q==
-X-CSE-MsgGUID: yJU4Hp/dTOGpHyOi5doX+A==
-Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 20 Dec 2024 14:31:12 +0100
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Dec 2024 14:31:12 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Fri, 20 Dec 2024 14:31:10 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Fri, 20 Dec 2024 14:31:10 +0100
-X-CSE-ConnectionGUID: sEKFtdADREa2YVRwZLjwOw==
-X-CSE-MsgGUID: 8SzjUWzQQaCPwSKBPW83JA==
-X-IronPort-AV: E=Sophos;i="6.12,250,1728943200"; d="scan'208";a="235131010"
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-CC: <yann.morin@orange.com>
-Date: Fri, 20 Dec 2024 14:31:03 +0100
-Message-ID: <64f9d09898aee7370ee86df702b207182e6d0cb5.1734701459.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1734701459.git.yann.morin@orange.com>
-References: <cover.1734701459.git.yann.morin@orange.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 63B01607D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63B01607D2
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.155])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 63B01607D2
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 15:11:36 +0000 (UTC)
+Received: from localhost (unknown [127.0.0.1])
+ by mx.kolabnow.com (Postfix) with ESMTP id 220253004C52
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 16:11:34 +0100 (CET)
+X-Virus-Scanned: amavis at mykolab.com
+Received: from mx.kolabnow.com ([127.0.0.1])
+ by localhost (ext-mx-out013.mykolab.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id Ov4rnPVuGOrk for <buildroot@buildroot.org>;
+ Fri, 20 Dec 2024 16:11:32 +0100 (CET)
+Received: from int-mx009.mykolab.com (unknown [10.9.13.9])
+ by mx.kolabnow.com (Postfix) with ESMTPS id D8B2D30005A2
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 16:11:32 +0100 (CET)
+Received: from ext-subm010.mykolab.com (unknown [10.9.6.10])
+ by int-mx009.mykolab.com (Postfix) with ESMTPS id ECDC820D3033
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 16:11:31 +0100 (CET)
+From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+To: buildroot@buildroot.org
+Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Date: Fri, 20 Dec 2024 16:11:23 +0100
+Message-Id: <20241220151123.620117-1-zgyarmati@zgyarmati.de>
 MIME-Version: 1.0
-X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1734701475; x=1766237475;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=LyQ979e/HIdTZzDmCXz4nrobj8NIGaVGyX0qFx8dRDw=;
- b=jhWhDyVze9nSM0csTgqm3V5MjVdr/n3MiEDMDL2mvnV79flzp1gTrEFR
- zoJAKCTRcDw/68/J+TUHAcTouBsqmvsT7Aqu/1WTYUyDwfnozkhOGyxsk
- Q8ExdGrfzHhXIgAEGcIlsXEyyzDlcc7KMOsnqaYAegcM5HkJiW0FO2P/r
- HzEoxrgpgUAaWitgDhM14AyeMUg3ddjxr2QQUrwNWPdVqx79KoV5S6vD8
- x9LIkWs+Bqw8YgkTsHeqBhd8xhSQZiLpmTft4ZujcqjIbzU1gPMFK3wm3
- seTLwrOpwrV3URnufiH6v6l9yfrDQhDF9Yt9Dcl+14QGwqrJkdcXhpQwA
- A==;
+ d=kolabnow.com; h=
+ content-transfer-encoding:mime-version:message-id:date:date
+ :subject:subject:from:from:received:received:received; s=
+ dkim20240523; t=1734707492; x=1736521893; bh=CCCynHodrJg0BHumCB9
+ Vto1SQpIsZJeR7Ep+jG1rmx0=; b=O8prF2wfHSiMuyOKVppQc4guJGUNMCVjZ7c
+ d8jcJp/KHoPc4fIa7m74bAdn/ix5xvykKoecG+zN/jYlXVHXkaedZgN/TjGvoPgu
+ 0Bte0i4hoi68+xssqLnFiCyH9g6IJGnJif08OhpqWbCNFmJF52861QrB+S11a6sX
+ yQ/Dee1OukwFGLEBEYwxzElrnu4mKf7wAjh6cmL1L9Dfsj90zgWO1Lf/YT6z+MRv
+ XgoSobc1LYEO59/6ktPUgjqMo/67oVxbkBWrg25YPyvamyFIsCQmyoeI0qbLmN4K
+ LsrhwmM8kJFjndobqbIQIjJ/BaQmnmOA5Xmk3ZykQm63FJk3rDw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
+ dmarc=none (p=none dis=none)
+ header.from=zgyarmati.de
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=jhWhDyVz
-Subject: [Buildroot] [PATCH 5/5] utils/get-developers: add option to report
- Cc: lines
+ unprotected) header.d=kolabnow.com header.i=@kolabnow.com header.a=rsa-sha256
+ header.s=dkim20240523 header.b=O8prF2wf
+X-Mailman-Original-Authentication-Results: ext-mx-out013.mykolab.com (amavis); 
+ dkim=pass (2048-bit key)
+ reason="pass (just generated, assumed good)"
+ header.d=kolabnow.com
+Subject: [Buildroot] [PATCH 1/1] package/proj: bump to 9.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,58 +96,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
-
-It is very common to use the output of get-developers to add cc: lines
-in the commit log (see below!).
-
-Add an option so that get-developers reports Cc: lines ready to be
-pasted in a commit log.
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 ---
- utils/get-developers | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/proj/proj.hash | 6 +++---
+ package/proj/proj.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/utils/get-developers b/utils/get-developers
-index 3253ce5d6b..f66477751a 100755
---- a/utils/get-developers
-+++ b/utils/get-developers
-@@ -17,6 +17,8 @@ def __main__():
-                         help='find developers in charge of these files')
-     parser.add_argument('-c', dest='check', action='store_const',
-                         const=True, help='list files not handled by any developer')
-+    parser.add_argument('--cc', action="store_true",
-+                        help='report developpers as CC: lines ready to be pasted in a commit log')
-     parser.add_argument('-e', dest='email', action='store_const',
-                         const=True, help='only list affected developer email addresses')
-     parser.add_argument('-v', dest='validate', action='store_const',
-@@ -99,9 +101,9 @@ def __main__():
-                     matching_devs.add(dev.name)
+diff --git a/package/proj/proj.hash b/package/proj/proj.hash
+index 8a1650ade5..5249f52c10 100644
+--- a/package/proj/proj.hash
++++ b/package/proj/proj.hash
+@@ -1,5 +1,5 @@
+-# Fetched from https://download.osgeo.org/proj/proj-9.5.0.tar.gz.md5
+-md5  ac46b4e31562890d012ea6b31e579cf6  proj-9.5.0.tar.gz
++# Fetched from https://download.osgeo.org/proj/proj-9.5.1.tar.gz.md5
++md5  07c44ca4a65a0664ce823c8448707c78  proj-9.5.1.tar.gz
+ # Locally calculated
+-sha256  659af0d558f7c5618c322fde2d3392910806faee8684687959339021fa207d99  proj-9.5.0.tar.gz
++sha256  a8395f9696338ffd46b0feb603edbb730fad6746fba77753c77f7f997345e3d3  proj-9.5.1.tar.gz
+ sha256  6a8f30793e877d32e3f88b972f0970a051a3b5a26cd057d3993cb51e21c43319  COPYING
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index a17a0a1feb..19b5f1012e 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-         matching_devs = sorted(matching_devs)
--        if args.email:
-+        if args.email or args.cc:
-             for dev in matching_devs:
--                print(dev)
-+                print(f"{'Cc: ' if args.cc else ''}{dev}")
-         else:
-             result = "--to buildroot@buildroot.org"
-             for dev in matching_devs:
+-PROJ_VERSION = 9.5.0
++PROJ_VERSION = 9.5.1
+ PROJ_SITE = http://download.osgeo.org/proj
+ PROJ_LICENSE = MIT
+ PROJ_LICENSE_FILES = COPYING
 -- 
-2.34.1
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.39.5
 
 _______________________________________________
 buildroot mailing list
