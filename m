@@ -1,59 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4805BE77188
-	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 15:15:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AD62E77188
+	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 16:44:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F0DD1607D2;
-	Fri, 20 Dec 2024 15:15:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7551F83C11;
+	Fri, 20 Dec 2024 16:44:22 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s873em9WrBvD; Fri, 20 Dec 2024 16:44:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3093E83C09
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3093E83C09;
+	Fri, 20 Dec 2024 16:44:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 92DF6730
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 16:44:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D933610B1
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 16:44:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FN1RibmXNzpg; Fri, 20 Dec 2024 15:15:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BCFC60B91
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BCFC60B91;
-	Fri, 20 Dec 2024 15:15:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A4B5D920
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 15:15:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7107E409FB
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 15:15:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QWxWAkx8NDBx for <buildroot@buildroot.org>;
- Fri, 20 Dec 2024 15:15:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.140.110.172;
- helo=foss.arm.com; envelope-from=vincent.stehle@arm.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4F01F409F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F01F409F2
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F01F409F2
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 15:15:36 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E1BE31480;
- Fri, 20 Dec 2024 07:16:03 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.57.0.16])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4015F3F528;
- Fri, 20 Dec 2024 07:15:35 -0800 (PST)
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
-To: buildroot@buildroot.org
-Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>,
- =?UTF-8?q?=C3=89tienne=20Carri=C3=A8re?= <etienne.carriere@foss.st.com>
-Date: Fri, 20 Dec 2024 16:15:31 +0100
-Message-ID: <20241220151531.59770-1-vincent.stehle@arm.com>
-X-Mailer: git-send-email 2.45.2
+ id cGThhBCBM4U2 for <buildroot@buildroot.org>;
+ Fri, 20 Dec 2024 16:44:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.238;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BAB6361053
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAB6361053
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.238])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BAB6361053
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 16:44:18 +0000 (UTC)
+X-CSE-ConnectionGUID: EAhpzzBLQ/+/Q93IYrna1g==
+X-CSE-MsgGUID: pYAEgGGnQDe8AxehQ6aoig==
+Received: from unknown (HELO opfedv1rlp0e.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 20 Dec 2024 17:44:17 +0100
+Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0e.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Dec 2024 17:44:15 +0100
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
+ Fri, 20 Dec 2024 17:44:14 +0100
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Fri, 20 Dec 2024 17:44:14 +0100
+X-CSE-ConnectionGUID: 24c6Akq4RAKb5c+BVSi5DA==
+X-CSE-MsgGUID: YV2Ri9GFQCC5VDhT7/VmTw==
+X-IronPort-AV: E=Sophos;i="6.12,251,1728943200"; d="scan'208";a="231691280"
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+CC: <yann.morin@orange.com>, Julien BOIBESSOT <julien.boibessot@armadeus.com>, 
+ Tal Shorer <tal.shorer@gmail.com>, Marcin Bis <marcin@bis.org.pl>
+Date: Fri, 20 Dec 2024 17:44:14 +0100
+Message-ID: <adc7c8fecb8ac3010b16178bdad062132dd0d0d8.1734713054.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Originating-IP: [10.115.27.53]
+X-ClientProxiedBy: OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1734713060; x=1766249060;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=cQ/sqBeeeJW3flEVJy5WezuqHvACviqPGqYfth8fkSw=;
+ b=WiTdNFKRHQQlDRhVxRnKbjSHpvuQyXQzWj5XDT9Dz79QVtEXEt+I6R9c
+ v8jma7XMqXuSNlA5dY7mzIf0JnOvrSspx7MYmLlDuwO39uEVKsGHqLAAV
+ m9m4Itu6QesEBOhkkaA3FV7na+4nXVfE5oQbQkI1/fWoeSWRB/TsC34cI
+ mrfTr2MXIMwM2U6pVBllrb3D8zFlxShbeUkMj0AlvSe93C+amQpLEQ73e
+ aIz21IPMk3fn3Tzdx7XlCsKUDkFvDcbMkTc/GsRIR/AxR9W+mjXs5zE7Y
+ P9NFELF5zLBKl4dMmqubOridCNkl6ytVn0BEjOwRjCfQTHq7BV3MLMNuh
+ g==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=arm.com
-Subject: [Buildroot] [PATCH] boot/optee-os: add custom version option
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=WiTdNFKR
+Subject: [Buildroot] [PATCH] package/usbip: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,56 +99,166 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWRkIGN1c3RvbSB2ZXJzaW9uIG9wdGlvbiwgdG8gZW5hYmxlIGVhc2lseSBzcGVjaWZ5aW5nIGFu
-IG9mZmljaWFsIE9QLVRFRQp2ZXJzaW9uIHRvIHVzZS4KVGhpcyBpcyBzaW1pbGFyIHRvIHdoYXQg
-aXMgZG9uZSBpbiBvdGhlciBwYWNrYWdlcywgc3VjaCBhcyBsaW51eCwgdWJvb3Qgb3IKYXJtLXRy
-dXN0ZWQtZmlybXdhcmUuCgpTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQu
-c3RlaGxlQGFybS5jb20+CkNjOiDDiXRpZW5uZSBDYXJyacOocmUgPGV0aWVubmUuY2FycmllcmVA
-Zm9zcy5zdC5jb20+Ci0tLQoKSGksCgpOb3RlIHRoYXQsIHVubGlrZSB3aGF0IGlzIGRvbmUgaW4g
-YXJtLXRydXN0ZWQtZmlybXdhcmUsIGJ1aWxkaW5nIHdpdGgKQlIyX0RPV05MT0FEX0ZPUkNFX0NI
-RUNLX0hBU0hFUz15IGFuZCBCUjJfVEFSR0VUX09QVEVFX09TX0NVU1RPTV9WRVJTSU9OPXksCmFu
-ZCBub3Qgc3VwcGx5aW5nIGEgaGFzaCB3aWxsIGZhaWwuCkkgdGhpbmsgdGhpcyBpcyB3aGF0IHdl
-IHdhbnQsIGJ1dCBkbyBub3QgaGVzaXRhdGUgdG8gbGV0IG1lIGtub3cgaWYgeW91CndvdWxkIHBy
-ZWZlciB0byBtYWtlIGFuIGV4Y2VwdGlvbiAod2l0aCBCUl9OT19DSEVDS19IQVNIX0ZPUikgaW4g
-YWxsIHRoZQpjYXNlcyB3aGVyZSB3ZSB1c2UgYSBjdXN0b20gdmVyc2lvbiwgYW5kIEkgd2lsbCBy
-ZXNwaW4gdGhlIHBhdGNoLgoKVGhpcyB3YXMgYm9vdC10ZXN0ZWQgd2l0aCB0aGUgZm9sbG93aW5n
-IGRlZmNvbmZpZ3MgKG1vZGlmaWVkIGxvY2FsbHkgdG8gdXNlCk9QLVRFRSA0LjQuMCk6Ci0gYXJt
-X2Z2cF9lYmJyCi0gcWVtdV9hYXJjaDY0X2ViYnIKLSBxZW11X2FybV9lYmJyCi0gcWVtdV9hcm1f
-dmV4cHJlc3NfdHoKCkFsc28sIHRoaXMgd2FzIGJ1aWxkLXRlc3RlZCB3aXRoIHRoZSBmb2xsb3dp
-bmcgZGVmY29uZmlncyAobW9kaWZpZWQgbG9jYWxseQp0byB1c2UgT1AtVEVFIDQuNC4wKToKLSBi
-ZWFnbGVib25lYWk2NAotIGJlYWdsZXBsYXkKLSB0aV9hbTYyYXhfc2sKLSB0aV9hbTYycHhfc2sK
-LSB0aV9hbTYyeF9zawotIHRpX2FtNjR4X3NrCgpGaW5hbGx5LCB0aGlzIHdhcyB0ZXN0ZWQgd2l0
-aCB0ZXN0cy5ib290LnRlc3Rfb3B0ZWVfb3MuVGVzdE9wdGVlIChtb2RpZmllZApsb2NhbGx5IHRv
-IHVzZSBPUC1URUUgNC40LjApLgoKKE5vdGUgdGhhdCB0byBidWlsZCBPUC1URUUgNC40LjAgaW4g
-dGhlIGRlZmNvbmZpZ3MgYW5kIHRlc3QsCkJSMl9UQVJHRVRfT1BURUVfT1NfTkVFRFNfUFlUSE9O
-X0NSWVBUT0dSQVBIWT15IGlzIGFsc28gbmVjZXNzYXJ5LikKCkhhdmUgYSBuaWNlIENocmlzdG1h
-cyBicmVhaywKVmluY2VudC4KCiBib290L29wdGVlLW9zL0NvbmZpZy5pbiB8IDExICsrKysrKysr
-KysrCiAxIGZpbGUgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2Jvb3Qv
-b3B0ZWUtb3MvQ29uZmlnLmluIGIvYm9vdC9vcHRlZS1vcy9Db25maWcuaW4KaW5kZXggY2MwMDQ0
-ZjAwYS4uNmM0YWZjY2M3YSAxMDA2NDQKLS0tIGEvYm9vdC9vcHRlZS1vcy9Db25maWcuaW4KKysr
-IGIvYm9vdC9vcHRlZS1vcy9Db25maWcuaW4KQEAgLTI1LDYgKzI1LDExIEBAIGNvbmZpZyBCUjJf
-VEFSR0VUX09QVEVFX09TX0xBVEVTVAogCSAgVXNlIHRoZSBsYXRlc3QgcmVsZWFzZSB0YWcgZnJv
-bSB0aGUgT1AtVEVFIE9TIG9mZmljaWFsIEdpdAogCSAgcmVwb3NpdG9yeS4KIAorY29uZmlnIEJS
-Ml9UQVJHRVRfT1BURUVfT1NfQ1VTVE9NX1ZFUlNJT04KKwlib29sICJDdXN0b20gdmVyc2lvbiIK
-KwloZWxwCisJICBUaGlzIG9wdGlvbiBhbGxvd3MgdG8gdXNlIGEgc3BlY2lmaWMgb2ZmaWNpYWwg
-dmVyc2lvbgorCiBjb25maWcgQlIyX1RBUkdFVF9PUFRFRV9PU19DVVNUT01fVEFSQkFMTAogCWJv
-b2wgIkN1c3RvbSB0YXJiYWxsIgogCWhlbHAKQEAgLTQzLDYgKzQ4LDEwIEBAIGNvbmZpZyBCUjJf
-VEFSR0VUX09QVEVFX09TX0NVU1RPTV9HSVQKIAogZW5kY2hvaWNlCiAKK2NvbmZpZyBCUjJfVEFS
-R0VUX09QVEVFX09TX0NVU1RPTV9WRVJTSU9OX1ZBTFVFCisJc3RyaW5nICJPUC1URUUgdmVyc2lv
-biIKKwlkZXBlbmRzIG9uIEJSMl9UQVJHRVRfT1BURUVfT1NfQ1VTVE9NX1ZFUlNJT04KKwogaWYg
-QlIyX1RBUkdFVF9PUFRFRV9PU19DVVNUT01fVEFSQkFMTAogCiBjb25maWcgQlIyX1RBUkdFVF9P
-UFRFRV9PU19DVVNUT01fVEFSQkFMTF9MT0NBVElPTgpAQCAtNzEsNiArODAsOCBAQCBlbmRpZgog
-Y29uZmlnIEJSMl9UQVJHRVRfT1BURUVfT1NfVkVSU0lPTgogCXN0cmluZwogCWRlZmF1bHQgIjQu
-My4wIgkJaWYgQlIyX1RBUkdFVF9PUFRFRV9PU19MQVRFU1QKKwlkZWZhdWx0IEJSMl9UQVJHRVRf
-T1BURUVfT1NfQ1VTVE9NX1ZFUlNJT05fVkFMVUUgXAorCQlpZiBCUjJfVEFSR0VUX09QVEVFX09T
-X0NVU1RPTV9WRVJTSU9OCiAJZGVmYXVsdCAiY3VzdG9tIglpZiBCUjJfVEFSR0VUX09QVEVFX09T
-X0NVU1RPTV9UQVJCQUxMCiAJZGVmYXVsdCBCUjJfVEFSR0VUX09QVEVFX09TX0NVU1RPTV9SRVBP
-X1ZFUlNJT04gXAogCQkJCWlmIEJSMl9UQVJHRVRfT1BURUVfT1NfQ1VTVE9NX0dJVAotLSAKMi40
-NS4yCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+From: "Yann E. MORIN" <yann.morin@orange.com>
+
+usbip allows configuring a client and a server, to share a USB device
+across the network.
+
+As explained in the .mk, usbip has been part from the kernel since
+linux-3.17. This would call for making it part of linux-tools, but this
+is a bit unwieldy: usbip is an autotools package, so trying to do a
+proper integration in linux-tools would basically need a complete
+duplication of the autotools infra [0].
+
+Instead, we decided to go with a full-blown package of its own, that
+just uses the current-latest kernel version. This makes for a nice,
+little autotools package as we like them. Nothing fancy.
+
+To be noted, though: usbip has its own license and license file, so
+that's what we use, and we do not reference those for the rest of the
+kernel: its GPL-2.0-or-later, not GPL-2.0(-only).
+
+Finally, we only enable the core usbip support in the kernel, and leave
+it to the user whether they should enable server and/or client support.
+
+[0] been there, done that; that was ugly and incomplete, what with the
+    libtool patches, autoreconf, and what not.
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Cc: Tal Shorer <tal.shorer@gmail.com>
+Cc: Marcin Bis <marcin@bis.org.pl>
+
+---
+There have been various attempts in the past:
+  - a separate package from legacy sources:
+    https://patchwork.ozlabs.org/project/buildroot/patch/CAOPBCFUzO64CXWKr4Z2rJeUb2NXExu=H1Gp2QyymrHcjVNaJuA@mail.gmail.com/
+  - a hybrid between a separate package and linux-tools:
+    https://patchwork.ozlabs.org/project/buildroot/patch/1481736504-12256-1-git-send-email-tal.shorer@gmail.com/
+  - a linux-tools implementatio:
+    https://patchwork.ozlabs.org/project/buildroot/patch/1512566955-4712-1-git-send-email-julien.boibessot@free.fr/
+
+All had shortcomings, so I started entirely from scratch. I first tried
+a linux-tools implementation (available if needed), but I really found
+it to be ugly and kludgy. The separate package is way nicer.
+---
+ package/Config.in        |  1 +
+ package/usbip/Config.in  | 13 +++++++++++++
+ package/usbip/usbip.hash |  5 +++++
+ package/usbip/usbip.mk   | 39 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 58 insertions(+)
+ create mode 100644 package/usbip/Config.in
+ create mode 100644 package/usbip/usbip.hash
+ create mode 100644 package/usbip/usbip.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index f33c4780f8..ee6a5a0e67 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -651,6 +651,7 @@ endmenu
+ 	source "package/usb_modeswitch/Config.in"
+ 	source "package/usb_modeswitch_data/Config.in"
+ 	source "package/usbguard/Config.in"
++	source "package/usbip/Config.in"
+ 	source "package/usbmount/Config.in"
+ 	source "package/usbutils/Config.in"
+ 	source "package/w_scan/Config.in"
+diff --git a/package/usbip/Config.in b/package/usbip/Config.in
+new file mode 100644
+index 0000000000..3038031aa0
+--- /dev/null
++++ b/package/usbip/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_USBIP
++	bool "usbip"
++	depends on BR2_PACKAGE_HAS_UDEV
++	help
++	  The USB-over-IP suite of tools.
++
++	  Note: you'll have to enable either (or both) of "VHCI hcd"
++	  (CONFIG_USBIP_VHCI_HCD) if you want to access a remote USB
++	  device, or "Host driver" (CONFIG_USBIP_HOST) if you want
++	  to share a USB device, in your kernel configuration.
++
++comment "usbip needs udev /dev management"
++	depends on !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/usbip/usbip.hash b/package/usbip/usbip.hash
+new file mode 100644
+index 0000000000..dc901617bf
+--- /dev/null
++++ b/package/usbip/usbip.hash
+@@ -0,0 +1,5 @@
++# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  d450ab215de4e1f8bb85e0f4216760fa33fd024b4526b144f4ce0d9012b29c9e  linux-6.12.6.tar.xz
++
++# Locally computed
++sha256  cd5c66af63b509ccd75ec85fee41b6e5cbb77cd6bf9392a54900acc0f02be4a6  tools/usb/usbip/COPYING
+diff --git a/package/usbip/usbip.mk b/package/usbip/usbip.mk
+new file mode 100644
+index 0000000000..77dd341f9b
+--- /dev/null
++++ b/package/usbip/usbip.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# usbip
++#
++################################################################################
++
++# Since linux 3.17, usbip is part of the linux source tree. Usually, we'd add
++# such a tool in the linux-tools package.
++#
++# However, usbip is autotools-based, so we'd have to duplicate the autotools
++# infra in linux-tools; the basic infra is easy to duplicate, but then come
++# the conditional libtool patches, and it's not trivial to do. And of course,
++# there would be the maintenance cost...
++#
++# usbip is not very tied to the kernel, in fact. It is pretty stable, API-wise,
++# so we can just use a recent kernel version.
++USBIP_VERSION = 6.12.6
++USBIP_SOURCE = linux-$(USBIP_VERSION).tar.xz
++USBIP_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v6.x
++USBIP_DL_SUBDIR = linux
++
++# usbip's licensing diverges from that of the rest of the kernel
++USBIP_LICENSE = GPL-2.0-or-later
++USBIP_LICENSE_FILES = tools/usb/usbip/COPYING
++
++USBIP_DEPENDENCIES = udev
++
++USBIP_SUBDIR = tools/usb/usbip
++USBIP_INSTALL_STAGING = YES
++
++USBIP_AUTORECONF = YES
++USBIP_CONFIGURE_OPTS = --without-tcp-wrappers
++
++define USBIP_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_USB_SUPPORT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_USBIP_CORE)
++endef
++
++$(eval $(autotools-package))
+-- 
+2.34.1
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
