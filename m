@@ -1,53 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 767A0E77188
-	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 20:40:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0239E77188
+	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 20:40:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 117E8410DF;
-	Fri, 20 Dec 2024 20:40:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 922236061E;
+	Fri, 20 Dec 2024 20:40:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2zsIKUxkHSCD; Fri, 20 Dec 2024 20:40:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ys5mYvJI7zhd; Fri, 20 Dec 2024 20:40:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D014A410E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8355A60661
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D014A410E3;
-	Fri, 20 Dec 2024 20:40:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id AF7AD730
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 20:40:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8355A60661;
+	Fri, 20 Dec 2024 20:40:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 28326920
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 20:40:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9049D81330
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 20:40:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 09D476061E
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 20:40:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ScfR8ei0OgCH for <buildroot@buildroot.org>;
- Fri, 20 Dec 2024 20:40:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 768228132B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 768228132B
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 20:40:19 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B5B3873A6; Fri, 20 Dec 2024 20:40:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y3yOc0fTpuJJ for <buildroot@buildroot.org>;
+ Fri, 20 Dec 2024 20:40:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EFDB060661
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFDB060661
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EFDB060661
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 20:40:55 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id E6B205FFBA;
+ Fri, 20 Dec 2024 21:40:51 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:58506])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 20 Dec 2024 21:40:51 +0100
+MIME-Version: 1.0
+Date: Fri, 20 Dec 2024 21:40:51 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 20 Dec 2024 21:28:06 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d21fdce7715878f2d1b2a44e450328f50c9862cb
-X-Git-Newrev: f38d7b4bb5a8c0c151bb3fe7322a8cc256ee6e7b
-X-Patchwork-Hint: ignore
-Message-Id: <20241220204019.5B5B3873A6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pymodbus: bump to version
- 3.8.1
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Falco Hyfing <hyfinglists@gmail.com>
+In-Reply-To: <20241219003400.227049-1-james.hilliard1@gmail.com>
+References: <20241219003400.227049-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <fd64c51ef331fb76e67e0e5cc4a811d1@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1734727254;
+ bh=4I3RF7ZSmsSiIRtBZUvIG0pKYcHPswMw9fu87Wf027k=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=d8HL9ATH7Q/ViUp4HqdDq+rQCEiInnSLgrZQoJHUZ5H7j5YCiWFNB5Kikk3mU/I7w
+ nE7/+fZIg4fx9vT7/Qm8/rct0qz6fZRMf0jhoFxlcIu9WgtZ2cPXjgpdrt04ISrNwJ
+ XPMBJEUxfZ+qi1SBIr2kpmYTIYu/udxIpcRMNJZh3KA6yc2QiIWs7BOXJmJn3AadW1
+ iVSj3c2C+OvPvuMXMX+366RLgGRPzFYRBlHRGFgvVIwqMfzRze1jgpCBzhF/5wL4Ak
+ Bxxr+6RUPNfV0qSsCL5/lDEbCCtxzFdHGSn5sCs5BjOh2Ca6ltptELVtu/WEk63A1g
+ NFgHL733Op1QQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=d8HL9ATH
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-pymodbus: bump to
+ version 3.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +83,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f38d7b4bb5a8c0c151bb3fe7322a8cc256ee6e7b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19/12/2024 01:34, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-pymodbus/python-pymodbus.hash | 4 ++--
- package/python-pymodbus/python-pymodbus.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
-index 7e3cadce70..1c51c5b2ab 100644
---- a/package/python-pymodbus/python-pymodbus.hash
-+++ b/package/python-pymodbus/python-pymodbus.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pymodbus/json
--md5  0371a857e08b555cabf3935044675f39  pymodbus-3.7.4.tar.gz
--sha256  573c370aea04523403eea1e159616a583cd7b93cfc5c81b07340d3cccd52c99f  pymodbus-3.7.4.tar.gz
-+md5  7fca9b2c51dce7e1d8585bb1d96dd7d1  pymodbus-3.8.1.tar.gz
-+sha256  543e3fabb10e9012801d235108ec81c8db15cc8f8e2c398861d0dc5acf9c623e  pymodbus-3.8.1.tar.gz
- # Locally computed sha256 checksums
- sha256  47f904249172e795a6b32de91f471073297befffd74e17cafc288d348a55972e  LICENSE
-diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
-index 0bd99cc3da..fe74e3d211 100644
---- a/package/python-pymodbus/python-pymodbus.mk
-+++ b/package/python-pymodbus/python-pymodbus.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYMODBUS_VERSION = 3.7.4
-+PYTHON_PYMODBUS_VERSION = 3.8.1
- PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
--PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/0b/bc/f98789706351e778676a3e84ed6203160c4f581092e298eb075bc9e08230
-+PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/ff/81/7a7bae73b54d3545a1da420886abea0641273bbd87956dc7217b54ef524f
- PYTHON_PYMODBUS_SETUP_TYPE = setuptools
- PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
- PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
+> ---
+>  package/python-pymodbus/python-pymodbus.hash | 4 ++--
+>  package/python-pymodbus/python-pymodbus.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/python-pymodbus/python-pymodbus.hash 
+> b/package/python-pymodbus/python-pymodbus.hash
+> index 7e3cadce70..1c51c5b2ab 100644
+> --- a/package/python-pymodbus/python-pymodbus.hash
+> +++ b/package/python-pymodbus/python-pymodbus.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/pymodbus/json
+> -md5  0371a857e08b555cabf3935044675f39  pymodbus-3.7.4.tar.gz
+> -sha256  
+> 573c370aea04523403eea1e159616a583cd7b93cfc5c81b07340d3cccd52c99f  
+> pymodbus-3.7.4.tar.gz
+> +md5  7fca9b2c51dce7e1d8585bb1d96dd7d1  pymodbus-3.8.1.tar.gz
+> +sha256  
+> 543e3fabb10e9012801d235108ec81c8db15cc8f8e2c398861d0dc5acf9c623e  
+> pymodbus-3.8.1.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  
+> 47f904249172e795a6b32de91f471073297befffd74e17cafc288d348a55972e  
+> LICENSE
+> diff --git a/package/python-pymodbus/python-pymodbus.mk 
+> b/package/python-pymodbus/python-pymodbus.mk
+> index 0bd99cc3da..fe74e3d211 100644
+> --- a/package/python-pymodbus/python-pymodbus.mk
+> +++ b/package/python-pymodbus/python-pymodbus.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  
+> ################################################################################
+> 
+> -PYTHON_PYMODBUS_VERSION = 3.7.4
+> +PYTHON_PYMODBUS_VERSION = 3.8.1
+>  PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
+> -PYTHON_PYMODBUS_SITE = 
+> https://files.pythonhosted.org/packages/0b/bc/f98789706351e778676a3e84ed6203160c4f581092e298eb075bc9e08230
+> +PYTHON_PYMODBUS_SITE = 
+> https://files.pythonhosted.org/packages/ff/81/7a7bae73b54d3545a1da420886abea0641273bbd87956dc7217b54ef524f
+>  PYTHON_PYMODBUS_SETUP_TYPE = setuptools
+>  PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
+>  PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
+> --
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
