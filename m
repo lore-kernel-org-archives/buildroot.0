@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14771E77188
-	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 22:06:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27BD9E7718C
+	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 22:06:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B20FF81440;
-	Fri, 20 Dec 2024 22:06:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DBDF4407AD;
+	Fri, 20 Dec 2024 22:06:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ti_pnd_GL-w0; Fri, 20 Dec 2024 22:06:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bbA70gLVHHKe; Fri, 20 Dec 2024 22:06:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB3CB8144A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8725407CD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB3CB8144A;
-	Fri, 20 Dec 2024 22:06:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D0D66920
+	by smtp4.osuosl.org (Postfix) with ESMTP id C8725407CD;
+	Fri, 20 Dec 2024 22:06:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E1518938
  for <buildroot@buildroot.org>; Fri, 20 Dec 2024 22:06:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B06966069D
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF9CA40187
  for <buildroot@buildroot.org>; Fri, 20 Dec 2024 22:06:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vkVSqwWCTGFA for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8Eync0vgHcNw for <buildroot@buildroot.org>;
  Fri, 20 Dec 2024 22:06:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1BAE606A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C422F40181
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C1BAE606A7
+ by smtp2.osuosl.org (Postfix) with ESMTP id C422F40181
  for <buildroot@buildroot.org>; Fri, 20 Dec 2024 22:06:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B85D587413; Fri, 20 Dec 2024 22:06:29 +0000 (UTC)
+ id AA6BF87412; Fri, 20 Dec 2024 22:06:29 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 20 Dec 2024 22:56:15 +0100
+Date: Fri, 20 Dec 2024 22:55:53 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ed59c2b7aa088b44d5d402bf4ddf454a99e45587
-X-Git-Newrev: 15dbc33be847c9b4d137e6311bb8ba68a51a3c27
+X-Git-Oldrev: 635c5f8a7dfa39bdd0413b48ae2752fc41bb6fac
+X-Git-Newrev: ed59c2b7aa088b44d5d402bf4ddf454a99e45587
 X-Patchwork-Hint: ignore
-Message-Id: <20241220220629.B85D587413@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: new proj runtime test
+Message-Id: <20241220220629.AA6BF87412@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/proj: add an option to build and
+ install apps
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,94 +65,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15dbc33be847c9b4d137e6311bb8ba68a51a3c27
+commit: https://git.buildroot.net/buildroot/commit/?id=ed59c2b7aa088b44d5d402bf4ddf454a99e45587
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The proj package includes command line applications. Those have always
+been disabled in Buildroot. Those applications can be useful for
+scripting, and also for runtime testing the libraries.
+
+This commit adds a package Kconfig option to enable those apps.
+
 Tested-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Reviewed-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Acked-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                 |  1 +
- support/testing/tests/package/test_proj.py | 59 ++++++++++++++++++++++++++++++
- 2 files changed, 60 insertions(+)
+ package/proj/Config.in | 12 ++++++++++++
+ package/proj/proj.mk   |  2 +-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 492eb765e0..f2abab2ef3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1956,6 +1956,7 @@ F:	support/testing/tests/package/test_pigz.py
- F:	support/testing/tests/package/test_postgresql.py
- F:	support/testing/tests/package/test_pppd.py
- F:	support/testing/tests/package/test_pppd/
-+F:	support/testing/tests/package/test_proj.py
- F:	support/testing/tests/package/test_pv.py
- F:	support/testing/tests/package/test_python_distro.py
- F:	support/testing/tests/package/test_python_gnupg.py
-diff --git a/support/testing/tests/package/test_proj.py b/support/testing/tests/package/test_proj.py
-new file mode 100644
-index 0000000000..ed23c229fd
---- /dev/null
-+++ b/support/testing/tests/package/test_proj.py
-@@ -0,0 +1,59 @@
-+import os
+diff --git a/package/proj/Config.in b/package/proj/Config.in
+index 6d172e2ee9..86966a4d10 100644
+--- a/package/proj/Config.in
++++ b/package/proj/Config.in
+@@ -14,6 +14,18 @@ config BR2_PACKAGE_PROJ
+ 
+ 	  http://proj4.org/
+ 
++if BR2_PACKAGE_PROJ
 +
-+import infra.basetest
++config BR2_PACKAGE_PROJ_APPS
++	bool "build apps"
++	select BR2_PACKAGE_LIBCURL
++	help
++	  Build and install proj command line apps. Those command line
++	  applications are: cct, cs2cs, geod, gie, invgeod, invproj,
++	  proj, projinfo, projsync.
 +
++endif
 +
-+class TestProj(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_PROJ=y
-+        BR2_PACKAGE_PROJ_APPS=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # We check the program can run. The "proj" command does not
-+        # have a "--version" option. It will just show its version
-+        # when invoked without any argument.
-+        self.assertRunOk("proj")
-+
-+        # The commands in this tests are taken from the Proj
-+        # documentation quickstart page, at:
-+        # https://proj.org/en/9.5/usage/quickstart.html
-+
-+        proj_str = "+proj=merc +lat_ts=56.5 +ellps=GRS80"
-+        cmd = "echo 55.2 12.2"
-+        cmd += f" | proj {proj_str}"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        expected_values = [3399483.80, 752085.60]
-+        values = list(map(lambda x: float(x), out[0].split()))
-+        for i in range(len(expected_values)):
-+            self.assertAlmostEqual(values[i], expected_values[i])
-+
-+        proj_str = "+proj=merc +lat_ts=56.5 +ellps=GRS80 +to +proj=utm +zone=32"
-+        cmd = "echo 3399483.80 752085.60"
-+        cmd += f" | cs2cs {proj_str}"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        expected_values = [6103992.36, 1924052.47, 0.00]
-+        values = list(map(lambda x: float(x), out[0].split()))
-+        for i in range(len(expected_values)):
-+            self.assertAlmostEqual(values[i], expected_values[i])
-+
-+        proj_str = "+init=epsg:4326 +to +init=epsg:25832"
-+        cmd = "echo 56 12"
-+        cmd += f" | cs2cs {proj_str}"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        expected_values = [6231950.54, 1920310.71, 0.00]
-+        values = list(map(lambda x: float(x), out[0].split()))
-+        for i in range(len(expected_values)):
-+            self.assertAlmostEqual(values[i], expected_values[i])
+ comment "proj needs a toolchain w/ C++, gcc >= 4.7, NPTL, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index 19b5f1012e..361c1e50b1 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
+@@ -20,7 +20,7 @@ PROJ_CXXFLAGS += -O0
+ endif
+ 
+ PROJ_CONF_OPTS = \
+-	-DBUILD_APPS=OFF \
++	-DBUILD_APPS=$(if $(BR2_PACKAGE_PROJ_APPS),ON,OFF) \
+ 	-DCMAKE_C_FLAGS="$(PROJ_CFLAGS)" \
+ 	-DCMAKE_CXX_FLAGS="$(PROJ_CXXFLAGS)"
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
