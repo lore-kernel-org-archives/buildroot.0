@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D057E77188
-	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 19:43:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 446F2E7718C
+	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 20:12:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51E00407DC;
-	Fri, 20 Dec 2024 19:43:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DBF1C83B18;
+	Fri, 20 Dec 2024 20:12:08 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LYX8JfGZyMXy; Fri, 20 Dec 2024 20:12:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D90E783B19
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D90E783B19;
+	Fri, 20 Dec 2024 20:12:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BB040730
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 20:12:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B307424B0
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 20:12:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p-FcsNqbksn2; Fri, 20 Dec 2024 19:43:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2144740895
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2144740895;
-	Fri, 20 Dec 2024 19:43:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BC5106C
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 19:43:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9A12A405AA
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 19:43:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IIs9CspilbGO for <buildroot@buildroot.org>;
- Fri, 20 Dec 2024 19:43:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5E82C400EA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E82C400EA
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5E82C400EA
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 19:43:54 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 6A8B119F57E;
- Fri, 20 Dec 2024 20:43:51 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:38270])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 20 Dec 2024 20:43:51 +0100
-MIME-Version: 1.0
-Date: Fri, 20 Dec 2024 20:43:51 +0100
+ id UWF8s_URkjGv for <buildroot@buildroot.org>;
+ Fri, 20 Dec 2024 20:12:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 824534249B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 824534249B
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 20:12:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 69923874BC; Fri, 20 Dec 2024 20:12:05 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241220151123.620117-1-zgyarmati@zgyarmati.de>
-References: <20241220151123.620117-1-zgyarmati@zgyarmati.de>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <867acb7d2873080a52f9c70728e72471@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734723832;
- bh=wr0R6sZJxR4leR5CsKmetXN7t/t+x3T0DnD4koz9QzM=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=N5Jz2pghH+kVLVtVH4U7BLaEglc5jEsW/d5sum00wV824UiEEcG25+VjBk6lBD4cm
- TNLctSu/n4ILkkAQwH9jdBVloaDeSoXm9Z7BWdGq6S/FzyN3NIyqMC+Jn6cO95913A
- +xV5uA9nHkdxvQZwFeM+uJq+/rsYmVQlqFUuHa1Gsa3XhiF6YbXABigaaHMPGV1lXF
- 9RAZgeYbUsB6fMbOhuUy8DKwOxlr5qjuhCXwZRZz8L5RPjqFIdV2P3Vu7b5vWQlppg
- P44wrfuOE6ZC0rsb/zkwiphrUrwVsC1z80sKoj9tvFUta2L05nHFr8d8lNWu0GQBqn
- 3ryDKs8aYq2Lg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=N5Jz2pgh
-Subject: Re: [Buildroot] [PATCH 1/1] package/proj: bump to 9.5.1
+To: buildroot@buildroot.org
+Date: Fri, 20 Dec 2024 20:53:31 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 38ea793bd2a2cf5d60a6887ad15e03eff58d84f9
+X-Git-Newrev: 6b2e3b2ce548f54db17818c9bac4bcd65b8bc9b5
+X-Patchwork-Hint: ignore
+Message-Id: <20241220201205.69923874BC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgpg-error: bump to version 1.51
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,61 +58,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 20/12/2024 16:11, Zoltan Gyarmati wrote:
-> Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=6b2e3b2ce548f54db17818c9bac4bcd65b8bc9b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+For the changelog, see:
+https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=log;h=libgpg-error-1.51
 
-> ---
->  package/proj/proj.hash | 6 +++---
->  package/proj/proj.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/proj/proj.hash b/package/proj/proj.hash
-> index 8a1650ade5..5249f52c10 100644
-> --- a/package/proj/proj.hash
-> +++ b/package/proj/proj.hash
-> @@ -1,5 +1,5 @@
-> -# Fetched from https://download.osgeo.org/proj/proj-9.5.0.tar.gz.md5
-> -md5  ac46b4e31562890d012ea6b31e579cf6  proj-9.5.0.tar.gz
-> +# Fetched from https://download.osgeo.org/proj/proj-9.5.1.tar.gz.md5
-> +md5  07c44ca4a65a0664ce823c8448707c78  proj-9.5.1.tar.gz
->  # Locally calculated
-> -sha256  
-> 659af0d558f7c5618c322fde2d3392910806faee8684687959339021fa207d99  
-> proj-9.5.0.tar.gz
-> +sha256  
-> a8395f9696338ffd46b0feb603edbb730fad6746fba77753c77f7f997345e3d3  
-> proj-9.5.1.tar.gz
->  sha256  
-> 6a8f30793e877d32e3f88b972f0970a051a3b5a26cd057d3993cb51e21c43319  
-> COPYING
-> diff --git a/package/proj/proj.mk b/package/proj/proj.mk
-> index a17a0a1feb..19b5f1012e 100644
-> --- a/package/proj/proj.mk
-> +++ b/package/proj/proj.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
-> 
-> -PROJ_VERSION = 9.5.0
-> +PROJ_VERSION = 9.5.1
->  PROJ_SITE = http://download.osgeo.org/proj
->  PROJ_LICENSE = MIT
->  PROJ_LICENSE_FILES = COPYING
-> --
-> 2.39.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Julien: add link to change log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libgpg-error/libgpg-error.hash | 4 ++--
+ package/libgpg-error/libgpg-error.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+index be5202584d..957f96edcf 100644
+--- a/package/libgpg-error/libgpg-error.hash
++++ b/package/libgpg-error/libgpg-error.hash
+@@ -1,6 +1,6 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  6790fc3d6e7bbd7576654b43971bbe15e953ccc4  libgpg-error-1.50.tar.bz2
+-sha256  69405349e0a633e444a28c5b35ce8f14484684518a508dc48a089992fe93e20a  libgpg-error-1.50.tar.bz2
++sha1  0a9386ff70a5d1f771771bf0b8db2b956e292f13  libgpg-error-1.51.tar.bz2
++sha256  be0f1b2db6b93eed55369cdf79f19f72750c8c7c39fc20b577e724545427e6b2  libgpg-error-1.51.tar.bz2
+ 
+ # Locally calculated
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 8dff6a612d..3f327e3054 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPG_ERROR_VERSION = 1.50
++LIBGPG_ERROR_VERSION = 1.51
+ LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
+ LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+ LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
