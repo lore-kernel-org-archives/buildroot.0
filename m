@@ -1,76 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2764E77188
-	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 20:15:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 933C1E77188
+	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 20:25:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C5F083C36;
-	Fri, 20 Dec 2024 20:15:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EA0660849;
+	Fri, 20 Dec 2024 20:25:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J36VyL6e9AAn; Fri, 20 Dec 2024 20:15:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TdDmjjQDbTm6; Fri, 20 Dec 2024 20:25:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BB5A83C34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BF086119E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BB5A83C34;
-	Fri, 20 Dec 2024 20:15:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6BF086119E;
+	Fri, 20 Dec 2024 20:25:09 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3A801730
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 20:15:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B5D7C920
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 20:25:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C2FC83C33
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 20:15:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9BEDE83C00
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 20:25:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yPgkcd5vLbbW for <buildroot@buildroot.org>;
- Fri, 20 Dec 2024 20:15:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9AFE983C2E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AFE983C2E
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9AFE983C2E
- for <buildroot@busybox.net>; Fri, 20 Dec 2024 20:15:39 +0000 (UTC)
+ id qyWMHFpZEbs9 for <buildroot@buildroot.org>;
+ Fri, 20 Dec 2024 20:25:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7307683BFF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7307683BFF
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7307683BFF
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 20:25:04 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id D93CB19F734;
- Fri, 20 Dec 2024 21:15:36 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:52422])
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 976D260132;
+ Fri, 20 Dec 2024 21:25:00 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:39994])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 20 Dec 2024 21:15:36 +0100
+ with HTTP (HTTP/1.0 POST); Fri, 20 Dec 2024 21:25:00 +0100
 MIME-Version: 1.0
-Date: Fri, 20 Dec 2024 21:15:36 +0100
+Date: Fri, 20 Dec 2024 21:25:00 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: Francois Perrad <francois.perrad@gadz.org>
-Cc: buildroot@busybox.net
-In-Reply-To: <20241220185829.1252883-1-francois.perrad@gadz.org>
-References: <20241220185829.1252883-1-francois.perrad@gadz.org>
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
+In-Reply-To: <20241220023856.3164047-1-james.hilliard1@gmail.com>
+References: <20241220023856.3164047-1-james.hilliard1@gmail.com>
 User-Agent: Webmail Free/1.6.9
-Message-ID: <8884af5dd629cce0d0e9cb64f1b49bd7@free.fr>
+Message-ID: <7cb989000245a77c68da602e4a7f77ef@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734725738;
- bh=/8eyZPqe63bNZE7tdG4Ot8aDDa0LXh7QB1fTgamb3j4=;
+ d=free.fr; s=smtp-20201208; t=1734726302;
+ bh=puyScXc5aaKn01a95yWjVWPX5Ns6UPM6T9SFWPLhWX8=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=FURgVF4XbYmlmzqIwP0A+21Y7dknvJd7UV7kkePI3T+7Np0zLtoWhCo7ZqJCGefEo
- BRt18tPL7QYD7aRZBAfIpfyJoABfCsJQz+uXTiAjD7rODBYk86PGXEMepmRdWlS/x1
- +pZm4acFY1wA7ADr1kxxUDS5+QpxlgmmwRSE22B1UVLAcbsT4Js8crGl/v6E+xcgmr
- 2/26H9spvPus439/u/RIbv2r3dLCZjobpYQZzfNWi8ivipoEVqJLboFchZk5imm3pA
- 6B8Wk1yykjYHnKbs168sycxqI7YYV5htVYlyn1xuvKB34/O/QeB7E7DJTQD8MNdy5i
- jIYihhKUHNxWw==
+ b=i6W8L+659X2B1v0WINTW1ei6zfY7LkPwhvOs1IKGTQbLVaaZo5xrZnSuylpG8EQg8
+ 8WBMFOO0TfpTjoVgmGGjK1br7vKgnlBDJupZ9NkWVlhn4oNgXX8PSaqTwwsG9Xk7SP
+ w5MrsFJPDzlg2l/PD9haUVLXlzK2LI2um8Ivj9dEynBDGGD3TSYjMfnqGq2BILUIr3
+ LvvI6lDLV/7RyyrbmkFiNG1VDAl5OHXj4SvgpV/YQnRTFJFk1uKJZ13RRaiwsi0fMg
+ mZURVD+dIAY0vKgsdfZe1H4dLJvd9QmB2TKB7xbzHQ4+JVBrcMbOKbrT6yPzkToNjo
+ Bb87L7ZSXGv+w==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FURgVF4X
-Subject: Re: [Buildroot] [PATCH] package/libnpth: bump to version 1.8
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=i6W8L+65
+Subject: Re: [Buildroot] [PATCH 1/1] package/rust: bump to version 1.83.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,235 +87,429 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 20/12/2024 19:58, Francois Perrad wrote:
-> remove merged patches
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Hi James,
 
-Applied to master, thanks.
+Thanks for the patch!
 
+This rust bump breaks the tests.package.test_rust.TestRust
+runtime test. See for example:
+https://gitlab.com/jolivain/buildroot/-/jobs/8701005012
+
+The version without this bump seems to work. See:
+https://gitlab.com/buildroot.org/buildroot/-/jobs?name=tests.package.test_rust.TestRust
+
+Could you have a look please?
+
+On 20/12/2024 03:38, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  ...EXPOSE_RWLOCK_API-for-musl-C-library.patch | 37 --------------
->  ..._rwlock_timedrdlock-is-not-supported.patch | 51 -------------------
->  .../libnpth/0003-Fix-previous-commit.patch    | 39 --------------
->  package/libnpth/libnpth.hash                  |  4 +-
->  package/libnpth/libnpth.mk                    |  4 +-
->  5 files changed, 3 insertions(+), 132 deletions(-)
->  delete mode 100644 
-> package/libnpth/0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch
->  delete mode 100644 
-> package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch
->  delete mode 100644 package/libnpth/0003-Fix-previous-commit.patch
+>  package/rust-bin/rust-bin.hash | 128 ++++++++++++++++-----------------
+>  package/rust-bin/rust-bin.mk   |   2 +-
+>  package/rust/rust.hash         |   4 +-
+>  package/rust/rust.mk           |   2 +-
+>  4 files changed, 68 insertions(+), 68 deletions(-)
 > 
-> diff --git 
-> a/package/libnpth/0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch 
-> b/package/libnpth/0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch
-> deleted file mode 100644
-> index bc5ed70a9..000000000
-> --- 
-> a/package/libnpth/0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch
-> +++ /dev/null
-> @@ -1,37 +0,0 @@
-> -From 417abd56fd7bf45cd4948414050615cb1ad59134 Mon Sep 17 00:00:00 2001
-> -From: NIIBE Yutaka <gniibe@fsij.org>
-> -Date: Fri, 1 Mar 2024 13:53:52 +0900
-> -Subject: [PATCH] Fix INSERT_EXPOSE_RWLOCK_API for musl C library.
-> -
-> -* configure.ac: Add a case for musl system.
-> -
-> ---
-> -
-> -GnuPG-bug-id: 5664
-> -Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
-> -
-> -Upstream: 
-> https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=commit;h=417abd56fd7bf45cd4948414050615cb1ad59134
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ----
-> - configure.ac | 5 ++++-
-> - 1 file changed, 4 insertions(+), 1 deletion(-)
-> -
-> -diff --git a/configure.ac b/configure.ac
-> -index c1091b1..576a26e 100644
-> ---- a/configure.ac
-> -+++ b/configure.ac
-> -@@ -381,7 +381,10 @@ fi
-> - AC_SUBST(INSERT_NO_RWLOCK)
-> -
-> - case "${host}" in
-> --    *-*-linux*|*-*-gnu*)
-> -+    *-*-linux-musl*)
-> -+        INSERT_EXPOSE_RWLOCK_API="1"
-> -+        ;;
-> -+    *-*-linux-gnu*|*-*-gnu*)
-> -         INSERT_EXPOSE_RWLOCK_API="defined(__USE_UNIX98) || 
-> defined(__USE_XOPEN2K)"
-> -         ;;
-> -     *)
-> ---
-> -2.30.2
-> -
-> diff --git 
-> a/package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch 
-> b/package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch
-> deleted file mode 100644
-> index 0d9b38e4c..000000000
-> --- 
-> a/package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch
-> +++ /dev/null
-> @@ -1,51 +0,0 @@
-> -From 01f03a91c9bd63910995aeef412beb3ca6dc9a67 Mon Sep 17 00:00:00 2001
-> -From: NIIBE Yutaka <gniibe@fsij.org>
-> -Date: Tue, 7 May 2024 13:45:47 +0900
-> -Subject: [PATCH] Return a run-time error if npth_rwlock_timedrdlock is 
-> not
-> - supported.
-> -
-> -* src/npth.c (npth_rwlock_timedrdlock): Return ENOSYS if not
-> -supported.
-> -(npth_rwlock_timedwrlock): Use HAVE_PTHREAD_RWLOCK_TRYWRLOCK.
-> -
-> ---
-> -
-> -GnuPG-bug-id: 7109
-> -Fixed-commit: 363c370bd35dd0bb4e5636b2d4f06ea88c658794
-> -Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
-> -
-> -Upstream: 
-> https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=commit;h=01f03a91c9bd63910995aeef412beb3ca6dc9a67
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ----
-> - src/npth.c | 6 ++++--
-> - 1 file changed, 4 insertions(+), 2 deletions(-)
-> -
-> -diff --git a/src/npth.c b/src/npth.c
-> -index c0ff8da..f02540c 100644
-> ---- a/src/npth.c
-> -+++ b/src/npth.c
-> -@@ -488,9 +488,11 @@ npth_rwlock_timedrdlock (npth_rwlock_t *rwlock, 
-> const struct timespec *abstime)
-> -   ENTER();
-> - #if HAVE_PTHREAD_RWLOCK_TIMEDRDLOCK
-> -   err = pthread_rwlock_timedrdlock (rwlock, abstime);
-> --#else
-> -+#elif HAVE_PTHREAD_RWLOCK_TRYRDLOCK
-> -   err = busy_wait_for ((trylock_func_t) pthread_rwlock_tryrdlock, 
-> rwlock,
-> - 		       abstime);
-> -+#else
-> -+  err = ENOSYS;
-> - #endif
-> -   LEAVE();
-> -   return err;
-> -@@ -533,7 +535,7 @@ npth_rwlock_timedwrlock (npth_rwlock_t *rwlock, 
-> const struct timespec *abstime)
-> -   ENTER();
-> - #if HAVE_PTHREAD_RWLOCK_TIMEDWRLOCK
-> -   err = pthread_rwlock_timedwrlock (rwlock, abstime);
-> --#elif HAVE_PTHREAD_RWLOCK_TRYRDLOCK
-> -+#elif HAVE_PTHREAD_RWLOCK_TRYWRLOCK
-> -   err = busy_wait_for ((trylock_func_t) pthread_rwlock_trywrlock, 
-> rwlock,
-> - 		       abstime);
-> - #else
-> ---
-> -2.30.2
-> -
-> diff --git a/package/libnpth/0003-Fix-previous-commit.patch 
-> b/package/libnpth/0003-Fix-previous-commit.patch
-> deleted file mode 100644
-> index 5f3ce06bf..000000000
-> --- a/package/libnpth/0003-Fix-previous-commit.patch
-> +++ /dev/null
-> @@ -1,39 +0,0 @@
-> -From 75c68399ef3bbb5d024f2a60474a7214fa479016 Mon Sep 17 00:00:00 2001
-> -From: NIIBE Yutaka <gniibe@fsij.org>
-> -Date: Mon, 13 May 2024 11:13:23 +0900
-> -Subject: [PATCH] Fix previous commit.
-> -
-> -Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
-> -
-> -Upstream: 
-> https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=commit;h=75c68399ef3bbb5d024f2a60474a7214fa479016
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ----
-> - src/npth.c | 12 ++++++++++++
-> - 1 file changed, 12 insertions(+)
-> -
-> -diff --git a/src/npth.c b/src/npth.c
-> -index f02540c..8dced17 100644
-> ---- a/src/npth.c
-> -+++ b/src/npth.c
-> -@@ -178,6 +178,18 @@ static int initialized_or_any_threads;
-> - typedef int (*trylock_func_t) (void *);
-> -
-> - #ifndef HAVE_PTHREAD_MUTEX_TIMEDLOCK
-> -+#define REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION 1
-> -+#endif
-> -+
-> -+#if !HAVE_PTHREAD_RWLOCK_TIMEDRDLOCK && HAVE_PTHREAD_RWLOCK_TRYRDLOCK
-> -+#define REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION 1
-> -+#endif
-> -+
-> -+#if !HAVE_PTHREAD_RWLOCK_TIMEDWRLOCK && HAVE_PTHREAD_RWLOCK_TRYWRLOCK
-> -+#define REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION 1
-> -+#endif
-> -+
-> -+#if REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION
-> - static int
-> - busy_wait_for (trylock_func_t trylock, void *lock,
-> - 	       const struct timespec *abstime)
-> ---
-> -2.30.2
-> -
-> diff --git a/package/libnpth/libnpth.hash 
-> b/package/libnpth/libnpth.hash
-> index a140a23f6..ad541111a 100644
-> --- a/package/libnpth/libnpth.hash
-> +++ b/package/libnpth/libnpth.hash
-> @@ -1,6 +1,6 @@
->  # From https://www.gnupg.org/download/integrity_check.html
-> -sha1  a9f7adc1b1f6707071d29bfb3338c28b995ca1ce  npth-1.7.tar.bz2
+> diff --git a/package/rust-bin/rust-bin.hash 
+> b/package/rust-bin/rust-bin.hash
+> index 070a0b9779..94464c687c 100644
+> --- a/package/rust-bin/rust-bin.hash
+> +++ b/package/rust-bin/rust-bin.hash
+> @@ -1,70 +1,70 @@
+>  # Generated with utils/update-rust
+>  # Do not edit manually
+> 
+> -# From 
+> https://static.rust-lang.org/dist/rust-1.82.0-aarch64-unknown-linux-gnu.tar.xz.sha256
 > -sha256  
-> 8589f56937b75ce33b28d312fccbf302b3b71ec3f3945fde6aaa74027914ad05  
-> npth-1.7.tar.bz2
-> +sha1  6f60ce8540453e120d715f269d0c7cfd9e0b0d24  npth-1.8.tar.bz2
+> 99acf175be33bd96ac82d644125d0e2acc6962d61ee64851edc7d8ba3bd23ca4  
+> rust-1.82.0-aarch64-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-1.82.0-i686-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> 34669e600d6ee7744e59f5d4542e2a539a9b13f099a4533f19a46e32a0868053  
+> rust-1.82.0-i686-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-1.82.0-powerpc-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> a32342217fb82167fffcaf0c7e44ac6e32ce5fa63dc3beb42439ab05f561a882  
+> rust-1.82.0-powerpc-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-1.82.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> 0608a560ce266e8aafecc2b9908e3094f5ef1e135460b1f88aa614e5bf65aae4  
+> rust-1.82.0-powerpc64-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-1.82.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> 048f637a547522ba0081c5772fd3196dfcc2d0d24f442424f168b5d55f961537  
+> rust-1.82.0-powerpc64le-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-1.82.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> 532190c3cdbdee9249bcde648b1c61b092bdd8885266ba9edd6df6824a454958  
+> rust-1.82.0-riscv64gc-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-1.82.0-s390x-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> 71428fab3cf18cfe4b4486a11d292ec157fe8b0c904fb4fae34db6539144c286  
+> rust-1.82.0-s390x-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-1.82.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> 8a6bf24ca1fee2bd861590431c7954674191a0c0dfa0af4169731bc1459cf58a  
+> rust-1.82.0-x86_64-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-aarch64-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> 1359ac1f3a123ae5da0ee9e47b98bb9e799578eefd9f347ff9bafd57a1d74a7f  
+> rust-std-1.82.0-aarch64-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-aarch64-unknown-linux-musl.tar.xz.sha256
+> -sha256  
+> a364a4b506865fbd56aac67e2b540a824cd9abda621bb38a8b678166d33b8ec2  
+> rust-std-1.82.0-aarch64-unknown-linux-musl.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-arm-unknown-linux-gnueabi.tar.xz.sha256
+> -sha256  
+> bec0b04e6e1e183fc21521e9cc2dc89be41c3ccacff3fb5ca48419b47af94fe1  
+> rust-std-1.82.0-arm-unknown-linux-gnueabi.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
+> -sha256  
+> fa379cc69b23782cbaddf66025889bf5ca9c32ddb60766fe158b43cfe49a2b2b  
+> rust-std-1.82.0-arm-unknown-linux-gnueabihf.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-arm-unknown-linux-musleabi.tar.xz.sha256
+> -sha256  
+> cd5e1577c1772ba309d003c49a2df2f06ccbc1cd1bf3ee9c1cfada210979f26e  
+> rust-std-1.82.0-arm-unknown-linux-musleabi.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-arm-unknown-linux-musleabihf.tar.xz.sha256
+> -sha256  
+> 86f2242347c1cbae354cd0ff66c9bfe735f1b371c189aaf0157a3b55004590cb  
+> rust-std-1.82.0-arm-unknown-linux-musleabihf.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-armv5te-unknown-linux-gnueabi.tar.xz.sha256
+> -sha256  
+> e3c74773cf6f09a3cda1b64c3058f5a88abea0a98f172de895c0ecf7b7b760b2  
+> rust-std-1.82.0-armv5te-unknown-linux-gnueabi.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-armv5te-unknown-linux-musleabi.tar.xz.sha256
+> -sha256  
+> df0a3be0e71ca8aa8be4915f7142661af32411949a75c1729a314e6ab5c78b0b  
+> rust-std-1.82.0-armv5te-unknown-linux-musleabi.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-armv7-unknown-linux-gnueabi.tar.xz.sha256
+> -sha256  
+> 4d692c1696ad49285a45bc5f636ce9c13ccb32b99ed14be428eaaf1e0cae6b33  
+> rust-std-1.82.0-armv7-unknown-linux-gnueabi.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
+> -sha256  
+> 34d258a07c9051803786405731c05fb19f7980e13308acf4b16e8c836bd73ac8  
+> rust-std-1.82.0-armv7-unknown-linux-gnueabihf.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-armv7-unknown-linux-musleabi.tar.xz.sha256
+> -sha256  
+> 1e318fcff01379cf4459f02526309b1f086530004be4fb5e00988ce7b1d821f5  
+> rust-std-1.82.0-armv7-unknown-linux-musleabi.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-armv7-unknown-linux-musleabihf.tar.xz.sha256
+> -sha256  
+> bf93c79abc56bfcc3d48f2defcb0ca720405d01a50ba08d6d24830ae034bbc2d  
+> rust-std-1.82.0-armv7-unknown-linux-musleabihf.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-i586-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> f56585c55664898c7484f4b7bd139770c99d7b4da6e56e4016f71cb053b1aee2  
+> rust-std-1.82.0-i586-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-i586-unknown-linux-musl.tar.xz.sha256
+> -sha256  
+> 711c03ffb5bb53fcc97278b015d1ea9f503ce826ba390855f576c0e3b77c4bdb  
+> rust-std-1.82.0-i586-unknown-linux-musl.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-i686-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> c7ebb02b6ca349999b3b7dce768efaca5e0d9060f55397523e11a64cd10a9405  
+> rust-std-1.82.0-i686-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-i686-unknown-linux-musl.tar.xz.sha256
+> -sha256  
+> 3c5ee32afc4b83313832c7a78175c05a5e568e6053fde7e65e2a9b19ce104c10  
+> rust-std-1.82.0-i686-unknown-linux-musl.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-powerpc-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> 827989a42526206199025f764d08d7cd319fee58bf2e08dcaf75df9ead6f094e  
+> rust-std-1.82.0-powerpc-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> cdfadb39f1325319de8152504413f34671ac09fa7ecb97f967c25ece3645bc5e  
+> rust-std-1.82.0-powerpc64-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> 4954a44305622b8f68ca088138b9a69432e350336da1a415a282ce148beb340d  
+> rust-std-1.82.0-powerpc64le-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> 5649f9b4e107d6c5f72fb7f82cfe15370b80b8d983670602e02e0b615bc6dc88  
+> rust-std-1.82.0-riscv64gc-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-s390x-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> 454b83668b57bdef28fc49aca8fd4c38e395b49011e653afdf3f9bb2dae8aa63  
+> rust-std-1.82.0-s390x-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-sparc64-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> 87db52d782131a8817b76f65eefcae2c24a49b2a6f19ed9bd4699167305c22aa  
+> rust-std-1.82.0-sparc64-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+> -sha256  
+> 2eca3d36f7928f877c334909f35fe202fbcecce109ccf3b439284c2cb7849594  
+> rust-std-1.82.0-x86_64-unknown-linux-gnu.tar.xz
+> -# From 
+> https://static.rust-lang.org/dist/rust-std-1.82.0-x86_64-unknown-linux-musl.tar.xz.sha256
+> -sha256  
+> 1c99a4c81f51b687ba55746c7d3f19b5b860fe4eff604d3c7d803e08c9cc89bb  
+> rust-std-1.82.0-x86_64-unknown-linux-musl.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-1.83.0-aarch64-unknown-linux-gnu.tar.xz.sha256
 > +sha256  
-> 8bd24b4f23a3065d6e5b26e98aba9ce783ea4fd781069c1b35d149694e90ca3e  
-> npth-1.8.tar.bz2
-> 
->  # Hash for license file:
+> 5f02e00bca65f6eebafe2ac6b1bbdecb5f160f260a9c2231a51ed8d382f0ada0  
+> rust-1.83.0-aarch64-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-1.83.0-i686-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> e36915f3a68d8da7166b49ad67d23d26efc79f38cf6a3db102dc022eb2ed1b0a  
+> rust-1.83.0-i686-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-1.83.0-powerpc-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> 2c5a825cc10b2a4e17856f594d5183db5bba5f40cfddeeef4481a6bca46893ff  
+> rust-1.83.0-powerpc-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-1.83.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> 0bc62191ca5fb655c0535b8935d94c28b5b601187eeb80bcf4928f6bae820594  
+> rust-1.83.0-powerpc64-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-1.83.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> 7f4c28eef31ea4b1f09e8eafe745234370d09cf42badcce5a15da3c738e5b92c  
+> rust-1.83.0-powerpc64le-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-1.83.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> ce9308beb0bb54560921821934625b9cdee01d8e6d269e252e9aaf630330b773  
+> rust-1.83.0-riscv64gc-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-1.83.0-s390x-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> 9b6043c0cbda239f74e874522816f5ac240cf78ca05c32f274bb1b7887be0cd4  
+> rust-1.83.0-s390x-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-1.83.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> b6467a0e8a6c5dca35269785c994e4d80d89754d6c600162cc9146f90c87ee08  
+> rust-1.83.0-x86_64-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-aarch64-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> 8804f673809c5c3db11ba354b5cf9724aed68884771fa32af4b3472127a76028  
+> rust-std-1.83.0-aarch64-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-aarch64-unknown-linux-musl.tar.xz.sha256
+> +sha256  
+> 2bac2fe2411f56788aa82587eace49b469bf1b03e5dbb0ee8e3e2a1ba667ca11  
+> rust-std-1.83.0-aarch64-unknown-linux-musl.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-arm-unknown-linux-gnueabi.tar.xz.sha256
+> +sha256  
+> 421ca05ad0f66c4172d29c650856c1510b77ca32a8056070460abb9f43859428  
+> rust-std-1.83.0-arm-unknown-linux-gnueabi.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
+> +sha256  
+> 1d71e107b7cd96ad90e45fa402475c96ea9420290740be90168205137f3163ab  
+> rust-std-1.83.0-arm-unknown-linux-gnueabihf.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-arm-unknown-linux-musleabi.tar.xz.sha256
+> +sha256  
+> da5a2f92006e579fafba77661e6e9c4660286fc5596bd5bfa632a442a7981ef5  
+> rust-std-1.83.0-arm-unknown-linux-musleabi.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-arm-unknown-linux-musleabihf.tar.xz.sha256
+> +sha256  
+> 81c42154aab83c0bb2e91d4d237fa833293b750c3154b68f6bed6749a195aa32  
+> rust-std-1.83.0-arm-unknown-linux-musleabihf.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-armv5te-unknown-linux-gnueabi.tar.xz.sha256
+> +sha256  
+> 16d270f5323ad986bc1daabc3ded7921d72ab60639ba14106ff491a345e48528  
+> rust-std-1.83.0-armv5te-unknown-linux-gnueabi.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-armv5te-unknown-linux-musleabi.tar.xz.sha256
+> +sha256  
+> a400a3441011f082baf00afe03f2ea4f11aaf935bbee599be1e8d2ef8b8b991c  
+> rust-std-1.83.0-armv5te-unknown-linux-musleabi.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-armv7-unknown-linux-gnueabi.tar.xz.sha256
+> +sha256  
+> 26a1a081da300225e68e05823ad027e078a35dc70be9d52f7d4243d1fc8286b3  
+> rust-std-1.83.0-armv7-unknown-linux-gnueabi.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
+> +sha256  
+> 78e4778d461532e13323a8bdb08e203153f7caf2fede6a2b8ecc6114b4e08ebb  
+> rust-std-1.83.0-armv7-unknown-linux-gnueabihf.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-armv7-unknown-linux-musleabi.tar.xz.sha256
+> +sha256  
+> 99a2846802dd0a94678e3393f58fc0f6a5144599911a119537849bb59952c401  
+> rust-std-1.83.0-armv7-unknown-linux-musleabi.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-armv7-unknown-linux-musleabihf.tar.xz.sha256
+> +sha256  
+> 220be1d117e7ec39239fd2e582674a9923e13ade5c4d606da06cd3657af09cb0  
+> rust-std-1.83.0-armv7-unknown-linux-musleabihf.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-i586-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> 7948ff50f7e83a20deba9d4f55170f7e3b0d805e80049f38b19f41580a9d7bb1  
+> rust-std-1.83.0-i586-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-i586-unknown-linux-musl.tar.xz.sha256
+> +sha256  
+> 186b8846bc429f0714da6c95dbd41e9940dc0a4f26ff8b94982c19a311a1de10  
+> rust-std-1.83.0-i586-unknown-linux-musl.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-i686-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> d6763f3ff18fa6da4455058fcb84ef19c2586fca02badab466200d90fa4184d4  
+> rust-std-1.83.0-i686-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-i686-unknown-linux-musl.tar.xz.sha256
+> +sha256  
+> f3b0b203caaa4954de510d571cfa60c68eae1ea1253ae056574353e33d322580  
+> rust-std-1.83.0-i686-unknown-linux-musl.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-powerpc-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> 17978a56a8efef883485201dc701ed2ff13530511578da240840f12bdc55cb27  
+> rust-std-1.83.0-powerpc-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> adcefafca7a7b7ddb220d18e31afdfd4c547f87b1515e45098513b2d468043e7  
+> rust-std-1.83.0-powerpc64-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> d39fdf0954e57fa9dd0763d58e7897bbb93265ab217e5fef14a11fafe2f706a3  
+> rust-std-1.83.0-powerpc64le-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> 6a5467d1f4b8040f19c94ca332063cad57581d6cfd1f15543da5a67d4d244f70  
+> rust-std-1.83.0-riscv64gc-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-s390x-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> d1e1af8622d59c3351046ded96af4eeecb3db2f4f7527249eaf1acc917e3f2e8  
+> rust-std-1.83.0-s390x-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-sparc64-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> e8684ba5d337dbb0594cdc8e4e8ffa11d7ac8e48b2f294019e042e341fa9a869  
+> rust-std-1.83.0-sparc64-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+> +sha256  
+> c88fe6cb22f9d2721f26430b6bdd291e562da759e8629e2b4c7eb2c7cad705f2  
+> rust-std-1.83.0-x86_64-unknown-linux-gnu.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rust-std-1.83.0-x86_64-unknown-linux-musl.tar.xz.sha256
+> +sha256  
+> 9086ad74419cf5194b414dadd422b9ce1311cee51d133d15e90be0c797fb3cd0  
+> rust-std-1.83.0-x86_64-unknown-linux-musl.tar.xz
+>  # Locally generated
 >  sha256  
-> ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  
-> COPYING.LIB
-> diff --git a/package/libnpth/libnpth.mk b/package/libnpth/libnpth.mk
-> index 634da6ed3..76abf45fd 100644
-> --- a/package/libnpth/libnpth.mk
-> +++ b/package/libnpth/libnpth.mk
-> @@ -4,14 +4,12 @@
->  #
->  
-> ################################################################################
+> 62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  
+> LICENSE-APACHE
+>  sha256  
+> 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  
+> LICENSE-MIT
+> diff --git a/package/rust-bin/rust-bin.mk 
+> b/package/rust-bin/rust-bin.mk
+> index c14ca7f88e..9cf261631f 100644
+> --- a/package/rust-bin/rust-bin.mk
+> +++ b/package/rust-bin/rust-bin.mk
+> @@ -6,7 +6,7 @@
 > 
-> -LIBNPTH_VERSION = 1.7
-> +LIBNPTH_VERSION = 1.8
->  LIBNPTH_SOURCE = npth-$(LIBNPTH_VERSION).tar.bz2
->  LIBNPTH_SITE = https://www.gnupg.org/ftp/gcrypt/npth
->  LIBNPTH_LICENSE = LGPL-2.0+
->  LIBNPTH_LICENSE_FILES = COPYING.LIB
->  LIBNPTH_INSTALL_STAGING = YES
-> -# 0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch
-> -LIBNPTH_AUTORECONF = YES
->  LIBNPTH_CONF_OPTS = --disable-tests
->  HOST_LIBNPTH_CONF_OPTS = --disable-tests
+>  # When updating this version, check whether 
+> support/download/cargo-post-process
+>  # still generates the same archives.
+> -RUST_BIN_VERSION = 1.82.0
+> +RUST_BIN_VERSION = 1.83.0
+>  RUST_BIN_SITE = https://static.rust-lang.org/dist
+>  RUST_BIN_LICENSE = Apache-2.0 or MIT
+>  RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+> diff --git a/package/rust/rust.hash b/package/rust/rust.hash
+> index 19af66e2d6..b753492f28 100644
+> --- a/package/rust/rust.hash
+> +++ b/package/rust/rust.hash
+> @@ -1,8 +1,8 @@
+>  # Generated with utils/update-rust
+>  # Do not edit manually
 > 
+> -# From 
+> https://static.rust-lang.org/dist/rustc-1.82.0-src.tar.xz.sha256
+> -sha256  
+> 1276a0bb8fa12288ba6fa96597d28b40e74c44257c051d3bc02c2b049bb38210  
+> rustc-1.82.0-src.tar.xz
+> +# From 
+> https://static.rust-lang.org/dist/rustc-1.83.0-src.tar.xz.sha256
+> +sha256  
+> 7b11d4242dab0921a7d54758ad3fe805153c979c144625fecde11735760f97df  
+> rustc-1.83.0-src.tar.xz
+>  # Locally generated
+>  sha256  
+> 62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  
+> LICENSE-APACHE
+>  sha256  
+> 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  
+> LICENSE-MIT
+> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+> index 29c03594d2..08dda64849 100644
+> --- a/package/rust/rust.mk
+> +++ b/package/rust/rust.mk
+> @@ -6,7 +6,7 @@
+> 
+>  # When updating this version, check whether 
+> support/download/cargo-post-process
+>  # still generates the same archives.
+> -RUST_VERSION = 1.82.0
+> +RUST_VERSION = 1.83.0
+>  RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
+>  RUST_SITE = https://static.rust-lang.org/dist
+>  RUST_LICENSE = Apache-2.0 or MIT
 > --
-> 2.43.0
+> 2.34.1
 > 
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
 > https://lists.buildroot.org/mailman/listinfo/buildroot
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
