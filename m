@@ -1,99 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BB0CE77188
-	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 18:58:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34A87E7718B
+	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 19:17:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7480A612D7;
-	Fri, 20 Dec 2024 18:58:40 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PfdnQJvB3dx9; Fri, 20 Dec 2024 18:58:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 084C46120A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 084C46120A;
-	Fri, 20 Dec 2024 18:58:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A90DF6C
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 18:58:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 88F9483B2F
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 18:58:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E02EC8118C;
+	Fri, 20 Dec 2024 19:17:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2omzOoL-_Eq5 for <buildroot@buildroot.org>;
- Fri, 20 Dec 2024 18:58:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
- envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EF87E83B0F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF87E83B0F
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EF87E83B0F
- for <buildroot@busybox.net>; Fri, 20 Dec 2024 18:58:35 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-436326dcb1cso15793275e9.0
- for <buildroot@busybox.net>; Fri, 20 Dec 2024 10:58:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1734721114; x=1735325914;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=oThXMvWkIttZ5DAqPWQKO+M2q5Hybys5NAnM2adp6r0=;
- b=aSCuBsSLug1bZPVn1fJH+jpslc100T5jtjSyJ/fV329w9XdXjYYRYJX8EibJV3Loul
- T7sByDVRPJtLeHSYN+N+8TImFp5g9EjPhWId3gWNyZ5w5gR4/ABN/a+POvGvU4poFGUl
- o4Vv+URa2Pytxsk90hoAoGnrAnEASdbywSgn+ZQ7m7tpkFPnrMyzZHGhOl6vrYLu60J3
- OvLSbqCMcq53WBqEcK/lWUzjbCsbi3Go7TEdnogq/0JT5viUgma+PNIJ+cNNbaZx3slS
- PGAm13pNqxZ25dtocg9MwmoAVck2ZhJjFZs5fgqAnv8OyacDFKyQdIYC6LO5gby/BQCk
- oJzw==
-X-Gm-Message-State: AOJu0Yye/CXrztTuYEHRBfddpEmLsEIKPEzXdXzq1U/yUbC6p01qASHh
- 4FqRu+H8wgs3bhPaYwh17pyqlnsOSGCc1qVt2qK7orSKV6mA428Jo/rhw56UZWYCFcsIDnS9PSr
- sxA==
-X-Gm-Gg: ASbGncvbAtGJC16vOPdGkDYyj4ksGLNf3HKT7O1YaeCDmM7O0j255+rzRahuNpESzfi
- Ffo87bguyWtXYwGA1hZhrcfOo5RdrOqVzWdIbXX37whsNJQtooRmTyYARBmF4Y9NSasfbPS2jY2
- 7qbgRUqpJ6+vMM2WLjI8AElzRFOlfs9UgMookYyN51VCIaHZPEiJsLt66jaANO03RvEr+ZXXos2
- roYQTgz9c7R3Kbj7HltkYsNuMmlYNXRzAcZG+kHOWPddp6Soeuh1mcb+/pVQm120FysuQDomTZm
- ia0YFkrzK6b5RJ4=
-X-Google-Smtp-Source: AGHT+IEehaWho8LEubeHWzZkapMA0TrKJGFFqpvqYr1wTq2dyUJ3YMeNDYmeqpt6Y5fIcyG+Oy5drw==
-X-Received: by 2002:a5d:5f95:0:b0:385:dc45:ea06 with SMTP id
- ffacd0b85a97d-38a221fab2dmr3932607f8f.13.1734721113610; 
- Fri, 20 Dec 2024 10:58:33 -0800 (PST)
-Received: from vm-2404.. (75.184.66.37.rev.sfr.net. [37.66.184.75])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4366127c493sm52433235e9.28.2024.12.20.10.58.31
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 20 Dec 2024 10:58:33 -0800 (PST)
-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Fri, 20 Dec 2024 19:58:29 +0100
-Message-ID: <20241220185829.1252883-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1734721114; x=1735325914; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=oThXMvWkIttZ5DAqPWQKO+M2q5Hybys5NAnM2adp6r0=;
- b=FUOwjyp4wV6OzD3ke8OqgaXzIjqda4WW+zE6r0Ez5sBqeKcVmFRgJokGXPzTpxwOeV
- TLeW6GYx1TYltk8x0i5rnKKsLWiqwAluE+zpdFcyH5Z+n+qQgatMRuFoBeCJIfeSXNBf
- IDddYtGGXI5mH3szZGhKbAJs1/ve7ze6zubkIp3SwQHsZojgXQ0c7c7sx6IYEmlZyQTi
- 4tHJdmHAe2W/IXwW4GjE/ai01B5iaprYdqZcIydsuR0kFZRcP0+gzft8gGxFO7d6roES
- Obu9Y9ODDTCpKWMH8hK8D4XltGwzFLhQFhal/4wuFnJIPWA+nd0grTo4g4lf3QYZdjNE
- ZqPw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gadz.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=FUOwjyp4
-Subject: [Buildroot] [PATCH] package/libnpth: bump to version 1.8
+ id 6qc8kfON7Ele; Fri, 20 Dec 2024 19:17:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1CC68117C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id F1CC68117C;
+	Fri, 20 Dec 2024 19:17:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2C7F5730
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 19:17:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C40A040453
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 19:17:48 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jolk7cjM38qJ for <buildroot@buildroot.org>;
+ Fri, 20 Dec 2024 19:17:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA95A400EA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA95A400EA
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 19:17:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C35AC87475; Fri, 20 Dec 2024 19:17:46 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 20 Dec 2024 20:15:00 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a0ebdd5cd8318d03693ffa2bfd95b311847bbc1c
+X-Git-Newrev: 75320f567d3ac120002a21e3c2399ef2a3929b61
+X-Patchwork-Hint: ignore
+Message-Id: <20241220191746.C35AC87475@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imx6ulz_bsh_smm_m2: bump U-Boot to
+ 2024.10 and Linux to 6.1.120
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,206 +59,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-remove merged patches
+commit: https://git.buildroot.net/buildroot/commit/?id=75320f567d3ac120002a21e3c2399ef2a3929b61
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- ...EXPOSE_RWLOCK_API-for-musl-C-library.patch | 37 --------------
- ..._rwlock_timedrdlock-is-not-supported.patch | 51 -------------------
- .../libnpth/0003-Fix-previous-commit.patch    | 39 --------------
- package/libnpth/libnpth.hash                  |  4 +-
- package/libnpth/libnpth.mk                    |  4 +-
- 5 files changed, 3 insertions(+), 132 deletions(-)
- delete mode 100644 package/libnpth/0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch
- delete mode 100644 package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch
- delete mode 100644 package/libnpth/0003-Fix-previous-commit.patch
+- Bump Linux kernel to 6.1.120
+- Bump U-Boot to 2024.10 and add the dependency on GnuTLS and
+  util-linux (for uuid)
 
-diff --git a/package/libnpth/0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch b/package/libnpth/0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch
-deleted file mode 100644
-index bc5ed70a9..000000000
---- a/package/libnpth/0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 417abd56fd7bf45cd4948414050615cb1ad59134 Mon Sep 17 00:00:00 2001
--From: NIIBE Yutaka <gniibe@fsij.org>
--Date: Fri, 1 Mar 2024 13:53:52 +0900
--Subject: [PATCH] Fix INSERT_EXPOSE_RWLOCK_API for musl C library.
--
--* configure.ac: Add a case for musl system.
--
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
--
--GnuPG-bug-id: 5664
--Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
--
--Upstream: https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=commit;h=417abd56fd7bf45cd4948414050615cb1ad59134
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure.ac | 5 ++++-
-- 1 file changed, 4 insertions(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index c1091b1..576a26e 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -381,7 +381,10 @@ fi
-- AC_SUBST(INSERT_NO_RWLOCK)
-- 
-- case "${host}" in
---    *-*-linux*|*-*-gnu*)
--+    *-*-linux-musl*)
--+        INSERT_EXPOSE_RWLOCK_API="1"
--+        ;;
--+    *-*-linux-gnu*|*-*-gnu*)
--         INSERT_EXPOSE_RWLOCK_API="defined(__USE_UNIX98) || defined(__USE_XOPEN2K)"
--         ;;
--     *)
---- 
--2.30.2
--
-diff --git a/package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch b/package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch
-deleted file mode 100644
-index 0d9b38e4c..000000000
---- a/package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 01f03a91c9bd63910995aeef412beb3ca6dc9a67 Mon Sep 17 00:00:00 2001
--From: NIIBE Yutaka <gniibe@fsij.org>
--Date: Tue, 7 May 2024 13:45:47 +0900
--Subject: [PATCH] Return a run-time error if npth_rwlock_timedrdlock is not
-- supported.
--
--* src/npth.c (npth_rwlock_timedrdlock): Return ENOSYS if not
--supported.
--(npth_rwlock_timedwrlock): Use HAVE_PTHREAD_RWLOCK_TRYWRLOCK.
--
----
--
--GnuPG-bug-id: 7109
--Fixed-commit: 363c370bd35dd0bb4e5636b2d4f06ea88c658794
--Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
--
--Upstream: https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=commit;h=01f03a91c9bd63910995aeef412beb3ca6dc9a67
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/npth.c | 6 ++++--
-- 1 file changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/src/npth.c b/src/npth.c
--index c0ff8da..f02540c 100644
----- a/src/npth.c
--+++ b/src/npth.c
--@@ -488,9 +488,11 @@ npth_rwlock_timedrdlock (npth_rwlock_t *rwlock, const struct timespec *abstime)
--   ENTER();
-- #if HAVE_PTHREAD_RWLOCK_TIMEDRDLOCK
--   err = pthread_rwlock_timedrdlock (rwlock, abstime);
---#else
--+#elif HAVE_PTHREAD_RWLOCK_TRYRDLOCK
--   err = busy_wait_for ((trylock_func_t) pthread_rwlock_tryrdlock, rwlock,
-- 		       abstime);
--+#else
--+  err = ENOSYS;
-- #endif
--   LEAVE();
--   return err;
--@@ -533,7 +535,7 @@ npth_rwlock_timedwrlock (npth_rwlock_t *rwlock, const struct timespec *abstime)
--   ENTER();
-- #if HAVE_PTHREAD_RWLOCK_TIMEDWRLOCK
--   err = pthread_rwlock_timedwrlock (rwlock, abstime);
---#elif HAVE_PTHREAD_RWLOCK_TRYRDLOCK
--+#elif HAVE_PTHREAD_RWLOCK_TRYWRLOCK
--   err = busy_wait_for ((trylock_func_t) pthread_rwlock_trywrlock, rwlock,
-- 		       abstime);
-- #else
---- 
--2.30.2
--
-diff --git a/package/libnpth/0003-Fix-previous-commit.patch b/package/libnpth/0003-Fix-previous-commit.patch
-deleted file mode 100644
-index 5f3ce06bf..000000000
---- a/package/libnpth/0003-Fix-previous-commit.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 75c68399ef3bbb5d024f2a60474a7214fa479016 Mon Sep 17 00:00:00 2001
--From: NIIBE Yutaka <gniibe@fsij.org>
--Date: Mon, 13 May 2024 11:13:23 +0900
--Subject: [PATCH] Fix previous commit.
--
--Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
--
--Upstream: https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=commit;h=75c68399ef3bbb5d024f2a60474a7214fa479016
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/npth.c | 12 ++++++++++++
-- 1 file changed, 12 insertions(+)
--
--diff --git a/src/npth.c b/src/npth.c
--index f02540c..8dced17 100644
----- a/src/npth.c
--+++ b/src/npth.c
--@@ -178,6 +178,18 @@ static int initialized_or_any_threads;
-- typedef int (*trylock_func_t) (void *);
-- 
-- #ifndef HAVE_PTHREAD_MUTEX_TIMEDLOCK
--+#define REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION 1
--+#endif
--+
--+#if !HAVE_PTHREAD_RWLOCK_TIMEDRDLOCK && HAVE_PTHREAD_RWLOCK_TRYRDLOCK
--+#define REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION 1
--+#endif
--+
--+#if !HAVE_PTHREAD_RWLOCK_TIMEDWRLOCK && HAVE_PTHREAD_RWLOCK_TRYWRLOCK
--+#define REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION 1
--+#endif
--+
--+#if REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION
-- static int
-- busy_wait_for (trylock_func_t trylock, void *lock,
-- 	       const struct timespec *abstime)
---- 
--2.30.2
--
-diff --git a/package/libnpth/libnpth.hash b/package/libnpth/libnpth.hash
-index a140a23f6..ad541111a 100644
---- a/package/libnpth/libnpth.hash
-+++ b/package/libnpth/libnpth.hash
-@@ -1,6 +1,6 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  a9f7adc1b1f6707071d29bfb3338c28b995ca1ce  npth-1.7.tar.bz2
--sha256  8589f56937b75ce33b28d312fccbf302b3b71ec3f3945fde6aaa74027914ad05  npth-1.7.tar.bz2
-+sha1  6f60ce8540453e120d715f269d0c7cfd9e0b0d24  npth-1.8.tar.bz2
-+sha256  8bd24b4f23a3065d6e5b26e98aba9ce783ea4fd781069c1b35d149694e90ca3e  npth-1.8.tar.bz2
- 
- # Hash for license file:
- sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING.LIB
-diff --git a/package/libnpth/libnpth.mk b/package/libnpth/libnpth.mk
-index 634da6ed3..76abf45fd 100644
---- a/package/libnpth/libnpth.mk
-+++ b/package/libnpth/libnpth.mk
-@@ -4,14 +4,12 @@
- #
- ################################################################################
- 
--LIBNPTH_VERSION = 1.7
-+LIBNPTH_VERSION = 1.8
- LIBNPTH_SOURCE = npth-$(LIBNPTH_VERSION).tar.bz2
- LIBNPTH_SITE = https://www.gnupg.org/ftp/gcrypt/npth
- LIBNPTH_LICENSE = LGPL-2.0+
- LIBNPTH_LICENSE_FILES = COPYING.LIB
- LIBNPTH_INSTALL_STAGING = YES
--# 0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch
--LIBNPTH_AUTORECONF = YES
- LIBNPTH_CONF_OPTS = --disable-tests
- HOST_LIBNPTH_CONF_OPTS = --disable-tests
- 
--- 
-2.43.0
+ board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash | 2 +-
+ configs/imx6ulz_bsh_smm_m2_defconfig                  | 6 ++++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
+diff --git a/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash b/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash
+index c0b3bcdd04..904fa56c02 100644
+--- a/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash
++++ b/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  e00e6c6f014e046101739d08d06f328811cebcf5ae101348f409cbbd55ce6900  u-boot-2023.10.tar.bz2
++sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
+diff --git a/configs/imx6ulz_bsh_smm_m2_defconfig b/configs/imx6ulz_bsh_smm_m2_defconfig
+index 29177c4756..f12dc8383d 100644
+--- a/configs/imx6ulz_bsh_smm_m2_defconfig
++++ b/configs/imx6ulz_bsh_smm_m2_defconfig
+@@ -9,7 +9,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/bsh/imx6ulz-bsh-smm-m2/post-build.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.68"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.120"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/bsh/imx6ulz-bsh-smm-m2/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -28,10 +28,12 @@ BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6ulz_smm_m2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
++BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-with-spl.imx"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
