@@ -4,63 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5515E77188
-	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 10:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6109EE77188
+	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 10:36:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C9F1417F6;
-	Fri, 20 Dec 2024 10:36:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26D76417D1;
+	Fri, 20 Dec 2024 10:36:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xCU2iSy2lkQe; Fri, 20 Dec 2024 10:36:13 +0000 (UTC)
+ id DPOuyYLK51DW; Fri, 20 Dec 2024 10:36:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44D07417CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A752441814
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44D07417CA;
-	Fri, 20 Dec 2024 10:36:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A752441814;
+	Fri, 20 Dec 2024 10:36:17 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A499A730
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 10:35:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7A1EA920
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 10:35:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 47AB683B9A
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 10:35:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68EDA83BA1
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 10:35:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NfiQfBDngP7b for <buildroot@buildroot.org>;
- Fri, 20 Dec 2024 10:35:49 +0000 (UTC)
+ id qtnHH6mET-hZ for <buildroot@buildroot.org>;
+ Fri, 20 Dec 2024 10:35:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2405::603;
- helo=nam02-dm3-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2413::61a;
+ helo=nam10-dm6-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5B64283B9F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B64283B9F
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com
- (mail-dm3nam02on20603.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2405::603])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5B64283B9F
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 10:35:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 67F9E83B9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67F9E83B9A
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam10on2061a.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2413::61a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 67F9E83B9A
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 10:35:52 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xJuL07J27dk5nL6Lu7ugwDzTJEno2p7MDSr08t4UKnx+zDQDcJugk8ZswRgwgBxZV6o3wGSLcP7pDVm2Bs9YhB3UxPAipF7Ze2bWo4IFFVjhKebDcUnWfxWcbPnRtQFsDfb5BTRkzcxvT+Uy7wr8UOhXG6lZ1huEOXzZXflj2emMvOePD1t2eqO2MOFWxoiTCUpTyzngLD7ttQaWFfqwxpLpMKpUmVHe99F4vc8DUNEzWfV1zFLxma9ZHP0kHKq0ms4IJB64eu2GrrBXGHA/MYE3G5FnuLToar1TQeBk/sN3X6V5libdvU0TxZmLeHATjCHBEVAFRifat7s4kYVABA==
+ b=SK4kZ8Whlm4QGIuRhwzCiq/nU7OS1Na6jCqyojXWSPAhIdTlOpOCUQiwpDr7p81+jh/MWEzXgrYDhtPqn7u11HHNPxSStqlTH/E3v5VSwWr/lMSigoX3nXepFmLM/gyaxK82yGUR3QSPFrkGkS4eOfcqxYf+9OZJg9VvKI6Kv+97o8eicwBlLs8JGdCkHfOhrAR4KxMUy0dkNhFQ95dNRvlMvFKb025zBBMoVyTfQXr2rATK6uKfuOEqL/1r/TVn1Mlc086V7pTc9vrm9Itnw7mMZdQ9CyX2GDCfguxCljbJaA+vXJFtUxYtI/L0Cg/QHYqqe8Ce5+mMUGqkJ2DXMA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xbtN5qqtKHqBG+ZnQPM+1CBWXzH+TZ55+5iPfjgHW2M=;
- b=J8Vo5Qq7HP4OvH/jv6GlXDZoOqQfFFGpjN0hCI/8Kx9ixPdE2zI1RaVQJJYOSzmlynI4HMtODAl3nE3uBpoVuxMkIZwufnfUeauX7d3cvAsoB4uwiMwE7yMrwqFW//S30/K+HsWen8gxOGHW1QlFv/tLqZ+vcdo5eO/zXPPtGHKBsE84tgjXYdWM/Lx82j1cJz0b4af3PzMLKovrxVXw7J3w/e3w0vJgIBipXxwIpLbiIWY56wkcBQW+IDt8w9csqTnSoMGTcp0pnKGV36vO/lZg52egNGkRN0UYsgqZWstw+e1WdhDLq673kEsXEodC4pJ1ogY/U8GhOmio0xjEGw==
+ bh=K4d7c0nB1Va009zCK0IE93Ol4Njr0tT/43SN3WbwiO8=;
+ b=ykm4F+oXD/r9uZzC+wOfdbHwi+CXszV1MU3YB4PvZzx0v0X+4CO17fXimhMsGhiVS+YnhVFdMf74L00E2J1naaU3b+PVIYopRFhtqcdKTOFE7fHWWKQzEXOxAjvzmlCfH/zsNrtnBDSouGfU4gI9X5rgULQ5aIZewcBUkW5HteeTNmKiSDsq4Pcv7ZK1gSa6YnDoPWQWAAM2UG/qHm+pcsZwHBEaScuB470rWzcyDFOMngHgbS+kohZ71uU5jUCJFk0zVj6MWadpkV8cXaptU2iam6f+EuiDAYtK9e8+mzkloLQJiYKU40VjG4w2uOZV5Imt/YhjleR2b68FwY/COw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from BN9PR03CA0181.namprd03.prod.outlook.com (2603:10b6:408:f9::6)
- by IA0PR12MB8350.namprd12.prod.outlook.com (2603:10b6:208:40d::14) with
- Microsoft SMTP Server (version=TLS1_2,
+Received: from BN9PR03CA0632.namprd03.prod.outlook.com (2603:10b6:408:13b::7)
+ by SJ1PR12MB6100.namprd12.prod.outlook.com (2603:10b6:a03:45d::20)
+ with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8272.14; Fri, 20 Dec
- 2024 10:35:43 +0000
-Received: from BN1PEPF0000467F.namprd03.prod.outlook.com
- (2603:10b6:408:f9:cafe::28) by BN9PR03CA0181.outlook.office365.com
- (2603:10b6:408:f9::6) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8230.12 via Frontend Transport; Fri,
- 20 Dec 2024 10:35:43 +0000
+ 2024 10:35:48 +0000
+Received: from BN1PEPF00004680.namprd03.prod.outlook.com
+ (2603:10b6:408:13b:cafe::21) by BN9PR03CA0632.outlook.office365.com
+ (2603:10b6:408:13b::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8251.24 via Frontend Transport; Fri,
+ 20 Dec 2024 10:35:47 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -68,91 +68,86 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN1PEPF0000467F.mail.protection.outlook.com (10.167.243.84) with Microsoft
+ BN1PEPF00004680.mail.protection.outlook.com (10.167.243.85) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8251.15 via Frontend Transport; Fri, 20 Dec 2024 10:35:41 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
+ 15.20.8251.15 via Frontend Transport; Fri, 20 Dec 2024 10:35:46 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 20 Dec
- 2024 04:35:41 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 20 Dec
- 2024 04:35:41 -0600
+ 2024 04:35:45 -0600
 Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Fri, 20 Dec 2024 04:35:39 -0600
+ Transport; Fri, 20 Dec 2024 04:35:44 -0600
+From: Neal Frager <neal.frager@amd.com>
 To: <buildroot@buildroot.org>
-Date: Fri, 20 Dec 2024 10:35:21 +0000
-Message-ID: <20241220103523.2301721-5-neal.frager@amd.com>
+Date: Fri, 20 Dec 2024 10:35:23 +0000
+Message-ID: <20241220103523.2301721-7-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20241220103523.2301721-1-neal.frager@amd.com>
 References: <20241220103523.2301721-1-neal.frager@amd.com>
 MIME-Version: 1.0
-Received-SPF: None (SATLEXMB05.amd.com: neal.frager@amd.com does not designate
+Received-SPF: None (SATLEXMB03.amd.com: neal.frager@amd.com does not designate
  permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN1PEPF0000467F:EE_|IA0PR12MB8350:EE_
-X-MS-Office365-Filtering-Correlation-Id: 03f80795-80de-4c05-9cc2-08dd20e20d9f
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004680:EE_|SJ1PR12MB6100:EE_
+X-MS-Office365-Filtering-Correlation-Id: 44868c72-6816-47da-418c-08dd20e21017
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
  ARA:13230040|82310400026|1800799024|376014|36860700013|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?6VmkrOtGfjk1slA72n26cMDF3FNJiG8rxHi5HIe8DrfuDyI4pRgkWAv+hRZk?=
- =?us-ascii?Q?xj2fm5MPFO3kdBKdaLUOnF3biNrsWoAkGnCM616UAzwfHsnz5N5Xzvq4m37n?=
- =?us-ascii?Q?HBRo8bOZTRRwQ/xlM9nrftzoSPmZW+958kU01JcvOoVMD16aNQWYl9jbOCHD?=
- =?us-ascii?Q?GRR4UCHo0QoQoB0fGK8+IHpYvTII2SaHe4iY5BckM3k0P8dDXMAcT/3CWfwt?=
- =?us-ascii?Q?FmTmC0ax1UJyhxArLNfEMge/rhL51/TX9h7wNhz83Bw1uCm80XGqtsBBPaSM?=
- =?us-ascii?Q?yP9WnvZkZygCCIFtF9w/pZeK0j2HLMZgfxRp+rsNk3jGwpdxO66KIMuoCwt7?=
- =?us-ascii?Q?c6+jLWv4/pJIq0brY8APRaq1daMjqdFIQCiNZOhgZtelIo35u1kfHE684pER?=
- =?us-ascii?Q?qeFmcqpQABc4PONwpUi8opklN3u3DFXXZ81s1jLeCPccjMNBPe9fN2Ia/4g6?=
- =?us-ascii?Q?tY9aZ3v28Ap/XrLS0h8pBpZYxB6B1Y88HDpZuaFscEs3Fyb1Tk+YZ4JXlWgA?=
- =?us-ascii?Q?7xtCwUKK/6XOR/h6qnRSr9m7v+f8cQambwxlqJ1Q0fIp4v/Umw4zhq1WYWU8?=
- =?us-ascii?Q?IhZ2+fD1qsg+ocpy/zoJob34spLU58KSlOFOuJcOpPSyHpgRImD8DHWAhPtG?=
- =?us-ascii?Q?0G9mQYyHhDcYikUvzMsLMymAirHs9auWHBXHYW51r/kCKNYKyRTk9Ac4Zldk?=
- =?us-ascii?Q?CLD/75zilV09cLLLKUzrZ/3/Qckm1cUi8jvkh/liXI5vJ3fsaoVm/4JtnjN/?=
- =?us-ascii?Q?Zclg4HfjBrDyCCn9vFC/dH52f1wedLS42CXla4rzqSlLnCr0jItsS8NhADIh?=
- =?us-ascii?Q?IPT+LQwwsH8jMwgOCkZVQEmW5D/VAAq19L9n2Ow7+qqhwVxTXuMXXvaZs1mR?=
- =?us-ascii?Q?Pcm7ScQ1hjEH81nfloijtZdhoYvmGmuBCCdc7jb5mdNDfdymld5L1ZSlYFQ1?=
- =?us-ascii?Q?5HA2V1w0Sql+YEG+5ehjg4fbuVuVz0d17rFBFElFiBKZHXooQvB12l03swj6?=
- =?us-ascii?Q?Mt+7+m+bg4wHfeoWZs7rzGewNiFN/Y+11RfwpWwAN/iDl1K3//yEDNgNV7SK?=
- =?us-ascii?Q?/XAbK7OhfOuqzgDSnQIPat4rBt32tpnE5HQUQpKzGf3BQzMEmgyGSNWlOgTS?=
- =?us-ascii?Q?Tn4nfpuAwO157kcuREGdg05cXlai9zNAxTJfKT0ZlWM/kKyZEXkGi3E4ZWh1?=
- =?us-ascii?Q?dBLbY0TVsT/P6ZMeKi7FqBpPI8qQscZXkFjZd49zivgFTg7rCw4jbb9oSiLu?=
- =?us-ascii?Q?huPrKQ/fPD2hjbnInfPYJlMogXxqBPzaIvyvi0RCpKxqcK/S+i2yk3cF9zqN?=
- =?us-ascii?Q?fbzdyAMS7u7I697JSVccESfnyEtvhhU0d/bIvgIliB9ZzC2ey7c+D22tn9If?=
- =?us-ascii?Q?fSdMTymOvF1A12HJkNWc6OvivCV4j2HVSa2TmcRkylasRxjHwJQ+ZTSbqa5s?=
- =?us-ascii?Q?53/ckZ2Ym82MJIy/XRMhOti6lkAIiBpVPEsyRLSX6ZrO7mmKplG4AZF94355?=
- =?us-ascii?Q?fCBU90TTlYOfcjU/HI12xlykUzBRPFg2g5N6?=
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?EMPS6HL1CWxuKKhWF7sWUNHylFouqUQxeakWAcCdWXnGrnDs/eRWnze4Jw+U?=
+ =?us-ascii?Q?S91/QQMH1WXLgEiRTsRlu3MwJDAESwkFxgfNZm4WyYRe6iau7cCJMrYb8mWu?=
+ =?us-ascii?Q?BKUKUjmtdnH2U7Rxy3qUB3fxxuIXDAc8J4JEJvLO1YzrQfkgw+VP1Upx8FWa?=
+ =?us-ascii?Q?lTIsjmeCiAZutlX73vjv/YqNMZU3iNS2Yq+CwPuufzs8a5BZAlMC++OeS71O?=
+ =?us-ascii?Q?adNPN37JcTI3xz2s5fMYbuJBYUhbDiJSoYnSSbtCL87hyiWDJpx/WYEn6VoW?=
+ =?us-ascii?Q?LGvTpTjKXZE7zfjDsEZzOvzT1N6Be1+o71ngG8ygLSFMSk6lPw6t3ooZ3R4G?=
+ =?us-ascii?Q?d+4tQ2SAs/dBJwqzx8/JQh6n4VJmar0ab40RjmGUHS9QGSCvksxBVKFkZMgf?=
+ =?us-ascii?Q?0PO5PD2Zh+hDBmcX57B04z4YDY9QIZQuHZ2KlI2KqcwEm+jTNrks2CRs8E6+?=
+ =?us-ascii?Q?KKK+mNTcptzVl7jw1jsMZL51+y6rgQfzHp970Sm+HoGD5wFsDYSX5X1Pp+gy?=
+ =?us-ascii?Q?Qft0WsmBCdaOlIk/drAjUI+5ny35mOaW5BrhmJ/kw5/2XiPJWvaFDZg9qaA1?=
+ =?us-ascii?Q?MsNxsO1CALOhN6nwf8mfj3DfgFcfNas69Or6GniJM2RuX9tGDNrIwGOnuhbp?=
+ =?us-ascii?Q?UmBVqV+VvJb2+ONASzNnLrZBaty/dR46kMWF+h6LfLIEd2wPOmtmffsUqMJ6?=
+ =?us-ascii?Q?j8mB2i7oc4d9P+RhMD9xPrsgHaZ/tAB3103EI0mJZtnCT54l8kK67ms2DJAw?=
+ =?us-ascii?Q?OdK7qEpRVfBFCrf7DWpJX1iLuqNqXD6QqwUeIq4cfontyOOZ4Q6ygFPO6CMb?=
+ =?us-ascii?Q?VV+GOXVwp1ikm/zad9JhRzepWftQjqb5nonmPmZcs+tY2kp4ypW8g42xwn0c?=
+ =?us-ascii?Q?PSu/g+dV1W0G1l+MZMt4I3uLEUwFc82uxkEDkpnXDMd1VTrwSAEf1ofy043l?=
+ =?us-ascii?Q?fcOO+af7wZAMnDLQISPF+dDuAxvgs6BsmwODh2mCEJJDGcgmYV4bfwGN3hvt?=
+ =?us-ascii?Q?YWCoLbPjDxkaklF1ifxE2Kth66KjyI2Qef4twWAAtrG7FjH6nRP27Wx2p/Vu?=
+ =?us-ascii?Q?NiDyff4vrFJRb0M80oF24OD5+IR5W+lQV+ogwF/+ogZW3gGtIxk/Q7srvp8j?=
+ =?us-ascii?Q?/jMu9l5/i25UxHVRQksW1GRJ+yyXA24NJ+3Bia2Vg369iSiWOvnq0+pQ9jDM?=
+ =?us-ascii?Q?uhERrn/ZJksNUzF4crNKuDrfXLM76HWCueTfesL54o0CuaD/d28uzJEYtYUo?=
+ =?us-ascii?Q?Y1Hge4uRHHr4NZCf+/p5X8kucOj/lkusUnlvkODyZmuaTjFrOj5nHEETHFju?=
+ =?us-ascii?Q?txc+X6AUY63cp3/S1r10TD3wZWD/RO3fADDBZNrqq9U0tJmdInMBxmVu16jX?=
+ =?us-ascii?Q?xMnMpcFezIB9Y5/pJvnwvb5OJv2eIoBfGANXw/y8z2Hos5CO77dIXwZSAGJL?=
+ =?us-ascii?Q?KCwzvqkihCkHLiB8IualZVnK8wFA/vNfeLwwaq+6tPCCZBeJ3pbNPA=3D=3D?=
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
  IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
  SFS:(13230040)(82310400026)(1800799024)(376014)(36860700013)(41080700001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2024 10:35:41.8959 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03f80795-80de-4c05-9cc2-08dd20e20d9f
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2024 10:35:46.0510 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44868c72-6816-47da-418c-08dd20e21017
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
  Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1PEPF0000467F.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN1PEPF00004680.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8350
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6100
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xbtN5qqtKHqBG+ZnQPM+1CBWXzH+TZ55+5iPfjgHW2M=;
- b=DQ4vxFYJTE/VZQldDF5uiTY9zsFgq8D7I2jKOVVQfGAdzY8OixjfL1ptrOTvsBUIQoETRHKTYJ5QYsRRPnYh3wZNOJOSmRqPAaTbSl5IWVzoKAlZ+PiHwHAxnp4GhxZivbQb0Pu0lAyxjMihHWyUP9wa3cV+whZxZQLb12C3j5g=
+ bh=K4d7c0nB1Va009zCK0IE93Ol4Njr0tT/43SN3WbwiO8=;
+ b=h/CX66wS8x65M9NLszHugGt19SpCzIHBJ6j1Y9SGj8SUSLgx36sGGfgQobucAPM72/Q0kiBw2OxkN8XeUpODiV3kBKZGinXg8CyyxzlBegvH+SH8Bp4tGT96yhAH2wFLCSvy98Qfg8Dy7xrfFuHlGA4IxtxRIiUMULvEjh8dABU=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=DQ4vxFYJ
-Subject: [Buildroot] [PATCH v2 5/7] board/zynqmp/kria: remove post-build
- fixup scripts
+ header.s=selector1 header.b=h/CX66wS
+Subject: [Buildroot] [PATCH v2 7/7] board/zynqmp/kria: update readme.txt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -164,8 +159,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
 Cc: luca.ceresoli@bootlin.com, brandon.maier@collins.com, ju.o@free.fr,
  thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
  romain.naour@smile.fr, michal.simek@amd.com, yann.morin.1998@free.fr
@@ -174,89 +167,84 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-With binman, u-boot can now build the correct u-boot.itb files for kria
-natively.  So the post-build fixup scripts are no longer needed and can
-be removed.
+This patch updates the documentation for Kria SOMs for reflashing
+the new qspi.bin binary file.
+
+The qspi.bin is a unified binary containing both the boot.bin and
+u-boot.itb files for simplifying the reflashing process and also
+enabling the BIRT for reflashing the qspi.bin image as either
+"ImageA" or "ImageB".
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
 V1->V2:
  - new to patch series
 ---
- board/zynqmp/kria/kd240/kd240.sh | 16 ----------------
- board/zynqmp/kria/kr260/kr260.sh | 16 ----------------
- board/zynqmp/kria/kv260/kv260.sh | 16 ----------------
- 3 files changed, 48 deletions(-)
- delete mode 100755 board/zynqmp/kria/kd240/kd240.sh
- delete mode 100755 board/zynqmp/kria/kr260/kr260.sh
- delete mode 100755 board/zynqmp/kria/kv260/kv260.sh
+ board/zynqmp/kria/readme.txt | 32 +++++++++++---------------------
+ 1 file changed, 11 insertions(+), 21 deletions(-)
 
-diff --git a/board/zynqmp/kria/kd240/kd240.sh b/board/zynqmp/kria/kd240/kd240.sh
-deleted file mode 100755
-index 2203536a52..0000000000
---- a/board/zynqmp/kria/kd240/kd240.sh
-+++ /dev/null
-@@ -1,16 +0,0 @@
--#!/bin/sh
+diff --git a/board/zynqmp/kria/readme.txt b/board/zynqmp/kria/readme.txt
+index 7d3a520fde..6fd7ca61ca 100644
+--- a/board/zynqmp/kria/readme.txt
++++ b/board/zynqmp/kria/readme.txt
+@@ -42,6 +42,7 @@ After building, you should get a tree like this:
+     +-- boot.bin
+     +-- boot.vfat
+     +-- Image
++    +-- qspi.bin
+     +-- rootfs.ext2
+     +-- rootfs.ext4 -> rootfs.ext2
+     +-- sdcard.img
+@@ -80,39 +81,28 @@ easier.
+ Instructions for using these utilities to update the files
+ in QSPI flash can be found on the wiki link below.
+ 
+-https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+K26+SOM#Boot-Firmware-Updates
++Please note that since the BIRT utility requires a single file
++for flashing, the qspi.bin should be used as either ImageA or
++ImageB.  The qspi.bin is a unified binary containing both the
++boot.bin and u-boot.itb files in a single binary.
++
++https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+SOMs+Starter+Kits#Boot-FW-Update-Process
+ 
+ Additionally, it is possible to use u-boot for updating the
+-QSPI with new boot.bin and u-boot.itb images with the u-boot
+-commands below.
++QSPI with new qspi.bin image with the u-boot commands below.
+ 
+ KV260 Flashing Instructions:
+-Flashing u-boot.itb:
+-    $ sf probe
+-    $ fatload mmc 1 0x1000000 u-boot.itb
+-    $ sf erase 0x280000 +$filesize
+-    $ sf write 0x1000000 0x280000 $filesize
 -
--# This is a temporary work around for generating kd240 u-boot.itb.
--# The problem is there is no way to currently configure u-boot to apply
--# the carrier board dtb overlay during build, so all kd240 carrier board
--# drivers are missing.
--# This will be removed when u-boot can build the kd240 u-boot.itb natively.
+-Flashing boot.bin:
+     $ sf probe
+-    $ fatload mmc 1 0x1000000 boot.bin
++    $ fatload mmc 1 0x1000000 qspi.bin
+     $ sf erase 0x200000 +$filesize
+     $ sf write 0x1000000 0x200000 $filesize
+ 
+ KD240 / KR260 Flashing Instructions:
+-Flashing u-boot.itb:
+-    $ usb start
+-    $ sf probe
+-    $ fatload usb 0 0x1000000 u-boot.itb
+-    $ sf erase 0x280000 +$filesize
+-    $ sf write 0x1000000 0x280000 $filesize
 -
--UBOOT_DIR="$4"
--
--fdtoverlay -o "${UBOOT_DIR}/fit-dtb.blob" \
--	   -i "${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k24-revA.dtb" \
--	   "${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kd-g-revA.dtbo"
--
--"${UBOOT_DIR}/tools/mkimage" -E -f "${UBOOT_DIR}/u-boot.its" \
--			     -B 0x8 "${BINARIES_DIR}/u-boot.itb"
-diff --git a/board/zynqmp/kria/kr260/kr260.sh b/board/zynqmp/kria/kr260/kr260.sh
-deleted file mode 100755
-index ac49fa5ee4..0000000000
---- a/board/zynqmp/kria/kr260/kr260.sh
-+++ /dev/null
-@@ -1,16 +0,0 @@
--#!/bin/sh
--
--# This is a temporary work around for generating kr260 u-boot.itb.
--# The problem is there is no way to currently configure u-boot to apply
--# the carrier board dtb overlay during build, so all kr260 carrier board
--# drivers are missing.
--# This will be removed when u-boot can build the kr260 u-boot.itb natively.
--
--UBOOT_DIR="$4"
--
--fdtoverlay -o "${UBOOT_DIR}/fit-dtb.blob" \
--	   -i "${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb" \
--	   "${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kr-g-revB.dtbo"
--
--"${UBOOT_DIR}/tools/mkimage" -E -f "${UBOOT_DIR}/u-boot.its" \
--			     -B 0x8 "${BINARIES_DIR}/u-boot.itb"
-diff --git a/board/zynqmp/kria/kv260/kv260.sh b/board/zynqmp/kria/kv260/kv260.sh
-deleted file mode 100755
-index dc92c51d43..0000000000
---- a/board/zynqmp/kria/kv260/kv260.sh
-+++ /dev/null
-@@ -1,16 +0,0 @@
--#!/bin/sh
--
--# This is a temporary work around for generating kv260 u-boot.itb.
--# The problem is there is no way to currently configure u-boot to apply
--# the carrier board dtb overlay during build, so all kv260 carrier board
--# drivers are missing.
--# This will be removed when u-boot can build the kv260 u-boot.itb natively.
--
--UBOOT_DIR="$4"
--
--fdtoverlay -o "${UBOOT_DIR}/fit-dtb.blob" \
--	   -i "${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb" \
--	   "${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo"
--
--"${UBOOT_DIR}/tools/mkimage" -E -f "${UBOOT_DIR}/u-boot.its" \
--			     -B 0x8 "${BINARIES_DIR}/u-boot.itb"
+-Flashing boot.bin:
+     $ usb start
+     $ sf probe
+-    $ fatload usb 0 0x1000000 boot.bin
++    $ fatload usb 0 0x1000000 qspi.bin
+     $ sf erase 0x200000 +$filesize
+     $ sf write 0x1000000 0x200000 $filesize
+ 
+ It is possible to boot the Buildroot generated SD card image without
+-updating the QSPI boot.bin image, so this is an optional step.
++updating the QSPI qspi.bin image, so this is an optional step.
 -- 
 2.25.1
 
