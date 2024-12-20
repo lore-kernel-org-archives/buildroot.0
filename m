@@ -4,90 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AD62E77188
-	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 16:44:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B938E77188
+	for <buildroot@archiver.kernel.org>; Fri, 20 Dec 2024 18:58:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7551F83C11;
-	Fri, 20 Dec 2024 16:44:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFAD283AAD;
+	Fri, 20 Dec 2024 18:58:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s873em9WrBvD; Fri, 20 Dec 2024 16:44:21 +0000 (UTC)
+ id HeK-IJZiNrjE; Fri, 20 Dec 2024 18:58:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3093E83C09
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8B0583AB1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3093E83C09;
-	Fri, 20 Dec 2024 16:44:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 92DF6730
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 16:44:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8B0583AB1;
+	Fri, 20 Dec 2024 18:58:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B6D33920
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 18:58:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7D933610B1
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 16:44:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A52B683AB1
+ for <buildroot@buildroot.org>; Fri, 20 Dec 2024 18:58:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cGThhBCBM4U2 for <buildroot@buildroot.org>;
- Fri, 20 Dec 2024 16:44:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.238;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BAB6361053
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAB6361053
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.238])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BAB6361053
- for <buildroot@buildroot.org>; Fri, 20 Dec 2024 16:44:18 +0000 (UTC)
-X-CSE-ConnectionGUID: EAhpzzBLQ/+/Q93IYrna1g==
-X-CSE-MsgGUID: pYAEgGGnQDe8AxehQ6aoig==
-Received: from unknown (HELO opfedv1rlp0e.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 20 Dec 2024 17:44:17 +0100
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0e.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Dec 2024 17:44:15 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Fri, 20 Dec 2024 17:44:14 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Fri, 20 Dec 2024 17:44:14 +0100
-X-CSE-ConnectionGUID: 24c6Akq4RAKb5c+BVSi5DA==
-X-CSE-MsgGUID: YV2Ri9GFQCC5VDhT7/VmTw==
-X-IronPort-AV: E=Sophos;i="6.12,251,1728943200"; d="scan'208";a="231691280"
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-CC: <yann.morin@orange.com>, Julien BOIBESSOT <julien.boibessot@armadeus.com>, 
- Tal Shorer <tal.shorer@gmail.com>, Marcin Bis <marcin@bis.org.pl>
-Date: Fri, 20 Dec 2024 17:44:14 +0100
-Message-ID: <adc7c8fecb8ac3010b16178bdad062132dd0d0d8.1734713054.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6blNij217ZPW for <buildroot@buildroot.org>;
+ Fri, 20 Dec 2024 18:58:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 956FB83AAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 956FB83AAD
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 956FB83AAD
+ for <buildroot@busybox.net>; Fri, 20 Dec 2024 18:58:27 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-385f07cd1a4so1493744f8f.1
+ for <buildroot@busybox.net>; Fri, 20 Dec 2024 10:58:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1734721105; x=1735325905;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8wYV5nT/VMnld0CKVAAn1k0iU5GSz0siKH119m5U1EA=;
+ b=qFwsp+3H6Zd3LOwCRzKVJfNr75h2wio8Xr3RCCSWVMEFu7CCdcVX2XsKmQ8HA13VXW
+ LIn2w8uyizURl212dk+wSyQy9n5AROphR8AFKtAhWj2U8rU/Ec7AN4EWJ3U+1uegojw6
+ YnzJj4s4ni6ZhmxBVqAFcTPYgs+MsjSCOgqzGzspgwM8oG4T4oqTamd/Oh1YY5AlTduB
+ bBhWxbR6u2goz4ROJpY4SzEGK/KCez187aYRs70VTmDjDstN9pTa+TgfzOnpVFx0RTCk
+ RXeaVrWi5ltc5VYQcbrCc3DhZM7DCJNvN6jdRRhWWnniQqr26LMvm7OpHqFjjh7S5aIf
+ FDdQ==
+X-Gm-Message-State: AOJu0Ywu+vYF6svMjKBul3uL6IRJhz8OzOFAjzjokTjxTdkW1bqMDdCm
+ DPzkWCelGh3rXMqOpt5bsdH3zd9UwO8ye2wROFtSyH78m2BzTw+KgnhKfg8wRIAfBzEqMea/Piv
+ VQA==
+X-Gm-Gg: ASbGncvE6T/9tfNSNiUlpHcRcijCgvqI/cfWl6DqV8VzW1QlHBEAEQfz4meChDU92uN
+ mLQKpu18ZLWxlRZMJgE0il1UkJKoe2yf8ml7PW/qnEW3fGRlhwqB8B3bO1Shycp252dr3UJ9tPR
+ DNmvX60UhmiH8wxnN2xJIlwVRDfkVfulARBEaQqw9yU9khfI9Qz1XIeDVxTmkUxQrYQvEDXEkdU
+ JcXeD8YTd3CcgcOAPpVIFbl5LzLiYG69WTc3q7jMh+sK/Lll67aJ0vrsDwLKZwmMu66Ik4p8ZEg
+ bMTTw84lKnqmW4U=
+X-Google-Smtp-Source: AGHT+IEg3gdQB3x+FoX+/wh8UoR+s9PpqDSipH3qE1Cm974FLilztJ7C7hfSFnqsIVB9ioF2F80PSA==
+X-Received: by 2002:a05:6000:70a:b0:386:459f:67e0 with SMTP id
+ ffacd0b85a97d-38a221f12a0mr4574963f8f.21.1734721105210; 
+ Fri, 20 Dec 2024 10:58:25 -0800 (PST)
+Received: from vm-2404.. (75.184.66.37.rev.sfr.net. [37.66.184.75])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-38a1c8bb4bcsm4684823f8f.111.2024.12.20.10.58.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 20 Dec 2024 10:58:24 -0800 (PST)
+From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Fri, 20 Dec 2024 19:58:20 +0100
+Message-ID: <20241220185820.1252854-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1734713060; x=1766249060;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=cQ/sqBeeeJW3flEVJy5WezuqHvACviqPGqYfth8fkSw=;
- b=WiTdNFKRHQQlDRhVxRnKbjSHpvuQyXQzWj5XDT9Dz79QVtEXEt+I6R9c
- v8jma7XMqXuSNlA5dY7mzIf0JnOvrSspx7MYmLlDuwO39uEVKsGHqLAAV
- m9m4Itu6QesEBOhkkaA3FV7na+4nXVfE5oQbQkI1/fWoeSWRB/TsC34cI
- mrfTr2MXIMwM2U6pVBllrb3D8zFlxShbeUkMj0AlvSe93C+amQpLEQ73e
- aIz21IPMk3fn3Tzdx7XlCsKUDkFvDcbMkTc/GsRIR/AxR9W+mjXs5zE7Y
- P9NFELF5zLBKl4dMmqubOridCNkl6ytVn0BEjOwRjCfQTHq7BV3MLMNuh
- g==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gadz.org; s=google; t=1734721105; x=1735325905; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8wYV5nT/VMnld0CKVAAn1k0iU5GSz0siKH119m5U1EA=;
+ b=hcWsqx211LZmMGXFqhY6VysWS5Mbf6fbUftUgGHjZ8fciNwsnzxTjZ408U0fM4BB50
+ H/t5Ywok/w3hAlabTgIL93YaqVduUjC1JiygnfUbOUox7PXBg3DUYT6SEBE7Bcf4OxQR
+ hQtiE1e6T6uRzrxKl6TD3vf42HExOOkk7AAQqgJ0xi1cUy3BLJ0DnQ4VdpXiZBK7ZrVS
+ wxx5L1mtV7HgZYRE/k9Djwp+7NRLaA2TXL4P5/t1jn7M1vgjOU82PpqTMo/0Kc2S2011
+ oQvRmyt+6j/5W0Zfn6QRD9xYOJ6aMkeE3sxMGwrN+7ZXtYF6cxO1mMrgpnWHSpdwvn/W
+ /loQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=WiTdNFKR
-Subject: [Buildroot] [PATCH] package/usbip: new package
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=hcWsqx21
+Subject: [Buildroot] [PATCH] package/libgpg-error: bump to version 1.51
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,159 +111,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
-
-usbip allows configuring a client and a server, to share a USB device
-across the network.
-
-As explained in the .mk, usbip has been part from the kernel since
-linux-3.17. This would call for making it part of linux-tools, but this
-is a bit unwieldy: usbip is an autotools package, so trying to do a
-proper integration in linux-tools would basically need a complete
-duplication of the autotools infra [0].
-
-Instead, we decided to go with a full-blown package of its own, that
-just uses the current-latest kernel version. This makes for a nice,
-little autotools package as we like them. Nothing fancy.
-
-To be noted, though: usbip has its own license and license file, so
-that's what we use, and we do not reference those for the rest of the
-kernel: its GPL-2.0-or-later, not GPL-2.0(-only).
-
-Finally, we only enable the core usbip support in the kernel, and leave
-it to the user whether they should enable server and/or client support.
-
-[0] been there, done that; that was ugly and incomplete, what with the
-    libtool patches, autoreconf, and what not.
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-Cc: Tal Shorer <tal.shorer@gmail.com>
-Cc: Marcin Bis <marcin@bis.org.pl>
-
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
-There have been various attempts in the past:
-  - a separate package from legacy sources:
-    https://patchwork.ozlabs.org/project/buildroot/patch/CAOPBCFUzO64CXWKr4Z2rJeUb2NXExu=H1Gp2QyymrHcjVNaJuA@mail.gmail.com/
-  - a hybrid between a separate package and linux-tools:
-    https://patchwork.ozlabs.org/project/buildroot/patch/1481736504-12256-1-git-send-email-tal.shorer@gmail.com/
-  - a linux-tools implementatio:
-    https://patchwork.ozlabs.org/project/buildroot/patch/1512566955-4712-1-git-send-email-julien.boibessot@free.fr/
+ package/libgpg-error/libgpg-error.hash | 4 ++--
+ package/libgpg-error/libgpg-error.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-All had shortcomings, so I started entirely from scratch. I first tried
-a linux-tools implementation (available if needed), but I really found
-it to be ugly and kludgy. The separate package is way nicer.
----
- package/Config.in        |  1 +
- package/usbip/Config.in  | 13 +++++++++++++
- package/usbip/usbip.hash |  5 +++++
- package/usbip/usbip.mk   | 39 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 58 insertions(+)
- create mode 100644 package/usbip/Config.in
- create mode 100644 package/usbip/usbip.hash
- create mode 100644 package/usbip/usbip.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index f33c4780f8..ee6a5a0e67 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -651,6 +651,7 @@ endmenu
- 	source "package/usb_modeswitch/Config.in"
- 	source "package/usb_modeswitch_data/Config.in"
- 	source "package/usbguard/Config.in"
-+	source "package/usbip/Config.in"
- 	source "package/usbmount/Config.in"
- 	source "package/usbutils/Config.in"
- 	source "package/w_scan/Config.in"
-diff --git a/package/usbip/Config.in b/package/usbip/Config.in
-new file mode 100644
-index 0000000000..3038031aa0
---- /dev/null
-+++ b/package/usbip/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_USBIP
-+	bool "usbip"
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	help
-+	  The USB-over-IP suite of tools.
-+
-+	  Note: you'll have to enable either (or both) of "VHCI hcd"
-+	  (CONFIG_USBIP_VHCI_HCD) if you want to access a remote USB
-+	  device, or "Host driver" (CONFIG_USBIP_HOST) if you want
-+	  to share a USB device, in your kernel configuration.
-+
-+comment "usbip needs udev /dev management"
-+	depends on !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/usbip/usbip.hash b/package/usbip/usbip.hash
-new file mode 100644
-index 0000000000..dc901617bf
---- /dev/null
-+++ b/package/usbip/usbip.hash
-@@ -0,0 +1,5 @@
-+# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  d450ab215de4e1f8bb85e0f4216760fa33fd024b4526b144f4ce0d9012b29c9e  linux-6.12.6.tar.xz
-+
-+# Locally computed
-+sha256  cd5c66af63b509ccd75ec85fee41b6e5cbb77cd6bf9392a54900acc0f02be4a6  tools/usb/usbip/COPYING
-diff --git a/package/usbip/usbip.mk b/package/usbip/usbip.mk
-new file mode 100644
-index 0000000000..77dd341f9b
---- /dev/null
-+++ b/package/usbip/usbip.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# usbip
-+#
-+################################################################################
-+
-+# Since linux 3.17, usbip is part of the linux source tree. Usually, we'd add
-+# such a tool in the linux-tools package.
-+#
-+# However, usbip is autotools-based, so we'd have to duplicate the autotools
-+# infra in linux-tools; the basic infra is easy to duplicate, but then come
-+# the conditional libtool patches, and it's not trivial to do. And of course,
-+# there would be the maintenance cost...
-+#
-+# usbip is not very tied to the kernel, in fact. It is pretty stable, API-wise,
-+# so we can just use a recent kernel version.
-+USBIP_VERSION = 6.12.6
-+USBIP_SOURCE = linux-$(USBIP_VERSION).tar.xz
-+USBIP_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v6.x
-+USBIP_DL_SUBDIR = linux
-+
-+# usbip's licensing diverges from that of the rest of the kernel
-+USBIP_LICENSE = GPL-2.0-or-later
-+USBIP_LICENSE_FILES = tools/usb/usbip/COPYING
-+
-+USBIP_DEPENDENCIES = udev
-+
-+USBIP_SUBDIR = tools/usb/usbip
-+USBIP_INSTALL_STAGING = YES
-+
-+USBIP_AUTORECONF = YES
-+USBIP_CONFIGURE_OPTS = --without-tcp-wrappers
-+
-+define USBIP_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USB_SUPPORT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USBIP_CORE)
-+endef
-+
-+$(eval $(autotools-package))
+diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+index be5202584..957f96edc 100644
+--- a/package/libgpg-error/libgpg-error.hash
++++ b/package/libgpg-error/libgpg-error.hash
+@@ -1,6 +1,6 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  6790fc3d6e7bbd7576654b43971bbe15e953ccc4  libgpg-error-1.50.tar.bz2
+-sha256  69405349e0a633e444a28c5b35ce8f14484684518a508dc48a089992fe93e20a  libgpg-error-1.50.tar.bz2
++sha1  0a9386ff70a5d1f771771bf0b8db2b956e292f13  libgpg-error-1.51.tar.bz2
++sha256  be0f1b2db6b93eed55369cdf79f19f72750c8c7c39fc20b577e724545427e6b2  libgpg-error-1.51.tar.bz2
+ 
+ # Locally calculated
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 8dff6a612..3f327e305 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPG_ERROR_VERSION = 1.50
++LIBGPG_ERROR_VERSION = 1.51
+ LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
+ LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+ LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
 -- 
-2.34.1
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.43.0
 
 _______________________________________________
 buildroot mailing list
