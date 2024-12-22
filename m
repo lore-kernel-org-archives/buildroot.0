@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6530C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:43:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31549C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:43:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 077BA4F9D5;
-	Fri, 28 Feb 2025 16:43:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 375314F9EA;
+	Fri, 28 Feb 2025 16:43:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SI_Qmjhmnen2; Fri, 28 Feb 2025 16:43:52 +0000 (UTC)
+ id jxgGPHoIrYzy; Fri, 28 Feb 2025 16:43:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE2F24F9D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DA0E4F157
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE2F24F9D1;
-	Fri, 28 Feb 2025 16:43:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5DA0E4F157;
+	Fri, 28 Feb 2025 16:43:55 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10B7168
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EC82711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4F4F742CF2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 66A1A41E6B
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eHbA-Fdxuy-D for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:58 +0000 (UTC)
+ id znEb5vKuKF2y for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0B0C41800
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76A624250F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B0B0C41800
+ by smtp4.osuosl.org (Postfix) with ESMTP id 76A624250F
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AC4E28350A; Fri, 28 Feb 2025 16:29:45 +0000 (UTC)
+ id 7227E8350A; Fri, 28 Feb 2025 16:29:45 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Dec 2024 14:16:07 +0100
+Date: Sun, 22 Dec 2024 14:13:55 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: daaeb8f621498cb30eb332fed2ec481449008c36
-X-Git-Newrev: 87706103a6bdee8ed3b6ea51b45626aa9d2185ab
+X-Git-Oldrev: 0412fd727d4e3483559b3606b277ab61ae2ee3b8
+X-Git-Newrev: ad1e214256f5a9427c36a536c397f2967072f4ae
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162945.AC4E28350A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-websockets:
- bump to version 14.1
+Message-Id: <20250228162945.7227E8350A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-sentry-sdk:
+ bump to version 2.19.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87706103a6bdee8ed3b6ea51b45626aa9d2185ab
+commit: https://git.buildroot.net/buildroot/commit/?id=ad1e214256f5a9427c36a536c397f2967072f4ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-websockets/python-websockets.hash | 4 ++--
- package/python-websockets/python-websockets.mk   | 4 ++--
+ package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
+ package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-websockets/python-websockets.hash b/package/python-websockets/python-websockets.hash
-index 5d24d5f6c4..4ecc4868ad 100644
---- a/package/python-websockets/python-websockets.hash
-+++ b/package/python-websockets/python-websockets.hash
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
+index 6243632685..5d65087a6d 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.hash
++++ b/package/python-sentry-sdk/python-sentry-sdk.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/websockets/json
--md5  ff1293b549e8177a5272e54208659d0d  websockets-13.1.tar.gz
--sha256  a3b3366087c1bc0a2795111edcadddb8b3b59509d5db5d7ea3fdd69f954a8878  websockets-13.1.tar.gz
-+md5  eaef5161b6d36f8f66a1328c7e3bde7f  websockets-14.1.tar.gz
-+sha256  398b10c77d471c0aab20a845e7a60076b6390bfdaac7a6d2edb0d2c59d75e8d8  websockets-14.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
+-md5  d68e388f9a261c00515e0f758303240f  sentry_sdk-2.18.0.tar.gz
+-sha256  0dc21febd1ab35c648391c664df96f5f79fb0d92d7d4225cd9832e53a617cafd  sentry_sdk-2.18.0.tar.gz
++md5  235bf9f6e317e809673bedf9dd5d5c4f  sentry_sdk-2.19.2.tar.gz
++sha256  467df6e126ba242d39952375dd816fbee0f217d119bf454a8ce74cf1e7909e8d  sentry_sdk-2.19.2.tar.gz
  # Locally computed sha256 checksums
- sha256  3d6a0c050d8bec52fabad502e45fb25bd02bcadbd70dea34d447b6a0ff4e6da8  LICENSE
-diff --git a/package/python-websockets/python-websockets.mk b/package/python-websockets/python-websockets.mk
-index 6fbdf983e9..f918bba383 100644
---- a/package/python-websockets/python-websockets.mk
-+++ b/package/python-websockets/python-websockets.mk
+ sha256  6d7ec62dc20e8b92cb88b89fb3b55ee8576505f3e1afa57952548f6eea5d008e  LICENSE
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+index e2cbdcf405..0ccfd7ecd3 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.mk
++++ b/package/python-sentry-sdk/python-sentry-sdk.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WEBSOCKETS_VERSION = 13.1
-+PYTHON_WEBSOCKETS_VERSION = 14.1
- PYTHON_WEBSOCKETS_SOURCE = websockets-$(PYTHON_WEBSOCKETS_VERSION).tar.gz
--PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/e2/73/9223dbc7be3dcaf2a7bbf756c351ec8da04b1fa573edaf545b95f6b0c7fd
-+PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/f4/1b/380b883ce05bb5f45a905b61790319a28958a9ab1e4b6b95ff5464b60ca1
- PYTHON_WEBSOCKETS_SETUP_TYPE = setuptools
- PYTHON_WEBSOCKETS_LICENSE = BSD-3-Clause
- PYTHON_WEBSOCKETS_LICENSE_FILES = LICENSE
+-PYTHON_SENTRY_SDK_VERSION = 2.18.0
++PYTHON_SENTRY_SDK_VERSION = 2.19.2
+ PYTHON_SENTRY_SDK_SOURCE = sentry_sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
+-PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/24/cc/0d87cc8246f52d92228aa6718a24e1988a2893f4abe2f64ec5a8bcba4185
++PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/36/4a/eccdcb8c2649d53440ae1902447b86e2e2ad1bc84207c80af9696fa07614
+ PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
+ PYTHON_SENTRY_SDK_LICENSE = MIT
+ PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
