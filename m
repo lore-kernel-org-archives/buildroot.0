@@ -1,72 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB594E7718D
-	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 16:26:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F09EE77188
+	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 17:09:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F78960F3F;
-	Sun, 22 Dec 2024 16:26:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E65D381EF5;
+	Sun, 22 Dec 2024 17:09:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i95jkhmDiMWh; Sun, 22 Dec 2024 16:26:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7JIfH99zn90Y; Sun, 22 Dec 2024 17:09:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6335A60F76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4A2C81EEF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6335A60F76;
-	Sun, 22 Dec 2024 16:26:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1036DD3
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 16:26:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4A2C81EEF;
+	Sun, 22 Dec 2024 17:09:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 56D265E
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 17:09:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E52FB42A0F
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 16:26:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 363C641395
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 17:09:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TZ6G9op92cIC for <buildroot@buildroot.org>;
- Sun, 22 Dec 2024 16:26:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id TAuRWvcOkEg5 for <buildroot@buildroot.org>;
+ Sun, 22 Dec 2024 17:09:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A214C42A03
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A214C42A03
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A214C42A03
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 16:26:19 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id BDC4C60002;
- Sun, 22 Dec 2024 16:26:16 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04DAD41374
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04DAD41374
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 17:09:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 727CC87317; Sun, 22 Dec 2024 17:09:53 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Dec 2024 17:26:14 +0100
-Message-ID: <20241222162615.1872897-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.47.0
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1734884777;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=zu0PcjEwcLW0QypxJGDSE5uRUQODfdXzlNwRCLYnRzA=;
- b=RmF1UQtreKRZFRdMnFsIQfv4htDOfzHWVLJP8Ucu6HIW1YiTNQjghgjJvaA0IHToCeqtfV
- fqq5CK4EAS2sVYhj0phjUOkmHkyXQGHSWvSpFcG98zlJnWtshXOIYy872qf0UgLJbqUE1X
- /WmbxbJOaL2/zcN7VHWTCzsXFrfYPq17blYc6F1p6t0pSQCvFtvImTH7eixvUJCztFcUVg
- 1dfqRPVQPtfPdlcsGQ2fY95VmiZmiXSbedMleFnpU5Qsg15/OCYfoJAB+acAq3xhspfYrv
- udDimToHt97NeXIBrIC6Vi7TTPskcApHmMhH12hM0k0REU5wL3im9Tl0JZDKlw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=RmF1UQtr
-Subject: [Buildroot] [PATCH] package/python-autocommand: add patch to fix
- build issue
+Date: Sun, 22 Dec 2024 17:55:22 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 87706103a6bdee8ed3b6ea51b45626aa9d2185ab
+X-Git-Newrev: 621ebccf3f1ca70443160103ae12ab3ea89f63bd
+X-Patchwork-Hint: ignore
+Message-Id: <20241222170953.727CC87317@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-autocommand: add patch to
+ fix build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,12 +59,14 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://git.buildroot.net/buildroot/commit/?id=621ebccf3f1ca70443160103ae12ab3ea89f63bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Since the python-autocommand package has been introduced in commit
 b6f3278539216f55fb18ff7e63ce2da39ed0c3e1 ("package/python-autocommand:
@@ -137,10 +120,10 @@ Fixes:
   http://autobuild.buildroot.net/results/c9114834eb00569cdb8ec3251ccd5ecfd906c9c9/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...eclaration-and-rely-instead-on-Trove.patch | 29 +++++++++++++++++++
+ ...nse-declaration-and-rely-instead-on-Trove.patch | 29 ++++++++++++++++++++++
  1 file changed, 29 insertions(+)
- create mode 100644 package/python-autocommand/0001-Remove-license-declaration-and-rely-instead-on-Trove.patch
 
 diff --git a/package/python-autocommand/0001-Remove-license-declaration-and-rely-instead-on-Trove.patch b/package/python-autocommand/0001-Remove-license-declaration-and-rely-instead-on-Trove.patch
 new file mode 100644
@@ -177,9 +160,6 @@ index 0000000000..9e00269cb0
 +-- 
 +2.47.0
 +
--- 
-2.47.0
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
