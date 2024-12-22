@@ -1,77 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ED15E77188
-	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 14:12:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FF45E77188
+	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 14:13:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E0EB80BAB;
-	Sun, 22 Dec 2024 14:12:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3DFAE60645;
+	Sun, 22 Dec 2024 14:13:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YSILKtfN11BW; Sun, 22 Dec 2024 14:13:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D04760A58
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D04760A58;
+	Sun, 22 Dec 2024 14:13:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4FDB5E
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 14:13:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 865BC829FD
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 14:13:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5-6RtkaSj-vd; Sun, 22 Dec 2024 14:12:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02EDA80BB5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 02EDA80BB5;
-	Sun, 22 Dec 2024 14:12:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4000A5E
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 14:12:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B2BB4027F
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 14:12:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IGpXh9gq-CXg for <buildroot@buildroot.org>;
- Sun, 22 Dec 2024 14:12:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CDCCC4138E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDCCC4138E
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CDCCC4138E
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 14:12:40 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
+ id rwYYZQyBaZXK for <buildroot@buildroot.org>;
+ Sun, 22 Dec 2024 14:13:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 95214829BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95214829BB
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 95214829BB
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 14:13:23 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
  (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id CF5762003C6;
- Sun, 22 Dec 2024 15:12:37 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:43048])
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id B06C5780372;
+ Sun, 22 Dec 2024 15:13:20 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:41714])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 22 Dec 2024 15:12:37 +0100
+ with HTTP (HTTP/1.0 POST); Sun, 22 Dec 2024 15:13:20 +0100
 MIME-Version: 1.0
-Date: Sun, 22 Dec 2024 15:12:37 +0100
+Date: Sun, 22 Dec 2024 15:13:20 +0100
 From: Julien Olivain <ju.o@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
 Cc: buildroot@buildroot.org
-In-Reply-To: <20241219022351.282995-1-james.hilliard1@gmail.com>
-References: <20241219022351.282995-1-james.hilliard1@gmail.com>
+In-Reply-To: <20241219022920.284880-1-james.hilliard1@gmail.com>
+References: <20241219022920.284880-1-james.hilliard1@gmail.com>
 User-Agent: Webmail Free/1.6.9
-Message-ID: <7c3277ca5ca53ade7016bf4ca38d6687@free.fr>
+Message-ID: <b988daa6e5ef66d7987ba61d97e275ed@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734876759;
- bh=q+o1yxvYWKm4ZaGhkESL17GLRtUqzCS8KPWXROaiNUg=;
+ d=free.fr; s=smtp-20201208; t=1734876801;
+ bh=rxfdla/Vlvin7En47GdVWN0T84T1780PYxrnvlXbvHU=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=h81DzBTIRoO5PKRXWQgfHq7Xcq1Hn/3ikGePWd8M7ggEyfASfg3kYYYCCO3tW5tk8
- ElF3qCHmSnaPTrq5jbfLhI2L8A56jQjMYl3mj1HahfG9KM4QCYJuPgQuo8NSE9QeHf
- TNmNGUi5ptRPpPE7YuQSniBiyTb8pGAJ6e54DH5eUpvzm11LSTmitkqmBJcMeihv7a
- cCeZdWVZ/W2ihud8GPsNs3kffMDEecG8vBHBFC/VaxDj3gXyDV5uWVztG479myDuiz
- MJM4s+gC7yUYSPsLWhGROs1hwEBHaxaYEhNrHiJtE/0khWv0sdO4TTApbydfQHE2GF
- n0/ceCBoybu+A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=T5P16Flru0GE9Y0MO321l1U+Omv4BceeNnnq8wzsLugNeEt13SbD+ZdVd5/+254bm
+ c+PtuALslgvdDksi3hgZY93EdiYocEWxyARkqODGwMLZxO+mUu4Gqb06idnZz84Ezw
+ WNzSw0yfSzFo/BRFBOsqvHOHpE34OtMsA/+3/IpjP3kGCTakBsh9fg74QOxZ78xbdP
+ NiwK6u2ycZI4apMoxNuKi/Z9SLN8NkZfi5ZktqIMGzTkWkhMl4Pt9FHvvFNUZLmVJ8
+ jjDHGtjNVxoipbhLNjWajiGYHNhW3VVM+6bApVZ4PjRluQx9x7P0BibueUCIrffKUv
+ YHvLPluEDx0EA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=h81DzBTI
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-pydantic-settings: bump
- to version 2.7.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=T5P16Flr
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-pypika-tortoise: bump to
+ version 0.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,58 +88,56 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/12/2024 03:23, James Hilliard wrote:
+On 19/12/2024 03:29, James Hilliard wrote:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
 Applied to master, thanks.
 
 > ---
->  .../python-pydantic-settings/python-pydantic-settings.hash    | 4 ++--
->  package/python-pydantic-settings/python-pydantic-settings.mk  | 4 ++--
+>  package/python-pypika-tortoise/python-pypika-tortoise.hash | 4 ++--
+>  package/python-pypika-tortoise/python-pypika-tortoise.mk   | 4 ++--
 >  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git 
-> a/package/python-pydantic-settings/python-pydantic-settings.hash 
-> b/package/python-pydantic-settings/python-pydantic-settings.hash
-> index c1acb00dc2..365158a1ec 100644
-> --- a/package/python-pydantic-settings/python-pydantic-settings.hash
-> +++ b/package/python-pydantic-settings/python-pydantic-settings.hash
+> diff --git a/package/python-pypika-tortoise/python-pypika-tortoise.hash 
+> b/package/python-pypika-tortoise/python-pypika-tortoise.hash
+> index 5c78509af2..a353fc3b33 100644
+> --- a/package/python-pypika-tortoise/python-pypika-tortoise.hash
+> +++ b/package/python-pypika-tortoise/python-pypika-tortoise.hash
 > @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/pydantic-settings/json
-> -md5  eb50e2f88dfb5229d7319be57dcc4ed0  pydantic_settings-2.6.1.tar.gz
+>  # md5, sha256 from https://pypi.org/pypi/pypika-tortoise/json
+> -md5  69e74ea7ee7236de921c662a3b0940bc  pypika_tortoise-0.2.1.tar.gz
 > -sha256  
-> e0f92546d8a9923cb8941689abf85d6601a8c19a23e97a34b2964a2e3f813ca0  
-> pydantic_settings-2.6.1.tar.gz
-> +md5  d00fcf00e6a5095033031398d96702a3  pydantic_settings-2.7.0.tar.gz
+> 979bbb9d60fe9f6e4129a25c44ee008aab4a4e97b296350be9983dcaa2766354  
+> pypika_tortoise-0.2.1.tar.gz
+> +md5  356b9c058d7e6f52256057158d71a67d  pypika_tortoise-0.3.2.tar.gz
 > +sha256  
-> ac4bfd4a36831a48dbf8b2d9325425b549a0a6f18cea118436d728eb4f1c4d66  
-> pydantic_settings-2.7.0.tar.gz
+> f5d508e2ef00255e52ec6ac79ef889e10dbab328f218c55cd134c4d02ff9f6f4  
+> pypika_tortoise-0.3.2.tar.gz
 >  # Locally computed sha256 checksums
 >  sha256  
-> eb355a753e020346d33d83bf9769135b89fc610568ac531a01c295bcee7fd998  
+> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  
 > LICENSE
-> diff --git 
-> a/package/python-pydantic-settings/python-pydantic-settings.mk 
-> b/package/python-pydantic-settings/python-pydantic-settings.mk
-> index 90e982b3ff..fa14f97cef 100644
-> --- a/package/python-pydantic-settings/python-pydantic-settings.mk
-> +++ b/package/python-pydantic-settings/python-pydantic-settings.mk
+> diff --git a/package/python-pypika-tortoise/python-pypika-tortoise.mk 
+> b/package/python-pypika-tortoise/python-pypika-tortoise.mk
+> index ba4845e100..2b10e40861 100644
+> --- a/package/python-pypika-tortoise/python-pypika-tortoise.mk
+> +++ b/package/python-pypika-tortoise/python-pypika-tortoise.mk
 > @@ -4,9 +4,9 @@
 >  #
 >  
 > ################################################################################
 > 
-> -PYTHON_PYDANTIC_SETTINGS_VERSION = 2.6.1
-> +PYTHON_PYDANTIC_SETTINGS_VERSION = 2.7.0
->  PYTHON_PYDANTIC_SETTINGS_SOURCE = 
-> pydantic_settings-$(PYTHON_PYDANTIC_SETTINGS_VERSION).tar.gz
-> -PYTHON_PYDANTIC_SETTINGS_SITE = 
-> https://files.pythonhosted.org/packages/b5/d4/9dfbe238f45ad8b168f5c96ee49a3df0598ce18a0795a983b419949ce65b
-> +PYTHON_PYDANTIC_SETTINGS_SITE = 
-> https://files.pythonhosted.org/packages/86/41/19b62b99e7530cfa1d6ccd16199afd9289a12929bef1a03aa4382b22e683
->  PYTHON_PYDANTIC_SETTINGS_SETUP_TYPE = hatch
->  PYTHON_PYDANTIC_SETTINGS_LICENSE = MIT
->  PYTHON_PYDANTIC_SETTINGS_LICENSE_FILES = LICENSE
+> -PYTHON_PYPIKA_TORTOISE_VERSION = 0.2.1
+> +PYTHON_PYPIKA_TORTOISE_VERSION = 0.3.2
+>  PYTHON_PYPIKA_TORTOISE_SOURCE = 
+> pypika_tortoise-$(PYTHON_PYPIKA_TORTOISE_VERSION).tar.gz
+> -PYTHON_PYPIKA_TORTOISE_SITE = 
+> https://files.pythonhosted.org/packages/30/af/b4a6035611cf6f3990879385cf6d077013c1bdf7ea294d6ceebfa14c8d08
+> +PYTHON_PYPIKA_TORTOISE_SITE = 
+> https://files.pythonhosted.org/packages/f2/6f/d7bfc44f9d8d68e33866688f7ce9ba0785b485e4dec1590ae0a6ba73b5e2
+>  PYTHON_PYPIKA_TORTOISE_SETUP_TYPE = poetry
+>  PYTHON_PYPIKA_TORTOISE_LICENSE = Apache-2.0
+>  PYTHON_PYPIKA_TORTOISE_LICENSE_FILES = LICENSE
 > --
 > 2.34.1
 > 
