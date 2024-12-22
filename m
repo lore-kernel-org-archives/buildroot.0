@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5128E77188
-	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 13:56:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9A43E7718D
+	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 13:56:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A1E760A58;
-	Sun, 22 Dec 2024 13:56:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8590E820D0;
+	Sun, 22 Dec 2024 13:56:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ACKFyzBL4MZC; Sun, 22 Dec 2024 13:56:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id snSfrC5cSmG7; Sun, 22 Dec 2024 13:56:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B2AE60A50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95AE0820D1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B2AE60A50;
-	Sun, 22 Dec 2024 13:56:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 55C615E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95AE0820D1;
+	Sun, 22 Dec 2024 13:56:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 710B4757
  for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 298DA60A58
+ by smtp2.osuosl.org (Postfix) with ESMTP id 501594042F
  for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U8-uElt__eJ3 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XLhqPkCbLS1S for <buildroot@buildroot.org>;
  Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E272608F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4370B40106
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4E272608F6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4370B40106
  for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 37AB1872F3; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
+ id 2843387279; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Dec 2024 13:57:32 +0100
+Date: Sun, 22 Dec 2024 13:56:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 354fa0985430b3b30107ba3f6f9d926d4fa8b3c3
-X-Git-Newrev: b005eb5bb5907a1010441d653e2ea3ec13ce3a92
+X-Git-Oldrev: 4f04bde045ad167ba605b6e78545e79dff153a58
+X-Git-Newrev: 354fa0985430b3b30107ba3f6f9d926d4fa8b3c3
 X-Patchwork-Hint: ignore
-Message-Id: <20241222135651.37AB1872F3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-asyncclick: new package
+Message-Id: <20241222135651.2843387279@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tortoise-orm: bump to
+ version 0.22.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,75 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b005eb5bb5907a1010441d653e2ea3ec13ce3a92
+commit: https://git.buildroot.net/buildroot/commit/?id=354fa0985430b3b30107ba3f6f9d926d4fa8b3c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/Config.in                                |  1 +
- package/python-asyncclick/Config.in              |  7 +++++++
- package/python-asyncclick/python-asyncclick.hash |  5 +++++
- package/python-asyncclick/python-asyncclick.mk   | 15 +++++++++++++++
- 4 files changed, 28 insertions(+)
+ package/python-tortoise-orm/python-tortoise-orm.hash | 4 ++--
+ package/python-tortoise-orm/python-tortoise-orm.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index feb4840a7d..06472aa972 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1013,6 +1013,7 @@ menu "External python modules"
- 	source "package/python-async-generator/Config.in"
- 	source "package/python-async-lru/Config.in"
- 	source "package/python-async-timeout/Config.in"
-+	source "package/python-asyncclick/Config.in"
- 	source "package/python-asyncssh/Config.in"
- 	source "package/python-attrs/Config.in"
- 	source "package/python-augeas/Config.in"
-diff --git a/package/python-asyncclick/Config.in b/package/python-asyncclick/Config.in
-new file mode 100644
-index 0000000000..9264245213
---- /dev/null
-+++ b/package/python-asyncclick/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_ASYNCCLICK
-+	bool "python-asyncclick"
-+	select BR2_PACKAGE_PYTHON_ANYIO # runtime
-+	help
-+	  Composable command line interface toolkit, async version.
-+
-+	  https://palletsprojects.com/p/click/
-diff --git a/package/python-asyncclick/python-asyncclick.hash b/package/python-asyncclick/python-asyncclick.hash
-new file mode 100644
-index 0000000000..59f00893e5
---- /dev/null
-+++ b/package/python-asyncclick/python-asyncclick.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/asyncclick/json
-+md5  542e83089a55129ca2fe7ccdbc65ba77  asyncclick-8.1.7.2.tar.gz
-+sha256  219ea0f29ccdc1bb4ff43bcab7ce0769ac6d48a04f997b43ec6bee99a222daa0  asyncclick-8.1.7.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256  9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  LICENSE.rst
-diff --git a/package/python-asyncclick/python-asyncclick.mk b/package/python-asyncclick/python-asyncclick.mk
-new file mode 100644
-index 0000000000..946325e496
---- /dev/null
-+++ b/package/python-asyncclick/python-asyncclick.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-asyncclick
-+#
-+################################################################################
-+
-+PYTHON_ASYNCCLICK_VERSION = 8.1.7.2
-+PYTHON_ASYNCCLICK_SOURCE = asyncclick-$(PYTHON_ASYNCCLICK_VERSION).tar.gz
-+PYTHON_ASYNCCLICK_SITE = https://files.pythonhosted.org/packages/5e/bf/59d836c3433d7aa07f76c2b95c4eb763195ea8a5d7f9ad3311ed30c2af61
-+PYTHON_ASYNCCLICK_SETUP_TYPE = setuptools
-+PYTHON_ASYNCCLICK_LICENSE = BSD-3-Clause
-+PYTHON_ASYNCCLICK_LICENSE_FILES = LICENSE.rst
-+PYTHON_ASYNCCLICK_DEPENDENCIES = host-python-setuptools-scm
-+
-+$(eval $(python-package))
+diff --git a/package/python-tortoise-orm/python-tortoise-orm.hash b/package/python-tortoise-orm/python-tortoise-orm.hash
+index 5e97c6302f..2297290616 100644
+--- a/package/python-tortoise-orm/python-tortoise-orm.hash
++++ b/package/python-tortoise-orm/python-tortoise-orm.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/tortoise-orm/json
+-md5  328373e7e6112eab38984d6c1c7caf41  tortoise_orm-0.21.7.tar.gz
+-sha256  8a790a931828aa37ac364b344c561e603422aced2af5e403f6790575da0f19c5  tortoise_orm-0.21.7.tar.gz
++md5  21f9f3624ef82b3b9c23ed1fb7d70766  tortoise_orm-0.22.2.tar.gz
++sha256  f1e808bc27265b3e4682dae89b725a66d8311cc20c206d512c57dd8a1c78096b  tortoise_orm-0.22.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  f955d347b975d5867ee364f978476b3012878a706d468571b9758cac74de6041  LICENSE.txt
+diff --git a/package/python-tortoise-orm/python-tortoise-orm.mk b/package/python-tortoise-orm/python-tortoise-orm.mk
+index 0a8f173c86..6bd1276bd1 100644
+--- a/package/python-tortoise-orm/python-tortoise-orm.mk
++++ b/package/python-tortoise-orm/python-tortoise-orm.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TORTOISE_ORM_VERSION = 0.21.7
++PYTHON_TORTOISE_ORM_VERSION = 0.22.2
+ PYTHON_TORTOISE_ORM_SOURCE = tortoise_orm-$(PYTHON_TORTOISE_ORM_VERSION).tar.gz
+-PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/e8/0e/ad8e7554b0259072887d602617a67ef21055e1d8aa061936e381ecc1a9a5
++PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/5c/19/c32752a3042580b40300aeffa48859e087a023114f50a2846ba95c26c87d
+ PYTHON_TORTOISE_ORM_SETUP_TYPE = poetry
+ PYTHON_TORTOISE_ORM_LICENSE = Apache-2.0
+ PYTHON_TORTOISE_ORM_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
