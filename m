@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E80FC282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:42:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C2E4C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:42:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E1D38479D;
-	Fri, 28 Feb 2025 16:42:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0FBC4F8D6;
+	Fri, 28 Feb 2025 16:42:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Cqw23ScVIJD; Fri, 28 Feb 2025 16:42:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TGbAY_5kF3DJ; Fri, 28 Feb 2025 16:42:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 255EA847A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AEE34F113
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 255EA847A8;
-	Fri, 28 Feb 2025 16:42:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8AEE34F113;
+	Fri, 28 Feb 2025 16:42:51 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 11E4E1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 28303711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 988AB42937
+ by smtp4.osuosl.org (Postfix) with ESMTP id A24E14293D
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CEDnZaHCa6WI for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:55 +0000 (UTC)
+ id WmDkPOlZlvyM for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FAD4419F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDFA942504
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2FAD4419F4
+ by smtp4.osuosl.org (Postfix) with ESMTP id EDFA942504
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2B49885E77; Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
+ id E68F2820F8; Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 20 Dec 2024 22:56:15 +0100
+Date: Sun, 22 Dec 2024 14:05:52 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ed59c2b7aa088b44d5d402bf4ddf454a99e45587
-X-Git-Newrev: 15dbc33be847c9b4d137e6311bb8ba68a51a3c27
+X-Git-Oldrev: 8e713c33aa5e3f91236a6f9a4d708de04de6d17a
+X-Git-Newrev: bdd2803e1b5a1f0e716550ffc16c6fdee2213d47
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162944.2B49885E77@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/testing: new proj
- runtime test
+Message-Id: <20250228162944.E68F2820F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-httpcore: bump
+ to version 1.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,94 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15dbc33be847c9b4d137e6311bb8ba68a51a3c27
+commit: https://git.buildroot.net/buildroot/commit/?id=bdd2803e1b5a1f0e716550ffc16c6fdee2213d47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Tested-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Reviewed-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                 |  1 +
- support/testing/tests/package/test_proj.py | 59 ++++++++++++++++++++++++++++++
- 2 files changed, 60 insertions(+)
+ package/python-httpcore/python-httpcore.hash | 4 ++--
+ package/python-httpcore/python-httpcore.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 492eb765e0..f2abab2ef3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1956,6 +1956,7 @@ F:	support/testing/tests/package/test_pigz.py
- F:	support/testing/tests/package/test_postgresql.py
- F:	support/testing/tests/package/test_pppd.py
- F:	support/testing/tests/package/test_pppd/
-+F:	support/testing/tests/package/test_proj.py
- F:	support/testing/tests/package/test_pv.py
- F:	support/testing/tests/package/test_python_distro.py
- F:	support/testing/tests/package/test_python_gnupg.py
-diff --git a/support/testing/tests/package/test_proj.py b/support/testing/tests/package/test_proj.py
-new file mode 100644
-index 0000000000..ed23c229fd
---- /dev/null
-+++ b/support/testing/tests/package/test_proj.py
-@@ -0,0 +1,59 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestProj(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_PROJ=y
-+        BR2_PACKAGE_PROJ_APPS=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # We check the program can run. The "proj" command does not
-+        # have a "--version" option. It will just show its version
-+        # when invoked without any argument.
-+        self.assertRunOk("proj")
-+
-+        # The commands in this tests are taken from the Proj
-+        # documentation quickstart page, at:
-+        # https://proj.org/en/9.5/usage/quickstart.html
-+
-+        proj_str = "+proj=merc +lat_ts=56.5 +ellps=GRS80"
-+        cmd = "echo 55.2 12.2"
-+        cmd += f" | proj {proj_str}"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        expected_values = [3399483.80, 752085.60]
-+        values = list(map(lambda x: float(x), out[0].split()))
-+        for i in range(len(expected_values)):
-+            self.assertAlmostEqual(values[i], expected_values[i])
-+
-+        proj_str = "+proj=merc +lat_ts=56.5 +ellps=GRS80 +to +proj=utm +zone=32"
-+        cmd = "echo 3399483.80 752085.60"
-+        cmd += f" | cs2cs {proj_str}"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        expected_values = [6103992.36, 1924052.47, 0.00]
-+        values = list(map(lambda x: float(x), out[0].split()))
-+        for i in range(len(expected_values)):
-+            self.assertAlmostEqual(values[i], expected_values[i])
-+
-+        proj_str = "+init=epsg:4326 +to +init=epsg:25832"
-+        cmd = "echo 56 12"
-+        cmd += f" | cs2cs {proj_str}"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        expected_values = [6231950.54, 1920310.71, 0.00]
-+        values = list(map(lambda x: float(x), out[0].split()))
-+        for i in range(len(expected_values)):
-+            self.assertAlmostEqual(values[i], expected_values[i])
+diff --git a/package/python-httpcore/python-httpcore.hash b/package/python-httpcore/python-httpcore.hash
+index 68c0450f94..ced9020a1e 100644
+--- a/package/python-httpcore/python-httpcore.hash
++++ b/package/python-httpcore/python-httpcore.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/httpcore/json
+-md5  458f9b56367cf547425bf2347bffd784  httpcore-1.0.6.tar.gz
+-sha256  73f6dbd6eb8c21bbf7ef8efad555481853f5f6acdeaff1edb0694289269ee17f  httpcore-1.0.6.tar.gz
++md5  4cdb4739273f33bfd49b6d2aa6f011c6  httpcore-1.0.7.tar.gz
++sha256  8551cb62a169ec7162ac7be8d4817d561f60e08eaa485234898414bb5a8a0b4c  httpcore-1.0.7.tar.gz
+ # Locally computed sha256 checksums
+ sha256  fdcb59154c74cbaba16a11242f7740bea9f23d6feb5547917d8c5f94a80392a5  LICENSE.md
+diff --git a/package/python-httpcore/python-httpcore.mk b/package/python-httpcore/python-httpcore.mk
+index a432433884..29d1ba1b7c 100644
+--- a/package/python-httpcore/python-httpcore.mk
++++ b/package/python-httpcore/python-httpcore.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_HTTPCORE_VERSION = 1.0.6
++PYTHON_HTTPCORE_VERSION = 1.0.7
+ PYTHON_HTTPCORE_SOURCE = httpcore-$(PYTHON_HTTPCORE_VERSION).tar.gz
+-PYTHON_HTTPCORE_SITE = https://files.pythonhosted.org/packages/b6/44/ed0fa6a17845fb033bd885c03e842f08c1b9406c86a2e60ac1ae1b9206a6
++PYTHON_HTTPCORE_SITE = https://files.pythonhosted.org/packages/6a/41/d7d0a89eb493922c37d343b607bc1b5da7f5be7e383740b4753ad8943e90
+ PYTHON_HTTPCORE_SETUP_TYPE = hatch
+ PYTHON_HTTPCORE_LICENSE = BSD-3-Clause
+ PYTHON_HTTPCORE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
