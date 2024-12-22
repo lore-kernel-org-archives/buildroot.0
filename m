@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62EABC282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:44:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55E1EC282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:44:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D0EE4FA44;
-	Fri, 28 Feb 2025 16:44:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E8294FA50;
+	Fri, 28 Feb 2025 16:44:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1cy6iDA6KSNm; Fri, 28 Feb 2025 16:44:10 +0000 (UTC)
+ id M8EisDAExlSf; Fri, 28 Feb 2025 16:44:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 827534F26D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8561B4FA4F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 827534F26D;
-	Fri, 28 Feb 2025 16:44:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8561B4FA4F;
+	Fri, 28 Feb 2025 16:44:13 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 173D71DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F8321DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 043A242534
+ by smtp4.osuosl.org (Postfix) with ESMTP id 44F014251C
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5wmalEvqR2GC for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:56 +0000 (UTC)
+ id 4CgZIiF70W1s for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1BF842503
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 931BF42511
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E1BF842503
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 931BF42511
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D787687BE7; Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
+ id 8D43387BE7; Fri, 28 Feb 2025 16:29:45 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Dec 2024 14:05:04 +0100
+Date: Sun, 22 Dec 2024 14:15:00 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1c448e02dd0eef997e142d8d424f40705f5c3afe
-X-Git-Newrev: 8e713c33aa5e3f91236a6f9a4d708de04de6d17a
+X-Git-Oldrev: 5684bde0864ea70c75732a5834f05aae6b34611a
+X-Git-Newrev: 1ac1c92a5f05264e95937076c33c3d42524212fe
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162944.D787687BE7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-fastapi: bump
- to version 0.115.6
+Message-Id: <20250228162945.8D43387BE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-starlette: bump
+ to version 0.41.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e713c33aa5e3f91236a6f9a4d708de04de6d17a
+commit: https://git.buildroot.net/buildroot/commit/?id=1ac1c92a5f05264e95937076c33c3d42524212fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-fastapi/python-fastapi.hash | 4 ++--
- package/python-fastapi/python-fastapi.mk   | 4 ++--
+ package/python-starlette/python-starlette.hash | 4 ++--
+ package/python-starlette/python-starlette.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
-index 6c7451ebd0..11e5837a3a 100644
---- a/package/python-fastapi/python-fastapi.hash
-+++ b/package/python-fastapi/python-fastapi.hash
+diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
+index f422e6cfe0..1542e565f9 100644
+--- a/package/python-starlette/python-starlette.hash
++++ b/package/python-starlette/python-starlette.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fastapi/json
--md5  feecf6d0db305d63ee9e6fcb77c81673  fastapi-0.115.4.tar.gz
--sha256  db653475586b091cb8b2fec2ac54a680ac6a158e07406e1abae31679e8826349  fastapi-0.115.4.tar.gz
-+md5  977d2052173cde94dd66c669110c2ac4  fastapi-0.115.6.tar.gz
-+sha256  9ec46f7addc14ea472958a96aae5b5de65f39721a46aaf5705c480d9a8b76654  fastapi-0.115.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/starlette/json
+-md5  97321ad76438c1106ddd817baddcda06  starlette-0.41.2.tar.gz
+-sha256  9834fd799d1a87fd346deb76158668cfa0b0d56f85caefe8268e2d97c3468b62  starlette-0.41.2.tar.gz
++md5  ccdbb470d005b83cc8f808e6dc25f890  starlette-0.41.3.tar.gz
++sha256  0e4ab3d16522a255be6b28260b938eae2482f98ce5cc934cb08dce8dc3ba5835  starlette-0.41.3.tar.gz
  # Locally computed sha256 checksums
- sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
-diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
-index 95eb565b23..9f275ad8a8 100644
---- a/package/python-fastapi/python-fastapi.mk
-+++ b/package/python-fastapi/python-fastapi.mk
+ sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
+diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
+index 3caa136987..0a4e5f3f17 100644
+--- a/package/python-starlette/python-starlette.mk
++++ b/package/python-starlette/python-starlette.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FASTAPI_VERSION = 0.115.4
-+PYTHON_FASTAPI_VERSION = 0.115.6
- PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
--PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/a9/db/5781f19bd30745885e0737ff3fdd4e63e7bc691710f9da691128bb0dc73b
-+PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/93/72/d83b98cd106541e8f5e5bfab8ef2974ab45a62e8a6c5b5e6940f26d2ed4b
- PYTHON_FASTAPI_SETUP_TYPE = pep517
- PYTHON_FASTAPI_LICENSE = MIT
- PYTHON_FASTAPI_LICENSE_FILES = LICENSE
+-PYTHON_STARLETTE_VERSION = 0.41.2
++PYTHON_STARLETTE_VERSION = 0.41.3
+ PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
+-PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/3e/da/1fb4bdb72ae12b834becd7e1e7e47001d32f91ec0ce8d7bc1b618d9f0bd9
++PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/1a/4c/9b5764bd22eec91c4039ef4c55334e9187085da2d8a2df7bd570869aae18
+ PYTHON_STARLETTE_SETUP_TYPE = hatch
+ PYTHON_STARLETTE_LICENSE = BSD-3-Clause
+ PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
