@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F178C282C1
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02145C282C6
 	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:44:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 238B342CF1;
-	Fri, 28 Feb 2025 16:44:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C76E580C07;
+	Fri, 28 Feb 2025 16:44:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sKTtBT-zGhyh; Fri, 28 Feb 2025 16:44:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IZyd8zfYChI4; Fri, 28 Feb 2025 16:44:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7013B4FA78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC66C80BB9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7013B4FA78;
-	Fri, 28 Feb 2025 16:44:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC66C80BB9;
+	Fri, 28 Feb 2025 16:44:32 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1E0B3711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 108C71DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D7C5F42539
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF73941867
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ykr_476pam3n for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:59 +0000 (UTC)
+ id DAwoZfZlJ7l8 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEC0241867
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 369784250B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AEC0241867
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 369784250B
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A7CD57FD48; Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
+ id 338A17FDE0; Fri, 28 Feb 2025 16:29:45 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Dec 2024 13:56:50 +0100
+Date: Sun, 22 Dec 2024 14:09:41 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a6de4cf11b44c11f35705b349979cd65b6906e73
-X-Git-Newrev: 3960334ba26c5f7235e5865c3d61ccef901aefe7
+X-Git-Oldrev: 9e8d9c5054c5c5c6600607e76fdfc62e34bf034c
+X-Git-Newrev: 8edea7b35fa6de1c95f585e20071fc61a5a5f595
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162946.A7CD57FD48@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/python-aiohappyeyeballs: bump to version 2.4.4
+Message-Id: <20250228162945.338A17FDE0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pydantic-core:
+ bump to version 2.27.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3960334ba26c5f7235e5865c3d61ccef901aefe7
+commit: https://git.buildroot.net/buildroot/commit/?id=8edea7b35fa6de1c95f585e20071fc61a5a5f595
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash | 4 ++--
- package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pydantic-core/python-pydantic-core.hash | 2 +-
+ package/python-pydantic-core/python-pydantic-core.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
-index 85938c1084..069dad89cf 100644
---- a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
-+++ b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohappyeyeballs/json
--md5  dcc0ba52e3c350f4edc8a8475d1892d6  aiohappyeyeballs-2.4.3.tar.gz
--sha256  75cf88a15106a5002a8eb1dab212525c00d1f4c0fa96e551c9fbe6f09a621586  aiohappyeyeballs-2.4.3.tar.gz
-+md5  57d956f516c6558674f6248d8ba38321  aiohappyeyeballs-2.4.4.tar.gz
-+sha256  5fdd7d87889c63183afc18ce9271f9b0a7d32c2303e394468dd45d514a757745  aiohappyeyeballs-2.4.4.tar.gz
+diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
+index 76e05eb20e..d908d5cddc 100644
+--- a/package/python-pydantic-core/python-pydantic-core.hash
++++ b/package/python-pydantic-core/python-pydantic-core.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after vendoring
+-sha256  c9a9e5970fbe54f24023635743dfe0f9a0adbebafb467729b674399f06a2d0b5  python-pydantic-core-2.26.0-cargo2.tar.gz
++sha256  d7e62e6331eb4e712b83dad434926440c7c94989e20d693cfae119b8777ce777  python-pydantic-core-2.27.2-cargo2.tar.gz
  # Locally computed sha256 checksums
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
-index 2a2c10fb37..9669b04793 100644
---- a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
-+++ b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
+ sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
+diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
+index 865c7d0c84..6a18421eee 100644
+--- a/package/python-pydantic-core/python-pydantic-core.mk
++++ b/package/python-pydantic-core/python-pydantic-core.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOHAPPYEYEBALLS_VERSION = 2.4.3
-+PYTHON_AIOHAPPYEYEBALLS_VERSION = 2.4.4
- PYTHON_AIOHAPPYEYEBALLS_SOURCE = aiohappyeyeballs-$(PYTHON_AIOHAPPYEYEBALLS_VERSION).tar.gz
--PYTHON_AIOHAPPYEYEBALLS_SITE = https://files.pythonhosted.org/packages/bc/69/2f6d5a019bd02e920a3417689a89887b39ad1e350b562f9955693d900c40
-+PYTHON_AIOHAPPYEYEBALLS_SITE = https://files.pythonhosted.org/packages/7f/55/e4373e888fdacb15563ef6fa9fa8c8252476ea071e96fb46defac9f18bf2
- PYTHON_AIOHAPPYEYEBALLS_SETUP_TYPE = poetry
- PYTHON_AIOHAPPYEYEBALLS_LICENSE = PSF-2.0
- PYTHON_AIOHAPPYEYEBALLS_LICENSE_FILES = LICENSE
+-PYTHON_PYDANTIC_CORE_VERSION = 2.26.0
++PYTHON_PYDANTIC_CORE_VERSION = 2.27.2
+ PYTHON_PYDANTIC_CORE_SOURCE_PYPI = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
+-PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/98/85/0ac4f8fc632fa1bb3f473e4dfb1cd520ede11179f76a028edfd2ca989ed4
++PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/fc/01/f3e5ac5e7c25833db5eb555f7b7ab24cd6f8c322d3a3ad2d67a952dc0abc
+ PYTHON_PYDANTIC_CORE_SITE = $(PYTHON_PYDANTIC_CORE_SITE_PYPI)/$(PYTHON_PYDANTIC_CORE_SOURCE_PYPI)?buildroot-path=filename
+ PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
+ PYTHON_PYDANTIC_CORE_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
