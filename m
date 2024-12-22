@@ -1,76 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14F7EE77188
-	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 14:09:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9043E77188
+	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 14:09:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 677C681F69;
-	Sun, 22 Dec 2024 14:09:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95B11605CB;
+	Sun, 22 Dec 2024 14:09:48 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M9Xq8HQSyT8y; Sun, 22 Dec 2024 14:09:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E1D260A3F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E1D260A3F;
+	Sun, 22 Dec 2024 14:09:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 44B22D3
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 14:09:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2642F81F69
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 14:09:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mKEElN0T2Etv; Sun, 22 Dec 2024 14:09:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 408FA81E4C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 408FA81E4C;
-	Sun, 22 Dec 2024 14:09:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F115D3
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 14:09:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C6A040744
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 14:09:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RucNZVdgtQxw for <buildroot@buildroot.org>;
- Sun, 22 Dec 2024 14:09:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ id 51vipYH_6k23 for <buildroot@buildroot.org>;
+ Sun, 22 Dec 2024 14:09:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
  helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A5F484073D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5F484073D
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A5F484073D
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 14:09:17 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 20BAF81F66
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20BAF81F66
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 20BAF81F66
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 14:09:43 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 6C5BE780371;
- Sun, 22 Dec 2024 15:09:13 +0100 (CET)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 00CF1780505;
+ Sun, 22 Dec 2024 15:09:40 +0100 (CET)
 Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:53540])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 22 Dec 2024 15:09:13 +0100
+ with HTTP (HTTP/1.0 POST); Sun, 22 Dec 2024 15:09:40 +0100
 MIME-Version: 1.0
-Date: Sun, 22 Dec 2024 15:09:13 +0100
+Date: Sun, 22 Dec 2024 15:09:40 +0100
 From: Julien Olivain <ju.o@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20241219010810.237875-1-james.hilliard1@gmail.com>
-References: <20241219010810.237875-1-james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20241219012018.239934-1-james.hilliard1@gmail.com>
+References: <20241219012018.239934-1-james.hilliard1@gmail.com>
 User-Agent: Webmail Free/1.6.9
-Message-ID: <66ef48b1d690be437988cc45a2d2f75a@free.fr>
+Message-ID: <dd14c0162cb5c05c2c3a9f06e97f4e5a@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734876555;
- bh=LitQvX7MUdkpsNVkNCEoAc2cguHu1qKZDv/jMiYOJpw=;
+ d=free.fr; s=smtp-20201208; t=1734876582;
+ bh=/jympmcAgIfnIB8ztRqVX46icgBQpTxJmTkqYY3eRjQ=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=K/hHUuAgsR8Laz2xVc8Dj3BVxXOxgqbJfWf26c9R4p+owlKTXrbK5EroXH1pHYUC9
- XzYxqJYdyoC55ajH7mkh4HsEvDmYhXsGGWVdRGc3GJKWUOuubBJmgDht1Vh+UvbB8v
- 7MrEgWUOQGdWjb7+XC8V1iisYZIh2tVrqzMZx2gKwaB3gPXNSqiDVpy9Zf5HrEY+JG
- iH1KLMMR4iJK+rWT1Ay5ORTxRRrsVaXPXW1fsO5Tx5wQbT5dwUDWX7d3tsWVJ6Af45
- wVRt+Urc8TnBzrt5LmrNMwUUKb9xZTQOyO6QMRJ3ABbctjVHrxg+RBLCqjTwYnbY/X
- J4z1GcVzmDpRw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=IGoZz/+b/MSIJzQw3DkeDHL3xlYj4zYmW0PncERljfLgUmTM/ODacQn9Qb6fG+79R
+ 1COT3IrMfNkxZ5Q0R1wsGhJz4ZiAHqzdHc4Buz7tVkq2QNjgH69T34BAuozCshj7Jd
+ ShXWgeIE/905fqON4s6Mis+2qAICF4DJgnrTNtbm5pDP7JJU4ZuOOqBpuSnwjneF90
+ hT5Eb5au6MzwApSLAiCqAdMm92gd1NpWjgBzQlPxlv/k+7Uj3JAr9zlF2RL3vtnO7l
+ YEuIpHuZwklEiFluHTjLL6hhipBeWLSt8htsvlWFCXZY1+oRmAyUzjq2tjr/U+WC7r
+ pjhnVw89GAOqw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=K/hHUuAg
-Subject: Re: [Buildroot] [PATCH 1/2] package/python-asyncclick: new package
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=IGoZz/+b
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-anyio: bump to version
+ 4.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,87 +89,71 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/12/2024 02:08, James Hilliard wrote:
+On 19/12/2024 02:20, James Hilliard wrote:
+> Add new python-typing-extensions runtime dependency.
+> 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Series applied to master, thanks.
+Applied to master, thanks.
 
 > ---
->  package/Config.in                                |  1 +
->  package/python-asyncclick/Config.in              |  7 +++++++
->  package/python-asyncclick/python-asyncclick.hash |  5 +++++
->  package/python-asyncclick/python-asyncclick.mk   | 15 +++++++++++++++
->  4 files changed, 28 insertions(+)
->  create mode 100644 package/python-asyncclick/Config.in
->  create mode 100644 package/python-asyncclick/python-asyncclick.hash
->  create mode 100644 package/python-asyncclick/python-asyncclick.mk
+>  package/python-anyio/Config.in         | 1 +
+>  package/python-anyio/python-anyio.hash | 4 ++--
+>  package/python-anyio/python-anyio.mk   | 4 ++--
+>  3 files changed, 5 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index feb4840a7d..06472aa972 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1013,6 +1013,7 @@ menu "External python modules"
->  	source "package/python-async-generator/Config.in"
->  	source "package/python-async-lru/Config.in"
->  	source "package/python-async-timeout/Config.in"
-> +	source "package/python-asyncclick/Config.in"
->  	source "package/python-asyncssh/Config.in"
->  	source "package/python-attrs/Config.in"
->  	source "package/python-augeas/Config.in"
-> diff --git a/package/python-asyncclick/Config.in 
-> b/package/python-asyncclick/Config.in
-> new file mode 100644
-> index 0000000000..9264245213
-> --- /dev/null
-> +++ b/package/python-asyncclick/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_ASYNCCLICK
-> +	bool "python-asyncclick"
-> +	select BR2_PACKAGE_PYTHON_ANYIO # runtime
-> +	help
-> +	  Composable command line interface toolkit, async version.
-> +
-> +	  https://palletsprojects.com/p/click/
-> diff --git a/package/python-asyncclick/python-asyncclick.hash 
-> b/package/python-asyncclick/python-asyncclick.hash
-> new file mode 100644
-> index 0000000000..59f00893e5
-> --- /dev/null
-> +++ b/package/python-asyncclick/python-asyncclick.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/asyncclick/json
-> +md5  542e83089a55129ca2fe7ccdbc65ba77  asyncclick-8.1.7.2.tar.gz
+> diff --git a/package/python-anyio/Config.in 
+> b/package/python-anyio/Config.in
+> index d843f37af0..353c7e4629 100644
+> --- a/package/python-anyio/Config.in
+> +++ b/package/python-anyio/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_ANYIO
+>  	bool "python-anyio"
+>  	select BR2_PACKAGE_PYTHON_IDNA # runtime
+>  	select BR2_PACKAGE_PYTHON_SNIFFIO # runtime
+> +	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+>  	help
+>  	  High level compatibility layer for multiple asynchronous
+>  	  event loop implementations.
+> diff --git a/package/python-anyio/python-anyio.hash 
+> b/package/python-anyio/python-anyio.hash
+> index cfd65ee92f..6896b7d516 100644
+> --- a/package/python-anyio/python-anyio.hash
+> +++ b/package/python-anyio/python-anyio.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/anyio/json
+> -md5  3aae01d9007bd08538158c7a7fa18c39  anyio-4.6.2.post1.tar.gz
+> -sha256  
+> 4c8bc31ccdb51c7f7bd251f51c609e038d63e34219b44aa86e47576389880b4c  
+> anyio-4.6.2.post1.tar.gz
+> +md5  6d0431fec06206d2bdbf57d449f1616b  anyio-4.7.0.tar.gz
 > +sha256  
-> 219ea0f29ccdc1bb4ff43bcab7ce0769ac6d48a04f997b43ec6bee99a222daa0  
-> asyncclick-8.1.7.2.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256  
-> 9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  
-> LICENSE.rst
-> diff --git a/package/python-asyncclick/python-asyncclick.mk 
-> b/package/python-asyncclick/python-asyncclick.mk
-> new file mode 100644
-> index 0000000000..946325e496
-> --- /dev/null
-> +++ b/package/python-asyncclick/python-asyncclick.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-asyncclick
-> +#
-> +################################################################################
-> +
-> +PYTHON_ASYNCCLICK_VERSION = 8.1.7.2
-> +PYTHON_ASYNCCLICK_SOURCE = 
-> asyncclick-$(PYTHON_ASYNCCLICK_VERSION).tar.gz
-> +PYTHON_ASYNCCLICK_SITE = 
-> https://files.pythonhosted.org/packages/5e/bf/59d836c3433d7aa07f76c2b95c4eb763195ea8a5d7f9ad3311ed30c2af61
-> +PYTHON_ASYNCCLICK_SETUP_TYPE = setuptools
-> +PYTHON_ASYNCCLICK_LICENSE = BSD-3-Clause
-> +PYTHON_ASYNCCLICK_LICENSE_FILES = LICENSE.rst
-> +PYTHON_ASYNCCLICK_DEPENDENCIES = host-python-setuptools-scm
-> +
-> +$(eval $(python-package))
+> 2f834749c602966b7d456a7567cafcb309f96482b5081d14ac93ccd457f9dd48  
+> anyio-4.7.0.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  
+> 5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  
+> LICENSE
+> diff --git a/package/python-anyio/python-anyio.mk 
+> b/package/python-anyio/python-anyio.mk
+> index 74c49c2e73..8c814abfdd 100644
+> --- a/package/python-anyio/python-anyio.mk
+> +++ b/package/python-anyio/python-anyio.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  
+> ################################################################################
+> 
+> -PYTHON_ANYIO_VERSION = 4.6.2.post1
+> +PYTHON_ANYIO_VERSION = 4.7.0
+>  PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
+> -PYTHON_ANYIO_SITE = 
+> https://files.pythonhosted.org/packages/9f/09/45b9b7a6d4e45c6bcb5bf61d19e3ab87df68e0601fa8c5293de3542546cc
+> +PYTHON_ANYIO_SITE = 
+> https://files.pythonhosted.org/packages/f6/40/318e58f669b1a9e00f5c4453910682e2d9dd594334539c7b7817dabb765f
+>  PYTHON_ANYIO_SETUP_TYPE = setuptools
+>  PYTHON_ANYIO_LICENSE = MIT
+>  PYTHON_ANYIO_LICENSE_FILES = LICENSE
 > --
 > 2.34.1
 > 
