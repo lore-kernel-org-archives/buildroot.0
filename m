@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A62A8C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:44:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62EABC282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:44:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70D2484884;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D0EE4FA44;
 	Fri, 28 Feb 2025 16:44:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LX2GSrPyqIGg; Fri, 28 Feb 2025 16:44:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58E9D8484D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 58E9D8484D;
-	Fri, 28 Feb 2025 16:44:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B64A711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E6B0E42CFC
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G-MifY698y-R for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:59 +0000 (UTC)
+ id 1cy6iDA6KSNm; Fri, 28 Feb 2025 16:44:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 827534F26D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 827534F26D;
+	Fri, 28 Feb 2025 16:44:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 173D71DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 043A242534
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:01 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5wmalEvqR2GC for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 039B942534
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1BF842503
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 039B942534
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E1BF842503
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F374B867C0; Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
+ id D787687BE7; Fri, 28 Feb 2025 16:29:44 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Dec 2024 14:05:25 +0100
+Date: Sun, 22 Dec 2024 14:05:04 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5d44798a49c6513366b47fb7863dad0386cb4a83
-X-Git-Newrev: a44671c2cfed2e5087223d0b0634427f67c2f830
+X-Git-Oldrev: 1c448e02dd0eef997e142d8d424f40705f5c3afe
+X-Git-Newrev: 8e713c33aa5e3f91236a6f9a4d708de04de6d17a
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162946.F374B867C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-aiorwlock: bump
- to version 1.5.0
+Message-Id: <20250228162944.D787687BE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-fastapi: bump
+ to version 0.115.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,48 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a44671c2cfed2e5087223d0b0634427f67c2f830
+commit: https://git.buildroot.net/buildroot/commit/?id=8e713c33aa5e3f91236a6f9a4d708de04de6d17a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Migrate from setuptools to poetry build backend.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-aiorwlock/python-aiorwlock.hash | 4 ++--
- package/python-aiorwlock/python-aiorwlock.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-fastapi/python-fastapi.hash | 4 ++--
+ package/python-fastapi/python-fastapi.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aiorwlock/python-aiorwlock.hash b/package/python-aiorwlock/python-aiorwlock.hash
-index 50a670280f..6ba5269c16 100644
---- a/package/python-aiorwlock/python-aiorwlock.hash
-+++ b/package/python-aiorwlock/python-aiorwlock.hash
+diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
+index 6c7451ebd0..11e5837a3a 100644
+--- a/package/python-fastapi/python-fastapi.hash
++++ b/package/python-fastapi/python-fastapi.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiorwlock/json
--md5  669ff2887392cfa393205cea23661c2f  aiorwlock-1.4.0.tar.gz
--sha256  4cea5bec4e9d03533a26919299394822a1422aa519bca9dd09178ec490f8d1cc  aiorwlock-1.4.0.tar.gz
-+md5  094d8676f4fa812ab35225e3737edbc8  aiorwlock-1.5.0.tar.gz
-+sha256  b529da24da659bdedcf68faf216595bde00db228c905197ac554773620e7fd2f  aiorwlock-1.5.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/fastapi/json
+-md5  feecf6d0db305d63ee9e6fcb77c81673  fastapi-0.115.4.tar.gz
+-sha256  db653475586b091cb8b2fec2ac54a680ac6a158e07406e1abae31679e8826349  fastapi-0.115.4.tar.gz
++md5  977d2052173cde94dd66c669110c2ac4  fastapi-0.115.6.tar.gz
++sha256  9ec46f7addc14ea472958a96aae5b5de65f39721a46aaf5705c480d9a8b76654  fastapi-0.115.6.tar.gz
  # Locally computed sha256 checksums
- sha256  fa99ee9d7727194a9f8994c67d1948dc42e8e00ab809fd4a47acfae119d11403  LICENSE
-diff --git a/package/python-aiorwlock/python-aiorwlock.mk b/package/python-aiorwlock/python-aiorwlock.mk
-index 4209ae407c..7f41b50442 100644
---- a/package/python-aiorwlock/python-aiorwlock.mk
-+++ b/package/python-aiorwlock/python-aiorwlock.mk
-@@ -4,10 +4,10 @@
+ sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
+diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
+index 95eb565b23..9f275ad8a8 100644
+--- a/package/python-fastapi/python-fastapi.mk
++++ b/package/python-fastapi/python-fastapi.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIORWLOCK_VERSION = 1.4.0
-+PYTHON_AIORWLOCK_VERSION = 1.5.0
- PYTHON_AIORWLOCK_SOURCE = aiorwlock-$(PYTHON_AIORWLOCK_VERSION).tar.gz
--PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/ba/c5/882b4c89d71d6f9c7d0d8dee18d267025e71d4c3241eb3b16ab39105a0d1
--PYTHON_AIORWLOCK_SETUP_TYPE = setuptools
-+PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/c5/bf/d1ddcd676be027a963b3b01fdf9915daf4590b4dfd03bf1c8c2858aac7e3
-+PYTHON_AIORWLOCK_SETUP_TYPE = poetry
- PYTHON_AIORWLOCK_LICENSE = Apache-2.0
- PYTHON_AIORWLOCK_LICENSE_FILES = LICENSE
- 
+-PYTHON_FASTAPI_VERSION = 0.115.4
++PYTHON_FASTAPI_VERSION = 0.115.6
+ PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
+-PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/a9/db/5781f19bd30745885e0737ff3fdd4e63e7bc691710f9da691128bb0dc73b
++PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/93/72/d83b98cd106541e8f5e5bfab8ef2974ab45a62e8a6c5b5e6940f26d2ed4b
+ PYTHON_FASTAPI_SETUP_TYPE = pep517
+ PYTHON_FASTAPI_LICENSE = MIT
+ PYTHON_FASTAPI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
