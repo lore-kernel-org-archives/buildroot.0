@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7B96E77188
-	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 13:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAEB8E77188
+	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 13:57:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79E2D80C69;
-	Sun, 22 Dec 2024 13:57:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FrzO2Kf_nhIN; Sun, 22 Dec 2024 13:57:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C16880C4F
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C16880C4F;
-	Sun, 22 Dec 2024 13:57:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 15B4C757
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E332C60A43
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B28FE60901;
+	Sun, 22 Dec 2024 13:57:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RwpIxoc3HTQD for <buildroot@buildroot.org>;
+ id 4PcOjDFoePSC; Sun, 22 Dec 2024 13:57:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8470960ACC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8470960ACC;
+	Sun, 22 Dec 2024 13:57:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5776C5E
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 747A342A53
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:53 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XSetTFq3rWK7 for <buildroot@buildroot.org>;
  Sun, 22 Dec 2024 13:56:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2CFB60A4B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F135142A55
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E2CFB60A4B
+ by smtp4.osuosl.org (Postfix) with ESMTP id F135142A55
  for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE22A872F3; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
+ id E7EB687392; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Dec 2024 14:13:26 +0100
+Date: Sun, 22 Dec 2024 14:13:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 96b280804a729d783853a9107aa9dd9ad4ee2d71
-X-Git-Newrev: 0412fd727d4e3483559b3606b277ab61ae2ee3b8
+X-Git-Oldrev: 0412fd727d4e3483559b3606b277ab61ae2ee3b8
+X-Git-Newrev: ad1e214256f5a9427c36a536c397f2967072f4ae
 X-Patchwork-Hint: ignore
-Message-Id: <20241222135651.DE22A872F3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pypika-tortoise: bump to
- version 0.3.2
+Message-Id: <20241222135651.E7EB687392@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-sentry-sdk: bump to version
+ 2.19.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0412fd727d4e3483559b3606b277ab61ae2ee3b8
+commit: https://git.buildroot.net/buildroot/commit/?id=ad1e214256f5a9427c36a536c397f2967072f4ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pypika-tortoise/python-pypika-tortoise.hash | 4 ++--
- package/python-pypika-tortoise/python-pypika-tortoise.mk   | 4 ++--
+ package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
+ package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pypika-tortoise/python-pypika-tortoise.hash b/package/python-pypika-tortoise/python-pypika-tortoise.hash
-index 5c78509af2..a353fc3b33 100644
---- a/package/python-pypika-tortoise/python-pypika-tortoise.hash
-+++ b/package/python-pypika-tortoise/python-pypika-tortoise.hash
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
+index 6243632685..5d65087a6d 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.hash
++++ b/package/python-sentry-sdk/python-sentry-sdk.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pypika-tortoise/json
--md5  69e74ea7ee7236de921c662a3b0940bc  pypika_tortoise-0.2.1.tar.gz
--sha256  979bbb9d60fe9f6e4129a25c44ee008aab4a4e97b296350be9983dcaa2766354  pypika_tortoise-0.2.1.tar.gz
-+md5  356b9c058d7e6f52256057158d71a67d  pypika_tortoise-0.3.2.tar.gz
-+sha256  f5d508e2ef00255e52ec6ac79ef889e10dbab328f218c55cd134c4d02ff9f6f4  pypika_tortoise-0.3.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
+-md5  d68e388f9a261c00515e0f758303240f  sentry_sdk-2.18.0.tar.gz
+-sha256  0dc21febd1ab35c648391c664df96f5f79fb0d92d7d4225cd9832e53a617cafd  sentry_sdk-2.18.0.tar.gz
++md5  235bf9f6e317e809673bedf9dd5d5c4f  sentry_sdk-2.19.2.tar.gz
++sha256  467df6e126ba242d39952375dd816fbee0f217d119bf454a8ce74cf1e7909e8d  sentry_sdk-2.19.2.tar.gz
  # Locally computed sha256 checksums
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-pypika-tortoise/python-pypika-tortoise.mk b/package/python-pypika-tortoise/python-pypika-tortoise.mk
-index ba4845e100..2b10e40861 100644
---- a/package/python-pypika-tortoise/python-pypika-tortoise.mk
-+++ b/package/python-pypika-tortoise/python-pypika-tortoise.mk
+ sha256  6d7ec62dc20e8b92cb88b89fb3b55ee8576505f3e1afa57952548f6eea5d008e  LICENSE
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+index e2cbdcf405..0ccfd7ecd3 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.mk
++++ b/package/python-sentry-sdk/python-sentry-sdk.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYPIKA_TORTOISE_VERSION = 0.2.1
-+PYTHON_PYPIKA_TORTOISE_VERSION = 0.3.2
- PYTHON_PYPIKA_TORTOISE_SOURCE = pypika_tortoise-$(PYTHON_PYPIKA_TORTOISE_VERSION).tar.gz
--PYTHON_PYPIKA_TORTOISE_SITE = https://files.pythonhosted.org/packages/30/af/b4a6035611cf6f3990879385cf6d077013c1bdf7ea294d6ceebfa14c8d08
-+PYTHON_PYPIKA_TORTOISE_SITE = https://files.pythonhosted.org/packages/f2/6f/d7bfc44f9d8d68e33866688f7ce9ba0785b485e4dec1590ae0a6ba73b5e2
- PYTHON_PYPIKA_TORTOISE_SETUP_TYPE = poetry
- PYTHON_PYPIKA_TORTOISE_LICENSE = Apache-2.0
- PYTHON_PYPIKA_TORTOISE_LICENSE_FILES = LICENSE
+-PYTHON_SENTRY_SDK_VERSION = 2.18.0
++PYTHON_SENTRY_SDK_VERSION = 2.19.2
+ PYTHON_SENTRY_SDK_SOURCE = sentry_sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
+-PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/24/cc/0d87cc8246f52d92228aa6718a24e1988a2893f4abe2f64ec5a8bcba4185
++PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/36/4a/eccdcb8c2649d53440ae1902447b86e2e2ad1bc84207c80af9696fa07614
+ PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
+ PYTHON_SENTRY_SDK_LICENSE = MIT
+ PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
