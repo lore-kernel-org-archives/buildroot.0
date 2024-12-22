@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9A43E7718D
-	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 13:56:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 717E6E7718D
+	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 13:57:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8590E820D0;
-	Sun, 22 Dec 2024 13:56:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F281760A6B;
+	Sun, 22 Dec 2024 13:56:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id snSfrC5cSmG7; Sun, 22 Dec 2024 13:56:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J0eTzFY1zh2x; Sun, 22 Dec 2024 13:56:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95AE0820D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4EFD60A7C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 95AE0820D1;
-	Sun, 22 Dec 2024 13:56:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 710B4757
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4EFD60A7C;
+	Sun, 22 Dec 2024 13:56:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9498F5E
  for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 501594042F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7565542A5F
  for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XLhqPkCbLS1S for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6AU07COOAZcf for <buildroot@buildroot.org>;
  Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4370B40106
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A54D42A46
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4370B40106
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A54D42A46
  for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2843387279; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
+ id 523CB87394; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Dec 2024 13:56:37 +0100
+Date: Sun, 22 Dec 2024 14:01:52 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4f04bde045ad167ba605b6e78545e79dff153a58
-X-Git-Newrev: 354fa0985430b3b30107ba3f6f9d926d4fa8b3c3
+X-Git-Oldrev: fb99040495eabc8b797076435501e5e4e07cf3a9
+X-Git-Newrev: d69f53137c877dbfe5173d73c20cab4807e6752e
 X-Patchwork-Hint: ignore
-Message-Id: <20241222135651.2843387279@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-tortoise-orm: bump to
- version 0.22.2
+Message-Id: <20241222135651.523CB87394@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-anyio: bump to version 4.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +64,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=354fa0985430b3b30107ba3f6f9d926d4fa8b3c3
+commit: https://git.buildroot.net/buildroot/commit/?id=d69f53137c877dbfe5173d73c20cab4807e6752e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add new python-typing-extensions runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-tortoise-orm/python-tortoise-orm.hash | 4 ++--
- package/python-tortoise-orm/python-tortoise-orm.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-anyio/Config.in         | 1 +
+ package/python-anyio/python-anyio.hash | 4 ++--
+ package/python-anyio/python-anyio.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-tortoise-orm/python-tortoise-orm.hash b/package/python-tortoise-orm/python-tortoise-orm.hash
-index 5e97c6302f..2297290616 100644
---- a/package/python-tortoise-orm/python-tortoise-orm.hash
-+++ b/package/python-tortoise-orm/python-tortoise-orm.hash
+diff --git a/package/python-anyio/Config.in b/package/python-anyio/Config.in
+index d843f37af0..353c7e4629 100644
+--- a/package/python-anyio/Config.in
++++ b/package/python-anyio/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_ANYIO
+ 	bool "python-anyio"
+ 	select BR2_PACKAGE_PYTHON_IDNA # runtime
+ 	select BR2_PACKAGE_PYTHON_SNIFFIO # runtime
++	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+ 	help
+ 	  High level compatibility layer for multiple asynchronous
+ 	  event loop implementations.
+diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
+index cfd65ee92f..6896b7d516 100644
+--- a/package/python-anyio/python-anyio.hash
++++ b/package/python-anyio/python-anyio.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tortoise-orm/json
--md5  328373e7e6112eab38984d6c1c7caf41  tortoise_orm-0.21.7.tar.gz
--sha256  8a790a931828aa37ac364b344c561e603422aced2af5e403f6790575da0f19c5  tortoise_orm-0.21.7.tar.gz
-+md5  21f9f3624ef82b3b9c23ed1fb7d70766  tortoise_orm-0.22.2.tar.gz
-+sha256  f1e808bc27265b3e4682dae89b725a66d8311cc20c206d512c57dd8a1c78096b  tortoise_orm-0.22.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/anyio/json
+-md5  3aae01d9007bd08538158c7a7fa18c39  anyio-4.6.2.post1.tar.gz
+-sha256  4c8bc31ccdb51c7f7bd251f51c609e038d63e34219b44aa86e47576389880b4c  anyio-4.6.2.post1.tar.gz
++md5  6d0431fec06206d2bdbf57d449f1616b  anyio-4.7.0.tar.gz
++sha256  2f834749c602966b7d456a7567cafcb309f96482b5081d14ac93ccd457f9dd48  anyio-4.7.0.tar.gz
  # Locally computed sha256 checksums
- sha256  f955d347b975d5867ee364f978476b3012878a706d468571b9758cac74de6041  LICENSE.txt
-diff --git a/package/python-tortoise-orm/python-tortoise-orm.mk b/package/python-tortoise-orm/python-tortoise-orm.mk
-index 0a8f173c86..6bd1276bd1 100644
---- a/package/python-tortoise-orm/python-tortoise-orm.mk
-+++ b/package/python-tortoise-orm/python-tortoise-orm.mk
+ sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
+diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
+index 74c49c2e73..8c814abfdd 100644
+--- a/package/python-anyio/python-anyio.mk
++++ b/package/python-anyio/python-anyio.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TORTOISE_ORM_VERSION = 0.21.7
-+PYTHON_TORTOISE_ORM_VERSION = 0.22.2
- PYTHON_TORTOISE_ORM_SOURCE = tortoise_orm-$(PYTHON_TORTOISE_ORM_VERSION).tar.gz
--PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/e8/0e/ad8e7554b0259072887d602617a67ef21055e1d8aa061936e381ecc1a9a5
-+PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/5c/19/c32752a3042580b40300aeffa48859e087a023114f50a2846ba95c26c87d
- PYTHON_TORTOISE_ORM_SETUP_TYPE = poetry
- PYTHON_TORTOISE_ORM_LICENSE = Apache-2.0
- PYTHON_TORTOISE_ORM_LICENSE_FILES = LICENSE.txt
+-PYTHON_ANYIO_VERSION = 4.6.2.post1
++PYTHON_ANYIO_VERSION = 4.7.0
+ PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
+-PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/9f/09/45b9b7a6d4e45c6bcb5bf61d19e3ab87df68e0601fa8c5293de3542546cc
++PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/f6/40/318e58f669b1a9e00f5c4453910682e2d9dd594334539c7b7817dabb765f
+ PYTHON_ANYIO_SETUP_TYPE = setuptools
+ PYTHON_ANYIO_LICENSE = MIT
+ PYTHON_ANYIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
