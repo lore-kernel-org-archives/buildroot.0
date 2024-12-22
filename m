@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A1D2E77188
-	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 13:57:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AFABE77188
+	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 13:57:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB7AE60A64;
-	Sun, 22 Dec 2024 13:57:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD6B360AC2;
+	Sun, 22 Dec 2024 13:57:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fvrvmoFGRfvT; Sun, 22 Dec 2024 13:57:24 +0000 (UTC)
+ id pogFCOWz5P15; Sun, 22 Dec 2024 13:57:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0401760AC2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8463860ADC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0401760AC2;
-	Sun, 22 Dec 2024 13:57:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 883065E
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8463860ADC;
+	Sun, 22 Dec 2024 13:57:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 206725E
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BCD184029F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9BBF160A44
  for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9SgYS_bBaFAy for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qEMa18WDlcHL for <buildroot@buildroot.org>;
  Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 885374032E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CCA360A43
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 885374032E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9CCA360A43
  for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 84D3287279; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
+ id 99E66872F3; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Dec 2024 14:05:04 +0100
+Date: Sun, 22 Dec 2024 14:06:30 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1c448e02dd0eef997e142d8d424f40705f5c3afe
-X-Git-Newrev: 8e713c33aa5e3f91236a6f9a4d708de04de6d17a
+X-Git-Oldrev: bdd2803e1b5a1f0e716550ffc16c6fdee2213d47
+X-Git-Newrev: 6780975af09776a7f4ecc5713416dd8ddbaec87c
 X-Patchwork-Hint: ignore
-Message-Id: <20241222135651.84D3287279@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-fastapi: bump to version
- 0.115.6
+Message-Id: <20241222135651.99E66872F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-httpx: bump to version
+ 0.28.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e713c33aa5e3f91236a6f9a4d708de04de6d17a
+commit: https://git.buildroot.net/buildroot/commit/?id=6780975af09776a7f4ecc5713416dd8ddbaec87c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Drop no longer required python-sniffio runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-fastapi/python-fastapi.hash | 4 ++--
- package/python-fastapi/python-fastapi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-httpx/Config.in         | 1 -
+ package/python-httpx/python-httpx.hash | 4 ++--
+ package/python-httpx/python-httpx.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
-index 6c7451ebd0..11e5837a3a 100644
---- a/package/python-fastapi/python-fastapi.hash
-+++ b/package/python-fastapi/python-fastapi.hash
+diff --git a/package/python-httpx/Config.in b/package/python-httpx/Config.in
+index 592cd559cd..0d20e6ca06 100644
+--- a/package/python-httpx/Config.in
++++ b/package/python-httpx/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_PYTHON_HTTPX
+ 	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
+ 	select BR2_PACKAGE_PYTHON_HTTPCORE # runtime
+ 	select BR2_PACKAGE_PYTHON_IDNA # runtime
+-	select BR2_PACKAGE_PYTHON_SNIFFIO # runtime
+ 	help
+ 	  The next generation HTTP client.
+ 
+diff --git a/package/python-httpx/python-httpx.hash b/package/python-httpx/python-httpx.hash
+index 3ffd491c9e..b2609c9b5c 100644
+--- a/package/python-httpx/python-httpx.hash
++++ b/package/python-httpx/python-httpx.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fastapi/json
--md5  feecf6d0db305d63ee9e6fcb77c81673  fastapi-0.115.4.tar.gz
--sha256  db653475586b091cb8b2fec2ac54a680ac6a158e07406e1abae31679e8826349  fastapi-0.115.4.tar.gz
-+md5  977d2052173cde94dd66c669110c2ac4  fastapi-0.115.6.tar.gz
-+sha256  9ec46f7addc14ea472958a96aae5b5de65f39721a46aaf5705c480d9a8b76654  fastapi-0.115.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/httpx/json
+-md5  f29763f29da610b185d2ca33937c572f  httpx-0.27.2.tar.gz
+-sha256  f7c2be1d2f3c3c3160d441802406b206c2b76f5947b11115e6df10c6c65e66c2  httpx-0.27.2.tar.gz
++md5  774cf32b9cd94a44189fbe5871026664  httpx-0.28.1.tar.gz
++sha256  75e98c5f16b0f35b567856f597f06ff2270a374470a5c2392242528e3e3e42fc  httpx-0.28.1.tar.gz
  # Locally computed sha256 checksums
- sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
-diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
-index 95eb565b23..9f275ad8a8 100644
---- a/package/python-fastapi/python-fastapi.mk
-+++ b/package/python-fastapi/python-fastapi.mk
+ sha256  4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d  LICENSE.md
+diff --git a/package/python-httpx/python-httpx.mk b/package/python-httpx/python-httpx.mk
+index 21bbd48a58..aef46a33bf 100644
+--- a/package/python-httpx/python-httpx.mk
++++ b/package/python-httpx/python-httpx.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FASTAPI_VERSION = 0.115.4
-+PYTHON_FASTAPI_VERSION = 0.115.6
- PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
--PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/a9/db/5781f19bd30745885e0737ff3fdd4e63e7bc691710f9da691128bb0dc73b
-+PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/93/72/d83b98cd106541e8f5e5bfab8ef2974ab45a62e8a6c5b5e6940f26d2ed4b
- PYTHON_FASTAPI_SETUP_TYPE = pep517
- PYTHON_FASTAPI_LICENSE = MIT
- PYTHON_FASTAPI_LICENSE_FILES = LICENSE
+-PYTHON_HTTPX_VERSION = 0.27.2
++PYTHON_HTTPX_VERSION = 0.28.1
+ PYTHON_HTTPX_SOURCE = httpx-$(PYTHON_HTTPX_VERSION).tar.gz
+-PYTHON_HTTPX_SITE = https://files.pythonhosted.org/packages/78/82/08f8c936781f67d9e6b9eeb8a0c8b4e406136ea4c3d1f89a5db71d42e0e6
++PYTHON_HTTPX_SITE = https://files.pythonhosted.org/packages/b1/df/48c586a5fe32a0f01324ee087459e112ebb7224f646c0b5023f5e79e9956
+ PYTHON_HTTPX_SETUP_TYPE = hatch
+ PYTHON_HTTPX_LICENSE = BSD-3-Clause
+ PYTHON_HTTPX_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
