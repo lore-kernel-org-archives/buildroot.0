@@ -1,79 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AACE5E77188
-	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 12:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5128E77188
+	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 13:56:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 737D04088E;
-	Sun, 22 Dec 2024 12:55:26 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hBMUq1SHndM6; Sun, 22 Dec 2024 12:55:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4333841449
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4333841449;
-	Sun, 22 Dec 2024 12:55:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 573E6D3
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 12:55:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 37B9E606F6
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 12:55:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A1E760A58;
+	Sun, 22 Dec 2024 13:56:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FMAQ7_V0TTEM for <buildroot@buildroot.org>;
- Sun, 22 Dec 2024 12:55:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 00D0160A58
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00D0160A58
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 00D0160A58
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 12:55:21 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 7D0C013F8B5;
- Sun, 22 Dec 2024 13:55:15 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:56068])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 22 Dec 2024 13:55:15 +0100
-MIME-Version: 1.0
-Date: Sun, 22 Dec 2024 13:55:15 +0100
+ id ACKFyzBL4MZC; Sun, 22 Dec 2024 13:56:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B2AE60A50
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B2AE60A50;
+	Sun, 22 Dec 2024 13:56:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 55C615E
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 298DA60A58
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U8-uElt__eJ3 for <buildroot@buildroot.org>;
+ Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E272608F6
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E272608F6
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 37AB1872F3; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: kilian.zinnecker@mail.de
-Cc: buildroot@buildroot.org, quentin.schulz@cherry.de, niklas.cassel@wdc.com
-In-Reply-To: <20241221140503.9861-2-kilian.zinnecker@mail.de>
-References: <20241221140503.9861-1-kilian.zinnecker@mail.de>
- <20241221140503.9861-2-kilian.zinnecker@mail.de>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <cd5ccf08e1964b460b5892c84f7e610a@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734872118;
- bh=cpbZp06UJKmd/YA71ZtH5XbZUilscGmuv6gcR3C+c0E=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=f9IXuxWLwk1mavdFDWtSSTbxAFgZ5KqEP+NLGElC4ErDAkLxuGAQvoGajLPDMiAWm
- TQ5G3hM6WxJ0oMQapZyrQrNRQ1FnuPvyEnAuRCX/YB4zE5OQlFoktEFBgJeAWqaxKP
- H0NYmGqwmJDnKmJuuWa996UBVwUDNkumGsZT2//DUYK4aUwnnUosXXjW8DFYMUDADJ
- PWDqDSLvk9+R0jdFFgAFr1ES6WxZbjEC4PMHEcf1p/dq14MoXicglM3TQqrXw+kzFo
- 5mgE0iREYu3+fZQd8X0Rh+FcyEtsL+VuzQNh4AXSW+46hstllOdzBY7ZDmB1JuKlph
- crB+NrBgYiihQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=f9IXuxWL
-Subject: Re: [Buildroot] [PATCH v2 1/1] configs/rock5b: Switch to mainline
- TrustedFirmware
+To: buildroot@buildroot.org
+Date: Sun, 22 Dec 2024 13:57:32 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 354fa0985430b3b30107ba3f6f9d926d4fa8b3c3
+X-Git-Newrev: b005eb5bb5907a1010441d653e2ea3ec13ce3a92
+X-Patchwork-Hint: ignore
+Message-Id: <20241222135651.37AB1872F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-asyncclick: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,63 +58,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 21/12/2024 15:05, kilian.zinnecker--- via buildroot wrote:
-> From: Kilian Zinnecker <kilian.zinnecker@mail.de>
-> 
-> The Rock 5b board support currently uses a binary trusted firmware
-> blob from the rockchip-rkbin package. Recently, the Rock 5b's SoC,
-> i.e., the rk3588, received mainline TrustedFirmware-A support:
-> 
-> https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/21840
-> https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/29363
-> 
-> This support was recently released as part of the v2.12 version of
-> the TrustedFirmware-A. This patch changes the defconfig from using
-> the rockchip-rkbin atf binary blob to building the TrustedFirmware-A
-> v2.12 for the rk3588 from source.
-> 
-> Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=b005eb5bb5907a1010441d653e2ea3ec13ce3a92
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/Config.in                                |  1 +
+ package/python-asyncclick/Config.in              |  7 +++++++
+ package/python-asyncclick/python-asyncclick.hash |  5 +++++
+ package/python-asyncclick/python-asyncclick.mk   | 15 +++++++++++++++
+ 4 files changed, 28 insertions(+)
 
-> ---
->  configs/rock5b_defconfig | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-> index f898e86c8c..47a7acc083 100644
-> --- a/configs/rock5b_defconfig
-> +++ b/configs/rock5b_defconfig
-> @@ -23,9 +23,15 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->  BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
->  BR2_PACKAGE_LINUX_FIRMWARE=y
->  BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
-> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
->  BR2_PACKAGE_ROCKCHIP_RKBIN=y
->  
-> BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin"
-> -BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME="bin/rk35/rk3588_bl31_v1.40.elf"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.12"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3588"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="bl31/bl31.elf"
->  BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
-> --
-> 2.47.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/package/Config.in b/package/Config.in
+index feb4840a7d..06472aa972 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1013,6 +1013,7 @@ menu "External python modules"
+ 	source "package/python-async-generator/Config.in"
+ 	source "package/python-async-lru/Config.in"
+ 	source "package/python-async-timeout/Config.in"
++	source "package/python-asyncclick/Config.in"
+ 	source "package/python-asyncssh/Config.in"
+ 	source "package/python-attrs/Config.in"
+ 	source "package/python-augeas/Config.in"
+diff --git a/package/python-asyncclick/Config.in b/package/python-asyncclick/Config.in
+new file mode 100644
+index 0000000000..9264245213
+--- /dev/null
++++ b/package/python-asyncclick/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_ASYNCCLICK
++	bool "python-asyncclick"
++	select BR2_PACKAGE_PYTHON_ANYIO # runtime
++	help
++	  Composable command line interface toolkit, async version.
++
++	  https://palletsprojects.com/p/click/
+diff --git a/package/python-asyncclick/python-asyncclick.hash b/package/python-asyncclick/python-asyncclick.hash
+new file mode 100644
+index 0000000000..59f00893e5
+--- /dev/null
++++ b/package/python-asyncclick/python-asyncclick.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/asyncclick/json
++md5  542e83089a55129ca2fe7ccdbc65ba77  asyncclick-8.1.7.2.tar.gz
++sha256  219ea0f29ccdc1bb4ff43bcab7ce0769ac6d48a04f997b43ec6bee99a222daa0  asyncclick-8.1.7.2.tar.gz
++# Locally computed sha256 checksums
++sha256  9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  LICENSE.rst
+diff --git a/package/python-asyncclick/python-asyncclick.mk b/package/python-asyncclick/python-asyncclick.mk
+new file mode 100644
+index 0000000000..946325e496
+--- /dev/null
++++ b/package/python-asyncclick/python-asyncclick.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-asyncclick
++#
++################################################################################
++
++PYTHON_ASYNCCLICK_VERSION = 8.1.7.2
++PYTHON_ASYNCCLICK_SOURCE = asyncclick-$(PYTHON_ASYNCCLICK_VERSION).tar.gz
++PYTHON_ASYNCCLICK_SITE = https://files.pythonhosted.org/packages/5e/bf/59d836c3433d7aa07f76c2b95c4eb763195ea8a5d7f9ad3311ed30c2af61
++PYTHON_ASYNCCLICK_SETUP_TYPE = setuptools
++PYTHON_ASYNCCLICK_LICENSE = BSD-3-Clause
++PYTHON_ASYNCCLICK_LICENSE_FILES = LICENSE.rst
++PYTHON_ASYNCCLICK_DEPENDENCIES = host-python-setuptools-scm
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
