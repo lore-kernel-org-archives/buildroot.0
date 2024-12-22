@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFFADE77188
-	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 13:57:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A1D2E77188
+	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 13:57:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9CAD2804FD;
-	Sun, 22 Dec 2024 13:57:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB7AE60A64;
+	Sun, 22 Dec 2024 13:57:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aVeJwFsj3U7Q; Sun, 22 Dec 2024 13:57:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fvrvmoFGRfvT; Sun, 22 Dec 2024 13:57:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 958D980570
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0401760AC2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 958D980570;
-	Sun, 22 Dec 2024 13:57:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D9BC757
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0401760AC2;
+	Sun, 22 Dec 2024 13:57:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 883065E
  for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 062E542A4E
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BCD184029F
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QpxSc-4FOmnF for <buildroot@buildroot.org>;
- Sun, 22 Dec 2024 13:56:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9SgYS_bBaFAy for <buildroot@buildroot.org>;
+ Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD52B42A53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 885374032E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD52B42A53
+ by smtp2.osuosl.org (Postfix) with ESMTP id 885374032E
  for <buildroot@buildroot.org>; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C7EB287394; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
+ id 84D3287279; Sun, 22 Dec 2024 13:56:51 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Dec 2024 14:11:51 +0100
+Date: Sun, 22 Dec 2024 14:05:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8edea7b35fa6de1c95f585e20071fc61a5a5f595
-X-Git-Newrev: fe28221fe918b28539017c1fcf59b82b1fcb34c6
+X-Git-Oldrev: 1c448e02dd0eef997e142d8d424f40705f5c3afe
+X-Git-Newrev: 8e713c33aa5e3f91236a6f9a4d708de04de6d17a
 X-Patchwork-Hint: ignore
-Message-Id: <20241222135651.C7EB287394@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pydantic: bump to version
- 2.10.4
+Message-Id: <20241222135651.84D3287279@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-fastapi: bump to version
+ 0.115.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe28221fe918b28539017c1fcf59b82b1fcb34c6
+commit: https://git.buildroot.net/buildroot/commit/?id=8e713c33aa5e3f91236a6f9a4d708de04de6d17a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pydantic/python-pydantic.hash | 4 ++--
- package/python-pydantic/python-pydantic.mk   | 4 ++--
+ package/python-fastapi/python-fastapi.hash | 4 ++--
+ package/python-fastapi/python-fastapi.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
-index b0db8ab4ef..635ae80dc2 100644
---- a/package/python-pydantic/python-pydantic.hash
-+++ b/package/python-pydantic/python-pydantic.hash
+diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
+index 6c7451ebd0..11e5837a3a 100644
+--- a/package/python-fastapi/python-fastapi.hash
++++ b/package/python-fastapi/python-fastapi.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pydantic/json
--md5  84624d794e7d2b528fe1d34eeeeb481a  pydantic-2.9.2.tar.gz
--sha256  d155cef71265d1e9807ed1c32b4c8deec042a44a50a4188b25ac67ecd81a9c0f  pydantic-2.9.2.tar.gz
-+md5  06f2a83ecaa1734954af07697bcc5554  pydantic-2.10.4.tar.gz
-+sha256  82f12e9723da6de4fe2ba888b5971157b3be7ad914267dea8f05f82b28254f06  pydantic-2.10.4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/fastapi/json
+-md5  feecf6d0db305d63ee9e6fcb77c81673  fastapi-0.115.4.tar.gz
+-sha256  db653475586b091cb8b2fec2ac54a680ac6a158e07406e1abae31679e8826349  fastapi-0.115.4.tar.gz
++md5  977d2052173cde94dd66c669110c2ac4  fastapi-0.115.6.tar.gz
++sha256  9ec46f7addc14ea472958a96aae5b5de65f39721a46aaf5705c480d9a8b76654  fastapi-0.115.6.tar.gz
  # Locally computed sha256 checksums
- sha256  a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3  LICENSE
-diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
-index 2b9cd6c38a..622b297586 100644
---- a/package/python-pydantic/python-pydantic.mk
-+++ b/package/python-pydantic/python-pydantic.mk
+ sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
+diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
+index 95eb565b23..9f275ad8a8 100644
+--- a/package/python-fastapi/python-fastapi.mk
++++ b/package/python-fastapi/python-fastapi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYDANTIC_VERSION = 2.9.2
-+PYTHON_PYDANTIC_VERSION = 2.10.4
- PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
--PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/a9/b7/d9e3f12af310e1120c21603644a1cd86f59060e040ec5c3a80b8f05fae30
-+PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/70/7e/fb60e6fee04d0ef8f15e4e01ff187a196fa976eb0f0ab524af4599e5754c
- PYTHON_PYDANTIC_SETUP_TYPE = hatch
- PYTHON_PYDANTIC_LICENSE = MIT
- PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
+-PYTHON_FASTAPI_VERSION = 0.115.4
++PYTHON_FASTAPI_VERSION = 0.115.6
+ PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
+-PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/a9/db/5781f19bd30745885e0737ff3fdd4e63e7bc691710f9da691128bb0dc73b
++PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/93/72/d83b98cd106541e8f5e5bfab8ef2974ab45a62e8a6c5b5e6940f26d2ed4b
+ PYTHON_FASTAPI_SETUP_TYPE = pep517
+ PYTHON_FASTAPI_LICENSE = MIT
+ PYTHON_FASTAPI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
