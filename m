@@ -4,68 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF640E77188
-	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 18:20:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0D6DE77188
+	for <buildroot@archiver.kernel.org>; Sun, 22 Dec 2024 18:25:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 655D64156C;
-	Sun, 22 Dec 2024 18:20:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4531B42989;
+	Sun, 22 Dec 2024 18:25:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Av-ZM_mC0CgX; Sun, 22 Dec 2024 18:20:43 +0000 (UTC)
+ id jEybrD77cIuc; Sun, 22 Dec 2024 18:25:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3460E4156E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 139524298C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3460E4156E;
-	Sun, 22 Dec 2024 18:20:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 139524298C;
+	Sun, 22 Dec 2024 18:25:50 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D3675E
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 18:20:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A2AE5E
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 18:25:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF26681EEA
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 18:20:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 17EB38221C
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 18:25:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1I_wzNUhn7lT for <buildroot@buildroot.org>;
- Sun, 22 Dec 2024 18:20:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DB2F781EE8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB2F781EE8
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DB2F781EE8
- for <buildroot@buildroot.org>; Sun, 22 Dec 2024 18:20:40 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 40674B00571;
- Sun, 22 Dec 2024 19:20:36 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>
-Date: Sun, 22 Dec 2024 19:20:26 +0100
-Message-ID: <20241222182026.1231497-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.47.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1734891637;
- bh=zz/NagtVD1VQjuChtOOBCV7EhewR5l+9kNIAkee6cSc=;
- h=From:To:Cc:Subject:Date:From;
- b=P4XLEVpAiAOMPysRuyUqhHvNDS2CULJR0aTN/rX8JrlY2D5Iq5FdC828BD7ohDFRl
- e49LYiTXA75AegISUeWFJTr22uz/yHB8EfzGlvVmaZqlc9sxGTA/vcGuioYbkn29nk
- S3rihI6Dk+QtDLMUwkv/t54H4Dd4e/PShls4QfQIKlsA2163+zcW4ByUta8pADM75F
- Hj0blJKDSiJYKOM1+cL85wgNdZMXRYNT1bMCXSCQIwWWVRwbbLpUDEmL4UXUOUrARI
- kV/geCPDweGdPpfcKNZiZLHh1o+wjY+YwrogWL6LBeqiYKeIuYW0rE+aZTeA1NYFLJ
- q/hgPMuBveoxg==
+ id cPZGWm3Ga18O for <buildroot@buildroot.org>;
+ Sun, 22 Dec 2024 18:25:47 +0000 (UTC)
+X-Greylist: delayed 90361 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sun, 22 Dec 2024 18:25:46 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DA7C28221B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA7C28221B
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.bonnefille@bootlin.com;
+ receiver=<UNKNOWN> 
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DA7C28221B
+ for <buildroot@buildroot.org>; Sun, 22 Dec 2024 18:25:46 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 47A0040002;
+ Sun, 22 Dec 2024 18:25:43 +0000 (UTC)
+Mime-Version: 1.0
+Date: Sun, 22 Dec 2024 19:25:42 +0100
+Message-Id: <D6IFV7MLF3EN.2NH20DP0JW6F@bootlin.com>
+Cc: =?utf-8?q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>, "Mahyar
+ Koshkouei" <mahyar.koshkouei@gmail.com>, "Eric Le Bihan"
+ <eric.le.bihan.dev@free.fr>
+From: "Thomas Bonnefille" <thomas.bonnefille@bootlin.com>
+To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, "Thomas Bonnefille
+ via buildroot" <buildroot@buildroot.org>
+X-Mailer: aerc 0.18.2-0-ge037c095a049
+References: <20241221-fix_mpv-v1-1-d7ba39606571@bootlin.com>
+ <20241222161820.7c8b1081@windsurf>
+In-Reply-To: <20241222161820.7c8b1081@windsurf>
+X-GND-Sasl: thomas.bonnefille@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1734891944;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=O7aHBEEoJfddUWmtP1LgZaQt2VNUqpF5RgtdKoFCPtA=;
+ b=WEy1paZ9gGi+imZB66V6qCa/W1qZWYptCrLni9UQz6ys7ecZQ4mBCE+zjW7OLPXP1S6Hk0
+ aJzttyy9rMFY1++dDdkV3UjAQpk6227kwd1MELm957q5Dv9z9AfkcQ6c8ZS2t6RbdRxX1S
+ KnJEUIwT2z2X97lAmBxxlr6D1gY+8m+60Tply+uGXi1EkW7eENuEwWh8UzmO+66hisIXrS
+ aX5J5VOI0C6xeFU1OFUphz370eqOoBJqkmj7iSi/D+Qx6DQ315bFidM033m9t4w5AaZVTG
+ 2MqpL0v9xBc242gsuOffMSZ+jba3OG+pzACEmdQEyhYJCHMwc9EUoofW+w5GrA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=P4XLEVpA
-Subject: [Buildroot] [PATCH 1/1] package/acpica: security bump to version
- 20241212
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=WEy1paZ9
+Subject: Re: [Buildroot] [PATCH] package/mpv: use meson instead of waf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,58 +92,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since 20240927, see:
-https://github.com/user-attachments/files/18117996/changes.txt
+On Sun Dec 22, 2024 at 4:18 PM CET, Thomas Petazzoni wrote:
+> Hello Thomas,
+Hello Thomas,
+>
+> On Sat, 21 Dec 2024 18:19:21 +0100
+> Thomas Bonnefille via buildroot <buildroot@buildroot.org> wrote:
+>
+> > Waf has been entirely removed from mpv since commit f2cce5f [1] in favor
+> > of meson.
+> > 
+> > This commit is a rework of mpv makefile to use meson.
+> > 
+> > Note that the meson package compilation itself supports the
+> > static/dynamic compilation setting.
+> > 
+> > Fixes:
+> >     https://autobuild.buildroot.org/results/68d42441fc0da34e1bf2a4247726f5f4ec3b8e77/
+> > 
+> > [1]: https://github.com/mpv-player/mpv/commit/f2cce5f38f4031bf1a4b4919ec90e4e8f8c66a77
+> > 
+> > Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+>
+> Thanks for the fix. However, do you have an analysis of what the
+> problem is, and since when it started occurring?
 
-Note: the change log mention "Fix 2 critical CVE addressing memory
-leaks" without providing actual CVE numbers. For reference, the
-upstream commits for those security fixes are [1] and [2]. From the log
-of those commits, it seems those memory leaks can only happen in old
-Kernels <= 4.9 (which is end-of-life since January 2023). Technically
-those leaks could happen in any program embedding the apcica code
-files. The impact seems very low, if any, on the acpica standalone
-tools.
+I don't have an in depth analysis of the problem however, what I can say
+is that the error appeared with commit
+fd5623150dcc23441c4f0bd586378daeb91d66ea which bump waf from v2.0.26
+(August 2023) to v2.1.1 (July 2024).
+I would think that waf isn't backward compatible and as the mpv version
+we're currently using is pretty old (November 2022), it broke with the
+new Waf version.
+>
+> Indeed, we want to know if we want to backport the fix to our stable
+> 2024.02.x branch or not. 
 
-[1] https://github.com/acpica/acpica/commit/987a3b5cf7175916e2a4b6ea5b8e70f830dfe732
-[2] https://github.com/acpica/acpica/commit/8829e70e1360c81e7a5a901b5d4f48330e021ea5
+I think that, as far as the waf version get still stuck on
+v2.0.26, the mpv package will not break (at least not this way).
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/8707592086
----
- package/acpica/acpica.hash | 2 +-
- package/acpica/acpica.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Also, your fix is far from being "minimal":
+> such a conversion from waf-package to meson-package can potentially
+> introduce other regressions.
 
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index c3e7fda340..9972e34b3b 100644
---- a/package/acpica/acpica.hash
-+++ b/package/acpica/acpica.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  57988fb55541e694dfa3323bd19db74b65d37e942bebef559ed51e8cd9348b43  acpica-unix-20240927.tar.gz
-+sha256  9dca83cfee390b710485fbdf787048370049c05723b10cc220cfef6e13c31961  acpica-unix-20241212.tar.gz
- sha256  b28f54dc421531bbe269afd8c28bf6fdfd6affbe50c2831464f777ec1766d4a5  source/include/acpi.h
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index a2abcf7558..2c97c04367 100644
---- a/package/acpica/acpica.mk
-+++ b/package/acpica/acpica.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--ACPICA_VERSION = 20240927
-+ACPICA_VERSION = 20241212
- ACPICA_SOURCE = acpica-unix-$(ACPICA_VERSION).tar.gz
--ACPICA_SITE = https://github.com/user-attachments/files/17171019
-+ACPICA_SITE = https://github.com/user-attachments/files/18117992
- ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
- ACPICA_LICENSE_FILES = source/include/acpi.h
- ACPICA_DEPENDENCIES = host-bison host-flex
--- 
-2.47.1
+Can you develop ? I'm not sure what kind of regression can be introduced
+?
+I don't know if it answers the question but the meson build system has
+been added to mpv with "waf-compatibility" in mind and so all the
+options were translated from waf to meson. [1]
 
+>
+> What was the issue with the waf build system?
+
+I don't know why they get rid of waf but it was first deprecated and
+then remove in favor of meson, so I thought this was a mandatory step to
+operate this switch in Buildroot.
+
+Thank you for your review,
+Thomas
+
+[1] : https://github.com/mpv-player/mpv/blob/release/0.35/DOCS/build-system-differences.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
