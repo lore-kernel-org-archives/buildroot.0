@@ -1,100 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62228E7718B
-	for <buildroot@archiver.kernel.org>; Mon, 23 Dec 2024 16:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18606E7718B
+	for <buildroot@archiver.kernel.org>; Mon, 23 Dec 2024 16:28:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E71A4141D;
-	Mon, 23 Dec 2024 16:25:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C5D838193E;
+	Mon, 23 Dec 2024 16:28:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ixGCl6A9bFuQ; Mon, 23 Dec 2024 16:25:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9_MsR5y__okA; Mon, 23 Dec 2024 16:28:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0BB9413CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D02918195C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0BB9413CB;
-	Mon, 23 Dec 2024 16:25:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 79A78D3
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 16:25:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D02918195C;
+	Mon, 23 Dec 2024 16:28:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E434ED8
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 16:28:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6455A408E2
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 16:25:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB8CC60BAE
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 16:28:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uSk1PYWAdKuD for <buildroot@buildroot.org>;
- Mon, 23 Dec 2024 16:25:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sfOuBECXiNEp for <buildroot@buildroot.org>;
+ Mon, 23 Dec 2024 16:28:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2e; helo=mail-io1-xd2e.google.com;
+ client-ip=2607:f8b0:4864:20::12c; helo=mail-il1-x12c.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 463B9408CF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 463B9408CF
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
- [IPv6:2607:f8b0:4864:20::d2e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 463B9408CF
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 16:25:40 +0000 (UTC)
-Received: by mail-io1-xd2e.google.com with SMTP id
- ca18e2360f4ac-84435dbda4bso192601939f.0
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 08:25:40 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CCBBB60B96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCBBB60B96
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
+ [IPv6:2607:f8b0:4864:20::12c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CCBBB60B96
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 16:28:26 +0000 (UTC)
+Received: by mail-il1-x12c.google.com with SMTP id
+ e9e14a558f8ab-3a78b39034dso13142725ab.3
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 08:28:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1734971139; x=1735575939;
+ d=1e100.net; s=20230601; t=1734971305; x=1735576105;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=ufQUO0Tv4PGaBZHx1sywFfV7ZvuGwqImk/vivOls0DQ=;
- b=YfbP7GO+SGpEgreH4eyqz/PtAbOGakgZ23XdUXH3ORHkDTtAE4ZhOz/cEd1ECjvZoL
- jiN32ddtcMRTdrUjhgJJ5yb+NCozgsDfNrIiV4qa7AxcJaYVHxBsnPMbDGtArxysiG8J
- jRRK2/vHiyuT+hFuPXnqte+D4fhM2WSej8qNXptArMd9shuTI+vEAYeubSINn4qYN2rE
- ki8ibX/1X0G2Agk4mnhHQ5TdtHPCs1jZLRQfTP9afUMOW+khshO0dc+dl4pNgK0oeeiQ
- 4QRKbSDlKVvXDs28JM3jd7r1mL0HxH+2kk7ROWBEmi78y0jCXuwy0RSGylGyaIniofbp
- oybg==
-X-Gm-Message-State: AOJu0YzEuM2M2Q/N3Egz19ovU4uTZ7YZFdMFEsKuKTgkcdJgmyeQ6TAM
- 0jLp/q4Mjx4ghwjHuOb7m/YE5EPxQ236ISEb97M9fyXcLdW2LW+6UjFZcSb0a/0=
-X-Gm-Gg: ASbGncsRqSCb35GR7e5CLXw/pe+4Loa06kPdq7PbMVqlg94MECqy54WNIVcTPjyOefh
- obUbevz/ZUsvI1r5G+JopDo0P7V0zAJn1rhkcDRJT2/phqx1UjqriYzd/T5VKFqmZCCSvwyTGbt
- vuB1rSmTkPSMLmxttAPjtfKNvk2XbceMq/aPQ3rDOW3bWGmWh0EDTKoz7Z1WU0fQfKAY/z+uoi2
- GMj4tklVimHSYVKezLgfwToN+81Bj2lponIqYyeW4cJMY4D3R9c16bne0MOzyczJ5Q8us9ebtdD
- Bh6rwKwGKbd2eEIA47svxgwudcRO3j0szA==
-X-Google-Smtp-Source: AGHT+IHusOrRRLzCiopXNFdd6eXS91B1FfURSjIfMg0aji1dOwfajBeSnXrttR6jV4lLAknkzpV5Bg==
-X-Received: by 2002:a05:6e02:1488:b0:3a7:e956:13fc with SMTP id
- e9e14a558f8ab-3c2fee1244amr110770355ab.5.1734971138892; 
- Mon, 23 Dec 2024 08:25:38 -0800 (PST)
+ bh=QuX91jo612OFyf+9uxGAriM8IbPdgEr1GQtOeF08dQM=;
+ b=HrLWQ0qb0nU8tUa6591qQChUBUAHSvqVBOeS9+w9/kb1L6qsq4z3wJFrpi6H1f5T+l
+ 2qiH3KmxqHh/Y2PHo+pwZphl21b4zHhKVvW6ebrnwSdKhh2g7u6vUngqGXoFz+aTemHc
+ ybZCtM0nsenBV/Vk9Agv0EZFI11/YeKDG5n3eiibpAwvOo/are8xI6CVUKsCEsd7kqrY
+ vNV56JmVxvB8S8LSqAXUUmaSx2QMsef8Kz6GUFlRbmtzzFZZDkRUsY9XMX3O+dDEZ+zo
+ 7hX3pJjG9CQgxWBKDxjcFUjUoqzV1DHTWEpwSmHcesJkRyngT+AzhXsEpEDASZSrTWcL
+ grBg==
+X-Gm-Message-State: AOJu0Yw9TkO5eddZGpu/43U2KfbAqtS5Zkurm106xLpZZALgJXEUx0WI
+ 6s9rpkvI5XmH8Kc+jS66cFQZ0NWgZJ4EhzGgzECcNErlqm6iSRFnz06f/jsqFh8=
+X-Gm-Gg: ASbGncsmbUvgJ5jN9En37LZ2OrQ+4GnWN0obyswYNFe1Q4eFoQbvynwv58RrmAQLdl9
+ ZWyOqDyEet9WqsgdOr/Tg735+9GTX+NEUbvMngdie03r7A0PBFPK7jPOGiNcJG/Ul8rlddFrQ5B
+ rM5N0DnccEsJmtz9bTIPdLlE96Qrc5d7B8KcjTcI8/KDR8/+XNzuXDuim9QIGiX/+pysnt7q86W
+ p6YLkw4owseMDqPJ+qyFWSLQ0+kK9ypQt22wPYlaxwApTeEP2bzkbeYUtoD6O6MvS8Re3g/ttvS
+ QvwKq5d/+gsUwdnSfR1kNiH6G4Y8SFp2qA==
+X-Google-Smtp-Source: AGHT+IHd0dhl1u3GyMzXjMa3Ue0X5lniNEbVccVPbNik8b94D9gVgQcfpuDkwOn0fblRZfQdoOu/jQ==
+X-Received: by 2002:a05:6e02:522:b0:3a7:e0a5:aa98 with SMTP id
+ e9e14a558f8ab-3c2d2d509b6mr88721785ab.13.1734971305599; 
+ Mon, 23 Dec 2024 08:28:25 -0800 (PST)
 Received: from james-x399.localdomain (71-218-105-232.hlrn.qwest.net.
  [71.218.105.232]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3c0deae6a06sm24761155ab.18.2024.12.23.08.25.37
+ 8926c6da1cb9f-4e68bf684cesm2284268173.55.2024.12.23.08.28.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 23 Dec 2024 08:25:38 -0800 (PST)
+ Mon, 23 Dec 2024 08:28:25 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 23 Dec 2024 09:25:36 -0700
-Message-Id: <20241223162536.1865762-1-james.hilliard1@gmail.com>
+Date: Mon, 23 Dec 2024 09:28:23 -0700
+Message-Id: <20241223162823.1867770-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1734971139; x=1735575939; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1734971305; x=1735576105; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ufQUO0Tv4PGaBZHx1sywFfV7ZvuGwqImk/vivOls0DQ=;
- b=WYG60fS+9iXGipzhN9YpgVqa9AVLByGY5J8skg9sY5sVugLsMh0NT7WjBCicIrxcbl
- p2CRHRMfs2aKYkAiyP3e8s8vtO3tZM191m5AE+XYVHkzywWz3G8zaNg3n33PHqEQztvr
- YeUZzjdge2Ml6iqbX6Qf7geDRsEQxqjdxrndnn5+wER0mqjHXOI27YknVafVkpS+PwWo
- AFq8Nh/fGUrn3GZ9SK7hF+LnssH/XtytSZESRKQ0qJR8x3FAnAodYqkkHdNVnI7dcBhr
- lZrbV//jYes1cN9rXj2TW19lx9LXDs6bYoj1nfFQBqYUJb6SkH9rTCPxnLZ6KMVwNSex
- rc4Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=QuX91jo612OFyf+9uxGAriM8IbPdgEr1GQtOeF08dQM=;
+ b=ONboni1t+3zU4bNFA3EXH8sADl6cAzb3jkgCZETMg0UdNEoN94xWy9LK6/vvVAPu0F
+ d/+8ROWsAFuC4QdMmJJh8HlwB1fYbmVh3MVRmLOPrFCLKLcMk2yjHr4HOqAk7vymsq0H
+ C5NBrxyr9XuH89PXdDfMj+iAnAzHiPE38G6m0BZT5wvzAUXS0gL1Skip8Hgve3dXGLhi
+ y3UzASNomkkGVGnNwhRx4zebVXsRlpp1hFlmBBVgcacHUGUE+mUtyXMeWqj85DlIcmWk
+ 6tCbb//8ktUj1IZ3FsPPqrZQ7vNbtePyBCAuOfrkOtS1Z+iQUHCIL8jLTkKY54cFJULG
+ uuGg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=WYG60fS+
-Subject: [Buildroot] [PATCH 1/1] package/python-contourpy: bump to version
- 1.3.1
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=ONboni1t
+Subject: [Buildroot] [PATCH 1/1] package/python-cppy: bump to version 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,38 +112,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-contourpy/python-contourpy.hash | 4 ++--
- package/python-contourpy/python-contourpy.mk   | 4 ++--
+ package/python-cppy/python-cppy.hash | 4 ++--
+ package/python-cppy/python-cppy.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-contourpy/python-contourpy.hash b/package/python-contourpy/python-contourpy.hash
-index 8902607ec8..aef7c3de74 100644
---- a/package/python-contourpy/python-contourpy.hash
-+++ b/package/python-contourpy/python-contourpy.hash
+diff --git a/package/python-cppy/python-cppy.hash b/package/python-cppy/python-cppy.hash
+index 45b78eab8e..73049c6df1 100644
+--- a/package/python-cppy/python-cppy.hash
++++ b/package/python-cppy/python-cppy.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/contourpy/json
--md5  81447a2ceaf933b28db04d02086a22ed  contourpy-1.3.0.tar.gz
--sha256  7ffa0db17717a8ffb127efd0c95a4362d996b892c2904db72428d5b52e1938a4  contourpy-1.3.0.tar.gz
-+md5  06a4ae6ab30b855514797cac7073ed08  contourpy-1.3.1.tar.gz
-+sha256  dfd97abd83335045a913e3bcc4a09c0ceadbe66580cf573fe961f4a825efa699  contourpy-1.3.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cppy/json
+-md5  7c1f825c43dd66454440932a35b9969c  cppy-1.2.1.tar.gz
+-sha256  83b43bf17b1085ac15c5debdb42154f138b928234b21447358981f69d0d6fe1b  cppy-1.2.1.tar.gz
++md5  522447d934d18484cd4cfe90c1872628  cppy-1.3.0.tar.gz
++sha256  da7413a286d5d31626ba35ed2c70ddfb033520cc81310088ba5a57d34039f604  cppy-1.3.0.tar.gz
  # Locally computed sha256 checksums
- sha256  c7d0a153bffaa104044463ebc633793d451722efd3138b5ffd2527b40f1505a2  LICENSE
-diff --git a/package/python-contourpy/python-contourpy.mk b/package/python-contourpy/python-contourpy.mk
-index 3804fce8c3..08c45f3805 100644
---- a/package/python-contourpy/python-contourpy.mk
-+++ b/package/python-contourpy/python-contourpy.mk
+ sha256  db7a008bff1e63ccec397cfa033109740c4dc6cb12070a70d0cfe69aba27c4df  LICENSE
+diff --git a/package/python-cppy/python-cppy.mk b/package/python-cppy/python-cppy.mk
+index 5bfd5a0f16..3253956672 100644
+--- a/package/python-cppy/python-cppy.mk
++++ b/package/python-cppy/python-cppy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CONTOURPY_VERSION = 1.3.0
-+PYTHON_CONTOURPY_VERSION = 1.3.1
- PYTHON_CONTOURPY_SOURCE = contourpy-$(PYTHON_CONTOURPY_VERSION).tar.gz
--PYTHON_CONTOURPY_SITE = https://files.pythonhosted.org/packages/f5/f6/31a8f28b4a2a4fa0e01085e542f3081ab0588eff8e589d39d775172c9792
-+PYTHON_CONTOURPY_SITE = https://files.pythonhosted.org/packages/25/c2/fc7193cc5383637ff390a712e88e4ded0452c9fbcf84abe3de5ea3df1866
- PYTHON_CONTOURPY_LICENSE = BSD-3-Clause
- PYTHON_CONTOURPY_LICENSE_FILES = LICENSE
- PYTHON_CONTOURPY_DEPENDENCIES = python-pybind host-python-meson-python
+-PYTHON_CPPY_VERSION = 1.2.1
++PYTHON_CPPY_VERSION = 1.3.0
+ PYTHON_CPPY_SOURCE = cppy-$(PYTHON_CPPY_VERSION).tar.gz
+-PYTHON_CPPY_SITE = https://files.pythonhosted.org/packages/c5/7e/6cc5acd93752ee52d2f0423046072a2ce3ae16dfcd44373b9fe2a0222204
++PYTHON_CPPY_SITE = https://files.pythonhosted.org/packages/1e/84/62a09daa04e732a5763ec22dbc11b988e5140a77b418ea70bba9ab1a77a5
+ PYTHON_CPPY_LICENSE = BSD-3-Clause
+ PYTHON_CPPY_LICENSE_FILES = LICENSE
+ PYTHON_CPPY_SETUP_TYPE = setuptools
 -- 
 2.34.1
 
