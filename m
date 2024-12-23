@@ -4,97 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3EADE7718B
-	for <buildroot@archiver.kernel.org>; Mon, 23 Dec 2024 14:11:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FE8BE7718B
+	for <buildroot@archiver.kernel.org>; Mon, 23 Dec 2024 14:16:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFFC48188A;
-	Mon, 23 Dec 2024 14:11:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 69D1E8183D;
+	Mon, 23 Dec 2024 14:16:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 36fyhOnsazLy; Mon, 23 Dec 2024 14:11:55 +0000 (UTC)
+ id wgwdqGc4l324; Mon, 23 Dec 2024 14:16:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB71181819
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69E288184F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB71181819;
-	Mon, 23 Dec 2024 14:11:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 21223757
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 14:11:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 69E288184F;
+	Mon, 23 Dec 2024 14:16:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 554C0757
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 14:16:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0F8BB6072C
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 14:11:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5079B413B7
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 14:16:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OsrsJb5pivlV for <buildroot@buildroot.org>;
- Mon, 23 Dec 2024 14:11:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2Cie5M97rFhz for <buildroot@buildroot.org>;
+ Mon, 23 Dec 2024 14:16:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2d; helo=mail-io1-xd2d.google.com;
+ client-ip=2607:f8b0:4864:20::d2c; helo=mail-io1-xd2c.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6D2F56072E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D2F56072E
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
- [IPv6:2607:f8b0:4864:20::d2d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6D2F56072E
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 14:11:52 +0000 (UTC)
-Received: by mail-io1-xd2d.google.com with SMTP id
- ca18e2360f4ac-844e9b7e50dso390357839f.3
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 06:11:52 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2724541376
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2724541376
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
+ [IPv6:2607:f8b0:4864:20::d2c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2724541376
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 14:16:31 +0000 (UTC)
+Received: by mail-io1-xd2c.google.com with SMTP id
+ ca18e2360f4ac-844e9b8b0b9so362266339f.0
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 06:16:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1734963111; x=1735567911;
+ d=1e100.net; s=20230601; t=1734963390; x=1735568190;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=xaXP8UBwM0effb5CeXWJDxDDje2C6kvcLFoKQb/gCHQ=;
- b=AFH4rguhOYVc92x4mQi5VGYxYZORf+YyAr+iYBcyA9k7Cl2jypCxB3SWCk1blhDYxF
- h5JaicPcu8LNEh3Oh0m+s8N4EUO905qwZDFXcrAclNPronmmmkSSXpbUKpGQKaqLHcUw
- Ysd8861oWOl+0ibKZYRMl2WGQTlGzzOUBktaHmeR4qIEUfuGzFiEQeRuOpolZ//rSSjQ
- vd3CvGsXGuCWDMJxRuADphdlPVgmbOhlOB44n4MmOT+epUwgbqKG2RyZuL+nIILfPlUg
- 6U635iYf9Pnbsg/A//g8fBZXhKET5ISYZdqM/i6iwTty6oCNy+oSSwTdOfUfyK1BjJLv
- YvKA==
-X-Gm-Message-State: AOJu0YxNfX+1VIh5z5Nm9urNQVJgr6ZjgP1OKUYoFnT/ceUeNsoLf+kq
- oji7vQJTA2ZPCRucSX8bTjvcl5n5W/WSOQqGHwb6VgYEr4d+oApr98aMs/0h0yE=
-X-Gm-Gg: ASbGncu2qIFEG1LQSobKxLJLn5yfBBAQfqZNxZDDVafHZN/UqrHQxzx8WnW+AdToxUl
- /i4+NBJHaNjw/jIdmItMi2W3cVhhGkGkFpu08zkz/yFSuFFxc8x5+VeZcS2LMPJTrrn4KmQwwTx
- N+ToLQ3wSxcqGmLUuRN5M3itEKKSg/cJ9s5BdqqbpDBvzuQnVSQutK+zliXpy26Z3zPcFYW/nCc
- SoE83UY0/TveS27dMidApY6qup5/vwiCququESIgOypMjQJk/KdKXA0h09WMjGiMQJTIvZGnRd8
- Zp9zApKiUYFBsuF1j93GDRIV9Elw+56mrA==
-X-Google-Smtp-Source: AGHT+IEJLPhrFLHzTf7Rw2pTAENoaiVYNp271Zue27LvTfgkRpglYLAx9G2t722IWWz0R2ZeeTglUQ==
-X-Received: by 2002:a05:6602:3887:b0:849:d268:d75 with SMTP id
- ca18e2360f4ac-849d2681115mr168506339f.9.1734963111143; 
- Mon, 23 Dec 2024 06:11:51 -0800 (PST)
+ bh=fAazPJfZsCMk23G+qQQOfVmWaiUVafEC2p4d5JYkydU=;
+ b=OleQ05KUmYNl9VlInh846ptcZtXJAF7+Y5iJkUkfQdGKOlgT8/23Hfd2Bu/nQzsufD
+ yoftyie/yFEdJXQF3zDYlAySyn5VI37ridLv0ZHdx8k44opN2B3GR+n9ojBxe5Mpvs6p
+ qQi3Ni/u7g7noSFV209azaHtf7YVNQVNNyQZ1i9zFYn4wD8XuquYT2Bbao18bwK0lQXX
+ saVCl7ewalPF8ymfPKgta13Rrs2DfGDB5k/qspVrUhh5MVyRWnyJAf2I+SihwfKY7ysx
+ oFyBrA/v/ej7ZUD+xvFsCQ0Ge2za9XurRy4LpRChcm6zXDkF/rrDp6yay/AiiStey2MO
+ /AWw==
+X-Gm-Message-State: AOJu0Yy8GNIcwf7t80pxKmKd/9BYLIPAu3rEUxlznQOTzaa+NcL72dhk
+ wqheHCdFp6SFKCHcQRSB7VUEgipLFASVLDRrnGlvH1KiA+JPSFFI8d3Kqjq3TOE=
+X-Gm-Gg: ASbGncvzJ6BXa/XXRK7stzoeGp0gduxyBPvvw+d9/x2l54GfY/8pXyiY3tzZM4mAqNP
+ VkHYukx/AihhWTNQMgNfRQJlD+X+p7QLu7OuA8NG8jfCmAASarb6BPwhcL1bnRoqp9B6BJCASEu
+ PfhzIf+fmzzxIcRhnrhSY4OBdlHm9IFvYZldgk8Ck4qi+JdbhUxFzm6XuaNWTIwsVHKpgz7rQd4
+ d3LhCFjJ/kF1cJCrKmk4GYLd3FR1pnDVV/SpY60tfgjOOM/8vca0hYyDmWftK2R5g+icBYDLE6g
+ 10TV90NhnnsaIDMkTBHIsESbO094uf7zdg==
+X-Google-Smtp-Source: AGHT+IEAkEy6gKF/CA2qYh6OjHGq1xDalcfaFmGyUFf3eH203Px+xhmrapzDSg7v33fFIgznNIs0mg==
+X-Received: by 2002:a05:6602:2cd1:b0:83a:97e7:8bcf with SMTP id
+ ca18e2360f4ac-8499e658743mr982105539f.11.1734963390295; 
+ Mon, 23 Dec 2024 06:16:30 -0800 (PST)
 Received: from james-x399.localdomain (71-218-105-232.hlrn.qwest.net.
  [71.218.105.232]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4e68bf5073dsm2267092173.29.2024.12.23.06.11.50
+ 8926c6da1cb9f-4e68bf66f8csm2254239173.51.2024.12.23.06.16.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 23 Dec 2024 06:11:50 -0800 (PST)
+ Mon, 23 Dec 2024 06:16:30 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 23 Dec 2024 07:11:46 -0700
-Message-Id: <20241223141146.1708338-1-james.hilliard1@gmail.com>
+Date: Mon, 23 Dec 2024 07:16:28 -0700
+Message-Id: <20241223141628.1710361-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1734963111; x=1735567911; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1734963390; x=1735568190; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=xaXP8UBwM0effb5CeXWJDxDDje2C6kvcLFoKQb/gCHQ=;
- b=OaiCOH9sDbiZ/WSpdBtBlw3MsXdkJNvL3EYdRc4KWD5weQ303SsMag92ryipdzDN4a
- lYU8B3keL2rkPrqWyVc2uvd7J/l1U5w6wY37NN+UAvvPKJJChxakhMEa9nd38Em0GOP6
- jhdVkT5fwr9PQ4NCsF/CvgCyVByWJy/464KVCRIAZfO7esY7gKYfoFJyAx3H7DqLPSW+
- 8NJQ2WL2t2ya4mD+FHakRSd99OzgxnZ7g9XStAQoElwPvAJCzO4LiGD/qGbZarmEmVzb
- EGucj89DmpoA8ry5PtNBOMVIipT29pGqd7xpMJXxCfJr2t58w/rOOvLA2kbcAgkKJpv1
- ZX5Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=fAazPJfZsCMk23G+qQQOfVmWaiUVafEC2p4d5JYkydU=;
+ b=IBuyEag0/JUI5niB76E+qOV1Gm8CiGPhmn19HcghXVHgm+IxZ9MpG0gxgROkLtVd08
+ s0SpLgLlhsKxHhHu4CzwXvh+T0xbcSUJEyQQmFlxlDwbFjoL3gOyBSMlne45JuiTqiQf
+ e1YOFgiFC/G5680/s6ktfrmy1v+USqil2CNeq7F4ri/IM1N4TeujHcebgkYvbP56T8fi
+ WXNikVho/fspKQ9sObPjgY1JVOMgP0qmnpcWAfllIpAmyhD3gy17o8zvqxd19nMaCO/3
+ sIC7gVfvsIpiK5IOTdFh2rA4uYOtO54PPCesEt2+aIa2O8gtez4tXCMObaFMhZGhGKwD
+ r94A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=OaiCOH9s
-Subject: [Buildroot] [PATCH 1/1] package/python-aiocoap: bump to version
- 0.4.12
+ header.s=20230601 header.b=IBuyEag0
+Subject: [Buildroot] [PATCH 1/1] package/python-aiohappyeyeballs: bump to
+ version 2.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,39 +114,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-aiocoap/python-aiocoap.hash | 4 ++--
- package/python-aiocoap/python-aiocoap.mk   | 4 ++--
+ package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash | 4 ++--
+ package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aiocoap/python-aiocoap.hash b/package/python-aiocoap/python-aiocoap.hash
-index 33895b2387..30e68a7582 100644
---- a/package/python-aiocoap/python-aiocoap.hash
-+++ b/package/python-aiocoap/python-aiocoap.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/aiocoap/json
--md5  09a0cce4b192d861d2becf216f0769fc  aiocoap-0.4.11.tar.gz
--sha256  2603b8ec61caedf008b4a153a94f337262bf89f26d1c030f12c492d085e875f7  aiocoap-0.4.11.tar.gz
-+md5  a79e7c7586cbb9056743683eb9bbaef9  aiocoap-0.4.12.tar.gz
-+sha256  808e87068aa57dbf31486cfdfa9098b0a6f5ca444c6b8966f3e50a403628981e  aiocoap-0.4.12.tar.gz
+diff --git a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
+index 85938c1084..069dad89cf 100644
+--- a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
++++ b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohappyeyeballs/json
+-md5  dcc0ba52e3c350f4edc8a8475d1892d6  aiohappyeyeballs-2.4.3.tar.gz
+-sha256  75cf88a15106a5002a8eb1dab212525c00d1f4c0fa96e551c9fbe6f09a621586  aiohappyeyeballs-2.4.3.tar.gz
++md5  57d956f516c6558674f6248d8ba38321  aiohappyeyeballs-2.4.4.tar.gz
++sha256  5fdd7d87889c63183afc18ce9271f9b0a7d32c2303e394468dd45d514a757745  aiohappyeyeballs-2.4.4.tar.gz
  # Locally computed sha256 checksums
- sha256  c59b1339031e4495b336555be42b8b488eacfb037a23fadf2d5e2c8abd0e6366  doc/LICENSE.rst
- sha256  51d56d9e6f9755df590a329e73ca58663605a182a8e80f0166fff65203a1185a  LICENSES/BSD-3-Clause.txt
-diff --git a/package/python-aiocoap/python-aiocoap.mk b/package/python-aiocoap/python-aiocoap.mk
-index a69722232c..357ac1da08 100644
---- a/package/python-aiocoap/python-aiocoap.mk
-+++ b/package/python-aiocoap/python-aiocoap.mk
+ sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
+diff --git a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
+index 2a2c10fb37..9669b04793 100644
+--- a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
++++ b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOCOAP_VERSION = 0.4.11
-+PYTHON_AIOCOAP_VERSION = 0.4.12
- PYTHON_AIOCOAP_SOURCE = aiocoap-$(PYTHON_AIOCOAP_VERSION).tar.gz
--PYTHON_AIOCOAP_SITE = https://files.pythonhosted.org/packages/50/b3/2ea6d3a294ec094da3175aceaa2ad1c2644eab162b48676267e992d4c651
-+PYTHON_AIOCOAP_SITE = https://files.pythonhosted.org/packages/a2/16/a9167225339089b2c295cc37aa5a01f758d164c5cda591cc9d2976719196
- PYTHON_AIOCOAP_SETUP_TYPE = setuptools
- PYTHON_AIOCOAP_LICENSE = BSD-3-Clause, MIT
- PYTHON_AIOCOAP_LICENSE_FILES = doc/LICENSE.rst LICENSES/BSD-3-Clause.txt LICENSES/MIT.txt
+-PYTHON_AIOHAPPYEYEBALLS_VERSION = 2.4.3
++PYTHON_AIOHAPPYEYEBALLS_VERSION = 2.4.4
+ PYTHON_AIOHAPPYEYEBALLS_SOURCE = aiohappyeyeballs-$(PYTHON_AIOHAPPYEYEBALLS_VERSION).tar.gz
+-PYTHON_AIOHAPPYEYEBALLS_SITE = https://files.pythonhosted.org/packages/bc/69/2f6d5a019bd02e920a3417689a89887b39ad1e350b562f9955693d900c40
++PYTHON_AIOHAPPYEYEBALLS_SITE = https://files.pythonhosted.org/packages/7f/55/e4373e888fdacb15563ef6fa9fa8c8252476ea071e96fb46defac9f18bf2
+ PYTHON_AIOHAPPYEYEBALLS_SETUP_TYPE = poetry
+ PYTHON_AIOHAPPYEYEBALLS_LICENSE = PSF-2.0
+ PYTHON_AIOHAPPYEYEBALLS_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
