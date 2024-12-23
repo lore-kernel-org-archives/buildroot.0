@@ -1,94 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B28AE7718E
-	for <buildroot@archiver.kernel.org>; Mon, 23 Dec 2024 07:27:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7C68E7718B
+	for <buildroot@archiver.kernel.org>; Mon, 23 Dec 2024 08:26:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C853D80F8E;
-	Mon, 23 Dec 2024 07:27:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 79270607D0;
+	Mon, 23 Dec 2024 08:26:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BcDGXCban0SP; Mon, 23 Dec 2024 08:26:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66E3C60AA0
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66E3C60AA0;
+	Mon, 23 Dec 2024 08:26:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 00966D3
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 08:26:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DC034814BA
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 08:26:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zAXYQOKK7BiW; Mon, 23 Dec 2024 07:27:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2EA680FA2
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2EA680FA2;
-	Mon, 23 Dec 2024 07:27:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C0CD3D8
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 07:27:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60D32415F6
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 07:27:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BVXW1nAHjkFW for <buildroot@buildroot.org>;
- Mon, 23 Dec 2024 07:27:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ id jC5xLpkpm3ob for <buildroot@buildroot.org>;
+ Mon, 23 Dec 2024 08:26:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5536E41607
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5536E41607
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5536E41607
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 07:27:30 +0000 (UTC)
-X-CSE-ConnectionGUID: SWgipGkeQI66uL7IDSDX7w==
-X-CSE-MsgGUID: T2MPzUUVQIOoZkB0sO8msQ==
-Received: from unknown (HELO opfedv3rlp0e.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 23 Dec 2024 08:27:28 +0100
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0e.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Dec 2024 08:27:28 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Mon, 23 Dec 2024 08:27:27 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Mon, 23 Dec 2024 08:27:26 +0100
-X-CSE-ConnectionGUID: Psuvv3oERTuWtUV3WslD9A==
-X-CSE-MsgGUID: H2T8TIHHSN+1kwlwkKk30g==
-X-IronPort-AV: E=Sophos;i="6.12,256,1728943200"; d="scan'208";a="237749943"
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-CC: <yann.morin@orange.com>, Julien Olivain <ju.o@free.fr>
-Date: Mon, 23 Dec 2024 08:27:20 +0100
-Message-ID: <af1aba057da1bd3bb056f7e6886641149bf22592.1734938835.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1734938835.git.yann.morin@orange.com>
-References: <cover.1734938835.git.yann.morin@orange.com>
-MIME-Version: 1.0
-X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX404.corporate.adroot.infra.ftgroup
- (10.115.26.17) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1734938851; x=1766474851;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=BZZHCfFyMRnu/bsprb+PZJJvC1vwhsOfW7q3Ihszb1Y=;
- b=YgSJldjvCiTj2IQUVGk6fOc5qbR+GALs1f7DYfztLdR9lexojn6BYZOZ
- YDyuWfgZJreveo7kEwSQnH7z9JevH9lAD0glEsbZ8Dgf7/cmmFRkNKGrw
- 8L1N+huZQt2WntHnkG+znO+APZc1I6jELqAqZ7zHWCDRKoGT/qn+XDDGD
- QrufdTQ7FWtLziONXss2noKPR4MaQHWMGCuYkk8oY2aALWLahQZAi+pso
- GbJFXTjzM13mvg0CDOFJZhZ38tWnxhrAn7z9GReq9CKqL6JQiVM+HGw6X
- mc/r+INGOG5DjmW5Wh8F2TEtXJy08qAgtMQGwprw1vLsS8sKGISOK4SZu
- Q==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=YgSJldjv
-Subject: [Buildroot] [PATCH 5/5] utils/get-developers: add option to report
- Cc: lines
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBE2C814B3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BBE2C814B3
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 08:26:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B5BF6873C5; Mon, 23 Dec 2024 08:26:47 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Mon, 23 Dec 2024 09:26:00 +0100
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 849306c66d6e39f4251890ec18121f957ed989f1
+X-Git-Newrev: 8b4a5da997b86a2a2b1e5b6e6059ff758fd5d6c9
+X-Patchwork-Hint: ignore
+Message-Id: <20241223082647.B5BF6873C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/cdrkit: fix build
+ with gcc 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,72 +59,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============4464725234500295037=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+--===============4464725234500295037==
+Content-Type: text/plain
 
-It is very common to use the output of get-developers to add cc: lines
-in the commit log.
+commit: https://git.buildroot.net/buildroot/commit/?id=8b4a5da997b86a2a2b1e5b6e6059ff758fd5d6c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Add an option so that get-developers reports Cc: lines ready to be
-pasted in a commit log. That new option behaves similarly to the
-existing -e option: it only affects the output when parsing a patch.
+This commit adds a patch, which is already in Debian, fixing the build
+with gcc 14.x:
 
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Julien Olivain <ju.o@free.fr>
+/home/autobuild/autobuild/instance-7/output-1/build/host-cdrkit-1.1.11/genisoimage/genisoimage.c:1509:17: error: implicit declaration of function 'parse_checksum_algo' [-Wimplicit-function-declaration]
+ 1509 |             if (parse_checksum_algo(optarg, &checksum_algo_iso))
+      |                 ^~~~~~~~~~~~~~~~~~~
+make[3]: *** [genisoimage/CMakeFiles/genisoimage.dir/build.make:76: genisoimage/CMakeFiles/genisoimage.dir/genisoimage.o] Error 1
 
+Fixes:
+
+  http://autobuild.buildroot.net/results/a9cca8da22774ecafdbb382697aae71f78e348f4/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0a0de4d86cd1fbeb5ff0439259b297756b3a5d98)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2:
-  - model the help text after the one of the -e option, below  (Julien)
-  - extend commit log to explain that.
----
- utils/get-developers | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ .../cdrkit/0004-Add-missing-header-includes.patch  | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/utils/get-developers b/utils/get-developers
-index 3253ce5d6b..83c573bf23 100755
---- a/utils/get-developers
-+++ b/utils/get-developers
-@@ -17,6 +17,8 @@ def __main__():
-                         help='find developers in charge of these files')
-     parser.add_argument('-c', dest='check', action='store_const',
-                         const=True, help='list files not handled by any developer')
-+    parser.add_argument('--cc', action="store_true",
-+                        help='list affected developers as CC: lines ready to be pasted in a commit log')
-     parser.add_argument('-e', dest='email', action='store_const',
-                         const=True, help='only list affected developer email addresses')
-     parser.add_argument('-v', dest='validate', action='store_const',
-@@ -99,9 +101,9 @@ def __main__():
-                     matching_devs.add(dev.name)
- 
-         matching_devs = sorted(matching_devs)
--        if args.email:
-+        if args.email or args.cc:
-             for dev in matching_devs:
--                print(dev)
-+                print(f"{'Cc: ' if args.cc else ''}{dev}")
-         else:
-             result = "--to buildroot@buildroot.org"
-             for dev in matching_devs:
--- 
-2.34.1
+diff --git a/package/cdrkit/0004-Add-missing-header-includes.patch b/package/cdrkit/0004-Add-missing-header-includes.patch
+new file mode 100644
+index 0000000000..d2a93fe5a7
+--- /dev/null
++++ b/package/cdrkit/0004-Add-missing-header-includes.patch
+@@ -0,0 +1,48 @@
++From 8b7852149c45c8a837a9f5124e91812dd475a270 Mon Sep 17 00:00:00 2001
++From: Andrey Rakhmatullin <wrar@debian.org>
++Date: Sat, 13 Jul 2024 11:37:07 +0200
++Subject: [PATCH] Add missing header includes
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Bug-Debian: https://bugs.debian.org/1066264
++
++Fixes:
++
++genisoimage/genisoimage.c:1509:17: error: implicit declaration of function ‘parse_checksum_algo’ [-Wimplicit-function-declaration]
++
++Upstream: https://sources.debian.org/patches/cdrkit/9:1.1.11-3.5/fix-implicit-function-declaration.patch/
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ genisoimage/genisoimage.c | 1 +
++ genisoimage/jte.c         | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/genisoimage/genisoimage.c b/genisoimage/genisoimage.c
++index 46f0cb7..fa2f8bd 100644
++--- a/genisoimage/genisoimage.c
+++++ b/genisoimage/genisoimage.c
++@@ -53,6 +53,7 @@
++ #include <ctype.h>
++ #include "match.h"
++ #include "exclude.h"
+++#include "checksum.h"
++ #include <unls.h>	/* For UNICODE translation */
++ #include <schily.h>
++ #ifdef UDF
++diff --git a/genisoimage/jte.c b/genisoimage/jte.c
++index 0dff289..4c4d986 100644
++--- a/genisoimage/jte.c
+++++ b/genisoimage/jte.c
++@@ -27,6 +27,7 @@
++ #include "ifo_read.h"
++ #include "endianconv.h"
++ #include "checksum.h"
+++#include "md5.h"
++ #endif
++ #ifdef APPLE_HYB
++ #include <ctype.h>
++-- 
++2.45.2
++
 
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+--===============4464725234500295037==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4464725234500295037==--
