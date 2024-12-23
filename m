@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FB73E7718B
-	for <buildroot@archiver.kernel.org>; Mon, 23 Dec 2024 07:27:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD149E7718E
+	for <buildroot@archiver.kernel.org>; Mon, 23 Dec 2024 07:27:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7ED780E98;
-	Mon, 23 Dec 2024 07:27:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8516380E95;
+	Mon, 23 Dec 2024 07:27:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3ijRvhGgxnSS; Mon, 23 Dec 2024 07:27:29 +0000 (UTC)
+ id 1PFWf-KaL53I; Mon, 23 Dec 2024 07:27:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BCEE80E65
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B74B80E74
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BCEE80E65;
-	Mon, 23 Dec 2024 07:27:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B74B80E74;
+	Mon, 23 Dec 2024 07:27:32 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 371C3D8
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 07:27:27 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 684905E
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 07:27:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 184FF415F0
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 07:27:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4835B4160A
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 07:27:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yDYUKySc1afg for <buildroot@buildroot.org>;
- Mon, 23 Dec 2024 07:27:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.124;
+ id PWPGYOM2Qkzi for <buildroot@buildroot.org>;
+ Mon, 23 Dec 2024 07:27:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.123;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9EE8E415FA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EE8E415FA
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.124])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9EE8E415FA
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 07:27:25 +0000 (UTC)
-X-CSE-ConnectionGUID: J0dZ8jRiSietu9IKSynZww==
-X-CSE-MsgGUID: KetDxD2gRhOif3tkHRO9mA==
-Received: from unknown (HELO opfedv3rlp0g.nor.fr.ftgroup) ([x.x.x.x]) by
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 037D8415F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 037D8415F0
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.123])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 037D8415F0
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 07:27:27 +0000 (UTC)
+X-CSE-ConnectionGUID: upKIdr5ySyGSgdbB+h2XKw==
+X-CSE-MsgGUID: pYxKpSlBQsi3HCqnaCO8Gg==
+Received: from unknown (HELO opfedv3rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 23 Dec 2024 08:27:23 +0100
+ 23 Dec 2024 08:27:26 +0100
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0g.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Dec 2024 08:27:23 +0100
+ ([x.x.x.x]) by opfedv3rlp0d.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Dec 2024 08:27:25 +0100
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Mon, 23 Dec 2024 08:27:22 +0100
+ Mon, 23 Dec 2024 08:27:23 +0100
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Mon, 23 Dec 2024 08:27:21 +0100
-X-CSE-ConnectionGUID: mMeiexgTS2OG7GItycowmQ==
-X-CSE-MsgGUID: QuU31E1FTP+TJzSN/MYbww==
-X-IronPort-AV: E=Sophos;i="6.12,256,1728943200"; d="scan'208";a="237508153"
+ Mon, 23 Dec 2024 08:27:23 +0100
+X-CSE-ConnectionGUID: aRor5B3STdCAtJ2eZYGuQA==
+X-CSE-MsgGUID: pPEC18UcRbiJ7kcSIoEfKA==
+X-IronPort-AV: E=Sophos;i="6.12,256,1728943200"; d="scan'208";a="237596657"
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-CC: <yann.morin@orange.com>, Julien Olivain <ju.o@free.fr>
-Date: Mon, 23 Dec 2024 08:27:17 +0100
-Message-ID: <44472fd9b7706002e24636430c4ddbf2ea040f41.1734938835.git.yann.morin@orange.com>
+CC: <yann.morin@orange.com>
+Date: Mon, 23 Dec 2024 08:27:18 +0100
+Message-ID: <4668d7a62590995bc5d3ac5f6f3de278aaec5b6c.1734938835.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1734938835.git.yann.morin@orange.com>
 References: <cover.1734938835.git.yann.morin@orange.com>
 MIME-Version: 1.0
 X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX101.corporate.adroot.infra.ftgroup (10.115.26.2)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX402.corporate.adroot.infra.ftgroup
+ (10.115.26.15) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1734938846; x=1766474846;
+ t=1734938849; x=1766474849;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=M3V/P2SSzZf9lAAGjEJFZ9v53EV0LfsVwETE6KamRP4=;
- b=T8uTfp4rQmTEIiWPEiYAis7D1Lbd8ZTWutlHbWA6gstePrAM0lswgspZ
- vLnhNiIQVODsRBBovyvaVvpv4lLZ0B8eZJHxcTshuPqcVdpwfz/ucKO6g
- Fl4HzuokMglNNAqy+MJiAIoFcWz5wYx16klUjoDXikmQgb+kZ9Z6/ZQpW
- sRsWGUkFYQkYfm1VQ9llszMyt8Wz3lCHkmzd5Ix7Gcm03lbqx/jPM2lQr
- no72Rt1inTFt9n0xVAW7DONM+Vbjox/GWfK7x8015vM3UDP1UA+av21yu
- pMyWc5y0OwJQCjdGLNDcT5GFtMn7tpMGxJlVdGbnmJkwNDVtTr7dT3eE6
- Q==;
+ bh=UVOPyT+zUXO3qYUcw6t7LSsnUQ0gF2TXr51fBvC0b8Y=;
+ b=BaQ8cAGjgfrGmXAfnxtFCi2+2I2jipmKPoKTmCpeSy+4TifGvhFg+WxF
+ zM2Fz/kDe0n7EvfHK8n7hd7k6T3EqCwogqL6O3meoadfsCJlshijldkHq
+ S9TnHOhDbZiyn+esSxApW+lggIjbablGcie97tcMPEUSCyfmPcAa+AsDQ
+ uLT5g7qXSWNwbvqsKGsc9iZgb+cDub5g3Oz12sRPGyRfQAhphrVdHbCes
+ gT7sPRdYFnQlnl4r+OfWak/fGzWgey0XAcBpQPp/2+/lfIm52gOCZ9sET
+ KSCT1kv7ojwDEigefuz9sBZeCRZQq9X5SPScpLgKEi9+2Qs+JU9yJ8n1Y
+ A==;
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=T8uTfp4r
-Subject: [Buildroot] [PATCH 2/5] utils/get-developers: use parser.error()
- rather than canned print+return
+ header.a=rsa-sha256 header.s=orange002 header.b=BaQ8cAGj
+Subject: [Buildroot] [PATCH 3/5] utils/get-developers: read patch from stdin
+ when it's not a tty
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,69 +107,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-parser.error() reports a nice error message, that also displays a short
-reminder of the available options.
+It is very common that get-developers be used with its stdin a pipe from
+git-show:
+    git show |./utils-get-developers -
 
-Adapt the test-suite accordingly: previously, the error string was an
-exact string in the stdout list, while it now is a substring in one of
-the strings in stderr. The exit code changes, too.
+In this case, the '-' is superfluous: we can very easily deduce that the
+user wants to read stdin as the patch.
+
+So, if no other action was requested, and stdin is not a tty, use it as
+the source of the patch, and thus '-' is then no longer required.
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Julien Olivain <ju.o@free.fr>
 
 ---
-Changes v1 -> v2:
-  - fix test-suite (Julien)
+Changes v2 -> v2:
+  - fix typoes in commit log
 ---
- support/testing/tests/utils/test_get_developers.py | 12 ++++++------
- utils/get-developers                               |  6 ++----
- 2 files changed, 8 insertions(+), 10 deletions(-)
+ utils/get-developers | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/utils/test_get_developers.py b/support/testing/tests/utils/test_get_developers.py
-index ffc01f6ce7..3ec4edeadd 100644
---- a/support/testing/tests/utils/test_get_developers.py
-+++ b/support/testing/tests/utils/test_get_developers.py
-@@ -41,9 +41,9 @@ class TestGetDevelopers(unittest.TestCase):
-         # no args, with syntax error in the file
-         developers = b'text3\n'
-         out, err, rc = call_get_developers("./utils/get-developers", [], self.WITH_EMPTY_PATH, topdir, developers)
--        self.assertIn("No action specified", out)
--        self.assertEqual(rc, 0)
--        self.assertEqual(len(err), 0)
-+        self.assertIn("No action specified", "\n".join(err))
-+        self.assertEqual(rc, 2)
-+        self.assertEqual(len(out), 0)
- 
-         # -v generating error, called from the main dir
-         developers = b'text1\n'
-@@ -150,9 +150,9 @@ class TestGetDevelopers(unittest.TestCase):
-         # no args, with syntax error in the file
-         developers = b'text3\n'
-         out, err, rc = call_get_developers("./utils/get-developers", [], self.WITH_EMPTY_PATH, topdir, developers)
--        self.assertIn("No action specified", out)
--        self.assertEqual(rc, 0)
--        self.assertEqual(len(err), 0)
-+        self.assertIn("No action specified", "\n".join(err))
-+        self.assertEqual(rc, 2)
-+        self.assertEqual(len(out), 0)
- 
-         # patchfile from topdir and from elsewhere
-         abs_path = infra.filepath("tests/utils/test_get_developers/")
 diff --git a/utils/get-developers b/utils/get-developers
-index 33980366d6..8e5796beaf 100755
+index 8e5796beaf..b45e617bff 100755
 --- a/utils/get-developers
 +++ b/utils/get-developers
-@@ -40,11 +40,9 @@ def __main__():
-     if len(args.patches) != 0:
-         action += 1
+@@ -42,7 +42,9 @@ def __main__():
      if action > 1:
--        print("Cannot do more than one action")
--        return
-+        parser.error("Cannot do more than one action")
+         parser.error("Cannot do more than one action")
      if action == 0:
--        print("No action specified")
--        return
-+        parser.error("No action specified")
+-        parser.error("No action specified")
++        if sys.stdin.isatty():
++            parser.error("No action specified")
++        args.patches.append(sys.stdin)
  
      devs = getdeveloperlib.parse_developers(args.filename)
      if devs is None:
