@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FB80C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:43:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B301C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:43:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C3BC64F968;
-	Fri, 28 Feb 2025 16:43:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BF868475B;
+	Fri, 28 Feb 2025 16:43:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EET5mySAlcwr; Fri, 28 Feb 2025 16:43:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5MuZ7wv50HHd; Fri, 28 Feb 2025 16:43:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B5074F96A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EDFA847F7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B5074F96A;
-	Fri, 28 Feb 2025 16:43:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EDFA847F7;
+	Fri, 28 Feb 2025 16:43:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1AC5968
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 12B491DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 57D5242AED
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A08B42514
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jky0_zS-75L2 for <buildroot@buildroot.org>;
+ id fvbY6usKfP9D for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:29:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1AC242514
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07AB64251D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C1AC242514
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 07AB64251D
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BE3FB818CF; Fri, 28 Feb 2025 16:29:45 +0000 (UTC)
+ id F2F047FD48; Fri, 28 Feb 2025 16:29:45 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Dec 2024 17:55:22 +0100
+Date: Mon, 23 Dec 2024 21:19:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 87706103a6bdee8ed3b6ea51b45626aa9d2185ab
-X-Git-Newrev: 621ebccf3f1ca70443160103ae12ab3ea89f63bd
+X-Git-Oldrev: 457283d14d9a37c8581cf4118bc57cb5fb583ff9
+X-Git-Newrev: b3ddad3d5199fe2443b20a562aac41fa1fc70529
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162945.BE3FB818CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-autocommand:
- add patch to fix build issue
+Message-Id: <20250228162945.F2F047FD48@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pytest-asyncio:
+ bump to 0.25.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,101 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=621ebccf3f1ca70443160103ae12ab3ea89f63bd
+commit: https://git.buildroot.net/buildroot/commit/?id=b3ddad3d5199fe2443b20a562aac41fa1fc70529
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since the python-autocommand package has been introduced in commit
-b6f3278539216f55fb18ff7e63ce2da39ed0c3e1 ("package/python-autocommand:
-new package"), it has consistently been failing to build with:
+For change log, see:
+https://pytest-asyncio.readthedocs.io/en/latest/reference/changelog.html
 
-Traceback (most recent call last):
-  File "/home/autobuild/autobuild/instance-12/output-1/host/lib/python3.12/site-packages/pyproject_hooks/_in_process/_in_process.py", line 353, in <module>
-    main()
-  File "/home/autobuild/autobuild/instance-12/output-1/host/lib/python3.12/site-packages/pyproject_hooks/_in_process/_in_process.py", line 335, in main
-    json_out['return_val'] = hook(**hook_input['kwargs'])
-                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/autobuild/autobuild/instance-12/output-1/host/lib/python3.12/site-packages/pyproject_hooks/_in_process/_in_process.py", line 118, in get_requires_for_build_wheel
-    return hook(config_settings)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/autobuild/autobuild/instance-12/output-1/host/lib/python3.12/site-packages/setuptools/build_meta.py", line 327, in get_requires_for_build_wheel
-    return self._get_build_requires(config_settings, requirements=[])
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/autobuild/autobuild/instance-12/output-1/host/lib/python3.12/site-packages/setuptools/build_meta.py", line 297, in _get_build_requires
-    self.run_setup()
-  File "/home/autobuild/autobuild/instance-12/output-1/host/lib/python3.12/site-packages/setuptools/build_meta.py", line 497, in run_setup
-    super().run_setup(setup_script=setup_script)
-  File "/home/autobuild/autobuild/instance-12/output-1/host/lib/python3.12/site-packages/setuptools/build_meta.py", line 313, in run_setup
-    exec(code, locals())
-  File "<string>", line 8, in <module>
-  File "/home/autobuild/autobuild/instance-12/output-1/host/lib/python3.12/site-packages/setuptools/__init__.py", line 108, in setup
-    return distutils.core.setup(**attrs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/autobuild/autobuild/instance-12/output-1/host/lib/python3.12/site-packages/setuptools/_distutils/core.py", line 158, in setup
-    dist.parse_config_files()
-  File "/home/autobuild/autobuild/instance-12/output-1/host/lib/python3.12/site-packages/setuptools/dist.py", line 632, in parse_config_files
-    pyprojecttoml.apply_configuration(self, filename, ignore_option_errors)
-  File "/home/autobuild/autobuild/instance-12/output-1/host/lib/python3.12/site-packages/setuptools/config/pyprojecttoml.py", line 71, in apply_configuration
-    return _apply(dist, config, filepath)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/autobuild/autobuild/instance-12/output-1/host/lib/python3.12/site-packages/setuptools/config/_apply_pyprojecttoml.py", line 53, in apply
-    _apply_project_table(dist, config, root_dir)
-  File "/home/autobuild/autobuild/instance-12/output-1/host/lib/python3.12/site-packages/setuptools/config/_apply_pyprojecttoml.py", line 79, in _apply_project_table
-    corresp(dist, value, root_dir)
-  File "/home/autobuild/autobuild/instance-12/output-1/host/lib/python3.12/site-packages/setuptools/config/_apply_pyprojecttoml.py", line 181, in _license
-    _set_config(dist, "license", val["text"])
-                                 ~~~^^^^^^^^
-KeyError: 'text'
-
-This is due to incorrect license information in pyproject.toml. This
-was probably missed as the package was merged ~6 months after it was
-submitted, so probably at the time it was submitted, it worked fine,
-but got broken with more recent versions of setuptools.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/c9114834eb00569cdb8ec3251ccd5ecfd906c9c9/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+[Julien: add link to change log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...nse-declaration-and-rely-instead-on-Trove.patch | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ package/python-pytest-asyncio/python-pytest-asyncio.hash | 4 ++--
+ package/python-pytest-asyncio/python-pytest-asyncio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-autocommand/0001-Remove-license-declaration-and-rely-instead-on-Trove.patch b/package/python-autocommand/0001-Remove-license-declaration-and-rely-instead-on-Trove.patch
-new file mode 100644
-index 0000000000..9e00269cb0
---- /dev/null
-+++ b/package/python-autocommand/0001-Remove-license-declaration-and-rely-instead-on-Trove.patch
-@@ -0,0 +1,29 @@
-+From 4e54dc74f2d6f735cb187343f01c44693ea86f59 Mon Sep 17 00:00:00 2001
-+From: "Jason R. Coombs" <jaraco@jaraco.com>
-+Date: Thu, 4 Apr 2024 17:23:20 -0400
-+Subject: [PATCH] Remove license declaration and rely instead on Trove
-+ classifiers and LICENSE being included.
-+
-+Closes #32.
-+
-+Upstream: https://github.com/Lucretiel/autocommand/pull/33
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ setup.py | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 41f86a1..d154562 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -13,7 +13,6 @@ setup(
-+     ],
-+     package_dir={'': 'src'},
-+     platforms='any',
-+-    license='LGPLv3',
-+     author='Nathan West',
-+     url='https://github.com/Lucretiel/autocommand',
-+     description='A library to create a command-line program from a function',
-+-- 
-+2.47.0
-+
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+index a88d1c5841..1e5eafd86a 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.hash
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
+-md5  510ca6136236bba0f0581aa46060ae03  pytest_asyncio-0.24.0.tar.gz
+-sha256  d081d828e576d85f875399194281e92bf8a68d60d72d1a2faf2feddb6c46b276  pytest_asyncio-0.24.0.tar.gz
++md5  cfec568101379ff7188b152e2f88a4c1  pytest_asyncio-0.25.0.tar.gz
++sha256  8c0610303c9e0442a5db8604505fc0f545456ba1528824842b37b4a626cbf609  pytest_asyncio-0.25.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a8ad31b1c3f40dca5a84119351b8fa8ddc868edd77fad8a8ebf6d8f2d16fa4ae  LICENSE
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+index ae0934e00f..52040df519 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.mk
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYTEST_ASYNCIO_VERSION = 0.24.0
++PYTHON_PYTEST_ASYNCIO_VERSION = 0.25.0
+ PYTHON_PYTEST_ASYNCIO_SOURCE = pytest_asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
+-PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/52/6d/c6cf50ce320cf8611df7a1254d86233b3df7cc07f9b5f5cbcb82e08aa534
++PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/94/18/82fcb4ee47d66d99f6cd1efc0b11b2a25029f303c599a5afda7c1bca4254
+ PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
+ PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
+ PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
