@@ -4,96 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D468E7718B
-	for <buildroot@archiver.kernel.org>; Mon, 23 Dec 2024 14:49:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A769FE7718B
+	for <buildroot@archiver.kernel.org>; Mon, 23 Dec 2024 14:50:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F1CA81649;
-	Mon, 23 Dec 2024 14:49:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DC96814A9;
+	Mon, 23 Dec 2024 14:49:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8oQIQg9rSwSp; Mon, 23 Dec 2024 14:49:54 +0000 (UTC)
+ id W2TNpBWwyIE2; Mon, 23 Dec 2024 14:49:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B07D815E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5C9581750
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B07D815E7;
-	Mon, 23 Dec 2024 14:49:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C5C9581750;
+	Mon, 23 Dec 2024 14:49:56 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 00353757
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 14:49:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5A13E757
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 14:49:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D55D9814B3
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 14:49:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A6839814B3
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 14:49:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l5zjhlAah8jn for <buildroot@buildroot.org>;
+ id M9XphIzAVVaf for <buildroot@buildroot.org>;
  Mon, 23 Dec 2024 14:49:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2b; helo=mail-io1-xd2b.google.com;
+ client-ip=2607:f8b0:4864:20::d2f; helo=mail-io1-xd2f.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D0E1E8149C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0E1E8149C
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
- [IPv6:2607:f8b0:4864:20::d2b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D0E1E8149C
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 14:49:51 +0000 (UTC)
-Received: by mail-io1-xd2b.google.com with SMTP id
- ca18e2360f4ac-844e7bc6d84so159678039f.0
- for <buildroot@buildroot.org>; Mon, 23 Dec 2024 06:49:51 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ABC3B814A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ABC3B814A9
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
+ [IPv6:2607:f8b0:4864:20::d2f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ABC3B814A9
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 14:49:52 +0000 (UTC)
+Received: by mail-io1-xd2f.google.com with SMTP id
+ ca18e2360f4ac-844eac51429so341828039f.2
+ for <buildroot@buildroot.org>; Mon, 23 Dec 2024 06:49:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1734965390; x=1735570190;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=IYt7OPh1Qn39FBzP1uQGTxs2X5aG2bmy2FP2Py5NjGQ=;
- b=DlFCEKk9yLOFdFSDDjGYM6iIY3os7jkBsAl3Gy7GVGMnYEfGJeKQM+esNfcVZ3jF7O
- 95so9BvUAMLjlO//i/35NDjcm5epjf2XHGHQoamhQ+PZYGIG/PdSulVlPRDvH/aoxs5f
- sDTuEYemAfc9ZsO4uHm1L6q/6OfLcD+eIVeOGnuhxN/R15wDfqg+AhlxOR0zP5BTUFG8
- qH58tYGom54FrxtE7RKEpGgshcclkyITQgN/Mg0CrgSeNevyB2BhXu/y4ju3TwZ47OiH
- 8XaDboByz6EO7knbmVSOHm+u0xggzb8E/9GPAOp/ega109yoRcpa391QJzoif/6pjttp
- AGeQ==
-X-Gm-Message-State: AOJu0YxjIj+/4TB4pKTqkU3Z1MlLXtayR67nlG05X9+HBaLPVmZdqNhI
- tXOH6J4jopTcqr+YvGaXDkXQ8dh5g9m0koZWhkMxqd7ByADZ1CovW23HIr0AY2o=
-X-Gm-Gg: ASbGnct6uTEpsYpvHaqm5MyuUmeLXOF4bpz5U+T8tmXTxWdyfn1emaNZoJW4m1xr0Hd
- oGgFBSxbA9q9sav8E2SWS3psX3xY1kJeL+oLdaan9rjJIgxpdlzTTP8pVXw+nK4wpln1/6Yaby9
- 87EcOicOUKSPIDMwDQ19jtHpecy9EEzXiKXCxAb6hvCHn20bKdc/6AUTXqMjoZvcpWtW3aC3JGk
- tHCVTrqKZp0M1JReSH4sywnhAOWCcua+y3KJx27BA2g9FWXPOsR/4LSpGDUecjURWQkkr/4mQqS
- 1Uqx6u08itkABJKeHsbDiW5yRyZ5OwVpGQ==
-X-Google-Smtp-Source: AGHT+IHSh0X8g6d0f86L+lyEAIVU1Jm606fwF7Wc3Ma+09E1YR7qfreEguosLfwHhcZNV4w70KMv7w==
-X-Received: by 2002:a05:6602:3f95:b0:83b:5306:d24d with SMTP id
- ca18e2360f4ac-8499eb0ef09mr949374339f.6.1734965390474; 
- Mon, 23 Dec 2024 06:49:50 -0800 (PST)
+ d=1e100.net; s=20230601; t=1734965391; x=1735570191;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=gG3Dv98M2DAQzxC8EGZo1Xk3nqRYGwDd6zCWDFjo+7s=;
+ b=cQ8VNH5GruUmDzWRMdKxrixX58sd+8AmAArQIUDDmcI/dDt39jySIBuiLZTcEcPcEd
+ NQAWVAaxLBWj31qEj/bYFgyBRkcQb+B/BqCZa2qaLXv5Jk3Rer06fUNP1uMqrzJNWzh/
+ rnxRyCjMRR8JxLkv1DVbbs4L9HZCfgxNU0xqsRAJAz3mNCK/jxH8XsR7u6xhBpqrhijR
+ Z6OYvMvithbrj+QKl8glBlrvv0gul8jBvT6GAbOVOtxyhWAx8oKcjbw/fW+8apE3UZKP
+ yOjYx+Cgm2UQSH9bk/M5nGC902xI5Lf1LJa5+hpVTOl+l89ZSci4fbAEqKdiWUFWeGyP
+ chSg==
+X-Gm-Message-State: AOJu0YyUJFaWC6P89DEMB8BfDGPDHGz2KMHhwhwt0edbesCjoeyiWyJM
+ qJsEheLIoZkZcJwZ9MQjZqFlegNzjecxH/tRNudB4VarBnQIvLRes07Un25PCvs=
+X-Gm-Gg: ASbGncvLqDn3lml8iW87GeeEfPm8PWLEisnX56oFKa9ea0fvY1oPBDK4Pn48iBWoGV4
+ 4sztDl+ECAGQNy+So4GIilbFE9/KGGeGPP2kkrKASeJdbjehivLTbvBtSOKGrjTbKBI5WIghrum
+ QbIkh7kbMWYfgODQCtE2G9obZjrA7jGr+/QKCpTtyk1VQuyzZljyp7JUMQMvftZr5VneIibguaD
+ Pn++gXDGDR+xOhNwcquJligJnLLMzYgl/gFTEMAKtGYDIAXVgtIinCut71SW13rNoKG/jUpHAc4
+ 4xjmkBpM4oAM8pLe2Iq21sPAvZESUz1JlQ==
+X-Google-Smtp-Source: AGHT+IHKZ1xm0jjiBnjtTuEW8GVwqYDuSyW2MNndbz8gIprVNmJLQxaTpid2D5Jx+X4PEnYtVinfJA==
+X-Received: by 2002:a05:6602:15cc:b0:841:95b5:8953 with SMTP id
+ ca18e2360f4ac-8499e67bda9mr1439556939f.14.1734965391481; 
+ Mon, 23 Dec 2024 06:49:51 -0800 (PST)
 Received: from james-x399.localdomain (71-218-105-232.hlrn.qwest.net.
  [71.218.105.232]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-8498d9028ddsm220073639f.50.2024.12.23.06.49.49
+ ca18e2360f4ac-8498d9028ddsm220073639f.50.2024.12.23.06.49.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 23 Dec 2024 06:49:49 -0800 (PST)
+ Mon, 23 Dec 2024 06:49:51 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 23 Dec 2024 07:49:38 -0700
-Message-Id: <20241223144939.1719298-1-james.hilliard1@gmail.com>
+Date: Mon, 23 Dec 2024 07:49:39 -0700
+Message-Id: <20241223144939.1719298-2-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241223144939.1719298-1-james.hilliard1@gmail.com>
+References: <20241223144939.1719298-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1734965390; x=1735570190; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=IYt7OPh1Qn39FBzP1uQGTxs2X5aG2bmy2FP2Py5NjGQ=;
- b=fxysBQ/AU7+3/bORBYHS1MdNonyQ/fpVwobis73ulgPPYutLKT5qlmJHHPcgNi8DX5
- 8eodH8Ck4z36SSE/FsxzoOlcZYNe4N5iYHN2tofSeqH9bp8UyrILBLK0cDU6qB7G/D/J
- +6gnibNtkMAHr73OkWp0tUMNIskA8Ffu/RuwCPHg8SBMe47oTqPdJo5+A25AtiynIFNu
- w35i7uFoGqa10gX4BU2B9N775RiA/XG/zRaZrUBBiMgTrEx6+Q/agEJkK9CxNS/yD01P
- wF4WhbmICS74Q4y7BkRvopZcGoHZ4Hk1CXjxyyRlhasRXRnnqmWiyBM58wGQuULE4ALs
- jE5w==
+ d=gmail.com; s=20230601; t=1734965391; x=1735570191; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=gG3Dv98M2DAQzxC8EGZo1Xk3nqRYGwDd6zCWDFjo+7s=;
+ b=cGty+q5mmREL1nNSAKjyqLDqvTlM5KElpZFaJru+lJ8zYMYp8DzaQpndbteK55DhOx
+ 0aJKNt6a7Zb0Rivwm5+DZaAP7uc6ndC1jO6ypvaqhUCBzUaFOme6jpQmez+jcax68IJx
+ kxTgPMLUrCfWUTPVGfMvU2qXa2rKrWmPKPiRU4mc32CQJYcf1X2l4WP0Cbqv8YmxGn5F
+ OYEr3OhyyssV/2rWacUUVmeSuGa2/XyvcdoZHn4MjJmVAaJkSQnJcfczEsID4xJMhPn2
+ 5UXf36gtf1bFiCcVdzdnQz5IMAXb+QupV8GpSowZ+YYDc0m8g26nkXMghYV0bNdro8d3
+ HH1Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=fxysBQ/A
-Subject: [Buildroot] [PATCH 1/2] package/python-telnetlib3: new package
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=cGty+q5m
+Subject: [Buildroot] [PATCH 2/2] package/python-aiomonitor: bump to version
+ 0.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,72 +115,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Add new python-telnetlib3 runtime dependency.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in                                |  1 +
- package/python-telnetlib3/Config.in              |  6 ++++++
- package/python-telnetlib3/python-telnetlib3.hash |  5 +++++
- package/python-telnetlib3/python-telnetlib3.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-telnetlib3/Config.in
- create mode 100644 package/python-telnetlib3/python-telnetlib3.hash
- create mode 100644 package/python-telnetlib3/python-telnetlib3.mk
+ package/python-aiomonitor/Config.in              | 1 +
+ package/python-aiomonitor/python-aiomonitor.hash | 4 ++--
+ package/python-aiomonitor/python-aiomonitor.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 06472aa972..8da59cdcbf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1421,6 +1421,7 @@ menu "External python modules"
- 	source "package/python-systemd/Config.in"
- 	source "package/python-tabledata/Config.in"
- 	source "package/python-tcolorpy/Config.in"
-+	source "package/python-telnetlib3/Config.in"
- 	source "package/python-tempora/Config.in"
- 	source "package/python-termcolor/Config.in"
- 	source "package/python-terminaltables/Config.in"
-diff --git a/package/python-telnetlib3/Config.in b/package/python-telnetlib3/Config.in
-new file mode 100644
-index 0000000000..487258c272
---- /dev/null
-+++ b/package/python-telnetlib3/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_TELNETLIB3
-+	bool "python-telnetlib3"
-+	help
-+	  Python 3 asyncio Telnet server and client Protocol library.
-+
-+	  http://telnetlib3.rtfd.org/
-diff --git a/package/python-telnetlib3/python-telnetlib3.hash b/package/python-telnetlib3/python-telnetlib3.hash
-new file mode 100644
-index 0000000000..db18889b8f
---- /dev/null
-+++ b/package/python-telnetlib3/python-telnetlib3.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/telnetlib3/json
-+md5  2dfac7e10ed63c408da50ea712415f87  telnetlib3-2.0.4.tar.gz
-+sha256  dbcbc16456a0e03a62431be7cfefff00515ab2f4ce2afbaf0d3a0e51a98c948d  telnetlib3-2.0.4.tar.gz
-+# Locally computed sha256 checksums
-+sha256  caaf4ac82c4363d4874a49b50af15797618f6aee5bf42218697cdcb41c391ca5  LICENSE.txt
-diff --git a/package/python-telnetlib3/python-telnetlib3.mk b/package/python-telnetlib3/python-telnetlib3.mk
-new file mode 100644
-index 0000000000..e68533af5c
---- /dev/null
-+++ b/package/python-telnetlib3/python-telnetlib3.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-telnetlib3
-+#
-+################################################################################
-+
-+PYTHON_TELNETLIB3_VERSION = 2.0.4
-+PYTHON_TELNETLIB3_SOURCE = telnetlib3-$(PYTHON_TELNETLIB3_VERSION).tar.gz
-+PYTHON_TELNETLIB3_SITE = https://files.pythonhosted.org/packages/ef/af/0fadfddd1764e627f4ba9c7381caaf121795ed459a1cc3d0fbb89a187954
-+PYTHON_TELNETLIB3_SETUP_TYPE = setuptools
-+PYTHON_TELNETLIB3_LICENSE = ISC
-+PYTHON_TELNETLIB3_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
+diff --git a/package/python-aiomonitor/Config.in b/package/python-aiomonitor/Config.in
+index 9f3787f9b3..dbe0f133dc 100644
+--- a/package/python-aiomonitor/Config.in
++++ b/package/python-aiomonitor/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_PYTHON_AIOMONITOR
+ 	select BR2_PACKAGE_PYTHON_JANUS # runtime
+ 	select BR2_PACKAGE_PYTHON_JINJA2 # runtime
+ 	select BR2_PACKAGE_PYTHON_PROMPT_TOOLKIT # runtime
++	select BR2_PACKAGE_PYTHON_TELNETLIB3 # runtime
+ 	select BR2_PACKAGE_PYTHON_TERMINALTABLES # runtime
+ 	select BR2_PACKAGE_PYTHON_TRAFARET # runtime
+ 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+diff --git a/package/python-aiomonitor/python-aiomonitor.hash b/package/python-aiomonitor/python-aiomonitor.hash
+index f1c0e37667..fb8300fd0d 100644
+--- a/package/python-aiomonitor/python-aiomonitor.hash
++++ b/package/python-aiomonitor/python-aiomonitor.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiomonitor/json
+-md5  75fc8f84c0ff385931d76c46265cfc0d  aiomonitor-0.7.0.tar.gz
+-sha256  109b9ad309a44c0c5db1219d106f4062615151ad3f0e288a0c104fbb004d0398  aiomonitor-0.7.0.tar.gz
++md5  e5b17b3baccb6e2b709bd85ab3faee32  aiomonitor-0.7.1.tar.gz
++sha256  beb1f14429bc4a3135bbac32381d242fe2019d74fcf9c86d3f4bd7405dc562e4  aiomonitor-0.7.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  98397c300949e0cc1ddc68b0e48e67b10f2d0a4ffada4903d891a1315fe04156  LICENSE
+diff --git a/package/python-aiomonitor/python-aiomonitor.mk b/package/python-aiomonitor/python-aiomonitor.mk
+index 8eaddcbfa6..824208ac79 100644
+--- a/package/python-aiomonitor/python-aiomonitor.mk
++++ b/package/python-aiomonitor/python-aiomonitor.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIOMONITOR_VERSION = 0.7.0
++PYTHON_AIOMONITOR_VERSION = 0.7.1
+ PYTHON_AIOMONITOR_SOURCE = aiomonitor-$(PYTHON_AIOMONITOR_VERSION).tar.gz
+-PYTHON_AIOMONITOR_SITE = https://files.pythonhosted.org/packages/50/30/1d903b716489c2b5d0a92baccf172f972e97c2de94d4ea41c154287e9b60
++PYTHON_AIOMONITOR_SITE = https://files.pythonhosted.org/packages/28/0a/805797608db4e30ab588b283137b5b2a735655c20df72f2f9bac41da789e
+ PYTHON_AIOMONITOR_SETUP_TYPE = setuptools
+ PYTHON_AIOMONITOR_LICENSE = Apache-2.0
+ PYTHON_AIOMONITOR_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
