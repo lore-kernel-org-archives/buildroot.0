@@ -1,83 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D520E77188
-	for <buildroot@archiver.kernel.org>; Tue, 24 Dec 2024 12:23:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D855E77188
+	for <buildroot@archiver.kernel.org>; Tue, 24 Dec 2024 16:15:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C7486065D;
-	Tue, 24 Dec 2024 12:23:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F4AF81BCB;
+	Tue, 24 Dec 2024 16:15:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b8nKFI4nVC2I; Tue, 24 Dec 2024 12:23:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c0ZZRJaRKmAx; Tue, 24 Dec 2024 16:15:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8064D60BC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0CA381B71
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8064D60BC3;
-	Tue, 24 Dec 2024 12:23:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 11FE6757
- for <buildroot@buildroot.org>; Tue, 24 Dec 2024 12:23:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E0CA381B71;
+	Tue, 24 Dec 2024 16:15:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 317EFE0
+ for <buildroot@buildroot.org>; Tue, 24 Dec 2024 16:15:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3F136065D
- for <buildroot@buildroot.org>; Tue, 24 Dec 2024 12:23:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1EAB960A71
+ for <buildroot@buildroot.org>; Tue, 24 Dec 2024 16:15:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xb45B04IwRAE for <buildroot@buildroot.org>;
- Tue, 24 Dec 2024 12:23:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
- helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6842560BC3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6842560BC3
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [147.173.1.68])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6842560BC3
- for <buildroot@buildroot.org>; Tue, 24 Dec 2024 12:23:01 +0000 (UTC)
-Received: from [IPV6:2a01:e0a:12:eba0:1aa2:48b6:81e8:4d24] (unknown
- [IPv6:2a01:e0a:12:eba0:1aa2:48b6:81e8:4d24])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 49642BFBE6;
- Tue, 24 Dec 2024 13:22:58 +0100 (CET)
-Message-ID: <4e691513-04a1-4f6f-ad3a-df18f653a6b7@grenoble.cnrs.fr>
-Date: Tue, 24 Dec 2024 13:22:57 +0100
+ id wztjN_8nmpn2 for <buildroot@buildroot.org>;
+ Tue, 24 Dec 2024 16:15:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C946D60857
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C946D60857
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C946D60857
+ for <buildroot@buildroot.org>; Tue, 24 Dec 2024 16:15:22 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-4361aa6e517so7543555e9.2
+ for <buildroot@buildroot.org>; Tue, 24 Dec 2024 08:15:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1735056920; x=1735661720;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=a5S+e+dzhhDrG+ipDV1p1A70ujETw/niv9jrdTL2FvM=;
+ b=tt2lPbqf5nvJBYXSOuScNEquAE5G3OaUoWs6Kx8rMRF6TcyvHozZZo/0kLpLPD3LBg
+ 0Li46lqDeaMv/PH+C4FUlH9J8ZDRkGhnU3pGXkOP8OYFtrLVCQy94ZyGUmApuzojQKwk
+ lfzvIYK7UmHViaUcbd8PSUYS0vhkvTeBrUv4ZwS68Dx97QA6A7XYphtQgqPXyOpxq9Nm
+ TSSq4YrtFxMW6Bms+b/cm4cserglYQXkhrH9wF02Q7wXXc2trvv+HsgHL9CUM/YGQRDM
+ qD4rNHVqj9N5EPYZVnkV51wQjyR4QG79vn7LzE57fFkUgKMXkUELT2VgFdQ+wqRYj2XN
+ wTvA==
+X-Gm-Message-State: AOJu0YyOh9VtAYGrDN6uR0y+A/BhJld/OHRcBMU+sqsD/Uw8itdWJjNI
+ rWlYacZhCAwIdfTRP9IqrSzRfkC+eK21oOMdxqIuWuqZVph9URUkJPfp6jJzgzUEfzjTokJ3Djx
+ nQVg=
+X-Gm-Gg: ASbGncusIhaFb8gXFAqHrHtI5TZNXE4iI5YLcO+v1VAjAzk4XrKRUVxeLmPhgd35M1i
+ nb9dcwh6o33vt5tSk1jzlo2PUD+5WsBhF4wr41aKIgH5AtJpZLhmIpKj4AqcM+BZCjZd7RhnIWU
+ O4BElc+miqBXxgUjpAVSeQ6TcHEBWTIjO/5nNCCMiRZMrZw/NrpcECRTjyj2jMHMWlogSkMTKMx
+ 1bzas4zkVO+nzaKOkW2KFZV/L714Uk4mjBJr8FhAFqZpEuPgT2/XUz6Ja4laRACGGzUCxea6Cbk
+ peDGiiLcMrqy
+X-Google-Smtp-Source: AGHT+IFB4fuj4fGElvmizT2LQEI/Km/OLUdSjZ8UDvoqK3v7vrsAkRcURJVb+R0n7NzIFTuw1tatHA==
+X-Received: by 2002:adf:9cc4:0:b0:386:3c21:b1f7 with SMTP id
+ ffacd0b85a97d-38a221f1a24mr4201581f8f.7.1735056920580; 
+ Tue, 24 Dec 2024 08:15:20 -0800 (PST)
+Received: from localhost.localdomain ([212.22.143.210])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-38a1c828d39sm15004580f8f.9.2024.12.24.08.15.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 24 Dec 2024 08:15:20 -0800 (PST)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Tue, 24 Dec 2024 17:15:08 +0100
+Message-ID: <20241224161510.410850-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.47.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Romain Naour <romain.naour@smile.fr>,
- Buildroot development <buildroot@buildroot.org>
-Cc: Michael Walle <mwalle@kernel.org>, Chris Packham
- <judge.packham@gmail.com>, Sergey Matyukevich <geomatsi@gmail.com>
-References: <035d6d78-0a31-4083-8fa1-65f5be5f74b5@grenoble.cnrs.fr>
- <3ea35c40-07d1-41d3-b4f9-08bbb0336d24@smile.fr>
-Content-Language: en-US
-From: Edgar Bonet <bonet@grenoble.cnrs.fr>
-In-Reply-To: <3ea35c40-07d1-41d3-b4f9-08bbb0336d24@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1735042978;
- bh=4XvK+jmrKje9rIeDYOJZZEC5NmwjdCMCF3gLtxJpkyk=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
- b=lGAJLURXojxTL+wlABGHslsiylNsmIeZ/uXyD65P6YMv/1E2E724bC1kTHD9UhfPN
- HkelKAWFt5B8LGIhDVrTFID2Ku1qwsZ2BdvzlxZ6juqFUrSIRA/R4YamqMowIKgqLc
- Lvp2c0ETsLiqnn65O74N6zccS6TlsWW72yT+HKC9qPW/a9HTw/PVwvDFAtcenBvIzd
- csbHoXrAgOckelY8m3FKWywuYOo/CVgfqX4ptqMnP9iWo7XRha0UcNlSRZ1OS3a+pX
- +StCMwmWXjkjuxCeP9B4y7IwSvh1O3ePjrz2GI22dtZryjZeN/ctKsozwPEpi12nIm
- b+Q+eLLslQlgw==
+ d=amarulasolutions.com; s=google; t=1735056920; x=1735661720;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=a5S+e+dzhhDrG+ipDV1p1A70ujETw/niv9jrdTL2FvM=;
+ b=DBQfD/jIwnNMjXUNFR9h/xOIBv3SzS0WhSukT5XcBGMoW5D4NF6KmEsL/o8GdRkUgE
+ dTzjQQ4xBVqaNQIwR6RfGj7boVIABWkLmFdNiLchxW8U/tABwtH4ZepbcN0mw74s5Hwg
+ m5TIe0U5eUIdAJ/GPSPl1d5riMTYT37ilvVLI=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=grenoble.cnrs.fr
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=lGAJLURX
-Subject: Re: [Buildroot] [PATCH v2 1/1] linux: make out-of-tree DTS work
- with newest kernels
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=DBQfD/jI
+Subject: [Buildroot] [PATCH 1/2] package/mender-artifact: bump version to
+ 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,98 +107,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8hCgpPbiAyMDI0LTEyLTE4LCBSb21haW4gTmFvdXIgd3JvdGU6Cj4gSGVsbG8gRWRnYXIs
-Cj4gCj4gTGUgMTcvMTIvMjAyNCDDoCAxMDo1NSwgRWRnYXIgQm9uZXQgYSDDqWNyaXTCoDoKPj4g
-U2luY2UgTGludXggNi4xMiAoY29tbWl0IGU3ZTI5NDEzMDBkMiwgImtidWlsZDogc3BsaXQgZGV2
-aWNlIHRyZWUgYnVpbGQKPj4gcnVsZXMgaW50byBzY3JpcHRzL01ha2VmaWxlLmR0YnMiKSwgdGhl
-IGtlcm5lbCBidWlsZCBwcm9jZXNzIGRvZXMgbm90Cj4+IGJ1aWxkIHRoZSBEVEJzIGZyb20gdGhl
-IHNvdXJjZSBmaWxlcyBsaXN0ZWQgaW4KPj4gQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fRFRTX1BB
-VEguWzFdIFRoaXMgaXMgYmVjYXVzZSBpdCBleHBlY3RzIGFsbCB0aGUKPj4gRFRTIGZpbGVzIHRv
-IGxpdmUgaW4gdmVuZG9yLXNwZWNpZmljIHN1YmRpcmVjdG9yaWVzIG9mCj4+IGFyY2gvJEFSQ0gv
-Ym9vdC9kdHMvICwgd2hlcmVhcyBCdWlsZHJvb3QgZHJvcHMgdGhlbSBpbiB0aGUgdG9wIGR0cwo+
-PiBkaXJlY3RvcnkuCj4gCj4gTWF5YmUgd2UgY291bGQgYWRkIHNvbWUgYWRkaXRpb25hbCBleHBs
-YW5hdGlvbjoKPiAKPiBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9EVFNfUEFUSCB3YXMgaW50cm9k
-dWNlZCBpbiBCdWlsZHJvb3QgMjAxMi4wOCBbMV0gYXQgdGhlCj4gdGltZSB0aGUga2VybmVsIGRp
-ZG4ndCBoYXZlIGFueSB2ZW5kb3Itc3BlY2lmaWMgc3ViZGlyZWN0b3J5IGluCj4gYXJjaC8kQVJD
-SC9ib290L2R0cy8uCj4gCj4gdmVuZG9yLXNwZWNpZmljIHN1YmRpcmVjdG9yeSB3YXMgaW50cm9k
-dWNlZCBpbiBrZXJuZWwgdjMuMTkgWzJdIGZvciBBUk02NCBhbmQgaW4KPiBrZXJuZWwgdjYuNSBm
-b3IgQVJNIFszXS4gTm90ZSwgb3RoZXIgYXJjaCB0aGFuIEFSTSBhbmQgQVJNNjQgZG9lc24ndCBh
-Y3R1YWxseQo+IHVzZSBhIHZlbmRvci1zcGVjaWZpYyBzdWJkaXJlY3RvcnkgKG5vdCBldmVuIHBv
-d2VycGMpLgoKSSBoYWRuJ3Qgbm90aWNlZCB0aGF0IHRoaXMgdmFyaWVzIGFtb25nIGFyY2hzLiBO
-b3cgdGhhdCBJIGxvb2sgYXQgaXQsIGl0CmFwcGVhcnMgbWlwcyBhbmQgcmlzY3YgYWxzbyB1c2Ug
-dmVuZG9yLXNwZWNpZmljIHN1YmRpcmVjdG9yaWVzLgoKPiBZb3VyIGNvbW1lbnQgZG9lc24ndCBz
-ZWVtcyB0byBhcHBseSBmb3Igbm9uIEFSTXssNjR9IGFyY2g6Cj4gIlRoaXMgaXMgYmVjYXVzZSBp
-dCBleHBlY3RzIGFsbCB0aGUgRFRTIGZpbGVzIHRvIGxpdmUgaW4gdmVuZG9yLXNwZWNpZmljCj4g
-c3ViZGlyZWN0b3JpZXMgb2YgYXJjaC8kQVJDSC9ib290L2R0cy8iCgpJbmRlZWQsIGl0IGlzIGFy
-Y2hpdGVjdHVyZS1kZXBlbmRlbnQuCgo+IFsxXQo+IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJv
-b3Qub3JnL2J1aWxkcm9vdC8tL2NvbW1pdC82OWZjNDk3ZGYwYWU1MWJjYzhhMDY3Yzg0OTQ0N2Fi
-ZGViM2NiMmJlCj4gWzJdCj4gaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tl
-cm5lbC9naXQvc3RhYmxlL2xpbnV4LmdpdC9jb21taXQvP2lkPWNhNWIzNDEwMGM1NzE2NThlNjA1
-YzU1NTRhYWMzNzQ2NDk1OTMzMjcKPiBbM10KPiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9z
-Y20vbGludXgva2VybmVsL2dpdC9zdGFibGUvbGludXguZ2l0L2NvbW1pdC8/aWQ9NzI0YmE2NzUx
-NTMyMDU1ZGI3NTk5MmZjNmFlMjFjM2UzMjJlOTRhNwo+IAo+IAo+Pgo+PiBGdWxmaWxsaW5nIHRo
-aXMga2VybmVsIGV4cGVjdGF0aW9uIHdvdWxkIHJlcXVpcmUgYSBuZXcgY29uZmlndXJhdGlvbgo+
-PiBwYXJhbWV0ZXIgZm9yIHRoZSBuYW1lIG9mIHRoZSBhcHByb3ByaWF0ZSB2ZW5kb3Igc3ViZGly
-ZWN0b3J5LiBJdCB3b3VsZAo+PiBhbHNvIHJlcXVpcmUgY2hhbmdpbmcgdGhlIHJlbGF0aXZlIHBh
-dGhzIHRvIGluY2x1ZGVkIC5kdHNpIGZpbGVzLgo+Pgo+PiBMZXQncyBhZGQgaW5zdGVhZCBhIHJ1
-bGUgdG8gdGhlIHRvcCBkdHMvTWFrZWZpbGUgZm9yIGVhY2ggRFRCIHdlIHdhbnQgdG8KPj4gYnVp
-bGQuIFRoaXMgYXZvaWRzIGJyZWFraW5nIHVzZXIncyBvdXQtb2YtdHJlZSBjb25maWd1cmF0aW9u
-cy4KPj4KPj4gWzFdIGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9waXBlcm1haWwvYnVpbGRy
-b290LzIwMjQtT2N0b2Jlci83NjU0NjMuaHRtbAo+IAo+IE5vdGU6IFlvY3RvIGRvZXNuJ3QgcmVs
-eSBvbiB0aGUga2VybmVsIGJ1aWxkIGluZnJhc3RydWN0dXJlIHRvIGJ1aWxkIHVzZXIKPiBwcm92
-aWRlZCBkZXZpY2V0cmVlIFs0XS4KPiAKPiBNYXliZSB3ZSBzaG91bGQgY29uc2lkZXIgYWRkaW5n
-IGEgbmV3IHBhY2thZ2UgaW5mcmFzdHJ1Y3R1cmUgbGlrZSBrZXJuZWwtbW9kdWxlPwoKVGhpcyBz
-ZWVtcyBsaWtlIGFuIGludGVyZXN0aW5nIG9wdGlvbi4gSXQgaXMsIGhvd2V2ZXIsIGJleW9uZCBt
-eQpjYXBhYmlsaXRpZXMuCgpTaG91bGQgSSByZXNwaW4gdGhpcyBwYXRjaCB3aXRoIGFuIHVwZGF0
-ZWQgY29tbWl0IGxvZz8gT3Igc2hvdWxkIEkKaW5zdGVhZCB3YWl0IGZvciBzb21lb25lIHRvIGlt
-cGxlbWVudCBhIFlvY3RvLWxpa2UgYXBwcm9hY2g/CgpSZWdhcmRzLAoKRWRnYXIgQm9uZXQuCgo+
-IFs0XQo+IGh0dHBzOi8vZ2l0aHViLmNvbS9vcGVuZW1iZWRkZWQvb3BlbmVtYmVkZGVkLWNvcmUv
-YmxvYi9mNjQyZWRiMDA2YThjMTZkYmU0NTY4MWFmZTU0N2VhYmZhZTE3MDczL21ldGEvY2xhc3Nl
-cy1yZWNpcGUvZGV2aWNldHJlZS5iYmNsYXNzI0w1OUMxLUw1OUM5Cj4gCj4gQmVzdCByZWdhcmRz
-LAo+IFJvbWFpbgo+IAo+IAo+Pgo+PiBSZXBvcnRlZC1ieTogQ2hyaXMgUGFja2hhbSA8anVkZ2Uu
-cGFja2hhbUBnbWFpbC5jb20+Cj4+IFNpZ25lZC1vZmYtYnk6IEVkZ2FyIEJvbmV0IDxib25ldEBn
-cmVub2JsZS5jbnJzLmZyPgo+PiAtLS0KPj4gQ2hhbmdlcyB2MSAtPiB2MjoKPj4gICAtIGRlZmlu
-ZSBhIGhvb2sgZm9yIExJTlVYX1BPU1RfUEFUQ0hfSE9PS1MgYW5kIExJTlVYX1BPU1RfUlNZTkNf
-SE9PS1MKPj4gICAgIGluc3RlYWQgb2YgbW9kaWZ5aW5nIExJTlVYX0JVSUxEX0NNRFMKPj4gICAt
-IHVzZSAkKHBhdHN1YnN0ICUuZHRzLCUuZHRiLCQoZHRzKSkgaW5zdGVhZCBvZiAkKGR0czolLmR0
-cz0lLmR0YikKPj4gYm90aCBjaGFuZ2VzIHN1Z2dlc3RlZCBieSBBcm5vdXQgVmFuZGVjYXBwZWxs
-ZS4KPj4KPj4gSSByYW4gdGhlIGZvbG93aW5nIGJ1aWxkIHRlc3RzOgo+Pgo+PiAgICAgIyBUZXN0
-IHdpdGggYW4gb2xkIGtlcm5lbDogdjYuNi4zMAo+PiAgICAgbWFrZSBhY21lc3lzdGVtc19hY3F1
-YV9hNV81MTJtYl9kZWZjb25maWcKPj4gICAgIG1ha2UgbGludXgKPj4KPj4gICAgICMgVGVzdCB3
-aXRoIGEgbmV3IGtlcm5lbDogdjYuMTIuNQo+PiAgICAgbWFrZSBsaW51eC1kaXJjbGVhbgo+PiAg
-ICAgZ2l0IGNoZXJyeS1waWNrIDA5MzgzNDZjZGUgICMgYnVtcCBBY3F1YSdzIGtlcm5lbCB0byB2
-Ni4xMi41Cj4+ICAgICBtYWtlIGFjbWVzeXN0ZW1zX2FjcXVhX2E1XzUxMm1iX2RlZmNvbmZpZwo+
-PiAgICAgbWFrZSBsaW51eAo+Pgo+PiAgICAgIyBUZXN0IHRoZSBPVkVSUklERV9TUkNESVIgY2Fz
-ZS4KPj4gICAgIG1ha2UgbGludXgtZGlyY2xlYW4KPj4gICAgIGdpdCAtQyAkSE9NRS9zcmMvbGlu
-dXggY2hlY2tvdXQgdjYuMTIuNQo+PiAgICAgZWNobyAiTElOVVhfT1ZFUlJJREVfU1JDRElSID0g
-JEhPTUUvc3JjL2xpbnV4IiA+IGxvY2FsLm1rCj4+ICAgICBtYWtlIGFjbWVzeXN0ZW1zX2FjcXVh
-X2E1XzUxMm1iX2RlZmNvbmZpZwo+PiAgICAgbWFrZSBsaW51eAo+Pgo+PiAgbGludXgvbGludXgu
-bWsgfCAxMSArKysrKysrKysrKwo+PiAgMSBmaWxlIGNoYW5nZWQsIDExIGluc2VydGlvbnMoKykK
-Pj4KPj4gZGlmZiAtLWdpdCBhL2xpbnV4L2xpbnV4Lm1rIGIvbGludXgvbGludXgubWsKPj4gaW5k
-ZXggMWQzZDhmZmZhNi4uZWI1MDlmZDc0NyAxMDA2NDQKPj4gLS0tIGEvbGludXgvbGludXgubWsK
-Pj4gKysrIGIvbGludXgvbGludXgubWsKPj4gQEAgLTMyNyw2ICszMjcsMTcgQEAgZGVmaW5lIExJ
-TlVYX1RSWV9QQVRDSF9USU1FQ09OU1QKPj4gIGVuZGVmCj4+ICBMSU5VWF9QT1NUX1BBVENIX0hP
-T0tTICs9IExJTlVYX1RSWV9QQVRDSF9USU1FQ09OU1QKPj4gIAo+PiArIyBLZXJuZWxzIDYuMTIr
-IHdvbid0IGNvbXBpbGUgdGhlIGN1c3RvbSBEVFMgZmlsZXMgd2UgZHJvcCBpbnRvCj4+ICsjIGFy
-Y2gvJEFSQ0gvYm9vdC9kdHMgdW5sZXNzIHdlIGFkZCBzcGVjaWZpYyBydWxlcyB0byB0aGF0IGRp
-cmVjdG9yeSdzCj4+ICsjIE1ha2VmaWxlLgo+PiArZGVmaW5lIExJTlVYX0FERF9EVEJfTUFLRV9S
-VUxFUwo+PiArCSQoZm9yZWFjaCBkdHMsJChjYWxsIHFzdHJpcCwkKEJSMl9MSU5VWF9LRVJORUxf
-Q1VTVE9NX0RUU19QQVRIKSksIFwKPj4gKwkJZWNobyAiZHRiLXkgKz0gJChwYXRzdWJzdCAlLmR0
-cywlLmR0YiwkKG5vdGRpciAkKGR0cykpKSIgPj4gJChMSU5VWF9BUkNIX1BBVEgpL2Jvb3QvZHRz
-L01ha2VmaWxlCj4+ICsJKQo+PiArZW5kZWYKPj4gK0xJTlVYX1BPU1RfUEFUQ0hfSE9PS1MgKz0g
-TElOVVhfQUREX0RUQl9NQUtFX1JVTEVTCj4+ICtMSU5VWF9QT1NUX1JTWU5DX0hPT0tTICs9IExJ
-TlVYX0FERF9EVEJfTUFLRV9SVUxFUwo+PiArCj4+ICBMSU5VWF9LRVJORUxfQ1VTVE9NX0xPR09f
-UEFUSCA9ICQoY2FsbCBxc3RyaXAsJChCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9MT0dPX1BBVEgp
-KQo+PiAgaWZuZXEgKCQoTElOVVhfS0VSTkVMX0NVU1RPTV9MT0dPX1BBVEgpLCkKPj4gIExJTlVY
-X0RFUEVOREVOQ0lFUyArPSBob3N0LWltYWdlbWFnaWNrCj4gCj4gX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4g
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+License changes:
+New:
+  Apache 2.0:
+    vendor/github.com/Keyfactor/signserver-go-client-sdk/LICENSE
+
+  BSD 3 Clause:
+    vendor/github.com/ulikunitz/xz/LICENSE
+
+Modified:
+  BSD 3 Clause:
+    vendor/golang.org/x/sys/LICENSE:
+      Google Inc -> Google LLC
+
+  MPL-2.0:
+    vendor/github.com/hashicorp/go-retryablehttp/LICENSE:
+      Added "Copyright (c) 2015 HashiCorp, Inc."
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ package/mender-artifact/mender-artifact.hash | 11 ++++++-----
+ package/mender-artifact/mender-artifact.mk   |  5 +++--
+ 2 files changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
+index e87d52fa72..c4209f44a0 100644
+--- a/package/mender-artifact/mender-artifact.hash
++++ b/package/mender-artifact/mender-artifact.hash
+@@ -1,6 +1,6 @@
+ # Locally computed:
+-sha256  3fc2d45bedf28843f84c4b8fcc6a9592e1dc176fc91123d99a5172935d7c78a0  mender-artifact-3.11.2-go2.tar.gz
+-sha256  8c41e20f891ae04abd2d32367248eaf33e1bd2f1328789ab60b8b0d10cc414a1  LIC_FILES_CHKSUM.sha256
++sha256  fc11754f12d9104fce5b62738739d07514b4bd975f5e87d411d4e381533a2c6d  mender-artifact-4.0.0-go2.tar.gz
++sha256  d4f369175698aa60b6e0a99413663af3212dc4c539de42ee8a9cda15d4ace40f  LIC_FILES_CHKSUM.sha256
+ 
+ # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
+ # following command:
+@@ -27,14 +27,14 @@ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor
+ sha256  dd26a7abddd02e2d0aba97805b31f248ef7835d9e10da289b22e3b8ab78b324d  vendor/github.com/go-jose/go-jose/v3/json/LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/go-jose/go-jose/v3/LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/google/s2a-go/LICENSE.md
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/github.com/Keyfactor/signserver-go-client-sdk/LICENSE
+ #
+ # BSD 2 Clause licenses.
+ sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
+ #
+ # BSD 3 Clause licenses.
+ sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
+-sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
+-sha256  87640bc4df2ceb1559f268a3db1ba859ab780f7ba5b1b4545173d4680a3d918b  vendor/github.com/remyoudompheng/go-liblzma/LICENSE
++sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/sys/LICENSE
+ sha256  0d9e582ee4bff57bf1189c9e514e6da7ce277f9cd3bc2d488b22fbb39a6d87cf  vendor/github.com/klauspost/compress/LICENSE
+ sha256  75e1ca97a84a9da6051dee0114333388216f2c4a5a028296b882ff3d57274735  vendor/github.com/russross/blackfriday/v2/LICENSE.txt
+ sha256  17b5d209ba8f9684257ecfcff87df6ceda6194143a8fbd074f29727cff6f0c40  vendor/github.com/google/go-cmp/LICENSE
+@@ -51,6 +51,7 @@ sha256  b95218cd9607855a6536384c0262922b30a0c2bf56e4ced790240f3a3bac4722  vendor
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/crypto/LICENSE
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/time/LICENSE
+ sha256  f69f157b0be75da373605dbc8bbf142e8924ee82d8f44f11bcaf351335bf98cf  vendor/github.com/klauspost/compress/internal/snapref/LICENSE
++sha256  701cbcc144a7c865b072f27547e66ddbf17ac44a3bd21f71149ace02518f107c  vendor/github.com/ulikunitz/xz/LICENSE
+ #
+ # ISC licenses.
+ sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
+@@ -77,7 +78,7 @@ sha256  bef1747eda88b9ed46e94830b0d978c3499dad5dfe38d364971760881901dadd  vendor
+ sha256  bef1747eda88b9ed46e94830b0d978c3499dad5dfe38d364971760881901dadd  vendor/github.com/hashicorp/hcl/LICENSE
+ sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/github.com/hashicorp/go-cleanhttp/LICENSE
+ sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/github.com/hashicorp/go-rootcerts/LICENSE
+-sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/github.com/hashicorp/go-retryablehttp/LICENSE
++sha256  d6b1a865f1c8c697d343bd4e0ce61025f91898486a1f00d727f32e8644af77d3  vendor/github.com/hashicorp/go-retryablehttp/LICENSE
+ sha256  1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5  vendor/github.com/hashicorp/go-sockaddr/LICENSE
+ sha256  d6b1a865f1c8c697d343bd4e0ce61025f91898486a1f00d727f32e8644af77d3  vendor/github.com/hashicorp/vault/api/LICENSE
+ sha256  a830016911a348a54e89bd54f2f8b0d8fffdeac20aecfba8e36ebbf38a03f5ff  vendor/github.com/hashicorp/go-multierror/LICENSE
+diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
+index 399c194c99..4c6fa272ec 100644
+--- a/package/mender-artifact/mender-artifact.mk
++++ b/package/mender-artifact/mender-artifact.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HOST_MENDER_ARTIFACT_VERSION = 3.11.2
++HOST_MENDER_ARTIFACT_VERSION = 4.0.0
+ HOST_MENDER_ARTIFACT_SITE = $(call github,mendersoftware,mender-artifact,$(HOST_MENDER_ARTIFACT_VERSION))
+ HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, MPL-2.0
+ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
+@@ -28,10 +28,10 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
+ 	vendor/github.com/go-jose/go-jose/v3/json/LICENSE \
+ 	vendor/github.com/go-jose/go-jose/v3/LICENSE \
+ 	vendor/github.com/google/s2a-go/LICENSE.md \
++	vendor/github.com/Keyfactor/signserver-go-client-sdk/LICENSE \
+ 	vendor/github.com/pkg/errors/LICENSE \
+ 	vendor/github.com/pmezard/go-difflib/LICENSE \
+ 	vendor/golang.org/x/sys/LICENSE \
+-	vendor/github.com/remyoudompheng/go-liblzma/LICENSE \
+ 	vendor/github.com/klauspost/compress/LICENSE \
+ 	vendor/github.com/russross/blackfriday/v2/LICENSE.txt \
+ 	vendor/github.com/google/go-cmp/LICENSE \
+@@ -48,6 +48,7 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
+ 	vendor/golang.org/x/crypto/LICENSE \
+ 	vendor/golang.org/x/time/LICENSE \
+ 	vendor/github.com/klauspost/compress/internal/snapref/LICENSE \
++	vendor/github.com/ulikunitz/xz/LICENSE \
+ 	vendor/github.com/davecgh/go-spew/LICENSE \
+ 	vendor/github.com/stretchr/testify/LICENSE \
+ 	vendor/github.com/urfave/cli/LICENSE \
+-- 
+2.47.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
