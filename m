@@ -1,75 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A2A3E7718E
-	for <buildroot@archiver.kernel.org>; Thu, 26 Dec 2024 22:45:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A6C8E77188
+	for <buildroot@archiver.kernel.org>; Thu, 26 Dec 2024 22:46:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B93A607CC;
-	Thu, 26 Dec 2024 22:45:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 571CC80D69;
+	Thu, 26 Dec 2024 22:46:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G002MpiR26bE; Thu, 26 Dec 2024 22:46:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EEB980DAA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EEB980DAA;
+	Thu, 26 Dec 2024 22:46:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9615FF1B
+ for <buildroot@buildroot.org>; Thu, 26 Dec 2024 22:46:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 83AB2607B2
+ for <buildroot@buildroot.org>; Thu, 26 Dec 2024 22:46:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A2SSmwfT031x; Thu, 26 Dec 2024 22:45:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C972605D0
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C972605D0;
-	Thu, 26 Dec 2024 22:45:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8F12FF1B
- for <buildroot@buildroot.org>; Thu, 26 Dec 2024 22:45:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6F1C6402B5
- for <buildroot@buildroot.org>; Thu, 26 Dec 2024 22:45:40 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rJ3QUYDFSfgD for <buildroot@buildroot.org>;
- Thu, 26 Dec 2024 22:45:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 8Ah_6JXP4_5H for <buildroot@buildroot.org>;
+ Thu, 26 Dec 2024 22:46:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 38AB5402B9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38AB5402B9
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 38AB5402B9
- for <buildroot@buildroot.org>; Thu, 26 Dec 2024 22:45:38 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 80B22FF802;
- Thu, 26 Dec 2024 22:45:36 +0000 (UTC)
-Date: Thu, 26 Dec 2024 23:45:35 +0100
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-Message-ID: <20241226234535.7722b612@windsurf>
-In-Reply-To: <20241101105249.2198353-1-ju.o@free.fr>
-References: <20241101105249.2198353-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1735253136;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=aq53KxxUEvDY++8yY7KDsjNa97z+5vICE/wgblINQcM=;
- b=OCmNzvJmEIzHAocCcjDLDgBerIsNW703+wPAj55sCahhAXBceZWQb2sUVIh1FGBU3GIErM
- ml9F/06HZFPY5NhmE4W2d29LSRKT5ZDej1Xr/Oi14Nu5ur6HO38uku/UwY2RkFrcCx8gDV
- WhFaKlPzA9qxPLZC7oklbAXPyVJgCoc+//gs2NyZBCDS1NxFRqcRWvsETKkCANzlC5Ufe/
- C067Mj0akjii3552MrHtKRZK5vnsPZgy3BH5wxQBEt2tymIR4soL/tax5+OTmQKXqujEX2
- zDFcLR1+Ju+cw25gj8r5fZtrLFNcbqB5hQbcsfL4Rtb6cpY09Kq3JIh2FvPU2g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OCmNzvJm
-Subject: Re: [Buildroot] [PATCH 1/1] package/libnl: bump to version 3.11.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB23D605D0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB23D605D0
+ for <buildroot@buildroot.org>; Thu, 26 Dec 2024 22:46:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C247387147; Thu, 26 Dec 2024 22:46:30 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 26 Dec 2024 23:45:17 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3f37b67025dcd43f4b3e9279a87646e6a79c3aa1
+X-Git-Newrev: f17b9dd79a241c75d9e07c0b9bb61dfaf4a007ed
+X-Patchwork-Hint: ignore
+Message-Id: <20241226224630.C247387147@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnl: bump to version 3.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,28 +59,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  1 Nov 2024 11:52:49 +0100
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f17b9dd79a241c75d9e07c0b9bb61dfaf4a007ed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For the commit log, see:
-> https://github.com/thom311/libnl/commits/libnl3_11_0/
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-> Patch tested on branch master at commit 0254077 with commands:
+For the commit log, see:
+https://github.com/thom311/libnl/commits/libnl3_11_0/
 
-Applied to master, thanks.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libnl/libnl.hash | 4 ++--
+ package/libnl/libnl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libnl/libnl.hash b/package/libnl/libnl.hash
+index 77d7781493..caf75616fe 100644
+--- a/package/libnl/libnl.hash
++++ b/package/libnl/libnl.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/thom311/libnl/releases/download/libnl3_9_0/libnl-3.9.0.tar.gz.sha256sum
+-sha256  aed507004d728a5cf11eab48ca4bf9e6e1874444e33939b9d3dfed25018ee9bb  libnl-3.9.0.tar.gz
++# From https://github.com/thom311/libnl/releases/download/libnl3_11_0/libnl-3.11.0.tar.gz.sha256sum
++sha256  2a56e1edefa3e68a7c00879496736fdbf62fc94ed3232c0baba127ecfa76874d  libnl-3.11.0.tar.gz
+ # Locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 6f50fd6afc..a0441b7835 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNL_VERSION = 3.9.0
++LIBNL_VERSION = 3.11.0
+ LIBNL_SITE = https://github.com/thom311/libnl/releases/download/libnl$(subst .,_,$(LIBNL_VERSION))
+ LIBNL_LICENSE = LGPL-2.1+
+ LIBNL_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
