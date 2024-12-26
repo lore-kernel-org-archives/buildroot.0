@@ -1,72 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A0BDE77188
-	for <buildroot@archiver.kernel.org>; Thu, 26 Dec 2024 12:13:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EF7EE77188
+	for <buildroot@archiver.kernel.org>; Thu, 26 Dec 2024 15:01:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2712560782;
-	Thu, 26 Dec 2024 12:13:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A37F40649;
+	Thu, 26 Dec 2024 15:01:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dPcizcnDP11m; Thu, 26 Dec 2024 12:13:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QixyoRnAwNfO; Thu, 26 Dec 2024 15:01:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16A2A607C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 206AB40644
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 16A2A607C4;
-	Thu, 26 Dec 2024 12:13:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A7E0E757
- for <buildroot@buildroot.org>; Thu, 26 Dec 2024 12:13:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 206AB40644;
+	Thu, 26 Dec 2024 15:01:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 18841F15
+ for <buildroot@buildroot.org>; Thu, 26 Dec 2024 15:01:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 95745409B1
- for <buildroot@buildroot.org>; Thu, 26 Dec 2024 12:13:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E789480C1B
+ for <buildroot@buildroot.org>; Thu, 26 Dec 2024 15:01:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F2ae_JJRygGj for <buildroot@buildroot.org>;
- Thu, 26 Dec 2024 12:13:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 396D94094F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 396D94094F
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 396D94094F
- for <buildroot@buildroot.org>; Thu, 26 Dec 2024 12:13:28 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 44DD0B0056A;
- Thu, 26 Dec 2024 13:13:22 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Kieran Bingham <kieran.bingham@ideasonboard.com>,
- Julien Olivain <ju.o@free.fr>
-Date: Thu, 26 Dec 2024 13:13:14 +0100
-Message-ID: <20241226121314.661260-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.47.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P0E3hH-CW0cu for <buildroot@buildroot.org>;
+ Thu, 26 Dec 2024 15:01:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6846080C0D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6846080C0D
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6846080C0D
+ for <buildroot@buildroot.org>; Thu, 26 Dec 2024 15:01:50 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DCBADFF808;
+ Thu, 26 Dec 2024 15:01:47 +0000 (UTC)
+Date: Thu, 26 Dec 2024 16:01:46 +0100
+To: "Thomas Bonnefille" <thomas.bonnefille@bootlin.com>
+Cc: "Thomas Bonnefille via buildroot" <buildroot@buildroot.org>,
+ =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>, "Mahyar
+ Koshkouei" <mahyar.koshkouei@gmail.com>, "Eric Le Bihan"
+ <eric.le.bihan.dev@free.fr>
+Message-ID: <20241226160146.3a93f3c8@windsurf>
+In-Reply-To: <D6IFV7MLF3EN.2NH20DP0JW6F@bootlin.com>
+References: <20241221-fix_mpv-v1-1-d7ba39606571@bootlin.com>
+ <20241222161820.7c8b1081@windsurf>
+ <D6IFV7MLF3EN.2NH20DP0JW6F@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1735215205;
- bh=YlvmZtKFmuf0ppfxH8UhKBj23BUP81RX7ny1ee/03gE=;
- h=From:To:Cc:Subject:Date:From;
- b=bfJPaOuXc46nZS+xLvL7icwF6LBYIHUs5MGQLiIWMW0nLG6ZcGS0YBy+t/gO1p5DB
- F9Q+qDNvH2p1Iz0Ohg3ZWuywdtY+2/vMwoXjsl4oUgzH8qtmWxnyKcOmi3EytvPx15
- mO5uZvLrWHeZKICjgV2GBrV4c20uorxOEmSf/xeuf3l7IBN46jRNcaSn57Wfgyiz5Z
- Jw2f9Z4jSW0Lize+UJsYJR9kUDNaJsain7Zkpmt8YMpdJKUo4EF/ABaog6A45CtRco
- vt2Ii/XwT7NYBsAsvNqZdWZVdQ4Mk9k7iIuNA5m82cNOjc46h29a3zHaUSbZAFgcyf
- Si083KD0BQhnw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=bfJPaOuX
-Subject: [Buildroot] [PATCH 1/1] package/libcamera: bump to version 0.4.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1735225308;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=GmkzM4ErZ2EAyMGOCVs3kaJyRZF+gk48ys17YW6l2D8=;
+ b=LM+cU0BTgv//T1575ppYnMx4lLLYbNdZb0RZWsczdqpuO7hQmtGNFz+QuKl7ABcKxJBhoU
+ 5dNIDbBVINtuEqClfG6BnHTfmpqhba3ModInkfp4ZGcPphsynqqD+UCEqyGVoRDvokYUiu
+ N9EW3pg52xikAthnPvsEY4qoIWk8sVxJKx98+pxlsAk60Mwt7QE1N0++1JpZgTFZ1TjkdY
+ aZv+T6Mo0DsWvyG1fMZ9H/dB+HyK/LwJqLtVLv7mWPdcCRj4M2gnSUcFHeDhY1acQ+NWrZ
+ KNGDFl3I4k2dnuUHg1cVQnTfQDb4AUWFxaqgd09I63Dj4CX7dV5Xp0uvoWkjDA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LM+cU0BT
+Subject: Re: [Buildroot] [PATCH] package/mpv: use meson instead of waf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,105 +86,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since 0.3.2, see:
-https://git.libcamera.org/libcamera/libcamera.git/tag/?h=v0.4.0
+Hello Thomas,
 
-libcamera dropped the gcc 8 support in [1] and increased the minimal
-version to 9. This commit updates that requirement in the package
-Config.in and in reverse dependency (in libcamera-apps).
+On Sun, 22 Dec 2024 19:25:42 +0100
+"Thomas Bonnefille" <thomas.bonnefille@bootlin.com> wrote:
 
-This commit also updates the libcamera runtime test to the new format
-of the "cam --list-properties" output.
+> I don't have an in depth analysis of the problem however, what I can say
+> is that the error appeared with commit
+> fd5623150dcc23441c4f0bd586378daeb91d66ea which bump waf from v2.0.26
+> (August 2023) to v2.1.1 (July 2024).
 
-[1] https://git.libcamera.org/libcamera/libcamera.git/commit/?id=9f513439b6896d1a33c91a400bd02b7b8829feb6
+This is already a very good analysis: we know what broke the build, and
+therefore since when it was broken.
 
-Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested in:
-compilation: https://gitlab.com/jolivain/buildroot/-/pipelines/1603076681
-runtime: https://gitlab.com/jolivain/buildroot/-/jobs/8725706819
+> I would think that waf isn't backward compatible and as the mpv version
+> we're currently using is pretty old (November 2022), it broke with the
+> new Waf version.
 
-Compilation also tested with pipewire and libcamera-apps.
----
- package/libcamera-apps/Config.in                | 2 +-
- package/libcamera/Config.in                     | 2 +-
- package/libcamera/libcamera.hash                | 2 +-
- package/libcamera/libcamera.mk                  | 2 +-
- support/testing/tests/package/test_libcamera.py | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+Seems totally possible indeed.
 
-diff --git a/package/libcamera-apps/Config.in b/package/libcamera-apps/Config.in
-index f169d8c52e..fa41d1be2d 100644
---- a/package/libcamera-apps/Config.in
-+++ b/package/libcamera-apps/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS # libcamera
- 	depends on BR2_INSTALL_LIBSTDCPP # libcamera/boost
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libcamera/boost
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libcamera
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # libcamera
- 	depends on !BR2_STATIC_LIBS # gnutls/libcamera
- 	depends on BR2_USE_WCHAR # gnutls/libcamera/boost
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
-diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
-index 4699e382c7..1df97edc41 100644
---- a/package/libcamera/Config.in
-+++ b/package/libcamera/Config.in
-@@ -9,7 +9,7 @@ menuconfig BR2_PACKAGE_LIBCAMERA
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 	depends on !BR2_STATIC_LIBS # gnutls
- 	depends on BR2_USE_WCHAR # gnutls
- 	select BR2_PACKAGE_GNUTLS
-diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
-index d4554af190..8c845d0e21 100644
---- a/package/libcamera/libcamera.hash
-+++ b/package/libcamera/libcamera.hash
-@@ -1,4 +1,4 @@
--sha256  d396bebe49aa7f605403594be3a9e970173d4c98061033c75f816946ff907eb8  libcamera-v0.3.2-git4.tar.gz
-+sha256  0b45861dc0430074bf10aaa78a69439b319e9df4ed041496fd5f95e546c8f575  libcamera-v0.4.0-git4.tar.gz
+And therefore, here is a more minimal fix:
+
+diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
+index a09015619d..44f2665a70 100644
+--- a/package/mpv/mpv.hash
++++ b/package/mpv/mpv.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+ sha256  41df981b7b84e33a2ef4478aaf81d6f4f5c8b9cd2c0d337ac142fc20b387d1a9  mpv-0.35.1.tar.gz
++sha256  dcec3e179f9c33a66544f1b3d7d91f20f6373530510fa6a858cddb6bfdcde14b  waf-2.0.26
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index cf37091186..70283df274 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -6,6 +6,9 @@
  
- # license files
- sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 3367eb60b2..dcfa54e5dd 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ MPV_VERSION = 0.35.1
+ MPV_SITE = $(call github,mpv-player,mpv,v$(MPV_VERSION))
++# The waf version from package/waf is too recent, so we download our
++# own
++MPV_EXTRA_DOWNLOADS = https://waf.io/waf-2.0.26
+ MPV_DEPENDENCIES = \
+ 	host-pkgconf ffmpeg libass zlib \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+@@ -14,7 +17,10 @@ MPV_LICENSE_FILES = LICENSE.GPL
+ MPV_CPE_ID_VENDOR = mpv
+ MPV_INSTALL_STAGING = YES
  
- LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
--LIBCAMERA_VERSION = v0.3.2
-+LIBCAMERA_VERSION = v0.4.0
- LIBCAMERA_SITE_METHOD = git
- LIBCAMERA_DEPENDENCIES = \
- 	host-openssl \
-diff --git a/support/testing/tests/package/test_libcamera.py b/support/testing/tests/package/test_libcamera.py
-index 8953021b82..91df427b6f 100644
---- a/support/testing/tests/package/test_libcamera.py
-+++ b/support/testing/tests/package/test_libcamera.py
-@@ -64,7 +64,7 @@ class TestLibCamera(infra.basetest.BRTest):
-         cmd = f"cam --camera {cam_idx} --list-controls"
-         out, ret = self.emulator.run(cmd)
-         self.assertEqual(ret, 0)
--        self.assertIn("Control: Brightness:", "\n".join(out))
-+        self.assertIn("Control: [inout] libcamera::Brightness:", "\n".join(out))
+-MPV_NEEDS_EXTERNAL_WAF = YES
++define MPV_INSTALL_WAF
++	$(INSTALL) -D -m 0755 $(MPV_DL_DIR)/waf-2.0.26 $(@D)/waf
++endef
++MPV_POST_PATCH_HOOKS += MPV_INSTALL_WAF
  
-         # List the camera properties and check we have a camera
-         # "Model" property.
+ # Some of these options need testing and/or tweaks
+ MPV_CONF_OPTS = \
+
+The idea is to have mpv download its own version of waf.
+
+However, now that we understand that the issue was introduced by commit
+fd5623150dcc23441c4f0bd586378daeb91d66ea, which got merged in 2024.08,
+we know we don't need to backport the fix to our LTS branch. Therefore,
+having a more "invasive" fix such as the one you proposed is acceptable.
+
+> > Indeed, we want to know if we want to backport the fix to our stable
+> > 2024.02.x branch or not.   
+> 
+> I think that, as far as the waf version get still stuck on
+> v2.0.26, the mpv package will not break (at least not this way).
+
+Right.
+
+> Can you develop ? I'm not sure what kind of regression can be introduced
+> ?
+> I don't know if it answers the question but the meson build system has
+> been added to mpv with "waf-compatibility" in mind and so all the
+> options were translated from waf to meson. [1]
+
+When you switch to one build system (waf) to another (meson), there is
+a fairly high chance that the way dependencies are detected is going to
+be slightly different, causing some subtle differences in behavior.
+After all, all the dependency detection logic and all the build logic
+is completely changed. We have regularly seen regressions when switch
+from build system A to build system B. Of course, it doesn't mean it
+shouldn't be done, but it means that considering such a switch as a fix
+for our LTS branch is clearly not good.
+
+But again, as the issue was introduced only in 2024.08, I think your
+proposal to switch to meson-package is fine.
+
+> I don't know why they get rid of waf but it was first deprecated and
+> then remove in favor of meson, so I thought this was a mandatory step to
+> operate this switch in Buildroot.
+
+Oh, yes definitely the only solution moving forward is to switch to
+meson. But as I've explained above: what we do moving forward (which
+can be invasive) may need to be different than what we do more
+conservatively in our LTS branch.
+
+In addition to this migration to meson, what about bumping to a newer
+version of mpv? Of course, in a separate commit.
+
+Thanks!
+
+Thomas
 -- 
-2.47.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
