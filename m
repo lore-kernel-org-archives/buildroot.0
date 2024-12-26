@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AECEE77188
-	for <buildroot@archiver.kernel.org>; Thu, 26 Dec 2024 22:20:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 607CEE77188
+	for <buildroot@archiver.kernel.org>; Thu, 26 Dec 2024 22:44:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FC4B607AF;
-	Thu, 26 Dec 2024 22:20:50 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zlC5mwwuy_Xo; Thu, 26 Dec 2024 22:20:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CE09607A9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CE09607A9;
-	Thu, 26 Dec 2024 22:20:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2763EF1B
- for <buildroot@buildroot.org>; Thu, 26 Dec 2024 22:20:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D60880C7D
- for <buildroot@buildroot.org>; Thu, 26 Dec 2024 22:20:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E3F7E80DAA;
+	Thu, 26 Dec 2024 22:44:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fPHhDQhRQ7dz for <buildroot@buildroot.org>;
- Thu, 26 Dec 2024 22:20:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id ifao04hDiFoD; Thu, 26 Dec 2024 22:44:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE97980DB2
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE97980DB2;
+	Thu, 26 Dec 2024 22:44:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 40098E0
+ for <buildroot@buildroot.org>; Thu, 26 Dec 2024 22:44:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 097494012D
+ for <buildroot@buildroot.org>; Thu, 26 Dec 2024 22:44:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5vWQ3eqSAiSF for <buildroot@buildroot.org>;
+ Thu, 26 Dec 2024 22:44:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 051E180C75
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 051E180C75
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 051E180C75
- for <buildroot@buildroot.org>; Thu, 26 Dec 2024 22:20:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5590A60004;
- Thu, 26 Dec 2024 22:20:44 +0000 (UTC)
-Date: Thu, 26 Dec 2024 23:20:43 +0100
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-Message-ID: <20241226232043.3e222abc@windsurf>
-In-Reply-To: <42c2a4da95f981e2a32af74502c4673b@free.fr>
-References: <20241226201920.2233441-1-thomas.petazzoni@bootlin.com>
- <42c2a4da95f981e2a32af74502c4673b@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1735251644;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=iZQtEzd5pPSVoQ/pqfuozYGiZQxBYUxntXcBRyLuloE=;
- b=lEiGVKLz0LPotjj6meuh+smMZOMOY28naO0LWlrjz8S5fLWFj63fjaFZYYNCQfUgHPkE8x
- 4FuYMkFIQIKPBmOV1IbTv+xXqma0f2/YLoQyoogbaJFUja/HD+TD/t//0ZrqqtGDpnndqa
- 2KXfYlNl5zByhn8ZezQhrmY3WUHGwkYfOT0Y0HWH8kOZ2d9b7JFnq0/ONHmgccHmxAodgX
- R3ZNOz1ixIil6DUV0qPDMciitKE1ybeztmKbUbPjvtpT6IxHeo/OMZGlm6Z+upZQ5oopPE
- /4dUI+PFrLrstnNvbsguhTS7xRQfRpMXHsbCMP2Vryonne2DWHH031o8yE36tQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lEiGVKLz
-Subject: Re: [Buildroot] [PATCH] package/log4cxx: bump to version 1.3.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3D39400E7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B3D39400E7
+ for <buildroot@buildroot.org>; Thu, 26 Dec 2024 22:44:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AAAFD874ED; Thu, 26 Dec 2024 22:44:49 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Thu, 26 Dec 2024 23:18:48 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b3ddad3d5199fe2443b20a562aac41fa1fc70529
+X-Git-Newrev: 3f37b67025dcd43f4b3e9279a87646e6a79c3aa1
+X-Patchwork-Hint: ignore
+Message-Id: <20241226224449.AAAFD874ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cifs-utils: bump to version 7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,44 +58,150 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============2235297667908480901=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Julien,
+--===============2235297667908480901==
+Content-Type: text/plain
 
-On Thu, 26 Dec 2024 22:45:28 +0100
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3f37b67025dcd43f4b3e9279a87646e6a79c3aa1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This bump seems to introduce a build failure, detected by
-> "utils/test-pkg -a -p log4cxx". In my Gitlab CI:
-> 
-> Without the bump (log4cxx-1.1.0), see:
-> https://gitlab.com/jolivain/buildroot/-/pipelines/1603545610
-> 
-> With the bump (log4cxx-1.3.1), see:
-> https://gitlab.com/jolivain/buildroot/-/pipelines/1603537890
-> 
-> The failure is with the br-powerpc-603e-basic-cpp toolchain and
-> seems to be related with wchar support:
-> https://gitlab.com/jolivain/buildroot/-/jobs/8728007916
-> 
-> Can you have a look, please?
+From https://wiki.samba.org/index.php/LinuxCIFS_utils:
 
-Thanks for having spotted this issue. I investigated, and I'm doing a
-test-pkg test to verify. I'll send a v2 once it's ready.
+- October, 2024: Release 7.1
+  LDAP Ping capability
+  smbinfo adds gettconinfo command
+  Various improvements to man pages
+  https://lists.samba.org/archive/samba-technical/2024-October/139146.html
+- August, 2022: Release 7.0
+  Add GSS-Proxy support
+  https://lists.samba.org/archive/samba-technical/2022-August/137528.html
 
-Again, thanks!
+Note: 7.0 was the release immediately after the 6.15 currently in
+Buildroot.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+One notable change is that this version 7.1 makes libtalloc a
+mandatory dependency. Also, a small patch, submitted upstream, is
+added to fix the build with musl due to a missing header include.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...ap_ping.c-add-missing-sys-types.h-include.patch | 38 ++++++++++++++++++++++
+ package/cifs-utils/Config.in                       |  8 ++++-
+ package/cifs-utils/cifs-utils.hash                 |  2 +-
+ package/cifs-utils/cifs-utils.mk                   |  4 +--
+ 4 files changed, 48 insertions(+), 4 deletions(-)
+
+diff --git a/package/cifs-utils/0001-cldap_ping.c-add-missing-sys-types.h-include.patch b/package/cifs-utils/0001-cldap_ping.c-add-missing-sys-types.h-include.patch
+new file mode 100644
+index 0000000000..bf7864e01a
+--- /dev/null
++++ b/package/cifs-utils/0001-cldap_ping.c-add-missing-sys-types.h-include.patch
+@@ -0,0 +1,38 @@
++From 62297e906149f9d2ca7b187a60f7c5ab99ef5dd5 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Thu, 26 Dec 2024 21:39:05 +0100
++Subject: [PATCH] cldap_ping.c: add missing <sys/types.h> include
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes:
++
++cldap_ping.c: In function ‘read_dns_string’:
++cldap_ping.c:72:37: error: ‘u_char’ undeclared (first use in this function)
++
++when building with the musl C library, but even with glibc u_char is
++defined in <sys/types.h>, it happens to work with glibc <sys/types.h>
++gets included by another header.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream: https://lore.kernel.org/linux-cifs/20241226204235.2311371-1-thomas.petazzoni@bootlin.com/
++---
++ cldap_ping.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/cldap_ping.c b/cldap_ping.c
++index 9183b27..a603be3 100644
++--- a/cldap_ping.c
+++++ b/cldap_ping.c
++@@ -20,6 +20,7 @@
++ #include <talloc.h>
++ #include <string.h>
++ #include <sys/socket.h>
+++#include <sys/types.h>
++ #include <arpa/inet.h>
++ #include <unistd.h>
++ #include <resolv.h>
++-- 
++2.47.0
++
+diff --git a/package/cifs-utils/Config.in b/package/cifs-utils/Config.in
+index d1b1406a3e..6813e3637d 100644
+--- a/package/cifs-utils/Config.in
++++ b/package/cifs-utils/Config.in
+@@ -1,7 +1,13 @@
++comment "cifs-utils needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_CIFS_UTILS
+ 	bool "cifs-utils"
+-	# uses fork()
++	# uses fork(), libtalloc
+ 	depends on BR2_USE_MMU
++	depends on !BR2_STATIC_LIBS # libtalloc
++	select BR2_PACKAGE_LIBTALLOC
+ 	help
+ 	  The in-kernel CIFS filesystem is generally the preferred
+ 	  method for mounting SMB/CIFS shares on Linux. The in-kernel
+diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
+index ec6ea55961..942f8aaa39 100644
+--- a/package/cifs-utils/cifs-utils.hash
++++ b/package/cifs-utils/cifs-utils.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  a7b6940e93250c1676a6fa66b6ead91b78cd43a5fee99cc462459c8b9cf1e6f4  cifs-utils-6.15.tar.bz2
++sha256  a21123f76a4a6a36c9653189ba4918ebdf3cfcd3f9092730a47ff3450b5b5b2a  cifs-utils-7.1.tar.bz2
+ 
+ # Hash for license file:
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index edf08d4b4d..e8eefde275 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CIFS_UTILS_VERSION = 6.15
++CIFS_UTILS_VERSION = 7.1
+ CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPL-3.0+
+@@ -12,7 +12,7 @@ CIFS_UTILS_LICENSE_FILES = COPYING
+ CIFS_UTILS_CPE_ID_VENDOR = samba
+ # Missing install-sh in release tarball
+ CIFS_UTILS_AUTORECONF = YES
+-CIFS_UTILS_DEPENDENCIES = host-pkgconf
++CIFS_UTILS_DEPENDENCIES = host-pkgconf libtalloc
+ 
+ # Let's disable PIE unconditionally. We want PIE to be enabled only by
+ # the global BR2_RELRO_FULL option.
+
+--===============2235297667908480901==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2235297667908480901==--
