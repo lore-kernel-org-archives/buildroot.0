@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B137E77188
-	for <buildroot@archiver.kernel.org>; Thu, 26 Dec 2024 20:56:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46627E77188
+	for <buildroot@archiver.kernel.org>; Thu, 26 Dec 2024 21:11:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB32B80DBA;
-	Thu, 26 Dec 2024 20:56:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XBNvvCGOxc0J; Thu, 26 Dec 2024 20:56:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BF9280DBF
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9BF9280DBF;
-	Thu, 26 Dec 2024 20:56:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 33A7EF1B
- for <buildroot@buildroot.org>; Thu, 26 Dec 2024 20:56:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 03CB8404A6
- for <buildroot@buildroot.org>; Thu, 26 Dec 2024 20:56:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D19F3401F6;
+	Thu, 26 Dec 2024 21:11:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PT_PW91ejkED for <buildroot@buildroot.org>;
- Thu, 26 Dec 2024 20:56:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id NpQGcfpXOomG; Thu, 26 Dec 2024 21:11:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D4484021C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D4484021C;
+	Thu, 26 Dec 2024 21:11:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 60251F1B
+ for <buildroot@buildroot.org>; Thu, 26 Dec 2024 21:11:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 40C80607A3
+ for <buildroot@buildroot.org>; Thu, 26 Dec 2024 21:11:49 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kfm3WD3g8893 for <buildroot@buildroot.org>;
+ Thu, 26 Dec 2024 21:11:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 49715404A4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49715404A4
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 49715404A4
- for <buildroot@buildroot.org>; Thu, 26 Dec 2024 20:56:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 9714B1BF203;
- Thu, 26 Dec 2024 20:56:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BBE7A605EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBE7A605EA
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BBE7A605EA
+ for <buildroot@buildroot.org>; Thu, 26 Dec 2024 21:11:47 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 8B7D5E0003;
+ Thu, 26 Dec 2024 21:11:44 +0000 (UTC)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Dec 2024 21:56:20 +0100
-Message-ID: <20241226205621.2398077-1-thomas.petazzoni@bootlin.com>
+Date: Thu, 26 Dec 2024 22:11:42 +0100
+Message-ID: <20241226211143.2507882-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1735246582;
+ d=bootlin.com; s=gm1; t=1735247504;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding;
- bh=VB0XS+AJyTilqD8tmwj7juTZ3s/cZrCJNZEpdmRCd1M=;
- b=mpYyrjRDsBBcWSFvs4BA41x+uKkNI2hHt4TgvZnhnvsHL4Jch+7d2OFhHPoNqS5IyUGFym
- I1aETXoAidXY1Ni54i9vnxIjNNCnxkqJqSpI/oZ7ineCYQrZ8hZMnTbLtyzy52eYyATZ3x
- iygW6hl/BGqLeUxV1hxzz8FM8qfTJm5UnLxhJDoY/p3iYHk8MQJeeIafqbKoR4i34zY1Id
- lSYi01TN/3QjkT0Jb2WBAD3U33s73Jcwzdc9n5QspOJXr/XE2ZHHrFNDKPheag2u4k0KPC
- phRz7UGr2TDbKsatceGsVszbMEMBBsI2LJHN9m0ks6ldMsOikf8XoIp+VlrsUw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=4diOqBdqdpFKXJDqAGB5R3H60tel+qGBDfsleVrmFow=;
+ b=X8jsdj+t0PZBGtmMhElJeBws5svr1UYDWKWkd6inL8tEem44nGZXvyzB8rrx8h7aab/mD5
+ oh2bQfEID66DFw6TMViedq8jMQS8iCebBR6/XKXHblsddhGFreoA+y02UNQzv2yWSe3wg4
+ 4+6oDNkPL+uXzXYGM4Rxur/1AwHizmxy4R5jBazv36R90CigN0weLfkLfySgZFJ3CE34Rg
+ 5R6RPMG3jIzDI3akJf4TDkeG5e5d+eV9zCKnETifT/kJIJGRyJmm5rEmtYMot0pvlULoIo
+ ubNSKdFIC8ILhSOY8fGa5N1ItGAq/UWT7IuIxan3eTDgAc9N1LDflT9JArsEZA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=mpYyrjRD
-Subject: [Buildroot] [PATCH] package/cifs-utils: bump to version 7.1
+ header.s=gm1 header.b=X8jsdj+t
+Subject: [Buildroot] [PATCH] package/cloop: bump to 3.14.1.3+nmu1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,94 +79,86 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJvbSBodHRwczovL3dpa2kuc2FtYmEub3JnL2luZGV4LnBocC9MaW51eENJRlNfdXRpbHM6Cgot
-IE9jdG9iZXIsIDIwMjQ6IFJlbGVhc2UgNy4xCiAgTERBUCBQaW5nIGNhcGFiaWxpdHkKICBzbWJp
-bmZvIGFkZHMgZ2V0dGNvbmluZm8gY29tbWFuZAogIFZhcmlvdXMgaW1wcm92ZW1lbnRzIHRvIG1h
-biBwYWdlcwogIGh0dHBzOi8vbGlzdHMuc2FtYmEub3JnL2FyY2hpdmUvc2FtYmEtdGVjaG5pY2Fs
-LzIwMjQtT2N0b2Jlci8xMzkxNDYuaHRtbAotIEF1Z3VzdCwgMjAyMjogUmVsZWFzZSA3LjAKICBB
-ZGQgR1NTLVByb3h5IHN1cHBvcnQKICBodHRwczovL2xpc3RzLnNhbWJhLm9yZy9hcmNoaXZlL3Nh
-bWJhLXRlY2huaWNhbC8yMDIyLUF1Z3VzdC8xMzc1MjguaHRtbAoKTm90ZTogNy4wIHdhcyB0aGUg
-cmVsZWFzZSBpbW1lZGlhdGVseSBhZnRlciB0aGUgNi4xNSBjdXJyZW50bHkgaW4KQnVpbGRyb290
-LgoKT25lIG5vdGFibGUgY2hhbmdlIGlzIHRoYXQgdGhpcyB2ZXJzaW9uIDcuMSBtYWtlcyBsaWJ0
-YWxsb2MgYQptYW5kYXRvcnkgZGVwZW5kZW5jeS4gQWxzbywgYSBzbWFsbCBwYXRjaCwgc3VibWl0
-dGVkIHVwc3RyZWFtLCBpcwphZGRlZCB0byBmaXggdGhlIGJ1aWxkIHdpdGggbXVzbCBkdWUgdG8g
-YSBtaXNzaW5nIGhlYWRlciBpbmNsdWRlLgoKU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBldGF6em9u
-aSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4KLS0tCiAuLi5uZy5jLWFkZC1taXNzaW5n
-LXN5cy10eXBlcy5oLWluY2x1ZGUucGF0Y2ggfCAzOCArKysrKysrKysrKysrKysrKysrCiBwYWNr
-YWdlL2NpZnMtdXRpbHMvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgfCAgOCArKystCiBwYWNr
-YWdlL2NpZnMtdXRpbHMvY2lmcy11dGlscy5oYXNoICAgICAgICAgICAgfCAgMiArLQogcGFja2Fn
-ZS9jaWZzLXV0aWxzL2NpZnMtdXRpbHMubWsgICAgICAgICAgICAgIHwgIDQgKy0KIDQgZmlsZXMg
-Y2hhbmdlZCwgNDggaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKIGNyZWF0ZSBtb2RlIDEw
-MDY0NCBwYWNrYWdlL2NpZnMtdXRpbHMvMDAwMS1jbGRhcF9waW5nLmMtYWRkLW1pc3Npbmctc3lz
-LXR5cGVzLmgtaW5jbHVkZS5wYXRjaAoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvY2lmcy11dGlscy8w
-MDAxLWNsZGFwX3BpbmcuYy1hZGQtbWlzc2luZy1zeXMtdHlwZXMuaC1pbmNsdWRlLnBhdGNoIGIv
-cGFja2FnZS9jaWZzLXV0aWxzLzAwMDEtY2xkYXBfcGluZy5jLWFkZC1taXNzaW5nLXN5cy10eXBl
-cy5oLWluY2x1ZGUucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4u
-YmY3ODY0ZTAxYQotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvY2lmcy11dGlscy8wMDAxLWNs
-ZGFwX3BpbmcuYy1hZGQtbWlzc2luZy1zeXMtdHlwZXMuaC1pbmNsdWRlLnBhdGNoCkBAIC0wLDAg
-KzEsMzggQEAKK0Zyb20gNjIyOTdlOTA2MTQ5ZjlkMmNhN2IxODdhNjBmN2M1YWI5OWVmNWRkNSBN
-b24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKK0Zyb206IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5w
-ZXRhenpvbmlAYm9vdGxpbi5jb20+CitEYXRlOiBUaHUsIDI2IERlYyAyMDI0IDIxOjM5OjA1ICsw
-MTAwCitTdWJqZWN0OiBbUEFUQ0hdIGNsZGFwX3BpbmcuYzogYWRkIG1pc3NpbmcgPHN5cy90eXBl
-cy5oPiBpbmNsdWRlCitNSU1FLVZlcnNpb246IDEuMAorQ29udGVudC1UeXBlOiB0ZXh0L3BsYWlu
-OyBjaGFyc2V0PVVURi04CitDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0CisKK0ZpeGVz
-OgorCitjbGRhcF9waW5nLmM6IEluIGZ1bmN0aW9uIOKAmHJlYWRfZG5zX3N0cmluZ+KAmToKK2Ns
-ZGFwX3BpbmcuYzo3MjozNzogZXJyb3I6IOKAmHVfY2hhcuKAmSB1bmRlY2xhcmVkIChmaXJzdCB1
-c2UgaW4gdGhpcyBmdW5jdGlvbikKKword2hlbiBidWlsZGluZyB3aXRoIHRoZSBtdXNsIEMgbGli
-cmFyeSwgYnV0IGV2ZW4gd2l0aCBnbGliYyB1X2NoYXIgaXMKK2RlZmluZWQgaW4gPHN5cy90eXBl
-cy5oPiwgaXQgaGFwcGVucyB0byB3b3JrIHdpdGggZ2xpYmMgPHN5cy90eXBlcy5oPgorZ2V0cyBp
-bmNsdWRlZCBieSBhbm90aGVyIGhlYWRlci4KKworU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBldGF6
-em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4KK1Vwc3RyZWFtOiBodHRwczovL2xv
-cmUua2VybmVsLm9yZy9saW51eC1jaWZzLzIwMjQxMjI2MjA0MjM1LjIzMTEzNzEtMS10aG9tYXMu
-cGV0YXp6b25pQGJvb3RsaW4uY29tLworLS0tCisgY2xkYXBfcGluZy5jIHwgMSArCisgMSBmaWxl
-IGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCisKK2RpZmYgLS1naXQgYS9jbGRhcF9waW5nLmMgYi9j
-bGRhcF9waW5nLmMKK2luZGV4IDkxODNiMjcuLmE2MDNiZTMgMTAwNjQ0CistLS0gYS9jbGRhcF9w
-aW5nLmMKKysrKyBiL2NsZGFwX3BpbmcuYworQEAgLTIwLDYgKzIwLDcgQEAKKyAjaW5jbHVkZSA8
-dGFsbG9jLmg+CisgI2luY2x1ZGUgPHN0cmluZy5oPgorICNpbmNsdWRlIDxzeXMvc29ja2V0Lmg+
-CisrI2luY2x1ZGUgPHN5cy90eXBlcy5oPgorICNpbmNsdWRlIDxhcnBhL2luZXQuaD4KKyAjaW5j
-bHVkZSA8dW5pc3RkLmg+CisgI2luY2x1ZGUgPHJlc29sdi5oPgorLS0gCisyLjQ3LjAKKwpkaWZm
-IC0tZ2l0IGEvcGFja2FnZS9jaWZzLXV0aWxzL0NvbmZpZy5pbiBiL3BhY2thZ2UvY2lmcy11dGls
-cy9Db25maWcuaW4KaW5kZXggZDFiMTQwNmEzZS4uNjgxM2UzNjM3ZCAxMDA2NDQKLS0tIGEvcGFj
-a2FnZS9jaWZzLXV0aWxzL0NvbmZpZy5pbgorKysgYi9wYWNrYWdlL2NpZnMtdXRpbHMvQ29uZmln
-LmluCkBAIC0xLDcgKzEsMTMgQEAKK2NvbW1lbnQgImNpZnMtdXRpbHMgbmVlZHMgYSB0b29sY2hh
-aW4gdy8gZHluYW1pYyBsaWJyYXJ5IgorCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUKKwlkZXBlbmRz
-IG9uIEJSMl9TVEFUSUNfTElCUworCiBjb25maWcgQlIyX1BBQ0tBR0VfQ0lGU19VVElMUwogCWJv
-b2wgImNpZnMtdXRpbHMiCi0JIyB1c2VzIGZvcmsoKQorCSMgdXNlcyBmb3JrKCksIGxpYnRhbGxv
-YwogCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUKKwlkZXBlbmRzIG9uICFCUjJfU1RBVElDX0xJQlMg
-IyBsaWJ0YWxsb2MKKwlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCVEFMTE9DCiAJaGVscAogCSAgVGhl
-IGluLWtlcm5lbCBDSUZTIGZpbGVzeXN0ZW0gaXMgZ2VuZXJhbGx5IHRoZSBwcmVmZXJyZWQKIAkg
-IG1ldGhvZCBmb3IgbW91bnRpbmcgU01CL0NJRlMgc2hhcmVzIG9uIExpbnV4LiBUaGUgaW4ta2Vy
-bmVsCmRpZmYgLS1naXQgYS9wYWNrYWdlL2NpZnMtdXRpbHMvY2lmcy11dGlscy5oYXNoIGIvcGFj
-a2FnZS9jaWZzLXV0aWxzL2NpZnMtdXRpbHMuaGFzaAppbmRleCBlYzZlYTU1OTYxLi45NDJmOGFh
-YTM5IDEwMDY0NAotLS0gYS9wYWNrYWdlL2NpZnMtdXRpbHMvY2lmcy11dGlscy5oYXNoCisrKyBi
-L3BhY2thZ2UvY2lmcy11dGlscy9jaWZzLXV0aWxzLmhhc2gKQEAgLTEsNSArMSw1IEBACiAjIExv
-Y2FsbHkgY2FsY3VsYXRlZCBhZnRlciBjaGVja2luZyBwZ3Agc2lnbmF0dXJlCi1zaGEyNTYgIGE3
-YjY5NDBlOTMyNTBjMTY3NmE2ZmE2NmI2ZWFkOTFiNzhjZDQzYTVmZWU5OWNjNDYyNDU5YzhiOWNm
-MWU2ZjQgIGNpZnMtdXRpbHMtNi4xNS50YXIuYnoyCitzaGEyNTYgIGEyMTEyM2Y3NmE0YTZhMzZj
-OTY1MzE4OWJhNDkxOGViZGYzY2ZjZDNmOTA5MjczMGE0N2ZmMzQ1MGI1YjViMmEgIGNpZnMtdXRp
-bHMtNy4xLnRhci5iejIKIAogIyBIYXNoIGZvciBsaWNlbnNlIGZpbGU6CiBzaGEyNTYgIDhjZWI0
-YjllZTVhZGVkZGU0N2IzMWU5NzVjMWQ5MGM3M2FkMjdiNmIxNjVhMWRjZDgwYzdjNTQ1ZWI2NWI5
-MDMgIENPUFlJTkcKZGlmZiAtLWdpdCBhL3BhY2thZ2UvY2lmcy11dGlscy9jaWZzLXV0aWxzLm1r
-IGIvcGFja2FnZS9jaWZzLXV0aWxzL2NpZnMtdXRpbHMubWsKaW5kZXggZWRmMDhkNGI0ZC4uZThl
-ZWZkZTI3NSAxMDA2NDQKLS0tIGEvcGFja2FnZS9jaWZzLXV0aWxzL2NpZnMtdXRpbHMubWsKKysr
-IGIvcGFja2FnZS9jaWZzLXV0aWxzL2NpZnMtdXRpbHMubWsKQEAgLTQsNyArNCw3IEBACiAjCiAj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCi1DSUZTX1VUSUxTX1ZFUlNJT04gPSA2LjE1CitDSUZT
-X1VUSUxTX1ZFUlNJT04gPSA3LjEKIENJRlNfVVRJTFNfU09VUkNFID0gY2lmcy11dGlscy0kKENJ
-RlNfVVRJTFNfVkVSU0lPTikudGFyLmJ6MgogQ0lGU19VVElMU19TSVRFID0gaHR0cDovL2Z0cC5z
-YW1iYS5vcmcvcHViL2xpbnV4LWNpZnMvY2lmcy11dGlscwogQ0lGU19VVElMU19MSUNFTlNFID0g
-R1BMLTMuMCsKQEAgLTEyLDcgKzEyLDcgQEAgQ0lGU19VVElMU19MSUNFTlNFX0ZJTEVTID0gQ09Q
-WUlORwogQ0lGU19VVElMU19DUEVfSURfVkVORE9SID0gc2FtYmEKICMgTWlzc2luZyBpbnN0YWxs
-LXNoIGluIHJlbGVhc2UgdGFyYmFsbAogQ0lGU19VVElMU19BVVRPUkVDT05GID0gWUVTCi1DSUZT
-X1VUSUxTX0RFUEVOREVOQ0lFUyA9IGhvc3QtcGtnY29uZgorQ0lGU19VVElMU19ERVBFTkRFTkNJ
-RVMgPSBob3N0LXBrZ2NvbmYgbGlidGFsbG9jCiAKICMgTGV0J3MgZGlzYWJsZSBQSUUgdW5jb25k
-aXRpb25hbGx5LiBXZSB3YW50IFBJRSB0byBiZSBlbmFibGVkIG9ubHkgYnkKICMgdGhlIGdsb2Jh
-bCBCUjJfUkVMUk9fRlVMTCBvcHRpb24uCi0tIAoyLjQ3LjAKCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+This is the latest version available in Debian (which is our upstream
+for this package). The changelog is:
+
+   [ Ben Hutchings ]
+   * Fix FTBFS with gcc 11 (Closes: #1005413):
+     - Remove exception specifications
+   * Fix module build for recent kernel versions (Closes: #1005414):
+     - Stop generating module vermagic in cloop.c. This has always been handled
+       by modpost and doing it here now results in build failure.
+     - Avoid using inode::i_bdev, which was removed in Linux 5.11.
+     - Use set_disk_ro() instead of set_device_ro(). The latter was not meant to
+       be used by device drivers and was removed in Linux 5.11.
+     - Use blk_{mq_alloc,cleanup}_disk() instead of separate queue and disk
+       allocation and cleanup on Linux 5.15+, since alloc_disk() was removed.
+     - Handle potential failure of add_disk() on Linux 5.15+.
+     - Use kernel_read() instead of vfs_read() and set_fs(). set_fs() is no
+       longer defined on some architectures, and kernel_read() has had large
+       file support since Linux 2.6.31.
+ .
+   [ Vagrant Cascadian ]
+   * debian/rules: Build tarball reproducibly, using consistent time, uid,
+     gid and sort order. Thanks to Dhole for the initial patch.
+
+The "Fix FTBFS with gcc 11" allows us to remove the -std=c++14
+workaround added in commit
+7e147e778fc3397cd2a069c8127fa4d2cc6c0355 ("package/cloop: fix build
+with gcc >= 9").
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cloop/cloop.hash | 4 ++--
+ package/cloop/cloop.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/cloop/cloop.hash b/package/cloop/cloop.hash
+index eb922764bb..a4f7056049 100644
+--- a/package/cloop/cloop.hash
++++ b/package/cloop/cloop.hash
+@@ -1,5 +1,5 @@
+-# From http://snapshot.debian.org/archive/debian/20200419T152225Z/pool/main/c/cloop/cloop_3.14.1.3.dsc
+-sha256  e3079e70f9edae8ed1ac64694af08f6c7dc710ca65a56e4770dcb1325a293193  cloop_3.14.1.3.tar.xz
++# From http://snapshot.debian.org/archive/debian-debug/20221223T030115Z/pool/main/c/cloop/cloop_3.14.1.3%2Bnmu1.dsc
++sha256  04060d88231208b0db8ae8c3b54b0a46ee12139b617ebfc80b03d2ddd2cdb6ba  cloop_3.14.1.3+nmu1.tar.xz
+ 
+ # Hash for license files
+ sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  advancecomp-1.15/COPYING
+diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
+index 6f6d5fe6a8..f42edee28b 100644
+--- a/package/cloop/cloop.mk
++++ b/package/cloop/cloop.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-CLOOP_VERSION = 3.14.1.3
++CLOOP_VERSION = 3.14.1.3+nmu1
+ CLOOP_SOURCE = cloop_$(CLOOP_VERSION).tar.xz
+-CLOOP_SITE = http://snapshot.debian.org/archive/debian/20200419T152225Z/pool/main/c/cloop
++CLOOP_SITE = http://snapshot.debian.org/archive/debian-debug/20221223T030115Z/pool/main/c/cloop
+ CLOOP_LICENSE = GPL-2.0 (module), GPL-2.0+ (advancecomp)
+ CLOOP_LICENSE_FILES = README advancecomp-1.15/COPYING
+ 
+@@ -14,7 +14,7 @@ HOST_CLOOP_DEPENDENCIES = host-zlib
+ 
+ define HOST_CLOOP_BUILD_CMDS
+ 	$(HOST_CONFIGURE_OPTS) $(MAKE1) -C $(@D) APPSONLY=yes \
+-		CFLAGS="$(HOST_CFLAGS) -D_GNU_SOURCE" CPPFLAGS="-std=c++14"
++		CFLAGS="$(HOST_CFLAGS) -D_GNU_SOURCE"
+ endef
+ 
+ define HOST_CLOOP_INSTALL_CMDS
+-- 
+2.47.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
