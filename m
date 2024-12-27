@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 427BBE77191
-	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 14:31:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF9F7E7718F
+	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 14:31:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF17560832;
-	Fri, 27 Dec 2024 14:31:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7ABE980BFA;
+	Fri, 27 Dec 2024 14:31:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cNRo0pEpGk6s; Fri, 27 Dec 2024 14:31:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U95b9YIv9vqP; Fri, 27 Dec 2024 14:31:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC30760836
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83B2E80C94
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC30760836;
-	Fri, 27 Dec 2024 14:31:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83B2E80C94;
+	Fri, 27 Dec 2024 14:31:38 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5FFB8E0
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:26 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2112BE0
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37F3F40139
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5D465401C9
  for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vGrDzOiqUQ6E for <buildroot@buildroot.org>;
+ id gZxiI0zyPS9t for <buildroot@buildroot.org>;
  Fri, 27 Dec 2024 14:31:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C087401C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E08B40278
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C087401C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1E08B40278
  for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0667F87521; Fri, 27 Dec 2024 14:31:25 +0000 (UTC)
+ id 1185287510; Fri, 27 Dec 2024 14:31:25 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Dec 2024 14:03:40 +0100
+Date: Fri, 27 Dec 2024 14:05:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c008a22ab4381a3d25c025db92684e56c5d562f4
-X-Git-Newrev: 5d44798a49c6513366b47fb7863dad0386cb4a83
+X-Git-Oldrev: 5d44798a49c6513366b47fb7863dad0386cb4a83
+X-Git-Newrev: a44671c2cfed2e5087223d0b0634427f67c2f830
 X-Patchwork-Hint: ignore
-Message-Id: <20241227143125.0667F87521@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aiomonitor: bump to version
- 0.7.1
+Message-Id: <20241227143125.1185287510@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aiorwlock: bump to version
+ 1.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,59 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d44798a49c6513366b47fb7863dad0386cb4a83
+commit: https://git.buildroot.net/buildroot/commit/?id=a44671c2cfed2e5087223d0b0634427f67c2f830
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add new python-telnetlib3 runtime dependency.
+Migrate from setuptools to poetry build backend.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-aiomonitor/Config.in              | 1 +
- package/python-aiomonitor/python-aiomonitor.hash | 4 ++--
- package/python-aiomonitor/python-aiomonitor.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-aiorwlock/python-aiorwlock.hash | 4 ++--
+ package/python-aiorwlock/python-aiorwlock.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-aiomonitor/Config.in b/package/python-aiomonitor/Config.in
-index 9f3787f9b3..dbe0f133dc 100644
---- a/package/python-aiomonitor/Config.in
-+++ b/package/python-aiomonitor/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_PYTHON_AIOMONITOR
- 	select BR2_PACKAGE_PYTHON_JANUS # runtime
- 	select BR2_PACKAGE_PYTHON_JINJA2 # runtime
- 	select BR2_PACKAGE_PYTHON_PROMPT_TOOLKIT # runtime
-+	select BR2_PACKAGE_PYTHON_TELNETLIB3 # runtime
- 	select BR2_PACKAGE_PYTHON_TERMINALTABLES # runtime
- 	select BR2_PACKAGE_PYTHON_TRAFARET # runtime
- 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
-diff --git a/package/python-aiomonitor/python-aiomonitor.hash b/package/python-aiomonitor/python-aiomonitor.hash
-index f1c0e37667..fb8300fd0d 100644
---- a/package/python-aiomonitor/python-aiomonitor.hash
-+++ b/package/python-aiomonitor/python-aiomonitor.hash
+diff --git a/package/python-aiorwlock/python-aiorwlock.hash b/package/python-aiorwlock/python-aiorwlock.hash
+index 50a670280f..6ba5269c16 100644
+--- a/package/python-aiorwlock/python-aiorwlock.hash
++++ b/package/python-aiorwlock/python-aiorwlock.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiomonitor/json
--md5  75fc8f84c0ff385931d76c46265cfc0d  aiomonitor-0.7.0.tar.gz
--sha256  109b9ad309a44c0c5db1219d106f4062615151ad3f0e288a0c104fbb004d0398  aiomonitor-0.7.0.tar.gz
-+md5  e5b17b3baccb6e2b709bd85ab3faee32  aiomonitor-0.7.1.tar.gz
-+sha256  beb1f14429bc4a3135bbac32381d242fe2019d74fcf9c86d3f4bd7405dc562e4  aiomonitor-0.7.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aiorwlock/json
+-md5  669ff2887392cfa393205cea23661c2f  aiorwlock-1.4.0.tar.gz
+-sha256  4cea5bec4e9d03533a26919299394822a1422aa519bca9dd09178ec490f8d1cc  aiorwlock-1.4.0.tar.gz
++md5  094d8676f4fa812ab35225e3737edbc8  aiorwlock-1.5.0.tar.gz
++sha256  b529da24da659bdedcf68faf216595bde00db228c905197ac554773620e7fd2f  aiorwlock-1.5.0.tar.gz
  # Locally computed sha256 checksums
- sha256  98397c300949e0cc1ddc68b0e48e67b10f2d0a4ffada4903d891a1315fe04156  LICENSE
-diff --git a/package/python-aiomonitor/python-aiomonitor.mk b/package/python-aiomonitor/python-aiomonitor.mk
-index 8eaddcbfa6..824208ac79 100644
---- a/package/python-aiomonitor/python-aiomonitor.mk
-+++ b/package/python-aiomonitor/python-aiomonitor.mk
-@@ -4,9 +4,9 @@
+ sha256  fa99ee9d7727194a9f8994c67d1948dc42e8e00ab809fd4a47acfae119d11403  LICENSE
+diff --git a/package/python-aiorwlock/python-aiorwlock.mk b/package/python-aiorwlock/python-aiorwlock.mk
+index 4209ae407c..7f41b50442 100644
+--- a/package/python-aiorwlock/python-aiorwlock.mk
++++ b/package/python-aiorwlock/python-aiorwlock.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_AIOMONITOR_VERSION = 0.7.0
-+PYTHON_AIOMONITOR_VERSION = 0.7.1
- PYTHON_AIOMONITOR_SOURCE = aiomonitor-$(PYTHON_AIOMONITOR_VERSION).tar.gz
--PYTHON_AIOMONITOR_SITE = https://files.pythonhosted.org/packages/50/30/1d903b716489c2b5d0a92baccf172f972e97c2de94d4ea41c154287e9b60
-+PYTHON_AIOMONITOR_SITE = https://files.pythonhosted.org/packages/28/0a/805797608db4e30ab588b283137b5b2a735655c20df72f2f9bac41da789e
- PYTHON_AIOMONITOR_SETUP_TYPE = setuptools
- PYTHON_AIOMONITOR_LICENSE = Apache-2.0
- PYTHON_AIOMONITOR_LICENSE_FILES = LICENSE
+-PYTHON_AIORWLOCK_VERSION = 1.4.0
++PYTHON_AIORWLOCK_VERSION = 1.5.0
+ PYTHON_AIORWLOCK_SOURCE = aiorwlock-$(PYTHON_AIORWLOCK_VERSION).tar.gz
+-PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/ba/c5/882b4c89d71d6f9c7d0d8dee18d267025e71d4c3241eb3b16ab39105a0d1
+-PYTHON_AIORWLOCK_SETUP_TYPE = setuptools
++PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/c5/bf/d1ddcd676be027a963b3b01fdf9915daf4590b4dfd03bf1c8c2858aac7e3
++PYTHON_AIORWLOCK_SETUP_TYPE = poetry
+ PYTHON_AIORWLOCK_LICENSE = Apache-2.0
+ PYTHON_AIORWLOCK_LICENSE_FILES = LICENSE
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
