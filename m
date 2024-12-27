@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3500FC282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:44:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B05DC282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:44:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 785804FAEB;
-	Fri, 28 Feb 2025 16:44:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4EE83813EB;
+	Fri, 28 Feb 2025 16:44:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wqL3MYu_1Zr4; Fri, 28 Feb 2025 16:44:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oIuv0SzPlgGh; Fri, 28 Feb 2025 16:44:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE2E04FADD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 441FA81416
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE2E04FADD;
-	Fri, 28 Feb 2025 16:44:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 441FA81416;
+	Fri, 28 Feb 2025 16:44:51 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 104D71DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 16E661DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9CA1142D0E
+ by smtp4.osuosl.org (Postfix) with ESMTP id DCF8A42D14
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fWAQYGodVQ6t for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:00 +0000 (UTC)
+ id Ove_fUi3dDjh for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B25F4247F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C004424B9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2B25F4247F
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C004424B9
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 25BAC867C0; Fri, 28 Feb 2025 16:29:47 +0000 (UTC)
+ id 4680A867C0; Fri, 28 Feb 2025 16:29:48 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Dec 2024 14:07:09 +0100
+Date: Fri, 27 Dec 2024 14:20:41 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a84c805ea814ced660e718d1d7886b8ec5134d4a
-X-Git-Newrev: 84f744e9ad712190e53faa1d8fea28fe42af203c
+X-Git-Oldrev: 475fca4db11bbb0fd995c7dc5157c71512c6f0f3
+X-Git-Newrev: 2032fe8937ab25f819e9e5f5469370d686ccfb72
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162947.25BAC867C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-apispec: bump
- to version 6.8.0
+Message-Id: <20250228162948.4680A867C0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-flask: bump to
+ version 3.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84f744e9ad712190e53faa1d8fea28fe42af203c
+commit: https://git.buildroot.net/buildroot/commit/?id=2032fe8937ab25f819e9e5f5469370d686ccfb72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-apispec/python-apispec.hash | 4 ++--
- package/python-apispec/python-apispec.mk   | 4 ++--
+ package/python-flask/python-flask.hash | 4 ++--
+ package/python-flask/python-flask.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-apispec/python-apispec.hash b/package/python-apispec/python-apispec.hash
-index ee6c422433..7bfbb5a9b0 100644
---- a/package/python-apispec/python-apispec.hash
-+++ b/package/python-apispec/python-apispec.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/apispec/json
--md5  0ace01922cd42fc19da5e597df73b631  apispec-6.7.1.tar.gz
--sha256  c01b8b6ff40ffedf55b79a67f9dd920e9b2fc3909aae116facf6c8372a08b933  apispec-6.7.1.tar.gz
-+md5  89f6b8186a8772dcfc54aade5e3495e1  apispec-6.8.0.tar.gz
-+sha256  861cca82bbc0652ca9acea896921b254944580342fde849f86f6dac1acc6ca96  apispec-6.8.0.tar.gz
+diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
+index 415e2068b0..97982f99d5 100644
+--- a/package/python-flask/python-flask.hash
++++ b/package/python-flask/python-flask.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/flask/json
+-md5  4658b022a07f6d8df51ef24c717fe162  flask-3.0.3.tar.gz
+-sha256  ceb27b0af3823ea2737928a4d99d125a06175b8512c445cbd9a9ce200ef76842  flask-3.0.3.tar.gz
++md5  c95d81666442bf04f7de7db7edbe2aff  flask-3.1.0.tar.gz
++sha256  5f873c5184c897c8d9d1b05df1e3d01b14910ce69607a117bd3277098a5836ac  flask-3.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  f345555ff39d6b573342781a6346a5202a8f14bce424fee41f910c6c5379cc7d  LICENSE
-diff --git a/package/python-apispec/python-apispec.mk b/package/python-apispec/python-apispec.mk
-index 168d3890ce..a02a1cb8a8 100644
---- a/package/python-apispec/python-apispec.mk
-+++ b/package/python-apispec/python-apispec.mk
+ sha256  489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.txt
+ sha256  1e07e9c25f2618a040560b70e63f42259eab24e558d0f3532e6163d751cb4eea  docs/license.rst
+diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
+index a4a19efba0..d44c2e68ef 100644
+--- a/package/python-flask/python-flask.mk
++++ b/package/python-flask/python-flask.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_APISPEC_VERSION = 6.7.1
-+PYTHON_APISPEC_VERSION = 6.8.0
- PYTHON_APISPEC_SOURCE = apispec-$(PYTHON_APISPEC_VERSION).tar.gz
--PYTHON_APISPEC_SITE = https://files.pythonhosted.org/packages/96/26/ef0e72400707469058a7536f64d4e00e1a1c07a179acd00fb7e424dc9330
-+PYTHON_APISPEC_SITE = https://files.pythonhosted.org/packages/12/66/81f6f31feafb0ee2f6c649ba33f4c768f837bbabef279f12053d00a7099d
- PYTHON_APISPEC_SETUP_TYPE = flit
- PYTHON_APISPEC_LICENSE = MIT
- PYTHON_APISPEC_LICENSE_FILES = LICENSE
+-PYTHON_FLASK_VERSION = 3.0.3
++PYTHON_FLASK_VERSION = 3.1.0
+ PYTHON_FLASK_SOURCE = flask-$(PYTHON_FLASK_VERSION).tar.gz
+-PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/41/e1/d104c83026f8d35dfd2c261df7d64738341067526406b40190bc063e829a
++PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/89/50/dff6380f1c7f84135484e176e0cac8690af72fa90e932ad2a0a60e28c69b
+ PYTHON_FLASK_SETUP_TYPE = flit
+ PYTHON_FLASK_LICENSE = BSD-3-Clause
+ PYTHON_FLASK_LICENSE_FILES = LICENSE.txt docs/license.rst
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
