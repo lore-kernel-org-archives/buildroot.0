@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E48A3C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:44:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F178C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:44:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8FBBA42F3B;
-	Fri, 28 Feb 2025 16:44:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 238B342CF1;
+	Fri, 28 Feb 2025 16:44:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HnOtN1Mgy5Y8; Fri, 28 Feb 2025 16:44:27 +0000 (UTC)
+ id sKTtBT-zGhyh; Fri, 28 Feb 2025 16:44:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 563BD4FA78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7013B4FA78
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 563BD4FA78;
-	Fri, 28 Feb 2025 16:44:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7013B4FA78;
+	Fri, 28 Feb 2025 16:44:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10B9968
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:18 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E0B3711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C662942537
+ by smtp4.osuosl.org (Postfix) with ESMTP id D7C5F42539
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8kWAuvYo18SB for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:01 +0000 (UTC)
+ id ykr_476pam3n for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFDA642539
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEC0241867
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFDA642539
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AEC0241867
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9B841815F8; Fri, 28 Feb 2025 16:29:47 +0000 (UTC)
+ id A7CD57FD48; Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Dec 2024 14:12:40 +0100
+Date: Fri, 27 Dec 2024 13:56:50 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7653f066e2b000b55549f53dd56dc377b375be1e
-X-Git-Newrev: 450a3ef7a760386f35bb096554a4faac71c11585
+X-Git-Oldrev: a6de4cf11b44c11f35705b349979cd65b6906e73
+X-Git-Newrev: 3960334ba26c5f7235e5865c3d61ccef901aefe7
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162947.9B841815F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-botocore: bump
- to version 1.35.86
+Message-Id: <20250228162946.A7CD57FD48@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/python-aiohappyeyeballs: bump to version 2.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,45 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=450a3ef7a760386f35bb096554a4faac71c11585
+commit: https://git.buildroot.net/buildroot/commit/?id=3960334ba26c5f7235e5865c3d61ccef901aefe7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-botocore/python-botocore.hash | 4 ++--
- package/python-botocore/python-botocore.mk   | 4 ++--
+ package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash | 4 ++--
+ package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
-index 1076a748b2..3c57ec639a 100644
---- a/package/python-botocore/python-botocore.hash
-+++ b/package/python-botocore/python-botocore.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/botocore/json
--md5  d317006e6032155bfd46a949cddbac72  botocore-1.35.57.tar.gz
--sha256  d96306558085baf0bcb3b022d7a8c39c93494f031edb376694d2b2dcd0e81327  botocore-1.35.57.tar.gz
-+md5  32354bfad0d8ad0fde84143f2f2edaf8  botocore-1.35.86.tar.gz
-+sha256  951e944eb30284b4593d4da98f70f7b5292ea237e4de0c5a2852946a549b8347  botocore-1.35.86.tar.gz
+diff --git a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
+index 85938c1084..069dad89cf 100644
+--- a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
++++ b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohappyeyeballs/json
+-md5  dcc0ba52e3c350f4edc8a8475d1892d6  aiohappyeyeballs-2.4.3.tar.gz
+-sha256  75cf88a15106a5002a8eb1dab212525c00d1f4c0fa96e551c9fbe6f09a621586  aiohappyeyeballs-2.4.3.tar.gz
++md5  57d956f516c6558674f6248d8ba38321  aiohappyeyeballs-2.4.4.tar.gz
++sha256  5fdd7d87889c63183afc18ce9271f9b0a7d32c2303e394468dd45d514a757745  aiohappyeyeballs-2.4.4.tar.gz
  # Locally computed sha256 checksums
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  tests/unit/auth/aws4_testsuite/LICENSE
-diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
-index d8d410aea5..c5168b1792 100644
---- a/package/python-botocore/python-botocore.mk
-+++ b/package/python-botocore/python-botocore.mk
+ sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
+diff --git a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
+index 2a2c10fb37..9669b04793 100644
+--- a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
++++ b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BOTOCORE_VERSION = 1.35.57
-+PYTHON_BOTOCORE_VERSION = 1.35.86
- PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
--PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/61/17/65b0a3bb507b19a7a1c6cc7c63e374906891798986f0ba2b6ad174ece86a
-+PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/14/ed/f639350bfa1c1f898dbbf69250c961ded22ebf7bedc02fa23127c7762d78
- PYTHON_BOTOCORE_SETUP_TYPE = setuptools
- PYTHON_BOTOCORE_LICENSE = Apache-2.0
- PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt tests/unit/auth/aws4_testsuite/LICENSE
+-PYTHON_AIOHAPPYEYEBALLS_VERSION = 2.4.3
++PYTHON_AIOHAPPYEYEBALLS_VERSION = 2.4.4
+ PYTHON_AIOHAPPYEYEBALLS_SOURCE = aiohappyeyeballs-$(PYTHON_AIOHAPPYEYEBALLS_VERSION).tar.gz
+-PYTHON_AIOHAPPYEYEBALLS_SITE = https://files.pythonhosted.org/packages/bc/69/2f6d5a019bd02e920a3417689a89887b39ad1e350b562f9955693d900c40
++PYTHON_AIOHAPPYEYEBALLS_SITE = https://files.pythonhosted.org/packages/7f/55/e4373e888fdacb15563ef6fa9fa8c8252476ea071e96fb46defac9f18bf2
+ PYTHON_AIOHAPPYEYEBALLS_SETUP_TYPE = poetry
+ PYTHON_AIOHAPPYEYEBALLS_LICENSE = PSF-2.0
+ PYTHON_AIOHAPPYEYEBALLS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
