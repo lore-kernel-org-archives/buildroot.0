@@ -4,73 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49F4BE7718B
-	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 18:58:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EA06E7718B
+	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 20:41:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6BD860836;
-	Fri, 27 Dec 2024 18:58:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE4E36087D;
+	Fri, 27 Dec 2024 20:41:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id USvwRDiUfydx; Fri, 27 Dec 2024 18:58:07 +0000 (UTC)
+ id BfpOk8gQzWA8; Fri, 27 Dec 2024 20:41:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B61E760832
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 190D760831
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B61E760832;
-	Fri, 27 Dec 2024 18:58:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A4AD0E0
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 18:58:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 190D760831;
+	Fri, 27 Dec 2024 20:41:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 26939E0
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 20:41:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 83E798083C
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 18:58:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 13C73402C0
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 20:41:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QUJ-Ozdhx39r for <buildroot@buildroot.org>;
- Fri, 27 Dec 2024 18:58:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2301180838
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2301180838
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2301180838
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 18:58:03 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id EE61278034D;
- Fri, 27 Dec 2024 19:57:59 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:42952])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 27 Dec 2024 19:57:59 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dM9UVIINucK6 for <buildroot@buildroot.org>;
+ Fri, 27 Dec 2024 20:41:17 +0000 (UTC)
+X-Greylist: delayed 965 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 27 Dec 2024 20:41:15 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7DA7D402AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DA7D402AC
+Received-SPF: Pass (sender SPF authorized) identity=helo;
+ client-ip=2a02:2350:5:500::1; helo=mailrelay1-3.pub.mailoutpod2-cph3.one.com;
+ envelope-from=ayoub.zaki@embetrix.com; receiver=<UNKNOWN> 
+Received: from mailrelay1-3.pub.mailoutpod2-cph3.one.com
+ (mailrelay1-3.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:500::1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7DA7D402AC
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 20:41:15 +0000 (UTC)
+X-HalOne-ID: a9182fac-c490-11ef-8e9d-a581d61233e4
+Received: from xps-13.fritz.box
+ (dynamic-2a02-3102-8c10-00a0-c1a6-0033-1c9d-f612.310.pool.telefonica.de
+ [2a02:3102:8c10:a0:c1a6:33:1c9d:f612])
+ by mailrelay1.pub.mailoutpod2-cph3.one.com (Halon) with ESMTPSA
+ id a9182fac-c490-11ef-8e9d-a581d61233e4;
+ Fri, 27 Dec 2024 20:25:07 +0000 (UTC)
+From: Ayoub Zaki <ayoub.zaki@embetrix.com>
+To: buildroot@buildroot.org
+Cc: Ayoub Zaki <ayoub.zaki@embetrix.com>
+Date: Fri, 27 Dec 2024 21:24:58 +0100
+Message-ID: <20241227202458.208386-1-ayoub.zaki@embetrix.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Fri, 27 Dec 2024 19:57:59 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241227184937.2687394-1-thomas.petazzoni@bootlin.com>
-References: <20241227184937.2687394-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <3014aeb097847b7a3675e4c10f15c8af@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1735325881;
- bh=5rD7FP5vXnYrFmTXBM+iM47OrspgO05B5n+d4vmiLyo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=jH/FDLDASqIP0mA/6CaXiE+tB2lNY9W6P9IbhHQ1GzuYFE9jQkvTmNOtxaj/vxUFP
- VvluF4bnkwAbUmhbQe7NWUPLTweJYszxOAF+k0KsTBhDIT8/jfp/LsF6c4T5B+PFIl
- Ly9C42T9ys5lNIyZxULFuc7TgKxDr94eU9F0tdAhY/9SbhBS85Ggqoo5Ehj8JFQMS8
- UGrQCqo3PShFoQ61d2A3W6xstfjV5AGwGIN+Q8kw5owF4WZ0hbaO08VCE3IKQpD5rM
- NzFINjMZW7SOzaTWtjaXCsBMkFQ9WAInw10mughICe8fD1Oq3PkjtqiVDnFMOasSFn
- kSCH2d+8ESuQA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jH/FDLDA
-Subject: Re: [Buildroot] [PATCH v2] package/log4cxx: bump to version 1.3.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ t=1735331107; x=1735935907; 
+ d=embetrix.com; s=rsa1;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+ from;
+ bh=+bSnBlOffm2VMolrYko/scK2Bj5oKAQVpMdTwSCERzc=;
+ b=DvQPsN78C+QzoVxSh9vjUkOZq/XfDPYY5UarU9Zz0v8akODMmv6mxRnrHQb+UF3WQlbytwGHBz6O5
+ /255d4pHaPhYYsnnoSkvTut06Ch9gA1SvO3l0ThIPaenxFylOXv23uJrWY7PgqHkXsFA90/aNAM1RQ
+ 4P9nSfVg0sqZlaBewL2osRlXWQhGYz9ILCtEDHimbRDP8DeiToXeMY2nOYCxKusrYllzMgXyLLup68
+ WVbKfmHYsLAWZkfO95HTh5rVQSFK9KRVJm7pLnPoIWybMlEMzVHa64/ulT6MDLM69xnL41g0qEMY8f
+ QpiqJjvZL24y54wR08mtDq2Btk4Bl1Q==
+X-Mailman-Original-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+ t=1735331107; x=1735935907; 
+ d=embetrix.com; s=ed1;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+ from;
+ bh=+bSnBlOffm2VMolrYko/scK2Bj5oKAQVpMdTwSCERzc=;
+ b=jf+JSBdCB7KdOGyMCPNA0TX8yFcct/Y5R4HibOaLMDWCm0+LirEukNkVMj2CKGZEVn/wL2ZPUaC2B
+ 6HEYAdWDw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=embetrix.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key, unprotected) header.d=embetrix.com
+ header.i=@embetrix.com header.a=rsa-sha256 header.s=rsa1 header.b=DvQPsN78; 
+ dkim=pass header.d=embetrix.com header.i=@embetrix.com header.a=ed25519-sha256
+ header.s=ed1 header.b=jf+JSBdC
+Subject: [Buildroot] [PATCH] package/bmap-writer: add initial package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,182 +93,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 27/12/2024 19:49, Thomas Petazzoni via buildroot wrote:
-> According to
-> https://logging.apache.org/log4cxx/1.3.1/changelog.html:
-> 
-> Release 1.3.1 - 2024-11-30
-> ==========================
-> 
-> This is a minor bugfix release to fix issues found with 1.3.0.
-> Bug
-> 
-> - Properly prevent undefined behaviour when an appender is deleted 
-> without being closed [#431]
-> - Prevent abnormal termination on exit when using a static NDC/MDC 
-> variable [#426]
-> - Support for std::experimental::optional (in the standard library used 
-> by gcc 5.4) [#419]
-> 
-> Release 1.3.0 - 2024-10-21
-> ==========================
-> 
-> Release 1.3.0 includes the following new features:
-> 
-> - Overhead reduction of upto 60% sending logging events to an appender
-> - Statistics on the AsyncAppender's queue length (in Log4cxx debug 
-> output)
-> - Fuzz tests along with Google OSS-Fuzz integration
-> 
-> The following issues have been addressed:
-> 
-> - MSYS2/MINGW build errors [#389]
-> - thread_local problems in MSYS2/MINGW [#394]
-> - A potential 'use after free' fault when using AsyncAppender [#397]
-> 
-> Release 1.2.0 - 2024-01-01
-> ==========================
-> 
-> The following issues have been addressed:
-> 
-> - The locale external character encoding option reverting to US-ASCII 
-> [LOGCXX-483]
-> - A segfault during process exit when log4cxx::LogManager::shutdown is 
-> not called [#268] [#219]
-> - The cmake option to include a MultiprocessRollingFileAppender did not 
-> work
-> - Build failure in a MSYS2 environment
-> - Format settings (e.g. std::hex) were retained across LOG4CXX_XXXXX 
-> macro logging requests
-> - When the APR library was built without support for threads 
-> (APR_HAS_THREADS=0):
->     the AsyncAppender and dynamically loaded configuration changes were 
-> not available
->     a single nested/mapped diagnostic context (NDC/MDC) would be used 
-> and updated (without synchronization)
-> - On Windows, GetThreadDescription() called for each logging event when 
-> the thread name was empty [#321]
-> 
-> Release 1.2.0 includes the following new features:
-> 
-> - LOG4CXX_XXXX macros now support logging of QStrings directly
-> - log4cxx::hexdump function that returns a string of hexadecimal byte 
-> values
-> - Ability to remove a HierarchyEventListener [#233]
-> - Less string copying when sending a logging event to an appender
-> - Less frequent mutex contention when logging from multiple threads 
-> concurrently [#320]
-> - Allow thread information to be included in JSON formatted output
-> - Optional support for logging during process termination [#271]
-> - A cmake option to place Log4cxx functions in a different namespace 
-> [#277]
-> - Optionally use std::format in LOG4CXX_XXXX_FMT macros instead of 
-> fmt::format [#291]
-> - Support for per object enabling/disabling of logging requests (see 
-> log4cxx::LoggerInstancePtr)
-> 
-> Note: the LOG4CXX_CHARSET cmake option (external character encoding) 
-> default value has changed to utf-8
-> 
-> Within Buildroot, log4cxx has no reverse dependencies, and we tested
-> building it with gcc 7.x to verify compatibility with reasonably old
-> compilers.
-> 
-> This new version of log4cxx now needs wchar support, as several
-> multi-byte functions are now used since upstream commit
-> 2569c6beac983e933574d001ec1601e569355c50 ("Implement a functional
-> 'locale' character encoding (#252)").
-> 
-> A full test-pkg build was performed with this package update:
-> https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1603576624.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Ayoub Zaki <ayoub.zaki@embetrix.com>
+---
+ package/Config.in                    |  1 +
+ package/bmap-writer/Config.in        | 12 ++++++++++++
+ package/bmap-writer/bmap-writer.hash |  3 +++
+ package/bmap-writer/bmap-writer.mk   | 15 +++++++++++++++
+ 4 files changed, 31 insertions(+)
+ create mode 100644 package/bmap-writer/Config.in
+ create mode 100644 package/bmap-writer/bmap-writer.hash
+ create mode 100644 package/bmap-writer/bmap-writer.mk
 
-Applied to master, thanks.
+diff --git a/package/Config.in b/package/Config.in
+index 420ebaa370..66808b71e0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -210,6 +210,7 @@ menu "Filesystem and flash utilities"
+ 	source "package/aufs-util/Config.in"
+ 	source "package/autofs/Config.in"
+ 	source "package/bmap-tools/Config.in"
++	source "package/bmap-writer/Config.in"
+ 	source "package/btrfs-progs/Config.in"
+ 	source "package/cifs-utils/Config.in"
+ 	source "package/cpio/Config.in"
+diff --git a/package/bmap-writer/Config.in b/package/bmap-writer/Config.in
+new file mode 100644
+index 0000000000..e779aa835b
+--- /dev/null
++++ b/package/bmap-writer/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_BMAP_WRITER
++	bool "bmap-writer"
++	select BR2_PACKAGE_LIBARCHIVE 
++	select BR2_PACKAGE_LIBXML2
++	help
++	  bmap-writer is a command-line utility designed to efficiently write 
++	  disk images to storage devices using block mapping (BMAP). It serves 
++	  as a lightweight alternative to the Yocto BMAP tool, specifically for 
++	  embedded systems. Unlike the Yocto BMAP tool, bmap-writer is C++ based, 
++	  does not require Python, and focuses solely on writing an image.
++
++	  https://github.com/embetrix/bmap-writer
+diff --git a/package/bmap-writer/bmap-writer.hash b/package/bmap-writer/bmap-writer.hash
+new file mode 100644
+index 0000000000..e97dac11b7
+--- /dev/null
++++ b/package/bmap-writer/bmap-writer.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  94fda8420fa82256bfd01a76dff18ae23c6be9be03cb641f9845164e9326de60  0.0.3.tar.gz
++sha256  8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b  LICENSE
+diff --git a/package/bmap-writer/bmap-writer.mk b/package/bmap-writer/bmap-writer.mk
+new file mode 100644
+index 0000000000..b363295850
+--- /dev/null
++++ b/package/bmap-writer/bmap-writer.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# bmap-writer
++#
++################################################################################
++BMAP_WRITER_VERSION = 0.0.3
++BMAP_WRITER_SITE = $(call github,embetrix,bmap-writer,$(BMAP_WRITER_VERSION))
++BMAP_WRITER_SOURCE = $(BMAP_WRITER_VERSION).tar.gz
++BMAP_WRITER_LICENSE = GPL-3.0
++BMAP_WRITER_LICENSE_FILES = LICENSE
++BMAP_WRITER_DEPENDENCIES = host-pkgconf libarchive libxml2
++
++BMAP_WRITER_CMAKE = YES
++
++$(eval $(cmake-package))
+-- 
+2.43.0
 
-> ---
-> v1 -> v2:
-> - Add wchar dependency, reported by Julien Olivain
-> - Full test-pkg build was done
-> 
->  package/log4cxx/Config.in    | 5 +++--
->  package/log4cxx/log4cxx.hash | 4 ++--
->  package/log4cxx/log4cxx.mk   | 2 +-
->  3 files changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/log4cxx/Config.in b/package/log4cxx/Config.in
-> index 27a5f06988..d9daf27eb6 100644
-> --- a/package/log4cxx/Config.in
-> +++ b/package/log4cxx/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_LOG4CXX
->  	depends on !BR2_STATIC_LIBS
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_USE_WCHAR # mbsinit
->  	depends on BR2_USE_MMU # apr
->  	depends on BR2_USE_WCHAR || BR2_TOOLCHAIN_GCC_AT_LEAST_7 # boost
->  	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS || 
-> BR2_TOOLCHAIN_GCC_AT_LEAST_7 # boost-thread
-> @@ -21,9 +22,9 @@ config BR2_PACKAGE_LOG4CXX
-> 
->  	  https://logging.apache.org/log4cxx/
-> 
-> -comment "log4cxx needs a toolchain w/ C++, threads, dynamic library"
-> +comment "log4cxx needs a toolchain w/ C++, threads, dynamic library, 
-> wchar"
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-> -		BR2_STATIC_LIBS
-> +		BR2_STATIC_LIBS || !BR2_USE_WCHAR
->  	depends on BR2_USE_MMU
-> 
->  comment "log4cxx needs a toolchain w/ wchar or gcc >= 7"
-> diff --git a/package/log4cxx/log4cxx.hash 
-> b/package/log4cxx/log4cxx.hash
-> index 728d49ee38..d9e9af18cf 100644
-> --- a/package/log4cxx/log4cxx.hash
-> +++ b/package/log4cxx/log4cxx.hash
-> @@ -1,4 +1,4 @@
-> -# From 
-> https://www.apache.org/dist/logging/log4cxx/1.1.0/apache-log4cxx-1.1.0.tar.gz.sha512
-> -sha512  
-> 66a66eab933a6afd0779e3f73f65afa4fb82481208b591fd7c7c86ded805f50abcd9cdf954bdb49e1e7f5198e6c1c4fff8a7e180ff5fff9491f1946e9ba6fe2b 
->  apache-log4cxx-1.1.0.tar.gz
-> +# From 
-> https://downloads.apache.org/logging/log4cxx/1.3.1/apache-log4cxx-1.3.1.tar.gz.sha512
-> +sha512  
-> 0956fd034fd1a98d2e48ed461578c1e85da02d176850a580195b6a60b959feaf402a2743cc84ccb5d467dd924ee46422b8a7b39d2be9ee131e4e275e65ba839c 
->  apache-log4cxx-1.3.1.tar.gz
->  # Locally computed
->  sha256  
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  
-> LICENSE
-> diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
-> index 8024c96d46..2d8d57a612 100644
-> --- a/package/log4cxx/log4cxx.mk
-> +++ b/package/log4cxx/log4cxx.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
-> 
-> -LOG4CXX_VERSION = 1.1.0
-> +LOG4CXX_VERSION = 1.3.1
->  LOG4CXX_SITE = 
-> https://archive.apache.org/dist/logging/log4cxx/$(LOG4CXX_VERSION)
->  LOG4CXX_SOURCE = apache-log4cxx-$(LOG4CXX_VERSION).tar.gz
->  LOG4CXX_INSTALL_STAGING = YES
-> --
-> 2.47.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
