@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53A2AE7718F
-	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 16:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF38BE7718F
+	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 16:40:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1EBBC80D0F;
-	Fri, 27 Dec 2024 16:40:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B07E0402FF;
+	Fri, 27 Dec 2024 16:40:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zTYLgHd7WW8e; Fri, 27 Dec 2024 16:40:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RIRNkpBOLy4j; Fri, 27 Dec 2024 16:40:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AC6180D94
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97E7640268
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5AC6180D94;
-	Fri, 27 Dec 2024 16:40:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 297B8F1C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97E7640268;
+	Fri, 27 Dec 2024 16:40:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BBDE6757
  for <buildroot@buildroot.org>; Fri, 27 Dec 2024 16:39:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 91A2F6074A
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 16:39:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 25C404042C
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 16:39:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wr06kyzcvM8e for <buildroot@buildroot.org>;
- Fri, 27 Dec 2024 16:39:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L6Cx3GgJqL1d for <buildroot@buildroot.org>;
+ Fri, 27 Dec 2024 16:39:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB1606082D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCAF14045D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB1606082D
+ by smtp2.osuosl.org (Postfix) with ESMTP id DCAF14045D
  for <buildroot@buildroot.org>; Fri, 27 Dec 2024 16:39:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8D628758D; Fri, 27 Dec 2024 16:39:48 +0000 (UTC)
+ id D61BA8758B; Fri, 27 Dec 2024 16:39:48 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Dec 2024 17:10:03 +0100
+Date: Fri, 27 Dec 2024 17:27:44 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 17c57efe399ab6e18428f1073532f63f59a38a3e
-X-Git-Newrev: f20de77f15e5b32f299a3ac2f2524f82710bab18
+X-Git-Oldrev: fd720980eb51401261438bb4f1928b54c2576438
+X-Git-Newrev: 038c7df88e063fa10b0e1aa5e26159618fea21de
 X-Patchwork-Hint: ignore
-Message-Id: <20241227163948.B8D628758D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gst1-rtsp-server: bump version to
- 1.22.12
+Message-Id: <20241227163948.D61BA8758B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gst-omx: bump version to 1.22.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f20de77f15e5b32f299a3ac2f2524f82710bab18
+commit: https://git.buildroot.net/buildroot/commit/?id=038c7df88e063fa10b0e1aa5e26159618fea21de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For various bugfixes. For details, see the release notes:
+No functional change, but bump for consistency.  For details, see the
+release notes:
 
 https://gstreamer.freedesktop.org/releases/1.22/
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
+ package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
+ package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-index 21f380378c..98b211f7a2 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-@@ -1,4 +1,4 @@
--# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.22.9.tar.xz.sha256sum
--sha256  808af148f89404ff74850f8ca5272bed4bfe67f9620231dc4514fd07eb26d0a4  gst-rtsp-server-1.22.9.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.22.12.tar.xz.sha256sum
-+sha256  bf6c7871e7cf3528e4ec87ddc2f2949691cd269f98e536482ae744c1405cf451  gst-rtsp-server-1.22.12.tar.xz
- sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
- sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING.LIB
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index 87e6413d00..a8c382e115 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
+index 86f8c772c9..a84ffa7b6b 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.hash
++++ b/package/gstreamer1/gst-omx/gst-omx.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.22.9.tar.xz.sha256sum
+-sha256  9362d6117985d09dcf6e27bdaef377dc08efb7df01d00101d04fb644addac61e  gst-omx-1.22.9.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.22.12.tar.xz.sha256sum
++sha256  6b0685b92ac735032d7987d1028afaeab0a98ab726e0c51e5b9bfc8f2da7c8b1  gst-omx-1.22.12.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
+index 32891bafa6..c1ab2b19c0 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.mk
++++ b/package/gstreamer1/gst-omx/gst-omx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_RTSP_SERVER_VERSION = 1.22.9
-+GST1_RTSP_SERVER_VERSION = 1.22.12
- GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
- GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
- GST1_RTSP_SERVER_LICENSE = LGPL-2.1+
+-GST_OMX_VERSION = 1.22.9
++GST_OMX_VERSION = 1.22.12
+ GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
+ GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
