@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A53F4C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:45:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1827C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:45:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B55084FB23;
-	Fri, 28 Feb 2025 16:45:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9177F41457;
+	Fri, 28 Feb 2025 16:45:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZAz3s_mC-WnI; Fri, 28 Feb 2025 16:45:01 +0000 (UTC)
+ id Nrqb05C6d8x3; Fri, 28 Feb 2025 16:45:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BE954FB15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2A5C4FB42
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BE954FB15;
-	Fri, 28 Feb 2025 16:45:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B2A5C4FB42;
+	Fri, 28 Feb 2025 16:45:18 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B89668
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 30B171DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9F5E842D22
+ by smtp4.osuosl.org (Postfix) with ESMTP id D161E42D15
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o-Ijw7AvwvxT for <buildroot@buildroot.org>;
+ id JAw2np55J-6B for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:30:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A0D34196F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AF9042543
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3A0D34196F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2AF9042543
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35739843B6; Fri, 28 Feb 2025 16:29:48 +0000 (UTC)
+ id 1F196867C0; Fri, 28 Feb 2025 16:29:48 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Dec 2024 14:19:56 +0100
+Date: Fri, 27 Dec 2024 14:18:36 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 18e18706c0dac91a1e7ba06a13c773200beb64b3
-X-Git-Newrev: 475fca4db11bbb0fd995c7dc5157c71512c6f0f3
+X-Git-Oldrev: c1a8acde4c882909d752f1ad863b8fd78e6468fa
+X-Git-Newrev: 18e18706c0dac91a1e7ba06a13c773200beb64b3
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162948.35739843B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-engineio: bump
- to version 4.11.1
+Message-Id: <20250228162948.1F196867C0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-cppy: bump to
+ version 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=475fca4db11bbb0fd995c7dc5157c71512c6f0f3
+commit: https://git.buildroot.net/buildroot/commit/?id=18e18706c0dac91a1e7ba06a13c773200beb64b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-engineio/python-engineio.hash | 4 ++--
- package/python-engineio/python-engineio.mk   | 4 ++--
+ package/python-cppy/python-cppy.hash | 4 ++--
+ package/python-cppy/python-cppy.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
-index ecf4d2898e..427e6cea12 100644
---- a/package/python-engineio/python-engineio.hash
-+++ b/package/python-engineio/python-engineio.hash
+diff --git a/package/python-cppy/python-cppy.hash b/package/python-cppy/python-cppy.hash
+index 45b78eab8e..73049c6df1 100644
+--- a/package/python-cppy/python-cppy.hash
++++ b/package/python-cppy/python-cppy.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-engineio/json
--md5  3e45a23dd8df2d611681cb6970c1fd27  python_engineio-4.10.1.tar.gz
--sha256  166cea8dd7429638c5c4e3a4895beae95196e860bc6f29ed0b9fe753d1ef2072  python_engineio-4.10.1.tar.gz
-+md5  cfed3d8b399a2a9889ee2e2371e5e03f  python_engineio-4.11.1.tar.gz
-+sha256  ff8a23a843c223ec793835f1bcf584ff89ce0f1c2bcce37dffa6436c6fa74133  python_engineio-4.11.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cppy/json
+-md5  7c1f825c43dd66454440932a35b9969c  cppy-1.2.1.tar.gz
+-sha256  83b43bf17b1085ac15c5debdb42154f138b928234b21447358981f69d0d6fe1b  cppy-1.2.1.tar.gz
++md5  522447d934d18484cd4cfe90c1872628  cppy-1.3.0.tar.gz
++sha256  da7413a286d5d31626ba35ed2c70ddfb033520cc81310088ba5a57d34039f604  cppy-1.3.0.tar.gz
  # Locally computed sha256 checksums
- sha256  c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
-diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
-index 49d5e298fe..99a7dae0a3 100644
---- a/package/python-engineio/python-engineio.mk
-+++ b/package/python-engineio/python-engineio.mk
+ sha256  db7a008bff1e63ccec397cfa033109740c4dc6cb12070a70d0cfe69aba27c4df  LICENSE
+diff --git a/package/python-cppy/python-cppy.mk b/package/python-cppy/python-cppy.mk
+index 5bfd5a0f16..3253956672 100644
+--- a/package/python-cppy/python-cppy.mk
++++ b/package/python-cppy/python-cppy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ENGINEIO_VERSION = 4.10.1
-+PYTHON_ENGINEIO_VERSION = 4.11.1
- PYTHON_ENGINEIO_SOURCE = python_engineio-$(PYTHON_ENGINEIO_VERSION).tar.gz
--PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/9e/d2/b985b0affc5944620e1f812969322f40204f75297c5087fc4cdd44f1a14e
-+PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/17/54/39e4c942296943cc79a1fd7d744a1a10ba2fc3af59293f26a8bd48c2aa74
- PYTHON_ENGINEIO_SETUP_TYPE = setuptools
- PYTHON_ENGINEIO_LICENSE = MIT
- PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
+-PYTHON_CPPY_VERSION = 1.2.1
++PYTHON_CPPY_VERSION = 1.3.0
+ PYTHON_CPPY_SOURCE = cppy-$(PYTHON_CPPY_VERSION).tar.gz
+-PYTHON_CPPY_SITE = https://files.pythonhosted.org/packages/c5/7e/6cc5acd93752ee52d2f0423046072a2ce3ae16dfcd44373b9fe2a0222204
++PYTHON_CPPY_SITE = https://files.pythonhosted.org/packages/1e/84/62a09daa04e732a5763ec22dbc11b988e5140a77b418ea70bba9ab1a77a5
+ PYTHON_CPPY_LICENSE = BSD-3-Clause
+ PYTHON_CPPY_LICENSE_FILES = LICENSE
+ PYTHON_CPPY_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
