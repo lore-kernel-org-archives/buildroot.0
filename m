@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55E1EC282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:44:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41AB7C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:44:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E8294FA50;
-	Fri, 28 Feb 2025 16:44:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EF258484D;
+	Fri, 28 Feb 2025 16:44:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M8EisDAExlSf; Fri, 28 Feb 2025 16:44:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ipcym6nPuVts; Fri, 28 Feb 2025 16:44:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8561B4FA4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 978048487D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8561B4FA4F;
-	Fri, 28 Feb 2025 16:44:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 978048487D;
+	Fri, 28 Feb 2025 16:44:15 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F8321DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1331868
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 44F014251C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 53A3B42D06
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4CgZIiF70W1s for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:57 +0000 (UTC)
+ id l-hYC9vcFFJz for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 931BF42511
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64C9C424B3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 931BF42511
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 64C9C424B3
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8D43387BE7; Fri, 28 Feb 2025 16:29:45 +0000 (UTC)
+ id 5C87587BE7; Fri, 28 Feb 2025 16:29:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Dec 2024 14:15:00 +0100
+Date: Fri, 27 Dec 2024 14:09:30 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5684bde0864ea70c75732a5834f05aae6b34611a
-X-Git-Newrev: 1ac1c92a5f05264e95937076c33c3d42524212fe
+X-Git-Oldrev: 08e430e20be12ee1262ddb47353f8411612c0a89
+X-Git-Newrev: 3839f06326068e740d28677bf5a3242cfdd3d60e
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162945.8D43387BE7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-starlette: bump
- to version 0.41.3
+Message-Id: <20250228162947.5C87587BE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-attrs: bump to
+ version 24.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ac1c92a5f05264e95937076c33c3d42524212fe
+commit: https://git.buildroot.net/buildroot/commit/?id=3839f06326068e740d28677bf5a3242cfdd3d60e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-starlette/python-starlette.hash | 4 ++--
- package/python-starlette/python-starlette.mk   | 4 ++--
+ package/python-attrs/python-attrs.hash | 4 ++--
+ package/python-attrs/python-attrs.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
-index f422e6cfe0..1542e565f9 100644
---- a/package/python-starlette/python-starlette.hash
-+++ b/package/python-starlette/python-starlette.hash
+diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
+index 5cd15dbed7..ae13fbb552 100644
+--- a/package/python-attrs/python-attrs.hash
++++ b/package/python-attrs/python-attrs.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/starlette/json
--md5  97321ad76438c1106ddd817baddcda06  starlette-0.41.2.tar.gz
--sha256  9834fd799d1a87fd346deb76158668cfa0b0d56f85caefe8268e2d97c3468b62  starlette-0.41.2.tar.gz
-+md5  ccdbb470d005b83cc8f808e6dc25f890  starlette-0.41.3.tar.gz
-+sha256  0e4ab3d16522a255be6b28260b938eae2482f98ce5cc934cb08dce8dc3ba5835  starlette-0.41.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/attrs/json
+-md5  031a41b703d7fc47ec204d0369b68dcd  attrs-24.2.0.tar.gz
+-sha256  5cfb1b9148b5b086569baec03f20d7b6bf3bcacc9a42bebf87ffaaca362f6346  attrs-24.2.0.tar.gz
++md5  85dc1d9cca54e0986f429bfd1f2a4987  attrs-24.3.0.tar.gz
++sha256  8f5c07333d543103541ba7be0e2ce16eeee8130cb0b3f9238ab904ce1e85baff  attrs-24.3.0.tar.gz
  # Locally computed sha256 checksums
- sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
-diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
-index 3caa136987..0a4e5f3f17 100644
---- a/package/python-starlette/python-starlette.mk
-+++ b/package/python-starlette/python-starlette.mk
+ sha256  882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f  LICENSE
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index c0725cf847..97b72df6dd 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_STARLETTE_VERSION = 0.41.2
-+PYTHON_STARLETTE_VERSION = 0.41.3
- PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
--PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/3e/da/1fb4bdb72ae12b834becd7e1e7e47001d32f91ec0ce8d7bc1b618d9f0bd9
-+PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/1a/4c/9b5764bd22eec91c4039ef4c55334e9187085da2d8a2df7bd570869aae18
- PYTHON_STARLETTE_SETUP_TYPE = hatch
- PYTHON_STARLETTE_LICENSE = BSD-3-Clause
- PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
+-PYTHON_ATTRS_VERSION = 24.2.0
++PYTHON_ATTRS_VERSION = 24.3.0
+ PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
+-PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/fc/0f/aafca9af9315aee06a89ffde799a10a582fe8de76c563ee80bbcdc08b3fb
++PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/48/c8/6260f8ccc11f0917360fc0da435c5c9c7504e3db174d5a12a1494887b045
+ PYTHON_ATTRS_SETUP_TYPE = hatch
+ PYTHON_ATTRS_LICENSE = MIT
+ PYTHON_ATTRS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
