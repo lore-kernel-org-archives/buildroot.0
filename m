@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7926C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:44:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A62A8C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:44:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90DB14FA1D;
-	Fri, 28 Feb 2025 16:44:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70D2484884;
+	Fri, 28 Feb 2025 16:44:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KdkRGq3boMSl; Fri, 28 Feb 2025 16:44:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LX2GSrPyqIGg; Fri, 28 Feb 2025 16:44:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CF5A4FA01
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58E9D8484D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CF5A4FA01;
-	Fri, 28 Feb 2025 16:44:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58E9D8484D;
+	Fri, 28 Feb 2025 16:44:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F92C1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B64A711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:33:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA87742CF8
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6B0E42CFC
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iZCtC96tG2TD for <buildroot@buildroot.org>;
+ id G-MifY698y-R for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:29:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8664F417FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 039B942534
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8664F417FF
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 039B942534
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 82DDE7FD48; Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
+ id F374B867C0; Fri, 28 Feb 2025 16:29:46 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Dec 2024 12:12:27 +0100
+Date: Fri, 27 Dec 2024 14:05:25 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 653e62918fb4fffe981e2212ae5597280d2ae091
-X-Git-Newrev: f05f2c1ad717b7cda065ee06fc1daa80cd09d859
+X-Git-Oldrev: 5d44798a49c6513366b47fb7863dad0386cb4a83
+X-Git-Newrev: a44671c2cfed2e5087223d0b0634427f67c2f830
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162946.82DDE7FD48@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/usbip: new package
+Message-Id: <20250228162946.F374B867C0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-aiorwlock: bump
+ to version 1.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,140 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f05f2c1ad717b7cda065ee06fc1daa80cd09d859
+commit: https://git.buildroot.net/buildroot/commit/?id=a44671c2cfed2e5087223d0b0634427f67c2f830
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-usbip allows configuring a client and a server, to share a USB device
-across the network.
+Migrate from setuptools to poetry build backend.
 
-As explained in the .mk, usbip has been part from the kernel since
-linux-3.17. This would call for making it part of linux-tools, but this
-is a bit unwieldy: usbip is an autotools package, so trying to do a
-proper integration in linux-tools would basically need a complete
-duplication of the autotools infra [0].
-
-Instead, we decided to go with a full-blown package of its own, that
-just uses the current-latest kernel version. This makes for a nice,
-little autotools package as we like them. Nothing fancy.
-
-To be noted, though: usbip has its own license and license file, so
-that's what we use, and we do not reference those for the rest of the
-kernel: its GPL-2.0-or-later, not GPL-2.0(-only).
-
-Finally, we only enable the core usbip support in the kernel, and leave
-it to the user whether they should enable server and/or client support.
-
-[0] been there, done that; that was ugly and incomplete, what with the
-    libtool patches, autoreconf, and what not.
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-Cc: Tal Shorer <tal.shorer@gmail.com>
-Cc: Marcin Bis <marcin@bis.org.pl>
-[Julien Olivain:
-  - Config.in: add hwdata comment
-  - Config.in: add a package homepage url
-]
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/Config.in        |  1 +
- package/usbip/Config.in  | 18 ++++++++++++++++++
- package/usbip/usbip.hash |  5 +++++
- package/usbip/usbip.mk   | 39 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 63 insertions(+)
+ package/python-aiorwlock/python-aiorwlock.hash | 4 ++--
+ package/python-aiorwlock/python-aiorwlock.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 06472aa972..39a2110b96 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -655,6 +655,7 @@ endmenu
- 	source "package/usb_modeswitch/Config.in"
- 	source "package/usb_modeswitch_data/Config.in"
- 	source "package/usbguard/Config.in"
-+	source "package/usbip/Config.in"
- 	source "package/usbmount/Config.in"
- 	source "package/usbutils/Config.in"
- 	source "package/w_scan/Config.in"
-diff --git a/package/usbip/Config.in b/package/usbip/Config.in
-new file mode 100644
-index 0000000000..25f8fb8577
---- /dev/null
-+++ b/package/usbip/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_USBIP
-+	bool "usbip"
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	help
-+	  The USB-over-IP suite of tools.
-+
-+	  Note: you'll have to enable either (or both) of "VHCI hcd"
-+	  (CONFIG_USBIP_VHCI_HCD) if you want to access a remote USB
-+	  device, or "Host driver" (CONFIG_USBIP_HOST) if you want
-+	  to share a USB device, in your kernel configuration. The
-+	  Buildroot package "hwdata" with the "usb.ids" file is also
-+	  useful (but not mandatory) to list and identify USB device
-+	  by name.
-+
-+	  https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/usb/usbip
-+
-+comment "usbip needs udev /dev management"
-+	depends on !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/usbip/usbip.hash b/package/usbip/usbip.hash
-new file mode 100644
-index 0000000000..dc901617bf
---- /dev/null
-+++ b/package/usbip/usbip.hash
-@@ -0,0 +1,5 @@
-+# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  d450ab215de4e1f8bb85e0f4216760fa33fd024b4526b144f4ce0d9012b29c9e  linux-6.12.6.tar.xz
-+
-+# Locally computed
-+sha256  cd5c66af63b509ccd75ec85fee41b6e5cbb77cd6bf9392a54900acc0f02be4a6  tools/usb/usbip/COPYING
-diff --git a/package/usbip/usbip.mk b/package/usbip/usbip.mk
-new file mode 100644
-index 0000000000..77dd341f9b
---- /dev/null
-+++ b/package/usbip/usbip.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# usbip
-+#
-+################################################################################
-+
-+# Since linux 3.17, usbip is part of the linux source tree. Usually, we'd add
-+# such a tool in the linux-tools package.
-+#
-+# However, usbip is autotools-based, so we'd have to duplicate the autotools
-+# infra in linux-tools; the basic infra is easy to duplicate, but then come
-+# the conditional libtool patches, and it's not trivial to do. And of course,
-+# there would be the maintenance cost...
-+#
-+# usbip is not very tied to the kernel, in fact. It is pretty stable, API-wise,
-+# so we can just use a recent kernel version.
-+USBIP_VERSION = 6.12.6
-+USBIP_SOURCE = linux-$(USBIP_VERSION).tar.xz
-+USBIP_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v6.x
-+USBIP_DL_SUBDIR = linux
-+
-+# usbip's licensing diverges from that of the rest of the kernel
-+USBIP_LICENSE = GPL-2.0-or-later
-+USBIP_LICENSE_FILES = tools/usb/usbip/COPYING
-+
-+USBIP_DEPENDENCIES = udev
-+
-+USBIP_SUBDIR = tools/usb/usbip
-+USBIP_INSTALL_STAGING = YES
-+
-+USBIP_AUTORECONF = YES
-+USBIP_CONFIGURE_OPTS = --without-tcp-wrappers
-+
-+define USBIP_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USB_SUPPORT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USBIP_CORE)
-+endef
-+
-+$(eval $(autotools-package))
+diff --git a/package/python-aiorwlock/python-aiorwlock.hash b/package/python-aiorwlock/python-aiorwlock.hash
+index 50a670280f..6ba5269c16 100644
+--- a/package/python-aiorwlock/python-aiorwlock.hash
++++ b/package/python-aiorwlock/python-aiorwlock.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiorwlock/json
+-md5  669ff2887392cfa393205cea23661c2f  aiorwlock-1.4.0.tar.gz
+-sha256  4cea5bec4e9d03533a26919299394822a1422aa519bca9dd09178ec490f8d1cc  aiorwlock-1.4.0.tar.gz
++md5  094d8676f4fa812ab35225e3737edbc8  aiorwlock-1.5.0.tar.gz
++sha256  b529da24da659bdedcf68faf216595bde00db228c905197ac554773620e7fd2f  aiorwlock-1.5.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  fa99ee9d7727194a9f8994c67d1948dc42e8e00ab809fd4a47acfae119d11403  LICENSE
+diff --git a/package/python-aiorwlock/python-aiorwlock.mk b/package/python-aiorwlock/python-aiorwlock.mk
+index 4209ae407c..7f41b50442 100644
+--- a/package/python-aiorwlock/python-aiorwlock.mk
++++ b/package/python-aiorwlock/python-aiorwlock.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIORWLOCK_VERSION = 1.4.0
++PYTHON_AIORWLOCK_VERSION = 1.5.0
+ PYTHON_AIORWLOCK_SOURCE = aiorwlock-$(PYTHON_AIORWLOCK_VERSION).tar.gz
+-PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/ba/c5/882b4c89d71d6f9c7d0d8dee18d267025e71d4c3241eb3b16ab39105a0d1
+-PYTHON_AIORWLOCK_SETUP_TYPE = setuptools
++PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/c5/bf/d1ddcd676be027a963b3b01fdf9915daf4590b4dfd03bf1c8c2858aac7e3
++PYTHON_AIORWLOCK_SETUP_TYPE = poetry
+ PYTHON_AIORWLOCK_LICENSE = Apache-2.0
+ PYTHON_AIORWLOCK_LICENSE_FILES = LICENSE
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
