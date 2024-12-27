@@ -1,52 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7ACD2E7718B
-	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 10:43:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D57E3E7718B
+	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 10:43:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C566540259;
-	Fri, 27 Dec 2024 10:42:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E02480C31;
+	Fri, 27 Dec 2024 10:43:42 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Wc16sBoD4esQ; Fri, 27 Dec 2024 10:43:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E5D280C32
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E5D280C32;
+	Fri, 27 Dec 2024 10:43:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 190EE757
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 10:43:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 06E0E40252
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 10:43:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Us0_QSwmvdiV; Fri, 27 Dec 2024 10:42:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4342140237
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4342140237;
-	Fri, 27 Dec 2024 10:42:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D3A1F1B
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 10:42:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0494A606F2
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 10:42:57 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X41XDencMlvy for <buildroot@buildroot.org>;
- Fri, 27 Dec 2024 10:42:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5D75605A2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E5D75605A2
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 10:42:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D058B874FF; Fri, 27 Dec 2024 10:42:55 +0000 (UTC)
+ id VUab6s6Ia19w for <buildroot@buildroot.org>;
+ Fri, 27 Dec 2024 10:43:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BCBE740246
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCBE740246
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BCBE740246
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 10:43:38 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 85503B00573;
+ Fri, 27 Dec 2024 11:43:34 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:59784])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 27 Dec 2024 11:43:34 +0100
+MIME-Version: 1.0
+Date: Fri, 27 Dec 2024 11:43:34 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 27 Dec 2024 11:34:10 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f78d8b50fea526a9cadd8480cb058536202cb4bc
-X-Git-Newrev: 653e62918fb4fffe981e2212ae5597280d2ae091
-X-Patchwork-Hint: ignore
-Message-Id: <20241227104255.D058B874FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kmod: bump to version 33
+To: yegorslists@googlemail.com
+Cc: buildroot@buildroot.org
+In-Reply-To: <20241227081342.2415503-1-yegorslists@googlemail.com>
+References: <20241227081342.2415503-1-yegorslists@googlemail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <b75c75efc8dab3fa29b2d044cd9394a1@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1735296215;
+ bh=ABPG+8D6yGakX4odrsMBCF9XTD/IlfxeQ3cKFswjLrU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=lxoUxRwocqykkFgDmF6cinMc/06VMZ+LnypGzvDoUta+JVFXLtwadYfY8IkLKBe7L
+ AfoNlnpkgWvPX8OXqLQ/PZ6+ay2ZIQtRcq63DNf+OrviFJwa77X05luAfBlFyqh0pj
+ RT/rxwVVg7DvD1Qci8gI2MgEA2KPQrW1N/LC8+E/r3jx1fbV8Xl1xB2fgx8lVRokoD
+ MQOhBqvVI83ms074LTZcIdvhPirPA/w2i5PnB6lcmXso2mJ3mnRkrVgCLfr/QTFc+L
+ ACSELBp5oCywwQ5YmrQmxx2p83bkMKISCbF4ycSNB7OqekuPFPzK+LtXFqeGayWUf9
+ wPsHry1zCLq8A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=lxoUxRwo
+Subject: Re: [Buildroot] [PATCH] package/kmod: bump to version 33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,194 +83,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=653e62918fb4fffe981e2212ae5597280d2ae091
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 27/12/2024 09:13, yegorslists--- via buildroot wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Remove an upstreamed patch.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-For announces since v31, see:
-https://lore.kernel.org/linux-modules/lsycc6ghy3vniv5c72c2jwms2yclyy7hkvez7twqk3sh6j2ufu@uhvvggs27tcj/
-https://lore.kernel.org/linux-modules/vi25zbzu3pteuevfnbfldyt23euinlrjqsfju5jdkgdbnluz7j@yyr3qmladzpj/
-
-Remove an upstreamed patch.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Julien: add links to release announces]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...-portable-implementation-for-basename-API.patch | 134 ---------------------
- package/kmod/kmod.hash                             |   2 +-
- package/kmod/kmod.mk                               |   2 +-
- 3 files changed, 2 insertions(+), 136 deletions(-)
-
-diff --git a/package/kmod/0002-Use-portable-implementation-for-basename-API.patch b/package/kmod/0002-Use-portable-implementation-for-basename-API.patch
-deleted file mode 100644
-index 26f108d66e..0000000000
---- a/package/kmod/0002-Use-portable-implementation-for-basename-API.patch
-+++ /dev/null
-@@ -1,134 +0,0 @@
--From 721ed6040c7aa47070faf6378c433089e178bd43 Mon Sep 17 00:00:00 2001
--From: Khem Raj <raj.khem@gmail.com>
--Date: Sat, 9 Dec 2023 17:35:59 -0800
--Subject: [PATCH] Use portable implementation for basename API
--
--musl has removed the non-prototype declaration of basename from
--string.h [1] which now results in build errors with clang-17+ compiler
--
--Implement GNU basename behavior using strchr which is portable across libcs
--
--Fixes
--../git/tools/kmod.c:71:19: error: call to undeclared function 'basename'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
--71 | "Commands:\n", basename(argv[0]));
--| ^
--
--[1] https://git.musl-libc.org/cgit/musl/commit/?id=725e17ed6dff4d0cd22487bb64470881e86a92e7
--
--Suggested-by: Rich Felker
--
--Signed-off-by: Khem Raj <raj.khem@gmail.com>
--
--Upstream: https://github.com/kmod-project/kmod/pull/32
--Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
-----
-- libkmod/libkmod-config.c | 2 +-
-- shared/util.c            | 4 ++--
-- shared/util.h            | 7 +++++++
-- testsuite/testsuite.c    | 2 +-
-- tools/depmod.c           | 2 +-
-- tools/kmod.c             | 4 ++--
-- 6 files changed, 14 insertions(+), 7 deletions(-)
--
--diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
--index e83621b3..8aa555a4 100644
----- a/libkmod/libkmod-config.c
--+++ b/libkmod/libkmod-config.c
--@@ -794,7 +794,7 @@ static int conf_files_insert_sorted(struct kmod_ctx *ctx,
-- 	bool is_single = false;
--
-- 	if (name == NULL) {
---		name = basename(path);
--+		name = gnu_basename(path);
-- 		is_single = true;
-- 	}
--
--diff --git a/shared/util.c b/shared/util.c
--index e2bab83a..0e16670e 100644
----- a/shared/util.c
--+++ b/shared/util.c
--@@ -172,9 +172,9 @@ char *modname_normalize(const char *modname, char buf[static PATH_MAX], size_t *
--
-- char *path_to_modname(const char *path, char buf[static PATH_MAX], size_t *len)
-- {
---	char *modname;
--+	const char *modname;
--
---	modname = basename(path);
--+	modname = gnu_basename(path);
-- 	if (modname == NULL || modname[0] == '\0')
-- 		return NULL;
--
--diff --git a/shared/util.h b/shared/util.h
--index c4a3916b..073dc5a7 100644
----- a/shared/util.h
--+++ b/shared/util.h
--@@ -5,6 +5,7 @@
-- #include <stdbool.h>
-- #include <stdlib.h>
-- #include <stdio.h>
--+#include <string.h>
-- #include <sys/types.h>
-- #include <sys/stat.h>
-- #include <time.h>
--@@ -76,6 +77,12 @@ do {						\
-- 	__p->__v = (val);			\
-- } while(0)
--
--+static _always_inline_ const char *gnu_basename(const char *s)
--+{
--+  const char *p = strrchr(s, '/');
--+  return p ? p+1 : s;
--+}
--+
-- static _always_inline_ unsigned int ALIGN_POWER2(unsigned int u)
-- {
-- 	return 1 << ((sizeof(u) * 8) - __builtin_clz(u - 1));
--diff --git a/testsuite/testsuite.c b/testsuite/testsuite.c
--index 318343ac..aafc9873 100644
----- a/testsuite/testsuite.c
--+++ b/testsuite/testsuite.c
--@@ -70,7 +70,7 @@ static void help(void)
--
-- 	printf("Usage:\n"
-- 	       "\t%s [options] <test>\n"
---	       "Options:\n", basename(progname));
--+	       "Options:\n", gnu_basename(progname));
--
-- 	for (itr = options, itr_short = options_short;
-- 				itr->name != NULL; itr++, itr_short++)
--diff --git a/tools/depmod.c b/tools/depmod.c
--index 43fc354a..cfb15b11 100644
----- a/tools/depmod.c
--+++ b/tools/depmod.c
--@@ -762,7 +762,7 @@ static int cfg_files_insert_sorted(struct cfg_file ***p_files, size_t *p_n_files
-- 	if (name != NULL)
-- 		namelen = strlen(name);
-- 	else {
---		name = basename(dir);
--+		name = gnu_basename(dir);
-- 		namelen = strlen(name);
-- 		dirlen -= namelen + 1;
-- 	}
--diff --git a/tools/kmod.c b/tools/kmod.c
--index 55689c07..df91e5c6 100644
----- a/tools/kmod.c
--+++ b/tools/kmod.c
--@@ -68,7 +68,7 @@ static int kmod_help(int argc, char *argv[])
-- 			"Options:\n"
-- 			"\t-V, --version     show version\n"
-- 			"\t-h, --help        show this help\n\n"
---			"Commands:\n", basename(argv[0]));
--+			"Commands:\n", gnu_basename(argv[0]));
--
-- 	for (i = 0; i < ARRAY_SIZE(kmod_cmds); i++) {
-- 		if (kmod_cmds[i]->help != NULL) {
--@@ -156,7 +156,7 @@ static int handle_kmod_compat_commands(int argc, char *argv[])
-- 	const char *cmd;
-- 	size_t i;
--
---	cmd = basename(argv[0]);
--+	cmd = gnu_basename(argv[0]);
--
-- 	for (i = 0; i < ARRAY_SIZE(kmod_compat_cmds); i++) {
-- 		if (streq(kmod_compat_cmds[i]->name, cmd))
-diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
-index f4b01b20a2..46a2d538ad 100644
---- a/package/kmod/kmod.hash
-+++ b/package/kmod/kmod.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
--sha256  f5a6949043cc72c001b728d8c218609c5a15f3c33d75614b78c79418fcf00d80  kmod-31.tar.xz
-+sha256  dc768b3155172091f56dc69430b5481f2d76ecd9ccb54ead8c2540dbcf5ea9bc  kmod-33.tar.xz
- 
- # Locally calculated
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libkmod/COPYING
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index d83fb85a3e..dfdd17b955 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KMOD_VERSION = 31
-+KMOD_VERSION = 33
- KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
- KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
- KMOD_INSTALL_STAGING = YES
+Applied to master, thanks.
+I also added links to release announces in the commit log.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
