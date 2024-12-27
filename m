@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E324E7718B
-	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 14:32:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C81ABE7718F
+	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 14:32:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 698E66083E;
-	Fri, 27 Dec 2024 14:32:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 93DAC804DA;
+	Fri, 27 Dec 2024 14:32:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HQzTB5M_0z7a; Fri, 27 Dec 2024 14:32:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U5xB3fg4VUkB; Fri, 27 Dec 2024 14:32:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71D2C60845
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8123B8045D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71D2C60845;
-	Fri, 27 Dec 2024 14:32:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8123B8045D;
+	Fri, 27 Dec 2024 14:32:20 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B2E90E0
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 20AF4F1C
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 00CBE40278
+ by smtp4.osuosl.org (Postfix) with ESMTP id 197E040282
  for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4-TJ-VhZeR3t for <buildroot@buildroot.org>;
+ id 4E6McIQYZVvc for <buildroot@buildroot.org>;
  Fri, 27 Dec 2024 14:31:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1CD740325
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82928402A9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C1CD740325
+ by smtp4.osuosl.org (Postfix) with ESMTP id 82928402A9
  for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3F0187510; Fri, 27 Dec 2024 14:31:25 +0000 (UTC)
+ id 779B787521; Fri, 27 Dec 2024 14:31:25 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Dec 2024 14:20:41 +0100
+Date: Fri, 27 Dec 2024 14:14:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 475fca4db11bbb0fd995c7dc5157c71512c6f0f3
-X-Git-Newrev: 2032fe8937ab25f819e9e5f5469370d686ccfb72
+X-Git-Oldrev: 2880032dce069210b9ab3008f3063efac7a597c4
+X-Git-Newrev: 742b9ee4dd3474d6e0bd61b92045a903da8b8ecf
 X-Patchwork-Hint: ignore
-Message-Id: <20241227143125.B3F0187510@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-flask: bump to version 3.1.0
+Message-Id: <20241227143125.779B787521@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-channels-redis: bump to
+ version 4.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,45 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2032fe8937ab25f819e9e5f5469370d686ccfb72
+commit: https://git.buildroot.net/buildroot/commit/?id=742b9ee4dd3474d6e0bd61b92045a903da8b8ecf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-flask/python-flask.hash | 4 ++--
- package/python-flask/python-flask.mk   | 4 ++--
+ package/python-channels-redis/python-channels-redis.hash | 4 ++--
+ package/python-channels-redis/python-channels-redis.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
-index 415e2068b0..97982f99d5 100644
---- a/package/python-flask/python-flask.hash
-+++ b/package/python-flask/python-flask.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/flask/json
--md5  4658b022a07f6d8df51ef24c717fe162  flask-3.0.3.tar.gz
--sha256  ceb27b0af3823ea2737928a4d99d125a06175b8512c445cbd9a9ce200ef76842  flask-3.0.3.tar.gz
-+md5  c95d81666442bf04f7de7db7edbe2aff  flask-3.1.0.tar.gz
-+sha256  5f873c5184c897c8d9d1b05df1e3d01b14910ce69607a117bd3277098a5836ac  flask-3.1.0.tar.gz
+diff --git a/package/python-channels-redis/python-channels-redis.hash b/package/python-channels-redis/python-channels-redis.hash
+index 6b62d0d6a2..3fc82ebb5c 100644
+--- a/package/python-channels-redis/python-channels-redis.hash
++++ b/package/python-channels-redis/python-channels-redis.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/channels-redis/json
+-md5  e43a397dd3049f382a9c8b91d0f62c79  channels_redis-4.2.0.tar.gz
+-sha256  01c26c4d5d3a203f104bba9e5585c0305a70df390d21792386586068162027fd  channels_redis-4.2.0.tar.gz
++md5  a6d2eafea6e44440bb30f0a62de5d089  channels_redis-4.2.1.tar.gz
++sha256  8375e81493e684792efe6e6eca60ef3d7782ef76c6664057d2e5c31e80d636dd  channels_redis-4.2.1.tar.gz
  # Locally computed sha256 checksums
- sha256  489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.txt
- sha256  1e07e9c25f2618a040560b70e63f42259eab24e558d0f3532e6163d751cb4eea  docs/license.rst
-diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
-index a4a19efba0..d44c2e68ef 100644
---- a/package/python-flask/python-flask.mk
-+++ b/package/python-flask/python-flask.mk
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-channels-redis/python-channels-redis.mk b/package/python-channels-redis/python-channels-redis.mk
+index 7ca065ce0e..f91e96c849 100644
+--- a/package/python-channels-redis/python-channels-redis.mk
++++ b/package/python-channels-redis/python-channels-redis.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FLASK_VERSION = 3.0.3
-+PYTHON_FLASK_VERSION = 3.1.0
- PYTHON_FLASK_SOURCE = flask-$(PYTHON_FLASK_VERSION).tar.gz
--PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/41/e1/d104c83026f8d35dfd2c261df7d64738341067526406b40190bc063e829a
-+PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/89/50/dff6380f1c7f84135484e176e0cac8690af72fa90e932ad2a0a60e28c69b
- PYTHON_FLASK_SETUP_TYPE = flit
- PYTHON_FLASK_LICENSE = BSD-3-Clause
- PYTHON_FLASK_LICENSE_FILES = LICENSE.txt docs/license.rst
+-PYTHON_CHANNELS_REDIS_VERSION = 4.2.0
++PYTHON_CHANNELS_REDIS_VERSION = 4.2.1
+ PYTHON_CHANNELS_REDIS_SOURCE = channels_redis-$(PYTHON_CHANNELS_REDIS_VERSION).tar.gz
+-PYTHON_CHANNELS_REDIS_SITE = https://files.pythonhosted.org/packages/fd/c8/d8e4d369a4cbce5dc86e84a559993001d471327f1ef57c13ffc82bdc9efa
++PYTHON_CHANNELS_REDIS_SITE = https://files.pythonhosted.org/packages/c7/6d/c379c9feea4522cbdb4eba9b3d23a6270ba8cbd94e847b21834d898109d6
+ PYTHON_CHANNELS_REDIS_SETUP_TYPE = setuptools
+ PYTHON_CHANNELS_REDIS_LICENSE = BSD-3-Clause
+ PYTHON_CHANNELS_REDIS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
