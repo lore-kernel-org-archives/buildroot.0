@@ -1,78 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDD2EE7718B
-	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 14:39:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 049F2E7718B
+	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 14:39:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC58F80ABA;
-	Fri, 27 Dec 2024 14:39:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C778C606C7;
+	Fri, 27 Dec 2024 14:39:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lxeFMZ9eyrjH; Fri, 27 Dec 2024 14:39:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id duW2LAJKyf8C; Fri, 27 Dec 2024 14:39:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9693A80BD1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC2B36083E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9693A80BD1;
-	Fri, 27 Dec 2024 14:39:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D4079E0
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:39:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC2B36083E;
+	Fri, 27 Dec 2024 14:39:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 25A7EE0
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:39:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C0A8140328
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:39:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1358240B37
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:39:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fuD7W2jfMd5d for <buildroot@buildroot.org>;
- Fri, 27 Dec 2024 14:39:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vwWnC7xKfMDy for <buildroot@buildroot.org>;
+ Fri, 27 Dec 2024 14:39:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
  helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 72F9640325
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72F9640325
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D64E7400AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D64E7400AB
 Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 72F9640325
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:39:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D64E7400AB
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:39:29 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 8264F19F742;
- Fri, 27 Dec 2024 15:39:03 +0100 (CET)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 9069819F74C;
+ Fri, 27 Dec 2024 15:39:25 +0100 (CET)
 Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:58184])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 27 Dec 2024 15:39:03 +0100
+ with HTTP (HTTP/1.0 POST); Fri, 27 Dec 2024 15:39:25 +0100
 MIME-Version: 1.0
-Date: Fri, 27 Dec 2024 15:39:03 +0100
+Date: Fri, 27 Dec 2024 15:39:25 +0100
 From: Julien Olivain <ju.o@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org, =?UTF-8?Q?Rapha=C3=ABl_M=C3=A9lotte?=
- <raphael.melotte@mind.be>
-In-Reply-To: <20241223155629.1849349-1-james.hilliard1@gmail.com>
-References: <20241223155629.1849349-1-james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Angelo Compagnucci <angelo.compagnucci@gmail.com>
+In-Reply-To: <20241223160331.1853338-1-james.hilliard1@gmail.com>
+References: <20241223160331.1853338-1-james.hilliard1@gmail.com>
 User-Agent: Webmail Free/1.6.9
-Message-ID: <902a531cf802b2163a104cfb2ec201e0@free.fr>
+Message-ID: <b1af92423e3befcbc7882cb27329113b@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1735310345;
- bh=IFQZwOItGqPBxpasjoT7NQAj2HJPWpcUN5VKfr/2o0k=;
+ d=free.fr; s=smtp-20201208; t=1735310367;
+ bh=KtkulDYjPBe4+g5GpCe2xobOFmqQP3ttbjciZz/K7eY=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=jLAiGgpJ++z2yms4U54SiIwxSMYnTzW5NCUetBwRkoL/6wdiE+vESUv4jY3p2XL53
- RcN6ptBXD0SuKviUYVXaiwHnPjUw03RVj19vcDCnGqst45HaNVkSkH5mRmsOUPx0US
- 1zv8byNr/VTi3dA+OtcwqFpCXVxnfovtxzQinHAj+YR0PK16QYHf+kC55hi+k5iCvq
- Odi6iX2H8l5xSqeL9R1ntgXolAk8AxVH5tmD9dR398Nqdq5Xy37aPCMyQhYeDb2m9k
- 8Ex4wJH8oiiUIx47Ib0zdj5F4HgysH/vIv9CimNbObBvPE9vk6uxrboPqv/Y+4SaIT
- nUZ2r1czZjfBg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=RHmpjqWboUR7+VK3rsZ2t/fLpp0+AgR5xi4mdCjolm2yrsKto5ZKJ3EwfsF2zjBc6
+ ul4BHXef8iBX9WpCoveB6pvnmSfSfsMKRANdBPSy73QAUm8gQexUycGY6W2DLZfnH1
+ DFZHkqaFzdxg0xz2hAjgkY9zkkhku/3yKPK/WPpmjPTTHKDeeO6di17py6rvePT+h2
+ xhhXBoq4LX7aKDevMA9nAcatCzhecAWwdm0fihZGflQXkRNtZ5Xii0N12wJE0f/o0v
+ tUv5uBEUp0SaQOIiGxh1eOvqF/ZRpQgxr5xlmu3nZ2o2d3qeojpSKtn/Y7tbeZVPB/
+ s7iH1jsazx2Lg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jLAiGgpJ
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-botocore: bump to
- version 1.35.86
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=RHmpjqWb
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-can: bump to version
+ 4.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,59 +88,59 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 23/12/2024 16:56, James Hilliard wrote:
+On 23/12/2024 17:03, James Hilliard wrote:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
 Applied to master, thanks.
 
 > ---
->  package/python-botocore/python-botocore.hash | 4 ++--
->  package/python-botocore/python-botocore.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/python-can/python-can.hash | 4 ++--
+>  package/python-can/python-can.mk   | 5 +++--
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/python-botocore/python-botocore.hash 
-> b/package/python-botocore/python-botocore.hash
-> index 1076a748b2..3c57ec639a 100644
-> --- a/package/python-botocore/python-botocore.hash
-> +++ b/package/python-botocore/python-botocore.hash
-> @@ -1,6 +1,6 @@
->  # md5, sha256 from https://pypi.org/pypi/botocore/json
-> -md5  d317006e6032155bfd46a949cddbac72  botocore-1.35.57.tar.gz
+> diff --git a/package/python-can/python-can.hash 
+> b/package/python-can/python-can.hash
+> index 479935b2f0..d343a4a6b9 100644
+> --- a/package/python-can/python-can.hash
+> +++ b/package/python-can/python-can.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/python-can/json
+> -md5  20133a1b73b58c976bba6b0af8581f32  python_can-4.4.2.tar.gz
 > -sha256  
-> d96306558085baf0bcb3b022d7a8c39c93494f031edb376694d2b2dcd0e81327  
-> botocore-1.35.57.tar.gz
-> +md5  32354bfad0d8ad0fde84143f2f2edaf8  botocore-1.35.86.tar.gz
+> 1c46c0935f39f7a9c3e76b03249af0580689ebf7a1844195e92f87257f009df5  
+> python_can-4.4.2.tar.gz
+> +md5  e22638e3e5d102e428614715dd04910f  python_can-4.5.0.tar.gz
 > +sha256  
-> 951e944eb30284b4593d4da98f70f7b5292ea237e4de0c5a2852946a549b8347  
-> botocore-1.35.86.tar.gz
+> d3684cebe5b028a148c1742b3a45cec4fcaf83a7f7c52d0680b2eaeaf52f8eb7  
+> python_can-4.5.0.tar.gz
 >  # Locally computed sha256 checksums
 >  sha256  
-> 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  
+> da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  
 > LICENSE.txt
->  sha256  
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  
-> tests/unit/auth/aws4_testsuite/LICENSE
-> diff --git a/package/python-botocore/python-botocore.mk 
-> b/package/python-botocore/python-botocore.mk
-> index d8d410aea5..c5168b1792 100644
-> --- a/package/python-botocore/python-botocore.mk
-> +++ b/package/python-botocore/python-botocore.mk
-> @@ -4,9 +4,9 @@
+> diff --git a/package/python-can/python-can.mk 
+> b/package/python-can/python-can.mk
+> index bc67be4f8c..1517777753 100644
+> --- a/package/python-can/python-can.mk
+> +++ b/package/python-can/python-can.mk
+> @@ -4,12 +4,13 @@
 >  #
 >  
 > ################################################################################
 > 
-> -PYTHON_BOTOCORE_VERSION = 1.35.57
-> +PYTHON_BOTOCORE_VERSION = 1.35.86
->  PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
-> -PYTHON_BOTOCORE_SITE = 
-> https://files.pythonhosted.org/packages/61/17/65b0a3bb507b19a7a1c6cc7c63e374906891798986f0ba2b6ad174ece86a
-> +PYTHON_BOTOCORE_SITE = 
-> https://files.pythonhosted.org/packages/14/ed/f639350bfa1c1f898dbbf69250c961ded22ebf7bedc02fa23127c7762d78
->  PYTHON_BOTOCORE_SETUP_TYPE = setuptools
->  PYTHON_BOTOCORE_LICENSE = Apache-2.0
->  PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt 
-> tests/unit/auth/aws4_testsuite/LICENSE
+> -PYTHON_CAN_VERSION = 4.4.2
+> +PYTHON_CAN_VERSION = 4.5.0
+>  PYTHON_CAN_SOURCE = python_can-$(PYTHON_CAN_VERSION).tar.gz
+> -PYTHON_CAN_SITE = 
+> https://files.pythonhosted.org/packages/a3/17/57c38abbf00993ac5ec306de0c00271685d1372ef3d907b107eb63ab13a8
+> +PYTHON_CAN_SITE = 
+> https://files.pythonhosted.org/packages/6a/4b/b6fd103c3f2eb0ae942e0704642d396ebbaf87f4d82d0102560cc738fdf1
+>  PYTHON_CAN_SETUP_TYPE = setuptools
+>  PYTHON_CAN_LICENSE = LGPL-3.0
+>  PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+> +PYTHON_CAN_DEPENDENCIES = host-python-setuptools-scm
+> 
+>  ifneq ($(BR2_PACKAGE_PYTHON_CAN_VIEWER),y)
+>  define PYTHON_CAN_REMOVE_VIEWER
 > --
 > 2.34.1
 > 
