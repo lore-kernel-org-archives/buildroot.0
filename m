@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 424BFE7718B
-	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 16:40:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F563E77191
+	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 16:40:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E0FB80E2F;
-	Fri, 27 Dec 2024 16:40:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 587F780E55;
+	Fri, 27 Dec 2024 16:40:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PFn5eIq3473P; Fri, 27 Dec 2024 16:40:15 +0000 (UTC)
+ id Jk1HHMGT5Adn; Fri, 27 Dec 2024 16:40:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06FD380CDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E24EE80E30
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 06FD380CDD;
-	Fri, 27 Dec 2024 16:40:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 941EAF1B
+	by smtp1.osuosl.org (Postfix) with ESMTP id E24EE80E30;
+	Fri, 27 Dec 2024 16:40:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CFFC4F1B
  for <buildroot@buildroot.org>; Fri, 27 Dec 2024 16:39:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A71486081F
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 16:39:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B3FE04042F
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 16:39:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VXPrgoMnxv_T for <buildroot@buildroot.org>;
- Fri, 27 Dec 2024 16:39:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vcJ6ZCKOZOZO for <buildroot@buildroot.org>;
+ Fri, 27 Dec 2024 16:39:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0E156082E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF35B4054E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D0E156082E
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF35B4054E
  for <buildroot@buildroot.org>; Fri, 27 Dec 2024 16:39:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CC7BD87589; Fri, 27 Dec 2024 16:39:48 +0000 (UTC)
+ id AF3B88758C; Fri, 27 Dec 2024 16:39:48 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Dec 2024 17:27:44 +0100
+Date: Fri, 27 Dec 2024 17:10:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8fd12c62022da53aee2872f8c912744b40393606
-X-Git-Newrev: fd720980eb51401261438bb4f1928b54c2576438
+X-Git-Oldrev: 3e5223d4e871c10dd4a9ae6e6b275a2ae74b9646
+X-Git-Newrev: 17c57efe399ab6e18428f1073532f63f59a38a3e
 X-Patchwork-Hint: ignore
-Message-Id: <20241227163948.CC7BD87589@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gstreamer1-editing-services: bump
- version to 1.22.12
+Message-Id: <20241227163948.AF3B88758C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gst1-python: bump version to
+ 1.22.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,46 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd720980eb51401261438bb4f1928b54c2576438
+commit: https://git.buildroot.net/buildroot/commit/?id=17c57efe399ab6e18428f1073532f63f59a38a3e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No functional change, but bump for consistency.  For details, see the
-release notes:
+For various bugfixes. For details, see the release notes:
 
 https://gstreamer.freedesktop.org/releases/1.22/
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../gstreamer1-editing-services/gstreamer1-editing-services.hash      | 4 ++--
- .../gstreamer1-editing-services/gstreamer1-editing-services.mk        | 2 +-
+ package/gstreamer1/gst1-python/gst1-python.hash | 4 ++--
+ package/gstreamer1/gst1-python/gst1-python.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index 2ea29dae61..e6bba20724 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.22.9.tar.xz.sha256sum
--sha256  3553ad3802dccde0c0ef1461881acd9b55bddf8adf751de4cb51b7f8cb50440d  gst-editing-services-1.22.9.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.22.12.tar.xz.sha256sum
-+sha256  792339135ce713088663cc5d44e0aea8217793e88fabfd11571e7abf4a429f2c  gst-editing-services-1.22.12.tar.xz
- 
- # Hashes for license files:
- sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index e2c0f1ccf8..75c660f31d 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+diff --git a/package/gstreamer1/gst1-python/gst1-python.hash b/package/gstreamer1/gst1-python/gst1-python.hash
+index 2f352df92e..b28ad5975f 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.hash
++++ b/package/gstreamer1/gst1-python/gst1-python.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.22.9.tar.xz.sha256sum
+-sha256  3f9d5c6ffefda268703744b592a6b3983aa6723273b1220ecbcb62c2a5800009  gst-python-1.22.9.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.22.12.tar.xz.sha256sum
++sha256  d98d3226efea20d5c440a28988a20319a953f7c594895df2bba4538633108e9f  gst-python-1.22.12.tar.xz
+ sha256  ea3ad127610e5ded2210b3a86a46314f2b3b28e438eccffdae19a4d6fbcdb0c2  COPYING
+diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
+index 501ca5e02b..f5f4d713a2 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.mk
++++ b/package/gstreamer1/gst1-python/gst1-python.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.22.9
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.22.12
- GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
+-GST1_PYTHON_VERSION = 1.22.9
++GST1_PYTHON_VERSION = 1.22.12
+ GST1_PYTHON_SOURCE = gst-python-$(GST1_PYTHON_VERSION).tar.xz
+ GST1_PYTHON_SITE = https://gstreamer.freedesktop.org/src/gst-python
+ GST1_PYTHON_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
