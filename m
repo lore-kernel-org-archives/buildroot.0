@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5572E7718B
-	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 14:32:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E5E8E7718F
+	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 14:32:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1716180E58;
-	Fri, 27 Dec 2024 14:32:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D40580E6D;
+	Fri, 27 Dec 2024 14:32:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IK7Njuq2s8-R; Fri, 27 Dec 2024 14:32:12 +0000 (UTC)
+ id 9IXI8nIvi0tk; Fri, 27 Dec 2024 14:32:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 172D180E83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCF7E80E65
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 172D180E83;
-	Fri, 27 Dec 2024 14:32:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 12002F1B
+	by smtp1.osuosl.org (Postfix) with ESMTP id DCF7E80E65;
+	Fri, 27 Dec 2024 14:32:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4AE59F1B
  for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7572E80BD4
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F223F400AB
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ExL9ItpEui7F for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aEi-aUkZXkeG for <buildroot@buildroot.org>;
  Fri, 27 Dec 2024 14:31:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C49B80BDF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69DC640582
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C49B80BDF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 69DC640582
  for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 95A508751E; Fri, 27 Dec 2024 14:31:25 +0000 (UTC)
+ id 6444487510; Fri, 27 Dec 2024 14:31:25 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Dec 2024 14:16:57 +0100
+Date: Fri, 27 Dec 2024 14:12:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b780b066a1c087d20707d79bd17ec4d803a10bf1
-X-Git-Newrev: c1a8acde4c882909d752f1ad863b8fd78e6468fa
+X-Git-Oldrev: 7653f066e2b000b55549f53dd56dc377b375be1e
+X-Git-Newrev: 450a3ef7a760386f35bb096554a4faac71c11585
 X-Patchwork-Hint: ignore
-Message-Id: <20241227143125.95A508751E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-contourpy: bump to version
- 1.3.1
+Message-Id: <20241227143125.6444487510@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-botocore: bump to version
+ 1.35.86
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1a8acde4c882909d752f1ad863b8fd78e6468fa
+commit: https://git.buildroot.net/buildroot/commit/?id=450a3ef7a760386f35bb096554a4faac71c11585
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-contourpy/python-contourpy.hash | 4 ++--
- package/python-contourpy/python-contourpy.mk   | 4 ++--
+ package/python-botocore/python-botocore.hash | 4 ++--
+ package/python-botocore/python-botocore.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-contourpy/python-contourpy.hash b/package/python-contourpy/python-contourpy.hash
-index 8902607ec8..aef7c3de74 100644
---- a/package/python-contourpy/python-contourpy.hash
-+++ b/package/python-contourpy/python-contourpy.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/contourpy/json
--md5  81447a2ceaf933b28db04d02086a22ed  contourpy-1.3.0.tar.gz
--sha256  7ffa0db17717a8ffb127efd0c95a4362d996b892c2904db72428d5b52e1938a4  contourpy-1.3.0.tar.gz
-+md5  06a4ae6ab30b855514797cac7073ed08  contourpy-1.3.1.tar.gz
-+sha256  dfd97abd83335045a913e3bcc4a09c0ceadbe66580cf573fe961f4a825efa699  contourpy-1.3.1.tar.gz
+diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
+index 1076a748b2..3c57ec639a 100644
+--- a/package/python-botocore/python-botocore.hash
++++ b/package/python-botocore/python-botocore.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/botocore/json
+-md5  d317006e6032155bfd46a949cddbac72  botocore-1.35.57.tar.gz
+-sha256  d96306558085baf0bcb3b022d7a8c39c93494f031edb376694d2b2dcd0e81327  botocore-1.35.57.tar.gz
++md5  32354bfad0d8ad0fde84143f2f2edaf8  botocore-1.35.86.tar.gz
++sha256  951e944eb30284b4593d4da98f70f7b5292ea237e4de0c5a2852946a549b8347  botocore-1.35.86.tar.gz
  # Locally computed sha256 checksums
- sha256  c7d0a153bffaa104044463ebc633793d451722efd3138b5ffd2527b40f1505a2  LICENSE
-diff --git a/package/python-contourpy/python-contourpy.mk b/package/python-contourpy/python-contourpy.mk
-index 3804fce8c3..08c45f3805 100644
---- a/package/python-contourpy/python-contourpy.mk
-+++ b/package/python-contourpy/python-contourpy.mk
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  tests/unit/auth/aws4_testsuite/LICENSE
+diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
+index d8d410aea5..c5168b1792 100644
+--- a/package/python-botocore/python-botocore.mk
++++ b/package/python-botocore/python-botocore.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CONTOURPY_VERSION = 1.3.0
-+PYTHON_CONTOURPY_VERSION = 1.3.1
- PYTHON_CONTOURPY_SOURCE = contourpy-$(PYTHON_CONTOURPY_VERSION).tar.gz
--PYTHON_CONTOURPY_SITE = https://files.pythonhosted.org/packages/f5/f6/31a8f28b4a2a4fa0e01085e542f3081ab0588eff8e589d39d775172c9792
-+PYTHON_CONTOURPY_SITE = https://files.pythonhosted.org/packages/25/c2/fc7193cc5383637ff390a712e88e4ded0452c9fbcf84abe3de5ea3df1866
- PYTHON_CONTOURPY_LICENSE = BSD-3-Clause
- PYTHON_CONTOURPY_LICENSE_FILES = LICENSE
- PYTHON_CONTOURPY_DEPENDENCIES = python-pybind host-python-meson-python
+-PYTHON_BOTOCORE_VERSION = 1.35.57
++PYTHON_BOTOCORE_VERSION = 1.35.86
+ PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
+-PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/61/17/65b0a3bb507b19a7a1c6cc7c63e374906891798986f0ba2b6ad174ece86a
++PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/14/ed/f639350bfa1c1f898dbbf69250c961ded22ebf7bedc02fa23127c7762d78
+ PYTHON_BOTOCORE_SETUP_TYPE = setuptools
+ PYTHON_BOTOCORE_LICENSE = Apache-2.0
+ PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt tests/unit/auth/aws4_testsuite/LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
