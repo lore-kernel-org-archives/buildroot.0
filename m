@@ -4,68 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22272E7718B
-	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 18:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99B9CE7718B
+	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 18:56:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41AA280C99;
-	Fri, 27 Dec 2024 18:49:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C29F80569;
+	Fri, 27 Dec 2024 18:56:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2zzRcxEdYUIj; Fri, 27 Dec 2024 18:49:46 +0000 (UTC)
+ id kJ9xeSyghNK1; Fri, 27 Dec 2024 18:56:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6C2B80C9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 245AC8056E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E6C2B80C9F;
-	Fri, 27 Dec 2024 18:49:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id CDFAD757
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 18:49:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 245AC8056E;
+	Fri, 27 Dec 2024 18:56:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B4F6757
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 18:56:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B40A402EB
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 18:49:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 183CB4034E
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 18:56:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jy8mILhBzRqG for <buildroot@buildroot.org>;
- Fri, 27 Dec 2024 18:49:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id x_eVnM-XhVox for <buildroot@buildroot.org>;
+ Fri, 27 Dec 2024 18:56:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BC21D40327
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC21D40327
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BC21D40327
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 18:49:42 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id CF238FF805;
- Fri, 27 Dec 2024 18:49:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 905E34030C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 905E34030C
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 18:56:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 79F8B87592; Fri, 27 Dec 2024 18:56:23 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Dec 2024 19:49:36 +0100
-Message-ID: <20241227184937.2687394-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.47.0
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1735325379;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=B/cTKgIxkcBVE4X7DqCHupls/N4SlwSt5yipkeIFj5E=;
- b=apCvVx99LIvkTDoCaFFKblLPaiEtKfnysUdpb/1RrZ5l4pRxoe7GHflsR3zl/LfuJnFOg6
- m+HRrG99LelNCiAQhVqqPccFWUPr8szpPJRuKCmdJki1HMmY50OB+/LXbgUiu5lC/pALLc
- KJpVwgwjEdyYx9Oman5m5DOJbbDwG4lKWJNiJSOoYN62qsn6Eg+QzhWrnkmXfsOSCfbpto
- 1/72p53an8azMUG5fZEFeMiP/wAV7aKiEk5p8IzCbeOWxs4c9uhm4HRzznwQXNGUD2GaS6
- M5/g42aDm3AW1Oj7OD/n//lzTl28wONCOt5lOIIfE0uzHF6cYu2ahBoiMd0kfQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=apCvVx99
-Subject: [Buildroot] [PATCH v2] package/log4cxx: bump to version 1.3.1
+Date: Fri, 27 Dec 2024 19:53:01 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 038c7df88e063fa10b0e1aa5e26159618fea21de
+X-Git-Newrev: 342fefa6d29588014226108e6a2c8b68384fb692
+X-Patchwork-Hint: ignore
+Message-Id: <20241227185623.79F8B87592@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/log4cxx: bump to version 1.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,12 +58,14 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://git.buildroot.net/buildroot/commit/?id=342fefa6d29588014226108e6a2c8b68384fb692
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 According to
 https://logging.apache.org/log4cxx/1.3.1/changelog.html:
@@ -155,11 +138,8 @@ A full test-pkg build was performed with this package update:
 https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1603576624.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-v1 -> v2:
-- Add wchar dependency, reported by Julien Olivain
-- Full test-pkg build was done
-
  package/log4cxx/Config.in    | 5 +++--
  package/log4cxx/log4cxx.hash | 4 ++--
  package/log4cxx/log4cxx.mk   | 2 +-
@@ -213,9 +193,6 @@ index 8024c96d46..2d8d57a612 100644
  LOG4CXX_SITE = https://archive.apache.org/dist/logging/log4cxx/$(LOG4CXX_VERSION)
  LOG4CXX_SOURCE = apache-log4cxx-$(LOG4CXX_VERSION).tar.gz
  LOG4CXX_INSTALL_STAGING = YES
--- 
-2.47.0
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
