@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC7E9E7718B
-	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 14:31:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84F0AE7718F
+	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 14:31:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B412060837;
-	Fri, 27 Dec 2024 14:31:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 542E480C8F;
+	Fri, 27 Dec 2024 14:31:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w4cXjS7snh-4; Fri, 27 Dec 2024 14:31:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4vMSp89FsKM9; Fri, 27 Dec 2024 14:31:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3C326085C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5802880D04
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3C326085C;
-	Fri, 27 Dec 2024 14:31:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A225BF1B
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5802880D04;
+	Fri, 27 Dec 2024 14:31:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 243C8F1B
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5DC61402A0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92C984045D
  for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iDTSQ8iTfCAn for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ma87YcxzERP0 for <buildroot@buildroot.org>;
  Fri, 27 Dec 2024 14:31:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0493440177
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91CCB40568
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0493440177
+ by smtp2.osuosl.org (Postfix) with ESMTP id 91CCB40568
  for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:31:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E50A38751E; Fri, 27 Dec 2024 14:31:24 +0000 (UTC)
+ id 8C3A687510; Fri, 27 Dec 2024 14:31:25 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Dec 2024 13:57:48 +0100
+Date: Fri, 27 Dec 2024 14:16:16 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3960334ba26c5f7235e5865c3d61ccef901aefe7
-X-Git-Newrev: 8ddfab3770591ce2435a61d027efd46ad098ea1d
+X-Git-Oldrev: bd80a00b2feda60ef71eeb03458b8400a0f672e6
+X-Git-Newrev: b780b066a1c087d20707d79bd17ec4d803a10bf1
 X-Patchwork-Hint: ignore
-Message-Id: <20241227143124.E50A38751E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aiohttp: bump to version
- 3.11.11
+Message-Id: <20241227143125.8C3A687510@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-click: bump to version 8.1.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,59 +64,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ddfab3770591ce2435a61d027efd46ad098ea1d
+commit: https://git.buildroot.net/buildroot/commit/?id=b780b066a1c087d20707d79bd17ec4d803a10bf1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add new python-propcache runtime dependency.
+Migrate from setuptools build backend to flit.
+
+License file renamed without content changes.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-aiohttp/Config.in           | 1 +
- package/python-aiohttp/python-aiohttp.hash | 4 ++--
- package/python-aiohttp/python-aiohttp.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-click/python-click.hash | 6 +++---
+ package/python-click/python-click.mk   | 8 ++++----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-aiohttp/Config.in b/package/python-aiohttp/Config.in
-index 01a1ed8a3d..08883316d8 100644
---- a/package/python-aiohttp/Config.in
-+++ b/package/python-aiohttp/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_PYTHON_AIOHTTP
- 	select BR2_PACKAGE_PYTHON_BROTLI # runtime
- 	select BR2_PACKAGE_PYTHON_FROZENLIST # runtime
- 	select BR2_PACKAGE_PYTHON_MULTIDICT # runtime
-+	select BR2_PACKAGE_PYTHON_PROPCACHE # runtime
- 	select BR2_PACKAGE_PYTHON_YARL # runtime
- 	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
- 	help
-diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
-index fd3ca7d72a..0aa22e9fa3 100644
---- a/package/python-aiohttp/python-aiohttp.hash
-+++ b/package/python-aiohttp/python-aiohttp.hash
+diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
+index 0fc04d638a..3511954a5d 100644
+--- a/package/python-click/python-click.hash
++++ b/package/python-click/python-click.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp/json
--md5  fa0526dab4bf4b755537ae5718a43e25  aiohttp-3.10.10.tar.gz
--sha256  0631dd7c9f0822cc61c88586ca76d5b5ada26538097d0f1df510b082bad3411a  aiohttp-3.10.10.tar.gz
-+md5  17f04b60068122e998a60a3010679501  aiohttp-3.11.11.tar.gz
-+sha256  bb49c7f1e6ebf3821a42d81d494f538107610c3a705987f53068546b0e90303e  aiohttp-3.11.11.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/click/json
+-md5  7c3b52c56fd30699f453a7dc7b42cecb  click-8.1.7.tar.gz
+-sha256  ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de  click-8.1.7.tar.gz
++md5  b52ee8e6c33d88a2b4626e6a6002245d  click-8.1.8.tar.gz
++sha256  ed53c9d8990d83c2a27deae68e4ee337473f6330c040a31d4225c9574d16096a  click-8.1.8.tar.gz
  # Locally computed sha256 checksums
- sha256  9f80d0db7d755a941db4572172c270ecbd8f082ba215ddd095985942ed94a9eb  LICENSE.txt
-diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-index 17eeae72b3..19e62745e0 100644
---- a/package/python-aiohttp/python-aiohttp.mk
-+++ b/package/python-aiohttp/python-aiohttp.mk
-@@ -4,9 +4,9 @@
+-sha256  9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  LICENSE.rst
++sha256  9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  LICENSE.txt
+diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
+index 0e29ff034e..8597c65cec 100644
+--- a/package/python-click/python-click.mk
++++ b/package/python-click/python-click.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_AIOHTTP_VERSION = 3.10.10
-+PYTHON_AIOHTTP_VERSION = 3.11.11
- PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
--PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/17/7e/16e57e6cf20eb62481a2f9ce8674328407187950ccc602ad07c685279141
-+PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/fe/ed/f26db39d29cd3cb2f5a3374304c713fe5ab5a0e4c8ee25a0c45cc6adf844
- PYTHON_AIOHTTP_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
+-PYTHON_CLICK_VERSION = 8.1.7
++PYTHON_CLICK_VERSION = 8.1.8
+ PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
+-PYTHON_CLICK_SITE = https://files.pythonhosted.org/packages/96/d3/f04c7bfcf5c1862a2a5b845c6b2b360488cf47af55dfa79c98f6a6bf98b5
++PYTHON_CLICK_SITE = https://files.pythonhosted.org/packages/b9/2e/0090cbf739cee7d23781ad4b89a9894a41538e4fcf4c31dcdd705b78eb8b
++PYTHON_CLICK_SETUP_TYPE = flit
+ PYTHON_CLICK_LICENSE = BSD-3-Clause
+-PYTHON_CLICK_LICENSE_FILES = LICENSE.rst
+-PYTHON_CLICK_SETUP_TYPE = setuptools
++PYTHON_CLICK_LICENSE_FILES = LICENSE.txt
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
