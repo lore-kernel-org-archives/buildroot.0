@@ -1,77 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B1B2E7718B
-	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 14:33:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41AF5E7718B
+	for <buildroot@archiver.kernel.org>; Fri, 27 Dec 2024 14:34:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7AA8607D9;
-	Fri, 27 Dec 2024 14:33:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1275280BF6;
+	Fri, 27 Dec 2024 14:34:02 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WDDzjyfTxmXi; Fri, 27 Dec 2024 14:34:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 209B980883
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 209B980883;
+	Fri, 27 Dec 2024 14:34:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7513BF1B
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:33:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 629EC60832
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:33:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id APCNvZrQt1Kq; Fri, 27 Dec 2024 14:33:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6B176082B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6B176082B;
-	Fri, 27 Dec 2024 14:33:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B7110F1B
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:33:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B00224045D
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:33:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q0cvSFF7KozL for <buildroot@buildroot.org>;
- Fri, 27 Dec 2024 14:33:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 852B5400AB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 852B5400AB
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 852B5400AB
- for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:33:20 +0000 (UTC)
+ id Kr2vVOR6mk0d for <buildroot@buildroot.org>;
+ Fri, 27 Dec 2024 14:33:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5B2CE6082B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B2CE6082B
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5B2CE6082B
+ for <buildroot@buildroot.org>; Fri, 27 Dec 2024 14:33:58 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 1537A2003F3;
- Fri, 27 Dec 2024 15:33:16 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:56764])
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 3272213F8CE;
+ Fri, 27 Dec 2024 15:33:55 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:56784])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 27 Dec 2024 15:33:15 +0100
+ with HTTP (HTTP/1.0 POST); Fri, 27 Dec 2024 15:33:55 +0100
 MIME-Version: 1.0
-Date: Fri, 27 Dec 2024 15:33:15 +0100
+Date: Fri, 27 Dec 2024 15:33:55 +0100
 From: Julien Olivain <ju.o@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
 Cc: buildroot@buildroot.org
-In-Reply-To: <20241223141146.1708338-1-james.hilliard1@gmail.com>
-References: <20241223141146.1708338-1-james.hilliard1@gmail.com>
+In-Reply-To: <20241223141628.1710361-1-james.hilliard1@gmail.com>
+References: <20241223141628.1710361-1-james.hilliard1@gmail.com>
 User-Agent: Webmail Free/1.6.9
-Message-ID: <9b4ea3ca3bc7eac97e997c1d4688ddfe@free.fr>
+Message-ID: <d9f53eb3eb791f0154d655bd4d701040@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1735309997;
- bh=yppFjelsTTDTNdlGWlXYSHMhK6v1S+NzkP13WCn2Zho=;
+ d=free.fr; s=smtp-20201208; t=1735310036;
+ bh=OGqThVP7RW/BMtRPzrOp6tYbvzYkZY+4vtKjuQhUYsk=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=qa28NKEpZKQNsl2W2bKjNCW6LlHTtv1cZj41MHgeyO5HiNXnIN5rWzsPXgISg0x07
- 8bSB3t5Quvsfp/DuohbnXAjLrA0joQNVqSiaLbF+4+35tGMeAeSeQJ9rFtSheriOsP
- w5jAXl/gHudMyW7WrZ7Dj8CFM5mV25yrj078vN2QbmwRHosyMfNl7CaRNfpfplrOJj
- sX0qropT4kLqaoNP/pMr0UlSozE70OgBNODPeoeZ1Bbuuhu66Djar7uAY7Hvn8jM9e
- xX55G9tuv5TjJWMwM6wV/2/1WKizqoOHPmD9Y/SHJCxbDVIPVKCG1xX+fC08xMvBap
- KLVu4BmgZcyEQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=GtnIYAjq8dn4gcQ5vD/Msam0JiRCq+UFA6//zSJdpFbr1OdD6cYYaggcz2PzBN59Y
+ dzwnaboim2bckZyxvjghC1Xw149NqtVlAx+sPRJ22snw/2gQDcqTM3uvjXIJa/fVO2
+ fj/ZECOFD9L1WWWwprp+/PnCM9vzgwzucvAYxdx9Z71tLuHqYq9RdQAXfNKhNSFe+l
+ bxxH2yklOws9Z4SaXa7EzejyqKeKaE8dGtsJw508X+l9sBR5d3Dz6qNaYAx9acUEv9
+ BxD4i0jN15H5D/SEMaGfOeDXmuthz24RHodnmEE04eYPKTchMMdWPBWBG/1CFnYGDd
+ UHeM7t6lOSPbA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=qa28NKEp
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-aiocoap: bump to version
- 0.4.12
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=GtnIYAjq
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-aiohappyeyeballs: bump
+ to version 2.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,59 +88,57 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 23/12/2024 15:11, James Hilliard wrote:
+On 23/12/2024 15:16, James Hilliard wrote:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
 Applied to master, thanks.
 
 > ---
->  package/python-aiocoap/python-aiocoap.hash | 4 ++--
->  package/python-aiocoap/python-aiocoap.mk   | 4 ++--
+>  package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash | 4 ++--
+>  package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk   | 4 ++--
 >  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/python-aiocoap/python-aiocoap.hash 
-> b/package/python-aiocoap/python-aiocoap.hash
-> index 33895b2387..30e68a7582 100644
-> --- a/package/python-aiocoap/python-aiocoap.hash
-> +++ b/package/python-aiocoap/python-aiocoap.hash
-> @@ -1,6 +1,6 @@
->  # md5, sha256 from https://pypi.org/pypi/aiocoap/json
-> -md5  09a0cce4b192d861d2becf216f0769fc  aiocoap-0.4.11.tar.gz
+> diff --git 
+> a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash 
+> b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
+> index 85938c1084..069dad89cf 100644
+> --- a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
+> +++ b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/aiohappyeyeballs/json
+> -md5  dcc0ba52e3c350f4edc8a8475d1892d6  aiohappyeyeballs-2.4.3.tar.gz
 > -sha256  
-> 2603b8ec61caedf008b4a153a94f337262bf89f26d1c030f12c492d085e875f7  
-> aiocoap-0.4.11.tar.gz
-> +md5  a79e7c7586cbb9056743683eb9bbaef9  aiocoap-0.4.12.tar.gz
+> 75cf88a15106a5002a8eb1dab212525c00d1f4c0fa96e551c9fbe6f09a621586  
+> aiohappyeyeballs-2.4.3.tar.gz
+> +md5  57d956f516c6558674f6248d8ba38321  aiohappyeyeballs-2.4.4.tar.gz
 > +sha256  
-> 808e87068aa57dbf31486cfdfa9098b0a6f5ca444c6b8966f3e50a403628981e  
-> aiocoap-0.4.12.tar.gz
+> 5fdd7d87889c63183afc18ce9271f9b0a7d32c2303e394468dd45d514a757745  
+> aiohappyeyeballs-2.4.4.tar.gz
 >  # Locally computed sha256 checksums
 >  sha256  
-> c59b1339031e4495b336555be42b8b488eacfb037a23fadf2d5e2c8abd0e6366  
-> doc/LICENSE.rst
->  sha256  
-> 51d56d9e6f9755df590a329e73ca58663605a182a8e80f0166fff65203a1185a  
-> LICENSES/BSD-3-Clause.txt
-> diff --git a/package/python-aiocoap/python-aiocoap.mk 
-> b/package/python-aiocoap/python-aiocoap.mk
-> index a69722232c..357ac1da08 100644
-> --- a/package/python-aiocoap/python-aiocoap.mk
-> +++ b/package/python-aiocoap/python-aiocoap.mk
+> 3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  
+> LICENSE
+> diff --git a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk 
+> b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
+> index 2a2c10fb37..9669b04793 100644
+> --- a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
+> +++ b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
 > @@ -4,9 +4,9 @@
 >  #
 >  
 > ################################################################################
 > 
-> -PYTHON_AIOCOAP_VERSION = 0.4.11
-> +PYTHON_AIOCOAP_VERSION = 0.4.12
->  PYTHON_AIOCOAP_SOURCE = aiocoap-$(PYTHON_AIOCOAP_VERSION).tar.gz
-> -PYTHON_AIOCOAP_SITE = 
-> https://files.pythonhosted.org/packages/50/b3/2ea6d3a294ec094da3175aceaa2ad1c2644eab162b48676267e992d4c651
-> +PYTHON_AIOCOAP_SITE = 
-> https://files.pythonhosted.org/packages/a2/16/a9167225339089b2c295cc37aa5a01f758d164c5cda591cc9d2976719196
->  PYTHON_AIOCOAP_SETUP_TYPE = setuptools
->  PYTHON_AIOCOAP_LICENSE = BSD-3-Clause, MIT
->  PYTHON_AIOCOAP_LICENSE_FILES = doc/LICENSE.rst 
-> LICENSES/BSD-3-Clause.txt LICENSES/MIT.txt
+> -PYTHON_AIOHAPPYEYEBALLS_VERSION = 2.4.3
+> +PYTHON_AIOHAPPYEYEBALLS_VERSION = 2.4.4
+>  PYTHON_AIOHAPPYEYEBALLS_SOURCE = 
+> aiohappyeyeballs-$(PYTHON_AIOHAPPYEYEBALLS_VERSION).tar.gz
+> -PYTHON_AIOHAPPYEYEBALLS_SITE = 
+> https://files.pythonhosted.org/packages/bc/69/2f6d5a019bd02e920a3417689a89887b39ad1e350b562f9955693d900c40
+> +PYTHON_AIOHAPPYEYEBALLS_SITE = 
+> https://files.pythonhosted.org/packages/7f/55/e4373e888fdacb15563ef6fa9fa8c8252476ea071e96fb46defac9f18bf2
+>  PYTHON_AIOHAPPYEYEBALLS_SETUP_TYPE = poetry
+>  PYTHON_AIOHAPPYEYEBALLS_LICENSE = PSF-2.0
+>  PYTHON_AIOHAPPYEYEBALLS_LICENSE_FILES = LICENSE
 > --
 > 2.34.1
 > 
