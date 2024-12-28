@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3460C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:46:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FF73C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:47:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 265FF45315;
-	Fri, 28 Feb 2025 16:46:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 835EF42E31;
+	Fri, 28 Feb 2025 16:47:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4-USTPr-kZj7; Fri, 28 Feb 2025 16:46:55 +0000 (UTC)
+ id qWlL8ilVqhfg; Fri, 28 Feb 2025 16:47:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44CDA4FC49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 340094616A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44CDA4FC49;
-	Fri, 28 Feb 2025 16:46:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 340094616A;
+	Fri, 28 Feb 2025 16:47:00 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 154401DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1453D68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F5D042DC7
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7A2742575
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YKAl7SBnxISC for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:08 +0000 (UTC)
+ id njQzjDhMDxi4 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29EF1424D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B356341A26
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 29EF1424D4
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B356341A26
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2545A81793; Fri, 28 Feb 2025 16:29:51 +0000 (UTC)
+ id A551A87C2C; Fri, 28 Feb 2025 16:29:49 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 12:43:32 +0100
+Date: Sat, 28 Dec 2024 11:02:39 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0d08940ce6454066254204aa9126a5c65cad7628
-X-Git-Newrev: ca46491736b4b3ae9549acbdef6383d145932963
+X-Git-Oldrev: 1125fdde17a2635c7345e312cf17f31a8ed218b2
+X-Git-Newrev: 5d69216cfeccbddc7fbe2e201b3d18aa9776ebae
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162951.2545A81793@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libinput: bump to
- version 1.27
+Message-Id: <20250228162949.A551A87C2C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/monit: bump version to
+ 5.43.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,70 +65,99 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca46491736b4b3ae9549acbdef6383d145932963
+commit: https://git.buildroot.net/buildroot/commit/?id=5d69216cfeccbddc7fbe2e201b3d18aa9776ebae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-From
-https://lists.freedesktop.org/archives/wayland-devel/2024-November/043860.html:
+Patch 0002 needs to be slightly refreshed to apply on this new
+version.
 
-In terms of new features we have a "sticky" mode for drag-locking. Previously a
-tap-and-drag lock would always expire after a timeout, now the button is held
-logically down until a completing tap. Desktop environments are encouraged to
-use this as the default as it provides a better experience for anyone with
-less-than-perfect dexterity. For backwards-compatibility reasons libinput cannot
-easily change its defaults without risking bugs in the callers.
+Version 5.34.3
+==============
 
-For tablet pads we now support tablet pad mode groups for devices without
-status LEDs as well, the previous implementation was tied to LEDs which some
-devices like the XP Pen ACK05 remote don't have. Since the mode is a software
-feature anyway tying it to LEDs is not necessary.
+Fixed: If the ping statement did not explicitly specify an outgoing
+address but a previous ping statement did, the same address was shared
+by both statements.
 
-If a tablet is unknown to libwacom we now assume that it is a built-in tablet.
-This matches the behavior of libwacom 2.11 but in our case the only visible
-result is that the device now has the calibration configuration available.
-Better to have it and not use it, as they say.
+Fixed: Monit may crash upon stopping if the ping statement is used in
+conjunction with the address option.
 
-The available area on external tablets can be reduced via the new tablet "area"
-configuration. Users can set a rectangle smaller than the width/height
-of the tablet and input outside this rectangle will be ignored.
-
-For packagers: the check dependency is now optional, almost all tests
-can now run without it.
-
-And then we have of course the usual collection of bug fixes and
-device-specific quirks.
+Fixed: If a directory is set in the 'allow' option of the 'set httpd'
+statement, instead of file or string, Monit hangs on start.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libinput/libinput.hash | 2 +-
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0002-configure.ac-fixes-missing-config-macro-dir.patch   | 12 ++++++------
+ package/monit/monit.hash                                     |  4 ++--
+ package/monit/monit.mk                                       |  2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 2ab56e4827..f6ec570588 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  8c582b86c6865aaee2516ee96b299cef60c98e113d1391bbd2683eac08221a07  libinput-1.26.0.tar.bz2
-+sha256  8e823cc9f44c51b63ae90af0b73676ed82c0402cc1cbd4a59ac91b7bb6cad716  libinput-1.27.0.tar.bz2
+diff --git a/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch b/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch
+index 3bee55cb5e..9ed49e5797 100644
+--- a/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch
++++ b/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch
+@@ -1,4 +1,4 @@
+-From 2c06ecdc02de75a9e7e1e30e9c3d7d3a64269b7c Mon Sep 17 00:00:00 2001
++From 99b466f5448951a83a0d763e633906b28c30fc0a Mon Sep 17 00:00:00 2001
+ From: Jens Maus <mail@jens-maus.de>
+ Date: Fri, 22 Sep 2023 21:32:18 +0200
+ Subject: [PATCH] configure.ac: fixes missing config macro dir
+@@ -18,12 +18,12 @@ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+  2 files changed, 2 insertions(+), 2 deletions(-)
  
- # License files
- sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 3b5070c85e..ee15b781e6 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+ diff --git a/configure.ac b/configure.ac
+-index 3c3d30a2..f4c5ea07 100644
++index b4f2a14c..41a8c1a5 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -8,7 +8,7 @@
++@@ -8,7 +8,7 @@ AC_PREREQ([2.53])
+  # Example: 5.0_beta2
+- AC_INIT([monit], [5.34.2], [monit-general@nongnu.org])
++ AC_INIT([monit], [5.34.3], [monit-general@nongnu.org])
+  AC_CONFIG_AUX_DIR(config)
+ -AC_CONFIG_MACRO_DIR([m4])
+ +AC_CONFIG_MACRO_DIRS([m4 config])
+@@ -31,7 +31,7 @@ index 3c3d30a2..f4c5ea07 100644
+  AC_CONFIG_SRCDIR([src/monit.c])
+  AC_CONFIG_SUBDIRS([libmonit])
+ diff --git a/libmonit/configure.ac b/libmonit/configure.ac
+-index d4cd0789..5366444a 100644
++index 800ebf83..03101a6b 100644
+ --- a/libmonit/configure.ac
+ +++ b/libmonit/configure.ac
+ @@ -4,7 +4,7 @@ AC_PREREQ([2.53])
+@@ -44,5 +44,5 @@ index d4cd0789..5366444a 100644
+  AC_CONFIG_SRCDIR([src])
+  
+ -- 
+-2.34.1
++2.47.0
+ 
+diff --git a/package/monit/monit.hash b/package/monit/monit.hash
+index 276e0a19d8..2c2956afa3 100644
+--- a/package/monit/monit.hash
++++ b/package/monit/monit.hash
+@@ -1,4 +1,4 @@
+-# From https://mmonit.com/monit/dist/monit-5.34.2.tar.gz.sha256
+-sha256  291ca3d898e9b425b6d0c1768728fecd6c1cf4c268c79db15fda26285ad5b832  monit-5.34.2.tar.gz
++# From https://mmonit.com/monit/dist/monit-5.34.3.tar.gz.sha256
++sha256  669d8b95ddec124d1444ba5264f67fdeae8e90e53b2929719f4750fc5ff3ba60  monit-5.34.3.tar.gz
+ # Locally computed
+ sha256  d5a4f52b1a5e1e7fe14e01a76aac8b08dc6bbea15466058f271456c97aac1ada  COPYING
+diff --git a/package/monit/monit.mk b/package/monit/monit.mk
+index a2d8073c31..7d78597c25 100644
+--- a/package/monit/monit.mk
++++ b/package/monit/monit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.26.0
-+LIBINPUT_VERSION = 1.27.0
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.bz2
- LIBINPUT_SITE = https://gitlab.freedesktop.org/libinput/libinput/-/archive/$(LIBINPUT_VERSION)
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-MONIT_VERSION = 5.34.2
++MONIT_VERSION = 5.34.3
+ MONIT_SITE = https://mmonit.com/monit/dist
+ MONIT_LICENSE = AGPL-3.0 with OpenSSL exception
+ MONIT_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
