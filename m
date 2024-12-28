@@ -1,71 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B42CE77188
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 16:23:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71FE7E77188
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 16:34:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 462866084C;
-	Sat, 28 Dec 2024 16:23:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 23E764064B;
+	Sat, 28 Dec 2024 16:34:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Of63uUqUJSzr; Sat, 28 Dec 2024 16:23:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HQUQeu5ZYvt4; Sat, 28 Dec 2024 16:34:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9332960845
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E333B4064D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9332960845;
-	Sat, 28 Dec 2024 16:23:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id DDE17C8
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 16:23:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E333B4064D;
+	Sat, 28 Dec 2024 16:34:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D6354C8
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 16:34:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D7BC160845
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 16:23:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C45ED8103B
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 16:34:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4dy5BOi9rGoX for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 16:23:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tyLHHkNCMd5s for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 16:34:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C5FB8605A9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5FB8605A9
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C5FB8605A9
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 16:23:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id E22D71BF206;
- Sat, 28 Dec 2024 16:23:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECFB281013
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id ECFB281013
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 16:34:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D7DD9875B5; Sat, 28 Dec 2024 16:34:20 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Dec 2024 17:23:14 +0100
-Message-ID: <20241228162315.3156194-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.47.0
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1735402996;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=5Ze2lqxGELTznEshskhGB4gIVsIYIK0YD+o0bP8RfuU=;
- b=JyWKetQIUXgTJ9IVTVhhr0ppCoFZ498UR9xdSXE+bHSUEBh5Tf171pfXMp/PfBPYsKITiW
- sDaLBi62At/9Zbbd+CZD7BPh5SEV/gWAbJapypnUvXgyNVhILtdtJgGa0LPEcnHaFytnv8
- BIflos9pclChb74FQn5nr13FPfTlF+90ywmkUm33jE210M8jlsEebgbGT05DoctXqodukg
- Hw4evONFrO2xqppz53YQd7yZ6y8zzqVvfqPOSL8Ra8pAU7yxGag6RWv5glZWcAhYwHa9Mm
- TPAN+fyXGuWZdJfJzgs1qm4HcLsDt10p9vU45LhCAN48TPAh/2Of9WghbrBXvA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JyWKetQI
-Subject: [Buildroot] [PATCH] package/tinifier: bump version to 4.1.0
+Date: Sat, 28 Dec 2024 17:27:35 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8f52d4183e8221b99b8b206fd41d6fc98255d80c
+X-Git-Newrev: 5027bcf2c5c6f152bd837b5f961a4eea8e92ba5a
+X-Patchwork-Hint: ignore
+Message-Id: <20241228163420.D7DD9875B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tinifier: bump version to 4.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,12 +58,14 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://git.buildroot.net/buildroot/commit/?id=5027bcf2c5c6f152bd837b5f961a4eea8e92ba5a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 3.4.0 -> 3.5.0:
 
@@ -122,6 +105,7 @@ Changed
     Module name changed from github.com/tarampampam/tinifier/v4 to gh.tarampamp.am/tinifier/v4
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
  package/tinifier/tinifier.hash | 2 +-
  package/tinifier/tinifier.mk   | 2 +-
@@ -149,9 +133,6 @@ index d7ed6f7c93..d837b5da00 100644
  TINIFIER_SITE = $(call github,tarampampam,tinifier,v$(TINIFIER_VERSION))
  TINIFIER_LICENSE = MIT
  TINIFIER_LICENSE_FILES = LICENSE
--- 
-2.47.0
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
