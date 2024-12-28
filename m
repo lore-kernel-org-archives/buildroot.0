@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58E0EE77188
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 10:00:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BA24E77188
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 10:07:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22F3780D7F;
-	Sat, 28 Dec 2024 10:00:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFEF1809EB;
+	Sat, 28 Dec 2024 10:07:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PBU5Sl6TpXza; Sat, 28 Dec 2024 10:00:58 +0000 (UTC)
+ id vhApvqr6VeJ7; Sat, 28 Dec 2024 10:07:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D54280D50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D329A80886
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D54280D50;
-	Sat, 28 Dec 2024 10:00:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E1C0DF1B
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:00:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D329A80886;
+	Sat, 28 Dec 2024 10:07:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6AF2FE0
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:07:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CF6C84029A
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:00:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6599080844
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:07:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iP2T1sq4gbUP for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 10:00:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AE14240287
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE14240287
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AE14240287
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:00:55 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 6753560134;
- Sat, 28 Dec 2024 11:00:51 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:56674])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 28 Dec 2024 11:00:51 +0100
-MIME-Version: 1.0
-Date: Sat, 28 Dec 2024 11:00:51 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oquE-OF7zsKa for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 10:07:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F18380500
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7F18380500
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:07:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 78CA987454; Sat, 28 Dec 2024 10:07:22 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241227210352.2759332-1-thomas.petazzoni@bootlin.com>
-References: <20241227210352.2759332-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <08172012d32b9b907f3df1f1f5b69a19@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1735380052;
- bh=eYupzaWwRvAb42QHDctu8qW6WAWd6E7BwwIhZxRShZg=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=FR4HwT3WUEbTIJz76z/eN/tLFSwyIk3/8mI4gcn40R1DitIuWDrihDAc4HKJ+aLBY
- Z8lf1XwEyD1dY9FTPqnVnnk07wUEBj6EFXCPgikUIKO63enRsnPjpVvv1B1/HR7kQ0
- aTclL7tzzGxyPDu9i6tgWfFsS69lHLUh5qeZcgFXVO4Sx71xIFWPpjlEC7KyE+LHg0
- Wn6gTY30vFoEGdILFDazYEN0VguuCpdanJJyyM9WBn02yAuvMuqsr/E4T49Ftk4Vxk
- Zu8Y1lDn4DC49x5QyDq+SnmSG2rJ/U0JAOeBGcn1nnxsiMzJ8N9nNJc1mkEb/W6o8N
- JQKYabtQ+iq1A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FR4HwT3W
-Subject: Re: [Buildroot] [PATCH] package/hiawatha: remove package
+To: buildroot@buildroot.org
+Date: Sat, 28 Dec 2024 11:02:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1125fdde17a2635c7345e312cf17f31a8ed218b2
+X-Git-Newrev: 5d69216cfeccbddc7fbe2e201b3d18aa9776ebae
+X-Patchwork-Hint: ignore
+Message-Id: <20241228100722.78CA987454@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/monit: bump version to 5.43.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,34 +58,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 27/12/2024 22:03, Thomas Petazzoni via buildroot wrote:
-> We wanted to update hiawatha from 11.2 to the latest version 11.6, but
-> since its version 11.5, building with -DENABLE_TLS=OFF is broken. The
-> upstream project is also kind of dead/weird:
-> 
-> - The Gitlab repo at https://gitlab.com/hsleisink/hiawatha does not
->   have real commit history, just one commit per release
-> 
-> - There is no bug tracker for the project, nor any mailing list to
->   contact the author and report a bug
-> 
-> - The upstream website at https://hiawatha.leisink.net/support states
->   "Due to lack of interest in this project, I no longer actively
->   support and promote Hiawatha. I still use Hiawatha a lot myself, so
->   development will continue, but likely very slow. New versions will
->   still be released via this website.
-> 
-> Since I was the one who introduced this package, and nobody else seems
-> to use it, let's drop it.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=5d69216cfeccbddc7fbe2e201b3d18aa9776ebae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Patch 0002 needs to be slightly refreshed to apply on this new
+version.
+
+Version 5.34.3
+==============
+
+Fixed: If the ping statement did not explicitly specify an outgoing
+address but a previous ping statement did, the same address was shared
+by both statements.
+
+Fixed: Monit may crash upon stopping if the ping statement is used in
+conjunction with the address option.
+
+Fixed: If a directory is set in the 'allow' option of the 'set httpd'
+statement, instead of file or string, Monit hangs on start.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../0002-configure.ac-fixes-missing-config-macro-dir.patch   | 12 ++++++------
+ package/monit/monit.hash                                     |  4 ++--
+ package/monit/monit.mk                                       |  2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch b/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch
+index 3bee55cb5e..9ed49e5797 100644
+--- a/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch
++++ b/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch
+@@ -1,4 +1,4 @@
+-From 2c06ecdc02de75a9e7e1e30e9c3d7d3a64269b7c Mon Sep 17 00:00:00 2001
++From 99b466f5448951a83a0d763e633906b28c30fc0a Mon Sep 17 00:00:00 2001
+ From: Jens Maus <mail@jens-maus.de>
+ Date: Fri, 22 Sep 2023 21:32:18 +0200
+ Subject: [PATCH] configure.ac: fixes missing config macro dir
+@@ -18,12 +18,12 @@ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+  2 files changed, 2 insertions(+), 2 deletions(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index 3c3d30a2..f4c5ea07 100644
++index b4f2a14c..41a8c1a5 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -8,7 +8,7 @@
++@@ -8,7 +8,7 @@ AC_PREREQ([2.53])
+  # Example: 5.0_beta2
+- AC_INIT([monit], [5.34.2], [monit-general@nongnu.org])
++ AC_INIT([monit], [5.34.3], [monit-general@nongnu.org])
+  AC_CONFIG_AUX_DIR(config)
+ -AC_CONFIG_MACRO_DIR([m4])
+ +AC_CONFIG_MACRO_DIRS([m4 config])
+@@ -31,7 +31,7 @@ index 3c3d30a2..f4c5ea07 100644
+  AC_CONFIG_SRCDIR([src/monit.c])
+  AC_CONFIG_SUBDIRS([libmonit])
+ diff --git a/libmonit/configure.ac b/libmonit/configure.ac
+-index d4cd0789..5366444a 100644
++index 800ebf83..03101a6b 100644
+ --- a/libmonit/configure.ac
+ +++ b/libmonit/configure.ac
+ @@ -4,7 +4,7 @@ AC_PREREQ([2.53])
+@@ -44,5 +44,5 @@ index d4cd0789..5366444a 100644
+  AC_CONFIG_SRCDIR([src])
+  
+ -- 
+-2.34.1
++2.47.0
+ 
+diff --git a/package/monit/monit.hash b/package/monit/monit.hash
+index 276e0a19d8..2c2956afa3 100644
+--- a/package/monit/monit.hash
++++ b/package/monit/monit.hash
+@@ -1,4 +1,4 @@
+-# From https://mmonit.com/monit/dist/monit-5.34.2.tar.gz.sha256
+-sha256  291ca3d898e9b425b6d0c1768728fecd6c1cf4c268c79db15fda26285ad5b832  monit-5.34.2.tar.gz
++# From https://mmonit.com/monit/dist/monit-5.34.3.tar.gz.sha256
++sha256  669d8b95ddec124d1444ba5264f67fdeae8e90e53b2929719f4750fc5ff3ba60  monit-5.34.3.tar.gz
+ # Locally computed
+ sha256  d5a4f52b1a5e1e7fe14e01a76aac8b08dc6bbea15466058f271456c97aac1ada  COPYING
+diff --git a/package/monit/monit.mk b/package/monit/monit.mk
+index a2d8073c31..7d78597c25 100644
+--- a/package/monit/monit.mk
++++ b/package/monit/monit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONIT_VERSION = 5.34.2
++MONIT_VERSION = 5.34.3
+ MONIT_SITE = https://mmonit.com/monit/dist
+ MONIT_LICENSE = AGPL-3.0 with OpenSSL exception
+ MONIT_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
