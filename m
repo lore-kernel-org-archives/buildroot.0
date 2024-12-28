@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F4B9C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:47:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0708AC282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9CF03849B0;
-	Fri, 28 Feb 2025 16:47:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3510242D72;
+	Fri, 28 Feb 2025 16:47:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8wTPbelryUka; Fri, 28 Feb 2025 16:47:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wOO-clRSYNgY; Fri, 28 Feb 2025 16:47:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 474D9849A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFA884639D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 474D9849A7;
-	Fri, 28 Feb 2025 16:47:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DFA884639D;
+	Fri, 28 Feb 2025 16:47:09 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 276EC1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:11 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 074671DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C2C3842DD6
+ by smtp4.osuosl.org (Postfix) with ESMTP id E1400424D8
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j1kUy67OffNF for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:08 +0000 (UTC)
+ id MHGtuAg9vm90 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF3C9424D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3BC142562
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF3C9424D8
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C3BC142562
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A2C2B81793; Fri, 28 Feb 2025 16:29:50 +0000 (UTC)
+ id B962C80584; Fri, 28 Feb 2025 16:29:49 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 12:34:41 +0100
+Date: Sat, 28 Dec 2024 11:14:22 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6beee86c0d953dd67549d27c1f684132bc052a31
-X-Git-Newrev: f27dcb9310464d21916625c892a9bc2a25664b9b
+X-Git-Oldrev: 5d69216cfeccbddc7fbe2e201b3d18aa9776ebae
+X-Git-Newrev: 0efc06ed5193d4c18fcafb39daaf693a9e81a73e
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162950.A2C2B81793@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wayland: bump to
- version 1.23.1
+Message-Id: <20250228162949.B962C80584@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/scons: bump to 4.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,63 +64,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f27dcb9310464d21916625c892a9bc2a25664b9b
+commit: https://git.buildroot.net/buildroot/commit/?id=0efc06ed5193d4c18fcafb39daaf693a9e81a73e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-From
-https://lists.freedesktop.org/archives/wayland-devel/2024-August/043760.html:
+The tarball was renamed from SCons-<version>.tar.gz to
+scons-<version>.tar.gz.
 
-This is a bugfix release for Wayland 1.23.
+Changes 4.7.0 -> 4.8.0:
+  https://scons.org/scons-480-is-available.html
 
-Joaquim Monteiro (1):
-      meson: Fix use of install_data() without specifying install_dir
+Changes 4.8.0 -> 4.8.1:
+  https://scons.org/scons-481-is-available.html
 
-Kirill Primak (1):
-      Put WL_DEPRECATED in front of the function declarations
-
-Sebastian Wick (1):
-      client: Handle proxies with no queue
-
-Simon Ser (4):
-      scanner: extract validator function emission to helper function
-      scanner: fix validator for bitfields
-      tests: add enum bitfield test
-      build: bump version to 1.23.1 for the bugfix release
+This change has been tested by building the two Buildroot packages
+that use host-scons: benejson and gpsd.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/wayland/wayland.hash | 6 +++---
- package/wayland/wayland.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/scons/scons.hash | 4 ++--
+ package/scons/scons.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
-index 627cb5a1b0..f7c085513a 100644
---- a/package/wayland/wayland.hash
-+++ b/package/wayland/wayland.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2024-May/043636.html
--sha256  05b3e1574d3e67626b5974f862f36b5b427c7ceeb965cb36a4e6c2d342e45ab2  wayland-1.23.0.tar.xz
--sha512  9c525231a7ea3e68d3178230d476285a960d23e38571ac96d885f86c0588c52ef01460bff6833db5adb9456ce8db7b996613611187aac972736748ba91b8fd81  wayland-1.23.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2024-August/043760.html
-+sha256  864fb2a8399e2d0ec39d56e9d9b753c093775beadc6022ce81f441929a81e5ed  wayland-1.23.1.tar.xz
-+sha512  818eda003e3f7aa15690eedb1ff227a6056b2ce54bf23d45ffe573dc40a914623c5a1358218b59444dcdc483db0503324f0d27091d0ea954412a8b290de5f50a  wayland-1.23.1.tar.xz
- 
- # Locally calculated
- sha256  6eefcb023622a463168a5c20add95fd24a38c7482622a9254a23b99b7c153061  COPYING
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index 06adafc3e1..bb5ceabb9c 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/scons/scons.hash b/package/scons/scons.hash
+index 8dca99830e..3a8a942ee8 100644
+--- a/package/scons/scons.hash
++++ b/package/scons/scons.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/scons/json
+-md5  f5a740e94864408902c62bdb47687d9d  SCons-4.7.0.tar.gz
+-sha256  d8b617f6610a73e46509de70dcf82f76861b79762ff602d546f4e80918ec81f3  SCons-4.7.0.tar.gz
++md5  37ad818d24ad2f44d6bee5b0f3838706  scons-4.8.1.tar.gz
++sha256  5b641357904d2f56f7bfdbb37e165ab996b6143c948b9df0efc7305f54949daa  scons-4.8.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  2f6ac9a1fc98394d18b80dba9bedb9d5626006d44db3fecf7cf3e21cff7e8b1c  LICENSE
+diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+index b6bfaa0237..f1f76f38a6 100644
+--- a/package/scons/scons.mk
++++ b/package/scons/scons.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--WAYLAND_VERSION = 1.23.0
-+WAYLAND_VERSION = 1.23.1
- WAYLAND_SITE = https://gitlab.freedesktop.org/wayland/wayland/-/releases/$(WAYLAND_VERSION)/downloads
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
+-SCONS_VERSION = 4.7.0
+-SCONS_SOURCE = SCons-$(SCONS_VERSION).tar.gz
+-SCONS_SITE = https://files.pythonhosted.org/packages/7b/68/6895065c86c65a9388eb760a43ea695ec5b9b1c98a9675a3bcd682dbe9c0
++SCONS_VERSION = 4.8.1
++SCONS_SITE = https://files.pythonhosted.org/packages/b9/76/a2c1293642f9a448f2d012cabf525be69ca5abf4af289bc0935ac1554ee8
+ SCONS_LICENSE = MIT
+ SCONS_LICENSE_FILES = LICENSE
+ SCONS_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
