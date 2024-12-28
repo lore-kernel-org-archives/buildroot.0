@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39893E77188
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 10:20:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AB07E77188
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 10:21:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BAD3C40554;
-	Sat, 28 Dec 2024 10:20:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 21B2C60871;
+	Sat, 28 Dec 2024 10:21:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mnw8QVGuMOjA; Sat, 28 Dec 2024 10:20:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HPP1cfuB-SG3; Sat, 28 Dec 2024 10:21:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BA4740555
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F7496087D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BA4740555;
-	Sat, 28 Dec 2024 10:20:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id BB342E0
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:20:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F7496087D;
+	Sat, 28 Dec 2024 10:21:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 84A82E0
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:21:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A2EA240554
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:20:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 64F3D80F4D
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:21:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pSj1f5l7CPQW for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 10:20:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A73B440550
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A73B440550
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A73B440550
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:20:49 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 05AAD5FFB7;
- Sat, 28 Dec 2024 11:20:46 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:60082])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 28 Dec 2024 11:20:46 +0100
-MIME-Version: 1.0
-Date: Sat, 28 Dec 2024 11:20:46 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WTqXYwmDe6E5 for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 10:21:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EF3C80F48
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9EF3C80F48
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:21:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8571081191; Sat, 28 Dec 2024 10:21:22 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241228092841.3045045-1-thomas.petazzoni@bootlin.com>
-References: <20241228092841.3045045-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <61c33a6eeba322638558c6db2d7e9b81@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1735381248;
- bh=N507hFkU7VfaSinbwFRK/G4YY8lWXlQE9c30jlWvjSg=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=lkbXN9yK5mpNK8/cXZZ5HAzsEfUp9x8k/6NhdE52omgJoc2pCT8NtkHZMWG9ObK0c
- lvj9EZaT4qZ77SJd6XvYoyy+nAD4XbIMyIeEHMr2/TWGjHPXi5D1Bt4ISV0n3ylKKO
- JX5GTpKZV3C7dXv9bvUmDjdyI8wU4ilRDQm45oVY9QQJ/B0GKoOo8FmUIrInIs/E8i
- RKEZPQQUMcBIb95R2ljrIKBdBnDG4ty75l78V5cQgTN6RY47/uzjf4nA1/38uJzN/S
- /yZ3uqpL7A+514oHNUuCN5ReKvsMf+AqpHwUsQmx5zfnuq1QAMXNKxz+MAO1RRDdAq
- Tfkc+8h/lQe4Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=lkbXN9yK
-Subject: Re: [Buildroot] [PATCH] package/scons: bump to 4.8.1
+To: buildroot@buildroot.org
+Date: Sat, 28 Dec 2024 11:14:22 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5d69216cfeccbddc7fbe2e201b3d18aa9776ebae
+X-Git-Newrev: 0efc06ed5193d4c18fcafb39daaf693a9e81a73e
+X-Patchwork-Hint: ignore
+Message-Id: <20241228102122.8571081191@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/scons: bump to 4.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,27 +58,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 28/12/2024 10:28, Thomas Petazzoni via buildroot wrote:
-> The tarball was renamed from SCons-<version>.tar.gz to
-> scons-<version>.tar.gz.
-> 
-> Changes 4.7.0 -> 4.8.0:
->   https://scons.org/scons-480-is-available.html
-> 
-> Changes 4.8.0 -> 4.8.1:
->   https://scons.org/scons-481-is-available.html
-> 
-> This change has been tested by building the two Buildroot packages
-> that use host-scons: benejson and gpsd.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=0efc06ed5193d4c18fcafb39daaf693a9e81a73e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+The tarball was renamed from SCons-<version>.tar.gz to
+scons-<version>.tar.gz.
+
+Changes 4.7.0 -> 4.8.0:
+  https://scons.org/scons-480-is-available.html
+
+Changes 4.8.0 -> 4.8.1:
+  https://scons.org/scons-481-is-available.html
+
+This change has been tested by building the two Buildroot packages
+that use host-scons: benejson and gpsd.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/scons/scons.hash | 4 ++--
+ package/scons/scons.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/package/scons/scons.hash b/package/scons/scons.hash
+index 8dca99830e..3a8a942ee8 100644
+--- a/package/scons/scons.hash
++++ b/package/scons/scons.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/scons/json
+-md5  f5a740e94864408902c62bdb47687d9d  SCons-4.7.0.tar.gz
+-sha256  d8b617f6610a73e46509de70dcf82f76861b79762ff602d546f4e80918ec81f3  SCons-4.7.0.tar.gz
++md5  37ad818d24ad2f44d6bee5b0f3838706  scons-4.8.1.tar.gz
++sha256  5b641357904d2f56f7bfdbb37e165ab996b6143c948b9df0efc7305f54949daa  scons-4.8.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  2f6ac9a1fc98394d18b80dba9bedb9d5626006d44db3fecf7cf3e21cff7e8b1c  LICENSE
+diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+index b6bfaa0237..f1f76f38a6 100644
+--- a/package/scons/scons.mk
++++ b/package/scons/scons.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-SCONS_VERSION = 4.7.0
+-SCONS_SOURCE = SCons-$(SCONS_VERSION).tar.gz
+-SCONS_SITE = https://files.pythonhosted.org/packages/7b/68/6895065c86c65a9388eb760a43ea695ec5b9b1c98a9675a3bcd682dbe9c0
++SCONS_VERSION = 4.8.1
++SCONS_SITE = https://files.pythonhosted.org/packages/b9/76/a2c1293642f9a448f2d012cabf525be69ca5abf4af289bc0935ac1554ee8
+ SCONS_LICENSE = MIT
+ SCONS_LICENSE_FILES = LICENSE
+ SCONS_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
