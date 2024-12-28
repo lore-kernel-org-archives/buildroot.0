@@ -1,72 +1,170 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46388E7718F
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 10:56:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36AC2E77188
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 14:06:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 01A4F80E0F;
-	Sat, 28 Dec 2024 10:56:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD59060761;
+	Sat, 28 Dec 2024 14:06:48 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3NZ4859b2SnJ; Sat, 28 Dec 2024 14:06:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECD5C6073A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECD5C6073A;
+	Sat, 28 Dec 2024 14:06:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 88C9EE0
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 14:06:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 63E25808AE
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 14:06:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ACZaCi-55Vrx; Sat, 28 Dec 2024 10:56:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8DA580DA6
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8DA580DA6;
-	Sat, 28 Dec 2024 10:56:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2FCE4E0
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:56:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F04D540394
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:56:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RYiolIBpLRfQ for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 10:56:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B978C401DC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B978C401DC
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B978C401DC
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:56:39 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id B645FC0002;
- Sat, 28 Dec 2024 10:56:36 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Dec 2024 11:56:34 +0100
-Message-ID: <20241228105635.3079116-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.47.0
+ id 6WZC0oe92PoC for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 14:06:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:240a::60e;
+ helo=nam04-mw2-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3BE7580A91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BE7580A91
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam04on2060e.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:240a::60e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3BE7580A91
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 14:06:42 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dDst6BRUStaOKlbq7uUrwURJ7YzOd3FNc2519ToET47b87gnWkhWUOjxZwp49DjhWbTX2EinI/kxGZQa/qi8M7R7N21ACrGZySW0kzFakVaajN49tM1XLnxU++e+0VXocY8wWdwpLT1P6PKfimZ9EUWoYnVOjJZyU+cNhPPjiU3MFxUr5L+Jo1FAzvHfsMMrbJWKJ7IFuH5Ae2WDkJYyX9caUhcEmKFk5akadKVp3fQdck5DpFJBoOOng8j5zmN8SBqT9eZSA9swuqCXwBO2l/q4Kat9vmt6GJ79v4nef06iT+HKFmivOfcZ61xtqbXf4D2Gt2Ryex3T7sQUzBmdCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2HVRXAJKWVAaUQjs1/DvukX8e29iXxkMsFIBuPUNn/w=;
+ b=LxtZxMa9e/XXxIIZcvBwiH20VvxyXXmD6tW0VQ7hocY7RJGxTeVhE7893JfJgmoj9KFYnCrFcBeAj0sgx5DG2vvOqwJoEucKNto+OokvDL88uuligF8Hjhh9UROlskuEk4JzcLBdiL5j89rtft85pLLESjHry/hapc3uqBcVCsHBM7XDiw2NtdfmotIML/obvJxDzsh99r8iUt+jKS5r3YvE4w9jpWLRsAvtgTys0O6utuWtd11K2z8xpr/o2HXfCWlFuhtnkp992aDLc0YFTQQJv5x/9ayaLh6uy/7POKaZGW8IQEaCS8/b7Orpdn8V4+ISdBfpmnFYZ47daU36Wg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
+ by LV3PR12MB9329.namprd12.prod.outlook.com (2603:10b6:408:21c::9)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8293.17; Sat, 28 Dec
+ 2024 14:06:35 +0000
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::e6c1:191b:641d:4d1b]) by CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::e6c1:191b:641d:4d1b%6]) with mapi id 15.20.8293.000; Sat, 28 Dec 2024
+ 14:06:35 +0000
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Thread-Topic: [PATCH v2 3/7] board/zynqmp/binman_patches: add zynqmp binman
+ patches
+Thread-Index: AQHbUsrzFHm28HM2AU6eLWTePC4EdrL1dOQAgAZIibA=
+Date: Sat, 28 Dec 2024 14:06:34 +0000
+Message-ID: <CH2PR12MB5004A588A07259CE652A7E35F00F2@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20241220103523.2301721-1-neal.frager@amd.com>
+ <20241220103523.2301721-3-neal.frager@amd.com>
+ <20241224150800.4bef4993@booty>
+In-Reply-To: <20241224150800.4bef4993@booty>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|LV3PR12MB9329:EE_
+x-ms-office365-filtering-correlation-id: 976745bf-6215-49b9-12f2-08dd2748d6a2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|1800799024|366016|376014|38070700018|41080700001; 
+x-microsoft-antispam-message-info: =?us-ascii?Q?BOKTohguv/25vbJe1lFOHAipPsuSxOLsj8L64f3bJ0l0NgyOPCUQA25Eqcyl?=
+ =?us-ascii?Q?EaM1uzY4hNV/mJkFOoPajH95dN/cNCcfChCEVw3oeCj4ZWkRQI+LZO370IAS?=
+ =?us-ascii?Q?HLiWODu8ahWYP9rQvDc9b4KSTaLngdPvBFRHihr0ZtDexFuETkNkmrQI5kib?=
+ =?us-ascii?Q?kyE+MKJPxVIhGiNo0fgnIz3Z8JmWzhNp+1FjukPjQWaAmWOvg+15pJ6O49Ws?=
+ =?us-ascii?Q?Fu6EA6hhuk5qUNG7piQBl9OwhkzB70G0xtxRsO+JHo56j9ezJ3YfxmRHrbeu?=
+ =?us-ascii?Q?ogAmbw/pAhtcCPqeX1EnLd+gku2DlYnoJlKh78j4ykTDrH0tDigFpUZXuAAn?=
+ =?us-ascii?Q?uEQGxpo+4I9pKzFMdpzlzdhovdrUrQgfXD5dQsHoNAm+UGP+Gpgg9D5sYyUO?=
+ =?us-ascii?Q?s1BcsqYjV+a+rpD9XBJwDZ1mEK1IeMTaWEBYbJzaknTEYoPeBRFsc/A+fv6e?=
+ =?us-ascii?Q?CY4nuB9aCvStuSlesrXFhUsh38ys6eVWy8CMARYqIW1w5LjQtI+7CneyTpy/?=
+ =?us-ascii?Q?b/WUxKrhh2zKptauaIAus+TZGpTYu+ZBY+XRnQhd08QamGHuDqn4BuT4nReH?=
+ =?us-ascii?Q?HcK+1Aex9AqBIfJGF8GN8VtxqQuN5xh3rt2OU9Rpjpw+YzniBUUt2fGqImMJ?=
+ =?us-ascii?Q?QGv7WA+bV7oUSamLEjxEaAjGqOwP2GBWQz2660gA7Ek93fMZTgbLr9M7CC+U?=
+ =?us-ascii?Q?z2tIBRX/QjT8SM2l+PKd3HWROl3M1vQRhz4nZjwiRV5OXV4rqEUwiqVF1NYX?=
+ =?us-ascii?Q?kimCrzUlxm0Td4OODK9ISw51V8HF1IvLAHIUtRiTgMvcZTyuOexU5LPY0a8f?=
+ =?us-ascii?Q?/+fQDUh+J7DEYdcH7h/3i8Ze506P1wU//gJEOoKjJiNpEdwdMI3EG2EMd9CO?=
+ =?us-ascii?Q?b3puASehhnrG2pFVIWkKho2jRfu26w4Pf1a5UFc1StRR9xkpcaUA6NeQcxnL?=
+ =?us-ascii?Q?eJ6+WcD/SH3GyfaS71bBFxKlaMuKOSTQ8HJZ+I8E37bR/7hUjc31MzdaPCml?=
+ =?us-ascii?Q?iAkugFNs3V+krrvmAdil1CPGnwB3H95Qr9bPnVYTwFwi/NKrsQoMbbFqeQMZ?=
+ =?us-ascii?Q?ykxCZF0RXKJSZJ/Fk9Cr2I2ZfDaz23G8BpzqiGlrWqIZwdrvnEdn+ErZmon9?=
+ =?us-ascii?Q?l/4qzCYRZBFzm4wlMJwugn9Qce29Ez2ok7DeTADcC8QHgMitbtWqv+wyVgof?=
+ =?us-ascii?Q?2ftUjRxqf9R/YZJJbZotzbTQ47SeY56INJ2TuY5gA83KOV873aweb3XHsAeg?=
+ =?us-ascii?Q?JWYyswy40l9VQSZafv7ZgLwms2/fiWWs/3nopDiI715zzQJ0GUk+Dq1xQtT1?=
+ =?us-ascii?Q?2YjJWpTlYph+Nd9e9JSNVNRyGQPvPk2zf21PJ6hVZ4DBGZmRmotN+wgalquR?=
+ =?us-ascii?Q?mxojAaqwL16L8pDUSVaMFXIQQkuNHz12t90TaS3xD36r/s+md9PG/GUgXUWG?=
+ =?us-ascii?Q?L3VsXW/dA/W2i5Oj19rw/UZxZOvQbjF5G8M1RoWQlajVZV7CbzASPD0BBgfx?=
+ =?us-ascii?Q?fUx1NS/65eKuY+E=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(1800799024)(366016)(376014)(38070700018)(41080700001); DIR:OUT;
+ SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JqIUBZRQgAlAeslBqPN+4Dwoaau/5wNDqiu/q7Ci85PjhzJrby5LcQk+Rgit?=
+ =?us-ascii?Q?6RfqA0N+gEbA5HKUyTNEzWoGd9fPFmb0e4esPepL+su/DavKDcPi8LvcyOu9?=
+ =?us-ascii?Q?1e4TzQ15KNootDxY6HJC0+DR/hQbuMti+OtnQOjvsR8Rp3EP9VNgspp1ypos?=
+ =?us-ascii?Q?OCKdrQ2hF+w00PaVlNGFJQcogd7/9mTA7S8RCqvjlDFF8rQYNx1eNfe4KkZz?=
+ =?us-ascii?Q?gpZIyZqaOrNTS9RLJUmGAmGUxh2/EI93lzabzu6UiHfZGveKV7JyH3LM+DOn?=
+ =?us-ascii?Q?jsPKBfwQf+GRsVwe6MBxDL048uFk9+be/BJe4xq0/bt0SKw9qnhd4XSKd4tM?=
+ =?us-ascii?Q?A8/BUKmKW0ViwR9DUkON4cnKQN7+XMBbfW4ZXn4nXx+gUvlrRMXYd0fLGX+K?=
+ =?us-ascii?Q?gmpyjN4DYdaFFqY25TbcOqCMcXD1SVmPQxvaQcfdnmsJphA9bPm3cPq0z7hS?=
+ =?us-ascii?Q?Nk1sfBorL0reRAEAXA0+TD9DcepeUPpxKYEMHUpJ7pNNcjqeX5i+L0PwGrhP?=
+ =?us-ascii?Q?AC3qi5goW5F8eJIEfXZSM1tUJUmrRcRudeukuIk7z0vFPVYZHrC3TSKZwQvZ?=
+ =?us-ascii?Q?2JMmsZFAF7oatynwrXPE6/F2xG1kMA1iS/A63M7LvxMsk/8X6hw4V2seVe1R?=
+ =?us-ascii?Q?Wc1RO60zgHlB/tZH2tBnzEB3pkL1M5i+Cp7lGxWXKiex1pdXm3IBxqGulyL2?=
+ =?us-ascii?Q?IF8jab6nia4C4tkamz4FmJF7/CSmmSCMMs3n3PVamF489BGiQhlXc/+xNgL+?=
+ =?us-ascii?Q?JeqrR7OLkle5Q+jIwrxxZ8+TYhdIJDspvB3QTz0aKrMMXH3mzfuUrZG/jPmU?=
+ =?us-ascii?Q?50jqBPynPNRJ1BOBKuuuZfOYll73RtzlVLmagpqDL6E+9wVVaaqI+P1hz8Qx?=
+ =?us-ascii?Q?av+EB3edTmnUCu3nRxMRjlDgVmUiIAhePsjJU+L87nSEZulMktmprj7t7Lta?=
+ =?us-ascii?Q?LAmRIg6YQ4+WK1klcraV40uQy7/Vb1slxKWgrA8v+v0a8qFRVcwFkaeoExTa?=
+ =?us-ascii?Q?BLjcuPVjkWJdTMiGO0q5GO5/YVl8qm9zXKV2s1B/Y3WJfyzvRqrGzm6vbm2o?=
+ =?us-ascii?Q?1ehy8vOInvp8wtZmRuFcO6C0pPQUKEJYcirVWMEovbDcE2U2ZQPR9q5EawNc?=
+ =?us-ascii?Q?cpseCYsMO/rHABkCwZXMOGZl9X7pN/6MT6vbO8sosor53ITH/lvn3XdzyZXu?=
+ =?us-ascii?Q?pc78ZGl87FfaC4GfT68sYhSrqUBtHPJpMO7s32dyZxdGqMT9oVVMU1TZrPAh?=
+ =?us-ascii?Q?ZXvZV/RqAncpcHAB0tsXXcKUmQHGWC2SzlfjzjF4xsElNtrRBf8VrW31Brya?=
+ =?us-ascii?Q?RSfRSvKJLy6qgKbYe1+eE2uWC4HE99B99SYRZwYp7WBK0L0Iu0XVE7T8zZOa?=
+ =?us-ascii?Q?nyqeHbHCYSrBHbKQ/M7G3SwJJfClEMtGT1fhlDiS1NHk+frpK/YxBnlCWes3?=
+ =?us-ascii?Q?IHPlRqWmcr5c3JssRKy6CII8YJvHqgxkElIL/hSG99GVoLygvTdnDB/RCAw5?=
+ =?us-ascii?Q?Q8rXECGzvdZUkEni8Qh4JkRFGYiCn0eZrwjXgawprsQUl1X8+vGmT1er3lbJ?=
+ =?us-ascii?Q?1MXpuULqX7GGVMRUZ48=3D?=
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 976745bf-6215-49b9-12f2-08dd2748d6a2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Dec 2024 14:06:34.8531 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WlEISARfpz67Ek2DEvhpT29E+TA3kZs5z8cN3oL07+l5aJzBF5sLTMK1ey0454YE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9329
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1735383396;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=uwQ4pCV7uirgW32F8mTqASwQaiBmbCeOrp9MXcb1pmo=;
- b=B5B2FTKwPmuX6bYAvxU7i0FRe4Q1khFC4y1KsH6Kcbli58EsF8VErCLFI177hy7HxqboY6
- 956XLzXp3HysEQm4o1VW9RiKUFpHXNxm9h+jf7JIlk/HUct/YN62t/GzntGfwOSIRZLS2M
- PoUYq3D3pJDQF4HeidLYo5bLs49fN1VbS1flZeDW1LQJ6YQ/BPWOgLx3Uczb2zBpHlCpOx
- iyMIBpMNipQy6DSp7l7I4jl+5jhrHrxRx+bDJfDu6lv53gTfHOsY+1kvuUcWUriWFjHC3g
- Hvfh5GElY7ma0GGZQQb3dzJsW6q4lLT2Q8YNNZv1ZuOQWqcgGVSIbIdZjmzv0Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=B5B2FTKw
-Subject: [Buildroot] [PATCH] package/rt-tests: bump to version 2.8
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2HVRXAJKWVAaUQjs1/DvukX8e29iXxkMsFIBuPUNn/w=;
+ b=N8KJtPuIxuy8PmF9Qo8A3zLevTUqrB/Gv7GdQJIq9g5uWgJh3jl7OTo/P9xDfIqkwK/UnOejFyIBzk83crRhRpb/b84zz2DEShqQNGK+pc7McDTaTYQphgjo2VhnqD+EaTvZQ5wrv9jKIlYdd5x++M8XOJH2kHbxlvC5SyBsayc=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=N8KJtPuI
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v2 3/7] board/zynqmp/binman_patches: add
+ zynqmp binman patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,105 +176,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "brandon.maier@collins.com" <brandon.maier@collins.com>,
+ "ju.o@free.fr" <ju.o@free.fr>,
+ "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
+ Michal" <michal.simek@amd.com>,
+ "yann.morin.1998@free.fr" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes 2.7..2.8:
+Hi Luca,
 
-c8b918c53cd57fdcbb6df153064d1b2e5cc329e8 rt-tests: Change to version v2.8
-84833954f7ee7ef9eec0071831355070c897e8d9 rt-tests: pi_stress:
-0ef93a1735316141df5d973496db54a08956fa85 rt-tests: cyclictest: Add --deepest-idle-state to manpage
-3b775a463a13f34b95d6963d6d034eb8b4690e5e rt-tests: cyclictest: Support idle state disabling via libcpupower
-3372e0d56b3fa2de82cbbab361b881ba470cfbbe rt-tests: Detect libcpupower presence
-fab7d905788701fd94d418126a52f74b776eb91d rt-tests: determine_maximum_mpps.sh: Get frequency from timebase-frequency if cpuinfo fails
-394f7507112b394142bdded1330b28a77f70851a rt-tests: queuelat: Fix wraparound in __clock_gettime()
-f2d8e34c9f2754b35327973f49d93f7b6089b8d7 rt-tests: cyclictest: Reformat help for 80 char screen
-3fdf4e7130ab53e7036268c0b85f447e8ba10d9e cyclictest: Fix help text for '-a' option
-d2af77295440da1c0f178aa87ff6ab9fc169dcf7 rt-tests: Add console_commands.json to gitignore
-e67db31eb3fd18f1dbbc97dc7b9adb9331572f11 rt-tests: pi_stress: Move unlock into if block with matching lock
-cadd661f984c0e6717e681fdaca1ce589b0ed964 rt-tests: hackbench: properly recognize when integer arguments are negative
-64c7f92979ded63ac5a19ea59e9b791e3da1fae4 rt-tests: hackbench: removed extra use of optind
+> This patch adds the zynqmp binman patches that are already committed to the
+> u-boot next branch.
+> 
+> https://github.com/u-boot/u-boot/commit/10de9b5a6a5b53a37600894115685f00d3bbfc2d
+> https://github.com/u-boot/u-boot/commit/290385f374fba69f9c4f473c8bd25d64935a4c82
+> https://github.com/u-boot/u-boot/commit/d92fdb60677b3990919a4216d3452418db215224
+> https://github.com/u-boot/u-boot/commit/afbc1fa5f18a2eebf1cf06f62574016edc093f50
+> https://github.com/u-boot/u-boot/commit/2eb8cd5bd4936a5eb2e77729855d946f6720921c
+> https://github.com/u-boot/u-boot/commit/a4c98119109a60b9b236996f47065aa8fc0de9ca
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+> V1->V2:
+>  - new to patch series
+> ---
+>  ...kbuild-fdtoverlay-changes-from-linux.patch | 198 ++++++++++
+>  ...s-and-add-new-dtb-entries-for-zynqmp.patch |  91 +++++
+>  ...for-pointing-to-separate-description.patch |  65 ++++
+>  ...64-zynqmp-describe-empty-binman-node.patch |  63 ++++
+>  ...ynqmp-add-binman-description-for-som.patch | 344 ++++++++++++++++++
+>  ...u-boot.itb-and-qspi-image-via-binman.patch | 158 ++++++++
+>  6 files changed, 919 insertions(+)
+>  create mode 100644 board/zynqmp/binman_patches/uboot/0001-kbuild-cherry-pick-kbuild-fdtoverlay-changes-from-linux.patch
+>  create mode 100644 board/zynqmp/binman_patches/uboot/0002-arm64-zynqmp-remove-overlays-and-add-new-dtb-entries-for-zynqmp.patch
+>  create mode 100644 board/zynqmp/binman_patches/uboot/0003-binman-add-option-for-pointing-to-separate-description.patch
+>  create mode 100644 board/zynqmp/binman_patches/uboot/0004-arm64-zynqmp-describe-empty-binman-node.patch
+>  create mode 100644 board/zynqmp/binman_patches/uboot/0005-arm64-zynqmp-add-binman-description-for-som.patch
+>  create mode 100644 board/zynqmp/binman_patches/uboot/0006-arm64-zynqmp-generate-u-boot.itb-and-qspi-image-via-binman.patch
 
-Patch 0002 is refreshed.
+> IIUC these patches apply to all the zynqmp boards (and none of the
+> Zynq-7000 boards). Why not adding them to board/zynqmp/patches/uboot
+> instead?
 
-The tarball is back at $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests since
-it's the latest release. We have sent an e-mail to the linux-rt-users@
-mailing list to ask them to stop moving the tarballs around:
+> Also, I wonder whether this patch should be merged with the following,
+> where these files are used. But given the large size of this patch,
+> I'll be OK if you prefer to keep it separate.
 
-  https://lore.kernel.org/linux-rt-users/20241228114346.6020d6b0@windsurf/
+> Other than that, LGTM.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...drop-explicit-undefine-PYLIB-for-compatibil.patch | 12 ++++++------
- package/rt-tests/rt-tests.hash                       |  2 +-
- package/rt-tests/rt-tests.mk                         |  4 ++--
- 3 files changed, 9 insertions(+), 9 deletions(-)
+Yes, we are currently only migrating the zynqmp platform to binman.  While we
+could migrate zynq7000 as well at some point, this is not currently planned.
 
-diff --git a/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch b/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch
-index 9212b8eee0..650e63460f 100644
---- a/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch
-+++ b/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch
-@@ -1,4 +1,4 @@
--From 063972eece2fb8157f0feb98a4608c2984c7c5ff Mon Sep 17 00:00:00 2001
-+From 17ec1bce74419f8193c0246dbde2d2fdd6b1b4e3 Mon Sep 17 00:00:00 2001
- From: Peter Korsgaard <peter@korsgaard.com>
- Date: Wed, 12 May 2021 09:18:33 +0200
- Subject: [PATCH] Makefile: drop explicit undefine PYLIB for compatibility with
-@@ -30,12 +30,12 @@ Signed-off-by: Julien Olivain <ju.o@free.fr>
-  1 file changed, 5 deletions(-)
- 
- diff --git a/Makefile b/Makefile
--index e2f8579..62c906f 100644
-+index f656e34..1206f40 100644
- --- a/Makefile
- +++ b/Makefile
--@@ -37,11 +37,6 @@ LDFLAGS ?=
-- 
-- PYLIB ?= $(shell python3 -m get_pylib)
-+@@ -52,11 +52,6 @@ else
-+ $(warning libcpupower disabled, building without --deepest-idle-state support.)
-+ endif
-  
- -# Check for errors, such as python3 not available
- -ifeq (${PYLIB},)
-@@ -46,5 +46,5 @@ index e2f8579..62c906f 100644
-  	   src/pi_tests/pi_stress.8 \
-  	   src/ptsematest/ptsematest.8 \
- -- 
--2.45.2
-+2.47.0
- 
-diff --git a/package/rt-tests/rt-tests.hash b/package/rt-tests/rt-tests.hash
-index 9682fde406..c17829cace 100644
---- a/package/rt-tests/rt-tests.hash
-+++ b/package/rt-tests/rt-tests.hash
-@@ -1,4 +1,4 @@
- # From https://mirrors.edge.kernel.org/pub/linux/utils/rt-tests/sha256sums.asc
--sha256  0e5b2fbc98ceb786bd113c9a30f0388d884b2d8c4bd6c569d94ae8b00a702bbb  rt-tests-2.7.tar.xz
-+sha256  13190fda63fae640a354d3378c16030f1bd4c243e514515810145dd9d1ae16d8  rt-tests-2.8.tar.xz
- # locally computed hash
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-index e048ee94d0..3c6b6f2276 100644
---- a/package/rt-tests/rt-tests.mk
-+++ b/package/rt-tests/rt-tests.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests/older
-+RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests
- RT_TESTS_SOURCE = rt-tests-$(RT_TESTS_VERSION).tar.xz
--RT_TESTS_VERSION = 2.7
-+RT_TESTS_VERSION = 2.8
- RT_TESTS_LICENSE = GPL-2.0+
- RT_TESTS_LICENSE_FILES = COPYING
- 
--- 
-2.47.0
+You are correct that we could put the patches in the board/zynqmp/patches/uboot
+directory.  I only created a special directory for them, since they are really
+a new feature patch set and not a typical bug fix patch set.  My thought was
+that the directory path would make this obvious to the users.  However, users
+could also learn this from the commit message as well.  In any case, I am ok
+with changing the directory path to board/zynqmp/patches/uboot.
 
+Best regards,
+Neal Frager
+AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
