@@ -1,76 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B19EE77188
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 16:38:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10BDEE77188
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 17:01:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 055CA80A92;
-	Sat, 28 Dec 2024 16:38:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AAF284031C;
+	Sat, 28 Dec 2024 17:01:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y3s02pgobVL8; Sat, 28 Dec 2024 16:38:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YPC119CS5pl3; Sat, 28 Dec 2024 17:01:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A3A380AE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 665484038E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A3A380AE1;
-	Sat, 28 Dec 2024 16:38:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5483FC8
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 16:38:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 665484038E;
+	Sat, 28 Dec 2024 17:01:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7142FC8
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 17:01:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 32B3880A92
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 16:38:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3D60E606EA
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 17:01:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MzXlAbVnZ33H for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 16:38:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 23E0E8083E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23E0E8083E
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 23E0E8083E
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 16:38:00 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 7F08E13F86A;
- Sat, 28 Dec 2024 17:37:56 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:43504])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 28 Dec 2024 17:37:56 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y76JLaUBH8W6 for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 17:01:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F1BE1606E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1BE1606E1
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F1BE1606E1
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 17:01:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id D426D20002;
+ Sat, 28 Dec 2024 17:01:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 28 Dec 2024 18:01:35 +0100
+Message-ID: <20241228170136.3164815-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-Date: Sat, 28 Dec 2024 17:37:56 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241228162315.3156194-1-thomas.petazzoni@bootlin.com>
-References: <20241228162315.3156194-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <dee4df78f10600e81bcc22fe247e32a7@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1735403877;
- bh=SGpvuc0TwFWd8WR0Fl0sKQ0ZYdx4wNms2oxsr5+Yars=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=f/lRUSvuTKQarBQKt7+jTjWDj2Lhey/eZnz0O6q261iAJT5mlVL1kgzW9fNDneS1W
- HzPSQYMjhkmc2StmwDizsPW3AIAPuLnCPVFWZfppwZ/TtVnojAEM9IIgHu8YdKjd38
- YxUasBtzpIxM+Eg+jw5dWsRPvdxKONx3ql4MR/Kahlcvl/AXV0ubBMDsz5STygqD77
- 7yUj1zINrUhwywpM+ykRAUhAk4WkkHLWEoujyCGoSavEUX++kAtr+z8dEZOGZf90i7
- kPY0ylwF22CFfi/G624nIMfUle88M4sXcfMwjLc2LMcdppArf6iAVNUjSneNDiifiT
- uKNW2FtP/gO1g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=f/lRUSvu
-Subject: Re: [Buildroot] [PATCH] package/tinifier: bump version to 4.1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1735405298;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=bS+X0oSPJQPis+UjHaOaamWkIIUZ2eACgwbLwoIlIpk=;
+ b=HCkut2tIhTvu0wy2I6N/vwDddpQz9IrWLz4oyG5emkGcXNI74wSvNrLQXo6G1MPSsmQDIi
+ cFBFsCcRcvG1xD+edxjkx2xeYSlPrLQVP+XID8Bf9zvPF/5Ylwb5iiUzu2TRSZpp9QmzSq
+ gveQL1+g5LOC+e9ePLzkZk0O04b3DZzroQmNC5nMHQOKMOQg7TaeDRvdHV9jTH7exHwbJf
+ hqrd6XE7lJEvilkM/jdRTqP5YC8avT/3BQnLBevIWrxUlI4JSzZUn8ZY0+/pCf43OQtkmW
+ W5lrll09mckgXA+XngXUrJFIJFx8/5g7zG984PXBhVGaKXA4YBVyT5oaJzqg9A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=HCkut2tI
+Subject: [Buildroot] [PATCH v2] package/mpdecimal: bump to version 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,56 +77,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 28/12/2024 17:23, Thomas Petazzoni via buildroot wrote:
-> 3.4.0 -> 3.5.0:
-> 
-> Changed
-> 
->     Go version updated from 1.17.3 up to 1.18.0
-> 
-> 3.5.0 -> 4.0.0:
-> 
-> Changed
-> 
->     Go version updated from 1.18 up to 1.19
->     Sub-command quota now supports multiple keys at once
->     Default threads count for compress sub-command is now NumCPU * 6
->     Go package (module) name changed to 
-> github.com/tarampampam/tinifier/v4
->     New terminal UI
-> 
-> Added
-> 
->     .env file support
->     Global --version flag
->     --update-mod-date flag for compress sub-command (since this 
-> release, the original file modification date will be preserved by 
-> default)
->     --keep-original-file flag for compress sub-command #103
-> 
-> Removed
-> 
->     Sub-command version (you can use --version flag instead)
->     Global --debug flag
->     Global --verbose flag
-> 
-> 4.0.0 -> 4.1.0:
-> 
-> Changed
-> 
->     Go dependencies updated
->     Go version updated from 1.19 up to 1.20
->     Module name changed from github.com/tarampampam/tinifier/v4 to 
-> gh.tarampamp.am/tinifier/v4
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+While 2.5.1 -> 4.0.0 may seems like a big jump with lots of versions
+skipped, in fact 4.0.0 is the immediate next release after 2.5.1.
 
-Applied to master, thanks.
+Changelog at:
+https://www.bytereef.org/mpdecimal/changelog.html
+
+Build tested successfully with test-pkg, including with the one
+reverse dependency of mpdecimal: the python3 decimal module:
+https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1604635008.
+
+The license file was renamed from LICENSE.txt to COPYRIGHT.txt. The
+license is still BSD-2-Clause, but the formatting changed: the license
+text is no longer inside a C-style comment, but just plain text, and
+the copyright years were updated.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+v1 -> v2:
+- Fix legal info
+---
+ package/mpdecimal/mpdecimal.hash | 4 ++--
+ package/mpdecimal/mpdecimal.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/mpdecimal/mpdecimal.hash b/package/mpdecimal/mpdecimal.hash
+index 81150c7575..53ca182287 100644
+--- a/package/mpdecimal/mpdecimal.hash
++++ b/package/mpdecimal/mpdecimal.hash
+@@ -1,4 +1,4 @@
+ # From http://www.bytereef.org/mpdecimal/download.html
+-sha256  9f9cd4c041f99b5c49ffb7b59d9f12d95b683d88585608aa56a6307667b2b21f  mpdecimal-2.5.1.tar.gz
++sha256  942445c3245b22730fd41a67a7c5c231d11cb1b9936b9c0f76334fb7d0b4468c  mpdecimal-4.0.0.tar.gz
+ # Locally computed
+-sha256  b07528d8b1dbf1e2d2741052996f0876e23342ce2d30d0effa39c5457716c25a  LICENSE.txt
++sha256  2713324211652ce4a60e6e21e54f9dc3004299e591b0933a352f1a89c5fb53c2  COPYRIGHT.txt
+diff --git a/package/mpdecimal/mpdecimal.mk b/package/mpdecimal/mpdecimal.mk
+index aa322df340..a2ab18523b 100644
+--- a/package/mpdecimal/mpdecimal.mk
++++ b/package/mpdecimal/mpdecimal.mk
+@@ -5,10 +5,10 @@
+ ################################################################################
+ 
+ MPDECIMAL_SITE = http://www.bytereef.org/software/mpdecimal/releases
+-MPDECIMAL_VERSION = 2.5.1
++MPDECIMAL_VERSION = 4.0.0
+ MPDECIMAL_INSTALL_STAGING = YES
+ MPDECIMAL_LICENSE = BSD-2-Clause
+-MPDECIMAL_LICENSE_FILES = LICENSE.txt
++MPDECIMAL_LICENSE_FILES = COPYRIGHT.txt
+ MPDECIMAL_CONF_OPTS = LD="$(TARGET_CC)"
+ 
+ # threads are only needed for tests
+-- 
+2.47.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
