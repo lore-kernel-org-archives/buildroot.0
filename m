@@ -4,75 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87659E77188
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 22:40:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D798E77188
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 23:00:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1FE580CC1;
-	Sat, 28 Dec 2024 22:40:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1F8180CEC;
+	Sat, 28 Dec 2024 23:00:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qQxxgyhYKQxr; Sat, 28 Dec 2024 22:40:47 +0000 (UTC)
+ id HrwXopn8p2H4; Sat, 28 Dec 2024 23:00:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 721B280CA3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83F5780CE7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 721B280CA3;
-	Sat, 28 Dec 2024 22:40:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E36F1C8
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 22:40:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83F5780CE7;
+	Sat, 28 Dec 2024 23:00:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 50746CA
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 23:00:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B19614012A
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 22:40:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3EA2260627
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 23:00:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IqZC_0QKkPPA for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 22:40:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VTDp6u9wQ803 for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 23:00:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 257F440217
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 257F440217
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 257F440217
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 22:40:43 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 129CB1BF203;
- Sat, 28 Dec 2024 22:40:40 +0000 (UTC)
-Date: Sat, 28 Dec 2024 23:40:40 +0100
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B365C6061B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B365C6061B
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B365C6061B
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 23:00:19 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9D879E0005;
+ Sat, 28 Dec 2024 23:00:16 +0000 (UTC)
+Date: Sun, 29 Dec 2024 00:00:15 +0100
 To: Heiko Thiery <heiko.thiery@gmail.com>
 Cc: buildroot@buildroot.org, Fiona Klute <fiona.klute@gmx.de>, Jan
  =?UTF-8?B?S3VuZHLDoXQ=?= <jan.kundrat@cesnet.cz>
-Message-ID: <20241228234040.54baae9d@windsurf>
-In-Reply-To: <20241219152105.298310-2-heiko.thiery@gmail.com>
+Message-ID: <20241229000015.1a9d4011@windsurf>
+In-Reply-To: <20241219152105.298310-1-heiko.thiery@gmail.com>
 References: <20241219152105.298310-1-heiko.thiery@gmail.com>
- <20241219152105.298310-2-heiko.thiery@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1735425641;
+ d=bootlin.com; s=gm1; t=1735426816;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=cAQLKG1gklcl0HOY8GcvSduaFoX51PmF5iv8ihpPeRE=;
- b=cwDVkm4Zv/278omYgzwg/8KzE9TR/Hokj/y7RpOPiQYH9HoxGlmS8UNSHktTpe+udKV51t
- eGOQnnIgn7Fsn5kFNKRoib8wGoBu1dcNmwQY/+zL157PcGBlR0x/F7sBniho/OT0h4Hqoq
- OeuQ50LHfF6WxGVAi2wF0pwcRW+7/hWJnxrwjN2se0JHQVGn6q9CbFZ2rcAjS+IixGivV2
- LcTwIXXBelFVFLxKNYhEdXpLvHiEo0+UzKACJ+V88hfhzalUKwmkTbQvWwzMXGX1kueIp0
- A4o5CXGtzQnrXYwo6evOr5zBL2qcK5BukV1CN3oXPtWZiQADF6a3OG3DdXUbzA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=v51Xnr+8ZRuSX72FCqk/pZ0LB+tCXHkTkDTfdlp2H7A=;
+ b=BS5RKuas3mPI2LYmQYey2lAZOgpcYKToUzWXvxkq56pazH/zE14W78jHgUB6q+Xuzr1o+v
+ ybWsmdwDdF3zEa4M4o1WZVlJwe90dpvEcnAA732rd2lYTcujMLgwS6reqNCzzS9v22S3rF
+ xUR2HYHf9pqwHoK7RETX9rF5EsMXot3pS98gbFZzf81puDcZc8D5Uxv4DXpeKCwaZ/tIoN
+ WgV8ueH7lh8bPpJ4p/8Ei0gWIOU6T8HbOyZAa/Kwt6qiKQjYGSiGZ1bBcd0L98WpV4zDR1
+ CtGdd/2/V/GfsaEi0c1FDMay17RC4uX3Y4VLNMfZ4119T4sACOokNlpBq9U0wA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=cwDVkm4Z
-Subject: Re: [Buildroot] [PATCH 2/6] package/libnetconf2: bump to version
- 3.5.1
+ header.s=gm1 header.b=BS5RKuas
+Subject: Re: [Buildroot] [PATCH 1/6] package/libyang: bump to version 3.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,66 +91,27 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello Heiko,
 
-On Thu, 19 Dec 2024 16:21:03 +0100
+On Thu, 19 Dec 2024 16:21:01 +0100
 Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-> Since version 3.x the options for TLS and SSH are merged to SSH_TLS. Thus
-> we also require LIBCURL. The openssl package dependency is now mandatory
-> and only selected when libssh-server and libcurl is selected.
+> The LICENSE hash has to be updated due to copyright year change.
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 
-This last sentence doesn't match what is done in your code I'm afraid,
-so I'm unclear what you're trying to achieve.
+I wanted to merge this with the new tests, but without the libnetconf2
+bump as I reported some issues with it. However, it seems like this
+libyang update and the libnetconf2 update need to be done in lockstep,
+as the build of libnetconf2 version in Buildroot today with the updated
+libyang fails:
 
-> diff --git a/package/libnetconf2/libnetconf2.hash b/package/libnetconf2/libnetconf2.hash
-> index 675c76a500..78fc5c8400 100644
-> --- a/package/libnetconf2/libnetconf2.hash
-> +++ b/package/libnetconf2/libnetconf2.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  72e9a6461fadbd22f0cf0d23ba68d62b297c8f564f7f2bee069748fb67fc3a24  libnetconf2-2.1.28.tar.gz
-> +sha256  0d49e796798015e35a08bfbd53a3dd4004cb9a26d4b1dd1f90940a427d483bbb  libnetconf2-3.5.1.tar.gz
->  sha256  bd962ab457c8a8cb8faaaa36c11484680f3c9a47dbc336507817ae8935384064  LICENSE
-> diff --git a/package/libnetconf2/libnetconf2.mk b/package/libnetconf2/libnetconf2.mk
-> index 88163926c0..40812cc0f0 100644
-> --- a/package/libnetconf2/libnetconf2.mk
-> +++ b/package/libnetconf2/libnetconf2.mk
-> @@ -4,41 +4,29 @@
->  #
->  ################################################################################
->  
-> -LIBNETCONF2_VERSION = 2.1.28
-> +LIBNETCONF2_VERSION = 3.5.1
->  LIBNETCONF2_SITE = $(call github,CESNET,libnetconf2,v$(LIBNETCONF2_VERSION))
->  LIBNETCONF2_INSTALL_STAGING = YES
->  LIBNETCONF2_LICENSE = BSD-3-Clause
->  LIBNETCONF2_LICENSE_FILES = LICENSE
-> -LIBNETCONF2_DEPENDENCIES = libyang
-> +LIBNETCONF2_DEPENDENCIES = libyang libxcrypt openssl
+/home/thomas/projets/outputs/TestNetopeer2/build/libnetconf2-2.1.28/src/log.c:140:5: error: too many arguments to function 'ly_set_log_clb'
+  140 |     ly_set_log_clb(nc_ly_log_clb, 1);
+      |     ^~~~~~~~~~~~~~
 
-Here you add openssl in your mandatory dependencies, but you don't
-select it. This is going to fail badly, as you cannot depend on a
-package that isn't enabled in your configuration.
+and some more errors clearly hitting at an API change.
 
->  HOST_LIBNETCONF2_DEPENDENCIES = host-libyang
->  
->  LIBNETCONF2_CONF_OPTS = \
->  	-DENABLE_TESTS=OFF \
->  	-DENABLE_VALGRIND_TESTS=OFF
->  
-> -ifeq ($(BR2_PACKAGE_LIBSSH_SERVER), y)
-> -LIBNETCONF2_CONF_OPTS += -DENABLE_SSH=ON
-> -LIBNETCONF2_DEPENDENCIES += libssh
-> +ifeq ($(BR2_PACKAGE_LIBSSH_SERVER)$(BR2_PACKAGE_LIBOPENSSL)$(BR2_PACKAGE_LIBCURL),yyy)
-
-And here it is extremely weird to have a test for
-$(BR2_PACKAGE_LIBOPENSSL). Either it's mandatory for the package, and
-therefore there's no point in testing if it's enabled... or it's not
-mandatory and openssl shouldn't be unconditionally added to
-LIBNETCONF2_DEPENDENCIES above.
-
-Could you clarify this?
-
-Thanks a lot!
+Not much you can do about it, aside for making it clear in the commit
+messages.
 
 Thomas
 -- 
