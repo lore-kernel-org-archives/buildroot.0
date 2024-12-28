@@ -4,151 +4,150 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1F6BE77188
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 14:58:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53ED3E7718F
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 14:58:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73123606E1;
-	Sat, 28 Dec 2024 14:58:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C79D6078F;
+	Sat, 28 Dec 2024 14:58:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N6x51VzK8Br1; Sat, 28 Dec 2024 14:58:41 +0000 (UTC)
+ id OO4yci8M9WJJ; Sat, 28 Dec 2024 14:58:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C64A6078C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD099607CE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C64A6078C;
-	Sat, 28 Dec 2024 14:58:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A77F6F1B
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 14:58:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD099607CE;
+	Sat, 28 Dec 2024 14:58:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8997DF1C
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 14:58:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 88FD280B92
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 14:58:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 68FEB60748
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 14:58:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7kPBruvwAlHa for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 14:58:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gu9KlyQEFYRa for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 14:58:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2414::60d;
- helo=nam11-bn8-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2413::621;
+ helo=nam10-dm6-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5F8AF80B88
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F8AF80B88
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam11on2060d.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2414::60d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5F8AF80B88
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 14:58:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 178E460790
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 178E460790
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam10on20621.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2413::621])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 178E460790
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 14:58:41 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QR5j/YuEiCWuvV+LPP8K51NS3+qZUpIzKx6TlHXsqH2bzI/DNbc2eApdrwTJDJihFhP3CUCvKKfgtYcBT+HYteTBlQrXSW7NA5SDxM9Vs52du9V3a+pHq/+uUB4Ln6zzcmrx/1Spo86c2e5rcSAQLVBsCZWET7w3JzyeWy+o6l8ptn/rzwiYM8GTlLtSpEJi/Wla3fSYl18hjCOJYIiwj1O4M/bmID5GgtEHxSbkcPAmr6BOOIu17EoUpofQNhyiaye6dsZigpDIfnLbpq9Hr+2KwWyZJ36JycL9jayAIJllXZtQyGfeSm+QSR49YFX+s3LgKGZpDhBY7rhQhxRwjg==
+ b=VY+V1CKMh+IxO/0GgzgAIHrIwOdZtdBDWfxfEfVJqabLzrbQgY8rzcmB/2oZMBLXKwFShAj30TDRpCAWfT1tPaC05jniZXjs96VnMak8WN022tg1/yr3LmfUJuHmFDBGA2Pz+kKEShL4dPTcFdP55oqIg//RDtDC+5wOzyuJlO9cdgUtOyQKZ7ajlyM5y6drOxZkLnxSTqRfVDECgi+YXt5VhrKr00wFF2mT8jA2lLskc45jOfI0fMPNivJKsmisMmnehoN6oIlXRlqjXW0JLL9GZ7r3YtVKEUHHoMkBU4VhK7hNuGKC6vyug/hk9s5v1cYWDB1aZ5y2WsZ5y/RjAQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U2jOXGKoX8I92pTmQxi9Z+MNJo9xLLO9csUUePruFD8=;
- b=y4HO6yOD+dX0co2TYW/OeMoneHloq5x7x9KsMbbS0b8kvTI7MGLXrnVAIxij3bYxL93cmROgGqiOdxL21/vfvcO/KtDeAIsEf+ho4FuddjzBw6wLrGdekGnI24yzq73nXAcug94vNFAvrPdhPloRx9ByC7cRPqsOmPK2+pwiqQ0yVy4WcQafzJyM9NqWRvQthb/WB5mTWGt32kyPDnhpRb7GrpcYm9WYIYeXO99zJ2zflIHIiUM+hY0CX/ebnxm4y9fxJu0wBsgi89lRU0sf/C/1DuOMcOAecNUwTPHxfNBspf3Al/gDIeIVcAl5DuC1KUR/XYf4FoV5sEksiQwCzQ==
+ bh=838IU/8xEevdlAkp/imaFwcWjn3PW3qQ/rMWjKMEr3Y=;
+ b=Vx44H5bUD48x+dauAArWsgUrfZHqRT3fdKWKQLUu9fN9+ZewxlqCgWGv6GH0OeMP0nyQS38kU/QFXXed7FIRc9JCdk8Efiuc7Uk42jNbfqWHSd8dM5nSiixO9FGakQmTZxwJbgvmYNE6lunBZO828GW9Ibbatb06frZ09/MKJV8dxc4kLNbMbhnxPOOJg4vBUFSo5es41J8mEzxrED/+277/k9CMPv4/7JZBeCaqBZ8OOf6xipbOeHILbu5TT0WhjcRtKXQihUWkUwKbKUvHPsBNyuFGPnn/2pUjK+0b664N+jkqMjUPfE1+EXWcJ74REhAaR1Pu1JLXSDFCdYjepA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from MW4PR04CA0183.namprd04.prod.outlook.com (2603:10b6:303:86::8)
- by PH7PR12MB7870.namprd12.prod.outlook.com (2603:10b6:510:27b::10) with
+Received: from DM6PR03CA0056.namprd03.prod.outlook.com (2603:10b6:5:100::33)
+ by SN7PR12MB6743.namprd12.prod.outlook.com (2603:10b6:806:26d::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8293.17; Sat, 28 Dec
- 2024 14:58:27 +0000
-Received: from SJ1PEPF00001CE9.namprd03.prod.outlook.com
- (2603:10b6:303:86:cafe::3) by MW4PR04CA0183.outlook.office365.com
- (2603:10b6:303:86::8) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8293.15; Sat, 28 Dec
+ 2024 14:58:33 +0000
+Received: from CY4PEPF0000EE32.namprd05.prod.outlook.com
+ (2603:10b6:5:100:cafe::65) by DM6PR03CA0056.outlook.office365.com
+ (2603:10b6:5:100::33) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.8293.14 via Frontend Transport; Sat,
- 28 Dec 2024 14:58:27 +0000
+ 28 Dec 2024 14:58:33 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SJ1PEPF00001CE9.mail.protection.outlook.com (10.167.242.25) with Microsoft
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CY4PEPF0000EE32.mail.protection.outlook.com (10.167.242.38) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8293.12 via Frontend Transport; Sat, 28 Dec 2024 14:58:26 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.8293.12 via Frontend Transport; Sat, 28 Dec 2024 14:58:32 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sat, 28 Dec
- 2024 08:58:24 -0600
+ 2024 08:58:31 -0600
 Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Sat, 28 Dec 2024 08:58:23 -0600
+ Transport; Sat, 28 Dec 2024 08:58:30 -0600
 To: <buildroot@buildroot.org>
-Date: Sat, 28 Dec 2024 14:58:14 +0000
-Message-ID: <20241228145818.2211273-2-neal.frager@amd.com>
+Date: Sat, 28 Dec 2024 14:58:17 +0000
+Message-ID: <20241228145818.2211273-5-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20241228145818.2211273-1-neal.frager@amd.com>
 References: <20241228145818.2211273-1-neal.frager@amd.com>
 MIME-Version: 1.0
-Received-SPF: None (SATLEXMB04.amd.com: neal.frager@amd.com does not designate
+Received-SPF: None (SATLEXMB03.amd.com: neal.frager@amd.com does not designate
  permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE9:EE_|PH7PR12MB7870:EE_
-X-MS-Office365-Filtering-Correlation-Id: 47e21768-7c0b-488c-600c-08dd27501555
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE32:EE_|SN7PR12MB6743:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7c389626-c90d-4ae2-ee6c-08dd275018da
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|36860700013|82310400026|1800799024|376014|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?Mm5MD2XYp8wgmE6Oc4Rqa6gRcVP5Qb269V1nT91ezpViBsD/t8+mRoqMRQsq?=
- =?us-ascii?Q?6X/3DDOXhfgCZ4OPHKoSMHL3gpZUG6C8E1xbvR6kaTHykmfwU4TaE0gBxjdJ?=
- =?us-ascii?Q?wYWg1IAJLlSvOFFyEv294BiBXQrih6Zv1arDt+keXkOfrtOyQ5XVJCBf7Btj?=
- =?us-ascii?Q?cBYluV0KYdI39Iad6WH0D/Od3KdMVe2MTYoYA/da/a30axYULDL38uMCM50C?=
- =?us-ascii?Q?0KSdEtn8tSBAxIQgEmHTa5USwxykg837c8aHTyDHNtgaVb/5Zwflcve+2tQa?=
- =?us-ascii?Q?mywE2jONbWoRjzhoJ8fnDoEh8wMe1n+r8Wy0ypj+ppS2CksvPj5fMwIWzKGM?=
- =?us-ascii?Q?Z8/J0IryV5mHjsIewyg88PfMvuj/6lp6OUdBBiBGNkumMJpEUXVcmIXToe1b?=
- =?us-ascii?Q?YgLe3GWJD3Dg6gJNeaXbcfpraKs0lrMIYq2w6hj2mwNCQdlWKoAKu6IjNu5O?=
- =?us-ascii?Q?nYfFj4YrDFk0P8s0/Lgix2t/cpEXL7yCWhzdhWtKOEggc8NqAsXwiUCYuGU2?=
- =?us-ascii?Q?DxiPhCXxChsPd3GyVrEk/eShCs83J+It0pT00J/HjMGBkVLi6hPfRahpFLQH?=
- =?us-ascii?Q?ilEc/UMo2B3TAoB/QhzO26a7oW7Z/ngh8+l19xoVifnCt/bx+RMmXgqvvKvI?=
- =?us-ascii?Q?Yk5amEpfVRMzTbWpfpS2/ZA6SeMxwHdYykvZR9+6+yXxf6fCt+eBg4fs09nK?=
- =?us-ascii?Q?4gicP57CvhZ/LlMksyA0/6UHb/4TLGjIL8k8ff1foExEJ5Rmn/BYJtA7uosU?=
- =?us-ascii?Q?RAyiz2dzBsypRrIyM5lOXxItnVQBSnbCRXRA9K74MXPAK0AEn6bmwsjsy/zP?=
- =?us-ascii?Q?wq7mHwgpoX+S6opeWWzzTere7LLn487fEj2q+9hupbASGhtgXkpLfyKPjYbb?=
- =?us-ascii?Q?APwD4tjNZHvS0AE4He6LypXC3QE/XjvP1J+sHRkW4Z00ehjXEOzWBFN2R1F9?=
- =?us-ascii?Q?7xmRNpg6FpYAmGA8S1ja8dDUEGZeNeL7FM6My31aGUupb2E9QbKXG1zTf5YE?=
- =?us-ascii?Q?6sNgmwBLsi71QwnA0QoYI/LEDVWSdoSIzojrT8dTw8jKVQSJiY22RsVNc03Z?=
- =?us-ascii?Q?oPlqwHaCKvdPqQO21P3YkmfH3PtPjzx7P8EWRjYTK4SPME6t2FO6C7Qm6yEQ?=
- =?us-ascii?Q?K3nJqDpottNcjLRQ2Fvh4H/wlTdPz7otZzG9B/LKcJaHJInCXKY3NnJ60hQ3?=
- =?us-ascii?Q?mV9OI1QzL6rhxstL1ICxbgOOXvLwnZ9bS9OjM0llzRy8mVuWTO4fGSJ/BUhg?=
- =?us-ascii?Q?FFhIdcQOy5PZYQkzYzxl2JBgAmtBRaHwAl8ZElyhw4j3odDFgtyD9TC3bAkB?=
- =?us-ascii?Q?cFkg1F/X5iT1QHCpmWNozCgX3VcoeoFp2pzsPBjuDc8NrPgsCYsVwA7j9Bwk?=
- =?us-ascii?Q?pUAjmDLU2P/oW9Msj8EKxB6DbjaDzlFjCBasPoy/VcK1+3xgINvIH1wd5JqW?=
- =?us-ascii?Q?r9zmkSFeAKVGb2FvQg++tpZvgOfPmiPP0Js0jVYFaPHNM+vNVTXHn8jjolhg?=
- =?us-ascii?Q?c2GVa4b2jX2E7pXdPElfJxd1giepaF6f8x1q51fE2qZct/8ujYrQoqqq1A?=
- =?us-ascii?Q?=3D=3D?=
+ ARA:13230040|82310400026|1800799024|376014|36860700013|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?UQGjyFophgxbLBSosq2Cus/vda3xfqXO/iK3UZ73R86T2f32mL3TfpiyMVrT?=
+ =?us-ascii?Q?do832FmT07uOa4qjn2Baks4gtL1ajGnIYuNqgchU5dSSA0cmSkmyj9B3MNUY?=
+ =?us-ascii?Q?Kqih/BF9JX7gLl5TbF15gJzvFrp+LUx7nAa/KrVzjLTrrp1gUcupcZAmNsx4?=
+ =?us-ascii?Q?gBl0Efa5RqVJ7JSGd307pxDEdXZAmkcCc2kO74UPLjvufXTmTfUG0yOw72HF?=
+ =?us-ascii?Q?UXiskPjhh+msW94suI4sumWRfs4W3nIdjxfrHNmKFCzeuHhHMYY+fFhHoosp?=
+ =?us-ascii?Q?XJC/5HyidqKx+ciI77WHlKwegTt1QFSOxmVzArLB03iMpWVH+Pb5KTbUwUGv?=
+ =?us-ascii?Q?NKflkq8bNDzyopINaLp2P0bzKqMYqiQvi1h3qJPeHNFEgso7+4Gwz1l39Fa8?=
+ =?us-ascii?Q?VkTkz42KeKZAZJr9YAxFA2qDnHYEQ5l0tX7tTKf+msVDFvS3UFqjzfJged5U?=
+ =?us-ascii?Q?u2Er0ghfGGyXyQ3LUKHSQXVWLJAYCaFxP8uHaMhrtFWBJ0sRk6KV1Vno3es7?=
+ =?us-ascii?Q?vTdcmL+keKbBX/ssf9hgMy4hqfw1wqP25ur/efrzqV4CVgfUAUc7R7VLvxLp?=
+ =?us-ascii?Q?nL0PbPxO9PpY48GXqCS73YuCMHavtPA+0PmGsO2qLzFdwUssI4xhjHWRbvCV?=
+ =?us-ascii?Q?0XMcbGyHNsb2YznGpXLshQ/PKyuEi4GpLOK5dz0YbhVHRcIm2gQJdLPaWzWN?=
+ =?us-ascii?Q?+UlOebq2dUkyo1lM0agJxa7s6g1HlNvp9HsHwFQ9fO1fti54O7Nx8wFGGBxQ?=
+ =?us-ascii?Q?cbiTZSvudMBwMHtXCkB6vmRAYdQqR6kyjgHLMJKhN5e3LSnLlXRPxlBy+OL7?=
+ =?us-ascii?Q?/MF04lm3DOJ2B9NUWFy0GdD0JlhteW6N01rLJadFW/NFxQDs+Bx28ivGBpRv?=
+ =?us-ascii?Q?bWVKiHMJOrsqnpuRqVO+CSwk7o/mNMhc53M7/T1nODn1hmHb5VPuwhGCRWW+?=
+ =?us-ascii?Q?f2UhDQvMqvR0MvLcVDgBQGZB5RRCpddIVfstk0Pm7AqIc0Sip3eBl7EImf0y?=
+ =?us-ascii?Q?AFP1RplKCngv0n+trxXPMXfqMzTD99cay3oMgc9bEDIkFacyQz7ZnWcRjmdp?=
+ =?us-ascii?Q?iICDNn4A6uS+LeMeEgG6mTevg7GRoraNiw+vVBQxe8bALTRzp0PruHGuV9SG?=
+ =?us-ascii?Q?N5oP21i4ghrS4FQuL98Ky66CSxmICku+UJwKRkrWa8MLVSb7NyGe/gKn0wua?=
+ =?us-ascii?Q?gyKV1ePvw//mC9NWkXMWCULkK773HhBglYwe4qnLBBg1/06vLTBmSjUXoXpq?=
+ =?us-ascii?Q?KrMUbrqmfxrBmso1Q0vkaY4Rc25aFA8HL6jkxzdtDmq1Cim5Z/JDlfDQOhpE?=
+ =?us-ascii?Q?IB5PlJuLBjK4fCtPCyD6zpphuskGN/fUUtEGutI9A/dSE3vWiZHDMQJ36eDD?=
+ =?us-ascii?Q?7BBQL5VXKB7J990B1J4l5x4P6RBlFw6Ull/v20MChk8TavGDn+8pIWBhddU/?=
+ =?us-ascii?Q?wIRAtqubyyMY1uq4dZ7zIYoBhZj7THlQeL7nLdSWEmZvk9vEAoXRCw=3D=3D?=
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014)(41080700001);
+ IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(82310400026)(1800799024)(376014)(36860700013)(41080700001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Dec 2024 14:58:26.3542 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47e21768-7c0b-488c-600c-08dd27501555
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Dec 2024 14:58:32.2627 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c389626-c90d-4ae2-ee6c-08dd275018da
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PEPF00001CE9.namprd03.prod.outlook.com
+ Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE32.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7870
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6743
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U2jOXGKoX8I92pTmQxi9Z+MNJo9xLLO9csUUePruFD8=;
- b=RS/stwIZ/sh0Cx7RIQAag0n1CRybuel9OBkjtjOrUXGYmerJachW9zqIwcC5yac1IeHh8fUa6D2YhFqmh0Flis+HATmR5Mr+mF/hWZsSX5BytOYSrsE3QXJ5DILEP6vrhd8m7wycie19b1pPMRFPb8PFSbWM6S9nv203AETNNO8=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=838IU/8xEevdlAkp/imaFwcWjn3PW3qQ/rMWjKMEr3Y=;
+ b=5TeEuVSLVROUdlAV6YUoanCEo91GWSh2FuEbQQS1PptJw/ejMVpNOi83wVrXWTWEQLiWTdARB6dYSHMjw0OD4BaGcv085wUaXOInx4397Ve4F1Z+7lNLFNvr7CkesAKCPJaakWLEs7bioNzXSTpuhgQIq9GB7C7EboXxJOqLWT4=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=RS/stwIZ
-Subject: [Buildroot] [PATCH v3 2/6] boot/uboot: add qspi.bin file support
+ header.s=selector1 header.b=5TeEuVSL
+Subject: [Buildroot] [PATCH v3 5/6] board/zynqmp: add new qspi.bin binary to
+ images
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -170,64 +169,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-u-boot has introduced a new file called qspi.bin for users who boot from a
-qspi flash device.  It combines the spl/boot.bin and u-boot.itb files into a
-single binary that can be written to the qspi flash.
+This patch adds the new qspi.bin file to the zynqmp sdcard.img.
 
-Here is an example of how binman generates the qspi.bin:
-https://github.com/u-boot/u-boot/commit/a4c98119109a60b9b236996f47065aa8fc0de9ca
+For SD card booting, the qspi.bin file is unnecessary and can just be ignored.
+For QSPI booting, only the qspi.bin file needs to be written to the flash.
 
-At the moment, the qspi.bin is only used for the zynqmp platform, but other
-platforms may adopt it, so the buildroot support has been made in a generic
-way.
+This patch enables the Kria BIRT tool for Kria SOM reflashing using qspi.bin
+as either "ImageA" or "ImageB".
 
-This patch adds the necessary support for buildroot to install this binary.
+Kria BIRT (Boot Image Recovery Tool):
+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+SOMs+Starter+Kits#Boot-FW-Update-Process
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
 V1->V2:
- - added dependency on BR2_TARGET_UBOOT_ZYNQMP
+ - new to patch series
 V2->V3:
- - no changes
+ - corrected commit message to use BIRT instead of SBIRT
 ---
- boot/uboot/Config.in | 8 ++++++++
- boot/uboot/uboot.mk  | 4 ++++
- 2 files changed, 12 insertions(+)
+ board/zynqmp/genimage.cfg           | 1 +
+ configs/zynqmp_kria_kd240_defconfig | 1 +
+ configs/zynqmp_kria_kr260_defconfig | 1 +
+ configs/zynqmp_kria_kv260_defconfig | 1 +
+ configs/zynqmp_zcu102_defconfig     | 1 +
+ configs/zynqmp_zcu104_defconfig     | 1 +
+ configs/zynqmp_zcu106_defconfig     | 1 +
+ 7 files changed, 7 insertions(+)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 8648d6eb7e..2946aa7251 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -446,6 +446,14 @@ config BR2_TARGET_UBOOT_FORMAT_SD
- 
- 	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
- 
-+config BR2_TARGET_UBOOT_FORMAT_QSPI
-+	bool "qspi.bin"
-+	depends on BR2_TARGET_UBOOT_ZYNQMP
-+	help
-+	  When booting from qspi flash, u-boot can generate a single
-+	  file for flashing by combining the spl/boot.bin and u-boot.itb
-+	  files into a unified binary.
-+
- config BR2_TARGET_UBOOT_FORMAT_STM32
- 	bool "u-boot.stm32"
- 	depends on BR2_arm
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index fd0323bb71..d7cde420ff 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -108,6 +108,10 @@ UBOOT_MAKE_TARGET += u-boot.itb
- endif
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_QSPI),y)
-+UBOOT_BINS += qspi.bin
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
- UBOOT_BINS += u-boot.imx
- UBOOT_MAKE_TARGET += u-boot.imx
+diff --git a/board/zynqmp/genimage.cfg b/board/zynqmp/genimage.cfg
+index 20d8352c08..0a6aea7a29 100644
+--- a/board/zynqmp/genimage.cfg
++++ b/board/zynqmp/genimage.cfg
+@@ -3,6 +3,7 @@ image boot.vfat {
+ 		files = {
+ 			"boot.bin",
+ 			"u-boot.itb",
++			"qspi.bin",
+ 			"system.dtb",
+ 			"Image"
+ 		}
+diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
+index 789bf21964..7cac34a8ce 100644
+--- a/configs/zynqmp_kria_kd240_defconfig
++++ b/configs/zynqmp_kria_kd240_defconfig
+@@ -33,6 +33,7 @@ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_FORMAT_QSPI=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
+index 577f4afb1d..1f86623402 100644
+--- a/configs/zynqmp_kria_kr260_defconfig
++++ b/configs/zynqmp_kria_kr260_defconfig
+@@ -33,6 +33,7 @@ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_FORMAT_QSPI=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index 34e536750c..9ebde4dfbe 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -33,6 +33,7 @@ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_FORMAT_QSPI=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index fb553c1b02..8870a7998d 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -32,6 +32,7 @@ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_FORMAT_QSPI=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
+index 42b585b5a7..c3516aca65 100644
+--- a/configs/zynqmp_zcu104_defconfig
++++ b/configs/zynqmp_zcu104_defconfig
+@@ -32,6 +32,7 @@ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_FORMAT_QSPI=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 271c54a0ba..0963d49731 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -32,6 +32,7 @@ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_FORMAT_QSPI=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
 -- 
 2.25.1
 
