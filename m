@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BAF2E77188
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 09:28:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A01DBE77188
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 09:32:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C97C24035C;
-	Sat, 28 Dec 2024 09:28:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46436804D2;
+	Sat, 28 Dec 2024 09:32:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HBf-1HAio5RH; Sat, 28 Dec 2024 09:28:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dl8QEPFl9MiJ; Sat, 28 Dec 2024 09:32:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78AC740347
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53F808034E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 78AC740347;
-	Sat, 28 Dec 2024 09:28:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 77197F1B
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 09:28:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53F808034E;
+	Sat, 28 Dec 2024 09:32:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 03901E0
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 09:32:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6484D401CC
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 09:28:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CC4DF80D57
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 09:32:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PymGO0zaUvVL for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 09:28:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f3Weoo12H0r7 for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 09:32:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D1E9A400EC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1E9A400EC
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D1E9A400EC
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 09:28:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id C1C371BF203;
- Sat, 28 Dec 2024 09:28:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B98F480D52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B98F480D52
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B98F480D52
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 09:32:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id B6102E0003;
+ Sat, 28 Dec 2024 09:32:14 +0000 (UTC)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Dec 2024 10:28:40 +0100
-Message-ID: <20241228092841.3045045-1-thomas.petazzoni@bootlin.com>
+Date: Sat, 28 Dec 2024 10:32:13 +0100
+Message-ID: <20241228093213.3047356-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1735378122;
+ d=bootlin.com; s=gm1; t=1735378334;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding;
- bh=IHcH6Zl2Rf5GJAGuMo330mfeTbkTndbaPRjPx5+CKkA=;
- b=Vkdx5GI05oEMyv5I/SLrU+dkFxWAYltgh5RjlwWhrzJBrGu/U4eBXBidow29oDSfkPvZTC
- Eo+mZv3JBG5lS9828DaoBoCo7dE/KXjvEi72O7gj5OBTEx/6GsaUNdnofvoF/0W4OxK0cb
- Wiza1NHjV1PPVCfRlZmtZdAWRtrOV7M5n6CBrok0OSoh540U+uJzvzNyEifMqMH7SyEYU3
- S0LnXFQTjTfueCP8d1XPGq7fODqxI1SVol9juCIaklaW/2pkZp/hnKuhf0YXUWZLPKwJbM
- KQpmu5PXJ1q3uN0LhiiRTEpQa4UCYybgb47WgOBoNmCGTooMHKeNcGAeI7R3+Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=wFbJMuyq35G7sGkkZ38c51VQ06iO1njmUdsQ0xkjN0E=;
+ b=NTk77fv/3RMlZgv8YLKeokBdGlvy9inAFxyP9OhUmdRhf5VBPnki6nj9ln2bGGj3CpURfV
+ FibFqneKz6D1rW1rKAvHD1eEGKSAof5jU8BtvQhBcMKWzXuB2n4UJ74dCpWP1CvFPDpW7z
+ 3D1HjeYo7l/A8Rk5JRCMMIBiElf6i93jcpaUhn1fwpLsupCr1yE2HWoQmph4AYkX1spjyn
+ Gbl3jYSvfPAAz1UIRVmtxyD1DOqcasB1O7T7lL1+MwCFUmyE+kLA14HdPpOvnPBOma4T1P
+ zdJ/GpkfppseULzoqn4JE/uGadaEw7uPcPtc7SN6jp1hsFLIpaI+xgTF68yEQA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Vkdx5GI0
-Subject: [Buildroot] [PATCH] package/scons: bump to 4.8.1
+ header.s=gm1 header.b=NTk77fv/
+Subject: [Buildroot] [PATCH] package/mpdecimal: bump to version 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,52 +84,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The tarball was renamed from SCons-<version>.tar.gz to
-scons-<version>.tar.gz.
+While 2.5.1 -> 4.0.0 may seems like a big jump with lots of versions
+skipped, in fact 4.0.0 is the immediate next release after 2.5.1.
 
-Changes 4.7.0 -> 4.8.0:
-  https://scons.org/scons-480-is-available.html
+Changelog at:
+https://www.bytereef.org/mpdecimal/changelog.html
 
-Changes 4.8.0 -> 4.8.1:
-  https://scons.org/scons-481-is-available.html
-
-This change has been tested by building the two Buildroot packages
-that use host-scons: benejson and gpsd.
+Build tested successfully with test-pkg, including with the one
+reverse dependency of mpdecimal: the python3 decimal module:
+https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1604635008.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/scons/scons.hash | 4 ++--
- package/scons/scons.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/mpdecimal/mpdecimal.hash | 2 +-
+ package/mpdecimal/mpdecimal.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/scons/scons.hash b/package/scons/scons.hash
-index 8dca99830e..3a8a942ee8 100644
---- a/package/scons/scons.hash
-+++ b/package/scons/scons.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/scons/json
--md5  f5a740e94864408902c62bdb47687d9d  SCons-4.7.0.tar.gz
--sha256  d8b617f6610a73e46509de70dcf82f76861b79762ff602d546f4e80918ec81f3  SCons-4.7.0.tar.gz
-+md5  37ad818d24ad2f44d6bee5b0f3838706  scons-4.8.1.tar.gz
-+sha256  5b641357904d2f56f7bfdbb37e165ab996b6143c948b9df0efc7305f54949daa  scons-4.8.1.tar.gz
- # Locally computed sha256 checksums
- sha256  2f6ac9a1fc98394d18b80dba9bedb9d5626006d44db3fecf7cf3e21cff7e8b1c  LICENSE
-diff --git a/package/scons/scons.mk b/package/scons/scons.mk
-index b6bfaa0237..f1f76f38a6 100644
---- a/package/scons/scons.mk
-+++ b/package/scons/scons.mk
-@@ -4,9 +4,8 @@
- #
+diff --git a/package/mpdecimal/mpdecimal.hash b/package/mpdecimal/mpdecimal.hash
+index 81150c7575..6e5f4cfcf8 100644
+--- a/package/mpdecimal/mpdecimal.hash
++++ b/package/mpdecimal/mpdecimal.hash
+@@ -1,4 +1,4 @@
+ # From http://www.bytereef.org/mpdecimal/download.html
+-sha256  9f9cd4c041f99b5c49ffb7b59d9f12d95b683d88585608aa56a6307667b2b21f  mpdecimal-2.5.1.tar.gz
++sha256  942445c3245b22730fd41a67a7c5c231d11cb1b9936b9c0f76334fb7d0b4468c  mpdecimal-4.0.0.tar.gz
+ # Locally computed
+ sha256  b07528d8b1dbf1e2d2741052996f0876e23342ce2d30d0effa39c5457716c25a  LICENSE.txt
+diff --git a/package/mpdecimal/mpdecimal.mk b/package/mpdecimal/mpdecimal.mk
+index aa322df340..212af5b7ee 100644
+--- a/package/mpdecimal/mpdecimal.mk
++++ b/package/mpdecimal/mpdecimal.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SCONS_VERSION = 4.7.0
--SCONS_SOURCE = SCons-$(SCONS_VERSION).tar.gz
--SCONS_SITE = https://files.pythonhosted.org/packages/7b/68/6895065c86c65a9388eb760a43ea695ec5b9b1c98a9675a3bcd682dbe9c0
-+SCONS_VERSION = 4.8.1
-+SCONS_SITE = https://files.pythonhosted.org/packages/b9/76/a2c1293642f9a448f2d012cabf525be69ca5abf4af289bc0935ac1554ee8
- SCONS_LICENSE = MIT
- SCONS_LICENSE_FILES = LICENSE
- SCONS_SETUP_TYPE = setuptools
+ MPDECIMAL_SITE = http://www.bytereef.org/software/mpdecimal/releases
+-MPDECIMAL_VERSION = 2.5.1
++MPDECIMAL_VERSION = 4.0.0
+ MPDECIMAL_INSTALL_STAGING = YES
+ MPDECIMAL_LICENSE = BSD-2-Clause
+ MPDECIMAL_LICENSE_FILES = LICENSE.txt
 -- 
 2.47.0
 
