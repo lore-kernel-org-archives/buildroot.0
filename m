@@ -1,77 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AC22E77188
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 10:54:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46388E7718F
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 10:56:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10BCA403A1;
-	Sat, 28 Dec 2024 10:54:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 01A4F80E0F;
+	Sat, 28 Dec 2024 10:56:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ACZaCi-55Vrx; Sat, 28 Dec 2024 10:56:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8DA580DA6
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E8DA580DA6;
+	Sat, 28 Dec 2024 10:56:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2FCE4E0
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:56:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F04D540394
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:56:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PyTqAixXz17i; Sat, 28 Dec 2024 10:54:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA0C6401DC
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA0C6401DC;
-	Sat, 28 Dec 2024 10:54:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8B065757
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:53:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8647660681
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:53:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JEPYYsr59J4H for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 10:53:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3EF9B605A3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EF9B605A3
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3EF9B605A3
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:53:58 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 3CA6513F8A9;
- Sat, 28 Dec 2024 11:53:54 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:48968])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 28 Dec 2024 11:53:53 +0100
+ id RYiolIBpLRfQ for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 10:56:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B978C401DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B978C401DC
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B978C401DC
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:56:39 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id B645FC0002;
+ Sat, 28 Dec 2024 10:56:36 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 28 Dec 2024 11:56:34 +0100
+Message-ID: <20241228105635.3079116-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-Date: Sat, 28 Dec 2024 11:53:53 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241228093213.3047356-1-thomas.petazzoni@bootlin.com>
-References: <20241228093213.3047356-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <75e688887d95948c57a11416de3047b5@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1735383235;
- bh=pAyv7hSA2kzDGs1vA91uSphR/Vc5+qAQfcrxIFGpz4I=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ZoYy7K+o3UKeKz0QOS18TVLFSMZPkFO7RxYz+WbhB4hbdy/Ax+xHpyoo/1ENME43f
- iySGlj6WRnFOwil29t7z4POjPrGhRa4nIlvVTuDdD1ETj1nzgPPpa9nRD7+yTl5QKS
- kpH4643wHCvwFik4kzlROidj8V8JWNACdeHHFXkprjXj/tTL52efEfwLGzZGh1YuRt
- ZP1UrqM6uuyXzkRUJgCfRumZ6pUMmwq0y3FQfZ+pvUuUHRGP5IDZvnUkw8leZvqkRU
- 2G7+hp0COnLdE5qIHePdI0q+5GYmoPBFa89oZsF05UIhmFUccCs6tM4a+eGgKFRc4S
- YDQpPLpq6apgA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1735383396;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=uwQ4pCV7uirgW32F8mTqASwQaiBmbCeOrp9MXcb1pmo=;
+ b=B5B2FTKwPmuX6bYAvxU7i0FRe4Q1khFC4y1KsH6Kcbli58EsF8VErCLFI177hy7HxqboY6
+ 956XLzXp3HysEQm4o1VW9RiKUFpHXNxm9h+jf7JIlk/HUct/YN62t/GzntGfwOSIRZLS2M
+ PoUYq3D3pJDQF4HeidLYo5bLs49fN1VbS1flZeDW1LQJ6YQ/BPWOgLx3Uczb2zBpHlCpOx
+ iyMIBpMNipQy6DSp7l7I4jl+5jhrHrxRx+bDJfDu6lv53gTfHOsY+1kvuUcWUriWFjHC3g
+ Hvfh5GElY7ma0GGZQQb3dzJsW6q4lLT2Q8YNNZv1ZuOQWqcgGVSIbIdZjmzv0Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=ZoYy7K+o
-Subject: Re: [Buildroot] [PATCH] package/mpdecimal: bump to version 4.0.0
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=B5B2FTKw
+Subject: [Buildroot] [PATCH] package/rt-tests: bump to version 2.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,92 +78,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+Changes 2.7..2.8:
 
-On 28/12/2024 10:32, Thomas Petazzoni via buildroot wrote:
-> While 2.5.1 -> 4.0.0 may seems like a big jump with lots of versions
-> skipped, in fact 4.0.0 is the immediate next release after 2.5.1.
-> 
-> Changelog at:
-> https://www.bytereef.org/mpdecimal/changelog.html
-> 
-> Build tested successfully with test-pkg, including with the one
-> reverse dependency of mpdecimal: the python3 decimal module:
-> https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1604635008.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/mpdecimal/mpdecimal.hash | 2 +-
->  package/mpdecimal/mpdecimal.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/mpdecimal/mpdecimal.hash 
-> b/package/mpdecimal/mpdecimal.hash
-> index 81150c7575..6e5f4cfcf8 100644
-> --- a/package/mpdecimal/mpdecimal.hash
-> +++ b/package/mpdecimal/mpdecimal.hash
-> @@ -1,4 +1,4 @@
->  # From http://www.bytereef.org/mpdecimal/download.html
-> -sha256  
-> 9f9cd4c041f99b5c49ffb7b59d9f12d95b683d88585608aa56a6307667b2b21f  
-> mpdecimal-2.5.1.tar.gz
-> +sha256  
-> 942445c3245b22730fd41a67a7c5c231d11cb1b9936b9c0f76334fb7d0b4468c  
-> mpdecimal-4.0.0.tar.gz
->  # Locally computed
->  sha256  
-> b07528d8b1dbf1e2d2741052996f0876e23342ce2d30d0effa39c5457716c25a  
-> LICENSE.txt
+c8b918c53cd57fdcbb6df153064d1b2e5cc329e8 rt-tests: Change to version v2.8
+84833954f7ee7ef9eec0071831355070c897e8d9 rt-tests: pi_stress:
+0ef93a1735316141df5d973496db54a08956fa85 rt-tests: cyclictest: Add --deepest-idle-state to manpage
+3b775a463a13f34b95d6963d6d034eb8b4690e5e rt-tests: cyclictest: Support idle state disabling via libcpupower
+3372e0d56b3fa2de82cbbab361b881ba470cfbbe rt-tests: Detect libcpupower presence
+fab7d905788701fd94d418126a52f74b776eb91d rt-tests: determine_maximum_mpps.sh: Get frequency from timebase-frequency if cpuinfo fails
+394f7507112b394142bdded1330b28a77f70851a rt-tests: queuelat: Fix wraparound in __clock_gettime()
+f2d8e34c9f2754b35327973f49d93f7b6089b8d7 rt-tests: cyclictest: Reformat help for 80 char screen
+3fdf4e7130ab53e7036268c0b85f447e8ba10d9e cyclictest: Fix help text for '-a' option
+d2af77295440da1c0f178aa87ff6ab9fc169dcf7 rt-tests: Add console_commands.json to gitignore
+e67db31eb3fd18f1dbbc97dc7b9adb9331572f11 rt-tests: pi_stress: Move unlock into if block with matching lock
+cadd661f984c0e6717e681fdaca1ce589b0ed964 rt-tests: hackbench: properly recognize when integer arguments are negative
+64c7f92979ded63ac5a19ea59e9b791e3da1fae4 rt-tests: hackbench: removed extra use of optind
 
-It seems the license file LICENSE.txt has be reformatted and renamed
-to COPYRIGHT.txt in mpdecimal-4.0.0. Running the command:
+Patch 0002 is refreshed.
 
-     make mpdecimal-legal-info
+The tarball is back at $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests since
+it's the latest release. We have sent an e-mail to the linux-rt-users@
+mailing list to ask them to stop moving the tarballs around:
 
-fails with output:
+  https://lore.kernel.org/linux-rt-users/20241228114346.6020d6b0@windsurf/
 
-     ...
-     >>> mpdecimal 4.0.0 Collecting legal info
-     sha256sum: /buildroot/output/build/mpdecimal-4.0.0/LICENSE.txt: No 
-such file or directory
-     ERROR: while checking hashes from package/mpdecimal/mpdecimal.hash
-     ...
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...drop-explicit-undefine-PYLIB-for-compatibil.patch | 12 ++++++------
+ package/rt-tests/rt-tests.hash                       |  2 +-
+ package/rt-tests/rt-tests.mk                         |  4 ++--
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-I thought this would have been detected by the "test-pkg -a" in the
-Gitlab CI. Should we add a "make legal-info" in the gitlab-ci.yaml.in? 
-Here:
-https://gitlab.com/buildroot.org/buildroot/-/blob/2024.11/support/misc/gitlab-ci.yml.in?ref_type=tags#L137
-to make sure the Gitlab CI behave like the "utils/test-pkg -a" script
-when executed manually?
+diff --git a/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch b/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch
+index 9212b8eee0..650e63460f 100644
+--- a/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch
++++ b/package/rt-tests/0002-Makefile-drop-explicit-undefine-PYLIB-for-compatibil.patch
+@@ -1,4 +1,4 @@
+-From 063972eece2fb8157f0feb98a4608c2984c7c5ff Mon Sep 17 00:00:00 2001
++From 17ec1bce74419f8193c0246dbde2d2fdd6b1b4e3 Mon Sep 17 00:00:00 2001
+ From: Peter Korsgaard <peter@korsgaard.com>
+ Date: Wed, 12 May 2021 09:18:33 +0200
+ Subject: [PATCH] Makefile: drop explicit undefine PYLIB for compatibility with
+@@ -30,12 +30,12 @@ Signed-off-by: Julien Olivain <ju.o@free.fr>
+  1 file changed, 5 deletions(-)
+ 
+ diff --git a/Makefile b/Makefile
+-index e2f8579..62c906f 100644
++index f656e34..1206f40 100644
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -37,11 +37,6 @@ LDFLAGS ?=
+- 
+- PYLIB ?= $(shell python3 -m get_pylib)
++@@ -52,11 +52,6 @@ else
++ $(warning libcpupower disabled, building without --deepest-idle-state support.)
++ endif
+  
+ -# Check for errors, such as python3 not available
+ -ifeq (${PYLIB},)
+@@ -46,5 +46,5 @@ index e2f8579..62c906f 100644
+  	   src/pi_tests/pi_stress.8 \
+  	   src/ptsematest/ptsematest.8 \
+ -- 
+-2.45.2
++2.47.0
+ 
+diff --git a/package/rt-tests/rt-tests.hash b/package/rt-tests/rt-tests.hash
+index 9682fde406..c17829cace 100644
+--- a/package/rt-tests/rt-tests.hash
++++ b/package/rt-tests/rt-tests.hash
+@@ -1,4 +1,4 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/utils/rt-tests/sha256sums.asc
+-sha256  0e5b2fbc98ceb786bd113c9a30f0388d884b2d8c4bd6c569d94ae8b00a702bbb  rt-tests-2.7.tar.xz
++sha256  13190fda63fae640a354d3378c16030f1bd4c243e514515810145dd9d1ae16d8  rt-tests-2.8.tar.xz
+ # locally computed hash
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
+index e048ee94d0..3c6b6f2276 100644
+--- a/package/rt-tests/rt-tests.mk
++++ b/package/rt-tests/rt-tests.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests/older
++RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests
+ RT_TESTS_SOURCE = rt-tests-$(RT_TESTS_VERSION).tar.xz
+-RT_TESTS_VERSION = 2.7
++RT_TESTS_VERSION = 2.8
+ RT_TESTS_LICENSE = GPL-2.0+
+ RT_TESTS_LICENSE_FILES = COPYING
+ 
+-- 
+2.47.0
 
-> diff --git a/package/mpdecimal/mpdecimal.mk 
-> b/package/mpdecimal/mpdecimal.mk
-> index aa322df340..212af5b7ee 100644
-> --- a/package/mpdecimal/mpdecimal.mk
-> +++ b/package/mpdecimal/mpdecimal.mk
-> @@ -5,7 +5,7 @@
->  
-> ################################################################################
-> 
->  MPDECIMAL_SITE = http://www.bytereef.org/software/mpdecimal/releases
-> -MPDECIMAL_VERSION = 2.5.1
-> +MPDECIMAL_VERSION = 4.0.0
->  MPDECIMAL_INSTALL_STAGING = YES
->  MPDECIMAL_LICENSE = BSD-2-Clause
->  MPDECIMAL_LICENSE_FILES = LICENSE.txt
-
-The _LICENSE_FILES here needs to be updated too.
-
-Can you send a v2 fixing the license file, please?
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
