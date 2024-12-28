@@ -1,60 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 942BFE77188
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 10:30:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2B06E77188
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 10:31:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43A3540173;
-	Sat, 28 Dec 2024 10:30:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6pIiK4gQasvU; Sat, 28 Dec 2024 10:30:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30171403A8
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 30171403A8;
-	Sat, 28 Dec 2024 10:30:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EA245757
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:30:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D87C3607CE
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:30:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9EC2860836;
+	Sat, 28 Dec 2024 10:31:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MolDuk600zgY for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 10:30:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id yKtEfg9HbYHf; Sat, 28 Dec 2024 10:31:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDF7960837
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDF7960837;
+	Sat, 28 Dec 2024 10:31:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9BB26757
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:31:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 775DD4059F
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:31:02 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Fiopf1WIVTzS for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 10:31:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6A543607B7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A543607B7
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6A543607B7
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:30:13 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F13071C0003
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:30:10 +0000 (UTC)
-Message-ID: <86d85d58-be0f-4f8e-85cb-4d8512582400@korsgaard.com>
-Date: Sat, 28 Dec 2024 11:30:10 +0100
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3725D40530
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3725D40530
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3725D40530
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:31:00 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 51C10FF802
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:30:58 +0000 (UTC)
+Message-ID: <2825aef2-2f20-49b0-9a58-1e33a8cd7edf@korsgaard.com>
+Date: Sat, 28 Dec 2024 11:30:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: buildroot@buildroot.org
 References: <20241215105537.1396270-1-bernd@kuhls.net>
- <20241215105537.1396270-3-bernd@kuhls.net>
+ <20241215105537.1396270-4-bernd@kuhls.net>
 Content-Language: en-US
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20241215105537.1396270-3-bernd@kuhls.net>
+In-Reply-To: <20241215105537.1396270-4-bernd@kuhls.net>
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 3/5] package/webkitgtk: needs NPTL
+Subject: Re: [Buildroot] [PATCH 4/5] package/wpewebkit: needs NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,8 +74,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 On 12/15/24 11:55, Bernd Kuhls wrote:
 > Fixes build error
 > 
-> /home/buildroot/buildroot/output/build/webkitgtk-2.44.2/Source/WTF/wtf/StackBounds.cpp: In static member function 'static WTF::StackBounds WTF::StackBounds::newThreadStackBounds(WTF::PlatformThreadHandle)':
-> /home/buildroot/buildroot/output/build/webkitgtk-2.44.2/Source/WTF/wtf/StackBounds.cpp:117:5: error: 'pthread_getattr_np' was not declared in this scope; did you mean 'pthread_attr_t'?
+> /home/buildroot/buildroot/output/build/wpewebkit-2.44.4/Source/WTF/wtf/StackBounds.cpp: In static member function 'static WTF::StackBounds WTF::StackBounds::newThreadStackBounds(WTF::PlatformThreadHandle)':
+> /home/buildroot/buildroot/output/build/wpewebkit-2.44.4/Source/WTF/wtf/StackBounds.cpp:117:5: error: 'pthread_getattr_np' was not declared in this scope; did you mean 'pthread_attr_t'?
 >    117 |     pthread_getattr_np(thread, &sattr);
 > 
 > using this defconfig (and libvpx bump to 1.15.0 reverted)
@@ -86,14 +86,15 @@ On 12/15/24 11:55, Bernd Kuhls wrote:
 > BR2_PTHREADS=y
 > BR2_TOOLCHAIN_BUILDROOT_CXX=y
 > BR2_PER_PACKAGE_DIRECTORIES=y
-> BR2_PACKAGE_XORG7=y
 > BR2_PACKAGE_RPI_USERLAND=y
 > BR2_PACKAGE_LIBGTK3=y
-> BR2_PACKAGE_WEBKITGTK=y
+> BR2_PACKAGE_WPEWEBKIT=y
 > 
 > A backport of this patch should be considered because the code is
 > present since 2011:
 > https://github.com/WebKit/WebKit/blame/03f678fac7076e4d69318bfaae065e4c0eab0f9e/Source/WTF/wtf/StackBounds.cpp#L117
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Committed to 2024.02.x and 2024.11.x, thanks.
 
