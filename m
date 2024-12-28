@@ -1,52 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A3D5E77188
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 17:49:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F628E77188
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 17:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC24480BF6;
-	Sat, 28 Dec 2024 17:49:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 152AF606EA;
+	Sat, 28 Dec 2024 17:49:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rer3WbG8Obvt; Sat, 28 Dec 2024 17:49:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ggYHsTNMKWmk; Sat, 28 Dec 2024 17:49:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C28BA80BFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09C8E606F0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C28BA80BFE;
-	Sat, 28 Dec 2024 17:49:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F603E0
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 17:49:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09C8E606F0;
+	Sat, 28 Dec 2024 17:49:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 97832E0
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 17:49:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA6904059D
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 17:49:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 857CD403F7
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 17:49:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W7h1DMCza_QM for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 17:49:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B74CC40274
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B74CC40274
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 17:49:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A9755875C0; Sat, 28 Dec 2024 17:49:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7ceezLi7vBYn for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 17:49:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 64428401FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64428401FF
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 64428401FF
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 17:49:40 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 12C9713F88E;
+ Sat, 28 Dec 2024 18:49:36 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:44422])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 28 Dec 2024 18:49:36 +0100
+MIME-Version: 1.0
+Date: Sat, 28 Dec 2024 18:49:36 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 28 Dec 2024 18:44:47 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5027bcf2c5c6f152bd837b5f961a4eea8e92ba5a
-X-Git-Newrev: d63801823dbf093463661dfeb653f66670bd0d3e
-X-Patchwork-Hint: ignore
-Message-Id: <20241228174918.A9755875C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpdecimal: bump to version 4.0.0
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20241228170136.3164815-1-thomas.petazzoni@bootlin.com>
+References: <20241228170136.3164815-1-thomas.petazzoni@bootlin.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <e58f4a81ac8144d3bc78869007cd9856@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1735408178;
+ bh=NLY2N+9X/NtvQ2OfmxoblPkjEkpKeKATjWMTW0NzxvU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=EGRcH9NM/aXHe8GWQtosCbPNtiOdZ2kocBQQHjonzMaA5L2IXiUczFOfRDO+HNjtl
+ f24Hp8N4ihMvwyATHpyh3SmoY72avFNJ4WU407AbcjUmEK6IupB9g4//4utVHStZpa
+ SSYVfG3D+dPLTF9y/f+aTsRwKjCW+DZnfxpRTIYcIT9aOMnIRZW1e4fxI172sfuByK
+ AwSLQTMux85REi2RBsMT5yOhhvqigRhZOKLHJ8Yq6+ulGNvgXreetMxkcs1x9FDn0S
+ PBVSQf+tMug7x1VXc6oLvFMkZ/FrwfO+iBtoAQMlFyVTQrZ3AJwHLUuQqVqrXKmYfP
+ OyozFaRNnp3dA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=EGRcH9NM
+Subject: Re: [Buildroot] [PATCH v2] package/mpdecimal: bump to version 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,65 +83,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d63801823dbf093463661dfeb653f66670bd0d3e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 28/12/2024 18:01, Thomas Petazzoni via buildroot wrote:
+> While 2.5.1 -> 4.0.0 may seems like a big jump with lots of versions
+> skipped, in fact 4.0.0 is the immediate next release after 2.5.1.
+> 
+> Changelog at:
+> https://www.bytereef.org/mpdecimal/changelog.html
+> 
+> Build tested successfully with test-pkg, including with the one
+> reverse dependency of mpdecimal: the python3 decimal module:
+> https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1604635008.
+> 
+> The license file was renamed from LICENSE.txt to COPYRIGHT.txt. The
+> license is still BSD-2-Clause, but the formatting changed: the license
+> text is no longer inside a C-style comment, but just plain text, and
+> the copyright years were updated.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-While 2.5.1 -> 4.0.0 may seems like a big jump with lots of versions
-skipped, in fact 4.0.0 is the immediate next release after 2.5.1.
-
-Changelog at:
-https://www.bytereef.org/mpdecimal/changelog.html
-
-Build tested successfully with test-pkg, including with the one
-reverse dependency of mpdecimal: the python3 decimal module:
-https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1604635008.
-
-The license file was renamed from LICENSE.txt to COPYRIGHT.txt. The
-license is still BSD-2-Clause, but the formatting changed: the license
-text is no longer inside a C-style comment, but just plain text, and
-the copyright years were updated.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/mpdecimal/mpdecimal.hash | 4 ++--
- package/mpdecimal/mpdecimal.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/mpdecimal/mpdecimal.hash b/package/mpdecimal/mpdecimal.hash
-index 81150c7575..53ca182287 100644
---- a/package/mpdecimal/mpdecimal.hash
-+++ b/package/mpdecimal/mpdecimal.hash
-@@ -1,4 +1,4 @@
- # From http://www.bytereef.org/mpdecimal/download.html
--sha256  9f9cd4c041f99b5c49ffb7b59d9f12d95b683d88585608aa56a6307667b2b21f  mpdecimal-2.5.1.tar.gz
-+sha256  942445c3245b22730fd41a67a7c5c231d11cb1b9936b9c0f76334fb7d0b4468c  mpdecimal-4.0.0.tar.gz
- # Locally computed
--sha256  b07528d8b1dbf1e2d2741052996f0876e23342ce2d30d0effa39c5457716c25a  LICENSE.txt
-+sha256  2713324211652ce4a60e6e21e54f9dc3004299e591b0933a352f1a89c5fb53c2  COPYRIGHT.txt
-diff --git a/package/mpdecimal/mpdecimal.mk b/package/mpdecimal/mpdecimal.mk
-index aa322df340..a2ab18523b 100644
---- a/package/mpdecimal/mpdecimal.mk
-+++ b/package/mpdecimal/mpdecimal.mk
-@@ -5,10 +5,10 @@
- ################################################################################
- 
- MPDECIMAL_SITE = http://www.bytereef.org/software/mpdecimal/releases
--MPDECIMAL_VERSION = 2.5.1
-+MPDECIMAL_VERSION = 4.0.0
- MPDECIMAL_INSTALL_STAGING = YES
- MPDECIMAL_LICENSE = BSD-2-Clause
--MPDECIMAL_LICENSE_FILES = LICENSE.txt
-+MPDECIMAL_LICENSE_FILES = COPYRIGHT.txt
- MPDECIMAL_CONF_OPTS = LD="$(TARGET_CC)"
- 
- # threads are only needed for tests
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
