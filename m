@@ -4,57 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C34DE77188
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 08:35:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81E30E77188
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 08:43:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F0A3401CC;
-	Sat, 28 Dec 2024 08:35:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EEBCA40234;
+	Sat, 28 Dec 2024 08:43:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NVmXJGGOvYf1; Sat, 28 Dec 2024 08:35:39 +0000 (UTC)
+ id ZCMmFV1HNasS; Sat, 28 Dec 2024 08:43:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BB0F401F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C37CE401BF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2BB0F401F4;
-	Sat, 28 Dec 2024 08:35:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 731A5757
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 08:35:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C37CE401BF;
+	Sat, 28 Dec 2024 08:43:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 36EC8E0
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 08:43:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5411580C1C
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 08:35:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04D3F401BF
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 08:43:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pi_uqd4uAa5K for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 08:35:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NYGjFTIcsC8Y for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 08:43:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1336F80486
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1336F80486
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1336F80486
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 08:35:35 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A24761C0002;
- Sat, 28 Dec 2024 08:35:32 +0000 (UTC)
-Message-ID: <fe3fb5e6-6e07-4391-b8c4-732b7b4606ad@korsgaard.com>
-Date: Sat, 28 Dec 2024 09:35:32 +0100
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B02924021C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B02924021C
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B02924021C
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 08:43:15 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A8E8520004;
+ Sat, 28 Dec 2024 08:43:12 +0000 (UTC)
+Message-ID: <9b9e8823-0b42-45de-a99d-198cd278a120@korsgaard.com>
+Date: Sat, 28 Dec 2024 09:43:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
-References: <20241211201146.4057892-1-geomatsi@gmail.com>
- <20241211201146.4057892-2-geomatsi@gmail.com>
+To: buildroot@buildroot.org
+Cc: Thomas Devoogdt <thomas@devoogdt.com>
+References: <20241215100724.3835761-1-peter@korsgaard.com>
 Content-Language: en-US
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20241211201146.4057892-2-geomatsi@gmail.com>
+In-Reply-To: <20241215100724.3835761-1-peter@korsgaard.com>
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/3] package/xr819-xradio: bump version
+Subject: Re: [Buildroot] [PATCH] package/libsoup3: security bump to version
+ 3.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,12 +72,27 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/11/24 21:09, Sergey Matyukevich wrote:
-> Pull driver fixes for v6.9+ kernels.
+On 12/15/24 11:07, Peter Korsgaard wrote:
+> Fixes the following security vulnerabilities:
 > 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> CVE-2024-52531: GNOME libsoup before 3.6.1 allows a buffer overflow in
+> applications that perform conversion to UTF-8 in
+> soup_header_parse_param_list_strict.  Input received over the network cannot
+> trigger this.
+> 
+> https://www.cve.org/CVERecord?id=CVE-2024-52531
+> 
+> CVE-2024-52532: GNOME libsoup before 3.6.1 has an infinite loop, and memory
+> consumption.  during the reading of certain patterns of WebSocket data from
+> clients.
+> 
+> https://www.cve.org/CVERecord?id=CVE-2024-52532
+> 
+> Changelog: https://gitlab.gnome.org/GNOME/libsoup/-/blob/3.6.1/NEWS
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Committed to 2024.11.x, thanks.
+Committed to 2024.02.x and 2024.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
