@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFFF3E77191
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 10:32:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 764D6E77188
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 10:33:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD4E0804D8;
-	Sat, 28 Dec 2024 10:32:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41FE14031B;
+	Sat, 28 Dec 2024 10:33:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ShdHQeqfPdex; Sat, 28 Dec 2024 10:32:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IurMEXFXmXTG; Sat, 28 Dec 2024 10:33:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7E35805A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06FC34038E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B7E35805A3;
-	Sat, 28 Dec 2024 10:32:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 06FC34038E;
+	Sat, 28 Dec 2024 10:33:39 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 530E5E0
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:32:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 25A84757
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:33:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 423C480553
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:32:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1379280DA6
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:33:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EHXo7kqr0niE for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 10:32:27 +0000 (UTC)
+ id i4VgrBEC_kWS for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 10:33:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A0CF804D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40A5F80A5E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0A0CF804D8
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:32:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 40A5F80A5E
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 10:33:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F254087528; Sat, 28 Dec 2024 10:32:26 +0000 (UTC)
+ id 3B9888759D; Sat, 28 Dec 2024 10:33:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 28 Dec 2024 11:18:19 +0100
-X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 070a0f697cce9f2f35ab16ebaa0bce96f4999acf
-X-Git-Newrev: a0f259f2884be8847be21764489b55f16ec61f0c
+Date: Sat, 28 Dec 2024 11:18:43 +0100
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 0ee60ab4d3d1b2e56331afafe85cb6cf7141ffe5
+X-Git-Newrev: ecd9ffbdd38c16570ac18fd41d0c286477731d7b
 X-Patchwork-Hint: ignore
-Message-Id: <20241228103226.F254087528@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/webkitgtk:
+Message-Id: <20241228103337.3B9888759D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/webkitgtk:
  disable libdrm usage when not available
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0f259f2884be8847be21764489b55f16ec61f0c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ecd9ffbdd38c16570ac18fd41d0c286477731d7b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Fixes build error
 
@@ -114,10 +114,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 19740b3b4e..9328327ac2 100644
+index 468fefab0e..e4ab947da4 100644
 --- a/package/webkitgtk/webkitgtk.mk
 +++ b/package/webkitgtk/webkitgtk.mk
-@@ -92,6 +92,13 @@ else
+@@ -82,6 +82,13 @@ else
  WEBKITGTK_CONF_OPTS += -DUSE_LIBBACKTRACE=OFF
  endif
  
