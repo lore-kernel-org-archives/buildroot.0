@@ -1,52 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AA45E7718F
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 22:32:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CADB1E77188
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 22:33:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 63C2180F76;
-	Sat, 28 Dec 2024 22:32:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8621360900;
+	Sat, 28 Dec 2024 22:33:22 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id azkndqti83-G; Sat, 28 Dec 2024 22:33:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F924608FE
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F924608FE;
+	Sat, 28 Dec 2024 22:33:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 44965C8
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 22:33:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8CBC8810E0
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 22:33:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xWNOZrHXmAY5; Sat, 28 Dec 2024 22:32:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F54F80FA7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F54F80FA7;
-	Sat, 28 Dec 2024 22:32:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E4B6F1B
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 22:32:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7338440665
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 22:32:36 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wYYHLpIYZZOs for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 22:32:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 7CWYCb0c-BPw for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 22:33:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B04140664
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B04140664
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 22:32:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2929A83F10; Sat, 28 Dec 2024 22:32:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 62B3080FA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62B3080FA7
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 62B3080FA7
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 22:33:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 59A2760002;
+ Sat, 28 Dec 2024 22:33:08 +0000 (UTC)
+Date: Sat, 28 Dec 2024 23:33:07 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sat, 28 Dec 2024 23:24:01 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 64525c4969727ff78f9a7b525749d70e245d6405
-X-Git-Newrev: 36925cb53d9e13d63089c84cc027b08c79a1f8e9
-X-Patchwork-Hint: ignore
-Message-Id: <20241228223235.2929A83F10@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt6/qt6quick3d: new package
+To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Cc: buildroot@buildroot.org, Christian Hitz <christian@klarinett.li>,
+ Andreas Naumann <ANaumann@ultratronik.de>, Zoltan Gyarmati
+ <zgyarmati@zgyarmati.de>, Jesse Van Gavere <jesseevg@gmail.com>
+Message-ID: <20241228233307.1c78f501@windsurf>
+In-Reply-To: <20241213115820.655993-1-roykollensvendsen@gmail.com>
+References: <20241213115820.655993-1-roykollensvendsen@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1735425188;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=RQGSXaIUtzL6wRWM7y/4oUrzESGNyCbc3u8Zv+3LldU=;
+ b=LevmGEPA+irv7dRO134Tm+WgpWkntBtWVVlzqu57aV1lUVB6tlBaMwb3GNnewZR/S/9V+A
+ ZpD4K9Kmyk1dHESbC/KVCv1mcSg4Ci7FY/snu9IPOP5rQCXArR4S3K03ZkvZ4ljJ61dbUS
+ UIE8xQJVEjDwRTP7+j9BqxhHSjAS7BUmaoI+ED2FyOPRxVyagHEA6s7IwWAyLc6E/U2aVX
+ tE8/w6ks7tc/Z0KTF/mX9b7eAKWxJ2j3NKlG1GFFBVin64W1DqfBk43mKL/RTgGm8ceAkR
+ jQXs1rnJB/RaVFM4uddNQ0wJFrG9tEJehEZYyqDH1rfPlcSKEfEI7U1FSZtdhA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LevmGEPA
+Subject: Re: [Buildroot] [PATCH 1/8] package/qt6: bump version to 6.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,140 +84,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36925cb53d9e13d63089c84cc027b08c79a1f8e9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 13 Dec 2024 12:58:08 +0100
+Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
 
-Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/qt6/Config.in                  |  1 +
- package/qt6/qt6quick3d/Config.in       | 10 ++++++
- package/qt6/qt6quick3d/qt6quick3d.hash | 14 ++++++++
- package/qt6/qt6quick3d/qt6quick3d.mk   | 62 ++++++++++++++++++++++++++++++++++
- 4 files changed, 87 insertions(+)
+> For details see:
+>  - https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.8.1/release-note.md
+>  - https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.8.0/release-note.md
+> 
+> qt6serialport:
+>  - Fix legal-info. LICENSES/Qt-GPL-exception-1.0.txt was removed from
+>  Qt6 Serial Port. This broke make qt6serialport-legal-info, so we had to
+>  do some minor modification to the qt6serialport package.
+> 
+> qt6declarative:
+>  - Remove patch from qt6declarative, since it's already included in this
+>  version.
+> Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+> ---
+>  package/qt6/qt6.mk                            |  4 +--
+>  package/qt6/qt6base/qt6base.hash              |  6 ++--
+>  package/qt6/qt6charts/qt6charts.hash          |  4 +--
+>  .../qt6/qt6core5compat/qt6core5compat.hash    |  4 +--
+>  ...1-Fix-build-with--no-feature-network.patch | 28 -------------------
+>  .../qt6/qt6declarative/qt6declarative.hash    |  4 +--
+>  .../qt6languageserver/qt6languageserver.hash  |  4 +--
+>  package/qt6/qt6mqtt/qt6mqtt.hash              |  2 +-
+>  package/qt6/qt6opcua/qt6opcua.hash            |  2 +-
+>  package/qt6/qt6scxml/qt6scxml.hash            |  4 +--
+>  package/qt6/qt6serialbus/qt6serialbus.hash    |  4 +--
+>  package/qt6/qt6serialport/qt6serialport.hash  |  5 ++--
+>  package/qt6/qt6serialport/qt6serialport.mk    |  3 +-
+>  .../qt6/qt6shadertools/qt6shadertools.hash    |  4 +--
+>  package/qt6/qt6svg/qt6svg.hash                |  4 +--
+>  package/qt6/qt6tools/qt6tools.hash            |  4 +--
+>  .../qt6virtualkeyboard.hash                   |  4 +--
+>  package/qt6/qt6wayland/qt6wayland.hash        |  4 +--
+>  package/qt6/qt6websockets/qt6websockets.hash  |  4 +--
+>  19 files changed, 34 insertions(+), 64 deletions(-)
+>  delete mode 100644 package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.patch
 
-diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index b1616495a6..2a5f5a4511 100644
---- a/package/qt6/Config.in
-+++ b/package/qt6/Config.in
-@@ -50,6 +50,7 @@ source "package/qt6/qt6declarative/Config.in"
- source "package/qt6/qt6languageserver/Config.in"
- source "package/qt6/qt6mqtt/Config.in"
- source "package/qt6/qt6opcua/Config.in"
-+source "package/qt6/qt6quick3d/Config.in"
- source "package/qt6/qt6quicktimeline/Config.in"
- source "package/qt6/qt6scxml/Config.in"
- source "package/qt6/qt6serialbus/Config.in"
-diff --git a/package/qt6/qt6quick3d/Config.in b/package/qt6/qt6quick3d/Config.in
-new file mode 100644
-index 0000000000..c4b8148039
---- /dev/null
-+++ b/package/qt6/qt6quick3d/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_QT6QUICK3D
-+	bool "qt6quick3d"
-+	select BR2_PACKAGE_HOST_QT6BASE_CONCURRENT # Host Quick3DRuntimeRender
-+	select BR2_PACKAGE_HOST_QT6BASE_GUI
-+	select BR2_PACKAGE_HOST_QT6BASE_WIDGETS
-+	select BR2_PACKAGE_QT6DECLARATIVE_QUICK
-+	help
-+	  This package corresponds to the Qt Quick 3D module:
-+
-+	  https://doc.qt.io/qt-6/qtquick3d-index.html
-diff --git a/package/qt6/qt6quick3d/qt6quick3d.hash b/package/qt6/qt6quick3d/qt6quick3d.hash
-new file mode 100644
-index 0000000000..960cda69ad
---- /dev/null
-+++ b/package/qt6/qt6quick3d/qt6quick3d.hash
-@@ -0,0 +1,14 @@
-+# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtquick3d-everywhere-src-6.8.1.tar.xz.sha256
-+sha256  3f3d345e6c95fcd40ab37e6a37cd31811e5d239dea8e142e632d4ea41bf20ce7  qtquick3d-everywhere-src-6.8.1.tar.xz
-+
-+# Hashes for license files
-+sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  d040359701c01996a017d5c515678929cd1b0625e64cb86db44025fbb6cdf1fc  LICENSES/MIT.txt
-+sha256  c3ed04bcbea49f521e4ab32c638fa86b13ebc7b8e1a8972807265079fcd1e6b9  src/3rdparty/assimp/LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/embree/LICENSE.txt
-+sha256  063805e3b8e24ceab4c5dea358b03245ee41c31be87cf65c61d836636cb494bb  src/3rdparty/meshoptimizer/LICENSE.md
-+sha256  2af9d14c7cd67f13c3e7e91dcfe15ec5c8af42923635441e0f5a75bcadadeb33  src/3rdparty/tinyexr/LICENSE
-+sha256  2c16d5b1c2808277fe975b4f70f0fd9afc9b3bcf04e6c676665a82cb2d5579e3  src/3rdparty/xatlas/LICENSE
-+sha256  966313e8129db5d0b3b081d1a50ae107da9a3da2d8faa05899e3042a33192525  src/helpers/GODOT_LICENSE.txt
-+sha256  966313e8129db5d0b3b081d1a50ae107da9a3da2d8faa05899e3042a33192525  src/runtimerender/GODOT_LICENSE.txt
-diff --git a/package/qt6/qt6quick3d/qt6quick3d.mk b/package/qt6/qt6quick3d/qt6quick3d.mk
-new file mode 100644
-index 0000000000..246bd2d82d
---- /dev/null
-+++ b/package/qt6/qt6quick3d/qt6quick3d.mk
-@@ -0,0 +1,62 @@
-+################################################################################
-+#
-+# qt6quick3d
-+#
-+################################################################################
-+
-+QT6QUICK3D_VERSION = $(QT6_VERSION)
-+QT6QUICK3D_SITE = $(QT6_SITE)
-+QT6QUICK3D_SOURCE = qtquick3d-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6QUICK3D_VERSION).tar.xz
-+QT6QUICK3D_INSTALL_STAGING = YES
-+QT6QUICK3D_SUPPORTS_IN_SOURCE_BUILD = NO
-+QT6QUICK3D_CMAKE_BACKEND = ninja
-+QT6QUICK3D_LICENSE = GPL-3.0
-+
-+QT6QUICK3D_LICENSE_FILES = \
-+	LICENSES/BSD-3-Clause.txt \
-+	LICENSES/GPL-3.0-only.txt \
-+	LICENSES/MIT.txt \
-+	src/3rdparty/assimp/LICENSE \
-+	src/3rdparty/embree/LICENSE.txt \
-+	src/3rdparty/meshoptimizer/LICENSE.md \
-+	src/3rdparty/tinyexr/LICENSE \
-+	src/3rdparty/xatlas/LICENSE \
-+	src/helpers/GODOT_LICENSE.txt \
-+	src/runtimerender/GODOT_LICENSE.txt
-+
-+QT6QUICK3D_CONF_OPTS = \
-+	-DQT_HOST_PATH=$(HOST_DIR) \
-+	-DBUILD_WITH_PCH=OFF \
-+	-DQT_BUILD_EXAMPLES=OFF \
-+	-DQT_BUILD_TESTS=OFF
-+
-+QT6QUICK3D_DEPENDENCIES = \
-+	host-qt6quick3d \
-+	host-qt6shadertools \
-+	qt6base \
-+	qt6declarative
-+
-+ifeq ($(BR2_PACKAGE_ASSIMP),y)
-+QT6QUICK3D_CONF_OPTS += -DFEATURE_system_assimp=ON
-+QT6QUICK3D_DEPENDENCIES += assimp
-+else
-+QT6QUICK3D_CONF_OPTS += -DFEATURE_system_assimp=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6QUICKTIMELINE),y)
-+QT6QUICK3D_DEPENDENCIES += qt6quicktimeline
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6SHADERTOOLS),y)
-+QT6QUICK3D_DEPENDENCIES += qt6shadertools
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+QT6QUICK3D_CONF_OPTS += -DFEATURE_system_zlib=ON
-+QT6QUICK3D_DEPENDENCIES += zlib
-+else
-+QT6QUICK3D_CONF_OPTS += -DFEATURE_system_zlib=OFF
-+endif
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+Thanks, entire series applied!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
