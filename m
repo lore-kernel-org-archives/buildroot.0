@@ -1,74 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E55DCE77188
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 20:08:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E65DE77191
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 20:08:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7739F80A92;
-	Sat, 28 Dec 2024 20:08:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oyyXY7DcnOvF; Sat, 28 Dec 2024 20:08:01 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 793D280BA8
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 793D280BA8;
-	Sat, 28 Dec 2024 20:08:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 73193C8
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 20:07:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 429BD605E8
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 20:07:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3F7E605E8;
+	Sat, 28 Dec 2024 20:08:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Iyi3VxwAhFwG for <buildroot@buildroot.org>;
+ id Chnf40SlUFCg; Sat, 28 Dec 2024 20:08:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1BDC606EC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1BDC606EC;
+	Sat, 28 Dec 2024 20:08:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7464DF1B
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 20:07:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 54179401DD
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 20:07:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id atkVR1jOFiSR for <buildroot@buildroot.org>;
  Sat, 28 Dec 2024 20:07:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
  helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DC5B960071
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC5B960071
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DCB164014C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCB164014C
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
  [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DC5B960071
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DCB164014C
  for <buildroot@buildroot.org>; Sat, 28 Dec 2024 20:07:57 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id AA4A9C0003;
- Sat, 28 Dec 2024 20:07:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 17B14C0004;
+ Sat, 28 Dec 2024 20:07:54 +0000 (UTC)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Dec 2024 21:07:49 +0100
-Message-ID: <20241228200754.4012273-2-thomas.petazzoni@bootlin.com>
+Date: Sat, 28 Dec 2024 21:07:48 +0100
+Message-ID: <20241228200754.4012273-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241228200754.4012273-1-thomas.petazzoni@bootlin.com>
-References: <20241228200754.4012273-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=gm1; t=1735416475;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=afG8kWj+Fx3SYcXiufwrcouvGOhW2BIX7jYo2BsFb7A=;
- b=O0EF/FBBRSGyEKSs1q0EWKVovb23wgr4Obi/koVCXim66xo7xKghlgaUAuL3a4pDhVuDyD
- R5H8D6tjjyegbzS1aD2s6FjWBYyy0PXKU/v2OU0pWeD4+fULaYw88akItXDHusBjstOa5p
- nc7bMbmfMO0enAovWNJpLentRdmCTBg9ZEGGrQ7h7DGrwgM2r8oUTN5w2om6XmntT5bed4
- iJDKQ/ZLj36aky9kF+2CXhMqhW7ftgo3tNlBStjbZvfgYU+Xh4nrx8dteVORJHuoX2R3K1
- OeodII11J+qMEYaETnFbNPT1OrZQ7kaFKedpGfqlMkcGAOj2v3TEkr2xkILlxQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ content-transfer-encoding:content-transfer-encoding;
+ bh=gsRCZPq3BzL6C3CLxjNuoum4KORiZUKDqx1peK7SXMA=;
+ b=T/YcD79qwrXIfAOIPoEsQlqYWOFhOJBvZ7nInQE+UPCvMyjk+ILWVUhvUI2xXzNoWEt3yR
+ ibDWm0ftBBPFGqjB0yB6DXAtjiuUBSr3dVh9tXzbBRWH6E3gDe4/UkrgHKdJJDk5o1764J
+ gywqIE3s40KnmB5HAtWNNqadJO/mAqXWkqNUVSC3tEt/dSxR1eFN1EZp0Fiv5/g56ygCYe
+ N9M/ah9FsHpjy+kgOJyZcqiJpCcGJq2odHz6WIOh6qoKgw5jKfaMkaLSFtE2efGCA2UhV6
+ gCFnnsEy7Sbar4Qomk7RSYIXYO518PcAoUXWOC0OxPApYhunvoTkuMcs2b69TQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=O0EF/FBB
-Subject: [Buildroot] [PATCH 2/4] package/weston: bump to version 14.0.1
+ header.s=gm1 header.b=T/YcD79q
+Subject: [Buildroot] [PATCH 1/4] package/wayland: bump to version 1.23.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,68 +85,58 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From
-https://lists.freedesktop.org/archives/wayland-devel/2024-October/043858.html:
+https://lists.freedesktop.org/archives/wayland-devel/2024-August/043760.html:
 
-This is Weston 14.0.1, a bug-fix release. Most of the fixes here are
-addressing some build issues with a C++ compiler, but also addressing a
-more critical issue that was causing the gtk4 test suite or other clients
-to crash when using the headless backend.
+This is a bugfix release for Wayland 1.23.
 
-Some distros already carry a patch to address that, but in case they
-have not, this would be a good time to update.
+Joaquim Monteiro (1):
+      meson: Fix use of install_data() without specifying install_dir
 
-David Edmundson (1):
-      libweston: Send seat name before announcing devices
+Kirill Primak (1):
+      Put WL_DEPRECATED in front of the function declarations
 
-EatingSumo (1):
-      libweston/screenshooter: Fix build when __builtin_clz is not available
+Sebastian Wick (1):
+      client: Handle proxies with no queue
 
-Jan Alexander Steffens (heftig) (1):
-      libweston/noop-renderer: Check shm_buffer for NULL
-
-Jan Engelhardt (1):
-      build: insert missing wayland-server-protocol dependency
-
-Jeri Li (1):
-      libweston/desktop: avoid weston crash while xdg_surface ack_configure
-
-Marius Vlad (4):
-      libweston: Move weston_get_backend_type after enum declaration
-      desktop-shell: Don't attempt to re-add the view to panel layer
-      libweston/matrix: Fix narrow conversion with C++
-      build: bump to version 14.0.1 for the point release
+Simon Ser (4):
+      scanner: extract validator function emission to helper function
+      scanner: fix validator for bitfields
+      tests: add enum bitfield test
+      build: bump version to 1.23.1 for the bugfix release
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/weston/weston.hash | 6 +++---
- package/weston/weston.mk   | 2 +-
+ package/wayland/wayland.hash | 6 +++---
+ package/wayland/wayland.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index 2fdc6ec1f4..35fe608e20 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
-@@ -1,4 +1,4 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2024-September/043776.html
--sha256  47fd0325b0b948e9b003a38fdf4eb3a8581f3fdc740b8932b35ae8793bf4e4a5  weston-14.0.0.tar.xz
--sha512  8bdeed91befd5cbb0bde0f1860ff7775c1835a5fa8c3bf26e99d2f0c16e81255fcf35bf338ae02d7826463d0efdf41ba3fe78e38e4c27787831dfa331acafc08  weston-14.0.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2024-October/043858.html
-+sha256  a8150505b126a59df781fe8c30c8e6f87da7013e179039eb844a5bbbcc7c79b3  weston-14.0.1.tar.xz
-+sha512  2d782f98f28b39b990acecfc885f62ab34c9cdd22ef06b09c5d8df792112c47b365f89c2bf05d871e36ddfb4c49aa7e6d05ff60fe67a2657727162e4f564a412  weston-14.0.1.tar.xz
- sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index d879dcc965..7d43132073 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
+diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
+index 627cb5a1b0..f7c085513a 100644
+--- a/package/wayland/wayland.hash
++++ b/package/wayland/wayland.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2024-May/043636.html
+-sha256  05b3e1574d3e67626b5974f862f36b5b427c7ceeb965cb36a4e6c2d342e45ab2  wayland-1.23.0.tar.xz
+-sha512  9c525231a7ea3e68d3178230d476285a960d23e38571ac96d885f86c0588c52ef01460bff6833db5adb9456ce8db7b996613611187aac972736748ba91b8fd81  wayland-1.23.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2024-August/043760.html
++sha256  864fb2a8399e2d0ec39d56e9d9b753c093775beadc6022ce81f441929a81e5ed  wayland-1.23.1.tar.xz
++sha512  818eda003e3f7aa15690eedb1ff227a6056b2ce54bf23d45ffe573dc40a914623c5a1358218b59444dcdc483db0503324f0d27091d0ea954412a8b290de5f50a  wayland-1.23.1.tar.xz
+ 
+ # Locally calculated
+ sha256  6eefcb023622a463168a5c20add95fd24a38c7482622a9254a23b99b7c153061  COPYING
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index 06adafc3e1..bb5ceabb9c 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WESTON_VERSION = 14.0.0
-+WESTON_VERSION = 14.0.1
- WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
+-WAYLAND_VERSION = 1.23.0
++WAYLAND_VERSION = 1.23.1
+ WAYLAND_SITE = https://gitlab.freedesktop.org/wayland/wayland/-/releases/$(WAYLAND_VERSION)/downloads
+ WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+ WAYLAND_LICENSE = MIT
 -- 
 2.47.0
 
