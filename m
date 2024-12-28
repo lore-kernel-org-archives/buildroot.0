@@ -4,50 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14505E7718F
-	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 08:51:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BAF2E77188
+	for <buildroot@archiver.kernel.org>; Sat, 28 Dec 2024 09:28:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9B9F403E5;
-	Sat, 28 Dec 2024 08:51:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C97C24035C;
+	Sat, 28 Dec 2024 09:28:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vtlElMMoSOLu; Sat, 28 Dec 2024 08:51:19 +0000 (UTC)
+ id HBf-1HAio5RH; Sat, 28 Dec 2024 09:28:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DEEC404DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78AC740347
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DEEC404DF;
-	Sat, 28 Dec 2024 08:51:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A299757
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 08:51:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78AC740347;
+	Sat, 28 Dec 2024 09:28:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 77197F1B
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 09:28:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CF07A402ED
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 08:51:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6484D401CC
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 09:28:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gsdzgcbfPINu for <buildroot@buildroot.org>;
- Sat, 28 Dec 2024 08:51:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PymGO0zaUvVL for <buildroot@buildroot.org>;
+ Sat, 28 Dec 2024 09:28:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8C794048F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D8C794048F
- for <buildroot@buildroot.org>; Sat, 28 Dec 2024 08:51:07 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D063A874AA; Sat, 28 Dec 2024 08:51:07 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D1E9A400EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1E9A400EC
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D1E9A400EC
+ for <buildroot@buildroot.org>; Sat, 28 Dec 2024 09:28:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id C1C371BF203;
+ Sat, 28 Dec 2024 09:28:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 28 Dec 2024 09:46:47 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 41bd9a5839abc69458d0bf7e7263c72436313ac1
-X-Git-Newrev: 0ee60ab4d3d1b2e56331afafe85cb6cf7141ffe5
-X-Patchwork-Hint: ignore
-Message-Id: <20241228085107.D063A874AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/opensc: security
- bump to version 0.26.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 28 Dec 2024 10:28:40 +0100
+Message-ID: <20241228092841.3045045-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.47.0
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1735378122;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=IHcH6Zl2Rf5GJAGuMo330mfeTbkTndbaPRjPx5+CKkA=;
+ b=Vkdx5GI05oEMyv5I/SLrU+dkFxWAYltgh5RjlwWhrzJBrGu/U4eBXBidow29oDSfkPvZTC
+ Eo+mZv3JBG5lS9828DaoBoCo7dE/KXjvEi72O7gj5OBTEx/6GsaUNdnofvoF/0W4OxK0cb
+ Wiza1NHjV1PPVCfRlZmtZdAWRtrOV7M5n6CBrok0OSoh540U+uJzvzNyEifMqMH7SyEYU3
+ S0LnXFQTjTfueCP8d1XPGq7fODqxI1SVol9juCIaklaW/2pkZp/hnKuhf0YXUWZLPKwJbM
+ KQpmu5PXJ1q3uN0LhiiRTEpQa4UCYybgb47WgOBoNmCGTooMHKeNcGAeI7R3+Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Vkdx5GI0
+Subject: [Buildroot] [PATCH] package/scons: bump to 4.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,90 +77,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ee60ab4d3d1b2e56331afafe85cb6cf7141ffe5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+The tarball was renamed from SCons-<version>.tar.gz to
+scons-<version>.tar.gz.
 
-Fixes the following security vulnerabilities:
+Changes 4.7.0 -> 4.8.0:
+  https://scons.org/scons-480-is-available.html
 
-0.25.0:
+Changes 4.8.0 -> 4.8.1:
+  https://scons.org/scons-481-is-available.html
 
-CVE-2023-5992: Side-channel leaks while stripping encryption PKCS#1.5
-padding in OpenSC
-https://github.com/OpenSC/OpenSC/wiki/CVE-2023-5992
+This change has been tested by building the two Buildroot packages
+that use host-scons: benejson and gpsd.
 
-CVE-2024-1454: Potential use-after-free in AuthentIC driver during card
-enrollment in pkcs15init
-https://github.com/OpenSC/OpenSC/wiki/CVE-2024-1454
-
-0.26.0:
-
-CVE-2024-45615: Usage of uninitialized values in libopensc and pkcs15init
-https://github.com/advisories/GHSA-3q68-hm47-94vg
-
-CVE-2024-45616: Uninitialized values after incorrect check or usage of APDU
-response values in libopensc
-https://github.com/advisories/GHSA-2mjg-798r-mxwh
-
-CVE-2024-45617: Uninitialized values after incorrect or missing checking
-return values of functions in libopensc
-https://github.com/advisories/GHSA-cf2w-h975-2fpg
-
-CVE-2024-45618: Uninitialized values after incorrect or missing checking
-return values of functions in pkcs15init
-https://github.com/advisories/GHSA-f2v6-mw6x-qmwc
-
-CVE-2024-45619: Incorrect handling length of buffers or files in libopensc
-https://github.com/advisories/GHSA-9vxw-3j77-cj78
-
-CVE-2024-45620: Incorrect handling of the length of buffers or files in
-pkcs15init
-https://github.com/advisories/GHSA-9c2g-6v5v-57qg
-
-CVE-2024-8443: Heap buffer overflow in OpenPGP driver when generating key
-https://github.com/advisories/GHSA-mgc5-p43f-72pc
-
-Release notes:
-https://github.com/OpenSC/OpenSC/releases/tag/0.26.0
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 1f4b4ccde7ceb379010aeb93458792202622d64b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/opensc/opensc.hash | 2 +-
- package/opensc/opensc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/scons/scons.hash | 4 ++--
+ package/scons/scons.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/opensc/opensc.hash b/package/opensc/opensc.hash
-index 232222062c..e12d2d4bfa 100644
---- a/package/opensc/opensc.hash
-+++ b/package/opensc/opensc.hash
+diff --git a/package/scons/scons.hash b/package/scons/scons.hash
+index 8dca99830e..3a8a942ee8 100644
+--- a/package/scons/scons.hash
++++ b/package/scons/scons.hash
 @@ -1,5 +1,5 @@
- # Computed locally from https://https://github.com/OpenSC/OpenSC/releases/
--sha256  24d03c69287291da32a30c4c38a304ad827f56cb85d83619e1f5403ab6480ef8  opensc-0.24.0.tar.gz
-+sha256  837baead45e1505260d868871056150ede6e73d35460a470f2595a9e5e75f82b  opensc-0.26.0.tar.gz
- 
- # Computed locally
- sha256  376b54d4c5f4aa99421823fa4da93e3ab73096fce2400e89858632aa7da24a14  COPYING
-diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
-index 008de9d4c2..11d1507d45 100644
---- a/package/opensc/opensc.mk
-+++ b/package/opensc/opensc.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/scons/json
+-md5  f5a740e94864408902c62bdb47687d9d  SCons-4.7.0.tar.gz
+-sha256  d8b617f6610a73e46509de70dcf82f76861b79762ff602d546f4e80918ec81f3  SCons-4.7.0.tar.gz
++md5  37ad818d24ad2f44d6bee5b0f3838706  scons-4.8.1.tar.gz
++sha256  5b641357904d2f56f7bfdbb37e165ab996b6143c948b9df0efc7305f54949daa  scons-4.8.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  2f6ac9a1fc98394d18b80dba9bedb9d5626006d44db3fecf7cf3e21cff7e8b1c  LICENSE
+diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+index b6bfaa0237..f1f76f38a6 100644
+--- a/package/scons/scons.mk
++++ b/package/scons/scons.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--OPENSC_VERSION = 0.24.0
-+OPENSC_VERSION = 0.26.0
- OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
- OPENSC_LICENSE = LGPL-2.1+
- OPENSC_LICENSE_FILES = COPYING
+-SCONS_VERSION = 4.7.0
+-SCONS_SOURCE = SCons-$(SCONS_VERSION).tar.gz
+-SCONS_SITE = https://files.pythonhosted.org/packages/7b/68/6895065c86c65a9388eb760a43ea695ec5b9b1c98a9675a3bcd682dbe9c0
++SCONS_VERSION = 4.8.1
++SCONS_SITE = https://files.pythonhosted.org/packages/b9/76/a2c1293642f9a448f2d012cabf525be69ca5abf4af289bc0935ac1554ee8
+ SCONS_LICENSE = MIT
+ SCONS_LICENSE_FILES = LICENSE
+ SCONS_SETUP_TYPE = setuptools
+-- 
+2.47.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
