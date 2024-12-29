@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84E31E7718F
-	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 22:46:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6A39E7718B
+	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 22:46:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AC9340248;
-	Sun, 29 Dec 2024 22:46:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B354D81171;
+	Sun, 29 Dec 2024 22:46:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iTHXs16akBi3; Sun, 29 Dec 2024 22:46:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BWrNL4MBDAjC; Sun, 29 Dec 2024 22:46:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43D8D40644
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8AA981172
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43D8D40644;
-	Sun, 29 Dec 2024 22:46:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A8AA981172;
+	Sun, 29 Dec 2024 22:46:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id AEAA4C8
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 22:46:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2ED87C8
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 22:46:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E96C4004A
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 22:46:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1A8254004A
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 22:46:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1FPEx3F2mywP for <buildroot@buildroot.org>;
+ id fqiM9gfjiHdk for <buildroot@buildroot.org>;
  Sun, 29 Dec 2024 22:46:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84EC940190
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A013E40258
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 84EC940190
+ by smtp2.osuosl.org (Postfix) with ESMTP id A013E40258
  for <buildroot@buildroot.org>; Sun, 29 Dec 2024 22:46:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7DE81877A2; Sun, 29 Dec 2024 22:46:50 +0000 (UTC)
+ id 887C9877A3; Sun, 29 Dec 2024 22:46:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 23:37:43 +0100
+Date: Sun, 29 Dec 2024 23:37:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4ce961b7777a76d60033543a5b1988a2af0a1e78
-X-Git-Newrev: 69b2946c44388c310f5c19f08657f41f5fd37332
+X-Git-Oldrev: 69b2946c44388c310f5c19f08657f41f5fd37332
+X-Git-Newrev: 9c8d11e658d307cbfafcf121e925765b8d46bc01
 X-Patchwork-Hint: ignore
-Message-Id: <20241229224650.7DE81877A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libvpl: bump version to 2.14.0
+Message-Id: <20241229224650.887C9877A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-gmmlib: bump version to
+ 22.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,38 +66,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69b2946c44388c310f5c19f08657f41f5fd37332
+commit: https://git.buildroot.net/buildroot/commit/?id=9c8d11e658d307cbfafcf121e925765b8d46bc01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libvpl/libvpl.hash | 2 +-
- package/libvpl/libvpl.mk   | 2 +-
+ package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+ package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libvpl/libvpl.hash b/package/libvpl/libvpl.hash
-index 0e7abd1e19..b88972415e 100644
---- a/package/libvpl/libvpl.hash
-+++ b/package/libvpl/libvpl.hash
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index 9c2f3526bb..9b421af3ed 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  1c740e2b58f7853f56b618bdb7d4a7e5d37f8c1a9b30105a0b79ba80873e1cbd  libvpl-2.13.0.tar.gz
-+sha256  7c6bff1c1708d910032c2e6c44998ffff3f5fdbf06b00972bc48bf2dd9e5ac06  libvpl-2.14.0.tar.gz
- sha256  bf1cfac2e2792b6e1e995ce103d70796aecaf2ec7e4c5fe5474f7acec7b4a677  LICENSE
-diff --git a/package/libvpl/libvpl.mk b/package/libvpl/libvpl.mk
-index 8933cbabd1..81ba571e46 100644
---- a/package/libvpl/libvpl.mk
-+++ b/package/libvpl/libvpl.mk
+-sha256  08db696071510b7e03aa2d9fb7375c6c35f7c327ecd6747424c664c622bb4377  intel-gmmlib-22.5.5.tar.gz
++sha256  2be3de25e45ed6b32d6ea173510b9e4ce141c22f9d6ed18dd5b574b33f34748c  intel-gmmlib-22.6.0.tar.gz
+ sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index 81aa1a9af8..66b0d1629a 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVPL_VERSION = 2.13.0
-+LIBVPL_VERSION = 2.14.0
- LIBVPL_SITE = $(call github,intel,libvpl,v$(LIBVPL_VERSION))
- LIBVPL_LICENSE = MIT
- LIBVPL_LICENSE_FILES = LICENSE
+-INTEL_GMMLIB_VERSION = 22.5.5
++INTEL_GMMLIB_VERSION = 22.6.0
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
