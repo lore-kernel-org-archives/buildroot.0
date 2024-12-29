@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AC2BE7718B
-	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 21:03:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4F37E7718B
+	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 21:04:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D298E811FD;
-	Sun, 29 Dec 2024 21:03:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 59051811F5;
+	Sun, 29 Dec 2024 21:04:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2u4w9YT0BeIA; Sun, 29 Dec 2024 21:03:35 +0000 (UTC)
+ id gsnGvXb3rS9x; Sun, 29 Dec 2024 21:04:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77C44811E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6110C81205
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77C44811E6;
-	Sun, 29 Dec 2024 21:03:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C51972
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 21:03:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6110C81205;
+	Sun, 29 Dec 2024 21:04:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BD8ABC8
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 21:04:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F012F40C13
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 21:03:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB86C8120B
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 21:04:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7q9NEQtQeYMR for <buildroot@buildroot.org>;
- Sun, 29 Dec 2024 21:03:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4n-9JBCoG1Gl for <buildroot@buildroot.org>;
+ Sun, 29 Dec 2024 21:04:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87E8740C1F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 87E8740C1F
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 21:03:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7FC0A87683; Sun, 29 Dec 2024 21:03:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 21:28:43 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 47f70b194e4e29408dd874a0fff61022f4d77c92
-X-Git-Newrev: a12a9a8e5c0664dd8e37d1e673b8e4ca4bde61b9
-X-Patchwork-Hint: ignore
-Message-Id: <20241229210332.7FC0A87683@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpd: update version to 0.23.16
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7D52F811F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D52F811F5
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7D52F811F5
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 21:04:03 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0F0AD1BF203;
+ Sun, 29 Dec 2024 21:03:59 +0000 (UTC)
+Date: Sun, 29 Dec 2024 22:03:58 +0100
+To: Andreas Ziegler <br015@umbiko.net>
+Cc: buildroot@buildroot.org
+Message-ID: <20241229220358.101af9bb@windsurf>
+In-Reply-To: <20241208081538.1245226-1-br015@umbiko.net>
+References: <20241208081538.1245226-1-br015@umbiko.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1735506240;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=xWXDwmB+v8C3fLqcyQEKBQVKdkxG6tJ6HH/G4vixfeQ=;
+ b=dq+RjPf48FW/1DoOIcphl5zsG6lXoiYr5DgDxj3iD4FXl0fg+UwOp291FK3HxEZq2Uglqg
+ 6MYQYKPL3iEG7rXi4UhvBBzazyZdETsJccyV7CDpAJ1bQYTcLs6o5WHkmV7orLBZGsqVof
+ FF1PnrI8d3Sd/X/WSs7L2nLehQp1IA3jrrxKZPOF3k/12c8QjZBYlO1ltEAwusRaob8bXH
+ +x6UdCh71AuHsd9N+02/m+BKKJ7gn6F4Mmy1iKtq+wrBOqbTCL6BKBJPbOzuPVOLnAMTN8
+ oAjBCGhKraJBpA5+p6IahO/W8Q9FwyvZaIY/jZqRGXX5zay/qG+L+vZ/tgVUOQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=dq+RjPf4
+Subject: Re: [Buildroot] [PATCH 1/1] package/mpd: update version to 0.23.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,204 +83,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a12a9a8e5c0664dd8e37d1e673b8e4ca4bde61b9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun,  8 Dec 2024 09:15:38 +0100
+Andreas Ziegler <br015@umbiko.net> wrote:
 
-Version 0.23.16 change log:
+> Version 0.23.16 change log:
+> 
+> * database
+>   - fix integer overflows with 64-bit inode numbers
+> * filter
+>   - ffmpeg: fix for filters producing no output
+> * support libfmt 11
+> * support ICU 76
+> 
+> Adapt 0001-src-event-meson.build-add-atomic-dependency-for-spar.patch to
+> silence check-package warnings
+> Remove 0002-lib-fmt-support-build-with-libfmt-11.0.0.patch, changes were
+> applied upstream
+> 
+> $ utils/check-package package/mpd/*
+> 916 lines processed
+> 0 warnings generated
+> 
+> $ echo "BR2_PACKAGE_MPD=y" > ~/output/mpd.config
+> $ utils/test-pkg -c ~/output/mpd.config -d ~/output -p mpd
+>                     bootlin-armv5-uclibc [1/6]: OK
+>                      bootlin-armv7-glibc [2/6]: OK
+>                    bootlin-armv7m-uclibc [3/6]: SKIPPED
+>                      bootlin-x86-64-musl [4/6]: OK
+>                       br-arm-full-static [5/6]: OK
+>                              arm-aarch64 [6/6]: OK
+> 6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+> 
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+> ---
+>  ...build-add-atomic-dependency-for-spar.patch |  6 +-
+>  ...fmt-support-build-with-libfmt-11.0.0.patch | 93 -------------------
+>  package/mpd/mpd.hash                          |  2 +-
+>  package/mpd/mpd.mk                            |  2 +-
+>  4 files changed, 6 insertions(+), 97 deletions(-)
+>  delete mode 100644 package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch
 
-* database
-  - fix integer overflows with 64-bit inode numbers
-* filter
-  - ffmpeg: fix for filters producing no output
-* support libfmt 11
-* support ICU 76
+Thanks for the patch. You had forgotten to update .checkpackageignore
+to no longer ignore the check-package warning on the 0001 patch, so I
+did that when applying to master. Thanks again!
 
-Adapt 0001-src-event-meson.build-add-atomic-dependency-for-spar.patch to
-silence check-package warnings
-Remove 0002-lib-fmt-support-build-with-libfmt-11.0.0.patch, changes were
-applied upstream
-
-$ utils/check-package package/mpd/*
-916 lines processed
-0 warnings generated
-
-$ echo "BR2_PACKAGE_MPD=y" > ~/output/mpd.config
-$ utils/test-pkg -c ~/output/mpd.config -d ~/output -p mpd
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                             arm-aarch64 [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                                |  1 -
- ...eson.build-add-atomic-dependency-for-spar.patch |  6 +-
- ...-lib-fmt-support-build-with-libfmt-11.0.0.patch | 93 ----------------------
- package/mpd/mpd.hash                               |  2 +-
- package/mpd/mpd.mk                                 |  2 +-
- 5 files changed, 6 insertions(+), 98 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 9b7b25c10c..4ae853c91f 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -841,7 +841,6 @@ package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch l
- package/mono/0002-Ongoing-work-on-the-cmake-build.patch lib_patch.Upstream
- package/mosquitto/S50mosquitto Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/motion/S99motion Shellcheck lib_sysv.Indent lib_sysv.Variables
--package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch lib_patch.Upstream
- package/mpir/0001-mpn-arm-udiv.asm-workaround-binutils-bug-14887.patch lib_patch.Upstream
- package/mpv/0001-fix-powerpc64-altivec.patch lib_patch.Upstream
- package/mraa/0001-include-Declare-gVERSION-global-as-extern.patch lib_patch.Upstream
-diff --git a/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-index 390cf12583..28a82da30a 100644
---- a/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-+++ b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-@@ -9,9 +9,11 @@ Linking with libatomic is needed on sparc otherwise build fails on:
- Fixes:
-  - http://autobuild.buildroot.org/results/7a9fdb7e323892fb6ed85a2441054303e889c089
- 
-+Upstream: not sent (the same kind of patch for ncmpc was
-+refused: https://github.com/MusicPlayerDaemon/ncmpc/pull/45)
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: not sent (the same kind of patch for ncmpc was
--refused: https://github.com/MusicPlayerDaemon/ncmpc/pull/45)]
-+[Andreas: adapt upstream formatting]
-+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
- ---
-  src/event/meson.build | 4 ++++
-  1 file changed, 4 insertions(+)
-diff --git a/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch b/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch
-deleted file mode 100644
-index e0a361fee2..0000000000
---- a/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch
-+++ /dev/null
-@@ -1,93 +0,0 @@
--From 1402869715e3efca87942d79c3173a6b21a6925d Mon Sep 17 00:00:00 2001
--From: Rudi Heitbaum <rudi@heitbaum.com>
--Date: Fri, 5 Jul 2024 14:27:45 +0000
--Subject: [PATCH] lib/fmt: support build with libfmt-11.0.0
--
--Upstream libfmt commit fmtlib/fmt@d707292
--now requires the format function to be const.
--
--Adjust the function prototype so it is const and can compile.
--
--Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
--
--Context: https://github.com/MusicPlayerDaemon/MPD/issues/2071
--Pull request: https://github.com/MusicPlayerDaemon/MPD/pull/2069
--
--Fixes: http://autobuild.buildroot.net/results/73514ea76a5960f59b4c50e2074571b10e4682d4
--Fixes: http://autobuild.buildroot.net/results/a58ddbdfe35bd19021e65db0b8b8cc4c1c884d51
--
--Rebase for mpd-0.23.15
--
--Upstream: https://github.com/MusicPlayerDaemon/MPD/commit/3648475f871c33daa9e598c102a16e5a1a4d4dfc
--Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-----
-- src/lib/ffmpeg/LibFmt.hxx            | 2 +-
-- src/lib/fmt/AudioFormatFormatter.hxx | 4 ++--
-- src/lib/fmt/ExceptionFormatter.hxx   | 2 +-
-- src/lib/fmt/PathFormatter.hxx        | 2 +-
-- 4 files changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/src/lib/ffmpeg/LibFmt.hxx b/src/lib/ffmpeg/LibFmt.hxx
--index aa068711f..dee83ed2d 100644
----- a/src/lib/ffmpeg/LibFmt.hxx
--+++ b/src/lib/ffmpeg/LibFmt.hxx
--@@ -29,7 +29,7 @@
-- struct fmt::formatter<AVSampleFormat> : formatter<string_view>
-- {
-- 	template<typename FormatContext>
---	auto format(const AVSampleFormat format, FormatContext &ctx) {
--+	auto format(const AVSampleFormat format, FormatContext &ctx) const {
-- 		const char *name = av_get_sample_fmt_name(format);
-- 		if (name == nullptr)
-- 			name = "?";
--diff --git a/src/lib/fmt/AudioFormatFormatter.hxx b/src/lib/fmt/AudioFormatFormatter.hxx
--index e0ffb6216..8da98efd4 100644
----- a/src/lib/fmt/AudioFormatFormatter.hxx
--+++ b/src/lib/fmt/AudioFormatFormatter.hxx
--@@ -39,7 +39,7 @@
-- struct fmt::formatter<SampleFormat> : formatter<string_view>
-- {
-- 	template<typename FormatContext>
---	auto format(const SampleFormat format, FormatContext &ctx) {
--+	auto format(const SampleFormat format, FormatContext &ctx) const {
-- 		return formatter<string_view>::format(sample_format_to_string(format),
-- 						      ctx);
-- 	}
--@@ -49,7 +49,7 @@
-- struct fmt::formatter<AudioFormat> : formatter<string_view>
-- {
-- 	template<typename FormatContext>
---	auto format(const AudioFormat &af, FormatContext &ctx) {
--+	auto format(const AudioFormat &af, FormatContext &ctx) const {
-- 		return formatter<string_view>::format(ToString(af).c_str(),
-- 						      ctx);
-- 	}
--diff --git a/src/lib/fmt/ExceptionFormatter.hxx b/src/lib/fmt/ExceptionFormatter.hxx
--index 3f342df67..f08b3bb22 100644
----- a/src/lib/fmt/ExceptionFormatter.hxx
--+++ b/src/lib/fmt/ExceptionFormatter.hxx
--@@ -38,7 +38,7 @@
-- struct fmt::formatter<std::exception_ptr> : formatter<string_view>
-- {
-- 	template<typename FormatContext>
---	auto format(std::exception_ptr e, FormatContext &ctx) {
--+	auto format(std::exception_ptr e, FormatContext &ctx) const {
-- 		return formatter<string_view>::format(GetFullMessage(e), ctx);
-- 	}
-- };
--diff --git a/src/lib/fmt/PathFormatter.hxx b/src/lib/fmt/PathFormatter.hxx
--index e5ae89dec..add06df81 100644
----- a/src/lib/fmt/PathFormatter.hxx
--+++ b/src/lib/fmt/PathFormatter.hxx
--@@ -29,7 +29,7 @@
-- struct fmt::formatter<Path> : formatter<string_view>
-- {
-- 	template<typename FormatContext>
---	auto format(Path path, FormatContext &ctx) {
--+	auto format(Path path, FormatContext &ctx) const {
-- 		return formatter<string_view>::format(path.ToUTF8(), ctx);
-- 	}
-- };
---- 
--2.43.0
--
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index fe3d449cc5..c18a80a9d0 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  550132239ad1acf82ccf8905b56cc13dc2c81a4489b96fba7731b3049907661a  mpd-0.23.15.tar.xz
-+sha256  9668e36df80de485683c962d02845bf314d8a08e6141af7afeff76401e32b2c1  mpd-0.23.16.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index e320ad9dec..fd528aaa87 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.23
--MPD_VERSION = $(MPD_VERSION_MAJOR).15
-+MPD_VERSION = $(MPD_VERSION_MAJOR).16
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost fmt
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
