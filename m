@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15A5FC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:33:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56448C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:33:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C73174AD51;
-	Fri, 28 Feb 2025 16:33:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05CC848F48;
+	Fri, 28 Feb 2025 16:33:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AnlY8aWWZ4WY; Fri, 28 Feb 2025 16:33:13 +0000 (UTC)
+ id feVV3SEO3J1R; Fri, 28 Feb 2025 16:33:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D80D4EF55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A82124EF80
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D80D4EF55;
-	Fri, 28 Feb 2025 16:32:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A5C2D711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A82124EF80;
+	Fri, 28 Feb 2025 16:33:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 24EE7711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 95A9E40AED
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 156E840AED
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L7yOGDJbEmGY for <buildroot@buildroot.org>;
+ id 1qltQRzzSi0H for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:29:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1741C40413
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D863F40469
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1741C40413
+ by smtp2.osuosl.org (Postfix) with ESMTP id D863F40469
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1273B8638C; Fri, 28 Feb 2025 16:29:51 +0000 (UTC)
+ id D315B81099; Fri, 28 Feb 2025 16:29:51 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 12:43:15 +0100
+Date: Sun, 29 Dec 2024 19:24:29 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6f74ee11b484b55b4d314195b4e5abf2f3625382
-X-Git-Newrev: 0d08940ce6454066254204aa9126a5c65cad7628
+X-Git-Oldrev: 4378f30da3a7beaad9417714268ca5a55cf81e93
+X-Git-Newrev: 56bc9cb2b7abd620587e32d640595d52e35cd2df
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162951.1273B8638C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wayland-protocols:
- bump to version 1.39
+Message-Id: <20250228162951.D315B81099@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lite: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,249 +59,239 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6911320675663528556=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6911320675663528556==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=0d08940ce6454066254204aa9126a5c65cad7628
+commit: https://git.buildroot.net/buildroot/commit/?id=56bc9cb2b7abd620587e32d640595d52e35cd2df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since upstream commit
-c9972235833b3586c05a6e6c4145aef6df3f4281 ("build: install headers with
-enums"), building wayland-protocols requires the wayland-scanner tool,
-so we must add host-wayland to the dependencies of wayland-protocols.
-
-1.36 -> 1.37
-============
-
-From
-https://lists.freedesktop.org/archives/wayland-devel/2024-August/043774.html:
-
-This release contains three new protocols:
-
- * xdg-toplevel-icon
-
-Associate an icon with a toplevel window.
-
- * ext-image-capture-source
- * ext-image-copy-capture
-
-A set of protocols that together allow capturing the pixel content of
-outputs and toplevels.
-
-Apart from this, it includes the usual protocol documentation
-improvements and fixes, as well as clarification of existing protocol
-review practices.
-
-Enjoy!
-
-Andri Yngvason (2):
-      ext-image-capture-source-v1: new protocol
-      ext-image-copy-capture-v1: new protocol
-
-Derek Foreman (1):
-      various: Fix definition of double-buffered state
-
-Jonas Ådahl (1):
-      build: Bump version to 1.37
-
-Matthias Klumpp (1):
-      staging: Add xdg-toplevel-icon protocol for dedicated toplevel icons
-
-Nicolas Fella (1):
-      tablet-v2: Fix feedback description in mode_switch
-
-PolyMeilex (1):
-      Fix some trivial typos
-
-Simon Ser (7):
-      ci: don't run pipelines in forks
-      readme: s/Makefile.am/meson.build/
-      readme: use references for links
-      readme: recommend using "Draft:" prefix for RFC protocols
-      members: trim trailing comma
-      governance: document review requirements
-      xdg-toplevel-icon: add error for destroyed wl_buffer
-
-Xaver Hugl (1):
-      staging/tearing-control: clarify what happens after wl_surface destruction
-
-YaoBing Xiao (1):
-      pointer-gestures: Add punctuation to clarify gesture cycles
-
-1.37 -> 1.38
-============
-
-From
-https://lists.freedesktop.org/archives/wayland-devel/2024-October/043851.html:
-
-This full packed release comes with three new staging protocols:
-
- * system bell - allowing e.g. terminal emulators to hand off system
-   bell alerts to the compositor for among other things accessibility
-   purposes
-
- * fifo - for implementing first in first out surface content update
-   behavior
-
- * commit timing - for adding time constraints to surface content
-   update
-
-Other than this, the presentation timing protocol protocol got a version
-minor bump describing how to deal with variable refresh rate.
-
-Other protocols saw the regular clarifications and bug fixes, and some
-deprecated events is now properly indicated as such in the XML. Please
-see individual commits for details.
-
-Since the last release, a new member was also added to MEMBERS.md: mesa.
-
-Daniel Stone (3):
-      protocols: Add GitLab contact information
-      README: Suggest pinging protocol authors on changes
-      presentation-time: Specify refresh bounds for VRR
-
-Derek Foreman (2):
-      fifo-v1: Add new protocol
-      commit-timing-v1: Add new protocol
-
-Jonas Ådahl (4):
-      members: Update weston point-of-contact
-      members: Add mesa as a member
-      Add staging system bell protocol
-      build: Bump version to 1.38
-
-Julian Orth (1):
-      security-context-v1: clarify close_fd behavior
-
-Nick Diego Yamane (1):
-      xdg-toplevel-drag: clarify offset is relative to geometry
-
-Sebastian Wick (1):
-      cursor-shape-v1: Make object inert when underlying cap is destroyed
-
-Simon Ser (9):
-      xdg-decoration: add invalid_mode error
-      xdg-shell: clarify clients set their initial state before initial commit
-      xdg-toplevel-icon: clarify that wl_buffer.release is unused
-      ci: upgrade wayland to v1.23.1
-      linux-dmabuf: mark format/modifier with deprecated-since attribute
-      xdg-output: mark done event with deprecated-since attribute
-      build: install headers with enums
-      ext-image-copy-capture: fix typo
-      governance: drop adoption website section
-
-Simon Zeni (3):
-      drm-lease-v1: specify existing lease status on withdrawn event
-      drm-lease-v1: advertise connector again upon lease destruction
-      drm-lease-v1: advertise connector again upon lease finished event
-
-itycodes (1):
-      ext-image-copy-capture-v1: Fix typo in ext_image_copy_capture_frame_v1::destroy
-
-1.38 -> 1.39
-============
-
-From
-https://lists.freedesktop.org/archives/wayland-devel/2024-December/043920.html:
-
-This new release contains two new protocols:
-
-  * ext-data-control - allow privileged clients to control data devices, e.g. a
-  clipboard manager.
-
-  * ext-workspace - receive events about and control workspaces, useful for
-  e.g. workspace indicators.
-
-This release also includes the recent governance workflow changes and
-clarifications. Mesa is also listed as a member, Simon Zeni was added as a
-drm-lease maintainer, and Nick Diego Yamane was added as a xdg-toplevel-drag
-maintainer.
-
-Daniel Stone (3):
-      governance: Clarify 'member'
-      governance: Specify how to change points of contact
-      governance: Deprecate wayland-devel@
-
-Heiko Becker (1):
-      build: Raise required wayland-scanner version to 1.23.0 for tests
-
-Jonas Ådahl (1):
-      build: Bump version to 1.39
-
-Mike Blumenkrantz (3):
-      add experimental protocols and their requirements
-      governance: introduce workflow improvements
-      governance: update NACK usage/restrictions
-
-Neal Gompa (1):
-      Add ext-data-control protocol
-
-Nick Diego Yamane (1):
-      xdg-toplevel-drag: Add myself as co-maintainer
-
-Simon Ser (1):
-      drm-lease: nominate Simon Zeni as maintainer
-
-Victoria Brekenfeld (1):
-      Add ext-workspace
-
-YaoBing Xiao (1):
-      ext-image-copy-capture: fix the error in the protocol description
+As we're about to remove DirectFB due to it no longer being
+maintained, we need to first remove Lite, a toolbox based on DirectFB.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/wayland-protocols/wayland-protocols.hash | 6 +++---
- package/wayland-protocols/wayland-protocols.mk   | 4 +++-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ .checkpackageignore                 |  3 ---
+ Config.in.legacy                    |  7 +++++
+ package/Config.in                   |  1 -
+ package/lite/0001-dfbspy-stat.patch | 53 -------------------------------------
+ package/lite/0002-no-tests.patch    | 11 --------
+ package/lite/0003-pkg-config.patch  | 22 ---------------
+ package/lite/Config.in              | 11 --------
+ package/lite/lite.hash              |  3 ---
+ package/lite/lite.mk                | 27 -------------------
+ 9 files changed, 7 insertions(+), 131 deletions(-)
 
-diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
-index 93d40a919c..645d6d8f25 100644
---- a/package/wayland-protocols/wayland-protocols.hash
-+++ b/package/wayland-protocols/wayland-protocols.hash
-@@ -1,4 +1,4 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2024-April/043581.html
--sha256  71fd4de05e79f9a1ca559fac30c1f8365fa10346422f9fe795f74d77b9ef7e92  wayland-protocols-1.36.tar.xz
--sha512  5448b9aedc953ce6be0f378da900c195c8743cb6001f615823b5fc9cab3e3ee54271132055743278e10decef7f8e9dcdeef31593a2a12062575fb90eb0084be0  wayland-protocols-1.36.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2024-December/043920.html
-+sha256  e1dcdcbbf08e2e0a8a02ee5d9a0be3a6aafc39a4b51fa7e0d2f1a16411cb72fa  wayland-protocols-1.39.tar.xz
-+sha512  480a195ec0846400d93160e3d0a7ba12948ed841835ee4661f54b0101ae0027affd9c0f660a73244786fecd70e4f609830489a6b95e00d750cf2379734aacbe0  wayland-protocols-1.39.tar.xz
- sha256  f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
-diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
-index c0dfe69401..b04693978d 100644
---- a/package/wayland-protocols/wayland-protocols.mk
-+++ b/package/wayland-protocols/wayland-protocols.mk
-@@ -4,13 +4,15 @@
- #
- ################################################################################
+diff --git a/.checkpackageignore b/.checkpackageignore
+index a91e1c8526..b17ed1b7fb 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -767,9 +767,6 @@ package/linuxptp/S66phc2sys Shellcheck lib_sysv.Indent
+ package/lirc-tools/0001-plugins-devinput.c-fix-build-with-musl-1.2.0.patch lib_patch.Upstream
+ package/lirc-tools/0002-configure-add-disable-doc-option.patch lib_patch.Upstream
+ package/lirc-tools/S25lircd lib_sysv.Indent lib_sysv.Variables
+-package/lite/0001-dfbspy-stat.patch lib_patch.Sob lib_patch.Upstream
+-package/lite/0002-no-tests.patch lib_patch.Sob lib_patch.Upstream
+-package/lite/0003-pkg-config.patch lib_patch.Sob lib_patch.Upstream
+ package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch lib_patch.Upstream
+ package/lldpd/S60lldpd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/llvm-project/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 5ee8fb27d9..c4c52c64d0 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
--WAYLAND_PROTOCOLS_VERSION = 1.36
-+WAYLAND_PROTOCOLS_VERSION = 1.39
- WAYLAND_PROTOCOLS_SITE = https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$(WAYLAND_PROTOCOLS_VERSION)/downloads
- WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
- WAYLAND_PROTOCOLS_LICENSE = MIT
- WAYLAND_PROTOCOLS_LICENSE_FILES = COPYING
- WAYLAND_PROTOCOLS_INSTALL_STAGING = YES
- WAYLAND_PROTOCOLS_INSTALL_TARGET = NO
-+# needs wayland-scanner
-+WAYLAND_PROTOCOLS_DEPENDENCIES = host-wayland
+ comment "Legacy options removed in 2025.02"
  
- WAYLAND_PROTOCOLS_CONF_OPTS = -Dtests=false
- 
-
---===============6911320675663528556==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++config BR2_PACKAGE_LITE
++	bool "lite has been removed"
++	select BR2_LEGACY
++	help
++	  This package was no longer maintained upstream, so it was
++	  dropped from Buildroot.
++
+ config BR2_PACKAGE_LINUX_FUSION
+ 	bool "linux-fusion has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 4b0467f3b1..becfc32d80 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -356,7 +356,6 @@ comment "Graphic libraries"
+ 	source "package/graphicsmagick/Config.in"
+ 	source "package/imagemagick/Config.in"
+ 	source "package/libglvnd/Config.in"
+-	source "package/lite/Config.in"
+ 	source "package/mesa3d/Config.in"
+ 	source "package/mesa3d-headers/Config.in"
+ 	source "package/ocrad/Config.in"
+diff --git a/package/lite/0001-dfbspy-stat.patch b/package/lite/0001-dfbspy-stat.patch
+deleted file mode 100644
+index 5ca73691ed..0000000000
+--- a/package/lite/0001-dfbspy-stat.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From upstream git (git://git.directfb.org/git/directfb/libs/LiTE.git)
+-
+-From ffe0ce78327a63ddb1265328ea9b5b03acdca019 Mon Sep 17 00:00:00 2001
+-From: Denis Oliver Kropp <dok@directfb.org>
+-Date: Fri, 1 Apr 2011 20:20:26 +0200
+-Subject: [PATCH] dfbspy: Build fix for dfbspy example.
+-
+----
+- examples/dfbspy.c |   20 ++++++++++----------
+- 1 files changed, 10 insertions(+), 10 deletions(-)
+-
+-diff --git a/examples/dfbspy.c b/examples/dfbspy.c
+-index 5f36f0b..c7f9725 100644
+---- a/examples/dfbspy.c
+-+++ b/examples/dfbspy.c
+-@@ -89,9 +89,9 @@ read_stat( FusionStat *stat, int world )
+- 
+- /**************************************************************************************************/
+- 
+--#define CALC(x)     stat.x = (int)(((s.x - last_stat.x) * 1000 / (float) diff) + 0.5f)
+-+#define CALC(x)     stats.x = (int)(((s.x - last_stat.x) * 1000 / (float) diff) + 0.5f)
+- 
+--static FusionStat last_stat, stat;
+-+static FusionStat last_stat, stats;
+- static long long  last_millis;
+- 
+- static int
+-@@ -145,14 +145,14 @@ static const struct {
+-      void          (*update)( LiteLabel *label, void *ctx );
+-      void           *ctx;
+- } list[] = {
+--     { "lease/purchase", update_number, &stat.lease_purchase },
+--     { "cede",           update_number, &stat.cede },
+--     { "attach",         update_number, &stat.attach },
+--     { "detach",         update_number, &stat.detach },
+--     { "ref up",         update_number, &stat.ref_up },
+--     { "ref down",       update_number, &stat.ref_down },
+--     { "prevail/swoop",  update_number, &stat.prevail_swoop },
+--     { "dismiss",        update_number, &stat.dismiss }
+-+     { "lease/purchase", update_number, &stats.lease_purchase },
+-+     { "cede",           update_number, &stats.cede },
+-+     { "attach",         update_number, &stats.attach },
+-+     { "detach",         update_number, &stats.detach },
+-+     { "ref up",         update_number, &stats.ref_up },
+-+     { "ref down",       update_number, &stats.ref_down },
+-+     { "prevail/swoop",  update_number, &stats.prevail_swoop },
+-+     { "dismiss",        update_number, &stats.dismiss }
+- };
+- 
+- #define NUM_LIST    (sizeof(list)/sizeof(list[0]))
+--- 
+-1.7.6.3
+-
+diff --git a/package/lite/0002-no-tests.patch b/package/lite/0002-no-tests.patch
+deleted file mode 100644
+index 3a47186512..0000000000
+--- a/package/lite/0002-no-tests.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- a/Makefile.in.orig	2008-07-07 13:07:12.000000000 +0200
+-+++ b/Makefile.in	2008-07-07 13:07:05.000000000 +0200
+-@@ -202,7 +202,7 @@
+- target_vendor = @target_vendor@
+- top_builddir = @top_builddir@
+- top_srcdir = @top_srcdir@
+--SUBDIRS = data fonts lite leck examples tests
+-+SUBDIRS = data fonts lite leck examples
+- EXTRA_DIST = TODO lite.pc.in leck.pc.in
+- pkgconfigdir = $(libdir)/pkgconfig
+- pkgconfig_DATA = lite.pc leck.pc
+diff --git a/package/lite/0003-pkg-config.patch b/package/lite/0003-pkg-config.patch
+deleted file mode 100644
+index cdd24162c7..0000000000
+--- a/package/lite/0003-pkg-config.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-From 7982cccbb6ad58f3802bb266467290200d130a48 Mon Sep 17 00:00:00 2001
+-From: Ville Syrjala <syrjala@sci.fi>
+-Date: Sat, 27 Nov 2010 01:14:25 +0200
+-Subject: [PATCH] Too many '\' characters in the .pc file
+-
+----
+- lite.pc.in |    2 +-
+- 1 files changed, 1 insertions(+), 1 deletions(-)
+-
+-diff --git a/lite.pc.in b/lite.pc.in
+-index 48eb969..3a21eaa 100644
+---- a/lite.pc.in
+-+++ b/lite.pc.in
+-@@ -9,4 +9,4 @@ Description: "LiTE" is a Toolkit Engine
+- Requires: directfb >= @DFB_REQUIRED_VERSION@
+- Version: @VERSION@
+- Libs: -L${libdir} -llite
+--Cflags: -I${includedir} -DLITEFONTDIR=\\\"@LITEFONTDIR@\\\"
+-+Cflags: -I${includedir} -DLITEFONTDIR=\"@LITEFONTDIR@\"
+---
+-1.7.1
+-
+diff --git a/package/lite/Config.in b/package/lite/Config.in
+deleted file mode 100644
+index 62cd21e53d..0000000000
+--- a/package/lite/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_LITE
+-	bool "LiTE (toolbox engine)"
+-	depends on BR2_PACKAGE_DIRECTFB
+-	help
+-	  LiTE stands for LiTE is a Toolbox Engine.
+-	  Its role is to facilitate the functions of DirectFB so that a
+-	  toolbox could be written on top of DirectFB with less effort.
+-	  As such LiTE has abstractions for the underlying graphics and
+-	  event systems.
+-
+-	  See http://www.directfb.org/wiki/index.php/LiTE:Architecture
+diff --git a/package/lite/lite.hash b/package/lite/lite.hash
+deleted file mode 100644
+index 13a494b714..0000000000
+--- a/package/lite/lite.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  1b784cf595c3d5313e3705db210119f77d48826dbc7fcf6328af83a1270c2264  LiTE-0.8.10.tar.gz
+-sha256  512d2d21b6b3384ba64781abb0208a1b87740bc31e2df48e2b206ddb7e4d5779  COPYING
+diff --git a/package/lite/lite.mk b/package/lite/lite.mk
+deleted file mode 100644
+index ddb55d46be..0000000000
+--- a/package/lite/lite.mk
++++ /dev/null
+@@ -1,27 +0,0 @@
+-################################################################################
+-#
+-# lite
+-#
+-################################################################################
+-
+-LITE_VERSION = 0.8.10
+-LITE_SOURCE = LiTE-$(LITE_VERSION).tar.gz
+-LITE_SITE = http://www.directfb.org/downloads/Libs
+-LITE_INSTALL_STAGING = YES
+-LITE_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+-LITE_CONF_ENV = DFB_CFLAGS=-I$(STAGING_DIR)/usr/include/directfb
+-LITE_DEPENDENCIES = directfb
+-LITE_LICENSE = LGPL-2.1+
+-LITE_LICENSE_FILES = COPYING
+-
+-define LITE_FINALIZE_INSTALL
+-	$(INSTALL) -d $(TARGET_DIR)/usr/share/LiTE/examples/
+-	$(INSTALL) -d $(TARGET_DIR)/usr/share/fonts/truetype/
+-	$(INSTALL) -m0644 $(@D)/data/*.png $(TARGET_DIR)/usr/share/LiTE/
+-	$(INSTALL) -m0644 $(@D)/examples/*.png $(TARGET_DIR)/usr/share/LiTE/examples/
+-	$(INSTALL) -m0644 $(@D)/fonts/*.ttf $(TARGET_DIR)/usr/share/fonts/truetype/
+-endef
+-
+-LITE_POST_INSTALL_TARGET_HOOKS += LITE_FINALIZE_INSTALL
+-
+-$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6911320675663528556==--
