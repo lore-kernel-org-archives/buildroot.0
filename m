@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C814E7718F
-	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 12:00:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F2D5E7718B
+	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 12:00:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62DBA40556;
-	Sun, 29 Dec 2024 12:00:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C32140565;
+	Sun, 29 Dec 2024 12:00:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fz4nsPrvSjqO; Sun, 29 Dec 2024 12:00:19 +0000 (UTC)
+ id PFpVSO0PPGDT; Sun, 29 Dec 2024 12:00:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB86540541
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0309A40583
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB86540541;
-	Sun, 29 Dec 2024 12:00:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4ABB4E0B
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:00:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0309A40583;
+	Sun, 29 Dec 2024 12:00:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 415A772
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:00:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 23ECF80ED6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E72D80ED7
  for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:00:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J_yVaSXuhXtj for <buildroot@buildroot.org>;
+ id 6EpK2jLc6NC7 for <buildroot@buildroot.org>;
  Sun, 29 Dec 2024 12:00:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5758180DCD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 758DA80DE4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5758180DCD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 758DA80DE4
  for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:00:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 43803812CF; Sun, 29 Dec 2024 12:00:14 +0000 (UTC)
+ id 6CF238767B; Sun, 29 Dec 2024 12:00:14 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 12:34:49 +0100
+Date: Sun, 29 Dec 2024 12:43:32 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f27dcb9310464d21916625c892a9bc2a25664b9b
-X-Git-Newrev: 6f74ee11b484b55b4d314195b4e5abf2f3625382
+X-Git-Oldrev: 0d08940ce6454066254204aa9126a5c65cad7628
+X-Git-Newrev: ca46491736b4b3ae9549acbdef6383d145932963
 X-Patchwork-Hint: ignore
-Message-Id: <20241229120014.43803812CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/weston: bump to version 14.0.1
+Message-Id: <20241229120014.6CF238767B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libinput: bump to version 1.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,73 +64,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f74ee11b484b55b4d314195b4e5abf2f3625382
+commit: https://git.buildroot.net/buildroot/commit/?id=ca46491736b4b3ae9549acbdef6383d145932963
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 From
-https://lists.freedesktop.org/archives/wayland-devel/2024-October/043858.html:
+https://lists.freedesktop.org/archives/wayland-devel/2024-November/043860.html:
 
-This is Weston 14.0.1, a bug-fix release. Most of the fixes here are
-addressing some build issues with a C++ compiler, but also addressing a
-more critical issue that was causing the gtk4 test suite or other clients
-to crash when using the headless backend.
+In terms of new features we have a "sticky" mode for drag-locking. Previously a
+tap-and-drag lock would always expire after a timeout, now the button is held
+logically down until a completing tap. Desktop environments are encouraged to
+use this as the default as it provides a better experience for anyone with
+less-than-perfect dexterity. For backwards-compatibility reasons libinput cannot
+easily change its defaults without risking bugs in the callers.
 
-Some distros already carry a patch to address that, but in case they
-have not, this would be a good time to update.
+For tablet pads we now support tablet pad mode groups for devices without
+status LEDs as well, the previous implementation was tied to LEDs which some
+devices like the XP Pen ACK05 remote don't have. Since the mode is a software
+feature anyway tying it to LEDs is not necessary.
 
-David Edmundson (1):
-      libweston: Send seat name before announcing devices
+If a tablet is unknown to libwacom we now assume that it is a built-in tablet.
+This matches the behavior of libwacom 2.11 but in our case the only visible
+result is that the device now has the calibration configuration available.
+Better to have it and not use it, as they say.
 
-EatingSumo (1):
-      libweston/screenshooter: Fix build when __builtin_clz is not available
+The available area on external tablets can be reduced via the new tablet "area"
+configuration. Users can set a rectangle smaller than the width/height
+of the tablet and input outside this rectangle will be ignored.
 
-Jan Alexander Steffens (heftig) (1):
-      libweston/noop-renderer: Check shm_buffer for NULL
+For packagers: the check dependency is now optional, almost all tests
+can now run without it.
 
-Jan Engelhardt (1):
-      build: insert missing wayland-server-protocol dependency
-
-Jeri Li (1):
-      libweston/desktop: avoid weston crash while xdg_surface ack_configure
-
-Marius Vlad (4):
-      libweston: Move weston_get_backend_type after enum declaration
-      desktop-shell: Don't attempt to re-add the view to panel layer
-      libweston/matrix: Fix narrow conversion with C++
-      build: bump to version 14.0.1 for the point release
+And then we have of course the usual collection of bug fixes and
+device-specific quirks.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/weston/weston.hash | 6 +++---
- package/weston/weston.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libinput/libinput.hash | 2 +-
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index 2fdc6ec1f4..35fe608e20 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
-@@ -1,4 +1,4 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2024-September/043776.html
--sha256  47fd0325b0b948e9b003a38fdf4eb3a8581f3fdc740b8932b35ae8793bf4e4a5  weston-14.0.0.tar.xz
--sha512  8bdeed91befd5cbb0bde0f1860ff7775c1835a5fa8c3bf26e99d2f0c16e81255fcf35bf338ae02d7826463d0efdf41ba3fe78e38e4c27787831dfa331acafc08  weston-14.0.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2024-October/043858.html
-+sha256  a8150505b126a59df781fe8c30c8e6f87da7013e179039eb844a5bbbcc7c79b3  weston-14.0.1.tar.xz
-+sha512  2d782f98f28b39b990acecfc885f62ab34c9cdd22ef06b09c5d8df792112c47b365f89c2bf05d871e36ddfb4c49aa7e6d05ff60fe67a2657727162e4f564a412  weston-14.0.1.tar.xz
- sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index d879dcc965..7d43132073 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 2ab56e4827..f6ec570588 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  8c582b86c6865aaee2516ee96b299cef60c98e113d1391bbd2683eac08221a07  libinput-1.26.0.tar.bz2
++sha256  8e823cc9f44c51b63ae90af0b73676ed82c0402cc1cbd4a59ac91b7bb6cad716  libinput-1.27.0.tar.bz2
+ 
+ # License files
+ sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 3b5070c85e..ee15b781e6 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WESTON_VERSION = 14.0.0
-+WESTON_VERSION = 14.0.1
- WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
+-LIBINPUT_VERSION = 1.26.0
++LIBINPUT_VERSION = 1.27.0
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.bz2
+ LIBINPUT_SITE = https://gitlab.freedesktop.org/libinput/libinput/-/archive/$(LIBINPUT_VERSION)
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
