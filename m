@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E4E8C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:48:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4C20C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:48:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D69B4FE17;
-	Fri, 28 Feb 2025 16:48:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 82382849A8;
+	Fri, 28 Feb 2025 16:48:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dmwVz4m6ltFV; Fri, 28 Feb 2025 16:48:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ul6J0jVycOAI; Fri, 28 Feb 2025 16:48:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 083F8487DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7CBB849A6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 083F8487DC;
-	Fri, 28 Feb 2025 16:48:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B7CBB849A6;
+	Fri, 28 Feb 2025 16:48:49 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B248711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 212851DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7707C42E47
+ by smtp4.osuosl.org (Postfix) with ESMTP id AAAC142E53
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fxznIra4J1z7 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:10 +0000 (UTC)
+ id zkKwCHbGgr2r for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE6F842585
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B83DB424EC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DE6F842585
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B83DB424EC
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D539F84C4E; Fri, 28 Feb 2025 16:29:52 +0000 (UTC)
+ id B238C8769C; Fri, 28 Feb 2025 16:29:54 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 21:28:43 +0100
+Date: Mon, 30 Dec 2024 00:04:13 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 47f70b194e4e29408dd874a0fff61022f4d77c92
-X-Git-Newrev: a12a9a8e5c0664dd8e37d1e673b8e4ca4bde61b9
+X-Git-Oldrev: f6fe892141cd4c8b6dd934df92eb1fe7d9469e0c
+X-Git-Newrev: f7fe84508a14641617586bc481a08cb3face0477
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162952.D539F84C4E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mpd: update version to
- 0.23.16
+Message-Id: <20250228162954.B238C8769C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/procps-ng: bump
+ version to 4.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,206 +59,401 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a12a9a8e5c0664dd8e37d1e673b8e4ca4bde61b9
+commit: https://git.buildroot.net/buildroot/commit/?id=f7fe84508a14641617586bc481a08cb3face0477
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Version 0.23.16 change log:
+Patch 0001 is dropped as it's upstream as of
+ca004d4657d5e8b468a4552ede429be53193a3a9.
 
-* database
-  - fix integer overflows with 64-bit inode numbers
-* filter
-  - ffmpeg: fix for filters producing no output
-* support libfmt 11
-* support ICU 76
+Patch 0002 is dropped as it's upstream as of
+263fe04f9ed6f3f40fdb7ce249221e03dc926c9b.
 
-Adapt 0001-src-event-meson.build-add-atomic-dependency-for-spar.patch to
-silence check-package warnings
-Remove 0002-lib-fmt-support-build-with-libfmt-11.0.0.patch, changes were
-applied upstream
+Patch 0003 is dropped as it's upstream as of
+2507bc475782ff5e0541d37c780dff1e293c9553.
 
-$ utils/check-package package/mpd/*
-916 lines processed
-0 warnings generated
+Patch 0004 is dropped as it's upstream as of
+587efb47df7ddbfda4e6abdd1e7792a2531a238f.
 
-$ echo "BR2_PACKAGE_MPD=y" > ~/output/mpd.config
-$ utils/test-pkg -c ~/output/mpd.config -d ~/output -p mpd
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                             arm-aarch64 [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+Patch 0005 is dropped as it's upstream as of
+5acbb5dc1587d688de646d739a97251eb893bbb0.
 
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+Therefore AUTORECONF = YES can be dropped as we're no longer patching
+the package.
+
+Release notes:
+https://gitlab.com/procps-ng/procps/-/releases/v4.0.5
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                                |  1 -
- ...eson.build-add-atomic-dependency-for-spar.patch |  6 +-
- ...-lib-fmt-support-build-with-libfmt-11.0.0.patch | 93 ----------------------
- package/mpd/mpd.hash                               |  2 +-
- package/mpd/mpd.mk                                 |  2 +-
- 5 files changed, 6 insertions(+), 98 deletions(-)
+ .../0001-build-sys-Add-systemd-elogind-to-w.patch  | 48 -----------
+ package/procps-ng/0002-fix-ncurses-h-include.patch | 55 ------------
+ .../0003-build-sys-Fix-pidfd_open-checking.patch   | 99 ----------------------
+ ...4-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch | 37 --------
+ ...p-Include-sys-syscall.h-if-making-pidwait.patch | 41 ---------
+ package/procps-ng/procps-ng.hash                   |  8 +-
+ package/procps-ng/procps-ng.mk                     |  8 +-
+ 7 files changed, 5 insertions(+), 291 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 9b7b25c10c..4ae853c91f 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -841,7 +841,6 @@ package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch l
- package/mono/0002-Ongoing-work-on-the-cmake-build.patch lib_patch.Upstream
- package/mosquitto/S50mosquitto Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/motion/S99motion Shellcheck lib_sysv.Indent lib_sysv.Variables
--package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch lib_patch.Upstream
- package/mpir/0001-mpn-arm-udiv.asm-workaround-binutils-bug-14887.patch lib_patch.Upstream
- package/mpv/0001-fix-powerpc64-altivec.patch lib_patch.Upstream
- package/mraa/0001-include-Declare-gVERSION-global-as-extern.patch lib_patch.Upstream
-diff --git a/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-index 390cf12583..28a82da30a 100644
---- a/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-+++ b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-@@ -9,9 +9,11 @@ Linking with libatomic is needed on sparc otherwise build fails on:
- Fixes:
-  - http://autobuild.buildroot.org/results/7a9fdb7e323892fb6ed85a2441054303e889c089
- 
-+Upstream: not sent (the same kind of patch for ncmpc was
-+refused: https://github.com/MusicPlayerDaemon/ncmpc/pull/45)
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: not sent (the same kind of patch for ncmpc was
--refused: https://github.com/MusicPlayerDaemon/ncmpc/pull/45)]
-+[Andreas: adapt upstream formatting]
-+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
- ---
-  src/event/meson.build | 4 ++++
-  1 file changed, 4 insertions(+)
-diff --git a/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch b/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch
+diff --git a/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch b/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch
 deleted file mode 100644
-index e0a361fee2..0000000000
---- a/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch
+index 4a8b2a6a8b..0000000000
+--- a/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch
 +++ /dev/null
-@@ -1,93 +0,0 @@
--From 1402869715e3efca87942d79c3173a6b21a6925d Mon Sep 17 00:00:00 2001
--From: Rudi Heitbaum <rudi@heitbaum.com>
--Date: Fri, 5 Jul 2024 14:27:45 +0000
--Subject: [PATCH] lib/fmt: support build with libfmt-11.0.0
+@@ -1,48 +0,0 @@
+-From 788248ee631b3b5f82073c36320fc3f4a3c8f9ba Mon Sep 17 00:00:00 2001
+-From: Craig Small <csmall@dropbear.xyz>
+-Date: Thu, 31 Aug 2023 22:24:23 +1000
+-Subject: [PATCH] build-sys: Add systemd/elogind to w
 -
--Upstream libfmt commit fmtlib/fmt@d707292
--now requires the format function to be const.
+-Depending on the compiler flags, w needs to be explictly linked
+-to libsystemd or elogind even though libproc2 is linked to it.
 -
--Adjust the function prototype so it is const and can compile.
--
--Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
--
--Context: https://github.com/MusicPlayerDaemon/MPD/issues/2071
--Pull request: https://github.com/MusicPlayerDaemon/MPD/pull/2069
--
--Fixes: http://autobuild.buildroot.net/results/73514ea76a5960f59b4c50e2074571b10e4682d4
--Fixes: http://autobuild.buildroot.net/results/a58ddbdfe35bd19021e65db0b8b8cc4c1c884d51
--
--Rebase for mpd-0.23.15
--
--Upstream: https://github.com/MusicPlayerDaemon/MPD/commit/3648475f871c33daa9e598c102a16e5a1a4d4dfc
--Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+-Signed-off-by: Craig Small <csmall@dropbear.xyz>
+-Upstream: https://gitlab.com/procps-ng/procps/-/commit/ca004d4657d5e8b468a4552ede429be53193a3a9
+-Signed-off-by: Hugo Cornelis <hugo.cornelis@essensium.com>
 ----
-- src/lib/ffmpeg/LibFmt.hxx            | 2 +-
-- src/lib/fmt/AudioFormatFormatter.hxx | 4 ++--
-- src/lib/fmt/ExceptionFormatter.hxx   | 2 +-
-- src/lib/fmt/PathFormatter.hxx        | 2 +-
-- 4 files changed, 5 insertions(+), 5 deletions(-)
+- Makefile.am | 7 +++++++
+- NEWS        | 3 +++
+- 2 files changed, 10 insertions(+)
 -
--diff --git a/src/lib/ffmpeg/LibFmt.hxx b/src/lib/ffmpeg/LibFmt.hxx
--index aa068711f..dee83ed2d 100644
----- a/src/lib/ffmpeg/LibFmt.hxx
--+++ b/src/lib/ffmpeg/LibFmt.hxx
--@@ -29,7 +29,7 @@
-- struct fmt::formatter<AVSampleFormat> : formatter<string_view>
-- {
-- 	template<typename FormatContext>
---	auto format(const AVSampleFormat format, FormatContext &ctx) {
--+	auto format(const AVSampleFormat format, FormatContext &ctx) const {
-- 		const char *name = av_get_sample_fmt_name(format);
-- 		if (name == nullptr)
-- 			name = "?";
--diff --git a/src/lib/fmt/AudioFormatFormatter.hxx b/src/lib/fmt/AudioFormatFormatter.hxx
--index e0ffb6216..8da98efd4 100644
----- a/src/lib/fmt/AudioFormatFormatter.hxx
--+++ b/src/lib/fmt/AudioFormatFormatter.hxx
--@@ -39,7 +39,7 @@
-- struct fmt::formatter<SampleFormat> : formatter<string_view>
-- {
-- 	template<typename FormatContext>
---	auto format(const SampleFormat format, FormatContext &ctx) {
--+	auto format(const SampleFormat format, FormatContext &ctx) const {
-- 		return formatter<string_view>::format(sample_format_to_string(format),
-- 						      ctx);
-- 	}
--@@ -49,7 +49,7 @@
-- struct fmt::formatter<AudioFormat> : formatter<string_view>
-- {
-- 	template<typename FormatContext>
---	auto format(const AudioFormat &af, FormatContext &ctx) {
--+	auto format(const AudioFormat &af, FormatContext &ctx) const {
-- 		return formatter<string_view>::format(ToString(af).c_str(),
-- 						      ctx);
-- 	}
--diff --git a/src/lib/fmt/ExceptionFormatter.hxx b/src/lib/fmt/ExceptionFormatter.hxx
--index 3f342df67..f08b3bb22 100644
----- a/src/lib/fmt/ExceptionFormatter.hxx
--+++ b/src/lib/fmt/ExceptionFormatter.hxx
--@@ -38,7 +38,7 @@
-- struct fmt::formatter<std::exception_ptr> : formatter<string_view>
-- {
-- 	template<typename FormatContext>
---	auto format(std::exception_ptr e, FormatContext &ctx) {
--+	auto format(std::exception_ptr e, FormatContext &ctx) const {
-- 		return formatter<string_view>::format(GetFullMessage(e), ctx);
-- 	}
-- };
--diff --git a/src/lib/fmt/PathFormatter.hxx b/src/lib/fmt/PathFormatter.hxx
--index e5ae89dec..add06df81 100644
----- a/src/lib/fmt/PathFormatter.hxx
--+++ b/src/lib/fmt/PathFormatter.hxx
--@@ -29,7 +29,7 @@
-- struct fmt::formatter<Path> : formatter<string_view>
-- {
-- 	template<typename FormatContext>
---	auto format(Path path, FormatContext &ctx) {
--+	auto format(Path path, FormatContext &ctx) const {
-- 		return formatter<string_view>::format(path.ToUTF8(), ctx);
-- 	}
-- };
+-diff --git a/Makefile.am b/Makefile.am
+-index f70c8fb1..ddfc0141 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -149,6 +149,13 @@ endif
+- 
+- dist_man_MANS += man/w.1
+- src_w_SOURCES = src/w.c local/fileutils.c
+-+src_w_LDADD = $(LDADD)
+-+if WITH_SYSTEMD
+-+src_w_LDADD += @SYSTEMD_LIBS@
+-+endif
+-+if WITH_ELOGIND
+-+src_w_LDADD += @ELOGIND_LIBS@
+-+endif
+- else
+-   EXTRA_DIST += man/w.1
+- endif
+-diff --git a/NEWS b/NEWS
+-index 3f2158d4..4ad9f74e 100644
+---- a/NEWS
+-+++ b/NEWS
+-@@ -1,3 +1,6 @@
+-+procps-ng-NEXT
+-+---------------
+-+
+- procps-ng-4.0.4
+- ---------------
+-   * library (API & ABI unchanged)
+--- 
+-2.34.1
+-
+diff --git a/package/procps-ng/0002-fix-ncurses-h-include.patch b/package/procps-ng/0002-fix-ncurses-h-include.patch
+deleted file mode 100644
+index 619126b863..0000000000
+--- a/package/procps-ng/0002-fix-ncurses-h-include.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From 263fe04f9ed6f3f40fdb7ce249221e03dc926c9b Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 24 Jul 2024 09:51:00 +0200
+-Subject: [PATCH] fix ncurses.h include
+-
+-Commit 58559a5b64a3634460536d6397ca382a54b599f0 was not backported from
+-3.3.17 to 4.0.0 resulting in the following build failure when ncursesw
+-headers are not installed in ../usr/include/ncursesw/..:
+-
+-src/watch.c:56:11: fatal error: ncursesw/ncurses.h: No such file or directory
+-   56 | # include <ncursesw/ncurses.h>
+-      |           ^~~~~~~~~~~~~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/b7573be2e78f3d224f48cb3f52087e3d227d58e3
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-
+-Upstream: https://gitlab.com/procps-ng/procps/-/commit/263fe04f9ed6f3f40fdb7ce249221e03dc926c9b
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+-[Bernd: backported to version 4.0.4]
+----
+- configure.ac | 2 +-
+- src/watch.c  | 5 ++++-
+- 2 files changed, 5 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index d433901f..38350aaf 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -64,7 +64,7 @@ PROCPS_PROG_PO4A
+- 
+- # Checks for header files.
+- AC_HEADER_MAJOR
+--AC_CHECK_HEADERS([arpa/inet.h fcntl.h float.h langinfo.h libintl.h limits.h locale.h stdint.h stdio_ext.h stdlib.h string.h sys/file.h sys/ioctl.h sys/param.h sys/time.h termios.h unistd.h utmp.h utmpx.h values.h wchar.h wctype.h])
+-+AC_CHECK_HEADERS([arpa/inet.h fcntl.h float.h langinfo.h libintl.h limits.h locale.h ncursesw/ncurses.h stdint.h stdio_ext.h stdlib.h string.h sys/file.h sys/ioctl.h sys/param.h sys/time.h termios.h unistd.h utmp.h utmpx.h values.h wchar.h wctype.h])
+- 
+- # Checks for typedefs, structures, and compiler characteristics.
+- AC_CHECK_HEADER_STDBOOL
+-diff --git a/src/watch.c b/src/watch.c
+-index ef638e00..7ec634b6 100644
+---- a/src/watch.c
+-+++ b/src/watch.c
+-@@ -53,6 +53,8 @@
+- # define _XOPEN_SOURCE_EXTENDED 1
+- # include <wchar.h>
+- # include <wctype.h>
+-+#endif
+-+#ifdef HAVE_NCURSESW_NCURSES_H
+- # include <ncursesw/ncurses.h>
+- #else
+- # include <ncurses.h>
+--- 
+-GitLab
+diff --git a/package/procps-ng/0003-build-sys-Fix-pidfd_open-checking.patch b/package/procps-ng/0003-build-sys-Fix-pidfd_open-checking.patch
+deleted file mode 100644
+index fc7e092347..0000000000
+--- a/package/procps-ng/0003-build-sys-Fix-pidfd_open-checking.patch
++++ /dev/null
+@@ -1,99 +0,0 @@
+-From f37d178d5c25c547835d054fbb1eda32c25034b3 Mon Sep 17 00:00:00 2001
+-From: Craig Small <csmall@dropbear.xyz>
+-Date: Mon, 30 Sep 2024 17:26:01 +1000
+-Subject: [PATCH] build-sys: Fix pidfd_open checking
+-
+-The previous build setup would check for pidfd_open using
+-AC_CHECK_FUNC and would be incorrectly reported as true.
+-
+-Also, if pidfd_open() and __NR_pidfd_open were not present,
+-pidwait would silently not be built.
+-
+-So, changes:
+- compile a small programin using pidfd_open to test it properly
+- conditionally try to find NR_pidfd_open if the function fails
+- complain if neither are present
+- have --disable-pidwait configure option so you are explicit in
+- not wanting and knowing you wont get pidwait
+-
+-References:
+- #352
+- commit d9c3e3676d86094abaa239b3218f57bf49d70b4f
+- commit 17f94796a9b3c4f1ff28829107a82107dcb362b4
+-
+-Signed-off-by: Craig Small <csmall@dropbear.xyz>
+-
+-Upstream: https://gitlab.com/procps-ng/procps/-/commit/2507bc475782ff5e0541d37c780dff1e293c9553
+-
+-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+-[Scott: backported to version 4.0.4]
+----
+- configure.ac | 45 ++++++++++++++++++++++++++++++---------------
+- 1 file changed, 30 insertions(+), 15 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index fec27e3f..0719fcd1 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -170,21 +170,6 @@ AC_TRY_COMPILE([#include <errno.h>],
+- 		AC_MSG_RESULT(yes),
+- 		AC_MSG_RESULT(no))
+- 
+--AC_CHECK_FUNC([pidfd_open], [enable_pidwait=yes], [
+--  AC_MSG_CHECKING([for __NR_pidfd_open])
+--  AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+--#include <sys/syscall.h>
+--#ifndef __NR_pidfd_open
+--#error __NR_pidfd_open not defined
+--#endif
+--    ])], [enable_pidwait=yes], [enable_pidwait=no])
+--  AC_MSG_RESULT([$enable_pidwait])
+--])
+--if test "$enable_pidwait" = yes; then
+--  AC_DEFINE([ENABLE_PIDWAIT], [1], [Enable pidwait])
+--fi
+--AM_CONDITIONAL([BUILD_PIDWAIT], [test x$enable_pidwait = xyes])
+--
+- dnl watch8bit must be before the AC_ARG_WITH set as it sets up ncurses
+- AC_SUBST([WITH_WATCH8BIT])
+- AC_ARG_ENABLE([watch8bit],
+-@@ -321,6 +306,36 @@ AC_ARG_ENABLE([pidof],
+- )
+- AM_CONDITIONAL(BUILD_PIDOF, test "x$enable_pidof" = xyes)
+- 
+-+# If pidwait is enabled, we need either pidfd_open() or __NR_pidfd_open need to be defined
+-+# Cannot use AC_CHECK_FUNC as it (incorrectly) passes with pidfd_open missing
+-+AC_ARG_ENABLE([pidwait],
+-+  AS_HELP_STRING([--disable-pidwait], [do not build pidwait]),
+-+  [], [
+-+    enable_pidwait=yes
+-+    AC_DEFINE(ENABLE_PIDWAIT, 1, [enable pidwait])
+-+  ]
+-+)
+-+AM_CONDITIONAL(BUILD_PIDWAIT, test "x$enable_pidwait" = xyes)
+-+AC_MSG_CHECKING([for pidfd_open()])
+-+AC_LINK_IFELSE([AC_LANG_PROGRAM([], [[ [pidfd_open(1,1)]]])],
+-+  have_pidfd_open=yes; AC_MSG_RESULT([yes]) ,
+-+  have_pidfd_open=no; AC_MSG_RESULT([no])
+-+  )
+-+
+-+AS_IF([[test "x$enable_pidwait" = xyes -a "x$have_pidfd_open" = xno]],
+-+   AC_MSG_CHECKING([for __NR_pidfd_open])
+-+   AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+-+#include <sys/syscall.h>
+-+#ifndef __NR_pidfd_open
+-+#error __NR_pidfd_open not defined
+-+#endif
+-+      ])],
+-+      AC_MSG_RESULT([yes]),
+-+      AC_MSG_RESULT([no])
+-+      AC_MSG_ERROR([Neither pidfd_open or __NR_pidfd_open found. Disable pidwait with configure option --disable-pidwait])
+-+    )
+-+   ,[])
+-+
+- AC_ARG_ENABLE([kill],
+-   AS_HELP_STRING([--disable-kill], [do not build kill]),
+-   [], [enable_kill=yes]
 --- 
 -2.43.0
 -
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index fe3d449cc5..c18a80a9d0 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  550132239ad1acf82ccf8905b56cc13dc2c81a4489b96fba7731b3049907661a  mpd-0.23.15.tar.xz
-+sha256  9668e36df80de485683c962d02845bf314d8a08e6141af7afeff76401e32b2c1  mpd-0.23.16.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index e320ad9dec..fd528aaa87 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/procps-ng/0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch b/package/procps-ng/0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch
+deleted file mode 100644
+index aa65df7706..0000000000
+--- a/package/procps-ng/0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 1e2d53e1d86cb75e8f39b42b9a5c409e5d3261ed Mon Sep 17 00:00:00 2001
+-From: oli-ben <24815225-oli-ben@users.noreply.gitlab.com>
+-Date: Wed, 27 Nov 2024 20:17:11 +0000
+-Subject: [PATCH] build-sys: Fix define of HAVE_PIDFD_OPEN
+-
+-Fix cross-compilation issues when using GCC-12.3
+-* configure fails to detect that the sysroot does support the pidfd_open
+-  syscall wrapper
+-* configure fails to define HAVE_PIDFD_OPEN which is used in pgrep.c,
+-  so it fails building, because __NR_pidfd_open is then undefined
+-
+-Upstream: https://gitlab.com/procps-ng/procps/-/commit/587efb47df7ddbfda4e6abdd1e7792a2531a238f
+-
+-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+-[Scott: backported to version 4.0.4]
+----
+- configure.ac | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 0719fcd1..6242a8f8 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -317,8 +317,8 @@ AC_ARG_ENABLE([pidwait],
+- )
+- AM_CONDITIONAL(BUILD_PIDWAIT, test "x$enable_pidwait" = xyes)
+- AC_MSG_CHECKING([for pidfd_open()])
+--AC_LINK_IFELSE([AC_LANG_PROGRAM([], [[ [pidfd_open(1,1)]]])],
+--  have_pidfd_open=yes; AC_MSG_RESULT([yes]) ,
+-+AC_LINK_IFELSE([AC_LANG_PROGRAM([], [[pidfd_open(1,1)]])],
+-+  have_pidfd_open=yes; AC_DEFINE(HAVE_PIDFD_OPEN, 1, [pidfd_open is defined]) AC_MSG_RESULT([yes]),
+-   have_pidfd_open=no; AC_MSG_RESULT([no])
+-   )
+- 
+--- 
+-2.43.0
+-
+diff --git a/package/procps-ng/0005-pgrep-Include-sys-syscall.h-if-making-pidwait.patch b/package/procps-ng/0005-pgrep-Include-sys-syscall.h-if-making-pidwait.patch
+deleted file mode 100644
+index 74f93c8e49..0000000000
+--- a/package/procps-ng/0005-pgrep-Include-sys-syscall.h-if-making-pidwait.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 81ded587d2484b6f470f2d5c837c5591491377ce Mon Sep 17 00:00:00 2001
+-From: Craig Small <csmall@dropbear.xyz>
+-Date: Thu, 28 Nov 2024 07:20:42 +1100
+-Subject: [PATCH] pgrep: Include sys/syscall.h if making pidwait
+-
+-sys/syscall.h would only be included if pidwait was made
+-and we found pidfd_open() The previous commit fixed the
+-finding part, but in fact we want sys/syscall.h either
+-way because syscall() is defined there too.
+-
+-Most of the time the header is included by other headers
+-but adding it explicitly means if that header is removed or
+-changed it still works.
+-
+-Signed-off-by: Craig Small <csmall@dropbear.xyz>
+-
+-Upstream: https://gitlab.com/procps-ng/procps/-/commit/5acbb5dc1587d688de646d739a97251eb893bbb0
+-
+-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+-[Scott: backported to version 4.0.4]
+----
+- src/pgrep.c | 2 --
+- 1 file changed, 2 deletions(-)
+-
+-diff --git a/src/pgrep.c b/src/pgrep.c
+-index d8e57dff..a2607532 100644
+---- a/src/pgrep.c
+-+++ b/src/pgrep.c
+-@@ -44,9 +44,7 @@
+- 
+- #ifdef ENABLE_PIDWAIT
+- #include <sys/epoll.h>
+--#ifndef HAVE_PIDFD_OPEN
+- #include <sys/syscall.h>
+--#endif /* !HAVE_PIDFD_OPEN */
+- #endif
+- 
+- /* EXIT_SUCCESS is 0 */
+--- 
+-2.43.0
+-
+diff --git a/package/procps-ng/procps-ng.hash b/package/procps-ng/procps-ng.hash
+index 0d9cd9a835..21c661192c 100644
+--- a/package/procps-ng/procps-ng.hash
++++ b/package/procps-ng/procps-ng.hash
+@@ -1,8 +1,8 @@
+ # From http://sourceforge.net/projects/procps-ng/files/Production/
+-md5  2f747fc7df8ccf402d03e375c565cf96  procps-ng-4.0.4.tar.xz
+-sha1  2b859acd7060e9898ac457dbd26dbebf563cc44b  procps-ng-4.0.4.tar.xz
++md5  90803e64f51f192f3325d25c3335d057  procps-ng-4.0.5.tar.xz
++sha1  a36b8ab95950addb4b34251fcf23195c45a63eda  procps-ng-4.0.5.tar.xz
+ # Locally calculated after checking signature
+-# http://downloads.sourceforge.net/project/procps-ng/Production/procps-ng-4.0.4.tar.xz.asc
+-sha256  22870d6feb2478adb617ce4f09a787addaf2d260c5a8aa7b17d889a962c5e42e  procps-ng-4.0.4.tar.xz
++# http://downloads.sourceforge.net/project/procps-ng/Production/procps-ng-4.0.5.tar.xz.asc
++sha256  c2e6d193cc78f84cd6ddb72aaf6d5c6a9162f0470e5992092057f5ff518562fa  procps-ng-4.0.5.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366  COPYING.LIB
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 9200b6faa6..f4eadcb547 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MPD_VERSION_MAJOR = 0.23
--MPD_VERSION = $(MPD_VERSION_MAJOR).15
-+MPD_VERSION = $(MPD_VERSION_MAJOR).16
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost fmt
+-PROCPS_NG_VERSION = 4.0.4
++PROCPS_NG_VERSION = 4.0.5
+ PROCPS_NG_SOURCE = procps-ng-$(PROCPS_NG_VERSION).tar.xz
+ PROCPS_NG_SITE = http://downloads.sourceforge.net/project/procps-ng/Production
+ PROCPS_NG_LICENSE = GPL-2.0+, LGPL-2.0+ (libproc and libps)
+@@ -14,12 +14,6 @@ PROCPS_NG_INSTALL_STAGING = YES
+ PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
+ 
+-# Applying 0001-build-sys-Add-systemd-elogind-to-w.patch touches Makefile.am
+-# Applying 0002-fix-ncurses-h-include.patch touches configure.ac
+-# Applying 0003-build-sys-Fix-pidfd_open-checking.patch touches configure.ac
+-# Applying 0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch touches configure.ac
+-PROCPS_NG_AUTORECONF = YES
+-
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ PROCPS_NG_DEPENDENCIES += systemd
+ PROCPS_NG_CONF_OPTS += --with-systemd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
