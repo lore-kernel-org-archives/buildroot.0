@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36644C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:48:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1164C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:48:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A6284F040;
-	Fri, 28 Feb 2025 16:48:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1C5284963;
+	Fri, 28 Feb 2025 16:48:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VaXmZQ-0Uz50; Fri, 28 Feb 2025 16:48:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6n1tfRE--oR8; Fri, 28 Feb 2025 16:48:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CB4447CA5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB16384A47
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CB4447CA5;
-	Fri, 28 Feb 2025 16:48:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB16384A47;
+	Fri, 28 Feb 2025 16:48:26 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 07AB11DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 193821DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C3A442E35
+ by smtp4.osuosl.org (Postfix) with ESMTP id D103142E38
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pEmDQO4ALXsv for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:11 +0000 (UTC)
+ id 5L3VWbzFIK_v for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F9A7424E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C578419D7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6F9A7424E0
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C578419D7
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6B66C876C0; Fri, 28 Feb 2025 16:29:53 +0000 (UTC)
+ id 1129087697; Fri, 28 Feb 2025 16:29:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 22:14:59 +0100
+Date: Sun, 29 Dec 2024 23:17:29 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 37a33d865d15561ee37920dd283dd98ee13182eb
-X-Git-Newrev: 48b3ad00b0f80513dedd9f8c5d15f099aa0e5a61
+X-Git-Oldrev: 6a4cdf2057335fc021b20488531e3293584840e7
+X-Git-Newrev: 99b473c94868163ac40311dc488a6d8491568429
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162953.6B66C876C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/nfs-utils: bump
- version to 2.8.2
+Message-Id: <20250228162954.1129087697@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bluez5_utils: fix
+ dbusconfdir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,41 +66,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48b3ad00b0f80513dedd9f8c5d15f099aa0e5a61
+commit: https://git.buildroot.net/buildroot/commit/?id=99b473c94868163ac40311dc488a6d8491568429
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Since D-Bus 1.14.0 installing default policies into sysconfdir (/etc)
+is deprecated, they should go into datadir (/usr/share) instead
+[1]. Follow that policy.
+
+[1] https://gitlab.freedesktop.org/dbus/dbus/-/blob/8f1e00427f7048f8b24c3a1cfca8903254fe00d4/NEWS#L274-283
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nfs-utils/nfs-utils.hash | 4 ++--
- package/nfs-utils/nfs-utils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/bluez5_utils/bluez5_utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
-index b4ecbd0aec..ff3f03799d 100644
---- a/package/nfs-utils/nfs-utils.hash
-+++ b/package/nfs-utils/nfs-utils.hash
-@@ -1,4 +1,4 @@
--# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.1/sha256sums.asc
--sha256  a0be95b08396908048583fcf6b34a7c1ab49d53e8a12eb28673ccfd2eff0c505  nfs-utils-2.8.1.tar.xz
-+# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.2/sha256sums.asc
-+sha256  a39bbea76ac0ab9e6e8699caf3c308b6b310c20d458e8fa8606196d358e7fb15  nfs-utils-2.8.2.tar.xz
- # Locally computed
- sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 4b008042ce..60e9c26695 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 1695aeb210..7725fb94bf 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -28,7 +28,7 @@ BLUEZ5_UTILS_CONF_OPTS = \
+ 	--disable-lsan \
+ 	--disable-ubsan \
+ 	--disable-pie \
+-	--with-dbusconfdir=/etc
++	--with-dbusconfdir=/usr/share
  
--NFS_UTILS_VERSION = 2.8.1
-+NFS_UTILS_VERSION = 2.8.2
- NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
- NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
- NFS_UTILS_LICENSE = GPL-2.0+
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_OBEX),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-obex
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
