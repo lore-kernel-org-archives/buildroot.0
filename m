@@ -1,73 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 489D3E77191
-	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 12:38:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1A1CE7718F
+	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 12:38:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0609D40557;
-	Sun, 29 Dec 2024 12:38:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CFD66083A;
+	Sun, 29 Dec 2024 12:38:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VRiJXgWrAASL; Sun, 29 Dec 2024 12:38:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YcQL9s7IgM_h; Sun, 29 Dec 2024 12:38:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 960344055C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 940C760845
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 960344055C;
-	Sun, 29 Dec 2024 12:38:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4EA5B72
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:37:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 940C760845;
+	Sun, 29 Dec 2024 12:38:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7F322CA
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:38:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4294F8048C
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:37:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9ACE44003A
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:37:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kH-MLk9uXPWr for <buildroot@buildroot.org>;
- Sun, 29 Dec 2024 12:37:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FDxF0UBvOkZo for <buildroot@buildroot.org>;
+ Sun, 29 Dec 2024 12:37:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
  helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 20D4B8048E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20D4B8048E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 60C004046C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60C004046C
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 20D4B8048E
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:37:56 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 77CC0FF806;
- Sun, 29 Dec 2024 12:37:55 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 60C004046C
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:37:58 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 1D54BFF807;
+ Sun, 29 Dec 2024 12:37:56 +0000 (UTC)
 To: Buildroot List <buildroot@buildroot.org>
-Date: Sun, 29 Dec 2024 13:37:47 +0100
-Message-ID: <20241229123751.639378-4-thomas.petazzoni@bootlin.com>
+Date: Sun, 29 Dec 2024 13:37:48 +0100
+Message-ID: <20241229123751.639378-5-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20241229123751.639378-1-thomas.petazzoni@bootlin.com>
 References: <20241229123751.639378-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1735475875;
+ d=bootlin.com; s=gm1; t=1735475876;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=pcIqsX42BZpBJEXABJmAB6vBiqPGQitmNg1gSGFOhNc=;
- b=k3IxbwkRFApQe7jMGW793RlDer+rL31430Ze3n6ibcxv+xJzJp05hUSFCkVH4wRvcuGdyg
- sy+Y5UBhEmYess9qYWprpOj9X71HjVwS918atNBoIYIb4DTjoAAaz5DDVIJuhhrBHTILqV
- KfNjDHvrJz06CEeje0lK+kOrcLUOfhLkdtR7mY9fVZ2sJpyKUGNumjmSt7wviTkNP1POw5
- /S6T9o6vGsVHuaRpgxfynxJ8XAVpcuvSq1pwqVm0yIh12eVS13pIgsmigGWgV7EnPeRIbX
- ogzl5USMUxsKNXLDyat22hEB4l7/5YCM29LqVZZwNyfSb3K1ASTH1nJWUqmxqg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=THb7ERjpzIzWuluKlS8kjtb1RYP6snQmKs0lXRiJpHk=;
+ b=fxK+Q+4zfRLDkH/ACmU30SQClxNm2yB/z/62r630nz9Aao4gqQ45npM37jcgUky/ZPN0Do
+ YfjrURISFhsDfE2z23sQKi4HVuqm6iG+5P7J16atK3arhpaxnx1P6ljDp+9Z7ms7WCTk3U
+ KNNRyzClBYKD2p4SK4PuTXCzAHR8WvS3HhQ69fCzIVc3L1gfh/XEbyLHKj+ZRdDLikjXzY
+ NcgUIY7d7COrft/ttf24EeZHuh4QTJlsqGHD+pGz56dJGR20Z8KYVB0e4M2OBWXUSRccRk
+ EWYWJK8X1w5SdvdmU2gxoEZWPIYNMsm1pgdXKQGR5fYxpS1UAUn96Imi3fB53w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=k3IxbwkR
-Subject: [Buildroot] [PATCH 3/4] linux: select proper defconfig on PowerPC
+ header.s=gm1 header.b=fxK+Q+4z
+Subject: [Buildroot] [PATCH 4/4] linux: select proper defconfig on ARC
+ 750d/770d
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,46 +88,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The handling of BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG is currently
-not doing a proper job: it is selecting ppc64le_defconfig if
-BR2_powerpc64le, and using the default of "defconfig" for everything
-else.
-
-However:
-
-- Since upstream commit 22f17b02f88b48c01d3ac38d40d2b0b695ab2d10,
-  which landed in Linux 6.8, the default defconfig is
-  ppc64le_defconfig and no longer ppc64_defconfig. This means that
-  despite the condition in linux.mk, we are in fact now always
-  building ppc64le_defconfig.
-
-- It doesn't handle the 32-bit case, as a 64-bit defconfig gets used
-  by default. This causes build failures in the autobuilders.
-
-To fix this we explicitly handle BR2_powerpc64le, BR2_powerpc64 and
-BR2_powerpc, and use appropriate defconfigs for each case.
+The Linux kernel "defconfig" on ARC is haps_hs_smp_defconfig, which
+cannot be built on ARC 750d/770d targets, so let's use a kernel
+defconfig that works properly on ARC 750d/770d.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/c15eaf2e7455aa265cc045e6d8be7cac5348d925/ (powerpc)
+  http://autobuild.buildroot.net/results/2913e5958cd6b20dbfdcdad304a5f5a0f8030d8d/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/linux.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ linux/linux.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index 1d3d8fffa6..7e443fb227 100644
+index 7e443fb227..12699b8ee4 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -343,6 +343,10 @@ LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
- else ifeq ($(BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG),y)
- ifeq ($(BR2_powerpc64le),y)
- LINUX_KCONFIG_DEFCONFIG = ppc64le_defconfig
-+else ifeq ($(BR2_powerpc64),y)
-+LINUX_KCONFIG_DEFCONFIG = ppc64_defconfig
-+else ifeq ($(BR2_powerpc),y)
-+LINUX_KCONFIG_DEFCONFIG = ppc_defconfig
+@@ -347,6 +347,8 @@ else ifeq ($(BR2_powerpc64),y)
+ LINUX_KCONFIG_DEFCONFIG = ppc64_defconfig
+ else ifeq ($(BR2_powerpc),y)
+ LINUX_KCONFIG_DEFCONFIG = ppc_defconfig
++else ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
++LINUX_KCONFIG_DEFCONFIG = axs101_defconfig
  else
  LINUX_KCONFIG_DEFCONFIG = defconfig
  endif
