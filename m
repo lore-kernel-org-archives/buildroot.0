@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58444C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:33:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40D09C282D1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:33:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E56DD4EFF5;
-	Fri, 28 Feb 2025 16:33:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 75EE042D65;
+	Fri, 28 Feb 2025 16:33:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DR_n_i8i2dlb; Fri, 28 Feb 2025 16:33:20 +0000 (UTC)
+ id j8LpuBdRAhkM; Fri, 28 Feb 2025 16:33:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C57934AB68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 096844EF65
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C57934AB68;
-	Fri, 28 Feb 2025 16:33:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 332C294F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 096844EF65;
+	Fri, 28 Feb 2025 16:33:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CA8A468
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C1766FB02
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B847880F55
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J8AwVWvJtUi2 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1k7B0ikP6sU6 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:29:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E66C2608B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A23E280F19
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E66C2608B9
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A23E280F19
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DDFD5839E7; Fri, 28 Feb 2025 16:29:36 +0000 (UTC)
+ id 9147485B5E; Fri, 28 Feb 2025 16:29:51 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 11 Dec 2024 14:35:13 +0100
+Date: Sun, 29 Dec 2024 19:24:19 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5144d2d7aeafcbff1e0c5bf5ad3fc4bb44ca0089
-X-Git-Newrev: 8ad137d76222f26fd32fdbab0c188ad6b6287d7d
+X-Git-Oldrev: c1bff80867fcf0c6ffbca555392b68594b150328
+X-Git-Newrev: 4af6fb64f3e8cdfd3a535c62a8402b2bcb1f375b
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162936.DDFD5839E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] {toolchain,
- linux-headers}: add support for 6.12 headers
+Message-Id: <20250228162951.9147485B5E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/directfb-examples:
+ remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,125 +59,154 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ad137d76222f26fd32fdbab0c188ad6b6287d7d
+commit: https://git.buildroot.net/buildroot/commit/?id=4af6fb64f3e8cdfd3a535c62a8402b2bcb1f375b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-And add (and default to) 6.12 to linux-headers.
+directfb.org is dead so since commit
+89ab2a5a3f4588891ab1e9e76feb8c3f69402d5c (from 2022), we are
+downloading from sources.buildroot.net.
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Clearly DirectFB 1.x is no longer maintained. A DirectFB 2.x project
+is now at https://github.com/directfb2/, but despite an attempt in
+August 2024 [1], it still isn't packaged in Buildroot. Therefore it's
+time to drop directfb 1.x, which doesn't prevent in the future from
+adding directfb 2.x.
+
+[1] https://lore.kernel.org/buildroot/20240705132544.351613-1-shengwen1997.tw@gmail.com/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- linux/linux.hash                                            |  1 +
- package/linux-headers/Config.in.host                        | 13 +++++++++++--
- toolchain/Config.in                                         |  5 +++++
- .../toolchain-external-custom/Config.in.options             |  6 +++++-
- 4 files changed, 22 insertions(+), 3 deletions(-)
+ .checkpackageignore                               |  1 -
+ Config.in.legacy                                  |  7 +++++++
+ package/Config.in                                 |  1 -
+ package/directfb-examples/0001-remove-bzero.patch | 17 -----------------
+ package/directfb-examples/Config.in               | 11 -----------
+ package/directfb-examples/directfb-examples.hash  |  3 ---
+ package/directfb-examples/directfb-examples.mk    | 18 ------------------
+ 7 files changed, 7 insertions(+), 51 deletions(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 6002478854..67bdc32372 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  c89809cc777d50f1ea484a118630281a26383707a0e752c96fd834f6e765deae  linux-6.12.3.tar.xz
- sha256  62148e7e17f54c4a5ab5e75ad4882682c54bee818948be61a5963234fc0849fc  linux-6.11.11.tar.xz
- sha256  d1054ab4803413efe2850f50f1a84349c091631ec50a1cf9e891d1b1f9061835  linux-6.6.63.tar.xz
- sha256  aecdaf39d0a844a81ce4c67d9daff8979e938bb690df4f679fbbb494fe423278  linux-6.1.119.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e8f7515894..0b517534c7 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -3,7 +3,7 @@ comment "Kernel Header Options"
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_6_11
-+	default BR2_KERNEL_HEADERS_6_12
- 	help
- 	  Select the kernel version to get headers from.
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 37cd4c9460..37b3a1dd76 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -399,7 +399,6 @@ package/dht/0001-cmake.patch lib_patch.Upstream
+ package/dillo/0001-usr-local-include.patch lib_patch.Upstream
+ package/dillo/0002-Fix-openssl-detection.patch lib_patch.Upstream
+ package/dillo/0004-fix-build-with-gcc-10.patch lib_patch.Upstream
+-package/directfb-examples/0001-remove-bzero.patch lib_patch.Sob lib_patch.Upstream
+ package/directfb/0001-fix-missing-davinci-voodoo-header.patch lib_patch.Upstream
+ package/directfb/0002-imlib2-config.patch lib_patch.Upstream
+ package/directfb/0003-setregion-lock.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index ed74bf15c2..34e2319949 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
-@@ -51,6 +51,10 @@ config BR2_KERNEL_HEADERS_6_6
- config BR2_KERNEL_HEADERS_6_11
- 	bool "Linux 6.11.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11
+ comment "Legacy options removed in 2025.02"
+ 
++config BR2_PACKAGE_DIRECTFB_EXAMPLES
++	bool "directfb-examples has been removed"
++	select BR2_LEGACY
++	help
++	  This package was no longer maintained upstream, so it was
++	  dropped from Buildroot.
 +
-+config BR2_KERNEL_HEADERS_6_12
-+	bool "Linux 6.12.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
- 	select BR2_KERNEL_HEADERS_LATEST
- 
- config BR2_KERNEL_HEADERS_VERSION
-@@ -129,8 +133,12 @@ choice
- 	  If your kernel headers are more recent than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12
-+	bool "6.12.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11
--	bool "6.11.x or later"
-+	bool "6.11.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10
-@@ -435,6 +443,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "6.1.119"	if BR2_KERNEL_HEADERS_6_1
- 	default "6.6.63"	if BR2_KERNEL_HEADERS_6_6
- 	default "6.11.11"	if BR2_KERNEL_HEADERS_6_11
-+	default "6.12.3"	if BR2_KERNEL_HEADERS_6_12
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index c2522aca7f..87160af3d7 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -660,6 +660,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_10
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_10
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11
- 	select BR2_TOOLCHAIN_HEADERS_LATEST
- 
- # This should be selected by the latest version, above, to indicate that
-@@ -673,6 +677,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "6.12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
- 	default "6.11" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11
- 	default "6.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_10
- 	default "6.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_9
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index fcffeb6b77..2dc04747b3 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -166,8 +166,12 @@ choice
- 	  If your toolchain uses headers newer than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_12
-+	bool "6.12.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_11
--	bool "6.11.x or later"
-+	bool "6.11.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_10
+ config BR2_PACKAGE_HIAWATHA
+ 	bool "hiwatha has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 814101458d..bbd46bd491 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -345,7 +345,6 @@ comment "Graphic applications"
+ comment "Graphic libraries"
+ 	source "package/cegui/Config.in"
+ 	source "package/directfb/Config.in"
+-	source "package/directfb-examples/Config.in"
+ 	source "package/efl/Config.in"
+ 	source "package/fb-test-app/Config.in"
+ 	source "package/fbdump/Config.in"
+diff --git a/package/directfb-examples/0001-remove-bzero.patch b/package/directfb-examples/0001-remove-bzero.patch
+deleted file mode 100644
+index 41616b5c31..0000000000
+--- a/package/directfb-examples/0001-remove-bzero.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+----
+- src/df_knuckles/matrix.c |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: directfb-examples-1.2.0/src/df_knuckles/matrix.c
+-===================================================================
+---- directfb-examples-1.2.0.orig/src/df_knuckles/matrix.c
+-+++ directfb-examples-1.2.0/src/df_knuckles/matrix.c
+-@@ -19,7 +19,7 @@
+- static float Cosine[3600];
+- static float Sine[3600];
+- 
+--#define M_CLEAR(m) bzero(m, MATRIX_SIZE)
+-+#define M_CLEAR(m) memset(m, 0, MATRIX_SIZE)
+- #define M_IDENTITY(m) memcpy(m, IdentityMatrix, MATRIX_SIZE)
+- 
+- static void MultiplyMatrix(float *A, float *B)
+diff --git a/package/directfb-examples/Config.in b/package/directfb-examples/Config.in
+deleted file mode 100644
+index 4d5de03068..0000000000
+--- a/package/directfb-examples/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_DIRECTFB_EXAMPLES
+-	bool "directfb examples"
+-	depends on BR2_PACKAGE_DIRECTFB
+-	help
+-	  The DirectFB-examples package contains a set of simple
+-	  DirectFB applications that can be used to test and demonstrate
+-	  various DirectFB features. As of 4 October 2015, DirectFB's
+-	  website http://www.directfb.org/ is down. See alternative site
+-	  listed below.
+-
+-	  http://elinux.org/DirectFB
+diff --git a/package/directfb-examples/directfb-examples.hash b/package/directfb-examples/directfb-examples.hash
+deleted file mode 100644
+index 9c7f7c25a7..0000000000
+--- a/package/directfb-examples/directfb-examples.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  9a2104cc4da8123c8371813551b66b943198979f745cbebc034bb5e10844122a  DirectFB-examples-1.7.0.tar.gz
+-sha256  f91483684678e8aa8ccc4ee0ede3140b0494f8305e162695c7e6e3f83e54f236  COPYING
+diff --git a/package/directfb-examples/directfb-examples.mk b/package/directfb-examples/directfb-examples.mk
+deleted file mode 100644
+index c8d09b3e33..0000000000
+--- a/package/directfb-examples/directfb-examples.mk
++++ /dev/null
+@@ -1,18 +0,0 @@
+-################################################################################
+-#
+-# directfb-examples
+-#
+-################################################################################
+-
+-DIRECTFB_EXAMPLES_VERSION = 1.7.0
+-DIRECTFB_EXAMPLES_SITE = http://sources.buildroot.net/directfb-examples
+-DIRECTFB_EXAMPLES_SOURCE = DirectFB-examples-$(DIRECTFB_EXAMPLES_VERSION).tar.gz
+-DIRECTFB_EXAMPLES_LICENSE = MIT
+-DIRECTFB_EXAMPLES_LICENSE_FILES = COPYING
+-DIRECTFB_EXAMPLES_DEPENDENCIES = directfb
+-
+-ifeq ($(BR2_STATIC_LIBS),y)
+-DIRECTFB_EXAMPLES_CONF_OPTS += LIBS=-lstdc++
+-endif
+-
+-$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
