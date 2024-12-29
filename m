@@ -1,74 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5A2EE7718B
-	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 13:17:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A881BE7718B
+	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 14:42:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 68BC180415;
-	Sun, 29 Dec 2024 13:17:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4978C60852;
+	Sun, 29 Dec 2024 14:42:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mZmhK3gpzwWz; Sun, 29 Dec 2024 13:17:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1ukixBAtlXyu; Sun, 29 Dec 2024 14:42:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B59C28042B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BEAD607FD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B59C28042B;
-	Sun, 29 Dec 2024 13:17:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4FCFC72
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 13:17:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BEAD607FD;
+	Sun, 29 Dec 2024 14:42:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 656D672
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 14:41:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2434E40A9B
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 13:17:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 52CBF607F7
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 14:41:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KH8FbE_syG0Y for <buildroot@buildroot.org>;
- Sun, 29 Dec 2024 13:17:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C917B40A96
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C917B40A96
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C917B40A96
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 13:17:15 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id AC602FF803;
- Sun, 29 Dec 2024 13:17:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Dec 2024 14:17:10 +0100
-Message-ID: <20241229131711.707899-2-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20241229131711.707899-1-thomas.petazzoni@bootlin.com>
-References: <20241229131711.707899-1-thomas.petazzoni@bootlin.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id izix2YrXy2f5 for <buildroot@buildroot.org>;
+ Sun, 29 Dec 2024 14:41:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8D35860783
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D35860783
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8D35860783
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 14:41:56 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 299E119F5C6;
+ Sun, 29 Dec 2024 15:41:52 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:52662])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 29 Dec 2024 15:41:52 +0100
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1735478233;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=9w2nJaeFdbU3bLmBCUhsE/BL0qXUxnSaO4ihkXPqz1o=;
- b=Kw6NnqpW6KR14Fz+OxeoMvXDHGoNwV18ffbd2YgkidCXjQ700B3ikKAFO8/P1ZDIY33Cci
- kd5BsUrMsAUZvYeY7Ng9MEuGNp6V4JdN8YfCdUUQSRIaFTLiV+BbIS8CMwhZjKI3+1WT0p
- 3HpTxPWL+fy9Q41u8YlN0974g2Xs6V5EPpF51EPpS1Q23tC5kaAYUlD82osJ/7f3lXkh2M
- oSic1HsslD7+eFnycyEFWF1U30xGpyz5US0vAAiCgm1lin8S+MKoIrUo6GB/WLHi52n9Gs
- 47Gcp1Id/bnPbGJjRHeTSWkucJTmClmHw4pkAkRzNGGPYJtiyOZLHmhfiMS/DA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+Date: Sun, 29 Dec 2024 15:41:52 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20241229093332.334759-1-thomas.petazzoni@bootlin.com>
+References: <20241229093332.334759-1-thomas.petazzoni@bootlin.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <4ec6a821a844d53ce68489983d4e4068@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1735483313;
+ bh=ZF/EQiOsm5AImamvbIoeN8jeexoeUlpjEKQIA+BDidM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ln1KJHtX0h1kQYlpcURTeIa+DcaBemNxp+r92jtoScvb2fWU2r/QWy0RFjliUmC1x
+ HRGlU/H1Zm6GAiPqZxT/t4lArKaJxoi8pBft7+Sb1GO9/QmqRuFqG6wxeUESt/lZPn
+ yNyHrB7sYVXH6aQR+KAkNULkyJevcpPyvWQgaOKk3OLUOxDYDCJhr+vbPzcMj8MSqO
+ YiM6hWQUXYk9d2JKCu3KAwGns2kbWNDuf3mCyg3MThKUytkJF3fi/DI2HNOBjFHMgn
+ vD7AiE7BPidetebktcppQsFuNbMcrmfJdQ8CRW93bpIFkbEqEbsOAMCau1kTNVA0BI
+ scmwNHdg6i0YQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Kw6NnqpW
-Subject: [Buildroot] [PATCH 2/2] package/procps-ng: bump version to 4.0.5
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=ln1KJHtX
+Subject: Re: [Buildroot] [PATCH] linux: select
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL when needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,390 +84,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Patch 0001 is dropped as it's upstream as of
-ca004d4657d5e8b468a4552ede429be53193a3a9.
+Hi Thomas,
 
-Patch 0002 is dropped as it's upstream as of
-263fe04f9ed6f3f40fdb7ce249221e03dc926c9b.
+On 29/12/2024 10:33, Thomas Petazzoni via buildroot wrote:
+> The autobuilders are regularly reporting issues when building the
+> Linux kernel due to BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL not being
+> enabled.
+> 
+> Since the autobuilders are always using
+> BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG, let's have this option
+> select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL when the latest kernel is
+> used.
+> 
+> For now, we enable this for ARC, Sparc and x86-64, but it might have
+> to be extended for additional architectures based on build results.
+> 
+> Fixes:
+> 
+>   
+> http://autobuild.buildroot.net/results/596699ede6e651163a23fa50386d84aca24c9a28
+>   
+> http://autobuild.buildroot.net/results/77a767bcd78f9ed21668cc268e91a4584a821661
+>   
+> http://autobuild.buildroot.net/results/e846d13c9f001b76a08ffb94f69c8dd26b4f5811
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  linux/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/linux/Config.in b/linux/Config.in
+> index be44c00d7d..50f1e31427 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -168,6 +168,12 @@ config BR2_LINUX_KERNEL_USE_DEFCONFIG
+> 
+>  config BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
+>  	bool "Use the architecture default configuration"
+> +	# We know that the default configuration on some architectures
+> +	# requires host-openssl, so select it for the latest kernel
+> +	# version. This is mainly needed to fix autobuilder testing.
+> +	select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL if \
+> +	       BR2_LINUX_KERNEL_LATEST_VERSION && \
+> +	       (BR2_arcle || BR2_arceb || BR2_sparc || BR2_x86_64)
 
-Patch 0003 is dropped as it's upstream as of
-2507bc475782ff5e0541d37c780dff1e293c9553.
+While reviewing, I quickly tested with:
 
-Patch 0004 is dropped as it's upstream as of
-587efb47df7ddbfda4e6abdd1e7792a2531a238f.
+     cat <<EOF >.config
+     BR2_x86_64=y
+     BR2_LINUX_KERNEL=y
+     BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+     BR2_TOOLCHAIN_EXTERNAL=y
+     EOF
+     make olddefconfig
+     make
 
-Patch 0005 is dropped as it's upstream as of
-5acbb5dc1587d688de646d739a97251eb893bbb0.
+It failed with output:
 
-Release notes:
-https://gitlab.com/procps-ng/procps/-/releases/v4.0.5
+     In file included from 
+/buildroot/output/build/linux-6.12.5/tools/objtool/include/objtool/objtool.h:13,
+                      from weak.c:10:
+     
+/buildroot/output/build/linux-6.12.5/tools/objtool/include/objtool/elf.h:10:10: 
+fatal error: gelf.h: No such file or directory
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...1-build-sys-Add-systemd-elogind-to-w.patch | 48 ---------
- .../0002-fix-ncurses-h-include.patch          | 55 -----------
- ...03-build-sys-Fix-pidfd_open-checking.patch | 99 -------------------
- ...ld-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch | 37 -------
- ...lude-sys-syscall.h-if-making-pidwait.patch | 41 --------
- package/procps-ng/procps-ng.hash              |  8 +-
- package/procps-ng/procps-ng.mk                |  2 +-
- 7 files changed, 5 insertions(+), 285 deletions(-)
- delete mode 100644 package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch
- delete mode 100644 package/procps-ng/0002-fix-ncurses-h-include.patch
- delete mode 100644 package/procps-ng/0003-build-sys-Fix-pidfd_open-checking.patch
- delete mode 100644 package/procps-ng/0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch
- delete mode 100644 package/procps-ng/0005-pgrep-Include-sys-syscall.h-if-making-pidwait.patch
+This hints to a missing BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y.
 
-diff --git a/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch b/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch
-deleted file mode 100644
-index 4a8b2a6a8b..0000000000
---- a/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From 788248ee631b3b5f82073c36320fc3f4a3c8f9ba Mon Sep 17 00:00:00 2001
--From: Craig Small <csmall@dropbear.xyz>
--Date: Thu, 31 Aug 2023 22:24:23 +1000
--Subject: [PATCH] build-sys: Add systemd/elogind to w
--
--Depending on the compiler flags, w needs to be explictly linked
--to libsystemd or elogind even though libproc2 is linked to it.
--
--Signed-off-by: Craig Small <csmall@dropbear.xyz>
--Upstream: https://gitlab.com/procps-ng/procps/-/commit/ca004d4657d5e8b468a4552ede429be53193a3a9
--Signed-off-by: Hugo Cornelis <hugo.cornelis@essensium.com>
-----
-- Makefile.am | 7 +++++++
-- NEWS        | 3 +++
-- 2 files changed, 10 insertions(+)
--
--diff --git a/Makefile.am b/Makefile.am
--index f70c8fb1..ddfc0141 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -149,6 +149,13 @@ endif
-- 
-- dist_man_MANS += man/w.1
-- src_w_SOURCES = src/w.c local/fileutils.c
--+src_w_LDADD = $(LDADD)
--+if WITH_SYSTEMD
--+src_w_LDADD += @SYSTEMD_LIBS@
--+endif
--+if WITH_ELOGIND
--+src_w_LDADD += @ELOGIND_LIBS@
--+endif
-- else
--   EXTRA_DIST += man/w.1
-- endif
--diff --git a/NEWS b/NEWS
--index 3f2158d4..4ad9f74e 100644
----- a/NEWS
--+++ b/NEWS
--@@ -1,3 +1,6 @@
--+procps-ng-NEXT
--+---------------
--+
-- procps-ng-4.0.4
-- ---------------
--   * library (API & ABI unchanged)
---- 
--2.34.1
--
-diff --git a/package/procps-ng/0002-fix-ncurses-h-include.patch b/package/procps-ng/0002-fix-ncurses-h-include.patch
-deleted file mode 100644
-index 619126b863..0000000000
---- a/package/procps-ng/0002-fix-ncurses-h-include.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From 263fe04f9ed6f3f40fdb7ce249221e03dc926c9b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 24 Jul 2024 09:51:00 +0200
--Subject: [PATCH] fix ncurses.h include
--
--Commit 58559a5b64a3634460536d6397ca382a54b599f0 was not backported from
--3.3.17 to 4.0.0 resulting in the following build failure when ncursesw
--headers are not installed in ../usr/include/ncursesw/..:
--
--src/watch.c:56:11: fatal error: ncursesw/ncurses.h: No such file or directory
--   56 | # include <ncursesw/ncurses.h>
--      |           ^~~~~~~~~~~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/b7573be2e78f3d224f48cb3f52087e3d227d58e3
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--
--Upstream: https://gitlab.com/procps-ng/procps/-/commit/263fe04f9ed6f3f40fdb7ce249221e03dc926c9b
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
--[Bernd: backported to version 4.0.4]
-----
-- configure.ac | 2 +-
-- src/watch.c  | 5 ++++-
-- 2 files changed, 5 insertions(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index d433901f..38350aaf 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -64,7 +64,7 @@ PROCPS_PROG_PO4A
-- 
-- # Checks for header files.
-- AC_HEADER_MAJOR
---AC_CHECK_HEADERS([arpa/inet.h fcntl.h float.h langinfo.h libintl.h limits.h locale.h stdint.h stdio_ext.h stdlib.h string.h sys/file.h sys/ioctl.h sys/param.h sys/time.h termios.h unistd.h utmp.h utmpx.h values.h wchar.h wctype.h])
--+AC_CHECK_HEADERS([arpa/inet.h fcntl.h float.h langinfo.h libintl.h limits.h locale.h ncursesw/ncurses.h stdint.h stdio_ext.h stdlib.h string.h sys/file.h sys/ioctl.h sys/param.h sys/time.h termios.h unistd.h utmp.h utmpx.h values.h wchar.h wctype.h])
-- 
-- # Checks for typedefs, structures, and compiler characteristics.
-- AC_CHECK_HEADER_STDBOOL
--diff --git a/src/watch.c b/src/watch.c
--index ef638e00..7ec634b6 100644
----- a/src/watch.c
--+++ b/src/watch.c
--@@ -53,6 +53,8 @@
-- # define _XOPEN_SOURCE_EXTENDED 1
-- # include <wchar.h>
-- # include <wctype.h>
--+#endif
--+#ifdef HAVE_NCURSESW_NCURSES_H
-- # include <ncursesw/ncurses.h>
-- #else
-- # include <ncurses.h>
---- 
--GitLab
-diff --git a/package/procps-ng/0003-build-sys-Fix-pidfd_open-checking.patch b/package/procps-ng/0003-build-sys-Fix-pidfd_open-checking.patch
-deleted file mode 100644
-index fc7e092347..0000000000
---- a/package/procps-ng/0003-build-sys-Fix-pidfd_open-checking.patch
-+++ /dev/null
-@@ -1,99 +0,0 @@
--From f37d178d5c25c547835d054fbb1eda32c25034b3 Mon Sep 17 00:00:00 2001
--From: Craig Small <csmall@dropbear.xyz>
--Date: Mon, 30 Sep 2024 17:26:01 +1000
--Subject: [PATCH] build-sys: Fix pidfd_open checking
--
--The previous build setup would check for pidfd_open using
--AC_CHECK_FUNC and would be incorrectly reported as true.
--
--Also, if pidfd_open() and __NR_pidfd_open were not present,
--pidwait would silently not be built.
--
--So, changes:
-- compile a small programin using pidfd_open to test it properly
-- conditionally try to find NR_pidfd_open if the function fails
-- complain if neither are present
-- have --disable-pidwait configure option so you are explicit in
-- not wanting and knowing you wont get pidwait
--
--References:
-- #352
-- commit d9c3e3676d86094abaa239b3218f57bf49d70b4f
-- commit 17f94796a9b3c4f1ff28829107a82107dcb362b4
--
--Signed-off-by: Craig Small <csmall@dropbear.xyz>
--
--Upstream: https://gitlab.com/procps-ng/procps/-/commit/2507bc475782ff5e0541d37c780dff1e293c9553
--
--Signed-off-by: Scott Fan <fancp2007@gmail.com>
--[Scott: backported to version 4.0.4]
-----
-- configure.ac | 45 ++++++++++++++++++++++++++++++---------------
-- 1 file changed, 30 insertions(+), 15 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index fec27e3f..0719fcd1 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -170,21 +170,6 @@ AC_TRY_COMPILE([#include <errno.h>],
-- 		AC_MSG_RESULT(yes),
-- 		AC_MSG_RESULT(no))
-- 
---AC_CHECK_FUNC([pidfd_open], [enable_pidwait=yes], [
---  AC_MSG_CHECKING([for __NR_pidfd_open])
---  AC_COMPILE_IFELSE([AC_LANG_SOURCE([
---#include <sys/syscall.h>
---#ifndef __NR_pidfd_open
---#error __NR_pidfd_open not defined
---#endif
---    ])], [enable_pidwait=yes], [enable_pidwait=no])
---  AC_MSG_RESULT([$enable_pidwait])
---])
---if test "$enable_pidwait" = yes; then
---  AC_DEFINE([ENABLE_PIDWAIT], [1], [Enable pidwait])
---fi
---AM_CONDITIONAL([BUILD_PIDWAIT], [test x$enable_pidwait = xyes])
---
-- dnl watch8bit must be before the AC_ARG_WITH set as it sets up ncurses
-- AC_SUBST([WITH_WATCH8BIT])
-- AC_ARG_ENABLE([watch8bit],
--@@ -321,6 +306,36 @@ AC_ARG_ENABLE([pidof],
-- )
-- AM_CONDITIONAL(BUILD_PIDOF, test "x$enable_pidof" = xyes)
-- 
--+# If pidwait is enabled, we need either pidfd_open() or __NR_pidfd_open need to be defined
--+# Cannot use AC_CHECK_FUNC as it (incorrectly) passes with pidfd_open missing
--+AC_ARG_ENABLE([pidwait],
--+  AS_HELP_STRING([--disable-pidwait], [do not build pidwait]),
--+  [], [
--+    enable_pidwait=yes
--+    AC_DEFINE(ENABLE_PIDWAIT, 1, [enable pidwait])
--+  ]
--+)
--+AM_CONDITIONAL(BUILD_PIDWAIT, test "x$enable_pidwait" = xyes)
--+AC_MSG_CHECKING([for pidfd_open()])
--+AC_LINK_IFELSE([AC_LANG_PROGRAM([], [[ [pidfd_open(1,1)]]])],
--+  have_pidfd_open=yes; AC_MSG_RESULT([yes]) ,
--+  have_pidfd_open=no; AC_MSG_RESULT([no])
--+  )
--+
--+AS_IF([[test "x$enable_pidwait" = xyes -a "x$have_pidfd_open" = xno]],
--+   AC_MSG_CHECKING([for __NR_pidfd_open])
--+   AC_COMPILE_IFELSE([AC_LANG_SOURCE([
--+#include <sys/syscall.h>
--+#ifndef __NR_pidfd_open
--+#error __NR_pidfd_open not defined
--+#endif
--+      ])],
--+      AC_MSG_RESULT([yes]),
--+      AC_MSG_RESULT([no])
--+      AC_MSG_ERROR([Neither pidfd_open or __NR_pidfd_open found. Disable pidwait with configure option --disable-pidwait])
--+    )
--+   ,[])
--+
-- AC_ARG_ENABLE([kill],
--   AS_HELP_STRING([--disable-kill], [do not build kill]),
--   [], [enable_kill=yes]
---- 
--2.43.0
--
-diff --git a/package/procps-ng/0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch b/package/procps-ng/0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch
-deleted file mode 100644
-index aa65df7706..0000000000
---- a/package/procps-ng/0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 1e2d53e1d86cb75e8f39b42b9a5c409e5d3261ed Mon Sep 17 00:00:00 2001
--From: oli-ben <24815225-oli-ben@users.noreply.gitlab.com>
--Date: Wed, 27 Nov 2024 20:17:11 +0000
--Subject: [PATCH] build-sys: Fix define of HAVE_PIDFD_OPEN
--
--Fix cross-compilation issues when using GCC-12.3
--* configure fails to detect that the sysroot does support the pidfd_open
--  syscall wrapper
--* configure fails to define HAVE_PIDFD_OPEN which is used in pgrep.c,
--  so it fails building, because __NR_pidfd_open is then undefined
--
--Upstream: https://gitlab.com/procps-ng/procps/-/commit/587efb47df7ddbfda4e6abdd1e7792a2531a238f
--
--Signed-off-by: Scott Fan <fancp2007@gmail.com>
--[Scott: backported to version 4.0.4]
-----
-- configure.ac | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 0719fcd1..6242a8f8 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -317,8 +317,8 @@ AC_ARG_ENABLE([pidwait],
-- )
-- AM_CONDITIONAL(BUILD_PIDWAIT, test "x$enable_pidwait" = xyes)
-- AC_MSG_CHECKING([for pidfd_open()])
---AC_LINK_IFELSE([AC_LANG_PROGRAM([], [[ [pidfd_open(1,1)]]])],
---  have_pidfd_open=yes; AC_MSG_RESULT([yes]) ,
--+AC_LINK_IFELSE([AC_LANG_PROGRAM([], [[pidfd_open(1,1)]])],
--+  have_pidfd_open=yes; AC_DEFINE(HAVE_PIDFD_OPEN, 1, [pidfd_open is defined]) AC_MSG_RESULT([yes]),
--   have_pidfd_open=no; AC_MSG_RESULT([no])
--   )
-- 
---- 
--2.43.0
--
-diff --git a/package/procps-ng/0005-pgrep-Include-sys-syscall.h-if-making-pidwait.patch b/package/procps-ng/0005-pgrep-Include-sys-syscall.h-if-making-pidwait.patch
-deleted file mode 100644
-index 74f93c8e49..0000000000
---- a/package/procps-ng/0005-pgrep-Include-sys-syscall.h-if-making-pidwait.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 81ded587d2484b6f470f2d5c837c5591491377ce Mon Sep 17 00:00:00 2001
--From: Craig Small <csmall@dropbear.xyz>
--Date: Thu, 28 Nov 2024 07:20:42 +1100
--Subject: [PATCH] pgrep: Include sys/syscall.h if making pidwait
--
--sys/syscall.h would only be included if pidwait was made
--and we found pidfd_open() The previous commit fixed the
--finding part, but in fact we want sys/syscall.h either
--way because syscall() is defined there too.
--
--Most of the time the header is included by other headers
--but adding it explicitly means if that header is removed or
--changed it still works.
--
--Signed-off-by: Craig Small <csmall@dropbear.xyz>
--
--Upstream: https://gitlab.com/procps-ng/procps/-/commit/5acbb5dc1587d688de646d739a97251eb893bbb0
--
--Signed-off-by: Scott Fan <fancp2007@gmail.com>
--[Scott: backported to version 4.0.4]
-----
-- src/pgrep.c | 2 --
-- 1 file changed, 2 deletions(-)
--
--diff --git a/src/pgrep.c b/src/pgrep.c
--index d8e57dff..a2607532 100644
----- a/src/pgrep.c
--+++ b/src/pgrep.c
--@@ -44,9 +44,7 @@
-- 
-- #ifdef ENABLE_PIDWAIT
-- #include <sys/epoll.h>
---#ifndef HAVE_PIDFD_OPEN
-- #include <sys/syscall.h>
---#endif /* !HAVE_PIDFD_OPEN */
-- #endif
-- 
-- /* EXIT_SUCCESS is 0 */
---- 
--2.43.0
--
-diff --git a/package/procps-ng/procps-ng.hash b/package/procps-ng/procps-ng.hash
-index 0d9cd9a835..21c661192c 100644
---- a/package/procps-ng/procps-ng.hash
-+++ b/package/procps-ng/procps-ng.hash
-@@ -1,8 +1,8 @@
- # From http://sourceforge.net/projects/procps-ng/files/Production/
--md5  2f747fc7df8ccf402d03e375c565cf96  procps-ng-4.0.4.tar.xz
--sha1  2b859acd7060e9898ac457dbd26dbebf563cc44b  procps-ng-4.0.4.tar.xz
-+md5  90803e64f51f192f3325d25c3335d057  procps-ng-4.0.5.tar.xz
-+sha1  a36b8ab95950addb4b34251fcf23195c45a63eda  procps-ng-4.0.5.tar.xz
- # Locally calculated after checking signature
--# http://downloads.sourceforge.net/project/procps-ng/Production/procps-ng-4.0.4.tar.xz.asc
--sha256  22870d6feb2478adb617ce4f09a787addaf2d260c5a8aa7b17d889a962c5e42e  procps-ng-4.0.4.tar.xz
-+# http://downloads.sourceforge.net/project/procps-ng/Production/procps-ng-4.0.5.tar.xz.asc
-+sha256  c2e6d193cc78f84cd6ddb72aaf6d5c6a9162f0470e5992092057f5ff518562fa  procps-ng-4.0.5.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366  COPYING.LIB
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index 9200b6faa6..57de34561a 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROCPS_NG_VERSION = 4.0.4
-+PROCPS_NG_VERSION = 4.0.5
- PROCPS_NG_SOURCE = procps-ng-$(PROCPS_NG_VERSION).tar.xz
- PROCPS_NG_SITE = http://downloads.sourceforge.net/project/procps-ng/Production
- PROCPS_NG_LICENSE = GPL-2.0+, LGPL-2.0+ (libproc and libps)
--- 
-2.47.1
+Do you think we will need the same logic for other
+BR2_LINUX_KERNEL_NEEDS_HOST_* configs? It is likely that autobuilder
+will catch this kind of failures.
 
+I was wondering if this logic will not become a bit complicated over
+time (e.g. BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3 for aarch64, ...).
+What do you think?
+
+If you think this is OK, I'll apply this patch as is and we'll
+update those conditions in future commits, when needed.
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
