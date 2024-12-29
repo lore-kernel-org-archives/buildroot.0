@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E8DCC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:48:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA689C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:48:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3563247A19;
-	Fri, 28 Feb 2025 16:48:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9399E4FDC4;
+	Fri, 28 Feb 2025 16:48:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2PaqoFj2NgBc; Fri, 28 Feb 2025 16:48:24 +0000 (UTC)
+ id MO5la2vn6jek; Fri, 28 Feb 2025 16:48:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A6F44FDAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 281D24F3AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A6F44FDAD;
-	Fri, 28 Feb 2025 16:48:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 281D24F3AF;
+	Fri, 28 Feb 2025 16:48:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1FB811DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F3CA68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C018D42E36
+ by smtp4.osuosl.org (Postfix) with ESMTP id F05CF42E42
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d8It6rjeo6cB for <buildroot@buildroot.org>;
+ id EKJe4xpMpV3L for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:30:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A66BE4265D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9425A41E86
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A66BE4265D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9425A41E86
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9DEE6876C0; Fri, 28 Feb 2025 16:29:54 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 8BC7A8769C; Fri, 28 Feb 2025 16:29:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 30 Dec 2024 00:04:09 +0100
+Date: Sun, 29 Dec 2024 23:47:34 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7824d5c4c842bff0d9dd6eae63c0da256082b503
-X-Git-Newrev: f6fe892141cd4c8b6dd934df92eb1fe7d9469e0c
+X-Git-Oldrev: bcaffa0a04af278d154e6e08b81a06a40a1b3ee9
+X-Git-Newrev: 7824d5c4c842bff0d9dd6eae63c0da256082b503
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162954.9DEE6876C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/procps-ng: add wchar
- dependency
+Message-Id: <20250228162954.8BC7A8769C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/octave: bump to
+ version 9.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,75 +58,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6fe892141cd4c8b6dd934df92eb1fe7d9469e0c
+commit: https://git.buildroot.net/buildroot/commit/?id=7824d5c4c842bff0d9dd6eae63c0da256082b503
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since procps-ng was bumped from 3.3.17 to 4.0.4 in commit
-d79f40dbbe98983bc657d4c82d46b38b8283351b ("package/procps-ng: security
-bump to version 4.0.4"), the build has been failing on !wchar
-configurations with:
+See release announce:
+https://octave.org/news/release/2024/12/15/octave-9.3.0-released.html
 
-src/ps/output.c:68:10: fatal error: wctype.h: No such file or directory
-   68 | #include <wctype.h>
-      |          ^~~~~~~~~~
-compilation terminated.
-
-The problematic code has been added by upstream commit
-https://gitlab.com/procps-ng/procps/-/commit/605ea4a8f7460920b6de9e432757bd13f80f0dba,
-which landed in upstream release v4.0.0.
-
-To solve this, we simply add a BR2_USE_WCHAR dependency, and update
-the comment related to this dependency on the only reverse dependency
-of procps-ng.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/afc035e866bec6f2c14f9d52fa74a9c1897706de/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/igt-gpu-tools/Config.in | 2 +-
- package/procps-ng/Config.in     | 6 ++++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ package/octave/octave.hash | 4 ++--
+ package/octave/octave.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/igt-gpu-tools/Config.in b/package/igt-gpu-tools/Config.in
-index 809c8e28ac..08fc34e917 100644
---- a/package/igt-gpu-tools/Config.in
-+++ b/package/igt-gpu-tools/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_IGT_GPU_TOOLS
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_HAS_UDEV
--	depends on BR2_USE_WCHAR # elfutils
-+	depends on BR2_USE_WCHAR # elfutils, procps-ng
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 # linux/dma-buf.h
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps-ng
- 	select BR2_PACKAGE_CAIRO
-diff --git a/package/procps-ng/Config.in b/package/procps-ng/Config.in
-index 7af0e97fb4..2b97096f00 100644
---- a/package/procps-ng/Config.in
-+++ b/package/procps-ng/Config.in
-@@ -1,7 +1,13 @@
-+comment "procps-ng needs a toolchain w/ wchar"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	depends on !BR2_USE_WCHAR
-+
- config BR2_PACKAGE_PROCPS_NG
- 	bool "procps-ng"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  Standard informational utilities and process-handling tools.
+diff --git a/package/octave/octave.hash b/package/octave/octave.hash
+index d9313734f1..5d96f9232c 100644
+--- a/package/octave/octave.hash
++++ b/package/octave/octave.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-# https://ftp.gnu.org/gnu/octave/octave-9.2.0.tar.lz.sig
++# https://ftp.gnu.org/gnu/octave/octave-9.3.0.tar.lz.sig
+ # using key DBD9C84E39FE1AAE99F04446B05F05B75D36644B
+-sha256  dcb2c098701cfcbc083f07e90e146261d15cdbf5e89c031032422112c89b47da  octave-9.2.0.tar.lz
++sha256  166e3ee492b2b1cade136cca50180c6adbbbd134fd1f34ae46e2948544a598ec  octave-9.3.0.tar.lz
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/octave/octave.mk b/package/octave/octave.mk
+index 34d9288c75..3989b85a4a 100644
+--- a/package/octave/octave.mk
++++ b/package/octave/octave.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OCTAVE_VERSION = 9.2.0
++OCTAVE_VERSION = 9.3.0
+ OCTAVE_SITE = $(BR2_GNU_MIRROR)/octave
+ OCTAVE_SOURCE = octave-$(OCTAVE_VERSION).tar.lz
+ OCTAVE_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
