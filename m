@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E39EC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:47:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F4B9C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:47:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DFD4B4F30E;
-	Fri, 28 Feb 2025 16:47:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CF03849B0;
+	Fri, 28 Feb 2025 16:47:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mX0-U82cA5n1; Fri, 28 Feb 2025 16:47:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8wTPbelryUka; Fri, 28 Feb 2025 16:47:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90E224F2FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 474D9849A7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90E224F2FA;
-	Fri, 28 Feb 2025 16:47:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 474D9849A7;
+	Fri, 28 Feb 2025 16:47:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 123891DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 276EC1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B46E341A26
+ by smtp4.osuosl.org (Postfix) with ESMTP id C2C3842DD6
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m9LVUT9oeUkp for <buildroot@buildroot.org>;
+ id j1kUy67OffNF for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:30:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FFD042577
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF3C9424D8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6FFD042577
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AF3C9424D8
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6974F81793; Fri, 28 Feb 2025 16:29:51 +0000 (UTC)
+ id A2C2B81793; Fri, 28 Feb 2025 16:29:50 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 18:53:11 +0100
+Date: Sun, 29 Dec 2024 12:34:41 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d3661ae845261721e2b5f087465261a07581e052
-X-Git-Newrev: c1bff80867fcf0c6ffbca555392b68594b150328
+X-Git-Oldrev: 6beee86c0d953dd67549d27c1f684132bc052a31
+X-Git-Newrev: f27dcb9310464d21916625c892a9bc2a25664b9b
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162951.6974F81793@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-nextpvr: bump
- version to 21.3.0-Omega
+Message-Id: <20250228162950.A2C2B81793@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wayland: bump to
+ version 1.23.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,38 +65,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1bff80867fcf0c6ffbca555392b68594b150328
+commit: https://git.buildroot.net/buildroot/commit/?id=f27dcb9310464d21916625c892a9bc2a25664b9b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+From
+https://lists.freedesktop.org/archives/wayland-devel/2024-August/043760.html:
+
+This is a bugfix release for Wayland 1.23.
+
+Joaquim Monteiro (1):
+      meson: Fix use of install_data() without specifying install_dir
+
+Kirill Primak (1):
+      Put WL_DEPRECATED in front of the function declarations
+
+Sebastian Wick (1):
+      client: Handle proxies with no queue
+
+Simon Ser (4):
+      scanner: extract validator function emission to helper function
+      scanner: fix validator for bitfields
+      tests: add enum bitfield test
+      build: bump version to 1.23.1 for the bugfix release
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wayland/wayland.hash | 6 +++---
+ package/wayland/wayland.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-index 130bcbe5b2..976b774dd3 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  3df0ed9a1f7dd61feba1fd8281cdd5b6e3ee153f78eba3e645e5d2213f7c5793  kodi-pvr-nextpvr-21.2.0-Omega.tar.gz
-+sha256  72502b3a57cbc3cfbfef92104d97681d75cdfedb2a4173ac92a8e92fdc60d668  kodi-pvr-nextpvr-21.3.0-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-index cd0378bff8..5d3c59dc13 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
+index 627cb5a1b0..f7c085513a 100644
+--- a/package/wayland/wayland.hash
++++ b/package/wayland/wayland.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2024-May/043636.html
+-sha256  05b3e1574d3e67626b5974f862f36b5b427c7ceeb965cb36a4e6c2d342e45ab2  wayland-1.23.0.tar.xz
+-sha512  9c525231a7ea3e68d3178230d476285a960d23e38571ac96d885f86c0588c52ef01460bff6833db5adb9456ce8db7b996613611187aac972736748ba91b8fd81  wayland-1.23.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2024-August/043760.html
++sha256  864fb2a8399e2d0ec39d56e9d9b753c093775beadc6022ce81f441929a81e5ed  wayland-1.23.1.tar.xz
++sha512  818eda003e3f7aa15690eedb1ff227a6056b2ce54bf23d45ffe573dc40a914623c5a1358218b59444dcdc483db0503324f0d27091d0ea954412a8b290de5f50a  wayland-1.23.1.tar.xz
+ 
+ # Locally calculated
+ sha256  6eefcb023622a463168a5c20add95fd24a38c7482622a9254a23b99b7c153061  COPYING
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index 06adafc3e1..bb5ceabb9c 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_NEXTPVR_VERSION = 21.2.0-Omega
-+KODI_PVR_NEXTPVR_VERSION = 21.3.0-Omega
- KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
- KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
- KODI_PVR_NEXTPVR_LICENSE_FILES = LICENSE.md
+-WAYLAND_VERSION = 1.23.0
++WAYLAND_VERSION = 1.23.1
+ WAYLAND_SITE = https://gitlab.freedesktop.org/wayland/wayland/-/releases/$(WAYLAND_VERSION)/downloads
+ WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+ WAYLAND_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
