@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B541E7718B
-	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 21:28:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF9CBE7718B
+	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 21:31:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 096648126E;
-	Sun, 29 Dec 2024 21:28:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A29A8813F9;
+	Sun, 29 Dec 2024 21:31:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X9erRyuhfSyQ; Sun, 29 Dec 2024 21:28:38 +0000 (UTC)
+ id WUuSXcxUFciU; Sun, 29 Dec 2024 21:31:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E9A880AB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E8C281400
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E9A880AB3;
-	Sun, 29 Dec 2024 21:28:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 96D13C8
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 21:28:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E8C281400;
+	Sun, 29 Dec 2024 21:31:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9019DCA
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 21:31:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 92F588126E
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 21:28:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 792EA403EC
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 21:31:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 28qtsWMLqS8j for <buildroot@buildroot.org>;
- Sun, 29 Dec 2024 21:28:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Hgdj7vvukXb5 for <buildroot@buildroot.org>;
+ Sun, 29 Dec 2024 21:31:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8B2A381193
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B2A381193
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8B2A381193
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 21:28:35 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BFF031C0002;
- Sun, 29 Dec 2024 21:28:32 +0000 (UTC)
-Date: Sun, 29 Dec 2024 22:28:32 +0100
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, Pierre-Jean Texier <texier.pj2@gmail.com>
-Message-ID: <20241229222832.1172e4e0@windsurf>
-In-Reply-To: <20241105234045.2624651-1-ju.o@free.fr>
-References: <20241105234045.2624651-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1735507712;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=0T2ALaEyjzxsKJcYbRA6fPX1GIJ8ihRYMrCk7JKh1ng=;
- b=Ml92mlndkekOEHsn7bQ8lc+FiA5JsvBV3VJQEfsMiu/UMWzo9LV4t/zS1IN9q3Rl6yF2Yx
- lmeLl7eVpxsJzA0LNDY6fR+f1VIjPigDOWfqP1qm24EICItu9+d6V0CHgly9EtJgzOhjQX
- B1C48ncM7vGbRmhQURkQPxTTbOsZaUPYMUsOdVNeLvNeNtEYEwPIMG3RSa0H3gk25EVezK
- AEe84KSXXWCkjvVrlDE5HL8TQMeUQzxl22O7VKFbrU3xI2iHUzZJoJM2utCZWfC4ieLhFS
- +xFd6I9QvsOkgEmmZNKWVqZh+Flq9w+pMXE8faj9WM7u5ab6ecVmKjZCiILuUA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Ml92mlnd
-Subject: Re: [Buildroot] [PATCH 1/1] package/numactl: bump to version 2.0.19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52CB24059F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 52CB24059F
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 21:31:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3CDEE87747; Sun, 29 Dec 2024 21:31:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 29 Dec 2024 22:31:01 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: eb8384bfbb64b1088bb9dca2d1d7df56e767231b
+X-Git-Newrev: e14380b3c4c3d5e037662c45b2cf90056056920a
+X-Patchwork-Hint: ignore
+Message-Id: <20241229213112.3CDEE87747@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_xvisor.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,39 +60,177 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  6 Nov 2024 00:40:45 +0100
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e14380b3c4c3d5e037662c45b2cf90056056920a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For change logs since 2.0.18, see:
-> https://github.com/numactl/numactl/releases/tag/v2.0.19
-> 
-> This commit also removes the package patch, which is included in
-> this version.
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-> Patch tested in:
-> https://gitlab.com/jolivain/buildroot/-/jobs/8279029791
-> https://gitlab.com/jolivain/buildroot/-/pipelines/1528845024
-> ---
->  ...-when-set_mempolicy_home_node-syscal.patch | 46 -------------------
->  package/numactl/numactl.hash                  |  2 +-
->  package/numactl/numactl.mk                    |  2 +-
->  3 files changed, 2 insertions(+), 48 deletions(-)
->  delete mode 100644 package/numactl/0001-Don-t-fail-build-when-set_mempolicy_home_node-syscal.patch
+This is a basic test for Xvisor RISC-V 64bit. It is running few
+management and status commands. It does not start a Linux kernel.
 
-Applied to master, thanks.
+RISC-V 64bit was chosen for this test because it was the simplest
+solution to run xvisor in a qemu emulator.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                   |   1 +
+ support/testing/tests/package/test_xvisor.py | 131 +++++++++++++++++++++++++++
+ 2 files changed, 132 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 820a216735..3805fe13be 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2002,6 +2002,7 @@ F:	support/testing/tests/package/test_which.py
+ F:	support/testing/tests/package/test_wine.py
+ F:	support/testing/tests/package/test_xfsprogs.py
+ F:	support/testing/tests/package/test_xfsprogs/
++F:	support/testing/tests/package/test_xvisor.py
+ F:	support/testing/tests/package/test_xz.py
+ F:	support/testing/tests/package/test_z3.py
+ F:	support/testing/tests/package/test_z3/
+diff --git a/support/testing/tests/package/test_xvisor.py b/support/testing/tests/package/test_xvisor.py
+new file mode 100644
+index 0000000000..b1b7d1a5e0
+--- /dev/null
++++ b/support/testing/tests/package/test_xvisor.py
+@@ -0,0 +1,131 @@
++import os
++import re
++
++import infra.basetest
++
++
++class TestXvisor(infra.basetest.BRTest):
++    # RISC-V 64bit is the "simplest" configuration to run
++    # Xvisor into QEmu.
++    config = \
++        """
++        BR2_riscv=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_PACKAGE_XVISOR=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_TARGET_OPENSBI=y
++        BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
++        BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.5"
++        BR2_TARGET_OPENSBI_PLAT="generic"
++        BR2_PACKAGE_HOST_QEMU=y
++        BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
++        """
++    xvisor_prompt = "XVisor# "
++
++    def expect_xvisor_prompt(self, timeout=-1):
++        self.emulator.qemu.expect(self.xvisor_prompt, timeout=timeout)
++
++    def run_xvisor_cmd(self, cmd, timeout=-1):
++        exit_code = 0
++        if timeout != -1:
++            timeout *= self.emulator.timeout_multiplier
++        self.emulator.qemu.sendline(cmd)
++        self.expect_xvisor_prompt(timeout)
++        output = self.emulator.qemu.before.replace("\r\r", "\r").splitlines()[1:]
++        # Some Xvisor commands (like "sleep") might not
++        # produce any output
++        if len(output) > 0:
++            last_line = output[-1]
++        else:
++            last_line = ""
++        if last_line.startswith("Error:"):
++            match = re.search(last_line, r"code (-?\d)")
++            if match is None:
++                exit_code = -1
++            else:
++                exit_code = int(match.group(1))
++
++        return output, exit_code
++
++    def assertXvRunOk(self, cmd, timeout=-1):
++        out, exit_code = self.run_xvisor_cmd(cmd, timeout)
++        self.assertEqual(
++            exit_code,
++            0,
++            "\nFailed to run xvisor command: {}\noutput was:\n{}".format(
++                cmd, '  '+'\n  '.join(out))
++        )
++
++    def test_run(self):
++        opensbi = os.path.join(self.builddir, "images", "fw_jump.bin")
++        xvisor = os.path.join(self.builddir, "images", "vmm.bin")
++        initrd = os.path.join(self.builddir, "images", "rootfs.cpio")
++
++        self.emulator.boot(arch="riscv64",
++                           kernel=xvisor,
++                           options=["-M", "virt", "-cpu", "rv64", "-m", "256M",
++                                    "-bios", opensbi, "-initrd", initrd])
++
++        # There is no emulator.login(), since we start directly in
++        # Xvisor prompt.
++        self.expect_xvisor_prompt()
++
++        # Check Xvisor version.
++        output, exit_code = self.run_xvisor_cmd("version")
++        self.assertEqual(exit_code, 0)
++        self.assertTrue(output[0].startswith("Xvisor"))
++
++        # Check a basic echo.
++        test_str = "Hello Buildroot!"
++        output, exit_code = self.run_xvisor_cmd("echo " + test_str)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output[0].strip(), test_str)
++
++        # Check a nonexisting command fails.
++        _, exit_code = self.run_xvisor_cmd("bad_command")
++        self.assertNotEqual(exit_code, 0)
++
++        # Check an error of a valid command.
++        _, exit_code = self.run_xvisor_cmd("vfs ls /nodir")
++        self.assertNotEqual(exit_code, 0)
++
++        # We mount the initrd...
++        self.assertXvRunOk("vfs mount initrd /")
++
++        # Check we see an existing file/symlink "os-release" in
++        # "/etc", from our mounted initrd.
++        output, exit_code = self.run_xvisor_cmd("vfs ls /etc")
++        self.assertEqual(exit_code, 0)
++        self.assertIn("os-release", "\n".join(output))
++
++        # Check the word "Buildroot" is in the /etc/issue file.
++        output, exit_code = self.run_xvisor_cmd("vfs cat /etc/issue")
++        self.assertEqual(exit_code, 0)
++        self.assertIn("Buildroot", "\n".join(output))
++
++        # Check qemu is seen in host info.
++        output, exit_code = self.run_xvisor_cmd("host info")
++        self.assertEqual(exit_code, 0)
++        self.assertIn("qemu", "\n".join(output))
++
++        # Run a batch of status commands...
++        cmds = [
++            "blockdev list",
++            "rbd list",
++            "module info 0",
++            "wallclock get_time",
++            "heap info",
++            "thread list",
++            "vcpu list",
++            "vcpu dumpreg 0",
++            "devtree node show /",
++            "host cpu info",
++            "host ram info",
++            "host resources",
++            "host bus_list",
++            "host bus_device_list platform"
++        ]
++
++        for cmd in cmds:
++            self.assertXvRunOk(cmd)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
