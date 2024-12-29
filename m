@@ -4,74 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 264E5E7718B
-	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 12:01:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 619BBE7718B
+	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 12:38:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C71F74053D;
-	Sun, 29 Dec 2024 12:01:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2DED40152;
+	Sun, 29 Dec 2024 12:37:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tzBjWDAmc9Mp; Sun, 29 Dec 2024 12:01:19 +0000 (UTC)
+ id fv2hDBfZEVc6; Sun, 29 Dec 2024 12:37:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B291A404CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD64240164
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B291A404CC;
-	Sun, 29 Dec 2024 12:01:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5F4B7C8
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:01:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD64240164;
+	Sun, 29 Dec 2024 12:37:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 73BFEE0B
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:37:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 406DF80DB5
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:01:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6181180492
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:37:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DgzebBUxYoUf for <buildroot@buildroot.org>;
- Sun, 29 Dec 2024 12:01:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DB69B80D9C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB69B80D9C
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DB69B80D9C
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:01:15 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 66269B00592;
- Sun, 29 Dec 2024 13:01:11 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:50294])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 29 Dec 2024 13:01:11 +0100
+ id IasIaVtOIObE for <buildroot@buildroot.org>;
+ Sun, 29 Dec 2024 12:37:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6CAE88048A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CAE88048A
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6CAE88048A
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:37:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 678A2FF802;
+ Sun, 29 Dec 2024 12:37:53 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Buildroot List <buildroot@buildroot.org>
+Date: Sun, 29 Dec 2024 13:37:44 +0100
+Message-ID: <20241229123751.639378-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.47.1
 MIME-Version: 1.0
-Date: Sun, 29 Dec 2024 13:01:11 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20241228200754.4012273-1-thomas.petazzoni@bootlin.com>
-References: <20241228200754.4012273-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <dd4594c37ac7158e85f68e3db1c6a31f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1735473672;
- bh=BDOj5I5r4IVL3mbqLon2e+QhT/t5qtM8mstyJLjB53w=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=HSqD4YXNECbNczO1BHJiSShORc30tsy0CTfdmWxeQVxJUFWSZ4DUha0ilwjnFplcg
- 3dQGO/ryM8AS257cGUECpWzpIPtZfwlxcmZmhbwGEUjTt+yKX/k8HKvFgZ6kfh853+
- KrwMoDGxVQKl62HxsoB5LRkobR3w5g0eoio0rbhqBpQ8IHxmT97hqlzubsXfWS/o6n
- NEsy2RrvlGprMt++fJ4qBT88+oQUDIi5CQdDz4lXtLtM4elqVKM0jd+eo0sfUeVyVF
- LVyV1EgZYr3ns5cFaQFIpNfHhaHZmflDjFVSMrNjB6QLHPXcT0fxyg5vkut39YzHzu
- 379dcxjdGVlAw==
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1735475873;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=xn/owEAqz+YU8pPRRYnBLhGesa8TlG4Ldtyv7E/sI7s=;
+ b=UUGGdaPNpdGAfjMRGJRWUA7WAKFM9o+QhrpTwB/2H1S2ipnJlHHUcfoNBFKNb56eg/sutc
+ VQlSjw1odH5Iv+3O2JcMrJFDpFGd330Eg6QH7Tmgsk7K3RqvNpCoz1jSG0Z5VjZ4nh2qkm
+ 3avRoptpD0fLHKBW3Ej3TnZPpW1Iofbjmen9DGXn6Fh1aSO9r4/UFLO30JMFA+r7H+vRP3
+ 50272PgY8yRLSfa0Nafs0HtihGh8XbPFy4Wlat+gIMTbkeipwB7gxMKdDbZB3lWEKgpdBd
+ AxhqVmeTLh44isFLt62rWQ0utkWJdfnuzUpa5htmSrpetLUSMm+Qjmt2g0Yq+A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=HSqD4YXN
-Subject: Re: [Buildroot] [PATCH 1/4] package/wayland: bump to version 1.23.1
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=UUGGdaPN
+Subject: [Buildroot] [PATCH 0/4] Fix linux build issues in the autobuilders
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,35 +77,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 28/12/2024 21:07, Thomas Petazzoni via buildroot wrote:
-> From
-> https://lists.freedesktop.org/archives/wayland-devel/2024-August/043760.html:
-> 
-> This is a bugfix release for Wayland 1.23.
-> 
-> Joaquim Monteiro (1):
->       meson: Fix use of install_data() without specifying install_dir
-> 
-> Kirill Primak (1):
->       Put WL_DEPRECATED in front of the function declarations
-> 
-> Sebastian Wick (1):
->       client: Handle proxies with no queue
-> 
-> Simon Ser (4):
->       scanner: extract validator function emission to helper function
->       scanner: fix validator for bitfields
->       tests: add enum bitfield test
->       build: bump version to 1.23.1 for the bugfix release
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Hello,
 
-Series applied to master, thanks.
+The four patches in this series aim at fixing recurring issues in our
+autobuilders affecting the linux kernel package.
+
+Thomas
+
+Thomas Petazzoni (4):
+  linux: select host-uboot-tools with FIT on mips
+  linux: select host-uboot-tools on nios2
+  linux: select proper defconfig on PowerPC
+  linux: select proper defconfig on ARC 750d/770d
+
+ linux/Config.in | 5 +++++
+ linux/linux.mk  | 6 ++++++
+ 2 files changed, 11 insertions(+)
+
+-- 
+2.47.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
