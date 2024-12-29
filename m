@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC0B0E7718B
-	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 22:11:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75275E7718F
+	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 22:11:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B626280F57;
-	Sun, 29 Dec 2024 22:11:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3DD444053D;
+	Sun, 29 Dec 2024 22:11:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8SJ4cZifo7sr; Sun, 29 Dec 2024 22:11:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GIxXbLkhH7t4; Sun, 29 Dec 2024 22:11:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAB5980F5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33436405B3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AAB5980F5D;
-	Sun, 29 Dec 2024 22:11:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33436405B3;
+	Sun, 29 Dec 2024 22:11:20 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4AC3BC8
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 22:11:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C44B0CA
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 22:11:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2AF0F608BA
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 22:11:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A568A6090A
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 22:11:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hi2r6QaO3VJf for <buildroot@buildroot.org>;
- Sun, 29 Dec 2024 22:11:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 7l-4KePmjNea for <buildroot@buildroot.org>;
+ Sun, 29 Dec 2024 22:11:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 585EB6090A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 585EB6090A
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 22:11:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5143687763; Sun, 29 Dec 2024 22:11:12 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 23:03:08 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 89061166eca2b48771426056ccd14e4d3e0850c9
-X-Git-Newrev: a9c8a2cf18bbd1a9d8bdf442762ba0351121df56
-X-Patchwork-Hint: ignore
-Message-Id: <20241229221112.5143687763@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xorgproto: bump version to
- 2024.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 873F8608BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 873F8608BA
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 873F8608BA
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 22:11:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BB7BD40004;
+ Sun, 29 Dec 2024 22:11:14 +0000 (UTC)
+Date: Sun, 29 Dec 2024 23:11:14 +0100
+To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Cc: buildroot@buildroot.org
+Message-ID: <20241229231114.3d360591@windsurf>
+In-Reply-To: <20241018215214.623918-1-raphael.pavlidis@gmail.com>
+References: <20241018215214.623918-1-raphael.pavlidis@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1735510274;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=AjhBIgG2gRyAmX8H3d6DUG6QozUxgaQ13zXTA/i5Cv8=;
+ b=kTIBD5Y7ZsVzyuhb+riNrw6OTf0ZaG8eJOGTpEDW/ybJiP9+hUaz6/yfx3V0trqsrHR1iD
+ uYyT22s1CUMhGVfWjaNriYwJ75l5SQxmk1ixiM6iJp9igQZW0qm73COV8Ig1tOhD9n/i57
+ a4w3ALPGHaAk7q2BGq/HD+7KRemM/ULuUcM49ka12bykkqBj0E6KRNH7XUDVE52fWjDe4R
+ d71aRjZVaP+G4xU5scjJsxhLlU+qnxv6cQCenuiP6Ks63sQgL28SbQGI500hfVa1QX3wcp
+ O0S8SmbZ2KuxImZnCXuMBbV1W2IZ7B+k5LK7XtvFvAkZsy8fFIYO6y1lm35XxQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=kTIBD5Y7
+Subject: Re: [Buildroot] [PATCH v1 1/2] package/x11r7/xorgproto: bump
+ version to 2024.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,54 +84,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9c8a2cf18bbd1a9d8bdf442762ba0351121df56
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 18 Oct 2024 21:52:13 +0000
+Raphael Pavlidis <raphael.pavlidis@gmail.com> wrote:
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2024-March/003495.html
+> Release notes:
+> https://lists.x.org/archives/xorg-announce/2024-March/003495.html
+> 
+> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+> ---
+>  package/x11r7/xorgproto/xorgproto.hash | 8 +++++---
+>  package/x11r7/xorgproto/xorgproto.mk   | 2 +-
+>  2 files changed, 6 insertions(+), 4 deletions(-)
 
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/x11r7/xorgproto/xorgproto.hash | 8 +++++---
- package/x11r7/xorgproto/xorgproto.mk   | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/x11r7/xorgproto/xorgproto.hash b/package/x11r7/xorgproto/xorgproto.hash
-index 37ad9c7c04..941ceabd49 100644
---- a/package/x11r7/xorgproto/xorgproto.hash
-+++ b/package/x11r7/xorgproto/xorgproto.hash
-@@ -1,6 +1,8 @@
--# From https://lists.x.org/archives/xorg-announce/2023-June/003408.html
--sha256  b61fbc7db82b14ce2dc705ab590efc32b9ad800037113d1973811781d5118c2c  xorgproto-2023.2.tar.xz
--sha512  af0a8c8094fc6a490a886a8c048175762b6334798f2e48b6f6e19a7bb39ddbef05fa1237c4e9d9f1d870d24f5ca7a7c463044c41ceebd108f8ab0816677a582d  xorgproto-2023.2.tar.xz
-+# Verified from https://xorg.freedesktop.org/archive/individual/proto/xorgproto-2024.1.tar.xz.sig
-+# with key 67DC86F2623FC5FD4BB5225D14706DBE1E4B4540
-+# From https://lists.x.org/archives/xorg-announce/2024-March/003495.html
-+sha256  372225fd40815b8423547f5d890c5debc72e88b91088fbfb13158c20495ccb59  xorgproto-2024.1.tar.xz
-+sha512  63955cb604ff831575af2193548857c1b99e52d00206ea9421ce99e145094bcd907388c4574bc32174a01cbe2c940b0377bf75ae7d2c0f953157dc9c32e5a07f  xorgproto-2024.1.tar.xz
- 
- # Locally computed
- sha256  aacd931f191b610902aee1e526090c2858aabc07969441fa2537ffd3e7049555  COPYING-applewmproto
-diff --git a/package/x11r7/xorgproto/xorgproto.mk b/package/x11r7/xorgproto/xorgproto.mk
-index f6e5a5a434..0253167372 100644
---- a/package/x11r7/xorgproto/xorgproto.mk
-+++ b/package/x11r7/xorgproto/xorgproto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XORGPROTO_VERSION = 2023.2
-+XORGPROTO_VERSION = 2024.1
- XORGPROTO_SOURCE = xorgproto-$(XORGPROTO_VERSION).tar.xz
- XORGPROTO_SITE = https://xorg.freedesktop.org/archive/individual/proto
- XORGPROTO_LICENSE = MIT
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
