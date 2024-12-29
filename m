@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F72AC282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E4E8C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:48:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1921E4A612;
-	Fri, 28 Feb 2025 16:48:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D69B4FE17;
+	Fri, 28 Feb 2025 16:48:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vQwFLZ3rWSzb; Fri, 28 Feb 2025 16:48:44 +0000 (UTC)
+ id dmwVz4m6ltFV; Fri, 28 Feb 2025 16:48:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9DCD4EF7A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 083F8487DC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9DCD4EF7A;
-	Fri, 28 Feb 2025 16:48:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 083F8487DC;
+	Fri, 28 Feb 2025 16:48:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 08B4B1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1B248711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 61CA342D41
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7707C42E47
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7ryclq72TWkI for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:11 +0000 (UTC)
+ id fxznIra4J1z7 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DF6A42521
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE6F842585
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5DF6A42521
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DE6F842585
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4FC9686FB9; Fri, 28 Feb 2025 16:29:53 +0000 (UTC)
+ id D539F84C4E; Fri, 28 Feb 2025 16:29:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 22:14:54 +0100
+Date: Sun, 29 Dec 2024 21:28:43 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 66a5f9bc742f517ad245e1ba0dcc8837205beedc
-X-Git-Newrev: 37a33d865d15561ee37920dd283dd98ee13182eb
+X-Git-Oldrev: 47f70b194e4e29408dd874a0fff61022f4d77c92
+X-Git-Newrev: a12a9a8e5c0664dd8e37d1e673b8e4ca4bde61b9
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162953.4FC9686FB9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/nfs-utils: bump
- version to 2.8.1
+Message-Id: <20250228162952.D539F84C4E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mpd: update version to
+ 0.23.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,151 +66,198 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37a33d865d15561ee37920dd283dd98ee13182eb
+commit: https://git.buildroot.net/buildroot/commit/?id=a12a9a8e5c0664dd8e37d1e673b8e4ca4bde61b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-* disable junction and nfsdctl by default
-* drop 2 local patches that have been committed.
+Version 0.23.16 change log:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+* database
+  - fix integer overflows with 64-bit inode numbers
+* filter
+  - ffmpeg: fix for filters producing no output
+* support libfmt 11
+* support ICU 76
+
+Adapt 0001-src-event-meson.build-add-atomic-dependency-for-spar.patch to
+silence check-package warnings
+Remove 0002-lib-fmt-support-build-with-libfmt-11.0.0.patch, changes were
+applied upstream
+
+$ utils/check-package package/mpd/*
+916 lines processed
+0 warnings generated
+
+$ echo "BR2_PACKAGE_MPD=y" > ~/output/mpd.config
+$ utils/test-pkg -c ~/output/mpd.config -d ~/output -p mpd
+                    bootlin-armv5-uclibc [1/6]: OK
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: SKIPPED
+                     bootlin-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                             arm-aarch64 [6/6]: OK
+6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...fsidd-reexport-.c-Re-add-missing-includes.patch | 44 ----------------------
- ...ackend_sqlite.c-Add-missing-sys-syscall.h.patch | 31 ---------------
- package/nfs-utils/nfs-utils.hash                   |  4 +-
- package/nfs-utils/nfs-utils.mk                     |  6 ++-
- 4 files changed, 7 insertions(+), 78 deletions(-)
+ .checkpackageignore                                |  1 -
+ ...eson.build-add-atomic-dependency-for-spar.patch |  6 +-
+ ...-lib-fmt-support-build-with-libfmt-11.0.0.patch | 93 ----------------------
+ package/mpd/mpd.hash                               |  2 +-
+ package/mpd/mpd.mk                                 |  2 +-
+ 5 files changed, 6 insertions(+), 98 deletions(-)
 
-diff --git a/package/nfs-utils/0001-reexport-fsidd-reexport-.c-Re-add-missing-includes.patch b/package/nfs-utils/0001-reexport-fsidd-reexport-.c-Re-add-missing-includes.patch
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 9b7b25c10c..4ae853c91f 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -841,7 +841,6 @@ package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch l
+ package/mono/0002-Ongoing-work-on-the-cmake-build.patch lib_patch.Upstream
+ package/mosquitto/S50mosquitto Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/motion/S99motion Shellcheck lib_sysv.Indent lib_sysv.Variables
+-package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch lib_patch.Upstream
+ package/mpir/0001-mpn-arm-udiv.asm-workaround-binutils-bug-14887.patch lib_patch.Upstream
+ package/mpv/0001-fix-powerpc64-altivec.patch lib_patch.Upstream
+ package/mraa/0001-include-Declare-gVERSION-global-as-extern.patch lib_patch.Upstream
+diff --git a/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
+index 390cf12583..28a82da30a 100644
+--- a/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
++++ b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
+@@ -9,9 +9,11 @@ Linking with libatomic is needed on sparc otherwise build fails on:
+ Fixes:
+  - http://autobuild.buildroot.org/results/7a9fdb7e323892fb6ed85a2441054303e889c089
+ 
++Upstream: not sent (the same kind of patch for ncmpc was
++refused: https://github.com/MusicPlayerDaemon/ncmpc/pull/45)
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: not sent (the same kind of patch for ncmpc was
+-refused: https://github.com/MusicPlayerDaemon/ncmpc/pull/45)]
++[Andreas: adapt upstream formatting]
++Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+ ---
+  src/event/meson.build | 4 ++++
+  1 file changed, 4 insertions(+)
+diff --git a/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch b/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch
 deleted file mode 100644
-index 4f79af450e..0000000000
---- a/package/nfs-utils/0001-reexport-fsidd-reexport-.c-Re-add-missing-includes.patch
+index e0a361fee2..0000000000
+--- a/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch
 +++ /dev/null
-@@ -1,44 +0,0 @@
--From 4710e469cd0f512ac5e2c3c4335d8e21b97f21b0 Mon Sep 17 00:00:00 2001
--From: Petr Vorel <pvorel@suse.cz>
--Date: Tue, 5 Dec 2023 20:40:36 +0100
--Subject: [PATCH] reexport/{fsidd,reexport}.c: Re-add missing includes
+@@ -1,93 +0,0 @@
+-From 1402869715e3efca87942d79c3173a6b21a6925d Mon Sep 17 00:00:00 2001
+-From: Rudi Heitbaum <rudi@heitbaum.com>
+-Date: Fri, 5 Jul 2024 14:27:45 +0000
+-Subject: [PATCH] lib/fmt: support build with libfmt-11.0.0
 -
--Older uClibc-ng requires <unistd.h> for close(2), unlink(2) and write(2),
--<sys/un.h> for struct sockaddr_un.
+-Upstream libfmt commit fmtlib/fmt@d707292
+-now requires the format function to be const.
 -
--Fixes: 1a4edb2a ("reexport/fsidd.c: Remove unused headers")
--Fixes: bdc79f02 ("support/reexport.c: Remove unused headers")
--Signed-off-by: Petr Vorel <pvorel@suse.cz>
--Upstream: https://lore.kernel.org/linux-nfs/20231205223543.31443-1-pvorel@suse.cz/
+-Adjust the function prototype so it is const and can compile.
+-
+-Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
+-
+-Context: https://github.com/MusicPlayerDaemon/MPD/issues/2071
+-Pull request: https://github.com/MusicPlayerDaemon/MPD/pull/2069
+-
+-Fixes: http://autobuild.buildroot.net/results/73514ea76a5960f59b4c50e2074571b10e4682d4
+-Fixes: http://autobuild.buildroot.net/results/a58ddbdfe35bd19021e65db0b8b8cc4c1c884d51
+-
+-Rebase for mpd-0.23.15
+-
+-Upstream: https://github.com/MusicPlayerDaemon/MPD/commit/3648475f871c33daa9e598c102a16e5a1a4d4dfc
+-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 ----
-- support/reexport/fsidd.c    | 2 ++
-- support/reexport/reexport.c | 1 +
-- 2 files changed, 3 insertions(+)
+- src/lib/ffmpeg/LibFmt.hxx            | 2 +-
+- src/lib/fmt/AudioFormatFormatter.hxx | 4 ++--
+- src/lib/fmt/ExceptionFormatter.hxx   | 2 +-
+- src/lib/fmt/PathFormatter.hxx        | 2 +-
+- 4 files changed, 5 insertions(+), 5 deletions(-)
 -
--diff --git a/support/reexport/fsidd.c b/support/reexport/fsidd.c
--index 3e62b3fc..814fb48e 100644
----- a/support/reexport/fsidd.c
--+++ b/support/reexport/fsidd.c
--@@ -7,6 +7,8 @@
-- #include <dlfcn.h>
-- #endif
-- #include <event2/event.h>
--+#include <sys/un.h>
--+#include <unistd.h>
--
-- #include "conffile.h"
-- #include "reexport_backend.h"
--diff --git a/support/reexport/reexport.c b/support/reexport/reexport.c
--index 78516586..1900b336 100644
----- a/support/reexport/reexport.c
--+++ b/support/reexport/reexport.c
--@@ -7,6 +7,7 @@
-- #endif
-- #include <sys/types.h>
-- #include <sys/vfs.h>
--+#include <unistd.h>
-- #include <errno.h>
--
-- #include "nfsd_path.h"
----
+-diff --git a/src/lib/ffmpeg/LibFmt.hxx b/src/lib/ffmpeg/LibFmt.hxx
+-index aa068711f..dee83ed2d 100644
+---- a/src/lib/ffmpeg/LibFmt.hxx
+-+++ b/src/lib/ffmpeg/LibFmt.hxx
+-@@ -29,7 +29,7 @@
+- struct fmt::formatter<AVSampleFormat> : formatter<string_view>
+- {
+- 	template<typename FormatContext>
+--	auto format(const AVSampleFormat format, FormatContext &ctx) {
+-+	auto format(const AVSampleFormat format, FormatContext &ctx) const {
+- 		const char *name = av_get_sample_fmt_name(format);
+- 		if (name == nullptr)
+- 			name = "?";
+-diff --git a/src/lib/fmt/AudioFormatFormatter.hxx b/src/lib/fmt/AudioFormatFormatter.hxx
+-index e0ffb6216..8da98efd4 100644
+---- a/src/lib/fmt/AudioFormatFormatter.hxx
+-+++ b/src/lib/fmt/AudioFormatFormatter.hxx
+-@@ -39,7 +39,7 @@
+- struct fmt::formatter<SampleFormat> : formatter<string_view>
+- {
+- 	template<typename FormatContext>
+--	auto format(const SampleFormat format, FormatContext &ctx) {
+-+	auto format(const SampleFormat format, FormatContext &ctx) const {
+- 		return formatter<string_view>::format(sample_format_to_string(format),
+- 						      ctx);
+- 	}
+-@@ -49,7 +49,7 @@
+- struct fmt::formatter<AudioFormat> : formatter<string_view>
+- {
+- 	template<typename FormatContext>
+--	auto format(const AudioFormat &af, FormatContext &ctx) {
+-+	auto format(const AudioFormat &af, FormatContext &ctx) const {
+- 		return formatter<string_view>::format(ToString(af).c_str(),
+- 						      ctx);
+- 	}
+-diff --git a/src/lib/fmt/ExceptionFormatter.hxx b/src/lib/fmt/ExceptionFormatter.hxx
+-index 3f342df67..f08b3bb22 100644
+---- a/src/lib/fmt/ExceptionFormatter.hxx
+-+++ b/src/lib/fmt/ExceptionFormatter.hxx
+-@@ -38,7 +38,7 @@
+- struct fmt::formatter<std::exception_ptr> : formatter<string_view>
+- {
+- 	template<typename FormatContext>
+--	auto format(std::exception_ptr e, FormatContext &ctx) {
+-+	auto format(std::exception_ptr e, FormatContext &ctx) const {
+- 		return formatter<string_view>::format(GetFullMessage(e), ctx);
+- 	}
+- };
+-diff --git a/src/lib/fmt/PathFormatter.hxx b/src/lib/fmt/PathFormatter.hxx
+-index e5ae89dec..add06df81 100644
+---- a/src/lib/fmt/PathFormatter.hxx
+-+++ b/src/lib/fmt/PathFormatter.hxx
+-@@ -29,7 +29,7 @@
+- struct fmt::formatter<Path> : formatter<string_view>
+- {
+- 	template<typename FormatContext>
+--	auto format(Path path, FormatContext &ctx) {
+-+	auto format(Path path, FormatContext &ctx) const {
+- 		return formatter<string_view>::format(path.ToUTF8(), ctx);
+- 	}
+- };
+--- 
 -2.43.0
-diff --git a/package/nfs-utils/0002-support-backend_sqlite.c-Add-missing-sys-syscall.h.patch b/package/nfs-utils/0002-support-backend_sqlite.c-Add-missing-sys-syscall.h.patch
-deleted file mode 100644
-index 88e1a9068d..0000000000
---- a/package/nfs-utils/0002-support-backend_sqlite.c-Add-missing-sys-syscall.h.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From aee92881ba80cf2ae7381d19f09e7fbeda57974c Mon Sep 17 00:00:00 2001
--From: Petr Vorel <petr.vorel@gmail.com>
--Date: Tue, 5 Dec 2023 23:20:33 +0100
--Subject: [PATCH] support/backend_sqlite.c: Add missing <sys/syscall.h>
 -
--This fixes build on systems which actually needs getrandom()
--(to get SYS_getrandom).
--
--Fixes: f92fd6ca ("support/backend_sqlite.c: Add getrandom() fallback")
--Fixes: http://autobuild.buildroot.net/results/c5fde6099a8b228a8bdc3154d1e47dfa192e94ed/
--Reported-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Signed-off-by: Petr Vorel <pvorel@suse.cz>
--Upstream: https://lore.kernel.org/linux-nfs/20231205223543.31443-2-pvorel@suse.cz/
-----
-- support/reexport/backend_sqlite.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/support/reexport/backend_sqlite.c b/support/reexport/backend_sqlite.c
--index 0eb5ea37..54dfe447 100644
----- a/support/reexport/backend_sqlite.c
--+++ b/support/reexport/backend_sqlite.c
--@@ -7,6 +7,7 @@
-- #include <stdio.h>
-- #include <stdlib.h>
-- #include <string.h>
--+#include <sys/syscall.h>
-- #include <unistd.h>
--
-- #ifdef HAVE_GETRANDOM
----
--2.43.0
-diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
-index 9d74991df1..b4ecbd0aec 100644
---- a/package/nfs-utils/nfs-utils.hash
-+++ b/package/nfs-utils/nfs-utils.hash
-@@ -1,4 +1,4 @@
--# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.6.4/sha256sums.asc
--sha256  01b3b0fb9c7d0bbabf5114c736542030748c788ec2fd9734744201e9b0a1119d  nfs-utils-2.6.4.tar.xz
-+# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.1/sha256sums.asc
-+sha256  a0be95b08396908048583fcf6b34a7c1ab49d53e8a12eb28673ccfd2eff0c505  nfs-utils-2.8.1.tar.xz
- # Locally computed
- sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 9ea3bae79d..4b008042ce 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index fe3d449cc5..c18a80a9d0 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  550132239ad1acf82ccf8905b56cc13dc2c81a4489b96fba7731b3049907661a  mpd-0.23.15.tar.xz
++sha256  9668e36df80de485683c962d02845bf314d8a08e6141af7afeff76401e32b2c1  mpd-0.23.16.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index e320ad9dec..fd528aaa87 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--NFS_UTILS_VERSION = 2.6.4
-+NFS_UTILS_VERSION = 2.8.1
- NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
- NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
- NFS_UTILS_LICENSE = GPL-2.0+
-@@ -17,6 +17,8 @@ NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
- NFS_UTILS_CONF_OPTS = \
- 	--enable-tirpc \
- 	--enable-ipv6 \
-+	--disable-junction \
-+	--disable-nfsdctl \
- 	--without-tcp-wrappers \
- 	--with-statedir=/run/nfs \
- 	--with-rpcgen=$(HOST_DIR)/bin/rpcgen
-@@ -30,6 +32,8 @@ HOST_NFS_UTILS_CONF_OPTS = \
- 	--disable-gss \
- 	--disable-uuid \
- 	--disable-ipv6 \
-+	--disable-junction \
-+	--disable-nfsdctl \
- 	--without-tcp-wrappers \
- 	--with-statedir=/run/nfs \
- 	--disable-caps \
+ MPD_VERSION_MAJOR = 0.23
+-MPD_VERSION = $(MPD_VERSION_MAJOR).15
++MPD_VERSION = $(MPD_VERSION_MAJOR).16
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost fmt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
