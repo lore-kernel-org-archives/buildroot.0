@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F2D5E7718B
-	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 12:00:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCFDBE77191
+	for <buildroot@archiver.kernel.org>; Sun, 29 Dec 2024 12:00:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C32140565;
-	Sun, 29 Dec 2024 12:00:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3C2640541;
+	Sun, 29 Dec 2024 12:00:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PFpVSO0PPGDT; Sun, 29 Dec 2024 12:00:23 +0000 (UTC)
+ id q1Ei_8j7h9e8; Sun, 29 Dec 2024 12:00:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0309A40583
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FBAF4055C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0309A40583;
-	Sun, 29 Dec 2024 12:00:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 415A772
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FBAF4055C;
+	Sun, 29 Dec 2024 12:00:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A7C2FC8
  for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:00:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3E72D80ED7
- for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:00:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 72D8940555
+ for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:00:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6EpK2jLc6NC7 for <buildroot@buildroot.org>;
- Sun, 29 Dec 2024 12:00:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y47HhM444BIw for <buildroot@buildroot.org>;
+ Sun, 29 Dec 2024 12:00:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 758DA80DE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98F7D40531
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 758DA80DE4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 98F7D40531
  for <buildroot@buildroot.org>; Sun, 29 Dec 2024 12:00:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6CF238767B; Sun, 29 Dec 2024 12:00:14 +0000 (UTC)
+ id 53B1580250; Sun, 29 Dec 2024 12:00:14 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 12:43:32 +0100
+Date: Sun, 29 Dec 2024 12:43:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0d08940ce6454066254204aa9126a5c65cad7628
-X-Git-Newrev: ca46491736b4b3ae9549acbdef6383d145932963
+X-Git-Oldrev: 6f74ee11b484b55b4d314195b4e5abf2f3625382
+X-Git-Newrev: 0d08940ce6454066254204aa9126a5c65cad7628
 X-Patchwork-Hint: ignore
-Message-Id: <20241229120014.6CF238767B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libinput: bump to version 1.27
+Message-Id: <20241229120014.53B1580250@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wayland-protocols: bump to version
+ 1.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,76 +60,249 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4180749800825206650=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca46491736b4b3ae9549acbdef6383d145932963
+--===============4180749800825206650==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=0d08940ce6454066254204aa9126a5c65cad7628
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Since upstream commit
+c9972235833b3586c05a6e6c4145aef6df3f4281 ("build: install headers with
+enums"), building wayland-protocols requires the wayland-scanner tool,
+so we must add host-wayland to the dependencies of wayland-protocols.
+
+1.36 -> 1.37
+============
+
 From
-https://lists.freedesktop.org/archives/wayland-devel/2024-November/043860.html:
+https://lists.freedesktop.org/archives/wayland-devel/2024-August/043774.html:
 
-In terms of new features we have a "sticky" mode for drag-locking. Previously a
-tap-and-drag lock would always expire after a timeout, now the button is held
-logically down until a completing tap. Desktop environments are encouraged to
-use this as the default as it provides a better experience for anyone with
-less-than-perfect dexterity. For backwards-compatibility reasons libinput cannot
-easily change its defaults without risking bugs in the callers.
+This release contains three new protocols:
 
-For tablet pads we now support tablet pad mode groups for devices without
-status LEDs as well, the previous implementation was tied to LEDs which some
-devices like the XP Pen ACK05 remote don't have. Since the mode is a software
-feature anyway tying it to LEDs is not necessary.
+ * xdg-toplevel-icon
 
-If a tablet is unknown to libwacom we now assume that it is a built-in tablet.
-This matches the behavior of libwacom 2.11 but in our case the only visible
-result is that the device now has the calibration configuration available.
-Better to have it and not use it, as they say.
+Associate an icon with a toplevel window.
 
-The available area on external tablets can be reduced via the new tablet "area"
-configuration. Users can set a rectangle smaller than the width/height
-of the tablet and input outside this rectangle will be ignored.
+ * ext-image-capture-source
+ * ext-image-copy-capture
 
-For packagers: the check dependency is now optional, almost all tests
-can now run without it.
+A set of protocols that together allow capturing the pixel content of
+outputs and toplevels.
 
-And then we have of course the usual collection of bug fixes and
-device-specific quirks.
+Apart from this, it includes the usual protocol documentation
+improvements and fixes, as well as clarification of existing protocol
+review practices.
+
+Enjoy!
+
+Andri Yngvason (2):
+      ext-image-capture-source-v1: new protocol
+      ext-image-copy-capture-v1: new protocol
+
+Derek Foreman (1):
+      various: Fix definition of double-buffered state
+
+Jonas Ådahl (1):
+      build: Bump version to 1.37
+
+Matthias Klumpp (1):
+      staging: Add xdg-toplevel-icon protocol for dedicated toplevel icons
+
+Nicolas Fella (1):
+      tablet-v2: Fix feedback description in mode_switch
+
+PolyMeilex (1):
+      Fix some trivial typos
+
+Simon Ser (7):
+      ci: don't run pipelines in forks
+      readme: s/Makefile.am/meson.build/
+      readme: use references for links
+      readme: recommend using "Draft:" prefix for RFC protocols
+      members: trim trailing comma
+      governance: document review requirements
+      xdg-toplevel-icon: add error for destroyed wl_buffer
+
+Xaver Hugl (1):
+      staging/tearing-control: clarify what happens after wl_surface destruction
+
+YaoBing Xiao (1):
+      pointer-gestures: Add punctuation to clarify gesture cycles
+
+1.37 -> 1.38
+============
+
+From
+https://lists.freedesktop.org/archives/wayland-devel/2024-October/043851.html:
+
+This full packed release comes with three new staging protocols:
+
+ * system bell - allowing e.g. terminal emulators to hand off system
+   bell alerts to the compositor for among other things accessibility
+   purposes
+
+ * fifo - for implementing first in first out surface content update
+   behavior
+
+ * commit timing - for adding time constraints to surface content
+   update
+
+Other than this, the presentation timing protocol protocol got a version
+minor bump describing how to deal with variable refresh rate.
+
+Other protocols saw the regular clarifications and bug fixes, and some
+deprecated events is now properly indicated as such in the XML. Please
+see individual commits for details.
+
+Since the last release, a new member was also added to MEMBERS.md: mesa.
+
+Daniel Stone (3):
+      protocols: Add GitLab contact information
+      README: Suggest pinging protocol authors on changes
+      presentation-time: Specify refresh bounds for VRR
+
+Derek Foreman (2):
+      fifo-v1: Add new protocol
+      commit-timing-v1: Add new protocol
+
+Jonas Ådahl (4):
+      members: Update weston point-of-contact
+      members: Add mesa as a member
+      Add staging system bell protocol
+      build: Bump version to 1.38
+
+Julian Orth (1):
+      security-context-v1: clarify close_fd behavior
+
+Nick Diego Yamane (1):
+      xdg-toplevel-drag: clarify offset is relative to geometry
+
+Sebastian Wick (1):
+      cursor-shape-v1: Make object inert when underlying cap is destroyed
+
+Simon Ser (9):
+      xdg-decoration: add invalid_mode error
+      xdg-shell: clarify clients set their initial state before initial commit
+      xdg-toplevel-icon: clarify that wl_buffer.release is unused
+      ci: upgrade wayland to v1.23.1
+      linux-dmabuf: mark format/modifier with deprecated-since attribute
+      xdg-output: mark done event with deprecated-since attribute
+      build: install headers with enums
+      ext-image-copy-capture: fix typo
+      governance: drop adoption website section
+
+Simon Zeni (3):
+      drm-lease-v1: specify existing lease status on withdrawn event
+      drm-lease-v1: advertise connector again upon lease destruction
+      drm-lease-v1: advertise connector again upon lease finished event
+
+itycodes (1):
+      ext-image-copy-capture-v1: Fix typo in ext_image_copy_capture_frame_v1::destroy
+
+1.38 -> 1.39
+============
+
+From
+https://lists.freedesktop.org/archives/wayland-devel/2024-December/043920.html:
+
+This new release contains two new protocols:
+
+  * ext-data-control - allow privileged clients to control data devices, e.g. a
+  clipboard manager.
+
+  * ext-workspace - receive events about and control workspaces, useful for
+  e.g. workspace indicators.
+
+This release also includes the recent governance workflow changes and
+clarifications. Mesa is also listed as a member, Simon Zeni was added as a
+drm-lease maintainer, and Nick Diego Yamane was added as a xdg-toplevel-drag
+maintainer.
+
+Daniel Stone (3):
+      governance: Clarify 'member'
+      governance: Specify how to change points of contact
+      governance: Deprecate wayland-devel@
+
+Heiko Becker (1):
+      build: Raise required wayland-scanner version to 1.23.0 for tests
+
+Jonas Ådahl (1):
+      build: Bump version to 1.39
+
+Mike Blumenkrantz (3):
+      add experimental protocols and their requirements
+      governance: introduce workflow improvements
+      governance: update NACK usage/restrictions
+
+Neal Gompa (1):
+      Add ext-data-control protocol
+
+Nick Diego Yamane (1):
+      xdg-toplevel-drag: Add myself as co-maintainer
+
+Simon Ser (1):
+      drm-lease: nominate Simon Zeni as maintainer
+
+Victoria Brekenfeld (1):
+      Add ext-workspace
+
+YaoBing Xiao (1):
+      ext-image-copy-capture: fix the error in the protocol description
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libinput/libinput.hash | 2 +-
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wayland-protocols/wayland-protocols.hash | 6 +++---
+ package/wayland-protocols/wayland-protocols.mk   | 4 +++-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 2ab56e4827..f6ec570588 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  8c582b86c6865aaee2516ee96b299cef60c98e113d1391bbd2683eac08221a07  libinput-1.26.0.tar.bz2
-+sha256  8e823cc9f44c51b63ae90af0b73676ed82c0402cc1cbd4a59ac91b7bb6cad716  libinput-1.27.0.tar.bz2
- 
- # License files
- sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 3b5070c85e..ee15b781e6 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index 93d40a919c..645d6d8f25 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2024-April/043581.html
+-sha256  71fd4de05e79f9a1ca559fac30c1f8365fa10346422f9fe795f74d77b9ef7e92  wayland-protocols-1.36.tar.xz
+-sha512  5448b9aedc953ce6be0f378da900c195c8743cb6001f615823b5fc9cab3e3ee54271132055743278e10decef7f8e9dcdeef31593a2a12062575fb90eb0084be0  wayland-protocols-1.36.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2024-December/043920.html
++sha256  e1dcdcbbf08e2e0a8a02ee5d9a0be3a6aafc39a4b51fa7e0d2f1a16411cb72fa  wayland-protocols-1.39.tar.xz
++sha512  480a195ec0846400d93160e3d0a7ba12948ed841835ee4661f54b0101ae0027affd9c0f660a73244786fecd70e4f609830489a6b95e00d750cf2379734aacbe0  wayland-protocols-1.39.tar.xz
+ sha256  f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index c0dfe69401..b04693978d 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
+@@ -4,13 +4,15 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.26.0
-+LIBINPUT_VERSION = 1.27.0
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.bz2
- LIBINPUT_SITE = https://gitlab.freedesktop.org/libinput/libinput/-/archive/$(LIBINPUT_VERSION)
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-WAYLAND_PROTOCOLS_VERSION = 1.36
++WAYLAND_PROTOCOLS_VERSION = 1.39
+ WAYLAND_PROTOCOLS_SITE = https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$(WAYLAND_PROTOCOLS_VERSION)/downloads
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
+ WAYLAND_PROTOCOLS_LICENSE_FILES = COPYING
+ WAYLAND_PROTOCOLS_INSTALL_STAGING = YES
+ WAYLAND_PROTOCOLS_INSTALL_TARGET = NO
++# needs wayland-scanner
++WAYLAND_PROTOCOLS_DEPENDENCIES = host-wayland
+ 
+ WAYLAND_PROTOCOLS_CONF_OPTS = -Dtests=false
+ 
+
+--===============4180749800825206650==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4180749800825206650==--
