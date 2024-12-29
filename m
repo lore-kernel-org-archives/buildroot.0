@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1164C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:48:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E8DCC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:48:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1C5284963;
-	Fri, 28 Feb 2025 16:48:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6n1tfRE--oR8; Fri, 28 Feb 2025 16:48:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB16384A47
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB16384A47;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3563247A19;
 	Fri, 28 Feb 2025 16:48:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2PaqoFj2NgBc; Fri, 28 Feb 2025 16:48:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A6F44FDAD
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A6F44FDAD;
+	Fri, 28 Feb 2025 16:48:24 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 193821DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1FB811DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D103142E38
+ by smtp4.osuosl.org (Postfix) with ESMTP id C018D42E36
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5L3VWbzFIK_v for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:12 +0000 (UTC)
+ id d8It6rjeo6cB for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C578419D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A66BE4265D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C578419D7
+ by smtp4.osuosl.org (Postfix) with ESMTP id A66BE4265D
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1129087697; Fri, 28 Feb 2025 16:29:54 +0000 (UTC)
+ id 9DEE6876C0; Fri, 28 Feb 2025 16:29:54 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 23:17:29 +0100
+Date: Mon, 30 Dec 2024 00:04:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6a4cdf2057335fc021b20488531e3293584840e7
-X-Git-Newrev: 99b473c94868163ac40311dc488a6d8491568429
+X-Git-Oldrev: 7824d5c4c842bff0d9dd6eae63c0da256082b503
+X-Git-Newrev: f6fe892141cd4c8b6dd934df92eb1fe7d9469e0c
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162954.1129087697@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bluez5_utils: fix
- dbusconfdir
+Message-Id: <20250228162954.9DEE6876C0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/procps-ng: add wchar
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,42 +59,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99b473c94868163ac40311dc488a6d8491568429
+commit: https://git.buildroot.net/buildroot/commit/?id=f6fe892141cd4c8b6dd934df92eb1fe7d9469e0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since D-Bus 1.14.0 installing default policies into sysconfdir (/etc)
-is deprecated, they should go into datadir (/usr/share) instead
-[1]. Follow that policy.
+Since procps-ng was bumped from 3.3.17 to 4.0.4 in commit
+d79f40dbbe98983bc657d4c82d46b38b8283351b ("package/procps-ng: security
+bump to version 4.0.4"), the build has been failing on !wchar
+configurations with:
 
-[1] https://gitlab.freedesktop.org/dbus/dbus/-/blob/8f1e00427f7048f8b24c3a1cfca8903254fe00d4/NEWS#L274-283
+src/ps/output.c:68:10: fatal error: wctype.h: No such file or directory
+   68 | #include <wctype.h>
+      |          ^~~~~~~~~~
+compilation terminated.
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+The problematic code has been added by upstream commit
+https://gitlab.com/procps-ng/procps/-/commit/605ea4a8f7460920b6de9e432757bd13f80f0dba,
+which landed in upstream release v4.0.0.
+
+To solve this, we simply add a BR2_USE_WCHAR dependency, and update
+the comment related to this dependency on the only reverse dependency
+of procps-ng.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/afc035e866bec6f2c14f9d52fa74a9c1897706de/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/bluez5_utils/bluez5_utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/igt-gpu-tools/Config.in | 2 +-
+ package/procps-ng/Config.in     | 6 ++++++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 1695aeb210..7725fb94bf 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -28,7 +28,7 @@ BLUEZ5_UTILS_CONF_OPTS = \
- 	--disable-lsan \
- 	--disable-ubsan \
- 	--disable-pie \
--	--with-dbusconfdir=/etc
-+	--with-dbusconfdir=/usr/share
- 
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_OBEX),y)
- BLUEZ5_UTILS_CONF_OPTS += --enable-obex
+diff --git a/package/igt-gpu-tools/Config.in b/package/igt-gpu-tools/Config.in
+index 809c8e28ac..08fc34e917 100644
+--- a/package/igt-gpu-tools/Config.in
++++ b/package/igt-gpu-tools/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_IGT_GPU_TOOLS
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_HAS_UDEV
+-	depends on BR2_USE_WCHAR # elfutils
++	depends on BR2_USE_WCHAR # elfutils, procps-ng
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 # linux/dma-buf.h
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps-ng
+ 	select BR2_PACKAGE_CAIRO
+diff --git a/package/procps-ng/Config.in b/package/procps-ng/Config.in
+index 7af0e97fb4..2b97096f00 100644
+--- a/package/procps-ng/Config.in
++++ b/package/procps-ng/Config.in
+@@ -1,7 +1,13 @@
++comment "procps-ng needs a toolchain w/ wchar"
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	depends on !BR2_USE_WCHAR
++
+ config BR2_PACKAGE_PROCPS_NG
+ 	bool "procps-ng"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  Standard informational utilities and process-handling tools.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
