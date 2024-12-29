@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CA18C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:48:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39DA8C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:48:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 251CD8490F;
-	Fri, 28 Feb 2025 16:48:05 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cQ-DodSpy7ER; Fri, 28 Feb 2025 16:48:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3438184A18
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3438184A18;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1088D4FD61;
 	Fri, 28 Feb 2025 16:48:04 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6Ml8ri8HSqDW; Fri, 28 Feb 2025 16:48:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BDED40CCD
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BDED40CCD;
+	Fri, 28 Feb 2025 16:48:01 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 08AE768
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:35 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 058991DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC166424E6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F9E542E28
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id thDi4C0KK6qS for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:12 +0000 (UTC)
+ id 5KOXZKQD1mg2 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F32E0424DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1FCC424E2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F32E0424DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1FCC424E2
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ECBF082215; Fri, 28 Feb 2025 16:29:53 +0000 (UTC)
+ id 947FA86FB9; Fri, 28 Feb 2025 16:29:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 23:11:30 +0100
+Date: Sun, 29 Dec 2024 22:31:01 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a9c8a2cf18bbd1a9d8bdf442762ba0351121df56
-X-Git-Newrev: 6a4cdf2057335fc021b20488531e3293584840e7
+X-Git-Oldrev: eb8384bfbb64b1088bb9dca2d1d7df56e767231b
+X-Git-Newrev: e14380b3c4c3d5e037662c45b2cf90056056920a
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162953.ECBF082215@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bluez5_utils{,
- -headers}: bump version to 5.79
+Message-Id: <20250228162953.947FA86FB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ support/testing/tests/package/test_xvisor.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,99 +66,171 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a4cdf2057335fc021b20488531e3293584840e7
+commit: https://git.buildroot.net/buildroot/commit/?id=e14380b3c4c3d5e037662c45b2cf90056056920a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Upstream changelog:
-https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?h=5.79&id=0845b8f6ef2ac004b1c953cf4fe4ca3458cd8e36
+This is a basic test for Xvisor RISC-V 64bit. It is running few
+management and status commands. It does not start a Linux kernel.
 
-Patch for musl compatibility taken from upstream "master".
+RISC-V 64bit was chosen for this test because it was the simplest
+solution to run xvisor in a qemu emulator.
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../bluez5_utils-headers/bluez5_utils-headers.mk   |  2 +-
- .../0001-gdbus-define-MAX_INPUT-for-musl.patch     | 33 ++++++++++++++++++++++
- package/bluez5_utils/bluez5_utils.hash             |  2 +-
- package/bluez5_utils/bluez5_utils.mk               |  2 +-
- 4 files changed, 36 insertions(+), 3 deletions(-)
+ DEVELOPERS                                   |   1 +
+ support/testing/tests/package/test_xvisor.py | 131 +++++++++++++++++++++++++++
+ 2 files changed, 132 insertions(+)
 
-diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-index 1fd4e0fff3..7acf62b226 100644
---- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
-+++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Keep the version and patches in sync with bluez5_utils
--BLUEZ5_UTILS_HEADERS_VERSION = 5.78
-+BLUEZ5_UTILS_HEADERS_VERSION = 5.79
- BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
-diff --git a/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch b/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 820a216735..3805fe13be 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2002,6 +2002,7 @@ F:	support/testing/tests/package/test_which.py
+ F:	support/testing/tests/package/test_wine.py
+ F:	support/testing/tests/package/test_xfsprogs.py
+ F:	support/testing/tests/package/test_xfsprogs/
++F:	support/testing/tests/package/test_xvisor.py
+ F:	support/testing/tests/package/test_xz.py
+ F:	support/testing/tests/package/test_z3.py
+ F:	support/testing/tests/package/test_z3/
+diff --git a/support/testing/tests/package/test_xvisor.py b/support/testing/tests/package/test_xvisor.py
 new file mode 100644
-index 0000000000..dc823e9277
+index 0000000000..b1b7d1a5e0
 --- /dev/null
-+++ b/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
-@@ -0,0 +1,33 @@
-+From 9d69dba21f1e46b34cdd8ae27fec11d0803907ee Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Gu=C3=B0ni=20M=C3=A1r=20Gilbert?= <gudni.m.g@gmail.com>
-+Date: Sat, 2 Nov 2024 16:10:18 +0000
-+Subject: [PATCH] gdbus: define MAX_INPUT for musl
++++ b/support/testing/tests/package/test_xvisor.py
+@@ -0,0 +1,131 @@
++import os
++import re
 +
-+This is the same solution as was done in src/shared/util.c
++import infra.basetest
 +
-+Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=9d69dba21f1e46b34cdd8ae27fec11d0803907ee
-+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-+---
-+ gdbus/object.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
 +
-+diff --git a/gdbus/object.c b/gdbus/object.c
-+index 84f116bf1..7b0476f1a 100644
-+--- a/gdbus/object.c
-++++ b/gdbus/object.c
-+@@ -20,6 +20,12 @@
-+ #include <dbus/dbus.h>
-+ 
-+ #include "gdbus.h"
-++
-++/* define MAX_INPUT for musl */
-++#ifndef MAX_INPUT
-++#define MAX_INPUT _POSIX_MAX_INPUT
-++#endif
-++
-+ #include "src/shared/util.h"
-+ 
-+ #define info(fmt...)
-+-- 
-+2.45.2
++class TestXvisor(infra.basetest.BRTest):
++    # RISC-V 64bit is the "simplest" configuration to run
++    # Xvisor into QEmu.
++    config = \
++        """
++        BR2_riscv=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_PACKAGE_XVISOR=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_TARGET_OPENSBI=y
++        BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
++        BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.5"
++        BR2_TARGET_OPENSBI_PLAT="generic"
++        BR2_PACKAGE_HOST_QEMU=y
++        BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
++        """
++    xvisor_prompt = "XVisor# "
 +
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index 41e39e0b5c..9b39b19c08 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256  830fed1915c5d375b8de0f5e6f45fcdea0dcc5ff5ffb3d31db6ed0f00d73c5e3  bluez-5.78.tar.xz
-+sha256  4164a5303a9f71c70f48c03ff60be34231b568d93a9ad5e79928d34e6aa0ea8a  bluez-5.79.tar.xz
- # Locally computed
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 717c10e870..1695aeb210 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Keep the version and patches in sync with bluez5_utils-headers
--BLUEZ5_UTILS_VERSION = 5.78
-+BLUEZ5_UTILS_VERSION = 5.79
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
++    def expect_xvisor_prompt(self, timeout=-1):
++        self.emulator.qemu.expect(self.xvisor_prompt, timeout=timeout)
++
++    def run_xvisor_cmd(self, cmd, timeout=-1):
++        exit_code = 0
++        if timeout != -1:
++            timeout *= self.emulator.timeout_multiplier
++        self.emulator.qemu.sendline(cmd)
++        self.expect_xvisor_prompt(timeout)
++        output = self.emulator.qemu.before.replace("\r\r", "\r").splitlines()[1:]
++        # Some Xvisor commands (like "sleep") might not
++        # produce any output
++        if len(output) > 0:
++            last_line = output[-1]
++        else:
++            last_line = ""
++        if last_line.startswith("Error:"):
++            match = re.search(last_line, r"code (-?\d)")
++            if match is None:
++                exit_code = -1
++            else:
++                exit_code = int(match.group(1))
++
++        return output, exit_code
++
++    def assertXvRunOk(self, cmd, timeout=-1):
++        out, exit_code = self.run_xvisor_cmd(cmd, timeout)
++        self.assertEqual(
++            exit_code,
++            0,
++            "\nFailed to run xvisor command: {}\noutput was:\n{}".format(
++                cmd, '  '+'\n  '.join(out))
++        )
++
++    def test_run(self):
++        opensbi = os.path.join(self.builddir, "images", "fw_jump.bin")
++        xvisor = os.path.join(self.builddir, "images", "vmm.bin")
++        initrd = os.path.join(self.builddir, "images", "rootfs.cpio")
++
++        self.emulator.boot(arch="riscv64",
++                           kernel=xvisor,
++                           options=["-M", "virt", "-cpu", "rv64", "-m", "256M",
++                                    "-bios", opensbi, "-initrd", initrd])
++
++        # There is no emulator.login(), since we start directly in
++        # Xvisor prompt.
++        self.expect_xvisor_prompt()
++
++        # Check Xvisor version.
++        output, exit_code = self.run_xvisor_cmd("version")
++        self.assertEqual(exit_code, 0)
++        self.assertTrue(output[0].startswith("Xvisor"))
++
++        # Check a basic echo.
++        test_str = "Hello Buildroot!"
++        output, exit_code = self.run_xvisor_cmd("echo " + test_str)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output[0].strip(), test_str)
++
++        # Check a nonexisting command fails.
++        _, exit_code = self.run_xvisor_cmd("bad_command")
++        self.assertNotEqual(exit_code, 0)
++
++        # Check an error of a valid command.
++        _, exit_code = self.run_xvisor_cmd("vfs ls /nodir")
++        self.assertNotEqual(exit_code, 0)
++
++        # We mount the initrd...
++        self.assertXvRunOk("vfs mount initrd /")
++
++        # Check we see an existing file/symlink "os-release" in
++        # "/etc", from our mounted initrd.
++        output, exit_code = self.run_xvisor_cmd("vfs ls /etc")
++        self.assertEqual(exit_code, 0)
++        self.assertIn("os-release", "\n".join(output))
++
++        # Check the word "Buildroot" is in the /etc/issue file.
++        output, exit_code = self.run_xvisor_cmd("vfs cat /etc/issue")
++        self.assertEqual(exit_code, 0)
++        self.assertIn("Buildroot", "\n".join(output))
++
++        # Check qemu is seen in host info.
++        output, exit_code = self.run_xvisor_cmd("host info")
++        self.assertEqual(exit_code, 0)
++        self.assertIn("qemu", "\n".join(output))
++
++        # Run a batch of status commands...
++        cmds = [
++            "blockdev list",
++            "rbd list",
++            "module info 0",
++            "wallclock get_time",
++            "heap info",
++            "thread list",
++            "vcpu list",
++            "vcpu dumpreg 0",
++            "devtree node show /",
++            "host cpu info",
++            "host ram info",
++            "host resources",
++            "host bus_list",
++            "host bus_device_list platform"
++        ]
++
++        for cmd in cmds:
++            self.assertXvRunOk(cmd)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
