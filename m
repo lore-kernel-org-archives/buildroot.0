@@ -1,52 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59551E7718F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Dec 2024 18:22:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0BCFE77194
+	for <buildroot@archiver.kernel.org>; Mon, 30 Dec 2024 18:24:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D13A8132E;
-	Mon, 30 Dec 2024 18:22:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89C4C40627;
+	Mon, 30 Dec 2024 18:24:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zWU0KrNEqM2W; Mon, 30 Dec 2024 18:22:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id phEbeKTW-Xc3; Mon, 30 Dec 2024 18:24:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F18081323
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66E7A406D1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F18081323;
-	Mon, 30 Dec 2024 18:22:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AF31ACA
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 18:22:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 66E7A406D1;
+	Mon, 30 Dec 2024 18:24:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B7AF6968
+ for <buildroot@buildroot.org>; Mon, 30 Dec 2024 18:24:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B58881322
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 18:22:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 968F740627
+ for <buildroot@buildroot.org>; Mon, 30 Dec 2024 18:24:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JA6OkewMLjXd for <buildroot@buildroot.org>;
- Mon, 30 Dec 2024 18:22:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1EF980512
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E1EF980512
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 18:22:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CBDEF828A6; Mon, 30 Dec 2024 18:22:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aJKXUzIgzkGB for <buildroot@buildroot.org>;
+ Mon, 30 Dec 2024 18:24:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A1C84406D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1C84406D7
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A1C84406D7
+ for <buildroot@buildroot.org>; Mon, 30 Dec 2024 18:24:17 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 8275878050F;
+ Mon, 30 Dec 2024 19:24:12 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:39866])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 30 Dec 2024 19:24:12 +0100
+MIME-Version: 1.0
+Date: Mon, 30 Dec 2024 19:24:12 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 30 Dec 2024 19:18:59 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f942a236e4eefad8f044bd1727a0b5c76b33e421
-X-Git-Newrev: 5dae966a30c5485e45b94f750a739d36810cba4c
-X-Patchwork-Hint: ignore
-Message-Id: <20241230182234.CBDEF828A6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] linux: select
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+In-Reply-To: <b58674e6-2aa1-4f27-831a-be9461070242@korsgaard.com>
+References: <20241229093332.334759-1-thomas.petazzoni@bootlin.com>
+ <4ec6a821a844d53ce68489983d4e4068@free.fr>
+ <20241229210352.684be2d5@windsurf>
+ <b58674e6-2aa1-4f27-831a-be9461070242@korsgaard.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <1ebf8adf851467fc9965ffdc5949688d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1735583054;
+ bh=3FkH8lzxh42DPqFHjeToaww/yrpCq9cWHBcu4aeO05Y=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=drvJyJcFO5HAcofanvFuN6R4r0MhTxGgTfCKUsmw8Hw0mI66guOTXtyOveEGhcU2V
+ TvqqKI4DKOyirooEI7khc76EN8YKODDp4fD8K0ts2NDV5Z6MiMTgeclrqBj32wjZ0L
+ rsgBqxkd6zw0NM/9sOVp4egPDobdRiHQsqf5Nf/XK3/ceX/TmG20D4Tq36A67EtlcB
+ Y3MBglMEOJ0BEKvnxKMuU2hY+iv5pjV8ntaVZN9V8EvhPMf4zbwu2s4wRvoycrfpr1
+ 0KdSTl+8BzgqBHOz/cR9pKz+7MY1yHy+d/PZVfRlYH3KOiD9sgcEMOMY/dpdUXk7Hp
+ KyQyr1P6Irvog==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=drvJyJcF
+Subject: Re: [Buildroot] [PATCH] linux: select
  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL when needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,56 +86,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5dae966a30c5485e45b94f750a739d36810cba4c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter, Thomas,
 
-The autobuilders are regularly reporting issues when building the
-Linux kernel due to BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL not being
-enabled.
+On 30/12/2024 13:43, Peter Korsgaard wrote:
+> On 12/29/24 21:03, Thomas Petazzoni wrote:
+> 
+>> I am not sure myself what is the right solution here. I'm trying to
+>> avoid recurring autobuilder failures. I discussed this topic some time
+>> ago with Peter. My idea was to do tweaks in utils/genrandconfig, but
+>> Peter was on the opinion that we should deal with those issues 
+>> directly
+>> in the linux package, so that it doesn't just benefit the 
+>> autobuilders,
+>> but also our users.
+>> 
+>> Clearly, it's going to be a cat-and-mouse game: we discover issues in
+>> the autobuilders and address them. This is for example the case for 
+>> the
+>> x86-64 situation you reported. But for example, I only took care of 
+>> the
+>> "latest kernel version" case, but we might have similar issues for the
+>> CIP versions as well. My idea was to simply deal with those
+>> progressively, improving the logic as we discover new cases.
+>> 
+>> Note that I am not 100% sure of what the best approach is. Maybe it's
+>> one of those cases where we simply to try one approach, and decide
+>> later if it was the right approach or not?
+> 
+> Yes, I think the complexity is more or less the same (+/- differences 
+> in kconfig vs python) no matter where we put it, so having it in 
+> kconfig and helping everyone rather than just the autobuilders IMHO 
+> makes most sense.
+> 
+> But lets see how complicated it turns out over time.
 
-Since the autobuilders are always using
-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG, let's have this option
-select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL when the latest kernel is
-used.
+Thanks for the clarifications.
 
-For now, we enable this for ARC, Sparc and x86-64, but it might have
-to be extended for additional architectures based on build results.
+I applied the patch to master.
 
-Fixes:
+In the future, if those conditions become too complex, we could still 
+adopt
+the same strategy as for  the _ARCH_SUPPORTS (i.e. moving the complex
+conditions in hidden Kconfig symbols). This should keep the symbol
+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG readable.
 
-  http://autobuild.buildroot.net/results/596699ede6e651163a23fa50386d84aca24c9a28
-  http://autobuild.buildroot.net/results/77a767bcd78f9ed21668cc268e91a4584a821661
-  http://autobuild.buildroot.net/results/e846d13c9f001b76a08ffb94f69c8dd26b4f5811
+Best regards,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- linux/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/linux/Config.in b/linux/Config.in
-index 5d348693c2..89b2e110a8 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -168,6 +168,12 @@ config BR2_LINUX_KERNEL_USE_DEFCONFIG
- 
- config BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
- 	bool "Use the architecture default configuration"
-+	# We know that the default configuration on some architectures
-+	# requires host-openssl, so select it for the latest kernel
-+	# version. This is mainly needed to fix autobuilder testing.
-+	select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL if \
-+	       BR2_LINUX_KERNEL_LATEST_VERSION && \
-+	       (BR2_arcle || BR2_arceb || BR2_sparc || BR2_x86_64)
- 	help
- 	  This option will use the default configuration for the
- 	  selected architecture. I.e, it is equivalent to running
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
