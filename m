@@ -1,103 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68C9AE77188
-	for <buildroot@archiver.kernel.org>; Mon, 30 Dec 2024 11:37:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0EDFE77188
+	for <buildroot@archiver.kernel.org>; Mon, 30 Dec 2024 11:38:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2D1368101D;
-	Mon, 30 Dec 2024 11:37:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9944C4074B;
+	Mon, 30 Dec 2024 11:38:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vtY0IF_kXuZb; Mon, 30 Dec 2024 11:37:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eberKlOcKXa6; Mon, 30 Dec 2024 11:38:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22D30810E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFCDA40749
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22D30810E7;
-	Mon, 30 Dec 2024 11:37:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C2981C8
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 11:37:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BFCDA40749;
+	Mon, 30 Dec 2024 11:38:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C16CFCA
+ for <buildroot@buildroot.org>; Mon, 30 Dec 2024 11:38:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A345860AC1
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 11:37:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF0CB400C8
+ for <buildroot@buildroot.org>; Mon, 30 Dec 2024 11:38:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OdJXC4VGhtAM for <buildroot@buildroot.org>;
- Mon, 30 Dec 2024 11:37:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b0jKB6_reQxE for <buildroot@buildroot.org>;
+ Mon, 30 Dec 2024 11:38:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::530; helo=mail-ed1-x530.google.com;
+ client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
  envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D459A60A5B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D459A60A5B
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D459A60A5B
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 11:37:39 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id
- 4fb4d7f45d1cf-5d3e9f60bf4so15500697a12.3
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 03:37:39 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 304A040DD6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 304A040DD6
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 304A040DD6
+ for <buildroot@buildroot.org>; Mon, 30 Dec 2024 11:38:12 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-aabfb33aff8so1583927866b.0
+ for <buildroot@buildroot.org>; Mon, 30 Dec 2024 03:38:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1735558657; x=1736163457;
+ d=1e100.net; s=20230601; t=1735558690; x=1736163490;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=QwS/4ghX/4JNoeE0Q2IyFSWj4mtkgSp1aIEd9QarE4U=;
- b=tn7zhfM7DJNvXtQMACBFiPa6A0xjVwbB3TznbUfH58T525Jd+SeiSKt1Qc757yJ80A
- qBExcbpXa0UlHRfy9H+uryWhoqGSoErj11Fs/6dU7+C/JF/Oouz3XxTO5gN2UoyjkLgM
- w/ljIT+wMuZF5sI/I1SS0GmoOYle4IJrQiBWHL/ql5u/kJFd23fMblwB0FLA3RV+v7qd
- 7l/p2is+SutssOJ944r4FlJpRmN1BsY6/4ZpS2laCXlARkP5JSY8PWpHZCdqhjQeMzgA
- mRDU2I/A8XOX3WnVSLv16TiLfPAIFFws9jZh+NXUMlrjbQoZ9NkbaHP7t/W2M7M3dAcU
- B1rw==
-X-Gm-Message-State: AOJu0YztLBLvzCkkJW+Ys+QwdDM02SA1UWWQewBGjxXHcs8GWK9QYqXk
- 9zKoz0KN92FlfW2/gvNCF7TSLsFLpyZBXs37g8RIPuqeVbc0mMOSPw9FRg==
-X-Gm-Gg: ASbGncvieWHi6r84oPRN0on+POmTYKCQGyDM6OZyLtu+TyFldelnN0I9a6ygLzRzO6H
- vMJh9eXwaCBNPLYvkRqzLXnLmD14ks7Fwgj6+J2OPaqRMVqMDIdFnKr2TUi6OD1XVQFT3R3AHr5
- LMcYpVoHwTsqeVAi8ivmui3nxxSKqt6845ye0mR7tQWso1H916fr6dYv4h+mU3Yi17KGSjsRso5
- ii7p/FVIZ7nrOVcvBnRH86Rq/Vi4PiMM3JAe2WZi8Nfwb3kQt/Ri9AY+P4/DJJjK1MOf6Wj
-X-Google-Smtp-Source: AGHT+IH1uw/nOH0FmQAQRs0SRe/kl1B2C892tVZFOuEzrz3sKjQN0fivrqKsOuMqNW4yM3ZDUaIFSQ==
-X-Received: by 2002:a17:907:1b81:b0:aae:bac6:6659 with SMTP id
- a640c23a62f3a-aaebac6712bmr1933762066b.7.1735558656978; 
- Mon, 30 Dec 2024 03:37:36 -0800 (PST)
+ bh=cuM3MqBttTdRu2T9SPNeFRmPASd+HvjMFA60K+GY1Xs=;
+ b=ppPyHzXLHvnncOZTIEIvoRQMcXGjBW/zjSrIHekiddHNJtiKwqwklXLh9gpnn9EBwV
+ zhEU/tsOgX3Alv6sfDfLOsnTum/UmLAlPEEicOCp2N3nziR8yqBLnhP1pv7oOSiD30uu
+ 8dpQYI9xXIr24kj7tj8lROLlik0L9uaLJj6z6aEdgzIXZrzsFjaqXLN4quOdArT7sM2e
+ GML/Xrd8BcAIgYDdnvPwBH/NEDnOnbWglDtBvBbEqTnAPRmZ9hfWcDxopjWiDbTtX4Jq
+ b/9eaYJnXdwRBrODOTEwvxDJChqJCIvvtEUdDlM22UXBdRmVcNMOVDF/cEJh36Ume+dM
+ apTg==
+X-Gm-Message-State: AOJu0YzYAQTtdd3BCk9j1i22qiaYlgtWHQAjK6LNGLlEW3GHUoV9AvDY
+ 0RsWHGy53xKNf66fYUTySaauFlKvvDZcoYzZg8ley5YkIqQgJ7er9TKIvg==
+X-Gm-Gg: ASbGnctOJWzkC1OZlC7SQR7O6Hzb5DkLE+4F/6Qgr1kk3IagxTi6ck0aK4ZXaGR3Pmi
+ GIzHOL03+fyZBJg5OR3vYReXTE7MBIc21cwYgpMRcnkRgn/LgGZbToIad7BVztobJX7heqFWJ27
+ 8lAyrCqSEWwkehbBweaIwhuB9/pO+J2xssPDdyVzAz1i5I5mbsXW6W/4hnqvlxKM7gwFDx1UX1m
+ 9J7AIPgMaG/2/YLBmolVlRxtvv283YP5DFiOXl/swNLxfSWe2wqkZ93EJkezZI3pB7Ct+Du
+X-Google-Smtp-Source: AGHT+IFnrCVuCDUpsSgbydoCSxuDMZ9QyYRH+JzhwPOILdsOQuIaMjKV36O7uHZ4CCk6QR5oaEOGuA==
+X-Received: by 2002:a17:907:97ce:b0:aab:73c2:a03 with SMTP id
+ a640c23a62f3a-aac33500857mr2595275866b.8.1735558689508; 
+ Mon, 30 Dec 2024 03:38:09 -0800 (PST)
 Received: from hthiery.fritz.box ([2a02:810b:5a04:dd00:18f9:775f:be73:a0e3])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-aac0efe46d5sm1471216666b.103.2024.12.30.03.37.36
+ a640c23a62f3a-aac0efe46d5sm1471216666b.103.2024.12.30.03.38.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 30 Dec 2024 03:37:36 -0800 (PST)
+ Mon, 30 Dec 2024 03:38:08 -0800 (PST)
 From: Heiko Thiery <heiko.thiery@gmail.com>
 To: buildroot@buildroot.org
 Cc: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>,
  Heiko Thiery <heiko.thiery@gmail.com>, Fiona Klute <fiona.klute@gmx.de>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Dec 2024 12:37:11 +0100
-Message-Id: <20241230113710.679717-4-heiko.thiery@gmail.com>
+Date: Mon, 30 Dec 2024 12:37:14 +0100
+Message-Id: <20241230113710.679717-5-heiko.thiery@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20241230113710.679717-1-heiko.thiery@gmail.com>
 References: <20241230113710.679717-1-heiko.thiery@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1735558657; x=1736163457; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1735558690; x=1736163490; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=QwS/4ghX/4JNoeE0Q2IyFSWj4mtkgSp1aIEd9QarE4U=;
- b=kOBBdFULPUqeirow5XLjbjOTGIqrO698T1we9HXRA6ykW9NBZlUbotrw0qX7X535xo
- xw93dWD4HnUAAmhTycwR2oOA4My/nAZJA1G1L4BqDBZIfjX4h48qdx4zdju+2kMvPm4R
- V1Vzwpk8qXR2S7fwavSSfJzry79aIIpBrUbvuHDd0fLZQT77FToIuE7EBMFfI9S30BYQ
- UM36gWpqzeORJZo49hmE0gAbTp7IXRwPj6BZN9YkZwnglphsqCG/wXbPK1+WB80zkP9c
- 30PnoOZB8z1z+1rjfuDAPt85E8HZ3dD+QVzMEcLexsdvNrrYxTzJY+10VFoTvJetnP0s
- Hx5A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=cuM3MqBttTdRu2T9SPNeFRmPASd+HvjMFA60K+GY1Xs=;
+ b=CpjTUmjlD/NnZE0/xFHoeYjE+oCwhjOfKcgbXDk7cdilGFVHgkVNQpiLlsGoAK4yoe
+ zduuD+OfXPvrLWu3kJui8ml+d8Ps3WZoyh+wPrZLMK+eR+RRkRR5erBZwHWPi7qNd1OC
+ Y7v0QbaqO0CEHMpsemS5j21JSoLuYhkrI/rCj1I1AZ1ZG+FnLX+wI4PKP5RsfA6KEEvu
+ u5uCSta0mU7hAFaz1CEOV74GiiFWaKFtg0GWx3NsuLQhWmALBfUUFRO4jRGbZPATaBtX
+ ECDphfg5CXv68takiI3iFxH0pVucCH5wB0a+iMrgv+rcNgVx7747iu6H5e5EfC7P9dMK
+ wFOQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=kOBBdFUL
-Subject: [Buildroot] [PATCH v3 3/6] package/sysrepo: bump to version 2.11.7
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=CpjTUmjl
+Subject: [Buildroot] [PATCH v3 4/6] package/netopeer2: bump to version 2.2.31
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,104 +115,128 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add new config options to enable/disable binary tools/daemon. By default
-this options are enabled.
-
-Also some sysv init script shellcheck warnings are fixed.
+Add select for BR2_PACKAGE_LIBCURL since this is a requirement for
+libnetconf2 to add TLS_SSH support.
+Package configuration option to set ssh authorized keys format
+and option to enable/disable calling syrepo setup script.
+The utils/check-package script complained about the init script, so this
+is fixed in advance.
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/sysrepo/Config.in          | 21 +++++++++++++++++++++
- package/sysrepo/S51sysrepo-plugind |  3 ++-
- package/sysrepo/sysrepo.hash       |  2 +-
- package/sysrepo/sysrepo.mk         |  5 ++++-
- 4 files changed, 28 insertions(+), 3 deletions(-)
 
-diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
-index b1535bed9f..ff75575952 100644
---- a/package/sysrepo/Config.in
-+++ b/package/sysrepo/Config.in
-@@ -16,6 +16,27 @@ config BR2_PACKAGE_SYSREPO
- 
- if BR2_PACKAGE_SYSREPO
- 
-+config BR2_PACKAGE_SYSREPO_SYSREPOCFG
-+	bool "enable sysrepocfg"
-+	default y
-+	help
-+	  Enable sysrepocfg.
-+	  Build binary tool sysrepocfg
-+
-+config BR2_PACKAGE_SYSREPO_SYSREPOCTL
-+	bool "enable sysrepoctl"
-+	default y
-+	help
-+	  Enable sysrepoctl.
-+	  Build binary tool sysrepoctl
-+
-+config BR2_PACKAGE_SYSREPO_PLUGIND
-+	bool "enable sysrepo-plugind"
-+	default y
-+	help
-+	  Enable sysrepo-plugind.
-+	  Build binary daemon sysrepo-plugind
-+
- config BR2_PACKAGE_SYSREPO_EXAMPLES
- 	bool "enable examples"
+v3: (after review comments from Thomas Pettazoni)
+    - remove 'select BR2_PACKAGE_OPENSSL' since it is now required by
+      libnetconf2 unconditionally
+    - fix typo in help text for BR2_PACKAGE_NETOPEER2_SSH_AUTHORIZED_KEYS_FORMAT
+    - change SSH_AUTHORIZED_KEYS_FORMAT setting
+
+ package/netopeer2/Config.in                     | 17 +++++++++++++++--
+ .../{S52netopeer2 => S52netopeer2-server}       |  2 +-
+ package/netopeer2/netopeer2.hash                |  2 +-
+ package/netopeer2/netopeer2.mk                  | 13 ++++++++++---
+ 4 files changed, 27 insertions(+), 7 deletions(-)
+ rename package/netopeer2/{S52netopeer2 => S52netopeer2-server} (92%)
+
+diff --git a/package/netopeer2/Config.in b/package/netopeer2/Config.in
+index db31a786a1..dc7bd647eb 100644
+--- a/package/netopeer2/Config.in
++++ b/package/netopeer2/Config.in
+@@ -14,9 +14,9 @@ config BR2_PACKAGE_NETOPEER2
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # sysrepo
+ 	select BR2_PACKAGE_LIBNETCONF2
+ 	select BR2_PACKAGE_LIBSSH
+-	select BR2_PACKAGE_LIBSSH_SERVER # For libnetconf2 to have SSH
++	select BR2_PACKAGE_LIBSSH_SERVER # For libnetconf2 to have SSH/TLS support
++	select BR2_PACKAGE_LIBCURL # For libnetconf2 to have SSH/TLS support
+ 	select BR2_PACKAGE_LIBYANG
+-	select BR2_PACKAGE_OPENSSL # For libnetconf2 to have TLS
+ 	select BR2_PACKAGE_SYSREPO
  	help
-diff --git a/package/sysrepo/S51sysrepo-plugind b/package/sysrepo/S51sysrepo-plugind
-index 60ea3ba7a9..4bee6c1705 100644
---- a/package/sysrepo/S51sysrepo-plugind
-+++ b/package/sysrepo/S51sysrepo-plugind
-@@ -10,6 +10,7 @@ SYSREPO_PLUGIND_ARGS=""
+ 	  Netopeer2 is a set of tools implementing network configuration
+@@ -33,4 +33,17 @@ config BR2_PACKAGE_NETOPEER2_CLI
+ 	help
+ 	  Enable netopeer2 CLI.
+ 
++config BR2_PACKAGE_NETOPEER2_SSH_AUTHORIZED_KEYS_FORMAT
++	string "ssh authorized keys format"
++	help
++	  sshd-like pattern (with '%h', '%u', '%U') for determining
++	  path to users SSH authorized_keys file
++
++config BR2_PACKAGE_NETOPEER2_SYSREPO_SETUP
++	bool "sysrepo modules setup"
++	default y
++	help
++	  Install required sysrepo modules with their default
++	  configuration into sysrepo using a script
++
+ endif
+diff --git a/package/netopeer2/S52netopeer2 b/package/netopeer2/S52netopeer2-server
+similarity index 92%
+rename from package/netopeer2/S52netopeer2
+rename to package/netopeer2/S52netopeer2-server
+index cadd6b9feb..3fd993b578 100644
+--- a/package/netopeer2/S52netopeer2
++++ b/package/netopeer2/S52netopeer2-server
+@@ -7,7 +7,7 @@ NETOPEER2_SERVER_ARGS=""
  
  start() {
  	printf 'Starting %s: ' "$DAEMON"
+-
 +	# shellcheck disable=SC2086 # we need the word splitting
- 	start-stop-daemon -S -q -x "$EXECUTABLE" \
- 		-- $SYSREPO_PLUGIND_ARGS
+ 	start-stop-daemon -S -q -p $PIDFILE -x "/usr/sbin/$DAEMON" \
+ 		-- $NETOPEER2_SERVER_ARGS
  	status=$?
-@@ -45,7 +46,7 @@ reload() {
- }
- 
- case "$1" in
--    start|stop|restart|reload)
-+	start|stop|restart|reload)
- 		"$1";;
- 	*)
- 		echo "Usage: $0 {start|stop|restart|reload}"
-diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
-index 056f70787d..93c336e1a9 100644
---- a/package/sysrepo/sysrepo.hash
-+++ b/package/sysrepo/sysrepo.hash
+diff --git a/package/netopeer2/netopeer2.hash b/package/netopeer2/netopeer2.hash
+index 6a278fbbaf..853696ae79 100644
+--- a/package/netopeer2/netopeer2.hash
++++ b/package/netopeer2/netopeer2.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  467efed8d0f62c26a0d200602b911096eb2d67858e620937ab68f96b316fa9b7  sysrepo-2.2.150.tar.gz
-+sha256  45a98a71827dd1428e2c6b7dedea47558cdfbc491042bbdbc0c52e607ab8266e  sysrepo-2.11.7.tar.gz
- sha256  88f1b7e5c64d2c113e07105aa9c0fb80639b40287565be1c2afd0949df83d826  LICENSE
-diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-index 7f2570bd7d..c215be0159 100644
---- a/package/sysrepo/sysrepo.mk
-+++ b/package/sysrepo/sysrepo.mk
+-sha256  2b1daac037f18c303e0c0dc3318ba30196459472e4c59f2f8547ee74d4cdf31d  netopeer2-2.1.49.tar.gz
++sha256  99c4827626852f9d4028330a79efa0b291580aceb0bfd8ae9aaf4ecea66ccc3b  netopeer2-2.2.31.tar.gz
+ sha256  b46f161fbdcf127d3ef22602e15958c3092fe3294f71a2dc8cdf8f6689cba95b  LICENSE
+diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
+index 47fcd31acd..5edb59efdb 100644
+--- a/package/netopeer2/netopeer2.mk
++++ b/package/netopeer2/netopeer2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSREPO_VERSION = 2.2.150
-+SYSREPO_VERSION = 2.11.7
- SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
- SYSREPO_INSTALL_STAGING = YES
- SYSREPO_LICENSE = BSD-3-Clause
-@@ -18,6 +18,9 @@ endif
+-NETOPEER2_VERSION = 2.1.49
++NETOPEER2_VERSION = 2.2.31
+ NETOPEER2_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_VERSION))
+ NETOPEER2_DL_SUBDIR = netopeer2
+ NETOPEER2_LICENSE = BSD-3-Clause
+@@ -17,8 +17,15 @@ endif
  
- SYSREPO_CONF_OPTS = \
- 	-DBUILD_EXAMPLES=$(if $(BR2_PACKAGE_SYSREPO_EXAMPLES),ON,OFF) \
-+	-DENABLE_SYSREPOCFG=$(if $(BR2_PACKAGE_SYSREPO_SYSREPOCFG),ON,OFF) \
-+	-DENABLE_SYSREPOCTL=$(if $(BR2_PACKAGE_SYSREPO_SYSREPOCTL),ON,OFF) \
-+	-DENABLE_SYSREPO_PLUGIND=$(if $(BR2_PACKAGE_SYSREPO_PLUGIND),ON,OFF) \
- 	-DENABLE_TESTS=OFF \
- 	-DENABLE_VALGRIND_TESTS=OFF \
- 	-DREPO_PATH=/etc/sysrepo
+ NETOPEER2_CONF_OPTS = \
+ 	-DBUILD_CLI=$(if $(BR2_PACKAGE_NETOPEER2_CLI),ON,OFF) \
++	-DSYSREPO_SETUP=$(if $(BR2_PACKAGE_NETOPEER2_SYSREPO_SETUP),ON,OFF) \
+ 	-DENABLE_TESTS=OFF
+ 
++NETOPEER2_SSH_AUTHORIZED_KEYS_FORMAT = $(call qstrip,$(BR2_PACKAGE_NETOPEER2_SSH_AUTHORIZED_KEYS_FORMAT))
++ifneq ($(NETOPEER2_SSH_AUTHORIZED_KEYS_FORMAT),)
++NETOPEER2_CONF_OPTS += \
++	-DSSH_AUTHORIZED_KEYS_FORMAT="$(NETOPEER2_SSH_AUTHORIZED_KEYS_FORMAT)"
++endif
++
+ # Set a build specific SYSREPO_SHM_PREFIX to ensure we can safely delete the
+ # files. This also ensures that concurrent parallel builds will not be
+ # affected mutualy.
+@@ -29,8 +36,8 @@ NETOPEER2_MAKE_ENV = \
+ 	SYSREPO_SHM_PREFIX=$(NETOPEER2_SYSREPO_SHM_PREFIX)
+ 
+ define NETOPEER2_INSTALL_INIT_SYSV
+-	$(INSTALL) -m 755 -D package/netopeer2/S52netopeer2 \
+-		$(TARGET_DIR)/etc/init.d/S52netopeer2
++	$(INSTALL) -m 755 -D package/netopeer2/S52netopeer2-server \
++		$(TARGET_DIR)/etc/init.d/S52netopeer2-server
+ endef
+ 
+ # The host sysrepo used to install the netopeer2 modules will leave
 -- 
 2.39.2
 
