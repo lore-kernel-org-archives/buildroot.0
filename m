@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E4CCC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:48:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E907AC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:49:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20CEE80CEA;
-	Fri, 28 Feb 2025 16:48:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E454C43067;
+	Fri, 28 Feb 2025 16:49:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D1-H8xd0GprW; Fri, 28 Feb 2025 16:48:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RWmyKT11tKtI; Fri, 28 Feb 2025 16:49:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 224DF84A82
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 660004FE43
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 224DF84A82;
-	Fri, 28 Feb 2025 16:48:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 660004FE43;
+	Fri, 28 Feb 2025 16:49:00 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 06EDD1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:57 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A9D268
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:34:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 469F6426A5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7568A42E63
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3BkPLep_DH5B for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:13 +0000 (UTC)
+ id cFuomMhWU6J6 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ACA34263E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93FD24195D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2ACA34263E
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 93FD24195D
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2675082215; Fri, 28 Feb 2025 16:29:54 +0000 (UTC)
+ id 8FC568769C; Fri, 28 Feb 2025 16:29:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 29 Dec 2024 23:17:47 +0100
+Date: Mon, 30 Dec 2024 23:19:10 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 99b473c94868163ac40311dc488a6d8491568429
-X-Git-Newrev: 421a92a8973d23b017293ea8b776d34fb54a6b5e
+X-Git-Oldrev: b118c9dcf344c489b3e78a325060f01540f03eb3
+X-Git-Newrev: ca63c4409b3c811e8c4ee19c2860c53af35c4ce1
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162954.2675082215@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bluez5_utils: install
- datafiles with correct permissions
+Message-Id: <20250228162955.8FC568769C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libxml2: fix
+ compilation with GCC 14.x and uClibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,99 +61,201 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============9170986746186673054=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=421a92a8973d23b017293ea8b776d34fb54a6b5e
+--===============9170986746186673054==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=ca63c4409b3c811e8c4ee19c2860c53af35c4ce1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The datafiles include the dbus policy, without which bluetoothd fails
-to start (unless it is provided by other means):
+The patch fixes the following errors and warnings raised by the
+compilation of libxml2 with the combination of GCC 14.x and uClibc.
 
-# /usr/libexec/bluetooth/bluetoothd -n
-bluetoothd[1011]: Bluetooth daemon 5.78
-D-Bus setup failed: Connection ":1.7" is not allowed to own the service "org.bluez" due to security policies in the configuration file
-bluetoothd[1011]: src/main.c:main() Unable to get on D-Bus
+encoding.c: In function ‘xmlEncInputChunk’:
+encoding.c:2209:32: warning: comparison between pointer and integer
+ 2209 |     else if (handler->iconv_in != NULL) {
+      |                                ^~
+encoding.c: In function ‘xmlEncOutputChunk’:
+encoding.c:2269:33: warning: comparison between pointer and integer
+ 2269 |     else if (handler->iconv_out != NULL) {
+      |                                 ^~
+encoding.c: In function ‘xmlCharEncCloseFunc’:
+encoding.c:2681:29: warning: comparison between pointer and integer
+ 2681 |     if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
+      |                             ^~
+encoding.c:2681:60: warning: comparison between pointer and integer
+ 2681 |     if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
+      |                                                            ^~
+encoding.c:2683:32: warning: comparison between pointer and integer
+ 2683 |         if (handler->iconv_out != NULL) {
+      |                                ^~
+encoding.c:2686:32: error: assignment to ‘iconv_t’ {aka ‘long int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
+ 2686 |             handler->iconv_out = NULL;
+      |                                ^
+encoding.c:2688:31: warning: comparison between pointer and integer
+ 2688 |         if (handler->iconv_in != NULL) {
+      |                               ^~
+encoding.c:2691:31: error: assignment to ‘iconv_t’ {aka ‘long int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
+ 2691 |             handler->iconv_in = NULL;
+      |                               ^
+make[4]: *** [Makefile:1147: libxml2_la-encoding.lo] Error 1
 
-The installation issue 1a8676aa6e4b0e372a1a744eac6e53c90c03bf0e was
-meant to fix is the result of upstream incorrectly installing
-/etc/bluetooth with 0555 (strictly read-only) permissions.
+This code has been in libxml2 pretty much forever: it was partially
+introduced in version 2.1.0: 496a1cf59284 ("496a1cf59284 revamped the
+encoding support, added iconv support, so now libxml if") and
+partially in version 2.2.3: 87b953957305 ("Large sync between my W3C
+base and Gnome's one:"). And the first time Buildroot packaged
+libxml2, it was version 2.6.29.
 
-Fixes: 1a8676aa6e4b0e372a1a744eac6e53c90c03bf0e
+However, both glibc and musl define iconv_t as "void *", which meant
+the libxml2 code was not problematic. uClibc defines iconv_t as
+"long", which generated only a warning... until GCC got updated to GCC
+14.x, which turned this warning into an error, causing the build
+failure.
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Fixes:
+
+  http://autobuild.buildroot.net/results/fd4f8d2e8d8ee68d9e18f761ceff350188e55a87/
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...002-Leave-config-files-writable-for-owner.patch | 35 ++++++++++++++++++++++
- package/bluez5_utils/bluez5_utils.mk               |  4 ++-
- 2 files changed, 38 insertions(+), 1 deletion(-)
+ .../libxml2/0001-Fix-compilation-with-uclibc.patch | 114 +++++++++++++++++++++
+ 1 file changed, 114 insertions(+)
 
-diff --git a/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch b/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch
+diff --git a/package/libxml2/0001-Fix-compilation-with-uclibc.patch b/package/libxml2/0001-Fix-compilation-with-uclibc.patch
 new file mode 100644
-index 0000000000..09ebe5edf1
+index 0000000000..aedad27e05
 --- /dev/null
-+++ b/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch
-@@ -0,0 +1,35 @@
-+From b1fd409960001a77cda2a09ecc00147ebd9c3667 Mon Sep 17 00:00:00 2001
-+From: Fiona Klute <fiona.klute@gmx.de>
-+Date: Mon, 9 Dec 2024 16:40:43 +0100
-+Subject: [PATCH BlueZ] build: Leave config files writable for owner
++++ b/package/libxml2/0001-Fix-compilation-with-uclibc.patch
+@@ -0,0 +1,114 @@
++From fc72e0833a4e5724aef604e2fd9adb1014cb4844 Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Date: Mon, 16 Dec 2024 17:23:23 +0100
++Subject: [PATCH] Fix compilation with uclibc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+This is needed for builds running as non-root users, so the build
-+process and any distribution tools can create/move/delete files in the
-+config directory without adjusting permissions separately. Limiting
-+writes from the running service needs to be done in the systemd unit
-+(already the case) or init script.
++The patch fixes the following errors and warnings raised by the
++compilation of the library with uClibc:
 +
-+See also: https://lore.kernel.org/linux-bluetooth/4d1206df-598b-4a68-8655-74981b62ecca@gmx.de/T/
-+Reviewed-by: Bastien Nocera <hadess@hadess.net>
-+Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=b1fd409960001a77cda2a09ecc00147ebd9c3667
-+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
++encoding.c: In function ‘xmlEncInputChunk’:
++encoding.c:2209:32: warning: comparison between pointer and integer
++ 2209 |     else if (handler->iconv_in != NULL) {
++      |                                ^~
++encoding.c: In function ‘xmlEncOutputChunk’:
++encoding.c:2269:33: warning: comparison between pointer and integer
++ 2269 |     else if (handler->iconv_out != NULL) {
++      |                                 ^~
++encoding.c: In function ‘xmlCharEncCloseFunc’:
++encoding.c:2681:29: warning: comparison between pointer and integer
++ 2681 |     if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
++      |                             ^~
++encoding.c:2681:60: warning: comparison between pointer and integer
++ 2681 |     if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
++      |                                                            ^~
++encoding.c:2683:32: warning: comparison between pointer and integer
++ 2683 |         if (handler->iconv_out != NULL) {
++      |                                ^~
++encoding.c:2686:32: error: assignment to ‘iconv_t’ {aka ‘long int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
++ 2686 |             handler->iconv_out = NULL;
++      |                                ^
++encoding.c:2688:31: warning: comparison between pointer and integer
++ 2688 |         if (handler->iconv_in != NULL) {
++      |                               ^~
++encoding.c:2691:31: error: assignment to ‘iconv_t’ {aka ‘long int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
++ 2691 |             handler->iconv_in = NULL;
++      |                               ^
++make[4]: *** [Makefile:1147: libxml2_la-encoding.lo] Error 1
++
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/commit/fc72e0833a4e5724aef604e2fd9adb1014cb4844
 +---
-+ Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ encoding.c | 20 ++++++++++----------
++ 1 file changed, 10 insertions(+), 10 deletions(-)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index 297d0774c..29018a91c 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -32,7 +32,7 @@ confdir = $(sysconfdir)/bluetooth
-+ statedir = $(localstatedir)/lib/bluetooth
++diff --git a/encoding.c b/encoding.c
++index 14ffafddbc02..41ecde1885e4 100644
++--- a/encoding.c
+++++ b/encoding.c
++@@ -1264,7 +1264,7 @@ DECLARE_ISO_FUNCS(16)
++ #endif /* LIBXML_ISO8859X_ENABLED */
 + 
-+ bluetoothd-fix-permissions:
-+-	install -dm555 $(DESTDIR)$(confdir)
-++	install -dm755 $(DESTDIR)$(confdir)
-+ 	install -dm700 $(DESTDIR)$(statedir)
++ #ifdef LIBXML_ICONV_ENABLED
++-  #define EMPTY_ICONV , (iconv_t) 0, (iconv_t) 0
+++  #define EMPTY_ICONV , (iconv_t) -1, (iconv_t) -1
++ #else
++   #define EMPTY_ICONV
++ #endif
++@@ -1389,8 +1389,8 @@ xmlNewCharEncodingHandler(const char *name,
++     handler->name = up;
 + 
-+ if DATAFILES
++ #ifdef LIBXML_ICONV_ENABLED
++-    handler->iconv_in = NULL;
++-    handler->iconv_out = NULL;
+++    handler->iconv_in = (iconv_t) -1;
+++    handler->iconv_out = (iconv_t) -1;
++ #endif
++ #ifdef LIBXML_ICU_ENABLED
++     handler->uconv_in = NULL;
++@@ -2200,7 +2200,7 @@ xmlEncInputChunk(xmlCharEncodingHandler *handler, unsigned char *out,
++         }
++     }
++ #ifdef LIBXML_ICONV_ENABLED
++-    else if (handler->iconv_in != NULL) {
+++    else if (handler->iconv_in != (iconv_t) -1) {
++         ret = xmlIconvWrapper(handler->iconv_in, out, outlen, in, inlen);
++     }
++ #endif /* LIBXML_ICONV_ENABLED */
++@@ -2260,7 +2260,7 @@ xmlEncOutputChunk(xmlCharEncodingHandler *handler, unsigned char *out,
++         }
++     }
++ #ifdef LIBXML_ICONV_ENABLED
++-    else if (handler->iconv_out != NULL) {
+++    else if (handler->iconv_out != (iconv_t) -1) {
++         ret = xmlIconvWrapper(handler->iconv_out, out, outlen, in, inlen);
++     }
++ #endif /* LIBXML_ICONV_ENABLED */
++@@ -2672,17 +2672,17 @@ xmlCharEncCloseFunc(xmlCharEncodingHandler *handler) {
++      * Iconv handlers can be used only once, free the whole block.
++      * and the associated icon resources.
++      */
++-    if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
+++    if ((handler->iconv_out != (iconv_t) -1) || (handler->iconv_in != (iconv_t) -1)) {
++         tofree = 1;
++-	if (handler->iconv_out != NULL) {
+++	if (handler->iconv_out != (iconv_t) -1) {
++ 	    if (iconv_close(handler->iconv_out))
++ 		ret = -1;
++-	    handler->iconv_out = NULL;
+++	    handler->iconv_out = (iconv_t) -1;
++ 	}
++-	if (handler->iconv_in != NULL) {
+++	if (handler->iconv_in != (iconv_t) -1) {
++ 	    if (iconv_close(handler->iconv_in))
++ 		ret = -1;
++-	    handler->iconv_in = NULL;
+++	    handler->iconv_in = (iconv_t) -1;
++ 	}
++     }
++ #endif /* LIBXML_ICONV_ENABLED */
 +-- 
-+2.45.2
++2.43.0
 +
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 7725fb94bf..e3b47e1e80 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -13,6 +13,9 @@ BLUEZ5_UTILS_LICENSE = GPL-2.0+, LGPL-2.1+
- BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
- BLUEZ5_UTILS_CPE_ID_VENDOR = bluez
- BLUEZ5_UTILS_CPE_ID_PRODUCT = bluez
-+# required because 0002-Leave-config-files-writable-for-owner.patch
-+# modifies Makefile.am
-+BLUEZ5_UTILS_AUTORECONF = YES
- 
- BLUEZ5_UTILS_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_BLUEZ5_UTILS_HEADERS),bluez5_utils-headers) \
-@@ -22,7 +25,6 @@ BLUEZ5_UTILS_DEPENDENCIES = \
- BLUEZ5_UTILS_CONF_OPTS = \
- 	--enable-library \
- 	--disable-cups \
--	--disable-datafiles \
- 	--disable-manpages \
- 	--disable-asan \
- 	--disable-lsan \
+
+--===============9170986746186673054==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============9170986746186673054==--
