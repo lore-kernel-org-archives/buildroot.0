@@ -1,107 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE3B7E77188
-	for <buildroot@archiver.kernel.org>; Mon, 30 Dec 2024 17:31:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E82B7E77188
+	for <buildroot@archiver.kernel.org>; Mon, 30 Dec 2024 18:05:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3468E60B0F;
-	Mon, 30 Dec 2024 17:31:50 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A9Hbi3TU1cTW; Mon, 30 Dec 2024 17:31:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33E9060B05
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33E9060B05;
-	Mon, 30 Dec 2024 17:31:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4FBF7968
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 17:31:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C7B14089D
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 17:31:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C7A24069D;
+	Mon, 30 Dec 2024 18:05:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TK4SNoHLvlB4 for <buildroot@buildroot.org>;
- Mon, 30 Dec 2024 17:31:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.167.47;
- helo=mail-lf1-f47.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ id TkokhwiQE_8I; Mon, 30 Dec 2024 18:05:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7727B406A0
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7727B406A0;
+	Mon, 30 Dec 2024 18:05:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 19B3DCA
+ for <buildroot@buildroot.org>; Mon, 30 Dec 2024 18:05:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0802C80AAB
+ for <buildroot@buildroot.org>; Mon, 30 Dec 2024 18:05:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZeN6H1zD-_2E for <buildroot@buildroot.org>;
+ Mon, 30 Dec 2024 18:05:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C0D9B40895
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0D9B40895
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com
- [209.85.167.47])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C0D9B40895
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 17:31:46 +0000 (UTC)
-Received: by mail-lf1-f47.google.com with SMTP id
- 2adb3069b0e04-540215984f0so9883261e87.1
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 09:31:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1735579904; x=1736184704;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Gbv2LlfQtlhSIMQRzcE3uuABNuYX1cyUIZCa+ENfgiY=;
- b=PM3hsuYkmrb2n3uthNO2Io2ANsGYqiIyk8Gj5W8YA/vqwXCRbQuZkiKNupGM3iP76d
- tKiI42KzbdUTbIgJbMAZKXg2FlwyHRAgYiv1FpDbDadIUHj9gf9NYSDmxyMomAbFVnES
- dlNUmbax5vGp5c7dQG1r9k1kDENgU87V8Jtrjxtb/2tLPP6wgADg6trWoSKOCSM2PlWg
- 9dK1cQGu8ckFtV7vLF+QcJpEXKhsALvbj2E/QP9KM21T6e+hjhOR4sHzmvDU9cURYkqs
- q8RmlWUyZV63X5+/zi2TNrxIfOHGDIASCCk9lRiG3N3V9tqNqgjss3cb1r+PN0sIZm2V
- 1P+A==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWX2+PrMKK6MAtWLDkbnr0b2O7n6BGfwryjtJ0JrjIdVv7Jb0DsxcabyvI21lLZ+D/VpBNDHd6psvc=@buildroot.org
-X-Gm-Message-State: AOJu0YyGmgoLny63g1UacpVHGjcyY+/1Gh4d5QSkRmJSRb+tLKY8oa11
- Say2BsNwctploimB/2f374o6YTowp96lHgu/j5oaXAjeDHJTNx0Ki8M67hVggak=
-X-Gm-Gg: ASbGncvMlIy3yK6JNIopzfZGmwuP26bIeDd+jQm/qsp6yYKc37DTPuipwggQjqvcZzo
- +GelX9ggHrRZZNpTVZuv3d8kryZuixHgVEtDhTlnAxaiIpXTz3rnOloZcaFdq8jroc9pYJFClcQ
- kHiFlA0DQ0jY3tTQWzJLqqWioZKErSatiSeEHTpneym6GHDt4a15AUiAXRch+7494P1Rmkt71ML
- 0mtYmEXKENtQolp2P8Zh+6TxDHkzKTF7luUOexoZXb2+kOEALSpV6BBYTnJABGRz9GBo846qysh
- GkJC0fxG5u8x6XeH2g==
-X-Google-Smtp-Source: AGHT+IEwnKeBc9ikqI3BRgQTwoBsLKLCnQote08ojYfwSaAKQAbNx58sMthzm76mvRbDGJe8iEsy3w==
-X-Received: by 2002:a05:6512:3994:b0:542:214c:532 with SMTP id
- 2adb3069b0e04-54229538b3amr9987672e87.13.1735579903627; 
- Mon, 30 Dec 2024 09:31:43 -0800 (PST)
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com.
- [209.85.167.43]) by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-542238216e9sm3144422e87.214.2024.12.30.09.31.42
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 30 Dec 2024 09:31:42 -0800 (PST)
-Received: by mail-lf1-f43.google.com with SMTP id
- 2adb3069b0e04-5401e6efffcso11509660e87.3
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 09:31:42 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCWKjKQzpwYoe+pY+umkZcSp9/KmXpN8Hdlz08xXhP0TaUEON0nzDbNPwUc8/v45ddT92NUWIZEvVAc=@buildroot.org
-X-Received: by 2002:a05:6512:110d:b0:540:2a92:7da9 with SMTP id
- 2adb3069b0e04-54229539f3dmr7310703e87.21.1735579902599; Mon, 30 Dec 2024
- 09:31:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20240917203311.1241557-1-thomas@devoogdt.com>
- <20241216181719.770389-1-thomas@devoogdt.com>
- <20241216181719.770389-2-thomas@devoogdt.com>
- <CACXRmJg8bzXKbHT48Ej8iUz3yzT18u3AtXep2-WVYKpsoTFyaQ@mail.gmail.com>
- <CACXRmJgAN=rDPQOtTufT0D7uWDp9o_W1xGN5EW6B_XFuQeR77Q@mail.gmail.com>
- <CACXRmJi-K=k+bwwhtVEjAOc6wEJaS1rg_5cDFwMY2nZmR24KVQ@mail.gmail.com>
- <20241229230256.609289ea@windsurf>
-In-Reply-To: <20241229230256.609289ea@windsurf>
-From: Thomas Devoogdt <thomas@devoogdt.com>
-Date: Mon, 30 Dec 2024 18:31:31 +0100
-X-Gmail-Original-Message-ID: <CACXRmJi=rGj9uA6R3fQ45sKuSy_+=Vi6u_Vdn_koVd4DkWZj8w@mail.gmail.com>
-Message-ID: <CACXRmJi=rGj9uA6R3fQ45sKuSy_+=Vi6u_Vdn_koVd4DkWZj8w@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>,
- James Hilliard <james.hilliard1@gmail.com>, 
- Thomas Devoogdt <thomas.devoogdt@barco.com>, buildroot@buildroot.org, 
- Adrian Perez de Castro <aperez@igalia.com>
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: Re: [Buildroot] [PATCH v3 2/2] package/webkitgtk: bump to 2.46.4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC71980AA2
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC71980AA2
+ for <buildroot@buildroot.org>; Mon, 30 Dec 2024 18:05:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D73C982891; Mon, 30 Dec 2024 18:05:35 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 30 Dec 2024 19:03:34 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c9e46575928a332ca04a16bfd77e23b44592072a
+X-Git-Newrev: f942a236e4eefad8f044bd1727a0b5c76b33e421
+X-Patchwork-Hint: ignore
+Message-Id: <20241230180535.D73C982891@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_riscv{32,
+ 64}_virt: bump OpenSBI to v1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,82 +59,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=f942a236e4eefad8f044bd1727a0b5c76b33e421
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This patchs bumps the OpenSBI of qemu_riscv{32,64}_virt to 1.6. The
+qemu commands in the readmes are adjusted to use OpenSBI's fw_jump.bin
+instead of fw_jump.elf, as the later causes ROM overlapping issues if
+OpenSBI 1.6 is used. See:
+https://github.com/riscv-software-src/opensbi/issues/372
 
->> Do you have a defconfig that exhibits the issue?
+This commit also updates the opensbi.hash file.
 
-I just used the test-pkg tool to figure this out.
+Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
+[Julien: update opensbi.hash]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ board/qemu/patches/opensbi/opensbi.hash | 2 +-
+ board/qemu/riscv32-virt/readme.txt      | 2 +-
+ board/qemu/riscv64-virt/readme.txt      | 2 +-
+ configs/qemu_riscv32_virt_defconfig     | 2 +-
+ configs/qemu_riscv64_virt_defconfig     | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-$ cat webkitgtk.config
-BR2_PACKAGE_WAYLAND=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-BR2_PACKAGE_LIBGTK3=y
-BR2_PACKAGE_WEBKITGTK=y
-BR2_PACKAGE_WEBKITGTK_MINIBROWSER=y
-
-$ ./utils/test-pkg -p webkitgtk -c webkitgtk.config
-
-All builds will fail due to the same reason. Are there other possible
-side effects?; I don't know. All I know is that a similar issue was
-fixed years ago, which was re-introduced by bumping pkg-config. Btw, I
-was searching https://autobuild.buildroot.org/ for this issue, but I
-didn't find any webkitgtk build. Is there a reason why this one has
-never been compiled?
-
-
-Kind regards,
-
-Thomas Devoogdt
-
-
-Op zo 29 dec 2024 om 23:03 schreef Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> Hello Thomas,
->
-> On Tue, 17 Dec 2024 23:20:47 +0100
-> Thomas Devoogdt <thomas@devoogdt.com> wrote:
->
-> > I discovered that dropping "pkgdatadir" in the
-> > package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
-> > fixes the problem.
-> > It's btw the same key that was added years ago by commit
-> > 3e74c1312d35866c05813b4690412548eaaff61a.
-> >
-> > It fixed this error back then:
-> >
-> > Making all in xwayland
-> > make[3]: Entering directory
-> > '/home/buildroot/br5/output/build/xserver_xorg-server-1.19.0/hw/xwayland'
-> > make[3]: *** No rule to make target
-> > '/usr/share/wayland-protocols/unstable/relative-pointer/relative-pointer-unstable-v1.xml',
-> > needed by 'relative-pointer-unstable-v1-client-protocol.h'. Stop.
-> >
-> > It's the same wayland-protocols that now give me those problems. So I
-> > think that we can just drop "pkgdatadir" from the patch list.
->
-> Do you have more details about "the same wayland-protocols that now
-> give me those problems" ? Do you have a defconfig that exhibits the
-> issue?
->
-> Essentially, I'm obviously concerned by the side effect of changing how
-> this pkgdatadir pkg-config variable gets handled. Your change will fix
-> some stuff for sure, but will it break something else?
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
->
+diff --git a/board/qemu/patches/opensbi/opensbi.hash b/board/qemu/patches/opensbi/opensbi.hash
+index 1408f547b8..d7893a1dee 100644
+--- a/board/qemu/patches/opensbi/opensbi.hash
++++ b/board/qemu/patches/opensbi/opensbi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  8fcbce598a73acc2c7f7d5607d46b9d5107d3ecbede8f68f42631dcfc25ef2b2  opensbi-1.2.tar.gz
++sha256  d11702103f177a2914e94eec57ce5ed820296d874f6b6525c4482e55d71a3667  opensbi-1.6.tar.gz
+diff --git a/board/qemu/riscv32-virt/readme.txt b/board/qemu/riscv32-virt/readme.txt
+index b4336e9357..cda8870c96 100644
+--- a/board/qemu/riscv32-virt/readme.txt
++++ b/board/qemu/riscv32-virt/readme.txt
+@@ -1,6 +1,6 @@
+ Run Linux in emulation with:
+ 
+-  qemu-system-riscv32 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv32_virt_defconfig
++  qemu-system-riscv32 -M virt -bios output/images/fw_jump.bin -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv32_virt_defconfig
+ 
+   qemu-system-riscv32 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0,if=none -device virtio-blk-device,drive=hd0 -nographic -cpu rv32,mmu=off -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 # qemu_riscv32_nommu_virt_defconfig
+ 
+diff --git a/board/qemu/riscv64-virt/readme.txt b/board/qemu/riscv64-virt/readme.txt
+index f9e920a88b..fc6bfffb5d 100644
+--- a/board/qemu/riscv64-virt/readme.txt
++++ b/board/qemu/riscv64-virt/readme.txt
+@@ -1,6 +1,6 @@
+ Run Linux in emulation with:
+ 
+-  qemu-system-riscv64 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv64_virt_defconfig
++  qemu-system-riscv64 -M virt -bios output/images/fw_jump.bin -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv64_virt_defconfig
+ 
+   qemu-system-riscv64 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0,if=none -device virtio-blk-device,drive=hd0 -nographic -cpu rv64,mmu=off -netdev user,id=net0 -device virtio-net-device,netdev=net0 # qemu_riscv64_nommu_virt_defconfig
+ 
+diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
+index 6064dd66c3..83ea0e91d9 100644
+--- a/configs/qemu_riscv32_virt_defconfig
++++ b/configs/qemu_riscv32_virt_defconfig
+@@ -13,7 +13,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="rv32"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_OPENSBI=y
+ BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
+-BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.2"
++BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.6"
+ BR2_TARGET_OPENSBI_PLAT="generic"
+ BR2_PACKAGE_HOST_QEMU=y
+ BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+index 575e367af8..d9f715198a 100644
+--- a/configs/qemu_riscv64_virt_defconfig
++++ b/configs/qemu_riscv64_virt_defconfig
+@@ -12,7 +12,7 @@ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_OPENSBI=y
+ BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
+-BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.2"
++BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.6"
+ BR2_TARGET_OPENSBI_PLAT="generic"
+ BR2_PACKAGE_HOST_QEMU=y
+ BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
