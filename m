@@ -1,104 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C619E77188
-	for <buildroot@archiver.kernel.org>; Mon, 30 Dec 2024 10:36:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9548E77188
+	for <buildroot@archiver.kernel.org>; Mon, 30 Dec 2024 10:36:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A9CB660AF4;
-	Mon, 30 Dec 2024 10:36:05 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mMZoo2Kz26jj; Mon, 30 Dec 2024 10:36:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E0AA60AF5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E0AA60AF5;
-	Mon, 30 Dec 2024 10:36:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 60E2ACA
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 10:36:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4CD28407D7
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 10:36:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F060407D7;
+	Mon, 30 Dec 2024 10:36:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 30L7WhgE5Wuj for <buildroot@buildroot.org>;
- Mon, 30 Dec 2024 10:36:02 +0000 (UTC)
+ id k7GPU-jF3hNn; Mon, 30 Dec 2024 10:36:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FAC7407CA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4FAC7407CA;
+	Mon, 30 Dec 2024 10:36:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DCFD2F11
+ for <buildroot@buildroot.org>; Mon, 30 Dec 2024 10:36:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BEC068148D
+ for <buildroot@buildroot.org>; Mon, 30 Dec 2024 10:36:08 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tt_FDXEycCPb for <buildroot@buildroot.org>;
+ Mon, 30 Dec 2024 10:36:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
+ client-ip=2a00:1450:4864:20::52e; helo=mail-ed1-x52e.google.com;
  envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0F9B1407CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F9B1407CA
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0F9B1407CA
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 10:36:01 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id
- a640c23a62f3a-aaf0f1adef8so554776266b.3
- for <buildroot@buildroot.org>; Mon, 30 Dec 2024 02:36:01 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C6A4081521
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6A4081521
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C6A4081521
+ for <buildroot@buildroot.org>; Mon, 30 Dec 2024 10:36:07 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id
+ 4fb4d7f45d1cf-5d8c1950da7so2995312a12.3
+ for <buildroot@buildroot.org>; Mon, 30 Dec 2024 02:36:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1735554959; x=1736159759;
+ d=1e100.net; s=20230601; t=1735554965; x=1736159765;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=ObOcCsrXw45FLpRvRW2hIrbo4OakPvj8HrIj6fpWx28=;
- b=lE2KBDLEoweUfaAuoKg6v6C0JYTyYqZQuOuWGt1/VQYpAQBzr8ayjrPXNOUvLzSEeI
- FcVia08QfoW+HcAsiwqXjaS8OuZEwTXqKPr4BAeNoDbjthDzq3Micf20RDph/WoepXZ3
- OMWJJ2mQRMY/WnNb4jyswrZhpXSk5bG+hLFEFdFPSVC11oxTK3Ea+BOtnV3PzlTlaQiq
- 10Xsjxotr06RrWXUoXuPjTq7aoiwdj+7Epc7loXYlLk6FqByX6xRfYaTAs/uGoeia6K0
- bT2eXaVBtzlZbjLC45+LVdWonFRfxx7YxvDlhPAofBWJJiU1E2NJTtysfWT6d1dKkqeh
- oJUw==
-X-Gm-Message-State: AOJu0YzrKrs7kLrOvW2EFN2uDoHvm/s+sOVXca43GJulOdNj4PHgnte7
- yoK8nKHKvgDxpywuim1lb2cKDrpKQ80M5GYYbPBw0hXpXEHuDm3DxyCMBw==
-X-Gm-Gg: ASbGncsA/FxL+ZDUViqArjKlW1geR0YLzPsGMVeEzIVvUhGZW003LtmeVjnPGOKKums
- gyp9rEwQzynL793475Md9NlH9v+PJsxX4x5G0fE1+DjVWY/9SOfLEqVXPixYYGk6ZJGZ9yfKUDJ
- ve0QTHtNW/flmpDDy2o1BeyT2IkNC6dvxC6Ikx/0L2TDbQjgUXB5KXvhtq14eEklMOTqkkfTE7D
- MR4K5+pptMjDbfubMZPEudAXwQlPHFUeKL96qEfnDXohDGCb6ebAphb7PwFvC7FiDevfmFL
-X-Google-Smtp-Source: AGHT+IGHC3FId0R/e5Enh0w4Ad/u6Q/hdDGrr7Ybt5EJat6LRd+h7mVN8fLi6D3MBuYpRz4TdcYpWA==
-X-Received: by 2002:a17:906:fd87:b0:aae:bd4c:2683 with SMTP id
- a640c23a62f3a-aaebd4c2951mr2615620466b.49.1735554959397; 
- Mon, 30 Dec 2024 02:35:59 -0800 (PST)
+ bh=QwS/4ghX/4JNoeE0Q2IyFSWj4mtkgSp1aIEd9QarE4U=;
+ b=LwrMHO3NQmkclW/vrPjARhIoxZi90bBlX2Ji31dD0OdDBG66+q9tUV5eud8W75ETGC
+ Nl040u2ZVl/zOrVYcMvroWn/st78voitV+4Pi2QzibDFR2EAF0RQrOIe2OgOVzoB4EOX
+ aI79qDHZen6LvsPSNU+iinApEU89k46qUAJo67v7pFrBDdzotiajGzf/4u5XZEdAOESR
+ kdDAuRzKpLPFMeF84J0LnGSwjEzszZdyz/HeFduW6cg9l4s6Bv2u4xTWUjAPZyY3X3+6
+ iIhYCEj4JWRhNwhCMeQn6ft0n/bu2w7ArRxKBabyrHIrUru/BXCd1H7uHF+3Jmy5YYAT
+ wcsA==
+X-Gm-Message-State: AOJu0Yzd0Xxc/woMryXhiIl4H4mNv2ByeMLlT6TVGmbwvp1oyAonzF+u
+ iJ0A2BTXo9YFva3H/VhpSt1QJ80QAjrmnd0y0LZ+Yq5b+pe4yHsLKDf6gw==
+X-Gm-Gg: ASbGncvAFDN0+2uYW7OPoRN+Uz/TJS12jqcC8KeSxTcrA4+oA5ume2GZSvj5uf5YA2a
+ i5DAxFAXlqPQpC4Ia+nLt9xeDtKbP5MNlrLX73ACtVpI2wXWznRc850Q0Q+6MTu+vpx9ec+lU1x
+ dK+MQQeaZWR2bTyxBBT9Z0mJedwY5+o5SoYyViB94M03CJmIb0y80adpOrdSlJ82OtTL3ZMS5Oi
+ RNxzH6Sxzc9rU0TLQZ/pm6Hla4RLowwwxuJZDQXCXzRZoWAniyhiFZhaAuHccJFK4/23Ie+
+X-Google-Smtp-Source: AGHT+IGLcFjUptkWh1Npxo3XGKig0aWHo7XRLQuCofs36UTDT7P1dP+zGqxWOIG9wnQ0DsOyS+xEPA==
+X-Received: by 2002:a17:907:971e:b0:aa6:b63a:4521 with SMTP id
+ a640c23a62f3a-aac2ad87883mr2939187166b.15.1735554965145; 
+ Mon, 30 Dec 2024 02:36:05 -0800 (PST)
 Received: from hthiery.fritz.box ([2a02:810b:5a04:dd00:18f9:775f:be73:a0e3])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-aac0e89617bsm1437781766b.76.2024.12.30.02.35.58
+ a640c23a62f3a-aac0e89617bsm1437781766b.76.2024.12.30.02.36.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 30 Dec 2024 02:35:58 -0800 (PST)
+ Mon, 30 Dec 2024 02:36:04 -0800 (PST)
 From: Heiko Thiery <heiko.thiery@gmail.com>
 To: buildroot@buildroot.org
 Cc: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>,
  Heiko Thiery <heiko.thiery@gmail.com>, Fiona Klute <fiona.klute@gmx.de>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Dec 2024 11:35:33 +0100
-Message-Id: <20241230103534.671602-3-heiko.thiery@gmail.com>
+Date: Mon, 30 Dec 2024 11:35:35 +0100
+Message-Id: <20241230103534.671602-4-heiko.thiery@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20241230103534.671602-1-heiko.thiery@gmail.com>
 References: <20241230103534.671602-1-heiko.thiery@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1735554959; x=1736159759; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1735554965; x=1736159765; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ObOcCsrXw45FLpRvRW2hIrbo4OakPvj8HrIj6fpWx28=;
- b=GrSFmc1U3UQiCdo6KHbnHiOT7wP6bbsRjiFQP0MTiaz2qCnmbV0ko04dlqnXLJOaOK
- TM/r0oRMf0IX5edIH/V4ph+FCPonMu7nfAOwU5n9YCiFLNuo3TJYIie2aZ/iK8J9aB7X
- I7lra7pXtzVm8PBcpcvRdjyItDRVS8lwxEM+7a4k9uF9eda320Eqpc8mhjIlu85MenjE
- WSdwM7uqQsgQd4TN8dzEw5N6TgjHlCfR8cb3Xypct5OcCW816hTgJA7KqL6Lm0lg2+mU
- Yocj+DZP3OwcSlTogUtCi9rtaSI9ouyKMoPpAh8YYn4+7SAIBfc07oTSsoDP3rbYRwWN
- OutA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=QwS/4ghX/4JNoeE0Q2IyFSWj4mtkgSp1aIEd9QarE4U=;
+ b=gvNz6m7pgrczoq2+uA5A+ia/eEm6RBUce53ax5gk+jmVi4EzVgy6EjuYSk4z58g6hP
+ V3prSS4ATO//E8zca1IeoK2PB5xZDlWnyhaJeUGpbCfdXbWW20fJG44izYdy4kiRYKZf
+ ozXMPrBdnP6TLtysioiXr33Oq2Co6Rl+LG+LN5ccmM02RLyVYT93iwwhIL9Ef8DQ8E2i
+ 94gNyZoliTiC++38RHdhc/PvYfmqYT+YleGnfcwzrJSgEv6QnElRTJNdrFQDjrNdWAsp
+ z63QqAXD740zXJzECx8ONQDffCpIDvCFKicB0dXeXEBLAZveug+kO4LVln9Q0eMpkSiX
+ aIfQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=GrSFmc1U
-Subject: [Buildroot] [PATCH v2 2/6] package/libnetconf2: bump to version
- 3.5.1
+ header.a=rsa-sha256 header.s=20230601 header.b=gvNz6m7p
+Subject: [Buildroot] [PATCH v2 3/6] package/sysrepo: bump to version 2.11.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,101 +114,104 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since version 3.x the cmake configuration options for ENABLE_TLS and
-ENABLE_SSH are refactored and are replaced by ENABLE_SSH_TLS.
+Add new config options to enable/disable binary tools/daemon. By default
+this options are enabled.
 
-The ENABLE_SSH_TLS option can only be selected when BR2_PACKAGE_LIBSSH_SERVER
-and BR2_PACKAGE_LIBCURL are available.
-
-In addition, the dependency on openssl is now necessary.
+Also some sysv init script shellcheck warnings are fixed.
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
+ package/sysrepo/Config.in          | 21 +++++++++++++++++++++
+ package/sysrepo/S51sysrepo-plugind |  3 ++-
+ package/sysrepo/sysrepo.hash       |  2 +-
+ package/sysrepo/sysrepo.mk         |  5 ++++-
+ 4 files changed, 28 insertions(+), 3 deletions(-)
 
-v2: (after review comments from Thomas Pettazoni)
-    - reworded the commit message
-    - added selection of openssol package in Config.in
-    - fixed inconsistency in dependency to openssl
-
- package/libnetconf2/Config.in        |  1 +
- package/libnetconf2/libnetconf2.hash |  2 +-
- package/libnetconf2/libnetconf2.mk   | 26 +++++++-------------------
- 3 files changed, 9 insertions(+), 20 deletions(-)
-
-diff --git a/package/libnetconf2/Config.in b/package/libnetconf2/Config.in
-index 1763243120..8f8677db62 100644
---- a/package/libnetconf2/Config.in
-+++ b/package/libnetconf2/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBNETCONF2
- 	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_LIBYANG
-+	select BR2_PACKAGE_OPENSSL
+diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
+index b1535bed9f..ff75575952 100644
+--- a/package/sysrepo/Config.in
++++ b/package/sysrepo/Config.in
+@@ -16,6 +16,27 @@ config BR2_PACKAGE_SYSREPO
+ 
+ if BR2_PACKAGE_SYSREPO
+ 
++config BR2_PACKAGE_SYSREPO_SYSREPOCFG
++	bool "enable sysrepocfg"
++	default y
++	help
++	  Enable sysrepocfg.
++	  Build binary tool sysrepocfg
++
++config BR2_PACKAGE_SYSREPO_SYSREPOCTL
++	bool "enable sysrepoctl"
++	default y
++	help
++	  Enable sysrepoctl.
++	  Build binary tool sysrepoctl
++
++config BR2_PACKAGE_SYSREPO_PLUGIND
++	bool "enable sysrepo-plugind"
++	default y
++	help
++	  Enable sysrepo-plugind.
++	  Build binary daemon sysrepo-plugind
++
+ config BR2_PACKAGE_SYSREPO_EXAMPLES
+ 	bool "enable examples"
  	help
- 	  libnetconf2 is a NETCONF library in C intended for building
- 	  NETCONF clients and servers.
-diff --git a/package/libnetconf2/libnetconf2.hash b/package/libnetconf2/libnetconf2.hash
-index 675c76a500..78fc5c8400 100644
---- a/package/libnetconf2/libnetconf2.hash
-+++ b/package/libnetconf2/libnetconf2.hash
+diff --git a/package/sysrepo/S51sysrepo-plugind b/package/sysrepo/S51sysrepo-plugind
+index 60ea3ba7a9..4bee6c1705 100644
+--- a/package/sysrepo/S51sysrepo-plugind
++++ b/package/sysrepo/S51sysrepo-plugind
+@@ -10,6 +10,7 @@ SYSREPO_PLUGIND_ARGS=""
+ 
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
+ 	start-stop-daemon -S -q -x "$EXECUTABLE" \
+ 		-- $SYSREPO_PLUGIND_ARGS
+ 	status=$?
+@@ -45,7 +46,7 @@ reload() {
+ }
+ 
+ case "$1" in
+-    start|stop|restart|reload)
++	start|stop|restart|reload)
+ 		"$1";;
+ 	*)
+ 		echo "Usage: $0 {start|stop|restart|reload}"
+diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
+index 056f70787d..93c336e1a9 100644
+--- a/package/sysrepo/sysrepo.hash
++++ b/package/sysrepo/sysrepo.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  72e9a6461fadbd22f0cf0d23ba68d62b297c8f564f7f2bee069748fb67fc3a24  libnetconf2-2.1.28.tar.gz
-+sha256  0d49e796798015e35a08bfbd53a3dd4004cb9a26d4b1dd1f90940a427d483bbb  libnetconf2-3.5.1.tar.gz
- sha256  bd962ab457c8a8cb8faaaa36c11484680f3c9a47dbc336507817ae8935384064  LICENSE
-diff --git a/package/libnetconf2/libnetconf2.mk b/package/libnetconf2/libnetconf2.mk
-index 88163926c0..85e4c2fbfd 100644
---- a/package/libnetconf2/libnetconf2.mk
-+++ b/package/libnetconf2/libnetconf2.mk
-@@ -4,41 +4,29 @@
+-sha256  467efed8d0f62c26a0d200602b911096eb2d67858e620937ab68f96b316fa9b7  sysrepo-2.2.150.tar.gz
++sha256  45a98a71827dd1428e2c6b7dedea47558cdfbc491042bbdbc0c52e607ab8266e  sysrepo-2.11.7.tar.gz
+ sha256  88f1b7e5c64d2c113e07105aa9c0fb80639b40287565be1c2afd0949df83d826  LICENSE
+diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+index 7f2570bd7d..c215be0159 100644
+--- a/package/sysrepo/sysrepo.mk
++++ b/package/sysrepo/sysrepo.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNETCONF2_VERSION = 2.1.28
-+LIBNETCONF2_VERSION = 3.5.1
- LIBNETCONF2_SITE = $(call github,CESNET,libnetconf2,v$(LIBNETCONF2_VERSION))
- LIBNETCONF2_INSTALL_STAGING = YES
- LIBNETCONF2_LICENSE = BSD-3-Clause
- LIBNETCONF2_LICENSE_FILES = LICENSE
--LIBNETCONF2_DEPENDENCIES = libyang
-+LIBNETCONF2_DEPENDENCIES = libyang libxcrypt openssl
- HOST_LIBNETCONF2_DEPENDENCIES = host-libyang
+-SYSREPO_VERSION = 2.2.150
++SYSREPO_VERSION = 2.11.7
+ SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
+ SYSREPO_INSTALL_STAGING = YES
+ SYSREPO_LICENSE = BSD-3-Clause
+@@ -18,6 +18,9 @@ endif
  
- LIBNETCONF2_CONF_OPTS = \
- 	-DENABLE_TESTS=OFF \
- 	-DENABLE_VALGRIND_TESTS=OFF
- 
--ifeq ($(BR2_PACKAGE_LIBSSH_SERVER), y)
--LIBNETCONF2_CONF_OPTS += -DENABLE_SSH=ON
--LIBNETCONF2_DEPENDENCIES += libssh
-+ifeq ($(BR2_PACKAGE_LIBSSH_SERVER)$(BR2_PACKAGE_LIBCURL),yy)
-+LIBNETCONF2_CONF_OPTS += -DENABLE_SSH_TLS=ON
-+LIBNETCONF2_DEPENDENCIES += libssh libcurl
- else
--LIBNETCONF2_CONF_OPTS += -DENABLE_SSH=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_LIBOPENSSL), y)
--LIBNETCONF2_CONF_OPTS += -DENABLE_TLS=ON
--LIBNETCONF2_DEPENDENCIES += openssl
--else
--LIBNETCONF2_CONF_OPTS += -DENABLE_TLS=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
--LIBNETCONF2_DEPENDENCIES += libxcrypt
-+LIBNETCONF2_CONF_OPTS += -DENABLE_SSH_TLS=OFF
- endif
- 
- HOST_LIBNETCONF2_CONF_OPTS = \
+ SYSREPO_CONF_OPTS = \
+ 	-DBUILD_EXAMPLES=$(if $(BR2_PACKAGE_SYSREPO_EXAMPLES),ON,OFF) \
++	-DENABLE_SYSREPOCFG=$(if $(BR2_PACKAGE_SYSREPO_SYSREPOCFG),ON,OFF) \
++	-DENABLE_SYSREPOCTL=$(if $(BR2_PACKAGE_SYSREPO_SYSREPOCTL),ON,OFF) \
++	-DENABLE_SYSREPO_PLUGIND=$(if $(BR2_PACKAGE_SYSREPO_PLUGIND),ON,OFF) \
  	-DENABLE_TESTS=OFF \
  	-DENABLE_VALGRIND_TESTS=OFF \
--	-DENABLE_SSH=OFF \
--	-DENABLE_TLS=OFF
-+	-DENABLE_TLS_SSH=OFF
- 
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
+ 	-DREPO_PATH=/etc/sysrepo
 -- 
 2.39.2
 
