@@ -1,79 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1367E77188
-	for <buildroot@archiver.kernel.org>; Tue, 31 Dec 2024 10:54:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36FD0E77188
+	for <buildroot@archiver.kernel.org>; Tue, 31 Dec 2024 10:55:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5548B81344;
-	Tue, 31 Dec 2024 10:54:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D5EDD40838;
+	Tue, 31 Dec 2024 10:55:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KkCO3pB66ion; Tue, 31 Dec 2024 10:55:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8729D40843
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8729D40843;
+	Tue, 31 Dec 2024 10:55:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 50044968
+ for <buildroot@buildroot.org>; Tue, 31 Dec 2024 10:55:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3175E813F1
+ for <buildroot@buildroot.org>; Tue, 31 Dec 2024 10:55:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P2iD22nRoJyD; Tue, 31 Dec 2024 10:54:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 527C481346
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 527C481346;
-	Tue, 31 Dec 2024 10:54:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C00FEC8
- for <buildroot@buildroot.org>; Tue, 31 Dec 2024 10:54:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 926E040DD1
- for <buildroot@buildroot.org>; Tue, 31 Dec 2024 10:54:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZaIVXSvkVTGS for <buildroot@buildroot.org>;
- Tue, 31 Dec 2024 10:54:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id U29e-LCIaRVp for <buildroot@buildroot.org>;
+ Tue, 31 Dec 2024 10:55:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 28D9940CBE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28D9940CBE
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 28D9940CBE
- for <buildroot@buildroot.org>; Tue, 31 Dec 2024 10:54:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DFA91FF808;
- Tue, 31 Dec 2024 10:54:49 +0000 (UTC)
-Date: Tue, 31 Dec 2024 11:54:47 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fiona Klute via buildroot <buildroot@buildroot.org>
-Cc: Fiona Klute <fiona.klute@gmx.de>, Grzegorz Blach <grzegorz@blach.pl>,
- Marcin Bis <marcin@bis.org.pl>, Fabrice Fontaine
- <fontaine.fabrice@gmail.com>
-Message-ID: <20241231115447.32f36592@windsurf>
-In-Reply-To: <20241210162243.1541113-1-fiona.klute@gmx.de>
-References: <20241210162243.1541113-1-fiona.klute@gmx.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0C0718137A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C0718137A
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0C0718137A
+ for <buildroot@buildroot.org>; Tue, 31 Dec 2024 10:55:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id E661AE0009;
+ Tue, 31 Dec 2024 10:55:36 +0000 (UTC)
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: Buildroot List <buildroot@buildroot.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Jesse Van Gavere <jesseevg@gmail.com>
+Date: Tue, 31 Dec 2024 11:55:35 +0100
+Message-ID: <20241231105535.1685869-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.47.1
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1735642491;
+ d=bootlin.com; s=gm1; t=1735642537;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Ng6Ib6RX4rJUK8BceUTGV5/xwfM52Em5PcmYhOZmOA8=;
- b=IFXCf5XQJpert+WB/jXP3kDsqEyxeFcVUMgS9SJIJsL/wuChGAckaXsKgk95seC+kC/hQB
- RyYUquWoeUhJrLSt+WGP3ZntHo//iWCRuF4xb3XiO/6PGEDau0TTVCKTg35/oZvanv6tBd
- wgUsZZYMf3RsgorM8IqqtE9ozOSYlT3YmhwYkqF9NYHyMmf6TWAgGlWHUTxZWzmdpc5Q++
- QvYr+z3eq7MfBnaxUFLJNZB7ljuN8nexP4bhij7MWqLeh5FjlPVEqH1Y+3eawniZ/jEO7F
- Qn4rj2UmmNpySl9rgCnM5Jmqeuoat/aenSN/vKMONcUIGuT064QY8di1Twbnmg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=hV6q7v0lpsVtyDI2rv9e9NlFJGUHYo5sG59KYyAsuxg=;
+ b=VTuFcv1Bz6HWDqvpEdlxEMDyKRuJrosnGDBEZ7UOK/dYFcJoTXYWqW2KTIX9wbR9R+WLoF
+ FFcgv1ZKprH4MDk0OyGeIPhNhd/PLZfJEyBmNsZAOfKx9aJnZZaaRr8995dp5iG7L1M4Q1
+ D5aA9Hi1WVBmSbkfcqOKwvbr4NYEjteahKMGG3B2SQbf7hVaSMlGxhEqgX57eOvvKiQlvE
+ aB2gR9u5AG/nVAHAtwTsYm/FcNmvg++HLHKBrWoNtKMKgHTisWAWfIN3SdCODXzgdohBpa
+ dCNr7eb2Hn/Xsrr4kCIQeFvbztwv7d5bb20NKrndIspJdLbcSuO3+ZypOK0kpg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IFXCf5XQ
-Subject: Re: [Buildroot] [PATCH v2 1/4] package/bluez5_utils{,
- -headers}: bump version to 5.79
+ header.s=gm1 header.b=VTuFcv1B
+Subject: [Buildroot] [2024.02.x] package/qt6base: properly ignore
+ CVE-2023-32573
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,52 +80,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fiona,
+In commit
+a9aa11544a1358609aee8446723898c6b5f22689 ("package/qt6/qt6svg:
+backport fix for CVE-2023-32573"), a fix for security issue
+CVE-2023-32573 was added to qt6svg, with the appropriate
+QT6SVG_IGNORE_CVES entry.
 
-On Tue, 10 Dec 2024 17:22:39 +0100
-Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
+However, all CVEs against Qt are reported by the NVD on the qt:qt
+vendor/product CPE. For example:
 
-> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-> 
-> Upstream changelog:
-> https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?h=5.79&id=0845b8f6ef2ac004b1c953cf4fe4ca3458cd8e36
-> 
-> Patch for musl compatibility taken from upstream "master".
-> 
-> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-> ---
->  .../bluez5_utils-headers.mk                   |  2 +-
->  ...0001-gdbus-define-MAX_INPUT-for-musl.patch | 33 +++++++++++++++++++
->  package/bluez5_utils/bluez5_utils.hash        |  2 +-
->  package/bluez5_utils/bluez5_utils.mk          |  2 +-
->  4 files changed, 36 insertions(+), 3 deletions(-)
->  create mode 100644 package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
+  https://nvd.nist.gov/vuln/detail/CVE-2023-32573
 
-It looks like this update is causing a few build failures:
+Therefore, the QT6SVG_IGNORE_CVES entry added has no effect, and
+CVE-2023-32573 continues to be reported against our qt6base package.
 
-  http://autobuild.buildroot.net/?reason=bluez5_utils-5.79
+The only reasonable option is to collect all such CVE ignore entries
+for Qt modules into the qt6base package, which is the one that matches
+with the qt:qt CPE identifier. This commit does just that, with an
+hopefully appropriate comment in qt6base.mk that explains what's going
+on.
 
-Like this:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt6/qt6base/qt6base.mk | 8 ++++++++
+ package/qt6/qt6svg/qt6svg.mk   | 2 --
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-/home/autobuild/autobuild/instance-7/output-1/host/lib/gcc/mips-buildroot-linux-musl/13.3.0/../../../../mips-buildroot-linux-musl/bin/ld: profiles/input/bluetoothd-hog.o: in function `hog_disconnect':
-/home/autobuild/autobuild/instance-7/output-1/build/bluez5_utils-5.79/profiles/input/hog.c:211:(.text.hog_disconnect+0x3c): undefined reference to `input_get_userspace_hid'
-/home/autobuild/autobuild/instance-7/output-1/host/lib/gcc/mips-buildroot-linux-musl/13.3.0/../../../../mips-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-7/output-1/build/bluez5_utils-5.79/profiles/input/hog.c:211:(.text.hog_disconnect+0x44): undefined reference to `input_get_userspace_hid'
-collect2: error: ld returned 1 exit status
-
-Could you have a look perhaps?
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index ab6764cbbe..3d45079747 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -27,6 +27,14 @@ QT6BASE_IGNORE_CVES += CVE-2023-34410
+ # 0016-HTTP2-Delay-any-communication-until-encrypted-can-be.patch
+ QT6BASE_IGNORE_CVES += CVE-2024-39936
+ 
++# All Qt CVEs are reported by NVD against the qt:qt vendor/product
++# CPE, so from a Buildroot perspective, they will all show up reported
++# on qt6base. The ignore CVE entries below are for other Qt modules,
++# but they need to be listed here to be properly accounted for.
++
++# qt6svg/0001-QSvgFont-Initialize-used-member-remove-unused.patch
++QT6BASE_IGNORE_CVES += CVE-2023-32573
++
+ QT6BASE_CMAKE_BACKEND = ninja
+ 
+ QT6BASE_LICENSE = \
+diff --git a/package/qt6/qt6svg/qt6svg.mk b/package/qt6/qt6svg/qt6svg.mk
+index 4386556548..25e87dd208 100644
+--- a/package/qt6/qt6svg/qt6svg.mk
++++ b/package/qt6/qt6svg/qt6svg.mk
+@@ -9,8 +9,6 @@ QT6SVG_SITE = $(QT6_SITE)
+ QT6SVG_SOURCE = qtsvg-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SVG_VERSION).tar.xz
+ QT6SVG_INSTALL_STAGING = YES
+ QT6SVG_SUPPORTS_IN_SOURCE_BUILD = NO
+-# 0001-QSvgFont-Initialize-used-member-remove-unused.patch
+-QT6SVG_IGNORE_CVES += CVE-2023-32573
+ 
+ QT6SVG_CMAKE_BACKEND = ninja
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.47.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
