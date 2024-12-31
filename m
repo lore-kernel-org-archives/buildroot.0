@@ -4,74 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 451A6E77188
-	for <buildroot@archiver.kernel.org>; Tue, 31 Dec 2024 17:20:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FEB9E77188
+	for <buildroot@archiver.kernel.org>; Tue, 31 Dec 2024 17:23:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05D2680BF2;
-	Tue, 31 Dec 2024 17:20:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 188C28100F;
+	Tue, 31 Dec 2024 17:23:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xb5K2x2RatWZ; Tue, 31 Dec 2024 17:20:37 +0000 (UTC)
+ id bvTyq7x9PXnO; Tue, 31 Dec 2024 17:23:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22C6080DAB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A8EB81010
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22C6080DAB;
-	Tue, 31 Dec 2024 17:20:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 28FA2E0F
- for <buildroot@buildroot.org>; Tue, 31 Dec 2024 17:20:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A8EB81010;
+	Tue, 31 Dec 2024 17:23:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9924BE0F
+ for <buildroot@buildroot.org>; Tue, 31 Dec 2024 17:23:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 17B08400EF
- for <buildroot@buildroot.org>; Tue, 31 Dec 2024 17:20:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8763D81010
+ for <buildroot@buildroot.org>; Tue, 31 Dec 2024 17:23:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lIOLUvtFaVoN for <buildroot@buildroot.org>;
- Tue, 31 Dec 2024 17:20:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0C9E84023A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C9E84023A
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0C9E84023A
- for <buildroot@buildroot.org>; Tue, 31 Dec 2024 17:20:34 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 05B9D2003DD;
- Tue, 31 Dec 2024 18:20:30 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:50686])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 31 Dec 2024 18:20:30 +0100
-MIME-Version: 1.0
-Date: Tue, 31 Dec 2024 18:20:30 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qqOhyn4_d6eU for <buildroot@buildroot.org>;
+ Tue, 31 Dec 2024 17:23:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A63198100F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A63198100F
+ for <buildroot@buildroot.org>; Tue, 31 Dec 2024 17:23:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 913DF82DE3; Tue, 31 Dec 2024 17:23:27 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Jannik Becher <becher.jannik@gmail.com>
-In-Reply-To: <20241231095315.1672693-1-thomas.petazzoni@bootlin.com>
-References: <20241231095315.1672693-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <78ce614a660f0e417d56e4f140ef8c32@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1735665633;
- bh=6FqAGdJMB+KbO9srRRBDkIZDTWGYenPZG88ltQYdtBo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=lS3BVV0lAJy3E8XrMHVAu2ALzjCriHeTdrZsIbpqlja2PVqeOnCiJDjWbCBcXhqMe
- X8Kdy3QLxlasDe7wQpsy47n8eoBabY7viufdP/U+z+WqKfdYg9QWTKK47l4l+ABQkf
- gLEwoN/H0SKv30PV5qpmnBMHrgUAH9g/+aeErBrhCi0rs0m3JXf81gh/cf8kNGIEd4
- V2Vz3Lob0vjimKD5yWBzI19HezZ1IbeJEAUAKXjuYzVbTYG65E88F5EoopQXswabUB
- 8RgVgcpPx69E0CGSTW7Al0wwfB8azu9iqpCEMG3VYu63nszDcZyqlsN+1F/t+dl3r5
- rUuAyY3KvWyEA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=lS3BVV0l
-Subject: Re: [Buildroot] [PATCH] package/igh-ethercat: fix build of tty
- module with recent kernels
+To: buildroot@buildroot.org
+Date: Tue, 31 Dec 2024 18:22:15 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c438cf82563a641fc78284ae6b5b38f03ddb21fb
+X-Git-Newrev: 0b785f5b063690f29d091198f9632f0c6b680909
+X-Patchwork-Hint: ignore
+Message-Id: <20241231172327.913DF82DE3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libzenoh-pico: fix debug+fortify
+ glibc builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,30 +59,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 31/12/2024 10:53, Thomas Petazzoni via buildroot wrote:
-> Since commit
-> eec3a1108a65ab8de4a313a7f34205c5d5ad8f2b ("package/igh-ethercat: add
-> configuration options"), we are building more components of
-> igh-ethercat, including the tty module, which fails to build with
-> Linux kernels >= 6.6.
-> 
-> This commit adds 3 patches, submitted upstream, that fix those build
-> failures.
-> 
-> Fixes:
-> 
->   
-> https://autobuild.buildroot.org/results/1bb799f4ae6140b67c4eb28c04aa45ccbd296b31/
-> 
-> Cc: Jannik Becher <becher.jannik@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=0b785f5b063690f29d091198f9632f0c6b680909
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+The configurations that have:
+- BR2_ENABLE_RUNTIME_DEBUG=y
+- One of BR2_FORTIFY_SOURCE_xyz=y
+
+Currently fail to build, as libzenoh-pico's build system forces -O0
+when BR2_ENABLE_RUNTIME_DEBUG=y, but -O0 builds aren't compatible with
+_FORTIFY_SOURCE, causing:
+
+../../../per-package/libzenoh-pico/host/mips64-buildroot-linux-gnu/sysroot/usr/include/features.h:422:4: error: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror=cpp]
+  422 | #  warning _FORTIFY_SOURCE requires compiling with optimization (-O)
+      |    ^~~~~~~
+cc1: all warnings being treated as errors
+
+We fix this by adding a patch that drops the forced -O3 (release
+builds) and -O0 (debug builds) from the project CMakeLists.txt.
+
+This issue exists since libzenoh-pico was introduced in Buildroot in
+commit
+a96361901dcc7b962a0c43f163e97a2de65687f3 ("package/libzenoh-pico: new
+package"), but was hidden by other issues until a first occurence in
+November 2024 right after the bump to 1.0.1:
+
+  http://autobuild.buildroot.net/results/f109e8b4aba0286dcaac5cb6d4579e6d91c492f8/
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/f109e8b4aba0286dcaac5cb6d4579e6d91c492f8/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...txt-don-t-override-the-optimization-level.patch | 64 ++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
+
+diff --git a/package/libzenoh-pico/0001-CMakeLists.txt-don-t-override-the-optimization-level.patch b/package/libzenoh-pico/0001-CMakeLists.txt-don-t-override-the-optimization-level.patch
+new file mode 100644
+index 0000000000..9f911a750b
+--- /dev/null
++++ b/package/libzenoh-pico/0001-CMakeLists.txt-don-t-override-the-optimization-level.patch
+@@ -0,0 +1,64 @@
++From 32d087860abaf5b2374043db7034174aec06b885 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Tue, 31 Dec 2024 15:52:57 +0100
++Subject: [PATCH] CMakeLists.txt: don't override the optimization level
++
++zenoh-pico's CMakeLists.txt has some logic to provide its own compiler
++optimization level: -O3 for release builds, -O0 for debug builds.
++
++Unfortunately, using add_compile_options() means that those settings
++take precedence over what the user can pass as custom compiler
++flags. And this causes issues for example when doing a debug build
++with _FORTIFY_SOURCE enabled, as _FORTIFY_SOURCE support in glibc is
++incompatible with unoptimized builds causing this build failure:
++
++/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/features.h:414:4: error: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror=cpp]
++  414 | #  warning _FORTIFY_SOURCE requires compiling with optimization (-O)
++      |    ^~~~~~~
++
++which is a warning, but as zenoh-pico builds with -Werror, it turns
++into a build failure.
++
++As it is unclear how CMakeLists.txt can pass a default -O level, while
++allowing it to be overridden by the user, we simply remove those
++optimization level options.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream: https://github.com/eclipse-zenoh/zenoh-pico/pull/847
++---
++ CMakeLists.txt | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 7a9fb6d1..97fba56a 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -85,13 +85,13 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
++ # Compile options
++ if(CMAKE_BUILD_TYPE MATCHES "RELEASE" OR "Release")
++   if(UNIX)
++-    add_compile_options(-pipe -O3)
+++    add_compile_options(-pipe)
++   elseif(CMAKE_SYSTEM_NAME MATCHES "Generic")
++-    add_compile_options(-pipe -O3)
+++    add_compile_options(-pipe)
++   endif()
++ else()
++   if(UNIX)
++-    add_compile_options(-c -Wall -Wextra -Werror -Wshadow -Wunused -Wstrict-prototypes -pipe -g -O0)
+++    add_compile_options(-c -Wall -Wextra -Werror -Wshadow -Wunused -Wstrict-prototypes -pipe -g)
++     # C99 pedantic doesn't like struct anonymous in unix header
++     if (NOT CMAKE_C_STANDARD STREQUAL "99")
++       add_compile_options(-Wpedantic)
++@@ -100,7 +100,7 @@ else()
++   elseif(MSVC)
++     add_compile_options(/W4 /WX /Od /wd4127)
++   elseif(CMAKE_SYSTEM_NAME MATCHES "Generic")
++-    add_compile_options(-Wall -Wextra -Wno-unused-parameter -Wmissing-prototypes -pipe -g -O0)
+++    add_compile_options(-Wall -Wextra -Wno-unused-parameter -Wmissing-prototypes -pipe -g)
++   endif()
++ endif()
++ 
++-- 
++2.47.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
