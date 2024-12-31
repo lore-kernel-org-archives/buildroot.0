@@ -1,74 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36FD0E77188
-	for <buildroot@archiver.kernel.org>; Tue, 31 Dec 2024 10:55:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AE9BE77188
+	for <buildroot@archiver.kernel.org>; Tue, 31 Dec 2024 11:02:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5EDD40838;
-	Tue, 31 Dec 2024 10:55:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KkCO3pB66ion; Tue, 31 Dec 2024 10:55:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8729D40843
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8729D40843;
-	Tue, 31 Dec 2024 10:55:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 50044968
- for <buildroot@buildroot.org>; Tue, 31 Dec 2024 10:55:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3175E813F1
- for <buildroot@buildroot.org>; Tue, 31 Dec 2024 10:55:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF20780A4C;
+	Tue, 31 Dec 2024 11:02:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U29e-LCIaRVp for <buildroot@buildroot.org>;
- Tue, 31 Dec 2024 10:55:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id UssNOgrWDNHW; Tue, 31 Dec 2024 11:02:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEBB4809F6
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id EEBB4809F6;
+	Tue, 31 Dec 2024 11:02:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 73141C8
+ for <buildroot@buildroot.org>; Tue, 31 Dec 2024 11:02:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E034408D3
+ for <buildroot@buildroot.org>; Tue, 31 Dec 2024 11:02:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TyLPsGGwUQFD for <buildroot@buildroot.org>;
+ Tue, 31 Dec 2024 11:02:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0C0718137A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C0718137A
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0C0718137A
- for <buildroot@buildroot.org>; Tue, 31 Dec 2024 10:55:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id E661AE0009;
- Tue, 31 Dec 2024 10:55:36 +0000 (UTC)
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: Buildroot List <buildroot@buildroot.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Jesse Van Gavere <jesseevg@gmail.com>
-Date: Tue, 31 Dec 2024 11:55:35 +0100
-Message-ID: <20241231105535.1685869-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.47.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0A465408CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A465408CE
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0A465408CE
+ for <buildroot@buildroot.org>; Tue, 31 Dec 2024 11:02:39 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 217C660005;
+ Tue, 31 Dec 2024 11:02:36 +0000 (UTC)
+Date: Tue, 31 Dec 2024 12:02:35 +0100
+To: nvd <nvd@nist.gov>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Message-ID: <20241231120235.30949440@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1735642537;
+ d=bootlin.com; s=gm1; t=1735642957;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding;
- bh=hV6q7v0lpsVtyDI2rv9e9NlFJGUHYo5sG59KYyAsuxg=;
- b=VTuFcv1Bz6HWDqvpEdlxEMDyKRuJrosnGDBEZ7UOK/dYFcJoTXYWqW2KTIX9wbR9R+WLoF
- FFcgv1ZKprH4MDk0OyGeIPhNhd/PLZfJEyBmNsZAOfKx9aJnZZaaRr8995dp5iG7L1M4Q1
- D5aA9Hi1WVBmSbkfcqOKwvbr4NYEjteahKMGG3B2SQbf7hVaSMlGxhEqgX57eOvvKiQlvE
- aB2gR9u5AG/nVAHAtwTsYm/FcNmvg++HLHKBrWoNtKMKgHTisWAWfIN3SdCODXzgdohBpa
- dCNr7eb2Hn/Xsrr4kCIQeFvbztwv7d5bb20NKrndIspJdLbcSuO3+ZypOK0kpg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=VBUXmKmMp9Jcqd9RGCQokOC9Ara0jKkPlY/KdMH1nnM=;
+ b=SWxRJDMuy9TIMFknaxz7ZhEzGUyp9Y+bMOiPK8jHL9sqM+OcYsy7kte2Mv5HvOfZJvpMZy
+ /gjgJhTpBr7ECD4p6cw6yNDgvy8YET1WxYamR0wdpqY9XKkVo2vDq2R0iRgUGLrqYRIqc3
+ XJOSMhygCD2SXGKbFGhF8pcaA8QiUVRX3nMZgEs8mjfDPBA3j3vraY2w+axKlkytm3IJfG
+ eKKcWpvLXRDGhUryJGPHiw3ebLXtXfFVDwH12NaxL2Ft7IvknvvIwaq3HfexhUW6wKtmYp
+ uDioWblTQLKH0YpgHf8mKH4sBxQtt1SBcknyP07EeETk8+UTj/IFQfrR05W3nQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VTuFcv1B
-Subject: [Buildroot] [2024.02.x] package/qt6base: properly ignore
- CVE-2023-32573
+ header.s=gm1 header.b=SWxRJDMu
+Subject: [Buildroot] CVE-2024-6232 version range fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,67 +85,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In commit
-a9aa11544a1358609aee8446723898c6b5f22689 ("package/qt6/qt6svg:
-backport fix for CVE-2023-32573"), a fix for security issue
-CVE-2023-32573 was added to qt6svg, with the appropriate
-QT6SVG_IGNORE_CVES entry.
+Dear NVD maintainers,
 
-However, all CVEs against Qt are reported by the NVD on the qt:qt
-vendor/product CPE. For example:
+CVE-2024-6232 reported against Python is documented at
+https://nvd.nist.gov/vuln/detail/CVE-2024-6232 as affecting
+all versions of Python prior to 3.12.5.
 
-  https://nvd.nist.gov/vuln/detail/CVE-2023-32573
+However, the fix for this issue has been backported to maintained
+versions of Python, which means some versions numerically before 3.12.5
+are NOT affected.
 
-Therefore, the QT6SVG_IGNORE_CVES entry added has no effect, and
-CVE-2023-32573 continues to be reported against our qt6base package.
+Namely:
 
-The only reasonable option is to collect all such CVE ignore entries
-for Qt modules into the qt6base package, which is the one that matches
-with the qt:qt CPE identifier. This commit does just that, with an
-hopefully appropriate comment in qt6base.mk that explains what's going
-on.
+* https://github.com/python/cpython/commit/d449caf8a179e3b954268b3a88eb9170be3c8fbf
+  is the fix that was backported to the 3.11.x branch of Python, and is
+  part of Python 3.11.10, so every version 3.11.x >= 3.11.10 are not affected.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/qt6/qt6base/qt6base.mk | 8 ++++++++
- package/qt6/qt6svg/qt6svg.mk   | 2 --
- 2 files changed, 8 insertions(+), 2 deletions(-)
+* https://github.com/python/cpython/commit/743acbe872485dc18df4d8ab2dc7895187f062c4
+  is the fix that was backported to the 3.10.x branch of Python, and is
+  part of Python 3.10.15, so every version 3.10.x >= 3.10.15 are not
+  affected.
 
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index ab6764cbbe..3d45079747 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -27,6 +27,14 @@ QT6BASE_IGNORE_CVES += CVE-2023-34410
- # 0016-HTTP2-Delay-any-communication-until-encrypted-can-be.patch
- QT6BASE_IGNORE_CVES += CVE-2024-39936
- 
-+# All Qt CVEs are reported by NVD against the qt:qt vendor/product
-+# CPE, so from a Buildroot perspective, they will all show up reported
-+# on qt6base. The ignore CVE entries below are for other Qt modules,
-+# but they need to be listed here to be properly accounted for.
-+
-+# qt6svg/0001-QSvgFont-Initialize-used-member-remove-unused.patch
-+QT6BASE_IGNORE_CVES += CVE-2023-32573
-+
- QT6BASE_CMAKE_BACKEND = ninja
- 
- QT6BASE_LICENSE = \
-diff --git a/package/qt6/qt6svg/qt6svg.mk b/package/qt6/qt6svg/qt6svg.mk
-index 4386556548..25e87dd208 100644
---- a/package/qt6/qt6svg/qt6svg.mk
-+++ b/package/qt6/qt6svg/qt6svg.mk
-@@ -9,8 +9,6 @@ QT6SVG_SITE = $(QT6_SITE)
- QT6SVG_SOURCE = qtsvg-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SVG_VERSION).tar.xz
- QT6SVG_INSTALL_STAGING = YES
- QT6SVG_SUPPORTS_IN_SOURCE_BUILD = NO
--# 0001-QSvgFont-Initialize-used-member-remove-unused.patch
--QT6SVG_IGNORE_CVES += CVE-2023-32573
- 
- QT6SVG_CMAKE_BACKEND = ninja
- 
+Would it be possible to adjust the CVE entry accordingly?
+
+Thanks a lot!
+
+Thomas
 -- 
-2.47.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
