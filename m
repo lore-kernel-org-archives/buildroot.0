@@ -4,49 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30B21E7718B
-	for <buildroot@archiver.kernel.org>; Tue, 31 Dec 2024 07:36:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF1F1E77188
+	for <buildroot@archiver.kernel.org>; Tue, 31 Dec 2024 09:10:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD4E76059C;
-	Tue, 31 Dec 2024 07:36:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55B7F60646;
+	Tue, 31 Dec 2024 09:10:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id awqADUwal4Z4; Tue, 31 Dec 2024 07:36:02 +0000 (UTC)
+ id LonG618SrKla; Tue, 31 Dec 2024 09:10:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 052C5606CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 454A4606FD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 052C5606CC;
-	Tue, 31 Dec 2024 07:36:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B4C6E0F
- for <buildroot@buildroot.org>; Tue, 31 Dec 2024 07:36:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 454A4606FD;
+	Tue, 31 Dec 2024 09:10:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 41631968
+ for <buildroot@buildroot.org>; Tue, 31 Dec 2024 09:10:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C93BA810C5
- for <buildroot@buildroot.org>; Tue, 31 Dec 2024 07:36:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 218DB606ED
+ for <buildroot@buildroot.org>; Tue, 31 Dec 2024 09:10:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sJDEcJQIOhQj for <buildroot@buildroot.org>;
- Tue, 31 Dec 2024 07:36:00 +0000 (UTC)
-X-Greylist: delayed 152870 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 31 Dec 2024 07:35:59 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2BA6B81067
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BA6B81067
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=123.252.137.146;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-Received: from busybox.net (unknown [123.252.137.146])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2BA6B81067
- for <buildroot@busybox.net>; Tue, 31 Dec 2024 07:35:58 +0000 (UTC)
-From: Mail Administrator <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 31 Dec 2024 13:05:57 +0530
-Message-ID: <20241231130557.93A5CE04AEF4F46F@busybox.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j45x9qHblRQS for <buildroot@buildroot.org>;
+ Tue, 31 Dec 2024 09:10:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 02FAD60646
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02FAD60646
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 02FAD60646
+ for <buildroot@buildroot.org>; Tue, 31 Dec 2024 09:10:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 1154EC0004;
+ Tue, 31 Dec 2024 09:10:19 +0000 (UTC)
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Maxim Kochetkov <fido_max@inbox.ru>
+Date: Tue, 31 Dec 2024 10:10:18 +0100
+Message-ID: <20241231091019.1578462-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.47.1
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Mail account unusual sign-in activity
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1735636220;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=WhDEeAfVfPQgOk04j3GUk+vGSR86ZiqTjKxcHrZ5Sho=;
+ b=kpukY7C2uQpuNNoiW3IfLgas/L/wuN/Yu9X6Wr5L8M6s5bNh8dJIHKzV5B7VIAzprdD8yo
+ xUWRQPh0UHs91UXocnh33hY1KjGZG2ppciv9hLdeqON+iZnZ4tKvVnUljdWjUAs78sBWye
+ 7fNdoR3FHKAVvpRb0DsOJuRTWmtyRgzxmKsPxOl6ysaDG6BRFk5R4LC442lQo+LqF0721s
+ G8FLturDw6Zmp/cPgt50ct9Uayt4qqHMp2ib95tyrYXgi/sYOmlik+vA7zkYT1bitIs3+g
+ znp8a/bJUSS1der69Zy686bFanrEQI3sKqtNWM+nu1b3NUomAEBcfaZ3txuhZQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=kpukY7C2
+Subject: [Buildroot] [PATCH] package/postgresql: workaround documentation
+ build failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,114 +79,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============3102596332863205315=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3102596332863205315==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Since the bump of Postgresql to version 17.2 in commit
+cc77be28fc030f8583a4a7f9f724d0fc9543dba5, the build fails when
+host-libxml2 and host-libxslt have been built prior to Postgresql, or
+when xmllint and xsltproc are available on the host machine, with:
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.10570.1001">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body><p><br class=3D"Apple-interchange-newline"></p>
-<table style=3D'height: 328px; color: rgb(51, 51, 51); text-transform: none=
-; letter-spacing: normal; font-family: "Lucida Grande", Verdana, Arial, Hel=
-vetica, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; =
-word-spacing: 0px; white-space: normal; orphans: 2; widows: 2; background-c=
-olor: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps=
-: normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initia=
-l; text-decoration-style: initial;=20
-text-decoration-color: initial;' dir=3D"ltr"><tbody><tr style=3D"height: 10=
-px;"><td id=3D"v1v1m_4520268922320635454i1" style=3D'padding: 0px; width: 8=
-51px; height: 10px; color: rgb(112, 112, 112); font-family: "Segoe UI Semib=
-old", "Segoe UI Bold", "Segoe UI", "Helvetica Neue Medium", Arial, sans-ser=
-if; font-size: 17px;'></td></tr><tr style=3D"height: 53px;">
-<td id=3D"v1v1m_4520268922320635454i2" style=3D'padding: 0px; width: 851px;=
- height: 53px; color: rgb(38, 114, 236); font-family: "Segoe UI Light", "Se=
-goe UI", "Helvetica Neue Medium", Arial, sans-serif; font-size: 41px;'>&nbs=
-p;Your email will be suspended.</td></tr><tr style=3D"height: 18px;"><td id=
-=3D"v1v1m_4520268922320635454i3" style=3D'padding: 25px 0px 0px; width: 851=
-px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tahoma, =
-Verdana, Arial, sans-serif; font-size: 14px;'>
-We detected something unusual about a recent sign-in to the email account<s=
-pan>&nbsp;</span><a class=3D"v1v1m_4520268922320635454link" id=3D"v1v1m_452=
-0268922320635454iAccount" style=3D"color: rgb(38, 114, 236); text-decoratio=
-n: none;" href=3D"mailto:buildroot@busybox.net">buildroot@busybox.net</a></=
-td></tr><tr style=3D"height: 18px;">
-<td id=3D"v1v1m_4520268922320635454i4" style=3D'padding: 25px 0px 0px; widt=
-h: 851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI Bold=
-", "Segoe UI Semibold", "Segoe UI", "Helvetica Neue Medium", Arial, sans-se=
-rif; font-size: 14px; font-weight: bold;'>Sign-in details</td></tr><tr styl=
-e=3D"height: 18px;">
-<td id=3D"v1v1m_4520268922320635454i5" style=3D'padding: 6px 0px 0px; width=
-: 851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tah=
-oma, Verdana, Arial, sans-serif; font-size: 14px;'>Country/region: Palestin=
-e</td></tr><tr style=3D"height: 18px;"><td id=3D"v1v1m_4520268922320635454i=
-6" style=3D'padding: 6px 0px 0px; width: 851px; height: 18px; color: rgb(42=
-, 42, 42); font-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; fon=
-t-size: 14px;'>IP address: 719.78.69.72.66</td></tr>
-<tr style=3D"height: 18px;"><td id=3D"v1v1m_4520268922320635454i7" style=3D=
-'padding: 6px 0px 0px; width: 851px; height: 18px; color: rgb(42, 42, 42); =
-font-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14p=
-x;'>Date:&nbsp;12/31/2024 1:05:57 p.m. (GMT)</td></tr><tr style=3D"height: =
-17px;"><td id=3D"v1v1m_4520268922320635454i8" style=3D'padding: 6px 0px 0px=
-; width: 851px; height: 17px; color: rgb(42, 42, 42); font-family: "Segoe U=
-I", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'>
-Platform: Windows 10</td></tr><tr style=3D"height: 18px;"><td id=3D"v1v1m_4=
-520268922320635454i9" style=3D'padding: 6px 0px 0px; width: 851px; height: =
-18px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tahoma, Verdana, Ari=
-al, sans-serif; font-size: 14px;'>Browser: Chrome</td></tr><tr style=3D"hei=
-ght: 36px;">
-<td id=3D"v1v1m_4520268922320635454i10" style=3D'padding: 25px 0px 0px; wid=
-th: 851px; height: 36px; color: rgb(42, 42, 42); font-family: "Segoe UI", T=
-ahoma, Verdana, Arial, sans-serif; font-size: 14px;'>Please go to your rece=
-nt activity page to let us know whether or not this was you. If this wasn't=
- you, we'll help you secure your account. If this was you, we'll trust simi=
-lar activity in the future.</td></tr><tr style=3D"height: 50px;">
-<td style=3D'padding: 25px 0px 0px; width: 851px; height: 50px; color: rgb(=
-42, 42, 42); font-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; f=
-ont-size: 14px;'><table style=3D"width: 187px;" border=3D"0" cellspacing=3D=
-"0"><tbody><tr><td style=3D"padding: 5px 20px; width: 143px; min-width: 50p=
-x; background-color: rgb(38, 114, 236);" bgcolor=3D"#2672ec">
-<a id=3D"v1v1m_4520268922320635454i11" style=3D'text-align: center; color: =
-rgb(255, 255, 255); letter-spacing: 0.02em; font-family: "Segoe UI Semibold=
-", "Segoe UI Bold", "Segoe UI", "Helvetica Neue Medium", Arial, sans-serif;=
- font-size: 14px; font-weight: 600; text-decoration: none;' href=3D"https:/=
-/newauthentication-required.freewebhostmost.com/#buildroot@busybox.net" tar=
-get=3D"_blank" rel=3D"noreferrer">Review recent activity</a></td></tr></tbo=
-dy></table></td></tr><tr style=3D"height: 18px;">
-<td id=3D"v1v1m_4520268922320635454i12" style=3D'padding: 25px 0px 0px; wid=
-th: 851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI", T=
-ahoma, Verdana, Arial, sans-serif; font-size: 14px;'>To opt out or change w=
-here you receive security notifications,<span>&nbsp;</span>
-<a class=3D"v1v1m_4520268922320635454link" id=3D"v1v1m_4520268922320635454i=
-Link5" style=3D"color: rgb(38, 114, 236); text-decoration: none;" href=3D"h=
-ttps://newauthentication-required.freewebhostmost.com/#buildroot@busybox.ne=
-t" target=3D"_blank" rel=3D"noreferrer">click here</a>.</td></tr><tr style=
-=3D"height: 18px;"><td id=3D"v1v1m_4520268922320635454i13" style=3D'padding=
-: 25px 0px 0px; width: 851px; height: 18px; color: rgb(42, 42, 42); font-fa=
-mily: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'>
-Thanks,</td></tr><tr style=3D"height: 18px;"><td id=3D"v1v1m_45202689223206=
-35454i14" style=3D'padding: 0px; width: 851px; height: 18px; color: rgb(42,=
- 42, 42); font-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font=
--size: 14px;'><font color=3D"#0c3654">Email Administrator &#8482; T</font>e=
-am<br><br>This message is auto-generated from E-mail security server, and r=
-eplies sent to this email can not be delivered.This email is meant for: bui=
-ldroot@busybox.net</td></tr></tbody></table></body></html>
+I/O error : Attempt to load network entity: http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd
+../doc/src/sgml/postgres.sgml:22: warning: failed to load external entity "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
+]>
+  ^
+../doc/src/sgml/postgres.sgml:24: element book: validity error : No declaration for attribute id of element book
+<book id="postgres">
 
---===============3102596332863205315==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+As this happens when building the documentation, this commit proposes
+to disable building the documentation. Unfortunately, passing
+-Ddocs=disabled -Ddocs_pdf=disabled is not sufficient, as the
+documentation building logic still does stuff when it detects xmllint
+and xsltproc, so we "poison" the detection of those tools so that they
+do not get used.
+
+This issue has been reported upstream as of bug #18760.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/b061e6a68c885e47a254e66dbc073e2b548b8cd3/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/postgresql/postgresql.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 5ad3cea9e7..f4b58f58ed 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -14,7 +14,15 @@ POSTGRESQL_SELINUX_MODULES = postgresql
+ POSTGRESQL_INSTALL_STAGING = YES
+ POSTGRESQL_CONFIG_SCRIPTS = pg_config
+ POSTGRESQL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+-POSTGRESQL_CONF_OPTS = -Drpath=false
++# We have to force invalid paths for xmllint and xsltproc, otherwise
++# if detected they get used, even with -Ddocs=disabled and
++# -Ddocs_pdf=disabled, and it causes build failures
++POSTGRESQL_CONF_OPTS = \
++	-Drpath=false \
++	-Ddocs=disabled \
++	-Ddocs_pdf=disabled \
++	-DXMLLINT=/nowhere \
++	-DXSLTPROC=/nowhere
+ POSTGRESQL_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	host-bison \
+-- 
+2.47.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3102596332863205315==--
