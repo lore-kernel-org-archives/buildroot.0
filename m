@@ -1,77 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EAA1E77194
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jan 2025 22:22:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 871CAE7718B
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jan 2025 22:28:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2189405A1;
-	Wed,  1 Jan 2025 22:22:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1cbKORxOSdaV; Wed,  1 Jan 2025 22:22:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCF55405A3
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCF55405A3;
-	Wed,  1 Jan 2025 22:22:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 92EB9E0F
- for <buildroot@buildroot.org>; Wed,  1 Jan 2025 22:22:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6130480FF3
- for <buildroot@buildroot.org>; Wed,  1 Jan 2025 22:22:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4863581CAF;
+	Wed,  1 Jan 2025 22:28:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PhLlsaWluhXz for <buildroot@buildroot.org>;
- Wed,  1 Jan 2025 22:22:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
- helo=mslow1.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9D0AA80E54
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D0AA80E54
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9D0AA80E54
- for <buildroot@busybox.net>; Wed,  1 Jan 2025 22:22:37 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::223])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 22852C0144
- for <buildroot@busybox.net>; Wed,  1 Jan 2025 22:22:33 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B23F660002;
- Wed,  1 Jan 2025 22:22:26 +0000 (UTC)
-Date: Wed, 1 Jan 2025 23:22:26 +0100
-To: Francois Perrad <francois.perrad@gadz.org>
-Cc: buildroot@busybox.net
-Message-ID: <20250101232226.7719f6ad@windsurf>
-In-Reply-To: <20241001193355.3966100-1-francois.perrad@gadz.org>
-References: <20241001193355.3966100-1-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ id 1a5W-zTZ-G-w; Wed,  1 Jan 2025 22:28:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6363281CE1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6363281CE1;
+	Wed,  1 Jan 2025 22:28:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E9D8AF24
+ for <buildroot@buildroot.org>; Wed,  1 Jan 2025 22:28:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB4A481CE1
+ for <buildroot@buildroot.org>; Wed,  1 Jan 2025 22:28:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iKrB5uIG16J1 for <buildroot@buildroot.org>;
+ Wed,  1 Jan 2025 22:28:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:868:100:600::216; helo=shout01.mail.de;
+ envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E61A381CAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E61A381CAF
+Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E61A381CAF
+ for <buildroot@buildroot.org>; Wed,  1 Jan 2025 22:28:55 +0000 (UTC)
+Received: from postfix02.mail.de (postfix02.bt.mail.de [10.0.121.126])
+ by shout01.mail.de (Postfix) with ESMTP id 17E2F240EA5;
+ Wed,  1 Jan 2025 23:28:54 +0100 (CET)
+Received: from smtp01.mail.de (smtp02.bt.mail.de [10.0.121.212])
+ by postfix02.mail.de (Postfix) with ESMTP id B587C2405BA;
+ Wed,  1 Jan 2025 23:28:53 +0100 (CET)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp01.mail.de (Postfix) with ESMTPSA id 64228241208;
+ Wed,  1 Jan 2025 23:28:51 +0100 (CET)
+To: buildroot@buildroot.org
+Cc: Drew Fustini <dfustini@tenstorrent.com>,
+ Drew Fustini <drew@beagleboard.org>, robertcnelson@beagleboard.org,
+ jkridner@beagleboard.org, Han Gao <rabenda.cn@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Kilian Zinnecker <kilian.zinnecker@mail.de>
+Date: Wed, 01 Jan 2025 23:27:54 +0100
+Message-ID: <8511014.NyiUUSuA9g@kilian-laptop>
+In-Reply-To: <3258931.5fSG56mABF@kilian-laptop>
+References: <20250101205435.1513140-1-kilian.zinnecker@mail.de>
+ <3258931.5fSG56mABF@kilian-laptop>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1735770147;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=2haCZJtwebJytE6eWWWKcIAb1FcQ4MQjltdz2c/Py84=;
- b=KHyxH+wjk4ojHMYxEQNTwr84ndcPTdfJTNh6PC5LiQ9Z/uPiQWN0I8xY/QEyO+JGjou2TD
- lNcrDPU+0E+Nnv4/fc0bebUTcKeu5mG8HvwB+LYzxqDvEOQkBE76BxWQ093huLLGHP2wbJ
- Zk4A1KY3Nojuj+dyabo/lE0VveUFpDMdnX9zHN0IOpVpuf5ufqTUSWiOEmozxL1ULOixvG
- rvy8u0U2tjopY8XMUNTurDRpRw934cnpRycO71N5G/W8ODLBOA42pHrCJq88SVWgYFUKax
- VtyN6Xmi1mj7VmhSS8Zn0CDmLiQDHnlnoYhNbQpvXDDcM6BOVBwXGioOESh5fQ==
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
+X-purgate: This mail is considered clean (visit https://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 541
+X-purgate-ID: 154282::1735770533-B953D89E-925643D0/0/0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=mail.de; s=mailde202009; t=1735770533;
+ bh=hb3HzX5AdZzrzG1nLNUq513/IQsZbfMgIhqfcJBOy70=;
+ h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=XDWjRGRfdlg67WU+cOjjbAAkt3jz+sBPvB668IF6P7T5xxKhE7eGRN6DsDXqudZvC
+ lk27+xXi+ODm5J2rD51xIrlxySug9LZFT53G6nGEKbt85qN4lE6K9plS4C/qnu/cbO
+ EzgOFOYbA65L1vfM4zvFAlh87egtHFqdMHJXRAB67Z15FVHs3inahE/v+IVxTzqkrB
+ 1QivqHDhuTCqdrOvtk8C3Eycx6De7/rjc2bpzr+PRRN4XN2GR4v4/sT+GnaQKGkeZY
+ 0tpqwXRpITU2czTvsIxy0WBV4qjA4yxiWwij3tDguk+rz0TNZ0YrzXBdDxqZWhkE6F
+ e/nrSVScfl0CQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mail.de
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KHyxH+wj
-Subject: Re: [Buildroot] [PATCH] package/perl: bump to version 5.40.0
+ unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
+ header.s=mailde202009 header.b=XDWjRGRf
+Subject: Re: [Buildroot] [PATCH v6 0/2] Add board support for the
+ BeagleV-Ahead
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,33 +101,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRnJhbsOnb2lzLAoKT24gVHVlLCAgMSBPY3QgMjAyNCAyMTozMzo1NCArMDIwMApGcmFu
-Y29pcyBQZXJyYWQgPGZyYW5jb2lzLnBlcnJhZEBnYWR6Lm9yZz4gd3JvdGU6Cgo+IHJlbW92ZSBt
-ZXJnZWQgcGF0Y2gKPiAKPiBkaWZmIFJFQURNRToKPiAgICAgLVBlcmwgaXMgQ29weXJpZ2h0IChD
-KSAxOTkzIC0gMjAyNCBieSBMYXJyeSBXYWxsIGFuZCBvdGhlcnMuCj4gICAgICtQZXJsIGlzIENv
-cHlyaWdodCAoQykgMTk5MyAtIDIwMjMgYnkgTGFycnkgV2FsbCBhbmQgb3RoZXJzLgo+IAo+IFNp
-Z25lZC1vZmYtYnk6IEZyYW5jb2lzIFBlcnJhZCA8ZnJhbmNvaXMucGVycmFkQGdhZHoub3JnPgo+
-IC0tLQo+ICAuLi5peHVwLXJlZ2V4LWVuZ2luZS1idWlsZC11bmRlci1VdXNlZGwucGF0Y2ggfCA1
-NTQgLS0tLS0tLS0tLS0tLS0tLS0tCj4gIHBhY2thZ2UvcGVybC9wZXJsLmhhc2ggICAgICAgICAg
-ICAgICAgICAgICAgICB8ICAxNCArLQo+ICBwYWNrYWdlL3BlcmwvcGVybC5tayAgICAgICAgICAg
-ICAgICAgICAgICAgICAgfCAgIDYgKy0KPiAgMyBmaWxlcyBjaGFuZ2VkLCAxMCBpbnNlcnRpb25z
-KCspLCA1NjQgZGVsZXRpb25zKC0pCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3Blcmwv
-MDAwMS1yZWdjb21wLWMtcmVnZXhlYy1jLWZpeHVwLXJlZ2V4LWVuZ2luZS1idWlsZC11bmRlci1V
-dXNlZGwucGF0Y2gKClRoaXMgdXBkYXRlIGJyZWFrcyB0aGUgYnVpbGQgb2YgcGVybCBmb3IgdGhl
-IHRhcmdldCB3aGVuCkJSMl9TVEFUSUNfTElCUz15OgoKICBodHRwOi8vYXV0b2J1aWxkLmJ1aWxk
-cm9vdC5uZXQvcmVzdWx0cy9lMDcvZTA3ZmU4YmEzNDNiNjA2YWI0YWE2N2UwNDJjNjBjZTFmYjU3
-MGMxNS9idWlsZC1lbmQubG9nCgpJbnRlcmVzdGluZ2x5LCBpbiB5b3VyIHZlcnNpb24gYnVtcCwg
-eW91IGRyb3BwZWQgYSBwYXRjaC4uLiB3aGljaCB3YXMKbWVyZ2VkIHVwc3RyZWFtIGJ1dCBzZWVt
-cyByZWxhdGVkLgoKQ291bGQgeW91IGhhdmUgYSBsb29rPwoKVGhvbWFzCi0tIApUaG9tYXMgUGV0
-YXp6b25pLCBDVE8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmlu
-ZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
-Cg==
+Hello all,
+
+> I was able to change to another custom uboot, which seems capable of
+> activating all 4 cores of the SoC. However, still the two needed binary
+> blobs are in a repository without a LICENSE file.
+
+actually the custom device tree containing the reset-sample node could be 
+wrong. With the node it seems that the cores 1-3 might not be activated after 
+all, but when omitting the node, it seems that the custom uboot does properly 
+activate them. I have to have another look at this ...
+
+Best regards,
+Kilian
+
+
+
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
