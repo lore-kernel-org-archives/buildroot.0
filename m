@@ -4,92 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 871CAE7718B
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jan 2025 22:28:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23519E7718B
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jan 2025 22:37:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4863581CAF;
-	Wed,  1 Jan 2025 22:28:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CCADC80B15;
+	Wed,  1 Jan 2025 22:37:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1a5W-zTZ-G-w; Wed,  1 Jan 2025 22:28:58 +0000 (UTC)
+ id S2_Ad_PL6NVM; Wed,  1 Jan 2025 22:37:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6363281CE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D90BE80B2F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6363281CE1;
-	Wed,  1 Jan 2025 22:28:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D90BE80B2F;
+	Wed,  1 Jan 2025 22:37:34 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E9D8AF24
- for <buildroot@buildroot.org>; Wed,  1 Jan 2025 22:28:56 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 423B4F24
+ for <buildroot@buildroot.org>; Wed,  1 Jan 2025 22:37:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB4A481CE1
- for <buildroot@buildroot.org>; Wed,  1 Jan 2025 22:28:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 312F880B9A
+ for <buildroot@buildroot.org>; Wed,  1 Jan 2025 22:37:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iKrB5uIG16J1 for <buildroot@buildroot.org>;
- Wed,  1 Jan 2025 22:28:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:868:100:600::216; helo=shout01.mail.de;
- envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E61A381CAF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E61A381CAF
-Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E61A381CAF
- for <buildroot@buildroot.org>; Wed,  1 Jan 2025 22:28:55 +0000 (UTC)
-Received: from postfix02.mail.de (postfix02.bt.mail.de [10.0.121.126])
- by shout01.mail.de (Postfix) with ESMTP id 17E2F240EA5;
- Wed,  1 Jan 2025 23:28:54 +0100 (CET)
-Received: from smtp01.mail.de (smtp02.bt.mail.de [10.0.121.212])
- by postfix02.mail.de (Postfix) with ESMTP id B587C2405BA;
- Wed,  1 Jan 2025 23:28:53 +0100 (CET)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id 64228241208;
- Wed,  1 Jan 2025 23:28:51 +0100 (CET)
+ id vPxG-brmDmUt for <buildroot@buildroot.org>;
+ Wed,  1 Jan 2025 22:37:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 113AD80B15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 113AD80B15
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 113AD80B15
+ for <buildroot@buildroot.org>; Wed,  1 Jan 2025 22:37:31 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 8F6B11BF205;
+ Wed,  1 Jan 2025 22:37:29 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Cc: Drew Fustini <dfustini@tenstorrent.com>,
- Drew Fustini <drew@beagleboard.org>, robertcnelson@beagleboard.org,
- jkridner@beagleboard.org, Han Gao <rabenda.cn@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Kilian Zinnecker <kilian.zinnecker@mail.de>
-Date: Wed, 01 Jan 2025 23:27:54 +0100
-Message-ID: <8511014.NyiUUSuA9g@kilian-laptop>
-In-Reply-To: <3258931.5fSG56mABF@kilian-laptop>
-References: <20250101205435.1513140-1-kilian.zinnecker@mail.de>
- <3258931.5fSG56mABF@kilian-laptop>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed,  1 Jan 2025 23:37:25 +0100
+Message-ID: <20250101223727.2348482-2-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250101223727.2348482-1-thomas.petazzoni@bootlin.com>
+References: <20250101223727.2348482-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
-X-purgate: This mail is considered clean (visit https://www.eleven.de for
- further information)
-X-purgate: clean
-X-purgate-size: 541
-X-purgate-ID: 154282::1735770533-B953D89E-925643D0/0/0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1735770533;
- bh=hb3HzX5AdZzrzG1nLNUq513/IQsZbfMgIhqfcJBOy70=;
- h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=XDWjRGRfdlg67WU+cOjjbAAkt3jz+sBPvB668IF6P7T5xxKhE7eGRN6DsDXqudZvC
- lk27+xXi+ODm5J2rD51xIrlxySug9LZFT53G6nGEKbt85qN4lE6K9plS4C/qnu/cbO
- EzgOFOYbA65L1vfM4zvFAlh87egtHFqdMHJXRAB67Z15FVHs3inahE/v+IVxTzqkrB
- 1QivqHDhuTCqdrOvtk8C3Eycx6De7/rjc2bpzr+PRRN4XN2GR4v4/sT+GnaQKGkeZY
- 0tpqwXRpITU2czTvsIxy0WBV4qjA4yxiWwij3tDguk+rz0TNZ0YrzXBdDxqZWhkE6F
- e/nrSVScfl0CQ==
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1735771049;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=vqczAJfOZVpzkToDDdZp+9Q7VT9wyy58UAsqTZDhdds=;
+ b=eozO8UNwg/cUP/w+d0OtryYr3anQy00ln5p4ywdzmck2EHTTctYTmJSa5Ehk+5eFLzMPdO
+ NcLLPN00BG3h577mG+XA2EAr0IjO4w9gidXe9l2JiXdy6ARuBDIFGKU90VYNLNEgBPdRfy
+ pWSRbYBXYs6EOHMfxyIyZxvRwQ6AB4x90YOWIkIZCqAhnYJGw8RrUp4gMCA2Qcj0PzjG4p
+ 54qLZ5ENqI7z4j/gfHsgObAwlbp23n0veAL4aXI7ZwNq/AnHsw7LR8BV4UT6Si7PpUDZg0
+ zeRmvLGuP96llnenktS9LnuTkV/nq7EXO2HWn+CiUwf/p1LEDdpB6t2S4hc4Aw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mail.de
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
- header.s=mailde202009 header.b=XDWjRGRf
-Subject: Re: [Buildroot] [PATCH v6 0/2] Add board support for the
- BeagleV-Ahead
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=eozO8UNw
+Subject: [Buildroot] [PATCH 2/2] package/c-icap: backport patch fixing
+ missing <stdio.h> include
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,29 +82,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
-Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello all,
+This commit backports an upstream patch that fixes a missing <stdio.h>
+include, causing build failures with toolchains based on GCC 14.x.
 
-> I was able to change to another custom uboot, which seems capable of
-> activating all 4 cores of the SoC. However, still the two needed binary
-> blobs are in a repository without a LICENSE file.
+Fixes:
 
-actually the custom device tree containing the reset-sample node could be 
-wrong. With the node it seems that the cores 1-3 might not be activated after 
-all, but when omitting the node, it seems that the custom uboot does properly 
-activate them. I have to have another look at this ...
+  http://autobuild.buildroot.net/results/a99a9999fd417aa5edcd6302e674a72a99d89675466/
 
-Best regards,
-Kilian
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ing-about-missing-stdio.h-include-fi.patch | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/c-icap/0002-Fix-compile-warning-about-missing-stdio.h-include-fi.patch
 
-
-
+diff --git a/package/c-icap/0002-Fix-compile-warning-about-missing-stdio.h-include-fi.patch b/package/c-icap/0002-Fix-compile-warning-about-missing-stdio.h-include-fi.patch
+new file mode 100644
+index 0000000000..986ed43355
+--- /dev/null
++++ b/package/c-icap/0002-Fix-compile-warning-about-missing-stdio.h-include-fi.patch
+@@ -0,0 +1,25 @@
++From ae8a1bc4979c797bb1f152fc92cfe6bc05a44594 Mon Sep 17 00:00:00 2001
++From: Christos Tsantilas <christos@chtsanti.net>
++Date: Tue, 20 Nov 2018 17:10:16 +0200
++Subject: [PATCH] Fix compile warning about missing stdio.h include file
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream: https://github.com/c-icap/c-icap-server/commit/ae8a1bc4979c797bb1f152fc92cfe6bc05a44594
++---
++ tests/test_base64.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/tests/test_base64.c b/tests/test_base64.c
++index 8a4a76c..7692197 100644
++--- a/tests/test_base64.c
+++++ b/tests/test_base64.c
++@@ -1,5 +1,6 @@
++ #include "common.h"
++ #include "simple_api.h"
+++#include <stdio.h>
++ 
++ 
++ int main(int argc, char *argv[])
++-- 
++2.47.1
++
+-- 
+2.47.1
 
 _______________________________________________
 buildroot mailing list
