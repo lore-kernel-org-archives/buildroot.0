@@ -1,93 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F4083E7718B
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jan 2025 20:01:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 490B6E7718B
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jan 2025 20:21:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B21541272;
-	Wed,  1 Jan 2025 20:01:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED144605C0;
+	Wed,  1 Jan 2025 20:21:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a6gJgdHiUS7n; Wed,  1 Jan 2025 20:01:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c_qgnHCVXxam; Wed,  1 Jan 2025 20:21:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3847541297
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 116D7605D7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3847541297;
-	Wed,  1 Jan 2025 20:01:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9474BF27
- for <buildroot@buildroot.org>; Wed,  1 Jan 2025 20:01:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 116D7605D7;
+	Wed,  1 Jan 2025 20:21:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DFA91F27
+ for <buildroot@buildroot.org>; Wed,  1 Jan 2025 20:21:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7566281250
- for <buildroot@buildroot.org>; Wed,  1 Jan 2025 20:01:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BFFD340169
+ for <buildroot@buildroot.org>; Wed,  1 Jan 2025 20:21:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ThPzRGenUliN for <buildroot@buildroot.org>;
- Wed,  1 Jan 2025 20:01:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:868:100:600::217; helo=shout02.mail.de;
- envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 670FE8122B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 670FE8122B
-Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 670FE8122B
- for <buildroot@buildroot.org>; Wed,  1 Jan 2025 20:01:54 +0000 (UTC)
-Received: from postfix02.mail.de (postfix02.bt.mail.de [10.0.121.126])
- by shout02.mail.de (Postfix) with ESMTP id C175D240D5E;
- Wed,  1 Jan 2025 21:01:52 +0100 (CET)
-Received: from smtp01.mail.de (smtp03.bt.mail.de [10.0.121.213])
- by postfix02.mail.de (Postfix) with ESMTP id 8DEF6240596;
- Wed,  1 Jan 2025 21:01:52 +0100 (CET)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id 8448424102E;
- Wed,  1 Jan 2025 21:01:51 +0100 (CET)
-To: buildroot@buildroot.org, Drew Fustini <dfustini@tenstorrent.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Revy <rabenda.cn@gmail.com>, robertcnelson@beagleboard.org,
- jkridner@beagleboard.org, Drew Fustini <drew@beagleboard.org>
-Date: Wed, 01 Jan 2025 21:00:54 +0100
-Message-ID: <2292259.iZASKD2KPV@kilian-laptop>
-In-Reply-To: <Z3WcIOKr8jnCUVCY@x1>
-References: <20241230224631.1080014-1-kilian.zinnecker@mail.de>
- <Z3WblFPOphrna9FD@x1> <Z3WcIOKr8jnCUVCY@x1>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Rww3slMxcxjZ for <buildroot@buildroot.org>;
+ Wed,  1 Jan 2025 20:21:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 74A6140140
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74A6140140
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 74A6140140
+ for <buildroot@buildroot.org>; Wed,  1 Jan 2025 20:21:15 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 3982560002;
+ Wed,  1 Jan 2025 20:21:13 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed,  1 Jan 2025 21:21:11 +0100
+Message-ID: <20250101202112.1845113-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.47.1
 MIME-Version: 1.0
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
-X-purgate: This mail is considered clean (visit https://www.eleven.de for
- further information)
-X-purgate: clean
-X-purgate-size: 2164
-X-purgate-ID: 154282::1735761712-BE51689A-06CE4530/10/3626336762
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1735761712;
- bh=6ppadoPsibZjzafcUw5KX5O0Lo36DAWdAO0+7NKkoVA=;
- h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=YrjABQeFsmiMhYdn/dstNf7ZXw+0mxJmPpNY8LhahBwpuGVKLTWYD3espm58GwXN0
- dmLu0ir/GROKHvL8LtakGditu9PVeoypXl5zAJQjJ54yHkiiUxKOkHS4pEA0TZbKzY
- rS2RRVc+4jMCbjNgCuNpo42zUlvzg02f3KDahn7UqhPYAQN4WKITyUvEAxw+31+kjD
- qxYJ9XL7nQ3HXAtr+SLtsigGGC2Vhb5sV60VUDq+S3CZYzseIc1zRnIY8qzOE03eEa
- xFXjpo4Fc4p3Xfya45Zj2Nq46vgf5uKS2tOikdWS9XJ89+xXz6uuhd5DHFakBAVb6u
- DwbVjxo+Begrg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mail.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1735762873;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=0WK8wTldEdQxE4oCUggGiC9dg7QQUWLOEyAP/r0dQ7Y=;
+ b=dcDIcZ2YwPE/bGaTAE7QoJB4o/8tGKHckk0tDuTPGtoUG2XJ5rwhKgogaltPrluUsjsKMc
+ KWbJLGOKxvODvTne1U5N5ZVJeW5YfhebnNanhSYRSfS8QaDbDL2V0yFpWy1YaoKTxoF0Nn
+ Xj17gJv0gIK26o7C0+QHGy348nsf0NHJOtbxJtmOuLOVouS2kp0eVrGQIgKluxXswLJefK
+ HR0Ya+skP42SUn1zQA43omP2aoWrtt4hwxkSOoQg4QQVJc6NU9INvW41I0M/U7DKvg3Ovl
+ 5TXqwXaCQKNQaY1hSNZGTHCsZhkA8HJi1hlrJHchtS1lQUVeLx9DSABipw6WRg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
- header.s=mailde202009 header.b=YrjABQeF
-Subject: Re: [Buildroot] [PATCH v5 0/2] Add board support for the
- BeagleV-Ahead
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=dcDIcZ2Y
+Subject: [Buildroot] [PATCH] package/perl: properly pass CFLAGS/LDFLAGS when
+ building host-perl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,65 +77,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
-Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Drew,
+HOST_CFLAGS and HOST_LDFLAGS are currently not accounted for when
+building host-perl. In particular, it means that executables
+built/installed by host-perl do not have a RPATH pointing to
+HOST_DIR/lib, which can cause issues as libcrypt.so can now be
+provided by host-libxcrypt.
 
-[--SNIP--]
+This was causing check-host-rpath to complain in the situation where:
 
-> > I think that u-boot is the ideal solution since that is the direction
-> > that T-Head decided to go. I asked Revy on Telegram [1] and they showed
-> > me where in thead-u-boot [2] that reset_sample() is called.
-> > 
-> > Revy pointed me to a build of u-boot-with-spl-beagle.bin [3] that I've
-> > just flashed to my Ahead [4]. Unfortunately, there is an issue that
-> > results in the board not booting [5]. Revy is going to look into the
-> > issue and get back to me.
-[--SNIP--]
-> 
-> Revy just replied that I should be trying mainline OpenSBI. I have to go
-> offline for awhile but I will try that later today.
+1. host-perl was built, with no RPATH, linked against the system
+   libcrypt.so
 
-I actually didn't wait and acutally already tried the revyos uboot and it 
-seems to work with kernel 6.12.7 and OpenSBI 1.6. I now get:
+2. host-libxcrypt was built afterwards, installed as
+   HOST_DIR/lib/libcrypt.so, which made check-host-rpath complain as
+   HOST_DIR/bin/perl is linked against a library present in
+   HOST_DIR/lib but doesn't have a RPATH to HOST_DIR/lib
 
-[    0.113565] smp: Bringing up secondary CPUs ...
-[    0.121700] smp: Brought up 1 node, 4 CPUs
-[--SNIP--]
-[    0.216965] cpuidle: using governor menu
-[    0.251283] cpu3: Ratio of byte access time to unaligned word access is 
-6.14, unaligned accesses are fast
-[    0.251283] cpu2: Ratio of byte access time to unaligned word access is 
-6.14, unaligned accesses are fast
-[    0.251284] cpu1: Ratio of byte access time to unaligned word access is 
-6.14, unaligned accesses are fast
-[    0.303594] cpu0: Ratio of byte access time to unaligned word access is 
-6.14, unaligned accesses are fast
+Fixes:
 
-So I think all cores are up and running now! :D Thanks for all the help so 
-far! I still have some questions though and there are still some things to do. 
-However, I will send a v6 of the patches, although they are still not ready to 
-get accepted.
+  http://autobuild.buildroot.net/results/d4348d7f872ccd734795a1d071960a696148ed6a/
 
-Regarding the revyos boot, I have two questions:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl/perl.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-1) Are the xuantie binary blobs still needed? The light_aon_fpga.bin and the 
-light_c906_audio.bin?
-
-2) The revyos uboot seems to also need the reset-sampe device tree node. I 
-therefore added it via a custom device tree. However I still get the error 
-message "## fdt has no reset_sample". Any idea, what could be wrong here?
-
-https://github.com/revyos/thead-u-boot/blob/th1520/arch/riscv/lib/bootm.c#L115
-
-Thanks and best regards,
-Kilian
-
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 0f7038a048..dc7c0b8d42 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -98,7 +98,9 @@ endef
+ HOST_PERL_CONF_OPTS = \
+ 	-des \
+ 	-Dprefix="$(HOST_DIR)" \
+-	-Dcc="$(HOSTCC)"
++	-Dcc="$(HOSTCC)" \
++	-Dccflags="$(HOST_CFLAGS)" \
++	-Dldflags="$(HOST_LDFLAGS)"
+ 
+ define HOST_PERL_CONFIGURE_CMDS
+ 	(cd $(@D); $(HOST_MAKE_ENV) HOSTCC='$(HOSTCC_NOCCACHE)' \
+-- 
+2.47.1
 
 _______________________________________________
 buildroot mailing list
