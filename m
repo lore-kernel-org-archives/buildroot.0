@@ -4,92 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BDB2E77194
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 09:45:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97BCEE77188
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 10:09:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF3AD403E7;
-	Thu,  2 Jan 2025 09:45:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 419A4403CA;
+	Thu,  2 Jan 2025 10:09:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cunwq0D5z0gc; Thu,  2 Jan 2025 09:45:51 +0000 (UTC)
+ id l4jlYuQC8tFQ; Thu,  2 Jan 2025 10:09:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5618C403D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 002EA40401
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5618C403D5;
-	Thu,  2 Jan 2025 09:45:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D0026F27
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 09:45:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 002EA40401;
+	Thu,  2 Jan 2025 10:09:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D47DEE0F
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 10:09:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A1AB3403CE
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 09:45:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C10FC6077D
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 10:09:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rk0tJsNb_NRW for <buildroot@buildroot.org>;
- Thu,  2 Jan 2025 09:45:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oiv0DYcFEnPP for <buildroot@buildroot.org>;
+ Thu,  2 Jan 2025 10:09:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::102d; helo=mail-pj1-x102d.google.com;
- envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5F992403D5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F992403D5
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com
- [IPv6:2607:f8b0:4864:20::102d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5F992403D5
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 09:45:48 +0000 (UTC)
-Received: by mail-pj1-x102d.google.com with SMTP id
- 98e67ed59e1d1-2ee8e8e29f6so12476312a91.0
- for <buildroot@buildroot.org>; Thu, 02 Jan 2025 01:45:48 -0800 (PST)
+ client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
+ envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CB80560771
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB80560771
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CB80560771
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 10:09:06 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-aa6b500a685so144992766b.2
+ for <buildroot@buildroot.org>; Thu, 02 Jan 2025 02:09:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1735811147; x=1736415947;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=qR1N6+cbtTyHz/TljNyh1Q514uJ/JXG/Rp4ebRDAnLY=;
- b=VH74ORld2TK6izJC/QFrsu2lMjxSqhgIfcr/hP9P2UCoYE2vRUT2Mu6novt2nAhXYc
- cBHYiKsziSILrZsY0H4XM5CpANdVMCOfe+egApEUAh1u21WYLL7MPu+/NXOvEWAo+GPh
- wF12sBmjOdWpo9BtcOo/t2WC7pCXjoUZRTCVooZ4caCNgrDTEO7EM7FMKNVrokp3am9p
- MpLZrPl/6WzUbtyJcnXhKyBz+z2vBPzv2S2/cB/WtW+B2YrpdCZ9QzQtv59KM0RVgDnv
- Yj2l/uOxBw6k9UE7zBMkHhqZH3LSTZCNIG36gyJxKaKSluTY7Pn1vjkDwiOHs3vlXsMX
- tTkQ==
-X-Gm-Message-State: AOJu0YyLcHs0HSXrST0NU2BV2JtkHXJzIXBrHOHjndRtWBxv1tU+slhT
- TCcdD0AAJeo9m6bpfMCuomXjvLiFoTracRyvK2SMuWBD5Vm9pO/RPpee8AZ92U/8L3CPKEQpz6+
- goKugjTbDT6umqvGnrCQN+5kA5nZZ82FEpY4KKgscBIA6jY3xMrQg
-X-Gm-Gg: ASbGnctsLIf3qNgx+7XkHa0lqLUyON6iV/FaZJ56wnxB3Ndx/FCDbgTfuP/GhHtk9M8
- 4xy2Yxq9cGm/d/sZjEpdyQPbJGns7M/lwOQJOtqu40ZcujdjIXGRnUy4/lXzl+Re/tMOEtfs=
-X-Google-Smtp-Source: AGHT+IHPVwklMjIs3vHAena60g1kej+7VyDctZLaWZeeo9SHPW0b3aSeNBuRxadhBRaXToXBQ4eOF0A5rEw6D0BMEXc=
-X-Received: by 2002:a17:90b:3d50:b0:2ee:b4bf:2d06 with SMTP id
- 98e67ed59e1d1-2f452e458ccmr66631438a91.19.1735811147463; Thu, 02 Jan 2025
- 01:45:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20250101202112.1845113-1-thomas.petazzoni@bootlin.com>
-In-Reply-To: <20250101202112.1845113-1-thomas.petazzoni@bootlin.com>
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Thu, 2 Jan 2025 10:45:36 +0100
-Message-ID: <CAAE6iEVZyYzizNbqd1koGCvna9EmTzkX7PpBKm6=07pdWVkV3Q@mail.gmail.com>
+ d=1e100.net; s=20230601; t=1735812544; x=1736417344;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=FQWza7lAf9g1fAptTsI89OA9eKc01C9sQSQUIskqcPk=;
+ b=l+IBDTn6gByZC8mCtB6DfPnKjyKH0vrKjJJdlwJkLMYWIQ/PPEdTSEnsd2PB8rVl8f
+ s7mC5E4J/lXbqMva6TvVUjXnhGNnaIvpPGvyFAUniinPiGddmGOX7MLmmziL+G+jpeav
+ oCzwnF1fjt8uoCGomtkPesXeAVX3kmVv1rLDA6cjXgHLcQRBUB7czj6Xa/ev1+nj4+ml
+ ly8HPBsmei7M6V3+IJ3/TAc63LT4OuMjqA50Mg2WnutT9IAhe6hWJh9x+twZhHHRGmwX
+ fCqa08guuQfE8vTjOZ3Hbe3CQe2HBQai2JA1dR/lj5FmIV27TrSFVca5rkQtIg4jG3XX
+ Fhbg==
+X-Gm-Message-State: AOJu0YwtOKp6yYmkdll0r4D9F+Gjdz9Zsfx2R4Y+ApVJb4JsJysFIs/u
+ Lv08lXX4FKP4DChlRyY/BMOfl2Wc41MeNJMBIzLiBejqmltpK5gcbMTL16xTsiRn51XjiEXhPNp
+ 9Af4=
+X-Gm-Gg: ASbGncuPH4Yoss9NxRer85rscK0EDS0XU594DcdU5mN+FqaCpTDsqbv+cGwCMszHq/f
+ ezlNsxn11jHSPwekWKG6Y6ElfdXpyjXLpq5I2dDGM1KgOgMOeC9L85FTz3ACxuvbBm43pAMh7IL
+ 5nV3gZ2CLsb6e3uPzfI2BSTZLKAbJItWE05sFHjsfsorlNEN9GnV0qoc6zVVnCBPWjpd7Ke/+V6
+ yuqxScFZb6PlewACIF4Lg53j5AVuO361Cnf8MT5gwB1xZ6q1/85fwP3LidiyLbNfiFT0Fm+HTHi
+ r1g6srgbAWaq
+X-Google-Smtp-Source: AGHT+IHT5wyCbTJovbsUczoXnry3CjgIhX44lLKBAMsgxFGqWrvq8eXtP66Krm8m+f04TFPA0kuyhw==
+X-Received: by 2002:a17:907:9496:b0:aa6:9407:34d3 with SMTP id
+ a640c23a62f3a-aac335532e1mr1484998866b.9.1735812543860; 
+ Thu, 02 Jan 2025 02:09:03 -0800 (PST)
+Received: from localhost.localdomain ([212.22.143.210])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-aac0e830b10sm1759295866b.37.2025.01.02.02.09.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 02 Jan 2025 02:09:03 -0800 (PST)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Thu,  2 Jan 2025 11:08:53 +0100
+Message-ID: <20250102100854.8937-4-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250102100854.8937-1-adam.duskett@amarulasolutions.com>
+References: <20250102100854.8937-1-adam.duskett@amarulasolutions.com>
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1735811147; x=1736415947; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=qR1N6+cbtTyHz/TljNyh1Q514uJ/JXG/Rp4ebRDAnLY=;
- b=TadV/73gCYe8Ht9WIlq506c2I1IUz3LyQzqQcPm18r+Re1Co+6yAHNO5SgKserBlDJ
- qITrJg8EPmN9wsTCrWfdFcD+sGEOLuAxYjK3ZOGujWdDNarchbsZCbfx4JO+VaqzrJuy
- pLscYPIuxkU/JtQxK1T09E3tWON+/UQUP6OLG87YExUj15IZw7h7xSFEmqNG8tPIF8HJ
- 5FyEtCYPCzjn5Xc92SNQy813w2JljaUhvbIUWR1GVDseOHEmb0fK5+uxXCM/KuFXi7BH
- bv15/bqSzlQcZbFpZ+T/c/gx7XT0zEM8wgWeW4SN4UKMWoLUqM+OY4KZjtAfYG7P5vzR
- 962A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=amarulasolutions.com; s=google; t=1735812544; x=1736417344;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=FQWza7lAf9g1fAptTsI89OA9eKc01C9sQSQUIskqcPk=;
+ b=iRNlkZP/Tz4BbXvx+bUEZ8C4hhHCWhXy8rGldDhoR16C+yIr3wUpq8o7XNkC9z6UlP
+ UByMdrBnksozZ10IzJKigPxAu37xZ7zAeQWfAnejWH6SRH3UKkuO25xkUe2+8UoCIDdN
+ u4vdgMaCmJebjpkxZC7hA4Y1E1VAmdSkZikoo=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gadz.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
- header.s=google header.b=TadV/73g
-Subject: Re: [Buildroot] [PATCH] package/perl: properly pass CFLAGS/LDFLAGS
- when building host-perl
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=iRNlkZP/
+Subject: [Buildroot] [PATCH 4/5] package/flutter-packages: bump to version
+ 3976c1bbd8ffba10007e5beeaddff37bfbaa2ae1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,153 +109,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============6132553214457820381=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6132553214457820381==
-Content-Type: multipart/alternative; boundary="000000000000d8165d062ab606f1"
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ package/flutter-packages/flutter-packages.hash | 2 +-
+ package/flutter-packages/flutter-packages.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---000000000000d8165d062ab606f1
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Le mer. 1 janv. 2025 =C3=A0 21:21, Thomas Petazzoni <thomas.petazzoni@bootl=
-in.com>
-a =C3=A9crit :
-
-> HOST_CFLAGS and HOST_LDFLAGS are currently not accounted for when
-> building host-perl. In particular, it means that executables
-> built/installed by host-perl do not have a RPATH pointing to
-> HOST_DIR/lib, which can cause issues as libcrypt.so can now be
-> provided by host-libxcrypt.
->
-> This was causing check-host-rpath to complain in the situation where:
->
-> 1. host-perl was built, with no RPATH, linked against the system
->    libcrypt.so
->
-> 2. host-libxcrypt was built afterwards, installed as
->    HOST_DIR/lib/libcrypt.so, which made check-host-rpath complain as
->    HOST_DIR/bin/perl is linked against a library present in
->    HOST_DIR/lib but doesn't have a RPATH to HOST_DIR/lib
->
-> Fixes:
->
->
-> http://autobuild.buildroot.net/results/d4348d7f872ccd734795a1d071960a6961=
-48ed6a/
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->
-
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
-
-
-> ---
->  package/perl/perl.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-> index 0f7038a048..dc7c0b8d42 100644
-> --- a/package/perl/perl.mk
-> +++ b/package/perl/perl.mk
-> @@ -98,7 +98,9 @@ endef
->  HOST_PERL_CONF_OPTS =3D \
->         -des \
->         -Dprefix=3D"$(HOST_DIR)" \
-> -       -Dcc=3D"$(HOSTCC)"
-> +       -Dcc=3D"$(HOSTCC)" \
-> +       -Dccflags=3D"$(HOST_CFLAGS)" \
-> +       -Dldflags=3D"$(HOST_LDFLAGS)"
->
->  define HOST_PERL_CONFIGURE_CMDS
->         (cd $(@D); $(HOST_MAKE_ENV) HOSTCC=3D'$(HOSTCC_NOCCACHE)' \
-> --
-> 2.47.1
->
->
-
---000000000000d8165d062ab606f1
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote g=
-mail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mer. 1 =
-janv. 2025 =C3=A0=C2=A021:21, Thomas Petazzoni &lt;<a href=3D"mailto:thomas=
-.petazzoni@bootlin.com">thomas.petazzoni@bootlin.com</a>&gt; a =C3=A9crit=
-=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px =
-0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">HOST_CFL=
-AGS and HOST_LDFLAGS are currently not accounted for when<br>
-building host-perl. In particular, it means that executables<br>
-built/installed by host-perl do not have a RPATH pointing to<br>
-HOST_DIR/lib, which can cause issues as libcrypt.so can now be<br>
-provided by host-libxcrypt.<br>
-<br>
-This was causing check-host-rpath to complain in the situation where:<br>
-<br>
-1. host-perl was built, with no RPATH, linked against the system<br>
-=C2=A0 =C2=A0libcrypt.so<br>
-<br>
-2. host-libxcrypt was built afterwards, installed as<br>
-=C2=A0 =C2=A0HOST_DIR/lib/libcrypt.so, which made check-host-rpath complain=
- as<br>
-=C2=A0 =C2=A0HOST_DIR/bin/perl is linked against a library present in<br>
-=C2=A0 =C2=A0HOST_DIR/lib but doesn&#39;t have a RPATH to HOST_DIR/lib<br>
-<br>
-Fixes:<br>
-<br>
-=C2=A0 <a href=3D"http://autobuild.buildroot.net/results/d4348d7f872ccd7347=
-95a1d071960a696148ed6a/" rel=3D"noreferrer" target=3D"_blank">http://autobu=
-ild.buildroot.net/results/d4348d7f872ccd734795a1d071960a696148ed6a/</a><br>
-<br>
-Signed-off-by: Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@boot=
-lin.com" target=3D"_blank">thomas.petazzoni@bootlin.com</a>&gt;<br></blockq=
-uote><div><br></div><div>Acked-by: Francois Perrad &lt;<a href=3D"mailto:fr=
-ancois.perrad@gadz.org">francois.perrad@gadz.org</a>&gt;</div><div>=C2=A0</=
-div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bor=
-der-left:1px solid rgb(204,204,204);padding-left:1ex">
----<br>
-=C2=A0package/perl/<a href=3D"http://perl.mk" rel=3D"noreferrer" target=3D"=
-_blank">perl.mk</a> | 4 +++-<br>
-=C2=A01 file changed, 3 insertions(+), 1 deletion(-)<br>
-<br>
-diff --git a/package/perl/<a href=3D"http://perl.mk" rel=3D"noreferrer" tar=
-get=3D"_blank">perl.mk</a> b/package/perl/<a href=3D"http://perl.mk" rel=3D=
-"noreferrer" target=3D"_blank">perl.mk</a><br>
-index 0f7038a048..dc7c0b8d42 100644<br>
---- a/package/perl/<a href=3D"http://perl.mk" rel=3D"noreferrer" target=3D"=
-_blank">perl.mk</a><br>
-+++ b/package/perl/<a href=3D"http://perl.mk" rel=3D"noreferrer" target=3D"=
-_blank">perl.mk</a><br>
-@@ -98,7 +98,9 @@ endef<br>
-=C2=A0HOST_PERL_CONF_OPTS =3D \<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 -des \<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 -Dprefix=3D&quot;$(HOST_DIR)&quot; \<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0-Dcc=3D&quot;$(HOSTCC)&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0-Dcc=3D&quot;$(HOSTCC)&quot; \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0-Dccflags=3D&quot;$(HOST_CFLAGS)&quot; \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0-Dldflags=3D&quot;$(HOST_LDFLAGS)&quot;<br>
-<br>
-=C2=A0define HOST_PERL_CONFIGURE_CMDS<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 (cd $(@D); $(HOST_MAKE_ENV) HOSTCC=3D&#39;$(HOS=
-TCC_NOCCACHE)&#39; \<br>
--- <br>
-2.47.1<br>
-<br>
-</blockquote></div></div>
-
---000000000000d8165d062ab606f1--
-
---===============6132553214457820381==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/flutter-packages/flutter-packages.hash b/package/flutter-packages/flutter-packages.hash
+index 9730f65bf2..615c1142b8 100644
+--- a/package/flutter-packages/flutter-packages.hash
++++ b/package/flutter-packages/flutter-packages.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fe87edffd828f7081f5622c592cb5871a2bc107dc03ff2610ddb6599f4f0137b  flutter-packages-85c4934bda545beff36133dc63e47de5b5c5c56b.tar.gz
++sha256  769de0bbccc6c5b04ccc0be72652c1a9b22d6b4e03b0477a3c7fccacfdb04177  flutter-packages-3976c1bbd8ffba10007e5beeaddff37bfbaa2ae1.tar.gz
+ sha256  89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9  LICENSE
+diff --git a/package/flutter-packages/flutter-packages.mk b/package/flutter-packages/flutter-packages.mk
+index 37f8141e7a..3dbbebb067 100644
+--- a/package/flutter-packages/flutter-packages.mk
++++ b/package/flutter-packages/flutter-packages.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLUTTER_PACKAGES_VERSION = 85c4934bda545beff36133dc63e47de5b5c5c56b
++FLUTTER_PACKAGES_VERSION = 3976c1bbd8ffba10007e5beeaddff37bfbaa2ae1
+ FLUTTER_PACKAGES_SITE = $(call github,flutter,packages,$(FLUTTER_PACKAGES_VERSION))
+ FLUTTER_PACKAGES_LICENSE = BSD-3-Clause
+ FLUTTER_PACKAGES_LICENSE_FILES = LICENSE
+-- 
+2.47.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6132553214457820381==--
