@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4B65E7718B
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 11:34:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B7E9E77188
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 11:35:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C6A080D4F;
-	Thu,  2 Jan 2025 11:34:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x_r9aCiUujUE; Thu,  2 Jan 2025 11:34:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 706C680D55
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 706C680D55;
-	Thu,  2 Jan 2025 11:34:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 025E6F29
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 11:34:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F0F274056E
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 11:34:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC0B34056E;
+	Thu,  2 Jan 2025 11:35:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p1Q-kThrLEBT for <buildroot@buildroot.org>;
- Thu,  2 Jan 2025 11:34:16 +0000 (UTC)
+ id yQzYq0UxTWHq; Thu,  2 Jan 2025 11:35:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 160F040574
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 160F040574;
+	Thu,  2 Jan 2025 11:35:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B74F0E0F
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 11:35:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 97BD040560
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 11:35:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rCs_BJT3S4lQ for <buildroot@buildroot.org>;
+ Thu,  2 Jan 2025 11:35:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 189C740560
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCC5840531
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 189C740560
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 11:34:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BCC5840531
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 11:35:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 04537835E3; Thu,  2 Jan 2025 11:34:16 +0000 (UTC)
+ id AA0D7835F4; Thu,  2 Jan 2025 11:35:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 2 Jan 2025 12:32:26 +0100
-X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: a51d3f794fe7a97e5301ae4caa5c2e00c379d698
-X-Git-Newrev: 64f932b4d836408382de9080ac955b162b9ed5d0
+Date: Thu, 2 Jan 2025 12:30:19 +0100
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: be577adfbc75f5ad2ab4190c6eaacf385132396f
+X-Git-Newrev: e09b44b36a8c42b308dda66c2f51cb0752fdfecd
 X-Patchwork-Hint: ignore
-Message-Id: <20250102113416.04537835E3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/gdb: add hash of
+Message-Id: <20250102113533.AA0D7835F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/gdb: add hash of
  licence files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64f932b4d836408382de9080ac955b162b9ed5d0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e09b44b36a8c42b308dda66c2f51cb0752fdfecd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Adds sha256 hash of the license files for GDB.
 
@@ -79,10 +79,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 6 insertions(+)
 
 diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 6cf55a675d..3d1809a2f9 100644
+index 5c8f883309..693ed581c2 100644
 --- a/package/gdb/gdb.hash
 +++ b/package/gdb/gdb.hash
-@@ -5,3 +5,9 @@ sha512  0217434073023a8b8316088bf3ee95d53a1b6a7897f6269095429016a8900f9a05e130c3
+@@ -5,3 +5,9 @@ sha512  7e07941f1fe661288cc571b4964012ceabc1760624fce20320db2f470c01439b2386f859
  
  # Locally calculated (fetched from Github)
  sha512  3518b47d5c11d1fb478ee152bde1719363f9391db73f3b9f5491217c17742bef8ebca6a51a40302dfaa9476c5a32a8b8f70a4bf64289422dea5f750ae53ab88d  gdb-arc-2023.09-release.tar.gz
