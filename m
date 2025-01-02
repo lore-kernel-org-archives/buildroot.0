@@ -1,100 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC97BE77188
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 11:00:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8027EE7718B
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 11:00:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86C6640353;
-	Thu,  2 Jan 2025 11:00:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 682FC80F0D;
+	Thu,  2 Jan 2025 11:00:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ukW9jKMfi5Ni; Thu,  2 Jan 2025 11:00:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C88780EC3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C88780EC3;
+	Thu,  2 Jan 2025 11:00:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 74A64F24
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 11:00:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5E4F040324
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 11:00:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i-M9knBYpmHm; Thu,  2 Jan 2025 11:00:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09EDA40448
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09EDA40448;
-	Thu,  2 Jan 2025 11:00:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D1E93E0F
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 11:00:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A4783403E7
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 11:00:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kzC_pFOCwfYp for <buildroot@buildroot.org>;
- Thu,  2 Jan 2025 11:00:38 +0000 (UTC)
+ id A5x8mOeli8hq for <buildroot@buildroot.org>;
+ Thu,  2 Jan 2025 11:00:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::635; helo=mail-ej1-x635.google.com;
+ client-ip=2a00:1450:4864:20::52b; helo=mail-ed1-x52b.google.com;
  envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F22E8402F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F22E8402F2
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F22E8402F2
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 11:00:37 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id
- a640c23a62f3a-aa659775dd5so145663566b.0
- for <buildroot@buildroot.org>; Thu, 02 Jan 2025 03:00:37 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BBBCD40317
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBBCD40317
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BBBCD40317
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 11:00:38 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id
+ 4fb4d7f45d1cf-5d3cfa1da14so2348962a12.1
+ for <buildroot@buildroot.org>; Thu, 02 Jan 2025 03:00:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1735815636; x=1736420436;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=OBZBY8sEJJ0ppIYW9K+ig0KUay6aQrVpaOmrEDXRSAU=;
- b=tN+ZS/XIOA4gk4mn2yjk2Zq/FXBp8o6xVVJb4tHljR/6DrcTVVfLhlhqvFcySIPvoV
- IwHjZeJc1b6So0IPxyOcMuRXXO8qgSUKIuFEo5VgYYoHG/ViRZs14J4HKRJItAgJvT3W
- TUjK+JP/1GyZoVfFhJQI8rpcJLgw4iujqv32wDqjlS/gZo5YMJCCAGiKkGWYDdsEC5/5
- D/e4npQ6U5SqpqlgxO9KWBuPux4TZ0U4sEMpd3dsh2WwhszjvoUwmVsY7hXuocVGNn9V
- 6zoa/EfXqRNtiq+6N6PuH4LAEKw20wagW7cO14Phu5ys9ETOWrPaMsEpNKX97JHzWMLO
- u3/Q==
-X-Gm-Message-State: AOJu0YxMpyEriIQ5qYKkPn4tMsZyFSA/1+oD5Xko8mpMNc7nea2hFd6a
- W3M3+EY7jkPouL85xjQ8lpHyyhlZEJlEFdVLsxI8TojoG9p/C7kOGggpvuCsjsoEC+90NgaX85e
- xUjc=
-X-Gm-Gg: ASbGncuKAPN9fBhXdZJEn+6hVLDXs6i6fyQq30UanzdUS6MsIWhejDfcVmRUOH5dDmx
- NtZNiTMLp9ZLtzdvxjbdC+Pv0yGgteYr2V+HxKC2Jdq5Xqdv4pqrNH4tjtETbRpTlkJcHQHIKH4
- l2G9wdDsGfwp6XyLkUNtUIo0jivUsEzZVLQPKRFFd4B1e9/mrU/Kb7Jw99viWNWHAZwqDnz/gf0
- ZT6011LzekgKM5tK7nrDFK2sSe3Ip4DzHysr5RfgTLb2Kg/MavRZVRcLxsry8jsKSyHEWfc/88E
- s+G1+icUCgF+
-X-Google-Smtp-Source: AGHT+IF3EagUfWILlTAjmGyijP1BAxiGjc2fR9+H+7G4zJT42YX8xMJB39uqyUt7IazwxKYHHTphfg==
-X-Received: by 2002:a17:907:3e1c:b0:a9a:1a17:e1cc with SMTP id
- a640c23a62f3a-aac2698bd77mr1456611066b.0.1735815635444; 
- Thu, 02 Jan 2025 03:00:35 -0800 (PST)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=9x+o2a+FALbHrrvNzxFT16RclLHuXGdrz1QwPFLGOj8=;
+ b=R7HkPLUhIZ5FMakD4amk+mNPbN5zUxShrr9gE5C7hw5ZMgnk2yLAL+l0m24/OyIl5h
+ bDJPUbfmA9TJaqYSQx2IXKTs5wPnpI4bOMI3QezfdMBINKeU4NqX7x9oxlvveY2HvNKz
+ IsLJQ3UWdiWMub2GscSHcLFEx+60Zco+zjr8ht/XEaOiyWPdrPBwu58M2tHWOTAqFptE
+ Hnabgh59nDcBuXU7n811Vh1ruWEFIs407Q6ZvI7dTZXddBMT5hsMwf2T3FHOp7ONvhDj
+ N4r94Nk/vGjaIITd43dnRsCcJU3Zq66Z/cEJ7723d1GSb12H/Tb9PWJ0yR5omARHgL9w
+ Ou1Q==
+X-Gm-Message-State: AOJu0YxTgj4UVgCt+xugm4O0i5aJnafpBbBoXwzNaaQ+g6vNG8WvsV34
+ 74jYqacWx0NDcpA+6jS7ENe5KV3Gn909sznfOcP5zmks+uin60C8qP+n3QcNRtqfYB+yLLMar2h
+ ZRKg=
+X-Gm-Gg: ASbGncvjNG/u8dzmHEw3XH+1ex7EUDcxqZYc9Guy0ibMso/yktLRwBy6JR9czxiKvCu
+ w33pPznZ4LAVegGMjsAJ3AZJx8ojlgyAtxXU+ohXVoQSNPYGEz8LsdGs8uhTzgNDDK7yiPd1H2y
+ SqRwIJqq0HTJb6QY7owZd5IeaO8+oYpvHqBLiO5YEvty7uylcoD59kqMhc3RmCWcYFEepfm9psb
+ 1st4oxaux4SCWVQusHU9Q0GxQZhFuSGxxSGAbY+IpgEAT4xedQ+CBx2udhApIQ9Z5I/8/aZ4rNf
+ VAprllC8d/N+
+X-Google-Smtp-Source: AGHT+IHsxdlmgMlrr0+jhikDeN+XJ7OKS1Bd0Yrqv0OWqg+DQpTapl39OXYEYcSYrDdGNoa3sqpAQA==
+X-Received: by 2002:a17:907:3e8f:b0:aa5:3e81:5aa2 with SMTP id
+ a640c23a62f3a-aac2adc463dmr1485391366b.4.1735815636431; 
+ Thu, 02 Jan 2025 03:00:36 -0800 (PST)
 Received: from localhost.localdomain ([212.22.143.210])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-aac0f0652a7sm1773799466b.174.2025.01.02.03.00.34
+ a640c23a62f3a-aac0f0652a7sm1773799466b.174.2025.01.02.03.00.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 02 Jan 2025 03:00:35 -0800 (PST)
+ Thu, 02 Jan 2025 03:00:36 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
 Cc: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>,
  Adam Duskett <adam.duskett@amarulasolutions.com>
-Date: Thu,  2 Jan 2025 12:00:24 +0100
-Message-ID: <20250102110025.722992-1-adam.duskett@amarulasolutions.com>
+Date: Thu,  2 Jan 2025 12:00:25 +0100
+Message-ID: <20250102110025.722992-2-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250102110025.722992-1-adam.duskett@amarulasolutions.com>
+References: <20250102110025.722992-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google; t=1735815636; x=1736420436;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OBZBY8sEJJ0ppIYW9K+ig0KUay6aQrVpaOmrEDXRSAU=;
- b=gZDdwx33fM7DZ83lRmEw+utTRMIdz/bEXWi0oInzHmZz/X6ikrpDn70iwkluMw5rbp
- 2Qsmi/sYLKaX/5Tr4RNvPq1FBXrHblFgqcnoCLm6jCkPpMgo5Z8G/Xg4j3QcZp+j3i5c
- tWoW2+oLCcXFR6ElCR5V+5BRByNciIOs1M3s0=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=9x+o2a+FALbHrrvNzxFT16RclLHuXGdrz1QwPFLGOj8=;
+ b=K+yw02VQkKnTR1Is/k3s5zIYc7BRf7wolOrBtYMCFpaueSkFlyq+7YIUmEzNtslORX
+ wMZzMlWj14lsDQ4pvYxNn219hGTjoSkF0hF4ubxSPZ7RT7U+4I2tt/E/NhF8tvW4chPX
+ ve56FRTxK0QjlD2TU+xTmevV3RqkHSdZd1xf4=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=gZDdwx33
-Subject: [Buildroot] [PATCH 1/1] package/bash: bump to version 5.2.37
+ header.a=rsa-sha256 header.s=google header.b=K+yw02VQ
+Subject: [Buildroot] [PATCH 1/1] package/openrc: bump to version 0.56
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,152 +115,154 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Other changes:
-  - Refactor necessary patches
-  - Remove upstream patch
-    0003-configure-invert-condition-for-strtoimax-builtin.patch
+  - Update 0007-allow-setting-rc_libexecdir-path.patch to apply cleanly
+  - Remove the split-usr logic, as it was removed in version 0.54. This
+    logic is now handled by passing the following to meson during the
+    configure stage: --bindir /bin --libdir /lib64 --libexecdir /lib
+                     --sbindir /sbin
+  - libcap is now a dependency
+  - The audit package must be explicity set as disabled if not available.
+    If not, configuration errors occure if audit is not found.
 
-run-tests tests.package.test_bash.TestBash.test_run passed
+    
+./support/testing/run-tests tests.init.test_openrc
+
+11:45:44 TestInitSystemOpenrcRwFull               Starting
+11:45:57 TestInitSystemOpenrcRwFull               Cleaning up
+11:45:57 TestInitSystemOpenrcRoFull               Starting
+11:46:10 TestInitSystemOpenrcRoFull               Cleaning up
+11:46:10 TestInitSystemOpenrcMergedUsrFull        Starting
+11:46:10 TestInitSystemOpenrcMergedUsrFull        Building
+11:51:59 TestInitSystemOpenrcMergedUsrFull        Building done
+11:52:12 TestInitSystemOpenrcMergedUsrFull        Cleaning up
+
+----------------------------------------------------------------------
+Ran 3 tests in 388.180s
+OK
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- ...compilation-for-non-multibyte-builds.patch |  8 +--
- ...vert-condition-for-strtoimax-builtin.patch | 62 -------------------
- package/bash/bash.hash                        |  2 +-
- package/bash/bash.mk                          |  2 +-
- 4 files changed, 6 insertions(+), 68 deletions(-)
- delete mode 100644 package/bash/0003-configure-invert-condition-for-strtoimax-builtin.patch
+ ...0007-allow-setting-rc_libexecdir-path.patch | 16 ++++++++--------
+ package/openrc/Config.in                       |  1 +
+ package/openrc/openrc.hash                     |  2 +-
+ package/openrc/openrc.mk                       | 18 +++++++++---------
+ 4 files changed, 19 insertions(+), 18 deletions(-)
 
-diff --git a/package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch b/package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch
-index d330de5cd4..378ff0dfd3 100644
---- a/package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch
-+++ b/package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch
-@@ -22,7 +22,7 @@ diff --git a/parse.y b/parse.y
- index 1d12e639..8f1355c6 100644
- --- a/parse.y
- +++ b/parse.y
--@@ -2625,6 +2625,7 @@ next_alias_char:
-+@@ -2640,6 +2640,7 @@ next_alias_char:
-        parser_state |= PST_ENDALIAS;
-        /* We need to do this to make sure last_shell_getc_is_singlebyte returns
-  	 true, since we are returning a single-byte space. */
-@@ -30,7 +30,7 @@ index 1d12e639..8f1355c6 100644
-        if (shell_input_line_index == shell_input_line_len && last_shell_getc_is_singlebyte == 0)
-  	{
-  #if 0
--@@ -2638,6 +2639,7 @@ next_alias_char:
-+@@ -2653,6 +2654,7 @@ next_alias_char:
-  	  shell_input_line_property[shell_input_line_index - 1] = 1;
-  #endif
-  	}
-@@ -42,7 +42,7 @@ diff --git a/y.tab.c b/y.tab.c
- index 50c5845b..799f730f 100644
- --- a/y.tab.c
- +++ b/y.tab.c
--@@ -4936,6 +4936,7 @@ next_alias_char:
-+@@ -4955,6 +4955,7 @@ next_alias_char:
-        parser_state |= PST_ENDALIAS;
-        /* We need to do this to make sure last_shell_getc_is_singlebyte returns
-  	 true, since we are returning a single-byte space. */
-@@ -50,7 +50,7 @@ index 50c5845b..799f730f 100644
-        if (shell_input_line_index == shell_input_line_len && last_shell_getc_is_singlebyte == 0)
-  	{
-  #if 0
--@@ -4949,6 +4950,7 @@ next_alias_char:
-+@@ -4968,6 +4969,7 @@ next_alias_char:
-  	  shell_input_line_property[shell_input_line_index - 1] = 1;
-  #endif
-  	}
-diff --git a/package/bash/0003-configure-invert-condition-for-strtoimax-builtin.patch b/package/bash/0003-configure-invert-condition-for-strtoimax-builtin.patch
-deleted file mode 100644
-index c412dcfce2..0000000000
---- a/package/bash/0003-configure-invert-condition-for-strtoimax-builtin.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From 754e0d1edc1c01b18f4890de7c58f7610e589d76 Mon Sep 17 00:00:00 2001
--From: Vincent Fazio <vfazio@gmail.com>
--Date: Tue, 7 Feb 2023 03:55:28 -0600
--Subject: [PATCH] configure: invert condition for strtoimax builtin
--
--Previously, bash would attempt to build a replacement for strtoimax if
--it found that the C library had the function already declared.
--
--This caused build errors when linking against static libraries that did
--not define the function as a weak alias but, in reality, was a logic
--error since bash should only provide it's own implementation if one is
--not provided by the C library.
--
--Now, fix this by inverting the logic.
--
--Upstream:
--  https://git.savannah.gnu.org/cgit/bash.git/commit/?h=devel&id=43e861c2cd840946a81dfd0386966eb4f3a17ce9
--
--Signed-off-by: Vincent Fazio <vfazio@gmail.com>
--[yann.morin.1998@free.fr: patch configure after the m file]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- configure       | 6 +++++-
-- m4/strtoimax.m4 | 5 ++++-
-- 2 files changed, 9 insertions(+), 2 deletions(-)
--
--diff --git a/m4/strtoimax.m4 b/m4/strtoimax.m4
--index 30985723..fa43ac7b 100644
----- a/m4/strtoimax.m4
--+++ b/m4/strtoimax.m4
--@@ -29,7 +29,10 @@ AC_CACHE_VAL(bash_cv_func_strtoimax,
--   fi
-- ])
-- AC_MSG_RESULT($bash_cv_func_strtoimax)
---if test $bash_cv_func_strtoimax = yes; then
--+if test "$ac_cv_have_decl_strtoimax" = "yes" ; then
--+AC_DEFINE([HAVE_DECL_STRTOIMAX], [1])
--+fi
--+if test $bash_cv_func_strtoimax = no; then
-- AC_LIBOBJ(strtoimax)
-- fi
-- ])
--diff --git a/configure b/configure
--index 47313753..6039cee7 100755
----- a/configure
--+++ b/configure
--@@ -20443,7 +20443,11 @@ fi
-- 
-- { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $bash_cv_func_strtoimax" >&5
-- printf "%s\n" "$bash_cv_func_strtoimax" >&6; }
---if test $bash_cv_func_strtoimax = yes; then
--+if test "$ac_cv_have_decl_strtoimax" = "yes" ; then
--+printf "%s\n" "#define HAVE_DECL_STRTOIMAX 1" >>confdefs.h
--+
--+fi
--+if test $bash_cv_func_strtoimax = no; then
-- case " $LIBOBJS " in
--   *" strtoimax.$ac_objext "* ) ;;
--   *) LIBOBJS="$LIBOBJS strtoimax.$ac_objext"
---- 
--2.25.1
--
-diff --git a/package/bash/bash.hash b/package/bash/bash.hash
-index 44c1c5ed50..d0a22e5baa 100644
---- a/package/bash/bash.hash
-+++ b/package/bash/bash.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature from
- # https://ftp.gnu.org/gnu/bash/bash-5.2.21.tar.gz.sig
--sha256  c8e31bdc59b69aaffc5b36509905ba3e5cbb12747091d27b4b977f078560d5b8  bash-5.2.21.tar.gz
-+sha256  9599b22ecd1d5787ad7d3b7bf0c59f312b3396d1e281175dd1f8a4014da621ff  bash-5.2.37.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 9d173a5c7c..81f698f166 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/openrc/0007-allow-setting-rc_libexecdir-path.patch b/package/openrc/0007-allow-setting-rc_libexecdir-path.patch
+index a11c789275..5787c26dde 100644
+--- a/package/openrc/0007-allow-setting-rc_libexecdir-path.patch
++++ b/package/openrc/0007-allow-setting-rc_libexecdir-path.patch
+@@ -4,12 +4,12 @@ Date: Wed, 8 Sep 2021 22:41:58 +0200
+ Subject: [PATCH] allow setting rc_libexecdir path
+ 
+   - Allow to change the rc dir name of the rc_libexecdir path
+-  - Introduce a librcdir option for override with value 'rc'
++  - Introduce a librcdir option for override with value 'rc'6
+ 
+ Upstream: https://github.com/OpenRC/openrc/pull/443
+ 
+ Signed-off-by: artoo <artoo@artixlinux.org>
+-[Adam: update for 0.50]
++[Adam: update for 0.56]
+ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+ ---
+  meson.build       | 2 +-
+@@ -20,10 +20,10 @@ diff --git a/meson.build b/meson.build
+ index 5b3f8fa..40d4be1 100644
+ --- a/meson.build
+ +++ b/meson.build
+-@@ -102,7 +102,7 @@ if os == 'Linux' and libexecdir == 'libexec'
+-   libexecdir = 'lib'
+- endif
+- libexecdir = rootprefix / libexecdir
++@@ -85,7 +85,7 @@ bindir = get_option('prefix') / get_option('bindir')
++ libdir = get_option('prefix') / get_option('libdir')
++ pluginsdir = libdir / 'rc/plugins'
++ libexecdir = get_option('prefix') / get_option('libexecdir')
+ -rc_libexecdir = libexecdir / 'rc'
+ +rc_libexecdir = libexecdir / get_option('librcdir')
+  rc_bindir = rc_libexecdir / 'bin'
+@@ -33,8 +33,8 @@ diff --git a/meson_options.txt b/meson_options.txt
+ index 2c74152..d2f67e4 100644
+ --- a/meson_options.txt
+ +++ b/meson_options.txt
+-@@ -37,3 +37,5 @@ option('termcap', type : 'combo',
+-   description : 'the termcap library to use')
++@@ -26,3 +26,5 @@ option('sysvinit', type : 'boolean', value : false,
++   description : 'enable SysVinit compatibility (linux only)')
+  option('zsh-completions', type : 'boolean',
+    description : 'install zsh completions')
+ +option('librcdir', type : 'string', value : 'rc',
+diff --git a/package/openrc/Config.in b/package/openrc/Config.in
+index 42d7347b0e..e1f004212b 100644
+--- a/package/openrc/Config.in
++++ b/package/openrc/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_OPENRC
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod tools
+ 	select BR2_PACKAGE_KMOD # runtime
+ 	select BR2_PACKAGE_KMOD_TOOLS # runtime
++	select BR2_PACKAGE_LIBCAP # runtime
+ 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+diff --git a/package/openrc/openrc.hash b/package/openrc/openrc.hash
+index c1c16a8c45..85e869f82a 100644
+--- a/package/openrc/openrc.hash
++++ b/package/openrc/openrc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  0b911eee4e64ad5e6945c6fed572220d537dfd0108838fa6d6797a2d7ff9f052  openrc-0.52.1.tar.gz
++sha256  a06b530290057637eab17fc943cbf79c0335eb734ba71ece38b9f3acd8a341d4  openrc-0.56.tar.gz
+ sha256  6ac2bf77510808fbec7dc86cbfbca98dfc4c6b47dc99e4ca77b5370e097d8e70  LICENSE
+diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
+index 69f5b3a121..67846ce0ea 100644
+--- a/package/openrc/openrc.mk
++++ b/package/openrc/openrc.mk
+@@ -4,22 +4,28 @@
  #
  ################################################################################
  
--BASH_VERSION = 5.2.21
-+BASH_VERSION = 5.2.37
- BASH_SITE = $(BR2_GNU_MIRROR)/bash
- BASH_DEPENDENCIES = ncurses readline host-bison
- BASH_LICENSE = GPL-3.0+
+-OPENRC_VERSION = 0.52.1
++OPENRC_VERSION = 0.56
+ OPENRC_SITE = $(call github,OpenRC,openrc,$(OPENRC_VERSION))
+ OPENRC_LICENSE = BSD-2-Clause
+ OPENRC_LICENSE_FILES = LICENSE
+ OPENRC_CPE_ID_VALID = YES
+ 
+-OPENRC_DEPENDENCIES = ncurses
++OPENRC_DEPENDENCIES = libcap ncurses
+ 
+ OPENRC_CONF_OPTS = \
+ 	-Dos=Linux \
+ 	-Dlibrcdir=/usr/libexec/rc \
+ 	-Dpkgconfig=false \
+ 	-Dsysvinit=true \
+-	-Drootprefix=/ \
+ 	-Dbranding="\"Buildroot $(BR2_VERSION_FULL)\""
+ 
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++OPENRC_CONF_OPTS += -Daudit=enabled
++OPENRC_DEPENDENCIES += audit
++else
++OPENRC_CONF_OPTS += -Daudit=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
+ OPENRC_CONF_OPTS += -Dbash-completions=true
+ else
+@@ -44,12 +50,6 @@ else
+ OPENRC_CONF_OPTS += -Dpam=false
+ endif
+ 
+-ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+-OPENRC_CONF_OPTS += -Dsplit-usr=false
+-else
+-OPENRC_CONF_OPTS += -Dsplit-usr=true
+-endif
+-
+ define OPENRC_INSTALL_SYSV_RCS_SCRIPT
+ 	$(INSTALL) -D -m 0755 $(OPENRC_PKGDIR)/sysv-rcs \
+ 		$(TARGET_DIR)/etc/init.d/sysv-rcs
 -- 
 2.47.1
 
