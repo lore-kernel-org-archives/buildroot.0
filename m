@@ -1,74 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FD64E77188
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 16:46:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A238CE77188
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 16:47:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C8DD40392;
-	Thu,  2 Jan 2025 16:46:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A0B1607A0;
+	Thu,  2 Jan 2025 16:47:04 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RE1IHAAsKY8w; Thu,  2 Jan 2025 16:47:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FBBC607AB
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FBBC607AB;
+	Thu,  2 Jan 2025 16:47:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1DF38E0F
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 16:47:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0BF4840644
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 16:47:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tlekHVbXyu2L; Thu,  2 Jan 2025 16:46:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 061EF403D1
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 061EF403D1;
-	Thu,  2 Jan 2025 16:46:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id BA300E0F
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 16:46:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BD0980BD9
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 16:46:50 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UBqxHl9qtctA for <buildroot@buildroot.org>;
- Thu,  2 Jan 2025 16:46:50 +0000 (UTC)
+ id ez0I8eRdxbGU for <buildroot@buildroot.org>;
+ Thu,  2 Jan 2025 16:47:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
  helo=smtp6-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AF6D2804C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF6D2804C4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0D4B740631
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D4B740631
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AF6D2804C4
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 16:46:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0D4B740631
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 16:47:00 +0000 (UTC)
 Received: from localhost.localdomain (unknown [213.36.7.11])
  (Authenticated sender: vjardin@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 26849780383;
- Thu,  2 Jan 2025 17:46:41 +0100 (CET)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 7E7A6780507;
+ Thu,  2 Jan 2025 17:46:53 +0100 (CET)
 From: Vincent Jardin <vjardin@free.fr>
 To: buildroot@buildroot.org
 Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, Robin Jarry <robin@jarry.cc>,
  Brandon Maier <brandon.maier@gmail.com>, Vincent Jardin <vjardin@free.fr>
-Date: Thu,  2 Jan 2025 17:46:29 +0100
-Message-ID: <20250102164630.25695-2-vjardin@free.fr>
+Date: Thu,  2 Jan 2025 17:46:30 +0100
+Message-ID: <20250102164630.25695-3-vjardin@free.fr>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250102164630.25695-1-vjardin@free.fr>
 References: <D67L0SLHFKBX.2N0314A43JOJC@gmail.com>
  <20250102164630.25695-1-vjardin@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1735836407;
- bh=P+R4Gbt7EEOkSg98Q0bUH0KNIxabOuKymkhFI6XeZv0=;
+ d=free.fr; s=smtp-20201208; t=1735836419;
+ bh=PHnh4T3s/6WZscbbqMT8sPtFWYSQmcr/x1X6hXrUjEU=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=J9b9V+cxgy0nHmxgZyrM3/z2lYXt112hhO2d3v88bk21kW2r0onwlmTmF9yUiUIe9
- 6/ITSfD2geHx3N0ovndS4kTuZZ0POZxdWhFvdfqnJ/uXwyrz1ngtv3YZnSRWUy5AQu
- gUkvqq1RHhkrQe2SQXiyiULt06ROBPY6RdRSjo8WgYBG7eHKfEK0vEtttvl8lNmB3l
- c9x7wYYAD0edERLDvAtM4ik3bjtM0LQK0EB9dbg9C1y4c8x8j+JlumM3PBS8vEz7It
- Kk2+s1y+sceI3ljvVv+YgHA97v4yYsBmQPUSaTuTXoYKFgZi+UisaYTAJQh1BB4w6q
- Pl8OJeeUksn+Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=KDb+v3VVHPEjfHzDc0OBwBZo/aIJ7iwHTrWEw+BDJQfdm4jYku1nk3DBJei0hK0sK
+ kQfDo13yyG2gg0CDhB//ov2n/anbhzKEXynfdeiJ0OhtOWVK09NjKJWpdO3En3k9H9
+ x8mdnkRuh85ej9FyuliTQUMDciYHwIPnCuLsUgAQQAMFbD3bXgNEVzOUXiSheD+IGW
+ /Q2sF+KK1hrwuD1uy601PCazTIe/cDV8Ghwqtj+8Usi8XI3YLSddxUnkJQ+XMZK9LA
+ vuVHd9hkVw4m3+mrXVjtJhsf9WjBNGuO+9CzOcR3izX0uEP/xsciwP76oLFgApwXxE
+ Zfl6WzZJhRGdw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=J9b9V+cx
-Subject: [Buildroot] [PATCH v6 1/2] package/pkg-meson: h files only into
- sysroot
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=KDb+v3VV
+Subject: [Buildroot] [PATCH v6 2/2] doc/manual/adding-packages-meson.adoc:
+ tags
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,46 +80,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TWFueSBwYWNrYWdlcyBidWlsdCB3aXRoIEJ1aWxkcm9vdCBhbmQgbWVzb24gY3VycmVudGx5IGlu
-c3RhbGwgaGVhZGVyCmZpbGVzIGludG8gYm90aDoKICAtIHRoZSB0YXJnZXTigJlzIC91c3IvaW5j
-bHVkZSwgYW5kCiAgLSB0aGUgc3lzcm9vdOKAmXMgL3Vzci9pbmNsdWRlLgoKV2hlbiBGT09fTUVT
-T05fSU5TVEFMTF9UQUdTID0gWUVTLCBlbnN1cmUgdGhhdCBoZWFkZXIgZmlsZXMgYXJlCmluc3Rh
-bGxlZCBleGNsdXNpdmVseSBpbiB0aGUgc3RhZ2luZyAoc3lzcm9vdCkgdGFyZ2V0IGR1cmluZyB0
-aGUKYnVpbGQgcHJvY2Vzcy4KClRoZSBkZWZhdWx0IGlzIEZPT19NRVNPTl9JTlNUQUxMX1RBR1Mg
-Pz0gTk8gaW4gb3JkZXIgdG8gYXZvaWQKY2hhbmdpbmcgdG8gdGhpcyBuZXcgYmVoYXZpb3VyIGZv
-ciB0aGUgdGltZSBiZWluZy4KClNpZ25lZC1vZmYtYnk6IFZpbmNlbnQgSmFyZGluIDx2amFyZGlu
-QGZyZWUuZnI+ClN1Z2dlc3RlZC1ieTogUm9iaW4gSmFycnkgPHJvYmluQGphcnJ5LmNjPgpTdWdn
-ZXN0ZWQtYnk6IEJyYW5kb24gTWFpZXIgPGJyYW5kb24ubWFpZXJAZ21haWwuY29tPgotLS0KIHBh
-Y2thZ2UvcGtnLW1lc29uLm1rIHwgMTEgKysrKysrKystLS0KIDEgZmlsZSBjaGFuZ2VkLCA4IGlu
-c2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9wa2ctbWVz
-b24ubWsgYi9wYWNrYWdlL3BrZy1tZXNvbi5tawppbmRleCBiYzgwNWI3OTljLi5jMDgzNzFhYTEw
-IDEwMDY0NAotLS0gYS9wYWNrYWdlL3BrZy1tZXNvbi5taworKysgYi9wYWNrYWdlL3BrZy1tZXNv
-bi5tawpAQCAtMjIwLDEwICsyMjAsMTMgQEAgZW5kaWYKIGlmbmRlZiAkKDIpX0lOU1RBTExfQ01E
-UwogZGVmaW5lICQoMilfSU5TVEFMTF9DTURTCiAJJCQoSE9TVF9NQUtFX0VOVikgJCQoJCQoUEtH
-KV9OSU5KQV9FTlYpIFwKLQkJJCQoTklOSkEpICQkKE5JTkpBX09QVFMpIC1DICQkKCQkKFBLRylf
-U1JDRElSKS9idWlsZCBpbnN0YWxsCisJCSQkKE1FU09OKSBpbnN0YWxsIC1DICQkKCQkKFBLRylf
-U1JDRElSKS9idWlsZAogZW5kZWYKIGVuZGlmCiAKKyMgRGVmYXVsdCB2YWx1ZXMgZm9yIFN0YWdp
-bmcgaW5zdGFsbGF0aW9uIGFuZCBUYXJnZXQgaW5zdGFsbGF0aW9uCiskKDIpX01FU09OX0lOU1RB
-TExfVEFHUyA/PSBOTworCiAjCiAjIFN0YWdpbmcgaW5zdGFsbGF0aW9uIHN0ZXAuIE9ubHkgZGVm
-aW5lIGl0IGlmIG5vdCBhbHJlYWR5IGRlZmluZWQgYnkKICMgdGhlIHBhY2thZ2UgLm1rIGZpbGUu
-CkBAIC0yMzEsNyArMjM0LDggQEAgZW5kaWYKIGlmbmRlZiAkKDIpX0lOU1RBTExfU1RBR0lOR19D
-TURTCiBkZWZpbmUgJCgyKV9JTlNUQUxMX1NUQUdJTkdfQ01EUwogCSQkKFRBUkdFVF9NQUtFX0VO
-VikgJCQoJCQoUEtHKV9OSU5KQV9FTlYpIERFU1RESVI9JCQoU1RBR0lOR19ESVIpIFwKLQkJJCQo
-TklOSkEpICQkKE5JTkpBX09QVFMpIC1DICQkKCQkKFBLRylfU1JDRElSKS9idWlsZCBpbnN0YWxs
-CisJCSQkKE1FU09OKSBpbnN0YWxsIC1DIFwKKwkJICAkJCgkJChQS0cpX1NSQ0RJUikvYnVpbGQg
-JCQoaWYgJCQoZmlsdGVyIFlFUywkJCgkJChQS0cpX01FU09OX0lOU1RBTExfVEFHUykpLC0tdGFn
-cz1ydW50aW1lJCQoY29tbWEpZGV2ZWwpCiBlbmRlZgogZW5kaWYKIApAQCAtMjQyLDcgKzI0Niw4
-IEBAIGVuZGlmCiBpZm5kZWYgJCgyKV9JTlNUQUxMX1RBUkdFVF9DTURTCiBkZWZpbmUgJCgyKV9J
-TlNUQUxMX1RBUkdFVF9DTURTCiAJJCQoVEFSR0VUX01BS0VfRU5WKSAkJCgkJChQS0cpX05JTkpB
-X0VOVikgREVTVERJUj0kJChUQVJHRVRfRElSKSBcCi0JCSQkKE5JTkpBKSAkJChOSU5KQV9PUFRT
-KSAtQyAkJCgkJChQS0cpX1NSQ0RJUikvYnVpbGQgaW5zdGFsbAorCQkkJChNRVNPTikgaW5zdGFs
-bCAtQyBcCisJCSAgJCQoJCQoUEtHKV9TUkNESVIpL2J1aWxkICQkKGlmICQkKGZpbHRlciBZRVMs
-JCQoJCQoUEtHKV9NRVNPTl9JTlNUQUxMX1RBR1MpKSwtLXRhZ3M9cnVudGltZSkKIGVuZGVmCiBl
-bmRpZgogCi0tIAoyLjM0LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
-aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Described the usage of FOO_MESON_INSTALL_TAGS=YES which decreases
+the footprint of the target since only the runtime will be installed.
+All the other development header files or libraries will be installed
+into the staging folder.
+
+Signed-off-by: Vincent Jardin <vjardin@free.fr>
+Suggested-by: Brandon Maier <brandon.maier@gmail.com>
+---
+ docs/manual/adding-packages-meson.adoc | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/docs/manual/adding-packages-meson.adoc b/docs/manual/adding-packages-meson.adoc
+index 01891e03cc..b7c987ddd1 100644
+--- a/docs/manual/adding-packages-meson.adoc
++++ b/docs/manual/adding-packages-meson.adoc
+@@ -124,6 +124,11 @@ will therefore only use a few of them.
+   +c_link_args+, +cpp_args+, +cpp_link_args+, +sys_root+, and
+   +pkg_config_libdir+.
+ 
++* +FOO_MESON_INSTALL_TAGS+, can be set to +YES+ to enable meson's `--runtime` and
++  `--devel` installation modes for the target and staging folders, respectively.
++  This configuration is necessary to prevent meson from installing development
++  artifacts into the target folder.
++
+ * +FOO_NINJA_ENV+, to specify additional environment variables to pass to
+   +ninja+, meson companion tool in charge of the build operations. By default,
+   empty.
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
