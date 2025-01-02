@@ -1,88 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10615E77188
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 08:51:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ED69E77188
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 08:58:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B415240252;
-	Thu,  2 Jan 2025 08:51:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E0B7F80BAE;
+	Thu,  2 Jan 2025 08:58:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sDTEny9_LCap; Thu,  2 Jan 2025 08:51:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tmEOaJkDLpKT; Thu,  2 Jan 2025 08:58:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DA864026C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D332680BBC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DA864026C;
-	Thu,  2 Jan 2025 08:51:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id C03B4F24
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 08:51:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D332680BBC;
+	Thu,  2 Jan 2025 08:58:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C212CF24
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 08:58:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 989BD6063A
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 08:51:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A32B980BAE
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 08:58:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MNFcOHldiTNz for <buildroot@buildroot.org>;
- Thu,  2 Jan 2025 08:51:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.59.80;
- helo=send241.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1569260623
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1569260623
-Received: from send241.i.mail.ru (send241.i.mail.ru [95.163.59.80])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1569260623
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 08:51:22 +0000 (UTC)
-Received: by exim-smtp-bcf9586c5-442wp with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1tTGvH-000000006z4-1WUH; Thu, 02 Jan 2025 11:51:19 +0300
-Message-ID: <63e75637-9c31-42e0-a5f9-1b9430882a6e@inbox.ru>
-Date: Thu, 2 Jan 2025 11:51:18 +0300
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lZ-UwAKMjCkO for <buildroot@buildroot.org>;
+ Thu,  2 Jan 2025 08:58:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::62e; helo=mail-pl1-x62e.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8566580BB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8566580BB4
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com
+ [IPv6:2607:f8b0:4864:20::62e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8566580BB4
+ for <buildroot@busybox.net>; Thu,  2 Jan 2025 08:58:15 +0000 (UTC)
+Received: by mail-pl1-x62e.google.com with SMTP id
+ d9443c01a7336-21683192bf9so150915525ad.3
+ for <buildroot@busybox.net>; Thu, 02 Jan 2025 00:58:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1735808295; x=1736413095;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=plreXbeJEwYvmhf0RmGm2r8nbb5WX122f/+a9gw3Pqw=;
+ b=WDmp/IG9ssB1DcfjOsKlTxIGsQZ69H+WQIoaeD17Y3t09SzURn1nxSw0EIiAhfOSp1
+ A51cs24RaKrqk7ROp5BZWofmjh0KpHZBQzSjqjQDTLu4uyKtPK1vJF8rBrzWr8fM2nSu
+ /HciT5NsQdqAuI/Ri5HVpi122zV6j+kSXtwxGY24Ao2MnyIublc+4yGA7PK53qoek3iZ
+ eFs6UChaxgBybmNW6eUlfLlPNy27qjmOW3Ln2sHh+rC2npFYittozkoEYbXN7mW3DBRT
+ qpasLpgvnPwtDo9br+ItQnD7kocFQSnVXmwjQ7biGg10ch/jdYB5pKXbtrXSt5vK3eMG
+ h1WA==
+X-Gm-Message-State: AOJu0YwLIS5eA6y3zKDip+FTyO6B17Eo9WjGPtuKY/CfyXh2bFm+pG06
+ WgSAT7YRde/o8lJTvUALSKuSKKweSDwzQapHxKqab/MyA1f7MIvHKeqTq0PEsw4HS0/qN1uNOqb
+ HHyiyRqiMPh/dxL/w7Sgv+AY6cKZyMMgddZm1CWD9Pq2iQoMWToY1
+X-Gm-Gg: ASbGncuxGSjTFXnKjES+RU0YJj9OYhYMqhwV2OjLzpnaoHgd05iVtlOfB7ye8ze/Ik6
+ Imwq/dwppCZjNdTUo2yVDyE/znsMpmWgV21U7KWOWIWWQr2DyMeF8+pIjujGBZMVNMHLngfo=
+X-Google-Smtp-Source: AGHT+IH7iQjpmvSl/23S1uqqWP4SIJuSsrLgH49WM4or/YkeL17ZyzCsl4NnqoZBnBXctzzhppkBG7tlR3WvBLzN9ps=
+X-Received: by 2002:a05:6a20:2d2a:b0:1e5:b0d6:5496 with SMTP id
+ adf61e73a8af0-1e5e046ff38mr68504347637.15.1735808294544; Thu, 02 Jan 2025
+ 00:58:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-References: <20241231091019.1578462-1-thomas.petazzoni@bootlin.com>
-Content-Language: en-US
-From: Maxim Kochetkov <fido_max@inbox.ru>
-In-Reply-To: <20241231091019.1578462-1-thomas.petazzoni@bootlin.com>
-X-Mailru-Src: smtp
-X-4EC0790: 10
-X-7564579A: 646B95376F6C166E
-X-77F55803: 4F1203BC0FB41BD97C62A2C8925CC6473F1CEB7CA3B899951999DBA140A61241182A05F5380850402B86A661AB67B5B33DE06ABAFEAF67051B1D6F45430EC2BFCCA40FBE8E6F6E63D6CDE72A09B3180C
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE71EEA4C46C73542F4EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637670E1B164B70895C8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D808967A04ECA2B0C521FB2D9B95F4E5D34A0E24518617A7A120879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C04CF195F1528592878941B15DA834481FA18204E546F3947CC2B5EEE3591E0D35F6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F7900637712AAB6D9D366D8A389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F3BBE47FD9DD3FB595F5C1EE8F4F765FC72CEEB2601E22B093A03B725D353964B0B7D0EA88DDEDAC722CA9DD8327EE4930A3850AC1BE2E7350555CCFDA08FA3FAC4224003CC83647689D4C264860C145E
-X-C1DE0DAB: 0D63561A33F958A56D76CFC4195832465002B1117B3ED6969CAF8395C9BB5767C638DF663A625AFA823CB91A9FED034534781492E4B8EEAD47A3109F1ACFD409BDAD6C7F3747799A
-X-C8649E89: 1C3962B70DF3F0ADBF74143AD284FC7177DD89D51EBB7742424CF958EAFF5D571004E42C50DC4CA955A7F0CF078B5EC49A30900B95165D346B222596F62B8FA9311FC698C60B56AD4A5AA4CF93E998CECBE2EF9496AA8FF97D704F80B4706B181D7E09C32AA3244C14E6926EA8AEE16C77DD89D51EBB77422664A874DF448AD4EA455F16B58544A2E30DDF7C44BCB90D57ADA2CBCE38F05762A0BE504FE5E636F1E3461735CEBA253FCF178C6DD14203
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojkdn7nI2SqQIxs4kRqsoQEQ==
-X-Mailru-Sender: 689FA8AB762F739381B31377CF4CA219DC36E3300BCAD7DDD58CA205E90EF88EE135C601DC624DA590DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; 
- s=mail4; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References
- :To:Subject:MIME-Version:Date:Message-ID:From:Sender:Reply-To:To:Cc:
- Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
- List-Archive:X-Cloud-Ids:Disposition-Notification-To;
- bh=Fm+mHXnua58GGEa1DQZf7PqzFs9IkZfFle+m0pll818=; t=1735807884; x=1735897884; 
- b=RgLUil7gk8CW97ffxC+hs/NwJ8SE2JBh7VtmDqH1YEWRg5j6Q5b7v6OIObdtPP3LoNKbh3YiuUz
- WA/7JZV7YkGhagvT2BX50asN5gL8RGh4Ey6jZkaMPZMacHU0QDbjlDtMtgEi/mfPtrVtb01U3q+E9
- np8KYZVtueW/COC5HL/no0mo4rUmeE8N5dkAr2spxJvDyooom5HgJM5GfsGs1Rt679TRKqlQqU7pY
- Xie2Mvb0hpdXvWVYzSuFX2AV5s2kIq9v+VlOZt5+YBwihePho1dHnXEeqO1k5F2d/+3nGnLeZ7i03
- 4arXwVcwp4yGkvSuwtZjFIk+qooF8yhjvG3A==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=inbox.ru
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+References: <20241001193355.3966100-1-francois.perrad@gadz.org>
+ <20250101232226.7719f6ad@windsurf>
+In-Reply-To: <20250101232226.7719f6ad@windsurf>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Thu, 2 Jan 2025 09:58:03 +0100
+Message-ID: <CAAE6iEW2Vsm2t5XJRHHi8hbvUuHA5nj6V0Ndh0P2UUp3gJ2g3A@mail.gmail.com>
+To: buildroot@busybox.net
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gadz.org; s=google; t=1735808295; x=1736413095; darn=busybox.net;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=plreXbeJEwYvmhf0RmGm2r8nbb5WX122f/+a9gw3Pqw=;
+ b=JFdWUPDzxL1zcBp1Bw45SGfsjAsqgn29Sq6b+RxW1T/c+gOt2xqDeF2rJ+eBhA/Ora
+ Kid7lQOn03Lxu426dnV8BqtyOOGZhToF7NQ/Zi8qo7omakfxenUSsNkHoT79Kh63nZ54
+ A8sV8JN2eZDEIH73vRXcsfZSJv/V3BFjz71qHSlqvf3pN+exnPkqT63Ocvuk9XM3FGtj
+ Zyej7S7N97St5dgHsz5GZt3R2gmxH5sWUCogo5uP1QnqkVbkG0fi1pJ+9di1+W1o2rR4
+ bwxaGeFmpSnK7kn9y/8tLj3pHjtsDt/7Rt4jjPcteJPE+r2Devcnmn7cSAnvH/KXiGHl
+ VtNA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
- header.s=mail4 header.b=RgLUil7g
-X-Mailman-Original-Authentication-Results: exim-smtp-bcf9586c5-442wp; auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: Re: [Buildroot] [PATCH] package/postgresql: workaround
- documentation build failure
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=JFdWUPDz
+Subject: Re: [Buildroot] [PATCH] package/perl: bump to version 5.40.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,42 +101,151 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: multipart/mixed; boundary="===============5994904183862951480=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-31.12.2024 12:10, Thomas Petazzoni wrote:
-> Since the bump of Postgresql to version 17.2 in commit
-> cc77be28fc030f8583a4a7f9f724d0fc9543dba5, the build fails when
-> host-libxml2 and host-libxslt have been built prior to Postgresql, or
-> when xmllint and xsltproc are available on the host machine, with:
-> 
-> I/O error : Attempt to load network entity: http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd
-> ../doc/src/sgml/postgres.sgml:22: warning: failed to load external entity "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
-> ]>
->    ^
-> ../doc/src/sgml/postgres.sgml:24: element book: validity error : No declaration for attribute id of element book
-> <book id="postgres">
-> 
-> As this happens when building the documentation, this commit proposes
-> to disable building the documentation. Unfortunately, passing
-> -Ddocs=disabled -Ddocs_pdf=disabled is not sufficient, as the
-> documentation building logic still does stuff when it detects xmllint
-> and xsltproc, so we "poison" the detection of those tools so that they
-> do not get used.
-> 
-> This issue has been reported upstream as of bug #18760.
-> 
-> Fixes:
-> 
->    http://autobuild.buildroot.net/results/b061e6a68c885e47a254e66dbc073e2b548b8cd3/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+--===============5994904183862951480==
+Content-Type: multipart/alternative; boundary="000000000000cbd904062ab55c3b"
 
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+--000000000000cbd904062ab55c3b
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Le mer. 1 janv. 2025 =C3=A0 23:22, Thomas Petazzoni <thomas.petazzoni@bootl=
+in.com>
+a =C3=A9crit :
+
+> Hello Fran=C3=A7ois,
+>
+> On Tue,  1 Oct 2024 21:33:54 +0200
+> Francois Perrad <francois.perrad@gadz.org> wrote:
+>
+> > remove merged patch
+> >
+> > diff README:
+> >     -Perl is Copyright (C) 1993 - 2024 by Larry Wall and others.
+> >     +Perl is Copyright (C) 1993 - 2023 by Larry Wall and others.
+> >
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> > ---
+> >  ...ixup-regex-engine-build-under-Uusedl.patch | 554 ------------------
+> >  package/perl/perl.hash                        |  14 +-
+> >  package/perl/perl.mk                          |   6 +-
+> >  3 files changed, 10 insertions(+), 564 deletions(-)
+> >  delete mode 100644
+> package/perl/0001-regcomp-c-regexec-c-fixup-regex-engine-build-under-Uuse=
+dl.patch
+>
+> This update breaks the build of perl for the target when
+> BR2_STATIC_LIBS=3Dy:
+>
+>
+> http://autobuild.buildroot.net/results/e07/e07fe8ba343b606ab4aa67e042c60c=
+e1fb570c15/build-end.log
+>
+> Interestingly, in your version bump, you dropped a patch... which was
+> merged upstream but seems related.
+>
+> Could you have a look?
+>
+>
+Already done.
+The problem doesn't come from this commit, but from a more recent one (also
+including in 5.40.0).
+See
+https://patchwork.ozlabs.org/project/buildroot/patch/20241116182335.121470-=
+1-francois.perrad@gadz.org/
+
+Fran=C3=A7ois
+
+
+
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+
+--000000000000cbd904062ab55c3b
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote g=
+mail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mer. 1 =
+janv. 2025 =C3=A0=C2=A023:22, Thomas Petazzoni &lt;<a href=3D"mailto:thomas=
+.petazzoni@bootlin.com">thomas.petazzoni@bootlin.com</a>&gt; a =C3=A9crit=
+=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px =
+0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hello Fr=
+an=C3=A7ois,<br>
+<br>
+On Tue,=C2=A0 1 Oct 2024 21:33:54 +0200<br>
+Francois Perrad &lt;<a href=3D"mailto:francois.perrad@gadz.org" target=3D"_=
+blank">francois.perrad@gadz.org</a>&gt; wrote:<br>
+<br>
+&gt; remove merged patch<br>
+&gt; <br>
+&gt; diff README:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0-Perl is Copyright (C) 1993 - 2024 by Larry Wall an=
+d others.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0+Perl is Copyright (C) 1993 - 2023 by Larry Wall an=
+d others.<br>
+&gt; <br>
+&gt; Signed-off-by: Francois Perrad &lt;<a href=3D"mailto:francois.perrad@g=
+adz.org" target=3D"_blank">francois.perrad@gadz.org</a>&gt;<br>
+&gt; ---<br>
+&gt;=C2=A0 ...ixup-regex-engine-build-under-Uusedl.patch | 554 ------------=
+------<br>
+&gt;=C2=A0 package/perl/perl.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 14 +-<br>
+&gt;=C2=A0 package/perl/<a href=3D"http://perl.mk" rel=3D"noreferrer" targe=
+t=3D"_blank">perl.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A06 +-<br>
+&gt;=C2=A0 3 files changed, 10 insertions(+), 564 deletions(-)<br>
+&gt;=C2=A0 delete mode 100644 package/perl/0001-regcomp-c-regexec-c-fixup-r=
+egex-engine-build-under-Uusedl.patch<br>
+<br>
+This update breaks the build of perl for the target when<br>
+BR2_STATIC_LIBS=3Dy:<br>
+<br>
+=C2=A0 <a href=3D"http://autobuild.buildroot.net/results/e07/e07fe8ba343b60=
+6ab4aa67e042c60ce1fb570c15/build-end.log" rel=3D"noreferrer" target=3D"_bla=
+nk">http://autobuild.buildroot.net/results/e07/e07fe8ba343b606ab4aa67e042c6=
+0ce1fb570c15/build-end.log</a><br>
+<br>
+Interestingly, in your version bump, you dropped a patch... which was<br>
+merged upstream but seems related.<br>
+<br>
+Could you have a look?<br>
+<br></blockquote><div><br></div><div>Already done.<br></div><div>The proble=
+m doesn&#39;t come from this commit, but from a more recent one (also inclu=
+ding in 5.40.0).</div><div>See <a href=3D"https://patchwork.ozlabs.org/proj=
+ect/buildroot/patch/20241116182335.121470-1-francois.perrad@gadz.org/">http=
+s://patchwork.ozlabs.org/project/buildroot/patch/20241116182335.121470-1-fr=
+ancois.perrad@gadz.org/</a></div><div><br></div><div>Fran=C3=A7ois<br></div=
+><div><br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D=
+"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-le=
+ft:1ex">
+Thomas<br>
+-- <br>
+Thomas Petazzoni, CTO, Bootlin<br>
+Embedded Linux and Kernel engineering<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+</blockquote></div></div>
+
+--000000000000cbd904062ab55c3b--
+
+--===============5994904183862951480==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5994904183862951480==--
