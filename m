@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70B8AE77194
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 13:29:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C09A1E7718B
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 13:29:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F9BB607C8;
-	Thu,  2 Jan 2025 13:29:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ToecqXr8IcqG; Thu,  2 Jan 2025 13:29:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C57E607EA
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C57E607EA;
-	Thu,  2 Jan 2025 13:29:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F483F29
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 13:28:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D8B8402DE
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 13:28:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8929740695;
+	Thu,  2 Jan 2025 13:29:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9lMnNxVWRCTQ for <buildroot@buildroot.org>;
+ id gziJOvCHQ5LF; Thu,  2 Jan 2025 13:29:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60257405AC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60257405AC;
+	Thu,  2 Jan 2025 13:29:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1585EE0F
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 13:28:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 090B040293
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 13:28:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BZM1MKdYpvUQ for <buildroot@buildroot.org>;
  Thu,  2 Jan 2025 13:28:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D65D40293
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F5F5402DB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D65D40293
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F5F5402DB
  for <buildroot@buildroot.org>; Thu,  2 Jan 2025 13:28:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 662238374A; Thu,  2 Jan 2025 13:28:48 +0000 (UTC)
+ id 1B82282297; Thu,  2 Jan 2025 13:28:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 2 Jan 2025 14:19:18 +0100
+Date: Thu, 2 Jan 2025 14:19:15 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 120780cae122b918ea7989786b424351fe74769f
-X-Git-Newrev: 575a174a96be7d20a85e621a1575853e7c2af354
+X-Git-Oldrev: 40b3fe6ff5750ae3865ff6da751b759d0d1ba94f
+X-Git-Newrev: 3838077f2e22fb333b92707e0ca3a359d3abe2aa
 X-Patchwork-Hint: ignore
-Message-Id: <20250102132848.662238374A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x]
- package/gstreamer1-editing-services: bump version to 1.22.12
+Message-Id: <20250102132848.1B82282297@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/gst1-devtools:
+ bump version to 1.22.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,48 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=575a174a96be7d20a85e621a1575853e7c2af354
+commit: https://git.buildroot.net/buildroot/commit/?id=3838077f2e22fb333b92707e0ca3a359d3abe2aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-No functional change, but bump for consistency.  For details, see the
-release notes:
+For various bugfixes. For details, see the release notes:
 
 https://gstreamer.freedesktop.org/releases/1.22/
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit fd720980eb51401261438bb4f1928b54c2576438)
+(cherry picked from commit 8fbadc1c060052e01cfdad7c705792d1d9821a67)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../gstreamer1-editing-services/gstreamer1-editing-services.hash      | 4 ++--
- .../gstreamer1-editing-services/gstreamer1-editing-services.mk        | 2 +-
+ package/gstreamer1/gst1-devtools/gst1-devtools.hash | 4 ++--
+ package/gstreamer1/gst1-devtools/gst1-devtools.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index 2ea29dae61..e6bba20724 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.22.9.tar.xz.sha256sum
--sha256  3553ad3802dccde0c0ef1461881acd9b55bddf8adf751de4cb51b7f8cb50440d  gst-editing-services-1.22.9.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.22.12.tar.xz.sha256sum
-+sha256  792339135ce713088663cc5d44e0aea8217793e88fabfd11571e7abf4a429f2c  gst-editing-services-1.22.12.tar.xz
- 
- # Hashes for license files:
- sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index e2c0f1ccf8..75c660f31d 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+diff --git a/package/gstreamer1/gst1-devtools/gst1-devtools.hash b/package/gstreamer1/gst1-devtools/gst1-devtools.hash
+index 6cf7c9597f..d194dd32e6 100644
+--- a/package/gstreamer1/gst1-devtools/gst1-devtools.hash
++++ b/package/gstreamer1/gst1-devtools/gst1-devtools.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-1.22.9.tar.xz.sha256sum
+-sha256  02e29400b44e9cc603aa6444dee5726b57edabef6455e6d0921ffed6f13840ee  gst-devtools-1.22.9.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-1.22.12.tar.xz.sha256sum
++sha256  015ff62789dab423edafe979b019c7de4c849a2b7e74912b20b74a70e5b68f72  gst-devtools-1.22.12.tar.xz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  validate/COPYING
+diff --git a/package/gstreamer1/gst1-devtools/gst1-devtools.mk b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
+index 0c085b8b42..66aec4a8e9 100644
+--- a/package/gstreamer1/gst1-devtools/gst1-devtools.mk
++++ b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.22.9
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.22.12
- GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
+-GST1_DEVTOOLS_VERSION = 1.22.9
++GST1_DEVTOOLS_VERSION = 1.22.12
+ GST1_DEVTOOLS_SOURCE = gst-devtools-$(GST1_DEVTOOLS_VERSION).tar.xz
+ GST1_DEVTOOLS_SITE = https://gstreamer.freedesktop.org/src/gst-devtools
+ GST1_DEVTOOLS_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
