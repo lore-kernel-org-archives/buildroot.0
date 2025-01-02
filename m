@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98A4AC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:49:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56D08C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:49:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A5D180851;
-	Fri, 28 Feb 2025 16:49:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f6-ookyjLKPl; Fri, 28 Feb 2025 16:49:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 721E180B99
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 721E180B99;
-	Fri, 28 Feb 2025 16:49:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 040AC1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:35:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0032042E7A
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2102D4EF0D;
+	Fri, 28 Feb 2025 16:49:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n0C5c4Js4HUQ for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:15 +0000 (UTC)
+ id SI2zAxddIt5F; Fri, 28 Feb 2025 16:49:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAA424F12D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id EAA424F12D;
+	Fri, 28 Feb 2025 16:49:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 20BDB711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:35:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29A3D424EE
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0mWUnUNItDdl for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAA48424EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F068426F7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CAA48424EE
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F068426F7
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C63798769C; Fri, 28 Feb 2025 16:29:55 +0000 (UTC)
+ id 6545587C2C; Fri, 28 Feb 2025 16:29:56 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 31 Dec 2024 18:08:28 +0100
+Date: Thu, 2 Jan 2025 19:46:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b3f7c104ca50a8cfa4403cc76b907672633eebca
-X-Git-Newrev: f0422b41df9d5b638b59ffc9811f9bce135f3e35
+X-Git-Oldrev: 892677f4f583031de048d81855e339dca15183ed
+X-Git-Newrev: e71036045b9b0d9b2c1bd3a2d17f57187ffdde9d
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162955.C63798769C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/postgresql: workaround
- documentation build failure
+Message-Id: <20250228162956.6545587C2C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/c-icap: memcached code
+ needs <crypt.h>
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,63 +65,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0422b41df9d5b638b59ffc9811f9bce135f3e35
+commit: https://git.buildroot.net/buildroot/commit/?id=e71036045b9b0d9b2c1bd3a2d17f57187ffdde9d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since the bump of Postgresql to version 17.2 in commit
-cc77be28fc030f8583a4a7f9f724d0fc9543dba5, the build fails when
-host-libxml2 and host-libxslt have been built prior to Postgresql, or
-when xmllint and xsltproc are available on the host machine, with:
-
-I/O error : Attempt to load network entity: http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd
-../doc/src/sgml/postgres.sgml:22: warning: failed to load external entity "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
-]>
-  ^
-../doc/src/sgml/postgres.sgml:24: element book: validity error : No declaration for attribute id of element book
-<book id="postgres">
-
-As this happens when building the documentation, this commit proposes
-to disable building the documentation. Unfortunately, passing
--Ddocs=disabled -Ddocs_pdf=disabled is not sufficient, as the
-documentation building logic still does stuff when it detects xmllint
-and xsltproc, so we "poison" the detection of those tools so that they
-do not get used.
-
-This issue has been reported upstream as of bug #18760:
-https://www.postgresql.org/message-id/18760-82d1b83da31b898d%40postgresql.org
+The memcached code of c-icap needs <crypt.h>, which is no longer
+provided by glibc since glibc 2.39. So add some logic to add a
+dependency on libxcrypt when needed.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/b061e6a68c885e47a254e66dbc073e2b548b8cd3/
+  http://autobuild.buildroot.net/results/63b04f86bb8794b79d206659a883acef96dfebf0/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Julien: add link to bug report]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/postgresql/postgresql.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/c-icap/Config.in | 3 +++
+ package/c-icap/c-icap.mk | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 5ad3cea9e7..f4b58f58ed 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -14,7 +14,15 @@ POSTGRESQL_SELINUX_MODULES = postgresql
- POSTGRESQL_INSTALL_STAGING = YES
- POSTGRESQL_CONFIG_SCRIPTS = pg_config
- POSTGRESQL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
--POSTGRESQL_CONF_OPTS = -Drpath=false
-+# We have to force invalid paths for xmllint and xsltproc, otherwise
-+# if detected they get used, even with -Ddocs=disabled and
-+# -Ddocs_pdf=disabled, and it causes build failures
-+POSTGRESQL_CONF_OPTS = \
-+	-Drpath=false \
-+	-Ddocs=disabled \
-+	-Ddocs_pdf=disabled \
-+	-DXMLLINT=/nowhere \
-+	-DXSLTPROC=/nowhere
- POSTGRESQL_DEPENDENCIES = \
- 	$(TARGET_NLS_DEPENDENCIES) \
- 	host-bison \
+diff --git a/package/c-icap/Config.in b/package/c-icap/Config.in
+index 8f7963c26a..3c1325ee39 100644
+--- a/package/c-icap/Config.in
++++ b/package/c-icap/Config.in
+@@ -3,6 +3,9 @@ config BR2_PACKAGE_C_ICAP
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
++	# the libmemcached code uses <crypt.h>
++	select BR2_PACKAGE_LIBXCRYPT if \
++	       BR2_PACKAGE_LIBMEMCACHED && BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  c-icap is an implementation of an ICAP server. It can be
+ 	  used with HTTP proxies that support the ICAP protocol to
+diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+index 36ef1c8b12..4ece4c4b26 100644
+--- a/package/c-icap/c-icap.mk
++++ b/package/c-icap/c-icap.mk
+@@ -43,7 +43,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBMEMCACHED),y)
+ C_ICAP_CONF_OPTS += --with-memcached
+-C_ICAP_DEPENDENCIES += libmemcached
++C_ICAP_DEPENDENCIES += libmemcached $(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt)
+ else
+ C_ICAP_CONF_OPTS += --without-memcached
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
