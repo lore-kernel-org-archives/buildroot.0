@@ -1,94 +1,154 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5874E77188
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 10:20:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DA79E77188
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 10:25:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BBCD80DF7;
-	Thu,  2 Jan 2025 10:20:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E01B4079B;
+	Thu,  2 Jan 2025 10:25:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EF1WJtuwEQVv; Thu,  2 Jan 2025 10:20:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JEdGJhUbR36O; Thu,  2 Jan 2025 10:25:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FD3480DF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCAC140787
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FD3480DF9;
-	Thu,  2 Jan 2025 10:20:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7186AF27
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 10:20:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCAC140787;
+	Thu,  2 Jan 2025 10:25:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15A82F27
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 10:25:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3920180DF2
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 10:20:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 03F8440787
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 10:25:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nMvvoQpu8sqX for <buildroot@buildroot.org>;
- Thu,  2 Jan 2025 10:20:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C938980DE7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C938980DE7
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C938980DE7
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 10:20:43 +0000 (UTC)
-X-CSE-ConnectionGUID: v8wAZtjnTBSfQ/vJlpWUBQ==
-X-CSE-MsgGUID: PBMT6tRiQSWQnn+RLgdLiQ==
-Received: from unknown (HELO opfedv1rlp0e.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 02 Jan 2025 11:20:40 +0100
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0e.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Jan 2025 11:20:40 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Thu, 2 Jan 2025 11:20:39 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Thu, 02 Jan 2025 11:20:38 +0100
-From: yann.morin@orange.com
-X-CSE-ConnectionGUID: 9opyjHvCSf6/4wBHcHvwdw==
-X-CSE-MsgGUID: rHGQE+hHT0i+S51cvOuT6Q==
-X-IronPort-AV: E=Sophos;i="6.12,285,1728943200"; d="scan'208";a="234765572"
-Date: Thu, 2 Jan 2025 11:20:38 +0100
-To: Julien Olivain <ju.o@free.fr>
-CC: <buildroot@buildroot.org>
-Message-ID: <Z3ZodlNb+JEvB9ub@yd-6wlzhs3>
-References: <20241227130231.862029-1-ju.o@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hXfSKh-GWErI for <buildroot@buildroot.org>;
+ Thu,  2 Jan 2025 10:25:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:2413::625;
+ helo=nam10-dm6-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AE86140784
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE86140784
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam10on20625.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2413::625])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AE86140784
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 10:25:20 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=g7T6ngOjZssDFZR8EjKzuq0lVBuSOK73O/lZUfLnpoNYC+earj+Pry7YM4udnB/iLf5WWJqxAAwv33YIvmbGuSZbturd+ltwWLQptuceQxb1WGKXJ6vzruR9hQkK2nbrSnaAtZ2TllNsISuzhuAu3JNNXpmGXi0vE0b+9bXkAtKd48Joz+T21p0+gJS2lNImg1H9WTIqZBmGiDEc/wpbiyd8cnVuhAEBrDs/j/IBrvuj+n4m2mVBxlfCfHttxc/HjpuOode/UJQKYPBNaLhQ0OzhQar8HzabzyO+pfEmRWthQGwVAN+mpdwR5D+wsdfvgWx6rmym2helMPWO5QrrUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PVbs1H1hD0Y/wgcBmfSDrIxio//Gn9KiI1VrSizIq0E=;
+ b=TGiAs5ZiV/Zt96TR6V9MstLGs6TDuN0m2VggsltD6LJLRBIy5SZ9I7vpnJ0NK6Q484sP9ngSbviwcLk9KAdlvt660ugxhID2caADOkM5yq55C+KSWcVedv79rhC159uadInHGxOHdDaBFX1QVqRZDnaE0xRuiHpbwe7JfHwF8p7BFYZoDIWsubpVfdPWrsOwYb7e8hncoEpVaqGQVOBi3JGuo5yUuGSvEMji1SFuczwVaCjHDvKYFKN6aAN42QrDN+Zye9XycCfFlh0NOlOL/QGiD2qN8m/to1zgJNs2mstd3TDhiRY20+jtgJqG6AOZaeoWYdMiTTAVPfVg0CHbTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from CH2PR02CA0023.namprd02.prod.outlook.com (2603:10b6:610:4e::33)
+ by SA3PR12MB8439.namprd12.prod.outlook.com (2603:10b6:806:2f7::9)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8293.20; Thu, 2 Jan
+ 2025 10:25:12 +0000
+Received: from CH3PEPF0000000B.namprd04.prod.outlook.com
+ (2603:10b6:610:4e:cafe::a3) by CH2PR02CA0023.outlook.office365.com
+ (2603:10b6:610:4e::33) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8314.14 via Frontend Transport; Thu,
+ 2 Jan 2025 10:25:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CH3PEPF0000000B.mail.protection.outlook.com (10.167.244.38) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8314.11 via Frontend Transport; Thu, 2 Jan 2025 10:25:12 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 2 Jan
+ 2025 04:25:11 -0600
+Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Thu, 2 Jan 2025 04:25:10 -0600
+To: <buildroot@buildroot.org>
+Date: Thu, 2 Jan 2025 10:25:00 +0000
+Message-ID: <20250102102500.1420512-2-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250102102500.1420512-1-neal.frager@amd.com>
+References: <20250102102500.1420512-1-neal.frager@amd.com>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20241227130231.862029-1-ju.o@free.fr>
-X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX203.corporate.adroot.infra.ftgroup (10.115.26.8)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
+Received-SPF: None (SATLEXMB03.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PEPF0000000B:EE_|SA3PR12MB8439:EE_
+X-MS-Office365-Filtering-Correlation-Id: 733219e2-31da-4415-fc0c-08dd2b17bdaa
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|376014|1800799024|36860700013|82310400026|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?P6fiuBbiu8FD363tiAvDowoE2nTXecxpWkkDLIADN56pd7aNmvLYb+VY2IvP?=
+ =?us-ascii?Q?3nnVhlOPk7dQ+Rtap2lBm2ub/+uXRsLrTwcU5Z0c7vr6SC6H23IZHuWeFaoa?=
+ =?us-ascii?Q?SxNxYBvMl70OV+iG8gRIxTRv7SF40U9Lx3yDyfDtN8KW9KO/c9B8JVOXiept?=
+ =?us-ascii?Q?zikS8bd10Dlp1S5nekyViuORBWIDdQOdl1UwPvNOwF43HXbpFpeSBBMLwAjK?=
+ =?us-ascii?Q?ZZY+CYxIvl6Uk0ZohLl8NizN93nElZgqYXQnhl3+Yb49InISbLF+D9HcB0ed?=
+ =?us-ascii?Q?mUNJO+S45qRiGIQfhzt2vxlE/2yv3wMyh0wtFkAFF8FQ7kWUdDqUbNQGdg7Y?=
+ =?us-ascii?Q?qM6MJCN1vhkT8hw/5A6mhEOYa+9thbYQDraoFQzs2CdgNQgDYYzuXT/YPckZ?=
+ =?us-ascii?Q?8L17mYnLeTVCgXL1RO0nNt0V+/3+ezLt1dXA+CInYQk3DLM6TenPJ+2UB/M5?=
+ =?us-ascii?Q?mWZmAfngmELOgYtrTSQH1PoXT0+c19MpNNVNBEyPXy9mupVFZjiXKubjIMjB?=
+ =?us-ascii?Q?RAN/myE7RRIzPGUmXxDkjBkPbWDXzQ9Kx4Y7BRs30GM6kzbVEtWGlAWjP4EI?=
+ =?us-ascii?Q?8fVP+g/PH58ENoMae1FQbo2XklvmCHC8XzeXPetVr3kTKL/Llra4r/T/FuVr?=
+ =?us-ascii?Q?vYhBDM6rxAGwRg7DeL++wnNAjKk7rMrANrOOIeCVEpIDSFFv2UYJZe9Voj/L?=
+ =?us-ascii?Q?KdPk0KigRb+upGbX3dEF4r9brNTYXvy/huK496LMDEeB1uyDPistngmPl7ra?=
+ =?us-ascii?Q?BvmjswP08p8TfzQknWzlyoNqMiI1WNTf1NAF8TUQqoWg0v8rJwo1u9CD7rMB?=
+ =?us-ascii?Q?8WANLShRTnlFAuydLtXJItDNgPPgfLOVNVlg7XS15WEHgMGJEghNps0rpB7n?=
+ =?us-ascii?Q?oDhZurTSKkmSq2VX5BAymslqWTdpnpusUL7H9u6JPUkuOYQ3lnd4dWFXSfWq?=
+ =?us-ascii?Q?8ls5FaVR2bezkPipFeHDFGk/G8tM8Vy0MM478i95N5ws8imEjz+WvnfP/0Tg?=
+ =?us-ascii?Q?VEBjD456oOBvH+vKJ9XFKF8i3ttQ6NzbKmfcuk8da5sQYAj79FVjmrSOLUa8?=
+ =?us-ascii?Q?jKR4iVtIwXQDOLi9NYFaN4N+fEVckrM36FvbPjQgk2ptHpBIj1vqAAzd58Ay?=
+ =?us-ascii?Q?NDloNLOqhK4gnqLyd+fx2MEL4/ewJULgoBL9llw4hSysU0jsFMNT2GOqVcoA?=
+ =?us-ascii?Q?/UiSMhFS/ODLQPFJu05bRblu83HfiXnyw7zQVwuORpMr9+FHxUOmE0SHo/OO?=
+ =?us-ascii?Q?WWHOo1KdCT8lnofofTSouCwweAca6gMWhX8HZWVtgCf90+HHCKPWHtCOyFKB?=
+ =?us-ascii?Q?+Mp7ix80clb9427OjF7crKEydyBc8buGnRSNcBov5EDwoUm5hCJaB13n/gLA?=
+ =?us-ascii?Q?hiEb6zKEsGQ+fYK1eHgAEsm+5VrJZYS/EKCZ8Jm57VkJVfeDsGeKQTxCAm1s?=
+ =?us-ascii?Q?f7r83aWDCw/JCDyCcUZtqgI35OFFbyRIw3gALDSFqJeRDoiVeHatqau6go46?=
+ =?us-ascii?Q?lr+j4ImLLWt/7rKGVQ8ud75H3DB3JyC61Dfn?=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(376014)(1800799024)(36860700013)(82310400026)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jan 2025 10:25:12.2038 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 733219e2-31da-4415-fc0c-08dd2b17bdaa
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CH3PEPF0000000B.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8439
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1735813244; x=1767349244;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=IIP+ZcHT+oi4Tw0R1N+sbAVY+oWoAhkLCivoRmR9Tb4=;
- b=LAvXg5vhzpVk+1w/7SdglW9cUP//hMfEMRQtxFfkdNlrGY76U54lmBUz
- yfo6HrQ3FMpHPQFEYT3jTIoBGpRyYaHP25A+NrXVJtZrGHQPzWcmeSEVM
- L23niclcYVDJHHMXaEt+PmOWTPtmdxzQtv+DJemADK2+2ceRrXd+nnYas
- 3Aewe32XwaCCe8356I7Gl3POxi8e33XoEODdbbTTtnR8mQLj/Ggc3wlO3
- O4oRekN7EK12cX1rwxulFNv081HO4yJ0eNJKvCYZEv8r08wEytNou9LpR
- PlYHAIjLpyVZByPdNEY8Vu8M0XSN/SNqrZH6c5cBT5HpP+svDJke4DsJF
- A==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=LAvXg5vh
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: new usbip runtime test
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PVbs1H1hD0Y/wgcBmfSDrIxio//Gn9KiI1VrSizIq0E=;
+ b=YCFa6AmhdS1vzAdHvnxR3xs8B4zFCqAsMrOUFEAevYOVCnoM4rW04d33rXf2cKnxhdoYuRhK6P8DmrKtjOkJUzFZKzhf4p0qweFyXqQtkUIjk9fvgTZtSiDNJH/slWnUu8GH6+D6rWj61D8I+hnwCmWdhXy2UE8ntjCmHmRhf+4=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=YCFa6Amh
+Subject: [Buildroot] [PATCH v1 2/2] package/newlib-bare-metal: replace fixup
+ with tooldir config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,59 +160,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: luca.ceresoli@bootlin.com, brandon.maier@collins.com, ju.o@free.fr,
+ thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
+ romain.naour@smile.fr, michal.simek@amd.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SnVsaWVuLCBBbGwsCgpPbiAyMDI0LTEyLTI3IDE0OjAyICswMTAwLCBKdWxpZW4gT2xpdmFpbiBz
-cGFrZSB0aHVzbHk6Cj4gQ29tbWl0IFsxXSBpbnRyb2R1Y2VkIHRoZSB1c2JpcCBwYWNrYWdlLiBU
-aGlzIGNvbW1pdCBhZGRzIGEgbmV3IHJ1bnRpbWUKPiB0ZXN0IHRvIGNoZWNrIHRoaXMgZnVuY3Rp
-b25hbGl0eS4KPiAKPiBbMV0gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRy
-b290Ly0vY29tbWl0L2YwNWYyYzFhZDcxN2I3Y2RhMDY1ZWUwNmZjMWRhYTgwY2QwOWQ4NTkKPiAK
-PiBDYzogWWFubiBFLiBNT1JJTiA8eWFubi5tb3JpbkBvcmFuZ2UuY29tPgo+IFNpZ25lZC1vZmYt
-Ynk6IEp1bGllbiBPbGl2YWluIDxqdS5vQGZyZWUuZnI+ClstLVNOSVAtLV0KPiBkaWZmIC0tZ2l0
-IGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF91c2JpcC9saW51eC11c2JpcC5m
-cmFnbWVudCBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfdXNiaXAvbGludXgt
-dXNiaXAuZnJhZ21lbnQKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAu
-LjU5MmY0NjExNDUKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3Rz
-L3BhY2thZ2UvdGVzdF91c2JpcC9saW51eC11c2JpcC5mcmFnbWVudAo+IEBAIC0wLDAgKzEsNSBA
-QAo+ICtDT05GSUdfVVNCPXkKPiArQ09ORklHX1VTQl9FSENJX0hDRD15Cj4gK0NPTkZJR19VU0JJ
-UF9DT1JFPXkKCkkgd2FzIHdvbmRlcmluZyB3aHkgeW91IG5lZWRlZCB0byByZXBlYXQgVVNCSVBf
-Q09SRSBoZXJlLCBhbHRob3VnaCBpdAppcyBwYXJ0IG9mIHRoZSBmaXh1cHMgaW4gVVNCSVBfTElO
-VVhfQ09ORklHX0ZJWFVQUy4uLgoKVHVybnMgb3V0IHRoYXQgdGhlIGZyYWdtZW50cyBhcmUgYXBw
-bGllZCBiZWZvcmUgdGhlIHBhY2thZ2VzIGZpeHVwcywKc28geWVhaCwgd2UgbmVlZCBVU0JJUF9D
-T1JFIChhbmQgVVNCIHRvbyBldmVuIHdpdGggbXkgcGF0Y2ggYXBwbGllZCkuCgpSZXZpZXdlZC1i
-eTogWWFubiBFLiBNT1JJTiA8eWFubi5tb3JpbkBvcmFuZ2UuY29tPgpUZXN0ZWQtYnk6IFlhbm4g
-RS4gTU9SSU4gPHlhbm4ubW9yaW5Ab3JhbmdlLmNvbT4KClRoYW5rIHlvdSBmb3IgdGhpcyBydW50
-aW1lIHRlc3QhIPCfkY0KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+ICtDT05GSUdfVVNCSVBf
-SE9TVD15Cj4gK0NPTkZJR19VU0JJUF9WSENJX0hDRD15Cj4gLS0gCj4gMi40Ny4xCj4gCgotLSAK
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF9fX19fX19fX19fXwouLS0t
-LS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS06ICAgICAgIF8gICAgOi0tLS0tLS0t
-LS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAgICBf
-Xy8gKSAgIHwgLyJcIEFTQ0lJIFJJQkJPTiB8CnwgICAgICAgICAgICAgICAgIHwgU29mdHdhcmUg
-IERlc2lnbmVyIHwgIF8vIC0gLycgICB8IFwgLyBDQU1QQUlHTiAgICAgfAp8ICszMyA2MzguNDEx
-LjI0NSAnLS0tLS0tLS0tLS0tLS0tLS0tLS06IChfICAgIGAtLSwgfCAgWCAgQUdBSU5TVCAgICAg
-IHwKfCB5YW5uLm1vcmluIChhdCkgb3JhbmdlLmNvbSAgICAgICAgICAgfF89IiAgICAsLS0nIHwg
-LyBcIEhUTUwgTUFJTCAgICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LTpfX19fX18vX19fX186LS0tLS0tLS0tLS0tLS0tLS0tJwoKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQpDZSBtZXNzYWdlIGV0IHNlcyBwaWVjZXMg
-am9pbnRlcyBwZXV2ZW50IGNvbnRlbmlyIGRlcyBpbmZvcm1hdGlvbnMgY29uZmlkZW50aWVsbGVz
-IG91IHByaXZpbGVnaWVlcyBldCBuZSBkb2l2ZW50IGRvbmMNCnBhcyBldHJlIGRpZmZ1c2VzLCBl
-eHBsb2l0ZXMgb3UgY29waWVzIHNhbnMgYXV0b3Jpc2F0aW9uLiBTaSB2b3VzIGF2ZXogcmVjdSBj
-ZSBtZXNzYWdlIHBhciBlcnJldXIsIHZldWlsbGV6IGxlIHNpZ25hbGVyDQphIGwnZXhwZWRpdGV1
-ciBldCBsZSBkZXRydWlyZSBhaW5zaSBxdWUgbGVzIHBpZWNlcyBqb2ludGVzLiBMZXMgbWVzc2Fn
-ZXMgZWxlY3Ryb25pcXVlcyBldGFudCBzdXNjZXB0aWJsZXMgZCdhbHRlcmF0aW9uLA0KT3Jhbmdl
-IGRlY2xpbmUgdG91dGUgcmVzcG9uc2FiaWxpdGUgc2kgY2UgbWVzc2FnZSBhIGV0ZSBhbHRlcmUs
-IGRlZm9ybWUgb3UgZmFsc2lmaWUuIE1lcmNpLg0KDQpUaGlzIG1lc3NhZ2UgYW5kIGl0cyBhdHRh
-Y2htZW50cyBtYXkgY29udGFpbiBjb25maWRlbnRpYWwgb3IgcHJpdmlsZWdlZCBpbmZvcm1hdGlv
-biB0aGF0IG1heSBiZSBwcm90ZWN0ZWQgYnkgbGF3Ow0KdGhleSBzaG91bGQgbm90IGJlIGRpc3Ry
-aWJ1dGVkLCB1c2VkIG9yIGNvcGllZCB3aXRob3V0IGF1dGhvcmlzYXRpb24uDQpJZiB5b3UgaGF2
-ZSByZWNlaXZlZCB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIg
-YW5kIGRlbGV0ZSB0aGlzIG1lc3NhZ2UgYW5kIGl0cyBhdHRhY2htZW50cy4NCkFzIGVtYWlscyBt
-YXkgYmUgYWx0ZXJlZCwgT3JhbmdlIGlzIG5vdCBsaWFibGUgZm9yIG1lc3NhZ2VzIHRoYXQgaGF2
-ZSBiZWVuIG1vZGlmaWVkLCBjaGFuZ2VkIG9yIGZhbHNpZmllZC4NClRoYW5rIHlvdS4KX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
-bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
-cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+This patch removes the post install fixup now that newlib 4.5.0 supports a
+configurable tooldir path using --with-tooldir config option.
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+---
+ package/newlib-bare-metal/newlib-bare-metal.mk | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
+
+diff --git a/package/newlib-bare-metal/newlib-bare-metal.mk b/package/newlib-bare-metal/newlib-bare-metal.mk
+index a3532f0b22..e28e7a717c 100644
+--- a/package/newlib-bare-metal/newlib-bare-metal.mk
++++ b/package/newlib-bare-metal/newlib-bare-metal.mk
+@@ -33,6 +33,7 @@ define NEWLIB_BARE_METAL_CONFIGURE_CMDS
+ 			--enable-newlib-io-float \
+ 			--enable-newlib-io-long-double \
+ 			--disable-multilib \
++			--with-tooldir=/usr \
+ 	)
+ endef
+ 
+@@ -45,12 +46,4 @@ define NEWLIB_BARE_METAL_INSTALL_STAGING_CMDS
+ 		DESTDIR=$(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT) install
+ endef
+ 
+-define NEWLIB_BARE_METAL_FIXUP
+-	mv $(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT)/usr/$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE)/include \
+-		$(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT)/usr/include
+-	mv $(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT)/usr/$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE)/lib \
+-		$(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT)/usr/lib
+-endef
+-NEWLIB_BARE_METAL_POST_INSTALL_STAGING_HOOKS += NEWLIB_BARE_METAL_FIXUP
+-
+ $(eval $(generic-package))
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
