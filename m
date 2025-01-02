@@ -4,74 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB5BEE77188
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 18:58:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B09FE77188
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 19:09:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1B0D607BA;
-	Thu,  2 Jan 2025 18:58:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CDF0C60898;
+	Thu,  2 Jan 2025 19:09:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dx-OtmtTN8VX; Thu,  2 Jan 2025 18:58:21 +0000 (UTC)
+ id AAbxlRilsaol; Thu,  2 Jan 2025 19:09:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9D5460802
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B855B6089B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A9D5460802;
-	Thu,  2 Jan 2025 18:58:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BE248F24
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 18:58:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B855B6089B;
+	Thu,  2 Jan 2025 19:09:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3B496F24
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 19:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ABE1E40707
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 18:58:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 358A6409BC
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 19:09:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p6GtnBta93nK for <buildroot@buildroot.org>;
- Thu,  2 Jan 2025 18:58:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A93BA403DB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A93BA403DB
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A93BA403DB
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 18:58:19 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id D87842003CE;
- Thu,  2 Jan 2025 19:58:16 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:55956])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 02 Jan 2025 19:58:16 +0100
-MIME-Version: 1.0
-Date: Thu, 02 Jan 2025 19:58:16 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cU6GIQqwsxu1 for <buildroot@buildroot.org>;
+ Thu,  2 Jan 2025 19:09:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09BED409A7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09BED409A7
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 19:09:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E1097838FE; Thu,  2 Jan 2025 19:09:21 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250101202112.1845113-1-thomas.petazzoni@bootlin.com>
-References: <20250101202112.1845113-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <e3c1d5ad4cf0eb6a57c062a7950db4e3@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1735844297;
- bh=VXOAptYhejXTH4DFjD4GyKo4GplAX+6wP0A2O64sOAE=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=NZ3PIks+auGsBBorf7vfc7Zn2QJctP5LxOpOiYXBRCm6zzhGT4l0Dw7UHudQZHXY/
- uVjOp/rBDtjvBzk898lhmXjkbbbQmIMLTnPDOvPEbREzqK69AJvTM7Te0+23gw3/2z
- qjWn12/qW9qunzyu81wm7WuTM+HrmG4MFDAEtgKZc+qWI+pt3truuTFdthsxWYHzrp
- N1CPdh0AU7uKsUAsuqLvAkjdcHFbqxb2D8Ju3bilk0IPVgaMfI4mXW9HqM0fvza0Rh
- zjlFrxrXLYdiKabRS9KWj08dPFrwrAUvsEoZw+uAsmLxTpR/qSxqK9G6cFs/a6wWKS
- 9b0WwtA1g7mvw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=NZ3PIks+
-Subject: Re: [Buildroot] [PATCH] package/perl: properly pass CFLAGS/LDFLAGS
- when building host-perl
+To: buildroot@buildroot.org
+Date: Thu, 2 Jan 2025 20:06:15 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 65127a8a772132c3d0905241563d1978a2b332ba
+X-Git-Newrev: d58574af1cc94f5fb1f61f49d648041f0f405ac5
+X-Patchwork-Hint: ignore
+Message-Id: <20250102190921.E1097838FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnuplot: bump version to 6.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,36 +58,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/01/2025 21:21, Thomas Petazzoni via buildroot wrote:
-> HOST_CFLAGS and HOST_LDFLAGS are currently not accounted for when
-> building host-perl. In particular, it means that executables
-> built/installed by host-perl do not have a RPATH pointing to
-> HOST_DIR/lib, which can cause issues as libcrypt.so can now be
-> provided by host-libxcrypt.
-> 
-> This was causing check-host-rpath to complain in the situation where:
-> 
-> 1. host-perl was built, with no RPATH, linked against the system
->    libcrypt.so
-> 
-> 2. host-libxcrypt was built afterwards, installed as
->    HOST_DIR/lib/libcrypt.so, which made check-host-rpath complain as
->    HOST_DIR/bin/perl is linked against a library present in
->    HOST_DIR/lib but doesn't have a RPATH to HOST_DIR/lib
-> 
-> Fixes:
-> 
->   
-> http://autobuild.buildroot.net/results/d4348d7f872ccd734795a1d071960a696148ed6a/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=d58574af1cc94f5fb1f61f49d648041f0f405ac5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+For release note, see:
+http://www.gnuplot.info/ReleaseNotes_6_0_2.html
+
+patch 0002: already applied upstream
+
+Signed-off-by: Michael Fischer <mf@go-sys.de>
+[Julien:
+  - add link to release note
+  - fix sha256 file name in gnuplot.hash
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../0002-check-for-defined-FE_UNDERFLOW.patch      | 32 ----------------------
+ package/gnuplot/gnuplot.hash                       |  8 +++---
+ package/gnuplot/gnuplot.mk                         |  2 +-
+ 3 files changed, 5 insertions(+), 37 deletions(-)
+
+diff --git a/package/gnuplot/0002-check-for-defined-FE_UNDERFLOW.patch b/package/gnuplot/0002-check-for-defined-FE_UNDERFLOW.patch
+deleted file mode 100644
+index e84c72aaed..0000000000
+--- a/package/gnuplot/0002-check-for-defined-FE_UNDERFLOW.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 806641b5ef504488f871b5cbd9e5c356d67d0bd1 Mon Sep 17 00:00:00 2001
+-From: Edgar Bonet <bonet@grenoble.cnrs.fr>
+-Date: Tue, 24 Sep 2024 20:03:18 -0700
+-Subject: [PATCH] check for defined(FE_UNDERFLOW)
+-
+-According to fenv(3), the macro FE_UNDERFLOW is defined by fenv.h only
+-if the implementation supports handling of the underflow exception. Do
+-not assume the presence of fenv.h implies FE_UNDERFLOW is defined.
+-
+-Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+-Upstream: https://sourceforge.net/p/gnuplot/gnuplot-main/ci/926d2c26d31f4b69feda372c76a28643ef45359d/
+-Upstream: https://sourceforge.net/p/gnuplot/gnuplot-main/ci/806641b5ef504488f871b5cbd9e5c356d67d0bd1/
+----
+- src/complexfun.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/complexfun.c b/src/complexfun.c
+-index 7a5d9a13f..7ddb4ed60 100644
+---- a/src/complexfun.c
+-+++ b/src/complexfun.c
+-@@ -86,7 +86,7 @@
+- 	int_error(NO_CARET, "%s: error present on entry (errno %d %s)", who, errno, strerror(errno));
+- #endif
+- 
+--#ifdef HAVE_FENV_H
+-+#if defined (HAVE_FENV_H) && defined (FE_UNDERFLOW)
+- #define handle_underflow( who, var ) \
+-     if (errno) { \
+- 	if (fetestexcept(FE_UNDERFLOW)) { \
+--- 
+-2.34.1
+-
+diff --git a/package/gnuplot/gnuplot.hash b/package/gnuplot/gnuplot.hash
+index 4072338885..980fe6858d 100644
+--- a/package/gnuplot/gnuplot.hash
++++ b/package/gnuplot/gnuplot.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/gnuplot/files/gnuplot/6.0.1/
+-md5  744fde2362fb20db6cfc58de73f96e9c  gnuplot-6.0.1.tar.gz
+-sha1  ce1aaeff632c78cba2b3ca8142cf130bfd411478  gnuplot-6.0.1.tar.gz
++# From https://sourceforge.net/projects/gnuplot/files/gnuplot/6.0.2/
++md5  ea0931758fc180e3b1950931b9869921  gnuplot-6.0.2.tar.gz
++sha1  be803916e4ea32720b4a646f2ffc98d6ad3a0dc2  gnuplot-6.0.2.tar.gz
+ # Locally computed
+-sha256  e85a660c1a2a1808ff24f7e69981ffcbac66a45c9dcf711b65610b26ea71379a  gnuplot-6.0.1.tar.gz
++sha256  f68a3b0bbb7bbbb437649674106d94522c00bf2f285cce0c19c3180b1ee7e738  gnuplot-6.0.2.tar.gz
+ sha256  895928ec0735cca1c8cec42656c7e314a065d0242813bb8693c0c1bf61fd4e4d  Copyright
+diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+index adb9ce6ad1..b363e761ef 100644
+--- a/package/gnuplot/gnuplot.mk
++++ b/package/gnuplot/gnuplot.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPLOT_VERSION = 6.0.1
++GNUPLOT_VERSION = 6.0.2
+ GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
+ GNUPLOT_LICENSE = gnuplot license (open source)
+ GNUPLOT_LICENSE_FILES = Copyright
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
