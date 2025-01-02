@@ -4,83 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA640E77188
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 13:35:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BA9DE7718B
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 13:50:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0899D404D8;
-	Thu,  2 Jan 2025 13:35:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42F674050C;
+	Thu,  2 Jan 2025 13:50:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xMGDPbfJfV0e; Thu,  2 Jan 2025 13:35:13 +0000 (UTC)
+ id 1aVIQ4xySQAs; Thu,  2 Jan 2025 13:50:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C0264031E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07E98404A3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C0264031E;
-	Thu,  2 Jan 2025 13:35:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B050F24
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 13:35:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07E98404A3;
+	Thu,  2 Jan 2025 13:50:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 498F8F24
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 13:50:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2C7C74046B
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 13:35:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3749360718
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 13:50:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FW1GVEYgc2HL for <buildroot@buildroot.org>;
- Thu,  2 Jan 2025 13:35:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p7d54qVE5JNd for <buildroot@buildroot.org>;
+ Thu,  2 Jan 2025 13:50:11 +0000 (UTC)
 X-Greylist: delayed 964 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 02 Jan 2025 13:35:08 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A042540460
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A042540460
+ Thu, 02 Jan 2025 13:50:10 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CBC9560623
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBC9560623
 Received-SPF: Pass (sender SPF authorized) identity=helo;
- client-ip=2a02:2350:5:504::1; helo=mailrelay5-3.pub.mailoutpod2-cph3.one.com;
+ client-ip=2a02:2350:5:522::1; helo=mailrelay3-3.pub.mailoutpod3-cph3.one.com;
  envelope-from=ayoub.zaki@embetrix.com; receiver=<UNKNOWN> 
-Received: from mailrelay5-3.pub.mailoutpod2-cph3.one.com
- (mailrelay5-3.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:504::1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A042540460
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 13:35:08 +0000 (UTC)
-X-HalOne-ID: 1fbeaf68-c90c-11ef-b81f-6f719e79c8e4
+Received: from mailrelay3-3.pub.mailoutpod3-cph3.one.com
+ (mailrelay3-3.pub.mailoutpod3-cph3.one.com [IPv6:2a02:2350:5:522::1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CBC9560623
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 13:50:10 +0000 (UTC)
+X-HalOne-ID: 39e9818d-c90e-11ef-9059-4bfe3c5334f1
 Received: from xps-13.fritz.box
  (dynamic-2a02-3102-8c10-00a0-daff-1abd-5602-0da0.310.pool.telefonica.de
  [2a02:3102:8c10:a0:daff:1abd:5602:da0])
- by mailrelay5.pub.mailoutpod2-cph3.one.com (Halon) with ESMTPSA
- id 1fbeaf68-c90c-11ef-b81f-6f719e79c8e4;
- Thu, 02 Jan 2025 13:19:00 +0000 (UTC)
+ by mailrelay3.pub.mailoutpod3-cph3.one.com (Halon) with ESMTPSA
+ id 39e9818d-c90e-11ef-9059-4bfe3c5334f1;
+ Thu, 02 Jan 2025 13:34:02 +0000 (UTC)
 From: Ayoub Zaki <ayoub.zaki@embetrix.com>
 To: buildroot@buildroot.org
 Cc: Ayoub Zaki <ayoub.zaki@embetrix.com>
-Date: Thu,  2 Jan 2025 14:18:58 +0100
-Message-ID: <20250102131858.214596-1-ayoub.zaki@embetrix.com>
+Date: Thu,  2 Jan 2025 14:33:58 +0100
+Message-ID: <20250102133358.226719-1-ayoub.zaki@embetrix.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- t=1735823940; x=1736428740; 
+ t=1735824843; x=1736429643; 
  d=embetrix.com; s=rsa1;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
  from;
  bh=psdpeSJGx5ZiZx2ecz+vxht5czbV8FlOSJ1HJWgKjTQ=;
- b=KyQnydlb6IM2P1y5DVIvhTwL22y854mO6WobPqvkn7gRuhM9T4QjK/rvHUPCr8T582OIbli2qryK1
- 22Hljg+OZSxtYYLHuh31p/G9CrzEZGl+VjZgUqArbwIANinZMzLBKmLApvqbEAkRKmyAD16BPm1kGw
- qIa0AlAzjrx49ChX4PokH937FRnn+Dm9YbF5YGKGPgDavi4YQXcKZ55+o93MHHRHH4OWJpacsawBHX
- MHX3wbdVZPaTnMZcs7X0kVP8KnZm23KhSGA8zfQAuKLIaPqnTSqHjSXC4A/nP/ZVOMlDsA0RWHLCtw
- D4vdOfBcnLS0aDupj6aIJXfLmkGkz7Q==
+ b=bSC1CLiNHYytVkRMZxvCYdHI8nKJTLOnXKXuadAbEiVPZ2f6pL3sUXZSFbtxawoQ9CJPHvO8XXkAf
+ ae3Ahjehdu/Yl89ECW4qxRCHtctGBgjPwOFOwuw+7sV7OgsMK4q0wugezUfag1C1ASgkWKQ7930OzA
+ Grb0aDr/HeAGKAJgmCBYE26yu/qFYXpQZQhxnMf08O8VcIJ1Q9uk+TgAiA4hpgNIpbp+Gi6Rq2su2E
+ Wsi9g4b2jMdxzLPxxDX6sgLtEH5hdJrK88VSn2BiRwPrd8v2eh/sWNY9i5lzVhW2R0a8Xaf39kB6Dp
+ pDq5lO9IwoCixKpMNd1u06EqMHwkDqg==
 X-Mailman-Original-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
- t=1735823940; x=1736428740; 
+ t=1735824843; x=1736429643; 
  d=embetrix.com; s=ed1;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
  from;
  bh=psdpeSJGx5ZiZx2ecz+vxht5czbV8FlOSJ1HJWgKjTQ=;
- b=c8XnWznYgDAJ8eHA/J5hZXbTyvHlIFDhGk0PvvEvZxvbvRL3qG33RbDMPooRmqAdELsgX1GF+Tyxn
- t8+cDk6Bg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=a8wic5jKv76Ir90RiJ0QxHZh65q7LpYS6ufXetYlbH+ad/aES79dnFDd56bnDnUbJAVSMu1Mj/K2u
+ 2vUrL3hDA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=embetrix.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key, unprotected) header.d=embetrix.com
- header.i=@embetrix.com header.a=rsa-sha256 header.s=rsa1 header.b=KyQnydlb; 
+ header.i=@embetrix.com header.a=rsa-sha256 header.s=rsa1 header.b=bSC1CLiN; 
  dkim=pass header.d=embetrix.com header.i=@embetrix.com header.a=ed25519-sha256
- header.s=ed1 header.b=c8XnWznY
+ header.s=ed1 header.b=a8wic5jK
 Subject: [Buildroot] [PATCH v2] package/bmap-writer: add initial package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
