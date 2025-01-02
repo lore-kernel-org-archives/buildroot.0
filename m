@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE56DE77188
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 12:27:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25597E77188
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jan 2025 12:28:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 745944034E;
-	Thu,  2 Jan 2025 12:27:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D41940398;
+	Thu,  2 Jan 2025 12:28:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gjs-nPJxdUSd; Thu,  2 Jan 2025 12:27:33 +0000 (UTC)
+ id 9IQtqqLQpkHw; Thu,  2 Jan 2025 12:28:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBCAA40353
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 138EE4034E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EBCAA40353;
-	Thu,  2 Jan 2025 12:27:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E1B1AF27
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 12:27:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 138EE4034E;
+	Thu,  2 Jan 2025 12:28:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 064B3F27
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 12:28:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C2AA8403FC
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 12:27:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E83AA607C8
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 12:28:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S2HOmSSmMY5m for <buildroot@buildroot.org>;
- Thu,  2 Jan 2025 12:27:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0RASpqXr_gSk for <buildroot@buildroot.org>;
+ Thu,  2 Jan 2025 12:28:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6717B403B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15CD2607CC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6717B403B7
- for <buildroot@buildroot.org>; Thu,  2 Jan 2025 12:27:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 15CD2607CC
+ for <buildroot@buildroot.org>; Thu,  2 Jan 2025 12:28:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5BD76835EF; Thu,  2 Jan 2025 12:27:29 +0000 (UTC)
+ id 0D73D835FA; Thu,  2 Jan 2025 12:28:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 2 Jan 2025 13:24:16 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: e09b44b36a8c42b308dda66c2f51cb0752fdfecd
-X-Git-Newrev: 0455bcc80407b4de284bad7ffa9c04e532b72bfe
+Date: Thu, 2 Jan 2025 13:23:49 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: 64f932b4d836408382de9080ac955b162b9ed5d0
+X-Git-Newrev: d10e600965481d02d1a1724cc84fff034162da06
 X-Patchwork-Hint: ignore
-Message-Id: <20250102122729.5BD76835EF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/gnutls: fix
+Message-Id: <20250102122837.0D73D835FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/gnutls: fix
  autobuild error from 3.8.8 update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0455bcc80407b4de284bad7ffa9c04e532b72bfe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d10e600965481d02d1a1724cc84fff034162da06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
 Fixes: http://autobuild.buildroot.net/results/317/3178fca15cbb2520336b0678a16a5be5a51a8702//
 Upstream bug report: https://gitlab.com/gnutls/gnutls/-/issues/1604
