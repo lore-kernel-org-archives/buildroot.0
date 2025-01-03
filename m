@@ -1,80 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C741E7718F
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jan 2025 14:37:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6584E77188
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jan 2025 17:57:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B50BB607C7;
-	Fri,  3 Jan 2025 14:37:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5CEC840860;
+	Fri,  3 Jan 2025 17:57:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ceRfpCSrAch7; Fri,  3 Jan 2025 14:37:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3c1Fu77YWG-t; Fri,  3 Jan 2025 17:56:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7D6B60845
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE82F408A5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7D6B60845;
-	Fri,  3 Jan 2025 14:37:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id EA40BF27
- for <buildroot@buildroot.org>; Fri,  3 Jan 2025 14:37:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE82F408A5;
+	Fri,  3 Jan 2025 17:56:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1DA42F27
+ for <buildroot@buildroot.org>; Fri,  3 Jan 2025 17:56:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C356240140
- for <buildroot@buildroot.org>; Fri,  3 Jan 2025 14:37:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B18E401DD
+ for <buildroot@buildroot.org>; Fri,  3 Jan 2025 17:56:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mHST9x15V0OJ for <buildroot@buildroot.org>;
- Fri,  3 Jan 2025 14:37:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:660:530d:201::44; helo=mailgw-out1.grenoble.cnrs.fr;
- envelope-from=bonet@grenoble.cnrs.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 15823400BD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15823400BD
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [IPv6:2001:660:530d:201::44])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 15823400BD
- for <buildroot@buildroot.org>; Fri,  3 Jan 2025 14:37:42 +0000 (UTC)
-Received: from [IPV6:2a01:e0a:12:eba0:851f:aacd:bf36:fec8] (unknown
- [IPv6:2a01:e0a:12:eba0:851f:aacd:bf36:fec8])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 43F24BFB2A;
- Fri,  3 Jan 2025 15:37:41 +0100 (CET)
-Message-ID: <5ff49b76-caae-4707-a1ad-c8836d37d87a@grenoble.cnrs.fr>
-Date: Fri, 3 Jan 2025 15:37:41 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Kilian Zinnecker <kilian.zinnecker@mail.de>, buildroot@buildroot.org
-References: <6114083.lOV4Wx5bFT@kilian-laptop> <87r05mpti4.fsf@tarshish>
- <4618658.LvFx2qVVIh@kilian-laptop>
-Content-Language: en-US
-From: Edgar Bonet <bonet@grenoble.cnrs.fr>
-In-Reply-To: <4618658.LvFx2qVVIh@kilian-laptop>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1735915061;
- bh=Rsuu1AqTVUUJC1McDZBF2gCXzIx3vAqYk/IyaRCoKDU=;
- h=Date:Subject:To:References:From:In-Reply-To:From;
- b=gZcMD6tFwQU3PNdbWXDUNCQULdNi6gPQev7eBMYBcG+FZri9tfXrzBBT8liBqz1Ls
- g/Xkw2riNLq/sjBX6qDTEkZEzaQzoD28cvwefXG6847l6O0nKQaYwYZ+3o73yodUeF
- eVM/iIJnioCJmYVTVrgYU3gnQlWr8qSbZ4stkSoMxEKX/4d81T8PseZOzqBW4ICm5x
- gDnVGjQfVXpmG8uYK5ukRcMdm6m4nbOIRkgzy7iUrRspasdztBxp1co2Aa0IZ3ElHh
- FmkKAMTy17oeRTO/n0Q0g+YPjXtQS9BhDbLB141a40qHU66L83AqCvSYKj3RRsDhzL
- MedO6XKfVtcDQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=grenoble.cnrs.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=gZcMD6tF
-Subject: Re: [Buildroot] [Help] Problem with
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH and kernel 6.12
+ id YGsG6TG9J3OV for <buildroot@buildroot.org>;
+ Fri,  3 Jan 2025 17:56:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B19D3409AD
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B19D3409AD
+ for <buildroot@buildroot.org>; Fri,  3 Jan 2025 17:56:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 995B48394F; Fri,  3 Jan 2025 17:56:56 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 3 Jan 2025 18:54:59 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b7882d024ae484c52473955fbbcbf3b5f0717c2f
+X-Git-Newrev: c26da4256031989df1d4a11c2dc2028e16c95fcc
+X-Patchwork-Hint: ignore
+Message-Id: <20250103175656.995B48394F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcamera: bump to version 0.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,31 +58,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello!
+commit: https://git.buildroot.net/buildroot/commit/?id=c26da4256031989df1d4a11c2dc2028e16c95fcc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Baruch Siach wrote:
-> See the link below for a recent discussions of this issue on the list:
->
->   https://lore.kernel.org/buildroot/dcbd3f77-e737-41a2-9f23-87141d0bdf9b@grenoble.cnrs.fr/
->
-> Edgar Bonet suggested a fix that you might want to test:
->
->   https://lore.kernel.org/buildroot/035d6d78-0a31-4083-8fa1-65f5be5f74b5@grenoble.cnrs.fr/
+For change log since 0.3.2, see:
+https://git.libcamera.org/libcamera/libcamera.git/tag/?h=v0.4.0
 
-Kilian Zinnecker replied:
-> Great, thanks, I will have a look!
+libcamera dropped the gcc 8 support in [1] and increased the minimal
+version to 9. This commit updates that requirement in the package
+Config.in and in reverse dependency (in libcamera-apps).
 
-I just sent a v3 of this patch. If you have a chance to test it, could
-you please reply to the patch with your Tested-By?
+This commit also updates the libcamera runtime test to the new format
+of the "cam --list-properties" output.
 
-Regards,
+[1] https://git.libcamera.org/libcamera/libcamera.git/commit/?id=9f513439b6896d1a33c91a400bd02b7b8829feb6
 
-Edgar.
+Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libcamera-apps/Config.in                | 2 +-
+ package/libcamera/Config.in                     | 2 +-
+ package/libcamera/libcamera.hash                | 2 +-
+ package/libcamera/libcamera.mk                  | 2 +-
+ support/testing/tests/package/test_libcamera.py | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/libcamera-apps/Config.in b/package/libcamera-apps/Config.in
+index f169d8c52e..fa41d1be2d 100644
+--- a/package/libcamera-apps/Config.in
++++ b/package/libcamera-apps/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
+ 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS # libcamera
+ 	depends on BR2_INSTALL_LIBSTDCPP # libcamera/boost
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libcamera/boost
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libcamera
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # libcamera
+ 	depends on !BR2_STATIC_LIBS # gnutls/libcamera
+ 	depends on BR2_USE_WCHAR # gnutls/libcamera/boost
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
+diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
+index 4699e382c7..1df97edc41 100644
+--- a/package/libcamera/Config.in
++++ b/package/libcamera/Config.in
+@@ -9,7 +9,7 @@ menuconfig BR2_PACKAGE_LIBCAMERA
+ 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 	depends on !BR2_STATIC_LIBS # gnutls
+ 	depends on BR2_USE_WCHAR # gnutls
+ 	select BR2_PACKAGE_GNUTLS
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index d4554af190..8c845d0e21 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,4 +1,4 @@
+-sha256  d396bebe49aa7f605403594be3a9e970173d4c98061033c75f816946ff907eb8  libcamera-v0.3.2-git4.tar.gz
++sha256  0b45861dc0430074bf10aaa78a69439b319e9df4ed041496fd5f95e546c8f575  libcamera-v0.4.0-git4.tar.gz
+ 
+ # license files
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 3367eb60b2..dcfa54e5dd 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = v0.3.2
++LIBCAMERA_VERSION = v0.4.0
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
+ 	host-openssl \
+diff --git a/support/testing/tests/package/test_libcamera.py b/support/testing/tests/package/test_libcamera.py
+index 8953021b82..91df427b6f 100644
+--- a/support/testing/tests/package/test_libcamera.py
++++ b/support/testing/tests/package/test_libcamera.py
+@@ -64,7 +64,7 @@ class TestLibCamera(infra.basetest.BRTest):
+         cmd = f"cam --camera {cam_idx} --list-controls"
+         out, ret = self.emulator.run(cmd)
+         self.assertEqual(ret, 0)
+-        self.assertIn("Control: Brightness:", "\n".join(out))
++        self.assertIn("Control: [inout] libcamera::Brightness:", "\n".join(out))
+ 
+         # List the camera properties and check we have a camera
+         # "Model" property.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
