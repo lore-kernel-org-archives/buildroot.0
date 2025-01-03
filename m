@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CAC9E77188
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jan 2025 19:13:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 507BEE7718F
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jan 2025 19:13:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 58A2A60B36;
-	Fri,  3 Jan 2025 19:13:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11DEF407F1;
+	Fri,  3 Jan 2025 19:13:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ud65qaBDIDmZ; Fri,  3 Jan 2025 19:13:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X845C-g74sMw; Fri,  3 Jan 2025 19:13:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A5A26083A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF8BA40800
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A5A26083A;
-	Fri,  3 Jan 2025 19:13:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C4C17F27
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF8BA40800;
+	Fri,  3 Jan 2025 19:13:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C76B7F2D
  for <buildroot@buildroot.org>; Fri,  3 Jan 2025 19:13:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A64CB40481
+ by smtp1.osuosl.org (Postfix) with ESMTP id A8D9280D71
  for <buildroot@buildroot.org>; Fri,  3 Jan 2025 19:13:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QsI67sJy3xJV for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ra4TcMpeclNu for <buildroot@buildroot.org>;
  Fri,  3 Jan 2025 19:13:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8387404C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB84080D6D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D8387404C4
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB84080D6D
  for <buildroot@buildroot.org>; Fri,  3 Jan 2025 19:13:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BE3FF838CD; Fri,  3 Jan 2025 19:13:40 +0000 (UTC)
+ id D4E7183961; Fri,  3 Jan 2025 19:13:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 3 Jan 2025 20:07:59 +0100
+Date: Fri, 3 Jan 2025 20:09:16 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 2cd0716c56e97199ff63dec38c71ca4b05a63bbf
-X-Git-Newrev: ccf579e731f5fd7f7e23af3f0a2606c1e324ec91
+X-Git-Oldrev: 61b540e90e07f7f4762fb01566963c4640d09ea0
+X-Git-Newrev: ccaa97bac17f0cff34863b9af1617e25fc5ac58d
 X-Patchwork-Hint: ignore
-Message-Id: <20250103191340.BE3FF838CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/qt6/qt6opcua: fix
- 'qt6opcua' typo
+Message-Id: <20250103191340.D4E7183961@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/weston: bump to
+ version 14.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,30 +65,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ccf579e731f5fd7f7e23af3f0a2606c1e324ec91
+commit: https://git.buildroot.net/buildroot/commit/?id=ccaa97bac17f0cff34863b9af1617e25fc5ac58d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+From
+https://lists.freedesktop.org/archives/wayland-devel/2024-October/043858.html:
+
+This is Weston 14.0.1, a bug-fix release. Most of the fixes here are
+addressing some build issues with a C++ compiler, but also addressing a
+more critical issue that was causing the gtk4 test suite or other clients
+to crash when using the headless backend.
+
+Some distros already carry a patch to address that, but in case they
+have not, this would be a good time to update.
+
+David Edmundson (1):
+      libweston: Send seat name before announcing devices
+
+EatingSumo (1):
+      libweston/screenshooter: Fix build when __builtin_clz is not available
+
+Jan Alexander Steffens (heftig) (1):
+      libweston/noop-renderer: Check shm_buffer for NULL
+
+Jan Engelhardt (1):
+      build: insert missing wayland-server-protocol dependency
+
+Jeri Li (1):
+      libweston/desktop: avoid weston crash while xdg_surface ack_configure
+
+Marius Vlad (4):
+      libweston: Move weston_get_backend_type after enum declaration
+      desktop-shell: Don't attempt to re-add the view to panel layer
+      libweston/matrix: Fix narrow conversion with C++
+      build: bump to version 14.0.1 for the point release
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6beee86c0d953dd67549d27c1f684132bc052a31)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 6f74ee11b484b55b4d314195b4e5abf2f3625382)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt6/qt6opcua/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/weston/weston.hash | 6 +++---
+ package/weston/weston.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/qt6/qt6opcua/Config.in b/package/qt6/qt6opcua/Config.in
-index 68b73f7c50..9b5359dd4c 100644
---- a/package/qt6/qt6opcua/Config.in
-+++ b/package/qt6/qt6opcua/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_QT6OPCUA
- 	bool "qt6opcua"
- 	select BR2_PACKAGE_QT6BASE_NETWORK
--	# qt6opcuda needs host-qt6opcua, and host-qt6opcua needs
-+	# qt6opcua needs host-qt6opcua, and host-qt6opcua needs
- 	# network support in qt6base.
- 	select BR2_PACKAGE_HOST_QT6BASE_NETWORK
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index 2fdc6ec1f4..35fe608e20 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2024-September/043776.html
+-sha256  47fd0325b0b948e9b003a38fdf4eb3a8581f3fdc740b8932b35ae8793bf4e4a5  weston-14.0.0.tar.xz
+-sha512  8bdeed91befd5cbb0bde0f1860ff7775c1835a5fa8c3bf26e99d2f0c16e81255fcf35bf338ae02d7826463d0efdf41ba3fe78e38e4c27787831dfa331acafc08  weston-14.0.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2024-October/043858.html
++sha256  a8150505b126a59df781fe8c30c8e6f87da7013e179039eb844a5bbbcc7c79b3  weston-14.0.1.tar.xz
++sha512  2d782f98f28b39b990acecfc885f62ab34c9cdd22ef06b09c5d8df792112c47b365f89c2bf05d871e36ddfb4c49aa7e6d05ff60fe67a2657727162e4f564a412  weston-14.0.1.tar.xz
+ sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index d879dcc965..7d43132073 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-WESTON_VERSION = 14.0.0
++WESTON_VERSION = 14.0.1
+ WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
