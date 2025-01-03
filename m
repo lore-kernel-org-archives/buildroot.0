@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DEF7C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:49:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31572C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:49:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6FEC64FEE4;
-	Fri, 28 Feb 2025 16:49:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03EEE6FA70;
+	Fri, 28 Feb 2025 16:49:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1P4u8Q-QP0XS; Fri, 28 Feb 2025 16:49:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B6wqfaBKrijG; Fri, 28 Feb 2025 16:49:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E72504FCA9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC8D16FAEA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E72504FCA9;
-	Fri, 28 Feb 2025 16:49:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC8D16FAEA;
+	Fri, 28 Feb 2025 16:49:49 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1349F68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:35:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A2BF68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:35:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C08242E83
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5C4542E8D
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E0Cwu2kCg3Qh for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:17 +0000 (UTC)
+ id IjMv6O1oq2Fs for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C809B426B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A716427E8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C809B426B8
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A716427E8
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C2AFD86612; Fri, 28 Feb 2025 16:29:56 +0000 (UTC)
+ id 033DE87C34; Fri, 28 Feb 2025 16:29:57 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 3 Jan 2025 18:54:59 +0100
+Date: Fri, 3 Jan 2025 22:15:22 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b7882d024ae484c52473955fbbcbf3b5f0717c2f
-X-Git-Newrev: c26da4256031989df1d4a11c2dc2028e16c95fcc
+X-Git-Oldrev: 75d418b59d4ffe251ffcd49c06ccf0f1d0b86e04
+X-Git-Newrev: 696de595e028daaec4d66792bb2d3db74c72f07e
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162956.C2AFD86612@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libcamera: bump to
- version 0.4.0
+Message-Id: <20250228162957.033DE87C34@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pixman: backport patch
+ to fix inlining issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,101 +60,108 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4093629148476165659=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c26da4256031989df1d4a11c2dc2028e16c95fcc
+--===============4093629148476165659==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=696de595e028daaec4d66792bb2d3db74c72f07e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For change log since 0.3.2, see:
-https://git.libcamera.org/libcamera/libcamera.git/tag/?h=v0.4.0
+pixman fails to build with -Og or -O3 due to forced inlining
+statements:
 
-libcamera dropped the gcc 8 support in [1] and increased the minimal
-version to 9. This commit updates that requirement in the package
-Config.in and in reverse dependency (in libcamera-apps).
+pixman-combine-float.c:370:5: error: inlining failed in call to 'always_inline' 'combine_soft_light_c': function not considered for inlining
 
-This commit also updates the libcamera runtime test to the new format
-of the "cam --list-properties" output.
+The first occurence in the autobuilders is on May 12, 2024, but the
+problem already existed before as we haven't updated pixman in a long
+time. Therefore, the issue started occurring because we started
+testing more random configurations.
 
-[1] https://git.libcamera.org/libcamera/libcamera.git/commit/?id=9f513439b6896d1a33c91a400bd02b7b8829feb6
+Fixes:
 
-Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
-Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+  https://autobuild.buildroot.org/results/2f3df7961b3181d9eef79893439ae7ebbe4415ad/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libcamera-apps/Config.in                | 2 +-
- package/libcamera/Config.in                     | 2 +-
- package/libcamera/libcamera.hash                | 2 +-
- package/libcamera/libcamera.mk                  | 2 +-
- support/testing/tests/package/test_libcamera.py | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ ...combine-float.c-fix-inlining-failed-error.patch | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-diff --git a/package/libcamera-apps/Config.in b/package/libcamera-apps/Config.in
-index f169d8c52e..fa41d1be2d 100644
---- a/package/libcamera-apps/Config.in
-+++ b/package/libcamera-apps/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS # libcamera
- 	depends on BR2_INSTALL_LIBSTDCPP # libcamera/boost
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libcamera/boost
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libcamera
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # libcamera
- 	depends on !BR2_STATIC_LIBS # gnutls/libcamera
- 	depends on BR2_USE_WCHAR # gnutls/libcamera/boost
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
-diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
-index 4699e382c7..1df97edc41 100644
---- a/package/libcamera/Config.in
-+++ b/package/libcamera/Config.in
-@@ -9,7 +9,7 @@ menuconfig BR2_PACKAGE_LIBCAMERA
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 	depends on !BR2_STATIC_LIBS # gnutls
- 	depends on BR2_USE_WCHAR # gnutls
- 	select BR2_PACKAGE_GNUTLS
-diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
-index d4554af190..8c845d0e21 100644
---- a/package/libcamera/libcamera.hash
-+++ b/package/libcamera/libcamera.hash
-@@ -1,4 +1,4 @@
--sha256  d396bebe49aa7f605403594be3a9e970173d4c98061033c75f816946ff907eb8  libcamera-v0.3.2-git4.tar.gz
-+sha256  0b45861dc0430074bf10aaa78a69439b319e9df4ed041496fd5f95e546c8f575  libcamera-v0.4.0-git4.tar.gz
- 
- # license files
- sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 3367eb60b2..dcfa54e5dd 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
--LIBCAMERA_VERSION = v0.3.2
-+LIBCAMERA_VERSION = v0.4.0
- LIBCAMERA_SITE_METHOD = git
- LIBCAMERA_DEPENDENCIES = \
- 	host-openssl \
-diff --git a/support/testing/tests/package/test_libcamera.py b/support/testing/tests/package/test_libcamera.py
-index 8953021b82..91df427b6f 100644
---- a/support/testing/tests/package/test_libcamera.py
-+++ b/support/testing/tests/package/test_libcamera.py
-@@ -64,7 +64,7 @@ class TestLibCamera(infra.basetest.BRTest):
-         cmd = f"cam --camera {cam_idx} --list-controls"
-         out, ret = self.emulator.run(cmd)
-         self.assertEqual(ret, 0)
--        self.assertIn("Control: Brightness:", "\n".join(out))
-+        self.assertIn("Control: [inout] libcamera::Brightness:", "\n".join(out))
- 
-         # List the camera properties and check we have a camera
-         # "Model" property.
+diff --git a/package/pixman/0003-pixman-combine-float.c-fix-inlining-failed-error.patch b/package/pixman/0003-pixman-combine-float.c-fix-inlining-failed-error.patch
+new file mode 100644
+index 0000000000..1c4b153fc5
+--- /dev/null
++++ b/package/pixman/0003-pixman-combine-float.c-fix-inlining-failed-error.patch
+@@ -0,0 +1,56 @@
++From 643f098a3922592c82f3ea19668a1596d92a3e7b Mon Sep 17 00:00:00 2001
++From: Changqing Li <changqing.li@windriver.com>
++Date: Tue, 16 Jul 2024 15:31:16 +0800
++Subject: [PATCH] pixman-combine-float.c: fix inlining failed error
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Refer [1], always-inline is not suggested to be used if you have indirect
++calls. so replace force_inline with inline to fix error like:
++In function ‘combine_inner’,
++    inlined from ‘combine_soft_light_ca_float’ at ../pixman/pixman-combine-float.c:655:511:
++../pixman/pixman-combine-float.c:655:211: error: inlining failed in call to ‘always_inline’ ‘combine_soft_light_c’: function not considered for inlining
++
++Test with gcc-9 and gcc-14, both works well
++
++[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=115679
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Upstream: https://gitlab.freedesktop.org/pixman/pixman/-/commit/643f098a3922592c82f3ea19668a1596d92a3e7b
++---
++ pixman/pixman-combine-float.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/pixman/pixman-combine-float.c b/pixman/pixman-combine-float.c
++index e1f8030..230164f 100644
++--- a/pixman/pixman-combine-float.c
+++++ b/pixman/pixman-combine-float.c
++@@ -261,7 +261,7 @@ get_factor (combine_factor_t factor, float sa, float da)
++ }
++ 
++ #define MAKE_PD_COMBINERS(name, a, b)					\
++-    static float force_inline						\
+++    static float							\
++     pd_combine_ ## name (float sa, float s, float da, float d)		\
++     {									\
++ 	const float fa = get_factor (a, sa, da);			\
++@@ -360,13 +360,13 @@ MAKE_PD_COMBINERS (conjoint_xor,		ONE_MINUS_DA_OVER_SA,		ONE_MINUS_SA_OVER_DA)
++  */
++ 
++ #define MAKE_SEPARABLE_PDF_COMBINERS(name)				\
++-    static force_inline float						\
+++    static float							\
++     combine_ ## name ## _a (float sa, float s, float da, float d)	\
++     {									\
++ 	return da + sa - da * sa;					\
++     }									\
++     									\
++-    static force_inline float						\
+++    static float							\
++     combine_ ## name ## _c (float sa, float s, float da, float d)	\
++     {									\
++ 	float f = (1 - sa) * d + (1 - da) * s;				\
++-- 
++2.47.1
++
+
+--===============4093629148476165659==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4093629148476165659==--
