@@ -4,49 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9404EE77188
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jan 2025 18:09:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02A87E77188
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jan 2025 18:09:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10DFE408C4;
-	Fri,  3 Jan 2025 18:09:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B1814408AE;
+	Fri,  3 Jan 2025 18:09:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hBeZtDujOEVp; Fri,  3 Jan 2025 18:09:32 +0000 (UTC)
+ id 1mU1Qs4yBFPi; Fri,  3 Jan 2025 18:09:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3AF640896
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 971A640896
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3AF640896;
-	Fri,  3 Jan 2025 18:09:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D945F27
- for <buildroot@buildroot.org>; Fri,  3 Jan 2025 18:09:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 971A640896;
+	Fri,  3 Jan 2025 18:09:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3953CE0F
+ for <buildroot@buildroot.org>; Fri,  3 Jan 2025 18:09:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 18ACC80E3F
- for <buildroot@buildroot.org>; Fri,  3 Jan 2025 18:09:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1A87060B1C
+ for <buildroot@buildroot.org>; Fri,  3 Jan 2025 18:09:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RHKSKtEJ60mS for <buildroot@buildroot.org>;
- Fri,  3 Jan 2025 18:09:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2655380E3D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2655380E3D
- for <buildroot@buildroot.org>; Fri,  3 Jan 2025 18:09:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1181C83957; Fri,  3 Jan 2025 18:09:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VbHuSDHo9nes for <buildroot@buildroot.org>;
+ Fri,  3 Jan 2025 18:09:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 47F5A60AD5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47F5A60AD5
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 47F5A60AD5
+ for <buildroot@buildroot.org>; Fri,  3 Jan 2025 18:09:47 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id F02A378034D;
+ Fri,  3 Jan 2025 19:09:42 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:37568])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 03 Jan 2025 19:09:42 +0100
+MIME-Version: 1.0
+Date: Fri, 03 Jan 2025 19:09:42 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 3 Jan 2025 19:04:20 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c26da4256031989df1d4a11c2dc2028e16c95fcc
-X-Git-Newrev: 1a5d680c53f41dae6b6f67b526927d08b335212d
-X-Patchwork-Hint: ignore
-Message-Id: <20250103180930.1181C83957@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openrc: bump to version 0.56
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: buildroot@buildroot.org, =?UTF-8?Q?Micha=C5=82_=C5=81yszczek?=
+ <michal.lyszczek@bofc.pl>
+In-Reply-To: <20250102110025.722992-2-adam.duskett@amarulasolutions.com>
+References: <20250102110025.722992-1-adam.duskett@amarulasolutions.com>
+ <20250102110025.722992-2-adam.duskett@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <ef072488b5972d0efc7a756039d50ab8@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1735927785;
+ bh=VDRx46NbrQ+85emYZrEM7KD3DOBeohtM980NaOZIrBU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=WxrDgjr+iMhf9jWbMHEY6aYN1uxx0in07ZjBMZTLf14gSLXHZdE3UPEKa6QW7O6qm
+ +Eqxs7/zK/ebUSe3A1qsv0+ojg6Rk917wEx2p+jU+nrwCZFnEEBbwfaWPQ6v7V+muZ
+ 3YmzI5SSF5hH8Lme0XQWRkIh/kFnvWpPVjqLySk7REiJWt4EOk/9dNXS7eLNFuXRt0
+ vL26Fl1joEFotZGqYEj8GN0zySUUzc35wEY0EmwaZ2pt78rq/ZzA6UmbWPrcYATJ3b
+ 3GE4d/gPdlNjaZz32wBMh1utKAzk6XKxNrMaVk1G29i2bYvCIzMQnwX/E3i3K5gpUi
+ f8WpdAFIVihsw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=WxrDgjr+
+Subject: Re: [Buildroot] [PATCH 1/1] package/openrc: bump to version 0.56
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,168 +85,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a5d680c53f41dae6b6f67b526927d08b335212d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 02/01/2025 12:00, Adam Duskett wrote:
+> Other changes:
+>   - Update 0007-allow-setting-rc_libexecdir-path.patch to apply cleanly
+>   - Remove the split-usr logic, as it was removed in version 0.54. This
+>     logic is now handled by passing the following to meson during the
+>     configure stage: --bindir /bin --libdir /lib64 --libexecdir /lib
+>                      --sbindir /sbin
+>   - libcap is now a dependency
+>   - The audit package must be explicity set as disabled if not 
+> available.
+>     If not, configuration errors occure if audit is not found.
+> 
+> 
+> ./support/testing/run-tests tests.init.test_openrc
+> 
+> 11:45:44 TestInitSystemOpenrcRwFull               Starting
+> 11:45:57 TestInitSystemOpenrcRwFull               Cleaning up
+> 11:45:57 TestInitSystemOpenrcRoFull               Starting
+> 11:46:10 TestInitSystemOpenrcRoFull               Cleaning up
+> 11:46:10 TestInitSystemOpenrcMergedUsrFull        Starting
+> 11:46:10 TestInitSystemOpenrcMergedUsrFull        Building
+> 11:51:59 TestInitSystemOpenrcMergedUsrFull        Building done
+> 11:52:12 TestInitSystemOpenrcMergedUsrFull        Cleaning up
+> 
+> ----------------------------------------------------------------------
+> Ran 3 tests in 388.180s
+> OK
+> 
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
-For release note since 0.52.1, see:
-https://github.com/OpenRC/openrc/blob/0.56/NEWS.md
-
-Other changes:
-  - Update 0007-allow-setting-rc_libexecdir-path.patch to apply cleanly
-  - Remove the split-usr logic, as it was removed in version 0.54. This
-    logic is now handled by passing the following to meson during the
-    configure stage: --bindir /bin --libdir /lib64 --libexecdir /lib
-                     --sbindir /sbin
-  - libcap is now a dependency
-  - The audit package must be explicity set as disabled if not available.
-    If not, configuration errors occure if audit is not found.
-
-./support/testing/run-tests tests.init.test_openrc
-
-11:45:44 TestInitSystemOpenrcRwFull               Starting
-11:45:57 TestInitSystemOpenrcRwFull               Cleaning up
-11:45:57 TestInitSystemOpenrcRoFull               Starting
-11:46:10 TestInitSystemOpenrcRoFull               Cleaning up
-11:46:10 TestInitSystemOpenrcMergedUsrFull        Starting
-11:46:10 TestInitSystemOpenrcMergedUsrFull        Building
-11:51:59 TestInitSystemOpenrcMergedUsrFull        Building done
-11:52:12 TestInitSystemOpenrcMergedUsrFull        Cleaning up
-
-----------------------------------------------------------------------
-Ran 3 tests in 388.180s
-OK
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-[Julien: add link to release notes]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../openrc/0007-allow-setting-rc_libexecdir-path.patch | 16 ++++++++--------
- package/openrc/Config.in                               |  1 +
- package/openrc/openrc.hash                             |  2 +-
- package/openrc/openrc.mk                               | 18 +++++++++---------
- 4 files changed, 19 insertions(+), 18 deletions(-)
-
-diff --git a/package/openrc/0007-allow-setting-rc_libexecdir-path.patch b/package/openrc/0007-allow-setting-rc_libexecdir-path.patch
-index a11c789275..5787c26dde 100644
---- a/package/openrc/0007-allow-setting-rc_libexecdir-path.patch
-+++ b/package/openrc/0007-allow-setting-rc_libexecdir-path.patch
-@@ -4,12 +4,12 @@ Date: Wed, 8 Sep 2021 22:41:58 +0200
- Subject: [PATCH] allow setting rc_libexecdir path
- 
-   - Allow to change the rc dir name of the rc_libexecdir path
--  - Introduce a librcdir option for override with value 'rc'
-+  - Introduce a librcdir option for override with value 'rc'6
- 
- Upstream: https://github.com/OpenRC/openrc/pull/443
- 
- Signed-off-by: artoo <artoo@artixlinux.org>
--[Adam: update for 0.50]
-+[Adam: update for 0.56]
- Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
- ---
-  meson.build       | 2 +-
-@@ -20,10 +20,10 @@ diff --git a/meson.build b/meson.build
- index 5b3f8fa..40d4be1 100644
- --- a/meson.build
- +++ b/meson.build
--@@ -102,7 +102,7 @@ if os == 'Linux' and libexecdir == 'libexec'
--   libexecdir = 'lib'
-- endif
-- libexecdir = rootprefix / libexecdir
-+@@ -85,7 +85,7 @@ bindir = get_option('prefix') / get_option('bindir')
-+ libdir = get_option('prefix') / get_option('libdir')
-+ pluginsdir = libdir / 'rc/plugins'
-+ libexecdir = get_option('prefix') / get_option('libexecdir')
- -rc_libexecdir = libexecdir / 'rc'
- +rc_libexecdir = libexecdir / get_option('librcdir')
-  rc_bindir = rc_libexecdir / 'bin'
-@@ -33,8 +33,8 @@ diff --git a/meson_options.txt b/meson_options.txt
- index 2c74152..d2f67e4 100644
- --- a/meson_options.txt
- +++ b/meson_options.txt
--@@ -37,3 +37,5 @@ option('termcap', type : 'combo',
--   description : 'the termcap library to use')
-+@@ -26,3 +26,5 @@ option('sysvinit', type : 'boolean', value : false,
-+   description : 'enable SysVinit compatibility (linux only)')
-  option('zsh-completions', type : 'boolean',
-    description : 'install zsh completions')
- +option('librcdir', type : 'string', value : 'rc',
-diff --git a/package/openrc/Config.in b/package/openrc/Config.in
-index 42d7347b0e..e1f004212b 100644
---- a/package/openrc/Config.in
-+++ b/package/openrc/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_OPENRC
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod tools
- 	select BR2_PACKAGE_KMOD # runtime
- 	select BR2_PACKAGE_KMOD_TOOLS # runtime
-+	select BR2_PACKAGE_LIBCAP # runtime
- 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_NCURSES
- 	help
-diff --git a/package/openrc/openrc.hash b/package/openrc/openrc.hash
-index c1c16a8c45..85e869f82a 100644
---- a/package/openrc/openrc.hash
-+++ b/package/openrc/openrc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0b911eee4e64ad5e6945c6fed572220d537dfd0108838fa6d6797a2d7ff9f052  openrc-0.52.1.tar.gz
-+sha256  a06b530290057637eab17fc943cbf79c0335eb734ba71ece38b9f3acd8a341d4  openrc-0.56.tar.gz
- sha256  6ac2bf77510808fbec7dc86cbfbca98dfc4c6b47dc99e4ca77b5370e097d8e70  LICENSE
-diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-index 69f5b3a121..67846ce0ea 100644
---- a/package/openrc/openrc.mk
-+++ b/package/openrc/openrc.mk
-@@ -4,22 +4,28 @@
- #
- ################################################################################
- 
--OPENRC_VERSION = 0.52.1
-+OPENRC_VERSION = 0.56
- OPENRC_SITE = $(call github,OpenRC,openrc,$(OPENRC_VERSION))
- OPENRC_LICENSE = BSD-2-Clause
- OPENRC_LICENSE_FILES = LICENSE
- OPENRC_CPE_ID_VALID = YES
- 
--OPENRC_DEPENDENCIES = ncurses
-+OPENRC_DEPENDENCIES = libcap ncurses
- 
- OPENRC_CONF_OPTS = \
- 	-Dos=Linux \
- 	-Dlibrcdir=/usr/libexec/rc \
- 	-Dpkgconfig=false \
- 	-Dsysvinit=true \
--	-Drootprefix=/ \
- 	-Dbranding="\"Buildroot $(BR2_VERSION_FULL)\""
- 
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+OPENRC_CONF_OPTS += -Daudit=enabled
-+OPENRC_DEPENDENCIES += audit
-+else
-+OPENRC_CONF_OPTS += -Daudit=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
- OPENRC_CONF_OPTS += -Dbash-completions=true
- else
-@@ -44,12 +50,6 @@ else
- OPENRC_CONF_OPTS += -Dpam=false
- endif
- 
--ifeq ($(BR2_ROOTFS_MERGED_USR),y)
--OPENRC_CONF_OPTS += -Dsplit-usr=false
--else
--OPENRC_CONF_OPTS += -Dsplit-usr=true
--endif
--
- define OPENRC_INSTALL_SYSV_RCS_SCRIPT
- 	$(INSTALL) -D -m 0755 $(OPENRC_PKGDIR)/sysv-rcs \
- 		$(TARGET_DIR)/etc/init.d/sysv-rcs
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
