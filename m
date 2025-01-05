@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE585E77197
-	for <buildroot@archiver.kernel.org>; Sun,  5 Jan 2025 11:36:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6684E77198
+	for <buildroot@archiver.kernel.org>; Sun,  5 Jan 2025 11:37:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 949D86067B;
-	Sun,  5 Jan 2025 11:36:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC0F5606AA;
+	Sun,  5 Jan 2025 11:37:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k9E59y2A5fkQ; Sun,  5 Jan 2025 11:36:56 +0000 (UTC)
+ id F4jVLzP5LeZb; Sun,  5 Jan 2025 11:36:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1947606A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97842606C6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1947606A9;
-	Sun,  5 Jan 2025 11:36:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C436ED92
- for <buildroot@buildroot.org>; Sun,  5 Jan 2025 11:36:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97842606C6;
+	Sun,  5 Jan 2025 11:36:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0C3D5D92
+ for <buildroot@buildroot.org>; Sun,  5 Jan 2025 11:36:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A3D6A80EFB
+ by smtp4.osuosl.org (Postfix) with ESMTP id DCD70405CA
  for <buildroot@buildroot.org>; Sun,  5 Jan 2025 11:36:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tGgmORgqFvVd for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rpHktVL3-__l for <buildroot@buildroot.org>;
  Sun,  5 Jan 2025 11:36:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B385980EC2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B967D405B9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B385980EC2
+ by smtp4.osuosl.org (Postfix) with ESMTP id B967D405B9
  for <buildroot@buildroot.org>; Sun,  5 Jan 2025 11:36:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ACFF683A05; Sun,  5 Jan 2025 11:36:53 +0000 (UTC)
+ id A24AB83A02; Sun,  5 Jan 2025 11:36:53 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 5 Jan 2025 11:48:30 +0100
+Date: Sun, 5 Jan 2025 11:48:26 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9114d48b313744fd163e4eeea0f5b0407568e771
-X-Git-Newrev: 1d8d9e8d6cd824b2a43a0b92d71cfb25a3f9300a
+X-Git-Oldrev: 9ee173ba5faa90f9487ddb0ac55b3c6032a86a91
+X-Git-Newrev: 9114d48b313744fd163e4eeea0f5b0407568e771
 X-Patchwork-Hint: ignore
-Message-Id: <20250105113653.ACFF683A05@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-kernel-module: disable
- CONFIG_TRIM_UNUSED_KSYMS
+Message-Id: <20250105113653.A24AB83A02@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cryptodev-linux: ensure
+ <pkg>_LINUX_CONFIG_FIXUPS has an effect
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,46 +65,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d8d9e8d6cd824b2a43a0b92d71cfb25a3f9300a
+commit: https://git.buildroot.net/buildroot/commit/?id=9114d48b313744fd163e4eeea0f5b0407568e771
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The kernel option CONFIG_TRIM_UNUSED_KSYMS=y allows to trim unused
-kernel symbols... which basically prevents building external
-modules. This option has been enabled in the default MIPS architecture
-kernel defconfig since pretty much forever, and it causes build
-failures of all our external modules on MIPS in the autobuilders.
+The variable <pkg>_LINUX_CONFIG_FIXUPS defined in the
+cryptodev-linux... has no effect. Indeed, the variable is only named
+CRYPTODEV_LINUX_CONFIG_FIXUPS.
 
-To fix this in a global manner, we handle the problem in the
-kernel-module infrastructure, by appending to the
-<pkg>_LINUX_CONFIG_FIXUPS variable provided by the package.
+But the variable name being <pkg>_LINUX_CONFIG_FIXUPS and the package
+name being CRYPTODEV_LINUX, the correct variable name is
+CRYPTODEV_LINUX_LINUX_CONFIG_FIXUPS.
 
-Fixes:
+Prior to this commit, a configuration with cryptodev-linux enabled
+would result in:
 
-  http://autobuild.buildroot.net/results/c26abec4e24d06557079654b12825efb2211996f/ (cryptodev-linux)
-  http://autobuild.buildroot.net/results/699c618730cb33f0ccf54f90e4b722198fd3d3bc/ (emlog)
-  http://autobuild.buildroot.net/results/f1d5626f5698a955bf378217528fbf4f8f741435/ (rtl8812au-aircrack-ng)
-  http://autobuild.buildroot.net/results/c9a507757ce3a01cd08d596cb519ee9f19caf77c/ (mdio-tools)
+$ make VARS=PACKAGES_LINUX_CONFIG_FIXUPS printvars
+$
 
+Aka, empty, while PACKAGES_LINUX_CONFIG_FIXUPS collects in
+package/pkg-generic.mk the value of the <pkg>_LINUX_CONFIG_FIXUPS
+variables from all enabled packages.
+
+With this patch applied:
+
+$ make VARS=PACKAGES_LINUX_CONFIG_FIXUPS printvars
+PACKAGES_LINUX_CONFIG_FIXUPS=		@if ! grep -q '^CONFIG_CRYPTO=[my]' /; then 	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_CRYPTO\>/d' / && echo 'CONFIG_CRYPTO=y' >> /; fi
+		@if ! grep -q '^CONFIG_CRYPTO_USER_API_AEAD=[my]' /; then 	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_CRYPTO_USER_API_AEAD\>/d' / && echo 'CONFIG_CRYPTO_USER_API_AEAD=y' >> /; fi
+$
+
+As one would expect.
+
+Fixes: 4b12336d1fad12fbb82b4d9144e6cb5636a12256 ("package/cryptodev-linux: needs CONFIG_CRYPTO_USER_API_AEAD")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/pkg-kernel-module.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/cryptodev-linux/cryptodev-linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
-index 4f64a73f11..032874c3ca 100644
---- a/package/pkg-kernel-module.mk
-+++ b/package/pkg-kernel-module.mk
-@@ -62,6 +62,9 @@ $(2)_MAKE ?= $$(BR2_MAKE)
- # the root of the package.
- $(2)_MODULE_SUBDIRS ?= .
+diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+index 580ea89520..550a248a27 100644
+--- a/package/cryptodev-linux/cryptodev-linux.mk
++++ b/package/cryptodev-linux/cryptodev-linux.mk
+@@ -21,7 +21,7 @@ define CRYPTODEV_LINUX_INSTALL_STAGING_CMDS
+ 		$(STAGING_DIR)/usr/include/crypto/cryptodev.h
+ endef
  
-+$(2)_LINUX_CONFIG_FIXUPS += \
-+	$$(sep)$$(call KCONFIG_DISABLE_OPT,CONFIG_TRIM_UNUSED_KSYMS)
-+
- # Build the kernel module(s)
- # Force PWD for those packages that want to use it to find their
- # includes and other support files (Booo!)
+-define CRYPTODEV_LINUX_CONFIG_FIXUPS
++define CRYPTODEV_LINUX_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_USER_API_AEAD)
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
