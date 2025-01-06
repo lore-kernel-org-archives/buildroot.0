@@ -4,97 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D008E77198
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 04:16:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67838E77188
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 04:28:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8108D60AE6;
-	Mon,  6 Jan 2025 04:16:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14D5A60819;
+	Mon,  6 Jan 2025 04:28:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NE6e0Uo-Eomp; Mon,  6 Jan 2025 04:16:17 +0000 (UTC)
+ id U1YHi4jZmoBT; Mon,  6 Jan 2025 04:28:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CCE460B1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3794860824
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CCE460B1F;
-	Mon,  6 Jan 2025 04:16:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9914CD92
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 04:16:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3794860824;
+	Mon,  6 Jan 2025 04:28:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2AD816B
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 04:28:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 791E540C26
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 04:16:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 185EE4060C
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 04:28:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vjyWu4d2ctEL for <buildroot@buildroot.org>;
- Mon,  6 Jan 2025 04:16:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::102f; helo=mail-pj1-x102f.google.com;
- envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5412140C16
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5412140C16
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com
- [IPv6:2607:f8b0:4864:20::102f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5412140C16
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 04:16:03 +0000 (UTC)
-Received: by mail-pj1-x102f.google.com with SMTP id
- 98e67ed59e1d1-2ef714374c0so17021994a91.0
- for <buildroot@buildroot.org>; Sun, 05 Jan 2025 20:16:03 -0800 (PST)
+ id IRWep1_hYuaV for <buildroot@buildroot.org>;
+ Mon,  6 Jan 2025 04:28:27 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::134; helo=mail-il1-x134.google.com;
+ envelope-from=jeremy@jeremypeper.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A800040462
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A800040462
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A800040462
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 04:28:26 +0000 (UTC)
+Received: by mail-il1-x134.google.com with SMTP id
+ e9e14a558f8ab-3a8c7b02d68so112765935ab.3
+ for <buildroot@buildroot.org>; Sun, 05 Jan 2025 20:28:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736136962; x=1736741762;
+ d=1e100.net; s=20230601; t=1736137705; x=1736742505;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=6quQappw2ix8o3jCPoEg3u6XMLS0Xs2eJZhPH1Gll70=;
- b=TKJZ6/udTlaDbgpNgcNXD4Uh7yfgPM9a7WtF55gtB7vCCR+DUFEjMsnfWPH8y4z22p
- 5IsfJNtqWZMawFwvkDSB4cp+Uoc1e9LN/fPvOFIVed+K8HIiZScq5dZtzCTcwhZSfrDA
- DMe2t3xrqdn3yyVGV79gihE3Kg8DGTZo6WRKsO68LldVcUoCifYGgY9mVrH46og9Z1ud
- jFAxM7Gtu7gfJa19Lq8zdwmDJ1XkMpilaQ+dLmwse2PqDb1PMdx7L2ZzUL/t9toFPp9B
- j1w9XNCeTbDZlfNJpM2yL79UVRtsANlxbewQLmzavdSxUVkO7sfOCXHlU7dwia/1DE3v
- 8UNQ==
-X-Gm-Message-State: AOJu0YxV7M7qRbXvXed+qPwgYpB60AX7/nbbPaU2CuMux+XuBbpbkk+B
- /axeYSX8uW+D/Erd/ZRZDFBxupUkjLmWZWNLnRJsy1ngEgF1pe3Cu3b05A==
-X-Gm-Gg: ASbGncuPAMGrKwFZspp+iPXy8jKUArfY6iAmf+EeyzDE0CpweLz4U/5q9vQnRgCcily
- fFOb46J77fsOTUy8C2EfExfUJeNtTFWkF/6er0jDpsEQciUneyFYj3HHpzpAVfgOf+jy1omeyzA
- t9YccnqWWv5E5GD3w5tMWiNQuO1Sgw9fFXq0irvpn3d0KEs/PEbxDzDxTbDTcoH8Hkj2KFEWJpX
- 1kUdnCDOgQhDuUpYCwSWaI/CL3bw/qvV+5zYvtqlYcXwRBec5jQO3K3dj+1XA03g7OINZkTRI8S
- QH1dAtcEkipxX5mR2MQQldL+7Jj7SjpUuO3pOZxD
-X-Google-Smtp-Source: AGHT+IEexJ6XLslAT8zTKbKJJ3bKPY/oP+wOAwFjAXFp+DmHjnSOuK3X1ct6yKi7VljEVNT/WZ/kdw==
-X-Received: by 2002:a17:90b:54d0:b0:2f1:2e10:8160 with SMTP id
- 98e67ed59e1d1-2f4536d193bmr84094741a91.11.1736136962328; 
- Sun, 05 Jan 2025 20:16:02 -0800 (PST)
-Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
- [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-2f44779890bsm36374171a91.9.2025.01.05.20.16.01
+ bh=gpksG6UC3N4S1DIHiyR4ceX/23C3RTJkqjOSc/DysRc=;
+ b=uln+T9AubmFWPETPnZ7K5mR4p+0VPClis2JCX841QRlsBTi3/IgnMxla+WJ7fK33KE
+ c7z9MYKoI1dU+6Uj6jKtGn2ro6OA6+BVMfE2fvLaRlpqyhGDOQ7vT8nd6oUn2VLm1DFl
+ cvUh1UK27DE/T+6uZMVPDJ0Lz4GCVmO/y919dhI8DUG/RKjfCxFZAuPsnZrFoAEVsUKX
+ ZKaIKu36TcUbjJkfU2yny89p5WPqXShKQzeEYzQR4vITqYZcc3XT8oSt94+kCvz7JJj/
+ 5524uI1sjCaf6eJcwRHhyNU88VNB0LfoZSDvGqeozH1rabN8kiSPEdscbOMJBWZj42Vi
+ bvTw==
+X-Gm-Message-State: AOJu0Yx8w6wt5EPgf+V/+6BwOCdABFvoGG8AtWt9sr6jg8kf2wPRagXh
+ JCu43iUvFLR1nd7xfLhUe4kyP/BppANmgLSjfHP6d7BXk6D3UKY4rx11/oxET3MMtkc2W3t5RlQ
+ =
+X-Gm-Gg: ASbGncsWdT1JMV5Yzbf9Zw5YyK11v2dncMAp+UHxzsQy7nuSpEQcoc3nntnCC+V5oGB
+ Yfn73GcJ9qlMUO9XZj0UGKPrlr0KFUs2Z1p0nJ5933N431e7c2H+xwiZ1UKD8UkRHOnp24nEcJM
+ jgoteU+qBtcE9upwX+90n12Iv6tiZpAAoKGwWNomuzKOMF2hZ9o4aXEQixN+QqMAiOZvRZbSbIU
+ CMbCNNlsbw9+r2jUTL14Jc3zTsUZ1mt5W/HJP3Afh+wChZSe/oLbmfijTADDtqtNg==
+X-Google-Smtp-Source: AGHT+IF6THUZAo26zn2cqT6M2mVCW9o/BKgTY8n68tLWcP9uCdAtp6WOj8cRrse7LAyOiTo1m0r63w==
+X-Received: by 2002:a05:6e02:19ca:b0:3a7:e7bd:9f09 with SMTP id
+ e9e14a558f8ab-3c2d1e7df64mr446191845ab.5.1736137705187; 
+ Sun, 05 Jan 2025 20:28:25 -0800 (PST)
+Received: from earth (97-127-37-139.mpls.qwest.net. [97.127.37.139])
+ by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4e68c22477fsm8864665173.159.2025.01.05.20.28.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Jan 2025 20:16:01 -0800 (PST)
-From: Akhilesh Nema <nemaakhilesh@gmail.com>
+ Sun, 05 Jan 2025 20:28:24 -0800 (PST)
+Received: by earth (Postfix, from userid 1000)
+ id 72531106D6E3; Sun,  5 Jan 2025 22:28:23 -0600 (CST)
+From: "Jeremy J. Peper" <jeremy@jeremypeper.com>
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Akhilesh Nema <nemaakhilesh@gmail.com>
-Date: Sun,  5 Jan 2025 20:03:23 -0800
-Message-Id: <20250106040323.153486-1-nemaakhilesh@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Cc: "Jeremy J . Peper" <jeremy@jeremypeper.com>
+Date: Sun,  5 Jan 2025 22:27:44 -0600
+Message-Id: <20250106042753.1562163-1-jeremy@jeremypeper.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1736136962; x=1736741762; darn=buildroot.org;
+ d=jeremypeper-com.20230601.gappssmtp.com; s=20230601; t=1736137705;
+ x=1736742505; darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=6quQappw2ix8o3jCPoEg3u6XMLS0Xs2eJZhPH1Gll70=;
- b=mCuU5Li6tv60klzeNvfjesMm83iJLn30TaVbbl+2mHnI2WqJItHRWvHEEXHDWgwGr4
- VG/JPbCJ/xKshjIWCatIWGxtb4p3p9bPACraGGcO7ZniXHI4KxFE8tIOZ1TtoAMy7YKO
- bySHq2WXXVAlRyqSKIrpgrzQm0XwOxROuibam3giKi/36KUhRiPS2N/pTcSttZaDNIGj
- HB5Sluf5I+DGDxBNpK4BT3VLCEft1VzTOpL9QVZBLK9okeR1sMPsFAGdMj8SwlKQKxXO
- VyjCsMXcXUPfHpGousy6linZHToVEoW+vObb5/9qDYr7QSDM2txMZlR+zFj/NbL/irdF
- PmvQ==
+ bh=gpksG6UC3N4S1DIHiyR4ceX/23C3RTJkqjOSc/DysRc=;
+ b=2/fuUbl1u6+rZKZfm9NVhX7Hd0UvwvMUkcRK2Cr+9zR88Lrhnf7fB1VQo1P5vFdqHT
+ mXT6FYopVGhRLz4sHfhgj0nZekepfov5rRBNPfY37ndCNYX5vs2Tdx+b7JYSLGAqhkLC
+ Z2z/qZjBjf4Xh+nGSPPuxNtggpaWBesPRqIPUCC6md2ypJTnIjfYMyIGZFbgwcs9sanE
+ Coizqv5OYoRuLxV8WKwMCbh5aYC5GNClQvLyZS+DDSbjEUwrp07tgqPZxb5YI9Pk9lkm
+ Q5lVIXLPDfhNQUssOTMaDPHzJ6V9C7gDW1F3qsnpXGF72Q0eV8bXqvVoM98QBgIVlWLR
+ AQ+Q==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=none (p=none dis=none)
+ header.from=jeremypeper.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=mCuU5Li6
-Subject: [Buildroot] [PATCH 1/1] package/json-c: bump to version 0.18
+ dkim=pass (2048-bit key,
+ unprotected) header.d=jeremypeper-com.20230601.gappssmtp.com
+ header.i=@jeremypeper-com.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=2/fuUbl1
+Subject: [Buildroot] [PATCH] package/mdadm: install generate systemd service
+ files when systemd configured as the init system
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,87 +116,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog - https://github.com/json-c/json-c/compare/json-c-0.17-20230812...json-c-0.18-20240915
+From: "Jeremy J. Peper" <1000001101000>
 
-Drop 0001-json_pointer.c-initialize-idx.patch.
-Upstream commit - https://github.com/json-c/json-c/commit/7ff7eab603611c65b3110dcb1b0caf5cc68b07a3
+call mdadm's install-systemd target via MDADM_INSTALL_INIT_SYSTEMD. This installs the service files timers etc needed for mdmonitor and other standard mdadm functions to work on systems using systemd.
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Jeremy J. Peper <jeremy@jeremypeper.com>
 ---
- .../0001-json_pointer.c-initialize-idx.patch  | 37 -------------------
- package/json-c/json-c.hash                    |  2 +-
- package/json-c/json-c.mk                      |  2 +-
- 3 files changed, 2 insertions(+), 39 deletions(-)
- delete mode 100644 package/json-c/0001-json_pointer.c-initialize-idx.patch
+ package/mdadm/mdadm.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/json-c/0001-json_pointer.c-initialize-idx.patch b/package/json-c/0001-json_pointer.c-initialize-idx.patch
-deleted file mode 100644
-index 3dbe0b4067..0000000000
---- a/package/json-c/0001-json_pointer.c-initialize-idx.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 7ff7eab603611c65b3110dcb1b0caf5cc68b07a3 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 8 Nov 2023 22:42:48 +0100
--Subject: [PATCH] json_pointer.c: initialize idx
--
--Fix the following build failure with gcc 5:
--
--/home/thomas/autobuild/instance-2/output-1/build/json-c-0.17/json_pointer.c: In function 'json_pointer_result_get_recursive':
--/home/thomas/autobuild/instance-2/output-1/build/json-c-0.17/json_pointer.c:193:25: error: 'idx' may be used uninitialized in this function [-Werror=maybe-uninitialized]
--    res->index_in_parent = idx;
--                         ^
--
--Fixes:
-- - http://autobuild.buildroot.org/results/523b35a979d59121fe4e18c38171792b06233940/
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/json-c/json-c/pull/839
-----
-- json_pointer.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/json_pointer.c b/json_pointer.c
--index 89e9e21..0ac8aaa 100644
----- a/json_pointer.c
--+++ b/json_pointer.c
--@@ -158,7 +158,7 @@ static int json_pointer_result_get_recursive(struct json_object *obj, char *path
--                                              struct json_pointer_get_result *res)
-- {
-- 	struct json_object *parent_obj = obj;
---	size_t idx;
--+	size_t idx = 0;
-- 	char *endp;
-- 	int rc;
-- 
---- 
--2.42.0
--
-diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
-index c9bb8c708b..88bb49cb9d 100644
---- a/package/json-c/json-c.hash
-+++ b/package/json-c/json-c.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/json-c/json-c/wiki
--sha256  7550914d58fb63b2c3546f3ccfbe11f1c094147bd31a69dcd23714d7956159e6  json-c-0.17.tar.gz
-+sha256  876ab046479166b869afc6896d288183bbc0e5843f141200c677b3e8dfb11724  json-c-0.18.tar.gz
- # Locally calculated
- sha256  74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
-diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
-index 68401433b4..254b6fd838 100644
---- a/package/json-c/json-c.mk
-+++ b/package/json-c/json-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
+index 421f06d6..2a95b3a8 100644
+--- a/package/mdadm/mdadm.mk
++++ b/package/mdadm/mdadm.mk
+@@ -36,6 +36,10 @@ else
+ MDADM_CXFLAGS += -DNO_LIBUDEV
+ endif
  
--JSON_C_VERSION = 0.17
-+JSON_C_VERSION = 0.18
- JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases
- JSON_C_INSTALL_STAGING = YES
- JSON_C_LICENSE = MIT
++define MDADM_INSTALL_INIT_SYSTEMD
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install-systemd
++endef
++
+ define MDADM_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(MDADM_BUILD_OPTS) mdadm mdmon
+ endef
 -- 
-2.25.1
+2.39.5
 
 _______________________________________________
 buildroot mailing list
