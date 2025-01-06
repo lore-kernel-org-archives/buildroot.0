@@ -1,60 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90944E77188
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 11:01:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2767E77188
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 13:42:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 42F5B4031C;
-	Mon,  6 Jan 2025 11:01:40 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 31ig2x4_Rbgs; Mon,  6 Jan 2025 11:01:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 123F64032E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 123F64032E;
-	Mon,  6 Jan 2025 11:01:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id C5B17D92
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 11:01:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 96AED606AA
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 11:01:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FFD460742;
+	Mon,  6 Jan 2025 13:42:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wf5n8Bnd5WwC for <buildroot@buildroot.org>;
- Mon,  6 Jan 2025 11:01:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0BCF560623
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BCF560623
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0BCF560623
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 11:01:35 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 23D17E0006;
- Mon,  6 Jan 2025 11:01:31 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1tUkrT-00Bu96-1C;
- Mon, 06 Jan 2025 12:01:31 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+ id TaC9WXFh9uqW; Mon,  6 Jan 2025 13:42:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 453E360093
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 453E360093;
+	Mon,  6 Jan 2025 13:42:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D5E15DB4
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 13:42:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C457280582
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 13:42:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N4dgrlfi76-5 for <buildroot@buildroot.org>;
+ Mon,  6 Jan 2025 13:42:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62a; helo=mail-ej1-x62a.google.com;
+ envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D2EAF80588
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2EAF80588
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D2EAF80588
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 13:42:33 +0000 (UTC)
+Received: by mail-ej1-x62a.google.com with SMTP id
+ a640c23a62f3a-aa67ac42819so2066730466b.0
+ for <buildroot@buildroot.org>; Mon, 06 Jan 2025 05:42:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1736170951; x=1736775751;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=cWR1KZHURTz7Edo2n8ViCtO4UZslYollYwwfdLFcpNQ=;
+ b=Z6SDtict3JCqPK2BE0T8EqFhuQKEhLzQCzZz5ezHWmV4t6XI4KlgRvFAJwWNUs+HmC
+ XY2JPpa7aUVu/kRch1rdNc1cklUl1zGwQe33MzbpWYfmOeMD3qqrMVM6CmmpjKM+Yd4P
+ oRjN8jVC5Zg5SpEcaeXGgE+oQGsbJn3ynCHMmSrxWVJyzkOxqtVOtNGVk1u1KdhPlXYt
+ U0v8RvLXWW6mk6u3s08MF3pYaqlUgqvKSz88H6xmF0svO01zBaOaj0swtO15I6D4tCL3
+ jpca0rPSAzxGhMd4+aV8LAKUWDO0JAEPj+PR1P8VSq8g6h4snsAoPRl9MLk53RToXFIB
+ DkyA==
+X-Gm-Message-State: AOJu0YyyqqsPdbfn5UCnnVFFgGRQK1405wbZQZE0aLk0sGndE2Y23TD3
+ TaZ0PyTBB7CxGnEx2CR+eqO58neHSqziABV5ArBHCE22MBGn7Mfr2+B0+w==
+X-Gm-Gg: ASbGnctbjaLKyv6IA9wyejpegFLOd7VFR0p2CuFtT9CtF6s1Eys8ZuTbHDpvuMAk2kI
+ u14DtBUvInxhj+mIj+BcZEcyDADoLHpEyMFNSLVzLToAPT3KYelJKD71hNSzvrv0/49rCOD3L/i
+ liIBop3PmA5kyBV8BTsdjnBI6g2HXrnXLoWL96k888IcWq+6sDq6Etz5i5BoJyEJP0EHfQTP6oY
+ vi3iBn17xaXiIiR+9TY7NLnr6jUDjynh7FEfQdARsIpqZi7ATqc/P80KTZQh6ob6SPhHIQCUg==
+X-Google-Smtp-Source: AGHT+IEZJVY8YSacwVsPp4i2Mp4qoUM+IioRXbgGvQrOOXwxXTZmjw+wl2HOnW5VJMW7x+diCrGTrg==
+X-Received: by 2002:a17:907:2d27:b0:aa6:7470:8efe with SMTP id
+ a640c23a62f3a-aac2ad94a1amr5137124866b.13.1736170950694; 
+ Mon, 06 Jan 2025 05:42:30 -0800 (PST)
+Received: from hthiery.kontron.local ([213.135.10.150])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-aac0eae74e4sm2243847766b.91.2025.01.06.05.42.29
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 06 Jan 2025 05:42:29 -0800 (PST)
+From: Heiko Thiery <heiko.thiery@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  6 Jan 2025 12:01:29 +0100
-Message-Id: <20250106110130.2837398-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+Cc: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>,
+ Heiko Thiery <heiko.thiery@gmail.com>, Fiona Klute <fiona.klute@gmx.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon,  6 Jan 2025 14:42:11 +0100
+Message-Id: <20250106134219.1914954-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] toolchain/toolchain-wrapper.c: do not pass
- linker flags if not linking
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1736170951; x=1736775751; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=cWR1KZHURTz7Edo2n8ViCtO4UZslYollYwwfdLFcpNQ=;
+ b=RYAhv/7QS9thoczZqgwCxWQ+R0PQ8+kdwdY4zZXfF3H2Q9jihmeeKfD1E2DZCnNLnK
+ kIRjFib5f44Ibh0xBjXgk7AoFAdMdEL32h30HvvhjV1Wcf+j9ZFye4IWNY8bz9OjsJJz
+ sodsGuuMXzX1bzVwxY0gf0jdb1OBLX6bFXdqfVYr5z9xzvcTmHY+xoBBDHjp5mj41BMY
+ HLRZ5nSWWh4qWbtoWN4r9B50xqzJ1SRZmRz0mxeSdNVEDbs0owSflhVL82ddZWSpTltd
+ Z8H0d+weSNS0s9X2iksEYZg9J5xgPEpkhNvRwH8uw+zzmvOU3xBG+AZJMi/FepyUMjaJ
+ uKFg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=RYAhv/7Q
+Subject: [Buildroot] [PATCH v4 0/9] netopeer2 package update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,65 +107,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rml4ZXM6IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2lzc3Vl
-cy81NQoKV2hlbiBnY2Mgc2VlcyBhIGxpbmtlciBvcHRpb24gKC1XbCwuLikgaXQgZXhlY3V0ZXMg
-dGhlIGxpbmtlciwgbGVhZGluZyB0bwpjb25mdXNpbmcgZXJyb3IgbWVzc2FnZXMgaWYgbm8gc291
-cmNlIGZpbGVzIGFyZSBwcm92aWRlZCwgRS5HLjoKCiUgZ2NjCmdjYzogZmF0YWwgZXJyb3I6IG5v
-IGlucHV0IGZpbGVzCmNvbXBpbGF0aW9uIHRlcm1pbmF0ZWQuCgolwqBnY2MgLVdsLC16LG5vdwov
-dXNyL2Jpbi9sZDogL3Vzci9saWIvZ2NjL3g4Nl82NC1saW51eC1nbnUvMTIvLi4vLi4vLi4veDg2
-XzY0LWxpbnV4LWdudS9TY3J0MS5vOiBpbiBmdW5jdGlvbiBgX3N0YXJ0JzoKKC50ZXh0KzB4MTcp
-OiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBtYWluJwpjb2xsZWN0MjogZXJyb3I6IGxkIHJldHVy
-bmVkIDEgZXhpdCBzdGF0dXMKCkl0IGlzIG5vdCByZWFsbHkgdHJpdmlhbCB0byBkZXRlY3QgaW4g
-dGhlIHdyYXBwZXIgaWYgbGlua2luZyB3aWxsIGJlIGRvbmUsCmJ1dCB3ZSBjYW4gYXQgbGVhc3Qg
-Y2hlY2sgaWYgYW55IG5vbi1vcHRpb24gYXJndW1lbnRzIChFLkcuICBzb3VyY2Uvb2JqZWN0CmZp
-bGVzKSBhcmUgcGFzc2VkIGFuZCBza2lwIHRoZSAtV2wsLi4gb3B0aW9ucyBpZiBub3QuCgolIC4v
-aG9zdC9iaW4vYWFyY2g2NC1saW51eC1nY2MKYWFyY2g2NC1saW51eC1nY2MuYnJfcmVhbDogZmF0
-YWwgZXJyb3I6IG5vIGlucHV0IGZpbGVzCmNvbXBpbGF0aW9uIHRlcm1pbmF0ZWQuCgpXaXRoIHRo
-aXMgZml4ZWQgd2Ugbm8gbG9uZ2VyIG5lZWQgdGhlIHNwZWNpYWwgY2FzZSBmb3IgLS1oZWxwIC12
-IGZyb20gY29tbWl0Cjk5NTQzMTVmYzViMiAoInRvb2xjaGFpbi90b29sY2hhaW4td3JhcHBlcjog
-bWFrZSBnY2MgLS1oZWxwIC12IHdvcmsKY29ycmVjdGx5IiksIHNvIGRyb3AgdGhhdC4KClNpZ25l
-ZC1vZmYtYnk6IFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJAa29yc2dhYXJkLmNvbT4KLS0tCiB0b29s
-Y2hhaW4vdG9vbGNoYWluLXdyYXBwZXIuYyB8IDIxICsrKysrKysrKysrLS0tLS0tLS0tLQogMSBm
-aWxlIGNoYW5nZWQsIDExIGluc2VydGlvbnMoKyksIDEwIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdp
-dCBhL3Rvb2xjaGFpbi90b29sY2hhaW4td3JhcHBlci5jIGIvdG9vbGNoYWluL3Rvb2xjaGFpbi13
-cmFwcGVyLmMKaW5kZXggZGIxMWNkYjZhYi4uOGIxZmI3OWRkZSAxMDA2NDQKLS0tIGEvdG9vbGNo
-YWluL3Rvb2xjaGFpbi13cmFwcGVyLmMKKysrIGIvdG9vbGNoYWluL3Rvb2xjaGFpbi13cmFwcGVy
-LmMKQEAgLTI0NSw3ICsyNDUsNyBAQCBpbnQgbWFpbihpbnQgYXJnYywgY2hhciAqKmFyZ3YpCiAJ
-Y2hhciAqcHJvZ3BhdGggPSBhcmd2WzBdOwogCWNoYXIgKmJhc2VuYW1lOwogCWNoYXIgKmVudl9k
-ZWJ1ZzsKLQlpbnQgcmV0LCBpLCBjb3VudCA9IDAsIGRlYnVnID0gMCwgZm91bmRfc2hhcmVkID0g
-MDsKKwlpbnQgcmV0LCBpLCBjb3VudCA9IDAsIGRlYnVnID0gMCwgZm91bmRfc2hhcmVkID0gMCwg
-Zm91bmRfbm9ub3B0aW9uID0gMDsKIAogCS8qIERlYnVnIHRoZSB3cmFwcGVyIHRvIHNlZSBhcmd1
-bWVudHMgaXQgd2FzIGNhbGxlZCB3aXRoLgogCSAqIElmIGVudmlyb25tZW50IHZhcmlhYmxlIEJS
-Ml9ERUJVR19XUkFQUEVSIGlzOgpAQCAtMzExLDEzICszMTEsMTEgQEAgaW50IG1haW4oaW50IGFy
-Z2MsIGNoYXIgKiphcmd2KQogCQlyZXR1cm4gMzsKIAl9CiAKLQkvKiBza2lwIGFsbCBwcm9jZXNz
-aW5nIC0taGVscCBpcyBzcGVjaWZpZWQgKi8KKwkvKiBhbnkgbm9uLW9wdGlvbiAoRS5HLiBzb3Vy
-Y2UgLyBvYmplY3QgZmlsZXMpIGFyZ3VtZW50cyBwYXNzZWQ/ICovCiAJZm9yIChpID0gMTsgaSA8
-IGFyZ2M7IGkrKykgewotCQlpZiAoIXN0cmNtcChhcmd2W2ldLCAiLS1oZWxwIikpIHsKLQkJCWFy
-Z3ZbMF0gPSBwYXRoOwotCQkJaWYgKGV4ZWN2KHBhdGgsIGFyZ3YpKQotCQkJCXBlcnJvcihwYXRo
-KTsKLQkJCXJldHVybiAxOworCQlpZiAoYXJndltpXVswXSAhPSAnLScpIHsKKwkJCWZvdW5kX25v
-bm9wdGlvbiA9IDE7CisJCQlicmVhazsKIAkJfQogCX0KIApAQCAtMzQyLDggKzM0MCwxMSBAQCBp
-bnQgbWFpbihpbnQgYXJnYywgY2hhciAqKmFyZ3YpCiAJfQogCiAJLyogc3RhcnQgd2l0aCBwcmVk
-ZWZpbmVkIGFyZ3MgKi8KLQltZW1jcHkoY3VyLCBwcmVkZWZfYXJncywgc2l6ZW9mKHByZWRlZl9h
-cmdzKSk7Ci0JY3VyICs9IHNpemVvZihwcmVkZWZfYXJncykgLyBzaXplb2YocHJlZGVmX2FyZ3Nb
-MF0pOworCWZvciAoaSA9IDA7IGkgPCBzaXplb2YocHJlZGVmX2FyZ3MpIC8gc2l6ZW9mKHByZWRl
-Zl9hcmdzWzBdKTsgaSsrKSB7CisJCS8qIHNraXAgbGlua2VyIGZsYWdzIHdoZW4gd2Uga25vdyB3
-ZSBhcmUgbm90IGxpbmtpbmcgKi8KKwkJaWYgKGZvdW5kX25vbm9wdGlvbiB8fCBzdHJuY21wKHBy
-ZWRlZl9hcmdzW2ldLCAiLVdsLCIsIHN0cmxlbigiLVdsLCIpKSkKKwkJCSpjdXIrKyA9IHByZWRl
-Zl9hcmdzW2ldOworCX0KIAogI2lmZGVmIEJSX0ZMT0FUX0FCSQogCS8qIGFkZCBmbG9hdCBhYmkg
-aWYgbm90IG92ZXJyaWRkZW4gaW4gYXJncyAqLwpAQCAtNDYzLDcgKzQ2NCw3IEBAIGludCBtYWlu
-KGludCBhcmdjLCBjaGFyICoqYXJndikKIAkJICAgICFzdHJjbXAoYXJndltpXSwgIi1EX19VQk9P
-VF9fIikpCiAJCQlicmVhazsKIAl9Ci0JaWYgKGkgPT0gYXJnYykgeworCWlmIChpID09IGFyZ2Mg
-JiYgZm91bmRfbm9ub3B0aW9uKSB7CiAJCS8qIGh0dHBzOi8vd2lraS5nZW50b28ub3JnL3dpa2kv
-SGFyZGVuZWQvVG9vbGNoYWluI01hcmtfUmVhZC1Pbmx5X0FwcHJvcHJpYXRlX1NlY3Rpb25zICov
-CiAjaWZkZWYgQlIyX1JFTFJPX1BBUlRJQUwKIAkJKmN1cisrID0gIi1XbCwteixyZWxybyI7Ci0t
-IAoyLjM5LjUKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
-aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+This series contains the netopeer2 package update with the corresponding
+dependencies: libyang, libnetconf2, sysrepo.
+
+This series must be applied together due to API breaking changes.
+
+Also minimal tests for sysrepo and netopeer2 are included in the series.
+
+Heiko Thiery (9):
+  package/libyang: add patch to solve issue with older cmake version
+  package/libyang: bump to version 3.4.2
+  package/libnetconf2: bump to version 3.5.1
+  package/sysrepo: fix shellcheck warnings of init script
+  package/sysrepo: bump to version 2.11.7
+  package/netopeer2: fix shellcheck warnings
+  package/netopeer2: bump to version 2.2.31
+  support/testing/tests/package/test_sysrepo.py: add new test
+  support/testing/tests/package/test_netopeer2.py: add new test
+
+ .checkpackageignore                           |  2 -
+ DEVELOPERS                                    |  2 +
+ package/libnetconf2/Config.in                 |  1 +
+ package/libnetconf2/libnetconf2.hash          |  2 +-
+ package/libnetconf2/libnetconf2.mk            | 22 ++++------
+ ...UseCompat.cmake-fix-list-REMOVE_ITEM.patch | 34 ++++++++++++++++
+ package/libyang/libyang.hash                  |  4 +-
+ package/libyang/libyang.mk                    |  2 +-
+ package/netopeer2/Config.in                   | 17 +++++++-
+ .../{S52netopeer2 => S52netopeer2-server}     |  2 +-
+ package/netopeer2/netopeer2.hash              |  2 +-
+ package/netopeer2/netopeer2.mk                | 13 ++++--
+ package/sysrepo/Config.in                     | 18 +++++++++
+ package/sysrepo/S51sysrepo-plugind            |  3 +-
+ package/sysrepo/sysrepo.hash                  |  2 +-
+ package/sysrepo/sysrepo.mk                    |  5 ++-
+ .../testing/tests/package/test_netopeer2.py   | 40 +++++++++++++++++++
+ support/testing/tests/package/test_sysrepo.py | 25 ++++++++++++
+ 18 files changed, 165 insertions(+), 31 deletions(-)
+ create mode 100644 package/libyang/0001-CMCMakeModules-UseCompat.cmake-fix-list-REMOVE_ITEM.patch
+ rename package/netopeer2/{S52netopeer2 => S52netopeer2-server} (92%)
+ create mode 100644 support/testing/tests/package/test_netopeer2.py
+ create mode 100644 support/testing/tests/package/test_sysrepo.py
+
+-- 
+2.39.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
