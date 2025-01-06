@@ -1,77 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 314C0E77198
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 22:42:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97137E77188
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 22:54:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE722406EA;
-	Mon,  6 Jan 2025 22:42:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58FB381296;
+	Mon,  6 Jan 2025 22:54:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X48ueeqT2AOb; Mon,  6 Jan 2025 22:54:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7033781298
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7033781298;
+	Mon,  6 Jan 2025 22:54:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 46B06F1E
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 22:54:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 33FF4406B1
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 22:54:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i1uRhJk0XWua; Mon,  6 Jan 2025 22:42:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE925405AE
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE925405AE;
-	Mon,  6 Jan 2025 22:42:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 895D3F1E
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 22:42:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B8E7605A0
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 22:42:37 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jrflC49RwtTa for <buildroot@buildroot.org>;
- Mon,  6 Jan 2025 22:42:35 +0000 (UTC)
+ id P4DBfRaH7lER for <buildroot@buildroot.org>;
+ Mon,  6 Jan 2025 22:54:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
  helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3A2D460604
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A2D460604
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1677F406AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1677F406AE
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3A2D460604
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 22:42:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1677F406AE
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 22:54:06 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.1])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 367F413F8AE;
- Mon,  6 Jan 2025 23:42:32 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:43814])
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 29BCE13F86E;
+ Mon,  6 Jan 2025 23:54:04 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:33870])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 06 Jan 2025 23:42:32 +0100
+ with HTTP (HTTP/1.0 POST); Mon, 06 Jan 2025 23:54:04 +0100
 MIME-Version: 1.0
-Date: Mon, 06 Jan 2025 23:42:32 +0100
+Date: Mon, 06 Jan 2025 23:54:04 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Akhilesh Nema <nemaakhilesh@gmail.com>
 Cc: buildroot@buildroot.org
-In-Reply-To: <20250106215514.1531389-1-thomas.petazzoni@bootlin.com>
-References: <20250106215514.1531389-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250106024626.151525-1-nemaakhilesh@gmail.com>
+References: <20250106024626.151525-1-nemaakhilesh@gmail.com>
 User-Agent: Webmail Free/1.6.9
-Message-ID: <076d24c023cba4c78080f516197ed438@free.fr>
+Message-ID: <d7c115a2a0d39baa4ddce696257ac360@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1736203353;
- bh=OTMgsghwsLNQN4c9RS/eYtKICCqIJKnflPa4+/aVpXM=;
+ d=free.fr; s=smtp-20201208; t=1736204045;
+ bh=4xO9XSbT7hGczJXa6fmgmpaYqcBmyuFCtoiNTn0Wbvw=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=WiRgn63PjkKvvXFzqTKghAKUTHxo2EbuPSruIgA5TiVCtDUaW/dRo73xvQvW3sava
- qx3UKApD4Nx6aY9mXUgDqPblCUFWqUXxfvwGQ4gVmsI00qC2zySlyoGXwu/h+DJ5JZ
- vYwzfh/HCkLPREnWP/cnbWhwfAl1bdDPSYIO5hWFk2yBfDQCSf0DzmzPW1wanpDWn6
- i5X4y2nuUhyX2RNP9YIuHgQ6D7m7rbnZD9X1q6tA8FLjWegEh57e4gnE6SGPE8MtQv
- gTTe8LYNa+KRnwNm+aLCwRzlTTCczwVT6jbNlDkTvCa6rvKmoh40WYZqiDErXi00Jc
- MnicQe2fGaubw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=CuC8sKRHmCpw2xHvvXxtykWx1PY/jDitXzAttve2tY02poQ3tsetq0W711SABMSqP
+ Za70sawlNhBkTNKWs3+ssiO16XOsL8Hy2tKtyJlVG1iHC/uuJrcRUDgfjn/Ct0Eppt
+ G/6JR5M7OzSb3/fDnkpP8d0hiMBLNkC2KNtLKguf/VeFYcFwCGCmcg9uIDaXsFAoJp
+ jNstM36TiT1Eac61AIpXeqfIzoX6NVC3U9UWR2x7sfujKtg+O17RX4rxIYdpO5jdRp
+ 0WTy17mRQ6yiFJMvf7voUQSYO7kDUCdaH4JAhmhyk/5E34PoRvUkZiOhlznFIJgl5k
+ EF/jIRseZC0Bg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=WiRgn63P
-Subject: Re: [Buildroot] [PATCH] package/opensc: fix build issue since bump
- to 0.26
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=CuC8sKRH
+Subject: Re: [Buildroot] [PATCH 1/1] package/iperf3: security bump to
+ version 3.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,41 +89,32 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 06/01/2025 22:55, Thomas Petazzoni via buildroot wrote:
-> Buildroot commit
-> 1f4b4ccde7ceb379010aeb93458792202622d64b ("package/opensc: security
-> bump to version 0.26.0") bumped opensc from 0.24 to 0.26, and the
-> build started failing with:
-> 
-> pkcs11-tool.c:7854:45: warning: implicit declaration of function 
-> 'EVP_bf_cbc'; did you mean 'EVP_sm4_cbc'? 
-> [-Wimplicit-function-declaration]
-> 
-> on configurations that have BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH
-> disabled (it is not explicitly selected by this package).
-> 
-> Our initial fix was to simply select
-> BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH, but when investigating when
-> EVP_bf_cbc() started being used in OpenSC, we discovered it has been
-> in use for a while... but in code that kept being disabled from
-> version to version as it was broken (upstream bug
-> https://github.com/OpenSC/OpenSC/issues/1796), but it was apparently
-> forgotten to be disabled again for 0.26 (the issue is still
-> open). Therefore, we opted to continue disabling this known broken
-> part of the code, and submit an upstream PR for that
-> https://github.com/OpenSC/OpenSC/pull/3303, which ultimately will
-> clarify what is the right fix.
-> 
-> In the mean time, this allows to fix the build issue.
-> 
-> Fixes:
-> 
->   
-> http://autobuild.buildroot.net/results/ca51b3e8e3ac83e2a69814caa84d9862385b956f/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Hi Akhilesh,
 
-Applied to master, thanks.
+On 06/01/2025 03:46, Akhilesh Nema wrote:
+> Fixes CVE-2024-26306.
+
+You mention here "CVE-2024-26306". It seems this CVE was already fixed 
+in
+Buildroot commit:
+https://gitlab.com/buildroot.org/buildroot/-/commit/9d9a0db3d8b471ccf1721312450337ff53ed4a35
+
+> https://github.com/advisories/GHSA-2w89-5px3-fvx6
+> 
+> Release notes:
+> https://github.com/esnet/iperf/releases/tag/3.18
+
+The advisory and release note are actually referring "CVE-2024-53580".
+
+> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+
+Can you confirm it is a typo?  You can just confirm it's a typo (and 
+I'll do the
+fix while applying) or send a v2, at your convenience.
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
