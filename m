@@ -4,96 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 052C1E77188
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 13:46:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41FD0E77188
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 14:01:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C603B809F5;
-	Mon,  6 Jan 2025 13:46:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4EBB80CA6;
+	Mon,  6 Jan 2025 14:01:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0HG7cqsk16tz; Mon,  6 Jan 2025 13:46:11 +0000 (UTC)
+ id mfp3z3UarY3m; Mon,  6 Jan 2025 14:00:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D047E8087D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8A7980C9A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D047E8087D;
-	Mon,  6 Jan 2025 13:46:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8A7980C9A;
+	Mon,  6 Jan 2025 14:00:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6FDA66B
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 13:46:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3DBE46B
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 14:00:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5069A403CD
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 13:46:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37B35403CB
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 14:00:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B9pYNWnTrtCN for <buildroot@buildroot.org>;
- Mon,  6 Jan 2025 13:46:08 +0000 (UTC)
+ id UOzSX73iA1ln for <buildroot@buildroot.org>;
+ Mon,  6 Jan 2025 14:00:57 +0000 (UTC)
+X-Greylist: delayed 508 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 06 Jan 2025 14:00:56 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6FBAD402AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FBAD402AC
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::136; helo=mail-lf1-x136.google.com;
- envelope-from=troglobit@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F36A8403C7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F36A8403C7
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F36A8403C7
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 13:46:07 +0000 (UTC)
-Received: by mail-lf1-x136.google.com with SMTP id
- 2adb3069b0e04-540201cfedbso470029e87.3
- for <buildroot@buildroot.org>; Mon, 06 Jan 2025 05:46:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736171165; x=1736775965;
- h=content-transfer-encoding:organization:mime-version:message-id:date
- :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=iJ0ZOjkYYB5GwVILRJwkf6lwygeYF5V4Yw66GEUjk3c=;
- b=ev/Z+h1U9OdMf5UrfeYPsyS7+dnbcqRfUw8h2BGRDW8+OHzjOwDU6C9V+aqJFyuosL
- sS0ZdSWuxwRh3kh1IBgl6OSq3zNvwrSZOb7tLQO+ws8rm3eUxW03CAbwrWefO3LM/XxM
- /Kn5huPaS66RRvDBBzPeBTly2hp8SF3PrPKPANIcuZXzoydP0LYs5UgblsT8H/bjeAR2
- jPK5W4Cvaurbzvvr5F8H2qddJa7KnkXdMjHL4Ig5MPQvmKXGrTfpCnQwjq+CXsknJpYF
- rRFQyli3akxFTOSJlGUBcmDpAG4zLJ51o4T6cWw063ppaQmm6kWLthiIkftchwhX3nfx
- R+TA==
-X-Gm-Message-State: AOJu0Yyb3Imf7nwKI3C8hWnoVyWozH6oAs4uW2lp/P6lPCYVYmNHZlZF
- kQvzJhB4qAavvSB2RiqAeEKrcgWWeR6D+zA+ZUmudQ57OLsxPI9i5QgTP5k1
-X-Gm-Gg: ASbGnctyw2kmF8AQ3Yz/ddX88o9ldn86afNTkEnongEhIWzhymOMyTchCd9iFbiOLFb
- DLH8vLWNsTyq7JDjeH+MqX8y1Vjpka2AVwg7VERc3ZHORCrxkcGlMC3hQTrIb+gK7w7vFBSbB2C
- ZxBBW3UdHZ32l5lhDBMU7ejbJyxwcFVdVhJ2QNU1KBwVugidroR1tVVJicAk7G24JlHJSOKbW6r
- 1WNEybTYZefcfacN9U1eWDQjQ15s6RPuqU=
-X-Google-Smtp-Source: AGHT+IEF3EFA3jnBVoXueQ2QDUAmPmZf/G40sYbb0mIj2/Wd+Sai8RkoIBMe6E950mluIyAvKnYBoA==
-X-Received: by 2002:a05:6512:12d1:b0:540:1b41:c765 with SMTP id
- 2adb3069b0e04-54229598b36mr17645485e87.56.1736171164981; 
- Mon, 06 Jan 2025 05:46:04 -0800 (PST)
-Received: from gimli.lan ([2001:9b0:214:3500::e19])
- by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-5422381383dsm4969652e87.161.2025.01.06.05.46.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Jan 2025 05:46:04 -0800 (PST)
-From: Joachim Wiberg <troglobit@gmail.com>
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6FBAD402AC
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 14:00:56 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 348633520825; Mon,  6 Jan 2025 14:52:23 +0100 (CET)
+Date: Mon, 6 Jan 2025 14:52:23 +0100
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Cc: Joachim Wiberg <troglobit@gmail.com>
-Date: Mon,  6 Jan 2025 14:45:54 +0100
-Message-ID: <20250106134554.2668609-1-troglobit@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Message-ID: <Z3vgF8YhSYdCRn9q@waldemar-brodkorb.de>
 MIME-Version: 1.0
-Organization: Addiva Elektronik
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1736171165; x=1736775965; darn=buildroot.org;
- h=content-transfer-encoding:organization:mime-version:message-id:date
- :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=iJ0ZOjkYYB5GwVILRJwkf6lwygeYF5V4Yw66GEUjk3c=;
- b=f8yPGo3htbYOAdcDJH7tm+wF+qCQXia8l6jZtCO7vJPY1NlfYe5gDWKgJ5xNhcbokF
- skES7ZtoZV11z3ZDlKEJhcJqw1iKGmG54+uHIDXxOpi4pbTBFrweeYA5SA7697aO9Pr7
- H+ZP4jXmOIcDKQql1HiBzN/sFVnZjc46naIlwigP9yvwumFIYXD1/VYzAch4nZjRSFKJ
- kld5K7QafNr/1E5rv3FDQ1JtucY5DFucnqAGrzCGQEJihWWTUAIaUB7V+sgpcverpxYQ
- U1v8iaCHPqxMOXF311YsiwN+Y67UMKe9PXE5I/rnpeSAO8/mL8kfo8f4FLW7x2+vL37y
- W0CQ==
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-32-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1736171543; bh=QdZCJHndNM5JAo7MvWa8KSDtpgs8fexJZnKmTMYElfg=;
+ h=Date:From:To:Subject:From;
+ b=uwk1LRGxYzb8TARCEZcP1Zm78Kb/EMJqtzGPZ2NDYz8tyL4kR7naU0TahHi4pYX58
+ 40Go6RioJpT9Ad8kqrzPzP5JWfoTElNSTqAKfwVrVxAaKHpD+k9HE2h9vJmV45xX+j
+ NBNMR2PdGscxr97YV4dpn+fPg8DKO95F0LS2NxqkDFkLAXn+lFKr1cVEkmMxa3BWFK
+ pVQYD9U3z+mvInRk9ar0pdoQOfaIl88pMiGuXOPo7oFOL4I5wq6QUxslaRy2om4Sg3
+ ZhqNcGr43fHKg5O+FZ9cjW1YUbEzc32dLlk7VGDiH4XIBkeKpwV7qehH8GEcNVMdu7
+ JrnIwrhHKkgAQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=f8yPGo3h
-Subject: [Buildroot] [PATCH 1/1] package/sysklogd: bump to v2.7.0
+ dkim=pass (2048-bit key,
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=uwk1LRGx
+Subject: [Buildroot] [PATCH] package/ruby: update to 3.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,63 +83,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From https://github.com/troglobit/sysklogd/releases/tag/v2.7.0
+See here for changes:
+https://www.ruby-lang.org/en/news/2024/12/25/ruby-3-4-1-released/
+https://www.ruby-lang.org/en/news/2024/12/25/ruby-3-4-0-released/
+https://www.ruby-lang.org/en/news/2024/11/05/ruby-3-3-6-released/
 
- - syslogd by default now cap forwarded messages to 1024 bytes. This can
-   be adjusted using -M size or the config file setting udp_size
- - syslogd socket buffering has been reduced from 160 kiB to 80 kiB
- - Allow slashes in process names to support, e.g., postfix/qmgr
- - Support for extended message filtering based on tag/ident, hostname,
-   or message property. This allows sorting of messages based on their
-   origin (program/remote) or content in any of the available message
-   fields: exact match, case-insensitive substring matching or extended
-   regular expression
- - Support for remote logging to a multicast group, as well as acting as
-   a multicast group receiver of syslog messages, both IPv4 and IPv6.
-   Forwarding to multicast groups support two new, per action, options:
-   - iface=IFNAME to set a different outbound interface
-   - ttl=1.255 to adjust the TTL of outbound multicast (default: 1)
- - libsyslog.a support for egressing multicast, two new struct members
-   .log_iface and .log_ttl control how the syslogp() API works
- - logger support for controlling egressing multicast using a new command
-   line option, -o iface=IFNAME,ttl=<1..255>
- - syslogd now logs the hostname as the FQDN in RFC5424 output format
- - Fix parsing of IPv6 addresses in listen .conf directive, as well as
-   command line option -b [A:B:C:D]:PORT
+The LEGAL file was updated.
+Entries for following files got removed:
+[ext/json/generator/generator.c]
+[ext/nkf/nkf-utf8/config.h]
+[ext/nkf/nkf-utf8/nkf.c]
+[ext/nkf/nkf-utf8/utf8tbl.c]
+Some minor rdoc changes were made.
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/sysklogd/sysklogd.hash | 5 ++---
- package/sysklogd/sysklogd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/ruby/ruby.hash | 6 +++---
+ package/ruby/ruby.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
-index 8b1cd63a73..4024965e23 100644
---- a/package/sysklogd/sysklogd.hash
-+++ b/package/sysklogd/sysklogd.hash
-@@ -1,5 +1,4 @@
--# Upstream .sha256 from GitHub
--sha256  40a3bb593d7507e49a4379f48ae8a9bc4b68dcc583efcdbf3b9056128442c92a  sysklogd-2.6.2.tar.gz
--
-+# Upstream .sha256 from https://github.com/troglobit/sysklogd/releases/tag/v2.7.0
-+sha256  6ab74ab5001121bb32697fd2f7ab3cc4b4452c3f721677e06e5b60982a04d0cc  sysklogd-2.7.0.tar.gz
- # Locally calculated
- sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index eeb3a3748d..e8b7fe2062 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index d6622909e5..be3e380a55 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,7 +1,7 @@
+-# https://www.ruby-lang.org/en/news/2024/09/03/3-3-5-released/
+-sha512  dd5c6a7f74854e143e0ca46b9d7c0d1983fc4886f5f733cd108345dbf4b21f61ad978ad6806e05a57b7af28fd9216dd38d7145808188bbb3695a7f3a4eda3883  ruby-3.3.5.tar.xz
++# https://www.ruby-lang.org/en/news/2024/12/25/ruby-3-4-1-released/
++sha512  8d2e34117696f9debf463ae1eed288fdbb5c1a12e32800e901b69218e3b7302a0066052077e2ebca851e3a635296199bd5a10437eea1d6f787f69a77bb865680  ruby-3.4.1.tar.xz
+ 
+ # License files, Locally calculated
+-sha256  e849b28d324423e636a3e6bc5d583cdaf4bd046c2b20872c53886b612d01a4a1  LEGAL
++sha256  39917f453428cba1f1054c6a1973f74599a30b8d92e752da94e205a213ef8f92  LEGAL
+ sha256  967586d538a28955ec2541910cf63c5ac345fcdea94bfb1f1705a1f6eb36bcbb  COPYING
+ sha256  36a9a6e7347214bbba599a412617204e65bff065dcbe5c46f5cb454c80de9eb0  BSDL
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 2e04cb3e92..be1b38ae59 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--SYSKLOGD_VERSION = 2.6.2
-+SYSKLOGD_VERSION = 2.7.0
- SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
- SYSKLOGD_LICENSE = BSD-3-Clause
- SYSKLOGD_LICENSE_FILES = LICENSE
+-RUBY_VERSION_MAJOR = 3.3
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).5
+-RUBY_VERSION_EXT = 3.3.0
++RUBY_VERSION_MAJOR = 3.4
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
++RUBY_VERSION_EXT = 3.4.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+ 
 -- 
-2.43.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
