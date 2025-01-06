@@ -4,69 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59F2FE77188
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 16:18:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21D33E77188
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 16:19:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 206F880B16;
-	Mon,  6 Jan 2025 16:18:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DB9FD80569;
+	Mon,  6 Jan 2025 16:19:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RAbhOj4PTLfQ; Mon,  6 Jan 2025 16:18:35 +0000 (UTC)
+ id 1e64_a2n6a1F; Mon,  6 Jan 2025 16:19:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2300C80CDA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E615A80CEC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2300C80CDA;
-	Mon,  6 Jan 2025 16:18:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C8171DB4
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 16:18:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E615A80CEC;
+	Mon,  6 Jan 2025 16:19:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 05A43DB4
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 16:19:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B5ECC80B16
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 16:18:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6BE840569
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 16:19:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JFAtzNrMwHBC for <buildroot@buildroot.org>;
- Mon,  6 Jan 2025 16:18:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GNum_UQRWPLy for <buildroot@buildroot.org>;
+ Mon,  6 Jan 2025 16:19:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 99FDE80CDA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99FDE80CDA
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 99FDE80CDA
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 16:18:32 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1622448600; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 06 Jan 2025 16:18:29 +0000 (UTC)
-Message-ID: <d27ef0cd-0896-4220-8736-1ad0594a14a8@korsgaard.com>
-Date: Mon, 6 Jan 2025 17:18:27 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Cc: Bernd Kuhls <bernd@kuhls.net>
-References: <20241229202647.788835-1-thomas.petazzoni@bootlin.com>
-Content-Language: en-US
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0699840561
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0699840561
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 16:19:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E194483B85; Mon,  6 Jan 2025 16:19:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20241229202647.788835-1-thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=fGNMPb1IHh0lJ0vyKBK69WB4I3pIChcmjlZbuKOfAR5Uje9m0yH+oiTziiHK5dQUb7ebs65mOAumT2EJXX0uBIte34mVcX87kYY7JYhfWufmYUkzS5GglSAVQh+BRdi9q/YIMmIOv0Fleycoce2uymVaxKJnIYJd5IAJtPYxQd7EzhO10blumoAsXMALeje20y922SYuXrbRZExhiLgiXeCJCZa7L5I2chFVA6eGQjoTWg4xpxJdU2MAw3nm24iOPvdaEbixD5PPpvNzFet2Rq0jspC+XCmENVQBp8USWQlp5Y3kN4ugIEBXIVoFN6o4flJ0Uk/DBJRxBDdLA8W6gw==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=HqiV+BxTHwxT551icmm7vQKsSrK1Rwy5RK1D6AeTh/U=;
- h=Feedback-ID:Received:Date:Subject:To:From; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=fGNMPb1I
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/procps-ng: add wchar
- dependency
+To: buildroot@buildroot.org
+Date: Mon, 6 Jan 2025 17:14:09 +0100
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: ea76f2425d5d7032140dfda7f428037bb7013c3c
+X-Git-Newrev: 70f75b7ad99d0845a0ddf5ffdbdee9ff94657082
+X-Patchwork-Hint: ignore
+Message-Id: <20250106161925.E194483B85@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/procps-ng: add
+ wchar dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,42 +59,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/29/24 21:26, Thomas Petazzoni via buildroot wrote:
-> Since procps-ng was bumped from 3.3.17 to 4.0.4 in commit
-> d79f40dbbe98983bc657d4c82d46b38b8283351b ("package/procps-ng: security
-> bump to version 4.0.4"), the build has been failing on !wchar
-> configurations with:
-> 
-> src/ps/output.c:68:10: fatal error: wctype.h: No such file or directory
->     68 | #include <wctype.h>
->        |          ^~~~~~~~~~
-> compilation terminated.
-> 
-> The problematic code has been added by upstream commit
-> https://gitlab.com/procps-ng/procps/-/commit/605ea4a8f7460920b6de9e432757bd13f80f0dba,
-> which landed in upstream release v4.0.0.
-> 
-> To solve this, we simply add a BR2_USE_WCHAR dependency, and update
-> the comment related to this dependency on the only reverse dependency
-> of procps-ng.
-> 
-> Fixes:
-> 
->    http://autobuild.buildroot.net/results/afc035e866bec6f2c14f9d52fa74a9c1897706de/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> v1 -> v2: no changes
+commit: https://git.buildroot.net/buildroot/commit/?id=70f75b7ad99d0845a0ddf5ffdbdee9ff94657082
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Committed to 2024.02.x and 2024.11.x, thanks.
+Since procps-ng was bumped from 3.3.17 to 4.0.4 in commit
+d79f40dbbe98983bc657d4c82d46b38b8283351b ("package/procps-ng: security
+bump to version 4.0.4"), the build has been failing on !wchar
+configurations with:
 
--- 
-Bye, Peter Korsgaard
+src/ps/output.c:68:10: fatal error: wctype.h: No such file or directory
+   68 | #include <wctype.h>
+      |          ^~~~~~~~~~
+compilation terminated.
+
+The problematic code has been added by upstream commit
+https://gitlab.com/procps-ng/procps/-/commit/605ea4a8f7460920b6de9e432757bd13f80f0dba,
+which landed in upstream release v4.0.0.
+
+To solve this, we simply add a BR2_USE_WCHAR dependency, and update
+the comment related to this dependency on the only reverse dependency
+of procps-ng.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/afc035e866bec6f2c14f9d52fa74a9c1897706de/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit f6fe892141cd4c8b6dd934df92eb1fe7d9469e0c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/procps-ng/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/procps-ng/Config.in b/package/procps-ng/Config.in
+index 6ff8983202..b0d69afdc0 100644
+--- a/package/procps-ng/Config.in
++++ b/package/procps-ng/Config.in
+@@ -1,7 +1,13 @@
++comment "procps-ng needs a toolchain w/ wchar"
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	depends on !BR2_USE_WCHAR
++
+ config BR2_PACKAGE_PROCPS_NG
+ 	bool "procps-ng"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  Standard informational utilities and process-handling tools.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
