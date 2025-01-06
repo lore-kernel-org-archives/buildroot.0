@@ -4,98 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0416E77188
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 04:39:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94C63E77198
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 05:52:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9543A60613;
-	Mon,  6 Jan 2025 04:39:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30CF2600B6;
+	Mon,  6 Jan 2025 05:52:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m1KlwxfAWFys; Mon,  6 Jan 2025 04:39:34 +0000 (UTC)
+ id Yxx3tfSkOHDT; Mon,  6 Jan 2025 05:52:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A177960623
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 324CD605A0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A177960623;
-	Mon,  6 Jan 2025 04:39:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 59161DB4
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 04:39:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 324CD605A0;
+	Mon,  6 Jan 2025 05:52:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EAF1B6B
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 05:52:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 23D7A80C74
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 04:39:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B81DB40132
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 05:52:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x7_060y3Weru for <buildroot@buildroot.org>;
- Mon,  6 Jan 2025 04:39:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id owTFxHR61e5p for <buildroot@buildroot.org>;
+ Mon,  6 Jan 2025 05:52:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::62b; helo=mail-pl1-x62b.google.com;
+ client-ip=2607:f8b0:4864:20::102c; helo=mail-pj1-x102c.google.com;
  envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 31FE580C6D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31FE580C6D
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
- [IPv6:2607:f8b0:4864:20::62b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 31FE580C6D
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 04:39:31 +0000 (UTC)
-Received: by mail-pl1-x62b.google.com with SMTP id
- d9443c01a7336-21675fd60feso262959245ad.2
- for <buildroot@buildroot.org>; Sun, 05 Jan 2025 20:39:31 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D56F0400CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D56F0400CE
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com
+ [IPv6:2607:f8b0:4864:20::102c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D56F0400CE
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 05:52:32 +0000 (UTC)
+Received: by mail-pj1-x102c.google.com with SMTP id
+ 98e67ed59e1d1-2eeb4d643a5so20470298a91.3
+ for <buildroot@buildroot.org>; Sun, 05 Jan 2025 21:52:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736138371; x=1736743171;
+ d=1e100.net; s=20230601; t=1736142752; x=1736747552;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Cfgaq22hF8LpruZVL+dmU1dbP0/OoYftEuC/I0RXd/c=;
- b=Iy5lGmmDvQ929ct0KewG44xwspisXKQfWSq7ohIvTeeHgNzgnH8ZzVB7JshTJU2Xz6
- G9VjNPJHq+P3jm3uEYjE+uhtiBMAKzK3wieuSYE7wU1LMfBwfBTEwUfcOTaaYDN0TK1i
- 65MTlxUtUnf/MdM8ezZ81yv10O1w6NHIdNFuVMMpzJjFymKYImA3Z+wGzM7TCQ6UPMaq
- 7dW/aF4zjB4LhzuNS1qkYDfmD5Eu1WUlIlilOdIASQfKazo2cjNpGCJKrSMIewDErDok
- Lb2goRb5PFjg6s9lq+VGIt18A5fhoPTPmeW3DsUJm6iPupa59TkcoD9DxcpAQGuv3vDd
- FAzw==
-X-Gm-Message-State: AOJu0YxigXuYzeudzgOfhn5ojmi3jmxXiIm9MwAl4MOLnrJVNsff8jDv
- 4UUjmdLNE10i9DYXGHS2uqyvrZsaRJRFhYup76QD5anXPhOdNQTyBxvH3w==
-X-Gm-Gg: ASbGncsgRBaBq1VrWDlB7H1pR7XtM3nY4pscHKT2NYOtz2sonuY6Qt6jvGeGAV7mzEU
- 1XfNeJzGR1wtNLE9BSbiRFmU4n+Ih+qvP/dhCNoVG3D42v7sefGqkGOzPiXErXLAwAF/EAEq7hm
- ObLQ+z0MZ1RpH0S9tNy+TR3tF6D/UIXQkfkBj8Ox6CwiQ8JDiY4FJPU3ZJNFcim0LSpbMJ/VKM+
- AsiRlI+58E4f7IXGrWLcNdDesYaI59DNBxb056hRQ9a/cbCry32RB8BSr4+mUup4fGlEDkzgnxc
- pxfFU5Ahsm3bZXZQwEz/VwNSEht0JD3b+dAoLw4k
-X-Google-Smtp-Source: AGHT+IFBCBDZ6UrSVmCqvNflCGeXp1ZvZEJ4XO6iOKjGxM575ha/cjH7pFp2cE6Zsx6bonnim+yOIA==
-X-Received: by 2002:a17:903:2383:b0:216:4122:925f with SMTP id
- d9443c01a7336-219e6e9f8d8mr790265705ad.14.1736138371121; 
- Sun, 05 Jan 2025 20:39:31 -0800 (PST)
+ bh=+aKgMt70P5Tzsx9BDZOYnHyKalvvNE0zWieNJ1gDNK8=;
+ b=E2hzEraZ11Y1zAxPQ65oGC/RbXbObXsQ6CjrzML/YXOHzSX1RR7v9vkVwBkkR5Qz6N
+ se+OLpM1ORCZfggYtEWGrc/phBIcGQ9G8wOnlO2OX+KFFTDfRvBRpq2mRd0FANc+tNr5
+ MJX52u2wxYiX7X0nN3QY6r3WiomZ05fU/X7rH7L7P5YepqERAN1jyxD04S+6AOSj5tpl
+ W+Qv2tr6todPZDOt3YcurSj2QGpme52Pi3YMsgLKuP2CBBAWD793y0lQ8g1N9XJSMF6R
+ njE+5E1XpeECyv76wO76nBeajmLQg9tiGMovzd9xfxCJDK45xJETk++6zPTLp42ECxXL
+ gE9Q==
+X-Gm-Message-State: AOJu0Yw7a+8/J9fwn2o+LMRNozorVxk+dDrWkRSr9HMT2Q/ssWrwKlkA
+ 6XxFSI5LhcxKEPnCeG5BtvzZhuxiWjTCm0E821+c9uKtFV06uWUzZK8+og==
+X-Gm-Gg: ASbGnctoVK1GMxVl6oKot+dl4D9elnFaJFiRTpDXmgY0hezH/kbnJhofEIoiUePIykJ
+ 29IPP0HRrJVa+nksvM84FhZfFVXRqOLJR4dio6PfDtzR+V6m44xGoQ9UB0UqsM4n/TahSrrFO+o
+ wyHHJjOL2Ym3b+3SGPE3v3+eg9p5MMforl0tJh+mEEHCZMrt5j+Wh/TdprwtaydJpmTaM7wOofh
+ QyOmDAoDlJsAp/6eTuGSYwOXJ0/PS0fgCjsytjkfnjhAiqi/xgvCwXNm4YI76syxYi8e7EBiHEh
+ jeFomrdgZTW9PFlICgomMlguNipgk3XpTrgCupn5
+X-Google-Smtp-Source: AGHT+IGLXvxFCez4Bd/kLfV+yk0UQCiioRwgLKqdrV5rU3SIVRA/zPVwQ1NDJmrXM9RpC3nFhdBpZA==
+X-Received: by 2002:a05:6a00:430d:b0:725:df1a:27c with SMTP id
+ d2e1a72fcca58-72abde0d185mr75770157b3a.14.1736142751778; 
+ Sun, 05 Jan 2025 21:52:31 -0800 (PST)
 Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
  [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-219dc9cde5bsm283622975ad.116.2025.01.05.20.39.30
+ d2e1a72fcca58-72aad8dbad9sm31575368b3a.103.2025.01.05.21.52.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Jan 2025 20:39:30 -0800 (PST)
+ Sun, 05 Jan 2025 21:52:31 -0800 (PST)
 From: Akhilesh Nema <nemaakhilesh@gmail.com>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+Cc: Kadambini Nema <kadambini.nema@gmail.com>,
  Akhilesh Nema <nemaakhilesh@gmail.com>
-Date: Sun,  5 Jan 2025 20:39:27 -0800
-Message-Id: <20250106043927.154476-1-nemaakhilesh@gmail.com>
+Date: Sun,  5 Jan 2025 21:52:27 -0800
+Message-Id: <20250106055227.157140-1-nemaakhilesh@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1736138371; x=1736743171; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1736142752; x=1736747552; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Cfgaq22hF8LpruZVL+dmU1dbP0/OoYftEuC/I0RXd/c=;
- b=Edy63VDxvJP7ONKmxvCNUJNzon0GGHEUyB7xH7lwNW39p/OvHM6xx9QG/qJTqUjOaZ
- vOPHgv/0bROP3XgqHJlKnhtSvEUqBBJltnLXboFsqA61ZuhAPhZFV/xEI1mqqojQlOgi
- zExsc6XGLMZBilh+K8phWxNiFEbXWMWopmL2uO4vrwXAhE6oJaT3vqlY2IHJVG56aknc
- PfIW8OCaFj8mknH7kA3GKVzMJeQmtgc2z22iNNkz73fsZsWxU6E8f93ipmy6IPY+kiVq
- W5lpE3zkwmXKOZ/feEisOKIgEyVreMxiNXMbp2O2qnMbXhAvJWQYua1/q6R0FApZysdL
- 8Ojw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=+aKgMt70P5Tzsx9BDZOYnHyKalvvNE0zWieNJ1gDNK8=;
+ b=LSJaCq4UTTFDAtrcOPrGUL2XF+uN+7I8tI/RyWu6Qi8Cos+TBt6RaHsl0K3mr/oVX1
+ qU9egVa6+N00/2Vi2Yfeb0d3+X1znSbxRjdecqTOBBre/Jx7nvMcU9YNPq02jDFiNkwx
+ mqay9a1/bCDVP1CMNIIh8NXspbz5/S+FD/Mq5BjJ7ZKuY0Xz3AkXKaZuwDWP+pAxFE/Y
+ OoSoMjxEg5chxctmRp4EsIBtHlBzhHQMvK/gqNOXN0vwzKddtqVoGhQuAlQyzalmyldD
+ jKyAhM3yckzxltL5241kXyD8nfHk3lCA/ApnSChaXGVAsiQ4Ns07J749roUwTbxJYT2C
+ OiOg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Edy63VDx
-Subject: [Buildroot] [PATCH 1/1] package/msmtp: bump version to 1.8.27
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=LSJaCq4U
+Subject: [Buildroot] [PATCH 1/1] package/ustreamer: bump version to 6.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,41 +111,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes - https://marlam.de/msmtp/news/msmtp-1-8-27/
+Changelog - https://github.com/pikvm/ustreamer/compare/v6.16...v6.21
 
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 ---
- package/msmtp/msmtp.hash | 4 ++--
- package/msmtp/msmtp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ustreamer/ustreamer.hash | 2 +-
+ package/ustreamer/ustreamer.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
-index ba4ef02746..eb80029626 100644
---- a/package/msmtp/msmtp.hash
-+++ b/package/msmtp/msmtp.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking signature
--# https://marlam.de/msmtp/releases/msmtp-1.8.25.tar.xz.sig
-+# https://marlam.de/msmtp/releases/msmtp-1.8.27.tar.xz.sig
- # with key 2F61B4828BBA779AECB3F32703A2A4AB1E32FD34
--sha256  2dfe1dbbb397d26fe0b0b6b2e9cd2efdf9d72dd42d18e70d7f363ada2652d738  msmtp-1.8.25.tar.xz
-+sha256  94030580a63a747faa0a3b9b1b264ae355aad33a4d94b832bfeb5b21633c965e  msmtp-1.8.27.tar.xz
- 
- # Hash for license file:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-index b964970bfa..f3543bff1b 100644
---- a/package/msmtp/msmtp.mk
-+++ b/package/msmtp/msmtp.mk
+diff --git a/package/ustreamer/ustreamer.hash b/package/ustreamer/ustreamer.hash
+index 7a03b21b86..cafdeadc87 100644
+--- a/package/ustreamer/ustreamer.hash
++++ b/package/ustreamer/ustreamer.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  88ac5e99c56729fecba2cf7f63b690a126dcaef420e2cce9c25c66c55c097f64  ustreamer-6.16.tar.gz
++sha256  405c8bef000525153e6b0afc8a23fe03ca0efb444a87a6c6262e3da06bc0b5af  ustreamer-6.21.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/ustreamer/ustreamer.mk b/package/ustreamer/ustreamer.mk
+index 2944827083..9226f4a2be 100644
+--- a/package/ustreamer/ustreamer.mk
++++ b/package/ustreamer/ustreamer.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MSMTP_VERSION = 1.8.25
-+MSMTP_VERSION = 1.8.27
- MSMTP_SITE = https://marlam.de/msmtp/releases
- MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
- MSMTP_DEPENDENCIES = host-pkgconf
+-USTREAMER_VERSION = 6.16
++USTREAMER_VERSION = 6.21
+ USTREAMER_SITE = $(call github,pikvm,ustreamer,v$(USTREAMER_VERSION))
+ USTREAMER_LICENSE = GPL-3.0+
+ USTREAMER_LICENSE_FILES = LICENSE
 -- 
 2.25.1
 
