@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C88EAE77199
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 16:20:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A29FE77198
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 16:20:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9960A80CEC;
-	Mon,  6 Jan 2025 16:20:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A0EC6075F;
+	Mon,  6 Jan 2025 16:20:54 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PoRWdwtea8X2; Mon,  6 Jan 2025 16:20:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 159E6606C9
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 159E6606C9;
+	Mon,  6 Jan 2025 16:20:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 14BCB6B
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 16:20:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1814480CEC
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 16:20:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pIvOuyuaWdVH; Mon,  6 Jan 2025 16:20:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8F5B80D04
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8F5B80D04;
-	Mon,  6 Jan 2025 16:20:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D1CAF1F
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 16:20:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D13940570
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 16:20:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QwGQnxPHkvdk for <buildroot@buildroot.org>;
+ id XYlzHDbUEscR for <buildroot@buildroot.org>;
  Mon,  6 Jan 2025 16:20:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E250C40561
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 358A180CDA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E250C40561
+ by smtp1.osuosl.org (Postfix) with ESMTP id 358A180CDA
  for <buildroot@buildroot.org>; Mon,  6 Jan 2025 16:20:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CEB8683BB1; Mon,  6 Jan 2025 16:20:40 +0000 (UTC)
+ id DA71283BB3; Mon,  6 Jan 2025 16:20:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Jan 2025 17:12:02 +0100
+Date: Mon, 6 Jan 2025 17:13:29 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 4199c629e444959bb4e2f665b2b4da459ee84de1
-X-Git-Newrev: d229aa601d74378687ba0bdb170259213c594049
+X-Git-Oldrev: d229aa601d74378687ba0bdb170259213c594049
+X-Git-Newrev: 0bb33c4694778bde6defe38c180a9334eb421805
 X-Patchwork-Hint: ignore
-Message-Id: <20250106162040.CEB8683BB1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/php: bump version
- to 8.3.15
+Message-Id: <20250106162040.DA71283BB3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/procps-ng: add
+ wchar dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,45 +65,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d229aa601d74378687ba0bdb170259213c594049
+commit: https://git.buildroot.net/buildroot/commit/?id=0bb33c4694778bde6defe38c180a9334eb421805
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_3
-Release notes: https://news-web.php.net/php.announce/448
+Since procps-ng was bumped from 3.3.17 to 4.0.4 in commit
+d79f40dbbe98983bc657d4c82d46b38b8283351b ("package/procps-ng: security
+bump to version 4.0.4"), the build has been failing on !wchar
+configurations with:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+src/ps/output.c:68:10: fatal error: wctype.h: No such file or directory
+   68 | #include <wctype.h>
+      |          ^~~~~~~~~~
+compilation terminated.
+
+The problematic code has been added by upstream commit
+https://gitlab.com/procps-ng/procps/-/commit/605ea4a8f7460920b6de9e432757bd13f80f0dba,
+which landed in upstream release v4.0.0.
+
+To solve this, we simply add a BR2_USE_WCHAR dependency, and update
+the comment related to this dependency on the only reverse dependency
+of procps-ng.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/afc035e866bec6f2c14f9d52fa74a9c1897706de/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bcaffa0a04af278d154e6e08b81a06a40a1b3ee9)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit f6fe892141cd4c8b6dd934df92eb1fe7d9469e0c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/igt-gpu-tools/Config.in | 2 +-
+ package/procps-ng/Config.in     | 6 ++++++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index e3a1c6cf2f..535761f047 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  58b4cb9019bf70c0cbcdb814c7df79b9065059d14cf7dbf48d971f8e56ae9be7  php-8.3.14.tar.xz
-+sha256  3df5d45637283f759eef8fc3ce03de829ded3e200c3da278936a684955d2f94f  php-8.3.15.tar.xz
- 
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 89d7766e94..468a73667a 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.3.14
-+PHP_VERSION = 8.3.15
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+diff --git a/package/igt-gpu-tools/Config.in b/package/igt-gpu-tools/Config.in
+index 809c8e28ac..08fc34e917 100644
+--- a/package/igt-gpu-tools/Config.in
++++ b/package/igt-gpu-tools/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_IGT_GPU_TOOLS
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_HAS_UDEV
+-	depends on BR2_USE_WCHAR # elfutils
++	depends on BR2_USE_WCHAR # elfutils, procps-ng
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 # linux/dma-buf.h
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps-ng
+ 	select BR2_PACKAGE_CAIRO
+diff --git a/package/procps-ng/Config.in b/package/procps-ng/Config.in
+index 7af0e97fb4..2b97096f00 100644
+--- a/package/procps-ng/Config.in
++++ b/package/procps-ng/Config.in
+@@ -1,7 +1,13 @@
++comment "procps-ng needs a toolchain w/ wchar"
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	depends on !BR2_USE_WCHAR
++
+ config BR2_PACKAGE_PROCPS_NG
+ 	bool "procps-ng"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  Standard informational utilities and process-handling tools.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
