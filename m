@@ -4,81 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE04EE77198
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 15:39:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2ADAE77188
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 16:00:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7921881379;
-	Mon,  6 Jan 2025 15:39:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E62D80572;
+	Mon,  6 Jan 2025 16:00:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N6g7pDCc8KzB; Mon,  6 Jan 2025 15:39:57 +0000 (UTC)
+ id VPyEsfu_u8GO; Mon,  6 Jan 2025 16:00:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87B6D813B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70AF98056C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87B6D813B6;
-	Mon,  6 Jan 2025 15:39:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E4ED6B
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 15:39:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70AF98056C;
+	Mon,  6 Jan 2025 16:00:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A17C669
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 16:00:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E6C84087D
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 15:39:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6DF484055E
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 16:00:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KssMqPVTgSZ7 for <buildroot@buildroot.org>;
- Mon,  6 Jan 2025 15:39:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id k-ia3f5uVNxZ for <buildroot@buildroot.org>;
+ Mon,  6 Jan 2025 16:00:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6322D40863
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6322D40863
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6322D40863
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 15:39:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 087D41C0007;
- Mon,  6 Jan 2025 15:39:49 +0000 (UTC)
-Date: Mon, 6 Jan 2025 16:39:49 +0100
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Thomas Devoogdt
- <thomas.devoogdt@barco.com>, buildroot@buildroot.org, Adrian Perez de
- Castro <aperez@igalia.com>
-Message-ID: <20250106163949.5c49b568@windsurf>
-In-Reply-To: <CACXRmJi=rGj9uA6R3fQ45sKuSy_+=Vi6u_Vdn_koVd4DkWZj8w@mail.gmail.com>
-References: <20240917203311.1241557-1-thomas@devoogdt.com>
- <20241216181719.770389-1-thomas@devoogdt.com>
- <20241216181719.770389-2-thomas@devoogdt.com>
- <CACXRmJg8bzXKbHT48Ej8iUz3yzT18u3AtXep2-WVYKpsoTFyaQ@mail.gmail.com>
- <CACXRmJgAN=rDPQOtTufT0D7uWDp9o_W1xGN5EW6B_XFuQeR77Q@mail.gmail.com>
- <CACXRmJi-K=k+bwwhtVEjAOc6wEJaS1rg_5cDFwMY2nZmR24KVQ@mail.gmail.com>
- <20241229230256.609289ea@windsurf>
- <CACXRmJi=rGj9uA6R3fQ45sKuSy_+=Vi6u_Vdn_koVd4DkWZj8w@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 02B8340569
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02B8340569
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 02B8340569
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 16:00:36 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -463279142; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 06 Jan 2025 16:00:30 +0000 (UTC)
+Message-ID: <f08d3efa-3c45-4b7f-a776-50ec4865463f@korsgaard.com>
+Date: Mon, 6 Jan 2025 17:00:28 +0100
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1736177990;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ArzUWjA+oZm+wVPF5Q++s0QuSovBJi3F6mXbnkDEn+o=;
- b=Nho1HsCnN3HGYPIuf0+6XidMxE0h8JCWKXEXgCl0U0lY120rmUyMeZyEUZsEmqLtCQGssv
- nIjLHDsqlNQy3t8p/Rf6Wl+4Iud1Ny8Yk/REnDv/DySDniZYj1Uw3V8Xzo/9Sxcpfwz29g
- AwfSj91GjbsFaLSJDL0V7z3awsCr5N33oW0XBNtmniOgkB50PsWQkJj6FAjPr10HpYrspv
- r3NZhkU1GV3Jm9hyl41MuP5zHaaNIiOE5vRa3DMZ1TEwM9TcPDoJqGB4BgYU/Zdgx2U9cW
- K3xy/xtB/qSZSE/8dDCo5XLvrK+SVGYPwFWROLouDRNhouPRfckbTU4h0QI/rw==
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+References: <20241023213643.915658-1-ju.o@free.fr>
+ <20241229225244.0922292a@windsurf>
+Content-Language: en-US
+From: Peter Korsgaard <peter@korsgaard.com>
+In-Reply-To: <20241229225244.0922292a@windsurf>
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=nkLBPBYzRPNYWKvqXME6N46wCGBWWKzRe3oO0cltO2oVgajStzcnVkwVHPBcabHpfF2OdQ13XjVCPdc3R0FKsM99gU7HWJZRUQII6qcXaBiTEmeXYVLjNJlom1jUK78MlJ4N6/1z8N6jDJI14NEqJ1zX9MUdnTNYrkIAIn7kt/MQwguZ8X0VGKMT3mrvK3A0a5knbkICFTRuFFe43Q5k/KTf9tIRuGie7pyl71zKE+UwpJ0gzIxm8n5f9Kh0ysBjk6Ljd5cJFy2LekNEew7HGeRRkyVRfp3cg5fxvmbJ53BukcJtApwt1TbDlr42b1C7VvUEyhR2B8wpKBeVxa0T0w==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=d/IvvT7GTlL1CEL0O7MipLNS3VIsPvN+wJWdK/8tBb0=;
+ h=Feedback-ID:Received:Date:Subject:To:From; 
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Nho1HsCn
-Subject: Re: [Buildroot] [PATCH v3 2/2] package/webkitgtk: bump to 2.46.4
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=nkLBPBYz
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add dpdk runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,63 +79,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
-
-Happy New Year and best wishes for 2025!
-
-On Mon, 30 Dec 2024 18:31:31 +0100
-Thomas Devoogdt <thomas@devoogdt.com> wrote:
-
-> >> Do you have a defconfig that exhibits the issue?  
+On 12/29/24 22:52, Thomas Petazzoni via buildroot wrote:
+> On Wed, 23 Oct 2024 23:36:43 +0200
+> Julien Olivain <ju.o@free.fr> wrote:
 > 
-> I just used the test-pkg tool to figure this out.
+>> Signed-off-by: Julien Olivain <ju.o@free.fr>
+>> ---
+>> Patch tested in:
+>> https://gitlab.com/jolivain/buildroot/-/jobs/8169488724
+>> ---
+>>   DEVELOPERS                                 |  1 +
+>>   support/testing/tests/package/test_dpdk.py | 46 ++++++++++++++++++++++
+>>   2 files changed, 47 insertions(+)
+>>   create mode 100644 support/testing/tests/package/test_dpdk.py
 > 
-> $ cat webkitgtk.config
-> BR2_PACKAGE_WAYLAND=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-> BR2_PACKAGE_LIBGTK3=y
-> BR2_PACKAGE_WEBKITGTK=y
-> BR2_PACKAGE_WEBKITGTK_MINIBROWSER=y
-> 
-> $ ./utils/test-pkg -p webkitgtk -c webkitgtk.config
+> Applied to master, thanks.
 
-Thanks for providing this snippet.
+Committed to 2024.11.x, thanks.
 
-> All builds will fail due to the same reason. Are there other possible
-> side effects?; I don't know. All I know is that a similar issue was
-> fixed years ago, which was re-introduced by bumping pkg-config. Btw, I
-> was searching https://autobuild.buildroot.org/ for this issue, but I
-> didn't find any webkitgtk build. Is there a reason why this one has
-> never been compiled?
-
-Webkitgtk is a huge beast with a lot of dependencies. Therefore, there
-is a significant chance that something else fails in the build before
-that...
-
-You can find all builds that had BR2_PACKAGE_WEBKITGTK=y by using:
-
-  http://autobuild.buildroot.net/index.php?symbols%5BBR2_PACKAGE_WEBKITGTK%5D=y
-
-but as you can see, all of them failed on some other package, most
-likely even before getting to webkitgtk.
-
-Ah and also: webkitgtk starts with a "w". So if nothing depends on
-webkitgtk, webkitgtk is going to be the last package to be built.
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
