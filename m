@@ -4,74 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66153E77198
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 22:20:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7EE8E77188
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jan 2025 22:20:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B51A4029A;
-	Mon,  6 Jan 2025 22:20:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C5EC404B6;
+	Mon,  6 Jan 2025 22:20:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zex2uhbFzSeJ; Mon,  6 Jan 2025 22:20:02 +0000 (UTC)
+ id DenlvmjlcmQF; Mon,  6 Jan 2025 22:20:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01E61404B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FAD7406E8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01E61404B6;
-	Mon,  6 Jan 2025 22:20:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 23D18F1E
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 22:20:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FAD7406E8;
+	Mon,  6 Jan 2025 22:20:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EDB95F1E
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 22:20:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 10D1580E5A
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 22:20:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA3EA60604
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 22:20:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pQQEuUnT8RWp for <buildroot@buildroot.org>;
- Mon,  6 Jan 2025 22:20:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x97xavjToowN for <buildroot@buildroot.org>;
+ Mon,  6 Jan 2025 22:20:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EAE0880E59
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAE0880E59
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EAE0880E59
- for <buildroot@buildroot.org>; Mon,  6 Jan 2025 22:19:59 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 66BC420003;
- Mon,  6 Jan 2025 22:19:55 +0000 (UTC)
-Date: Mon, 6 Jan 2025 23:19:54 +0100
-To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Message-ID: <20250106231954.734c2006@windsurf>
-In-Reply-To: <CA+R_deqLs+aSCBvoTGj9rJn8D5ARu1=QFKDy19qgTP_YWBdU0g@mail.gmail.com>
-References: <20250106210623.1296442-1-thomas.petazzoni@bootlin.com>
- <CA+R_deqLs+aSCBvoTGj9rJn8D5ARu1=QFKDy19qgTP_YWBdU0g@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1736201995;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=0K+uBq7qU4L81JdklumtUJVh3enhLAonDPoXhJAj5tE=;
- b=NLdn1BezyQuV/PMPo7ZFmD9von+/z70HuE4HadXWMSW0EwFISg305R9iZ+XtNBuJZOlZtl
- dJMRaKfdJIVvYft/3JraBuDoaG8jFsgd+1M+HkUQIr38/A6U9F16ua5ZQSGwpsWNx9OsDi
- VOMpXBgtmGErqmInVsMsAY3EzEdiFHcGSlb1ImyLy/gVIfJYcEkOudybFrnbSDp7qjoK9e
- Q7rgH5sH5UR3uFT3c6NX7jkHYfPpgSDw70jpZ+FI+DjYuW8LszmqVa8bCeI6vysx+dMLEj
- pGf6VhiDK6VNpa3/nJoiaXag5K8MW3582nZiy1Ix1a79d1fxRi0TOqU+aGYdnQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NLdn1Bez
-Subject: Re: [Buildroot] [PATCH] package/qt6/qt6quicktimeline: add missing
- select BR2_PACKAGE_QT6DECLARATIVE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E998605B7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0E998605B7
+ for <buildroot@buildroot.org>; Mon,  6 Jan 2025 22:20:50 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E713C83BBF; Mon,  6 Jan 2025 22:20:49 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 6 Jan 2025 23:19:33 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: da9adec1491eefc618aab610615fe293899845fd
+X-Git-Newrev: 8c93f0c1f51a32f3e68761104e512123490b515e
+X-Patchwork-Hint: ignore
+Message-Id: <20250106222049.E713C83BBF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/arm-gnu-toolchain: drop prompt for
+ _SUPPORTS option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,49 +59,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Roy,
+commit: https://git.buildroot.net/buildroot/commit/?id=8c93f0c1f51a32f3e68761104e512123490b515e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 6 Jan 2025 23:07:46 +0100
-Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
+The _SUPPORTS option should be blind: it represents a restriction that
+we certainly do not want to allow the user to lift by manually enabling
+that option...
 
-> How can I recreate the warning reported by kconfig?
+Fixes: 65f268e21cbe (package/arm-gnu-toolchain: add
+       BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_SUPPORTS)
 
-Like this:
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Bryce Johnson <bryce@redpinelabs.com>
+Cc: Suniel Mahesh <sunil@amarulasolutions.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/arm-gnu-toolchain/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-$ cat > .config <<EOF
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_VFP=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_QT6=y
-BR2_PACKAGE_QT6QUICKTIMELINE=y
-EOF
-$ make olddefconfig
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_QT6DECLARATIVE_QUICK
-  Depends on [n]: BR2_PACKAGE_QT6 [=y] && BR2_PACKAGE_QT6DECLARATIVE [=n]
-  Selected by [y]:
-  - BR2_PACKAGE_QT6QUICKTIMELINE [=y] && BR2_PACKAGE_QT6 [=y]
-#
-# configuration written to /home/thomas/projets/buildroot/.config
-#
-
-Basically, just enable qt6 and qt6quicktimeline. You can even do it
-from menuconfig, and then when you exit menuconfig, you will see the
-kconfig warning.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/arm-gnu-toolchain/Config.in.host b/package/arm-gnu-toolchain/Config.in.host
+index dfd30e5223..de8ff8c005 100644
+--- a/package/arm-gnu-toolchain/Config.in.host
++++ b/package/arm-gnu-toolchain/Config.in.host
+@@ -1,4 +1,4 @@
+ config BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_SUPPORTS
+-	bool "host arm-gnu-toolchain"
++	bool
+ 	default y if BR2_HOSTARCH = "aarch64"
+ 	default y if BR2_HOSTARCH = "x86_64"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
