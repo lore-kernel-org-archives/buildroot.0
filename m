@@ -1,104 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A464DE77188
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jan 2025 00:28:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3A3FE77188
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jan 2025 02:14:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 69928406BD;
-	Tue,  7 Jan 2025 00:28:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gZleAv7WV-BO; Tue,  7 Jan 2025 00:28:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 413E7406FD
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 413E7406FD;
-	Tue,  7 Jan 2025 00:28:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 59B1CDB4
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 00:28:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 47AAC6062A
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 00:28:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 61EBE60707;
+	Tue,  7 Jan 2025 02:14:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 00hOhPVN56cN for <buildroot@buildroot.org>;
- Tue,  7 Jan 2025 00:28:04 +0000 (UTC)
+ id SObQypBcXOdm; Tue,  7 Jan 2025 02:14:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFB9D60799
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFB9D60799;
+	Tue,  7 Jan 2025 02:14:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B0E27DB4
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 02:14:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 90B5C4019D
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 02:14:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A7m30O-THpsg for <buildroot@buildroot.org>;
+ Tue,  7 Jan 2025 02:14:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1031; helo=mail-pj1-x1031.google.com;
+ client-ip=2607:f8b0:4864:20::b2b; helo=mail-yb1-xb2b.google.com;
  envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4E26D608BE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E26D608BE
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com
- [IPv6:2607:f8b0:4864:20::1031])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4E26D608BE
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 00:28:04 +0000 (UTC)
-Received: by mail-pj1-x1031.google.com with SMTP id
- 98e67ed59e1d1-2ef72924e53so21771231a91.3
- for <buildroot@buildroot.org>; Mon, 06 Jan 2025 16:28:04 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 14B7140191
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14B7140191
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com
+ [IPv6:2607:f8b0:4864:20::b2b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 14B7140191
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 02:14:40 +0000 (UTC)
+Received: by mail-yb1-xb2b.google.com with SMTP id
+ 3f1490d57ef6-e3983f8ff40so17544348276.1
+ for <buildroot@buildroot.org>; Mon, 06 Jan 2025 18:14:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736209683; x=1736814483;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=RoWo1ZczWv3v1aWjGMoLu2xhZMZiEDzQUApBSMeTRMw=;
- b=bsj/Q+rne93N1TlyzxZ/wFRBjEHbx7lW9UryKYUluAMhvwQwyYzf5YNBL00Rl2Fgpj
- g4tVyVcldu27nfQ39kjhO6lIUSVLQ8YMrXrxTcBJ/M4+AkHjJtOqjbGCGZPIkxEc79gE
- cB9LkbVNBFWFeFPhjfIXQ/q4uUHyJAy8yRnRRMIDhljRZPb16gs4dfNWGFwticfMu2ZW
- rcYhG9HthlsxRIShA/Gj7qiElgDWjSgMSKijRyHti5cvkoKoejIj7+SSVl0WqFeWJvD9
- zee+1S0fFJhCXVyfTtNPydIfW9IwoNOCLGiqek5D5Lm0QOHL1OldwwH/SSNqI0BAUIJ9
- 816g==
-X-Gm-Message-State: AOJu0YwCYQfIXlIurkS8WdZMHMh/eVKq4E4soZjpEFgVcpBccSzicCOK
- zEGGuQDzRgA1BiQgc6tKhlaElj7e1bNRn/otwOSjqT60bl2qz1eRaWQOUg==
-X-Gm-Gg: ASbGncsPANIP3QX7Pg7X+G7Sm0avKJEDZuyRPHRu+Y/WFPTz7t0SvYoCdsoT7qCIfm+
- yCcoR03IZUjbGQ73Z+r8ZYQrPjhu8zOgUTlU9ULsTYRe90X2BUpw/UHqq8z/VFcP2h/S/C3RCgA
- vjqCKIq2CbeZXGBWXiTzA0kBqskFRLy28jgXCEB9J/zmVDveYW9fifRyxiKZrSOR0JxKpr2J+F7
- YDULvEp1En3OIW0iMwuQWQx/R3yI1Cx+F3o7+Kq8qUDCLKFZ2lSSFlP2RxXEquQ8RI3vUEQ9cJm
- lNEjbK29AGhY4aiDAUqi8OP+kiMQui7odwAQrby0
-X-Google-Smtp-Source: AGHT+IH8cZMS1DlcGfYpOskk7123873WRGKPDogBHECYvplcs1Sx8WUFGAMhA5I6Iri7dMilwQktHA==
-X-Received: by 2002:a17:90b:5208:b0:2ee:dcf6:1c8f with SMTP id
- 98e67ed59e1d1-2f452e1814bmr94467177a91.16.1736209683274; 
- Mon, 06 Jan 2025 16:28:03 -0800 (PST)
-Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
- [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-219dc9d4c73sm290031145ad.121.2025.01.06.16.28.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Jan 2025 16:28:02 -0800 (PST)
-From: Akhilesh Nema <nemaakhilesh@gmail.com>
-To: buildroot@buildroot.org
-Cc: Richard Braun <rbraun@sceen.net>, Martin Bark <martin@barkynet.com>,
- Akhilesh Nema <nemaakhilesh@gmail.com>
-Date: Mon,  6 Jan 2025 16:27:02 -0800
-Message-Id: <20250107002702.191013-2-nemaakhilesh@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250107002702.191013-1-nemaakhilesh@gmail.com>
-References: <20250107002702.191013-1-nemaakhilesh@gmail.com>
+ d=1e100.net; s=20230601; t=1736216080; x=1736820880;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=FUuwRpvb7Us5Ry84jcI/0yf7j++hlVsuja7jYz1zDa4=;
+ b=gNrraLKSsXL5g1n93VFH3/mI/kyYmDRj5rnYH/4W72J7Jyx6vOEChDtkLUaXNJpx/q
+ o6Gu7S5d92rqJcjCNY/+KgaWOYX4ccL2UyfmiZmUgzq7VgSiOz02PG4oiFu3y2PbiOwL
+ b/G8T7jbqiu9UcuR0fSx5jyZSre32zvqsJJR/0wNv515e6ffLakuy4e3+8ZQ39PYO/cl
+ IQnlcjH3ig2A9IyyU+hAydikPItM4lVd9s9grdD+RBtBNuh5wgAwsj00fhkvfudCHL8K
+ zQnMUwVRWKPvWbUgGw1x5CBt0PKPasOHQaeit36f5pLMzX5oozvNtdoBCKJCPqzK1ots
+ vgww==
+X-Gm-Message-State: AOJu0YwsihjyTbacKCJDiuBM005xl9JHIy8vh/sNSGMcSIvXSbTAqYK6
+ iXf+wfz1o252oT85leAQSmI/+7GKaVEd7xT9tx3HY+F1DJIxgNLcsdjnhpR9Z9x+t0UtG5IM1K9
+ vTm1gQG2EpU4+r3KjZQJusFU8RRlNGp1H
+X-Gm-Gg: ASbGncsd8XBXuuI8aURAY2EOLyzJleZT37VHJxQNMqh2TePKrpklAnl6+XXyWVGOZ4b
+ KpR2c0RSgt1N5hUYvwJgZZYEBzluwrW1E88gP03I=
+X-Google-Smtp-Source: AGHT+IGSapb0wbDNjklMixAhiw8P+vszvR4QWe1WkzxUzomaW+438XYSdbCuw8ods+nLvTVcad1J+pOmrk5B/qr/WdU=
+X-Received: by 2002:a05:690c:7404:b0:6ef:4fba:8151 with SMTP id
+ 00721157ae682-6f3f8134ccamr383553857b3.19.1736216079574; Mon, 06 Jan 2025
+ 18:14:39 -0800 (PST)
 MIME-Version: 1.0
+References: <20250106024626.151525-1-nemaakhilesh@gmail.com>
+ <d7c115a2a0d39baa4ddce696257ac360@free.fr>
+In-Reply-To: <d7c115a2a0d39baa4ddce696257ac360@free.fr>
+From: Akhilesh Nema <nemaakhilesh@gmail.com>
+Date: Mon, 6 Jan 2025 18:14:13 -0800
+Message-ID: <CAMV0Ro-_qiPc2i1xFPw4v0M2D-4xUu_=PR9ReCdTFjmMesRR6Q@mail.gmail.com>
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1736209683; x=1736814483; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=RoWo1ZczWv3v1aWjGMoLu2xhZMZiEDzQUApBSMeTRMw=;
- b=Tmhr6zZZGBXWPq7r7mb0MBCV2bym4xnrJ+7SR3TTeAs+FMPumWAfbPgBOxVChk/fJX
- u5V47ZiqYXHaBJZAzSyaBozvJr6rn5w2ZLwfXjH4OPN8VGUXfFH7oShvHUXc2Ht476nE
- f/jl03KR1OUU/XRRHYYF5HCqs2ybMb4gCcKPu1FydYEmKRgPdp5tonZc4vURQVPf+bmX
- dxlEAQS4aSADTImMp8jENaJpstS2Nnrw9/j9bNulRTgFlLUBWqi+s5DwgT1j9hZcbUvu
- esf7PoYXZUEJNbkXuyuxzXKZDlbEuwmLuyJlI4yNY5pqaci/mnxqCFxJd6IqcCm/h+JW
- C5ww==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1736216080; x=1736820880; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=FUuwRpvb7Us5Ry84jcI/0yf7j++hlVsuja7jYz1zDa4=;
+ b=bgK+1xr5/Zzv04uMLO1IHP0txQToy8udzzZzjA9kzNrovd++YOspHlnzlP5WDSMkHV
+ eAKYeW1qrnq60ArcbzEmKW0Z/0BKhsefg42StTt/HELlnTordMl508rF/UQb2ZEi9X1s
+ svlNspXMcsrecCMWnSD/9s0cqTE6HGazsQZGcWU+kKH8CUHQnyerQuNdKw/ow/fKfDHS
+ Uh41HAtgxveoG16uqBGfrUnUurl77X++OII7URFy5vezqXrKhleSsd2D/RgbdYgHaHUR
+ z3nOOujKxpU3y2AWx/GQ2qCwenViNGxHEd4eyq4FJSmZi5Hb6DLS5LFvINKtWY2cUkHs
+ 9Uxw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Tmhr6zZZ
-Subject: [Buildroot] [PATCH 2/2] package/tzdata: bump version to 2024b
+ header.s=20230601 header.b=bgK+1xr5
+Subject: Re: [Buildroot] [PATCH 1/1] package/iperf3: security bump to
+ version 3.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,50 +102,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7346394931130139447=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/IZ7AO6WRE3W3TWBL5IR6PMQUL433BQIE/
+--===============7346394931130139447==
+Content-Type: multipart/alternative; boundary="000000000000ad2e81062b144e12"
 
-Updated the hash URL.
+--000000000000ad2e81062b144e12
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
----
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Julien,
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index d353bc4410..3f84ec4f87 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,4 +1,4 @@
--# From https://mm.icann.org/pipermail/tz-announce/2024-February/000081.html
--sha512  1f09f1b2327cc9e1afc7e9045e83ee3377918dafe1bee2f282b6991828d03b3c70a4d3a17f9207dfb1361bb25bc214a8922a756e84fa114e9ba476226db57236  tzdata2024a.tar.gz
-+# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/IZ7AO6WRE3W3TWBL5IR6PMQUL433BQIE/
-+sha512  0d86686e215672343debb3471b7e7ccb8a27f063f085c9b532d5e0470377843daa0dfb6aee0db4fb9068dd52810c69aeee914a1a7c7e603fdecda7e855020193  tzdata2024b.tar.gz
- # Locally computed:
- sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index e367205277..ba53ae7c38 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TZDATA_VERSION = 2024a
-+TZDATA_VERSION = 2024b
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
- TZDATA_SELINUX_MODULES = tzdata
--- 
-2.25.1
+On 06/01/2025 03:46, Akhilesh Nema wrote:
+> > Fixes CVE-2024-26306.
+>
+> You mention here "CVE-2024-26306". It seems this CVE was already fixed
+> in
+> Buildroot commit:
+>
+> https://gitlab.com/buildroot.org/buildroot/-/commit/9d9a0db3d8b471ccf1721312450337ff53ed4a35
+
+
+Yes, there was a typo in the message. This version bump has a fix for the
+CVE-2024-53580.
+
+Thanks
+Akhilesh
+
+--000000000000ad2e81062b144e12
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi Julien,</div><div><br></div><div class=3D"gmail_qu=
+ote gmail_quote_container"><blockquote class=3D"gmail_quote" style=3D"margi=
+n:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex=
+">On 06/01/2025 03:46, Akhilesh Nema wrote:<br>
+&gt; Fixes CVE-2024-26306.<br>
+<br>
+You mention here &quot;CVE-2024-26306&quot;. It seems this CVE was already =
+fixed <br>
+in<br>
+Buildroot commit:<br>
+<a href=3D"https://gitlab.com/buildroot.org/buildroot/-/commit/9d9a0db3d8b4=
+71ccf1721312450337ff53ed4a35" rel=3D"noreferrer" target=3D"_blank">https://=
+gitlab.com/buildroot.org/buildroot/-/commit/9d9a0db3d8b471ccf1721312450337f=
+f53ed4a35</a></blockquote><div><br></div><div>Yes, there was a typo in the =
+message. This version bump has a fix for the CVE-2024-53580.</div><div><br>=
+</div><div>Thanks</div><div>Akhilesh=C2=A0</div></div></div>
+
+--000000000000ad2e81062b144e12--
+
+--===============7346394931130139447==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7346394931130139447==--
