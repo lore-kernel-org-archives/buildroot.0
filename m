@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E08AE77197
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jan 2025 20:41:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70E7BE77197
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jan 2025 20:41:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D42286059A;
-	Tue,  7 Jan 2025 20:41:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 156116059A;
+	Tue,  7 Jan 2025 20:41:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RI3u3TkSAIG4; Tue,  7 Jan 2025 20:41:11 +0000 (UTC)
+ id eAMyQYqGGKn8; Tue,  7 Jan 2025 20:41:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D413960723
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35E5160723
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D413960723;
-	Tue,  7 Jan 2025 20:41:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 04CE97AA
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 20:41:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35E5160723;
+	Tue,  7 Jan 2025 20:41:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 162216B
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 20:41:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C7B5B80868
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 20:41:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EBDA58059D
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 20:41:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jhroc0aGmAz4 for <buildroot@buildroot.org>;
- Tue,  7 Jan 2025 20:41:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB8E580574
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB8E580574
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 20:41:07 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C48C583C98; Tue,  7 Jan 2025 20:41:07 +0000 (UTC)
+ id miy7jNvVocgk for <buildroot@buildroot.org>;
+ Tue,  7 Jan 2025 20:41:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0177080574
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0177080574
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0177080574
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 20:41:37 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id E7F1519F57B;
+ Tue,  7 Jan 2025 21:41:31 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:58176])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 07 Jan 2025 21:41:31 +0100
+MIME-Version: 1.0
+Date: Tue, 07 Jan 2025 21:41:31 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 7 Jan 2025 21:27:25 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 94f676021d89c616bb8432e84026a86c0face259
-X-Git-Newrev: d5f0794d155d2d0b982604a4103287e04bec0966
-X-Patchwork-Hint: ignore
-Message-Id: <20250107204107.C48C583C98@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/json-c: bump to version 0.18
+To: Akhilesh Nema <nemaakhilesh@gmail.com>
+Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20250106040323.153486-1-nemaakhilesh@gmail.com>
+References: <20250106040323.153486-1-nemaakhilesh@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <80e4a7354f640ada02c7c2c38269e574@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1736282494;
+ bh=vDyksI0vAjqefrZUyPr0GIFy3Itx4bKz9TBQ9Em2Qyk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=pV+Nig14lnuB1se3M+Y+5fuKUAa6Pp0aoU9UFs6r2gcskl0JTfMcIT2/tS53hyrKM
+ /hxAIDX7NUqlVnoFO/N+O1wVF9NrKT5r08OADlRlZ8Z5vLwbzJqRtFuoUpipyNdGpL
+ hqSBCNcKnGVvMwDgnZpSUMda0UhwoI+putTSd3nEChK7PRvlPvI0HXLQQ5UPb6k0FU
+ Duv0d4cOIm3gOjswlkhG9B9CUc85RnoaakA1jIofdsYBgjYAJrxXz8BsStD8Sq3n66
+ ufE0IA5dQ+NSd2UJDMdzYHMsc4wkSbRnEhcI20D15/WKuri5BEtVQyjqZxbGVtqT7H
+ pbHIb91x0DmIA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=pV+Nig14
+Subject: Re: [Buildroot] [PATCH 1/1] package/json-c: bump to version 0.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,94 +82,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5f0794d155d2d0b982604a4103287e04bec0966
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 06/01/2025 05:03, Akhilesh Nema wrote:
+> Changelog - 
+> https://github.com/json-c/json-c/compare/json-c-0.17-20230812...json-c-0.18-20240915
+> 
+> Drop 0001-json_pointer.c-initialize-idx.patch.
+> Upstream commit - 
+> https://github.com/json-c/json-c/commit/7ff7eab603611c65b3110dcb1b0caf5cc68b07a3
+> 
+> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 
-Changelog - https://github.com/json-c/json-c/compare/json-c-0.17-20230812...json-c-0.18-20240915
-
-Drop 0001-json_pointer.c-initialize-idx.patch.
-Upstream commit - https://github.com/json-c/json-c/commit/7ff7eab603611c65b3110dcb1b0caf5cc68b07a3
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../0001-json_pointer.c-initialize-idx.patch       | 37 ----------------------
- package/json-c/json-c.hash                         |  2 +-
- package/json-c/json-c.mk                           |  2 +-
- 3 files changed, 2 insertions(+), 39 deletions(-)
-
-diff --git a/package/json-c/0001-json_pointer.c-initialize-idx.patch b/package/json-c/0001-json_pointer.c-initialize-idx.patch
-deleted file mode 100644
-index 3dbe0b4067..0000000000
---- a/package/json-c/0001-json_pointer.c-initialize-idx.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 7ff7eab603611c65b3110dcb1b0caf5cc68b07a3 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 8 Nov 2023 22:42:48 +0100
--Subject: [PATCH] json_pointer.c: initialize idx
--
--Fix the following build failure with gcc 5:
--
--/home/thomas/autobuild/instance-2/output-1/build/json-c-0.17/json_pointer.c: In function 'json_pointer_result_get_recursive':
--/home/thomas/autobuild/instance-2/output-1/build/json-c-0.17/json_pointer.c:193:25: error: 'idx' may be used uninitialized in this function [-Werror=maybe-uninitialized]
--    res->index_in_parent = idx;
--                         ^
--
--Fixes:
-- - http://autobuild.buildroot.org/results/523b35a979d59121fe4e18c38171792b06233940/
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/json-c/json-c/pull/839
-----
-- json_pointer.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/json_pointer.c b/json_pointer.c
--index 89e9e21..0ac8aaa 100644
----- a/json_pointer.c
--+++ b/json_pointer.c
--@@ -158,7 +158,7 @@ static int json_pointer_result_get_recursive(struct json_object *obj, char *path
--                                              struct json_pointer_get_result *res)
-- {
-- 	struct json_object *parent_obj = obj;
---	size_t idx;
--+	size_t idx = 0;
-- 	char *endp;
-- 	int rc;
-- 
---- 
--2.42.0
--
-diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
-index c9bb8c708b..88bb49cb9d 100644
---- a/package/json-c/json-c.hash
-+++ b/package/json-c/json-c.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/json-c/json-c/wiki
--sha256  7550914d58fb63b2c3546f3ccfbe11f1c094147bd31a69dcd23714d7956159e6  json-c-0.17.tar.gz
-+sha256  876ab046479166b869afc6896d288183bbc0e5843f141200c677b3e8dfb11724  json-c-0.18.tar.gz
- # Locally calculated
- sha256  74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
-diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
-index 68401433b4..254b6fd838 100644
---- a/package/json-c/json-c.mk
-+++ b/package/json-c/json-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JSON_C_VERSION = 0.17
-+JSON_C_VERSION = 0.18
- JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases
- JSON_C_INSTALL_STAGING = YES
- JSON_C_LICENSE = MIT
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
