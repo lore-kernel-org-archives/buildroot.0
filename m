@@ -4,93 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44037E77198
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jan 2025 21:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44B57E77197
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jan 2025 21:31:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2B9761081;
-	Tue,  7 Jan 2025 21:23:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5C32600C7;
+	Tue,  7 Jan 2025 21:31:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yfmk0m16kDZh; Tue,  7 Jan 2025 21:23:20 +0000 (UTC)
+ id br90mfH5ampk; Tue,  7 Jan 2025 21:31:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD98161020
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D95296059E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD98161020;
-	Tue,  7 Jan 2025 21:23:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B03436B
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 21:23:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D95296059E;
+	Tue,  7 Jan 2025 21:31:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AA1BA1EB8
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 21:31:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 901E740424
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 21:23:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B37D6059E
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 21:31:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZzGILOdnRTWX for <buildroot@buildroot.org>;
- Tue,  7 Jan 2025 21:23:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:868:100:600::217; helo=shout02.mail.de;
- envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F3BBB4011C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3BBB4011C
-Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F3BBB4011C
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 21:23:15 +0000 (UTC)
-Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
- by shout02.mail.de (Postfix) with ESMTP id 016F3240C91;
- Tue,  7 Jan 2025 22:23:13 +0100 (CET)
-Received: from smtp01.mail.de (smtp02.bt.mail.de [10.0.121.212])
- by postfix03.mail.de (Postfix) with ESMTP id CC77326044B;
- Tue,  7 Jan 2025 22:23:13 +0100 (CET)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id B890B240C91;
- Tue,  7 Jan 2025 22:23:11 +0100 (CET)
-To: Han Gao <rabenda.cn@gmail.com>
-Cc: buildroot@buildroot.org, Drew Fustini <dfustini@tenstorrent.com>,
- Drew Fustini <drew@beagleboard.org>, robertcnelson@beagleboard.org,
- jkridner@beagleboard.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 07 Jan 2025 22:22:08 +0100
-Message-ID: <3335914.44csPzL39Z@kilian-laptop>
-In-Reply-To: <CAAT7Ki9Y3ZfcbnQnYytgUon6iY8P8o6o2YXCXOeTw++gsoHJUg@mail.gmail.com>
-References: <20250101205435.1513140-1-kilian.zinnecker@mail.de>
- <10590208.nUPlyArG6x@kilian-laptop>
- <CAAT7Ki9Y3ZfcbnQnYytgUon6iY8P8o6o2YXCXOeTw++gsoHJUg@mail.gmail.com>
-MIME-Version: 1.0
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
-X-purgate: This mail is considered clean (visit https://www.eleven.de for
- further information)
-X-purgate: clean
-X-purgate-size: 4546
-X-purgate-ID: 154282::1736284993-3953D89E-E2A2FE87/10/3626336762
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1736284993;
- bh=MDOpnVBzbSiV6odrAqdAKYYuTy/E1oLPQUNIZYfKj1U=;
- h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=CKuNYm3y9wvIvuH9a2Imq7H1ChFsTnxGo0qERxM5TaMuW8P3gCXEzVSq9xQ4ndubS
- 8C32t+Im5QVCGbYXmqfqFA8sxEhjBqq2kW8Uz3MoGN9E4scBIHVD3UOyWk8W3zgKvt
- hRA4NC0BVo13YViaNTfNC+Mh3OJEymZOdjsmf/uL5z6wPEew7QOfeKNs0nliwpSDds
- V39Y29Lvch3+1cjrLrzBEh1Tx+hAcwApHAhiIzvR5WyaaJSFzKZO9P1G/ovF7LSjJq
- KFp4+pc/l4GOTo8sPRE6+8XE/nBDQpUMfO/yp4AClPuVfspKm6jLg4wMfeS7yUugM7
- gys7U7AP6+3gQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mail.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
- header.s=mailde202009 header.b=CKuNYm3y
-Subject: Re: [Buildroot] [PATCH v6 0/2] Add board support for the
- BeagleV-Ahead
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tH_MRPLalEUp for <buildroot@buildroot.org>;
+ Tue,  7 Jan 2025 21:31:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2DE560615
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A2DE560615
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 21:31:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9A44283D11; Tue,  7 Jan 2025 21:31:46 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 7 Jan 2025 22:13:36 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c994deab9fd357af0c1afadeba0944fe6322c073
+X-Git-Newrev: b26bd08fc4d84c9dbbe4793422c790c9a9d136a6
+X-Patchwork-Hint: ignore
+Message-Id: <20250107213146.9A44283D11@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tzdata: bump version to 2024b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,110 +58,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
-Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Han,
+commit: https://git.buildroot.net/buildroot/commit/?id=b26bd08fc4d84c9dbbe4793422c790c9a9d136a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[--SNIP--]
+Release notes:
+https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/IZ7AO6WRE3W3TWBL5IR6PMQUL433BQIE/
 
-> > Furthermore, there is now a repo, containing the "Xuantie-bins", which has
-> > a LICENSE file in it[1]! I switched to using that repository. As it is a
-> > couple of 100MBs large, I changed the package makefile to only fetch the
-> > needed binaries and the LICENSE file. Hence, I prepared a 7th iterartion
-> > of the board.
-> Regarding the license of xuantie-bin[1], the xuantie team thinks it
-> should be released under the apache license, but I doubt if this
-> applies to binary files?
+Updated the hash URL.
 
-I am not sure, but I assumed the Apache License could also cover binaries, 
-i.e., such that they may be redistributed? Can someone shed a bit light on 
-this?
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> For another binary, please do not use the version from the
-> xuantie-yocto repository. This is v0.9.5 SDK.
-> The revyos repository has released v2.0.2 SDK, which needs to be used
-> in conjunction with it.
-> 
-> The behavior of the aon has been modified in the SDK 1.4.0 version update.
-
-Thanks for the information! Do you refer to the binaries in this repository, 
-here:
-
-https://github.com/revyos/th1520-boot-firmware/tree/master/addons/boot
-
-I could switch to using those, but again, I would need some information about 
-the license of these binaries inside the repository, e.g., via a LICENSE file. 
-It is important, that people are allowed to use the binaries and redistribute 
-images containing them. Would it be possible, that a license is added? E.g., 
-Rockchip added this license to a repository, which contains binary blobs for 
-their SoCs:
-
-https://github.com/rockchip-linux/rkbin/blob/master/LICENSE
-
-> > However, I have further questions, I wanted to ask before sending a v7:
-> > There exist vulnerabilities reported for the board's SoC, e.g.,
-> > "Ghostwrite"[2]. How would be a proper way to deal with such issues?
-> > Specifically regarding Ghostwrite the authors say, that to mitigate one
-> > would have to disable the SoCs vector extension. However, the only way I
-> > am currently aware to do that is to disable the SoC's vendor extensions
-> > all toghether (using the "theadisaee" bit in the "mxstatus" register). If
-> > I do so, I do get a kernel oops upon booting, as the kernel is executing
-> > some vendor specific instructions. Is there a proper way to disable the
-> > use of the vendor specific instructions by the kernel, which does not
-> > introduce other issues? Or alternatively would it be ok to only mention
-> > the vulnerability in the board's readme, (ofc. including links and CVEs),
-> > stating that the board support does not fix theses issues?
-> > 
-> > [1] https://github.com/XUANTIE-RV/xuantie-yocto
-> > [2] https://ghostwriteattack.com/
-> > [3]
-> > https://elixir.bootlin.com/linux/v6.12.6/source/arch/riscv/errata/thead/
-> > errata.c
-> 
-> The mainline kernel does not support xtheadvector yet, so it is not
-> affected by Ghostwrite.
-> I think the way to turn it off is to delete the xtheadvector
-> description in the dts, but it doesn't exist now, so don't worry about
-> it.
-
-From my understanding of "Ghostwrite", it is not sufficient, that the kernel 
-does not support any xtheadvector instructions: From my understanding, as long 
-as the xtheadvector extension is activated, any userspace program could 
-execute xtheadvector instructions, including the ones, which may be missused 
-for a privilege escalation. Hence I think that as a mitigation the 
-xtheadvector would actually have to be disabled, e.g., if possible by setting 
-proper configuration bits. I attempted that, but so far I could only identify a 
-configuration bit, which disables all vendor extension instructions all 
-toghether: "theadisaee". If I disable all vendor extension instructions, I get 
-a kernel oops, because the kernel is executing some vendor extension 
-instructions[1] - not from xtheadvector, but e.g., from xtheadcmo. So I am not 
-sure how to deal with that. Either, there is some configuration bit, which can 
-precisely only disable the xtheadvector extension alone. Or maybe one can 
-configure/patch the kernel to not use any vendor extension instruction, without 
-introducing other issues. Or else I put a notice into the boards readme, that 
-the board support may be susceptible to "Ghostwrite", if that is acceptable 
-for a board support in buildroot? Any help, how I can and should deal with the 
-issue appreciated!
-
-Thanks and best regards,
-Kilian
-
-[1] https://elixir.bootlin.com/linux/v6.12.6/source/arch/riscv/errata/thead/
-errata.c
-
-
-
-
-
-
-
-
-
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index d353bc4410..3f84ec4f87 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,4 +1,4 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2024-February/000081.html
+-sha512  1f09f1b2327cc9e1afc7e9045e83ee3377918dafe1bee2f282b6991828d03b3c70a4d3a17f9207dfb1361bb25bc214a8922a756e84fa114e9ba476226db57236  tzdata2024a.tar.gz
++# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/IZ7AO6WRE3W3TWBL5IR6PMQUL433BQIE/
++sha512  0d86686e215672343debb3471b7e7ccb8a27f063f085c9b532d5e0470377843daa0dfb6aee0db4fb9068dd52810c69aeee914a1a7c7e603fdecda7e855020193  tzdata2024b.tar.gz
+ # Locally computed:
+ sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index e367205277..ba53ae7c38 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TZDATA_VERSION = 2024a
++TZDATA_VERSION = 2024b
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
+ TZDATA_SELINUX_MODULES = tzdata
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
