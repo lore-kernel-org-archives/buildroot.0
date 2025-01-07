@@ -1,152 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 310C0E77197
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jan 2025 15:15:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5271E77197
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jan 2025 15:54:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C74A400B7;
-	Tue,  7 Jan 2025 15:15:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hyJTzF7PTgtc; Tue,  7 Jan 2025 15:15:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E1B1402FB
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E1B1402FB;
-	Tue,  7 Jan 2025 15:15:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EA7166B
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 15:15:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B400D60742
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 15:15:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 89B04606C1;
+	Tue,  7 Jan 2025 15:54:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9P9hKVKLa2eH for <buildroot@buildroot.org>;
- Tue,  7 Jan 2025 15:15:34 +0000 (UTC)
+ id FAK8Mfmb_Dud; Tue,  7 Jan 2025 15:54:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7FEE60704
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7FEE60704;
+	Tue,  7 Jan 2025 15:54:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AA3046B
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 15:54:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E7FD403DE
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 15:54:23 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bWIiOkV1eRbG for <buildroot@buildroot.org>;
+ Tue,  7 Jan 2025 15:54:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2417::613;
- helo=nam12-dm6-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 32C3B60704
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32C3B60704
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam12on20613.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2417::613])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 32C3B60704
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 15:15:33 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wrr2u3JBkK0YrGBTE4kFEu7ToYoiNAAx+f/xH7qEusyPUvsYlqcAkqs2OhnGsr3jStHH4aqM0NXDTYLxFfJ+Z9jlmwh2r78OXtvGypJ6HDtpf0QlCu2wWHGUEcmBjpAi1SZWFQ+XM0CLIBEv0tTMWpuPsrBq9Dzv65fdo0p2pIPsbmuuGkyVkW/zKktycCsYYo0uJ5Qe+POYx50dJIuVlFVE2CyKz9uQm1B+8TzR1V7Ma7EHZV1gRJ1YeQLpOZkfHSBgf4MJaPb6WICtK5B7wV5ypNBjGlKqTmhW1AWeZN0xHZqTIKlrB8WuZ4JgM7S3WsCgTL8Qsy0b88iVPbMxVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IcDhDB9uH6RdbWa/BVDAJfQW/j5u+chThE4i8U27j1U=;
- b=UyTLBL7UN64wxNwRWscgZJ8e+v0BaUrdRccf7/Uo2N4xfyvtHm7pXbhiWVeWtaLEIwQMvAtyjBfZgdoHKblRw9/Aa281TuR+vMBW+//sujmh/d7BPiccuCY+oMvAgL0+0jt/oMyKq7meuQczgEnyGd1awDpVkkaHDYd2QygKpdurj8iaRcynTmXdnDEqLEl+/atb1Z4CiaPkYcj02zmsUDo4DIHAIuRguXqxJ2r3JffjlO/P+LwLK3Sdi18y1TR4mF7CgA0cDZBLNqKIeMhTMW8FjtjI1abNxb0FumLt3KWmKqO8ikbMDk5EzItrleZ6BmclwsrSboXzYCwGw8ugeg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from BY3PR03CA0028.namprd03.prod.outlook.com (2603:10b6:a03:39a::33)
- by PH7PR12MB5902.namprd12.prod.outlook.com (2603:10b6:510:1d6::8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8314.17; Tue, 7 Jan
- 2025 15:15:28 +0000
-Received: from CO1PEPF000066E6.namprd05.prod.outlook.com
- (2603:10b6:a03:39a:cafe::63) by BY3PR03CA0028.outlook.office365.com
- (2603:10b6:a03:39a::33) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8314.18 via Frontend Transport; Tue,
- 7 Jan 2025 15:15:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1PEPF000066E6.mail.protection.outlook.com (10.167.249.4) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8335.7 via Frontend Transport; Tue, 7 Jan 2025 15:15:26 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 7 Jan
- 2025 09:15:25 -0600
-Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Tue, 7 Jan 2025 09:15:24 -0600
-To: <buildroot@buildroot.org>
-Date: Tue, 7 Jan 2025 15:15:20 +0000
-Message-ID: <20250107151521.1655280-1-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
+ client-ip=2607:f8b0:4864:20::631; helo=mail-pl1-x631.google.com;
+ envelope-from=tim.gover@raspberrypi.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DEA9940323
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEA9940323
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com
+ [IPv6:2607:f8b0:4864:20::631])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DEA9940323
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 15:54:17 +0000 (UTC)
+Received: by mail-pl1-x631.google.com with SMTP id
+ d9443c01a7336-21619108a6bso215967665ad.3
+ for <buildroot@buildroot.org>; Tue, 07 Jan 2025 07:54:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1736265257; x=1736870057;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=KtQHSxiD+kOPfgwfC6sXB7NY1k6SuH8LxHYp99xsAqw=;
+ b=NRrmDla6R/tDjNbHmove/ZzW2yTdybgfL1AdgI+4Z/UkIbNm2mNJvrI21hYJqmZ8A2
+ AlWivgmBEj2O9qC99osg0CayRAiBvgSYbbkqKZunpWlO4lCeFKmRa7jL1zNvHhcMr9vv
+ cGweAJFnK6ryx7BswL9tvBYPUOElUCnS8bEXRAsw8hdlzbIoWuarKVzByjxo5f2BlbNs
+ rCZGRgoJV2z52SR4X3dyaWD9d9uFJL3EgjIWeqg4GHh1cHYvtkd+5vtwMUolwA8kAIF0
+ a7EYkrgpwEvTMOkyIFbQV46L4WWJed2skbw7azzYwt3CwAjvN3krrzfbnsDOFCNam+17
+ iQaw==
+X-Gm-Message-State: AOJu0YwyT3s+g9zn/qDfpTgr+MbOeXcufnPPPpXA4QI7E7LdUiOHS6b2
+ ajeqtyRQqbpODp1AF7wEOiWjOVaasNZXq9Uwn/Fq5CFOQkacG3N+5cJsejDb8uoUWnMfmnlvMFN
+ 37Lbak06H6tZp4qpF13Vhhu5QpkXCjVjVeK4xYQ==
+X-Gm-Gg: ASbGncvwVMgaelr1ls9ySTfYyxu1Pa4XqCi2hPMpHSEDlqQ8ah8YcEjg1FF+VnNDk5Z
+ RCwOeCtYDJCwf1TonJbmWgvQLkCSAqK6ArUtkPLZProKXtwtu+fxEbBuzpDQQGCP1D8yKrg==
+X-Google-Smtp-Source: AGHT+IEu6iCscKv7Kc5b3g+kZhkYUse6we9GD7L85ZcrzxLQen1R8xs2IW7ZXG2ELSeJwy86FHK602sEBJGocjsJkPY=
+X-Received: by 2002:a05:6a20:1582:b0:1e0:d5f3:f3ed with SMTP id
+ adf61e73a8af0-1e5e048ab3bmr97805258637.19.1736265257066; Tue, 07 Jan 2025
+ 07:54:17 -0800 (PST)
 MIME-Version: 1.0
-Received-SPF: None (SATLEXMB03.amd.com: neal.frager@amd.com does not designate
- permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000066E6:EE_|PH7PR12MB5902:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9d1b4b87-8512-43ea-e622-08dd2f2e1d5a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|376014|1800799024|36860700013|82310400026|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?Hz3oKi8DaRmZWcLFLoHeIB+pu0QT+vdGjk89bvceSZ41gFuAlB8qNSLnynnF?=
- =?us-ascii?Q?xNVUuvAPPrPpSY6vCjYThOd3HPEO4s1sZdAyyoLtbFkuhf3nBjeSv7djgVgE?=
- =?us-ascii?Q?nLcWP+888LCV3NbThZm4EwBtdRreVzCbnKM+rFkcg14nGH03aFl6Vv9mhK4K?=
- =?us-ascii?Q?0t2Oi71nKi0MBi9QjBFPHpVFy1sn32yqRa5Kqk79BqgWtyPUQwcM0emuaXiM?=
- =?us-ascii?Q?2oEwJKbME+rOApP3b0Jve08uxxynDT0UFAPTCTjBWi+r61b259rLjl82uLZ6?=
- =?us-ascii?Q?cBryOJAbEiMg3/AV03PlgzGTTBC5tqcpBwKE+/9ZF/ybK8v3NznKUjxZsM7M?=
- =?us-ascii?Q?FI+lz8COPGt1uLNbCXUew0UMZ3DAHa03lB7Kk1a0awYEsBlhbMybLTeYTIoI?=
- =?us-ascii?Q?QDyqvkOuE3l0pPjo3ajFCk4Mpy62dv8Rm7fesPZhXJKF06YLzfkOc4LW2l+c?=
- =?us-ascii?Q?QUmkK3DyUPPXmmZINsEu4rXezZymNlYe29ty2ZC3tkZeO7Nq5lSRoxdXtJeT?=
- =?us-ascii?Q?jga1jb6tyqQ3JhPPGSZI6+LzUhTSBib9XJL8AcUTM2D852jtuzVqPvKk4W7X?=
- =?us-ascii?Q?JCXKlwh/ZJDke7BHqnAXOaBLunxgdsA1lGhKeWBOIa5yZfPEaBaVA2nCR6Bw?=
- =?us-ascii?Q?RuBbfNWtRvMWv2BG3P+WJ+liE2nOTHbUr8KAdOioaIM4krKlAeLVtUNAh/2x?=
- =?us-ascii?Q?1gYWjz5Ox1F5HwlK7JZAb1EVi6rIsvj/7jij9luWg8ywmKl1TzM54s+Df8Ar?=
- =?us-ascii?Q?L1AE6UUgzDU5A+IsYtcGjVP/S5dSlXE6x3SVeuTYHXUZi9VOjFr8ZuNluW7C?=
- =?us-ascii?Q?O0QBOjHf1nAsHX95PPvRbf2+L5iBEIWI7GQu1xbe9RtxlOMcrcAdXSfiICAr?=
- =?us-ascii?Q?rqqTb+zz055Fev3PeBqGw022bQoM/eDSilFY+FL9HX97JpvXRY7igiTu0ZtQ?=
- =?us-ascii?Q?QBjMiH987CUaha4GmwkdRMRitzp8VanzwtWhcf7zVctwgb9bkm8fHr4rj4Ky?=
- =?us-ascii?Q?rmrZ8X8LlLWRLg8pBJqT4k8EP0lHsc2LMdUyXFw4wgEbVbsGB2xzGZBRBFFC?=
- =?us-ascii?Q?yfyoW4O1IG/OQ2+UR/lAwpuupnrttPMftot+tu1DVrq3bOjxK826kYHgVuEt?=
- =?us-ascii?Q?948XXFxfQCKdh7P/vMDFcHcAyHDaHCJa+kAropUdlYnXm/O9frzb4aOVqKbB?=
- =?us-ascii?Q?AgWPpL7JZUVHNQbJi7lBrgo/vB58pyiqWZBVAE9cTNo4hJac3yKtN1ksmhFi?=
- =?us-ascii?Q?jy4L1x78kX1zfaDK9DepE3FDswIltyBO8F90Y3rLVRrLGeSQkRnbGHHh0lOr?=
- =?us-ascii?Q?LD3FyVJvsiEcgWnzo1sctvKYO3DaZg24Pj+o8axCg16+E/v4RD7T3RVg8gDA?=
- =?us-ascii?Q?ez8woN03UzK9eKLSk+v3ez6xtgNsA47lo9VBZGBRxukXEtkYhraweOcBsr7e?=
- =?us-ascii?Q?kG59wmgPS+XcwPfalWQbOosQfq4JCOQEXZIELd9BTCh0J6Rn6EvvaBI0FXor?=
- =?us-ascii?Q?c+QIQ9Si5vbWHallRv6PwFA5LBwvA0NAJ4Sy?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(376014)(1800799024)(36860700013)(82310400026)(41080700001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2025 15:15:26.2257 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d1b4b87-8512-43ea-e622-08dd2f2e1d5a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000066E6.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5902
+References: <20241216125800.219227-1-tim.gover@raspberrypi.com>
+ <20241216125800.219227-2-tim.gover@raspberrypi.com>
+ <20241230000816.34cc40be@windsurf>
+In-Reply-To: <20241230000816.34cc40be@windsurf>
+Date: Tue, 7 Jan 2025 15:54:07 +0000
+X-Gm-Features: AbW1kvY83IXFaKg_zvl85xukrwF5KP6h_ZpDrbFqSB0PnBLW_Xlah6osG5BrK3s
+Message-ID: <CAAvKZ67mYqJtFF=oVQpRjjLVObyqvfeGgD=K3se+p65LxstYYQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Tim Gover via buildroot <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IcDhDB9uH6RdbWa/BVDAJfQW/j5u+chThE4i8U27j1U=;
- b=X2Ce71bQgo9kMiolVprLlis9CiXPx6+YO5lVZ6xAqlGdovljAKmeN9IKWZU9hp1y7vjQf/m62HaMn8fWcN8o8w7B+IZTR0qEVp/AOZZIvn+BM0kg2Gb1Xjx7zFWL2rXHBDWvxC4tKrhdnxi+KMOkivkOMZNimTQx743uC4f7pOY=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=X2Ce71bQ
-Subject: [Buildroot] [PATCH v1 1/2] boot/xilinx-prebuilt: bump default to
- xilinx_v2024.2_update1
+ d=raspberrypi.com; s=google; t=1736265257; x=1736870057; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=KtQHSxiD+kOPfgwfC6sXB7NY1k6SuH8LxHYp99xsAqw=;
+ b=W1Wwj0LrorG8CDuCbY5qx8mDCk3Z1r8QVhK5hvZbhdUw20mQde/Qbh5jqjP9B8JdWf
+ /QjtbN3mB7qujoYPVefBOiWUTGtJk70aKRkwTMIixDy34tUrqgtJ+Qbbc1y0wWwYzuYD
+ 7AsvM+bGf6TcN9rLEa8DPJM5iEqvs60Sp/47jO5Mq8qCFcIy0HWmBnYKXlYIZ/9blcEJ
+ Z/TcYRT9PJj6GxCa2JnpIPigekOjNrBuZzO80KqKWOIKfmyr7vF1ReXLM3Bd1BkSSbZ2
+ 630ddh5umYcBnFQ++K6ozxTkMae08DsdWzBplIYeirFKQTCBWiJykPTF/ol4524E1oEk
+ 2pTA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=raspberrypi.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=raspberrypi.com header.i=@raspberrypi.com
+ header.a=rsa-sha256 header.s=google header.b=W1Wwj0Lr
+Subject: Re: [Buildroot] [PATCH 1/1] package/rpi-eeprom: New package for RPi
+ bootloader tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -158,55 +103,187 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- brandon.maier@collins.com, ju.o@free.fr, thomas.petazzoni@bootlin.com,
- Neal Frager <neal.frager@amd.com>, romain.naour@smile.fr, michal.simek@amd.com
+From: Tim Gover via buildroot <buildroot@buildroot.org>
+Reply-To: Tim Gover <tim.gover@raspberrypi.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch bumps the default version of xilinx-prebuilt to
-xilinx_v2024.2_update1.  For some reason, the original xilinx_v2024.2
-release tag was missing the kria boards.  There is no difference between
-the xilinx_v2024.2 and the xilinx_v2024.2_update1 release tags other than
-the fact that the kria boards are included.
+On Sun, 29 Dec 2024 at 23:08, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Tim,
+>
+> Thanks a lot for your submission, and sorry for the delay in getting
+> back to you! See below some feedback.
+>
+> On Mon, 16 Dec 2024 12:58:00 +0000
+> Tim Gover via buildroot <buildroot@buildroot.org> wrote:
+>
+> > This package adds the host and OS tools for configuring
+> > the bootloader and building/signing tools for signed boot.
+> >
+> > Normally, the host tools would be invoked from a post-build
+> > script to sign the boot.img file. The device tools would be
+> > invoked from a custom on-device software update process e.g.
+> > using rpi-eeprom-digest to verify the signature of a boot.img
+> > file against a public key retrieved from the EEPROM.
+>
+> Thanks for the good explanation of why both a target and host package
+> are needed.
+>
+> >  configs/raspberrypi5_defconfig     |  1 +
+> >  package/Config.in                  |  1 +
+> >  package/Config.in.host             |  1 +
+> >  package/rpi-eeprom/Config.in       |  9 +++++++++
+> >  package/rpi-eeprom/Config.in.host  |  9 +++++++++
+> >  package/rpi-eeprom/rpi-eeprom.hash |  1 +
+> >  package/rpi-eeprom/rpi-eeprom.mk   | 27 +++++++++++++++++++++++++++
+> >  7 files changed, 49 insertions(+)
+> >  create mode 100644 package/rpi-eeprom/Config.in
+> >  create mode 100644 package/rpi-eeprom/Config.in.host
+> >  create mode 100644 package/rpi-eeprom/rpi-eeprom.hash
+> >  create mode 100644 package/rpi-eeprom/rpi-eeprom.mk
+>
+> Could you please add an entry in the DEVELOPERS file for this new
+> package?
+>
+> > diff --git a/configs/raspberrypi5_defconfig b/configs/raspberrypi5_defconfig
+> > index 8cbd533eee..6d364ad32f 100644
+> > --- a/configs/raspberrypi5_defconfig
+> > +++ b/configs/raspberrypi5_defconfig
+> > @@ -31,3 +31,4 @@ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> >  BR2_PACKAGE_HOST_GENIMAGE=y
+> >  BR2_PACKAGE_HOST_KMOD_XZ=y
+> >  BR2_PACKAGE_HOST_MTOOLS=y
+> > +BR2_PACKAGE_HOST_RPI_EEPROM=y
+>
+> I'd prefer to see this done as a separate commit (possibly in the same
+> patch series). However, the bigger question is why is this only done
+> for RPi5, and not the other RaspberryPi? Is there anything that makes
+> this tool RPi5-specific?
 
-Now that the release tag includes all the boards, it is possible to bump
-the default version from xilinx_v2024.1 to xilinx_v2024.2_update1.
+The tools are common to the Pi4 and Pi5 family. In retrospect there
+was no need for the
+raspberrypi5_defconfig to be changed to enable this by default because
+right now most
+systems won't use this.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
----
- boot/xilinx-prebuilt/Config.in            | 2 +-
- boot/xilinx-prebuilt/xilinx-prebuilt.hash | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> > diff --git a/package/rpi-eeprom/Config.in b/package/rpi-eeprom/Config.in
+> > new file mode 100644
+> > index 0000000000..02e1109264
+> > --- /dev/null
+> > +++ b/package/rpi-eeprom/Config.in
+> > @@ -0,0 +1,9 @@
+> > +config BR2_PACKAGE_RPI_EEPROM
+> > +     bool "rpi-eeprom"
+> > +     select BR2_PACKAGE_LIBOPENSSL
+>
+> Why is openssl needed? You don't even depend on it in the .mk file.
+>
+> Also, you should directly select BR2_PACKAGE_LIBOPENSSL. But you should
+> select BR2_PACKAGE_OPENSSL, and then if only openssl is supported (and
+> not libressl), you also need to select
+> BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL. openssl is kind of a special
+> beast, as it's a virtual package with two implementations: libopenssl
+> and libressl.
+>
+> > +     select BR2_PACKAGE_PYTHON3
+> > +     select BR2_PACKAGE_PYTHON_PYCRYPTODOMEX
+>
+> Are these runtime dependencies? If so:
+>
+>         select BR2_PACKAGE_PYTHON3 # runtime
+>         select BR2_PACKAGE_PYTHON_PYCRYPTODOMEX # runtime
+>
+> > +     help
+> > +       Raspberry Pi bootloader tools.
+>
+> A slightly longer help text with more details would make sense, perhaps
+> borrowing some details from your commit log on the use case (here for
+> the target package).
+>
+> > +       https://github.com/raspberrypi/rpi-eeprom
+> > diff --git a/package/rpi-eeprom/Config.in.host b/package/rpi-eeprom/Config.in.host
+> > new file mode 100644
+> > index 0000000000..3d36d7bec8
+> > --- /dev/null
+> > +++ b/package/rpi-eeprom/Config.in.host
+> > @@ -0,0 +1,9 @@
+> > +config BR2_PACKAGE_HOST_RPI_EEPROM
+> > +     bool "host rpi-eeprom"
+> > +     select BR2_PACKAGE_LIBOPENSSL
+> > +     select BR2_PACKAGE_PYTHON3
+> > +     select BR2_PACKAGE_PYTHON_PYCRYPTODOMEX
+>
+> These selects don't make sense, as you're selecting target packages...
+> while we're here in the option enabling the host variant of rpi-eeprom.
+> Most likely you don't need any "select" here.
+>
+> > +     help
+> > +       Raspberry Pi bootloader tools.
+> > +
+> > +       https://github.com/raspberrypi/rpi-eeprom
+> > diff --git a/package/rpi-eeprom/rpi-eeprom.hash b/package/rpi-eeprom/rpi-eeprom.hash
+> > new file mode 100644
+> > index 0000000000..27cd0bfdf3
+> > --- /dev/null
+> > +++ b/package/rpi-eeprom/rpi-eeprom.hash
+> > @@ -0,0 +1 @@
+> > +sha256  90970fd9a72c29449a8f4f27577395a1fb418f87b979adeb81d51300f959dab9  rpi-eeprom-fe7bfc720165464d9dfe2f85fe090ca22a625bd7.tar.gz
+>
+> Please add a comment on where this hash comes from. Most likely:
+>
+> # Locally calculated
+>
+> Also, please add a hash for the LICENSE file (see other packages).
+>
+> > diff --git a/package/rpi-eeprom/rpi-eeprom.mk b/package/rpi-eeprom/rpi-eeprom.mk
+> > new file mode 100644
+> > index 0000000000..db1634315f
+> > --- /dev/null
+> > +++ b/package/rpi-eeprom/rpi-eeprom.mk
+> > @@ -0,0 +1,27 @@
+> > +################################################################################
+> > +#
+> > +# rpi-eeprom
+> > +#
+> > +################################################################################
+> > +
+> > +RPI_EEPROM_VERSION = fe7bfc720165464d9dfe2f85fe090ca22a625bd7
+> > +RPI_EEPROM_SITE = $(call github,raspberrypi,rpi-eeprom,$(RPI_EEPROM_VERSION))
+> > +RPI_EEPROM_LICENSE = BSD-3-Clause
+> > +RPI_EEPROM_LICENSE_FILES = LICENSE
+> > +
+> > +HOST_RPI_EEPROM_INSTALL = YES
+> > +RPI_EEPROM_INSTALL = YES
+>
+> Neither of these are needed/have an effect.
+>
+> You will most likely need:
+>
+> HOST_RPI_EEPROM_DEPENDENCIES = host-python3 host-python-pycryptodomex
+>
+> indeed, for the host package, we need the package to be fully
+> functional right after its installation, as other packages depending on
+> it might use it right after.
+>
+> However, for the target package, we only care that everything is on the
+> target once it runs, hence select BR2_PACKAGE_PYTHON3 + select
+> BR2_PACKAGE_PYTHON_PYCRYPTODOMEX in Config.in is sufficient.
+>
+> Could you have a look at adjusting those details and submitting a
+> second iteration of this patch?
 
-diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
-index 94ef3dd111..8e5918ed4e 100644
---- a/boot/xilinx-prebuilt/Config.in
-+++ b/boot/xilinx-prebuilt/Config.in
-@@ -10,7 +10,7 @@ if BR2_TARGET_XILINX_PREBUILT
- 
- config BR2_TARGET_XILINX_PREBUILT_VERSION
- 	string "prebuilt version"
--	default "xilinx_v2024.1"
-+	default "xilinx_v2024.2_update1"
- 	help
- 	  Release version of Xilinx firmware.
- 	  Must be xilinx_v2023.1 or newer.
-diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.hash b/boot/xilinx-prebuilt/xilinx-prebuilt.hash
-index c955cd79f5..ea072378a8 100644
---- a/boot/xilinx-prebuilt/xilinx-prebuilt.hash
-+++ b/boot/xilinx-prebuilt/xilinx-prebuilt.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  7abcba4e0e44e3a4adf9c1f971d918575226d7604dfd64a386baaa00c1c6c35f  xilinx-prebuilt-xilinx_v2024.1.tar.gz
-+sha256  86ee9629366aa8c0d70b87202152a793804ed4090e3a6fdac4eaf855bcc4d458  xilinx-prebuilt-xilinx_v2024.2_update1.tar.gz
--- 
-2.25.1
+Thanks for the feedback. I'll endeavor to make those changes as soon
+as possible.
 
+I need to think a bit more about the weak runtime dependencies
+(optional features) but
+will probably recommend including real openssl because the rpi-eeprom-digest
+script launches the openssl binary to verify a signature.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
