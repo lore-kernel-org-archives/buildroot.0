@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5B01E77197
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jan 2025 21:06:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34934E77197
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jan 2025 21:09:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFFB460B55;
-	Tue,  7 Jan 2025 21:06:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD21260BB2;
+	Tue,  7 Jan 2025 21:09:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nQ-hEiWY3pKQ; Tue,  7 Jan 2025 21:06:41 +0000 (UTC)
+ id G-FdaQEj5XM8; Tue,  7 Jan 2025 21:09:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C28EB60B9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECEE760BBE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C28EB60B9B;
-	Tue,  7 Jan 2025 21:06:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 16C8E1EB8
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 21:06:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECEE760BBE;
+	Tue,  7 Jan 2025 21:09:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 432311EB8
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 21:09:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 01A7C60B9B
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 21:06:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3BB02402F0
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 21:09:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3FI_ogdsT6tW for <buildroot@buildroot.org>;
- Tue,  7 Jan 2025 21:06:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 17DDC60B55
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17DDC60B55
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 17DDC60B55
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 21:06:38 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id BC0E95FFB7;
- Tue,  7 Jan 2025 22:06:35 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:55738])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 07 Jan 2025 22:06:35 +0100
-MIME-Version: 1.0
-Date: Tue, 07 Jan 2025 22:06:35 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zLkwPEMoSWEA for <buildroot@buildroot.org>;
+ Tue,  7 Jan 2025 21:09:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49A6A40223
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 49A6A40223
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 21:09:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3AFA583CE3; Tue,  7 Jan 2025 21:09:24 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Akhilesh Nema <nemaakhilesh@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250106170715.176041-1-nemaakhilesh@gmail.com>
-References: <20250106170715.176041-1-nemaakhilesh@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <075b6a69f01be7591b611c2c32662702@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1736283996;
- bh=/sjXICCXMqxyDjlZGSjB+PnHqsnsumB9I0wAnyzNKiw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=GjHdL6gMeNDyM+RbAnD1R8gvnqU7E9nLTPlh2U29od6Eivf40mFfBmBotPL1CAMK7
- hODa9rf0DA7E/p7ET+6gR7dGmwRhXY10U2LBxYaHTSZijWaBU5PvC7i3E72QBUjY6v
- FQJsFPzWYPWNbKuR5GKOyMhBpmBAW13Oa6DdeLftrYYN9WTor6aAuCBcY8r8eBymfH
- RCOroXn/LZoe1aQvkvHL8j481GLxcCC/t0pt7CYZAOIPgM39FlvnhGwiEKv/D75pkX
- j4I+VZmKOq7DUxh0bvFLUsU7H5abrF6pG9IDdfwDpiQQcjThAMNLepg1F8fpDl9cvV
- GUqwpa8lJprcw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=GjHdL6gM
-Subject: Re: [Buildroot] [PATCH 1/1] package/iptables: bump version to 1.8.11
+To: buildroot@buildroot.org
+Date: Tue, 7 Jan 2025 22:07:47 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 83c37e62933cf1236f475ef14c300493fc93b21e
+X-Git-Newrev: 80f884e84375cac9f7e410e1d8d25ead3bef76bd
+X-Patchwork-Hint: ignore
+Message-Id: <20250107210924.3AFA583CE3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/logrotate: bump version to 3.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,18 +58,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 06/01/2025 18:07, Akhilesh Nema wrote:
-> Changelog - 
-> https://www.netfilter.org/projects/iptables/files/changes-iptables-1.8.11.txt
-> 
-> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=80f884e84375cac9f7e410e1d8d25ead3bef76bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Changelog - https://github.com/logrotate/logrotate/releases/tag/3.22.0
+
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/logrotate/logrotate.hash | 2 +-
+ package/logrotate/logrotate.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
+index cc466a6f4e..37cf85ff6d 100644
+--- a/package/logrotate/logrotate.hash
++++ b/package/logrotate/logrotate.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+-sha256  8fa12015e3b8415c121fc9c0ca53aa872f7b0702f543afda7e32b6c4900f6516  logrotate-3.21.0.tar.xz
++sha256  42b4080ee99c9fb6a7d12d8e787637d057a635194e25971997eebbe8d5e57618  logrotate-3.22.0.tar.xz
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index 3fed1b957f..9867835aeb 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LOGROTATE_VERSION = 3.21.0
++LOGROTATE_VERSION = 3.22.0
+ LOGROTATE_SOURCE = logrotate-$(LOGROTATE_VERSION).tar.xz
+ LOGROTATE_SITE = https://github.com/logrotate/logrotate/releases/download/$(LOGROTATE_VERSION)
+ LOGROTATE_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
