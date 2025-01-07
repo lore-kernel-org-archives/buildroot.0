@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 018BFE77197
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jan 2025 18:40:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15E7EE77197
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jan 2025 18:40:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9773B6069E;
-	Tue,  7 Jan 2025 18:40:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BDFEF402DC;
+	Tue,  7 Jan 2025 18:40:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wHr62QLkmlzB; Tue,  7 Jan 2025 18:40:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ESa6Q9cpaPzk; Tue,  7 Jan 2025 18:40:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 371A06074F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D8D640402
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 371A06074F;
-	Tue,  7 Jan 2025 18:40:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5C5CFDB4
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 18:40:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D8D640402;
+	Tue,  7 Jan 2025 18:40:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C24C57AA
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 18:40:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 578728109E
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 18:40:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF46940163
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 18:40:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4jbpP6lFYaEG for <buildroot@buildroot.org>;
- Tue,  7 Jan 2025 18:40:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF1A880F1C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AF1A880F1C
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 18:40:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A687683C5D; Tue,  7 Jan 2025 18:40:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yxAOFEilvm4I for <buildroot@buildroot.org>;
+ Tue,  7 Jan 2025 18:40:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A7E8640015
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7E8640015
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A7E8640015
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 18:40:43 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 7E24560136;
+ Tue,  7 Jan 2025 19:40:38 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:36614])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 07 Jan 2025 19:40:38 +0100
+MIME-Version: 1.0
+Date: Tue, 07 Jan 2025 19:40:38 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 7 Jan 2025 19:27:24 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ad67ba25e229978ec06d6a836f4ad9aa89c73d25
-X-Git-Newrev: 674da4417852b5effd8df141c57d38faa819d342
-X-Patchwork-Hint: ignore
-Message-Id: <20250107184018.A687683C5D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pppd: bump version to 2.5.2
+To: Akhilesh Nema <nemaakhilesh@gmail.com>
+Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>
+In-Reply-To: <20250105033159.4966-1-nemaakhilesh@gmail.com>
+References: <20250105033159.4966-1-nemaakhilesh@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <66b3b21bf87379cfbdff7fe00535e50b@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1736275240;
+ bh=No6Fls0zuu6dSVoofOJEpynpDzP/W7SYFfvxKNmb9R8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=rDXvO/TTWDl+DN1m928fsVbumAEi1g3QIuYHEKTJKSHBHW+xiCsOdWXJ2yMQTKr3k
+ n9mLSzQiw6CZ7BKxpQzJ/qk4iXzUrQI6FJEMjluPPxzZy1BDoblvCs0iYFHEry6wIQ
+ CdJN4C4Fs0GJPafMDShCrhxnWM6QbPXIbp0Hco7oKnWeHAsOHiA6FzUrtAwqXCCeBT
+ ekzWZOk7+t6y0SmpyLbHy4LRfJka0ofKLMRaASSikIyV+Fh4BeHsJycscUEQ1Gxr3f
+ KBadhbBaB98J/Os8quPi5Wv+PreIse8Tq2G7UocVhUarUIbf4TV0VktaEzhVskytVN
+ lMj6SPvwLKdQA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=rDXvO/TT
+Subject: Re: [Buildroot] [PATCH 1/1] package/pppd: bump version to 2.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,50 +82,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=674da4417852b5effd8df141c57d38faa819d342
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 05/01/2025 04:31, Akhilesh Nema wrote:
+> Release notes - https://github.com/ppp-project/ppp/releases/tag/v2.5.2
+> The tag now has a 'v' prefix instead of 'ppp-', so update that in the 
+> github macro
+> 
+> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 
-Release notes - https://github.com/ppp-project/ppp/releases/tag/v2.5.2
-The tag now has a 'v' prefix instead of 'ppp-', so update that in the github macro
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/pppd/pppd.hash | 2 +-
- package/pppd/pppd.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/pppd/pppd.hash b/package/pppd/pppd.hash
-index 92f036df58..1aec3f037c 100644
---- a/package/pppd/pppd.hash
-+++ b/package/pppd/pppd.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  c0537067bdff5f0b5d7a2fd1cca13c220f6dadc89183f23739a2cf9df49c68ca  pppd-2.5.1.tar.gz
-+sha256  d7457f0ff409cb2d7a0d8382ef6302520d664895ac5568cb3dce727d71a2a1f5  pppd-2.5.2.tar.gz
- sha256  5d588eb3b157d52112afea935c88a7ff9efddc1e2d95a42c25d3b96ad9055008  LICENSE.BSD
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL-2
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 4b65cf08d1..8d80675d15 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -6,8 +6,8 @@
- 
- # The tarball provided at https://download.samba.org/pub/ppp/ does not
- # include the license files yet so we use the github tarball.
--PPPD_VERSION = 2.5.1
--PPPD_SITE = $(call github,ppp-project,ppp,ppp-$(PPPD_VERSION))
-+PPPD_VERSION = 2.5.2
-+PPPD_SITE = $(call github,ppp-project,ppp,v$(PPPD_VERSION))
- PPPD_LICENSE = LGPL-2.0+, LGPL, BSD-4-Clause, BSD-3-Clause, GPL-2.0+
- PPPD_LICENSE_FILES = LICENSE.BSD LICENSE.GPL-2
- PPPD_CPE_ID_VENDOR = point-to-point_protocol_project
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
