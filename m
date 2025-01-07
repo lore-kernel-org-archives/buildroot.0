@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 930B6E77197
-	for <buildroot@archiver.kernel.org>; Tue,  7 Jan 2025 20:46:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84BEAE77197
+	for <buildroot@archiver.kernel.org>; Tue,  7 Jan 2025 20:47:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32FAA40200;
-	Tue,  7 Jan 2025 20:46:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P7v_T37ys_vo; Tue,  7 Jan 2025 20:46:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED82540207
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED82540207;
-	Tue,  7 Jan 2025 20:46:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 94EED7AA
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 20:46:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7666C6059E
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 20:46:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4EDE96059A;
+	Tue,  7 Jan 2025 20:47:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lPc1XU7QdwmA for <buildroot@buildroot.org>;
- Tue,  7 Jan 2025 20:46:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE8E66059A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AE8E66059A
- for <buildroot@buildroot.org>; Tue,  7 Jan 2025 20:46:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A6E3983CB6; Tue,  7 Jan 2025 20:46:17 +0000 (UTC)
+ id 80wwacx1iHfp; Tue,  7 Jan 2025 20:46:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 678876059E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 678876059E;
+	Tue,  7 Jan 2025 20:46:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 319FD6B
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 20:46:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1CF1340290
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 20:46:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S8Qz-E-4FRPG for <buildroot@buildroot.org>;
+ Tue,  7 Jan 2025 20:46:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 195284019A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 195284019A
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 195284019A
+ for <buildroot@buildroot.org>; Tue,  7 Jan 2025 20:46:57 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 28F78B00571;
+ Tue,  7 Jan 2025 21:46:53 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:52064])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 07 Jan 2025 21:46:53 +0100
+MIME-Version: 1.0
+Date: Tue, 07 Jan 2025 21:46:53 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 7 Jan 2025 21:43:03 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d5f0794d155d2d0b982604a4103287e04bec0966
-X-Git-Newrev: e9007bc74ed571234bb938c1fdc4cc99d6571bfc
-X-Patchwork-Hint: ignore
-Message-Id: <20250107204617.A6E3983CB6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/msmtp: bump version to 1.8.27
+To: Akhilesh Nema <nemaakhilesh@gmail.com>
+Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250106043927.154476-1-nemaakhilesh@gmail.com>
+References: <20250106043927.154476-1-nemaakhilesh@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <6fa0e6bd179cc220c18c391ebed6756f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1736282815;
+ bh=8u3q1eeRZo8pepjLbRFKisavUVZKG0QzQEvwD7xEm8M=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=HeLYKS7B+IsTisJkJMiHS8BYcZnhRGgrWVO4s9mP6xRBzfjqEedxtB1x+q8GeOEwN
+ zkMd3zNCuQzb2E41M1Z8kIMQX3KDQWt10+UI3GRQNDINznKYUcOnCgiiKWWAugRZrH
+ fg8UocRZAunQW7K4zpMzgG4BQdoUXWMSVfUAProNCaeUYbXuEQ+wT9U2X4l0tr/Rmg
+ a170HIGLPPPwuuKCI6QFNpidsSi0R3O2LEqiFuHkuFK46P72vd6VCRNSR8D6KFsrzo
+ DARR6RaHU7jr4qHM2sk6FR0Et6IuL8w2gwewFXFNz9yAd758eVGvLp56dfSN8aO0/B
+ IvFPzW59iMJxQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=HeLYKS7B
+Subject: Re: [Buildroot] [PATCH 1/1] package/msmtp: bump version to 1.8.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,54 +82,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9007bc74ed571234bb938c1fdc4cc99d6571bfc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 06/01/2025 05:39, Akhilesh Nema wrote:
+> Release notes - https://marlam.de/msmtp/news/msmtp-1-8-27/
+> 
+> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 
-Release notes since 1.8.25:
-- https://marlam.de/msmtp/news/msmtp-1-8-26/
-- https://marlam.de/msmtp/news/msmtp-1-8-27/
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-[Julien: add link to 1.8.26 release note]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/msmtp/msmtp.hash | 4 ++--
- package/msmtp/msmtp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
-index ba4ef02746..eb80029626 100644
---- a/package/msmtp/msmtp.hash
-+++ b/package/msmtp/msmtp.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking signature
--# https://marlam.de/msmtp/releases/msmtp-1.8.25.tar.xz.sig
-+# https://marlam.de/msmtp/releases/msmtp-1.8.27.tar.xz.sig
- # with key 2F61B4828BBA779AECB3F32703A2A4AB1E32FD34
--sha256  2dfe1dbbb397d26fe0b0b6b2e9cd2efdf9d72dd42d18e70d7f363ada2652d738  msmtp-1.8.25.tar.xz
-+sha256  94030580a63a747faa0a3b9b1b264ae355aad33a4d94b832bfeb5b21633c965e  msmtp-1.8.27.tar.xz
- 
- # Hash for license file:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-index b964970bfa..f3543bff1b 100644
---- a/package/msmtp/msmtp.mk
-+++ b/package/msmtp/msmtp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MSMTP_VERSION = 1.8.25
-+MSMTP_VERSION = 1.8.27
- MSMTP_SITE = https://marlam.de/msmtp/releases
- MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
- MSMTP_DEPENDENCIES = host-pkgconf
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
