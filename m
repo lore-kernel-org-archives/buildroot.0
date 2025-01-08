@@ -4,59 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB465E77188
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 21:08:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94A3CE77188
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 21:09:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86E4B80A91;
-	Wed,  8 Jan 2025 21:08:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D80E80AD5;
+	Wed,  8 Jan 2025 21:09:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id peYeihLkF_lW; Wed,  8 Jan 2025 21:08:15 +0000 (UTC)
+ id d9NAtcyA2Cyb; Wed,  8 Jan 2025 21:09:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9689B80A95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DA3980A95
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9689B80A95;
-	Wed,  8 Jan 2025 21:08:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B079E1FF7
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:08:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7DA3980A95;
+	Wed,  8 Jan 2025 21:09:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 57BA77AA
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:09:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9BDB4408F1
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:08:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3377B408F1
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:09:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vigq1P_GjdqW for <buildroot@buildroot.org>;
- Wed,  8 Jan 2025 21:08:13 +0000 (UTC)
+ id CvPm-Co8rLY7 for <buildroot@buildroot.org>;
+ Wed,  8 Jan 2025 21:09:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3FFE5408F0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FFE5408F0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 69EB140481
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69EB140481
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3FFE5408F0
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:08:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 69EB140481
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:09:03 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -644014939; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1578735705; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 08 Jan 2025 21:08:08 +0000 (UTC)
-Message-ID: <c6739bf6-2d79-48f3-a63c-c78f695c8330@korsgaard.com>
-Date: Wed, 8 Jan 2025 22:08:06 +0100
+ Wed, 08 Jan 2025 21:08:58 +0000 (UTC)
+Message-ID: <b9621656-5e13-43b5-953e-e5066b67ac75@korsgaard.com>
+Date: Wed, 8 Jan 2025 22:08:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Cc: Alex Michel <alex.michel@wiedemann-group.com>
-References: <20241231150509.1763416-1-thomas.petazzoni@bootlin.com>
+To: Bartosz Bilas <b.bilas@grinn-global.com>, buildroot@buildroot.org
+References: <20241231160736.142068-1-b.bilas@grinn-global.com>
 Content-Language: en-US
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20241231150509.1763416-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20241231160736.142068-1-b.bilas@grinn-global.com>
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=IZzWZwI+fZnmSVuL0B05qkaBe//0GaHIu2PSPUyYO9+bOQilBtwV1G9nNECZ7zY/o3UCfjW7LTYc3aZIc++gatsrv8rtWK34Sj6z5NyFoU5FHGi5WkAOgzT5VQ8cI6jAP4n9UIfUw2g6ySyoMlyiR3E0lQFp8StbgArydE2tJQDNT29zg4c4ef0HKQDWdXXj6JZ1ng/6wlSGFSHpBscENQD/vAnSCuNRrgd+QQ2AgHvTBqYnU8M3iFZlvA9DRjifanEmbHexOuivKRw05Tw1Npwz5OsRn8PpdmsCk/GZtSiB2Rs41Ri0qKGjRtLNzp5Ntsnpy26wWs5F82P1IqDrCQ==;
+ b=aWzamWVXS4vuV0aiEWfq2QWf8NrArwCEL71m5JlHzRa7hyDK9JjytK1lgLob/ALNKuy0LANR9EkeS8rQ2yo18zZxCwz4a6Qnq3xf6CBq3PG/vOWl6Hnlitqf7QgO1LaEvj49dYok0DoazrY3PubS5WVgKxW09b9KMxQmP4tiB1IvuAMxXp0On8V+ZxREV5rNJmNe7UiyrpHn9CxCNQygSTj1dJA+SgwrHer+VI5essRWEXxaHLVAx/QYMoTKvR18lR9bR7/YsyVx3skVrkSPLBubNwAOKWxFkNokZ0rPfnAFeI2i+or2AJAY2BpW76TlYHv0BwrVQkXDxsKBvR+sSQ==;
  s=purelymail1; d=purelymail.com; v=1;
- bh=l5r8jqBEhXBEg/cIWf0UjYRl7PpOaIOPJr3556sBA98=;
+ bh=8O7Mdxex1caR4/sML3Yz2/E4HuklXtwutyxgLe2Z/1o=;
  h=Feedback-ID:Received:Date:Subject:To:From; 
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
@@ -64,9 +63,8 @@ X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=IZzWZwI+
-Subject: Re: [Buildroot] [PATCH] package/libzenoh-pico: fix debug+fortify
- glibc builds
+ header.a=rsa-sha256 header.s=purelymail1 header.b=aWzamWVX
+Subject: Re: [Buildroot] [PATCH] DEVELOPERS: remove Bartosz Bilas from cegui
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,46 +81,12 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/31/24 16:05, Thomas Petazzoni via buildroot wrote:
-> The configurations that have:
-> - BR2_ENABLE_RUNTIME_DEBUG=y
-> - One of BR2_FORTIFY_SOURCE_xyz=y
+On 12/31/24 17:07, Bartosz Bilas wrote:
+> I no longer use this package.
 > 
-> Currently fail to build, as libzenoh-pico's build system forces -O0
-> when BR2_ENABLE_RUNTIME_DEBUG=y, but -O0 builds aren't compatible with
-> _FORTIFY_SOURCE, causing:
-> 
-> ../../../per-package/libzenoh-pico/host/mips64-buildroot-linux-gnu/sysroot/usr/include/features.h:422:4: error: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror=cpp]
->    422 | #  warning _FORTIFY_SOURCE requires compiling with optimization (-O)
->        |    ^~~~~~~
-> cc1: all warnings being treated as errors
-> 
-> We fix this by adding a patch that drops the forced -O3 (release
-> builds) and -O0 (debug builds) from the project CMakeLists.txt.
-> 
-> This issue exists since libzenoh-pico was introduced in Buildroot in
-> commit
-> a96361901dcc7b962a0c43f163e97a2de65687f3 ("package/libzenoh-pico: new
-> package"), but was hidden by other issues until a first occurence in
-> November 2024 right after the bump to 1.0.1:
-> 
->    http://autobuild.buildroot.net/results/f109e8b4aba0286dcaac5cb6d4579e6d91c492f8/
-> 
-> Fixes:
-> 
->    http://autobuild.buildroot.net/results/f109e8b4aba0286dcaac5cb6d4579e6d91c492f8/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 
-Committed to 2024.11.x, thanks.
-
-> The provided patch will not apply well on the version of libzenoh-pico
-> that's in 2024.02.x. If that patch gets backported to 2024.02.x,
-> contact me, and I'll provide a patch that applies on the version of
-> libzenoh-pico that was in 2024.02.x.
-
-Yes, that would be great - Thanks!
+Committed to 2024.02.x and 2024.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
