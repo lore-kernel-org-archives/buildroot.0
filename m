@@ -4,59 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4765CE77188
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 21:12:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21BB7E77188
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 21:17:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1220D80B29;
-	Wed,  8 Jan 2025 21:12:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E434380F8E;
+	Wed,  8 Jan 2025 21:17:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dywUrlATR22u; Wed,  8 Jan 2025 21:12:40 +0000 (UTC)
+ id HzQinnrEQe6M; Wed,  8 Jan 2025 21:17:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DEFF80B28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14A6180F9F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DEFF80B28;
-	Wed,  8 Jan 2025 21:12:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E5CFE1FF7
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:12:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 14A6180F9F;
+	Wed,  8 Jan 2025 21:17:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 48BFF1FF7
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:17:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D486780B28
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:12:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3CAC580F9F
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:17:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L1MkVpFGKvk8 for <buildroot@buildroot.org>;
- Wed,  8 Jan 2025 21:12:37 +0000 (UTC)
+ id wzcoJApi1w5E for <buildroot@buildroot.org>;
+ Wed,  8 Jan 2025 21:17:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 07B2680B0F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07B2680B0F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4960C80F57
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4960C80F57
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 07B2680B0F
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:12:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4960C80F57
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:17:07 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -571025575; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1803846444; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 08 Jan 2025 21:12:31 +0000 (UTC)
-Message-ID: <d45c79dd-d470-43c5-8b42-5c7193bfb44a@korsgaard.com>
-Date: Wed, 8 Jan 2025 22:12:28 +0100
+ Wed, 08 Jan 2025 21:16:58 +0000 (UTC)
+Message-ID: <5d70cc79-b74c-4352-b162-b08d64d2c27f@korsgaard.com>
+Date: Wed, 8 Jan 2025 22:16:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Bryan Brattlof <bb@ti.com>, buildroot@buildroot.org
-Cc: Anand Gadiyar <gadiyar@ti.com>, Xuanhao Shi <X15000177@gmail.com>
-References: <20241218-uboot-bump-v2-1-0692ca1c4dcd@ti.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+References: <20250101214216.2117350-1-thomas.petazzoni@bootlin.com>
 Content-Language: en-US
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20241218-uboot-bump-v2-1-0692ca1c4dcd@ti.com>
+In-Reply-To: <20250101214216.2117350-1-thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=W09izikF4oLHOKwvq+SuOs6nPHEg1HBzSCfdQqIU0ciHbHiI1kU+7T0uEfCD7fhjXqomz+uM9FzS6KiBbFL2viNJwbAC1YPgUX/u8UVNP6iWAu05x2jY5b28SyRbmuVCr06Jibao59I4aJuKG6vA2E0PGdnQTlRwWDEHhn6YNWgZ4M4bFBguzsY3F17rv99R7KiRG1Yp2ufTKYp7XPtmJNlujyEZH9D4NYrJJ4CkiAznGcdnmsQCzjdeyDdNKvJcmhiBzqf1BRrZ+u2UpnHXbz7Clw0JTmDShh+hEDcEBCwoKLYX/QMyY0caUtCLFY50va0VXybNPxZvVIzV9YJj+w==;
+ b=P9kS3kqUYYSi8IY0PCdudLiUqdRKufnnyCwklzDyF4mWzQw455dcaprXs+8a79o+qv84Q9z/VwX1QxgQiI3iPAbJ5U07+8QiOJC9ObJarGepMMt3zo6Pfi4Whnm+Ah5NGz3E/X0svC3CBwT5ydcnHkQPAFN6+N81w2FgJgl+bsViFX3FPNDyZV/ScrZ6oyJ97xTBZE+HYSGr8ecgMbRSRvkHaq5/qGTWkyGxyuzS5vd2VokuaUyvA+OcfeqtzhG0p96MrRtulMYakAsvoUSs13dje3U9M/6MdpwEWrxKzSnblIc8tEbiJzn5+CRPWHs+UGTlD/ZCwjxRe0y7rGZA+A==;
  s=purelymail1; d=purelymail.com; v=1;
- bh=qMTFbjhH2ixx4hpKE2Fp1uhkGZ5nGX3BFEwu/E2zg/4=;
+ bh=cA5zCgVr/SeXczI+TU0zqclf3YnuY3+0kP3nlJNYu0g=;
  h=Feedback-ID:Received:Date:Subject:To:From; 
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
@@ -64,9 +63,9 @@ X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=W09izikF
-Subject: Re: [Buildroot] [PATCH v2] boot/ti-k3-r5-loader: add host-gnutls to
- dependencies
+ header.a=rsa-sha256 header.s=purelymail1 header.b=P9kS3kqU
+Subject: Re: [Buildroot] [PATCH] linux: the aarch64 defconfig also needs
+ host-openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,19 +82,18 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/19/24 01:37, Bryan Brattlof via buildroot wrote:
-> Newer versions of U-Boot will require the GnuTLS library to be installed
-> on the host machine to build the mkeficapsule tool for U-Boot's image
-> packaging phase to generate the final capsule for all the boot images
-> including the tiboot3.bin image.
+On 1/1/25 22:42, Thomas Petazzoni via buildroot wrote:
+> This commit extends 5dae966a30c5485e45b94f750a739d36810cba4c ("linux:
+> select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL when needed") to also cover
+> the aarch64 architecture, whose kernel defconfig also needs
+> host-openssl.
 > 
-> Add host-gnutls to the list of dependencies.
+> Fixes:
 > 
-> Signed-off-by: Bryan Brattlof <bb@ti.com>
+>    http://autobuild.buildroot.net/results/375f48cabebddce3b1d23c820bc3a722c8cdd819/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
-> Changes in v2:
-> - elaborated on commit why host-gnutls is required
-> - Link to v1: https://lore.kernel.org/r/20241210-uboot-bump-v1-1-baeb59feef61@ti.com
 
 Committed to 2024.11.x, thanks.
 
