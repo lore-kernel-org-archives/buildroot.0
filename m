@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39C26E7719A
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:06:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D584E77199
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:06:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AD4F81C0A;
-	Wed,  8 Jan 2025 22:06:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 056F381BC6;
+	Wed,  8 Jan 2025 22:06:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iI44nWYIKj8t; Wed,  8 Jan 2025 22:06:15 +0000 (UTC)
+ id MU6557Z40kfb; Wed,  8 Jan 2025 22:06:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06F8481973
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D60F81C38
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 06F8481973;
-	Wed,  8 Jan 2025 22:06:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C2A67AA
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:05:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D60F81C38;
+	Wed,  8 Jan 2025 22:06:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4154E1EB8
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:05:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E0C440146
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4FBB402FF
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:05:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ec1a1JDf5VE7 for <buildroot@buildroot.org>;
- Wed,  8 Jan 2025 22:05:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1gmCYZWB0pRg for <buildroot@buildroot.org>;
+ Wed,  8 Jan 2025 22:05:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3559C4094B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A58F4030C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3559C4094B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A58F4030C
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:05:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 31CBF83F98; Wed,  8 Jan 2025 22:05:54 +0000 (UTC)
+ id 46EE183F99; Wed,  8 Jan 2025 22:05:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Jan 2025 22:57:52 +0100
+Date: Wed, 8 Jan 2025 23:01:59 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 138e4b2d1409815dd0212ee04b91976477cf8470
-X-Git-Newrev: a4469e87672f6b653ffa1a9e61352be4132eeeaf
+X-Git-Oldrev: 420b686e377edc4cced68cdf17208cc982937fc8
+X-Git-Newrev: be585e15ed009eb3bcae52ef49b8b19d67044a3e
 X-Patchwork-Hint: ignore
-Message-Id: <20250108220554.31CBF83F98@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/cryptodev-linux:
- ensure <pkg>_LINUX_CONFIG_FIXUPS has an effect
+Message-Id: <20250108220554.46EE183F99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x]
+ package/gobject-introspection: disable on Microblaze
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,58 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4469e87672f6b653ffa1a9e61352be4132eeeaf
+commit: https://git.buildroot.net/buildroot/commit/?id=be585e15ed009eb3bcae52ef49b8b19d67044a3e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-The variable <pkg>_LINUX_CONFIG_FIXUPS defined in the
-cryptodev-linux... has no effect. Indeed, the variable is only named
-CRYPTODEV_LINUX_CONFIG_FIXUPS.
+The build of GOI on Microblaze fails as qemu-user hangs forver when
+running the GOI programs. Considering how small Microblaze targets
+are, the use-case for GOI is very small if not inexistant, and it's
+unlikely anybody is ever going to debug this, so just disable GOI on
+Microblaze.
 
-But the variable name being <pkg>_LINUX_CONFIG_FIXUPS and the package
-name being CRYPTODEV_LINUX, the correct variable name is
-CRYPTODEV_LINUX_LINUX_CONFIG_FIXUPS.
+This issue is causing timeouts in the autobuilders on a regular basis:
 
-Prior to this commit, a configuration with cryptodev-linux enabled
-would result in:
+  http://autobuild.buildroot.net/?status=TIMEOUT&reason=gobject-introspection%
 
-$ make VARS=PACKAGES_LINUX_CONFIG_FIXUPS printvars
-$
+Fixes:
 
-Aka, empty, while PACKAGES_LINUX_CONFIG_FIXUPS collects in
-package/pkg-generic.mk the value of the <pkg>_LINUX_CONFIG_FIXUPS
-variables from all enabled packages.
+  http://autobuild.buildroot.net/results/f8e5ef74478c63c89e7b99fb928b97ac4518f943/
 
-With this patch applied:
-
-$ make VARS=PACKAGES_LINUX_CONFIG_FIXUPS printvars
-PACKAGES_LINUX_CONFIG_FIXUPS=		@if ! grep -q '^CONFIG_CRYPTO=[my]' /; then 	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_CRYPTO\>/d' / && echo 'CONFIG_CRYPTO=y' >> /; fi
-		@if ! grep -q '^CONFIG_CRYPTO_USER_API_AEAD=[my]' /; then 	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_CRYPTO_USER_API_AEAD\>/d' / && echo 'CONFIG_CRYPTO_USER_API_AEAD=y' >> /; fi
-$
-
-As one would expect.
-
-Fixes: 4b12336d1fad12fbb82b4d9144e6cb5636a12256 ("package/cryptodev-linux: needs CONFIG_CRYPTO_USER_API_AEAD")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 9114d48b313744fd163e4eeea0f5b0407568e771)
+(cherry picked from commit 8548c7586a56938b2f52f5c41050441b53a457f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptodev-linux/cryptodev-linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gobject-introspection/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-index 580ea89520..550a248a27 100644
---- a/package/cryptodev-linux/cryptodev-linux.mk
-+++ b/package/cryptodev-linux/cryptodev-linux.mk
-@@ -21,7 +21,7 @@ define CRYPTODEV_LINUX_INSTALL_STAGING_CMDS
- 		$(STAGING_DIR)/usr/include/crypto/cryptodev.h
- endef
+diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
+index 345118745f..681655c2d4 100644
+--- a/package/gobject-introspection/Config.in
++++ b/package/gobject-introspection/Config.in
+@@ -2,6 +2,11 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
+ 	bool
+ 	default y
+ 	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
++	# gobject-introspection programs cause a hang of Qemu on
++	# Microblaze, and supporting GOI on Microblaze is not very
++	# relevant.
++	depends on !BR2_microblazeel
++	depends on !BR2_microblazebe
  
--define CRYPTODEV_LINUX_CONFIG_FIXUPS
-+define CRYPTODEV_LINUX_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_USER_API_AEAD)
- endef
+ config BR2_PACKAGE_GOBJECT_INTROSPECTION
+ 	bool "gobject-introspection"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
