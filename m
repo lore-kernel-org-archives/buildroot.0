@@ -4,67 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94A3CE77188
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 21:09:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4765CE77188
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 21:12:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D80E80AD5;
-	Wed,  8 Jan 2025 21:09:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1220D80B29;
+	Wed,  8 Jan 2025 21:12:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d9NAtcyA2Cyb; Wed,  8 Jan 2025 21:09:06 +0000 (UTC)
+ id dywUrlATR22u; Wed,  8 Jan 2025 21:12:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DA3980A95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DEFF80B28
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7DA3980A95;
-	Wed,  8 Jan 2025 21:09:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 57BA77AA
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:09:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1DEFF80B28;
+	Wed,  8 Jan 2025 21:12:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E5CFE1FF7
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:12:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3377B408F1
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:09:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D486780B28
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:12:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CvPm-Co8rLY7 for <buildroot@buildroot.org>;
- Wed,  8 Jan 2025 21:09:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L1MkVpFGKvk8 for <buildroot@buildroot.org>;
+ Wed,  8 Jan 2025 21:12:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 69EB140481
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69EB140481
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 07B2680B0F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07B2680B0F
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 69EB140481
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:09:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 07B2680B0F
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:12:36 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1578735705; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -571025575; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 08 Jan 2025 21:08:58 +0000 (UTC)
-Message-ID: <b9621656-5e13-43b5-953e-e5066b67ac75@korsgaard.com>
-Date: Wed, 8 Jan 2025 22:08:56 +0100
+ Wed, 08 Jan 2025 21:12:31 +0000 (UTC)
+Message-ID: <d45c79dd-d470-43c5-8b42-5c7193bfb44a@korsgaard.com>
+Date: Wed, 8 Jan 2025 22:12:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Bartosz Bilas <b.bilas@grinn-global.com>, buildroot@buildroot.org
-References: <20241231160736.142068-1-b.bilas@grinn-global.com>
+To: Bryan Brattlof <bb@ti.com>, buildroot@buildroot.org
+Cc: Anand Gadiyar <gadiyar@ti.com>, Xuanhao Shi <X15000177@gmail.com>
+References: <20241218-uboot-bump-v2-1-0692ca1c4dcd@ti.com>
 Content-Language: en-US
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20241231160736.142068-1-b.bilas@grinn-global.com>
+In-Reply-To: <20241218-uboot-bump-v2-1-0692ca1c4dcd@ti.com>
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=aWzamWVXS4vuV0aiEWfq2QWf8NrArwCEL71m5JlHzRa7hyDK9JjytK1lgLob/ALNKuy0LANR9EkeS8rQ2yo18zZxCwz4a6Qnq3xf6CBq3PG/vOWl6Hnlitqf7QgO1LaEvj49dYok0DoazrY3PubS5WVgKxW09b9KMxQmP4tiB1IvuAMxXp0On8V+ZxREV5rNJmNe7UiyrpHn9CxCNQygSTj1dJA+SgwrHer+VI5essRWEXxaHLVAx/QYMoTKvR18lR9bR7/YsyVx3skVrkSPLBubNwAOKWxFkNokZ0rPfnAFeI2i+or2AJAY2BpW76TlYHv0BwrVQkXDxsKBvR+sSQ==;
+ b=W09izikF4oLHOKwvq+SuOs6nPHEg1HBzSCfdQqIU0ciHbHiI1kU+7T0uEfCD7fhjXqomz+uM9FzS6KiBbFL2viNJwbAC1YPgUX/u8UVNP6iWAu05x2jY5b28SyRbmuVCr06Jibao59I4aJuKG6vA2E0PGdnQTlRwWDEHhn6YNWgZ4M4bFBguzsY3F17rv99R7KiRG1Yp2ufTKYp7XPtmJNlujyEZH9D4NYrJJ4CkiAznGcdnmsQCzjdeyDdNKvJcmhiBzqf1BRrZ+u2UpnHXbz7Clw0JTmDShh+hEDcEBCwoKLYX/QMyY0caUtCLFY50va0VXybNPxZvVIzV9YJj+w==;
  s=purelymail1; d=purelymail.com; v=1;
- bh=8O7Mdxex1caR4/sML3Yz2/E4HuklXtwutyxgLe2Z/1o=;
+ bh=qMTFbjhH2ixx4hpKE2Fp1uhkGZ5nGX3BFEwu/E2zg/4=;
  h=Feedback-ID:Received:Date:Subject:To:From; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=aWzamWVX
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: remove Bartosz Bilas from cegui
+ header.a=rsa-sha256 header.s=purelymail1 header.b=W09izikF
+Subject: Re: [Buildroot] [PATCH v2] boot/ti-k3-r5-loader: add host-gnutls to
+ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,12 +83,21 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/31/24 17:07, Bartosz Bilas wrote:
-> I no longer use this package.
+On 12/19/24 01:37, Bryan Brattlof via buildroot wrote:
+> Newer versions of U-Boot will require the GnuTLS library to be installed
+> on the host machine to build the mkeficapsule tool for U-Boot's image
+> packaging phase to generate the final capsule for all the boot images
+> including the tiboot3.bin image.
 > 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> Add host-gnutls to the list of dependencies.
+> 
+> Signed-off-by: Bryan Brattlof <bb@ti.com>
+> ---
+> Changes in v2:
+> - elaborated on commit why host-gnutls is required
+> - Link to v1: https://lore.kernel.org/r/20241210-uboot-bump-v1-1-baeb59feef61@ti.com
 
-Committed to 2024.02.x and 2024.11.x, thanks.
+Committed to 2024.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
