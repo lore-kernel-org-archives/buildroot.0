@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F0BBE77188
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:05:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 832E2E77188
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:05:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE03960BB0;
-	Wed,  8 Jan 2025 22:05:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51FC78169A;
+	Wed,  8 Jan 2025 22:05:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ISQRwmImnZJG; Wed,  8 Jan 2025 22:05:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lK5VDgk0w4ao; Wed,  8 Jan 2025 22:05:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE6EF60BDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F284817FD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE6EF60BDC;
-	Wed,  8 Jan 2025 22:05:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F284817FD;
+	Wed,  8 Jan 2025 22:05:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 74C3B1EB8
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 88E551FF9
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5228240967
+ by smtp2.osuosl.org (Postfix) with ESMTP id 624CD409A7
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OvUrwbJryC0V for <buildroot@buildroot.org>;
- Wed,  8 Jan 2025 22:04:46 +0000 (UTC)
+ id LWlAHfeHS5_x for <buildroot@buildroot.org>;
+ Wed,  8 Jan 2025 22:04:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CAF6409A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99D4740966
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0CAF6409A7
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99D4740966
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0978A83F26; Wed,  8 Jan 2025 22:04:45 +0000 (UTC)
+ id 9154183F27; Wed,  8 Jan 2025 22:04:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Jan 2025 22:59:45 +0100
+Date: Wed, 8 Jan 2025 22:21:09 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: bbddbb4e7deec10da834e36716d2486ddd156377
-X-Git-Newrev: 36ec020e6fc1e99a344d12ed2c493ff5877c742b
+X-Git-Oldrev: fa8d58ebe86205a64d2bf4a5a8e481e8a5627b9c
+X-Git-Newrev: 1330a354613f64618dbb9b96459208592572aeb8
 X-Patchwork-Hint: ignore
-Message-Id: <20250108220445.0978A83F26@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x]
- package/pkg-kernel-module: disable CONFIG_TRIM_UNUSED_KSYMS
+Message-Id: <20250108220444.9154183F27@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/perl: properly
+ pass CFLAGS/LDFLAGS when building host-perl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,48 +65,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36ec020e6fc1e99a344d12ed2c493ff5877c742b
+commit: https://git.buildroot.net/buildroot/commit/?id=1330a354613f64618dbb9b96459208592572aeb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-The kernel option CONFIG_TRIM_UNUSED_KSYMS=y allows to trim unused
-kernel symbols... which basically prevents building external
-modules. This option has been enabled in the default MIPS architecture
-kernel defconfig since pretty much forever, and it causes build
-failures of all our external modules on MIPS in the autobuilders.
+HOST_CFLAGS and HOST_LDFLAGS are currently not accounted for when
+building host-perl. In particular, it means that executables
+built/installed by host-perl do not have a RPATH pointing to
+HOST_DIR/lib, which can cause issues as libcrypt.so can now be
+provided by host-libxcrypt.
 
-To fix this in a global manner, we handle the problem in the
-kernel-module infrastructure, by appending to the
-<pkg>_LINUX_CONFIG_FIXUPS variable provided by the package.
+This was causing check-host-rpath to complain in the situation where:
+
+1. host-perl was built, with no RPATH, linked against the system
+   libcrypt.so
+
+2. host-libxcrypt was built afterwards, installed as
+   HOST_DIR/lib/libcrypt.so, which made check-host-rpath complain as
+   HOST_DIR/bin/perl is linked against a library present in
+   HOST_DIR/lib but doesn't have a RPATH to HOST_DIR/lib
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/c26abec4e24d06557079654b12825efb2211996f/ (cryptodev-linux)
-  http://autobuild.buildroot.net/results/699c618730cb33f0ccf54f90e4b722198fd3d3bc/ (emlog)
-  http://autobuild.buildroot.net/results/f1d5626f5698a955bf378217528fbf4f8f741435/ (rtl8812au-aircrack-ng)
-  http://autobuild.buildroot.net/results/c9a507757ce3a01cd08d596cb519ee9f19caf77c/ (mdio-tools)
+  http://autobuild.buildroot.net/results/d4348d7f872ccd734795a1d071960a696148ed6a/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 1d8d9e8d6cd824b2a43a0b92d71cfb25a3f9300a)
+(cherry picked from commit 65127a8a772132c3d0905241563d1978a2b332ba)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-kernel-module.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/perl/perl.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
-index 4f64a73f11..032874c3ca 100644
---- a/package/pkg-kernel-module.mk
-+++ b/package/pkg-kernel-module.mk
-@@ -62,6 +62,9 @@ $(2)_MAKE ?= $$(BR2_MAKE)
- # the root of the package.
- $(2)_MODULE_SUBDIRS ?= .
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 0f7038a048..dc7c0b8d42 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -98,7 +98,9 @@ endef
+ HOST_PERL_CONF_OPTS = \
+ 	-des \
+ 	-Dprefix="$(HOST_DIR)" \
+-	-Dcc="$(HOSTCC)"
++	-Dcc="$(HOSTCC)" \
++	-Dccflags="$(HOST_CFLAGS)" \
++	-Dldflags="$(HOST_LDFLAGS)"
  
-+$(2)_LINUX_CONFIG_FIXUPS += \
-+	$$(sep)$$(call KCONFIG_DISABLE_OPT,CONFIG_TRIM_UNUSED_KSYMS)
-+
- # Build the kernel module(s)
- # Force PWD for those packages that want to use it to find their
- # includes and other support files (Booo!)
+ define HOST_PERL_CONFIGURE_CMDS
+ 	(cd $(@D); $(HOST_MAKE_ENV) HOSTCC='$(HOSTCC_NOCCACHE)' \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
