@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCF40E77188
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:05:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E832AE77188
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:05:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 043CB8161D;
-	Wed,  8 Jan 2025 22:05:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A3427815CF;
+	Wed,  8 Jan 2025 22:05:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UjHMtES96w0v; Wed,  8 Jan 2025 22:05:20 +0000 (UTC)
+ id 1v-QZJTIGnEd; Wed,  8 Jan 2025 22:05:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD884818B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11E4E81776
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD884818B5;
-	Wed,  8 Jan 2025 22:05:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3A6547AA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11E4E81776;
+	Wed,  8 Jan 2025 22:05:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F2F381EB8
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 359BA408F1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4832C402F3
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LL_r088eIDP1 for <buildroot@buildroot.org>;
- Wed,  8 Jan 2025 22:04:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KBQ9GnW4y6bu for <buildroot@buildroot.org>;
+ Wed,  8 Jan 2025 22:04:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 690784094B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B388402FF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 690784094B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B388402FF
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 65B1A83F4C; Wed,  8 Jan 2025 22:04:44 +0000 (UTC)
+ id 2937B83F27; Wed,  8 Jan 2025 22:04:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Jan 2025 22:16:35 +0100
+Date: Wed, 8 Jan 2025 21:40:25 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 487d7513b88864c67a0172066570a2fcf0b0cb15
-X-Git-Newrev: 92f81d78a4bf4aeb7e4f18e236275cc50d68a22c
+X-Git-Oldrev: 8cc63c1818b071b4cc9453938e69bbda57e4c599
+X-Git-Newrev: 5926391587aeaf34626fc7662b6c0418a1cd6809
 X-Patchwork-Hint: ignore
-Message-Id: <20250108220444.65B1A83F4C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] linux: the aarch64
- defconfig also needs host-openssl
+Message-Id: <20250108220444.2937B83F27@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] support/testing: new
+ xxhash runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,39 +65,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92f81d78a4bf4aeb7e4f18e236275cc50d68a22c
+commit: https://git.buildroot.net/buildroot/commit/?id=5926391587aeaf34626fc7662b6c0418a1cd6809
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-This commit extends 5dae966a30c5485e45b94f750a739d36810cba4c ("linux:
-select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL when needed") to also cover
-the aarch64 architecture, whose kernel defconfig also needs
-host-openssl.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/375f48cabebddce3b1d23c820bc3a722c8cdd819/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 892677f4f583031de048d81855e339dca15183ed)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b118c9dcf344c489b3e78a325060f01540f03eb3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS                                   |  1 +
+ support/testing/tests/package/test_xxhash.py | 35 ++++++++++++++++++++++++++++
+ 2 files changed, 36 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 4d0620150d..2f37a2e418 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -178,7 +178,7 @@ config BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
- 	# version. This is mainly needed to fix autobuilder testing.
- 	select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL if \
- 	       BR2_LINUX_KERNEL_LATEST_VERSION && \
--	       (BR2_arcle || BR2_arceb || BR2_sparc || BR2_x86_64)
-+	       (BR2_aarch64 || BR2_aarch64_be || BR2_arcle || BR2_arceb || BR2_sparc || BR2_x86_64)
- 	help
- 	  This option will use the default configuration for the
- 	  selected architecture. I.e, it is equivalent to running
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 509630d14c..99442d983d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2007,6 +2007,7 @@ F:	support/testing/tests/package/test_wine.py
+ F:	support/testing/tests/package/test_xfsprogs.py
+ F:	support/testing/tests/package/test_xfsprogs/
+ F:	support/testing/tests/package/test_xvisor.py
++F:	support/testing/tests/package/test_xxhash.py
+ F:	support/testing/tests/package/test_xz.py
+ F:	support/testing/tests/package/test_z3.py
+ F:	support/testing/tests/package/test_z3/
+diff --git a/support/testing/tests/package/test_xxhash.py b/support/testing/tests/package/test_xxhash.py
+new file mode 100644
+index 0000000000..00e0f245fc
+--- /dev/null
++++ b/support/testing/tests/package/test_xxhash.py
+@@ -0,0 +1,35 @@
++import os
++
++import infra.basetest
++
++
++class TestXxHash(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_XXHASH=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        testfile = "data.bin"
++
++        # Check we can run the program.
++        self.assertRunOk("xxhsum --version")
++
++        # We create a test data file with random data.
++        cmd = f"dd if=/dev/urandom of={testfile} bs=1M count=1"
++        self.assertRunOk(cmd)
++
++        # For the three hash sizes, we compute the xxhash and check
++        # the integrity of the file.
++        for hsize in [32, 64, 128]:
++            hashfile = f"{testfile}.xxh{hsize}"
++            self.assertRunOk(f"xxh{hsize}sum {testfile} | tee {hashfile}")
++            self.assertRunOk(f"xxh{hsize}sum -c {hashfile}")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
