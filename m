@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C49E0E7719A
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 23:06:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BC38E77188
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 23:06:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B1F880F8B;
-	Wed,  8 Jan 2025 23:06:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD73C80F7B;
+	Wed,  8 Jan 2025 23:06:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w5rNYg_fFlYg; Wed,  8 Jan 2025 23:06:01 +0000 (UTC)
+ id Z70ZWlmgblAL; Wed,  8 Jan 2025 23:06:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2AE1480DEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A3A08100F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2AE1480DEA;
-	Wed,  8 Jan 2025 23:05:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 351281FF9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A3A08100F;
+	Wed,  8 Jan 2025 23:06:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CCEA21FF7
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 23:05:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D6CA14026A
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 23:05:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA17B80DE1
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 23:05:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GeLQFnNaNhZN for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VIQtfqhnh_Pz for <buildroot@buildroot.org>;
  Wed,  8 Jan 2025 23:05:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9FE4340595
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FE4340595
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9FE4340595
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 00F5180DD5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00F5180DD5
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 00F5180DD5
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 23:05:33 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-38637614567so161279f8f.3
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-436a39e4891so2731865e9.1
  for <buildroot@buildroot.org>; Wed, 08 Jan 2025 15:05:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736377531; x=1736982331;
+ d=1e100.net; s=20230601; t=1736377532; x=1736982332;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=ZR0xTbO9lpDNEPrGaM9bt8C+wVenQ6PEVvqYInBHmYI=;
- b=XwbAAGpe5WHGXlF3cnykN74AqY2v7caDNqpzLjUxNbYcU5B52bTSrbvjoa9/g7OU83
- pD2LfjzSLCR2KnY/7zo8iJFDOjf0Rj61Gl1wyd7LnJ7l7A1T6hXbu6n6a24Kz0ZAT+us
- 8xNMe5SNm4Bi/orE4OmoV4SNQWLiYN9lYakHHEZYpgEc4v6ZeQ1XDF9JMSZVRWmV360E
- hRlmGKkO2DkGG+zvhbKsAyPDdvQxUL3FdRhGqynemTfM4BDxPLcSkmQ15agJ5zrzbSBK
- G1tJos1ThTYbKkA2k9yFZZ42iIRN4YZGY4xWkJbv93aUgnxLx1yIsH3W/gL/EeeW6xbn
- xBvg==
-X-Gm-Message-State: AOJu0YxiaNFBOKqZj2siOA4f0sr5tfqOLMd4KJJr80g91gKqADcIAGRc
- ATrn/gnBXzoyw4x0kqfPmpG6FB3RP1CT7T2rSdstDuMtcBLTFzWJUR2DAZE93W2hUWhtDKXR0jg
- w
-X-Gm-Gg: ASbGncsP7JqI5paZr/9tQFWLmukSodWS/8iHedH0dVSA0Vf//fDQEXDQeaGVaL9A30K
- quC0yoRQhAP9TbvnN0wyemEi4hz5+9e86lxN+saD6en5o67jenBUWI2W1c6ld0lexwksnX6ezj+
- QotjOfcAKxh8BKXzLAauAYR2VGwR/BwgMdlHvYbPNG1VX7/M0kykLnfNvCJcB/uOrKq2lFTaYof
- DTDh+5ds3FFr6DSzcEnJZKD36/fGSzOp8FiIk8oIO3pSk8uDIUuVqyot64/Bucr0jU1EAFKtftL
- BF8NbivHCHBh65WgHLwgFhZiQTH26jnFacTRoElXMW1CCpVFosPTJg==
-X-Google-Smtp-Source: AGHT+IHx8lWfyI+uLlwdx8VUSB+XBUYA+VFBHUvfua3xovLQRaIpzL7rdtsonfG9E+KnwMfazE9iOg==
-X-Received: by 2002:a05:6000:18ac:b0:385:ef39:6cd5 with SMTP id
- ffacd0b85a97d-38a872f6ed5mr4026938f8f.1.1736377531650; 
- Wed, 08 Jan 2025 15:05:31 -0800 (PST)
+ bh=v6yZEbZooyiQomOeAagGGtas67BYFF4CU9nrnaTJmk8=;
+ b=msSBRbzDTlSTNwlovPkNI+UklENIDJDhNPrRrFrZYOrHL2pJ8tn6Pc6LJLoC9lpD3m
+ BLLDS/3gflnQ5lf2rZ+Nf1eJYLeCZccRUAUD7AGMavFn/as1bWwC3Il8cKjvvn9zMoao
+ 5P0CEfJdeSetE6uRIVTHKKs3LcZUSa5eOnCCPFYWBJSZo02hzuByVxCt1P2N8qPgY09n
+ tIVJ0fcs7DTrn5/NnGPXKjZDp9a3Z86epOXl0DJxG2NIQRielyjZ1fz2Ga1Wz9Vd+NOr
+ 2FfyNwaMIDMeX2NljlVBtKYpgyH9eBvuEPCcBMOlwsICsSVohOpnBB2YsDNq57iLwJHh
+ LaWg==
+X-Gm-Message-State: AOJu0YzNJjHkYgoWeIicYpYiTxxG5oUuc9eYTZp9wjGuXVpw1Wo3+JTa
+ 25qVuazaD+IGYyscl6PEhxcJqUPFSdVFHJ2z1XNTZu7JLNWT6kjBEAiB0UCc4+Xd+KvNR8V4vc4
+ 3
+X-Gm-Gg: ASbGncv7s/Zw3CGz0l58PDV4fPyIQ+HFNcSZ/Vnj0UKsGWL6sXMqNhBNWNw5g5mnpJB
+ eFEe4qUe35ydbZhrUbciHRF0lNEBgqH7VhI9X7INHs8++zgHSocCR1omXL9md0f0Ecgh1yyiTiF
+ v7XIsrd8oEe0wjOfWy1SnebIbR06Xvydt9ohCQRnY06Ai4YNNLAjANeQGgZG1gJV3AXaq/nBKgx
+ Zxl18VWPgOUxnBhxn9pLmNbkOWYUYb2yKTqY0k5ht6U2w1+v3eZfFmCIxZ/o06ZuHvzadAPWIYm
+ ylUoXFwzEy9JOVhWjoXLTC0expppKyaon/OplqiEM34Lug4KrUS0JA==
+X-Google-Smtp-Source: AGHT+IFidJwUaP3hTLE+jq8EBzafXOIXgNhPj8dfplfnAGaKJmaP1XrAizb3K38IRg07E0djdYrHOg==
+X-Received: by 2002:a05:600c:3c97:b0:436:840b:261c with SMTP id
+ 5b1f17b1804b1-436e26ab54fmr38580665e9.19.1736377532134; 
+ Wed, 08 Jan 2025 15:05:32 -0800 (PST)
 Received: from P-NTS-Evian.home
  (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
@@ -74,29 +74,29 @@ Received: from P-NTS-Evian.home
  Wed, 08 Jan 2025 15:05:31 -0800 (PST)
 To: buildroot@buildroot.org
 Cc: Romain Naour <romain.naour@smile.fr>
-Date: Thu,  9 Jan 2025 00:05:19 +0100
-Message-ID: <20250108230521.1345210-10-romain.naour@smile.fr>
+Date: Thu,  9 Jan 2025 00:05:20 +0100
+Message-ID: <20250108230521.1345210-11-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250108230521.1345210-1-romain.naour@smile.fr>
 References: <20250108230521.1345210-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1736377531; x=1736982331; darn=buildroot.org;
+ d=smile.fr; s=google; t=1736377532; x=1736982332; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ZR0xTbO9lpDNEPrGaM9bt8C+wVenQ6PEVvqYInBHmYI=;
- b=Kc5CaBMNlMcD+XwcBreKf6ehi//OKO4lC6oUdFqIlU3I0VSd1aQLcpybf1VIT6/AMx
- 1sSuzWtlGVuuNhaWyXz2ceMKemQnkY0+sPA1S5YZQhe/nJSJahl/V/y9l//mf4i0wSUv
- e1WNeX8JUD9e09KxVw7BD6MZaJzvpfI5RThqQ=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=v6yZEbZooyiQomOeAagGGtas67BYFF4CU9nrnaTJmk8=;
+ b=ZeEdhMag+DdxzMKsOZsb/Sh37mreO0yQk/VfnHFmPPXlnPHEgp0PnbLm5wtkM26R3C
+ U0+fUvKDlN+qN1r06q6lvEeU+HC4vKiWp6sar7ctqszUu8/rsjzF6gLTJuTt17mg9vcL
+ 0zsf3r0x1HwUNZRwaJbSHax+AwdHZE25MF3Bg=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=Kc5CaBMN
-Subject: [Buildroot] [PATCH 10/12] toolchain: remove
- BR2_TOOLCHAIN_HAS_GCC_BUG_99410 (nios2 only)
+ header.a=rsa-sha256 header.s=google header.b=ZeEdhMag
+Subject: [Buildroot] [PATCH 11/12] toolchain: remove remaining BR2_nios2
+ from toolchain bugs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,62 +117,29 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/belle-sip/belle-sip.mk |  4 ----
- package/matio/matio.mk         |  4 ----
- toolchain/Config.in            | 10 ----------
- 3 files changed, 18 deletions(-)
+ toolchain/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/belle-sip/belle-sip.mk b/package/belle-sip/belle-sip.mk
-index c9bcc3f55d..b4de3612ce 100644
---- a/package/belle-sip/belle-sip.mk
-+++ b/package/belle-sip/belle-sip.mk
-@@ -35,10 +35,6 @@ endif
- 
- BELLE_SIP_CFLAGS = $(TARGET_CFLAGS)
- 
--ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_99410),y)
--BELLE_SIP_CFLAGS += -O0
--endif
--
- BELLE_SIP_CONF_OPTS += -DCMAKE_C_FLAGS="$(BELLE_SIP_CFLAGS)"
- 
- $(eval $(cmake-package))
-diff --git a/package/matio/matio.mk b/package/matio/matio.mk
-index dc9be2ac18..d378f06e5b 100644
---- a/package/matio/matio.mk
-+++ b/package/matio/matio.mk
-@@ -19,10 +19,6 @@ MATIO_CONF_ENV = ac_cv_va_copy=yes
- 
- MATIO_CFLAGS = $(TARGET_CFLAGS)
- 
--ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_99410),y)
--MATIO_CFLAGS += -O0
--endif
--
- MATIO_CONF_ENV += CFLAGS="$(MATIO_CFLAGS)"
- 
- # mat73 require hdf5 (not available), extented-sparse take 2KB
 diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 23123138e5..86ab3710a0 100644
+index 86ab3710a0..d6ed25ff96 100644
 --- a/toolchain/Config.in
 +++ b/toolchain/Config.in
-@@ -180,16 +180,6 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_90620
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10 \
- 		|| BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 
--# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99410
--# Error: branch offset out of range on Nios II. This bug
--# no longer exists in gcc 8.x but reappeared on gcc 9.x and still exists
--# on gcc 12.x
--config BR2_TOOLCHAIN_HAS_GCC_BUG_99410
--	bool
--	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
--	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_9
--	depends on BR2_nios2
--
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737
- # ICE: SH4 -Os causes internal compiler error. This bug
- # still exists in gcc = 11.1.0
+@@ -89,7 +89,6 @@ config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
+ config BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	bool
+ 	default y
+-	depends on !BR2_nios2
+ 	depends on !BR2_ARM_CPU_ARMV4
+ 	depends on !BR2_ARM_CPU_ARMV5
+ 	depends on !BR2_sparc_v8
+@@ -221,7 +220,6 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_107728
+ 	bool
+ 	default y if BR2_microblazebe || BR2_microblazeel \
+ 		|| BR2_mips || BR2_mipsel \
+-		|| BR2_nios2 \
+ 		|| BR2_or1k \
+ 		|| BR2_sh
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
 -- 
 2.47.1
 
