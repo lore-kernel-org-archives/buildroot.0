@@ -1,72 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 236ACE77199
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 21:45:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B5C3E77188
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 21:45:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEADB60687;
-	Wed,  8 Jan 2025 21:45:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C58A080BC2;
+	Wed,  8 Jan 2025 21:45:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a3eyRjeznK-R; Wed,  8 Jan 2025 21:45:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iTqUyrFHcOWo; Wed,  8 Jan 2025 21:45:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9ECC060827
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3A7E80BB3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9ECC060827;
-	Wed,  8 Jan 2025 21:45:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A205F1FF7
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:45:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E3A7E80BB3;
+	Wed,  8 Jan 2025 21:45:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 85ABD7AA
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:45:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8F8F840260
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:45:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 72B7140272
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:45:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5mt0-r7rKObd for <buildroot@buildroot.org>;
- Wed,  8 Jan 2025 21:45:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 56B5C40146
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56B5C40146
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 56B5C40146
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:45:21 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -988164391; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 08 Jan 2025 21:45:17 +0000 (UTC)
-Message-ID: <bc19f010-bd2b-4c4d-bc75-aa076f71a84c@korsgaard.com>
-Date: Wed, 8 Jan 2025 22:45:15 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CmsaW6ezqP0w for <buildroot@buildroot.org>;
+ Wed,  8 Jan 2025 21:45:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 579CA4024F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 579CA4024F
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 579CA4024F
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:45:32 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id C72FC5FFAF;
+ Wed,  8 Jan 2025 22:45:27 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:36182])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 08 Jan 2025 22:45:27 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Cc: James Hilliard <james.hilliard1@gmail.com>, Bernd Kuhls <bernd@kuhls.net>
-References: <20250104152722.90914-1-thomas.petazzoni@bootlin.com>
-Content-Language: en-US
-From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20250104152722.90914-1-thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=C7bikaoz/x2fdNnmExX0UMAibdU7xNs99UhAkimNCsMozITV9oBCEH0+rtT/ziDG5ZarcNn8JtGAqRRqof/EXZwLEDI85wlt3zOrHyem4Zav46MTggcO7D3jH/ZFlJq7q0l68GihHeUBXJhJIo8WPhgcb0Ay9o4FbjicOdiZXfCjijtiIqexhybwr5CVc68pu2lH3LtkS6gk0ggaQlWyOPbj6/FbrmTWihNmMF9ch7aR8uf4Ju2dxs2k62my+C4k4Ayf59YEDzGwieUUjng7m4Pl4V2jFxY5WlwE0VyQNNG9BmTBJ/AOXLnDRO26G/N+ZQvAbmFv07W63eah71PUdg==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=eOSq8D+om2puXJ2ZwGsrYagX8COoNiW/I+zUwKQ+I7s=;
- h=Feedback-ID:Received:Date:Subject:To:From; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=C7bikaoz
-Subject: Re: [Buildroot] [PATCH] package/php: backport upstream patch to
- fix/workaround xxhash issue
+Date: Wed, 08 Jan 2025 22:45:27 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: =?UTF-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>
+Cc: buildroot@buildroot.org, Christoph Muellner
+ <christoph.muellner@theobroma-systems.com>
+In-Reply-To: <20250107142109.1308899-1-vincent.stehle@arm.com>
+References: <20250107142109.1308899-1-vincent.stehle@arm.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <29fcdb83ef22ca11468675672a1ac675@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1736372730;
+ bh=KRvCx2JDjFmWNlaqYKQwnY7P2OHiW2dE+qBwLwVGjWI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ggjmxW99ocp2X1xVuDV888dl1VDd8LhrTTbhp/NBDGEelGqu7wE+hNAYxuvzaIxDa
+ xtKWPPIgx8WEebMzOShGWPKC6tCsqlBkh0ZK/Yux+qWzi6/SpXrW0Flas3ebBUo87q
+ vXWONAeIiwqj2NGQxTZ9kk/wqYNuYRaIFclRj1U7MjNAo/OojhsBlU7LAZvpndMMI8
+ dJT9yg78V+oylTXoXvgYU33sh0fYx+oWT6Qjypx7xizBQpwnaBVfvrpgGHWcXpJ3sh
+ EQi570ossmwLtqxedux84JtpOuIPQ0LXPpVGG+c+R4s+wfTIX/GduW6u+PghZkNxDY
+ 4LyOnX/zxAiKQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ggjmxW99
+Subject: Re: [Buildroot] [PATCH] boot/uboot: add support for embedded TEE in
+ binary format
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,50 +84,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 1/4/25 16:27, Thomas Petazzoni via buildroot wrote:
-> Since the bump of xxhash from 0.8.2 to 0.8.3 in Buildroot commit
-> 4b8f2f3a5e45fe2962a9fcdb148d32198929e228, the host of host-php fails
-> when host-xxhash has been built before.
-> 
-> This is due to the fact that host-xxhash installs
-> HOST_DIR/include/xxhash.h, and the PHP code has an internal xxhash.h,
-> but due to the order of CFLAGS, the one from HOST_DIR/include/xxhash.h
-> gets included instead of the internal xxhash.h from PHP.
-> 
-> We initially tried to fix the order of CFLAGS, but that has proven to
-> be challenging within the complicated PHP build system. Then, we opted
-> for renaming the internal xxhash.h header of PHP, which we had
-> implemented and were about to submit upstream. But while rebasing this
-> fix on PHP's master, it turned out that PHP has an upstream commit
-> "Sync headers installation", merged for PHP 8.4.0, which has the side
-> effect of avoiding the issue. This commit moves xxhash.h into a
-> subfolder, so it gets included as #include "xxhash/xxhash.h" now,
-> which avoids the conflict with HOST_DIR/include/xxhash.h. Maybe not
-> the best fix, but it does fix the issue and it's upstream.
-> 
-> Since this patch is tweaking the PHP build system, we need to do the
-> equivalent of "autoreconf" but in the PHP world. It was already done
-> for the target package, we simply add the same logic for the host
-> package.
-> 
-> Fixes:
-> 
->    http://autobuild.buildroot.net/results/583c054a564f90b8c884565070c5e17b43b89674/
-> 
-> Cc: James Hilliard <james.hilliard1@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Ups, sounds messy. Committed to 2024.11.x, thanks. For 2024.02.x I will 
-instead drop the xxhash bump.
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gMDcvMDEvMjAyNSAxNToyMSwgVmluY2VudCBTdGVobMOpIHdyb3RlOgo+IFdlIGNhbiBlbWJl
+ZCBhIFRFRSBpbiBFTEYgZm9ybWF0IGludG8gVS1Cb290LCBidXQgdmVyc2lvbnMgb2YgT1AtVEVF
+IAo+IHNpbmNlCj4gMy44LjAgbXVzdCBiZSBlbWJlZGRlZCBpbiBiaW5hcnkgZm9ybWF0LCBhcyB0
+aGUgdGVlLmJpbiBjb250YWlucyAKPiBpbXBvcnRhbnQKPiBtZXRhLWRhdGEuIFsxXQo+IAo+IFVw
+ZGF0ZSB0aGUgY29uZmlndXJhdGlvbiBtZW51IGFuZCB0aGUgTWFrZWZpbGUgdG8gYWxsb3cgc2Vs
+ZWN0aW5nIHRvCj4gZW1iZWQgZWl0aGVyIHRlZS5lbGYgb3IgdGVlLmJpbi4KPiAKPiBCeSBkZWZh
+dWx0LCBlbWJlZCB0aGUgVEVFIGluIEVMRiBmb3JtYXQgdG8gc3RheSBjb21wYXRpYmxlIHdpdGgg
+Cj4gZXhpc3RpbmcKPiBjb25maWd1cmF0aW9ucy4KPiAKPiBbMV0gaHR0cHM6Ly9naXRodWIuY29t
+L09QLVRFRS9vcHRlZV9vcy9pc3N1ZXMvNDU0Mgo+IAo+IFNpZ25lZC1vZmYtYnk6IFZpbmNlbnQg
+U3RlaGzDqSA8dmluY2VudC5zdGVobGVAYXJtLmNvbT4KPiBDYzogQ2hyaXN0b3BoIE11ZWxsbmVy
+IDxjaHJpc3RvcGgubXVlbGxuZXJAdGhlb2Jyb21hLXN5c3RlbXMuY29tPgoKQXBwbGllZCB0byBt
+YXN0ZXIsIHRoYW5rcy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
+czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
