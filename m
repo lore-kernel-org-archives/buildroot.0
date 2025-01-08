@@ -1,76 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED2C1E77188
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 21:34:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D79DFE7719A
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 21:34:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E78981441;
-	Wed,  8 Jan 2025 21:34:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3NVHWiZ5juis; Wed,  8 Jan 2025 21:34:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E6D18143D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E6D18143D;
-	Wed,  8 Jan 2025 21:34:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A21D41FF7
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:34:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8FA4E60B13
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:34:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4F3560B15;
+	Wed,  8 Jan 2025 21:34:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ROdwz7jISp7o for <buildroot@buildroot.org>;
+ id EN6hrmwh9XVg; Wed,  8 Jan 2025 21:34:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7692060B16
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7692060B16;
+	Wed,  8 Jan 2025 21:34:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B98D51FF9
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:34:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9A7BC813F3
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:34:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zSvn2QCNnRkC for <buildroot@buildroot.org>;
  Wed,  8 Jan 2025 21:34:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
  helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 21A5F60AB9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21A5F60AB9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 220D78143D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 220D78143D
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 21A5F60AB9
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 220D78143D
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 21:34:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 9856BC0003;
- Wed,  8 Jan 2025 21:34:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id DEC69C0002;
+ Wed,  8 Jan 2025 21:34:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Guillaume William Brs <guillaume.bressaix@gmail.com>
-Date: Wed,  8 Jan 2025 22:34:07 +0100
-Message-ID: <20250108213411.2091627-2-thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed,  8 Jan 2025 22:34:06 +0100
+Message-ID: <20250108213411.2091627-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250108213411.2091627-1-thomas.petazzoni@bootlin.com>
-References: <20250108213411.2091627-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=gm1; t=1736372056;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=M4wPVVQwhhdEtX2Z+em1P8Ef0GBkJiGpwsHmx8mAZDY=;
- b=axYqSt8zL51dQJF83utw29kbrtBusbOxqz0sQRUAvP58wiiAoVOYcjlA/TH5f47hj9kV4Q
- YvT1hHGN12W9CaGjIkhYScGfLlgcOLShkd1vwhX7YuYkw91tNUK2Os6v6xPxg3Fhfk/O/o
- 62dRY/M6lzKTMbZXU9lfiOYwc9q9Ti6MFag8mjoC4vUlkcVcCcCHEWOWCSab78NBupiH01
- Gr+tThvh+fl/4RkTh7zaeqByVLfaADBDTyZbXtzQh/aHkl/dd3W++kFTxZTo9heEPVlhqe
- /M+QDKvQXPPvjujSXt1/bU0TKv7bmVzeLJB4EPLK3515KjQvBDzGbdP4FCJP7g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=wc6tEnFQhDNzJzAW4MvuH2NROVN6KmoeX7JPyxxV8QQ=;
+ b=ZTHYoaegFDZ+KtEhWJasHsUS5hwgLhlyGGfzOYSJkzA9IGnpZaBWgit6sFfHPfcza4lEfp
+ ZB+CAI7a893vZU3b+4HQ7EuwNgGJjZTUsDwoN9RAxGxzxcFBziuIUsj8VY3lhqlmvZzqqr
+ +JZLeo6yRLk8/QZiOHGjf3U6vyUDxAvdhoZqrvBaWi/3hp1UcFRa6pHhH5kS3p23YAL7P9
+ 8HTUN735JJ0NZ3HLXwpjdyD1CPpJr5pmxR2ZBbQnnw4LArB818fqE6JMZURXnLtqoJjO2J
+ Ez1EeMnjAZmfYKS9auyVQH0uZ1sWbA5wMREmucUL6AM5oZSRZrmESgnKZeifSA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=axYqSt8z
-Subject: [Buildroot] [PATCH 2/3] package/libxcrypt: make available only with
- glibc
+ header.s=gm1 header.b=ZTHYoaeg
+Subject: [Buildroot] [PATCH 1/3] package/linux-pam: backport upstream patch
+ to fix build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,102 +80,123 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libxcrypt has been added as a replacement for the libcrypt
-implementation that was part of glibc, but dropped from glibc starting
-from version 2.39.
-
-However, libxcrypt was made available for all C libraries, and this is
-unfortunately causing some problems as it can clash with the libcrypt
-implementation provided by the C library.
-
-In particular, linux-pam has been consistently failing with uclibc, in
-BR2_PER_PACKAGE_DIRECTORIES=y builds, with the following build
-failure:
-
-opasswd.c: In function 'compare_password':
-opasswd.c:133:27: error: invalid application of 'sizeof' to incomplete type 'struct crypt_data'
-
-What happens is relatively tricky, but let's try to break it down:
-
-- uclibc-ng install a stub libcrypt.a (no shared variant, as for
-  shared libraries, everything is in libc.so), and crypt.h
-
-- libxcrypt installs libcrypt.so.* and crypt.h
-
-So there is no "clash" on the library itself, but there is a clash on
-the header file.
-
-Since we're using BR2_PER_PACKAGE_DIRECTORIES=y, when building
-linux-pam, we are creating the per-package STAGING_DIR by copying the
-STAGING_DIR of linux-pam dependencies, i.e both the libxcrypt
-STAGING_DIR and the uclibc-ng STAGING_DIR. But the latter ends up
-being copied last, which means that at the end of the day, we have in
-the per-package STAGING_DIR of linux-pam:
-
-- The libcrypt.so from libxcrypt
-- The crypt.h header from uclibc-ng
-- The libcrypt.a from uclibc-ng
-
-When the ./configure script of linux-pam tests whether the library has
-crypt_r(), it concludes that yes it's available: and indeed
-libcrypt.so from libxcrypt has it.
-
-So it tries to use 'struct crypt_data' and 'crypt_r()', but those are
-not supported in uClibc-ng, and so cannot be found in the <crypt.h>
-header. So even if the ./configure script and the linux-pam code has
-some logic to fallback to crypt() if crypt_r() isn't available, this
-fallback doesn't trigger because the installed libcrypt.so does have
-crypt_r().
-
-Basically what happens is that uclibc-ng + libxcrypt is a combo that
-violates a golden rule of our BR2_PER_PACKAGE_DIRECTORIES=y
-implementation: packages shouldn't overwrite files from each other.
-
-To avoid this situation, we make libxcrypt only installable on
-glibc. This isn't a problem because as of today, BR2_PACKAGE_LIBXCRYPT
-is always selected "if BR2_TOOLCHAIN_USES_GLIBC".
-
-It should be noted though that the case of an older glibc (which still
-had its own internal libcrypt) + libxcrypt continues to exist. It's
-less likely to cause trouble though, as the libcrypt implementations
-are much more similar.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/560f66b0311d02dc884732221d6870ae3c38067c/
-
-Note: we do not add a Config.in comment for this glibc dependency,
-because libxcrypt really is a "replacement" library to fill in the
-void left by libcrypt's removal from glibc. There isn't realy a point
-showing "libxcrypt needs a toolchain w/ glibc", because with musl or
-uclibc-ng, the libcrypt functionality is directly part of the C
-library.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libxcrypt/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/libxcrypt/Config.in b/package/libxcrypt/Config.in
-index 57ae8f67a3..38c75b5e63 100644
---- a/package/libxcrypt/Config.in
-+++ b/package/libxcrypt/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBXCRYPT
- 	bool "libxcrypt"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  libxcrypt is a modern library for one-way hashing
- 	  of passwords. It supports a wide variety of both
--- 
-2.47.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+V2UgYXJlIHNlZWluZyBidWlsZCBpc3N1ZXMgd2l0aCBsaW51eC1wYW0gaW4gdGhlIGF1dG9idWls
+ZGVycyBzdWNoIGFzOgoKbWQ1X2NyeXB0LmM6IEluIGZ1bmN0aW9uICdHb29kY3J5cHRfbWQ1JzoK
+bWQ1X2NyeXB0LmM6MTQ1OjEzOiBlcnJvcjogaW1wbGljaXQgZGVjbGFyYXRpb24gb2YgZnVuY3Rp
+b24gJ2FzcHJpbnRmJzsgZGlkIHlvdSBtZWFuICd2c3ByaW50Zic/IFstV2ltcGxpY2l0LWZ1bmN0
+aW9uLWRlY2xhcmF0aW9uXQogIDE0NSB8ICAgICAgICAgaWYgKGFzcHJpbnRmKCZwYXNzd2QsICIl
+cyUuKnMkJXMiLCBtYWdpYywgc2wsIHNwLCBidWYpIDwgMCkKICAgICAgfCAgICAgICAgICAgICBe
+fn5+fn5+fgogICAgICB8ICAgICAgICAgICAgIHZzcHJpbnRmCgpUaGlzIGlzIGR1ZSB0byB0aGUg
+ZmFjdCB0aGF0IDxzdGRpby5oPiBnZXRzIGluY2x1ZGVkIHdpdGhvdXQKX0dOVV9TT1VSQ0UgYmVp
+bmcgZGVmaW5lZCwgYW5kIHNvIHRoZSBwcm90b3R5cGUgb2YgYXNwcmludGYoKSBpcyBub3QKYWNj
+ZXNzaWJsZSwgYXQgbGVhc3Qgd2l0aCB1Y2xpYmMtbmcuCgpUaGUgX0dOVV9TT1VSQ0UgZGVmaW5p
+dGlvbiBpcyBwcm9wZXJseSBpbiBsaW51eC1wYW0ncyBjb25maWcuaCwgYnV0CmNvbmZpZy5oIGRv
+ZXNuJ3QgZ2V0IHByb3Blcmx5IGluY2x1ZGVkIGZpcnN0IGV2ZXJ5d2hlcmUuIFRoaXMgaXNzdWUK
+aGFzIGJlZW4gZml4ZWQgdXBzdHJlYW0gaW4gdGhlIG1lYW4gdGltZSwgc28gd2Ugc2ltcGx5IGJh
+Y2twb3J0IHRoZQp1cHN0cmVhbSBwYXRjaC4KCkZpeGVzOgoKICBodHRwOi8vYXV0b2J1aWxkLmJ1
+aWxkcm9vdC5uZXQvcmVzdWx0cy80OWIxOTBiM2ZiYWUzY2RjYTRjN2EwOGIzYWI1MTAwYTkzN2Vk
+ZTllLwoKU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBi
+b290bGluLmNvbT4KLS0tCiAuLi4tY29uc2lzdGVudGx5LWluY2x1ZGUtY29uZmlnLmgtZmlyc3Qu
+cGF0Y2ggfCAxODAgKysrKysrKysrKysrKysrKysrCiAxIGZpbGUgY2hhbmdlZCwgMTgwIGluc2Vy
+dGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xpbnV4LXBhbS8wMDAxLWJ1aWxk
+LWNvbnNpc3RlbnRseS1pbmNsdWRlLWNvbmZpZy5oLWZpcnN0LnBhdGNoCgpkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9saW51eC1wYW0vMDAwMS1idWlsZC1jb25zaXN0ZW50bHktaW5jbHVkZS1jb25maWcu
+aC1maXJzdC5wYXRjaCBiL3BhY2thZ2UvbGludXgtcGFtLzAwMDEtYnVpbGQtY29uc2lzdGVudGx5
+LWluY2x1ZGUtY29uZmlnLmgtZmlyc3QucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXgg
+MDAwMDAwMDAwMC4uZTlmMzZiOGE2MAotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvbGludXgt
+cGFtLzAwMDEtYnVpbGQtY29uc2lzdGVudGx5LWluY2x1ZGUtY29uZmlnLmgtZmlyc3QucGF0Y2gK
+QEAgLTAsMCArMSwxODAgQEAKK0Zyb20gY2RiYTJjOGNkYmE5YjM1MDA1OTU2MjRmYjM3NWMwZGRh
+MjY2NjMxYiBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKK0Zyb206ICJEbWl0cnkgVi4gTGV2aW4i
+IDxsZHZAc3RyYWNlLmlvPgorRGF0ZTogRnJpLCAzMCBBdWcgMjAyNCAwODowMDowMCArMDAwMAor
+U3ViamVjdDogW1BBVENIXSBidWlsZDogY29uc2lzdGVudGx5IGluY2x1ZGUgY29uZmlnLmggZmly
+c3QKKworTWFrZSBzdXJlIHRoYXQgY29uZmlnLmggaXMgaW5jbHVkZWQgYmVmb3JlIGFueSBzeXN0
+ZW0gaGVhZGVyLgorCitVcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL2xpbnV4LXBhbS9saW51
+eC1wYW0vY29tbWl0LzVkN2VlZmIxODgzYzU1N2M3YTAyN2Y2OGU5NjZlMmZhZTI5NGE5YjYKK1Np
+Z25lZC1vZmYtYnk6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5j
+b20+CistLS0KKyBsaWJwYW0vcGFtX3ByZWx1ZGUuYyAgICAgICAgICAgICAgICB8IDggKysrKy0t
+LS0KKyBtb2R1bGVzL3BhbV9uYW1lc3BhY2UvYXJndl9wYXJzZS5jICB8IDIgKysKKyBtb2R1bGVz
+L3BhbV9zZXRxdW90YS9wYW1fc2V0cXVvdGEuYyB8IDMgKystCisgbW9kdWxlcy9wYW1fdGltZXN0
+YW1wL3NoYTEuYyAgICAgICAgfCAyICstCisgbW9kdWxlcy9wYW1fdW5peC9hdWRpdC5jICAgICAg
+ICAgICAgfCAzICstLQorIG1vZHVsZXMvcGFtX3VuaXgvYmlnY3J5cHRfbWFpbi5jICAgIHwgMiAr
+KworIG1vZHVsZXMvcGFtX3VuaXgvbWQ1LmMgICAgICAgICAgICAgIHwgNCArKy0tCisgbW9kdWxl
+cy9wYW1fdW5peC9tZDVfY3J5cHQuYyAgICAgICAgfCAyICstCisgbW9kdWxlcy9wYW1fdW5peC95
+cHBhc3N3ZC5oICAgICAgICAgfCAyICsrCisgOSBmaWxlcyBjaGFuZ2VkLCAxNyBpbnNlcnRpb25z
+KCspLCAxMSBkZWxldGlvbnMoLSkKKworZGlmZiAtLWdpdCBhL2xpYnBhbS9wYW1fcHJlbHVkZS5j
+IGIvbGlicGFtL3BhbV9wcmVsdWRlLmMKK2luZGV4IDZjNzNiZjVkLi5jNjJlMmYyYyAxMDA2NDQK
+Ky0tLSBhL2xpYnBhbS9wYW1fcHJlbHVkZS5jCisrKysgYi9saWJwYW0vcGFtX3ByZWx1ZGUuYwor
+QEAgLTUsMTcgKzUsMTcgQEAKKyAgKiAoQykgU2ViYXN0aWVuIFRyaWNhdWQgMjAwNSA8dG9hZHlA
+Z3Njb3JlLm9yZz4KKyAgKi8KKyAKKy0jaW5jbHVkZSA8c3RkaW8uaD4KKy0jaW5jbHVkZSA8c3lz
+bG9nLmg+CistCisgI2lmZGVmIFBSRUxVREUKKyAKKysjaW5jbHVkZSAicGFtX3ByaXZhdGUuaCIK
+KysKKysjaW5jbHVkZSA8c3RkaW8uaD4KKysjaW5jbHVkZSA8c3lzbG9nLmg+CisgI2luY2x1ZGUg
+PGxpYnByZWx1ZGUvcHJlbHVkZS5oPgorICNpbmNsdWRlIDxsaWJwcmVsdWRlL3ByZWx1ZGUtbG9n
+Lmg+CisgI2luY2x1ZGUgPGxpYnByZWx1ZGUvaWRtZWYtbWVzc2FnZS1wcmludC5oPgorIAorICNp
+bmNsdWRlICJwYW1fcHJlbHVkZS5oIgorLSNpbmNsdWRlICJwYW1fcHJpdmF0ZS5oIgorIAorIAor
+ICNkZWZpbmUgQU5BTFlaRVJfQ0xBU1MgInBhbSIKK2RpZmYgLS1naXQgYS9tb2R1bGVzL3BhbV9u
+YW1lc3BhY2UvYXJndl9wYXJzZS5jIGIvbW9kdWxlcy9wYW1fbmFtZXNwYWNlL2FyZ3ZfcGFyc2Uu
+YworaW5kZXggYWM3YzlhZTAuLmNiYWU3ODMxIDEwMDY0NAorLS0tIGEvbW9kdWxlcy9wYW1fbmFt
+ZXNwYWNlL2FyZ3ZfcGFyc2UuYworKysrIGIvbW9kdWxlcy9wYW1fbmFtZXNwYWNlL2FyZ3ZfcGFy
+c2UuYworQEAgLTI4LDYgKzI4LDggQEAKKyAgKiBWZXJzaW9uIDEuMSwgbW9kaWZpZWQgMi8yNy8x
+OTk5CisgICovCisgCisrI2luY2x1ZGUgImNvbmZpZy5oIgorKworICNpbmNsdWRlIDxsaW1pdHMu
+aD4KKyAjaW5jbHVkZSA8c3RkbGliLmg+CisgI2luY2x1ZGUgPGN0eXBlLmg+CitkaWZmIC0tZ2l0
+IGEvbW9kdWxlcy9wYW1fc2V0cXVvdGEvcGFtX3NldHF1b3RhLmMgYi9tb2R1bGVzL3BhbV9zZXRx
+dW90YS9wYW1fc2V0cXVvdGEuYworaW5kZXggYzE1ZmM2NjkuLjczNDQ1ZTI5IDEwMDY0NAorLS0t
+IGEvbW9kdWxlcy9wYW1fc2V0cXVvdGEvcGFtX3NldHF1b3RhLmMKKysrKyBiL21vZHVsZXMvcGFt
+X3NldHF1b3RhL3BhbV9zZXRxdW90YS5jCitAQCAtOCw2ICs4LDggQEAKKyAgICBDb3B5cmlnaHQg
+wqkgMjAxNiBLZWxsZXIgRnVjaHMgPGtlbGxlcmZ1Y2hzQGhhc2hiYW5nLnNoPgorICovCisgCisr
+I2luY2x1ZGUgInBhbV9pbmxpbmUuaCIKKysKKyAjaW5jbHVkZSA8c3lzL3R5cGVzLmg+CisgI2lu
+Y2x1ZGUgPHN5cy9xdW90YS5oPgorICNpbmNsdWRlIDxsaW51eC9xdW90YS5oPgorQEAgLTIyLDcg
+KzI0LDYgQEAKKyAjaW5jbHVkZSA8c2VjdXJpdHkvX3BhbV9tYWNyb3MuaD4KKyAjaW5jbHVkZSA8
+c2VjdXJpdHkvcGFtX2V4dC5oPgorICNpbmNsdWRlIDxzZWN1cml0eS9wYW1fbW9kdXRpbC5oPgor
+LSNpbmNsdWRlICJwYW1faW5saW5lLmgiCisgCisgI2lmbmRlZiBQQVRIX0xPR0lOX0RFRlMKKyAj
+IGRlZmluZSBQQVRIX0xPR0lOX0RFRlMgIi9ldGMvbG9naW4uZGVmcyIKK2RpZmYgLS1naXQgYS9t
+b2R1bGVzL3BhbV90aW1lc3RhbXAvc2hhMS5jIGIvbW9kdWxlcy9wYW1fdGltZXN0YW1wL3NoYTEu
+YworaW5kZXggZGZmNDU0Y2YuLmYyMWIyODcwIDEwMDY0NAorLS0tIGEvbW9kdWxlcy9wYW1fdGlt
+ZXN0YW1wL3NoYTEuYworKysrIGIvbW9kdWxlcy9wYW1fdGltZXN0YW1wL3NoYTEuYworQEAgLTM3
+LDYgKzM3LDcgQEAKKyAgKi8KKyAvKiBTZWUgaHR0cDovL3d3dy5pdGwubmlzdC5nb3YvZmlwc3B1
+YnMvZmlwMTgwLTEuaHRtIGZvciBkZXNjcmlwdGlvbnMuICovCisgCisrI2luY2x1ZGUgInBhbV9p
+bmxpbmUuaCIKKyAjaW5jbHVkZSA8c3lzL3R5cGVzLmg+CisgI2luY2x1ZGUgPHN5cy9zdGF0Lmg+
+CisgI2luY2x1ZGUgPG5ldGluZXQvaW4uaD4KK0BAIC00Nyw3ICs0OCw2IEBACisgI2luY2x1ZGUg
+PGVuZGlhbi5oPgorICNpbmNsdWRlIDx1bmlzdGQuaD4KKyAjaW5jbHVkZSAic2hhMS5oIgorLSNp
+bmNsdWRlICJwYW1faW5saW5lLmgiCisgCisgc3RhdGljIGNvbnN0IHVuc2lnbmVkIGNoYXIKKyBw
+YWRkaW5nW1NIQTFfQkxPQ0tfU0laRV0gPSB7CitkaWZmIC0tZ2l0IGEvbW9kdWxlcy9wYW1fdW5p
+eC9hdWRpdC5jIGIvbW9kdWxlcy9wYW1fdW5peC9hdWRpdC5jCitpbmRleCAxNTQ3YTY1Mi4uOTUx
+M2FhYTkgMTAwNjQ0CistLS0gYS9tb2R1bGVzL3BhbV91bml4L2F1ZGl0LmMKKysrKyBiL21vZHVs
+ZXMvcGFtX3VuaXgvYXVkaXQuYworQEAgLTEsNSArMSwzIEBACistI2luY2x1ZGUgImF1ZGl0Lmgi
+CistCisgI2luY2x1ZGUgImNvbmZpZy5oIgorIAorICNpZmRlZiBIQVZFX0xJQkFVRElUCitAQCAt
+MTEsNiArOSw3IEBACisgCisgI2luY2x1ZGUgPHNlY3VyaXR5L19wYW1fdHlwZXMuaD4KKyAKKysj
+aW5jbHVkZSAiYXVkaXQuaCIKKyAjaW5jbHVkZSAicGFzc3ZlcmlmeS5oIgorIAorIGludCBhdWRp
+dF9sb2coaW50IHR5cGUsIGNvbnN0IGNoYXIgKnVuYW1lLCBpbnQgcmV0dmFsKQorZGlmZiAtLWdp
+dCBhL21vZHVsZXMvcGFtX3VuaXgvYmlnY3J5cHRfbWFpbi5jIGIvbW9kdWxlcy9wYW1fdW5peC9i
+aWdjcnlwdF9tYWluLmMKK2luZGV4IGZhYjIxMmQ5Li4yMmQzMjVkYSAxMDA2NDQKKy0tLSBhL21v
+ZHVsZXMvcGFtX3VuaXgvYmlnY3J5cHRfbWFpbi5jCisrKysgYi9tb2R1bGVzL3BhbV91bml4L2Jp
+Z2NyeXB0X21haW4uYworQEAgLTEsMyArMSw1IEBACisrI2luY2x1ZGUgImNvbmZpZy5oIgorKwor
+ICNpbmNsdWRlIDxzdGRpby5oPgorICNpbmNsdWRlIDxzdHJpbmcuaD4KKyAKK2RpZmYgLS1naXQg
+YS9tb2R1bGVzL3BhbV91bml4L21kNS5jIGIvbW9kdWxlcy9wYW1fdW5peC9tZDUuYworaW5kZXgg
+OTViOGRlNGMuLjc4ZTlhZjI3IDEwMDY0NAorLS0tIGEvbW9kdWxlcy9wYW1fdW5peC9tZDUuYwor
+KysrIGIvbW9kdWxlcy9wYW1fdW5peC9tZDUuYworQEAgLTE4LDExICsxOCwxMSBAQAorICAqCisg
+ICovCisgCisrI2luY2x1ZGUgInBhbV9pbmxpbmUuaCIKKysKKyAjaW5jbHVkZSA8c3RyaW5nLmg+
+CisgI2luY2x1ZGUgIm1kNS5oIgorIAorLSNpbmNsdWRlICJwYW1faW5saW5lLmgiCistCisgI2lm
+bmRlZiBISUdIRklSU1QKKyAjZGVmaW5lIGJ5dGVSZXZlcnNlKGJ1ZiwgbGVuKQkvKiBOb3RoaW5n
+ICovCisgI2Vsc2UKK2RpZmYgLS1naXQgYS9tb2R1bGVzL3BhbV91bml4L21kNV9jcnlwdC5jIGIv
+bW9kdWxlcy9wYW1fdW5peC9tZDVfY3J5cHQuYworaW5kZXggOWE2YmQ0ZjkuLjk0NTFmMzc2IDEw
+MDY0NAorLS0tIGEvbW9kdWxlcy9wYW1fdW5peC9tZDVfY3J5cHQuYworKysrIGIvbW9kdWxlcy9w
+YW1fdW5peC9tZDVfY3J5cHQuYworQEAgLTEyLDExICsxMiwxMSBAQAorICAqCisgICovCisgCisr
+I2luY2x1ZGUgInBhbV9pbmxpbmUuaCIKKyAjaW5jbHVkZSA8c3RyaW5nLmg+CisgI2luY2x1ZGUg
+PHN0ZGlvLmg+CisgI2luY2x1ZGUgPHN0ZGxpYi5oPgorICNpbmNsdWRlICJtZDUuaCIKKy0jaW5j
+bHVkZSAicGFtX2lubGluZS5oIgorIAorIHN0YXRpYyBjb25zdCB1bnNpZ25lZCBjaGFyIGl0b2E2
+NFtdID0JLyogMCAuLi4gNjMgPT4gYXNjaWkgLSA2NCAqLworICIuLzAxMjM0NTY3ODlBQkNERUZH
+SElKS0xNTk9QUVJTVFVWV1hZWmFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6IjsKK2RpZmYgLS1n
+aXQgYS9tb2R1bGVzL3BhbV91bml4L3lwcGFzc3dkLmggYi9tb2R1bGVzL3BhbV91bml4L3lwcGFz
+c3dkLmgKK2luZGV4IGRjNjg2Y2Q3Li4zYTQwYzNlYSAxMDA2NDQKKy0tLSBhL21vZHVsZXMvcGFt
+X3VuaXgveXBwYXNzd2QuaAorKysrIGIvbW9kdWxlcy9wYW1fdW5peC95cHBhc3N3ZC5oCitAQCAt
+Niw2ICs2LDggQEAKKyAjaWZuZGVmIF9ZUFBBU1NXRF9IX1JQQ0dFTgorICNkZWZpbmUgX1lQUEFT
+U1dEX0hfUlBDR0VOCisgCisrI2luY2x1ZGUgImNvbmZpZy5oIgorKworICNpbmNsdWRlIDxycGMv
+cnBjLmg+CisgCisgCistLSAKKzIuNDcuMQorCi0tIAoyLjQ3LjEKCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
