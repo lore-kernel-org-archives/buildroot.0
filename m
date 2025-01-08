@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BA1FE77188
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:43:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35E83E7719B
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:43:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0D3380F82;
-	Wed,  8 Jan 2025 22:43:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0550980F80;
+	Wed,  8 Jan 2025 22:43:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fhrZZ3UcsKB1; Wed,  8 Jan 2025 22:43:30 +0000 (UTC)
+ id UxEIReracZs2; Wed,  8 Jan 2025 22:43:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E21A80F86
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE8D080F8C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E21A80F86;
-	Wed,  8 Jan 2025 22:43:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 439CC1EB8
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:43:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE8D080F8C;
+	Wed,  8 Jan 2025 22:43:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1B3227AA
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:43:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 24A8340200
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:43:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EDFAB80F7E
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:43:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HauW5uexckj0 for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WpHxs6oxCOGm for <buildroot@buildroot.org>;
  Wed,  8 Jan 2025 22:43:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
  helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6DB354021C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DB354021C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C18C480F6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C18C480F6E
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6DB354021C
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:43:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 816401BF207;
- Wed,  8 Jan 2025 22:43:23 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C18C480F6E
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:43:24 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 2F2E81BF204;
+ Wed,  8 Jan 2025 22:43:22 +0000 (UTC)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed,  8 Jan 2025 23:43:16 +0100
-Message-ID: <20250108224320.2241826-4-thomas.petazzoni@bootlin.com>
+Date: Wed,  8 Jan 2025 23:43:14 +0100
+Message-ID: <20250108224320.2241826-2-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250108224320.2241826-1-thomas.petazzoni@bootlin.com>
 References: <20250108224320.2241826-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1736376203;
+ d=bootlin.com; s=gm1; t=1736376202;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=8sBxBDrNhP3bNSd7PyTMMNuy30mnKRvw9gIcVoO/j+4=;
- b=R00Fc3ZHXKg58Hfulvw+4KHareev87L2OtiYWxqecZYmQUM0DXwuLdUdwKWvGlbAlhg6NE
- iZCL3oIClW63ko+yYwdHvDNL6fxyxadHNBkP00TlF5p+DCJ9E/vI1EpQYSLHvZReSCT0Is
- lVTxjNtl6HLlIW7jHfBaGIDH8StkNA9UIaCALMgqnIuuwhL0z63yuEnbEHlK5gF8WlE8/u
- pKdAl7Pq24WF1sJuGSDItuWc6B80sGhygLchYXmDzRve2KiShWoHfC3qyEGHbJ6OwqlL4C
- ranIComTntcaVU5hV8M5i5CIF2upApoVvFZc3AGD9X5Gv8If1ywMubYHAiRLeg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=OIch9qqSJ6dtAYU2+qyiaYnbgjepmPjepvWtA5wadLI=;
+ b=bPnby4JgZQPTFb268gK8F2pJ3gp5I1OSgAiXFBiZ/kXxpg2QBPkbM4Qjd/7pulnKgkmRuj
+ blmVTQcWjBwmu9ESm7o+UjAKoOoOANJt3hlv1rsxjbNkIHPe6TOi1EjrMo/yMy1RupRo0u
+ +f8LXhxVZ6sPa54P9nVqIzTVFuUtzB8jj5yocyR72TSTsLaStSElj/oLPIwxKxIYc5wbU0
+ BiOUHJVkmR9VC2S7TpsPmxFe5F6Uxhwl2PYKJ0Myl/QzlRWnHgp3v4oETnhznabXWv14Ki
+ YKgmillrHVoGfb+hRdbekOj9L7fOMWbWmt85JfIF886nVJV/S9lrxZzEVKgTxA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=R00Fc3ZH
-Subject: [Buildroot] [PATCH 3/4] package/prelink-cross: remove package
+ header.s=gm1 header.b=bPnby4Jg
+Subject: [Buildroot] [PATCH 1/4] package/cross-ldd: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,130 +82,111 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-V2UgYXJlIG5vdyB1c2luZyBjcm9zcy1sZGQgaW5zdGVhZCBvZiBwcmVsaW5rLWNyb3NzLCBzbyB3
-ZSBjYW4gZHJvcAp0aGlzIHBhY2thZ2UuCgpTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgUGV0YXp6b25p
-IDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgotLS0KIC5jaGVja3BhY2thZ2VpZ25vcmUg
-ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxIC0KIC4uLmMtRml4LVRMUy1vZmZzZXRzLWNv
-bXB1dGF0aW9uLWZvci1zMy5wYXRjaCB8IDQzIC0tLS0tLS0tLS0tLS0tLS0tLQogLi4ucmMtZXhl
-Y3N0YWNrLmMtZml4LXByZWxpbmtfcGF0aC10eXBlLnBhdGNoIHwgNDQgLS0tLS0tLS0tLS0tLS0t
-LS0tLQogcGFja2FnZS9wcmVsaW5rLWNyb3NzL3ByZWxpbmstY3Jvc3MuaGFzaCAgICAgIHwgIDMg
-LS0KIHBhY2thZ2UvcHJlbGluay1jcm9zcy9wcmVsaW5rLWNyb3NzLm1rICAgICAgICB8IDE2IC0t
-LS0tLS0KIDUgZmlsZXMgY2hhbmdlZCwgMTA3IGRlbGV0aW9ucygtKQogZGVsZXRlIG1vZGUgMTAw
-NjQ0IHBhY2thZ2UvcHJlbGluay1jcm9zcy8wMDAxLXNyYy1ydGxkLWRsLXRscy5jLUZpeC1UTFMt
-b2Zmc2V0cy1jb21wdXRhdGlvbi1mb3ItczMucGF0Y2gKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNr
-YWdlL3ByZWxpbmstY3Jvc3MvMDAwMi1zcmMtZXhlY3N0YWNrLmMtZml4LXByZWxpbmtfcGF0aC10
-eXBlLnBhdGNoCiBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9wcmVsaW5rLWNyb3NzL3ByZWxp
-bmstY3Jvc3MuaGFzaAogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcHJlbGluay1jcm9zcy9w
-cmVsaW5rLWNyb3NzLm1rCgpkaWZmIC0tZ2l0IGEvLmNoZWNrcGFja2FnZWlnbm9yZSBiLy5jaGVj
-a3BhY2thZ2VpZ25vcmUKaW5kZXggODRiMWU3YWUwMC4uNzc2ODk2MmI5ZiAxMDA2NDQKLS0tIGEv
-LmNoZWNrcGFja2FnZWlnbm9yZQorKysgYi8uY2hlY2twYWNrYWdlaWdub3JlCkBAIC05OTYsNyAr
-OTk2LDYgQEAgcGFja2FnZS9wcHRwLWxpbnV4LzAwMDEtc3VzdjMtbGVnYWN5LnBhdGNoIGxpYl9w
-YXRjaC5VcHN0cmVhbQogcGFja2FnZS9wcHRwLWxpbnV4LzAwMDItZml4LXBhcmFsbGVsLWJ1aWxk
-LnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQogcGFja2FnZS9wcmJvb20vMDAwMS1saWJwbmctMS40
-LnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQogcGFja2FnZS9wcmJvb20vMDAwMi1jb25maWd1cmUt
-cmVtb3ZlLXByZWRlZmluZWQtTzItb3B0aW1pemF0aW9uLWZsYWcucGF0Y2ggbGliX3BhdGNoLlVw
-c3RyZWFtCi1wYWNrYWdlL3ByZWxpbmstY3Jvc3MvMDAwMS1zcmMtcnRsZC1kbC10bHMuYy1GaXgt
-VExTLW9mZnNldHMtY29tcHV0YXRpb24tZm9yLXMzLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQog
-cGFja2FnZS9wcm9jcHMtbmcvUzAyc3lzY3RsIGxpYl9zeXN2LlZhcmlhYmxlcwogcGFja2FnZS9w
-cm9mdHBkL1M1MHByb2Z0cGQgU2hlbGxjaGVjayBsaWJfc3lzdi5JbmRlbnQgbGliX3N5c3YuVmFy
-aWFibGVzCiBwYWNrYWdlL3Byb3NvZHkvMDAwMS1lbmFibGUtc3lzbG9nLnBhdGNoIGxpYl9wYXRj
-aC5VcHN0cmVhbQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9wcmVsaW5rLWNyb3NzLzAwMDEtc3JjLXJ0
-bGQtZGwtdGxzLmMtRml4LVRMUy1vZmZzZXRzLWNvbXB1dGF0aW9uLWZvci1zMy5wYXRjaCBiL3Bh
-Y2thZ2UvcHJlbGluay1jcm9zcy8wMDAxLXNyYy1ydGxkLWRsLXRscy5jLUZpeC1UTFMtb2Zmc2V0
-cy1jb21wdXRhdGlvbi1mb3ItczMucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4
-IGNlYTEzNTdkMWQuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9wcmVsaW5rLWNyb3NzLzAwMDEt
-c3JjLXJ0bGQtZGwtdGxzLmMtRml4LVRMUy1vZmZzZXRzLWNvbXB1dGF0aW9uLWZvci1zMy5wYXRj
-aAorKysgL2Rldi9udWxsCkBAIC0xLDQzICswLDAgQEAKLUZyb20gNDA2NGY3N2QyZjU1MDc2MmNi
-ZjIyMGZlYzdjMjZhOGNlNDIxOWVhNCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKLUZyb206IEFs
-ZXhhbmRlciBFZ29yZW5rb3YgPGVnb3JlbmFyQGxpbnV4LmlibS5jb20+Ci1EYXRlOiBTdW4sIDgg
-QXVnIDIwMjEgMTE6MTk6NTIgKzAyMDAKLVN1YmplY3Q6IFtQQVRDSF0gc3JjL3J0bGQvZGwtdGxz
-LmM6IEZpeCBUTFMgb2Zmc2V0cyBjb21wdXRhdGlvbiBmb3IgczM5MCBhcmNoCi0KLXJ0bGRfZGV0
-ZXJtaW5lX3Rsc29mZnNldHMoKSBkaWRuJ3QgaGFuZGxlIHMzOTAgYXJjaCBwcm9wZXJseSBieSBm
-YWxsaW5nCi1iYWNrIHRvIHRoZSBkZWZhdWx0IGNhc2UuIElmIFRMU19UQ0JfQVRfVFAgaXMgMSwg
-dGhlbiBzZXQgb2Zmc2V0IHRvIC0xLgotCi1Gcm9tIGdsaWJjJ3Mgc3lzZGVwcy9zMzkwL25wdGwv
-dGxzLmg6Ci0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCi0vKiBUaGUgVENC
-IGNhbiBoYXZlIGFueSBzaXplIGFuZCB0aGUgbWVtb3J5IGZvbGxvd2luZyB0aGUgYWRkcmVzcyB0
-aGUKLSAgIHRocmVhZCBwb2ludGVyIHBvaW50cyB0byBpcyB1bnNwZWNpZmllZC4gIEFsbG9jYXRl
-IHRoZSBUQ0IgdGhlcmUuICAqLwotZGVmaW5lIFRMU19UQ0JfQVRfVFAJMQotZGVmaW5lIFRMU19E
-VFZfQVRfVFAJMAotCi1UaGlzIGxlYWQgdG8gdGhlIGZvbGxvd2luZyBlcnJvcjoKLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQotcHJlbGluay1ydGxkOiBlcnJvciB3aGlsZSBsb2Fk
-aW5nIHNoYXJlZCBsaWJyYXJpZXM6IC9saWI2NC9saWJjLnNvLjY6IGNhbm5vdCBoYW5kbGUgVExT
-IGRhdGEKLQotU2lnbmVkLW9mZi1ieTogQWxleGFuZGVyIEVnb3JlbmtvdiA8ZWdvcmVuYXJAbGlu
-dXguaWJtLmNvbT4KLS0tLQotIHNyYy9ydGxkL2RsLXRscy5jIHwgNSArKysrKwotIDEgZmlsZSBj
-aGFuZ2VkLCA1IGluc2VydGlvbnMoKykKLQotZGlmZiAtLWdpdCBhL3NyYy9ydGxkL2RsLXRscy5j
-IGIvc3JjL3J0bGQvZGwtdGxzLmMKLWluZGV4IDI4MGNlZTQ1Zjk1MC4uMjk0MjJkY2ZkMjVlIDEw
-MDY0NAotLS0tIGEvc3JjL3J0bGQvZGwtdGxzLmMKLSsrKyBiL3NyYy9ydGxkL2RsLXRscy5jCi1A
-QCAtMTQzLDYgKzE0MywxMSBAQCBydGxkX2RldGVybWluZV90bHNvZmZzZXRzIChpbnQgZV9tYWNo
-aW5lLCBzdHJ1Y3Qgcl9zY29wZV9lbGVtICpzZWFyY2hfbGlzdCkKLSAgICAgICB0bHNfdGNiX3Np
-emUgPSAwOwotICAgICAgIGJyZWFrOwotIAotKyAgICBjYXNlIEVNX1MzOTA6Ci0rICAgICAgdGxz
-X3RjYl9hdF90cCA9IDE7Ci0rICAgICAgdGxzX3RjYl9zaXplID0gLTE7Ci0rICAgICAgYnJlYWs7
-Ci0rCi0gICAgIGRlZmF1bHQ6Ci0gICAgICAgLyogSG9wZSB0aGVyZSdzIG5vIFRMUyEgICovCi0g
-ICAgICAgZm9yIChpID0gMDsgaSA8IHNlYXJjaF9saXN0LT5yX25saXN0OyBpKyspCi0tLSAKLTIu
-MzEuMQotCmRpZmYgLS1naXQgYS9wYWNrYWdlL3ByZWxpbmstY3Jvc3MvMDAwMi1zcmMtZXhlY3N0
-YWNrLmMtZml4LXByZWxpbmtfcGF0aC10eXBlLnBhdGNoIGIvcGFja2FnZS9wcmVsaW5rLWNyb3Nz
-LzAwMDItc3JjLWV4ZWNzdGFjay5jLWZpeC1wcmVsaW5rX3BhdGgtdHlwZS5wYXRjaApkZWxldGVk
-IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMjZhNjhkOGY1ZC4uMDAwMDAwMDAwMAotLS0gYS9wYWNr
-YWdlL3ByZWxpbmstY3Jvc3MvMDAwMi1zcmMtZXhlY3N0YWNrLmMtZml4LXByZWxpbmtfcGF0aC10
-eXBlLnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEsNDQgKzAsMCBAQAotRnJvbSA1MTYwMzBmMjg3
-ZjY1Y2E4YmRhYjkyYzk3OWJhMmQzMjhlZTQwNTA2IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQot
-RnJvbTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+Ci1EYXRlOiBG
-cmksIDMxIE1heSAyMDI0IDEyOjUxOjAxIC0wNjAwCi1TdWJqZWN0OiBbUEFUQ0hdIHNyYy9leGVj
-c3RhY2suYzogZml4IHByZWxpbmtfcGF0aCB0eXBlCi1NSU1FLVZlcnNpb246IDEuMAotQ29udGVu
-dC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04Ci1Db250ZW50LVRyYW5zZmVyLUVuY29k
-aW5nOiA4Yml0Ci0KLUZpeGVzOgotZXhlY3N0YWNrLmM6IEluIGZ1bmN0aW9uIOKAmGV4ZWNzdGFj
-a19tYWtlX3Jkd3LigJk6Ci1leGVjc3RhY2suYzoxMjc6MTc6IGVycm9yOiBwYXNzaW5nIGFyZ3Vt
-ZW50IDEgb2Yg4oCYYXNwcmludGbigJkgZnJvbSBpbmNvbXBhdGlibGUgcG9pbnRlciB0eXBlIFst
-V2luY29tcGF0aWJsZS1wb2ludGVyLXR5cGVzXQotICAxMjcgfCAgICAgICBhc3ByaW50ZiAoJnBy
-ZWxpbmtfcGF0aCwgIiVzLyVzIiwgZGlybmFtZSwgUFJFTElOS19QUk9HIEVYRUVYVCk7Ci0gICAg
-ICB8ICAgICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+Ci0gICAgICB8ICAgICAgICAgICAgICAg
-ICB8Ci0gICAgICB8ICAgICAgICAgICAgICAgICBjb25zdCBjaGFyICoqCi1JbiBmaWxlIGluY2x1
-ZGVkIGZyb20gZXhlY3N0YWNrLmM6MTA6Ci0vdXNyL2luY2x1ZGUvc3RkaW8uaDo0MDM6NDA6IG5v
-dGU6IGV4cGVjdGVkIOKAmGNoYXIgKiogcmVzdHJpY3TigJkgYnV0IGFyZ3VtZW50IGlzIG9mIHR5
-cGUg4oCYY29uc3QgY2hhciAqKuKAmQotICA0MDMgfCBleHRlcm4gaW50IGFzcHJpbnRmIChjaGFy
-ICoqX19yZXN0cmljdCBfX3B0ciwKLSAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgfn5+fn5+
-fn5+fn5+fn5+fn5+Xn5+fn4KLQotU2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlhcmQgPGphbWVz
-LmhpbGxpYXJkMUBnbWFpbC5jb20+Ci1TaWduZWQtb2ZmLWJ5OiBSaWNoYXJkIFB1cmRpZSA8cmlj
-aGFyZC5wdXJkaWVAbGludXhmb3VuZGF0aW9uLm9yZz4KLVVwc3RyZWFtOiBodHRwczovL2dpdC55
-b2N0b3Byb2plY3Qub3JnL3ByZWxpbmstY3Jvc3MvY29tbWl0Lz9pZD1mZjI1NjFjMDJhZGU5NmM1
-ZDRkNTZkZGQ0ZTI3ZmYwNjQ4NDBhMTc2Ci1TaWduZWQtb2ZmLWJ5OiBUaG9tYXMgUGV0YXp6b25p
-IDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgotLS0tCi0gc3JjL2V4ZWNzdGFjay5jIHwg
-MiArLQotIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQotCi1k
-aWZmIC0tZ2l0IGEvc3JjL2V4ZWNzdGFjay5jIGIvc3JjL2V4ZWNzdGFjay5jCi1pbmRleCBkZGE2
-YmM3Li41NDEzZmEyIDEwMDY0NAotLS0tIGEvc3JjL2V4ZWNzdGFjay5jCi0rKysgYi9zcmMvZXhl
-Y3N0YWNrLmMKLUBAIC01Miw3ICs1Miw3IEBAIGNvbnN0IGNoYXIgKnByb2dyYW1fcGF0aDsKLSAK
-LSAvKiBUaGUgZnVsbCBwYXRobmFtZSBvZiB0aGUgcHJlbGluayB0b29sLCBvciBOVUxMIGlmIGl0
-IGhhc24ndCBiZWVuCi0gICAgY29tcHV0ZWQgeWV0LiAgKi8KLS1jb25zdCBjaGFyICpwcmVsaW5r
-X3BhdGg7Ci0rY2hhciAqcHJlbGlua19wYXRoOwotIAotIHN0YXRpYyBlcnJvcl90Ci0gcGFyc2Vf
-b3B0IChpbnQga2V5LCBjaGFyICphcmcsIHN0cnVjdCBhcmdwX3N0YXRlICpzdGF0ZSkKLS0tIAot
-Mi40NS4yCi0KZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHJlbGluay1jcm9zcy9wcmVsaW5rLWNyb3Nz
-Lmhhc2ggYi9wYWNrYWdlL3ByZWxpbmstY3Jvc3MvcHJlbGluay1jcm9zcy5oYXNoCmRlbGV0ZWQg
-ZmlsZSBtb2RlIDEwMDY0NAppbmRleCA2Nzc2ZDQwN2I4Li4wMDAwMDAwMDAwCi0tLSBhL3BhY2th
-Z2UvcHJlbGluay1jcm9zcy9wcmVsaW5rLWNyb3NzLmhhc2gKKysrIC9kZXYvbnVsbApAQCAtMSwz
-ICswLDAgQEAKLSMgTG9jYWxseSBjb21wdXRlZAotc2hhMjU2ICA1NTVmZDY1YzFiOTA3ZjliNzhk
-NmQ0MWVjMDRjYjZlMjQyZDJlY2IwNjY3ODY3ZTM5Y2RkNTE3YjNmMTgyZGQzICBwcmVsaW5rLWNy
-b3NzLWE4NTNhNWQ3MTVkODRlZWM5M2FhNjhlOGYyZGYyNmI3ZDg2MGY1YjItZ2l0NC50YXIuZ3oK
-LXNoYTI1NiAgYjhhMmY3M2Y3NDNkYzFhNTFhZmYyM2YxYWFjYmNhNGI4Njg1NjRkYjUyNDk2ZmEz
-YzBjYWJhNzU1YmZkMWVhZiAgQ09QWUlORwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9wcmVsaW5rLWNy
-b3NzL3ByZWxpbmstY3Jvc3MubWsgYi9wYWNrYWdlL3ByZWxpbmstY3Jvc3MvcHJlbGluay1jcm9z
-cy5tawpkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMjMxMmVlNTNlNi4uMDAwMDAwMDAw
-MAotLS0gYS9wYWNrYWdlL3ByZWxpbmstY3Jvc3MvcHJlbGluay1jcm9zcy5taworKysgL2Rldi9u
-dWxsCkBAIC0xLDE2ICswLDAgQEAKLSMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCi0jCi0jIGhvc3Qt
-cHJlbGluay1jcm9zcwotIwotIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKLQotUFJFTElOS19DUk9T
-U19WRVJTSU9OID0gYTg1M2E1ZDcxNWQ4NGVlYzkzYWE2OGU4ZjJkZjI2YjdkODYwZjViMgotUFJF
-TElOS19DUk9TU19TSVRFID0gaHR0cHM6Ly9naXQueW9jdG9wcm9qZWN0Lm9yZy9naXQvcHJlbGlu
-ay1jcm9zcwotUFJFTElOS19DUk9TU19TSVRFX01FVEhPRCA9IGdpdAotUFJFTElOS19DUk9TU19M
-SUNFTlNFID0gR1BMLTIuMCsKLVBSRUxJTktfQ1JPU1NfTElDRU5TRV9GSUxFUyA9IENPUFlJTkcK
-LSMgU291cmNlcyBmcm9tIGdpdCwgbm8gY29uZmlndXJlIHNjcmlwdCBwcmVzZW50Ci1QUkVMSU5L
-X0NST1NTX0FVVE9SRUNPTkYgPSBZRVMKLUhPU1RfUFJFTElOS19DUk9TU19ERVBFTkRFTkNJRVMg
-PSBob3N0LWVsZnV0aWxzIGhvc3QtbGliaWJlcnR5Ci0KLSQoZXZhbCAkKGhvc3QtYXV0b3Rvb2xz
-LXBhY2thZ2UpKQotLSAKMi40Ny4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+This commit introduces a new cross-ldd package which installs the
+cross ldd implementation that comes from Crosstool-NG, and which can
+be used like ldd, but when cross-compiling. We intend to use it as a
+replacement of host-prelink-cross for our dracut package.
+
+The cross-ldd from Crosstool-NG is in fact even recommended by the
+Dracut documentation, in its docs/README.cross document:
+
+   To support cross-compiled binaries, a different ldd variant is needed that
+   works on those binaries. One such ldd script is found at
+   https://gist.github.com/jerome-pouiller/c403786c1394f53f44a3b61214489e6f
+
+This Github Gist in fact contains the xldd.in code from Crosstool-NG.
+
+Our package downloads the full tarball of Crosstool-NG. We tried to
+download only the script and the license file, but we couldn't figure
+out a way of downloading them *and* have the version in the filename
+to make sure that when doing an upgrade to a newer version, we
+wouldn't have a clash between old/new files having the same name (and
+causing conflicts with the hash verification). So in the end, we opted
+for download the whole tarball.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                       |  1 +
+ package/cross-ldd/cross-ldd.hash |  4 ++++
+ package/cross-ldd/cross-ldd.mk   | 37 ++++++++++++++++++++++++++++++++
+ 3 files changed, 42 insertions(+)
+ create mode 100644 package/cross-ldd/cross-ldd.hash
+ create mode 100644 package/cross-ldd/cross-ldd.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 16b72eee08..1174100014 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3145,6 +3145,7 @@ F:	package/cifs-utils/
+ F:	package/cloop/
+ F:	package/cmake/
+ F:	package/cramfs/
++F:	package/cross-ldd/
+ F:	package/dmidecode/
+ F:	package/double-conversion/
+ F:	package/flashrom/
+diff --git a/package/cross-ldd/cross-ldd.hash b/package/cross-ldd/cross-ldd.hash
+new file mode 100644
+index 0000000000..b179aec5e0
+--- /dev/null
++++ b/package/cross-ldd/cross-ldd.hash
+@@ -0,0 +1,4 @@
++# From http://crosstool-ng.org/download/crosstool-ng/crosstool-ng-1.26.0.tar.xz.sha512
++sha512  7834184ae5792fd347455f9f48fee826248dcb82d271954ed4304b1a18f63995ff8a2c3b817564dcf147ac7e16e02d779195b26d97eb57db27f1118a1837002a  crosstool-ng-1.26.0.tar.xz
++# Locally calculated
++sha256  07bc0ccd386469c748c4cf6c8faca5667fbf8c4400386714287fa233acfd68ba  COPYING
+diff --git a/package/cross-ldd/cross-ldd.mk b/package/cross-ldd/cross-ldd.mk
+new file mode 100644
+index 0000000000..357133cdd2
+--- /dev/null
++++ b/package/cross-ldd/cross-ldd.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# cross-ldd
++#
++################################################################################
++
++CROSS_LDD_VERSION = 1.26.0
++CROSS_LDD_SITE = http://crosstool-ng.org/download/crosstool-ng
++CROSS_LDD_SOURCE = crosstool-ng-$(CROSS_LDD_VERSION).tar.xz
++CROSS_LDD_LICENSE = GPL-2.0
++CROSS_LDD_LICENSE_FILES = COPYING
++
++ifeq ($(BR2_ARCH_IS_64),y)
++CROSS_LDD_BITNESS = 64
++else
++CROSS_LDD_BITNESS = 32
++endif
++
++CROSS_LDD_TOOLS_PREFIX = $(patsubst %-,%,$(TARGET_CROSS))
++
++define HOST_CROSS_LDD_CONFIGURE_CMDS
++	sed \
++		-e "s%@@CT_bash@@%/usr/bin/env bash%" \
++		-e "s%@@CT_VERSION@@%$(CROSS_LDD_VERSION)%" \
++		-e "s%@@CT_BITS@@%$(CROSS_LDD_BITNESS)%" \
++		-e "s%@@CT_sed@@%sed%" \
++		-e "s%@@CT_grep@@%grep%" \
++		-e "s%^prefix=.*%prefix=$(CROSS_LDD_TOOLS_PREFIX)%" \
++		$(@D)/scripts/xldd.in > \
++		$(@D)/scripts/xldd
++endef
++
++define HOST_CROSS_LDD_INSTALL_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/scripts/xldd $(TARGET_CROSS)xldd
++endef
++
++$(eval $(host-generic-package))
+-- 
+2.47.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
