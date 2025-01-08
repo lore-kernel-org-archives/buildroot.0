@@ -4,58 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C770BE77199
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 20:35:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6156E77188
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 20:36:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9382C80D6B;
-	Wed,  8 Jan 2025 20:35:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ADE5B80D6B;
+	Wed,  8 Jan 2025 20:36:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sLoLv9hsdk3L; Wed,  8 Jan 2025 20:35:53 +0000 (UTC)
+ id j5gyEJv9WrdD; Wed,  8 Jan 2025 20:36:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B54AC80D8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D04D880DEE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B54AC80D8C;
-	Wed,  8 Jan 2025 20:35:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id EA1D31EB8
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 20:35:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D04D880DEE;
+	Wed,  8 Jan 2025 20:36:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8DD281EB8
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 20:36:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E425F6086D
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 20:35:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7B2646083A
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 20:36:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DyVhfu4x6XZn for <buildroot@buildroot.org>;
- Wed,  8 Jan 2025 20:35:52 +0000 (UTC)
+ id 98W8Zt6tedyi for <buildroot@buildroot.org>;
+ Wed,  8 Jan 2025 20:36:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3DC226083A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DC226083A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 69C9D6086D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69C9D6086D
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3DC226083A
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 20:35:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 69C9D6086D
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 20:36:21 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1559455254; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -173400979; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 08 Jan 2025 20:35:44 +0000 (UTC)
-Message-ID: <3176f967-29c6-47c2-a1f5-d4bd96ec6567@korsgaard.com>
-Date: Wed, 8 Jan 2025 21:35:42 +0100
+ Wed, 08 Jan 2025 20:36:17 +0000 (UTC)
+Message-ID: <5f16395c-c4b3-4c30-b63b-4fafd0189c93@korsgaard.com>
+Date: Wed, 8 Jan 2025 21:36:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-References: <20241230182234.CBDEF828A6@busybox.osuosl.org>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot List <buildroot@buildroot.org>
+References: <20241229123751.639378-1-thomas.petazzoni@bootlin.com>
+ <20241229123751.639378-3-thomas.petazzoni@bootlin.com>
 Content-Language: en-US
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20241230182234.CBDEF828A6@busybox.osuosl.org>
+In-Reply-To: <20241229123751.639378-3-thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=mHqce8LO4herDb1P3Pudd6/4baxCTNr3l19M5+KZ1eLtHcBKDXdkIn1B/uUjta5ZuNrJ2fCbyjsFNddlZsijasNgocaASKSYs4c65noGTENpD2lDokCZGK7sOMrA7uWeaiaViCKR4APhlTRhL4YVpeC+OYdEQz9o/zFp4k+lBF3loyvaG2ep18suo5nLS7YpaNKKJhfWjdMRmbw6ztOfu2Zesr9Qxp61VYIBqMOWABmcVDj6taYTBukxs4osatcrg+6QiQlrq7OjND1Vf27V9p2nQ/XiZp6o8HXGFA4Yl/+tF3t7JShP9r5zXksRf4KxNgU8hy2R5Ozj6/9kbQpumw==;
+ b=Cf9sKmeAm7Ag86h17bic1cpT9/Du3RwPGVoU+12WSt7SoqVQgWXRcm5xzn1tvDgZi2Cj4a2StJSQdPcosDoUv6OnOsm9wc345eNv7gYoueMG1D9WvI4Ks6WgEaIpm0xtZWjNDfFdMWfdOp+FZ9D0aXGNhrPow6iyud12ugT18rm5aAzKJqlOS0nfI761AgJdwvci1sR2bx9Nz+k4JAhy0urvk07o9CvyQ2okhwr/snJ/VszVlhpQLGwlSpwo6aH81UNQ3CWmEtVh4QW58jE0oqUkiysa2pIWD3qHNSaayqNY8hvr0/YgqmUO1P3i7e1roC/njS0hYHWOXqKfP+EloQ==;
  s=purelymail1; d=purelymail.com; v=1;
- bh=bB0s4WJd0JWjC+sPL/N/GpELz2BL8bEMwuOti0We9jg=;
+ bh=vntYaYhJN5eWD30wB+0xLYXs4AhU9AshwP/38NqkN9o=;
  h=Feedback-ID:Received:Date:Subject:To:From; 
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
@@ -63,9 +65,8 @@ X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=mHqce8LO
-Subject: Re: [Buildroot] [git commit] linux: select
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL when needed
+ header.a=rsa-sha256 header.s=purelymail1 header.b=Cf9sKmeA
+Subject: Re: [Buildroot] [PATCH 2/4] linux: select host-uboot-tools on nios2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,30 +83,26 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/30/24 19:18, Julien Olivain wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=5dae966a30c5485e45b94f750a739d36810cba4c
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/29/24 13:37, Thomas Petazzoni wrote:
+> In the latest kernel, U-Boot images are always generated when building
+> a kernel for NIOS2. Note that we build the kernel with:
 > 
-> The autobuilders are regularly reporting issues when building the
-> Linux kernel due to BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL not being
-> enabled.
+>    make all
+>    make <selected-image>
 > 
-> Since the autobuilders are always using
-> BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG, let's have this option
-> select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL when the latest kernel is
-> used.
+> so the selected image through Buildroot options doesn't matter: a
+> U-Boot image is always generated.
 > 
-> For now, we enable this for ARC, Sparc and x86-64, but it might have
-> to be extended for additional architectures based on build results.
+> Therefore, in order to fix autobuilder issues, make sure
+> host-uboot-tools are always selected when building the latest kernel
+> version. We do not select it in general as custom versions may be
+> different.
 > 
 > Fixes:
 > 
->    http://autobuild.buildroot.net/results/596699ede6e651163a23fa50386d84aca24c9a28
->    http://autobuild.buildroot.net/results/77a767bcd78f9ed21668cc268e91a4584a821661
->    http://autobuild.buildroot.net/results/e846d13c9f001b76a08ffb94f69c8dd26b4f5811
+>    http://autobuild.buildroot.net/results/1d4c249887bdd78dab40152ad3a4fcef16458a1a/
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
 Committed to 2024.11.x, thanks.
 
