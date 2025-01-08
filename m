@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADD4EE77199
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:05:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F0BBE77188
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:05:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7CAED8193E;
-	Wed,  8 Jan 2025 22:05:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE03960BB0;
+	Wed,  8 Jan 2025 22:05:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rm5l-psLfM3p; Wed,  8 Jan 2025 22:05:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ISQRwmImnZJG; Wed,  8 Jan 2025 22:05:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29A3D81947
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE6EF60BDC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 29A3D81947;
-	Wed,  8 Jan 2025 22:05:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE6EF60BDC;
+	Wed,  8 Jan 2025 22:05:35 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 588107AA
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 74C3B1EB8
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2DDDA40146
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5228240967
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2YjwfNM63SNc for <buildroot@buildroot.org>;
+ id OvUrwbJryC0V for <buildroot@buildroot.org>;
  Wed,  8 Jan 2025 22:04:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 198FF409B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CAF6409A7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 198FF409B7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0CAF6409A7
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 15C7083F27; Wed,  8 Jan 2025 22:04:45 +0000 (UTC)
+ id 0978A83F26; Wed,  8 Jan 2025 22:04:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Jan 2025 23:01:16 +0100
+Date: Wed, 8 Jan 2025 22:59:45 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 36ec020e6fc1e99a344d12ed2c493ff5877c742b
-X-Git-Newrev: eb3631955a9c9ce5c69cb0dd4756544a86a3cf21
+X-Git-Oldrev: bbddbb4e7deec10da834e36716d2486ddd156377
+X-Git-Newrev: 36ec020e6fc1e99a344d12ed2c493ff5877c742b
 X-Patchwork-Hint: ignore
-Message-Id: <20250108220445.15C7083F27@busybox.osuosl.org>
+Message-Id: <20250108220445.0978A83F26@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2024.11.x]
- package/gobject-introspection: disable on Microblaze
+ package/pkg-kernel-module: disable CONFIG_TRIM_UNUSED_KSYMS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,47 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb3631955a9c9ce5c69cb0dd4756544a86a3cf21
+commit: https://git.buildroot.net/buildroot/commit/?id=36ec020e6fc1e99a344d12ed2c493ff5877c742b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-The build of GOI on Microblaze fails as qemu-user hangs forver when
-running the GOI programs. Considering how small Microblaze targets
-are, the use-case for GOI is very small if not inexistant, and it's
-unlikely anybody is ever going to debug this, so just disable GOI on
-Microblaze.
+The kernel option CONFIG_TRIM_UNUSED_KSYMS=y allows to trim unused
+kernel symbols... which basically prevents building external
+modules. This option has been enabled in the default MIPS architecture
+kernel defconfig since pretty much forever, and it causes build
+failures of all our external modules on MIPS in the autobuilders.
 
-This issue is causing timeouts in the autobuilders on a regular basis:
-
-  http://autobuild.buildroot.net/?status=TIMEOUT&reason=gobject-introspection%
+To fix this in a global manner, we handle the problem in the
+kernel-module infrastructure, by appending to the
+<pkg>_LINUX_CONFIG_FIXUPS variable provided by the package.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/f8e5ef74478c63c89e7b99fb928b97ac4518f943/
+  http://autobuild.buildroot.net/results/c26abec4e24d06557079654b12825efb2211996f/ (cryptodev-linux)
+  http://autobuild.buildroot.net/results/699c618730cb33f0ccf54f90e4b722198fd3d3bc/ (emlog)
+  http://autobuild.buildroot.net/results/f1d5626f5698a955bf378217528fbf4f8f741435/ (rtl8812au-aircrack-ng)
+  http://autobuild.buildroot.net/results/c9a507757ce3a01cd08d596cb519ee9f19caf77c/ (mdio-tools)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 8548c7586a56938b2f52f5c41050441b53a457f0)
+(cherry picked from commit 1d8d9e8d6cd824b2a43a0b92d71cfb25a3f9300a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gobject-introspection/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/pkg-kernel-module.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
-index 345118745f..681655c2d4 100644
---- a/package/gobject-introspection/Config.in
-+++ b/package/gobject-introspection/Config.in
-@@ -2,6 +2,11 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
- 	bool
- 	default y
- 	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-+	# gobject-introspection programs cause a hang of Qemu on
-+	# Microblaze, and supporting GOI on Microblaze is not very
-+	# relevant.
-+	depends on !BR2_microblazeel
-+	depends on !BR2_microblazebe
+diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
+index 4f64a73f11..032874c3ca 100644
+--- a/package/pkg-kernel-module.mk
++++ b/package/pkg-kernel-module.mk
+@@ -62,6 +62,9 @@ $(2)_MAKE ?= $$(BR2_MAKE)
+ # the root of the package.
+ $(2)_MODULE_SUBDIRS ?= .
  
- config BR2_PACKAGE_GOBJECT_INTROSPECTION
- 	bool "gobject-introspection"
++$(2)_LINUX_CONFIG_FIXUPS += \
++	$$(sep)$$(call KCONFIG_DISABLE_OPT,CONFIG_TRIM_UNUSED_KSYMS)
++
+ # Build the kernel module(s)
+ # Force PWD for those packages that want to use it to find their
+ # includes and other support files (Booo!)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
