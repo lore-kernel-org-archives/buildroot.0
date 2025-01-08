@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F40DE7719A
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:05:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78DE4E77188
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:05:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C78AD60D9C;
-	Wed,  8 Jan 2025 22:05:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D7B6817B3;
+	Wed,  8 Jan 2025 22:05:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tkN_x8QMAUde; Wed,  8 Jan 2025 22:05:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nQjZdRyFrD8F; Wed,  8 Jan 2025 22:05:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E323260BAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AC358161D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E323260BAE;
-	Wed,  8 Jan 2025 22:05:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 087E11EB8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4AC358161D;
+	Wed,  8 Jan 2025 22:05:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2C3061FF9
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 235A2409C1
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F338C40300
+ for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ErcsKw48l9gE for <buildroot@buildroot.org>;
- Wed,  8 Jan 2025 22:04:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KA6EAtWmH38q for <buildroot@buildroot.org>;
+ Wed,  8 Jan 2025 22:04:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DE6A40970
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E565402F3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7DE6A40970
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E565402F3
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 72DD683F26; Wed,  8 Jan 2025 22:04:44 +0000 (UTC)
+ id EF2A583F2A; Wed,  8 Jan 2025 22:04:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Jan 2025 22:17:50 +0100
+Date: Wed, 8 Jan 2025 21:28:18 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 92f81d78a4bf4aeb7e4f18e236275cc50d68a22c
-X-Git-Newrev: 1fae268c4e7b783827b883c53aadd5901d7e8356
+X-Git-Oldrev: e4b591c8d14f9225c96c8ead92c390b9c03fa417
+X-Git-Newrev: 39e5e3a29a52a688f9cf172a8e8317d2e2d01e8d
 X-Patchwork-Hint: ignore
-Message-Id: <20250108220444.72DD683F26@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/c-icap: memcached
- code needs <crypt.h>
+Message-Id: <20250108220443.EF2A583F2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] linux: select
+ host-uboot-tools on nios2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,53 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fae268c4e7b783827b883c53aadd5901d7e8356
+commit: https://git.buildroot.net/buildroot/commit/?id=39e5e3a29a52a688f9cf172a8e8317d2e2d01e8d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-The memcached code of c-icap needs <crypt.h>, which is no longer
-provided by glibc since glibc 2.39. So add some logic to add a
-dependency on libxcrypt when needed.
+In the latest kernel, U-Boot images are always generated when building
+a kernel for NIOS2. Note that we build the kernel with:
+
+  make all
+  make <selected-image>
+
+so the selected image through Buildroot options doesn't matter: a
+U-Boot image is always generated.
+
+Therefore, in order to fix autobuilder issues, make sure
+host-uboot-tools are always selected when building the latest kernel
+version. We do not select it in general as custom versions may be
+different.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/63b04f86bb8794b79d206659a883acef96dfebf0/
+  http://autobuild.buildroot.net/results/1d4c249887bdd78dab40152ad3a4fcef16458a1a/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit e71036045b9b0d9b2c1bd3a2d17f57187ffdde9d)
+(cherry picked from commit d94c478ebc03fb71cd0c7ee48e7d52ff79b2807e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/c-icap/Config.in | 3 +++
- package/c-icap/c-icap.mk | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ linux/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/c-icap/Config.in b/package/c-icap/Config.in
-index 8f7963c26a..3c1325ee39 100644
---- a/package/c-icap/Config.in
-+++ b/package/c-icap/Config.in
-@@ -3,6 +3,9 @@ config BR2_PACKAGE_C_ICAP
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	# the libmemcached code uses <crypt.h>
-+	select BR2_PACKAGE_LIBXCRYPT if \
-+	       BR2_PACKAGE_LIBMEMCACHED && BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  c-icap is an implementation of an ICAP server. It can be
- 	  used with HTTP proxies that support the ICAP protocol to
-diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-index 36ef1c8b12..4ece4c4b26 100644
---- a/package/c-icap/c-icap.mk
-+++ b/package/c-icap/c-icap.mk
-@@ -43,7 +43,7 @@ endif
+diff --git a/linux/Config.in b/linux/Config.in
+index b70b1f323a..4d0620150d 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -33,6 +33,8 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	# mips always generates an ITB image
+ 	select BR2_PACKAGE_HOST_UBOOT_TOOLS if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	select BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	# nios2 always generates a U-Boot image
++	select BR2_PACKAGE_HOST_UBOOT_TOOLS if BR2_nios2
  
- ifeq ($(BR2_PACKAGE_LIBMEMCACHED),y)
- C_ICAP_CONF_OPTS += --with-memcached
--C_ICAP_DEPENDENCIES += libmemcached
-+C_ICAP_DEPENDENCIES += libmemcached $(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt)
- else
- C_ICAP_CONF_OPTS += --without-memcached
- endif
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (5.10.162-cip24)"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
