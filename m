@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07419E77188
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:04:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D1E5E77199
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:04:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C8927815CF;
-	Wed,  8 Jan 2025 22:04:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15BC4815AD;
+	Wed,  8 Jan 2025 22:04:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bGrG8XDA_tMg; Wed,  8 Jan 2025 22:04:50 +0000 (UTC)
+ id xCelmu8ldqNd; Wed,  8 Jan 2025 22:04:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0500815E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DE3081764
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0500815E7;
-	Wed,  8 Jan 2025 22:04:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 31E701EB8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DE3081764;
+	Wed,  8 Jan 2025 22:04:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D07F61EB8
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B65F409BC
+ by smtp3.osuosl.org (Postfix) with ESMTP id B16EE60B8C
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zbdxhib6IEUD for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SBM-ITU9Oa2Z for <buildroot@buildroot.org>;
  Wed,  8 Jan 2025 22:04:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04A4640146
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A95A60BA5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 04A4640146
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8A95A60BA5
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:04:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4A7483F27; Wed,  8 Jan 2025 22:04:43 +0000 (UTC)
+ id 34CB783F2A; Wed,  8 Jan 2025 22:04:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Jan 2025 21:27:41 +0100
+Date: Wed, 8 Jan 2025 21:43:46 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 1f6275e558efe187795de6726cf0b0b47bcfc6c4
-X-Git-Newrev: e4b591c8d14f9225c96c8ead92c390b9c03fa417
+X-Git-Oldrev: 5926391587aeaf34626fc7662b6c0418a1cd6809
+X-Git-Newrev: e2260f309f9cfbe149817d068f1f7679b45e4935
 X-Patchwork-Hint: ignore
-Message-Id: <20250108220443.E4A7483F27@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] linux: select
- host-uboot-tools with FIT on mips
+Message-Id: <20250108220444.34CB783F2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/libxml2: fix
+ compilation with GCC 14.x and uClibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,56 +60,203 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0634301598413862790=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4b591c8d14f9225c96c8ead92c390b9c03fa417
+--===============0634301598413862790==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e2260f309f9cfbe149817d068f1f7679b45e4935
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-In the latest kernel, FIT images are always generated when building a
-kernel for MIPS. Note that we build the kernel with:
+The patch fixes the following errors and warnings raised by the
+compilation of libxml2 with the combination of GCC 14.x and uClibc.
 
-  make all
-  make <selected-image>
+encoding.c: In function ‘xmlEncInputChunk’:
+encoding.c:2209:32: warning: comparison between pointer and integer
+ 2209 |     else if (handler->iconv_in != NULL) {
+      |                                ^~
+encoding.c: In function ‘xmlEncOutputChunk’:
+encoding.c:2269:33: warning: comparison between pointer and integer
+ 2269 |     else if (handler->iconv_out != NULL) {
+      |                                 ^~
+encoding.c: In function ‘xmlCharEncCloseFunc’:
+encoding.c:2681:29: warning: comparison between pointer and integer
+ 2681 |     if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
+      |                             ^~
+encoding.c:2681:60: warning: comparison between pointer and integer
+ 2681 |     if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
+      |                                                            ^~
+encoding.c:2683:32: warning: comparison between pointer and integer
+ 2683 |         if (handler->iconv_out != NULL) {
+      |                                ^~
+encoding.c:2686:32: error: assignment to ‘iconv_t’ {aka ‘long int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
+ 2686 |             handler->iconv_out = NULL;
+      |                                ^
+encoding.c:2688:31: warning: comparison between pointer and integer
+ 2688 |         if (handler->iconv_in != NULL) {
+      |                               ^~
+encoding.c:2691:31: error: assignment to ‘iconv_t’ {aka ‘long int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
+ 2691 |             handler->iconv_in = NULL;
+      |                               ^
+make[4]: *** [Makefile:1147: libxml2_la-encoding.lo] Error 1
 
-so the selected image through Buildroot options doesn't matter: a FIT
-image is always generated.
+This code has been in libxml2 pretty much forever: it was partially
+introduced in version 2.1.0: 496a1cf59284 ("496a1cf59284 revamped the
+encoding support, added iconv support, so now libxml if") and
+partially in version 2.2.3: 87b953957305 ("Large sync between my W3C
+base and Gnome's one:"). And the first time Buildroot packaged
+libxml2, it was version 2.6.29.
 
-Therefore, in order to fix autobuilder issues, make sure
-host-uboot-tools with FIT image are always selected when building the
-latest kernel version. We do not select it in general as custom
-versions may be different.
+However, both glibc and musl define iconv_t as "void *", which meant
+the libxml2 code was not problematic. uClibc defines iconv_t as
+"long", which generated only a warning... until GCC got updated to GCC
+14.x, which turned this warning into an error, causing the build
+failure.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/24bd5ae44f4097c374fe43b263254a985e2989d2 (mips)
-  http://autobuild.buildroot.net/results/d18b458a600f1f4bd7008d13ad2a56cb22ce8a73 (mips64el)
+  http://autobuild.buildroot.net/results/fd4f8d2e8d8ee68d9e18f761ceff350188e55a87/
 
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 40e266ccb9aa5a9d9ddcee2457990ee2d80c5a21)
+(cherry picked from commit ca63c4409b3c811e8c4ee19c2860c53af35c4ce1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ .../libxml2/0001-Fix-compilation-with-uclibc.patch | 114 +++++++++++++++++++++
+ 1 file changed, 114 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index a7caf2743c..b70b1f323a 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -30,6 +30,9 @@ choice
- config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (6.11)"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11 if BR2_KERNEL_HEADERS_AS_KERNEL
-+	# mips always generates an ITB image
-+	select BR2_PACKAGE_HOST_UBOOT_TOOLS if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	select BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (5.10.162-cip24)"
+diff --git a/package/libxml2/0001-Fix-compilation-with-uclibc.patch b/package/libxml2/0001-Fix-compilation-with-uclibc.patch
+new file mode 100644
+index 0000000000..aedad27e05
+--- /dev/null
++++ b/package/libxml2/0001-Fix-compilation-with-uclibc.patch
+@@ -0,0 +1,114 @@
++From fc72e0833a4e5724aef604e2fd9adb1014cb4844 Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Date: Mon, 16 Dec 2024 17:23:23 +0100
++Subject: [PATCH] Fix compilation with uclibc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The patch fixes the following errors and warnings raised by the
++compilation of the library with uClibc:
++
++encoding.c: In function ‘xmlEncInputChunk’:
++encoding.c:2209:32: warning: comparison between pointer and integer
++ 2209 |     else if (handler->iconv_in != NULL) {
++      |                                ^~
++encoding.c: In function ‘xmlEncOutputChunk’:
++encoding.c:2269:33: warning: comparison between pointer and integer
++ 2269 |     else if (handler->iconv_out != NULL) {
++      |                                 ^~
++encoding.c: In function ‘xmlCharEncCloseFunc’:
++encoding.c:2681:29: warning: comparison between pointer and integer
++ 2681 |     if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
++      |                             ^~
++encoding.c:2681:60: warning: comparison between pointer and integer
++ 2681 |     if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
++      |                                                            ^~
++encoding.c:2683:32: warning: comparison between pointer and integer
++ 2683 |         if (handler->iconv_out != NULL) {
++      |                                ^~
++encoding.c:2686:32: error: assignment to ‘iconv_t’ {aka ‘long int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
++ 2686 |             handler->iconv_out = NULL;
++      |                                ^
++encoding.c:2688:31: warning: comparison between pointer and integer
++ 2688 |         if (handler->iconv_in != NULL) {
++      |                               ^~
++encoding.c:2691:31: error: assignment to ‘iconv_t’ {aka ‘long int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
++ 2691 |             handler->iconv_in = NULL;
++      |                               ^
++make[4]: *** [Makefile:1147: libxml2_la-encoding.lo] Error 1
++
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/commit/fc72e0833a4e5724aef604e2fd9adb1014cb4844
++---
++ encoding.c | 20 ++++++++++----------
++ 1 file changed, 10 insertions(+), 10 deletions(-)
++
++diff --git a/encoding.c b/encoding.c
++index 14ffafddbc02..41ecde1885e4 100644
++--- a/encoding.c
+++++ b/encoding.c
++@@ -1264,7 +1264,7 @@ DECLARE_ISO_FUNCS(16)
++ #endif /* LIBXML_ISO8859X_ENABLED */
++ 
++ #ifdef LIBXML_ICONV_ENABLED
++-  #define EMPTY_ICONV , (iconv_t) 0, (iconv_t) 0
+++  #define EMPTY_ICONV , (iconv_t) -1, (iconv_t) -1
++ #else
++   #define EMPTY_ICONV
++ #endif
++@@ -1389,8 +1389,8 @@ xmlNewCharEncodingHandler(const char *name,
++     handler->name = up;
++ 
++ #ifdef LIBXML_ICONV_ENABLED
++-    handler->iconv_in = NULL;
++-    handler->iconv_out = NULL;
+++    handler->iconv_in = (iconv_t) -1;
+++    handler->iconv_out = (iconv_t) -1;
++ #endif
++ #ifdef LIBXML_ICU_ENABLED
++     handler->uconv_in = NULL;
++@@ -2200,7 +2200,7 @@ xmlEncInputChunk(xmlCharEncodingHandler *handler, unsigned char *out,
++         }
++     }
++ #ifdef LIBXML_ICONV_ENABLED
++-    else if (handler->iconv_in != NULL) {
+++    else if (handler->iconv_in != (iconv_t) -1) {
++         ret = xmlIconvWrapper(handler->iconv_in, out, outlen, in, inlen);
++     }
++ #endif /* LIBXML_ICONV_ENABLED */
++@@ -2260,7 +2260,7 @@ xmlEncOutputChunk(xmlCharEncodingHandler *handler, unsigned char *out,
++         }
++     }
++ #ifdef LIBXML_ICONV_ENABLED
++-    else if (handler->iconv_out != NULL) {
+++    else if (handler->iconv_out != (iconv_t) -1) {
++         ret = xmlIconvWrapper(handler->iconv_out, out, outlen, in, inlen);
++     }
++ #endif /* LIBXML_ICONV_ENABLED */
++@@ -2672,17 +2672,17 @@ xmlCharEncCloseFunc(xmlCharEncodingHandler *handler) {
++      * Iconv handlers can be used only once, free the whole block.
++      * and the associated icon resources.
++      */
++-    if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
+++    if ((handler->iconv_out != (iconv_t) -1) || (handler->iconv_in != (iconv_t) -1)) {
++         tofree = 1;
++-	if (handler->iconv_out != NULL) {
+++	if (handler->iconv_out != (iconv_t) -1) {
++ 	    if (iconv_close(handler->iconv_out))
++ 		ret = -1;
++-	    handler->iconv_out = NULL;
+++	    handler->iconv_out = (iconv_t) -1;
++ 	}
++-	if (handler->iconv_in != NULL) {
+++	if (handler->iconv_in != (iconv_t) -1) {
++ 	    if (iconv_close(handler->iconv_in))
++ 		ret = -1;
++-	    handler->iconv_in = NULL;
+++	    handler->iconv_in = (iconv_t) -1;
++ 	}
++     }
++ #endif /* LIBXML_ICONV_ENABLED */
++-- 
++2.43.0
++
+
+--===============0634301598413862790==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0634301598413862790==--
