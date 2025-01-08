@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C291BE77188
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F14B5E7719A
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 22:59:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 19CA080C47;
-	Wed,  8 Jan 2025 22:59:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DFFD4058C;
+	Wed,  8 Jan 2025 22:59:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id APfxYhRKXd5s; Wed,  8 Jan 2025 22:59:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x0kNyQ_RU4tw; Wed,  8 Jan 2025 22:59:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBA0F80C37
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4966F4029E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBA0F80C37;
-	Wed,  8 Jan 2025 22:59:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 84E661EB8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4966F4029E;
+	Wed,  8 Jan 2025 22:59:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CED557AA
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:59:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8072A600C4
+ by smtp2.osuosl.org (Postfix) with ESMTP id B30AD405DF
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:59:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yXJOgOQr9Bey for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4yxpZ5Ie9ort for <buildroot@buildroot.org>;
  Wed,  8 Jan 2025 22:59:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EEB0605F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7416540478
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5EEB0605F7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7416540478
  for <buildroot@buildroot.org>; Wed,  8 Jan 2025 22:59:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5572D83FDD; Wed,  8 Jan 2025 22:59:42 +0000 (UTC)
+ id 6047A83FDF; Wed,  8 Jan 2025 22:59:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 8 Jan 2025 23:00:47 +0100
+Date: Wed, 8 Jan 2025 23:00:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0f3791f25f5039904765c33f1d8a812290caebb9
-X-Git-Newrev: 001e777d507b972a580d75e3ac8d892eff72fbf2
+X-Git-Oldrev: 001e777d507b972a580d75e3ac8d892eff72fbf2
+X-Git-Newrev: 5c0a91f7293523254e9c48667df4468370fda58d
 X-Patchwork-Hint: ignore
-Message-Id: <20250108225942.5572D83FDD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-pam: backport upstream patch
- to fix build issue
+Message-Id: <20250108225942.6047A83FDF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libxcrypt: make available only
+ with glibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,239 +60,103 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6677327675280371262=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6677327675280371262==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=001e777d507b972a580d75e3ac8d892eff72fbf2
+commit: https://git.buildroot.net/buildroot/commit/?id=5c0a91f7293523254e9c48667df4468370fda58d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We are seeing build issues with linux-pam in the autobuilders such as:
+libxcrypt has been added as a replacement for the libcrypt
+implementation that was part of glibc, but dropped from glibc starting
+from version 2.39.
 
-md5_crypt.c: In function 'Goodcrypt_md5':
-md5_crypt.c:145:13: error: implicit declaration of function 'asprintf'; did you mean 'vsprintf'? [-Wimplicit-function-declaration]
-  145 |         if (asprintf(&passwd, "%s%.*s$%s", magic, sl, sp, buf) < 0)
-      |             ^~~~~~~~
-      |             vsprintf
+However, libxcrypt was made available for all C libraries, and this is
+unfortunately causing some problems as it can clash with the libcrypt
+implementation provided by the C library.
 
-This is due to the fact that <stdio.h> gets included without
-_GNU_SOURCE being defined, and so the prototype of asprintf() is not
-accessible, at least with uclibc-ng.
+In particular, linux-pam has been consistently failing with uclibc, in
+BR2_PER_PACKAGE_DIRECTORIES=y builds, with the following build
+failure:
 
-The _GNU_SOURCE definition is properly in linux-pam's config.h, but
-config.h doesn't get properly included first everywhere. This issue
-has been fixed upstream in the mean time, so we simply backport the
-upstream patch.
+opasswd.c: In function 'compare_password':
+opasswd.c:133:27: error: invalid application of 'sizeof' to incomplete type 'struct crypt_data'
+
+What happens is relatively tricky, but let's try to break it down:
+
+- uclibc-ng install a stub libcrypt.a (no shared variant, as for
+  shared libraries, everything is in libc.so), and crypt.h
+
+- libxcrypt installs libcrypt.so.* and crypt.h
+
+So there is no "clash" on the library itself, but there is a clash on
+the header file.
+
+Since we're using BR2_PER_PACKAGE_DIRECTORIES=y, when building
+linux-pam, we are creating the per-package STAGING_DIR by copying the
+STAGING_DIR of linux-pam dependencies, i.e both the libxcrypt
+STAGING_DIR and the uclibc-ng STAGING_DIR. But the latter ends up
+being copied last, which means that at the end of the day, we have in
+the per-package STAGING_DIR of linux-pam:
+
+- The libcrypt.so from libxcrypt
+- The crypt.h header from uclibc-ng
+- The libcrypt.a from uclibc-ng
+
+When the ./configure script of linux-pam tests whether the library has
+crypt_r(), it concludes that yes it's available: and indeed
+libcrypt.so from libxcrypt has it.
+
+So it tries to use 'struct crypt_data' and 'crypt_r()', but those are
+not supported in uClibc-ng, and so cannot be found in the <crypt.h>
+header. So even if the ./configure script and the linux-pam code has
+some logic to fallback to crypt() if crypt_r() isn't available, this
+fallback doesn't trigger because the installed libcrypt.so does have
+crypt_r().
+
+Basically what happens is that uclibc-ng + libxcrypt is a combo that
+violates a golden rule of our BR2_PER_PACKAGE_DIRECTORIES=y
+implementation: packages shouldn't overwrite files from each other.
+
+To avoid this situation, we make libxcrypt only installable on
+glibc. This isn't a problem because as of today, BR2_PACKAGE_LIBXCRYPT
+is always selected "if BR2_TOOLCHAIN_USES_GLIBC".
+
+It should be noted though that the case of an older glibc (which still
+had its own internal libcrypt) + libxcrypt continues to exist. It's
+less likely to cause trouble though, as the libcrypt implementations
+are much more similar.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/49b190b3fbae3cdca4c7a08b3ab5100a937ede9e/
+  http://autobuild.buildroot.net/results/560f66b0311d02dc884732221d6870ae3c38067c/
+
+Note: we do not add a Config.in comment for this glibc dependency,
+because libxcrypt really is a "replacement" library to fill in the
+void left by libcrypt's removal from glibc. There isn't realy a point
+showing "libxcrypt needs a toolchain w/ glibc", because with musl or
+uclibc-ng, the libcrypt functionality is directly part of the C
+library.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...build-consistently-include-config.h-first.patch | 180 +++++++++++++++++++++
- 1 file changed, 180 insertions(+)
+ package/libxcrypt/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/linux-pam/0001-build-consistently-include-config.h-first.patch b/package/linux-pam/0001-build-consistently-include-config.h-first.patch
-new file mode 100644
-index 0000000000..e9f36b8a60
---- /dev/null
-+++ b/package/linux-pam/0001-build-consistently-include-config.h-first.patch
-@@ -0,0 +1,180 @@
-+From cdba2c8cdba9b3500595624fb375c0dda266631b Mon Sep 17 00:00:00 2001
-+From: "Dmitry V. Levin" <ldv@strace.io>
-+Date: Fri, 30 Aug 2024 08:00:00 +0000
-+Subject: [PATCH] build: consistently include config.h first
-+
-+Make sure that config.h is included before any system header.
-+
-+Upstream: https://github.com/linux-pam/linux-pam/commit/5d7eefb1883c557c7a027f68e966e2fae294a9b6
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ libpam/pam_prelude.c                | 8 ++++----
-+ modules/pam_namespace/argv_parse.c  | 2 ++
-+ modules/pam_setquota/pam_setquota.c | 3 ++-
-+ modules/pam_timestamp/sha1.c        | 2 +-
-+ modules/pam_unix/audit.c            | 3 +--
-+ modules/pam_unix/bigcrypt_main.c    | 2 ++
-+ modules/pam_unix/md5.c              | 4 ++--
-+ modules/pam_unix/md5_crypt.c        | 2 +-
-+ modules/pam_unix/yppasswd.h         | 2 ++
-+ 9 files changed, 17 insertions(+), 11 deletions(-)
-+
-+diff --git a/libpam/pam_prelude.c b/libpam/pam_prelude.c
-+index 6c73bf5d..c62e2f2c 100644
-+--- a/libpam/pam_prelude.c
-++++ b/libpam/pam_prelude.c
-+@@ -5,17 +5,17 @@
-+  * (C) Sebastien Tricaud 2005 <toady@gscore.org>
-+  */
-+ 
-+-#include <stdio.h>
-+-#include <syslog.h>
-+-
-+ #ifdef PRELUDE
-+ 
-++#include "pam_private.h"
-++
-++#include <stdio.h>
-++#include <syslog.h>
-+ #include <libprelude/prelude.h>
-+ #include <libprelude/prelude-log.h>
-+ #include <libprelude/idmef-message-print.h>
-+ 
-+ #include "pam_prelude.h"
-+-#include "pam_private.h"
-+ 
-+ 
-+ #define ANALYZER_CLASS "pam"
-+diff --git a/modules/pam_namespace/argv_parse.c b/modules/pam_namespace/argv_parse.c
-+index ac7c9ae0..cbae7831 100644
-+--- a/modules/pam_namespace/argv_parse.c
-++++ b/modules/pam_namespace/argv_parse.c
-+@@ -28,6 +28,8 @@
-+  * Version 1.1, modified 2/27/1999
-+  */
-+ 
-++#include "config.h"
-++
-+ #include <limits.h>
-+ #include <stdlib.h>
-+ #include <ctype.h>
-+diff --git a/modules/pam_setquota/pam_setquota.c b/modules/pam_setquota/pam_setquota.c
-+index c15fc669..73445e29 100644
-+--- a/modules/pam_setquota/pam_setquota.c
-++++ b/modules/pam_setquota/pam_setquota.c
-+@@ -8,6 +8,8 @@
-+    Copyright © 2016 Keller Fuchs <kellerfuchs@hashbang.sh>
-+ */
-+ 
-++#include "pam_inline.h"
-++
-+ #include <sys/types.h>
-+ #include <sys/quota.h>
-+ #include <linux/quota.h>
-+@@ -22,7 +24,6 @@
-+ #include <security/_pam_macros.h>
-+ #include <security/pam_ext.h>
-+ #include <security/pam_modutil.h>
-+-#include "pam_inline.h"
-+ 
-+ #ifndef PATH_LOGIN_DEFS
-+ # define PATH_LOGIN_DEFS "/etc/login.defs"
-+diff --git a/modules/pam_timestamp/sha1.c b/modules/pam_timestamp/sha1.c
-+index dff454cf..f21b2870 100644
-+--- a/modules/pam_timestamp/sha1.c
-++++ b/modules/pam_timestamp/sha1.c
-+@@ -37,6 +37,7 @@
-+  */
-+ /* See http://www.itl.nist.gov/fipspubs/fip180-1.htm for descriptions. */
-+ 
-++#include "pam_inline.h"
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ #include <netinet/in.h>
-+@@ -47,7 +48,6 @@
-+ #include <endian.h>
-+ #include <unistd.h>
-+ #include "sha1.h"
-+-#include "pam_inline.h"
-+ 
-+ static const unsigned char
-+ padding[SHA1_BLOCK_SIZE] = {
-+diff --git a/modules/pam_unix/audit.c b/modules/pam_unix/audit.c
-+index 1547a652..9513aaa9 100644
-+--- a/modules/pam_unix/audit.c
-++++ b/modules/pam_unix/audit.c
-+@@ -1,5 +1,3 @@
-+-#include "audit.h"
-+-
-+ #include "config.h"
-+ 
-+ #ifdef HAVE_LIBAUDIT
-+@@ -11,6 +9,7 @@
-+ 
-+ #include <security/_pam_types.h>
-+ 
-++#include "audit.h"
-+ #include "passverify.h"
-+ 
-+ int audit_log(int type, const char *uname, int retval)
-+diff --git a/modules/pam_unix/bigcrypt_main.c b/modules/pam_unix/bigcrypt_main.c
-+index fab212d9..22d325da 100644
-+--- a/modules/pam_unix/bigcrypt_main.c
-++++ b/modules/pam_unix/bigcrypt_main.c
-+@@ -1,3 +1,5 @@
-++#include "config.h"
-++
-+ #include <stdio.h>
-+ #include <string.h>
-+ 
-+diff --git a/modules/pam_unix/md5.c b/modules/pam_unix/md5.c
-+index 95b8de4c..78e9af27 100644
-+--- a/modules/pam_unix/md5.c
-++++ b/modules/pam_unix/md5.c
-+@@ -18,11 +18,11 @@
-+  *
-+  */
-+ 
-++#include "pam_inline.h"
-++
-+ #include <string.h>
-+ #include "md5.h"
-+ 
-+-#include "pam_inline.h"
-+-
-+ #ifndef HIGHFIRST
-+ #define byteReverse(buf, len)	/* Nothing */
-+ #else
-+diff --git a/modules/pam_unix/md5_crypt.c b/modules/pam_unix/md5_crypt.c
-+index 9a6bd4f9..9451f376 100644
-+--- a/modules/pam_unix/md5_crypt.c
-++++ b/modules/pam_unix/md5_crypt.c
-+@@ -12,11 +12,11 @@
-+  *
-+  */
-+ 
-++#include "pam_inline.h"
-+ #include <string.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include "md5.h"
-+-#include "pam_inline.h"
-+ 
-+ static const unsigned char itoa64[] =	/* 0 ... 63 => ascii - 64 */
-+ "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-+diff --git a/modules/pam_unix/yppasswd.h b/modules/pam_unix/yppasswd.h
-+index dc686cd7..3a40c3ea 100644
-+--- a/modules/pam_unix/yppasswd.h
-++++ b/modules/pam_unix/yppasswd.h
-+@@ -6,6 +6,8 @@
-+ #ifndef _YPPASSWD_H_RPCGEN
-+ #define _YPPASSWD_H_RPCGEN
-+ 
-++#include "config.h"
-++
-+ #include <rpc/rpc.h>
-+ 
-+ 
-+-- 
-+2.47.1
-+
-
---===============6677327675280371262==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/libxcrypt/Config.in b/package/libxcrypt/Config.in
+index 57ae8f67a3..38c75b5e63 100644
+--- a/package/libxcrypt/Config.in
++++ b/package/libxcrypt/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBXCRYPT
+ 	bool "libxcrypt"
++	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  libxcrypt is a modern library for one-way hashing
+ 	  of passwords. It supports a wide variety of both
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6677327675280371262==--
