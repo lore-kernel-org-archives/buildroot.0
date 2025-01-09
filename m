@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E639BE77199
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 09:24:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 946E0E77199
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 09:24:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5CB380C01;
-	Thu,  9 Jan 2025 09:24:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F0A44071D;
+	Thu,  9 Jan 2025 09:24:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zhXcOujUZrGr; Thu,  9 Jan 2025 09:24:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pd5o9MfN-hYb; Thu,  9 Jan 2025 09:24:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C208F8108C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E174340749
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C208F8108C;
-	Thu,  9 Jan 2025 09:24:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E174340749;
+	Thu,  9 Jan 2025 09:24:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3A1E8942
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:24:26 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 31DE3942
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9E2880B98
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:24:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8901980BC6
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:24:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6ud_y9mUHw_Y for <buildroot@buildroot.org>;
- Thu,  9 Jan 2025 09:24:22 +0000 (UTC)
+ id ZfufMjZ4cf2h for <buildroot@buildroot.org>;
+ Thu,  9 Jan 2025 09:24:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 138D380BC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3FE980B51
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 138D380BC6
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:24:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C3FE980B51
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:24:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0BBA37F98A; Thu,  9 Jan 2025 09:24:22 +0000 (UTC)
+ id B23867F98A; Thu,  9 Jan 2025 09:24:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 9 Jan 2025 10:19:11 +0100
+Date: Thu, 9 Jan 2025 09:58:20 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 92bb20468a0e4913632fd07c7b2adcd4790d8a47
-X-Git-Newrev: 0bc0c719e32938319e208f0c78b192944cb5e2f9
+X-Git-Oldrev: 33ea45a4fbb5a02a5b9ca6c1a90177687b28a789
+X-Git-Newrev: 18fa9c60ef80d74c3ec626f90d64bb1bdfb909b7
 X-Patchwork-Hint: ignore
-Message-Id: <20250109092422.0BBA37F98A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/tzdata: bump
- version to 2024b
+Message-Id: <20250109092421.B23867F98A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libvirt: do not
+ use 'qemu' user if not defined
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,47 +65,150 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bc0c719e32938319e208f0c78b192944cb5e2f9
+commit: https://git.buildroot.net/buildroot/commit/?id=18fa9c60ef80d74c3ec626f90d64bb1bdfb909b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Release notes:
-https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/IZ7AO6WRE3W3TWBL5IR6PMQUL433BQIE/
+Commit ed12e2fbed3d (package/libvirt: add lxc and qemu options)
+introduced the definition of the 'qemu' user when the libvirt daemon
+is enabled, but unconditionally uses that user in its permissions
+table.
 
-Updated the hash URL.
+When enabling libvirt without its qemu support, for example with the
+commands:
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+    cat <<EOF >.config
+    BR2_aarch64=y
+    BR2_PACKAGE_LIBVIRT=y
+    BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+    BR2_TARGET_ROOTFS_EXT2=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    EOF
+    make olddefconfig
+    make
+
+The build fails with output:
+
+    >>>   Generating filesystem image rootfs.ext2
+    ...
+    makedevs: unknown user name: qemu
+
+Move the permissions needing the 'qemu' user under the same condition
+the 'qemu' user is defined under. It means that a few permissions
+needing root must also be moved, as they belong under a directory
+needing the 'qemu' user. It also moves a few qemu-related permissions
+introduced in that same commit. The list of qemu permissions is
+reordered alphabetically (the others are left unchanged).
+
+Of course, it also requires that the qemu-related directory and symlink
+be moved under the same condition as well.
+
+Reported-by: Alessandro <alex@0x65c.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Jared Bents <jared.bents@rockwellcollins.com>
+[Julien: add the commands to reproduce the issue]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit b26bd08fc4d84c9dbbe4793422c790c9a9d136a6)
+(cherry picked from commit da9adec1491eefc618aab610615fe293899845fd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libvirt/libvirt.mk | 54 +++++++++++++++++++++++++++-------------------
+ 1 file changed, 32 insertions(+), 22 deletions(-)
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index d353bc4410..3f84ec4f87 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,4 +1,4 @@
--# From https://mm.icann.org/pipermail/tz-announce/2024-February/000081.html
--sha512  1f09f1b2327cc9e1afc7e9045e83ee3377918dafe1bee2f282b6991828d03b3c70a4d3a17f9207dfb1361bb25bc214a8922a756e84fa114e9ba476226db57236  tzdata2024a.tar.gz
-+# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/IZ7AO6WRE3W3TWBL5IR6PMQUL433BQIE/
-+sha512  0d86686e215672343debb3471b7e7ccb8a27f063f085c9b532d5e0470377843daa0dfb6aee0db4fb9068dd52810c69aeee914a1a7c7e603fdecda7e855020193  tzdata2024b.tar.gz
- # Locally computed:
- sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index e367205277..ba53ae7c38 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
+index 1dc61a7549..7f2a33e926 100644
+--- a/package/libvirt/libvirt.mk
++++ b/package/libvirt/libvirt.mk
+@@ -250,6 +250,36 @@ define LIBVIRT_INSTALL_UDEV_RULES
+ endef
+ LIBVIRT_POST_INSTALL_TARGET_HOOKS += LIBVIRT_INSTALL_UDEV_RULES
  
--TZDATA_VERSION = 2024a
-+TZDATA_VERSION = 2024b
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
- TZDATA_SELINUX_MODULES = tzdata
++ifeq ($(BR2_PACKAGE_LIBVIRT_QEMU),y)
++define LIBVIRT_USERS_QEMU
++	qemu -1 kvm -1 * - - - Libvirt qemu/kvm daemon
++endef
++define LIBVIRT_PERMISSIONS_QEMU
++	/var/cache/libvirt/qemu                  d  750  qemu  kvm   -  -  -  -  -
++	/var/cache/libvirt/qemu/capabilities     d  755  root  root  -  -  -  -  -
++	/var/lib/libvirt/qemu                    d  751  qemu  kvm   -  -  -  -  -
++	/var/lib/libvirt/qemu/autostart          d  700  root  root  -  -  -  -  -
++	/var/lib/libvirt/qemu/channel            d  755  qemu  kvm   -  -  -  -  -
++	/var/lib/libvirt/qemu/channel/target     d  755  qemu  kvm   -  -  -  -  -
++	/var/lib/libvirt/qemu/dump               d  755  qemu  kvm   -  -  -  -  -
++	/var/lib/libvirt/qemu/networks           d  700  root  root  -  -  -  -  -
++	/var/lib/libvirt/qemu/networks/autostart d  700  root  root  -  -  -  -  -
++	/var/lib/libvirt/qemu/nvram              d  755  qemu  kvm   -  -  -  -  -
++	/var/lib/libvirt/qemu/save               d  755  qemu  kvm   -  -  -  -  -
++	/var/lib/libvirt/qemu/snapshot           d  755  qemu  kvm   -  -  -  -  -
++	/var/log/libvirt/qemu                    d  750  root  root  -  -  -  -  -
++	/var/log/swtpm/libvirt/qemu              d  711  root  root  -  -  -  -  -
++endef
++define LIBVIRT_CREATE_SYMLINKS_QEMU
++	$(INSTALL) -m 751 -d $(TARGET_DIR)/var/lib/libvirt/qemu
++	ln -s -f ../../var/lib/libvirt/qemu $(TARGET_DIR)/etc/libvirt/
++endef
++endif
++
++define LIBVIRT_USERS
++	$(LIBVIRT_USERS_QEMU)
++endef
++
+ # Adjust directory ownerships and permissions. Notice /var/log is a symlink to
+ # /tmp in the default sysvinit skeleton, so some directories may disappear at
+ # run-time. Set the permissions anyway, since they are valid for the default
+@@ -263,29 +293,16 @@ define LIBVIRT_PERMISSIONS
+ 	/var/lib/libvirt/filesystems             d  711  root  root  -  -  -  -  -
+ 	/var/lib/libvirt/images                  d  711  root  root  -  -  -  -  -
+ 	/var/lib/libvirt/network                 d  700  root  root  -  -  -  -  -
+-	/var/lib/libvirt/qemu                    d  751  qemu  kvm   -  -  -  -  -
+-	/var/lib/libvirt/qemu/autostart          d  700  root  root  -  -  -  -  -
+-	/var/lib/libvirt/qemu/networks           d  700  root  root  -  -  -  -  -
+-	/var/lib/libvirt/qemu/networks/autostart d  700  root  root  -  -  -  -  -
+-	/var/lib/libvirt/qemu/channel            d  755  qemu  kvm   -  -  -  -  -
+-	/var/lib/libvirt/qemu/channel/target     d  755  qemu  kvm   -  -  -  -  -
+-	/var/lib/libvirt/qemu/dump               d  755  qemu  kvm   -  -  -  -  -
+-	/var/lib/libvirt/qemu/nvram              d  755  qemu  kvm   -  -  -  -  -
+-	/var/lib/libvirt/qemu/save               d  755  qemu  kvm   -  -  -  -  -
+-	/var/lib/libvirt/qemu/snapshot           d  755  qemu  kvm   -  -  -  -  -
+ 	/var/lib/libvirt/secrets                 d  700  root  root  -  -  -  -  -
+ 	/var/lib/libvirt/storage                 d  755  root  root  -  -  -  -  -
+ 	/var/lib/libvirt/storage/autostart       d  755  root  root  -  -  -  -  -
+ 	/var/cache/libvirt                       d  711  root  root  -  -  -  -  -
+ 	/var/cache/libvirt/lxc                   d  750  root  root  -  -  -  -  -
+-	/var/cache/libvirt/qemu                  d  750  qemu  kvm   -  -  -  -  -
+-	/var/cache/libvirt/qemu/capabilities     d  755  root  root  -  -  -  -  -
+ 	/var/log/libvirt                         d  700  root  root  -  -  -  -  -
+ 	/var/log/libvirt/lxc                     d  750  root  root  -  -  -  -  -
+-	/var/log/libvirt/qemu                    d  750  root  root  -  -  -  -  -
+ 	/var/log/swtpm                           d  755  root  root  -  -  -  -  -
+ 	/var/log/swtpm/libvirt                   d  755  root  root  -  -  -  -  -
+-	/var/log/swtpm/libvirt/qemu              d  711  root  root  -  -  -  -  -
++	$(LIBVIRT_PERMISSIONS_QEMU)
+ endef
+ 
+ # libvirt may need to create persistent files (e.g. VM definitions) in these
+@@ -296,22 +313,15 @@ endef
+ define LIBVIRT_CREATE_SYMLINKS
+ 	$(INSTALL) -m 700 -d $(TARGET_DIR)/etc/libvirt
+ 	$(INSTALL) -m 755 -d $(TARGET_DIR)/var/lib/libvirt
+-	$(INSTALL) -m 751 -d $(TARGET_DIR)/var/lib/libvirt/qemu
+ 	$(INSTALL) -m 700 -d $(TARGET_DIR)/var/lib/libvirt/secrets
+ 	$(INSTALL) -m 755 -d $(TARGET_DIR)/var/lib/libvirt/storage
+-	ln -s -f ../../var/lib/libvirt/qemu $(TARGET_DIR)/etc/libvirt/
+ 	ln -s -f ../../var/lib/libvirt/secrets $(TARGET_DIR)/etc/libvirt/
+ 	ln -s -f ../../var/lib/libvirt/storage $(TARGET_DIR)/etc/libvirt/
++	$(LIBVIRT_CREATE_SYMLINKS_QEMU)
+ endef
+ 
+ LIBVIRT_PRE_INSTALL_TARGET_HOOKS += LIBVIRT_CREATE_SYMLINKS
+ 
+-ifeq ($(BR2_PACKAGE_LIBVIRT_QEMU),y)
+-define LIBVIRT_USERS
+-	qemu -1 kvm -1 * - - - Libvirt qemu/kvm daemon
+-endef
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBVIRT_DAEMON),y)
+ define LIBVIRT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/libvirt/S91virtlogd $(TARGET_DIR)/etc/init.d/S91virtlogd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
