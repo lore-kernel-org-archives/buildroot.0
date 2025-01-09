@@ -1,71 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BA5EE77197
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 09:54:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEECBE77197
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 09:55:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 262B34062E;
-	Thu,  9 Jan 2025 09:54:57 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KmyCakQ2F-_w; Thu,  9 Jan 2025 09:54:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 199B740644
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 199B740644;
-	Thu,  9 Jan 2025 09:54:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C0B8E940
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:54:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 98A9382CCA
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:54:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8186E80B57;
+	Thu,  9 Jan 2025 09:55:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FCzeN6IiSY04 for <buildroot@buildroot.org>;
- Thu,  9 Jan 2025 09:54:52 +0000 (UTC)
+ id O1qNCnHpJOJO; Thu,  9 Jan 2025 09:55:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92CA482CCA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92CA482CCA;
+	Thu,  9 Jan 2025 09:55:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 20FC8942
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:55:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C6DB4062E
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:55:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JOdUAPUXKwUX for <buildroot@buildroot.org>;
+ Thu,  9 Jan 2025 09:55:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 263FD82CAC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 263FD82CAC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8F8AE40684
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F8AE40684
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 263FD82CAC
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:54:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8F8AE40684
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:55:17 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 900414238; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -870120513; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 09 Jan 2025 09:54:43 +0000 (UTC)
-Message-ID: <ec2dda65-987d-43fa-ba63-816be9273b08@korsgaard.com>
-Date: Thu, 9 Jan 2025 10:54:41 +0100
+ Thu, 09 Jan 2025 09:55:14 +0000 (UTC)
+Message-ID: <f5ddf82d-1fee-4477-9fcf-87e8c2b28e94@korsgaard.com>
+Date: Thu, 9 Jan 2025 10:55:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>
 References: <20250108213411.2091627-1-thomas.petazzoni@bootlin.com>
+ <20250108213411.2091627-2-thomas.petazzoni@bootlin.com>
 Content-Language: en-US
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20250108213411.2091627-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250108213411.2091627-2-thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=PUoMVCY5ZoqRDU6a3w/4UqMOV3iD4nGWGPW9rRSfoWc5AQaNpModVR/VBaEmD5DqwLSD2ybBse10zeHI5erfJxXqqNWEBI/xLIIs//5LbYSs4AuNDarGjFVf7LkdIOz7WER2H7VFXIzjf/YI6+3hJb9FFT+J5zQ9x41iJAXRxFAW3bPR/u6maR7j1ya52z2VvetbT6jr+AHpD0fVNtBDiSGrU/aFA+gVy8GtsmZSZEi48ccBycCHpv5WWs0japtJ4hDsZDSiHdEfzCo5BTlGaQsH2qvAsucMLwqAHt/N1jvT11QI//HvzBbxNKa0jogFLjaviuGTtJCh3IVF4KQgEw==;
+ b=EtjztWfewtKI8lsjx6CTQrDG7bzxmJSSu6swvxqENqvMYTi91ajXoeA3uvxzRe0HGj1T0WgKaopxlFJBCCSdBvWk1n9+GSJ0ddUDjj0OnJodJWGK41nirDz8N6H/EgbETVggGzDmebM2agAIpponcsseVsw1hL8DTgCtgMlBCEoB0N/Xmq0ZGOGzngarH7YMjBPtY6vdlxxa27sSAXM6WaIJM+My6bq7orXM4iBYRtJKHTnhzxQLRxBScP9zCAF9HOeVDCG1/47xvlT9XlZ9YXbRYGxATPPUh1hVuff9qzpwgQbzWajSl9xE2cFwlz+0jkuCeWcndzrl4tFbRXlsGg==;
  s=purelymail1; d=purelymail.com; v=1;
- bh=0b5JTUmfYc25Cu8WJiWfSCTQzoBoViNQ/DcKyIvz/v0=;
+ bh=LdVupIwm66vC+u5okVdQH7KOY1znNPYYuzqnSJ3r2Ao=;
  h=Feedback-ID:Received:Date:Subject:To:From; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=PUoMVCY5
-Subject: Re: [Buildroot] [PATCH 1/3] package/linux-pam: backport upstream
- patch to fix build issue
+ header.a=rsa-sha256 header.s=purelymail1 header.b=EtjztWfe
+Subject: Re: [Buildroot] [PATCH 2/3] package/libxcrypt: make available only
+ with glibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,26 +85,76 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 On 1/8/25 22:34, Thomas Petazzoni via buildroot wrote:
-> We are seeing build issues with linux-pam in the autobuilders such as:
+> libxcrypt has been added as a replacement for the libcrypt
+> implementation that was part of glibc, but dropped from glibc starting
+> from version 2.39.
 > 
-> md5_crypt.c: In function 'Goodcrypt_md5':
-> md5_crypt.c:145:13: error: implicit declaration of function 'asprintf'; did you mean 'vsprintf'? [-Wimplicit-function-declaration]
->    145 |         if (asprintf(&passwd, "%s%.*s$%s", magic, sl, sp, buf) < 0)
->        |             ^~~~~~~~
->        |             vsprintf
+> However, libxcrypt was made available for all C libraries, and this is
+> unfortunately causing some problems as it can clash with the libcrypt
+> implementation provided by the C library.
 > 
-> This is due to the fact that <stdio.h> gets included without
-> _GNU_SOURCE being defined, and so the prototype of asprintf() is not
-> accessible, at least with uclibc-ng.
+> In particular, linux-pam has been consistently failing with uclibc, in
+> BR2_PER_PACKAGE_DIRECTORIES=y builds, with the following build
+> failure:
 > 
-> The _GNU_SOURCE definition is properly in linux-pam's config.h, but
-> config.h doesn't get properly included first everywhere. This issue
-> has been fixed upstream in the mean time, so we simply backport the
-> upstream patch.
+> opasswd.c: In function 'compare_password':
+> opasswd.c:133:27: error: invalid application of 'sizeof' to incomplete type 'struct crypt_data'
+> 
+> What happens is relatively tricky, but let's try to break it down:
+> 
+> - uclibc-ng install a stub libcrypt.a (no shared variant, as for
+>    shared libraries, everything is in libc.so), and crypt.h
+> 
+> - libxcrypt installs libcrypt.so.* and crypt.h
+> 
+> So there is no "clash" on the library itself, but there is a clash on
+> the header file.
+> 
+> Since we're using BR2_PER_PACKAGE_DIRECTORIES=y, when building
+> linux-pam, we are creating the per-package STAGING_DIR by copying the
+> STAGING_DIR of linux-pam dependencies, i.e both the libxcrypt
+> STAGING_DIR and the uclibc-ng STAGING_DIR. But the latter ends up
+> being copied last, which means that at the end of the day, we have in
+> the per-package STAGING_DIR of linux-pam:
+> 
+> - The libcrypt.so from libxcrypt
+> - The crypt.h header from uclibc-ng
+> - The libcrypt.a from uclibc-ng
+> 
+> When the ./configure script of linux-pam tests whether the library has
+> crypt_r(), it concludes that yes it's available: and indeed
+> libcrypt.so from libxcrypt has it.
+> 
+> So it tries to use 'struct crypt_data' and 'crypt_r()', but those are
+> not supported in uClibc-ng, and so cannot be found in the <crypt.h>
+> header. So even if the ./configure script and the linux-pam code has
+> some logic to fallback to crypt() if crypt_r() isn't available, this
+> fallback doesn't trigger because the installed libcrypt.so does have
+> crypt_r().
+> 
+> Basically what happens is that uclibc-ng + libxcrypt is a combo that
+> violates a golden rule of our BR2_PER_PACKAGE_DIRECTORIES=y
+> implementation: packages shouldn't overwrite files from each other.
+> 
+> To avoid this situation, we make libxcrypt only installable on
+> glibc. This isn't a problem because as of today, BR2_PACKAGE_LIBXCRYPT
+> is always selected "if BR2_TOOLCHAIN_USES_GLIBC".
+> 
+> It should be noted though that the case of an older glibc (which still
+> had its own internal libcrypt) + libxcrypt continues to exist. It's
+> less likely to cause trouble though, as the libcrypt implementations
+> are much more similar.
 > 
 > Fixes:
 > 
->    http://autobuild.buildroot.net/results/49b190b3fbae3cdca4c7a08b3ab5100a937ede9e/
+>    http://autobuild.buildroot.net/results/560f66b0311d02dc884732221d6870ae3c38067c/
+> 
+> Note: we do not add a Config.in comment for this glibc dependency,
+> because libxcrypt really is a "replacement" library to fill in the
+> void left by libcrypt's removal from glibc. There isn't realy a point
+> showing "libxcrypt needs a toolchain w/ glibc", because with musl or
+> uclibc-ng, the libcrypt functionality is directly part of the C
+> library.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
