@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9652E77197
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 09:24:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9944BE77197
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 09:24:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE83D401D1;
-	Thu,  9 Jan 2025 09:24:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68F52404C6;
+	Thu,  9 Jan 2025 09:24:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d4kGNvSJe1U5; Thu,  9 Jan 2025 09:24:34 +0000 (UTC)
+ id JwPuBL9HbmUM; Thu,  9 Jan 2025 09:24:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F14F406F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10FAA406CF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F14F406F5;
-	Thu,  9 Jan 2025 09:24:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3FE9A940
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10FAA406CF;
+	Thu,  9 Jan 2025 09:24:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B4005942
  for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:24:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B1AFC80B14
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:24:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 556A540103
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:24:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bvatigLvcfTP for <buildroot@buildroot.org>;
- Thu,  9 Jan 2025 09:24:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GpccxelT2lW2 for <buildroot@buildroot.org>;
+ Thu,  9 Jan 2025 09:24:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DED0280526
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80A034055A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DED0280526
+ by smtp2.osuosl.org (Postfix) with ESMTP id 80A034055A
  for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:24:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BF27283FA0; Thu,  9 Jan 2025 09:24:21 +0000 (UTC)
+ id 6CCAB841F5; Thu,  9 Jan 2025 09:24:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 9 Jan 2025 10:01:54 +0100
+Date: Thu, 9 Jan 2025 09:09:51 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 18fa9c60ef80d74c3ec626f90d64bb1bdfb909b7
-X-Git-Newrev: 0ad5993c480f3b1c50f9a32d486e9d9f96f37bfc
+X-Git-Oldrev: be585e15ed009eb3bcae52ef49b8b19d67044a3e
+X-Git-Newrev: 6c0f612efa209397b2d17b17e29c64bc2d1c28e9
 X-Patchwork-Hint: ignore
-Message-Id: <20250109092421.BF27283FA0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] support/dependencies:
- remove confusing comment about host system python
+Message-Id: <20250109092421.6CCAB841F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] utils/get-developers:
+ don't offload parse_args()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,37 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ad5993c480f3b1c50f9a32d486e9d9f96f37bfc
+commit: https://git.buildroot.net/buildroot/commit/?id=6c0f612efa209397b2d17b17e29c64bc2d1c28e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Since commit 9c0c7846cdb6 (support/dependencies: don't check for python
-on the host), we no longer check for a host python interpreter installed
-on the system.
+Offloading parser.parse_args() to a helper function does not bring much,
+if at all; it even is restrictive: indeed, we can't use parser.error()
+to report errors and thus have to resort to a canned print+return
+sequence...
 
-Drop the comment in support/dependencies/check-host-python3.sh, as it is
-now confusing.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 3722998a3d0b771154b5069798f55ff9ea2c81bd)
+(cherry picked from commit cdcb3f56e8d5b5f51cd12721feaf8679953547b1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/dependencies/check-host-python3.sh | 2 --
- 1 file changed, 2 deletions(-)
+ utils/get-developers | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/support/dependencies/check-host-python3.sh b/support/dependencies/check-host-python3.sh
-index 17cafd2883..380b19ccf7 100755
---- a/support/dependencies/check-host-python3.sh
-+++ b/support/dependencies/check-host-python3.sh
-@@ -7,8 +7,6 @@ version_min="$(echo ${1} | awk '{ split($1, v, "."); print v[1] v[2] }')"
+diff --git a/utils/get-developers b/utils/get-developers
+index 9ab5c4503f..33980366d6 100755
+--- a/utils/get-developers
++++ b/utils/get-developers
+@@ -5,7 +5,7 @@ import getdeveloperlib
+ import sys
  
- shift
  
--# The host python interpreter is already checked by dependencies.sh but
--# it only check if the version is at least 2.7.
- # We want to check the version number of the python3 interpreter even
- # if Buildroot is able to use any version but some packages may require
- # a more recent version.
+-def parse_args():
++def __main__():
+     parser = argparse.ArgumentParser()
+     parser.add_argument('patches', metavar='P', type=argparse.FileType('r'), nargs='*',
+                         help='list of patches (use - to read patches from stdin)')
+@@ -23,11 +23,7 @@ def parse_args():
+                         const=True, help='validate syntax of DEVELOPERS file')
+     parser.add_argument('-d', dest='filename', action='store', default=None,
+                         help='override the default DEVELOPERS file (for debug)')
+-    return parser.parse_args()
+-
+-
+-def __main__():
+-    args = parse_args()
++    args = parser.parse_args()
+ 
+     # Check that only one action is given
+     action = 0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
