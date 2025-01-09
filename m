@@ -1,77 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97AEBE77188
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jan 2025 23:06:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59A2AE77188
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 01:07:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B0FD4059F;
-	Wed,  8 Jan 2025 23:06:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D02CE60596;
+	Thu,  9 Jan 2025 01:07:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D57trk6WnyFn; Wed,  8 Jan 2025 23:06:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UcBajeNZIzLN; Thu,  9 Jan 2025 01:07:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E6D5405A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A3F7605C3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E6D5405A6;
-	Wed,  8 Jan 2025 23:06:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D1887AA
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 23:06:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A3F7605C3;
+	Thu,  9 Jan 2025 01:07:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 34CB47AA
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 01:07:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA74A80C37
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 23:06:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0AF6D60596
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 01:07:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gfwm_u-hPNvY for <buildroot@buildroot.org>;
- Wed,  8 Jan 2025 23:06:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CDB1880DE1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDB1880DE1
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CDB1880DE1
- for <buildroot@buildroot.org>; Wed,  8 Jan 2025 23:06:35 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id BC78A13F861;
- Thu,  9 Jan 2025 00:06:31 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:39402])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 09 Jan 2025 00:06:31 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DrrQGhZXX28g for <buildroot@buildroot.org>;
+ Thu,  9 Jan 2025 01:07:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::102c; helo=mail-pj1-x102c.google.com;
+ envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 60ED2606A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60ED2606A7
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com
+ [IPv6:2607:f8b0:4864:20::102c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 60ED2606A7
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 01:07:28 +0000 (UTC)
+Received: by mail-pj1-x102c.google.com with SMTP id
+ 98e67ed59e1d1-2f43d17b0e3so721053a91.0
+ for <buildroot@buildroot.org>; Wed, 08 Jan 2025 17:07:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1736384847; x=1736989647;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=KY5vIyJSGeXHn39PzhD6gOssLYsUMVBq2IcLEPET6c8=;
+ b=knm3B3AXIuRFMMKEWJrzlk6N3NxnZoyvjxjpaiKx/BUkIj8qWHrXdqO5uDD8vj0TxZ
+ OliaXK+Z8bBIZc1rXMm7v+kGvN3soEKoRZ9T1KBzcowgau8SX5hVBbqBJbuVNw3FGwOF
+ JA/sSt/V++0O2CBBxWJEbvxJBlM48rjToRHng4IMPqD37YH3HMfKEfF6S7SXavwu741u
+ nqVYjDj73ZgcuYXxX6guNV2zLtrQbypxoUJ9lLDD/n/a/FzlYfwkVqdvOiFZI58srA/W
+ 1UlBlyRWTjsR8XE+jyFvMWzPOYyMYlmzEYxd/H+cBNejoOnmh61Rv2HDQ0F0fV+fwocK
+ x20w==
+X-Gm-Message-State: AOJu0YzTNDa+NvdU49Jr538bCS5hC11K/RYogaqKo0+wC1njGxH6dzoE
+ x4CgCune8uUMFc+sLXR7wclXvhqRHf1pxeFsfxJ/KOd5q0GkslpaS2gXow==
+X-Gm-Gg: ASbGncumSD0+MChScrdQjT6f3qOebYi+PxcKkljiypnDy8dpHuBniW/gRMWTPZNNrvD
+ 8dn8BaGIiTTUus1FWzVqPftoPFz2+6SifhReAIz/CYJPzbvR5XHcce1cVkzugvkmI+d9hbFoMLG
+ svu4hRqtvtMVcgR8vti9zpChp1IKsZq7MdYeXk1808TSTVP9VaxVd111dB8Bke1AYtJMpmxembS
+ sviKp/FwK6Wj2MbIDts+LguWULis5tOBAFi3otrsh7q/E/Onc6t6rjMrb2BIDOTHRbocuC9aSQQ
+ 8ylpr48rHk7zRv1oQ/cc8WYcykjDo2uSbdoH59/S
+X-Google-Smtp-Source: AGHT+IHAvgSa8BShd1WlzcBdtqvSj4Km/nT1KVsVEfl3w6gbG/u125DPGoXOUX6N++zud8RGs0wE8w==
+X-Received: by 2002:a05:6a00:3996:b0:725:ffe:4dae with SMTP id
+ d2e1a72fcca58-72d21f63618mr6721960b3a.10.1736384846566; 
+ Wed, 08 Jan 2025 17:07:26 -0800 (PST)
+Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
+ [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
+ d2e1a72fcca58-72aad8dd1a8sm37190268b3a.106.2025.01.08.17.07.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 08 Jan 2025 17:07:25 -0800 (PST)
+From: Akhilesh Nema <nemaakhilesh@gmail.com>
+To: buildroot@buildroot.org
+Cc: Akhilesh Nema <nemaakhilesh@gmail.com>
+Date: Wed,  8 Jan 2025 17:07:21 -0800
+Message-Id: <20250109010721.25290-1-nemaakhilesh@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date: Thu, 09 Jan 2025 00:06:31 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
-In-Reply-To: <20250108213411.2091627-3-thomas.petazzoni@bootlin.com>
-References: <20250108213411.2091627-1-thomas.petazzoni@bootlin.com>
- <20250108213411.2091627-3-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <278c34858ad7a277eb70c291b5adca5e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1736377593;
- bh=bcIUhs2bV2KYbykpfbuge/6fisCiUG4sDH0pd6VdirU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=BUho8SGI65ZE7+ykHMmtnlHiH6jX2Ri/1lv49O/bWnsKIXgZdidmnY4WUHfhhtBlY
- rpUAdm4TcDOA3SJL5uetzJfg7P/rQMFrhIfzWfn2VJFNbG9iW6CROU2jPzOCoa+gkf
- I8Pg53/EGcroqaTjGHFsTa3urD5EbLqCTf0rKQnHl2xdVW1TiE/JZZ0u30uNPhbs5h
- abLGKE8omzwXh1gHBpwSQrdErugMeGFKPkAQ8vJ5ynDO6/AoRpweZtq6/tqWNLA8sC
- aWK+8DMLiX2a2OZ5lejg77WNok/+2RN22xEZVJ4YoUJKkfTQsG6wLNrloFEQ+2e2W+
- p92lchJEVH8Kw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1736384847; x=1736989647; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=KY5vIyJSGeXHn39PzhD6gOssLYsUMVBq2IcLEPET6c8=;
+ b=GC9p2W8Q+xN+g0csk3ZPn7p59XYlY3W7v9a3jMtopYKsDWdcAYjOhGh3URm55e/GBR
+ xsXKo0lt77U39/CegPTU/n6abvglQe00Ayl0pDDscLNqIcehCvJmMdE16l7Wh5aa9IeD
+ 0aQVg81EmwX5jTFmx5HLCPU0t+7mxtA9wy96V8kV4XIo9xQrEMnRqwODQs3TJlTX6GxQ
+ B6kiq0FhMaMkpKYWUEuCWZtRAFXEftq8PNa+Sm9lNLhLSNkgiyaRQVEQPOgTTz+Q55Qj
+ QYVRV1DBjX2g/+3w5PikJRdFCsqzBWMVKRDZWSoIOdv43v+m6TzJigEMOUat8CNc2X2X
+ 0w/w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=BUho8SGI
-Subject: Re: [Buildroot] [PATCH 3/3] package/linux-pam: bump to version 1.7.0
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=GC9p2W8Q
+Subject: [Buildroot] [PATCH 1/1] package/smartmontools: bump version to 7.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,74 +105,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+Release notes:
+https://www.smartmontools.org/browser/tags/RELEASE_7_4/smartmontools/NEWS
 
-On 08/01/2025 22:34, Thomas Petazzoni via buildroot wrote:
-> Changes from 1.6.1 to 1.7.0:
-> 
->     build: changed build system from autotools to meson.
->     libpam_misc: use ECHOCTL in the terminal input
->     pam_access: support UID and GID in access.conf
->     pam_env: install environment file in vendordir if vendordir is 
-> enabled
->     pam_issue: only count class user if logind support is enabled
->     pam_limits: use systemd-logind instead of utmp if logind support is 
-> enabled
->     pam_unix: compare password hashes in constant time
->     Multiple minor bug fixes, build fixes, portability fixes,
->     documentation improvements, and translation updates.
-> 
-> Clearly from a Buildroot standpoint, the most significant change is
-> the migration from autotools (no longer supported) to meson.
-> 
-> This deserves a few explanations:
-> 
-> * --disable-prelude option no longer exists
-> 
-> * --disable-isadir but is documented as Arch-specific PAM modules
->   directory, relative to SECUREDIR, which seems odd to use. It has
->   been set since the package was introduced in
->   04be7f0f8ca100afaf06b264332bc2cd61fbb3d0, with no specific
->   explanation.
-> 
-> * --disable-nis is preserved
-> 
-> * --disable-db doesn't exist, it can only take a number of values,
->   including "auto"
-> 
-> * --disable-regenerate-docu doesn't exist, but -Ddocs=disabled is
->   passed
-> 
-> * -Di18n is now handled, and LINUX_PAM_LDFLAGS is used to pass
->   TARGET_NLS_LIBS
-> 
-> * We continue to use --libdir and not -Dlibdir because meson-package
->   already passes "--libdir=lib" and we can't override that with
->   -Dlibdir (it fails at configure time), so we have to override with
->   --libdir.
-> 
-> Also: existing patch 0001 is dropped as it's upstream, part of 1.7.0,
-> but another upstream backport is added to fix -Di18n=disabled builds.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+---
+ package/smartmontools/smartmontools.hash | 8 ++++----
+ package/smartmontools/smartmontools.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-This bump (and change to meson) is introducing build failures.
-So I did not merged this patch. See my test-pkg run:
-https://gitlab.com/jolivain/buildroot/-/pipelines/1616985492
+diff --git a/package/smartmontools/smartmontools.hash b/package/smartmontools/smartmontools.hash
+index e48e955d01..a61aeb9381 100644
+--- a/package/smartmontools/smartmontools.hash
++++ b/package/smartmontools/smartmontools.hash
+@@ -1,7 +1,7 @@
+-# From http://sourceforge.net/projects/smartmontools/files/smartmontools/7.3/
+-md5  7a71d388124e3cd43abf6586a43cb1ff  smartmontools-7.3.tar.gz
+-sha1  5ce7adb606119148d725b91a00652d427ca0adc2  smartmontools-7.3.tar.gz
++# From http://sourceforge.net/projects/smartmontools/files/smartmontools/7.4/
++md5  178d31a6ff5256c093227ab45a3f52aa  smartmontools-7.4.tar.gz
+ 
+ # Locally computed
+-sha256  a544f8808d0c58cfb0e7424ca1841cb858a974922b035d505d4e4c248be3a22b  smartmontools-7.3.tar.gz
++sha1  b0d7c9ca80768059607b92bf4e373e2822300d3f  smartmontools-7.4.tar.gz
++sha256  e9a61f641ff96ca95319edfb17948cd297d0cd3342736b2c49c99d4716fb993d  smartmontools-7.4.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
+index d24f008df4..18a1417681 100644
+--- a/package/smartmontools/smartmontools.mk
++++ b/package/smartmontools/smartmontools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SMARTMONTOOLS_VERSION = 7.3
++SMARTMONTOOLS_VERSION = 7.4
+ SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
+ SMARTMONTOOLS_LICENSE = GPL-2.0+
+ SMARTMONTOOLS_LICENSE_FILES = COPYING
+-- 
+2.25.1
 
-Most failures seems to be related to my test config having:
-BR2_PACKAGE_LINUX_PAM_LASTLOG=y
-
-Could you have a look please?
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
