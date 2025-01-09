@@ -4,49 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38B97E77199
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 15:33:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4401FE77197
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 16:56:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B53DF6076C;
-	Thu,  9 Jan 2025 15:33:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04AB260B02;
+	Thu,  9 Jan 2025 16:56:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I2Eo6sNPcgjQ; Thu,  9 Jan 2025 15:33:03 +0000 (UTC)
+ id mButN-7UkSLL; Thu,  9 Jan 2025 16:56:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2A38607D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 065D360ADF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2A38607D8;
-	Thu,  9 Jan 2025 15:33:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 56BD4940
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:32:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 065D360ADF;
+	Thu,  9 Jan 2025 16:56:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6F7B976C
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 16:56:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4552C80526
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:32:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5D92D4070C
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 16:56:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jdfwCD8TkUJt for <buildroot@buildroot.org>;
- Thu,  9 Jan 2025 15:32:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zNP25OPdCvNk for <buildroot@buildroot.org>;
+ Thu,  9 Jan 2025 16:56:40 +0000 (UTC)
+X-Greylist: delayed 1188 seconds by postgrey-1.37 at util1.osuosl.org;
+ Thu, 09 Jan 2025 16:56:38 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DB7234020B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB7234020B
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.33.45.51;
+ helo=1.mo581.mail-out.ovh.net; envelope-from=sebastien.szymanski@armadeus.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE35880523
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE35880523
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:32:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9AFFB8353C; Thu,  9 Jan 2025 15:32:57 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from 1.mo581.mail-out.ovh.net (1.mo581.mail-out.ovh.net
+ [178.33.45.51])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DB7234020B
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 16:56:38 +0000 (UTC)
+Received: from director5.ghost.mail-out.ovh.net (unknown [10.109.140.54])
+ by mo581.mail-out.ovh.net (Postfix) with ESMTP id 4YTVmb62X9z18hc
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 16:36:47 +0000 (UTC)
+Received: from ghost-submission-5b5ff79f4f-fjps7 (unknown [10.111.182.153])
+ by director5.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 496E21FDFB;
+ Thu,  9 Jan 2025 16:36:47 +0000 (UTC)
+Received: from armadeus.com ([37.59.142.104])
+ by ghost-submission-5b5ff79f4f-fjps7 with ESMTPSA
+ id zIZ9NR77f2epAgAAOZ7/fw
+ (envelope-from <sebastien.szymanski@armadeus.com>);
+ Thu, 09 Jan 2025 16:36:47 +0000
+X-OVh-ClientIp: 92.148.253.243
+From: =?utf-8?q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Thu, 09 Jan 2025 17:36:25 +0100
+Message-Id: <20250109-nxp-mwifiex-firmware-driver-v1-0-b2ec8b34643c@armadeus.com>
+MIME-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAAn7f2cC/x3MQQqDMBAF0KvIrB1IAqm1VykuQpzUvzCVCWhAv
+ LvB5du8k4oopNCnO0llR8E/N9i+o7iE/BPG3EzOOG+sGTnXjdcDCVI5QdcjqPCs2EU5eP8exhj
+ iyzpqw6aSUJ/9O13XDVfch/ptAAAA
+X-Change-ID: 20250109-nxp-mwifiex-firmware-driver-a55879cac612
 To: buildroot@buildroot.org
-Date: Thu, 9 Jan 2025 16:32:19 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c04ba4b58090ccf5d1e0b62f992c75e9af1fe98f
-X-Git-Newrev: d81b579d990a65689c09c6ae416e6f2402481b00
-X-Patchwork-Hint: ignore
-Message-Id: <20250109153257.9AFFB8353C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: Update for 2024.11.1
+X-Mailer: b4 0.14.2
+X-Ovh-Tracer-Id: 18095181830007614422
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrudegiedgkeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffufffkgggtgffvvefosehtkeertdertdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeevgeeghfejvdegtedukeejieetheekjeejvdfhtdeguedukeejtdeftdeugeeileenucfkphepuddvjedrtddrtddruddpledvrddugeekrddvheefrddvgeefpdefjedrheelrddugedvrddutdegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehkedumgdpmhhouggvpehsmhhtphhouhht
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ bh=ROFISPyOpq0nPQnK2KLdV+hmCm8NhL4kivll7eUBtbc=; 
+ c=relaxed/relaxed; d=armadeus.com; h=From; s=ovhmo103079-selector1;
+ t=1736440607; v=1;
+ b=fBNblcjB+O9CyDNB28p98cUIOU/uHririhixJ0L+cJB+UumkhQVB87WriCc9ePawKEIyWAy4
+ x40gfVMENees3g5I5llXOsFySD65xHmIy8yPqLpP/WcrlA5L3+P5LhHn5iwZ88ceGyJZoM7Q0sn
+ tl6DZPZ4sp6zF72ubxwNOA1s5Q5oV8FhcYiQc6rq2y5X2xMT/L25hXFpxRjAtpMkeAVU2VVmrVJ
+ heKTGJZzpCSRoQrXZqUqBcPd45GLZ5gXKohKkJn1FrAm0E9HLiSUZxbTYUSGP6WTxK2Rq3+vk6T
+ c1g53LsQ58hPFLU96m0qJrQflEPONeEDmkExKcPB+7/Fw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=armadeus.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=armadeus.com header.i=@armadeus.com header.a=rsa-sha256
+ header.s=ovhmo103079-selector1 header.b=fBNblcjB
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-104R005f5a3e280-7523-4d90-b33d-2f72b930f6af,
+ 72BCDE73031BAE8127C6C3DAB41EBC240DC3E12A)
+ smtp.auth=sebastien.szymanski@armadeus.com
+Subject: [Buildroot] [PATCH 0/2] Add NXP WiFi chipsets support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,103 +98,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Gilles Talis <gilles.talis@gmail.com>, Julien Olivain <ju.o@free.fr>,
+ Fabio Estevam <festevam@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d81b579d990a65689c09c6ae416e6f2402481b00
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
-
-diff --git a/docs/website/download.html b/docs/website/download.html
-index f6b3bfdeb7..3854f052a9 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2024.11</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2024.11.1</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2024.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2024.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2024.11.tar.gz">buildroot-2024.11.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2024.11.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2024.11.1.tar.gz">buildroot-2024.11.1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2024.11.1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2024.11.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.11.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2024.11.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.11.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2024.11.tar.xz">buildroot-2024.11.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2024.11.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2024.11.1.tar.xz">buildroot-2024.11.1.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2024.11.1.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index b0938135ea..190998f931 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2024.11.1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>9 January 2025</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2024.11.1 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2024.11 release. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2024.11.1/CHANGES">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/87y0zkhumg.fsf@dell.be.48ers.dk/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2024.11.1.tar.xz">2024.11.1 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBzZXJpZXMgYWRkcyBzdXBwb3J0IG9mIFdpRmkgY2hpcHMgZnJvbSBOWFAKSVc0MTYgLyBJ
+VzYxMCAvIElXNjEyIC8gVzg4MDEgLyBXODk4NyAvIFc4OTk3IC8gVzkwOTguCgpUaGUgZmlyc3Qg
+cGF0Y2ggYWRkcyBhIG5ldyBwYWNrYWdlIHByb3ZpZGluZyB0aGUgZmlybXdhcmVzLgpUaGUgc2Vj
+b25kIHBhdGNoIGFkZHMgYSBuZXcgcGFja2FnZSBwcm92aWRpbmcgdGhlIGRyaXZlci4KClNpZ25l
+ZC1vZmYtYnk6IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFk
+ZXVzLmNvbT4KLS0tClPDqWJhc3RpZW4gU3p5bWFuc2tpICgyKToKICAgICAgcGFja2FnZS9ueHAt
+YnQtd2lmaS1maXJtd2FyZTogbmV3IHBhY2thZ2UKICAgICAgcGFja2FnZS9ueHAtbXdpZmlleDog
+bmV3IHBhY2thZ2UKCiBERVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICB8ICAyICsKIHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIHwgIDIgKwogcGFja2FnZS9ueHAtYnQtd2lmaS1maXJtd2FyZS9Db25maWcuaW4g
+ICAgICAgICAgICAgfCA2NyArKysrKysrKysrKysrKysrKysrKysrCiAuLi4vbnhwLWJ0LXdpZmkt
+ZmlybXdhcmUvbnhwLWJ0LXdpZmktZmlybXdhcmUuaGFzaCB8ICAzICsKIC4uLi9ueHAtYnQtd2lm
+aS1maXJtd2FyZS9ueHAtYnQtd2lmaS1maXJtd2FyZS5tayAgIHwgMzMgKysrKysrKysrKysKIHBh
+Y2thZ2UvbnhwLW13aWZpZXgvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgIHwgMTEgKysr
+KwogcGFja2FnZS9ueHAtbXdpZmlleC9ueHAtbXdpZmlleC5oYXNoICAgICAgICAgICAgICAgfCAg
+MyArCiBwYWNrYWdlL254cC1td2lmaWV4L254cC1td2lmaWV4Lm1rICAgICAgICAgICAgICAgICB8
+IDE1ICsrKysrCiA4IGZpbGVzIGNoYW5nZWQsIDEzNiBpbnNlcnRpb25zKCspCi0tLQpiYXNlLWNv
+bW1pdDogNWMwYTkxZjcyOTM1MjMyNTRlOWM0ODY2N2RmNDQ2ODM3MGZkYTU4ZApjaGFuZ2UtaWQ6
+IDIwMjUwMTA5LW54cC1td2lmaWV4LWZpcm13YXJlLWRyaXZlci1hNTU4NzljYWM2MTIKCkJlc3Qg
+cmVnYXJkcywKLS0gClPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFy
+bWFkZXVzLmNvbT4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
+Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
