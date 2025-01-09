@@ -4,50 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B93EE77199
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 09:56:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D426FE7719A
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 10:50:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9EE67406F4;
-	Thu,  9 Jan 2025 09:56:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF8F54068A;
+	Thu,  9 Jan 2025 10:50:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lo-RrfXcjpGo; Thu,  9 Jan 2025 09:56:15 +0000 (UTC)
+ id YB87F8tF11pW; Thu,  9 Jan 2025 10:50:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50656406F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C14B40635
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50656406F5;
-	Thu,  9 Jan 2025 09:56:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2F047942
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:56:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C14B40635;
+	Thu,  9 Jan 2025 10:50:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7B8AB76C
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 10:50:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A2A1406F1
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:56:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5C80D60739
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 10:50:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id voYWbzjf87NP for <buildroot@buildroot.org>;
- Thu,  9 Jan 2025 09:56:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12FA140690
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 12FA140690
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:56:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F2DA9826D0; Thu,  9 Jan 2025 09:56:08 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 9 Jan 2025 10:48:17 +0100
-X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: feb7445d8b54b703b625768025e4b57811967b95
-X-Git-Newrev: 33136337b2b4a174d7a7a82e10d5c9257abfc7d9
-X-Patchwork-Hint: ignore
-Message-Id: <20250109095608.F2DA9826D0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/linux-pam:
- backport upstream patch to fix build issue
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HcOfSx_eQVOQ for <buildroot@buildroot.org>;
+ Thu,  9 Jan 2025 10:50:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C37AB60750
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C37AB60750
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C37AB60750
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 10:50:52 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-436281c8a38so5808875e9.3
+ for <buildroot@buildroot.org>; Thu, 09 Jan 2025 02:50:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1736419850; x=1737024650;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=RE7BHhhXuwGZBDhnoLOSf6LMP4Wz2CpWdrto2ZK6vvM=;
+ b=M05tFnOj8bTwpG/y07HwM4TiNKpA0YyGqrIiiFi4JGU8vvIeTi1QN6t3zQby5fVGJ4
+ FRPCqd1J0S8/bQorLHTr7BbW1t5A64N3DxDOO8MtUDVXb2kDr1bCWlLWKuoTyIh/8e6i
+ +EZeSRsAx09x2LH7rLOwpmhuAzfYMqQrhZwnwh8ZA/OyXmp/DI6DWmAhs3X8xvspSnFU
+ mdtGoYvGZwuNddZWvcjb4iAPGwDi4F+Rn79j6BMo2B7j6ZtzG0KZO9a4mayucrRwmoxh
+ 115n63V66z2ic8F64YoyYJt8dtmmMIPlXfDsWpO6d+FjjlmMP8cUmbe0sbGe1CJL/lXq
+ aHqQ==
+X-Gm-Message-State: AOJu0Yw5RJdv2gSG43JjftaJQ8smutYaZD+dzpgCA1l1i1/v6P+CBGew
+ eKeYlHu+Am0y9JqEdgaDvoSEQOGBEre3N1nwmO/Agx+/XCZmvNZhvx85HPCJ1WJhJT2N/qRjywl
+ M
+X-Gm-Gg: ASbGncvi2651B3UUjG6PjJxld5fePECa4AghBGUEyr+ci/FRI9G2hOW/NeeskFIJDtj
+ tUrbfIWj1oDR5uUfw+VbZVbleWjvhKqJIhDlZLfA3gKT56Ec27aGzH8NiyYuwAKJQVCUPF1a8KO
+ H9cFZD+S7YkQEUBW57mCHbf35bXip8yfZc3wfTNWh0ZpgUQPQUx4OmwB6m6z1W6FuUnBlHDzC/y
+ 6H+bxCsmIyBAW3deRV0H5XFV9OWaGiR5cXQzy/UJ2bnru1tojGxPxtusm+MaABs1fDExb1mc2r9
+ JGTU+ZZ8YBSnAmiJFRU0HZ83BRjCuuQATtoUQZNsnbB77iq9VrF+2tX9ckyyZ4GceN/jtkXQXjE
+ 7BPF7T/uRMtto3lw8
+X-Google-Smtp-Source: AGHT+IFtDQ4/Gyha4hwm28Vqf3XCyEXfclsY/NSZH9imMtQ11h2LQ+t8SIvQvsLI4TDM3qeQe/2a2A==
+X-Received: by 2002:a05:600c:4e92:b0:434:fdbc:5ce5 with SMTP id
+ 5b1f17b1804b1-436e2707f4amr52861455e9.29.1736419850601; 
+ Thu, 09 Jan 2025 02:50:50 -0800 (PST)
+Received: from ?IPV6:2a01:cb05:949d:5800:e3ef:2d7a:4131:71f?
+ (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-38a8e4b81a4sm1490043f8f.68.2025.01.09.02.50.50
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 09 Jan 2025 02:50:50 -0800 (PST)
+Message-ID: <951e370c-1132-4759-bbd1-317d15e6db55@smile.fr>
+Date: Thu, 9 Jan 2025 11:50:49 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Peter Korsgaard <peter@korsgaard.com>, Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+References: <20250107210923.1127755-1-romain.naour@smile.fr>
+ <cabf6dca22e81938b46cd749c5ceb921@free.fr>
+ <a58bb770-6e83-4ee9-a2a3-7f96ad0536a2@korsgaard.com>
+Content-Language: en-US
+In-Reply-To: <a58bb770-6e83-4ee9-a2a3-7f96ad0536a2@korsgaard.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1736419850; x=1737024650; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=RE7BHhhXuwGZBDhnoLOSf6LMP4Wz2CpWdrto2ZK6vvM=;
+ b=xGMKync6fp87ZTFmlmHOl+XQyDCU7IHQ9turjx6wB4IGvfc397NmILX2BwXKW1DHso
+ LQUfjKOSEbY7iSkJyKwfKM/a33EkUeFz+NoXNoJdY9QOZXaGVAazc3srPzE8qsQ2byj1
+ GoRvaiNtA7cYFXhGMzmNNfRIten6ZJ5xyShwU=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=xGMKync6
+Subject: Re: [Buildroot] [PATCH] package/qemu: fix Qemu stub builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,242 +112,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5139533126469855593=="
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5139533126469855593==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=33136337b2b4a174d7a7a82e10d5c9257abfc7d9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
-
-We are seeing build issues with linux-pam in the autobuilders such as:
-
-md5_crypt.c: In function 'Goodcrypt_md5':
-md5_crypt.c:145:13: error: implicit declaration of function 'asprintf'; did you mean 'vsprintf'? [-Wimplicit-function-declaration]
-  145 |         if (asprintf(&passwd, "%s%.*s$%s", magic, sl, sp, buf) < 0)
-      |             ^~~~~~~~
-      |             vsprintf
-
-This is due to the fact that <stdio.h> gets included without
-_GNU_SOURCE being defined, and so the prototype of asprintf() is not
-accessible, at least with uclibc-ng.
-
-The _GNU_SOURCE definition is properly in linux-pam's config.h, but
-config.h doesn't get properly included first everywhere. This issue
-has been fixed upstream in the mean time, so we simply backport the
-upstream patch.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/49b190b3fbae3cdca4c7a08b3ab5100a937ede9e/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 001e777d507b972a580d75e3ac8d892eff72fbf2)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...build-consistently-include-config.h-first.patch | 180 +++++++++++++++++++++
- 1 file changed, 180 insertions(+)
-
-diff --git a/package/linux-pam/0001-build-consistently-include-config.h-first.patch b/package/linux-pam/0001-build-consistently-include-config.h-first.patch
-new file mode 100644
-index 0000000000..e9f36b8a60
---- /dev/null
-+++ b/package/linux-pam/0001-build-consistently-include-config.h-first.patch
-@@ -0,0 +1,180 @@
-+From cdba2c8cdba9b3500595624fb375c0dda266631b Mon Sep 17 00:00:00 2001
-+From: "Dmitry V. Levin" <ldv@strace.io>
-+Date: Fri, 30 Aug 2024 08:00:00 +0000
-+Subject: [PATCH] build: consistently include config.h first
-+
-+Make sure that config.h is included before any system header.
-+
-+Upstream: https://github.com/linux-pam/linux-pam/commit/5d7eefb1883c557c7a027f68e966e2fae294a9b6
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ libpam/pam_prelude.c                | 8 ++++----
-+ modules/pam_namespace/argv_parse.c  | 2 ++
-+ modules/pam_setquota/pam_setquota.c | 3 ++-
-+ modules/pam_timestamp/sha1.c        | 2 +-
-+ modules/pam_unix/audit.c            | 3 +--
-+ modules/pam_unix/bigcrypt_main.c    | 2 ++
-+ modules/pam_unix/md5.c              | 4 ++--
-+ modules/pam_unix/md5_crypt.c        | 2 +-
-+ modules/pam_unix/yppasswd.h         | 2 ++
-+ 9 files changed, 17 insertions(+), 11 deletions(-)
-+
-+diff --git a/libpam/pam_prelude.c b/libpam/pam_prelude.c
-+index 6c73bf5d..c62e2f2c 100644
-+--- a/libpam/pam_prelude.c
-++++ b/libpam/pam_prelude.c
-+@@ -5,17 +5,17 @@
-+  * (C) Sebastien Tricaud 2005 <toady@gscore.org>
-+  */
-+ 
-+-#include <stdio.h>
-+-#include <syslog.h>
-+-
-+ #ifdef PRELUDE
-+ 
-++#include "pam_private.h"
-++
-++#include <stdio.h>
-++#include <syslog.h>
-+ #include <libprelude/prelude.h>
-+ #include <libprelude/prelude-log.h>
-+ #include <libprelude/idmef-message-print.h>
-+ 
-+ #include "pam_prelude.h"
-+-#include "pam_private.h"
-+ 
-+ 
-+ #define ANALYZER_CLASS "pam"
-+diff --git a/modules/pam_namespace/argv_parse.c b/modules/pam_namespace/argv_parse.c
-+index ac7c9ae0..cbae7831 100644
-+--- a/modules/pam_namespace/argv_parse.c
-++++ b/modules/pam_namespace/argv_parse.c
-+@@ -28,6 +28,8 @@
-+  * Version 1.1, modified 2/27/1999
-+  */
-+ 
-++#include "config.h"
-++
-+ #include <limits.h>
-+ #include <stdlib.h>
-+ #include <ctype.h>
-+diff --git a/modules/pam_setquota/pam_setquota.c b/modules/pam_setquota/pam_setquota.c
-+index c15fc669..73445e29 100644
-+--- a/modules/pam_setquota/pam_setquota.c
-++++ b/modules/pam_setquota/pam_setquota.c
-+@@ -8,6 +8,8 @@
-+    Copyright © 2016 Keller Fuchs <kellerfuchs@hashbang.sh>
-+ */
-+ 
-++#include "pam_inline.h"
-++
-+ #include <sys/types.h>
-+ #include <sys/quota.h>
-+ #include <linux/quota.h>
-+@@ -22,7 +24,6 @@
-+ #include <security/_pam_macros.h>
-+ #include <security/pam_ext.h>
-+ #include <security/pam_modutil.h>
-+-#include "pam_inline.h"
-+ 
-+ #ifndef PATH_LOGIN_DEFS
-+ # define PATH_LOGIN_DEFS "/etc/login.defs"
-+diff --git a/modules/pam_timestamp/sha1.c b/modules/pam_timestamp/sha1.c
-+index dff454cf..f21b2870 100644
-+--- a/modules/pam_timestamp/sha1.c
-++++ b/modules/pam_timestamp/sha1.c
-+@@ -37,6 +37,7 @@
-+  */
-+ /* See http://www.itl.nist.gov/fipspubs/fip180-1.htm for descriptions. */
-+ 
-++#include "pam_inline.h"
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ #include <netinet/in.h>
-+@@ -47,7 +48,6 @@
-+ #include <endian.h>
-+ #include <unistd.h>
-+ #include "sha1.h"
-+-#include "pam_inline.h"
-+ 
-+ static const unsigned char
-+ padding[SHA1_BLOCK_SIZE] = {
-+diff --git a/modules/pam_unix/audit.c b/modules/pam_unix/audit.c
-+index 1547a652..9513aaa9 100644
-+--- a/modules/pam_unix/audit.c
-++++ b/modules/pam_unix/audit.c
-+@@ -1,5 +1,3 @@
-+-#include "audit.h"
-+-
-+ #include "config.h"
-+ 
-+ #ifdef HAVE_LIBAUDIT
-+@@ -11,6 +9,7 @@
-+ 
-+ #include <security/_pam_types.h>
-+ 
-++#include "audit.h"
-+ #include "passverify.h"
-+ 
-+ int audit_log(int type, const char *uname, int retval)
-+diff --git a/modules/pam_unix/bigcrypt_main.c b/modules/pam_unix/bigcrypt_main.c
-+index fab212d9..22d325da 100644
-+--- a/modules/pam_unix/bigcrypt_main.c
-++++ b/modules/pam_unix/bigcrypt_main.c
-+@@ -1,3 +1,5 @@
-++#include "config.h"
-++
-+ #include <stdio.h>
-+ #include <string.h>
-+ 
-+diff --git a/modules/pam_unix/md5.c b/modules/pam_unix/md5.c
-+index 95b8de4c..78e9af27 100644
-+--- a/modules/pam_unix/md5.c
-++++ b/modules/pam_unix/md5.c
-+@@ -18,11 +18,11 @@
-+  *
-+  */
-+ 
-++#include "pam_inline.h"
-++
-+ #include <string.h>
-+ #include "md5.h"
-+ 
-+-#include "pam_inline.h"
-+-
-+ #ifndef HIGHFIRST
-+ #define byteReverse(buf, len)	/* Nothing */
-+ #else
-+diff --git a/modules/pam_unix/md5_crypt.c b/modules/pam_unix/md5_crypt.c
-+index 9a6bd4f9..9451f376 100644
-+--- a/modules/pam_unix/md5_crypt.c
-++++ b/modules/pam_unix/md5_crypt.c
-+@@ -12,11 +12,11 @@
-+  *
-+  */
-+ 
-++#include "pam_inline.h"
-+ #include <string.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include "md5.h"
-+-#include "pam_inline.h"
-+ 
-+ static const unsigned char itoa64[] =	/* 0 ... 63 => ascii - 64 */
-+ "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-+diff --git a/modules/pam_unix/yppasswd.h b/modules/pam_unix/yppasswd.h
-+index dc686cd7..3a40c3ea 100644
-+--- a/modules/pam_unix/yppasswd.h
-++++ b/modules/pam_unix/yppasswd.h
-+@@ -6,6 +6,8 @@
-+ #ifndef _YPPASSWD_H_RPCGEN
-+ #define _YPPASSWD_H_RPCGEN
-+ 
-++#include "config.h"
-++
-+ #include <rpc/rpc.h>
-+ 
-+ 
-+-- 
-+2.47.1
-+
-
---===============5139533126469855593==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5139533126469855593==--
+SGVsbG8gUGV0ZXIsIEFsbCwKCkxlIDA5LzAxLzIwMjUgw6AgMTA6MjEsIFBldGVyIEtvcnNnYWFy
+ZCBhIMOpY3JpdMKgOgo+IE9uIDEvNy8yNSAyMjo1MSwgSnVsaWVuIE9saXZhaW4gd3JvdGU6Cj4+
+IE9uIDA3LzAxLzIwMjUgMjI6MDksIFJvbWFpbiBOYW91ciB2aWEgYnVpbGRyb290IHdyb3RlOgo+
+Pj4gU2luY2UgY29tbWl0ICJzdHViczogYXZvaWQgZHVwbGljYXRlIHN5bWJvbHMgaW4gbGlicWVt
+dXV0aWwuYSIgWzFdLAo+Pj4gUWVtdSBkb2Vzbid0IGJ1aWxkIHdpdGg6Cj4+Pgo+Pj4gwqAgLi9j
+b25maWd1cmUgLS1lbmFibGUtdXNlciAtLWRpc2FibGUtc3lzdGVtIC0tZW5hYmxlLXRvb2xzCj4+
+Pgo+Pj4gwqAgL3Vzci9iaW4vbGQ6IGxpYmh3Y29yZS5hLnAvaHdfY29yZV9xZGV2LmMubzogaW4g
+ZnVuY3Rpb24gJ2RldmljZV9maW5hbGl6ZSc6Cj4+PiBbLi4uXW91dHB1dC9idWlsZC9ob3N0LXFl
+bXUtOS4yLjAvYnVpbGQvLi4vaHcvY29yZS9xZGV2LmM6Njg5OiAoLnRleHQrMHg3NWMpOgo+Pj4g
+dW5kZWZpbmVkIHJlZmVyZW5jZSB0byAncWFwaV9ldmVudF9zZW5kX2RldmljZV9kZWxldGVkJwo+
+Pj4gwqAgY29sbGVjdDI6IGVycm9yOiBsZCByZXR1cm5lZCAxIGV4aXQgc3RhdHVzCj4+Pgo+Pj4g
+SW5kZWVkLCB3aXRoIGhhdmVfc3lzdGVtID0gZmFsc2UgYW5kIGhhdmVfdG9vbHMgPSB0cnVlLCBR
+ZW11IG5lZWRzIHRoZQo+Pj4gc3R1YnMgZm9yIFFBUEkgZXZlbnRzIGFkZGVkIGJ5IHN0dWJfc3Mu
+YWRkKGZpbGVzKCdxZGV2LmMnKSkgdG8gcHJvdmlkZQo+Pj4gcWFwaV9ldmVudF9zZW5kX2Rldmlj
+ZV9kZWxldGVkKCkuCj4+Pgo+Pj4gRml4ZXM6IDM4OGI4NDlmYjZjMzM4ODJiNDgxMTIzNTY4OTk1
+YTc0OWE1NGY2NDguCj4gCj4gRllJLCB0aGlzIHNob3VsZCBoYXZlIGJlZW4gZWRmYzY3ZmIxYTVm
+MGZlNjdiYTlkZTkxZTkwYjA2YTQ0OTAyYzIzMSAoInBhY2thZ2UvCj4gcWVtdTogYnVtcCB0byB2
+ZXJzaW9uIDkuMi4wIikKPiAKCkluZGVlZCwgdGhpcyBpcyBhY3R1YWxseSB0aGUgZ2l0IGhhc2gg
+aW4gdGhlIFFlbXUgcmVwby4uLgoKTXkgYmFkLgoKQmVzdCByZWdhcmRzLApSb21haW4KCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
