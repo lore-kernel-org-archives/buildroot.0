@@ -1,59 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABB02E77199
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 15:31:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74117E77197
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 15:33:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 38A4E6076C;
-	Thu,  9 Jan 2025 15:31:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 25FBC4022A;
+	Thu,  9 Jan 2025 15:33:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q5-0R1O4hKRc; Thu,  9 Jan 2025 15:31:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6LbaGZbkFNLY; Thu,  9 Jan 2025 15:33:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31607607D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D516340213
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31607607D8;
-	Thu,  9 Jan 2025 15:31:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D516340213;
+	Thu,  9 Jan 2025 15:33:00 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 68B2B76C
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:31:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 71CCE940
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:32:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 48EA86076C
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:31:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6C307607D8
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:32:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W4DU1qDTxzSn for <buildroot@buildroot.org>;
- Thu,  9 Jan 2025 15:31:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id b3Ri--Q1FLWi for <buildroot@buildroot.org>;
+ Thu,  9 Jan 2025 15:32:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6E876606F1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E876606F1
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6E876606F1
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:31:07 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A131E1C000C
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:31:04 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tVuUx-005TwX-2y
- for buildroot@buildroot.org; Thu, 09 Jan 2025 16:31:03 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 959D56076C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 959D56076C
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:32:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8BFF8842A1; Thu,  9 Jan 2025 15:32:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 09 Jan 2025 16:31:03 +0100
-Message-ID: <87y0zkhumg.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] Buildroot 2024.11.1 released
+Date: Thu, 9 Jan 2025 16:05:08 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9d3d12b6b5996e2a6f6bb90908613036cf70d6c1
+X-Git-Newrev: c04ba4b58090ccf5d1e0b62f992c75e9af1fe98f
+X-Patchwork-Hint: ignore
+Message-Id: <20250109153257.8BFF8842A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2024.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,50 +58,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGksCgpCdWlsZHJvb3QgaXMgYSBzaW1wbGUgdG9vbCBmb3IgY3JlYXRpbmcgY29tcGxldGUgZW1i
-ZWRkZWQgTGludXggc3lzdGVtcwooaHR0cHM6Ly9idWlsZHJvb3Qub3JnKS4KCkJ1aWxkcm9vdCAy
-MDI0LjExLjEgaXMgcmVsZWFzZWQgLSBHbyBkb3dubG9hZCBpdCBhdDoKCmh0dHBzOi8vYnVpbGRy
-b290Lm9yZy9kb3dubG9hZHMvYnVpbGRyb290LTIwMjQuMTEuMS50YXIuZ3oKCm9yCgpodHRwczov
-L2J1aWxkcm9vdC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDI0LjExLjEudGFyLnh6CgpPciBn
-ZXQgaXQgZnJvbSBHaXQ6CgpodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJv
-b3QuZ2l0ICgyMDI0LjExLjEgdGFnKQoKQnVpbGRyb290IDIwMjQuMTEuMSBpcyBhIGJ1Z2ZpeCBy
-ZWxlYXNlLCBmaXhpbmcgYSBudW1iZXIgb2YgaW1wb3J0YW50IC8Kc2VjdXJpdHkgcmVsYXRlZCBp
-c3N1ZXMgZGlzY292ZXJlZCBzaW5jZSB0aGUgMjAyNC4xMSByZWxlYXNlLgoKLSBFbnN1cmUgQ09O
-RklHX1RSSU1fVU5VU0VEX0tTWU1TIGlzIGRpc2FibGVkIHdoZW4gYnVpbGRpbmcgZXh0ZXJuYWwK
-ICBMaW51eCBrZXJuZWwgbW9kdWxlcwoKLSBTZWN1cml0eSBmaXhlcyBmb3IgYXByLCBkcGRrLCBn
-c3QxLXBsdWdpbnMtYmFzZSwgaXBlcmYzLCBsaWJjdXJsLAogIGxpYnNuZGZpbGUsIGxpYnNvdXAz
-LCBuZXRhdGFsaywgb3BlbnNjLCBweXRob24tZGphbmdvLCBzdWJ2ZXJzaW9uLAogIHdnZXQsIHdp
-cmVzaGFyawoKLSBGaXhlcyBmb3IgZG93bmxvYWQvY29tcGlsYXRpb24vcnVudGltZS9saWNlbnNl
-IGlzc3VlcyBpbiBiYywKICBibHVlejVfdXRpbHMsIGMtaWNhcCwgY3J5cHRvZGV2LWxpbnV4LCBk
-YWhkaS1saW51eCwgZnJlZWlwbWksIGdkYiwKICBnbnVwZzIsIGdudXBsb3QsIGdudXRscywgZ28s
-IGdvYmplY3QtaW50cm9zcGVjdGlvbiwgZ3J1YjIsIGdzdC1vbXgsCiAgZ3N0MS1kZXZ0b29scywg
-Z3N0MS1saWJhdiwgZ3N0MS1wbHVnaW5zLWJhZCwgZ3N0MS1wbHVnaW5zLWdvb2QsCiAgZ3N0MS1w
-bHVnaW5zLXVnbHksIGdzdDEtcHl0aG9uLCBnc3QxLXJ0c3Atc2VydmVyLCBnc3QxLXZhYXBpLAog
-IGdzdHJlYW1lcjEsIGdzdHJlYW1lcjEtZWRpdGluZy1zZXJ2aWNlcywgaWd0LWdwdS10b29scywg
-bGlic2hhMSwKICBsaWJ2aXJ0LCBsaWJ4Y3J5cHQsIGxpYnhtbDIsIGxpYnplbm9oLXBpY28sIGxp
-bnV4LCBsaW51eC1wYW0sIG5ldHRsZSwKICBvY3RhdmUsIHBlcmwsIHBocCwgcGl4bWFuLCBwb2xr
-aXQsIHByb2Nwcy1uZywgcHl0aG9uLWF1dG9jb21tYW5kLAogIHB5dGhvbjMsIHF1aWNranMsIHNh
-bWJhNCwgc2tlbGV0b24sIHRpLWszLXI1LWxvYWRlciwgdHpkYXRhLAogIHY0bDJsb29wYmFjaywg
-d2F5bGFuZCwgd2Via2l0Z3RrLCB3ZXN0b24sIHdwZXdlYmtpdCwgeHI4MTkteHJhZGlvLAogIHh4
-aGFzaCwgemZzLCB6aWMKCkZvciBtb3JlIGRldGFpbHMsIHNlZSB0aGUgQ0hBTkdFUyBmaWxlOgoK
-aHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vYmxvYi8yMDI0LjEx
-LjEvQ0hBTkdFUwoKVXNlcnMgb2YgdGhlIGFmZmVjdGVkIHBhY2thZ2VzIGFyZSBzdHJvbmdseSBl
-bmNvdXJhZ2VkIHRvIHVwZ3JhZGUuCgpNYW55IHRoYW5rcyB0byBhbGwgdGhlIHBlb3BsZSBjb250
-cmlidXRpbmcgdG8gdGhpcyByZWxlYXNlOgoKZ2l0IHNob3J0bG9nIC1zIC1uIDIwMjQuMTEuLgoK
-ICAgIDQ4ICBQZXRlciBLb3JzZ2FhcmQKICAgIDI0ICBUaG9tYXMgUGV0YXp6b25pCiAgICAxMyAg
-SnVsaWVuIE9saXZhaW4KICAgIDExICBCZXJuZCBLdWhscwogICAgIDcgIFlhbm4gRS4gTU9SSU4K
-ICAgICAzICBBa2hpbGVzaCBOZW1hCiAgICAgMyAgRmlvbmEgS2x1dGUgKFdJV0EpCiAgICAgMyAg
-VGhvbWFzIEJvbm5lZmlsbGUKICAgICAyICBDaHJpc3RpYW4gU3Rld2FydAogICAgIDEgIEJhcnRv
-c3ogQmlsYXMKICAgICAxICBCcmFuZG9uIE1haWVyCiAgICAgMSAgQnJ5YW4gQnJhdHRsb2YKICAg
-ICAxICBEYXJpbyBCaW5hY2NoaQogICAgIDEgIEZyYW5jb2lzIFBlcnJhZAogICAgIDEgIEpvc8Op
-IEx1aXMgU2FsdmFkb3IgUnVmbwogICAgIDEgIE1hcnRpbiBCw7ZoCiAgICAgMSAgTWljaGFlbCBG
-aXNjaGVyCiAgICAgMSAgUmV6YSBBcmJhYgogICAgIDEgIFJveSBLb2xsZW4gU3ZlbmRzZW4KCi0t
-IApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=c04ba4b58090ccf5d1e0b62f992c75e9af1fe98f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 31462e41696fb7a5e65679fd7c944cde95142da6)
+[Peter: drop Makefile change]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                  | 32 ++++++++++++++++++++++++++++++++
+ support/misc/Vagrantfile |  2 +-
+ 2 files changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/CHANGES b/CHANGES
+index 5e67496b9d..272db0af69 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,35 @@
++2024.11.1, released January 9th, 2025
++
++	Important / security related fixes.
++
++        Infrastructure:
++
++        - Ensure CONFIG_TRIM_UNUSED_KSYMS is disabled when building
++          external Linux kernel modules
++
++	Updated/fixed packages: apr, bc, bluez5_utils, c-icap,
++	cryptodev-linux, dahdi-linux, dpdk, freeipmi, gdb, gnupg2,
++	gnuplot, gnutls, go, gobject-introspection, grub2, gst-omx,
++	gst1-devtools, gst1-libav, gst1-plugins-bad,
++	gst1-plugins-base, gst1-plugins-good, gst1-plugins-ugly,
++	gst1-python, gst1-rtsp-server, gst1-vaapi, gstreamer1,
++	gstreamer1-editing-services, igt-gpu-tools, iperf3, libcurl,
++	libsha1, libsndfile, libsoup3, libvirt, libxcrypt, libxml2,
++	libzenoh-pico, linux, linux-pam, netatalk, nettle, octave,
++	opensc, perl, php, pixman, polkit, procps-ng,
++	python-autocommand, python-django, python3, quickjs, samba4,
++	skeleton, subversion, ti-k3-r5-loader, tzdata, v4l2loopback,
++	wayland, webkitgtk, weston, wget, wireshark, wpewebkit,
++	xr819-xradio, xxhash, zfs, zic
++
++	Issues resolved:
++	- bluetooth.service cannot connect to D-BUS
++	  https://gitlab.com/buildroot.org/buildroot/-/issues/65
++        - gdb package doesn't have a licence hash in the gdb.hash file
++          https://gitlab.com/buildroot.org/buildroot/-/issues/66
++	- package/libsha1: Build failure with GCC 14 [-Wimplicit-int]
++	  https://gitlab.com/buildroot.org/buildroot/-/issues/69
++
+ 2024.11, released December 8th, 2024
+ 
+ 	Various fixes.
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 00592a7839..add08ccae7 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2024.11'
++RELEASE='2024.11.1'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
