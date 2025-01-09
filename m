@@ -4,97 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD455E77197
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 08:00:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA8A9E77197
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 08:01:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 431D0812AB;
-	Thu,  9 Jan 2025 08:00:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63E718049B;
+	Thu,  9 Jan 2025 08:01:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id imsl5nniyIXo; Thu,  9 Jan 2025 08:00:18 +0000 (UTC)
+ id OQ-zdMN4KikU; Thu,  9 Jan 2025 08:01:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2250482DD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C8608129B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2250482DD9;
-	Thu,  9 Jan 2025 08:00:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B5145942
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 08:00:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C8608129B;
+	Thu,  9 Jan 2025 08:01:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15D56942
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 08:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7755E40B12
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 08:00:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EA7AB8129D
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 08:01:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g1JpRcaKaDCl for <buildroot@buildroot.org>;
- Thu,  9 Jan 2025 08:00:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t1I_nX_dBN4Q for <buildroot@buildroot.org>;
+ Thu,  9 Jan 2025 08:01:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::62b; helo=mail-pl1-x62b.google.com;
+ client-ip=2607:f8b0:4864:20::1033; helo=mail-pj1-x1033.google.com;
  envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4321140025
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4321140025
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
- [IPv6:2607:f8b0:4864:20::62b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4321140025
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 08:00:02 +0000 (UTC)
-Received: by mail-pl1-x62b.google.com with SMTP id
- d9443c01a7336-216401de828so8571435ad.3
- for <buildroot@buildroot.org>; Thu, 09 Jan 2025 00:00:02 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0CE2181290
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CE2181290
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com
+ [IPv6:2607:f8b0:4864:20::1033])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0CE2181290
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 08:01:34 +0000 (UTC)
+Received: by mail-pj1-x1033.google.com with SMTP id
+ 98e67ed59e1d1-2f13acbe29bso2643231a91.1
+ for <buildroot@buildroot.org>; Thu, 09 Jan 2025 00:01:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736409601; x=1737014401;
+ d=1e100.net; s=20230601; t=1736409694; x=1737014494;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=+QGSxzw5lfypoXOrThHSjI4kh+tejP3Qqz6WuDCIyaI=;
- b=qbrQtSdCYiqPeDFPZP+T6/qSF552OzYdnZHHg+Lxt1at/zbmIA/6oaBkT2t/S0BktQ
- PICOW2gXDxxi3PTFYNBhR/6jxE5ordLBQrYCqQncCXuexcZmq9EmN9f87F8JiqTyjLPD
- CEVV81u+KX6DfijyDDxVjUnpkabs+8LJ2ZF+ihXROPOl998bOL633J5k+MD90/BMU1yf
- baI64Tug/9YYfGqiBBYocjLwaFxhgvW6OvylzpU1w5kRUnmVUKfTrwdXAFA7rXl3/ss1
- uVV8nEUvWouR3EDVp8rns9X6FZLshtQMnJsPvBWFyEJaLlvSmmRUA+O+k2xUJj6Vs9NJ
- VwUw==
-X-Gm-Message-State: AOJu0YwjofThhoFDOBcHHxq4E2dkoLeSC50eIwdZ/K9PJRtva3tL+4Um
- AFSpjhN3p1t0QAkva+nDFRmSkeL/YEjjiOsAzmlYm1EUZ7g/LGXY/hvhb3ec
-X-Gm-Gg: ASbGncvjI8t7NdtxYsAEovmKQ1PkN0ssT55w2ZRIgQKr6VWRlC4+YInVwzkYC1FBLfQ
- 9BZfiaLsl8QrKeNfL6Dhg4rmWPblGfRFFB3RzopiAp6MsFcc9VzQ/hA/CVfItXVGVp68b74+WIg
- YHg5eGqjaarHR8CPpruCcra9wCWa/HGCjAjNg9ZGUloObivNCPKCvbZXRR9vEHzOSjFmVwQIiKM
- NtSyAtuwepVVmGHbEee6/HT8IZ+xVUeZu59U7KoJ1d7jLqroHFG7jaJSuasy+uu9vfNGe1vZHot
- UxX/WzKUtj9O3IL1HZnMr5mnJRECQcuRWRlQBx1j
-X-Google-Smtp-Source: AGHT+IGKPKiNQfe8pVc/wsukna02Vlf2mNHiZJko9oOHpteMeXrk+PhA2aDhEWgJcYrwQ1S0TmZdrg==
-X-Received: by 2002:a05:6a21:1807:b0:1e1:cd09:e08d with SMTP id
- adf61e73a8af0-1e88cfa6b83mr9442793637.11.1736409601175; 
- Thu, 09 Jan 2025 00:00:01 -0800 (PST)
+ bh=8UHyxnMT9nPaHWJ6HrOwvl3ovaJP8z1H9dNyHaGFhsA=;
+ b=ljUBmqE6Gdf+JWVQRp6rZf3MIkORPEvxi93JIXii9XMMLjE+KhQFFNBEMTLoz7osD5
+ uKTPn7bvN/MwJCmlZ6rOVUt/KAJvZAOHbx1Al+JQ7Z+vvV2c+gJMwWbgBmwnf8mjtvki
+ V4hMWhzUuA+5BDw7EIBMcks1NQpKca7YhMu4w4eLk83FcpeF4qXWWezkb3RzFvL16U7V
+ idsUMTEb3gjrfPt9a7Fqu9eBgbeAVKkkRrJFb4+NYe9C4TIlZzi0vdnbeRp1VeytFe4h
+ IjGTkXjpGv9QPQZcY6BC8jw5w7p5TUG8zDyqpFlEraoMkav+oT6ZbU2YB39IGxnNNRcD
+ FgRQ==
+X-Gm-Message-State: AOJu0YwIx4CR05Lg0OfyCcT0LtZYkxyDwYoHMLPub0Xh8nU9uGhPeU2a
+ mJqbn1BYItnVTxpoENe8OxhmqzVHSyAa6ikhoTtA9i7bn7LJisPh49peCDZj
+X-Gm-Gg: ASbGncvGywezbIL5nwD3iubXgPqYK4nAZjbr11ISXnM7wIzhAhYJRoW1+J7GqhSKjte
+ ZyU8XdOol+95XcbnPxZvN9G9Y4eyfl/8esob1sZYXVSviF3tTscpCV5+1RYpIoKFzEKZK1N5jFx
+ 2WUzqx535bKvraLMifP7RtcIFHMMBVagN5OnGbpL4elx0PuXFtRey6N45ZmKblviWh57dMJMuO3
+ HiC9HtoVjmoaQB45VzqGmzAj+D0CLzHZRCmsMfSTUyTXDJQTKNTPcffkhOmqLcXk7DnHqbJhML3
+ 1nHYOE83M2VYgxXyaxBYTNRR/oASxP6+YSSUVAKb
+X-Google-Smtp-Source: AGHT+IEW0Bbrbn8plMM9qGGreID3UcvQxBrK84RHQxjAXZIfz0/q/GN61ssoF11DXRVXZQy+/8yq+Q==
+X-Received: by 2002:a17:90a:e706:b0:2ee:cbd0:4910 with SMTP id
+ 98e67ed59e1d1-2f5583139d7mr2175480a91.1.1736409694104; 
+ Thu, 09 Jan 2025 00:01:34 -0800 (PST)
 Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
  [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- 41be03b00d2f7-a317a07cc09sm710640a12.5.2025.01.09.00.00.00
+ d9443c01a7336-21a917442adsm6652795ad.69.2025.01.09.00.01.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Jan 2025 00:00:00 -0800 (PST)
+ Thu, 09 Jan 2025 00:01:33 -0800 (PST)
 From: Akhilesh Nema <nemaakhilesh@gmail.com>
 To: buildroot@buildroot.org
 Cc: Akhilesh Nema <nemaakhilesh@gmail.com>
-Date: Wed,  8 Jan 2025 23:59:57 -0800
-Message-Id: <20250109075957.758942-1-nemaakhilesh@gmail.com>
+Date: Thu,  9 Jan 2025 00:01:30 -0800
+Message-Id: <20250109080130.759117-1-nemaakhilesh@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1736409601; x=1737014401; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1736409694; x=1737014494; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+QGSxzw5lfypoXOrThHSjI4kh+tejP3Qqz6WuDCIyaI=;
- b=j+YYgl9X1fmcC2IeAU0a09gXqs/tAFkcS2uUx9OqBbiXeBZuj0q4M7Gd+dmQtZNGJM
- ufCJ5P5x4xe8iJRJh8QklsIj1rI859geTcuiq+kFWKkZcJY0nFfQiUslND5RvG5Vd5vq
- 9c4iuESAVlCOPsiMjL12852ijzYUdLe4BLxqpo7X8EG0M2noflfZ4r/stc7yLZEe+epr
- IFzpGUcWVp1cV6vODGV2pfxp+ziSTHFnNQVbJdLGgQ14EDgYem7PRqYlC1YkPoyWcDLq
- fFDuMHEpxv08RXrq5cQI6CetxFO/VMGuMDtvHgSzLgyDQr79uuTYjSLaU+AwJFlNS8Ga
- REiQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=8UHyxnMT9nPaHWJ6HrOwvl3ovaJP8z1H9dNyHaGFhsA=;
+ b=RqryQ23fXKXbCSJ+XTadbB6h6qFEPqR+2+jyJU18vHVViFk8ME6CwJTehZPOmDrSqG
+ h4uMXQhxA6yMPCKA2wxd+K2xuPcBWL+Gp+r97mb27Tc37lgNYpTH4rgAQnyndLvZrgFx
+ WoK6xrtnzBZucdg00C7h1Oa5pUWRbNunOX4Zm+tqlbWT8GAJ9UhU3UojsZBy0U25o/yM
+ J3TCdBqWuQUnCfS+OaK0qXTzht897MX0BlTijZEDvgcs0uLB905NIMXzP8BWhGm2cM+4
+ OYb06rjvwxI/moPWJZL+Ax7uGT+dJcll7INtjexSaZGSvRzD50L20iRTAwD8NhRKR7rp
+ EgIA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=j+YYgl9X
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: bump to version 2025.01
+ header.s=20230601 header.b=RqryQ23f
+Subject: [Buildroot] [PATCH 1/1] package/radvd: bump version to 2.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,58 +111,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release announcement:
-https://lists.denx.de/pipermail/u-boot/2025-January/576668.html
+- Updated radvd dependencies.
 
 Changelog:
-https://github.com/u-boot/u-boot/compare/v2024.10...v2025.01
+https://github.com/radvd-project/radvd/blob/v2.20/CHANGES
 
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 ---
- boot/uboot/Config.in  | 6 +++---
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/radvd/Config.in  | 3 +++
+ package/radvd/radvd.hash | 4 ++--
+ package/radvd/radvd.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index f6823d537b..b6ac2f9380 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -41,7 +41,7 @@ choice
- 	  Select the specific U-Boot version you want to use
- 
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2024.10"
-+	bool "2025.01"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -85,7 +85,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2024.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2025.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-@@ -339,7 +339,7 @@ config BR2_TARGET_UBOOT_USE_BINMAN
+diff --git a/package/radvd/Config.in b/package/radvd/Config.in
+index f1df0c3cb8..4149683fc9 100644
+--- a/package/radvd/Config.in
++++ b/package/radvd/Config.in
+@@ -1,6 +1,9 @@
+ config BR2_PACKAGE_RADVD
+ 	bool "radvd"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS  # libbsd
++	depends on BR2_TOOLCHAIN_HAS_THREADS  # libbsd
++	select BR2_PACKAGE_LIBBSD
  	help
- 	  Use binman tool for generation and signing of boot images.
+ 	  IPv6 Router Advertisement Daemon.
  
--	  https://docs.u-boot.org/en/v2024.10/develop/package/binman.html
-+	  https://docs.u-boot.org/en/v2025.01/develop/package/binman.html
- 
- menu "U-Boot binary format"
- 
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index af025a583e..b619a70423 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
+diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
+index a624db24ba..8415b8d854 100644
+--- a/package/radvd/radvd.hash
++++ b/package/radvd/radvd.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-+sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+-# From http://www.litech.org/radvd/dist/radvd-2.19.tar.gz.sha512
+-sha512  caa621fd77e34ff6858d60a41b0ee02aff967ac14f2b84c402359744f4bece5c1563419860431c328adc0385e9893ed1f2421d652247a3aa0dfc0aaad1e01233  radvd-2.19.tar.gz
++# From http://www.litech.org/radvd/dist/radvd-2.20.tar.gz.sha512
++sha512  798d8476ab5ff43083b181d6d6ec43c47d06e4067d30c71e038cfd890bcf1ca23e809f9e184c4363458bfa25a916625dd2d7553290fb3e5459034d477b80ebaa  radvd-2.20.tar.gz
+ sha256  40a6db00cf0b97f031eaa6c6e87157788f40ced1b88e3ea6d78779bd2a39dc80  COPYRIGHT
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index 7a3b0a36ac..89d8f55d51 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-RADVD_VERSION = 2.19
++RADVD_VERSION = 2.20
+ RADVD_SITE = http://www.litech.org/radvd/dist
+-RADVD_DEPENDENCIES = host-bison host-flex host-pkgconf
++RADVD_DEPENDENCIES = host-bison host-flex host-pkgconf libbsd
+ # We need to ignore <linux/if_arp.h>, because radvd already includes
+ # <net/if_arp.h>, which conflicts with <linux/if_arp.h>.
+ RADVD_CONF_ENV = \
 -- 
 2.25.1
 
