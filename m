@@ -1,106 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D426FE7719A
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 10:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 554E4E77197
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 12:03:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF8F54068A;
-	Thu,  9 Jan 2025 10:50:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0452180D75;
+	Thu,  9 Jan 2025 12:03:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YB87F8tF11pW; Thu,  9 Jan 2025 10:50:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dfnMwroUZVvZ; Thu,  9 Jan 2025 12:03:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C14B40635
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C44680DA7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C14B40635;
-	Thu,  9 Jan 2025 10:50:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7B8AB76C
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 10:50:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C44680DA7;
+	Thu,  9 Jan 2025 12:03:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 643D1942
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 12:03:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C80D60739
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 10:50:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 458FD80D75
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 12:03:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HcOfSx_eQVOQ for <buildroot@buildroot.org>;
- Thu,  9 Jan 2025 10:50:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C37AB60750
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C37AB60750
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C37AB60750
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 10:50:52 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-436281c8a38so5808875e9.3
- for <buildroot@buildroot.org>; Thu, 09 Jan 2025 02:50:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736419850; x=1737024650;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=RE7BHhhXuwGZBDhnoLOSf6LMP4Wz2CpWdrto2ZK6vvM=;
- b=M05tFnOj8bTwpG/y07HwM4TiNKpA0YyGqrIiiFi4JGU8vvIeTi1QN6t3zQby5fVGJ4
- FRPCqd1J0S8/bQorLHTr7BbW1t5A64N3DxDOO8MtUDVXb2kDr1bCWlLWKuoTyIh/8e6i
- +EZeSRsAx09x2LH7rLOwpmhuAzfYMqQrhZwnwh8ZA/OyXmp/DI6DWmAhs3X8xvspSnFU
- mdtGoYvGZwuNddZWvcjb4iAPGwDi4F+Rn79j6BMo2B7j6ZtzG0KZO9a4mayucrRwmoxh
- 115n63V66z2ic8F64YoyYJt8dtmmMIPlXfDsWpO6d+FjjlmMP8cUmbe0sbGe1CJL/lXq
- aHqQ==
-X-Gm-Message-State: AOJu0Yw5RJdv2gSG43JjftaJQ8smutYaZD+dzpgCA1l1i1/v6P+CBGew
- eKeYlHu+Am0y9JqEdgaDvoSEQOGBEre3N1nwmO/Agx+/XCZmvNZhvx85HPCJ1WJhJT2N/qRjywl
- M
-X-Gm-Gg: ASbGncvi2651B3UUjG6PjJxld5fePECa4AghBGUEyr+ci/FRI9G2hOW/NeeskFIJDtj
- tUrbfIWj1oDR5uUfw+VbZVbleWjvhKqJIhDlZLfA3gKT56Ec27aGzH8NiyYuwAKJQVCUPF1a8KO
- H9cFZD+S7YkQEUBW57mCHbf35bXip8yfZc3wfTNWh0ZpgUQPQUx4OmwB6m6z1W6FuUnBlHDzC/y
- 6H+bxCsmIyBAW3deRV0H5XFV9OWaGiR5cXQzy/UJ2bnru1tojGxPxtusm+MaABs1fDExb1mc2r9
- JGTU+ZZ8YBSnAmiJFRU0HZ83BRjCuuQATtoUQZNsnbB77iq9VrF+2tX9ckyyZ4GceN/jtkXQXjE
- 7BPF7T/uRMtto3lw8
-X-Google-Smtp-Source: AGHT+IFtDQ4/Gyha4hwm28Vqf3XCyEXfclsY/NSZH9imMtQ11h2LQ+t8SIvQvsLI4TDM3qeQe/2a2A==
-X-Received: by 2002:a05:600c:4e92:b0:434:fdbc:5ce5 with SMTP id
- 5b1f17b1804b1-436e2707f4amr52861455e9.29.1736419850601; 
- Thu, 09 Jan 2025 02:50:50 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:949d:5800:e3ef:2d7a:4131:71f?
- (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-38a8e4b81a4sm1490043f8f.68.2025.01.09.02.50.50
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 09 Jan 2025 02:50:50 -0800 (PST)
-Message-ID: <951e370c-1132-4759-bbd1-317d15e6db55@smile.fr>
-Date: Thu, 9 Jan 2025 11:50:49 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jNz4RkXs_rRO for <buildroot@buildroot.org>;
+ Thu,  9 Jan 2025 12:03:26 +0000 (UTC)
+X-Greylist: delayed 549 seconds by postgrey-1.37 at util1.osuosl.org;
+ Thu, 09 Jan 2025 12:03:25 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F3C6A8056E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3C6A8056E
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F3C6A8056E
+ for <buildroot@busybox.net>; Thu,  9 Jan 2025 12:03:25 +0000 (UTC)
+Received: from [192.168.178.36] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 1A4AA2C833BB;
+ Thu, 09 Jan 2025 12:54:13 +0100 (CET)
+Message-ID: <0560e329-4abe-4988-9fa3-bb4ddc733773@bubu1.eu>
+Date: Thu, 9 Jan 2025 12:54:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Peter Korsgaard <peter@korsgaard.com>, Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-References: <20250107210923.1127755-1-romain.naour@smile.fr>
- <cabf6dca22e81938b46cd749c5ceb921@free.fr>
- <a58bb770-6e83-4ee9-a2a3-7f96ad0536a2@korsgaard.com>
+To: Peter Seiderer <ps.report@gmx.net>, buildroot@busybox.net
+References: <20240626090026.31083-1-ps.report@gmx.net>
 Content-Language: en-US
-In-Reply-To: <a58bb770-6e83-4ee9-a2a3-7f96ad0536a2@korsgaard.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1736419850; x=1737024650; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=RE7BHhhXuwGZBDhnoLOSf6LMP4Wz2CpWdrto2ZK6vvM=;
- b=xGMKync6fp87ZTFmlmHOl+XQyDCU7IHQ9turjx6wB4IGvfc397NmILX2BwXKW1DHso
- LQUfjKOSEbY7iSkJyKwfKM/a33EkUeFz+NoXNoJdY9QOZXaGVAazc3srPzE8qsQ2byj1
- GoRvaiNtA7cYFXhGMzmNNfRIten6ZJ5xyShwU=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+In-Reply-To: <20240626090026.31083-1-ps.report@gmx.net>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1736423653; bh=hCCjzM5JBa83dPU71CtNg2Kf8j+SjGqRqqmAubZ7rRw=;
+ h=Date:Subject:To:References:From:In-Reply-To;
+ b=ar9gEwiUb6jl3wNxozcNHQl7Y56lOVjPCnXAW+xEcqmlhn8KT3mAkeZ1NaAJ7Ye2S
+ Hq+mmuvI6QrlFH6H/t4GFnytGHK44XRQh2SHL1mYfBgvAWg1onUsWfS8FTGk5RPDtU
+ bvhTGkVVgKPelxAXJNh60cMiDrqJM9dl/IPN68Wq91ZOI+SlN+zPO8clY+y9HekmkV
+ dBgOv+vIKjb7TWQ8CPczt4kf0I0GAszaN7W7Vf5tc0WBa9Y7+DfgnxW9aum85ffSco
+ WPPB7Lu75mzIsmY2EamN3jqXZFk5zr0UsvrXRwzCfU4o4dRWlDkEuTJeV4d0OnM5z9
+ yvIHaYu1JDQUQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=xGMKync6
-Subject: Re: [Buildroot] [PATCH] package/qemu: fix Qemu stub builds
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=ar9gEwiU
+Subject: Re: [Buildroot] [PATCH v1] package/pcre2: bump version to 10.44
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,32 +81,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gUGV0ZXIsIEFsbCwKCkxlIDA5LzAxLzIwMjUgw6AgMTA6MjEsIFBldGVyIEtvcnNnYWFy
-ZCBhIMOpY3JpdMKgOgo+IE9uIDEvNy8yNSAyMjo1MSwgSnVsaWVuIE9saXZhaW4gd3JvdGU6Cj4+
-IE9uIDA3LzAxLzIwMjUgMjI6MDksIFJvbWFpbiBOYW91ciB2aWEgYnVpbGRyb290IHdyb3RlOgo+
-Pj4gU2luY2UgY29tbWl0ICJzdHViczogYXZvaWQgZHVwbGljYXRlIHN5bWJvbHMgaW4gbGlicWVt
-dXV0aWwuYSIgWzFdLAo+Pj4gUWVtdSBkb2Vzbid0IGJ1aWxkIHdpdGg6Cj4+Pgo+Pj4gwqAgLi9j
-b25maWd1cmUgLS1lbmFibGUtdXNlciAtLWRpc2FibGUtc3lzdGVtIC0tZW5hYmxlLXRvb2xzCj4+
-Pgo+Pj4gwqAgL3Vzci9iaW4vbGQ6IGxpYmh3Y29yZS5hLnAvaHdfY29yZV9xZGV2LmMubzogaW4g
-ZnVuY3Rpb24gJ2RldmljZV9maW5hbGl6ZSc6Cj4+PiBbLi4uXW91dHB1dC9idWlsZC9ob3N0LXFl
-bXUtOS4yLjAvYnVpbGQvLi4vaHcvY29yZS9xZGV2LmM6Njg5OiAoLnRleHQrMHg3NWMpOgo+Pj4g
-dW5kZWZpbmVkIHJlZmVyZW5jZSB0byAncWFwaV9ldmVudF9zZW5kX2RldmljZV9kZWxldGVkJwo+
-Pj4gwqAgY29sbGVjdDI6IGVycm9yOiBsZCByZXR1cm5lZCAxIGV4aXQgc3RhdHVzCj4+Pgo+Pj4g
-SW5kZWVkLCB3aXRoIGhhdmVfc3lzdGVtID0gZmFsc2UgYW5kIGhhdmVfdG9vbHMgPSB0cnVlLCBR
-ZW11IG5lZWRzIHRoZQo+Pj4gc3R1YnMgZm9yIFFBUEkgZXZlbnRzIGFkZGVkIGJ5IHN0dWJfc3Mu
-YWRkKGZpbGVzKCdxZGV2LmMnKSkgdG8gcHJvdmlkZQo+Pj4gcWFwaV9ldmVudF9zZW5kX2Rldmlj
-ZV9kZWxldGVkKCkuCj4+Pgo+Pj4gRml4ZXM6IDM4OGI4NDlmYjZjMzM4ODJiNDgxMTIzNTY4OTk1
-YTc0OWE1NGY2NDguCj4gCj4gRllJLCB0aGlzIHNob3VsZCBoYXZlIGJlZW4gZWRmYzY3ZmIxYTVm
-MGZlNjdiYTlkZTkxZTkwYjA2YTQ0OTAyYzIzMSAoInBhY2thZ2UvCj4gcWVtdTogYnVtcCB0byB2
-ZXJzaW9uIDkuMi4wIikKPiAKCkluZGVlZCwgdGhpcyBpcyBhY3R1YWxseSB0aGUgZ2l0IGhhc2gg
-aW4gdGhlIFFlbXUgcmVwby4uLgoKTXkgYmFkLgoKQmVzdCByZWdhcmRzLApSb21haW4KCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Hi,
+
+On 26.06.24 11:00, Peter Seiderer via buildroot wrote:
+> - enable PCRE2_AUTORECONF to fix the following buildi/relink failure:
+> 
+>      x86_64-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used
+>      in cross-compilation: '-L/usr/lib'
+> 
+> For details see [1].
+> 
+> [1] https://github.com/PCRE2Project/pcre2/blob/master/ChangeLog
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Not sure why this slipped through the cracks, but FWIW:
+
+Tested-by: Marcus Hoffmann <buildroot@bubu1.eu>
+
+> ---
+>   package/pcre2/pcre2.hash | 4 ++--
+>   package/pcre2/pcre2.mk   | 5 ++++-
+>   2 files changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
+> index f2e17df753..8b22040ba7 100644
+> --- a/package/pcre2/pcre2.hash
+> +++ b/package/pcre2/pcre2.hash
+> @@ -1,5 +1,5 @@
+>   # Locally calculated after checking pgp signature:
+> -# https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.43/pcre2-10.43.tar.bz2.sig
+> -sha256  e2a53984ff0b07dfdb5ae4486bbb9b21cca8e7df2434096cc9bf1b728c350bcb  pcre2-10.43.tar.bz2
+> +# https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.44/pcre2-10.44.tar.bz2.sig
+> +sha256  d34f02e113cf7193a1ebf2770d3ac527088d485d4e047ed10e5d217c6ef5de96  pcre2-10.44.tar.bz2
+>   # Locally computed
+>   sha256  030087e2e8dd7c1bdd26057d25d4ded8f45bbf01ad458d68665ad04b8b0fbedf  LICENCE
+> diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
+> index 9641f22e81..191596181a 100644
+> --- a/package/pcre2/pcre2.mk
+> +++ b/package/pcre2/pcre2.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -PCRE2_VERSION = 10.43
+> +PCRE2_VERSION = 10.44
+>   PCRE2_SITE = https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$(PCRE2_VERSION)
+>   PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
+>   PCRE2_LICENSE = BSD-3-Clause
+> @@ -12,6 +12,9 @@ PCRE2_LICENSE_FILES = LICENCE
+>   PCRE2_CPE_ID_VENDOR = pcre
+>   PCRE2_INSTALL_STAGING = YES
+>   PCRE2_CONFIG_SCRIPTS = pcre2-config
+> +# Fixes build/relink failure ("ERROR: unsafe header/library path used in
+> +# cross-compilation: '-L/usr/lib'")
+> +PCRE2_AUTORECONF = YES
+>   
+>   PCRE2_CONF_OPTS += --enable-pcre2-8
+>   PCRE2_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE2_16),--enable-pcre2-16,--disable-pcre2-16)
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
