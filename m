@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D913E77197
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 14:44:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3DF0E77199
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 15:07:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2225380BDD;
-	Thu,  9 Jan 2025 14:44:15 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6B2wDIUC6ASx; Thu,  9 Jan 2025 14:44:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39FCB81376
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39FCB81376;
-	Thu,  9 Jan 2025 14:44:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 989EC942
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 14:44:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 793564065C
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 14:44:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E59D405E8;
+	Thu,  9 Jan 2025 15:07:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TfXABWawd9Wv for <buildroot@buildroot.org>;
- Thu,  9 Jan 2025 14:44:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C604406BC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2C604406BC
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 14:44:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 159B28426F; Thu,  9 Jan 2025 14:44:11 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 9 Jan 2025 15:43:35 +0100
-X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: b47a466bbd0a66f3f1737b6ec38b5a5962980346
-X-Git-Newrev: 31462e41696fb7a5e65679fd7c944cde95142da6
-X-Patchwork-Hint: ignore
-Message-Id: <20250109144411.159B28426F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] Update for 2024.11.1
+ id q9pceGER1oGH; Thu,  9 Jan 2025 15:07:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B8B14060E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B8B14060E;
+	Thu,  9 Jan 2025 15:07:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 24422942
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:07:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 05B1180CA1
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:07:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id koGm9rFQpjqY for <buildroot@buildroot.org>;
+ Thu,  9 Jan 2025 15:07:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
+ helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D2B5B80C9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2B5B80C9B
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D2B5B80C9B
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:07:55 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPA id D0F531814B9; Thu,  9 Jan 2025 16:07:51 +0100 (CET)
+In-Reply-To: <609c8-677ee700-5-6f236100@144340327>
+References: <CAOiXNkBXaWBGL7D2FAbs+HQ-CQvF6Gt3Xw3s3Zr8T8Br5AvoBA@mail.gmail.com>
+ <be38d9eb-4d8d-4da4-bc94-e4093a79c206@mind.be>
+ <CAOiXNkDqh6Q=s4o8u0SapkcajBKE=Sdd-X312N61P6md2v2EVw@mail.gmail.com>
+ <CAOiXNkAc2J9q8GkkweddmNQuBS-0L+RuGYvh4Ug94rOX8+C_GQ@mail.gmail.com>
+ <609c8-677ee700-5-6f236100@144340327>
+Date: Thu, 09 Jan 2025 16:07:51 +0100
+To: "Michael Nosthoff" <buildroot@heine.tech>
+MIME-Version: 1.0
+Message-ID: <66f08-677fe680-3-7be8a200@217949933>
+User-Agent: SOGoMail 5.11.2
+X-Last-TLS-Session-Version: None
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=heine.tech; s=dkim; t=1736435272;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=vxQuy8OnM6cw6fMgKou9IpYkNoR6TwksbSIsVoAeoVU=;
+ b=dhbhDl3aRk7vKTxHSS9yeVh4lbjHZwhl3Pz4fA/eNoqueOytnGs47qJM8EjS/Phw1YEQZy
+ S+EWTF9uYpHzTZsVkkfx8RCaRgcWyDuc7RE4Tw4TUORiVjpyKz4dNIluX8QgdNFdxzNHn1
+ xHcEmd+veU105wDs1+pjPKZr6hH4GRU=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=heine.tech
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
+ header.s=dkim header.b=dhbhDl3a
+Subject: Re: [Buildroot] 
+ =?utf-8?q?Problem_compiling_grpc_package_with_BR_202?=
+ =?utf-8?q?4=2E11?=
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,91 +81,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Andrey Nechypurenko <andreynech@gmail.com>,
+ James Hillard <james.hilliard1@gmail.com>,
+ Robert Rose <robertroyrose@gmail.com>, buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31462e41696fb7a5e65679fd7c944cde95142da6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                  | 32 ++++++++++++++++++++++++++++++++
- Makefile                 |  4 ++--
- support/misc/Vagrantfile |  2 +-
- 3 files changed, 35 insertions(+), 3 deletions(-)
+On Wednesday, January 08, 2025 21:59 CET, "Michael Nosthoff" <buildroot@heine.tech> wrote:
 
-diff --git a/CHANGES b/CHANGES
-index cf49ce56b3..72da8d9084 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,35 @@
-+2024.11.1, released January 9th, 2025
-+
-+	Important / security related fixes.
-+
-+        Infrastructure:
-+
-+        - Ensure CONFIG_TRIM_UNUSED_KSYMS is disabled when building
-+          external Linux kernel modules
-+
-+	Updated/fixed packages: apr, bc, bluez5_utils, c-icap,
-+	cryptodev-linux, dahdi-linux, dpdk, freeipmi, gdb, gnupg2,
-+	gnuplot, gnutls, go, gobject-introspection, grub2, gst-omx,
-+	gst1-devtools, gst1-libav, gst1-plugins-bad,
-+	gst1-plugins-base, gst1-plugins-good, gst1-plugins-ugly,
-+	gst1-python, gst1-rtsp-server, gst1-vaapi, gstreamer1,
-+	gstreamer1-editing-services, igt-gpu-tools, iperf3, libcurl,
-+	libsha1, libsndfile, libsoup3, libvirt, libxcrypt, libxml2,
-+	libzenoh-pico, linux, linux-pam, netatalk, nettle, octave,
-+	opensc, perl, php, pixman, polkit, procps-ng,
-+	python-autocommand, python-django, python3, quickjs, samba4,
-+	skeleton, subversion, ti-k3-r5-loader, tzdata, v4l2loopback,
-+	wayland, webkitgtk, weston, wget, wireshark, wpewebkit,
-+	xr819-xradio, xxhash, zfs, zic
-+
-+	Issues resolved:
-+	- bluetooth.service cannot connect to D-BUS
-+	  https://gitlab.com/buildroot.org/buildroot/-/issues/65
-+        - gdb package doesn't have a licence hash in the gdb.hash file
-+          https://gitlab.com/buildroot.org/buildroot/-/issues/66
-+	- package/libsha1: Build failure with GCC 14 [-Wimplicit-int]
-+	  https://gitlab.com/buildroot.org/buildroot/-/issues/69
-+
- 2024.11, released December 8th, 2024
- 
- 	Various fixes.
-diff --git a/Makefile b/Makefile
-index 764148f715..7f61909aff 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2024.11
-+export BR2_VERSION := 2024.11.1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1733653000
-+BR2_VERSION_EPOCH = 1736433000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 00592a7839..add08ccae7 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2024.11'
-+RELEASE='2024.11.1'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+> Hi Andrey, Arnout,
+> 
+> On Wednesday, December 18, 2024 17:18 CET, Andrey Nechypurenko <andreynech@gmail.com> wrote:
+> 
+> > On Wed, 18 Dec 2024 at 13:09, Andrey Nechypurenko <andreynech@gmail.com> wrote:
+> > >
+> 
+> > >
+> > > -- Configuring incomplete, errors occurred!
+> > 
+> > This problem is caused by the fact that the protobuf package is built with
+> > autotools and not with cmake. Grpc package was looking for cmake files from
+> > protobuf and did not find them. I was able to solve this problem by changing
+> > protobuf package type from autotools to cmake (plus a couple of other minor
+> > changes). I think this step makes anyway sense, because it looks like the
+> > newer protobuf versions does not support autotools anymore and moved
+> > completely to cmake.
+> > 
+> > With your patch mentioned above and the following changes I was able to
+> > build the grpc package.
+> > 
+> 
+> I think what you probably didn't see and Arnout didn't point out explicitly: the linked grpc patch was part of a series 
+> https://patchwork.ozlabs.org/project/buildroot/list/?series=431795 which also included the version bump of
+> protobuf.
+> 
+> I'm not sure why the last patch revision wasn't picked up yet.
+> But indeed the currently applied state of "only bumping libabseil-cpp" breaks grpc in 2024.11 and master.
+> 
+> @Andrey: Could you maybe try to apply the whole patch series and see if everything looks good for you?
+> @James: Do you know if there is still something open for v5 of the patch series? I don't see any replies which would prevent a merge...
+> 
+> For the 2024.11 branch I would suggest to revert the version bump of libabseil-cpp which Thomas applied. As it alone brings no advantage
+> and breaks grpc (its only real dependant).
+>
+
+I created an issue for better visibility: https://gitlab.com/buildroot.org/buildroot/-/issues/83
+
+Regards,
+Michael
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
