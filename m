@@ -1,75 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3DF0E77199
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 15:07:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26E22E77197
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 15:12:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E59D405E8;
-	Thu,  9 Jan 2025 15:07:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q9pceGER1oGH; Thu,  9 Jan 2025 15:07:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B8B14060E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B8B14060E;
-	Thu,  9 Jan 2025 15:07:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 24422942
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:07:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 05B1180CA1
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:07:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D4A47835CF;
+	Thu,  9 Jan 2025 15:12:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id koGm9rFQpjqY for <buildroot@buildroot.org>;
- Thu,  9 Jan 2025 15:07:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
- helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D2B5B80C9B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2B5B80C9B
-Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D2B5B80C9B
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:07:55 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPA id D0F531814B9; Thu,  9 Jan 2025 16:07:51 +0100 (CET)
-In-Reply-To: <609c8-677ee700-5-6f236100@144340327>
-References: <CAOiXNkBXaWBGL7D2FAbs+HQ-CQvF6Gt3Xw3s3Zr8T8Br5AvoBA@mail.gmail.com>
- <be38d9eb-4d8d-4da4-bc94-e4093a79c206@mind.be>
- <CAOiXNkDqh6Q=s4o8u0SapkcajBKE=Sdd-X312N61P6md2v2EVw@mail.gmail.com>
- <CAOiXNkAc2J9q8GkkweddmNQuBS-0L+RuGYvh4Ug94rOX8+C_GQ@mail.gmail.com>
- <609c8-677ee700-5-6f236100@144340327>
-Date: Thu, 09 Jan 2025 16:07:51 +0100
-To: "Michael Nosthoff" <buildroot@heine.tech>
+ id KvCdXhRQbwyZ; Thu,  9 Jan 2025 15:12:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2741B835BA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2741B835BA;
+	Thu,  9 Jan 2025 15:12:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D43EF940
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:12:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B35FB40FD1
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:12:12 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6_UTY8LNXCz1 for <buildroot@buildroot.org>;
+ Thu,  9 Jan 2025 15:12:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F26D240FD0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F26D240FD0
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F26D240FD0
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 15:12:10 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 16A383520859; Thu,  9 Jan 2025 16:12:05 +0100 (CET)
+Date: Thu, 9 Jan 2025 16:12:04 +0100
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <Z3/nRFjjatiNygaG@waldemar-brodkorb.de>
 MIME-Version: 1.0
-Message-ID: <66f08-677fe680-3-7be8a200@217949933>
-User-Agent: SOGoMail 5.11.2
-X-Last-TLS-Session-Version: None
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; t=1736435272;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=vxQuy8OnM6cw6fMgKou9IpYkNoR6TwksbSIsVoAeoVU=;
- b=dhbhDl3aRk7vKTxHSS9yeVh4lbjHZwhl3Pz4fA/eNoqueOytnGs47qJM8EjS/Phw1YEQZy
- S+EWTF9uYpHzTZsVkkfx8RCaRgcWyDuc7RE4Tw4TUORiVjpyKz4dNIluX8QgdNFdxzNHn1
- xHcEmd+veU105wDs1+pjPKZr6hH4GRU=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=heine.tech
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
- header.s=dkim header.b=dhbhDl3a
-Subject: Re: [Buildroot] 
- =?utf-8?q?Problem_compiling_grpc_package_with_BR_202?=
- =?utf-8?q?4=2E11?=
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-32-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1736435525; bh=qj4YdAmgrSclU/5oqNxIDvFr8SI+RmW/C4wtXP/eDlc=;
+ h=Date:From:To:Subject:From;
+ b=guJxOrGQkR8VE3kHn1XXnUgmOrLUj2ni6sdqp60VU+9TdbAAZ89JrS3aZ8VxS+fIb
+ 2atNLG8SLAVDKHaeE2Tk1EGvprh3u73atxSj0YppDTV1EJdEL4HMe4IYlvMIHRXGyh
+ EDIlgGgyk34O6wUxXA6EHWTtHfX69R5DYFw7gyBh/ONXOPHnAX0vMvUihpw40xgFi9
+ wDPwZtVpFvTMbG7xTDRenB0OJPsrBbGXHBum0XpOuX6/Wj58h4FFGDC2LgOkSW+ZHj
+ yMxsuQ/JPa7mdxcvTxmHQxeAbmts1CDUDmNdVxFsYMxj5lAw+JEXPsL4PdMCusl+zw
+ O99dnVLHDYk3g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=guJxOrGQ
+Subject: [Buildroot] [PATCH] package/bind: update to 9.18.32
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,60 +76,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Andrey Nechypurenko <andreynech@gmail.com>,
- James Hillard <james.hilliard1@gmail.com>,
- Robert Rose <robertroyrose@gmail.com>, buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+See here for a ChangeLog:
+https://downloads.isc.org/isc/bind9/9.18.32/doc/arm/html/notes.html#notes-for-bind-9-18-32
 
-On Wednesday, January 08, 2025 21:59 CET, "Michael Nosthoff" <buildroot@heine.tech> wrote:
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/bind/bind.hash | 6 +++---
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> Hi Andrey, Arnout,
-> 
-> On Wednesday, December 18, 2024 17:18 CET, Andrey Nechypurenko <andreynech@gmail.com> wrote:
-> 
-> > On Wed, 18 Dec 2024 at 13:09, Andrey Nechypurenko <andreynech@gmail.com> wrote:
-> > >
-> 
-> > >
-> > > -- Configuring incomplete, errors occurred!
-> > 
-> > This problem is caused by the fact that the protobuf package is built with
-> > autotools and not with cmake. Grpc package was looking for cmake files from
-> > protobuf and did not find them. I was able to solve this problem by changing
-> > protobuf package type from autotools to cmake (plus a couple of other minor
-> > changes). I think this step makes anyway sense, because it looks like the
-> > newer protobuf versions does not support autotools anymore and moved
-> > completely to cmake.
-> > 
-> > With your patch mentioned above and the following changes I was able to
-> > build the grpc package.
-> > 
-> 
-> I think what you probably didn't see and Arnout didn't point out explicitly: the linked grpc patch was part of a series 
-> https://patchwork.ozlabs.org/project/buildroot/list/?series=431795 which also included the version bump of
-> protobuf.
-> 
-> I'm not sure why the last patch revision wasn't picked up yet.
-> But indeed the currently applied state of "only bumping libabseil-cpp" breaks grpc in 2024.11 and master.
-> 
-> @Andrey: Could you maybe try to apply the whole patch series and see if everything looks good for you?
-> @James: Do you know if there is still something open for v5 of the patch series? I don't see any replies which would prevent a merge...
-> 
-> For the 2024.11 branch I would suggest to revert the version bump of libabseil-cpp which Thomas applied. As it alone brings no advantage
-> and breaks grpc (its only real dependant).
->
-
-I created an issue for better visibility: https://gitlab.com/buildroot.org/buildroot/-/issues/83
-
-Regards,
-Michael
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index abcbf0a938..fd83196e5a 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.18.31/bind-9.18.31.tar.xz.asc
+-# with key 706B6C28620E76F91D11F7DF510A642A06C52CEC
+-sha256  51b258969275c5206ef745a5aac03dbe98f1c8031fefed378d53597e7987b1b3  bind-9.18.31.tar.xz
++# Verified from https://ftp.isc.org/isc/bind9/9.18.32/bind-9.18.32.tar.xz.asc
++# with key D99CCEAF879747014F038D63182E23579462EFAA
++sha256  dc840cdf9d54578d98400f2edf7008b1b33a1721be6e490eb1e42d0d11d9cff4  bind-9.18.32.tar.xz
+ sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 52b1e56c40..aa3c3222f5 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.18.31
++BIND_VERSION = 9.18.32
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+-- 
+2.30.2
 
 _______________________________________________
 buildroot mailing list
