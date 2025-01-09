@@ -4,96 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BFC3E77197
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 21:18:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55863E77197
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 21:22:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5F1260B2E;
-	Thu,  9 Jan 2025 21:18:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F32660B02;
+	Thu,  9 Jan 2025 21:22:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NRVlUd6NnDnB; Thu,  9 Jan 2025 21:18:49 +0000 (UTC)
+ id cib3HBIJS00s; Thu,  9 Jan 2025 21:22:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD0B560B30
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30F7E60B96
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD0B560B30;
-	Thu,  9 Jan 2025 21:18:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D6242942
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 21:18:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30F7E60B96;
+	Thu,  9 Jan 2025 21:22:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A60E8942
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 21:22:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C3DED60B2E
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 21:18:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 845C240FFE
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 21:22:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c-7y4tj_agGx for <buildroot@buildroot.org>;
- Thu,  9 Jan 2025 21:18:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id shUI3ZbaWSOe for <buildroot@buildroot.org>;
+ Thu,  9 Jan 2025 21:22:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d29; helo=mail-io1-xd29.google.com;
+ client-ip=2607:f8b0:4864:20::d2f; helo=mail-io1-xd2f.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CFC0B60B13
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFC0B60B13
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
- [IPv6:2607:f8b0:4864:20::d29])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CFC0B60B13
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 21:18:47 +0000 (UTC)
-Received: by mail-io1-xd29.google.com with SMTP id
- ca18e2360f4ac-844df397754so41408439f.2
- for <buildroot@buildroot.org>; Thu, 09 Jan 2025 13:18:47 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4EF694028C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EF694028C
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
+ [IPv6:2607:f8b0:4864:20::d2f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4EF694028C
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 21:22:38 +0000 (UTC)
+Received: by mail-io1-xd2f.google.com with SMTP id
+ ca18e2360f4ac-84a1ce51187so39681639f.1
+ for <buildroot@buildroot.org>; Thu, 09 Jan 2025 13:22:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736457526; x=1737062326;
+ d=1e100.net; s=20230601; t=1736457757; x=1737062557;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=r2NGONPSR+XhYAwgsNhYqYCI+MhfgnsMXh+D7hDQyQw=;
- b=xOlpcfePZe+w1notkpHJTs780QXs+LXPaqnhuM7mOfYpGXSO32bwxqV4CJQ9s2J0vJ
- gzEwCj0aP2zaj7j5k0f95KSYKbVPRbB3Y/6v65l0VBnwU95tsnoRd1MB4gltMFptJYTY
- 5HNDlmWUzpPPqvLKQfy517jRR1+PuQrAkHkKxbOfOeM6F2I1QXrB223DUKnkS/Hcq7Ak
- LRh/CkmcZfrTurt5sWhJRWvdzaLANPChweiDtvZn9q/EN0LOfMiT4RkYNWEaN11F7SLy
- 27vFZAkoIFkUlEodD3qrBIIYSyPb1MTGiRxldvkq0oplXB0srjoVFng/K8zk/4bkmX/h
- 60uA==
-X-Gm-Message-State: AOJu0YzPicv/Nb2lW0BMAyuVvL1bH4kDSPMpyQ02SQWZqXkP1zBHwOGi
- 0gXOkBeA+QnybBSRR7ew4ujytqFcTB6J0p0ogDxKqTKGR+FCtrFUwOnq0whLDIM=
-X-Gm-Gg: ASbGncvNOfBAbw5kn66tyx8rfMa2hfHyzcJtB9I06p7zTwnr/1l0cWS0lTRfAnJWyLc
- ca6Hid3C1ZGDO80ED2QUIptirzl8iZGyG/fnaMgrPtta+8GHgoW/PKEZcerInqgc5FyT8WxzOy8
- 05Kc+9KSOg0F1zbuulx2raLWaV296nwxLHgCvuoOUKnlMHWf1bMhbPMiC9484y7f1X1Dzn7+Msv
- kEnsgzUUouMJNnmLc8flCqvszOs6umUEuSB5FLLSajnQRxB4UBjhw+hfYs6QHcPhiSkJwI/ECRt
- USdLo8uj6/v0qqIksgxruMmb/HL7ap8=
-X-Google-Smtp-Source: AGHT+IHbsHOmV58omjm2O0WHJRKESBtTdx1WlhIDDPHuWdVpl6pvXnb5CpmqzB5ocP/2KKwDMzqa0Q==
-X-Received: by 2002:a05:6e02:1f84:b0:3a7:8d8e:e760 with SMTP id
- e9e14a558f8ab-3ce3a90ed40mr63356925ab.4.1736457526383; 
- Thu, 09 Jan 2025 13:18:46 -0800 (PST)
+ bh=QkBLQZUZoVCd6B+deV7dTTXWXuZ1VFVL9VBiKgCG2Lk=;
+ b=DR5AG+SzEN4PvqqwSJALFVdVYtEtjwgZf4BKe0CMIwDetkeY68ct5U+t+Z1yT/HH2r
+ /ubXz2TIokCYcz87sQsEKTOQm3ornAPklGASwRtWQcbbOODbl1bwyvuzqyEH5dTVC+XI
+ J9aFPeLdA76osr4yYcgvDsvY7K6cmgsQYHwG2xJOQOZaoTyrD3/184aoEYta36Mywk/0
+ 0WgsovNDUDX/3N5vaJfhfz4uZBuqLEfYmlEtHVTinpFVExvzYeE50AqviQhdbsx13xpd
+ MGkb3m/VOQAdPrcuqmrr26RlVVSTmU//xt1FIZtwfXkJLsne8PmX5OT5Tvsh4a2hOIqA
+ 5L8g==
+X-Gm-Message-State: AOJu0YxmWSUBIYGQVb1ssnsfCbmPHUw5C/GHqb2Zv1I/EARrsTAKhuIH
+ RnwRlU1aLk6783yhKPAUqs/B6qAtcJ2HYWZAotXQUBl5ngUusmhwKbYKIB2Mb4Q=
+X-Gm-Gg: ASbGncs9jplZZhrrwujTF4ed5KwzDX7XPjpvIPjEneTJKbhjcdHnN3eeSaPlLZgmO4K
+ Gz01io9Y+mwbqPa/9u4AwxygcKj8HZduGl4lPxTURA6F43dkRwXcHS4uVgALL8i+lUmyR4e9B2N
+ HxZ8IMO93tfnz40sY2wTAuBCgCBrnENXtvNzSqNnD0i18gNI0UJPymf5+71VROvFA32ML0bVVAI
+ O5n0tC0ac76Kl327OJDqqCyfFsQH5PmApSWsfCr6P3J27CFQceJt8sAsFfHTUDXjqiA+AkFaHpi
+ 5SVy0jKaSdRgYqf0OmlcKQnkn2qOhs8=
+X-Google-Smtp-Source: AGHT+IHoaSMZptJ7/q3h/zRLv1DuvYe2/S4J/FmURxBLLT0mCokIEeiTnDnUJCfCSr3c8XbmxwXdww==
+X-Received: by 2002:a92:c24f:0:b0:3a7:e592:55ee with SMTP id
+ e9e14a558f8ab-3ce3aa746d1mr70673135ab.20.1736457757022; 
+ Thu, 09 Jan 2025 13:22:37 -0800 (PST)
 Received: from james-x399.localdomain (71-218-115-58.hlrn.qwest.net.
  [71.218.115.58]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4ea1b5f93d2sm511587173.22.2025.01.09.13.18.45
+ 8926c6da1cb9f-4ea1b629396sm515955173.72.2025.01.09.13.22.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Jan 2025 13:18:46 -0800 (PST)
+ Thu, 09 Jan 2025 13:22:36 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  9 Jan 2025 14:18:44 -0700
-Message-Id: <20250109211844.2401761-1-james.hilliard1@gmail.com>
+Date: Thu,  9 Jan 2025 14:22:35 -0700
+Message-Id: <20250109212235.2403294-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1736457526; x=1737062326; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1736457757; x=1737062557; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=r2NGONPSR+XhYAwgsNhYqYCI+MhfgnsMXh+D7hDQyQw=;
- b=BojcU/W6/jMOGxOJwA7aWFCHj6XeNcnrBOIogoRxyrnRfpgL5hdlPAIbfeQd1cN99o
- 3nu8AAjO+qsmSt7lGzWAxDGDXX49ZdP5VJXxaVfw2lDYWIXdc3Cze+FPXAjai//Lu4NL
- jijbBg+H+DA5dLCqSph0uyrucSXEsEV4GL5qFPDvnhpbyZ0vTpfdt1QeVO6u32z0dfWw
- VxdfKyRGNUQaFrKXN0E/7YfRl/u2w+vaL/KhyGBu2hlNNuloybMdxxlUtZV+G36yV0sI
- g+D60gfal9svuffBuN81aXVL2ea8f7B6QZzhxoNTBI2zZDRP2dBzbpH2XsZIfPvzD1sL
- lJLw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=QkBLQZUZoVCd6B+deV7dTTXWXuZ1VFVL9VBiKgCG2Lk=;
+ b=Efw0ETZmXnsKAFPYhJiL/bKVYqsR/4dxCKuGFmw/3q07MrdWGyyTCsdg1TmEyJdHdU
+ A9egVFppLVSZCIfKWArRa3a7j9d5AQD5HpoDbd+Xwof4TPQBQLEtlnI12kuzLz2fHU6r
+ oMlVTRd9Eu5I26CtyJjrGqA+yVvmTT3CaAggzmg7VnP4pZ1cnbhvY42rfLWwHDucszce
+ Gl15g9WY30NIQTJxAyu+ovsLQHPNJDOqNrRtgCtHW63hVg0HccYnd24IvUhY6UZ+mvN4
+ cWKVOfFK2Y9D2lmLm+pVxPPxvYlKfbLIHLmB3vy+ml3nVwCNyhKNT/nggVgtg5hMKFuF
+ 2DSg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=BojcU/W6
-Subject: [Buildroot] [PATCH 1/1] package/python-hiredis: bump to version
- 3.1.0
+ header.a=rsa-sha256 header.s=20230601 header.b=Efw0ETZm
+Subject: [Buildroot] [PATCH 1/1] package/python-immutabledict: bump to
+ version 4.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,8 +105,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Grzegorz Blach <grzegorz@blach.pl>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -114,39 +113,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-hiredis/python-hiredis.hash | 4 ++--
- package/python-hiredis/python-hiredis.mk   | 4 ++--
+ package/python-immutabledict/python-immutabledict.hash | 4 ++--
+ package/python-immutabledict/python-immutabledict.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-hiredis/python-hiredis.hash b/package/python-hiredis/python-hiredis.hash
-index d4d98d85df..07b0d96582 100644
---- a/package/python-hiredis/python-hiredis.hash
-+++ b/package/python-hiredis/python-hiredis.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/hiredis/json
--md5  c0b7f7def9f945e8a900a4275df2d3af  hiredis-3.0.0.tar.gz
--sha256  fed8581ae26345dea1f1e0d1a96e05041a727a45e7d8d459164583e23c6ac441  hiredis-3.0.0.tar.gz
-+md5  56a3997b44753c11a0cdb2dc4aa50352  hiredis-3.1.0.tar.gz
-+sha256  51d40ac3611091020d7dea6b05ed62cb152bff595fa4f931e7b6479d777acf7c  hiredis-3.1.0.tar.gz
+diff --git a/package/python-immutabledict/python-immutabledict.hash b/package/python-immutabledict/python-immutabledict.hash
+index 8232bc6e0e..1dd4a79597 100644
+--- a/package/python-immutabledict/python-immutabledict.hash
++++ b/package/python-immutabledict/python-immutabledict.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/immutabledict/json
+-md5  6796be00860cc5cf45ae839b9ed2de52  immutabledict-4.2.0.tar.gz
+-sha256  e003fd81aad2377a5a758bf7e1086cf3b70b63e9a5cc2f46bce8d0a2b4727c5f  immutabledict-4.2.0.tar.gz
++md5  ac3ce87a7507d3e7d44a24a6b6bdb4a7  immutabledict-4.2.1.tar.gz
++sha256  d91017248981c72eb66c8ff9834e99c2f53562346f23e7f51e7a5ebcf66a3bcc  immutabledict-4.2.1.tar.gz
  # Locally computed sha256 checksums
- sha256  3256b5b77e98aa34ff31a4d2c2c10f7f177b0f3058753a6044430a168987353b  LICENSE
- sha256  dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
-diff --git a/package/python-hiredis/python-hiredis.mk b/package/python-hiredis/python-hiredis.mk
-index 59e036c845..b938650caf 100644
---- a/package/python-hiredis/python-hiredis.mk
-+++ b/package/python-hiredis/python-hiredis.mk
+ sha256  347f918d37d4e0556a0695d34b9fb87fa9bbe808d54949851789c6c1fc91c61f  LICENSE
+diff --git a/package/python-immutabledict/python-immutabledict.mk b/package/python-immutabledict/python-immutabledict.mk
+index 99089f0d6a..902352a5d0 100644
+--- a/package/python-immutabledict/python-immutabledict.mk
++++ b/package/python-immutabledict/python-immutabledict.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_HIREDIS_VERSION = 3.0.0
-+PYTHON_HIREDIS_VERSION = 3.1.0
- PYTHON_HIREDIS_SOURCE = hiredis-$(PYTHON_HIREDIS_VERSION).tar.gz
--PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/8b/80/740fb0dfa7a42416ce8376490f41dcdb1e5deed9c3739dfe4200fad865a9
-+PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/38/e5/789cfa8993ced0061a6ef7ea758302ef5cf3439629bf0d39c85a6ede4641
- PYTHON_HIREDIS_SETUP_TYPE = setuptools
- PYTHON_HIREDIS_LICENSE = MIT, BSD-3-Clause
- PYTHON_HIREDIS_LICENSE_FILES = LICENSE vendor/hiredis/COPYING
+-PYTHON_IMMUTABLEDICT_VERSION = 4.2.0
++PYTHON_IMMUTABLEDICT_VERSION = 4.2.1
+ PYTHON_IMMUTABLEDICT_SOURCE = immutabledict-$(PYTHON_IMMUTABLEDICT_VERSION).tar.gz
+-PYTHON_IMMUTABLEDICT_SITE = https://files.pythonhosted.org/packages/55/f4/710c84db4d77767176342913ac6b25f43aaed6d0a0bdb9168a8d2936d9c7
++PYTHON_IMMUTABLEDICT_SITE = https://files.pythonhosted.org/packages/e0/c5/4240186fbabc58fba41bbe17c5f0cd37ffd4c0b85a5029ab104f946df175
+ PYTHON_IMMUTABLEDICT_SETUP_TYPE = poetry
+ PYTHON_IMMUTABLEDICT_LICENSE = MIT
+ PYTHON_IMMUTABLEDICT_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
