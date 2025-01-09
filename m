@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25482E77199
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 09:23:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D9F4E77199
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 09:23:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE8DC403ED;
-	Thu,  9 Jan 2025 09:23:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A141405C1;
+	Thu,  9 Jan 2025 09:23:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tT3N9CLt_YOA; Thu,  9 Jan 2025 09:23:35 +0000 (UTC)
+ id clwS0qqhVcob; Thu,  9 Jan 2025 09:23:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9258340489
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9844A40578
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9258340489;
-	Thu,  9 Jan 2025 09:23:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 78D0F942
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:23:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9844A40578;
+	Thu,  9 Jan 2025 09:23:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E132940
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:23:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2657980B24
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2310060749
  for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:23:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wlpf5qqQFcQ9 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O04LcZpxtP3i for <buildroot@buildroot.org>;
  Thu,  9 Jan 2025 09:23:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 420F580526
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3176760ABE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 420F580526
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3176760ABE
  for <buildroot@buildroot.org>; Thu,  9 Jan 2025 09:23:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C9C38416C; Thu,  9 Jan 2025 09:23:18 +0000 (UTC)
+ id 2E5F984171; Thu,  9 Jan 2025 09:23:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 9 Jan 2025 10:06:58 +0100
+Date: Thu, 9 Jan 2025 10:05:04 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: cf2ce880365b14aa92e16f8c7718dbc26af6a2ad
-X-Git-Newrev: 2b4a3e2d5612cb863e9377940f02c18c2972f59e
+X-Git-Oldrev: 0aba2faf3edf54de6aaafb583b844244aa4402fb
+X-Git-Newrev: cf2ce880365b14aa92e16f8c7718dbc26af6a2ad
 X-Patchwork-Hint: ignore
-Message-Id: <20250109092318.3C9C38416C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/iperf3: security
- bump to version 3.18
+Message-Id: <20250109092318.2E5F984171@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/opensc: fix build
+ issue since bump to 0.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,52 +65,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b4a3e2d5612cb863e9377940f02c18c2972f59e
+commit: https://git.buildroot.net/buildroot/commit/?id=cf2ce880365b14aa92e16f8c7718dbc26af6a2ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Fixes CVE-2024-53580.
-https://github.com/advisories/GHSA-2w89-5px3-fvx6
+Buildroot commit
+1f4b4ccde7ceb379010aeb93458792202622d64b ("package/opensc: security
+bump to version 0.26.0") bumped opensc from 0.24 to 0.26, and the
+build started failing with:
 
-Release notes:
-https://github.com/esnet/iperf/releases/tag/3.18
+pkcs11-tool.c:7854:45: warning: implicit declaration of function 'EVP_bf_cbc'; did you mean 'EVP_sm4_cbc'? [-Wimplicit-function-declaration]
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-[Julien:
-  - fix CVE ID typo
-  - fixed "make check-package" error in iperf3.hash
-]
+on configurations that have BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH
+disabled (it is not explicitly selected by this package).
+
+Our initial fix was to simply select
+BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH, but when investigating when
+EVP_bf_cbc() started being used in OpenSC, we discovered it has been
+in use for a while... but in code that kept being disabled from
+version to version as it was broken (upstream bug
+https://github.com/OpenSC/OpenSC/issues/1796), but it was apparently
+forgotten to be disabled again for 0.26 (the issue is still
+open). Therefore, we opted to continue disabling this known broken
+part of the code, and submit an upstream PR for that
+https://github.com/OpenSC/OpenSC/pull/3303, which ultimately will
+clarify what is the right fix.
+
+In the mean time, this allows to fix the build issue.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/ca51b3e8e3ac83e2a69814caa84d9862385b956f/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit ad67ba25e229978ec06d6a836f4ad9aa89c73d25)
+(cherry picked from commit 5d7ab604d24e13cfd6dd57ee95171fac0bf45b63)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iperf3/iperf3.hash | 4 ++--
- package/iperf3/iperf3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...-disable-wrap-unwrap-test-until-OpenSC-17.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
-index ee0149daed..2aef76578a 100644
---- a/package/iperf3/iperf3.hash
-+++ b/package/iperf3/iperf3.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.es.net/pub/iperf/iperf-3.17.1.tar.gz.sha256
--sha256  84404ca8431b595e86c473d8f23d8bb102810001f15feaf610effd3b318788aa  iperf-3.17.1.tar.gz
-+# From https://downloads.es.net/pub/iperf/iperf-3.18.tar.gz.sha256
-+sha256  c0618175514331e766522500e20c94bfb293b4424eb27d7207fb427b88d20bab  iperf-3.18.tar.gz
- # Locally computed
- sha256  3dc3e2076dd9cdea2b66d8fe213997ff25fb6171594f055b59fe25321b438f6f  LICENSE
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index 1d2b57208a..744ee070a4 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPERF3_VERSION = 3.17.1
-+IPERF3_VERSION = 3.18
- IPERF3_SITE = https://downloads.es.net/pub/iperf
- IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
- IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
+diff --git a/package/opensc/0001-pkcs11-tool-disable-wrap-unwrap-test-until-OpenSC-17.patch b/package/opensc/0001-pkcs11-tool-disable-wrap-unwrap-test-until-OpenSC-17.patch
+new file mode 100644
+index 0000000000..9bf601370a
+--- /dev/null
++++ b/package/opensc/0001-pkcs11-tool-disable-wrap-unwrap-test-until-OpenSC-17.patch
+@@ -0,0 +1,41 @@
++From 768c9bfcd91206f0d85cd4757fde48e00850a014 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Mon, 6 Jan 2025 22:36:10 +0100
++Subject: [PATCH] pkcs11-tool: disable wrap/unwrap test until OpenSC#1796 is
++ resolved
++
++Similar to ab74fae4d71d1705b77b9459141987a95dcfc91e ("pkcs11-tool:
++disable wrap/unwrap test until OpenSC#1796 is resolved"), but for
++0.26, since OpenSC#1796 is still open.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream: https://github.com/OpenSC/OpenSC/pull/3303
++---
++ src/tools/pkcs11-tool.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/tools/pkcs11-tool.c b/src/tools/pkcs11-tool.c
++index d701d76d6..871a39977 100644
++--- a/src/tools/pkcs11-tool.c
+++++ b/src/tools/pkcs11-tool.c
++@@ -7681,7 +7681,7 @@ static int test_verify(CK_SESSION_HANDLE sess)
++ 	return errors;
++ }
++ 
++-#if OPENSC_VERSION_MAJOR == 0 && OPENSC_VERSION_MINOR <= 25
+++#if OPENSC_VERSION_MAJOR == 0 && OPENSC_VERSION_MINOR <= 26
++ #else
++ #ifdef ENABLE_OPENSSL
++ static int wrap_unwrap(CK_SESSION_HANDLE session,
++@@ -7805,7 +7805,7 @@ static int wrap_unwrap(CK_SESSION_HANDLE session,
++  */
++ static int test_unwrap(CK_SESSION_HANDLE sess)
++ {
++-#if OPENSC_VERSION_MAJOR == 0 && OPENSC_VERSION_MINOR <= 25
+++#if OPENSC_VERSION_MAJOR == 0 && OPENSC_VERSION_MINOR <= 26
++ 	/* temporarily disable test, see https://github.com/OpenSC/OpenSC/issues/1796 */
++ 	return 0;
++ #else
++-- 
++2.47.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
