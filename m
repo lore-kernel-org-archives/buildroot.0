@@ -1,100 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D22D6E77197
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 08:58:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E244FE77197
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jan 2025 08:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 89A668083C;
-	Thu,  9 Jan 2025 08:58:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90A81605E4;
+	Thu,  9 Jan 2025 08:59:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YL5doHfKNIRW; Thu,  9 Jan 2025 08:59:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B71A5608A0
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B71A5608A0;
+	Thu,  9 Jan 2025 08:59:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 01DF776C
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 08:59:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D53A680847
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 08:59:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BH9XCZ2cHt96; Thu,  9 Jan 2025 08:58:01 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A617A80847
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A617A80847;
-	Thu,  9 Jan 2025 08:58:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 949C1940
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 08:58:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F0D7401EA
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 08:58:00 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6rqrj_yZoEO1 for <buildroot@buildroot.org>;
- Thu,  9 Jan 2025 08:57:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::630; helo=mail-pl1-x630.google.com;
- envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 55DB0401B1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55DB0401B1
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com
- [IPv6:2607:f8b0:4864:20::630])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 55DB0401B1
- for <buildroot@buildroot.org>; Thu,  9 Jan 2025 08:57:59 +0000 (UTC)
-Received: by mail-pl1-x630.google.com with SMTP id
- d9443c01a7336-2166f1e589cso12175915ad.3
- for <buildroot@buildroot.org>; Thu, 09 Jan 2025 00:57:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736413078; x=1737017878;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ZRSg4qFEOyNZ/SPOhgzre9v9ZBzRX27343B1TKklNLw=;
- b=eDd7I985Zp5YGz5uwK/1RxEIZmDGGnIsVaawh7axSj5Li+MPryG2b9gRa/oidNFJs5
- bYQFrS7EsklUMOlocPJ0XWIQbWztfNG6RKDrVcPkQlsJ5PIO3ape0UhzSa9qgYzP13pA
- pnvKVNFYnC+sJEVg9SvDnCnHQen7twJcLPEBvRzwr+kAen9oN2nxDE30PxZN6ihKL6YN
- JQoTX/ZGXNtcRz42xbDdbcu78aEb5aC6Ux8VbIpyLEXxJ/EJJUHayU98lC6az0PsT9Ea
- ZX0cH8e5fqkRRwIO8OBI1BNM7vgpo0L0Fv/HO8MgK0fYNabRvkvy42NzHXOSj03CRQlI
- O/fA==
-X-Gm-Message-State: AOJu0YyEVW4foJHJPS5U+zCjHDHupfcYlV4OmVy379jER+dVSBewroN/
- HJ7vjo4AHlwAnMBSGTsJ19+jQl/T5h94XaBAidLyBGlLNagThSwhdEFor5QQ
-X-Gm-Gg: ASbGnctuk0zUNwc29Mz7wQCLqH8hQg26xkhWfFTHHHE/CAaOobBfJkMZRZCvB1nKS5F
- cCZ0jBlyzcod6T34keulou0MgmF0DSUQDrN3GPDp64ze7Je2t6RI5uMgkns2jr2cz9ik0m3gC9B
- ho62MgSiu8eRGJYN8sCD1H+aoWhcRlFabGczvKpdbGKG4wiZQdt3M6PMrI+r5Qi1dDkLPH2dUPB
- IUMmgFYLDd9DepREhcS0goO3IQnRTXq7XX5pLqyb9I0N7qIgfb0RDqcTJqeWxzpuklnNZPhBqlA
- Ll61SMrXHaS2h+TrX5k8sTBhH2TlJUZ1nruy3kEe
-X-Google-Smtp-Source: AGHT+IHPbgqQFksUJek0XARNBJsCZRC+SSH65jViLrDzd3Kgjxdo0gis1C32I+KeWiNrF/wQtxgK6w==
-X-Received: by 2002:a05:6a20:a103:b0:1e1:aab8:386a with SMTP id
- adf61e73a8af0-1e88d115298mr9752883637.18.1736413078182; 
- Thu, 09 Jan 2025 00:57:58 -0800 (PST)
-Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
- [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- 41be03b00d2f7-a31d5047ea0sm806583a12.58.2025.01.09.00.57.57
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Jan 2025 00:57:57 -0800 (PST)
-From: Akhilesh Nema <nemaakhilesh@gmail.com>
-To: buildroot@buildroot.org
-Cc: Akhilesh Nema <nemaakhilesh@gmail.com>
-Date: Thu,  9 Jan 2025 00:57:54 -0800
-Message-Id: <20250109085754.760776-1-nemaakhilesh@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ id tVYu6-OyBcqq for <buildroot@buildroot.org>;
+ Thu,  9 Jan 2025 08:59:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0601C80A52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0601C80A52
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0601C80A52
+ for <buildroot@buildroot.org>; Thu,  9 Jan 2025 08:59:09 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1075956673; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 09 Jan 2025 08:59:05 +0000 (UTC)
+Message-ID: <5206b6db-b27b-4a6d-81c9-4bea0a11e529@korsgaard.com>
+Date: Thu, 9 Jan 2025 09:59:03 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1736413078; x=1737017878; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ZRSg4qFEOyNZ/SPOhgzre9v9ZBzRX27343B1TKklNLw=;
- b=VfjtO8WgtUQ3wwu+dPrLBl5q4aG22rl9KgViQ9tOebKjfEUv5ILES0IArDXLhMtDC6
- EimyXv2e4OXsfLR5qGb4yBmT/BQU0tvHV5pvwKREWZRcYP0jjBAP26Km0c1m58XqIKUd
- G2Lr7QaapeOIAlN9dvrDI3daaEOR5GLGiCFD9leIFWnv23Yl9SXkXySs2wz6VX04jR7L
- 2p/dprOCTtJWjSY+jFb4v/PW1a1IA9x+i0RlhyrnZ0O8mCRkyR/GDsOBwTC6K2HL9DPP
- /K56bHhN2LZlg8K8FpYbAvE4kUYkYzvsO9pLEaaLmqc6H3iGx0Td3icySTyRyBe0HJii
- L2Pg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Alessandro <alex@0x65c.net>, Jared Bents <jared.bents@rockwellcollins.com>
+References: <20240123190902.1285941-1-yann.morin.1998@free.fr>
+Content-Language: en-US
+From: Peter Korsgaard <peter@korsgaard.com>
+In-Reply-To: <20240123190902.1285941-1-yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=k/zJ8EsM5cnRob5Cqbb/CSyBV0t4R0Zo+E9sS8HZLmH4pgQ9vo/p8eyZ1l7bjbQtnpp6p0pNpWkPsUPjG4yMzozZv5kJ4gUY1f1QTcdlVQhgToH5JClt1CkSo2dpSxQDHMdltAILbUiMb9fKvYmQ/BemRHs0QzZtabyObmubkpvM5utcyHycNBIWydVMRb6HKv7zn7g62KdDsFXeyRYFUrc/s3yLH9cvDpjfvz+onEUrFka9PyLY38qMDKWb9eVKZUT0S6k3DeG3xXaJOiKnN+240ScU7t8IpsMt4qQR+1DN1FGP6nrgvtFze1RgJRMCzCUXj5T06rxUAsdqLZVKkw==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=plNwSJxib5uFWn6BF2RRdZeQ9oRBR9bWjh9VK5DJKL0=;
+ h=Feedback-ID:Received:Date:Subject:To:From; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=VfjtO8Wg
-Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: bump version to 1.47.2
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=k/zJ8EsM
+Subject: Re: [Buildroot] [PATCH] package/libvirt: do not use 'qemu' user if
+ not defined
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,48 +78,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/tytso/e2fsprogs/blob/v1.47.2/doc/RelNotes/v1.47.2.txt
+On 1/23/24 20:09, Yann E. MORIN wrote:
+> Commit ed12e2fbed3d (package/libvirt: add lxc and qemu options)
+> introduced the definition of the 'qemu' user when the libvirt daemon
+> is enabled, but unconditionally uses that user in its permissions
+> table.
+> 
+> Move the permissions needing the 'qemu' user under the same condition
+> the 'qemu' user is defined under. It means that a few permissions
+> needing root must also be moved, as they belong under a directory
+> needing the 'qemu' user. It also moves a few qemu-related permissions
+> introduced in that same commit. The list of qemu permissions is
+> reordered alphabetically (the others are left unchanged).
+> 
+> Of course, it also requires that the qemu-related directory and symlink
+> be moved under the same condition as well.
+> 
+> Reported-by: Alessandro <alex@0x65c.net>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Jared Bents <jared.bents@rockwellcollins.com>
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
----
- package/e2fsprogs/e2fsprogs.hash | 4 ++--
- package/e2fsprogs/e2fsprogs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Committed to 2024.02.x and 2024.11.x, thanks.
 
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index 94ce2d5bc9..1e97e4363a 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -1,5 +1,5 @@
--# From https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.47.1/sha256sums.asc
--sha256  5a33dc047fd47284bca4bb10c13cfe7896377ae3d01cb81a05d406025d99e0d1  e2fsprogs-1.47.1.tar.xz
-+# From https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.47.2/sha256sums.asc
-+sha256  08242e64ca0e8194d9c1caad49762b19209a06318199b63ce74ae4ef2d74e63c  e2fsprogs-1.47.2.tar.xz
- # Locally calculated
- sha256  5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
- sha256  032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 7e2d9a739d..61d89add3c 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--E2FSPROGS_VERSION = 1.47.1
-+E2FSPROGS_VERSION = 1.47.2
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
 -- 
-2.25.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
