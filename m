@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9CABC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:53:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94406C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:53:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB278703F4;
-	Fri, 28 Feb 2025 16:53:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zRopOUHy7l5p; Fri, 28 Feb 2025 16:53:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A1C970388
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A1C970388;
-	Fri, 28 Feb 2025 16:53:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1FA4E94F
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:36:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EB38942FD2
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 141AD4F2E3;
+	Fri, 28 Feb 2025 16:53:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5m8VJOOnPFEZ for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:32 +0000 (UTC)
+ id KSmWichpMt-v; Fri, 28 Feb 2025 16:53:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEECF500BE
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id EEECF500BE;
+	Fri, 28 Feb 2025 16:53:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 106ED1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:36:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FB7B42D18
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 129kW0NDD37j for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57E6F41E69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB3EC42CF9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 57E6F41E69
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BB3EC42CF9
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5065B87A8B; Fri, 28 Feb 2025 16:30:03 +0000 (UTC)
+ id B170784C4E; Fri, 28 Feb 2025 16:30:00 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 17:20:04 +0100
+Date: Fri, 10 Jan 2025 18:59:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 67f16fae0c26ffcddace7ce9db0fb98f4dc44878
-X-Git-Newrev: 979f9cdff0be3f7e56e207dc200ae17288239766
+X-Git-Oldrev: 5aa12833d5ca461b466a40a698711bf57d3b1edd
+X-Git-Newrev: 5e7bcbb62f506a077b96b5d8a8202c852601d8fe
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163003.5065B87A8B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-modbus-tk: bump
- to version 1.1.4
+Message-Id: <20250228163000.B170784C4E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/xilinx: add hash for
+ Linux 6.6.60
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,45 +65,25 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=979f9cdff0be3f7e56e207dc200ae17288239766
+commit: https://git.buildroot.net/buildroot/commit/?id=5e7bcbb62f506a077b96b5d8a8202c852601d8fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+This patch adds the hash for Linux version 6.6.60 for Xilinx boards.
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-modbus-tk/python-modbus-tk.hash | 4 ++--
- package/python-modbus-tk/python-modbus-tk.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ board/xilinx/patches/linux/linux.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
-index c7f4ac2dd4..c60733b02d 100644
---- a/package/python-modbus-tk/python-modbus-tk.hash
-+++ b/package/python-modbus-tk/python-modbus-tk.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/modbus-tk/json
--md5  2e66c361d3e4591a19be1259ef50fdf7  modbus_tk-1.1.3.tar.gz
--sha256  690fa7bb86ea978992465d2d61c8b5acc639ce0e8b833a0aa96d4dd172c5644a  modbus_tk-1.1.3.tar.gz
-+md5  03873278a842535c9069cc0dd352f520  modbus_tk-1.1.4.tar.gz
-+sha256  68977766eb10469973dd56a2814bd981b85dd180b79043248786d88008f2593b  modbus_tk-1.1.4.tar.gz
- # Locally computed sha256 checksums
- sha256  3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
- sha256  aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
-diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
-index d8552e57a6..2e15354b04 100644
---- a/package/python-modbus-tk/python-modbus-tk.mk
-+++ b/package/python-modbus-tk/python-modbus-tk.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MODBUS_TK_VERSION = 1.1.3
-+PYTHON_MODBUS_TK_VERSION = 1.1.4
- PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
--PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/8d/9f/5963e30dba160dbc646b76c59ca8136709c7fe9002bbaaa3cf1e1bb0404b
-+PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/78/40/9ae5c428b1867bfccd3c184dcf18cfef04e3d9c5b9dc22b8e9eb8d480651
- PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
- PYTHON_MODBUS_TK_LICENSE = LGPL-2.1+
- PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
+diff --git a/board/xilinx/patches/linux/linux.hash b/board/xilinx/patches/linux/linux.hash
+index 41bf2141fb..ce93e4016f 100644
+--- a/board/xilinx/patches/linux/linux.hash
++++ b/board/xilinx/patches/linux/linux.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  8ebbbe2d40597d9a5f36d47a1dfe4caffcef3d9f5ffa059ed4504bb761282593  xlnx_rebase_v6.6_LTS_2024.2.tar.gz
++sha256  f59c7d260794d73ee519ba2579ef41aa8ac4985ac5af9461f94fa314969acd2e  xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
