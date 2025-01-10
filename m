@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 977B3E77188
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jan 2025 18:35:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBAE3E7719C
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jan 2025 18:35:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 870B741240;
-	Fri, 10 Jan 2025 18:35:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 829AF60F06;
+	Fri, 10 Jan 2025 18:35:40 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xjuJQ7PLDg2T; Fri, 10 Jan 2025 18:35:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA95860F0C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA95860F0C;
+	Fri, 10 Jan 2025 18:35:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B65EC76C
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 18:35:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A3FA940E3B
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 18:35:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zigqeJLnC91J; Fri, 10 Jan 2025 18:35:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 362AA40E3B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 362AA40E3B;
-	Fri, 10 Jan 2025 18:35:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id DAB13940
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 18:35:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B16F240445
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 18:35:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nP_UXiMNGuQf for <buildroot@buildroot.org>;
- Fri, 10 Jan 2025 18:35:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2E5340127
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A2E5340127
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 18:35:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8AC3384391; Fri, 10 Jan 2025 18:35:20 +0000 (UTC)
+ id JEiAnFMemJhf for <buildroot@buildroot.org>;
+ Fri, 10 Jan 2025 18:35:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 72F9C4123F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72F9C4123F
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 72F9C4123F
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 18:35:37 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 91F4113F8C2;
+ Fri, 10 Jan 2025 19:35:33 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:52238])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 10 Jan 2025 19:35:33 +0100
+MIME-Version: 1.0
+Date: Fri, 10 Jan 2025 19:35:33 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 10 Jan 2025 19:04:45 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 796ab038613f169bf76c74e656b800a036aacceb
-X-Git-Newrev: d92b592ce145761b8b73a88c9f00fa5928b62a18
-X-Patchwork-Hint: ignore
-Message-Id: <20250110183520.8AC3384391@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bind: update to 9.18.32
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+In-Reply-To: <Z3/nRFjjatiNygaG@waldemar-brodkorb.de>
+References: <Z3/nRFjjatiNygaG@waldemar-brodkorb.de>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <8e67e11215b477ce965a6b7059cf581f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1736534134;
+ bh=XWbz23fZBuLk795civI/PJWAeUjykjWkjO21SL8kPv0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=JQkmGfjp2TPFovLse5vttWvzxbbdsfDUYxXE/8TbXbT785vWVR5h7y5f/jr7sV59I
+ kPy2PS6U13Zej1kedCfTWA7/f4So8rdoLVPD2z5WQqFmQjh+/5sjSWuwiQMhu1XbdT
+ E9/QOO/p/fVDP0Ch+Ca4X/RBXhYWZinMibGr1B7XuqZL7fB9iZxgijiNSh/Znqn7RT
+ 24RXKTY3et/rdaVTVB/uyRFw5u54fTolgFfIygnvk9ssk/DPBHxk9rxc8cZ1KuxJAJ
+ lOwZRyJmwt+i9NypV1pviU9NrvzvxyKcRDEpgZxiEu6MIPqolXOG1/jxwvvg6yG2ef
+ PZO7naUoTbHmQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=JQkmGfjp
+Subject: Re: [Buildroot] [PATCH] package/bind: update to 9.18.32
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,50 +82,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d92b592ce145761b8b73a88c9f00fa5928b62a18
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09/01/2025 16:12, Waldemar Brodkorb wrote:
+> See here for a ChangeLog:
+> https://downloads.isc.org/isc/bind9/9.18.32/doc/arm/html/notes.html#notes-for-bind-9-18-32
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-See here for a ChangeLog:
-https://downloads.isc.org/isc/bind9/9.18.32/doc/arm/html/notes.html#notes-for-bind-9-18-32
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/bind/bind.hash | 6 +++---
- package/bind/bind.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index abcbf0a938..fd83196e5a 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.18.31/bind-9.18.31.tar.xz.asc
--# with key 706B6C28620E76F91D11F7DF510A642A06C52CEC
--sha256  51b258969275c5206ef745a5aac03dbe98f1c8031fefed378d53597e7987b1b3  bind-9.18.31.tar.xz
-+# Verified from https://ftp.isc.org/isc/bind9/9.18.32/bind-9.18.32.tar.xz.asc
-+# with key D99CCEAF879747014F038D63182E23579462EFAA
-+sha256  dc840cdf9d54578d98400f2edf7008b1b33a1721be6e490eb1e42d0d11d9cff4  bind-9.18.32.tar.xz
- sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 52b1e56c40..aa3c3222f5 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.18.31
-+BIND_VERSION = 9.18.32
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
