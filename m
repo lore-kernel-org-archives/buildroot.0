@@ -1,104 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2328DE77188
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jan 2025 13:06:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F5E7E7719C
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jan 2025 14:17:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FA81408B6;
-	Fri, 10 Jan 2025 13:06:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BCCB260605;
+	Fri, 10 Jan 2025 14:17:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xcNZ4X3sEIQk; Fri, 10 Jan 2025 14:17:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFB10606F6
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFB10606F6;
+	Fri, 10 Jan 2025 14:17:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4885940
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 14:17:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7216B407D6
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 14:17:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b_YJLhvkREY3; Fri, 10 Jan 2025 13:06:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 790AA408B0
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 790AA408B0;
-	Fri, 10 Jan 2025 13:06:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CD33E940
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 13:06:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A58D980E81
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 13:06:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ptN4WdXi3RZH for <buildroot@buildroot.org>;
- Fri, 10 Jan 2025 13:06:29 +0000 (UTC)
+ id BBYGJU8hPVNH for <buildroot@buildroot.org>;
+ Fri, 10 Jan 2025 14:17:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
- envelope-from=david.laight.linux@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C46D180D28
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C46D180D28
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C46D180D28
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 13:06:28 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-43635796b48so13313365e9.0
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 05:06:28 -0800 (PST)
+ client-ip=2607:f8b0:4864:20::12b; helo=mail-il1-x12b.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3D0E8407CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D0E8407CA
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
+ [IPv6:2607:f8b0:4864:20::12b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3D0E8407CA
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 14:17:21 +0000 (UTC)
+Received: by mail-il1-x12b.google.com with SMTP id
+ e9e14a558f8ab-3cddfa9a331so6796485ab.3
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 06:17:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736514387; x=1737119187;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=1ErOrYe5q1M2N5KuMbbsco+GFuY1jvUVU7hGamM+BKk=;
- b=ot1VHd/LB8je8uTG/GyW0cZpCGaqZghp/H9LkAGIyDHfC+kMHDyw0BWf8wsuobgnOr
- HetAQ3dh3wiu4x2r7mcvb36MFP3kiZMbbFDkFDcdquabd/P2W2D+v7+tx2U9Bh9BCT+F
- WzjfhDeJHWiwsXk/hnr7XW5Y+EExwyvS+mi1COeZVmIrPjUg3r0i06uaxsmUM6avtHzQ
- nMAa/WZ7FgjbPk3KIFEpn8D0nReLGbH1Y1RKfxZiBJc8qLTeVQRKabw7ogQ93Rg5wT38
- //sCrrwxUi22BUMkaKsMIGmht5z7cxDd2UfiCer+gxxcmUQSSztpmZunhW5Hx0YjeCK7
- BkOQ==
-X-Gm-Message-State: AOJu0YxZG4EICnavlyKxgQuMB5VzDHqgep5G4s2sZad/FtpzWHhiJLv2
- E+1lWrZsPD/4PD08QFWJPQpkgMGYnG8UNgkISQkfCuxwLmm3keqW5usSYQ==
-X-Gm-Gg: ASbGncvwOocByxs46BqvvkzollYu7ohnL3dBnO3Atl9TlHgPUuF5wJjSOSxQGUPvief
- 0ETt3NBk3abtxTfq4whfMIAWcApT570/th/OUOnLg9VJtDlC0Ut3JBpNMbbOpwkCwJUXi/B1qHy
- 4HFchOjQu768kzVr0GG6aGOS4B/ndSa13JOF+MW6XyvHtIn4WqV+C5V40RZXzoRSXvcmkW+bMdW
- V0eLaqGjEUzkpKhjf1Y79XVkiYugZ3QHbTqK5/+ASD41eHHPAz0v4H+dhlsqOzCJd8cl7emGg+P
- MMmTwg/LjLrfSYI1+AI=
-X-Google-Smtp-Source: AGHT+IHKnieET4BZStcuhZ/928HY48yaLeikmi1yiEMA5Zz1GJkzoeXesEt90S2n97DndaDfs09wtg==
-X-Received: by 2002:a05:600c:3ba5:b0:436:1af3:5b13 with SMTP id
- 5b1f17b1804b1-436e884a59amr64233855e9.15.1736514386585; 
- Fri, 10 Jan 2025 05:06:26 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-436e9d8fc67sm52286175e9.8.2025.01.10.05.06.26
+ d=1e100.net; s=20230601; t=1736518640; x=1737123440;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=J+E3rK+pAV9i1034E0K8Ki9dbv0lNOGogaxvdRXm+Aw=;
+ b=wBR904oog5I71y8/wzRV6g/ZF8wbkiSDu7oma+Mb7ECUDF8AIUPXHViZKpuMCjt2S7
+ oqeOYsz5kbubv+aHW39yyOafo0VJQZ8MRzAl3/4NBgCUfqj5Y1o8utWFPMF6++m0e748
+ iKQUa/BptfwF+VSs6NMzdUW0H7DF9Q5V/L+O7KaxHshyBGUF+T6Bcpi2h0DsYMDG87ql
+ gvr+wJN5ldHtqkmxKDdvhc/BBJody3cyCffJqan05HyceEziZUa8FkiHhFlbAOEeBlZQ
+ WFWBvJaswaM/A9eRWW8SaKiEwvYfnCQo0Y/JAthLSFSDdnuCJlWOPUyu8Ozzt1Emm+M3
+ 82xw==
+X-Gm-Message-State: AOJu0YyZhIR+GVSUaLVWwCE2ANS9nhz64k8PQM+VDBgg1SIEZicqZDYl
+ eKYnkmciE+k7frZkDWi4eQeNZIPUdZafETbMr5BlCtfXxvS30R11n7MOs6rvAWI=
+X-Gm-Gg: ASbGncupr+S7LuAIJLcoWDvTaXSw5IBByCxx/RnVBdxGyFe2Pa7xVRdiDORVf2XI8TZ
+ bsW+AJGq4lmuvRjIsQsyaTScl2j3K+AN9/RRu3VgXP6iECHJDsiVN6lyUYFyZwYPgGlP3qSHGZ3
+ LSoWd54ugWpRrE/9vthQ3PR6x2pc7g/FpVs41Ab+yBnxPpGcsH3KZfQVP8GttbTApuT4T4xQb7Q
+ riGob0Oi3rdHKQrXdWYkuca58tn/w3EBuB/VuoN0abRfGFewaIwlS2yyeg+6AYmfxmfZHtWvAqN
+ 3Aca4HxSWPaxR0SLwvWRKuUxdwLjdh0=
+X-Google-Smtp-Source: AGHT+IEVr0ear3ygCC9vezB9VGdPVtdtGhV9+8q3UHgCx5RHauMxz5c1n8btW4JryzjLOLOhjptIGw==
+X-Received: by 2002:a92:cdab:0:b0:3a7:c5b1:a55c with SMTP id
+ e9e14a558f8ab-3ce3a8936efmr78857285ab.0.1736518639750; 
+ Fri, 10 Jan 2025 06:17:19 -0800 (PST)
+Received: from james-x399.localdomain (71-218-115-58.hlrn.qwest.net.
+ [71.218.115.58]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4ea1b745ca3sm915032173.126.2025.01.10.06.17.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Jan 2025 05:06:26 -0800 (PST)
-Date: Fri, 10 Jan 2025 13:06:25 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Romain Naour via buildroot <buildroot@buildroot.org>
-Cc: Romain Naour <romain.naour@smile.fr>, Julien Olivain <ju.o@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20250110130625.245ef276@pumpkin>
-In-Reply-To: <20250108230521.1345210-1-romain.naour@smile.fr>
-References: <20250108230521.1345210-1-romain.naour@smile.fr>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+ Fri, 10 Jan 2025 06:17:19 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 10 Jan 2025 07:17:17 -0700
+Message-Id: <20250110141717.2434937-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1736514387; x=1737119187; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:subject:cc:to:from:date:from:to:cc:subject:date
- :message-id:reply-to;
- bh=1ErOrYe5q1M2N5KuMbbsco+GFuY1jvUVU7hGamM+BKk=;
- b=hCIjw0o1ovCjHOgvr+vYUC5zd4EZZar+XGaH1L7OObQNqjB3gAbZLiAcLcs9OThOky
- nOKBs1PZqEck3TJ8HsAQrDBTB5r7wPaORJ6SG2jYCUVdlmkpgPMoBggnBBTgPORMs/XW
- 9vWaPIDr9K+FLeEodF17NzvdZti4Oif6fLyGdCz4fVmilbIsBlpZUXGengePJd5+ELOz
- Rd7chfT/LQaIP0BL7s27bsphf8okRtDdfdfS+ymsCRnIrFiyxRWanRPUNebR8Rsm4TS5
- TGFkzPXpyuWwW5lUC7I/UkASR44uv6pjXsL9s3VW8OyGZbdYc/fMAQus3rI2FKXoNJQC
- oq6g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1736518640; x=1737123440; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=J+E3rK+pAV9i1034E0K8Ki9dbv0lNOGogaxvdRXm+Aw=;
+ b=Lc+mKpqu4SKQyF9gfA7f07rr710HUc05XwngonrWfdXo7pMC+FuymvxenEmDUllv0v
+ 2pTlqxIXOLA8Khlo8z4+A5oYDhSfwPneQt5s06hkmomZKwyBwshErY2nBG/7K1VGwEwy
+ MqFaTEkxUtJatbe/f3/VFVGXHKXZuTM1mgiewdoT3tD4lVEXWo1KvnNIGkfm/aPBKMu6
+ 6eSqadYdBqCm3RuZ76njSlChSMu5WP7f3axk24TdXU5i4TlvNE2vn0RGncM9XA4sclKz
+ +o7Va+oaGM683AeBi/ywZj/54/Z9Hupf6RAwWBDCiIyuA4dUspsruQ397azgIrsNGHLJ
+ braQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=hCIjw0o1
-Subject: Re: [Buildroot] [PATCH 01/12] support/config-fragments: remove
- nios2 toolchain
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Lc+mKpqu
+Subject: [Buildroot] [PATCH v2 1/1] package/python-jc: bump to version 1.25.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,39 +105,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  9 Jan 2025 00:05:10 +0100
-Romain Naour via buildroot <buildroot@buildroot.org> wrote:
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v1 -> v2:
+  - don't add new dependencies which are not actually required
+---
+ package/python-jc/python-jc.hash | 4 ++--
+ package/python-jc/python-jc.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> The nios2 architecture was deprecated in gcc-14 and has been removed
-> in the upcoming gcc-15 [1][2].
-> 
-> Our last and only nios2 defconfig "qemu_nios2_10m50_defconfig" was
-> removed in 2024.11 due to nios2 removal from Qemu 9.1.0 [3].
-...
-
-Interesting, I've not seen an indication that nios2 support is being removed
-from the Linux kernel.
-Not that I've ever considered running Linux on nios2 a sane idea.
-(Better to get an fpga with a 'proper' cpu in it.)
-
-I know Intel deprecated nios2 in quartus 23.04 (suggesting that RISC-V was a
-suitable alternative), but I suspect that some major telco hardware supplies
-objected (I believe they use a lot of nios2 for embedded control code in
-mobile base stations - they'll be running with a few kB of code and data).
-We certainly found it possible to get a free nios2 licence for our fpga builds
-(after being told earlier it wasn't possible to get one).
-
-In any case I spent a few weeks writing a compatible cpu we can use for
-our embedded hardware.
-(We also use the first gcc that supported it - good enough for the code
-we have, especially after some local patches.)
-
-	David
+diff --git a/package/python-jc/python-jc.hash b/package/python-jc/python-jc.hash
+index 75d64da7bf..d8ee918ac7 100644
+--- a/package/python-jc/python-jc.hash
++++ b/package/python-jc/python-jc.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jc/json
+-md5  7e9454e01eafa7c8c6e415fddc7d2638  jc-1.25.3.tar.gz
+-sha256  fa3140ceda6cba1210d1362f363cd79a0514741e8a1dd6167db2b2e2d5f24f7b  jc-1.25.3.tar.gz
++md5  77e798f2c3fbe89c0dbf7b31dc35fc69  jc-1.25.4.tar.gz
++sha256  a32eaf029c56b582dadae48895f20784d0f84f2fa28a8e2b32f377a8bffa8b39  jc-1.25.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6493f2db400f4166ca0956cf192a41aa092bd1396ff463e7fdaf51f257c10497  LICENSE.md
+diff --git a/package/python-jc/python-jc.mk b/package/python-jc/python-jc.mk
+index 202884f3dc..9a3754a0fa 100644
+--- a/package/python-jc/python-jc.mk
++++ b/package/python-jc/python-jc.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_JC_VERSION = 1.25.3
++PYTHON_JC_VERSION = 1.25.4
+ PYTHON_JC_SOURCE = jc-$(PYTHON_JC_VERSION).tar.gz
+-PYTHON_JC_SITE = https://files.pythonhosted.org/packages/a5/82/bfb1ec7d9667bc2f922254bc62e12fd460a5de3b711518f5089df0a17180
++PYTHON_JC_SITE = https://files.pythonhosted.org/packages/5b/82/146ef4c94297ef87c6a732c92dd57761bea2c2179e1b8ca8a6b9b8dd6ff7
+ PYTHON_JC_SETUP_TYPE = setuptools
+ PYTHON_JC_LICENSE = MIT, BSD-3-Clause (bundled pbPlist)
+ PYTHON_JC_LICENSE_FILES = LICENSE.md
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
