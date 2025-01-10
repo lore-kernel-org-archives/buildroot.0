@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BEFCE77188
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jan 2025 17:51:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40388E77188
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jan 2025 17:54:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 440E983B92;
-	Fri, 10 Jan 2025 17:51:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAE19610DC;
+	Fri, 10 Jan 2025 17:54:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XJSYa-xtLUJN; Fri, 10 Jan 2025 17:54:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECF6E610D7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECF6E610D7;
+	Fri, 10 Jan 2025 17:54:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id ED0E376C
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 17:54:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B84FD83BD0
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 17:54:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VunOafOsCMr7; Fri, 10 Jan 2025 17:51:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 656D083BAF
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 656D083BAF;
-	Fri, 10 Jan 2025 17:51:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 80E5076C
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 17:51:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6ED944124F
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 17:51:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3FEofaJ0MaFf for <buildroot@buildroot.org>;
- Fri, 10 Jan 2025 17:51:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 606894124E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 606894124E
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 606894124E
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 17:51:11 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 339FB60149;
- Fri, 10 Jan 2025 18:51:07 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:33702])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 10 Jan 2025 18:51:07 +0100
-MIME-Version: 1.0
-Date: Fri, 10 Jan 2025 18:51:07 +0100
+ id ON9YU5PZg97f for <buildroot@buildroot.org>;
+ Fri, 10 Jan 2025 17:54:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E150483BCF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E150483BCF
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 17:54:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DA937842E5; Fri, 10 Jan 2025 17:54:27 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: yann.morin@orange.com
-Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>
-In-Reply-To: <2e74286729fd798109e9c067c28e4a17af8522ed.1736521850.git.yann.morin@orange.com>
-References: <2e74286729fd798109e9c067c28e4a17af8522ed.1736521850.git.yann.morin@orange.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <e46fa367427e12e60059309074645c80@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1736531469;
- bh=hDMYEVw8f6z1Kg2k/oeTKHx5eGdRogrOAmpfSSutDTA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=C0N0mBmSCmOHxzY9T07KbU/7c0pwEYZWWLQ2BDVrhI/IKdZcWrrqxq92C0JI4W+yl
- /AeqcKmQyXUokHjA4ntxlhWU+zG0fWHd8N9V+G7yxJKarcV2ziHHQ+bexebz2Vnz4/
- iFMZkfN06hhEC//F8trP5lawbhXMQmKE8ZbPTcYMwg+JW/YIyIMandheBE907B2z2D
- eafFgSjWqYIaTvgvmSrUi6m66C3HdHCeZAYohq9dS8GXEX19v2YWIG0VapOo1VLjIm
- eqqS1K7dAD0QNEa9jrrxW1mfeoNJB66JYtqYjRhgWTMBr4BwptFxvVUV7j3Oum6grE
- 0UceB8tzrz8BA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=C0N0mBmS
-Subject: Re: [Buildroot] [PATCH] package/gpsd: python support needs pyserial
+To: buildroot@buildroot.org
+Date: Fri, 10 Jan 2025 18:52:07 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5d2f3737a1e52d140bd412bf01241eecf5cff994
+X-Git-Newrev: 5aa12833d5ca461b466a40a698711bf57d3b1edd
+X-Patchwork-Hint: ignore
+Message-Id: <20250110175427.DA937842E5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imx6ulz_bsh_smm_m2: fix kernel hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,39 +58,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10/01/2025 16:10, yann.morin@orange.com wrote:
-> From: "Yann E. MORIN" <yann.morin@orange.com>
-> 
-> Usually, ubxtool, a python-based too lto drive u-blox devices, connects
-> to a gpsd instance and delegates to it the responsibility to write to
-> and read from the actual device. This is sane, because a serial device
-> can only be opened once, and if gpsd is running, it has that device
-> open.
-> 
-> However, in some cases, ubxtool can be used to directly talk to the
-> device, to pre-configure it before gpsd runs, or even in the abscence 
-> of
-> gpsd altogether. This is not used very often, except when setting up an
-> RTK base, where gpsd is not needed.
-> 
-> In that case, ubxtool will directly talk to the serial device. It uses
-> the pyserial python module. Since this is not the traditional way to
-> talk to the device, failure to import the module is ignored, and the
-> error reporting is deferred until it is actually needed, which is why 
-> we
-> did not catch the issue earlier.
-> 
-> Fixes: f3ef0723cf71 (package/gpsd: enable python support and modules)
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-> Cc: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=5aa12833d5ca461b466a40a698711bf57d3b1edd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Commit 75320f567d "configs/imx6ulz_bsh_smm_m2: bump U-Boot to 2024.10
+and Linux to 6.1.120" updated the kernel from 6.1.68 to 6.1.120 but
+forgot to update its per-config kernel hash file.
+
+The defconfig fails with the error:
+
+    ERROR: No hash found for linux-6.1.120.tar.xz
+
+This failure happen since commit 07149e5f30 "{linux, linux-headers}:
+bump 5.{4, 10, 15}.x / 6.{1, 6, 12}.x series" which updated the
+Buildroot 6.1 kernel series from 6.1.120 to 6.1.122.
+
+This commit fixes the issue by updating the hash.
+
+While at it, it also changes the "Locally computed" comment
+by the upstream link to hashes.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/8751983243
+
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: Michael Trimarchi <michael@amarulasolutions.com>
+Reviewed-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash b/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
+index 25e4464adb..6d69eabbd6 100644
+--- a/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
++++ b/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256  365ff26a30e206de9b18489f45d38582a0a61b7c5919f8ab89295a47316784e1  linux-6.1.68.tar.xz
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  61c997b8acbbb8ab184565e96f476ecbb7e773cb35b98a1a4c832d809b2bf719  linux-6.1.120.tar.xz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
