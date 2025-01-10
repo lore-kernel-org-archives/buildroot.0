@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 466D8C282C1
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8C7BC282D0
 	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:52:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74F994F44C;
-	Fri, 28 Feb 2025 16:52:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB8AD84C74;
+	Fri, 28 Feb 2025 16:52:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pdYyXymh-R_a; Fri, 28 Feb 2025 16:52:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id akamriSOtfHZ; Fri, 28 Feb 2025 16:52:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BB544F1A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C517C84906
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2BB544F1A1;
-	Fri, 28 Feb 2025 16:52:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C517C84906;
+	Fri, 28 Feb 2025 16:52:40 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DF691DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:36:18 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 166F268
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:36:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9FB2341807
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD40542F67
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CfK3XtVMfGoy for <buildroot@buildroot.org>;
+ id W1WnEtp8S6Rb for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:30:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA5E44252B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1EF8417FF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AA5E44252B
+ by smtp4.osuosl.org (Postfix) with ESMTP id D1EF8417FF
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A1D7886612; Fri, 28 Feb 2025 16:30:00 +0000 (UTC)
+ id CC1A986612; Fri, 28 Feb 2025 16:30:00 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 10 Jan 2025 18:52:07 +0100
+Date: Fri, 10 Jan 2025 18:59:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5d2f3737a1e52d140bd412bf01241eecf5cff994
-X-Git-Newrev: 5aa12833d5ca461b466a40a698711bf57d3b1edd
+X-Git-Oldrev: ec5b28542cb0faa3251a3dfef11dfa28ad0e8a53
+X-Git-Newrev: 68137ef42b2ad006e91b4d0c9edf94cfdb023ad6
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163000.A1D7886612@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/imx6ulz_bsh_smm_m2:
- fix kernel hash
+Message-Id: <20250228163000.CC1A986612@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/zynq_zc706_defconfig:
+ bump to 6.6.60
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,46 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5aa12833d5ca461b466a40a698711bf57d3b1edd
+commit: https://git.buildroot.net/buildroot/commit/?id=68137ef42b2ad006e91b4d0c9edf94cfdb023ad6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 75320f567d "configs/imx6ulz_bsh_smm_m2: bump U-Boot to 2024.10
-and Linux to 6.1.120" updated the kernel from 6.1.68 to 6.1.120 but
-forgot to update its per-config kernel hash file.
+This patch bumps the zynq_zc706_defconfig to Linux kernel 6.6.60.
 
-The defconfig fails with the error:
-
-    ERROR: No hash found for linux-6.1.120.tar.xz
-
-This failure happen since commit 07149e5f30 "{linux, linux-headers}:
-bump 5.{4, 10, 15}.x / 6.{1, 6, 12}.x series" which updated the
-Buildroot 6.1 kernel series from 6.1.120 to 6.1.122.
-
-This commit fixes the issue by updating the hash.
-
-While at it, it also changes the "Locally computed" comment
-by the upstream link to hashes.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8751983243
-
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: Michael Trimarchi <michael@amarulasolutions.com>
-Reviewed-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ configs/zynq_zc706_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash b/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
-index 25e4464adb..6d69eabbd6 100644
---- a/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
-+++ b/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256  365ff26a30e206de9b18489f45d38582a0a61b7c5919f8ab89295a47316784e1  linux-6.1.68.tar.xz
-+# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  61c997b8acbbb8ab184565e96f476ecbb7e773cb35b98a1a4c832d809b2bf719  linux-6.1.120.tar.xz
+diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
+index f50511b822..d39cf36aab 100644
+--- a/configs/zynq_zc706_defconfig
++++ b/configs/zynq_zc706_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.2)/xlnx_rebase_v6.6_LTS_2024.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.60)/xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
