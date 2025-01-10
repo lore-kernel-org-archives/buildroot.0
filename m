@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BADDCE77188
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jan 2025 17:43:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A20A9E77188
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jan 2025 17:50:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E19860E70;
-	Fri, 10 Jan 2025 17:43:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 697356109B;
+	Fri, 10 Jan 2025 17:50:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8boj-uqBKKE7; Fri, 10 Jan 2025 17:43:32 +0000 (UTC)
+ id 0TylXJM8HCpK; Fri, 10 Jan 2025 17:50:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D51460E62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B1C761098
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D51460E62;
-	Fri, 10 Jan 2025 17:43:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 20C0776C
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 17:43:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B1C761098;
+	Fri, 10 Jan 2025 17:50:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F00D676C
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 17:50:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1ADA840949
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 17:43:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EA8D06109B
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 17:50:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1rpKKLcUnRuK for <buildroot@buildroot.org>;
- Fri, 10 Jan 2025 17:43:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AzLrRpFx6qAA for <buildroot@buildroot.org>;
+ Fri, 10 Jan 2025 17:50:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 051EB408E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26F52610A6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 051EB408E8
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 17:43:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 26F52610A6
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 17:50:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC41C842C6; Fri, 10 Jan 2025 17:43:28 +0000 (UTC)
+ id 1F8098408C; Fri, 10 Jan 2025 17:50:48 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 10 Jan 2025 18:39:46 +0100
+Date: Fri, 10 Jan 2025 18:49:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d81b579d990a65689c09c6ae416e6f2402481b00
-X-Git-Newrev: cc2866ccec465623cf6deadc641b879fc61c561b
+X-Git-Oldrev: cc2866ccec465623cf6deadc641b879fc61c561b
+X-Git-Newrev: 5d2f3737a1e52d140bd412bf01241eecf5cff994
 X-Patchwork-Hint: ignore
-Message-Id: <20250110174328.DC41C842C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 5.{4, 10,
- 15}.x / 6.{1, 6, 12}.x series
+Message-Id: <20250110175048.1F8098408C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gpsd: python support needs pyserial
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,75 +64,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc2866ccec465623cf6deadc641b879fc61c561b
+commit: https://git.buildroot.net/buildroot/commit/?id=5d2f3737a1e52d140bd412bf01241eecf5cff994
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Usually, ubxtool, a python-based tool to drive u-blox devices, connects
+to a gpsd instance and delegates to it the responsibility to write to
+and read from the actual device. This is sane, because a serial device
+can only be opened once, and if gpsd is running, it has that device
+open.
+
+However, in some cases, ubxtool can be used to directly talk to the
+device, to pre-configure it before gpsd runs, or even in the absence of
+gpsd altogether. This is not used very often, except when setting up an
+RTK base, where gpsd is not needed.
+
+In that case, ubxtool will directly talk to the serial device. It uses
+the pyserial python module. Since this is not the traditional way to
+talk to the device, failure to import the module is ignored, and the
+error reporting is deferred until it is actually needed, which is why we
+did not catch the issue earlier. See [1] and [2].
+
+Fixes: f3ef0723cf71 (package/gpsd: enable python support and modules)
+
+[1] https://gitlab.com/gpsd/gpsd/-/blob/release-3.25/clients/ubxtool.py.in#L47
+[2] https://gitlab.com/gpsd/gpsd/-/blob/release-3.25/gps/gps.py.in#L36
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add link to described code portion]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ package/gpsd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 98db89f8ab..aec6da6f7a 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -139,7 +139,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.12.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.12.9" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 6301673e07..05c7e803d3 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,11 +1,11 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  f785fb648a0e0b66a943bb3228a4b6ed62c90b985cd1ebf69da5d38e589da0cf  linux-6.12.7.tar.xz
--sha256  283ff410e3f352ceed161ae30c0020301326059db03e86efcb384d46ac5840e2  linux-6.6.68.tar.xz
--sha256  e892c0b380100b7e6249060282ad07fbded092f0a2ca1d647243d0fbe9ce6e50  linux-6.1.122.tar.xz
-+sha256  87be0360df0931b340d2bac35161a548070fbc3a8c352c49e21e96666c26aeb4  linux-6.12.9.tar.xz
-+sha256  84d23ee07fb26febbcb6d1295ba15efdc67ac382b4137b2c8853146c10fd2f97  linux-6.6.70.tar.xz
-+sha256  ff4ef6d5cc626faa81fc6da7b5270de064924c919be460f114e6ad8cb9589827  linux-6.1.124.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  8fd8bbc80e7aae30aaca3b40576b283010b5e84e70f6fea1573589155ce8a9d0  linux-5.15.175.tar.xz
--sha256  fda44589a438dff8c718082e9a48843b15e5eb82f6cc2f98d48f48226063bef0  linux-5.10.232.tar.xz
--sha256  876fbae303723bcf9e01ab57b1a0a7d38045aacd481ff865dccc2cc89f591afe  linux-5.4.288.tar.xz
-+sha256  a84ab5328c8a5a0e5c4a39a06b07479a7769c73af49a4c9ce59eeb644829d3b1  linux-5.15.176.tar.xz
-+sha256  239e57280f8c9159187e383d7b730d29f5cc8e1b30be218f004e0c90d1137f52  linux-5.10.233.tar.xz
-+sha256  1e3e5fc052c8e15f8eaa37d30bf4f0b3eef7430dd234d9fed0d0005852a06d10  linux-5.4.289.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7878872f37..b0b0e73e66 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -428,12 +428,12 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "5.4.288"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.232"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.175"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.122"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.68"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.7"	if BR2_KERNEL_HEADERS_6_12
-+	default "5.4.289"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.233"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.176"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.124"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.70"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.9"	if BR2_KERNEL_HEADERS_6_12
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index 92a124b8ac..fa4dc7a814 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -238,6 +238,7 @@ config BR2_PACKAGE_GPSD_PYTHON
+ 	bool "build Python support and modules"
+ 	depends on BR2_USE_WCHAR # python3
+ 	select BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_SERIAL # runtime
+ 	help
+ 	  Python libraries and tools for the gpsd service daemon
+ 	  including gpsfake test harness.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
