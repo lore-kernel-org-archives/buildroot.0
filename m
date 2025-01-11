@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC765E7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:23:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51C2DE7719C
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:23:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A28E96112D;
-	Sat, 11 Jan 2025 16:23:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C8AE60F74;
+	Sat, 11 Jan 2025 16:23:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g0ildD6D3SoG; Sat, 11 Jan 2025 16:23:26 +0000 (UTC)
+ id T5JkOxi-mbbB; Sat, 11 Jan 2025 16:23:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D451D610FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C10296115F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D451D610FD;
-	Sat, 11 Jan 2025 16:23:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D6C4E940
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C10296115F;
+	Sat, 11 Jan 2025 16:23:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 04B3E942
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 97DB64000B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 87B0160AAD
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id abgY4fWNvfI9 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C5Rr4Uz0h0Jr for <buildroot@buildroot.org>;
  Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E4A5400F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B319360AAE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E4A5400F9
+ by smtp3.osuosl.org (Postfix) with ESMTP id B319360AAE
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 67D6A82592; Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
+ id AE69F7FE21; Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 17:15:06 +0100
+Date: Sat, 11 Jan 2025 17:20:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 074c6cc575c1a3bba1a487b7d6e310a5405874dd
-X-Git-Newrev: 178130bbad97c0b2b6665557f6345f5a86e0e08d
+X-Git-Oldrev: 67f16fae0c26ffcddace7ce9db0fb98f4dc44878
+X-Git-Newrev: 979f9cdff0be3f7e56e207dc200ae17288239766
 X-Patchwork-Hint: ignore
-Message-Id: <20250111162314.67D6A82592@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-marshmallow: bump to
- version 3.25.0
+Message-Id: <20250111162314.AE69F7FE21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-modbus-tk: bump to version
+ 1.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,45 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=178130bbad97c0b2b6665557f6345f5a86e0e08d
+commit: https://git.buildroot.net/buildroot/commit/?id=979f9cdff0be3f7e56e207dc200ae17288239766
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-marshmallow/python-marshmallow.hash | 4 ++--
- package/python-marshmallow/python-marshmallow.mk   | 4 ++--
+ package/python-modbus-tk/python-modbus-tk.hash | 4 ++--
+ package/python-modbus-tk/python-modbus-tk.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-marshmallow/python-marshmallow.hash b/package/python-marshmallow/python-marshmallow.hash
-index 8a6a3cf85b..f7a158a830 100644
---- a/package/python-marshmallow/python-marshmallow.hash
-+++ b/package/python-marshmallow/python-marshmallow.hash
+diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
+index c7f4ac2dd4..c60733b02d 100644
+--- a/package/python-modbus-tk/python-modbus-tk.hash
++++ b/package/python-modbus-tk/python-modbus-tk.hash
 @@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/marshmallow/json
--md5  45f26839a3486cac60f6aa043e5035dd  marshmallow-3.23.1.tar.gz
--sha256  3a8dfda6edd8dcdbf216c0ede1d1e78d230a6dc9c5a088f58c4083b974a0d468  marshmallow-3.23.1.tar.gz
-+md5  881654a8819a7f8ae8f91563cf378b7d  marshmallow-3.25.0.tar.gz
-+sha256  5ba94a4eb68894ad6761a505eb225daf7e5cb7b4c32af62d4a45e9d42665bc31  marshmallow-3.25.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/modbus-tk/json
+-md5  2e66c361d3e4591a19be1259ef50fdf7  modbus_tk-1.1.3.tar.gz
+-sha256  690fa7bb86ea978992465d2d61c8b5acc639ce0e8b833a0aa96d4dd172c5644a  modbus_tk-1.1.3.tar.gz
++md5  03873278a842535c9069cc0dd352f520  modbus_tk-1.1.4.tar.gz
++sha256  68977766eb10469973dd56a2814bd981b85dd180b79043248786d88008f2593b  modbus_tk-1.1.4.tar.gz
  # Locally computed sha256 checksums
- sha256  906b5d9051e426144cb173ad911667b8ebd05a9c584c2c26c135b32a3ed12001  LICENSE
- sha256  f982e6fd97ba00973e94605b972ff04894b22c4fa937b868828b32ae8f0a7c2e  docs/license.rst
-diff --git a/package/python-marshmallow/python-marshmallow.mk b/package/python-marshmallow/python-marshmallow.mk
-index 2c2e7f1ee3..d6a91bae72 100644
---- a/package/python-marshmallow/python-marshmallow.mk
-+++ b/package/python-marshmallow/python-marshmallow.mk
+ sha256  3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
+ sha256  aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
+diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
+index d8552e57a6..2e15354b04 100644
+--- a/package/python-modbus-tk/python-modbus-tk.mk
++++ b/package/python-modbus-tk/python-modbus-tk.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MARSHMALLOW_VERSION = 3.23.1
-+PYTHON_MARSHMALLOW_VERSION = 3.25.0
- PYTHON_MARSHMALLOW_SOURCE = marshmallow-$(PYTHON_MARSHMALLOW_VERSION).tar.gz
--PYTHON_MARSHMALLOW_SITE = https://files.pythonhosted.org/packages/6d/30/14d8609f65c8aeddddd3181c06d2c9582da6278f063b27c910bbf9903441
-+PYTHON_MARSHMALLOW_SITE = https://files.pythonhosted.org/packages/bd/5c/cbfa41491d6c83b36471f2a2f75602349d20a8f88afd94f83c1e68bbc298
- PYTHON_MARSHMALLOW_SETUP_TYPE = flit
- PYTHON_MARSHMALLOW_LICENSE = MIT
- PYTHON_MARSHMALLOW_LICENSE_FILES = LICENSE docs/license.rst
+-PYTHON_MODBUS_TK_VERSION = 1.1.3
++PYTHON_MODBUS_TK_VERSION = 1.1.4
+ PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
+-PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/8d/9f/5963e30dba160dbc646b76c59ca8136709c7fe9002bbaaa3cf1e1bb0404b
++PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/78/40/9ae5c428b1867bfccd3c184dcf18cfef04e3d9c5b9dc22b8e9eb8d480651
+ PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
+ PYTHON_MODBUS_TK_LICENSE = LGPL-2.1+
+ PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
