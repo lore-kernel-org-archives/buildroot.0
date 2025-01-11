@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED839E7719D
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 17:28:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 926AAE7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 17:28:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B64CC83829;
-	Sat, 11 Jan 2025 17:28:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B9EC410CA;
+	Sat, 11 Jan 2025 17:28:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UgG5RZa1VoUu; Sat, 11 Jan 2025 17:28:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DXPBxJlVXD3I; Sat, 11 Jan 2025 17:28:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C39098385D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 270BE407C9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C39098385D;
-	Sat, 11 Jan 2025 17:28:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 270BE407C9;
+	Sat, 11 Jan 2025 17:28:46 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 130C2950
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FC5E950
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B514260A4D
+ by smtp3.osuosl.org (Postfix) with ESMTP id D18A960A5C
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ay9eDHCa7ZEj for <buildroot@buildroot.org>;
+ id hUHbh7i0ksak for <buildroot@buildroot.org>;
  Sat, 11 Jan 2025 17:28:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FB3F608FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1BA3606E9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8FB3F608FA
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1BA3606E9
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8B24B7F8B7; Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
+ id 9E01880FA4; Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 18:04:02 +0100
+Date: Sat, 11 Jan 2025 18:04:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 487bd884cda8aeb315b65cd47a43493cc3a6ccd7
-X-Git-Newrev: 7bdfa27d20dbeddfac53ea6823df8851a94f96ba
+X-Git-Oldrev: 7bdfa27d20dbeddfac53ea6823df8851a94f96ba
+X-Git-Newrev: 34f8413fd8d6692e825978783800bb4555e8df22
 X-Patchwork-Hint: ignore
-Message-Id: <20250111172826.8B24B7F8B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-psutil: bump to version
- 6.1.1
+Message-Id: <20250111172826.9E01880FA4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyaml: bump to version
+ 25.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bdfa27d20dbeddfac53ea6823df8851a94f96ba
+commit: https://git.buildroot.net/buildroot/commit/?id=34f8413fd8d6692e825978783800bb4555e8df22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-psutil/python-psutil.hash | 4 ++--
- package/python-psutil/python-psutil.mk   | 4 ++--
+ package/python-pyaml/python-pyaml.hash | 4 ++--
+ package/python-pyaml/python-pyaml.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
-index 0b7c3f6bed..3432ac6506 100644
---- a/package/python-psutil/python-psutil.hash
-+++ b/package/python-psutil/python-psutil.hash
+diff --git a/package/python-pyaml/python-pyaml.hash b/package/python-pyaml/python-pyaml.hash
+index 06e99448d0..29863ed502 100644
+--- a/package/python-pyaml/python-pyaml.hash
++++ b/package/python-pyaml/python-pyaml.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/psutil/json
--md5  2baae02411c42c185e129c3f26030079  psutil-6.1.0.tar.gz
--sha256  353815f59a7f64cdaca1c0307ee13558a0512f6db064e92fe833784f08539c7a  psutil-6.1.0.tar.gz
-+md5  d06db97a604ddeac1d42694eac4390db  psutil-6.1.1.tar.gz
-+sha256  cf8496728c18f2d0b45198f06895be52f36611711746b7f30c464b422b50e2f5  psutil-6.1.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pyaml/json
+-md5  1301f53ad68626ac295c2663315b1804  pyaml-24.9.0.tar.gz
+-sha256  e78dee8b0d4fed56bb9fa11a8a7858e6fade1ec70a9a122cee6736efac3e69b5  pyaml-24.9.0.tar.gz
++md5  ce3505d0331fdfc05c98f0a514308063  pyaml-25.1.0.tar.gz
++sha256  33a93ac49218f57e020b81e280d2706cea554ac5a76445ac79add760d019c709  pyaml-25.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  b89c063b3786e28e0c0a38f1931db61fed35e69dd2a2966fbecffee0f46c8d10  LICENSE
-diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-index 73f54231b6..ff90126a8f 100644
---- a/package/python-psutil/python-psutil.mk
-+++ b/package/python-psutil/python-psutil.mk
+ sha256  dc1342cc1cb49e24c1c9e8a495acc9625ce2e04146c116279af0ab0949cd829c  COPYING
+diff --git a/package/python-pyaml/python-pyaml.mk b/package/python-pyaml/python-pyaml.mk
+index e908aa089a..06e3871b5a 100644
+--- a/package/python-pyaml/python-pyaml.mk
++++ b/package/python-pyaml/python-pyaml.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PSUTIL_VERSION = 6.1.0
-+PYTHON_PSUTIL_VERSION = 6.1.1
- PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
--PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/26/10/2a30b13c61e7cf937f4adf90710776b7918ed0a9c434e2c38224732af310
-+PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/1f/5a/07871137bb752428aa4b659f910b399ba6f291156bdea939be3e96cae7cb
- PYTHON_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_PSUTIL_LICENSE = BSD-3-Clause
- PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+-PYTHON_PYAML_VERSION = 24.9.0
++PYTHON_PYAML_VERSION = 25.1.0
+ PYTHON_PYAML_SOURCE = pyaml-$(PYTHON_PYAML_VERSION).tar.gz
+-PYTHON_PYAML_SITE = https://files.pythonhosted.org/packages/fd/a6/5b51160ff7ce60b0c60ec825359c0e818b0ce4a2504fa3dd1470f42f9b10
++PYTHON_PYAML_SITE = https://files.pythonhosted.org/packages/f4/06/04b9c1907c13dc81729a9c6b4f42eab47baab7a8738ed5d2683eac215ad0
+ PYTHON_PYAML_SETUP_TYPE = setuptools
+ PYTHON_PYAML_LICENSE = WTFPL
+ PYTHON_PYAML_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
