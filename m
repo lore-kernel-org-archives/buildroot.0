@@ -1,53 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E2F2E7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 17:56:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA3C2E7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 17:56:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B846606CF;
-	Sat, 11 Jan 2025 17:56:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 705E680D26;
+	Sat, 11 Jan 2025 17:56:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4aPvNjdoaFBs; Sat, 11 Jan 2025 17:55:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6pECosdjsrPK; Sat, 11 Jan 2025 17:56:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F67460708
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 977C783A6C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F67460708;
-	Sat, 11 Jan 2025 17:55:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B1289940
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:55:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 977C783A6C;
+	Sat, 11 Jan 2025 17:56:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D0CE5940
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:56:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 11CC360779
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:55:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE81F40F48
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:56:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FrW_gTAsmbyt for <buildroot@buildroot.org>;
- Sat, 11 Jan 2025 17:55:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3484A606F4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3484A606F4
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:55:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2F496802FA; Sat, 11 Jan 2025 17:55:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HCEC4AX80808 for <buildroot@buildroot.org>;
+ Sat, 11 Jan 2025 17:56:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C5E82410C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5E82410C8
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C5E82410C8
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:56:09 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id C3A33200401;
+ Sat, 11 Jan 2025 18:56:05 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:44356])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 11 Jan 2025 18:56:05 +0100
+MIME-Version: 1.0
+Date: Sat, 11 Jan 2025 18:56:05 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 18:39:00 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e4292ba79d371611b74581a65862499893232e3c
-X-Git-Newrev: cf8a1785bbb1c5f328091902ae473d20d4a15548
-X-Patchwork-Hint: ignore
-Message-Id: <20250111175530.2F496802FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pydantic: bump to version
- 2.10.5
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250111152919.2840946-1-james.hilliard1@gmail.com>
+References: <20250111152919.2840946-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <a14f020a6a6169905dee2332ccd8f46b@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1736618166;
+ bh=ijRJCY21UzASL/58X5oASMqzyzoHFhBOHV2aA3bEhJE=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Rj8SKRtdkOAQdS0rqSf35eMKTDB5zeXa9qVxk3+ZNZ4eWV+GysT14oNyFVr448Y67
+ XS3z8TfjVBFUBFWUrGtSlpRMx0FD9MMTjDFUS/mgxY2tVw0LNCB0Zs6zbqoLke6+Nt
+ LByGsdgpNQs6rKeNgBe27Yq+PHSK+RYuLiaGDlXEVCf1g8HHuqtULospLdf3YAS3r0
+ OoP715AT+IegydVw/8T2ocdWyObTquuuYxD5Zgh9lnIh5brXcd0ZZejq2L+LxItGOa
+ crKD4PhG92Ga0PCY5HUtvBskyGHrzjdmmhYVKC6ElccFJyq7TSRBnfBjoC79nhQEqH
+ FvVGE9TMIv6CQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Rj8SKRtd
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-pycares: bump to version
+ 4.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +84,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf8a1785bbb1c5f328091902ae473d20d4a15548
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/01/2025 16:29, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-pydantic/python-pydantic.hash | 4 ++--
- package/python-pydantic/python-pydantic.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
-index 635ae80dc2..2c814b2f40 100644
---- a/package/python-pydantic/python-pydantic.hash
-+++ b/package/python-pydantic/python-pydantic.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pydantic/json
--md5  06f2a83ecaa1734954af07697bcc5554  pydantic-2.10.4.tar.gz
--sha256  82f12e9723da6de4fe2ba888b5971157b3be7ad914267dea8f05f82b28254f06  pydantic-2.10.4.tar.gz
-+md5  be725b089172d10a9c95605fed30cdb1  pydantic-2.10.5.tar.gz
-+sha256  278b38dbbaec562011d659ee05f63346951b3a248a6f3642e1bc68894ea2b4ff  pydantic-2.10.5.tar.gz
- # Locally computed sha256 checksums
- sha256  a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3  LICENSE
-diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
-index 622b297586..8b9da3d45c 100644
---- a/package/python-pydantic/python-pydantic.mk
-+++ b/package/python-pydantic/python-pydantic.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYDANTIC_VERSION = 2.10.4
-+PYTHON_PYDANTIC_VERSION = 2.10.5
- PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
--PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/70/7e/fb60e6fee04d0ef8f15e4e01ff187a196fa976eb0f0ab524af4599e5754c
-+PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/6a/c7/ca334c2ef6f2e046b1144fe4bb2a5da8a4c574e7f2ebf7e16b34a6a2fa92
- PYTHON_PYDANTIC_SETUP_TYPE = hatch
- PYTHON_PYDANTIC_LICENSE = MIT
- PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
