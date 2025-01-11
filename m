@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FE8EE7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:43:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45EA6E7719C
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:43:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F2F63606CE;
-	Sat, 11 Jan 2025 16:43:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3EE0403D3;
+	Sat, 11 Jan 2025 16:43:35 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6UvkTCUJ_gOr; Sat, 11 Jan 2025 16:43:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC0984047E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC0984047E;
+	Sat, 11 Jan 2025 16:43:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 58736950
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:43:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4714C60819
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:43:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4VcESApdiUef; Sat, 11 Jan 2025 16:43:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1696B60780
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1696B60780;
-	Sat, 11 Jan 2025 16:43:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 270CA950
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:43:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 15A5D811BF
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:43:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KKmowAeLYVSV for <buildroot@buildroot.org>;
+ id ECN4AaRMviEH for <buildroot@buildroot.org>;
  Sat, 11 Jan 2025 16:43:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B9B28111C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6ABB0606CE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4B9B28111C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6ABB0606CE
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:43:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4159984692; Sat, 11 Jan 2025 16:43:29 +0000 (UTC)
+ id 63D1184692; Sat, 11 Jan 2025 16:43:29 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 17:29:51 +0100
+Date: Sat, 11 Jan 2025 17:30:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 979f9cdff0be3f7e56e207dc200ae17288239766
-X-Git-Newrev: 6bfc91ff4a0c32c150efea2f7c2d9d024e8699ff
+X-Git-Oldrev: df8012b565a46759ce53168385ab6b010a4349ba
+X-Git-Newrev: ea6fb2554bd0607b94b801471e520829f006ee9c
 X-Patchwork-Hint: ignore
-Message-Id: <20250111164329.4159984692@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dataproperty: bump to
- version 1.1.0
+Message-Id: <20250111164329.63D1184692@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-gitdb2: bump to version
+ 4.0.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,54 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bfc91ff4a0c32c150efea2f7c2d9d024e8699ff
+commit: https://git.buildroot.net/buildroot/commit/?id=ea6fb2554bd0607b94b801471e520829f006ee9c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add new host-python-setuptools-scm build dependency.
-
-License hash changed due to year update:
-https://github.com/thombashi/DataProperty/commit/ef109407122cfe4784053e58bb7e25d2e75e2032
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-dataproperty/python-dataproperty.hash | 6 +++---
- package/python-dataproperty/python-dataproperty.mk   | 7 ++++---
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-gitdb2/python-gitdb2.hash | 4 ++--
+ package/python-gitdb2/python-gitdb2.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index ee5644a7ff..49ce188898 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
+diff --git a/package/python-gitdb2/python-gitdb2.hash b/package/python-gitdb2/python-gitdb2.hash
+index c70c1aade9..74a7c6ead8 100644
+--- a/package/python-gitdb2/python-gitdb2.hash
++++ b/package/python-gitdb2/python-gitdb2.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dataproperty/json
--md5  aca50cd5f543b7831d8a48ab1c02a152  DataProperty-1.0.1.tar.gz
--sha256  723e5729fa6e885e127a771a983ee1e0e34bb141aca4ffe1f0bfa7cde34650a4  DataProperty-1.0.1.tar.gz
-+md5  b10a82d8c35a1e69f58b921aa7d7f063  dataproperty-1.1.0.tar.gz
-+sha256  b038437a4097d1a1c497695c3586ea34bea67fdd35372b9a50f30bf044d77d04  dataproperty-1.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/gitdb/json
+-md5  6071755f2899cd4882b83a070b045bac  gitdb-4.0.11.tar.gz
+-sha256  bf5421126136d6d0af55bc1e7c1af1c397a34f5b7bd79e776cd3e89785c2b04b  gitdb-4.0.11.tar.gz
++md5  13bf7fcb906ead5236d1edc6e6656924  gitdb-4.0.12.tar.gz
++sha256  5ef71f855d191a3326fcfbc0d5da835f26b13fbcba60c32c21091c349ffdb571  gitdb-4.0.12.tar.gz
  # Locally computed sha256 checksums
--sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-+sha256  36289157e371aaae5b5d3ba4be87359ed07548cdc7a9f19ff61dc67cfc536a9c  LICENSE
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index 6cac4f27e5..060de7cab5 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
-@@ -4,11 +4,12 @@
+ sha256  efd29f596a08e8857e68e7694a50bcda72839792da7c3f041bcbff5f18009239  LICENSE
+diff --git a/package/python-gitdb2/python-gitdb2.mk b/package/python-gitdb2/python-gitdb2.mk
+index 424f37f8f4..55ec0fc6d5 100644
+--- a/package/python-gitdb2/python-gitdb2.mk
++++ b/package/python-gitdb2/python-gitdb2.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DATAPROPERTY_VERSION = 1.0.1
--PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/48/e2/31ffb67d2a9ab4ff70b106e08ad01a3e7696f8d409457042d1eb18244f82
-+PYTHON_DATAPROPERTY_VERSION = 1.1.0
-+PYTHON_DATAPROPERTY_SOURCE = dataproperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
-+PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/0b/81/8c8b64ae873cb9014815214c07b63b12e3b18835780fb342223cfe3fe7d8
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
-+PYTHON_DATAPROPERTY_DEPENDENCIES = host-python-setuptools-scm
- 
- $(eval $(python-package))
+-PYTHON_GITDB2_VERSION = 4.0.11
++PYTHON_GITDB2_VERSION = 4.0.12
+ PYTHON_GITDB2_SOURCE = gitdb-$(PYTHON_GITDB2_VERSION).tar.gz
+-PYTHON_GITDB2_SITE = https://files.pythonhosted.org/packages/19/0d/bbb5b5ee188dec84647a4664f3e11b06ade2bde568dbd489d9d64adef8ed
++PYTHON_GITDB2_SITE = https://files.pythonhosted.org/packages/72/94/63b0fc47eb32792c7ba1fe1b694daec9a63620db1e313033d18140c2320a
+ PYTHON_GITDB2_SETUP_TYPE = setuptools
+ PYTHON_GITDB2_LICENSE = BSD-3-Clause
+ PYTHON_GITDB2_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
