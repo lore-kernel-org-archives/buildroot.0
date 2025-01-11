@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAB25E7719C
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 17:28:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED839E7719D
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 17:28:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C11B60708;
-	Sat, 11 Jan 2025 17:28:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B64CC83829;
+	Sat, 11 Jan 2025 17:28:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MTYGO7eUyygg; Sat, 11 Jan 2025 17:28:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UgG5RZa1VoUu; Sat, 11 Jan 2025 17:28:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A01D660744
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C39098385D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A01D660744;
-	Sat, 11 Jan 2025 17:28:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C39098385D;
+	Sat, 11 Jan 2025 17:28:43 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 05A0B942
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 130C2950
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9E75F608D2
+ by smtp3.osuosl.org (Postfix) with ESMTP id B514260A4D
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6rJx78EFfG9E for <buildroot@buildroot.org>;
- Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
+ id Ay9eDHCa7ZEj for <buildroot@buildroot.org>;
+ Sat, 11 Jan 2025 17:28:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D11C608F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FB3F608FA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7D11C608F7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8FB3F608FA
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 79C3180FA4; Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
+ id 8B24B7F8B7; Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 18:03:58 +0100
+Date: Sat, 11 Jan 2025 18:04:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 02bcbe6384cc7d7c54b56a995a861125be47352c
-X-Git-Newrev: 487bd884cda8aeb315b65cd47a43493cc3a6ccd7
+X-Git-Oldrev: 487bd884cda8aeb315b65cd47a43493cc3a6ccd7
+X-Git-Newrev: 7bdfa27d20dbeddfac53ea6823df8851a94f96ba
 X-Patchwork-Hint: ignore
-Message-Id: <20250111172826.79C3180FA4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-propcache: bump to version
- 0.2.1
+Message-Id: <20250111172826.8B24B7F8B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-psutil: bump to version
+ 6.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=487bd884cda8aeb315b65cd47a43493cc3a6ccd7
+commit: https://git.buildroot.net/buildroot/commit/?id=7bdfa27d20dbeddfac53ea6823df8851a94f96ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-propcache/python-propcache.hash | 4 ++--
- package/python-propcache/python-propcache.mk   | 4 ++--
+ package/python-psutil/python-psutil.hash | 4 ++--
+ package/python-psutil/python-psutil.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-propcache/python-propcache.hash b/package/python-propcache/python-propcache.hash
-index 56a491433f..1bda1e96fb 100644
---- a/package/python-propcache/python-propcache.hash
-+++ b/package/python-propcache/python-propcache.hash
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index 0b7c3f6bed..3432ac6506 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/propcache/json
--md5  70b121a9845a0da06eccfbc42ff74335  propcache-0.2.0.tar.gz
--sha256  df81779732feb9d01e5d513fad0122efb3d53bbc75f61b2a4f29a020bc985e70  propcache-0.2.0.tar.gz
-+md5  c642caac1415818205011277008142ea  propcache-0.2.1.tar.gz
-+sha256  3f77ce728b19cb537714499928fe800c3dda29e8d9428778fc7c186da4c09a64  propcache-0.2.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/psutil/json
+-md5  2baae02411c42c185e129c3f26030079  psutil-6.1.0.tar.gz
+-sha256  353815f59a7f64cdaca1c0307ee13558a0512f6db064e92fe833784f08539c7a  psutil-6.1.0.tar.gz
++md5  d06db97a604ddeac1d42694eac4390db  psutil-6.1.1.tar.gz
++sha256  cf8496728c18f2d0b45198f06895be52f36611711746b7f30c464b422b50e2f5  psutil-6.1.1.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-propcache/python-propcache.mk b/package/python-propcache/python-propcache.mk
-index 37ceec731d..92a31a19af 100644
---- a/package/python-propcache/python-propcache.mk
-+++ b/package/python-propcache/python-propcache.mk
+ sha256  b89c063b3786e28e0c0a38f1931db61fed35e69dd2a2966fbecffee0f46c8d10  LICENSE
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 73f54231b6..ff90126a8f 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PROPCACHE_VERSION = 0.2.0
-+PYTHON_PROPCACHE_VERSION = 0.2.1
- PYTHON_PROPCACHE_SOURCE = propcache-$(PYTHON_PROPCACHE_VERSION).tar.gz
--PYTHON_PROPCACHE_SITE = https://files.pythonhosted.org/packages/a9/4d/5e5a60b78dbc1d464f8a7bbaeb30957257afdc8512cbb9dfd5659304f5cd
-+PYTHON_PROPCACHE_SITE = https://files.pythonhosted.org/packages/20/c8/2a13f78d82211490855b2fb303b6721348d0787fdd9a12ac46d99d3acde1
- PYTHON_PROPCACHE_SETUP_TYPE = setuptools
- PYTHON_PROPCACHE_LICENSE = Apache-2.0
- PYTHON_PROPCACHE_LICENSE_FILES = LICENSE
+-PYTHON_PSUTIL_VERSION = 6.1.0
++PYTHON_PSUTIL_VERSION = 6.1.1
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/26/10/2a30b13c61e7cf937f4adf90710776b7918ed0a9c434e2c38224732af310
++PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/1f/5a/07871137bb752428aa4b659f910b399ba6f291156bdea939be3e96cae7cb
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
