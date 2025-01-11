@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58920C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:54:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78A87C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:54:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D88A75013E;
-	Fri, 28 Feb 2025 16:54:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2822A703C5;
+	Fri, 28 Feb 2025 16:54:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8j-vfItYecns; Fri, 28 Feb 2025 16:54:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2I8f_5L54Rcn; Fri, 28 Feb 2025 16:54:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D14764F062
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E33F703CA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D14764F062;
-	Fri, 28 Feb 2025 16:54:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E33F703CA;
+	Fri, 28 Feb 2025 16:54:52 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10BEB1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:37:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 15D921DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:37:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 34BDD42950
+ by smtp4.osuosl.org (Postfix) with ESMTP id C3F8244202
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A9QS4IcYv-cM for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:35 +0000 (UTC)
+ id TSwbrL7cPh-8 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0646142542
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 929D542D2E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0646142542
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 929D542D2E
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 01AAE87A8B; Fri, 28 Feb 2025 16:30:05 +0000 (UTC)
+ id 8EBF086A52; Fri, 28 Feb 2025 16:30:04 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 18:04:06 +0100
+Date: Sat, 11 Jan 2025 18:03:43 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7bdfa27d20dbeddfac53ea6823df8851a94f96ba
-X-Git-Newrev: 34f8413fd8d6692e825978783800bb4555e8df22
+X-Git-Oldrev: 9166c0fc903fd52c160308d1bd0273c0c7b11b73
+X-Git-Newrev: c140fd98817c4d594805378f5aef9d41b8cb7582
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163005.01AAE87A8B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pyaml: bump to
- version 25.1.0
+Message-Id: <20250228163004.8EBF086A52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pathvalidate:
+ bump to version 3.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34f8413fd8d6692e825978783800bb4555e8df22
+commit: https://git.buildroot.net/buildroot/commit/?id=c140fd98817c4d594805378f5aef9d41b8cb7582
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+License hash changed due to year update:
+https://github.com/thombashi/pathvalidate/commit/e56c54b09815b6b2b501ae9762215d065b99e01c
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pyaml/python-pyaml.hash | 4 ++--
- package/python-pyaml/python-pyaml.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pathvalidate/python-pathvalidate.hash | 6 +++---
+ package/python-pathvalidate/python-pathvalidate.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyaml/python-pyaml.hash b/package/python-pyaml/python-pyaml.hash
-index 06e99448d0..29863ed502 100644
---- a/package/python-pyaml/python-pyaml.hash
-+++ b/package/python-pyaml/python-pyaml.hash
+diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
+index dc6a1999e0..9793217fcb 100644
+--- a/package/python-pathvalidate/python-pathvalidate.hash
++++ b/package/python-pathvalidate/python-pathvalidate.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyaml/json
--md5  1301f53ad68626ac295c2663315b1804  pyaml-24.9.0.tar.gz
--sha256  e78dee8b0d4fed56bb9fa11a8a7858e6fade1ec70a9a122cee6736efac3e69b5  pyaml-24.9.0.tar.gz
-+md5  ce3505d0331fdfc05c98f0a514308063  pyaml-25.1.0.tar.gz
-+sha256  33a93ac49218f57e020b81e280d2706cea554ac5a76445ac79add760d019c709  pyaml-25.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pathvalidate/json
+-md5  cc99f63c6f835eae4fe8643c79b8ca68  pathvalidate-3.2.1.tar.gz
+-sha256  f5d07b1e2374187040612a1fcd2bcb2919f8db180df254c9581bb90bf903377d  pathvalidate-3.2.1.tar.gz
++md5  9b6599a16c5e3ea7b6dcad5ca7dc337e  pathvalidate-3.2.3.tar.gz
++sha256  59b5b9278e30382d6d213497623043ebe63f10e29055be4419a9c04c721739cb  pathvalidate-3.2.3.tar.gz
  # Locally computed sha256 checksums
- sha256  dc1342cc1cb49e24c1c9e8a495acc9625ce2e04146c116279af0ab0949cd829c  COPYING
-diff --git a/package/python-pyaml/python-pyaml.mk b/package/python-pyaml/python-pyaml.mk
-index e908aa089a..06e3871b5a 100644
---- a/package/python-pyaml/python-pyaml.mk
-+++ b/package/python-pyaml/python-pyaml.mk
+-sha256  36289157e371aaae5b5d3ba4be87359ed07548cdc7a9f19ff61dc67cfc536a9c  LICENSE
++sha256  130a35b917df1951aefbf366120491d5124045a87ded123f20ded21521f4e3a2  LICENSE
+diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
+index f5eb257cc1..f666e07fb8 100644
+--- a/package/python-pathvalidate/python-pathvalidate.mk
++++ b/package/python-pathvalidate/python-pathvalidate.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYAML_VERSION = 24.9.0
-+PYTHON_PYAML_VERSION = 25.1.0
- PYTHON_PYAML_SOURCE = pyaml-$(PYTHON_PYAML_VERSION).tar.gz
--PYTHON_PYAML_SITE = https://files.pythonhosted.org/packages/fd/a6/5b51160ff7ce60b0c60ec825359c0e818b0ce4a2504fa3dd1470f42f9b10
-+PYTHON_PYAML_SITE = https://files.pythonhosted.org/packages/f4/06/04b9c1907c13dc81729a9c6b4f42eab47baab7a8738ed5d2683eac215ad0
- PYTHON_PYAML_SETUP_TYPE = setuptools
- PYTHON_PYAML_LICENSE = WTFPL
- PYTHON_PYAML_LICENSE_FILES = COPYING
+-PYTHON_PATHVALIDATE_VERSION = 3.2.1
++PYTHON_PATHVALIDATE_VERSION = 3.2.3
+ PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
+-PYTHON_PATHVALIDATE_SITE = https://files.pythonhosted.org/packages/b4/8c/8713d8dcd8e357b9358695b441ee974580a8addfaea4f01437df07577052
++PYTHON_PATHVALIDATE_SITE = https://files.pythonhosted.org/packages/92/87/c7a2f51cc62df0495acb0ed2533a7c74cc895e569a1b020ee5f6e9fa4e21
+ PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
+ PYTHON_PATHVALIDATE_LICENSE = MIT
+ PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
