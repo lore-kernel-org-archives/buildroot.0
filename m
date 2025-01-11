@@ -4,50 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8584AE7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 17:28:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08176E7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 17:29:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59B7F407C9;
-	Sat, 11 Jan 2025 17:28:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C8E12409FB;
+	Sat, 11 Jan 2025 17:29:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xZ26wUbpgI3O; Sat, 11 Jan 2025 17:28:53 +0000 (UTC)
+ id vmk1OfGxtWtj; Sat, 11 Jan 2025 17:29:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1012440BDF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C22E440DB3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1012440BDF;
-	Sat, 11 Jan 2025 17:28:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C22E440DB3;
+	Sat, 11 Jan 2025 17:29:28 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1226B950
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9D9EF950
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:29:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 03733608FA
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B73A608D2
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:29:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8IKKZVQ00qX0 for <buildroot@buildroot.org>;
- Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3922B60744
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3922B60744
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2CD7984496; Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
+ id 4tSRZC_wBfI1 for <buildroot@buildroot.org>;
+ Sat, 11 Jan 2025 17:29:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DE8F6606ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE8F6606ED
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DE8F6606ED
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:29:25 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 022E413F8CE;
+ Sat, 11 Jan 2025 18:29:20 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:39466])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 11 Jan 2025 18:29:20 +0100
+MIME-Version: 1.0
+Date: Sat, 11 Jan 2025 18:29:20 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 18:03:43 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9166c0fc903fd52c160308d1bd0273c0c7b11b73
-X-Git-Newrev: c140fd98817c4d594805378f5aef9d41b8cb7582
-X-Patchwork-Hint: ignore
-Message-Id: <20250111172826.2CD7984496@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pathvalidate: bump to
- version 3.2.3
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Esben Haabendal <esben@haabendal.dk>
+In-Reply-To: <20250111125216.2449244-1-james.hilliard1@gmail.com>
+References: <20250111125216.2449244-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <834181a411b7c1d695a2e93027151990@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1736616563;
+ bh=mhjcabs3Z0z43sNRf8On/hixaequ6w4FCqoAkBnAuY0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=cl7CBRQa6PS0Rej+RbsS8Hzv76QdHRy2GZH/Rx9YQ+UXws/PO3aLTbbwx+SIm9NWE
+ PTyJJD5cGr53YEiGxIU/4ZqQ/dEi4EVQKdjlyzKKOzupGOuj+FURzx3iHhq4ndfW7j
+ Iwq1gYHOJItDxpZNqm/N7belKv9DkayXlF1qOHJzE2ZG8lKFUpUXquskMwdq38nXy9
+ I8ckcyxvvClFWayUueI1LCjIkMSJmpZCflEsmRr7sn7YFcllsjeAkm4UhVFJcPXvi6
+ jRE++LdGNjUjAbtqDL7KvllLSkdU7NKxAHh/i1C3twM/AL7R3r7dHd5NfNrY7C2cj7
+ QKSPx8ofWIqRQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=cl7CBRQa
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-kiwisolver: bump to
+ version 1.4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,54 +83,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c140fd98817c4d594805378f5aef9d41b8cb7582
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/01/2025 13:52, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-License hash changed due to year update:
-https://github.com/thombashi/pathvalidate/commit/e56c54b09815b6b2b501ae9762215d065b99e01c
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-pathvalidate/python-pathvalidate.hash | 6 +++---
- package/python-pathvalidate/python-pathvalidate.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
-index dc6a1999e0..9793217fcb 100644
---- a/package/python-pathvalidate/python-pathvalidate.hash
-+++ b/package/python-pathvalidate/python-pathvalidate.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pathvalidate/json
--md5  cc99f63c6f835eae4fe8643c79b8ca68  pathvalidate-3.2.1.tar.gz
--sha256  f5d07b1e2374187040612a1fcd2bcb2919f8db180df254c9581bb90bf903377d  pathvalidate-3.2.1.tar.gz
-+md5  9b6599a16c5e3ea7b6dcad5ca7dc337e  pathvalidate-3.2.3.tar.gz
-+sha256  59b5b9278e30382d6d213497623043ebe63f10e29055be4419a9c04c721739cb  pathvalidate-3.2.3.tar.gz
- # Locally computed sha256 checksums
--sha256  36289157e371aaae5b5d3ba4be87359ed07548cdc7a9f19ff61dc67cfc536a9c  LICENSE
-+sha256  130a35b917df1951aefbf366120491d5124045a87ded123f20ded21521f4e3a2  LICENSE
-diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
-index f5eb257cc1..f666e07fb8 100644
---- a/package/python-pathvalidate/python-pathvalidate.mk
-+++ b/package/python-pathvalidate/python-pathvalidate.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PATHVALIDATE_VERSION = 3.2.1
-+PYTHON_PATHVALIDATE_VERSION = 3.2.3
- PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
--PYTHON_PATHVALIDATE_SITE = https://files.pythonhosted.org/packages/b4/8c/8713d8dcd8e357b9358695b441ee974580a8addfaea4f01437df07577052
-+PYTHON_PATHVALIDATE_SITE = https://files.pythonhosted.org/packages/92/87/c7a2f51cc62df0495acb0ed2533a7c74cc895e569a1b020ee5f6e9fa4e21
- PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
- PYTHON_PATHVALIDATE_LICENSE = MIT
- PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
