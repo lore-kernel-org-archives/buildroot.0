@@ -1,104 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28B32E7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 06:38:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3877CE7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 06:38:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 60D5A40753;
-	Sat, 11 Jan 2025 06:38:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CA4960A73;
+	Sat, 11 Jan 2025 06:38:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G9i8_QZ0JVvJ; Sat, 11 Jan 2025 06:38:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2VqHrhtZSiEW; Sat, 11 Jan 2025 06:38:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E7364088F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7A3660A94
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E7364088F;
-	Sat, 11 Jan 2025 06:38:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 03F06940
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 06:38:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7A3660A94;
+	Sat, 11 Jan 2025 06:38:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D6AFB950
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 06:38:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E65CF407B0
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 06:38:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B7B4583A5E
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 06:38:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3qw-ekwz_OAK for <buildroot@buildroot.org>;
- Sat, 11 Jan 2025 06:38:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9CGwVeg4XFSH for <buildroot@buildroot.org>;
+ Sat, 11 Jan 2025 06:38:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::631; helo=mail-pl1-x631.google.com;
+ client-ip=2607:f8b0:4864:20::635; helo=mail-pl1-x635.google.com;
  envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 32765404D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32765404D7
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com
- [IPv6:2607:f8b0:4864:20::631])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 32765404D7
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 06:38:01 +0000 (UTC)
-Received: by mail-pl1-x631.google.com with SMTP id
- d9443c01a7336-2161eb95317so46680395ad.1
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 22:38:01 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B170083A62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B170083A62
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com
+ [IPv6:2607:f8b0:4864:20::635])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B170083A62
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 06:38:03 +0000 (UTC)
+Received: by mail-pl1-x635.google.com with SMTP id
+ d9443c01a7336-2166f1e589cso56676055ad.3
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 22:38:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736577480; x=1737182280;
+ d=1e100.net; s=20230601; t=1736577483; x=1737182283;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=brCFohrGYSURFfy9RfVFIe2j0kYqy7Qkc7qtsXQy9dE=;
- b=hKI8c90hexKdU8NlO3sduUC5ycWv9aJH9Owd1cG8xFsS4a0HfIk5WrCaxLN6QCLbF/
- gPgKZgvleEbyLHf+a0pE5oGh0FgdfjTnqft+W1LTGLGyoaVn+YNp4TpP5cJcppRkWdO6
- 1ps2k1IWVkx1DeUZsaDPNkOtenrZMEBqMvoieSeJEAAblF7yN0yR4gqnnb9rMS2YSdzZ
- BqdzZhLk/X8T3XsILkU4sggXaUDil9mfw1eQd7Elho/5hN7FnncNvLlJuCbPFHHv48l2
- s2MVSmQV2BeRGPovSeM7gJnZuj327mabU6jnHMabitYdbH+CBq0DJFNbKw4Td++JBitl
- grBw==
-X-Gm-Message-State: AOJu0YybJkM0VG6fB7CGVmVMrZr5txeFfO5IpC23dt9PkgtGz0zu1jhy
- Qdk5XZrqqG3mSS5NOroOdelxs7VHos9bxvEpZ5p6FqDd3JyaSF7lXVEYHIq8
-X-Gm-Gg: ASbGnctiCCzM/vAuZJJuNrvXilPpQu4LPoMo/+U0RctU30H5/nkFo9o/kGDMHwBksHG
- +BGOPsMmcQMXlCJdGRTitdSmU08fz+gdGcJVGOxq4HPMuYfCqXSm6dCXZm12jXEPSzU8GoHk+Qk
- aXNqUhJrPdbCesz2ZVKqYrSy+oydjiixwAcUgC07Nvwb4EavFbYxKlFnkI+e1ms1mxNDr+GC3SO
- pUT8Zk8mRpU6a/cu1RayaK9pB9xrLR5M0SYLZjxu6KJ+tXUXHx4k5q6i8472Gc6nthG0/uGgsyJ
- o9zyJYEQ9mKVUbP4KLNUwYJbENgMoju8ZtQM4Trp
-X-Google-Smtp-Source: AGHT+IEDwkhAzib9p5pP+s3FreIctvLgnoS1gDIn+Bp+Q1lJoAdbn+1RWJd6Ongq+/1vM0Oe/PRM4w==
-X-Received: by 2002:a05:6a20:841b:b0:1e1:ae9a:6316 with SMTP id
- adf61e73a8af0-1e88d09cbbbmr26506285637.35.1736577480141; 
- Fri, 10 Jan 2025 22:38:00 -0800 (PST)
+ bh=LLu+9TKy9NCZInv/EcYZbA4pCdUSDgwTEvjAnem8c28=;
+ b=IPtLszuOXzZvz3ymjTNIJGcdga3j9bxk6mIJ+XObgIZOM9iiO2l6FSusWP5Q6BDqwr
+ tX9EHsN78JcHffCAf4hGDLhfPhq7piN8TphrYlCxQhGmOkHkZvVoZxXdryxadmrj5MAw
+ 8V5InBcnb6oJ0uKbRQYUf2EuOERc+PNrRSSHcuQIyYaDqjYFnLasWTNU4L6dfKDek86k
+ ujKgmuEjA4dcbLECzfO0czpbXGt1dEaRwS3rt7QakfKZdtMPF4jZri3ShbTqi13ZLH+h
+ Irsy2DMdvClA7hMwL5+vs2QM2faJcbHSmchc0yZPmEhH5Pgc4JMTgYIGuaVvBV5XOI/4
+ pghA==
+X-Gm-Message-State: AOJu0Yy79LRRyLne+2OsBiotp1DodbVQl/EdwCXUmiYEkU+MD35QPVo2
+ a/0nx9Zbgkwn38Y3+AI9783dMVbkxAUJUxFPA1NOzk3xz/2921zYZlK+5bIg
+X-Gm-Gg: ASbGncv8AoeiT/5DVmnB2e++WnQ3/1xowD9r87dannWzzlhIL+UzoQzyVF1Y4YuAOKK
+ VG3+WRWTUTHRMsvufEj9nU63cfMjDE+R8bM6+C5EIueOfhhbZQNsNSIbblfsKezW3WtEkHJDC5I
+ o5B2D0/ZnUruMvH3Mt8mI4YpasyDh2ZoNVd+HN6yda8LjPki85tmZPIbT5uBtfq1/5Q1TN54uRI
+ XGqo0YjkzjhdBytdkZwkWEGIn7X9VFw7TTkBC20DR2vPlozitcbgprlAPjkkRX/nVkFW2Xi5yun
+ r2v0eWEnGkLSVSK+af4XomdOITkANVBuJUZRFCzJ
+X-Google-Smtp-Source: AGHT+IHUFV8l+jeJFN8G2thw79jUGpuWmhd+b+EC2CkZg3utop03gUBSCa3e+ztLaZU/OdgHzRn23A==
+X-Received: by 2002:a05:6a20:7f8b:b0:1e0:d6ef:521a with SMTP id
+ adf61e73a8af0-1e88d0e6390mr18332650637.1.1736577482711; 
+ Fri, 10 Jan 2025 22:38:02 -0800 (PST)
 Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
  [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-72d406a9433sm2477488b3a.176.2025.01.10.22.37.59
+ d2e1a72fcca58-72d406a9433sm2477488b3a.176.2025.01.10.22.38.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Jan 2025 22:37:59 -0800 (PST)
+ Fri, 10 Jan 2025 22:38:02 -0800 (PST)
 From: Akhilesh Nema <nemaakhilesh@gmail.com>
 To: buildroot@buildroot.org
 Cc: Brandon Maier <brandon.maier@collins.com>,
  Akhilesh Nema <nemaakhilesh@gmail.com>
-Date: Fri, 10 Jan 2025 22:37:50 -0800
-Message-Id: <20250111063753.769689-2-nemaakhilesh@gmail.com>
+Date: Fri, 10 Jan 2025 22:37:51 -0800
+Message-Id: <20250111063753.769689-3-nemaakhilesh@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250111063753.769689-1-nemaakhilesh@gmail.com>
 References: <20250111063753.769689-1-nemaakhilesh@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1736577480; x=1737182280; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1736577483; x=1737182283; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=brCFohrGYSURFfy9RfVFIe2j0kYqy7Qkc7qtsXQy9dE=;
- b=M6DXYr3qE2+lazx/sw969CF9bJxb+j95qPpdLQtFifS75iUHaEXxDlQPYL80DQChM4
- qurlnP6/4O0m0KnBFxii1OvAd8KzHOGeLpzXn65mP6ssTCh0Ui30+p9juAfsgVeDdkbw
- YquzkEVKE/GAncV3xzhwZq+pCmkKur/GNnHnFUgL/skhTBijXTyqx6vKd51m9gjJGmSj
- rbAY/Qx7iOoMVRXfARAibAYh2KS2YIw/xe4V6WhSSwuFlfA74aDgU3eQabvyMZ+zdU7d
- KV8ThBpgGvKFMVFSSlxbaXC9/aZipqnwyDWa+5F/6rxHBXCkmZE+yq0BxeikANK+nRxu
- Ablg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=LLu+9TKy9NCZInv/EcYZbA4pCdUSDgwTEvjAnem8c28=;
+ b=cKJg5BWjjo5BmKLYS8BAZdT6loO4EHFjR3p7f3qrPja+s4ziFcVitnAew2fhgfp/G5
+ QqWzS1/l5SxMwNwU/330RjrqQGDIp6i8BHNlAB+Ov1qgJh7ejIb3Ms3Te8fqKcLL8LE5
+ eIkugz6nEUWOEDQUiyDjryrB7cmo9OBEtMTt+dpzmNb5B6pn/PS5wgunRrUxN1gNDQhJ
+ 0c8yZi8FWVMr5Sjwib5ZQ7zWzeNEqPWToVd02iTdMJaTxMfXXxF+V5n0Bz9lTaqK9DgL
+ J3vVer6L8NzEUm1QrQtr5dQYc1VEbWbI6MTD6VQI6i8+hwEkfKLuXtvBUfg+5jT/seF8
+ x9bQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=M6DXYr3q
-Subject: [Buildroot] [PATCH 2/5] package/qoriq-fm-ucode: bump version to
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=cKJg5BWj
+Subject: [Buildroot] [PATCH 3/5] package/fmlib: bump version to
  lf-6.6.52-2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -111,45 +110,150 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4225811595319655688=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The package is unchanged; a new tag was added to match other NXP QorIQ package versions.
+--===============4225811595319655688==
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
+
+- The license file was renamed from COPYING to LICENSE.
+- Added a patch to fix build errors with gcc-14.
 
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 ---
- package/qoriq-fm-ucode/qoriq-fm-ucode.hash | 2 +-
- package/qoriq-fm-ucode/qoriq-fm-ucode.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...conversion-error-and-enum-compare-wa.patch | 79 +++++++++++++++++++
+ package/fmlib/fmlib.hash                      |  4 +-
+ package/fmlib/fmlib.mk                        |  4 +-
+ 3 files changed, 83 insertions(+), 4 deletions(-)
+ create mode 100644 package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch
 
-diff --git a/package/qoriq-fm-ucode/qoriq-fm-ucode.hash b/package/qoriq-fm-ucode/qoriq-fm-ucode.hash
-index 67efd675cc..bf494b177b 100644
---- a/package/qoriq-fm-ucode/qoriq-fm-ucode.hash
-+++ b/package/qoriq-fm-ucode/qoriq-fm-ucode.hash
+diff --git a/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch b/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch
+new file mode 100644
+index 0000000000..e38b36128f
+--- /dev/null
++++ b/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch
+@@ -0,0 +1,79 @@
++From 3a1962a70cec74b3dac979e52a2cbcaa8897b9c8 Mon Sep 17 00:00:00 2001
++From: Akhilesh Nema <nemaakhilesh@gmail.com>
++Date: Fri, 10 Jan 2025 20:20:50 -0800
++Subject: [PATCH] Fix the integer conversion error and enum compare
++ warnings on build under gcc-14
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Error:
++src/fm_lib.c: In function ‘GetDeviceId’:
++src/fm_lib.c:139:21: error: returning ‘uintptr_t’ {aka ‘long unsigned int’} from a function with return type ‘t_Handle’ {aka ‘void *’} makes pointer from integer without a cast [-Wint-conversion]
++  139 |         return p_Dev->id;
++      |                ~~~~~^~~~
++
++Warnings:
++
++src/fm_lib.c: In function ‘FM_PCD_CcRootModifyNextEngine’:
++src/fm_lib.c:997:51: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
++  997 |         if (p_FmPcdCcNextEngineParams->nextEngine == e_IOC_FM_PCD_FR) {
++      |                                                   ^~
++src/fm_lib.c: In function ‘FM_PCD_MatchTableAddKey’:
++src/fm_lib.c:1103:57: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
++ 1103 |     else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
++      |                                                         ^~
++src/fm_lib.c: In function ‘FM_PCD_MatchTableModifyKeyAndNextEngine’:
++src/fm_lib.c:1174:57: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
++ 1174 |     else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
++
++Upstream: https://github.com/nxp-qoriq/fmlib/pull/1
++
++Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
++---
++ src/fm_lib.c | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/fm_lib.c b/src/fm_lib.c
++index 4ea40ff..85b4a66 100644
++--- a/src/fm_lib.c
+++++ b/src/fm_lib.c
++@@ -136,7 +136,7 @@ t_Handle GetDeviceId(t_Handle h_Dev)
++ {
++ 	t_Device *p_Dev = (t_Device*)h_Dev;
++ 
++-	return p_Dev->id;
+++	return (t_Handle) p_Dev->id;
++ }
++ 
++ 
++@@ -994,7 +994,7 @@ t_Error FM_PCD_CcRootModifyNextEngine(t_Handle                  h_CcTree,
++     }
++ 
++ #if (DPAA_VERSION >= 11)
++-	if (p_FmPcdCcNextEngineParams->nextEngine == e_IOC_FM_PCD_FR) {
+++	if (p_FmPcdCcNextEngineParams->nextEngine == e_FM_PCD_FR) {
++         t_Device *p_NextDev = (t_Device*) p_FmPcdCcNextEngineParams->params.frParams.h_FrmReplic;
++         params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
++     }
++@@ -1100,7 +1100,7 @@ t_Error FM_PCD_MatchTableAddKey(t_Handle            h_CcNode,
++     	params.key_params.cc_next_engine_params.params.kg_params.p_direct_scheme = UINT_TO_PTR(p_NextDev->id);
++     }
++ #if (DPAA_VERSION >= 11)
++-    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
+++    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_FM_PCD_FR) {
++     	t_Device *p_NextDev = (t_Device*) p_KeyParams->ccNextEngineParams.params.frParams.h_FrmReplic;
++     	params.key_params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
++     }
++@@ -1171,7 +1171,7 @@ t_Error FM_PCD_MatchTableModifyKeyAndNextEngine(t_Handle            h_CcNode,
++     	params.key_params.cc_next_engine_params.params.kg_params.p_direct_scheme = UINT_TO_PTR(p_NextDev->id);
++     }
++ #if (DPAA_VERSION >= 11)
++-    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
+++    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_FM_PCD_FR) {
++     	t_Device *p_NextDev = (t_Device*) p_KeyParams->ccNextEngineParams.params.frParams.h_FrmReplic;
++     	params.key_params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
++     }
++-- 
++2.25.1
++
+diff --git a/package/fmlib/fmlib.hash b/package/fmlib/fmlib.hash
+index f81b017869..edf87426df 100644
+--- a/package/fmlib/fmlib.hash
++++ b/package/fmlib/fmlib.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c994367c74dd2ff6cd70ea269cf1bc775c5f4e11294a8db414491ce6c2eb9dc3  qoriq-fm-ucode-lf-6.6.23-2.0.0.tar.gz
-+sha256  6b9e2a5c383fb9288db1459821fc696f3abfeddd080b04c11cf9f712f0d36470  qoriq-fm-ucode-lf-6.6.52-2.2.0.tar.gz
- sha256  7a223031d76339df0e4e5a94d193a270fb9963d42b577aa42fe130a4657f3e17  LICENSE
-diff --git a/package/qoriq-fm-ucode/qoriq-fm-ucode.mk b/package/qoriq-fm-ucode/qoriq-fm-ucode.mk
-index 84360533eb..71904e5b13 100644
---- a/package/qoriq-fm-ucode/qoriq-fm-ucode.mk
-+++ b/package/qoriq-fm-ucode/qoriq-fm-ucode.mk
-@@ -4,7 +4,7 @@
+ # Locally computed
+-sha256  64dc76c0adc3aa58bce6aba470dee7dee001d4964ccb1958e899a59d9917b21d  fmlib-LSDK-21.08.tar.gz
+-sha256  5d7770fa9f70f0c6f0b4784bbca8401811259a4b1e03455dbd863ffd0d34d2ca  COPYING
++sha256  173f1c41207e50dd3908c7dad192962240fd1a9269bca6e368f401134b3503bf  fmlib-lf-6.6.52-2.2.0.tar.gz
++sha256  5d7770fa9f70f0c6f0b4784bbca8401811259a4b1e03455dbd863ffd0d34d2ca  LICENSE
+diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
+index 3d185979d5..601a3e16ef 100644
+--- a/package/fmlib/fmlib.mk
++++ b/package/fmlib/fmlib.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--QORIQ_FM_UCODE_VERSION = lf-6.6.23-2.0.0
-+QORIQ_FM_UCODE_VERSION = lf-6.6.52-2.2.0
- QORIQ_FM_UCODE_SITE = $(call github,nxp-qoriq,qoriq-fm-ucode,$(QORIQ_FM_UCODE_VERSION))
- QORIQ_FM_UCODE_LICENSE = NXP Binary EULA
- QORIQ_FM_UCODE_LICENSE_FILES = LICENSE
+-FMLIB_VERSION = LSDK-21.08
++FMLIB_VERSION = lf-6.6.52-2.2.0
+ FMLIB_SITE = $(call github,nxp-qoriq,fmlib,$(FMLIB_VERSION))
+ FMLIB_LICENSE = BSD-3-Clause
+-FMLIB_LICENSE_FILES = COPYING
++FMLIB_LICENSE_FILES = LICENSE
+ FMLIB_DEPENDENCIES = linux
+ FMLIB_INSTALL_STAGING = YES
+ 
 -- 
 2.25.1
+
+
+--===============4225811595319655688==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4225811595319655688==--
