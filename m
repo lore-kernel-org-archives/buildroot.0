@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B12A3C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:54:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C066C282D1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:54:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6982284C92;
-	Fri, 28 Feb 2025 16:54:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 281AB6FB1E;
+	Fri, 28 Feb 2025 16:54:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w2866sn83x_k; Fri, 28 Feb 2025 16:54:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jx2OvX03aJ5Q; Fri, 28 Feb 2025 16:54:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55BC284D9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A29D7037D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 55BC284D9D;
-	Fri, 28 Feb 2025 16:54:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A29D7037D;
+	Fri, 28 Feb 2025 16:54:27 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1AAD61DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:37:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1453A1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:37:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25D9B424AB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 59F91436ED
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8Qic2F5KNVKk for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:34 +0000 (UTC)
+ id RRejrnQA1gWV for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7815842D2B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F06A42547
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7815842D2B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F06A42547
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 707A786A52; Fri, 28 Feb 2025 16:30:04 +0000 (UTC)
+ id 610A687C2C; Fri, 28 Feb 2025 16:30:04 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 18:03:34 +0100
+Date: Sat, 11 Jan 2025 18:03:30 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 35c425e7b288484c79ef0aeb7b28dcd989936ed0
-X-Git-Newrev: 40a561d90a2c9a5cd122de6239cbbbfb7b2b365c
+X-Git-Oldrev: ba6cafad2343c1fa5aa4da17deec3759f70b5b06
+X-Git-Newrev: 35c425e7b288484c79ef0aeb7b28dcd989936ed0
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163004.707A786A52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-orjson: bump to
- version 3.10.14
+Message-Id: <20250228163004.610A687C2C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-lmdb: bump to
+ version 1.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40a561d90a2c9a5cd122de6239cbbbfb7b2b365c
+commit: https://git.buildroot.net/buildroot/commit/?id=35c425e7b288484c79ef0aeb7b28dcd989936ed0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-orjson/python-orjson.hash | 2 +-
- package/python-orjson/python-orjson.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-lmdb/python-lmdb.hash | 4 ++--
+ package/python-lmdb/python-lmdb.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
-index ddea73f629..df657aacb9 100644
---- a/package/python-orjson/python-orjson.hash
-+++ b/package/python-orjson/python-orjson.hash
+diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
+index 064c76fb58..f729c197f8 100644
+--- a/package/python-lmdb/python-lmdb.hash
++++ b/package/python-lmdb/python-lmdb.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  144d268da63c96d800f5aa0c0901cf09c9337a6dc5372a4539415d2cf7f45b2d  python-orjson-3.10.11-cargo2.tar.gz
-+sha256  2d093fc336be04a32f4edf27b2aca8e6e7c796521cfaf9552079b39d2ea93e06  python-orjson-3.10.14-cargo2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/lmdb/json
+-md5  bdd78148e8374cb0001af06cc64bfefb  lmdb-1.5.1.tar.gz
+-sha256  717c255827d331e02f7242b44051aa06466c90f6d732ecb07b31edfb1e06c67a  lmdb-1.5.1.tar.gz
++md5  f9d67b42a6d708ec1cfc860f67e20387  lmdb-1.6.2.tar.gz
++sha256  d28e3fa59935ff688858760ec52f202ecb8c1089a3f68d1f162ea3078d151e73  lmdb-1.6.2.tar.gz
  # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
-index 85ad6c3248..9b44ebcd67 100644
---- a/package/python-orjson/python-orjson.mk
-+++ b/package/python-orjson/python-orjson.mk
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
+index 7105fd1464..1648ed7054 100644
+--- a/package/python-lmdb/python-lmdb.mk
++++ b/package/python-lmdb/python-lmdb.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ORJSON_VERSION = 3.10.11
-+PYTHON_ORJSON_VERSION = 3.10.14
- PYTHON_ORJSON_SOURCE_PYPI = orjson-$(PYTHON_ORJSON_VERSION).tar.gz
--PYTHON_ORJSON_SITE_PYPI = https://files.pythonhosted.org/packages/db/3a/10320029954badc7eaa338a15ee279043436f396e965dafc169610e4933f
-+PYTHON_ORJSON_SITE_PYPI = https://files.pythonhosted.org/packages/92/f7/3219b56f47b4f5e864fb11cdf4ac0aaa3de608730ad2dc4c6e16382f35ec
- PYTHON_ORJSON_SITE = $(PYTHON_ORJSON_SITE_PYPI)/$(PYTHON_ORJSON_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_ORJSON_SETUP_TYPE = maturin
- PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
+-PYTHON_LMDB_VERSION = 1.5.1
++PYTHON_LMDB_VERSION = 1.6.2
+ PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
+-PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/67/2c/0cc9375341121ca1f4b31a2137f955dc24550e095d733c9b42ea94113ba1
++PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/71/54/fb1d5918406a72fcf46fbfaece7c0349d88cd8685f5443a142ddd7dac05b
+ PYTHON_LMDB_LICENSE = OLDAP-2.8
+ PYTHON_LMDB_LICENSE_FILES = LICENSE
+ PYTHON_LMDB_CPE_ID_VENDOR = py-lmdb_project
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
