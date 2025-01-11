@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EA12C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:53:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F727C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:54:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 540EB6FBF8;
-	Fri, 28 Feb 2025 16:53:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CBE9500E4;
+	Fri, 28 Feb 2025 16:54:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MWWaJERZ1DTg; Fri, 28 Feb 2025 16:53:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PS5WbhYKHGRF; Fri, 28 Feb 2025 16:53:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45AE670379
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4285A4F4A2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 45AE670379;
-	Fri, 28 Feb 2025 16:53:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4285A4F4A2;
+	Fri, 28 Feb 2025 16:53:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C9A8711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:36:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 18F761DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:36:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B064243067
+ by smtp4.osuosl.org (Postfix) with ESMTP id C7FAD42D13
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wm02wEwu01mO for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:31 +0000 (UTC)
+ id 5vBXrzW-gH4i for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA00642D13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73A7542D1E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA00642D13
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 73A7542D1E
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D493687C2C; Fri, 28 Feb 2025 16:30:02 +0000 (UTC)
+ id 6F5A487C2C; Fri, 28 Feb 2025 16:30:03 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 17:03:49 +0100
+Date: Sat, 11 Jan 2025 17:29:55 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b27de188f78b467ea06ab431393e4bcc9bac93c3
-X-Git-Newrev: acede98f8f606d9f8d5fc198cffbba9cd679f3ac
+X-Git-Oldrev: 6bfc91ff4a0c32c150efea2f7c2d9d024e8699ff
+X-Git-Newrev: 0cde293a4fe0f92f7f07b159ec6be61b5dc567ff
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163002.D493687C2C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-aerich: bump to
- version 0.8.1
+Message-Id: <20250228163003.6F5A487C2C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-dunamai: bump
+ to version 1.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,60 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acede98f8f606d9f8d5fc198cffbba9cd679f3ac
+commit: https://git.buildroot.net/buildroot/commit/?id=0cde293a4fe0f92f7f07b159ec6be61b5dc567ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Replace python-tomlkit with python-tomli-w runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-aerich/Config.in          | 2 +-
- package/python-aerich/python-aerich.hash | 4 ++--
- package/python-aerich/python-aerich.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-dunamai/python-dunamai.hash | 4 ++--
+ package/python-dunamai/python-dunamai.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aerich/Config.in b/package/python-aerich/Config.in
-index 39c0a50aa1..4e7ea1117c 100644
---- a/package/python-aerich/Config.in
-+++ b/package/python-aerich/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_PYTHON_AERICH
- 	select BR2_PACKAGE_PYTHON_ASYNCCLICK # runtime
- 	select BR2_PACKAGE_PYTHON_DICTDIFFER # runtime
- 	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
--	select BR2_PACKAGE_PYTHON_TOMLKIT # runtime
-+	select BR2_PACKAGE_PYTHON_TOMLI_W # runtime
- 	select BR2_PACKAGE_PYTHON_TORTOISE_ORM # runtime
- 	help
- 	  A database migrations tool for Tortoise ORM.
-diff --git a/package/python-aerich/python-aerich.hash b/package/python-aerich/python-aerich.hash
-index ba1ea35997..87df73d3c7 100644
---- a/package/python-aerich/python-aerich.hash
-+++ b/package/python-aerich/python-aerich.hash
+diff --git a/package/python-dunamai/python-dunamai.hash b/package/python-dunamai/python-dunamai.hash
+index a2a92b8699..9c0fcc1810 100644
+--- a/package/python-dunamai/python-dunamai.hash
++++ b/package/python-dunamai/python-dunamai.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aerich/json
--md5  22db080bf0e608344dbd837ff29ee2e8  aerich-0.8.0.tar.gz
--sha256  13786a91469626c025a2e2c5e524cac2b82b900de063b317f402710ee4c11ccb  aerich-0.8.0.tar.gz
-+md5  d4062a911161435a3d21736b51340b0e  aerich-0.8.1.tar.gz
-+sha256  1e95b1c04dfc0c634dd43b0123933038c820140e17a4b27885a63b7461eb0632  aerich-0.8.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/dunamai/json
+-md5  1b3ca932416961ea6953dbbc21e6d42c  dunamai-1.22.0.tar.gz
+-sha256  375a0b21309336f0d8b6bbaea3e038c36f462318c68795166e31f9873fdad676  dunamai-1.22.0.tar.gz
++md5  5aa5f8aa470a4e8f67430b1a8a6ff801  dunamai-1.23.0.tar.gz
++sha256  a163746de7ea5acb6dacdab3a6ad621ebc612ed1e528aaa8beedb8887fccd2c4  dunamai-1.23.0.tar.gz
  # Locally computed sha256 checksums
- sha256  4cc00f0e33ac8e089b37d8a1474be441b26311bdc16fe035c75b51201515f617  LICENSE
-diff --git a/package/python-aerich/python-aerich.mk b/package/python-aerich/python-aerich.mk
-index ea4ee07697..bb568d642f 100644
---- a/package/python-aerich/python-aerich.mk
-+++ b/package/python-aerich/python-aerich.mk
+ sha256  cd75c5564078e3aadf662a9df3d23430f4705dfeedebbd0ebbeef53998ad94a8  LICENSE
+diff --git a/package/python-dunamai/python-dunamai.mk b/package/python-dunamai/python-dunamai.mk
+index bd6c71fd6a..ba422f5b2f 100644
+--- a/package/python-dunamai/python-dunamai.mk
++++ b/package/python-dunamai/python-dunamai.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AERICH_VERSION = 0.8.0
-+PYTHON_AERICH_VERSION = 0.8.1
- PYTHON_AERICH_SOURCE = aerich-$(PYTHON_AERICH_VERSION).tar.gz
--PYTHON_AERICH_SITE = https://files.pythonhosted.org/packages/35/a5/fc8f6e70cedf47757c4738ed6f79420b9cca6ed1655daf527f86e73f3159
-+PYTHON_AERICH_SITE = https://files.pythonhosted.org/packages/4f/41/3c478b7a344abda866f2c644b056ebae638499bbe0eec0010e7361211774
- PYTHON_AERICH_SETUP_TYPE = poetry
- PYTHON_AERICH_LICENSE = Apache-2.0
- PYTHON_AERICH_LICENSE_FILES = LICENSE
+-PYTHON_DUNAMAI_VERSION = 1.22.0
++PYTHON_DUNAMAI_VERSION = 1.23.0
+ PYTHON_DUNAMAI_SOURCE = dunamai-$(PYTHON_DUNAMAI_VERSION).tar.gz
+-PYTHON_DUNAMAI_SITE = https://files.pythonhosted.org/packages/a0/fe/aee602f08765de4dd753d2e5d6cbd480857182e345f161f7a19ad1979e4d
++PYTHON_DUNAMAI_SITE = https://files.pythonhosted.org/packages/06/4e/a5c8c337a1d9ac0384298ade02d322741fb5998041a5ea74d1cd2a4a1d47
+ PYTHON_DUNAMAI_SETUP_TYPE = poetry
+ PYTHON_DUNAMAI_LICENSE = MIT
+ PYTHON_DUNAMAI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
