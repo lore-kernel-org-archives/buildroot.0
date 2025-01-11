@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6245E7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:23:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC765E7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:23:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F12F60779;
-	Sat, 11 Jan 2025 16:23:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A28E96112D;
+	Sat, 11 Jan 2025 16:23:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KHGshnRnnfTl; Sat, 11 Jan 2025 16:23:23 +0000 (UTC)
+ id g0ildD6D3SoG; Sat, 11 Jan 2025 16:23:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 237CD60F34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D451D610FD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 237CD60F34;
-	Sat, 11 Jan 2025 16:23:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9FA5A940
+	by smtp3.osuosl.org (Postfix) with ESMTP id D451D610FD;
+	Sat, 11 Jan 2025 16:23:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D6C4E940
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6EBA360A4F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 97DB64000B
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1LCXQe4Lo1Tv for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id abgY4fWNvfI9 for <buildroot@buildroot.org>;
  Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9209860AAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E4A5400F9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9209860AAD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E4A5400F9
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8C7B283D33; Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
+ id 67D6A82592; Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 17:16:42 +0100
+Date: Sat, 11 Jan 2025 17:15:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7476515466c27d0918eb81847d4937a2b2a3f745
-X-Git-Newrev: e837797a64dc19d55b4c8d36ff1f494dca72a210
+X-Git-Oldrev: 074c6cc575c1a3bba1a487b7d6e310a5405874dd
+X-Git-Newrev: 178130bbad97c0b2b6665557f6345f5a86e0e08d
 X-Patchwork-Hint: ignore
-Message-Id: <20250111162314.8C7B283D33@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-maturin: bump to version
- 1.8.1
+Message-Id: <20250111162314.67D6A82592@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-marshmallow: bump to
+ version 3.25.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e837797a64dc19d55b4c8d36ff1f494dca72a210
+commit: https://git.buildroot.net/buildroot/commit/?id=178130bbad97c0b2b6665557f6345f5a86e0e08d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-maturin/python-maturin.hash | 2 +-
- package/python-maturin/python-maturin.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-marshmallow/python-marshmallow.hash | 4 ++--
+ package/python-marshmallow/python-marshmallow.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
-index 218b789295..1b295127f6 100644
---- a/package/python-maturin/python-maturin.hash
-+++ b/package/python-maturin/python-maturin.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  1595a7bdc135888ed0f2c595819f010738196392e3d42569af4bdfe718654899  python-maturin-1.7.4-cargo2.tar.gz
-+sha256  da4ab5a84c35d0ab00c0fb63975f25c497d6570dcdeaae0ec0f7d9f70f1d5382  python-maturin-1.8.1-cargo2.tar.gz
+diff --git a/package/python-marshmallow/python-marshmallow.hash b/package/python-marshmallow/python-marshmallow.hash
+index 8a6a3cf85b..f7a158a830 100644
+--- a/package/python-marshmallow/python-marshmallow.hash
++++ b/package/python-marshmallow/python-marshmallow.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/marshmallow/json
+-md5  45f26839a3486cac60f6aa043e5035dd  marshmallow-3.23.1.tar.gz
+-sha256  3a8dfda6edd8dcdbf216c0ede1d1e78d230a6dc9c5a088f58c4083b974a0d468  marshmallow-3.23.1.tar.gz
++md5  881654a8819a7f8ae8f91563cf378b7d  marshmallow-3.25.0.tar.gz
++sha256  5ba94a4eb68894ad6761a505eb225daf7e5cb7b4c32af62d4a45e9d42665bc31  marshmallow-3.25.0.tar.gz
  # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
- sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
-diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
-index 2e59538212..b9816e2119 100644
---- a/package/python-maturin/python-maturin.mk
-+++ b/package/python-maturin/python-maturin.mk
+ sha256  906b5d9051e426144cb173ad911667b8ebd05a9c584c2c26c135b32a3ed12001  LICENSE
+ sha256  f982e6fd97ba00973e94605b972ff04894b22c4fa937b868828b32ae8f0a7c2e  docs/license.rst
+diff --git a/package/python-marshmallow/python-marshmallow.mk b/package/python-marshmallow/python-marshmallow.mk
+index 2c2e7f1ee3..d6a91bae72 100644
+--- a/package/python-marshmallow/python-marshmallow.mk
++++ b/package/python-marshmallow/python-marshmallow.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MATURIN_VERSION = 1.7.4
-+PYTHON_MATURIN_VERSION = 1.8.1
- PYTHON_MATURIN_SOURCE_PYPI = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
--PYTHON_MATURIN_SITE_PYPI = https://files.pythonhosted.org/packages/51/28/31a650d9209d873b6aec759c944bd284155154d7a01f7f541786d7c435ca
-+PYTHON_MATURIN_SITE_PYPI = https://files.pythonhosted.org/packages/9a/08/ccb0f917722a35ab0d758be9bb5edaf645c3a3d6170061f10d396ecd273f
- PYTHON_MATURIN_SITE = $(PYTHON_MATURIN_SITE_PYPI)/$(PYTHON_MATURIN_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_MATURIN_SETUP_TYPE = setuptools-rust
- PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
+-PYTHON_MARSHMALLOW_VERSION = 3.23.1
++PYTHON_MARSHMALLOW_VERSION = 3.25.0
+ PYTHON_MARSHMALLOW_SOURCE = marshmallow-$(PYTHON_MARSHMALLOW_VERSION).tar.gz
+-PYTHON_MARSHMALLOW_SITE = https://files.pythonhosted.org/packages/6d/30/14d8609f65c8aeddddd3181c06d2c9582da6278f063b27c910bbf9903441
++PYTHON_MARSHMALLOW_SITE = https://files.pythonhosted.org/packages/bd/5c/cbfa41491d6c83b36471f2a2f75602349d20a8f88afd94f83c1e68bbc298
+ PYTHON_MARSHMALLOW_SETUP_TYPE = flit
+ PYTHON_MARSHMALLOW_LICENSE = MIT
+ PYTHON_MARSHMALLOW_LICENSE_FILES = LICENSE docs/license.rst
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
