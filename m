@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A148E7719D
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 17:55:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18EB1E7719C
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 17:55:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 377A483AF1;
-	Sat, 11 Jan 2025 17:55:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2D8940F48;
+	Sat, 11 Jan 2025 17:55:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nsMCyK-7kWMO; Sat, 11 Jan 2025 17:55:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nwEEw5len5lj; Sat, 11 Jan 2025 17:55:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3005483B0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A47A41137
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3005483B0A;
-	Sat, 11 Jan 2025 17:55:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 82F1C942
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:55:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A47A41137;
+	Sat, 11 Jan 2025 17:55:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2FEB0940
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:55:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6E16040180
+ by smtp3.osuosl.org (Postfix) with ESMTP id 25022606CF
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:55:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ftW9cDIUPv07 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0y0o24oQw7WH for <buildroot@buildroot.org>;
  Sat, 11 Jan 2025 17:55:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4401C400DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56BEC60708
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4401C400DD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 56BEC60708
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:55:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F9D28405E; Sat, 11 Jan 2025 17:55:30 +0000 (UTC)
+ id 505F8802FA; Sat, 11 Jan 2025 17:55:30 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 18:39:04 +0100
+Date: Sat, 11 Jan 2025 18:39:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cf8a1785bbb1c5f328091902ae473d20d4a15548
-X-Git-Newrev: eb0db0edb0b38677da7d956013cbe8fe04040a0e
+X-Git-Oldrev: eb0db0edb0b38677da7d956013cbe8fe04040a0e
+X-Git-Newrev: 58007e20b2231416fefb3f42eacddf3999149068
 X-Patchwork-Hint: ignore
-Message-Id: <20250111175530.3F9D28405E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pygments: bump to version
- 2.19.1
+Message-Id: <20250111175530.505F8802FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyjwt: bump to version
+ 2.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb0db0edb0b38677da7d956013cbe8fe04040a0e
+commit: https://git.buildroot.net/buildroot/commit/?id=58007e20b2231416fefb3f42eacddf3999149068
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pygments/python-pygments.hash | 4 ++--
- package/python-pygments/python-pygments.mk   | 4 ++--
+ package/python-pyjwt/python-pyjwt.hash | 4 ++--
+ package/python-pyjwt/python-pyjwt.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pygments/python-pygments.hash b/package/python-pygments/python-pygments.hash
-index 0b5d2cfe72..894b6c39d3 100644
---- a/package/python-pygments/python-pygments.hash
-+++ b/package/python-pygments/python-pygments.hash
+diff --git a/package/python-pyjwt/python-pyjwt.hash b/package/python-pyjwt/python-pyjwt.hash
+index a6c8d90853..8eaf7ece50 100644
+--- a/package/python-pyjwt/python-pyjwt.hash
++++ b/package/python-pyjwt/python-pyjwt.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pygments/json
--md5  fbb7976df756f832f3391008778e8999  pygments-2.18.0.tar.gz
--sha256  786ff802f32e91311bff3889f6e9a86e81505fe99f2735bb6d60ae0c5004f199  pygments-2.18.0.tar.gz
-+md5  5e6e00a0f63b9f3b63edfa260f71b1b5  pygments-2.19.1.tar.gz
-+sha256  61c16d2a8576dc0649d9f39e089b5f02bcd27fba10d8fb4dcc28173f7a45151f  pygments-2.19.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/PyJWT/json
+-md5  88c9dbeb3e6302c7db813195e202420a  pyjwt-2.9.0.tar.gz
+-sha256  7e1e5b56cc735432a7369cbfa0efe50fa113ebecdc04ae6922deba8b84582d0c  pyjwt-2.9.0.tar.gz
++md5  f3273aaf736c24795e78ac48adbab111  pyjwt-2.10.1.tar.gz
++sha256  3cc5772eb20009233caf06e9d8a0577824723b44e6648ee0a2aedb6cf9381953  pyjwt-2.10.1.tar.gz
  # Locally computed sha256 checksums
- sha256  a9d66f1d526df02e29dce73436d34e56e8632f46c275bbdffc70569e882f9f17  LICENSE
-diff --git a/package/python-pygments/python-pygments.mk b/package/python-pygments/python-pygments.mk
-index d3e6624ad4..e94c9dc908 100644
---- a/package/python-pygments/python-pygments.mk
-+++ b/package/python-pygments/python-pygments.mk
+ sha256  797a7a20231d4c433e9f1911db1731d06b5828b98f499819a034f7c0f56f5ce5  LICENSE
+diff --git a/package/python-pyjwt/python-pyjwt.mk b/package/python-pyjwt/python-pyjwt.mk
+index 084d4ac802..18e84b7838 100644
+--- a/package/python-pyjwt/python-pyjwt.mk
++++ b/package/python-pyjwt/python-pyjwt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYGMENTS_VERSION = 2.18.0
-+PYTHON_PYGMENTS_VERSION = 2.19.1
- PYTHON_PYGMENTS_SOURCE = pygments-$(PYTHON_PYGMENTS_VERSION).tar.gz
--PYTHON_PYGMENTS_SITE = https://files.pythonhosted.org/packages/8e/62/8336eff65bcbc8e4cb5d05b55faf041285951b6e80f33e2bff2024788f31
-+PYTHON_PYGMENTS_SITE = https://files.pythonhosted.org/packages/7c/2d/c3338d48ea6cc0feb8446d8e6937e1408088a72a39937982cc6111d17f84
- PYTHON_PYGMENTS_LICENSE = BSD-2-Clause
- PYTHON_PYGMENTS_LICENSE_FILES = LICENSE
- PYTHON_PYGMENTS_CPE_ID_VENDOR = pygments
+-PYTHON_PYJWT_VERSION = 2.9.0
++PYTHON_PYJWT_VERSION = 2.10.1
+ PYTHON_PYJWT_SOURCE = pyjwt-$(PYTHON_PYJWT_VERSION).tar.gz
+-PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/fb/68/ce067f09fca4abeca8771fe667d89cc347d1e99da3e093112ac329c6020e
++PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/e7/46/bd74733ff231675599650d3e47f361794b22ef3e3770998dda30d3b63726
+ PYTHON_PYJWT_SETUP_TYPE = setuptools
+ PYTHON_PYJWT_LICENSE = MIT
+ PYTHON_PYJWT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
