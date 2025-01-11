@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52BDCE7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 17:28:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB149E7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 17:28:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D04D838F2;
-	Sat, 11 Jan 2025 17:28:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FA93409FB;
+	Sat, 11 Jan 2025 17:28:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pKGXqc4MplDF; Sat, 11 Jan 2025 17:28:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5zV7xJgYMHK4; Sat, 11 Jan 2025 17:28:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2C998380E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43D5B40B67
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2C998380E;
-	Sat, 11 Jan 2025 17:28:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 43D5B40B67;
+	Sat, 11 Jan 2025 17:28:39 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 213BA950
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 240A4942
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B88560708
+ by smtp3.osuosl.org (Postfix) with ESMTP id 86B2A6078E
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4QUgT724-qDI for <buildroot@buildroot.org>;
+ id ex6pFOHXd67n for <buildroot@buildroot.org>;
  Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 440146078E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F59A608D2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 440146078E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F59A608D2
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4024F7F8B7; Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
+ id 674627F8B7; Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 18:03:47 +0100
+Date: Sat, 11 Jan 2025 18:03:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c140fd98817c4d594805378f5aef9d41b8cb7582
-X-Git-Newrev: 8056aa730968a66b37768d3aac7b445cdfedc4a1
+X-Git-Oldrev: 2ae73dec68c437c2acb32bb76cdeb8cb17f5476a
+X-Git-Newrev: 02bcbe6384cc7d7c54b56a995a861125be47352c
 X-Patchwork-Hint: ignore
-Message-Id: <20250111172826.4024F7F8B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pillow: bump to version
- 11.1.0
+Message-Id: <20250111172826.674627F8B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-poetry-dynamic-versioning:
+ bump to version 1.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,47 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8056aa730968a66b37768d3aac7b445cdfedc4a1
+commit: https://git.buildroot.net/buildroot/commit/?id=02bcbe6384cc7d7c54b56a995a861125be47352c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to end year removal:
-https://github.com/python-pillow/Pillow/commit/513fe2ca2d23c7f1685b089fc6087ab02b2828df
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pillow/python-pillow.hash | 6 +++---
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../python-poetry-dynamic-versioning.hash                             | 4 ++--
+ .../python-poetry-dynamic-versioning.mk                               | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 0ef6ebc820..abc5a4bf2e 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
+diff --git a/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.hash b/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.hash
+index abe063096d..7e0675cabb 100644
+--- a/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.hash
++++ b/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pillow/json
--md5  22912b3db645a51ab4b4ff036b559ca8  pillow-11.0.0.tar.gz
--sha256  72bacbaf24ac003fea9bff9837d1eedb6088758d41e100c1552930151f677739  pillow-11.0.0.tar.gz
-+md5  ede5dce0bbbeff02099e2e297919a82a  pillow-11.1.0.tar.gz
-+sha256  368da70808b36d73b4b390a8ffac11069f8a5c85f29eff1f1b01bcf3ef5b2a20  pillow-11.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/poetry-dynamic-versioning/json
+-md5  91032d27f9da010d8a9b7e76bfd09d24  poetry_dynamic_versioning-1.4.1.tar.gz
+-sha256  21584d21ca405aa7d83d23d38372e3c11da664a8742995bdd517577e8676d0e1  poetry_dynamic_versioning-1.4.1.tar.gz
++md5  d3d35766974dc0e040d73f7dcc15cc5f  poetry_dynamic_versioning-1.6.0.tar.gz
++sha256  568b728eeb7b2c4a3b818565bbaffc2128bde68ad037152d464b92975f45ce70  poetry_dynamic_versioning-1.6.0.tar.gz
  # Locally computed sha256 checksums
--sha256  cf234c27a3f275f5a050f4df3946f8855704226fe4e7ca8b33928cbcecbced37  LICENSE
-+sha256  17f240ae101143707e5e7303a5d800450d9ccc7475b463cedb555cefdb3c6ece  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 9626268b6e..1053bec5d6 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,8 +4,8 @@
+ sha256  cd75c5564078e3aadf662a9df3d23430f4705dfeedebbd0ebbeef53998ad94a8  LICENSE
+diff --git a/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk b/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk
+index e159e80324..6ff596bca2 100644
+--- a/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk
++++ b/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PILLOW_VERSION = 11.0.0
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/a5/26/0d95c04c868f6bdb0c447e3ee2de5564411845e36a858cfd63766bc7b563
-+PYTHON_PILLOW_VERSION = 11.1.0
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/f3/af/c097e544e7bd278333db77933e535098c259609c4eb3b85381109602fb5b
- PYTHON_PILLOW_SOURCE = pillow-$(PYTHON_PILLOW_VERSION).tar.gz
- PYTHON_PILLOW_LICENSE = HPND
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
+-PYTHON_POETRY_DYNAMIC_VERSIONING_VERSION = 1.4.1
++PYTHON_POETRY_DYNAMIC_VERSIONING_VERSION = 1.6.0
+ PYTHON_POETRY_DYNAMIC_VERSIONING_SOURCE = poetry_dynamic_versioning-$(PYTHON_POETRY_DYNAMIC_VERSIONING_VERSION).tar.gz
+-PYTHON_POETRY_DYNAMIC_VERSIONING_SITE = https://files.pythonhosted.org/packages/dd/70/1138211a6e5051d28596922ed39acf20b42819db5ae1f93e465b9a903c28
++PYTHON_POETRY_DYNAMIC_VERSIONING_SITE = https://files.pythonhosted.org/packages/d3/f9/97b14cae52513ee028f1e81aad8a44e3a8f5a5d47570b48219431e131989
+ PYTHON_POETRY_DYNAMIC_VERSIONING_SETUP_TYPE = poetry
+ PYTHON_POETRY_DYNAMIC_VERSIONING_LICENSE = MIT
+ PYTHON_POETRY_DYNAMIC_VERSIONING_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
