@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1A52E7719C
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 17:28:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52BDCE7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 17:28:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B252A606ED;
-	Sat, 11 Jan 2025 17:28:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D04D838F2;
+	Sat, 11 Jan 2025 17:28:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1E0rGpGvHWKl; Sat, 11 Jan 2025 17:28:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pKGXqc4MplDF; Sat, 11 Jan 2025 17:28:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBC3460A6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2C998380E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBC3460A6E;
-	Sat, 11 Jan 2025 17:28:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2C998380E;
+	Sat, 11 Jan 2025 17:28:36 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 953CF950
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 213BA950
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B115606ED
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B88560708
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gk1RpQCn8SrC for <buildroot@buildroot.org>;
+ id 4QUgT724-qDI for <buildroot@buildroot.org>;
  Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 196DE60708
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 440146078E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 196DE60708
+ by smtp3.osuosl.org (Postfix) with ESMTP id 440146078E
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 02C9784738; Sat, 11 Jan 2025 17:28:25 +0000 (UTC)
+ id 4024F7F8B7; Sat, 11 Jan 2025 17:28:26 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 18:03:34 +0100
+Date: Sat, 11 Jan 2025 18:03:47 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 35c425e7b288484c79ef0aeb7b28dcd989936ed0
-X-Git-Newrev: 40a561d90a2c9a5cd122de6239cbbbfb7b2b365c
+X-Git-Oldrev: c140fd98817c4d594805378f5aef9d41b8cb7582
+X-Git-Newrev: 8056aa730968a66b37768d3aac7b445cdfedc4a1
 X-Patchwork-Hint: ignore
-Message-Id: <20250111172826.02C9784738@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-orjson: bump to version
- 3.10.14
+Message-Id: <20250111172826.4024F7F8B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pillow: bump to version
+ 11.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40a561d90a2c9a5cd122de6239cbbbfb7b2b365c
+commit: https://git.buildroot.net/buildroot/commit/?id=8056aa730968a66b37768d3aac7b445cdfedc4a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License hash changed due to end year removal:
+https://github.com/python-pillow/Pillow/commit/513fe2ca2d23c7f1685b089fc6087ab02b2828df
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-orjson/python-orjson.hash | 2 +-
- package/python-orjson/python-orjson.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pillow/python-pillow.hash | 6 +++---
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
-index ddea73f629..df657aacb9 100644
---- a/package/python-orjson/python-orjson.hash
-+++ b/package/python-orjson/python-orjson.hash
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index 0ef6ebc820..abc5a4bf2e 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  144d268da63c96d800f5aa0c0901cf09c9337a6dc5372a4539415d2cf7f45b2d  python-orjson-3.10.11-cargo2.tar.gz
-+sha256  2d093fc336be04a32f4edf27b2aca8e6e7c796521cfaf9552079b39d2ea93e06  python-orjson-3.10.14-cargo2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pillow/json
+-md5  22912b3db645a51ab4b4ff036b559ca8  pillow-11.0.0.tar.gz
+-sha256  72bacbaf24ac003fea9bff9837d1eedb6088758d41e100c1552930151f677739  pillow-11.0.0.tar.gz
++md5  ede5dce0bbbeff02099e2e297919a82a  pillow-11.1.0.tar.gz
++sha256  368da70808b36d73b4b390a8ffac11069f8a5c85f29eff1f1b01bcf3ef5b2a20  pillow-11.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
-index 85ad6c3248..9b44ebcd67 100644
---- a/package/python-orjson/python-orjson.mk
-+++ b/package/python-orjson/python-orjson.mk
-@@ -4,9 +4,9 @@
+-sha256  cf234c27a3f275f5a050f4df3946f8855704226fe4e7ca8b33928cbcecbced37  LICENSE
++sha256  17f240ae101143707e5e7303a5d800450d9ccc7475b463cedb555cefdb3c6ece  LICENSE
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index 9626268b6e..1053bec5d6 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_ORJSON_VERSION = 3.10.11
-+PYTHON_ORJSON_VERSION = 3.10.14
- PYTHON_ORJSON_SOURCE_PYPI = orjson-$(PYTHON_ORJSON_VERSION).tar.gz
--PYTHON_ORJSON_SITE_PYPI = https://files.pythonhosted.org/packages/db/3a/10320029954badc7eaa338a15ee279043436f396e965dafc169610e4933f
-+PYTHON_ORJSON_SITE_PYPI = https://files.pythonhosted.org/packages/92/f7/3219b56f47b4f5e864fb11cdf4ac0aaa3de608730ad2dc4c6e16382f35ec
- PYTHON_ORJSON_SITE = $(PYTHON_ORJSON_SITE_PYPI)/$(PYTHON_ORJSON_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_ORJSON_SETUP_TYPE = maturin
- PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
+-PYTHON_PILLOW_VERSION = 11.0.0
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/a5/26/0d95c04c868f6bdb0c447e3ee2de5564411845e36a858cfd63766bc7b563
++PYTHON_PILLOW_VERSION = 11.1.0
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/f3/af/c097e544e7bd278333db77933e535098c259609c4eb3b85381109602fb5b
+ PYTHON_PILLOW_SOURCE = pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+ PYTHON_PILLOW_LICENSE = HPND
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
