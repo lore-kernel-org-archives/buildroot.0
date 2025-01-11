@@ -1,52 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42888E7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 15:45:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD394E7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 15:45:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 039AE41297;
-	Sat, 11 Jan 2025 15:45:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B12660AC9;
+	Sat, 11 Jan 2025 15:45:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kQQSGYHcrz87; Sat, 11 Jan 2025 15:45:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RbOmtrDyH9G2; Sat, 11 Jan 2025 15:45:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDD704129F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A30D60E14
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDD704129F;
-	Sat, 11 Jan 2025 15:45:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C8FB942
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 15:45:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A30D60E14;
+	Sat, 11 Jan 2025 15:45:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4193E940
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 15:45:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B69583B1E
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 15:45:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 22DEF60E14
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 15:45:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CihChuQWUUbI for <buildroot@buildroot.org>;
- Sat, 11 Jan 2025 15:45:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE42883B22
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE42883B22
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 15:45:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D91C88449B; Sat, 11 Jan 2025 15:45:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EEL2naNmLbfT for <buildroot@buildroot.org>;
+ Sat, 11 Jan 2025 15:45:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5690960AC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5690960AC9
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5690960AC9
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 15:45:30 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 1253478050B;
+ Sat, 11 Jan 2025 16:45:26 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:43180])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 11 Jan 2025 16:45:26 +0100
+MIME-Version: 1.0
+Date: Sat, 11 Jan 2025 16:45:26 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 16:34:54 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 09649af4bd539b3fb2a52b07c1f58f6f4caffaa6
-X-Git-Newrev: c255eb8b4d782fe739f1debf786f086720f339c7
-X-Patchwork-Hint: ignore
-Message-Id: <20250111154504.D91C88449B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-gnupg: bump to version 0.5.4
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250109210848.2400151-1-james.hilliard1@gmail.com>
+References: <20250109210848.2400151-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <6c21b75f292444927c63a9b992a5a439@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1736610328;
+ bh=6jfQWAJPj23/vJjAgFbYGqtQxdJQSi8VEYHteNPrXUs=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=KDnG+BVrUTEhSuPXas3m0sNO7wA1HgN6rV/FAKszt/03i9LnX5AM6DPEAPGXfL4zq
+ V2c0hLontbTRJA2MwQ/kqeANLFSPo0/ALNpph/s+mZL1fEFTQgbzPuSmi37EdET75v
+ /weXOgVmrN9r+oS2DCPmC+E13WyH2c52Z+h+iCBNyCRGv9/2nSviPv9JiMGBCSAKWi
+ oMhGrTL6a+pahkOC5JeHGz+0LNp4kw3wZ1HSk0e1kIdun2r7JXFuoj/ZBje4JRUhzW
+ tsblhPJbgBu4gGQBSXbmSvTGQE4XySoJ4mZo6I8yKvpNTnTO1KoBiKf+LNTVqtqm27
+ TJo8WPK0Vy+Bg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=KDnG+BVr
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-gnupg: bump to version
+ 0.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,49 +83,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c255eb8b4d782fe739f1debf786f086720f339c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09/01/2025 22:08, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-gnupg/python-gnupg.hash | 4 ++--
- package/python-gnupg/python-gnupg.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-gnupg/python-gnupg.hash b/package/python-gnupg/python-gnupg.hash
-index 5d722a1b95..9f3ba63721 100644
---- a/package/python-gnupg/python-gnupg.hash
-+++ b/package/python-gnupg/python-gnupg.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-gnupg/json
--md5  48c77a551bed992d19f7a99e3c6fb9d6  python-gnupg-0.5.3.tar.gz
--sha256  290d8ddb9cd63df96cfe9284b9b265f19fd6e145e5582dc58fd7271f026d0a47  python-gnupg-0.5.3.tar.gz
-+md5  8358b54f2c76b714545f04df3f33df28  python-gnupg-0.5.4.tar.gz
-+sha256  f2fdb5fb29615c77c2743e1cb3d9314353a6e87b10c37d238d91ae1c6feae086  python-gnupg-0.5.4.tar.gz
- # Locally computed sha256 checksums
- sha256  4104ca980dbca7603fc553078378eb14566a76f819d033d7bff89fd6a97e181b  LICENSE.txt
-diff --git a/package/python-gnupg/python-gnupg.mk b/package/python-gnupg/python-gnupg.mk
-index 00c1b9edde..ae5548660f 100644
---- a/package/python-gnupg/python-gnupg.mk
-+++ b/package/python-gnupg/python-gnupg.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_GNUPG_VERSION = 0.5.3
--PYTHON_GNUPG_SITE = https://files.pythonhosted.org/packages/85/61/2df3cd6f49dbb2d4a6a567cac1d803e3a50d86207e196d0f9e67a48664f7
-+PYTHON_GNUPG_VERSION = 0.5.4
-+PYTHON_GNUPG_SITE = https://files.pythonhosted.org/packages/f1/3e/ba0dc69c9f4e0aeb24d93175230ef057c151790a7516012f61014918992d
- PYTHON_GNUPG_LICENSE = BSD-3-Clause
- PYTHON_GNUPG_LICENSE_FILES = LICENSE.txt
- PYTHON_GNUPG_CPE_ID_VENDOR = python
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
