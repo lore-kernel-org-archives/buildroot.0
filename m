@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F9DBE7719C
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:43:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8FADE7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:43:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2D9960F68;
-	Sat, 11 Jan 2025 16:43:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B0EDD608B7;
+	Sat, 11 Jan 2025 16:43:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DIO8y32Rq7rA; Sat, 11 Jan 2025 16:43:56 +0000 (UTC)
+ id P6OO9rOAYtZk; Sat, 11 Jan 2025 16:43:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD9AB6109F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37773610F9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD9AB6109F;
-	Sat, 11 Jan 2025 16:43:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 34C03952
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:43:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37773610F9;
+	Sat, 11 Jan 2025 16:43:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0BF29950
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:43:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 03D6C4047E
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:43:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F2C26072D
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:43:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jlsK8B-5_QOY for <buildroot@buildroot.org>;
- Sat, 11 Jan 2025 16:43:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kl38R4XYfWtE for <buildroot@buildroot.org>;
+ Sat, 11 Jan 2025 16:43:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A3C840438
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA9206078E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A3C840438
+ by smtp3.osuosl.org (Postfix) with ESMTP id AA9206078E
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:43:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9169E84694; Sat, 11 Jan 2025 16:43:29 +0000 (UTC)
+ id A75FE84692; Sat, 11 Jan 2025 16:43:29 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 17:30:16 +0100
+Date: Sat, 11 Jan 2025 17:30:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cf711bf9b374468606eac045a92f1fe4076e825f
-X-Git-Newrev: af91c5c48d75f5a8a13a3ac194d8612c018908a3
+X-Git-Oldrev: dc4346c530dbeaa902a712e1e66b904ea8c60949
+X-Git-Newrev: 8f07566230ab3572c8ff479e8b38b1b3c3996017
 X-Patchwork-Hint: ignore
-Message-Id: <20250111164329.9169E84694@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-ipython: bump to version
- 8.31.0
+Message-Id: <20250111164329.A75FE84692@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-jedi: bump to version 0.19.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,45 +64,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af91c5c48d75f5a8a13a3ac194d8612c018908a3
+commit: https://git.buildroot.net/buildroot/commit/?id=8f07566230ab3572c8ff479e8b38b1b3c3996017
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-ipython/python-ipython.hash | 4 ++--
- package/python-ipython/python-ipython.mk   | 4 ++--
+ package/python-jedi/python-jedi.hash | 4 ++--
+ package/python-jedi/python-jedi.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
-index ca2b0ea16c..8186b5c09d 100644
---- a/package/python-ipython/python-ipython.hash
-+++ b/package/python-ipython/python-ipython.hash
+diff --git a/package/python-jedi/python-jedi.hash b/package/python-jedi/python-jedi.hash
+index 99034d20bb..7ecce429aa 100644
+--- a/package/python-jedi/python-jedi.hash
++++ b/package/python-jedi/python-jedi.hash
 @@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/ipython/json
--md5  728e73b95f7a3078fcbce50e64396bc3  ipython-8.29.0.tar.gz
--sha256  40b60e15b22591450eef73e40a027cf77bd652e757523eebc5bd7c7c498290eb  ipython-8.29.0.tar.gz
-+md5  5c629ec6cc81a8d5eecea3956e670d54  ipython-8.31.0.tar.gz
-+sha256  b6a2274606bec6166405ff05e54932ed6e5cfecaca1fc05f2cacde7bb074d70b  ipython-8.31.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/jedi/json
+-md5  0951191b506b660bfdb90c3dcd5b3254  jedi-0.19.1.tar.gz
+-sha256  cf0496f3651bc65d7174ac1b7d043eff454892c708a87d1b683e57b569927ffd  jedi-0.19.1.tar.gz
++md5  bc2dfcc3fdcd7a1384867b5c6f5bf519  jedi-0.19.2.tar.gz
++sha256  4770dc3de41bde3966b02eb84fbcf557fb33cce26ad23da12c742fb50ecb11f0  jedi-0.19.2.tar.gz
  # Locally computed sha256 checksums
- sha256  341afcbd729887b7046fe7b98fc4f4edff3aed8d38f06eefd9b30670f043df17  COPYING.rst
- sha256  e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index 7e7806b12d..2bc4b54ef7 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
+ sha256  78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412  LICENSE.txt
+ sha256  235e993965d399a25e7d493d25c8622f78718510884b9c051f1f1866b6f34e9d  jedi/third_party/django-stubs/LICENSE.txt
+diff --git a/package/python-jedi/python-jedi.mk b/package/python-jedi/python-jedi.mk
+index 5d54642a07..7cd69f9053 100644
+--- a/package/python-jedi/python-jedi.mk
++++ b/package/python-jedi/python-jedi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPYTHON_VERSION = 8.29.0
-+PYTHON_IPYTHON_VERSION = 8.31.0
- PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
--PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/85/e0/a3f36dde97e12121106807d80485423ae4c5b27ce60d40d4ab0bab18a9db
-+PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/01/35/6f90fdddff7a08b7b715fccbd2427b5212c9525cd043d26fdc45bee0708d
- PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
- PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
+-PYTHON_JEDI_VERSION = 0.19.1
++PYTHON_JEDI_VERSION = 0.19.2
+ PYTHON_JEDI_SOURCE = jedi-$(PYTHON_JEDI_VERSION).tar.gz
+-PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/d6/99/99b493cec4bf43176b678de30f81ed003fd6a647a301b9c927280c600f0a
++PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/72/3a/79a912fbd4d8dd6fbb02bf69afd3bb72cf0c729bb3063c6f4498603db17a
+ PYTHON_JEDI_SETUP_TYPE = setuptools
+ PYTHON_JEDI_LICENSE = MIT, Apache-2.0 (typeshed)
+ PYTHON_JEDI_LICENSE_FILES = LICENSE.txt jedi/third_party/django-stubs/LICENSE.txt jedi/third_party/typeshed/LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
