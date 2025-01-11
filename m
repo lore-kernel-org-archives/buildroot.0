@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 094B7E7719C
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:43:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B66E9E7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:43:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BDAB660A4F;
-	Sat, 11 Jan 2025 16:43:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80E2C40438;
+	Sat, 11 Jan 2025 16:43:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0I1OpHzTBDRr; Sat, 11 Jan 2025 16:43:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6u1oOepfCVFQ; Sat, 11 Jan 2025 16:43:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E414360BD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68A7340507
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E414360BD3;
-	Sat, 11 Jan 2025 16:43:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9BA08950
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:43:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68A7340507;
+	Sat, 11 Jan 2025 16:43:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 22BBC942
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:43:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96F684047E
+ by smtp4.osuosl.org (Postfix) with ESMTP id BBB1D403D3
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:43:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k8ipGphMIPg8 for <buildroot@buildroot.org>;
+ id pKxsZnVHuTFS for <buildroot@buildroot.org>;
  Sat, 11 Jan 2025 16:43:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8298A403D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4FDA4043D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8298A403D3
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4FDA4043D
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:43:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6EF0E84696; Sat, 11 Jan 2025 16:43:29 +0000 (UTC)
+ id B1F3284696; Sat, 11 Jan 2025 16:43:29 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 17:30:06 +0100
+Date: Sat, 11 Jan 2025 17:30:28 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ea6fb2554bd0607b94b801471e520829f006ee9c
-X-Git-Newrev: 616dafb36581c142aa57c23c18c810f25e14a9d1
+X-Git-Oldrev: 8f07566230ab3572c8ff479e8b38b1b3c3996017
+X-Git-Newrev: b9563a5206d767d5c72f4a096854c1dfeb6c830a
 X-Patchwork-Hint: ignore
-Message-Id: <20250111164329.6EF0E84696@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-hiredis: bump to version
- 3.1.0
+Message-Id: <20250111164329.B1F3284696@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-jinja2: bump to version
+ 3.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,45 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=616dafb36581c142aa57c23c18c810f25e14a9d1
+commit: https://git.buildroot.net/buildroot/commit/?id=b9563a5206d767d5c72f4a096854c1dfeb6c830a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-hiredis/python-hiredis.hash | 4 ++--
- package/python-hiredis/python-hiredis.mk   | 4 ++--
+ package/python-jinja2/python-jinja2.hash | 4 ++--
+ package/python-jinja2/python-jinja2.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-hiredis/python-hiredis.hash b/package/python-hiredis/python-hiredis.hash
-index d4d98d85df..07b0d96582 100644
---- a/package/python-hiredis/python-hiredis.hash
-+++ b/package/python-hiredis/python-hiredis.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/hiredis/json
--md5  c0b7f7def9f945e8a900a4275df2d3af  hiredis-3.0.0.tar.gz
--sha256  fed8581ae26345dea1f1e0d1a96e05041a727a45e7d8d459164583e23c6ac441  hiredis-3.0.0.tar.gz
-+md5  56a3997b44753c11a0cdb2dc4aa50352  hiredis-3.1.0.tar.gz
-+sha256  51d40ac3611091020d7dea6b05ed62cb152bff595fa4f931e7b6479d777acf7c  hiredis-3.1.0.tar.gz
+diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
+index 2b32f5cce4..a89c63a0f4 100644
+--- a/package/python-jinja2/python-jinja2.hash
++++ b/package/python-jinja2/python-jinja2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jinja2/json
+-md5  02ca9a6364c92e83d14b037bef4732bc  jinja2-3.1.4.tar.gz
+-sha256  4a3aee7acbbe7303aede8e9648d13b8bf88a429282aa6122a993f0ac800cb369  jinja2-3.1.4.tar.gz
++md5  083d64f070f6f1b5f75971ae60240785  jinja2-3.1.5.tar.gz
++sha256  8fefff8dc3034e27bb80d67c671eb8a9bc424c0ef4c0826edbff304cceff43bb  jinja2-3.1.5.tar.gz
  # Locally computed sha256 checksums
- sha256  3256b5b77e98aa34ff31a4d2c2c10f7f177b0f3058753a6044430a168987353b  LICENSE
- sha256  dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
-diff --git a/package/python-hiredis/python-hiredis.mk b/package/python-hiredis/python-hiredis.mk
-index 59e036c845..b938650caf 100644
---- a/package/python-hiredis/python-hiredis.mk
-+++ b/package/python-hiredis/python-hiredis.mk
+ sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.txt
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 780b693281..9b95b3212c 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_HIREDIS_VERSION = 3.0.0
-+PYTHON_HIREDIS_VERSION = 3.1.0
- PYTHON_HIREDIS_SOURCE = hiredis-$(PYTHON_HIREDIS_VERSION).tar.gz
--PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/8b/80/740fb0dfa7a42416ce8376490f41dcdb1e5deed9c3739dfe4200fad865a9
-+PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/38/e5/789cfa8993ced0061a6ef7ea758302ef5cf3439629bf0d39c85a6ede4641
- PYTHON_HIREDIS_SETUP_TYPE = setuptools
- PYTHON_HIREDIS_LICENSE = MIT, BSD-3-Clause
- PYTHON_HIREDIS_LICENSE_FILES = LICENSE vendor/hiredis/COPYING
+-PYTHON_JINJA2_VERSION = 3.1.4
++PYTHON_JINJA2_VERSION = 3.1.5
+ PYTHON_JINJA2_SOURCE = jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
+-PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/ed/55/39036716d19cab0747a5020fc7e907f362fbf48c984b14e62127f7e68e5d
++PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/af/92/b3130cbbf5591acf9ade8708c365f3238046ac7cb8ccba6e81abccb0ccff
+ PYTHON_JINJA2_SETUP_TYPE = flit
+ PYTHON_JINJA2_LICENSE = BSD-3-Clause
+ PYTHON_JINJA2_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
