@@ -4,49 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34916E7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 10:45:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51DB0E7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 10:49:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D545083BCB;
-	Sat, 11 Jan 2025 10:45:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15FB083C1C;
+	Sat, 11 Jan 2025 10:49:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F23jgmSCaOzX; Sat, 11 Jan 2025 10:45:55 +0000 (UTC)
+ id yxospJUTYJ_F; Sat, 11 Jan 2025 10:49:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDA3083BCD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F3D083C1D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DDA3083BCD;
-	Sat, 11 Jan 2025 10:45:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 11439942
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 10:45:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F3D083C1D;
+	Sat, 11 Jan 2025 10:49:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 90E8A942
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 10:49:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E5824610BD
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 10:45:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6BA9383C1C
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 10:49:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LyERwaAzg2ta for <buildroot@buildroot.org>;
- Sat, 11 Jan 2025 10:45:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE98561093
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BE98561093
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 10:45:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A6A1783D30; Sat, 11 Jan 2025 10:45:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XpbVBO5j42PI for <buildroot@buildroot.org>;
+ Sat, 11 Jan 2025 10:48:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3942D83C1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3942D83C1D
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3942D83C1D
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 10:48:58 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id B0F8A19F73B;
+ Sat, 11 Jan 2025 11:48:54 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:33656])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 11 Jan 2025 11:48:54 +0100
+MIME-Version: 1.0
+Date: Sat, 11 Jan 2025 11:48:54 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 11:41:19 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5af07b8c9b2bbf23069dca9d55b0f0b05129647a
-X-Git-Newrev: e8bedf18671a21bdc000a0cebf23c5cb83fe9b18
-X-Patchwork-Hint: ignore
-Message-Id: <20250111104551.A6A1783D30@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgsasl: bump version to 2.2.1
+To: Akhilesh Nema <nemaakhilesh@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250109011520.27360-1-nemaakhilesh@gmail.com>
+References: <20250109011520.27360-1-nemaakhilesh@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <f5262d1182de5413116ddaeed66157a9@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1736592535;
+ bh=1mdx81zohjuCGy5RnG3KCi9JKi4ePa+L7IrSNLGzFss=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=sh+dQ0voZEfnI3tvSB5qWL6zn7Sv8JrNPQXM/xnuPvY+PrYUGwCKC4DAlEfGl8sWL
+ LhuBCOTuoUS6CcqVMy6maeM4byink/VwCriQqSPQZKIWurN2UHEPDWRnCthZIVjogk
+ AVt6Je3aaoqBT92UAKFAWhNgBmORr1muzTrFDZRFev88iUGnPqsPNsGeX9KEopRS6X
+ vbIMs3eYeBpD5lzr7DkjdkpjnQQkG/1GCq2OB2eUjU+EzK/gQaMW10eHVPerhTLGUy
+ k478fN75EtvTh8mB/1pf6tDmTumvS/SgZEH9Xk75F3mrMfLH0qSt0qrD6KYBTdGXTn
+ VPpNIG1Ujn4hA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=sh+dQ0vo
+Subject: Re: [Buildroot] [PATCH 1/1] package/libgsasl: bump version to 2.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,105 +83,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8bedf18671a21bdc000a0cebf23c5cb83fe9b18
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Akhilesh,
 
-Release notes, since 1.10.0:
-2.0.0: https://lists.gnu.org/archive/html/help-gsasl/2022-06/msg00005.html
-2.0.1: https://lists.gnu.org/archive/html/help-gsasl/2022-07/msg00000.html
-2.2.0: https://lists.gnu.org/archive/html/help-gsasl/2022-09/msg00001.html
-2.2.1: https://lists.gnu.org/archive/html/help-gsasl/2024-01/msg00003.html
+On 09/01/2025 02:15, Akhilesh Nema wrote:
+> Release notes:
+> https://lists.gnu.org/archive/html/help-gsasl/2024-01/msg00003.html
+> 
+> Updates:
+> - COPYING.LIB renamed to COPYING.LESSER.
+>   
+> https://gitlab.com/gsasl/gsasl/-/commit/2492403b4e6d65a3c2d6dd7eee9ddedbc733275b
+> - Upstream tarball no longer includes the lib prefix.
+> - COPYING hash changed due to copyright URL update.
+>   
+> https://gitlab.com/gsasl/gsasl/-/commit/89c4c35d7b0204dc3d6ecbccadab47d76640f0be
+> - README hash changed due to multiple revisions.
+>   
+> https://gitlab.com/gsasl/gsasl/-/commits/master/README.md?ref_type=heads
+> - Tarball's sha256sum mentioned in the release notes was 
+> base64-encoded. It was decoded with the following command:
+>   echo "1FtWLhO9E7n8ILNy9LUyaXQM9iefg28JzhG50yvO4HU=" | base64 -d | xxd 
+> -c 32 -p
+> 
+> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 
-Updates:
-- COPYING.LIB renamed to COPYING.LESSER.
-  https://gitlab.com/gsasl/gsasl/-/commit/2492403b4e6d65a3c2d6dd7eee9ddedbc733275b
-- Upstream tarball no longer includes the lib prefix.
-- COPYING hash changed due to copyright URL update.
-  https://gitlab.com/gsasl/gsasl/-/commit/89c4c35d7b0204dc3d6ecbccadab47d76640f0be
-- README hash changed due to multiple revisions.
-  https://gitlab.com/gsasl/gsasl/-/commits/master/README.md?ref_type=heads
-- Tarball's sha256sum mentioned in the release notes was base64-encoded. It was decoded with the following command:
-  echo "1FtWLhO9E7n8ILNy9LUyaXQM9iefg28JzhG50yvO4HU=" | base64 -d | xxd -c 32 -p
+I applied this patch to master. Thanks.
 
-Also, this libgsasl-2.2.1 fixes a msmtp-1.8.27 build failure. When
-using a Buildroot config with:
+I added comments that it fixes the recent msmtp build failures.
 
-    BR2_PACKAGE_MSMTP=y
-    BR2_PACKAGE_LIBGSASL=y
-    BR2_PACKAGE_OPENSSL=y
+Best regards,
 
-mtmsp is failing to build with error.
-
-    smtp.c: In function 'smtp_auth':
-    smtp.c:1392:19: error: 'GSASL_CB_TLS_EXPORTER' undeclared (first use in this function); did you mean 'GSASL_CB_TLS_UNIQUE'?
-     1392 |                 ? GSASL_CB_TLS_EXPORTER : GSASL_CB_TLS_UNIQUE,
-          |                   ^~~~~~~~~~~~~~~~~~~~~
-
-This GSASL_CB_TLS_EXPORTER was introduced in gsasl v2.1.0. This bump
-fixes this build failure.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/commit/e9007bc74ed571234bb938c1fdc4cc99d6571bfc
-https://autobuild.buildroot.org/results/835fec8275d4ff6eed298b892807dd295436d99d
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-[Julien:
-  - add other release notes since previous version
-  - add comment about msmtp build failure fix
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libgsasl/libgsasl.hash | 14 +++++++-------
- package/libgsasl/libgsasl.mk   |  5 +++--
- 2 files changed, 10 insertions(+), 9 deletions(-)
-
-diff --git a/package/libgsasl/libgsasl.hash b/package/libgsasl/libgsasl.hash
-index 75e5a317fa..81907f8875 100644
---- a/package/libgsasl/libgsasl.hash
-+++ b/package/libgsasl/libgsasl.hash
-@@ -1,11 +1,11 @@
--# From https://lists.gnu.org/archive/html/help-gsasl/2021-01/msg00007.html
--sha1  a16ff428bbf28fcfa681c7edd2cd2bb087bcc4e7  libgsasl-1.10.0.tar.gz
--sha224  20b37757fccb6a0f8b4c6fcb28f51a3b4b8a4b1fdb4736da07707a0b  libgsasl-1.10.0.tar.gz
-+# From https://lists.gnu.org/archive/html/help-gsasl/2024-01/msg00003.html
-+sha1  c238b3af05af3804808cbf734f049a06840d787c  gsasl-2.2.1.tar.gz
-+sha256  d45b562e13bd13b9fc20b372f4b53269740cf6279f836f09ce11b9d32bcee075  gsasl-2.2.1.tar.gz
- 
- # Locally calculated after checking pgp signature
--sha256  f1b553384dedbd87478449775546a358d6f5140c15cccc8fb574136fdc77329f  libgsasl-1.10.0.tar.gz
-+sha256  d45b562e13bd13b9fc20b372f4b53269740cf6279f836f09ce11b9d32bcee075  gsasl-2.2.1.tar.gz
- 
- # Hash for license files:
--sha256  26e99818ca6ce79d8b2c461fabc72dc6e03483e6b0fd9692dcb07ab1b09bbac7  README
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  8908e3d66e17102a3b921e1f7f80be5dc9c905ad15561579d46a7074387e311b  README
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/libgsasl/libgsasl.mk b/package/libgsasl/libgsasl.mk
-index b1981dea3b..b8570058a4 100644
---- a/package/libgsasl/libgsasl.mk
-+++ b/package/libgsasl/libgsasl.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
- 
--LIBGSASL_VERSION = 1.10.0
-+LIBGSASL_VERSION = 2.2.1
-+LIBGSASL_SOURCE = gsasl-$(LIBGSASL_VERSION).tar.gz
- LIBGSASL_SITE = $(BR2_GNU_MIRROR)/gsasl
- LIBGSASL_LICENSE = LGPL-2.1+ (library), GPL-3.0+ (programs)
--LIBGSASL_LICENSE_FILES = README COPYING.LIB COPYING
-+LIBGSASL_LICENSE_FILES = README COPYING.LESSER COPYING
- LIBGSASL_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
