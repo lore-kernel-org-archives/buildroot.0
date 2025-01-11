@@ -4,49 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6155EE7719C
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8737E7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:06:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DBE5611BD;
-	Sat, 11 Jan 2025 16:05:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CFFD611AB;
+	Sat, 11 Jan 2025 16:06:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7leRuzuaadv1; Sat, 11 Jan 2025 16:05:31 +0000 (UTC)
+ id rJVBCz-D01vF; Sat, 11 Jan 2025 16:06:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D478611D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D1F2611C6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D478611D3;
-	Sat, 11 Jan 2025 16:05:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 11DB7942
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:05:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D1F2611C6;
+	Sat, 11 Jan 2025 16:06:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 60DFB940
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:06:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0E1276119F
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:05:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4EA8C82F13
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:06:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pl-RIzA1UE6W for <buildroot@buildroot.org>;
- Sat, 11 Jan 2025 16:05:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D335E611A8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D335E611A8
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:05:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BE97A8292F; Sat, 11 Jan 2025 16:05:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 49j6VH6dmt3u for <buildroot@buildroot.org>;
+ Sat, 11 Jan 2025 16:06:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0766582F0F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0766582F0F
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0766582F0F
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:06:08 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 28A4B60140;
+ Sat, 11 Jan 2025 17:06:05 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:37794])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 11 Jan 2025 17:06:05 +0100
+MIME-Version: 1.0
+Date: Sat, 11 Jan 2025 17:06:05 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 17:02:44 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3eef6d14b55ae03e06952914d0d1204e47572319
-X-Git-Newrev: b27de188f78b467ea06ab431393e4bcc9bac93c3
-X-Patchwork-Hint: ignore
-Message-Id: <20250111160517.BE97A8292F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-anyio: bump to version 4.8.0
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250109192354.2361883-1-james.hilliard1@gmail.com>
+References: <20250109192354.2361883-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <c21726001774ccc1e79596ec409f5a65@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1736611566;
+ bh=o5WvYKv02EHlS77/7+/1s364lxTasDHSf/ZU6rYTJmM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=fzOEXLN1JUo1FkEErF+KfaSv8eDg16VJSyDqv01yLD2uAp95sxh+i0dSPdZuFdY4l
+ xeaZEOCGXmGC77QMh+tT0oh5BRs5yfNJsmk+jTaifNFCFlOjAFiKTWbN5IOayJ9DU6
+ BseuIgXvg8/8vmCCd9bq8VnHvS/4GKjx0TvjI0iOYo6RQ9aA6eE5Iy8DD0yKZsDvXm
+ 2Ge4geW82VlKlRrZyYVr0qUBEd4+78zx8jiyrp7nz/nJmNOO0HDJLIXaqIBEVM7tFE
+ 155l9abefD+esT7b52QjO1qB+5ecE63wC7hNOLs/5ivTdGHUle7AlwSyCXtMSf9Gqh
+ wxOSq3gRah6dA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=fzOEXLN1
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-asyncclick: bump to
+ version 8.1.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,50 +83,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b27de188f78b467ea06ab431393e4bcc9bac93c3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09/01/2025 20:23, James Hilliard wrote:
+> Migrate from setuptools to flit build backend.
+> 
+> License file renamed without content changes.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-anyio/python-anyio.hash | 4 ++--
- package/python-anyio/python-anyio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
-index 6896b7d516..4ff6955ae5 100644
---- a/package/python-anyio/python-anyio.hash
-+++ b/package/python-anyio/python-anyio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/anyio/json
--md5  6d0431fec06206d2bdbf57d449f1616b  anyio-4.7.0.tar.gz
--sha256  2f834749c602966b7d456a7567cafcb309f96482b5081d14ac93ccd457f9dd48  anyio-4.7.0.tar.gz
-+md5  ad00874069a6685b2e3e84c5a2e045cb  anyio-4.8.0.tar.gz
-+sha256  1d9fe889df5212298c0c0723fa20479d1b94883a2df44bd3897aa91083316f7a  anyio-4.8.0.tar.gz
- # Locally computed sha256 checksums
- sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
-diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
-index 8c814abfdd..4f38e12794 100644
---- a/package/python-anyio/python-anyio.mk
-+++ b/package/python-anyio/python-anyio.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_ANYIO_VERSION = 4.7.0
-+PYTHON_ANYIO_VERSION = 4.8.0
- PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
--PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/f6/40/318e58f669b1a9e00f5c4453910682e2d9dd594334539c7b7817dabb765f
-+PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/a3/73/199a98fc2dae33535d6b8e8e6ec01f8c1d76c9adb096c6b7d64823038cde
- PYTHON_ANYIO_SETUP_TYPE = setuptools
- PYTHON_ANYIO_LICENSE = MIT
- PYTHON_ANYIO_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
