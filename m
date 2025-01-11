@@ -4,98 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A75AE77188
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 00:28:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 411E9E7719C
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 01:25:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BBAAA41127;
-	Sat, 11 Jan 2025 00:28:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A694F410D1;
+	Sat, 11 Jan 2025 01:25:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pJseIii3y0LM; Sat, 11 Jan 2025 00:28:12 +0000 (UTC)
+ id 8gYgff9WkiXi; Sat, 11 Jan 2025 01:25:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE4704061E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35F9C410D4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE4704061E;
-	Sat, 11 Jan 2025 00:28:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2986376C
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 00:28:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 35F9C410D4;
+	Sat, 11 Jan 2025 01:25:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 766E3942
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 01:25:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0ECDF608D1
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 00:28:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5753D839D8
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 01:25:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jxFvnmGY2Unh for <buildroot@buildroot.org>;
- Sat, 11 Jan 2025 00:28:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PY-3pWPFWT5J for <buildroot@buildroot.org>;
+ Sat, 11 Jan 2025 01:25:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1029; helo=mail-pj1-x1029.google.com;
+ client-ip=2607:f8b0:4864:20::b2d; helo=mail-yb1-xb2d.google.com;
  envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 06B24608CD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06B24608CD
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com
- [IPv6:2607:f8b0:4864:20::1029])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 06B24608CD
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 00:28:07 +0000 (UTC)
-Received: by mail-pj1-x1029.google.com with SMTP id
- 98e67ed59e1d1-2f4448bf96fso3451685a91.0
- for <buildroot@buildroot.org>; Fri, 10 Jan 2025 16:28:07 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 47D44839CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47D44839CD
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com
+ [IPv6:2607:f8b0:4864:20::b2d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 47D44839CD
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 01:25:50 +0000 (UTC)
+Received: by mail-yb1-xb2d.google.com with SMTP id
+ 3f1490d57ef6-e3978c00a5aso4008573276.1
+ for <buildroot@buildroot.org>; Fri, 10 Jan 2025 17:25:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736555287; x=1737160087;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1736558749; x=1737163549;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=wVMCjr4wXkudH9cjNG1wMTLZyRntcWVzR0OLtorve7U=;
- b=s1yjhPzBXfezEk5CdXtZLz2WRtp8Z2XARjlJCFkeTVenm7U/kU7mbSf4Ny4chQ+GWG
- Vx4ihmvQxJSfhZ47iF+pU9Jr/4IzU4iSsj4oBJ3gE6mZDQn7WlX9KKNgUdjbjsHJlgZf
- Pe7u/rLyv4lOCLBzEh6Rs2tf/hrVb/9w1NM5Dio8JgVt1E74Ctmp+QmyBioOZu7rWo0b
- yLGIerqFG9SXjOpIPCMGT5DJSfS/P3HIgRtnPBAEpTljrE5nhwoN2LbwSGbStaQzmLSD
- WnwiMw1pDooBLcbvwlhycewlQUEmnsb4FBuoE0HdTSlwvlB36xPegsjlcw48hKrsBNcR
- hxQA==
-X-Gm-Message-State: AOJu0YzKS5KAEBUfFKlb2dZrt//UPlHskNer242PoLhIZFCJsq1Zu30O
- QsQrpquIWJ6ENjDt05U+hj89cuQE5zD/vwUX7Rib9Um5Bcyw8nILP7TErtUn
-X-Gm-Gg: ASbGnctMXy7MrawvYvDRwTYImpTJMVSKWQcSWURmwARjO/l+UafTUZu+uymThsblpHK
- B1XlvHy6OdbEmyg6Rk56tNRkexbtZ9yuCCCgyss59Rgri6vVegD/BivZLPKfawpWeJ58B5mFzCb
- 7z9YcjhzDmhsidrlQSoeSTvT5rfcmgqhlza1oLfJ8giMAyYc7jFzfB/jLtCBacUcXkxPosm73PA
- m9gSp8ZfqWIuRLEWwxhd08g2gDtl7PgyoZNGQDzZ5hwazLV4wPipvvhiiMSaE/+DyYSRAQsS4SJ
- OlTMlucGuE+2uIuSbptryr8m4MnLxq0qCu2b+5Tg
-X-Google-Smtp-Source: AGHT+IEwcMJ5XbrYJkOpbGDUG6PZ8QPfJYwinEzcKrhyD5CHvk8q72PmmGX7qGbXcucn//H/sOYNmw==
-X-Received: by 2002:a17:90b:2b87:b0:2ee:8031:cdbc with SMTP id
- 98e67ed59e1d1-2f548f1ec3fmr15918502a91.23.1736555287041; 
- Fri, 10 Jan 2025 16:28:07 -0800 (PST)
-Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
- [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-21a9f262e23sm18292365ad.253.2025.01.10.16.28.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Jan 2025 16:28:06 -0800 (PST)
-From: Akhilesh Nema <nemaakhilesh@gmail.com>
-To: buildroot@buildroot.org
-Cc: Bernd Kuhls <bernd@kuhls.net>,
-	Akhilesh Nema <nemaakhilesh@gmail.com>
-Date: Fri, 10 Jan 2025 16:28:03 -0800
-Message-Id: <20250111002803.767877-1-nemaakhilesh@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ bh=w+fjO3KzOuG7VxBkoB1EaZu9EfPTUIy+GLITfn4OgeA=;
+ b=CaxEcSq9UcbVbjqxizCyBHLhBu+hge24iR/Ds1/C/MBJCyHwSWN4mwe/nDmhSnEta+
+ hsULPMaCYMgCWj70ZHq6hoLePTOyDeHOWEUruGT2DG4GSDzzgnQ2ypvDfEIgyje1hq5S
+ S1m4j8sSn5fkDWyirMEPHl5aptbQyCLdGNdp3MpvyP0btmqQum51g8MBH/Hx5sji4zj3
+ vs2Yb3/wG7842VBfAB1bezRmQzubbJ0RI80fDV9VYQmZhfuY+iwtQ2Ka/RAp3aBxigdX
+ qVl5mxn0yRlcfULJPRCW+Yv5YfB6iSWX3uZhKBvHPx584mb+Lu/FHBbPwv/Q2ZAE5d5M
+ F0Yg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVXw6E9B3ULIF8SdIzJvyXvYcpHz1iTQLxoZafPrQW4MloEB77Vn6DZPI4fBI200T8dYZB2KbG9Aoo=@buildroot.org
+X-Gm-Message-State: AOJu0YzXcJDiO789W0Z+TSp0JSv7Cws+wQ8qwBd4RUDmtC9+NR9xv8Be
+ zvgUIBFN/ttSDoGP3THCrMR9ChJh8CLpeZdDPa9NvikvRIfhvChHn9wuL3VVq5GCPlRy78RWd1T
+ CEdsk9cpIDGopaZ9o7J3JwrZorL0=
+X-Gm-Gg: ASbGnctaJgH8Qww6632V4F/+P/iE9Re4gkM9QjLTxS6wGxZVVcIZqI71QPxaLU9Ko8+
+ dxALZ8e9mB7gkOY6vQLDB1aQp9huFaUWREEf6r/8=
+X-Google-Smtp-Source: AGHT+IFurPTxR2wEEtkdwULfUjG7o/Wuyb3huyJ/rwRv7fYMK1TEOYEjeOPyw4rFdzMGZM3C494qnqDWfFaQf/V9ULU=
+X-Received: by 2002:a05:690c:b83:b0:6ef:c688:1b61 with SMTP id
+ 00721157ae682-6f5311e6517mr113273147b3.6.1736558748812; Fri, 10 Jan 2025
+ 17:25:48 -0800 (PST)
 MIME-Version: 1.0
+References: <20250106043927.154476-1-nemaakhilesh@gmail.com>
+ <20250110104134.7638d728@windsurf> <81d60dbc93cc938d49a3828ddafdbd7b@free.fr>
+In-Reply-To: <81d60dbc93cc938d49a3828ddafdbd7b@free.fr>
+From: Akhilesh Nema <nemaakhilesh@gmail.com>
+Date: Fri, 10 Jan 2025 17:25:22 -0800
+X-Gm-Features: AbW1kvbYqNLetlNVpWIyO-U-8E2FD1lsn6TV9Ee5zUHt1iH3nrZDxYGgWVmnZqM
+Message-ID: <CAMV0Ro9A98ARjOyWNpaUbGEgHPU84o+Pm+HZmX2bh+0WQYscBQ@mail.gmail.com>
+To: Julien Olivain <ju.o@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1736555287; x=1737160087; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=wVMCjr4wXkudH9cjNG1wMTLZyRntcWVzR0OLtorve7U=;
- b=RRxBkwRXJQW599Mk9XQKAULhcAlwZshic3eBJ6Svx4/rShH4enDA8ujAyeoLlqoMaG
- +c/LIwJx/Bc4oWatZfvgZVTGMs6HMszgYXUDFvSdEqNMUOamIm0pZuXiVUU6Qgh/aL3Y
- IT86v3IyPdTYftsKbinx4Z4oa7d2POoYDxVnFgnCrC5G4HexkOb5bynjQnmS1WgCmE6J
- fo7CO343dPmTRHJRkM1zZo2s5zjQHQgOVQZ8AvOUqjuf1miEaLCSGsObYur/+Ce1mToN
- LwYDtpAmCGnHVIep4fuXIkiyCjOHP/vv8RhfCKN7BeYGHushdthaiQQjY5ODM2WfNcYt
- /Nrg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1736558749; x=1737163549; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=w+fjO3KzOuG7VxBkoB1EaZu9EfPTUIy+GLITfn4OgeA=;
+ b=Hq2LwX7B4IsyxVNourXawScPKxO2h3z3I/x5Ox1gynk/0Kn0ahdfl2pUzcNrgnPN32
+ ZgPCnsI7PjYnFHQCI+b1Wpzo9q+F+M1iZbGp0gb2dhYuNcHwJDXGjGeYxqoFbczP8cPg
+ GNjgnPWwPXYMLkQx652r8k81UaDaZUwgdAOnGvWEg8b22mgCKEf9ux+qacz6nH6S4Tv7
+ 331OxWEpC8VaPEQsAyiosRnNLajCgPh10BzYAJLpz4IcMvHhEyqD8gh77ILqPT2tbS8+
+ /JqhrGVAcnthjvNaBbrvlGY8BLx+nW6lLalXtQr/xAvQ/y8iH/rgKJj6Q/BY20RTZ3sY
+ xeYg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=RRxBkwRX
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.21.3
+ header.s=20230601 header.b=Hq2LwX7B
+Subject: Re: [Buildroot] [PATCH 1/1] package/msmtp: bump version to 1.8.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,50 +104,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5636421998890095003=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://www.samba.org/samba/history/samba-4.21.3.html
-https://www.samba.org/samba/history/samba-4.21.2.html
-https://www.samba.org/samba/history/samba-4.21.1.html
+--===============5636421998890095003==
+Content-Type: multipart/alternative; boundary="0000000000005ad3ff062b641797"
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+--0000000000005ad3ff062b641797
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index cf97560e54..144894fd60 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.20.6.tar.asc
--sha256  8fe37f9e7817b6583fa55a0a15568b8e6be8875513741312ef805484b102ccf7  samba-4.20.6.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.21.3.tar.asc
-+sha256  ae2179a613e7a5d4088735ab100d4ca1cae0f92374d6307e22eaec13ad90125c  samba-4.21.3.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index e5b348a3b7..70200279a4 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.20.6
-+SAMBA4_VERSION = 4.21.3
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
--- 
-2.25.1
+Hi Julien, Thomas,
+
+On Fri, Jan 10, 2025 at 12:28=E2=80=AFPM Julien Olivain <ju.o@free.fr> wrot=
+e:
+
+> Hi Thomas, Akhilesh,
+>
+> On 10/01/2025 10:41, Thomas Petazzoni via buildroot wrote:
+> > On Sun,  5 Jan 2025 20:39:27 -0800
+> > Akhilesh Nema <nemaakhilesh@gmail.com> wrote:
+> >
+> >> Release notes - https://marlam.de/msmtp/news/msmtp-1-8-27/
+> >>
+> >> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+> >> ---
+> >>  package/msmtp/msmtp.hash | 4 ++--
+> >>  package/msmtp/msmtp.mk   | 2 +-
+> >>  2 files changed, 3 insertions(+), 3 deletions(-)
+> >
+> > Thanks for your version bump!
+> >
+> > However, it seems like it is causing quite a few build failures in our
+> > autobuilders:
+> >
+> >   http://autobuild.buildroot.net/?reason=3Dmsmtp-1.8.27
+> >
+> > Could you have a look and send a fix?
+>
+> Regarding those build failures, msmtp seems to require
+> libgsasl >=3D 2.1. This requirement was added in msmtp after
+> version 1.8.27. See:
+>
+> https://github.com/marlam/msmtp/commit/64e06bfc2d61efdbcd79833f73ee3d0f22=
+fb6c38
+>
+> I see that Akhilesh already proposed a patch to update libgsasl
+> to 2.2.1. It will probably fix those issues.
+>
+> https://patchwork.ozlabs.org/project/buildroot/patch/20250109011520.27360=
+-1-nemaakhilesh@gmail.com/
+
+
+Yes, the libgsasl update will resolve the msmtp-1.8.27 build failures. It
+wasn't included in the comments of the libgsasl patch mail.
+
+Thanks
+Akhilesh
+
+--0000000000005ad3ff062b641797
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi Julien, Thomas,</div><br><div class=3D"gmail_quote=
+ gmail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">On Fri, Jan 1=
+0, 2025 at 12:28=E2=80=AFPM Julien Olivain &lt;<a href=3D"mailto:ju.o@free.=
+fr">ju.o@free.fr</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" =
+style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pa=
+dding-left:1ex">Hi Thomas, Akhilesh,<br>
+<br>
+On 10/01/2025 10:41, Thomas Petazzoni via buildroot wrote:<br>
+&gt; On Sun,=C2=A0 5 Jan 2025 20:39:27 -0800<br>
+&gt; Akhilesh Nema &lt;<a href=3D"mailto:nemaakhilesh@gmail.com" target=3D"=
+_blank">nemaakhilesh@gmail.com</a>&gt; wrote:<br>
+&gt; <br>
+&gt;&gt; Release notes - <a href=3D"https://marlam.de/msmtp/news/msmtp-1-8-=
+27/" rel=3D"noreferrer" target=3D"_blank">https://marlam.de/msmtp/news/msmt=
+p-1-8-27/</a><br>
+&gt;&gt; <br>
+&gt;&gt; Signed-off-by: Akhilesh Nema &lt;<a href=3D"mailto:nemaakhilesh@gm=
+ail.com" target=3D"_blank">nemaakhilesh@gmail.com</a>&gt;<br>
+&gt;&gt; ---<br>
+&gt;&gt;=C2=A0 package/msmtp/msmtp.hash | 4 ++--<br>
+&gt;&gt;=C2=A0 package/msmtp/<a href=3D"http://msmtp.mk" rel=3D"noreferrer"=
+ target=3D"_blank">msmtp.mk</a>=C2=A0 =C2=A0| 2 +-<br>
+&gt;&gt;=C2=A0 2 files changed, 3 insertions(+), 3 deletions(-)<br>
+&gt; <br>
+&gt; Thanks for your version bump!<br>
+&gt; <br>
+&gt; However, it seems like it is causing quite a few build failures in our=
+<br>
+&gt; autobuilders:<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0<a href=3D"http://autobuild.buildroot.net/?reason=3Dmsmtp-=
+1.8.27" rel=3D"noreferrer" target=3D"_blank">http://autobuild.buildroot.net=
+/?reason=3Dmsmtp-1.8.27</a><br>
+&gt; <br>
+&gt; Could you have a look and send a fix?<br>
+<br>
+Regarding those build failures, msmtp seems to require<br>
+libgsasl &gt;=3D 2.1. This requirement was added in msmtp after<br>
+version 1.8.27. See:<br>
+<a href=3D"https://github.com/marlam/msmtp/commit/64e06bfc2d61efdbcd79833f7=
+3ee3d0f22fb6c38" rel=3D"noreferrer" target=3D"_blank">https://github.com/ma=
+rlam/msmtp/commit/64e06bfc2d61efdbcd79833f73ee3d0f22fb6c38</a><br>
+<br>
+I see that Akhilesh already proposed a patch to update libgsasl<br>
+to 2.2.1. It will probably fix those issues.<br>
+<a href=3D"https://patchwork.ozlabs.org/project/buildroot/patch/20250109011=
+520.27360-1-nemaakhilesh@gmail.com/" rel=3D"noreferrer" target=3D"_blank">h=
+ttps://patchwork.ozlabs.org/project/buildroot/patch/20250109011520.27360-1-=
+nemaakhilesh@gmail.com/</a></blockquote><div><br></div><div>Yes, the libgsa=
+sl update will resolve the msmtp-1.8.27 build failures. It wasn&#39;t inclu=
+ded in the comments of the libgsasl patch mail.</div><div><br></div><div>Th=
+anks</div><div>Akhilesh</div><div>=C2=A0</div></div></div>
+
+--0000000000005ad3ff062b641797--
+
+--===============5636421998890095003==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5636421998890095003==--
