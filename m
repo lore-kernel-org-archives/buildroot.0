@@ -4,96 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D83E1E7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 13:14:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFE37E7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 13:20:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8FD7B60689;
-	Sat, 11 Jan 2025 13:14:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73C2260719;
+	Sat, 11 Jan 2025 13:20:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yPpcVAllSuhA; Sat, 11 Jan 2025 13:14:06 +0000 (UTC)
+ id WZJMYq4rKCyA; Sat, 11 Jan 2025 13:20:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7ED686071E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99C1F60741
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7ED686071E;
-	Sat, 11 Jan 2025 13:14:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2194E942
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 13:14:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 99C1F60741;
+	Sat, 11 Jan 2025 13:20:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 73FD6950
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 13:20:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0076280E7A
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 13:14:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 613624022A
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 13:20:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uciSus69ImIK for <buildroot@buildroot.org>;
- Sat, 11 Jan 2025 13:14:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::133; helo=mail-il1-x133.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0AA1683AAA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AA1683AAA
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
- [IPv6:2607:f8b0:4864:20::133])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0AA1683AAA
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 13:14:03 +0000 (UTC)
-Received: by mail-il1-x133.google.com with SMTP id
- e9e14a558f8ab-3a8aed87a0dso9644595ab.3
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 05:14:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736601242; x=1737206042;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=BzDOtDhv9nscuaewA11EnfgDADo1iHfG5fT7q4e/3BA=;
- b=Y+JV6cBMGIAZNAR00bks8jphGfita4GjrYc9DRRnyj19vZxodgcUqtQO7rkVpKxBeR
- Bj3iVpLwAnkkoDEg6KYDIug7pvqT5Gj3e5F862VbPmWE0GX+qp3iJuBb4cJJn7k3k4lG
- NFaU756XutmNOw4gJvd7WUZXDZjeeJ60PWQlSE96dVxz4oKH57UP4OWzwBClIP3QSTih
- MBxCNacmjgU/yFHw+0PmEzb5ZaNFAuG/JFgVgdzH0Z5q9HdtxAhFFw94rA2A0YT6gCIp
- PHuH1KxNmg69FCHaBVnRIspKEtOfHV1+rHUqErDsJKhtmGp/8tFhv6/hbLyzZydp2Vot
- hT+w==
-X-Gm-Message-State: AOJu0Yyzfdsr8T3k0qeuJFlI9pXWHxPkKCKt/4EQBSJ8W3e/2paUZGvH
- XZkB9c4u33ZVlMBB5P1gLqLK7yeMOiUc4x9GmFgUag1Yfy2SeTtk5gI2crNwOKM=
-X-Gm-Gg: ASbGncvEgnmYw0JTS7UM4WXul+T3HpVB/UqTdPccwjC+5Ehf0W4VpyilC5YSARFkaUa
- IkCmD3e9erFbdPlF+Fevk1GQ1QJGKrwNsZZhgpd/Zb1y9d33Bmz2VSs2hQP0MB6t2y5XASK8J1W
- dvQJXhJFq/kZwei7lXMrPyjXgMkWcOZGVhZHT6KkEW/4kCgga6PlvDoS9uUFsZApQLld1/ql8zk
- 6WmzQzTtg2D28/emOwd7TCJlJvWptU7RoBhutlI38CuKzvqwJq0MkEsQsq/i8lQSE94Tw75hjwS
- 28SV9gTkfmAXqQTvVYfLm9ybaIucoIY=
-X-Google-Smtp-Source: AGHT+IFyMMLhiakEdw6nY0LLOrmRLGF3yi4o0fW+E+3gueqZStFG0/6kJcF/bUmIpznKg37f5VfFaQ==
-X-Received: by 2002:a92:c248:0:b0:3a7:e732:4713 with SMTP id
- e9e14a558f8ab-3ce3a9c1aa9mr108709715ab.15.1736601242412; 
- Sat, 11 Jan 2025 05:14:02 -0800 (PST)
-Received: from james-x399.localdomain (71-218-115-58.hlrn.qwest.net.
- [71.218.115.58]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4ea1b718428sm1497425173.89.2025.01.11.05.14.01
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 11 Jan 2025 05:14:01 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 06:14:00 -0700
-Message-Id: <20250111131400.2464699-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NP4UOmpR2Mgw for <buildroot@buildroot.org>;
+ Sat, 11 Jan 2025 13:20:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E2046400F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2046400F2
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E2046400F2
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 13:20:01 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id BE7CC13F8C0;
+ Sat, 11 Jan 2025 14:19:56 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:36432])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 11 Jan 2025 14:19:56 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1736601242; x=1737206042; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=BzDOtDhv9nscuaewA11EnfgDADo1iHfG5fT7q4e/3BA=;
- b=gle6Y6hjGexAWv6rEnSG5dX4sxwmbJ5CFpHGbXcanDxkQe3oFVXl7WZ2TzRPZc+TvC
- hnOfhGpryvCnwuo6YK0YkayshVBh1evBy6Z2Sa+eJhdbW3BhLXspX+543hpS5vggS7Y2
- HQkD/lh08SXB6ROcm1hAeHgE8cS/Bol2Z0AcNp9sLK2OAm4Ynu2tDs8Cg618KrQ4DbFg
- M43s5EgPn7lNqPlCdIEI4ffyMMfiTtYvWtcYGJJDXWCJHIM7kIb8f82s7g7cEVP6fdrL
- y/pyO5cWf8m9clohR+v27yHCDuDGKJRoM3pTGjBp0EAoAPv+maMP+lDHaNBF68xv0uq5
- Fytw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Date: Sat, 11 Jan 2025 14:19:56 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Akhilesh Nema <nemaakhilesh@gmail.com>
+Cc: buildroot@buildroot.org, Guillaume William Brs
+ <guillaume.bressaix@gmail.com>
+In-Reply-To: <20250109011807.28041-1-nemaakhilesh@gmail.com>
+References: <20250109011807.28041-1-nemaakhilesh@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <4c9c28ba8d404ac268334f211221f8b0@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1736601599;
+ bh=kABw9XQXAt9BBfKq9y5rrh9BA+UtrHSw+aun+ZFvq9U=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=P2XWd6YEarPmApxlZ77xIKOzyJfV9m0wZ16cezapI4izHjO9/sNO9GcVlLdLH3HAS
+ vtZstrlwQwMnMMYo5/CllPABWNM4BeulLCnK1f4UVRFSPJucOQFv/ygN/lpmI0dT3a
+ 3tnZaJXWDCrlj8IRjiyfYILRz3NQeYDNkeF5vVlqlYjlrEeI3Br8KMool+2YwuRF09
+ krct9VxlYJds9KOd3ZTLUaLLbPqq0kUWkMNgYIJ0aY0jjwk8SNJ+O7pvPP8tJPq4PJ
+ RcYWqLLzJzgWaoAE6GP/zn3Hj8zNu8hPJkx9ubbl5fuSLqOZUxm+J2bd3ycy4C8w0w
+ F1Nqs+/V3uaQQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=gle6Y6hj
-Subject: [Buildroot] [PATCH 1/1] package/python-marshmallow: bump to version
- 3.25.0
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=P2XWd6YE
+Subject: Re: [Buildroot] [PATCH 1/1] package/libxcrypt: bump version to
+ 4.4.37
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,51 +84,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
- James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-marshmallow/python-marshmallow.hash | 4 ++--
- package/python-marshmallow/python-marshmallow.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi Akhilesh,
 
-diff --git a/package/python-marshmallow/python-marshmallow.hash b/package/python-marshmallow/python-marshmallow.hash
-index 8a6a3cf85b..f7a158a830 100644
---- a/package/python-marshmallow/python-marshmallow.hash
-+++ b/package/python-marshmallow/python-marshmallow.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/marshmallow/json
--md5  45f26839a3486cac60f6aa043e5035dd  marshmallow-3.23.1.tar.gz
--sha256  3a8dfda6edd8dcdbf216c0ede1d1e78d230a6dc9c5a088f58c4083b974a0d468  marshmallow-3.23.1.tar.gz
-+md5  881654a8819a7f8ae8f91563cf378b7d  marshmallow-3.25.0.tar.gz
-+sha256  5ba94a4eb68894ad6761a505eb225daf7e5cb7b4c32af62d4a45e9d42665bc31  marshmallow-3.25.0.tar.gz
- # Locally computed sha256 checksums
- sha256  906b5d9051e426144cb173ad911667b8ebd05a9c584c2c26c135b32a3ed12001  LICENSE
- sha256  f982e6fd97ba00973e94605b972ff04894b22c4fa937b868828b32ae8f0a7c2e  docs/license.rst
-diff --git a/package/python-marshmallow/python-marshmallow.mk b/package/python-marshmallow/python-marshmallow.mk
-index 2c2e7f1ee3..d6a91bae72 100644
---- a/package/python-marshmallow/python-marshmallow.mk
-+++ b/package/python-marshmallow/python-marshmallow.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MARSHMALLOW_VERSION = 3.23.1
-+PYTHON_MARSHMALLOW_VERSION = 3.25.0
- PYTHON_MARSHMALLOW_SOURCE = marshmallow-$(PYTHON_MARSHMALLOW_VERSION).tar.gz
--PYTHON_MARSHMALLOW_SITE = https://files.pythonhosted.org/packages/6d/30/14d8609f65c8aeddddd3181c06d2c9582da6278f063b27c910bbf9903441
-+PYTHON_MARSHMALLOW_SITE = https://files.pythonhosted.org/packages/bd/5c/cbfa41491d6c83b36471f2a2f75602349d20a8f88afd94f83c1e68bbc298
- PYTHON_MARSHMALLOW_SETUP_TYPE = flit
- PYTHON_MARSHMALLOW_LICENSE = MIT
- PYTHON_MARSHMALLOW_LICENSE_FILES = LICENSE docs/license.rst
--- 
-2.34.1
+Thanks for this patch.
 
+On 09/01/2025 02:18, Akhilesh Nema wrote:
+> Release notes:
+> https://github.com/besser82/libxcrypt/releases/tag/v4.4.37
+> 
+> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+
+[...]
+
+> -LIBXCRYPT_VERSION = 4.4.36
+> +LIBXCRYPT_VERSION = 4.4.37
+
+When testing this new version with the command:
+
+     utils/test-pkg -a -p libxcrypt
+
+it seems all builds are now failing. The failures seems related
+to the release archive autoconf "configure" script which was
+generated with a newer pkgconf, which includes commit [1].
+
+This means new dependencies might be needed, such as:
+
+LIBXCRYPT_DEPENDENCIES = host-pkgconf
+HOST_LIBXCRYPT_DEPENDENCIES = host-pkgconf
+
+Could you confirm this analysis and send an updated patch please?
+Could you also add the explanation in the commit log why those
+new dependencies are needed?
+
+Best regards,
+
+Julien.
+
+[1] 
+https://github.com/pkgconf/pkgconf/commit/c583d49a3780c71c0d20a662a7cf562f6d01c171
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
