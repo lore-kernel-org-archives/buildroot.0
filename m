@@ -4,96 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12185E7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 14:31:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B8F2E7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 14:35:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 907F94048F;
-	Sat, 11 Jan 2025 14:31:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FCD340683;
+	Sat, 11 Jan 2025 14:35:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O9y9UNPPsN9g; Sat, 11 Jan 2025 14:31:21 +0000 (UTC)
+ id CelGLQsLsiGi; Sat, 11 Jan 2025 14:35:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CB47404DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F3C7406B8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CB47404DC;
-	Sat, 11 Jan 2025 14:31:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 71584940
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 14:31:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F3C7406B8;
+	Sat, 11 Jan 2025 14:35:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 55BBD940
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 14:35:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 528C7600CA
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 14:31:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 35971406B8
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 14:35:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JKmk1AoZkRsl for <buildroot@buildroot.org>;
- Sat, 11 Jan 2025 14:31:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J8l3v6uSwka5 for <buildroot@buildroot.org>;
+ Sat, 11 Jan 2025 14:35:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::136; helo=mail-il1-x136.google.com;
+ client-ip=2607:f8b0:4864:20::d36; helo=mail-io1-xd36.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5565160603
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5565160603
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
- [IPv6:2607:f8b0:4864:20::136])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5565160603
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 14:31:18 +0000 (UTC)
-Received: by mail-il1-x136.google.com with SMTP id
- e9e14a558f8ab-3a8165cfae8so8469435ab.0
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 06:31:18 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3081C40663
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3081C40663
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3081C40663
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 14:35:26 +0000 (UTC)
+Received: by mail-io1-xd36.google.com with SMTP id
+ ca18e2360f4ac-844e1eb50e2so96347339f.0
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 06:35:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736605877; x=1737210677;
+ d=1e100.net; s=20230601; t=1736606125; x=1737210925;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=4u6DWACRzhbDkfnPzaA6/B909tOuS5l4UpfgWCF5i38=;
- b=PPuLuur5lVvjZqGWTo4mrfj04mrByOA9ar8BIZEZDqjTAWoVU25BdWWuEAokjDtgSW
- IOmk1qyio/OAGuUpy6ILZL+FR3s3D98YgS47y/Id4zytqNDevHVNY9ggS4vBIxL8iP8B
- FLU3v1DT9aqMsllWa2ztXj/uGIndoHQNbAN3x03HWdPlANkpjUmjrypi7N/5Kjp2r7t2
- FLKgC2b6ZkdufJwz7SwfrqQU3vc5LfNWmliro+LRb8zQv9RX1kJFKp2RV6PHIJuQW5+P
- g1hWkDlVDXGoOahjSn37wGf1VdudQH44BYH+KSWyA2GlIdXaU0SxaOgbf/pjdQj6TxuL
- KKLQ==
-X-Gm-Message-State: AOJu0YzrebYfvhEkhHv90vQuUtLnbxN2Qgzv40idtPeJFFcqdT3Pat2B
- 2memN/31pXBpEi21nfx0bXyYMOgO4pdGeL79rMCPhPFu+AhdNhX77ohBoO4+xUs=
-X-Gm-Gg: ASbGncuK/DHKOD8mzoUfqc6L+dPoHIF/AG1l+h00DOxSKY+zRYzfL01PXuVwKNxyqqc
- dta/qKqalv8roNmu2z+/l+GpRtYVQXn86aIZrdGqWhGJk625bR7XwRWuoyGmQgjfVwgU3G2uqan
- BBAZcT/BZXjqkslL+3bzgQdvqvYOsbAiB+uOxdhPxyMSd16Xsu+pkg87HgOj8MU8Nl5taTrjaK/
- tCGAFz3roGtd99GGjmHHPaisBaGPwAzMfOnwlmZ8e7FK+ImQx2nif7C/6nnCA30yVlIlHZJ8qFa
- 0jsuZNHh0KszZapPgesGV7JFrOAml6Q=
-X-Google-Smtp-Source: AGHT+IF9qoMfHGZ7ihYbRCo+1I8ZdMHKOASMjhUF95HexEBj5/EADjRgQXT8LQkAcieXHq6QFm/utg==
-X-Received: by 2002:a05:6e02:1988:b0:3a7:bcbf:ba99 with SMTP id
- e9e14a558f8ab-3ce3a9b57eamr115735345ab.6.1736605877152; 
- Sat, 11 Jan 2025 06:31:17 -0800 (PST)
+ bh=9Bu7L9Fm8t3fEBVC/0qiHjRydee9HUqYfTx6nM9DNg0=;
+ b=MfsNlInGmWFns97B3vw1V5yDOxYmTSy9hWFilayhyQJM4d1BewT00P0UG42VS1ibkR
+ ebI9eM4xqoM0Qol9oG6UkRKUzQkt6ufjgI7UuwZbC8G2X7MyvSuuouRp22937X31dL37
+ KPefH5WpI0nIMHB5CApHYf0pRiuqyTdgf4w99tDrxyZG/qa+Ul4/vfw59HUkj3QBbcge
+ Et3R9Uu09SenJwAVQ+Xrj0a88hmtCk5/ZiBKHaAsnIK9y4TWcOef+VOC0cGirII9wYfh
+ NXRLH988pkXfLyfGaSnn6rfcoxqUllfqLj7/r4hKfMDuqU+Q9LGlHApRcOthqzKymMJr
+ S+yQ==
+X-Gm-Message-State: AOJu0Yypc1u5um8EQ1xNE/e5bLI7WebBRD4vJ5RnrifTxk1vWYlrNabU
+ +s1nUFhvd/64aYh+JudUbWVy8TWrtjRATcMzFDMnII4ii5mcyI1dc90jCJtlIL4=
+X-Gm-Gg: ASbGncs5b/j1jgd3Jk3dCH1Cf1MPvljF0YCvpeQscWIEefzSxg2ZqttCDNPZ5qxoPij
+ bNlvrfscjNKEkX7kIk6wwCBjoumSFCbtAYyVCsNZX+KmkMXFr0zAeVky4OWq9vbhiAaDdAf8U/r
+ qJ2d9cjqgVA34k9o7eXQzeMKDUVQ+JHNBxKHQS23Kwgi7+pihPwXtGzi8jmGn/49CtZIAR6r02O
+ t3A1jKsTRvLKJsxje4CA3fY9e90ghnMjDIRGOBMB+Fhp2xvyoh+hxXTEDopPyNtCr7xxyNmbRnc
+ WElUSNpMpjBifmyNbNIW2kV06xuTA5o=
+X-Google-Smtp-Source: AGHT+IHSW/0WcFE9+MdE3Wpr0hROCpXp9Z3rEvNSuXW7Ucap7EKe5xIaNE5uWbLjWGTaIiYL43cpGg==
+X-Received: by 2002:a92:1905:0:b0:3a7:820c:180a with SMTP id
+ e9e14a558f8ab-3ce3a8bb656mr86490365ab.19.1736606124854; 
+ Sat, 11 Jan 2025 06:35:24 -0800 (PST)
 Received: from james-x399.localdomain (71-218-115-58.hlrn.qwest.net.
  [71.218.115.58]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4ea1b717821sm1534464173.81.2025.01.11.06.31.16
+ e9e14a558f8ab-3ce4adef371sm15964185ab.47.2025.01.11.06.35.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 11 Jan 2025 06:31:16 -0800 (PST)
+ Sat, 11 Jan 2025 06:35:24 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 07:31:15 -0700
-Message-Id: <20250111143115.2739414-1-james.hilliard1@gmail.com>
+Date: Sat, 11 Jan 2025 07:35:23 -0700
+Message-Id: <20250111143523.2741916-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1736605877; x=1737210677; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1736606125; x=1737210925; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=4u6DWACRzhbDkfnPzaA6/B909tOuS5l4UpfgWCF5i38=;
- b=l1PS1Uv/yInVBQb3erQ6pXfzAZS5OD/rVcamz1SWDoWb6YK84I3Xk1Jr8Rfg59x6CY
- zxx5DUW4ydEyV2eSWPdLRYllZQWSX1rX/YDZIryDs65NzZVWVZh/qZTIeLAUdlH6+2Ee
- hRQbC2qmsWkABcItXJuNQbFFhufY+Fqoyra0wfME0fo43IRcadSnt066+ulR7AZFBR3K
- KYNn1YNfRKoadkBHLTohEmJl7nkDxae9yWoaA7gXK8iuFxublW0m/P+u9iNAcJHlGgBV
- i1ATDD1iE6yqYP5KwxCKPihdJSuHIdI1nxH7nEs/nCXpaKGuAdpnpBSeOwGtbKHFU1lL
- VUAg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=9Bu7L9Fm8t3fEBVC/0qiHjRydee9HUqYfTx6nM9DNg0=;
+ b=Y0OZdCGZ6lBlfXgaIHcamB8fRGmLUbhJMVx6dpJYhgVOHqqK1PPrzcW/XeV7rRaK60
+ h0qpRPNf+H1ax8k+u5xykSQQgbQ5n04XHJUwPa/x63cOB7KpMQGofIa0aFxKOrs9jPvv
+ bvskp4vzXGVcnzg2n8eieRkxJ+zi9VArp1/1Yt+HiKx1+fIuvuwz1FInteNPHRrOewvo
+ 8TevGsChWSR/ah7iVmZJ+4zGrMdFOvv7P2phtJ/5Guls+oiwn9H2xUo9HjMCsDJR/ofk
+ I+XjQ9Lu8bUAJ0pyBdFTgGx0IYMQXuE3MOpmA8ltcOhDuas/YxqxBVRNM3M0fdssbUBp
+ nXrQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=l1PS1Uv/
-Subject: [Buildroot] [PATCH 1/1] package/python-ml-dtypes: bump to version
- 0.5.1
+ header.a=rsa-sha256 header.s=20230601 header.b=Y0OZdCGZ
+Subject: [Buildroot] [PATCH 1/1] package/python-modbus-tk: bump to version
+ 1.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,7 +105,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Julien Olivain <ju.o@free.fr>
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -113,38 +114,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-ml-dtypes/python-ml-dtypes.hash | 4 ++--
- package/python-ml-dtypes/python-ml-dtypes.mk   | 4 ++--
+ package/python-modbus-tk/python-modbus-tk.hash | 4 ++--
+ package/python-modbus-tk/python-modbus-tk.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ml-dtypes/python-ml-dtypes.hash b/package/python-ml-dtypes/python-ml-dtypes.hash
-index e11ae88abf..9f81056cd0 100644
---- a/package/python-ml-dtypes/python-ml-dtypes.hash
-+++ b/package/python-ml-dtypes/python-ml-dtypes.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/ml_dtypes/json
--md5  0d4d585a69dc36ce685c487c99fcc59a  ml_dtypes-0.5.0.tar.gz
--sha256  3e7d3a380fe73a63c884f06136f8baa7a5249cc8e9fdec677997dd78549f8128  ml_dtypes-0.5.0.tar.gz
-+md5  410474c03a1754e6b5197a24040e3f3c  ml_dtypes-0.5.1.tar.gz
-+sha256  ac5b58559bb84a95848ed6984eb8013249f90b6bab62aa5acbad876e256002c9  ml_dtypes-0.5.1.tar.gz
+diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
+index c7f4ac2dd4..c60733b02d 100644
+--- a/package/python-modbus-tk/python-modbus-tk.hash
++++ b/package/python-modbus-tk/python-modbus-tk.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/modbus-tk/json
+-md5  2e66c361d3e4591a19be1259ef50fdf7  modbus_tk-1.1.3.tar.gz
+-sha256  690fa7bb86ea978992465d2d61c8b5acc639ce0e8b833a0aa96d4dd172c5644a  modbus_tk-1.1.3.tar.gz
++md5  03873278a842535c9069cc0dd352f520  modbus_tk-1.1.4.tar.gz
++sha256  68977766eb10469973dd56a2814bd981b85dd180b79043248786d88008f2593b  modbus_tk-1.1.4.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-ml-dtypes/python-ml-dtypes.mk b/package/python-ml-dtypes/python-ml-dtypes.mk
-index 060fe555c5..ab50069696 100644
---- a/package/python-ml-dtypes/python-ml-dtypes.mk
-+++ b/package/python-ml-dtypes/python-ml-dtypes.mk
+ sha256  3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
+ sha256  aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
+diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
+index d8552e57a6..2e15354b04 100644
+--- a/package/python-modbus-tk/python-modbus-tk.mk
++++ b/package/python-modbus-tk/python-modbus-tk.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ML_DTYPES_VERSION = 0.5.0
-+PYTHON_ML_DTYPES_VERSION = 0.5.1
- PYTHON_ML_DTYPES_SOURCE = ml_dtypes-$(PYTHON_ML_DTYPES_VERSION).tar.gz
--PYTHON_ML_DTYPES_SITE = https://files.pythonhosted.org/packages/ab/79/717c5e22ad25d63ce3acdfe8ff8d64bdedec18914256c59b838218708b16
-+PYTHON_ML_DTYPES_SITE = https://files.pythonhosted.org/packages/32/49/6e67c334872d2c114df3020e579f3718c333198f8312290e09ec0216703a
- PYTHON_ML_DTYPES_LICENSE = Apache-2.0
- PYTHON_ML_DTYPES_LICENSE_FILES = LICENSE
- PYTHON_ML_DTYPES_SETUP_TYPE = setuptools
+-PYTHON_MODBUS_TK_VERSION = 1.1.3
++PYTHON_MODBUS_TK_VERSION = 1.1.4
+ PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
+-PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/8d/9f/5963e30dba160dbc646b76c59ca8136709c7fe9002bbaaa3cf1e1bb0404b
++PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/78/40/9ae5c428b1867bfccd3c184dcf18cfef04e3d9c5b9dc22b8e9eb8d480651
+ PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
+ PYTHON_MODBUS_TK_LICENSE = LGPL-2.1+
+ PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
 -- 
 2.34.1
 
