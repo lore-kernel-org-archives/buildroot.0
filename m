@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DA71E7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:05:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EDD0E7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:05:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A31DE611A8;
-	Sat, 11 Jan 2025 16:05:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38F9841422;
+	Sat, 11 Jan 2025 16:05:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iA9PgayeMs70; Sat, 11 Jan 2025 16:05:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D-qA50iXDh9S; Sat, 11 Jan 2025 16:05:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B486B611B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F07834141F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B486B611B5;
-	Sat, 11 Jan 2025 16:05:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 444BA942
+	by smtp4.osuosl.org (Postfix) with ESMTP id F07834141F;
+	Sat, 11 Jan 2025 16:05:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 64369952
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:05:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB4096119F
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:05:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C8B6413FB
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:05:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uzzPw5XNXEw8 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ioJHJzSxDJ70 for <buildroot@buildroot.org>;
  Sat, 11 Jan 2025 16:05:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5710611AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B7464140F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E5710611AB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B7464140F
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:05:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D1B938427B; Sat, 11 Jan 2025 16:05:17 +0000 (UTC)
+ id 8A318844F2; Sat, 11 Jan 2025 16:05:17 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 17:03:49 +0100
+Date: Sat, 11 Jan 2025 16:56:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b27de188f78b467ea06ab431393e4bcc9bac93c3
-X-Git-Newrev: acede98f8f606d9f8d5fc198cffbba9cd679f3ac
+X-Git-Oldrev: 5c16173e69485299b2e79b89cd4a3391b79ab971
+X-Git-Newrev: 878dc204f9ff659e7fb3ba441ea84f60d020b347
 X-Patchwork-Hint: ignore
-Message-Id: <20250111160517.D1B938427B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aerich: bump to version
- 0.8.1
+Message-Id: <20250111160517.8A318844F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-asyncclick: bump to version
+ 8.1.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,60 +65,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acede98f8f606d9f8d5fc198cffbba9cd679f3ac
+commit: https://git.buildroot.net/buildroot/commit/?id=878dc204f9ff659e7fb3ba441ea84f60d020b347
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Replace python-tomlkit with python-tomli-w runtime dependency.
+Migrate from setuptools to flit build backend.
+
+License file renamed without content changes.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-aerich/Config.in          | 2 +-
- package/python-aerich/python-aerich.hash | 4 ++--
- package/python-aerich/python-aerich.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-asyncclick/python-asyncclick.hash | 6 +++---
+ package/python-asyncclick/python-asyncclick.mk   | 9 ++++-----
+ 2 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-aerich/Config.in b/package/python-aerich/Config.in
-index 39c0a50aa1..4e7ea1117c 100644
---- a/package/python-aerich/Config.in
-+++ b/package/python-aerich/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_PYTHON_AERICH
- 	select BR2_PACKAGE_PYTHON_ASYNCCLICK # runtime
- 	select BR2_PACKAGE_PYTHON_DICTDIFFER # runtime
- 	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
--	select BR2_PACKAGE_PYTHON_TOMLKIT # runtime
-+	select BR2_PACKAGE_PYTHON_TOMLI_W # runtime
- 	select BR2_PACKAGE_PYTHON_TORTOISE_ORM # runtime
- 	help
- 	  A database migrations tool for Tortoise ORM.
-diff --git a/package/python-aerich/python-aerich.hash b/package/python-aerich/python-aerich.hash
-index ba1ea35997..87df73d3c7 100644
---- a/package/python-aerich/python-aerich.hash
-+++ b/package/python-aerich/python-aerich.hash
+diff --git a/package/python-asyncclick/python-asyncclick.hash b/package/python-asyncclick/python-asyncclick.hash
+index 59f00893e5..d121097130 100644
+--- a/package/python-asyncclick/python-asyncclick.hash
++++ b/package/python-asyncclick/python-asyncclick.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aerich/json
--md5  22db080bf0e608344dbd837ff29ee2e8  aerich-0.8.0.tar.gz
--sha256  13786a91469626c025a2e2c5e524cac2b82b900de063b317f402710ee4c11ccb  aerich-0.8.0.tar.gz
-+md5  d4062a911161435a3d21736b51340b0e  aerich-0.8.1.tar.gz
-+sha256  1e95b1c04dfc0c634dd43b0123933038c820140e17a4b27885a63b7461eb0632  aerich-0.8.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/asyncclick/json
+-md5  542e83089a55129ca2fe7ccdbc65ba77  asyncclick-8.1.7.2.tar.gz
+-sha256  219ea0f29ccdc1bb4ff43bcab7ce0769ac6d48a04f997b43ec6bee99a222daa0  asyncclick-8.1.7.2.tar.gz
++md5  e9bab017b26d1310d42b4043742812ce  asyncclick-8.1.8.tar.gz
++sha256  0f0eb0f280e04919d67cf71b9fcdfb4db2d9ff7203669c40284485c149578e4c  asyncclick-8.1.8.tar.gz
  # Locally computed sha256 checksums
- sha256  4cc00f0e33ac8e089b37d8a1474be441b26311bdc16fe035c75b51201515f617  LICENSE
-diff --git a/package/python-aerich/python-aerich.mk b/package/python-aerich/python-aerich.mk
-index ea4ee07697..bb568d642f 100644
---- a/package/python-aerich/python-aerich.mk
-+++ b/package/python-aerich/python-aerich.mk
-@@ -4,9 +4,9 @@
+-sha256  9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  LICENSE.rst
++sha256  9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  LICENSE.txt
+diff --git a/package/python-asyncclick/python-asyncclick.mk b/package/python-asyncclick/python-asyncclick.mk
+index 946325e496..9168d65b58 100644
+--- a/package/python-asyncclick/python-asyncclick.mk
++++ b/package/python-asyncclick/python-asyncclick.mk
+@@ -4,12 +4,11 @@
  #
  ################################################################################
  
--PYTHON_AERICH_VERSION = 0.8.0
-+PYTHON_AERICH_VERSION = 0.8.1
- PYTHON_AERICH_SOURCE = aerich-$(PYTHON_AERICH_VERSION).tar.gz
--PYTHON_AERICH_SITE = https://files.pythonhosted.org/packages/35/a5/fc8f6e70cedf47757c4738ed6f79420b9cca6ed1655daf527f86e73f3159
-+PYTHON_AERICH_SITE = https://files.pythonhosted.org/packages/4f/41/3c478b7a344abda866f2c644b056ebae638499bbe0eec0010e7361211774
- PYTHON_AERICH_SETUP_TYPE = poetry
- PYTHON_AERICH_LICENSE = Apache-2.0
- PYTHON_AERICH_LICENSE_FILES = LICENSE
+-PYTHON_ASYNCCLICK_VERSION = 8.1.7.2
++PYTHON_ASYNCCLICK_VERSION = 8.1.8
+ PYTHON_ASYNCCLICK_SOURCE = asyncclick-$(PYTHON_ASYNCCLICK_VERSION).tar.gz
+-PYTHON_ASYNCCLICK_SITE = https://files.pythonhosted.org/packages/5e/bf/59d836c3433d7aa07f76c2b95c4eb763195ea8a5d7f9ad3311ed30c2af61
+-PYTHON_ASYNCCLICK_SETUP_TYPE = setuptools
++PYTHON_ASYNCCLICK_SITE = https://files.pythonhosted.org/packages/cb/b5/e1e5fdf1c1bb7e6e614987c120a98d9324bf8edfaa5f5cd16a6235c9d91b
++PYTHON_ASYNCCLICK_SETUP_TYPE = flit
+ PYTHON_ASYNCCLICK_LICENSE = BSD-3-Clause
+-PYTHON_ASYNCCLICK_LICENSE_FILES = LICENSE.rst
+-PYTHON_ASYNCCLICK_DEPENDENCIES = host-python-setuptools-scm
++PYTHON_ASYNCCLICK_LICENSE_FILES = LICENSE.txt
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
