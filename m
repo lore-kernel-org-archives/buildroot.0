@@ -4,75 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFE37E7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 13:20:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB936E7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 13:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73C2260719;
-	Sat, 11 Jan 2025 13:20:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7196960719;
+	Sat, 11 Jan 2025 13:23:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WZJMYq4rKCyA; Sat, 11 Jan 2025 13:20:04 +0000 (UTC)
+ id E7hkxswFsnBX; Sat, 11 Jan 2025 13:23:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99C1F60741
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83E6B6071E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 99C1F60741;
-	Sat, 11 Jan 2025 13:20:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83E6B6071E;
+	Sat, 11 Jan 2025 13:23:24 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 73FD6950
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 13:20:03 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2530C950
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 13:23:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 613624022A
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 13:20:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 101EA40378
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 13:23:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NP4UOmpR2Mgw for <buildroot@buildroot.org>;
- Sat, 11 Jan 2025 13:20:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E2046400F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2046400F2
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E2046400F2
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 13:20:01 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id BE7CC13F8C0;
- Sat, 11 Jan 2025 14:19:56 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:36432])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 11 Jan 2025 14:19:56 +0100
+ id AvgYsfhuWIOm for <buildroot@buildroot.org>;
+ Sat, 11 Jan 2025 13:23:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::d2e; helo=mail-io1-xd2e.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CF557400F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF557400F2
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CF557400F2
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 13:23:21 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id
+ ca18e2360f4ac-844de072603so237658839f.0
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 05:23:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1736601800; x=1737206600;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Im+wQGS7iRBbTQvnUGLNivpF2vg9SggtKgqwPvos5Yw=;
+ b=nsvETeQyvBS/wMf4pk/DBW+FM+eUSxZK0sVEx16d1/XYBm4jIbBWJ+EIfxv3Es8Dzt
+ 88gJScynk+kX1ddjQ6xYIFFyHiQHd3xgFqPofTsCSQQLV6wZd/7JdKMHALr55AsofGr/
+ 0GXlSVBpBWh2fj4qX2x4Gzb+dkzeLL8tJI+rwHhes1uHjiMGk+XPAxY+fbe+DW/cslNv
+ oVTvnWG/1tu0sGeUiV1G2OnOxCodpW6bd6UYVhyKH8DDQQRwdc7+DVmeiasmFMgrGS4i
+ l0PpEW7Izg4w8p4As5R2meWLryY5Ck87ONntCQ7iJDv1XoajgegFJDMJYTK+tLp2XFFW
+ /T1g==
+X-Gm-Message-State: AOJu0YxahVhRVInSGVNwSB/pWxD9LIRCDyZYUPVQFVqAoXxAjAwYHGG4
+ G8xt9uXowmv9kcSmPY4sroGxfhif7Y9gVrUOGthA4KkkYBDjwjZSW4WYAtIv2HA=
+X-Gm-Gg: ASbGnctD9Inq28lDJXGtQ3rjhR3a3i7DIzaf8ZtDtJf5yeYuLnWRlupRF2tvpRQ2yn6
+ JyaFlz4kgsRX2YVIe0EVj0o47ntjkV9Van2eEKE4CAGLo535fzwNJjpRcuSSc7J7CY1e3CwQ+3Y
+ ju82xLLa6Z+5UR7HHZlPauGwbO0so6NVXmTSpxOLBFRUskHve2tvPT9IP+f0f4QfoWZTujM1BjC
+ y/COR9rnUuJ6yTkglQMIQ3nnvlaVAdapQLQNYINJLAsfzC8VP12l0OMx7CdgJdL2X8r++nXBNH2
+ V2FvfRFTw4DX8q1/YsoaEHGulk4HYGk=
+X-Google-Smtp-Source: AGHT+IEcpeSUBbZ3HfupnPRAYq6IxBPktL0MmjxNzKuol0RZ4n90US4gcn+unCu/NFmsvPtYcbm4pg==
+X-Received: by 2002:a05:6602:3985:b0:841:a9d3:3b39 with SMTP id
+ ca18e2360f4ac-84ce00757d8mr1430540239f.5.1736601800553; 
+ Sat, 11 Jan 2025 05:23:20 -0800 (PST)
+Received: from james-x399.localdomain (71-218-115-58.hlrn.qwest.net.
+ [71.218.115.58]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4ea1b5f9379sm1515613173.24.2025.01.11.05.23.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 11 Jan 2025 05:23:20 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 11 Jan 2025 06:23:18 -0700
+Message-Id: <20250111132318.2496023-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date: Sat, 11 Jan 2025 14:19:56 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Akhilesh Nema <nemaakhilesh@gmail.com>
-Cc: buildroot@buildroot.org, Guillaume William Brs
- <guillaume.bressaix@gmail.com>
-In-Reply-To: <20250109011807.28041-1-nemaakhilesh@gmail.com>
-References: <20250109011807.28041-1-nemaakhilesh@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <4c9c28ba8d404ac268334f211221f8b0@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1736601599;
- bh=kABw9XQXAt9BBfKq9y5rrh9BA+UtrHSw+aun+ZFvq9U=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=P2XWd6YEarPmApxlZ77xIKOzyJfV9m0wZ16cezapI4izHjO9/sNO9GcVlLdLH3HAS
- vtZstrlwQwMnMMYo5/CllPABWNM4BeulLCnK1f4UVRFSPJucOQFv/ygN/lpmI0dT3a
- 3tnZaJXWDCrlj8IRjiyfYILRz3NQeYDNkeF5vVlqlYjlrEeI3Br8KMool+2YwuRF09
- krct9VxlYJds9KOd3ZTLUaLLbPqq0kUWkMNgYIJ0aY0jjwk8SNJ+O7pvPP8tJPq4PJ
- RcYWqLLzJzgWaoAE6GP/zn3Hj8zNu8hPJkx9ubbl5fuSLqOZUxm+J2bd3ycy4C8w0w
- F1Nqs+/V3uaQQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1736601800; x=1737206600; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Im+wQGS7iRBbTQvnUGLNivpF2vg9SggtKgqwPvos5Yw=;
+ b=A5Y3b1m7O0Gq7Z765NN3+zRffQgtuUcuA03AHGC+t0U0qW/Uz/DlycAsuRVPRPtThL
+ mS7cM5ulB+2s3o0eX0KqO+coXaMBXoLieZ90cwWrKUnYjkK8KLa4ZAiGllAF9llMNRMZ
+ iyvRN/bVH8tuvEmKhG5qnNu2+r5bQwWlb2RDlFWkSTFUDcznAwy0Uf8aLSPGXq85xyqf
+ sxvl3qpZNypM6dWqOYHq1HxJ95LBEuJRv49t9WsSyrDstLgAKBZcE8F2hYppwaOaGD35
+ WWRczBnTJ6l+j+dd/T8VMgEb1z9Yu6RrB/vC6jFevgNrvLrxGRBx8zTyaglwczEhaYV4
+ 8Y7g==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=P2XWd6YE
-Subject: Re: [Buildroot] [PATCH 1/1] package/libxcrypt: bump version to
- 4.4.37
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=A5Y3b1m7
+Subject: [Buildroot] [PATCH 1/1] package/python-matplotlib: bump to version
+ 3.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,49 +105,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Akhilesh,
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-matplotlib/python-matplotlib.hash | 4 ++--
+ package/python-matplotlib/python-matplotlib.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thanks for this patch.
+diff --git a/package/python-matplotlib/python-matplotlib.hash b/package/python-matplotlib/python-matplotlib.hash
+index 2882997b8a..c862860b06 100644
+--- a/package/python-matplotlib/python-matplotlib.hash
++++ b/package/python-matplotlib/python-matplotlib.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/matplotlib/json
+-md5  bb92dfd3c1e9c816100b91008be5e300  matplotlib-3.9.2.tar.gz
+-sha256  96ab43906269ca64a6366934106fa01534454a69e471b7bf3d79083981aaab92  matplotlib-3.9.2.tar.gz
++md5  9c9a5c3ced2bba7b5b2f8dab68ae4b06  matplotlib-3.10.0.tar.gz
++sha256  b886d02a581b96704c9d1ffe55709e49b4d2d52709ccebc4be42db856e511278  matplotlib-3.10.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  5a1a81ea301728c8bba2933da832c0cd62229daf20893a024ab3d53244468dbc  LICENSE/LICENSE
+diff --git a/package/python-matplotlib/python-matplotlib.mk b/package/python-matplotlib/python-matplotlib.mk
+index 7312d2b1ec..49fbd76bdb 100644
+--- a/package/python-matplotlib/python-matplotlib.mk
++++ b/package/python-matplotlib/python-matplotlib.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MATPLOTLIB_VERSION = 3.9.2
++PYTHON_MATPLOTLIB_VERSION = 3.10.0
+ PYTHON_MATPLOTLIB_SOURCE = matplotlib-$(PYTHON_MATPLOTLIB_VERSION).tar.gz
+-PYTHON_MATPLOTLIB_SITE = https://files.pythonhosted.org/packages/9e/d8/3d7f706c69e024d4287c1110d74f7dabac91d9843b99eadc90de9efc8869
++PYTHON_MATPLOTLIB_SITE = https://files.pythonhosted.org/packages/68/dd/fa2e1a45fce2d09f4aea3cee169760e672c8262325aa5796c49d543dc7e6
+ PYTHON_MATPLOTLIB_LICENSE = Python-2.0
+ PYTHON_MATPLOTLIB_LICENSE_FILES = LICENSE/LICENSE
+ PYTHON_MATPLOTLIB_DEPENDENCIES = \
+-- 
+2.34.1
 
-On 09/01/2025 02:18, Akhilesh Nema wrote:
-> Release notes:
-> https://github.com/besser82/libxcrypt/releases/tag/v4.4.37
-> 
-> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-
-[...]
-
-> -LIBXCRYPT_VERSION = 4.4.36
-> +LIBXCRYPT_VERSION = 4.4.37
-
-When testing this new version with the command:
-
-     utils/test-pkg -a -p libxcrypt
-
-it seems all builds are now failing. The failures seems related
-to the release archive autoconf "configure" script which was
-generated with a newer pkgconf, which includes commit [1].
-
-This means new dependencies might be needed, such as:
-
-LIBXCRYPT_DEPENDENCIES = host-pkgconf
-HOST_LIBXCRYPT_DEPENDENCIES = host-pkgconf
-
-Could you confirm this analysis and send an updated patch please?
-Could you also add the explanation in the commit log why those
-new dependencies are needed?
-
-Best regards,
-
-Julien.
-
-[1] 
-https://github.com/pkgconf/pkgconf/commit/c583d49a3780c71c0d20a662a7cf562f6d01c171
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
