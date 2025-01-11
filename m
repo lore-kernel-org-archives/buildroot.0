@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78A87C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:54:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FEC1C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:54:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2822A703C5;
-	Fri, 28 Feb 2025 16:54:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 02A45817A8;
+	Fri, 28 Feb 2025 16:54:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2I8f_5L54Rcn; Fri, 28 Feb 2025 16:54:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iFnkiG6FSwsT; Fri, 28 Feb 2025 16:54:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E33F703CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D908817E4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E33F703CA;
-	Fri, 28 Feb 2025 16:54:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0D908817E4;
+	Fri, 28 Feb 2025 16:54:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 15D921DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:37:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 119C61DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:37:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3F8244202
+ by smtp4.osuosl.org (Postfix) with ESMTP id F1B9644302
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TSwbrL7cPh-8 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:34 +0000 (UTC)
+ id jQ5oAeW3vcBi for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 929D542D2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A9E842516
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 929D542D2E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1A9E842516
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8EBF086A52; Fri, 28 Feb 2025 16:30:04 +0000 (UTC)
+ id 1453387A8B; Fri, 28 Feb 2025 16:30:04 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 18:03:43 +0100
+Date: Sat, 11 Jan 2025 17:30:28 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9166c0fc903fd52c160308d1bd0273c0c7b11b73
-X-Git-Newrev: c140fd98817c4d594805378f5aef9d41b8cb7582
+X-Git-Oldrev: 8f07566230ab3572c8ff479e8b38b1b3c3996017
+X-Git-Newrev: b9563a5206d767d5c72f4a096854c1dfeb6c830a
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163004.8EBF086A52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pathvalidate:
- bump to version 3.2.3
+Message-Id: <20250228163004.1453387A8B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-jinja2: bump to
+ version 3.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,48 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c140fd98817c4d594805378f5aef9d41b8cb7582
+commit: https://git.buildroot.net/buildroot/commit/?id=b9563a5206d767d5c72f4a096854c1dfeb6c830a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-License hash changed due to year update:
-https://github.com/thombashi/pathvalidate/commit/e56c54b09815b6b2b501ae9762215d065b99e01c
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pathvalidate/python-pathvalidate.hash | 6 +++---
- package/python-pathvalidate/python-pathvalidate.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-jinja2/python-jinja2.hash | 4 ++--
+ package/python-jinja2/python-jinja2.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
-index dc6a1999e0..9793217fcb 100644
---- a/package/python-pathvalidate/python-pathvalidate.hash
-+++ b/package/python-pathvalidate/python-pathvalidate.hash
+diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
+index 2b32f5cce4..a89c63a0f4 100644
+--- a/package/python-jinja2/python-jinja2.hash
++++ b/package/python-jinja2/python-jinja2.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pathvalidate/json
--md5  cc99f63c6f835eae4fe8643c79b8ca68  pathvalidate-3.2.1.tar.gz
--sha256  f5d07b1e2374187040612a1fcd2bcb2919f8db180df254c9581bb90bf903377d  pathvalidate-3.2.1.tar.gz
-+md5  9b6599a16c5e3ea7b6dcad5ca7dc337e  pathvalidate-3.2.3.tar.gz
-+sha256  59b5b9278e30382d6d213497623043ebe63f10e29055be4419a9c04c721739cb  pathvalidate-3.2.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/jinja2/json
+-md5  02ca9a6364c92e83d14b037bef4732bc  jinja2-3.1.4.tar.gz
+-sha256  4a3aee7acbbe7303aede8e9648d13b8bf88a429282aa6122a993f0ac800cb369  jinja2-3.1.4.tar.gz
++md5  083d64f070f6f1b5f75971ae60240785  jinja2-3.1.5.tar.gz
++sha256  8fefff8dc3034e27bb80d67c671eb8a9bc424c0ef4c0826edbff304cceff43bb  jinja2-3.1.5.tar.gz
  # Locally computed sha256 checksums
--sha256  36289157e371aaae5b5d3ba4be87359ed07548cdc7a9f19ff61dc67cfc536a9c  LICENSE
-+sha256  130a35b917df1951aefbf366120491d5124045a87ded123f20ded21521f4e3a2  LICENSE
-diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
-index f5eb257cc1..f666e07fb8 100644
---- a/package/python-pathvalidate/python-pathvalidate.mk
-+++ b/package/python-pathvalidate/python-pathvalidate.mk
+ sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.txt
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 780b693281..9b95b3212c 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PATHVALIDATE_VERSION = 3.2.1
-+PYTHON_PATHVALIDATE_VERSION = 3.2.3
- PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
--PYTHON_PATHVALIDATE_SITE = https://files.pythonhosted.org/packages/b4/8c/8713d8dcd8e357b9358695b441ee974580a8addfaea4f01437df07577052
-+PYTHON_PATHVALIDATE_SITE = https://files.pythonhosted.org/packages/92/87/c7a2f51cc62df0495acb0ed2533a7c74cc895e569a1b020ee5f6e9fa4e21
- PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
- PYTHON_PATHVALIDATE_LICENSE = MIT
- PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
+-PYTHON_JINJA2_VERSION = 3.1.4
++PYTHON_JINJA2_VERSION = 3.1.5
+ PYTHON_JINJA2_SOURCE = jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
+-PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/ed/55/39036716d19cab0747a5020fc7e907f362fbf48c984b14e62127f7e68e5d
++PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/af/92/b3130cbbf5591acf9ade8708c365f3238046ac7cb8ccba6e81abccb0ccff
+ PYTHON_JINJA2_SETUP_TYPE = flit
+ PYTHON_JINJA2_LICENSE = BSD-3-Clause
+ PYTHON_JINJA2_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
