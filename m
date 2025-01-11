@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56E14C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:53:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB980C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:53:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 196828146C;
-	Fri, 28 Feb 2025 16:53:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B027F6FC64;
+	Fri, 28 Feb 2025 16:53:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AR_Yi89O4HQ0; Fri, 28 Feb 2025 16:53:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id stt_gxaabK4E; Fri, 28 Feb 2025 16:53:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 194F483B76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABD63703E8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 194F483B76;
-	Fri, 28 Feb 2025 16:53:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABD63703E8;
+	Fri, 28 Feb 2025 16:53:12 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 22D1C711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:36:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 07F2D68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:36:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1677142F81
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F8F8424BF
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GEHNOOteai7I for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:29 +0000 (UTC)
+ id Ae70NgmX2d9R for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E687C42CFB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2F1942D0C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E687C42CFB
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2F1942D0C
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DAACD84C4E; Fri, 28 Feb 2025 16:30:00 +0000 (UTC)
+ id D797E87C2C; Fri, 28 Feb 2025 16:30:01 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 10 Jan 2025 18:59:14 +0100
+Date: Sat, 11 Jan 2025 16:06:39 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 68137ef42b2ad006e91b4d0c9edf94cfdb023ad6
-X-Git-Newrev: 16ea67d813ade1615ff5926d59cfc51b68468732
+X-Git-Oldrev: 830f9f5d81751c57471f4ebfbd9eb2034db6a46f
+X-Git-Newrev: d757916f0d0b672bf8d1976ba52fb60d30cbb070
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163000.DAACD84C4E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/zynq_microzed_defconfig: bump to 6.6.60
+Message-Id: <20250228163001.D797E87C2C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-bitstring: bump
+ to version 4.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,30 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16ea67d813ade1615ff5926d59cfc51b68468732
+commit: https://git.buildroot.net/buildroot/commit/?id=d757916f0d0b672bf8d1976ba52fb60d30cbb070
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch bumps the zynq_microzed_defconfig to Linux kernel 6.6.60.
+License hash changed due to year update:
+https://github.com/scott-griffiths/bitstring/commit/fdc3fbe76862e581997403b9f59c1a2d2ba5d85b
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/zynq_microzed_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-bitstring/python-bitstring.hash | 6 +++---
+ package/python-bitstring/python-bitstring.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index 7d08331cd6..18148b5fbd 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.2)/xlnx_rebase_v6.6_LTS_2024.2.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.60)/xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+diff --git a/package/python-bitstring/python-bitstring.hash b/package/python-bitstring/python-bitstring.hash
+index e1b66c76b0..35ce801523 100644
+--- a/package/python-bitstring/python-bitstring.hash
++++ b/package/python-bitstring/python-bitstring.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/bitstring/json
+-md5  5edecacd8fa0356601f7035977d0749e  bitstring-4.2.3.tar.gz
+-sha256  e0c447af3fda0d114f77b88c2d199f02f97ee7e957e6d719f40f41cf15fbb897  bitstring-4.2.3.tar.gz
++md5  378cfff7d1c8befad689cc6df0e642b7  bitstring-4.3.0.tar.gz
++sha256  81800bc4e00b6508716adbae648e741256355c8dfd19541f76482fb89bee0313  bitstring-4.3.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  3705eed5a923f35d9bfaca1f10e9136cc84d6e576570aec661bda69991f129ea  LICENSE
++sha256  4110041ff5b99a3b0f64d4aa0c426fb9bb4fb3de69cd4c847e634f8e99b2c6f0  LICENSE
+diff --git a/package/python-bitstring/python-bitstring.mk b/package/python-bitstring/python-bitstring.mk
+index fcb40365d4..d0abfeb909 100644
+--- a/package/python-bitstring/python-bitstring.mk
++++ b/package/python-bitstring/python-bitstring.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_BITSTRING_VERSION = 4.2.3
++PYTHON_BITSTRING_VERSION = 4.3.0
+ PYTHON_BITSTRING_SOURCE = bitstring-$(PYTHON_BITSTRING_VERSION).tar.gz
+-PYTHON_BITSTRING_SITE = https://files.pythonhosted.org/packages/d8/d0/d6f57409bb50f54fe2894ec5a50b5c04cb41aa814c3bdb8a7eeb4a0f7697
++PYTHON_BITSTRING_SITE = https://files.pythonhosted.org/packages/0d/43/52859178f337661e2d496262f9061799d99644012b7b02ab5d7c491c21fd
+ PYTHON_BITSTRING_SETUP_TYPE = setuptools
+ PYTHON_BITSTRING_LICENSE = MIT
+ PYTHON_BITSTRING_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
