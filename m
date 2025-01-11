@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 612AFE7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:23:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 868B4E7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:23:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3295060A4F;
-	Sat, 11 Jan 2025 16:23:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EC4A60B71;
+	Sat, 11 Jan 2025 16:23:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id me7jpnkYiClY; Sat, 11 Jan 2025 16:23:17 +0000 (UTC)
+ id lFlizJdjzTNV; Sat, 11 Jan 2025 16:23:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 363C460AAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 730D760BD3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 363C460AAE;
-	Sat, 11 Jan 2025 16:23:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 74764942
+	by smtp3.osuosl.org (Postfix) with ESMTP id 730D760BD3;
+	Sat, 11 Jan 2025 16:23:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 76AE6952
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54A0360AC9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6578B4013D
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LKi5CMVqnyLG for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kPJYWBfy4_nY for <buildroot@buildroot.org>;
  Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6804D60A4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DDBE4000B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6804D60A4F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5DDBE4000B
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 52C6084599; Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
+ id 4314E8458F; Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 17:13:57 +0100
+Date: Sat, 11 Jan 2025 17:11:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7a12c94955cb1c848c8fb98f719f13a886b03b41
-X-Git-Newrev: 074c6cc575c1a3bba1a487b7d6e310a5405874dd
+X-Git-Oldrev: acede98f8f606d9f8d5fc198cffbba9cd679f3ac
+X-Git-Newrev: 7a12c94955cb1c848c8fb98f719f13a886b03b41
 X-Patchwork-Hint: ignore
-Message-Id: <20250111162314.52C6084599@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-marshmallow-sqlalchemy:
- bump to version 1.2.0
+Message-Id: <20250111162314.4314E8458F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-markdown2: bump to version
+ 2.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=074c6cc575c1a3bba1a487b7d6e310a5405874dd
+commit: https://git.buildroot.net/buildroot/commit/?id=7a12c94955cb1c848c8fb98f719f13a886b03b41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash  | 4 ++--
- .../python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk    | 4 ++--
+ package/python-markdown2/python-markdown2.hash | 4 ++--
+ package/python-markdown2/python-markdown2.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
-index 68892165f5..20714feb4b 100644
---- a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
-+++ b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
+diff --git a/package/python-markdown2/python-markdown2.hash b/package/python-markdown2/python-markdown2.hash
+index f5c2adb0e1..6419e3da7c 100644
+--- a/package/python-markdown2/python-markdown2.hash
++++ b/package/python-markdown2/python-markdown2.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/marshmallow-sqlalchemy/json
--md5  1cdbefa0aa35a1205d7e3bb3674743bb  marshmallow_sqlalchemy-1.1.0.tar.gz
--sha256  2ab092da269dafa8a05d51a58409af71a8d2183958ba47143127dd239e0359d8  marshmallow_sqlalchemy-1.1.0.tar.gz
-+md5  da3500ba7a5c4eb499c3564748d76ccf  marshmallow_sqlalchemy-1.2.0.tar.gz
-+sha256  9787e95d52dc39f351db1ca47a7ca30b593e4f02b5c54592680bc03ce8ce0e79  marshmallow_sqlalchemy-1.2.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/markdown2/json
+-md5  1b6f79fa3baea447e6b4dda5132e2fbc  markdown2-2.5.1.tar.gz
+-sha256  12fc04ea5a87f7bb4b65acf5bf3af1183b20838cc7d543b74c92ec7eea4bbc74  markdown2-2.5.1.tar.gz
++md5  9896bd95d1eb564300d7fd176e17d0a1  markdown2-2.5.2.tar.gz
++sha256  3ac02226a901c4b2f6fc21dbd17c26d118d2c25bcbb28cee093a1f8b5c46f3f1  markdown2-2.5.2.tar.gz
  # Locally computed sha256 checksums
- sha256  906b5d9051e426144cb173ad911667b8ebd05a9c584c2c26c135b32a3ed12001  LICENSE
-diff --git a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
-index a334bec1f5..a1ca926b10 100644
---- a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
-+++ b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
+ sha256  f8c7c4d554409cf621b8d653dbfffb719745fd36f5c49b8305258649b403ef9c  LICENSE.txt
+diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
+index 228c5d0eff..60c01dbdef 100644
+--- a/package/python-markdown2/python-markdown2.mk
++++ b/package/python-markdown2/python-markdown2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION = 1.1.0
-+PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION = 1.2.0
- PYTHON_MARSHMALLOW_SQLALCHEMY_SOURCE = marshmallow_sqlalchemy-$(PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION).tar.gz
--PYTHON_MARSHMALLOW_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/82/f8/2e565045b17dd60b38aafc3242ac44f5403315df08963501d07463d089ac
-+PYTHON_MARSHMALLOW_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/9f/a7/5ee9c0073c34a2141d4ae5e90a6c131bc859c6f7b3367ba55c6910d48f3b
- PYTHON_MARSHMALLOW_SQLALCHEMY_SETUP_TYPE = flit
- PYTHON_MARSHMALLOW_SQLALCHEMY_LICENSE = MIT
- PYTHON_MARSHMALLOW_SQLALCHEMY_LICENSE_FILES = LICENSE
+-PYTHON_MARKDOWN2_VERSION = 2.5.1
++PYTHON_MARKDOWN2_VERSION = 2.5.2
+ PYTHON_MARKDOWN2_SOURCE = markdown2-$(PYTHON_MARKDOWN2_VERSION).tar.gz
+-PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/05/92/22e3645e352562ea9bfc89aeaeb9a76feb79e20907b18bc25d5ca340b50f
++PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/a0/61/d3c0c21280ba1fc348822a4410847cf78f99bba8625755a5062a44d2e228
+ PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
+ PYTHON_MARKDOWN2_LICENSE = MIT
+ PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
