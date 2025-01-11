@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80E74E7719A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:23:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 862A2E7719A
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jan 2025 16:23:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3739A400F8;
-	Sat, 11 Jan 2025 16:23:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5424160BBA;
+	Sat, 11 Jan 2025 16:23:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cra1OxveJRSw; Sat, 11 Jan 2025 16:23:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BDd6_xjOKtqt; Sat, 11 Jan 2025 16:23:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC9034085A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E47560C1F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC9034085A;
-	Sat, 11 Jan 2025 16:23:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D79C940
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E47560C1F;
+	Sat, 11 Jan 2025 16:23:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FFE1940
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4355400F9
- for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ACF3E60A4F
+ for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dc5cNc9HeWXf for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JIFTlBH-0Neb for <buildroot@buildroot.org>;
  Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B306940184
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DDB860A94
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B306940184
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8DDB860A94
  for <buildroot@buildroot.org>; Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9D0D982592; Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
+ id 7AAA78184C; Sat, 11 Jan 2025 16:23:14 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 11 Jan 2025 17:19:19 +0100
+Date: Sat, 11 Jan 2025 17:15:42 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e837797a64dc19d55b4c8d36ff1f494dca72a210
-X-Git-Newrev: 67f16fae0c26ffcddace7ce9db0fb98f4dc44878
+X-Git-Oldrev: 178130bbad97c0b2b6665557f6345f5a86e0e08d
+X-Git-Newrev: 7476515466c27d0918eb81847d4937a2b2a3f745
 X-Patchwork-Hint: ignore
-Message-Id: <20250111162314.9D0D982592@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-mistune: bump to version
- 3.1.0
+Message-Id: <20250111162314.7AAA78184C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-matplotlib: bump to version
+ 3.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67f16fae0c26ffcddace7ce9db0fb98f4dc44878
+commit: https://git.buildroot.net/buildroot/commit/?id=7476515466c27d0918eb81847d4937a2b2a3f745
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-mistune/python-mistune.hash | 4 ++--
- package/python-mistune/python-mistune.mk   | 4 ++--
+ package/python-matplotlib/python-matplotlib.hash | 4 ++--
+ package/python-matplotlib/python-matplotlib.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
-index 7dee76cfa2..7f119f4a58 100644
---- a/package/python-mistune/python-mistune.hash
-+++ b/package/python-mistune/python-mistune.hash
+diff --git a/package/python-matplotlib/python-matplotlib.hash b/package/python-matplotlib/python-matplotlib.hash
+index 2882997b8a..c862860b06 100644
+--- a/package/python-matplotlib/python-matplotlib.hash
++++ b/package/python-matplotlib/python-matplotlib.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mistune/json
--md5  8c02b3476d0343e0a4c75a2321729f01  mistune-3.0.2.tar.gz
--sha256  fc7f93ded930c92394ef2cb6f04a8aabab4117a91449e72dcc8dfa646a508be8  mistune-3.0.2.tar.gz
-+md5  fb1f89ef8e8e0313d69ac82cb7c1627b  mistune-3.1.0.tar.gz
-+sha256  dbcac2f78292b9dc066cd03b7a3a26b62d85f8159f2ea5fd28e55df79908d667  mistune-3.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/matplotlib/json
+-md5  bb92dfd3c1e9c816100b91008be5e300  matplotlib-3.9.2.tar.gz
+-sha256  96ab43906269ca64a6366934106fa01534454a69e471b7bf3d79083981aaab92  matplotlib-3.9.2.tar.gz
++md5  9c9a5c3ced2bba7b5b2f8dab68ae4b06  matplotlib-3.10.0.tar.gz
++sha256  b886d02a581b96704c9d1ffe55709e49b4d2d52709ccebc4be42db856e511278  matplotlib-3.10.0.tar.gz
  # Locally computed sha256 checksums
- sha256  539013fd8e19f744f8bf0e27a532bbff54cd689ecef7a800f56ae5dc824be870  LICENSE
-diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
-index ac900c82ba..80c1ac83e2 100644
---- a/package/python-mistune/python-mistune.mk
-+++ b/package/python-mistune/python-mistune.mk
+ sha256  5a1a81ea301728c8bba2933da832c0cd62229daf20893a024ab3d53244468dbc  LICENSE/LICENSE
+diff --git a/package/python-matplotlib/python-matplotlib.mk b/package/python-matplotlib/python-matplotlib.mk
+index 7312d2b1ec..49fbd76bdb 100644
+--- a/package/python-matplotlib/python-matplotlib.mk
++++ b/package/python-matplotlib/python-matplotlib.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MISTUNE_VERSION = 3.0.2
-+PYTHON_MISTUNE_VERSION = 3.1.0
- PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
--PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/ef/c8/f0173fe3bf85fd891aee2e7bcd8207dfe26c2c683d727c5a6cc3aec7b628
-+PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/79/6e/96fc7cb3288666c5de2c396eb0e338dc95f7a8e4920e43e38783a22d0084
- PYTHON_MISTUNE_LICENSE = BSD-3-Clause
- PYTHON_MISTUNE_LICENSE_FILES = LICENSE
- PYTHON_MISTUNE_SETUP_TYPE = setuptools
+-PYTHON_MATPLOTLIB_VERSION = 3.9.2
++PYTHON_MATPLOTLIB_VERSION = 3.10.0
+ PYTHON_MATPLOTLIB_SOURCE = matplotlib-$(PYTHON_MATPLOTLIB_VERSION).tar.gz
+-PYTHON_MATPLOTLIB_SITE = https://files.pythonhosted.org/packages/9e/d8/3d7f706c69e024d4287c1110d74f7dabac91d9843b99eadc90de9efc8869
++PYTHON_MATPLOTLIB_SITE = https://files.pythonhosted.org/packages/68/dd/fa2e1a45fce2d09f4aea3cee169760e672c8262325aa5796c49d543dc7e6
+ PYTHON_MATPLOTLIB_LICENSE = Python-2.0
+ PYTHON_MATPLOTLIB_LICENSE_FILES = LICENSE/LICENSE
+ PYTHON_MATPLOTLIB_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
