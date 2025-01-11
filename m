@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03A34C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:34:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 612DBC282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:34:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9C364F07E;
-	Fri, 28 Feb 2025 16:34:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3464660736;
+	Fri, 28 Feb 2025 16:34:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iUXybQIExAiy; Fri, 28 Feb 2025 16:34:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fVITvW0eXMII; Fri, 28 Feb 2025 16:34:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 758374F082
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33D1D6FBCC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 758374F082;
-	Fri, 28 Feb 2025 16:34:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 07D551DD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33D1D6FBCC;
+	Fri, 28 Feb 2025 16:34:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C818F68
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 63E9641A10
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AAB6741625
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 15Pj23oTIgb4 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:29:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id COC0dzKvgcsh for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F0F841954
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB89840413
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F0F841954
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:29:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB89840413
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8976A8769C; Fri, 28 Feb 2025 16:29:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 2766487C2C; Fri, 28 Feb 2025 16:30:02 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 23 Nov 2024 11:36:10 +0100
+Date: Sat, 11 Jan 2025 16:25:23 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 81d111dbd49fd0597fdec3924c29f7c9e09e7d89
-X-Git-Newrev: 366d403bedd83d1e884b6c7c60a8a4ff497a458a
+X-Git-Oldrev: a45a94284005e89c04e0d80394f333e44e97e488
+X-Git-Newrev: 09649af4bd539b3fb2a52b07c1f58f6f4caffaa6
 X-Patchwork-Hint: ignore
-Message-Id: <20250228162930.8976A8769C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] docs/website/news.html: use
- gitlab for all CHANGES links
+Message-Id: <20250228163002.2766487C2C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-git: bump to
+ version 3.1.44
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,23 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=366d403bedd83d1e884b6c7c60a8a4ff497a458a
+commit: https://git.buildroot.net/buildroot/commit/?id=09649af4bd539b3fb2a52b07c1f58f6f4caffaa6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-We migrated to Gitlab a while ago, so update the CHANGES links to point to
-that rather than git.buildroot.net.
-
-Automated with:
-
-sed -i 's|http://git.buildroot.net/buildroot/plain/CHANGES?id=\([^"]*\)|https://gitlab.com/buildroot.org/buildroot/-/blob/\1/CHANGES|g' \
- docs/website/news.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- docs/website/news.html | 776 ++++++++++++++++++++++++-------------------------
- 1 file changed, 388 insertions(+), 388 deletions(-)
+ package/python-git/python-git.hash | 4 ++--
+ package/python-git/python-git.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/python-git/python-git.hash b/package/python-git/python-git.hash
+index 44b91662dd..aac8b3fab0 100644
+--- a/package/python-git/python-git.hash
++++ b/package/python-git/python-git.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/gitpython/json
+-md5  350a6dd0d1d560e0af82733592e8dbb3  GitPython-3.1.43.tar.gz
+-sha256  35f314a9f878467f5453cc1fee295c3e18e52f1b99f10f6cf5b1682e968a9e7c  GitPython-3.1.43.tar.gz
++md5  14e2083b71e235ba4d81fa485ce9153d  gitpython-3.1.44.tar.gz
++sha256  c87e30b26253bf5418b01b0660f818967f3c503193838337fe5e573331249269  gitpython-3.1.44.tar.gz
+ # Locally computed sha256 checksums
+ sha256  86fc94c321a9afbc11514713511bafded225f25100dcc0f7350e82bc231b8beb  LICENSE
+diff --git a/package/python-git/python-git.mk b/package/python-git/python-git.mk
+index 9975af9198..318cb614f0 100644
+--- a/package/python-git/python-git.mk
++++ b/package/python-git/python-git.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_GIT_VERSION = 3.1.43
+-PYTHON_GIT_SOURCE = GitPython-$(PYTHON_GIT_VERSION).tar.gz
+-PYTHON_GIT_SITE = https://files.pythonhosted.org/packages/b6/a1/106fd9fa2dd989b6fb36e5893961f82992cf676381707253e0bf93eb1662
++PYTHON_GIT_VERSION = 3.1.44
++PYTHON_GIT_SOURCE = gitpython-$(PYTHON_GIT_VERSION).tar.gz
++PYTHON_GIT_SITE = https://files.pythonhosted.org/packages/c0/89/37df0b71473153574a5cdef8f242de422a0f5d26d7a9e231e6f169b4ad14
+ PYTHON_GIT_LICENSE = BSD-3-Clause
+ PYTHON_GIT_LICENSE_FILES = LICENSE
+ PYTHON_GIT_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
