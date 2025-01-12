@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2E9EE7719C
-	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:34:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58E35E77188
+	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:34:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75E3B60B59;
-	Sun, 12 Jan 2025 11:34:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1CD9E60B49;
+	Sun, 12 Jan 2025 11:34:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T9vQmrOOTljz; Sun, 12 Jan 2025 11:34:00 +0000 (UTC)
+ id kUtZIdNMMz3v; Sun, 12 Jan 2025 11:34:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0196B608D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87C1F60B76
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0196B608D3;
-	Sun, 12 Jan 2025 11:34:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A388868
+	by smtp3.osuosl.org (Postfix) with ESMTP id 87C1F60B76;
+	Sun, 12 Jan 2025 11:34:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BC39C950
  for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C4554404DB
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 95035606A3
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L_N_NBXZmVya for <buildroot@buildroot.org>;
- Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vHBRXN52vBua for <buildroot@buildroot.org>;
+ Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B38F4404DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C52286069A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B38F4404DC
+ by smtp3.osuosl.org (Postfix) with ESMTP id C52286069A
  for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FB53852E0; Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
+ id 7E1D3852CA; Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Jan 2025 12:22:12 +0100
+Date: Sun, 12 Jan 2025 12:22:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 23b9e0420feaf17771edf1797ca4addbbfb477d1
-X-Git-Newrev: 157f7688fe040f0e54e4c8d37ace3d42f16d8847
+X-Git-Oldrev: 0fb0ade539a0856790d08bedac4a9d70b8e5607e
+X-Git-Newrev: 817902a21896617d8cbbee3450d10b34f218ca38
 X-Patchwork-Hint: ignore
-Message-Id: <20250112113340.9FB53852E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-trio: bump to version 0.28.0
+Message-Id: <20250112113340.7E1D3852CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tornado: bump to version
+ 6.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,45 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=157f7688fe040f0e54e4c8d37ace3d42f16d8847
+commit: https://git.buildroot.net/buildroot/commit/?id=817902a21896617d8cbbee3450d10b34f218ca38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-trio/python-trio.hash | 4 ++--
- package/python-trio/python-trio.mk   | 4 ++--
+ package/python-tornado/python-tornado.hash | 4 ++--
+ package/python-tornado/python-tornado.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-trio/python-trio.hash b/package/python-trio/python-trio.hash
-index 35de5d6c3b..0dd367a236 100644
---- a/package/python-trio/python-trio.hash
-+++ b/package/python-trio/python-trio.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/trio/json
--md5  81c1aa4eefa98e1b2895a85369211d24  trio-0.27.0.tar.gz
--sha256  1dcc95ab1726b2da054afea8fd761af74bad79bd52381b84eae408e983c76831  trio-0.27.0.tar.gz
-+md5  e6d930a02a7ddf370083b9c9efa39e85  trio-0.28.0.tar.gz
-+sha256  4e547896fe9e8a5658e54e4c7c5fa1db748cbbbaa7c965e7d40505b928c73c05  trio-0.28.0.tar.gz
+diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
+index f8ac0ceaf3..a7ba8f899f 100644
+--- a/package/python-tornado/python-tornado.hash
++++ b/package/python-tornado/python-tornado.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/tornado/json
+-md5  07ebd88a2a7acee1b819738f3f4ca7ef  tornado-6.4.1.tar.gz
+-sha256  92d3ab53183d8c50f8204a51e6f91d18a15d5ef261e84d452800d4ff6fc504e9  tornado-6.4.1.tar.gz
++md5  c3a490d9cea9360ecd0805e4c2d1e87e  tornado-6.4.2.tar.gz
++sha256  92bad5b4746e9879fd7bf1eb21dce4e3fc5128d71601f80005afa39237ad620b  tornado-6.4.2.tar.gz
  # Locally computed sha256 checksums
- sha256  418d025e1284311f2690263e6efa6bf51585e5741818ece63e5862487e505bb9  LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.APACHE2
-diff --git a/package/python-trio/python-trio.mk b/package/python-trio/python-trio.mk
-index dace4eec9e..f298619fe4 100644
---- a/package/python-trio/python-trio.mk
-+++ b/package/python-trio/python-trio.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
+index c5e5a2ca0c..45883b844d 100644
+--- a/package/python-tornado/python-tornado.mk
++++ b/package/python-tornado/python-tornado.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TRIO_VERSION = 0.27.0
-+PYTHON_TRIO_VERSION = 0.28.0
- PYTHON_TRIO_SOURCE = trio-$(PYTHON_TRIO_VERSION).tar.gz
--PYTHON_TRIO_SITE = https://files.pythonhosted.org/packages/17/d1/a83dee5be404da7afe5a71783a33b8907bacb935a6dc8c69ab785e4a3eed
-+PYTHON_TRIO_SITE = https://files.pythonhosted.org/packages/b3/73/57efab729506a8d4b89814f1e356ec8f3369de0ed4fd7e7616974d09646d
- PYTHON_TRIO_SETUP_TYPE = setuptools
- PYTHON_TRIO_LICENSE = Apache-2.0 or MIT
- PYTHON_TRIO_LICENSE_FILES = LICENSE LICENSE.APACHE2 LICENSE.MIT
+-PYTHON_TORNADO_VERSION = 6.4.1
++PYTHON_TORNADO_VERSION = 6.4.2
+ PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
+-PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/ee/66/398ac7167f1c7835406888a386f6d0d26ee5dbf197d8a571300be57662d3
++PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/59/45/a0daf161f7d6f36c3ea5fc0c2de619746cc3dd4c76402e9db545bd920f63
+ PYTHON_TORNADO_LICENSE = Apache-2.0
+ PYTHON_TORNADO_LICENSE_FILES = LICENSE
+ PYTHON_TORNADO_CPE_ID_VENDOR = tornadoweb
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
