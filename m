@@ -1,53 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB922E7719C
-	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:34:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3E7DE77188
+	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:34:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6EF32406E8;
-	Sun, 12 Jan 2025 11:34:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9507E6075F;
+	Sun, 12 Jan 2025 11:34:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iDyaI-f3wSkP; Sun, 12 Jan 2025 11:34:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JyN8_J3awDJO; Sun, 12 Jan 2025 11:34:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35E86406FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B325E60711
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35E86406FD;
-	Sun, 12 Jan 2025 11:34:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 59169942
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B325E60711;
+	Sun, 12 Jan 2025 11:34:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 52239942
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:34:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7810B40259
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 249578112E
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:34:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BCPvCwj595yI for <buildroot@buildroot.org>;
- Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D36834027C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D36834027C
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B7114852D8; Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c_PcKs9Ms0r3 for <buildroot@buildroot.org>;
+ Sun, 12 Jan 2025 11:34:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 752C781115
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 752C781115
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 752C781115
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:34:33 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 9AEC7780333;
+ Sun, 12 Jan 2025 12:34:29 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:41924])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 12 Jan 2025 12:34:29 +0100
+MIME-Version: 1.0
+Date: Sun, 12 Jan 2025 12:34:29 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 12 Jan 2025 12:22:19 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0ab41ed0f1f289a96a5900b9e075599aa73b0e96
-X-Git-Newrev: e0e55920eda4c5830aa3bd5e90a2936b36745192
-X-Patchwork-Hint: ignore
-Message-Id: <20250112113340.B7114852D8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-typepy: bump to version
- 1.3.4
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250111182546.2932747-1-james.hilliard1@gmail.com>
+References: <20250111182546.2932747-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <45e039132b70fe060a88ea3c7e8422fe@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1736681670;
+ bh=93bx2jH8goEcmL7jnUOfr26MJO5253JgY1xrxWvHGsw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=mvJFz9UHWIaHL+9188nQNGVoHNz5aAtNTPM770FTab5YGpOgR/mT++2MuEYVPgUng
+ ZM457NZs4gm+hW7SU87a45s5W9wxnDqLSnTnDj1hkNsB+/BNb3Nc7GTrOvIG5EBBHX
+ f7gSizbtmlAHFJcYGH+Yu7DFn34349tXGjG81aFs3V8UFSC8ishyT55TYmFyggOTto
+ 6/NqU1SqDrButQloi+ALEV+tZSdwtXOUh8IuUznRo7B5Pq6b7b60cKLbeF1L+Gr7j+
+ uy30QUZmHWkLq2UgAv+aa3wBOxEVfDofLBPJUfcCDfATOv+EbUUY9D9eGtA4clYl8K
+ u35B6Dr+8Dbdw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=mvJFz9UH
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-tornado: bump to version
+ 6.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,59 +83,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0e55920eda4c5830aa3bd5e90a2936b36745192
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/01/2025 19:25, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Add new host-python-setuptools-scm build dependency.
-
-License hash changed due to year update:
-https://github.com/thombashi/typepy/commit/974f6c5665c4ff0ee9f030e5d2e89b07bcea2073
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-typepy/python-typepy.hash | 6 +++---
- package/python-typepy/python-typepy.mk   | 5 +++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-typepy/python-typepy.hash b/package/python-typepy/python-typepy.hash
-index 0b73f9f4df..5cf3daded9 100644
---- a/package/python-typepy/python-typepy.hash
-+++ b/package/python-typepy/python-typepy.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/typepy/json
--md5  2637fdf609b8a7b9b8ec722852efc706  typepy-1.3.2.tar.gz
--sha256  b69fd48b9f50cdb3809906eef36b855b3134ff66c8893a4f8580abddb0b39517  typepy-1.3.2.tar.gz
-+md5  f7ba433b3ea79aa36699be634b36aef1  typepy-1.3.4.tar.gz
-+sha256  89c1f66de6c6133209c43a94d23431d320ba03ef5db18f241091ea594035d9de  typepy-1.3.4.tar.gz
- # Locally computed sha256 checksums
--sha256  bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
-+sha256  4434f353a12dd0236a99e5d3fd07fe3b3a453f9164fe10c57a11d6ca86b50c08  LICENSE
-diff --git a/package/python-typepy/python-typepy.mk b/package/python-typepy/python-typepy.mk
-index cd67d4e888..03760f1d5f 100644
---- a/package/python-typepy/python-typepy.mk
-+++ b/package/python-typepy/python-typepy.mk
-@@ -4,11 +4,12 @@
- #
- ################################################################################
- 
--PYTHON_TYPEPY_VERSION = 1.3.2
-+PYTHON_TYPEPY_VERSION = 1.3.4
- PYTHON_TYPEPY_SOURCE = typepy-$(PYTHON_TYPEPY_VERSION).tar.gz
--PYTHON_TYPEPY_SITE = https://files.pythonhosted.org/packages/cc/86/9672794fb1c87a17b839666976ed4c8cb779ce05d471bed3166a39a53c4d
-+PYTHON_TYPEPY_SITE = https://files.pythonhosted.org/packages/79/59/4c39942077d7de285f762a91024dbda731be693591732977358f77d120fb
- PYTHON_TYPEPY_SETUP_TYPE = setuptools
- PYTHON_TYPEPY_LICENSE = MIT
- PYTHON_TYPEPY_LICENSE_FILES = LICENSE
-+PYTHON_TYPEPY_DEPENDENCIES = host-python-setuptools-scm
- 
- $(eval $(python-package))
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
