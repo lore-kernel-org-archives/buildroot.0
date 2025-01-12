@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D778E77188
-	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:34:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D1BBE77188
+	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:34:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 697766111C;
-	Sun, 12 Jan 2025 11:34:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 553FA40795;
+	Sun, 12 Jan 2025 11:34:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5DYBhUMvJail; Sun, 12 Jan 2025 11:34:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3AglhGkUoh_Z; Sun, 12 Jan 2025 11:34:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FBE4610D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC1C040659
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FBE4610D7;
-	Sun, 12 Jan 2025 11:34:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4F7C568
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC1C040659;
+	Sun, 12 Jan 2025 11:34:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 52320950
  for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF02E8111C
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F1BC40287
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xg3qhubcf4JS for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d5Bkk_VCMDMr for <buildroot@buildroot.org>;
  Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 161298112E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EB0840288
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 161298112E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0EB0840288
  for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1189B852E0; Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
+ id 07C98852D2; Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Jan 2025 12:22:44 +0100
+Date: Sun, 12 Jan 2025 12:22:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 872919427e4bae7cfcb680fb27aab68bfc04828e
-X-Git-Newrev: b2b4bc92d7f753465b001074496159d53369a1dd
+X-Git-Oldrev: 2646d3cbac2042f6b8c61e5b252e3daa8a4b5f04
+X-Git-Newrev: 872919427e4bae7cfcb680fb27aab68bfc04828e
 X-Patchwork-Hint: ignore
-Message-Id: <20250112113341.1189B852E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-yarl: bump to version 1.18.3
+Message-Id: <20250112113341.07C98852D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-ws4py: bump to version 0.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,44 +64,121 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2b4bc92d7f753465b001074496159d53369a1dd
+commit: https://git.buildroot.net/buildroot/commit/?id=872919427e4bae7cfcb680fb27aab68bfc04828e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Drop patch which is no longer required.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-yarl/python-yarl.hash | 4 ++--
- package/python-yarl/python-yarl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .checkpackageignore                                |  1 -
+ .../0001-Adjust-ws4py-for-Python-3.7-syntax.patch  | 55 ----------------------
+ package/python-ws4py/python-ws4py.hash             |  4 +-
+ package/python-ws4py/python-ws4py.mk               |  4 +-
+ 4 files changed, 4 insertions(+), 60 deletions(-)
 
-diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
-index 3918383548..ca2d42bf58 100644
---- a/package/python-yarl/python-yarl.hash
-+++ b/package/python-yarl/python-yarl.hash
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 84b1e7ae00..ee89f7e4bf 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1023,7 +1023,6 @@ package/python-scipy/0001-build-sh4-FE.patch lib_patch.Upstream
+ package/python-setuptools/0001-add-executable.patch lib_patch.Upstream
+ package/python-sip/0001-remove-join-from-sip-h-files-string.patch lib_patch.Upstream
+ package/python-web2py/S51web2py Shellcheck lib_sysv.Variables
+-package/python-ws4py/0001-Adjust-ws4py-for-Python-3.7-syntax.patch lib_patch.Upstream
+ package/python3/0001-Make-the-build-of-pyc-files-conditional.patch lib_patch.Upstream
+ package/python3/0002-Disable-buggy_getaddrinfo-configure-test-when-cross-.patch lib_patch.Upstream
+ package/python3/0003-Add-an-option-to-disable-pydoc.patch lib_patch.Upstream
+diff --git a/package/python-ws4py/0001-Adjust-ws4py-for-Python-3.7-syntax.patch b/package/python-ws4py/0001-Adjust-ws4py-for-Python-3.7-syntax.patch
+deleted file mode 100644
+index 12dac30db8..0000000000
+--- a/package/python-ws4py/0001-Adjust-ws4py-for-Python-3.7-syntax.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From dfe6f65b7078315c32cebb727e9c47ead7603475 Mon Sep 17 00:00:00 2001
+-From: Asaf Kahlon <asafka7@gmail.com>
+-Date: Sun, 13 Oct 2019 16:44:44 +0300
+-Subject: [PATCH] Adjust ws4py for Python 3.7 syntax
+-
+-Since Python 3.7, "async" has become a keyword and cannot be used.
+-Thus, instead of asyncio.async we will use asyncio.ensure_future.
+-
+-There's also a pull request with this change:
+-https://github.com/Lawouach/WebSocket-for-Python/pull/245
+-
+-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+----
+- ws4py/async_websocket.py    | 4 ++--
+- ws4py/server/tulipserver.py | 2 +-
+- 2 files changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/ws4py/async_websocket.py b/ws4py/async_websocket.py
+-index 9e2a4c7..ea296b4 100644
+---- a/ws4py/async_websocket.py
+-+++ b/ws4py/async_websocket.py
+-@@ -84,7 +84,7 @@ class WebSocket(_WebSocket):
+-         def closeit():
+-             yield from self.proto.writer.drain()
+-             self.proto.writer.close()
+--        asyncio.async(closeit())
+-+        asyncio.ensure_future(closeit())
+- 
+-     def _write(self, data):
+-         """
+-@@ -94,7 +94,7 @@ class WebSocket(_WebSocket):
+-         def sendit(data):
+-             self.proto.writer.write(data)
+-             yield from self.proto.writer.drain()
+--        asyncio.async(sendit(data))
+-+        asyncio.ensure_future(sendit(data))
+- 
+-     @asyncio.coroutine
+-     def run(self):
+-diff --git a/ws4py/server/tulipserver.py b/ws4py/server/tulipserver.py
+-index 2786c16..85312a2 100644
+---- a/ws4py/server/tulipserver.py
+-+++ b/ws4py/server/tulipserver.py
+-@@ -40,7 +40,7 @@ class WebSocketProtocol(asyncio.StreamReaderProtocol):
+-         #self.stream.set_transport(transport)
+-         asyncio.StreamReaderProtocol.connection_made(self, transport)
+-         # Let make it concurrent for others to tag along
+--        f = asyncio.async(self.handle_initial_handshake())
+-+        f = asyncio.ensure_future(self.handle_initial_handshake())
+-         f.add_done_callback(self.terminated)
+- 
+-     @property
+--- 
+-2.20.1
+-
+diff --git a/package/python-ws4py/python-ws4py.hash b/package/python-ws4py/python-ws4py.hash
+index 1e809fee0a..fc14748b8d 100644
+--- a/package/python-ws4py/python-ws4py.hash
++++ b/package/python-ws4py/python-ws4py.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/yarl/json
--md5  d356afad18b20095b766ad47bedcb34a  yarl-1.17.1.tar.gz
--sha256  067a63fcfda82da6b198fa73079b1ca40b7c9b7994995b6ee38acda728b64d47  yarl-1.17.1.tar.gz
-+md5  80b89d2b28be7345a38f099b2f839d7d  yarl-1.18.3.tar.gz
-+sha256  ac1801c45cbf77b6c99242eeff4fffb5e4e73a800b5c4ad4fc0be5def634d2e1  yarl-1.18.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/ws4py/json
+-md5  68e0cfae9659dd059ff7e7a8218af548  ws4py-0.5.1.tar.gz
+-sha256  29d073d7f2e006373e6a848b1d00951a1107eb81f3742952be905429dc5a5483  ws4py-0.5.1.tar.gz
++md5  373750c014b6a5e225aad4cf5b0a5721  ws4py-0.6.0.tar.gz
++sha256  9f87b19b773f0a0744a38f3afa36a803286dd3197f0bb35d9b75293ec7002d19  ws4py-0.6.0.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
-index c7d846521f..160dec8a1b 100644
---- a/package/python-yarl/python-yarl.mk
-+++ b/package/python-yarl/python-yarl.mk
+ sha256  3c98d9e820de01b1ae3be846419700ab9cefa22b09aa0ef441b3bfd5613c3ba1  LICENSE
+diff --git a/package/python-ws4py/python-ws4py.mk b/package/python-ws4py/python-ws4py.mk
+index edfd5d0df1..c76c636d8b 100644
+--- a/package/python-ws4py/python-ws4py.mk
++++ b/package/python-ws4py/python-ws4py.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_YARL_VERSION = 1.17.1
-+PYTHON_YARL_VERSION = 1.18.3
- PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
--PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/54/9c/9c0a9bfa683fc1be7fdcd9687635151544d992cccd48892dc5e0a5885a29
-+PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/b7/9d/4b94a8e6d2b51b599516a5cb88e5bc99b4d8d4583e468057eaa29d5f0918
- PYTHON_YARL_LICENSE = Apache-2.0
- PYTHON_YARL_LICENSE_FILES = LICENSE
- PYTHON_YARL_SETUP_TYPE = setuptools
+-PYTHON_WS4PY_VERSION = 0.5.1
++PYTHON_WS4PY_VERSION = 0.6.0
+ PYTHON_WS4PY_SOURCE = ws4py-$(PYTHON_WS4PY_VERSION).tar.gz
+-PYTHON_WS4PY_SITE = https://files.pythonhosted.org/packages/53/20/4019a739b2eefe9282d3822ef6a225250af964b117356971bd55e274193c
++PYTHON_WS4PY_SITE = https://files.pythonhosted.org/packages/cb/55/dd8a5e1f975d1549494fe8692fc272602f17e475fe70de910cdd53aec902
+ PYTHON_WS4PY_SETUP_TYPE = setuptools
+ PYTHON_WS4PY_LICENSE = BSD-3-Clause
+ PYTHON_WS4PY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
