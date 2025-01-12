@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FDC0E7719C
-	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:33:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18CA8E77188
+	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:33:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C623660711;
-	Sun, 12 Jan 2025 11:33:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F2A1608B4;
+	Sun, 12 Jan 2025 11:33:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nuSncNB9FTcG; Sun, 12 Jan 2025 11:33:51 +0000 (UTC)
+ id ynHmu-7WP44l; Sun, 12 Jan 2025 11:33:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A78EF60725
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60BC460A51
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A78EF60725;
-	Sun, 12 Jan 2025 11:33:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 60BC460A51;
+	Sun, 12 Jan 2025 11:33:54 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id EA7BB950
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1996768
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C92EC4031C
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1471440259
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YbMHvVxFs-Fq for <buildroot@buildroot.org>;
- Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
+ id Aj8uwrTU66Qo for <buildroot@buildroot.org>;
+ Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF59A40259
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF51840287
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF59A40259
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF51840287
  for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB656852D2; Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
+ id DAE05852D2; Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Jan 2025 12:22:15 +0100
+Date: Sun, 12 Jan 2025 12:22:29 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 157f7688fe040f0e54e4c8d37ace3d42f16d8847
-X-Git-Newrev: 0ab41ed0f1f289a96a5900b9e075599aa73b0e96
+X-Git-Oldrev: f9d3ea40ea9f1784799caaa6b24b169cc9ba365c
+X-Git-Newrev: a582313cf982bf6e85d0f0752d26ef5163fbf846
 X-Patchwork-Hint: ignore
-Message-Id: <20250112113340.AB656852D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-trove-classifiers: bump to
- version 2025.1.10.15
+Message-Id: <20250112113340.DAE05852D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-uswid: bump to version 0.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ab41ed0f1f289a96a5900b9e075599aa73b0e96
+commit: https://git.buildroot.net/buildroot/commit/?id=a582313cf982bf6e85d0f0752d26ef5163fbf846
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-trove-classifiers/python-trove-classifiers.hash | 4 ++--
- package/python-trove-classifiers/python-trove-classifiers.mk   | 4 ++--
+ package/python-uswid/python-uswid.hash | 4 ++--
+ package/python-uswid/python-uswid.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-trove-classifiers/python-trove-classifiers.hash b/package/python-trove-classifiers/python-trove-classifiers.hash
-index 02ea021527..bb58e4930b 100644
---- a/package/python-trove-classifiers/python-trove-classifiers.hash
-+++ b/package/python-trove-classifiers/python-trove-classifiers.hash
+diff --git a/package/python-uswid/python-uswid.hash b/package/python-uswid/python-uswid.hash
+index b6bf09c713..eb9011bad6 100644
+--- a/package/python-uswid/python-uswid.hash
++++ b/package/python-uswid/python-uswid.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/trove-classifiers/json
--md5  c2820cfbb09e91d84ade85e0e65d87ae  trove_classifiers-2024.10.21.16.tar.gz
--sha256  17cbd055d67d5e9d9de63293a8732943fabc21574e4c7b74edf112b4928cf5f3  trove_classifiers-2024.10.21.16.tar.gz
-+md5  b8c01a04127e7929f588fabbd0352ecb  trove_classifiers-2025.1.10.15.tar.gz
-+sha256  be2c7d25e46cd39d5c7151acd389584df3919f61890f5f163c8ee2090ff71e7f  trove_classifiers-2025.1.10.15.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/uswid/json
+-md5  e43ff6d49ddcda0c95338d3271694b91  uswid-0.5.0.tar.gz
+-sha256  bdcd7ee5afac1da60ee688c357aa12f5f8d74bc28012446b10e2b4a9cf52fc6d  uswid-0.5.0.tar.gz
++md5  dc9a4aa4f9293b9e24c35c14dad6f296  uswid-0.5.1.tar.gz
++sha256  92b48a8f6601687c1cc556878571abf9ddb0bdbaf244713b7ff838c48fcb68b3  uswid-0.5.1.tar.gz
  # Locally computed sha256 checksums
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-trove-classifiers/python-trove-classifiers.mk b/package/python-trove-classifiers/python-trove-classifiers.mk
-index ab2421cbe5..98ebcc4d1b 100644
---- a/package/python-trove-classifiers/python-trove-classifiers.mk
-+++ b/package/python-trove-classifiers/python-trove-classifiers.mk
+ sha256  98bc07f3fb70d05b01ff740e8191b9f29c080159f01588991fbd872c611236f9  LICENSE
+diff --git a/package/python-uswid/python-uswid.mk b/package/python-uswid/python-uswid.mk
+index 2092a06f52..e6ca702742 100644
+--- a/package/python-uswid/python-uswid.mk
++++ b/package/python-uswid/python-uswid.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TROVE_CLASSIFIERS_VERSION = 2024.10.21.16
-+PYTHON_TROVE_CLASSIFIERS_VERSION = 2025.1.10.15
- PYTHON_TROVE_CLASSIFIERS_SOURCE = trove_classifiers-$(PYTHON_TROVE_CLASSIFIERS_VERSION).tar.gz
--PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/99/85/92c2667cf221b37648041ce9319427f92fa76cbec634aad844e67e284706
-+PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/db/1b/7bb619b31396d550022965673a0c284c914a0a4c68480f78097401e1b3e5
- PYTHON_TROVE_CLASSIFIERS_SETUP_TYPE = setuptools
- PYTHON_TROVE_CLASSIFIERS_LICENSE = Apache-2.0
- PYTHON_TROVE_CLASSIFIERS_LICENSE_FILES = LICENSE
+-PYTHON_USWID_VERSION = 0.5.0
++PYTHON_USWID_VERSION = 0.5.1
+ PYTHON_USWID_SOURCE = uswid-$(PYTHON_USWID_VERSION).tar.gz
+-PYTHON_USWID_SITE = https://files.pythonhosted.org/packages/dc/bf/05291df12037befeacda2083c798e98691043978e07ca4a00b4eb94aeb61
++PYTHON_USWID_SITE = https://files.pythonhosted.org/packages/5c/67/9244d29d6391d49f30128da6c73a61c7a6c1f8bfcf0181f83298aa050832
+ PYTHON_USWID_SETUP_TYPE = setuptools
+ PYTHON_USWID_LICENSE = BSD-2-Clause-Patent
+ PYTHON_USWID_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
