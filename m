@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58E35E77188
-	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:34:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CDB1E77188
+	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:34:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CD9E60B49;
-	Sun, 12 Jan 2025 11:34:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DB9D406AA;
+	Sun, 12 Jan 2025 11:34:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kUtZIdNMMz3v; Sun, 12 Jan 2025 11:34:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mquhx24iyfbl; Sun, 12 Jan 2025 11:34:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87C1F60B76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C01740761
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 87C1F60B76;
-	Sun, 12 Jan 2025 11:34:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id BC39C950
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C01740761;
+	Sun, 12 Jan 2025 11:34:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E7A8942
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 95035606A3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2A91940259
  for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vHBRXN52vBua for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cX2SvbX89lll for <buildroot@buildroot.org>;
  Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C52286069A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3A7A40291
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C52286069A
+ by smtp2.osuosl.org (Postfix) with ESMTP id F3A7A40291
  for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E1D3852CA; Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
+ id EF0A0852D8; Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Jan 2025 12:22:02 +0100
+Date: Sun, 12 Jan 2025 12:22:36 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0fb0ade539a0856790d08bedac4a9d70b8e5607e
-X-Git-Newrev: 817902a21896617d8cbbee3450d10b34f218ca38
+X-Git-Oldrev: 6189f6154738db45629d76d31ab92b7d5bc9d671
+X-Git-Newrev: 2646d3cbac2042f6b8c61e5b252e3daa8a4b5f04
 X-Patchwork-Hint: ignore
-Message-Id: <20250112113340.7E1D3852CA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-tornado: bump to version
- 6.4.2
+Message-Id: <20250112113340.EF0A0852D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-wrapt: bump to version
+ 1.17.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=817902a21896617d8cbbee3450d10b34f218ca38
+commit: https://git.buildroot.net/buildroot/commit/?id=2646d3cbac2042f6b8c61e5b252e3daa8a4b5f04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-tornado/python-tornado.hash | 4 ++--
- package/python-tornado/python-tornado.mk   | 4 ++--
+ package/python-wrapt/python-wrapt.hash | 4 ++--
+ package/python-wrapt/python-wrapt.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
-index f8ac0ceaf3..a7ba8f899f 100644
---- a/package/python-tornado/python-tornado.hash
-+++ b/package/python-tornado/python-tornado.hash
+diff --git a/package/python-wrapt/python-wrapt.hash b/package/python-wrapt/python-wrapt.hash
+index b89c805bf6..b83d7fc575 100644
+--- a/package/python-wrapt/python-wrapt.hash
++++ b/package/python-wrapt/python-wrapt.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tornado/json
--md5  07ebd88a2a7acee1b819738f3f4ca7ef  tornado-6.4.1.tar.gz
--sha256  92d3ab53183d8c50f8204a51e6f91d18a15d5ef261e84d452800d4ff6fc504e9  tornado-6.4.1.tar.gz
-+md5  c3a490d9cea9360ecd0805e4c2d1e87e  tornado-6.4.2.tar.gz
-+sha256  92bad5b4746e9879fd7bf1eb21dce4e3fc5128d71601f80005afa39237ad620b  tornado-6.4.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/wrapt/json
+-md5  3e370b4bc08f7dcc518cf8895673b19c  wrapt-1.16.0.tar.gz
+-sha256  5f370f952971e7d17c7d1ead40e49f32345a7f7a5373571ef44d800d06b1899d  wrapt-1.16.0.tar.gz
++md5  31bef7bc31a8ba7da00cb33a70aca7a1  wrapt-1.17.1.tar.gz
++sha256  16b2fdfa09a74a3930175b6d9d7d008022aa72a4f02de2b3eecafcc1adfd3cfe  wrapt-1.17.1.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-index c5e5a2ca0c..45883b844d 100644
---- a/package/python-tornado/python-tornado.mk
-+++ b/package/python-tornado/python-tornado.mk
+ sha256  5974efbbc8b626b2050810d63c3a907ee21c92bf64b3740fc623ad05eb3448ab  LICENSE
+diff --git a/package/python-wrapt/python-wrapt.mk b/package/python-wrapt/python-wrapt.mk
+index ed4a911e14..32bac19d61 100644
+--- a/package/python-wrapt/python-wrapt.mk
++++ b/package/python-wrapt/python-wrapt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TORNADO_VERSION = 6.4.1
-+PYTHON_TORNADO_VERSION = 6.4.2
- PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
--PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/ee/66/398ac7167f1c7835406888a386f6d0d26ee5dbf197d8a571300be57662d3
-+PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/59/45/a0daf161f7d6f36c3ea5fc0c2de619746cc3dd4c76402e9db545bd920f63
- PYTHON_TORNADO_LICENSE = Apache-2.0
- PYTHON_TORNADO_LICENSE_FILES = LICENSE
- PYTHON_TORNADO_CPE_ID_VENDOR = tornadoweb
+-PYTHON_WRAPT_VERSION = 1.16.0
++PYTHON_WRAPT_VERSION = 1.17.1
+ PYTHON_WRAPT_SOURCE = wrapt-$(PYTHON_WRAPT_VERSION).tar.gz
+-PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/95/4c/063a912e20bcef7124e0df97282a8af3ff3e4b603ce84c481d6d7346be0a
++PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/c8/dd/35c573cc2b4b8d65ea96bba0247d05710f284857d30e2266d1874f1c727d
+ PYTHON_WRAPT_SETUP_TYPE = setuptools
+ PYTHON_WRAPT_LICENSE = BSD-2-Clause
+ PYTHON_WRAPT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
