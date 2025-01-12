@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CBEFE7719C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE28CE77188
 	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:33:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3196B606CE;
-	Sun, 12 Jan 2025 11:33:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83D14404DE;
+	Sun, 12 Jan 2025 11:33:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WNTmSMCNwCTM; Sun, 12 Jan 2025 11:33:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0wSNF0OwCe5F; Sun, 12 Jan 2025 11:33:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB821606FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 460DC404F9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB821606FF;
-	Sun, 12 Jan 2025 11:33:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A8F0B950
+	by smtp4.osuosl.org (Postfix) with ESMTP id 460DC404F9;
+	Sun, 12 Jan 2025 11:33:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C6682942
  for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A312481133
+ by smtp4.osuosl.org (Postfix) with ESMTP id A592C404DE
  for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8LfUukUQnxPy for <buildroot@buildroot.org>;
- Sun, 12 Jan 2025 11:33:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5hzM3SmS0C13 for <buildroot@buildroot.org>;
+ Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E16D581118
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90A7A404DB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E16D581118
+ by smtp4.osuosl.org (Postfix) with ESMTP id 90A7A404DB
  for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CFE1F852E0; Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
+ id 88F59852D2; Sun, 12 Jan 2025 11:33:40 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Jan 2025 12:22:26 +0100
+Date: Sun, 12 Jan 2025 12:22:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cec35d11418a4cb7704c96f69957669ddbabdc21
-X-Git-Newrev: f9d3ea40ea9f1784799caaa6b24b169cc9ba365c
+X-Git-Oldrev: 817902a21896617d8cbbee3450d10b34f218ca38
+X-Git-Newrev: b024708202057559c60633ca3c800a3d8b46f48b
 X-Patchwork-Hint: ignore
-Message-Id: <20250112113340.CFE1F852E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-urllib3: bump to version
- 2.3.0
+Message-Id: <20250112113340.88F59852D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tortoise-orm: bump to
+ version 0.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9d3ea40ea9f1784799caaa6b24b169cc9ba365c
+commit: https://git.buildroot.net/buildroot/commit/?id=b024708202057559c60633ca3c800a3d8b46f48b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-urllib3/python-urllib3.hash | 4 ++--
- package/python-urllib3/python-urllib3.mk   | 4 ++--
+ package/python-tortoise-orm/python-tortoise-orm.hash | 4 ++--
+ package/python-tortoise-orm/python-tortoise-orm.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
-index 7f4a7505a9..f80ed6eafc 100644
---- a/package/python-urllib3/python-urllib3.hash
-+++ b/package/python-urllib3/python-urllib3.hash
+diff --git a/package/python-tortoise-orm/python-tortoise-orm.hash b/package/python-tortoise-orm/python-tortoise-orm.hash
+index 2297290616..649e268cb5 100644
+--- a/package/python-tortoise-orm/python-tortoise-orm.hash
++++ b/package/python-tortoise-orm/python-tortoise-orm.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/urllib3/json
--md5  d65de4f0effae2b52669246f0aab0a91  urllib3-2.2.3.tar.gz
--sha256  e7d814a81dad81e6caf2ec9fdedb284ecc9c73076b62654547cc64ccdcae26e9  urllib3-2.2.3.tar.gz
-+md5  6388afd062cf2e1ef27843738629dbc1  urllib3-2.3.0.tar.gz
-+sha256  f8c5449b3cf0861679ce7e0503c7b44b5ec981bec0d1d3795a07f1ba96f0204d  urllib3-2.3.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/tortoise-orm/json
+-md5  21f9f3624ef82b3b9c23ed1fb7d70766  tortoise_orm-0.22.2.tar.gz
+-sha256  f1e808bc27265b3e4682dae89b725a66d8311cc20c206d512c57dd8a1c78096b  tortoise_orm-0.22.2.tar.gz
++md5  455b03a55fd090b65ebaa497c770be09  tortoise_orm-0.23.0.tar.gz
++sha256  f25d431ef4fb521a84edad582f4b9c53dccc5abf6cfbc6f228cbece5a13952fa  tortoise_orm-0.23.0.tar.gz
  # Locally computed sha256 checksums
- sha256  130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686  LICENSE.txt
-diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
-index fdd75317d4..911ccab445 100644
---- a/package/python-urllib3/python-urllib3.mk
-+++ b/package/python-urllib3/python-urllib3.mk
+ sha256  f955d347b975d5867ee364f978476b3012878a706d468571b9758cac74de6041  LICENSE.txt
+diff --git a/package/python-tortoise-orm/python-tortoise-orm.mk b/package/python-tortoise-orm/python-tortoise-orm.mk
+index 6bd1276bd1..e5970bdb41 100644
+--- a/package/python-tortoise-orm/python-tortoise-orm.mk
++++ b/package/python-tortoise-orm/python-tortoise-orm.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_URLLIB3_VERSION = 2.2.3
-+PYTHON_URLLIB3_VERSION = 2.3.0
- PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
--PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/ed/63/22ba4ebfe7430b76388e7cd448d5478814d3032121827c12a2cc287e2260
-+PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/aa/63/e53da845320b757bf29ef6a9062f5c669fe997973f966045cb019c3f4b66
- PYTHON_URLLIB3_LICENSE = MIT
- PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
- PYTHON_URLLIB3_CPE_ID_VENDOR = python
+-PYTHON_TORTOISE_ORM_VERSION = 0.22.2
++PYTHON_TORTOISE_ORM_VERSION = 0.23.0
+ PYTHON_TORTOISE_ORM_SOURCE = tortoise_orm-$(PYTHON_TORTOISE_ORM_VERSION).tar.gz
+-PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/5c/19/c32752a3042580b40300aeffa48859e087a023114f50a2846ba95c26c87d
++PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/1b/6e/c23d788524750d84c75864eac0176f57c07a5316b36cc467d2914a109bef
+ PYTHON_TORTOISE_ORM_SETUP_TYPE = poetry
+ PYTHON_TORTOISE_ORM_LICENSE = Apache-2.0
+ PYTHON_TORTOISE_ORM_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
