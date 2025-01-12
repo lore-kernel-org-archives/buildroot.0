@@ -1,72 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AACDE77188
-	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 16:41:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FC3EE77188
+	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 17:32:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E869460618;
-	Sun, 12 Jan 2025 16:41:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4C1A80B6A;
+	Sun, 12 Jan 2025 17:32:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sNjSihbhkUO1; Sun, 12 Jan 2025 16:41:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ynUzI8ZYgjbM; Sun, 12 Jan 2025 17:32:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED10E60647
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFFCA80B20
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED10E60647;
-	Sun, 12 Jan 2025 16:41:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 98C1B68
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 16:41:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFFCA80B20;
+	Sun, 12 Jan 2025 17:32:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A9AFE68
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 17:32:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 861234015F
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 16:41:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8B83280ADE
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 17:32:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oCuN1SgKT9s1 for <buildroot@buildroot.org>;
- Sun, 12 Jan 2025 16:41:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hoNAUxVa5xHu for <buildroot@buildroot.org>;
+ Sun, 12 Jan 2025 17:32:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F061740129
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F061740129
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F061740129
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 16:41:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id AA6B840002;
- Sun, 12 Jan 2025 16:41:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DBE080B07
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8DBE080B07
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 17:32:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 87E7C8555C; Sun, 12 Jan 2025 17:32:47 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jan 2025 17:41:35 +0100
-Message-ID: <20250112164136.213929-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.47.1
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1736700097;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=ocoeiQkR5yP1hxqkphrVUndGYm3VTmRfxpMYpyZyUBk=;
- b=DfdixzcDeHCIH/f1q0lCBqTj9awIbYgVmaWCC/0TKvKTfU/EBYwJZzitmZ/FRT88sC1Fjx
- WoRX9zGAZo9mVlpsGqXwa7nYTZb2KuzLuiL24bLul28K84zfE8Q8QUbDKaHnhZ98tKp2Zn
- AIvPzN4arYL2nrgk1yYrJ68S98stomPfHQk+jRWzCHD8KAsbUlmOwFCp6f+zxTb/RRKS1a
- OOiqKg35Aa/JySByuuHkOPHHwYzHr1XMLoAaa6vE+8nxAMlfQQLRJSZynYExKvtHsWfh5g
- /2uMsCYDVQcLXLneHRYUUQQRs/ZIouTH+wx9ajztTfbRh4uDHUsP2EEFf9skaw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=DfdixzcD
-Subject: [Buildroot] [PATCH] package/igh-ethercat: backport upstream commit
- to fix build issue
+Date: Sun, 12 Jan 2025 16:48:27 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d555cc8e83fdcd8593d3e069d662cbd89d982f4e
+X-Git-Newrev: 7ad307aa1ca4deb6b73fb82637751ddcc1d2b3a0
+X-Patchwork-Hint: ignore
+Message-Id: <20250112173247.87E7C8555C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tomli: bump to version 2.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,75 +58,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch backports an upstream igh-ethercat commit to fix build
-issues at -O0 or -Os. The commit message says -O0, but in the context
-of Buildroot, the issue was encountered at -Os, due to dead-code
-elimination.
+commit: https://git.buildroot.net/buildroot/commit/?id=7ad307aa1ca4deb6b73fb82637751ddcc1d2b3a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-
-  https://autobuild.buildroot.org/results/bfa074afee8a70abe597b117ecf815e234f16b40/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...ry-inline-statement-causing-build-O0.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/igh-ethercat/0004-Remove-unnecessary-inline-statement-causing-build-O0.patch
+ package/python-tomli/python-tomli.hash | 4 ++--
+ package/python-tomli/python-tomli.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/igh-ethercat/0004-Remove-unnecessary-inline-statement-causing-build-O0.patch b/package/igh-ethercat/0004-Remove-unnecessary-inline-statement-causing-build-O0.patch
-new file mode 100644
-index 0000000000..2cbb9c3ce7
---- /dev/null
-+++ b/package/igh-ethercat/0004-Remove-unnecessary-inline-statement-causing-build-O0.patch
-@@ -0,0 +1,38 @@
-+From 39d065d5fb56525c1171c4fcb643b798ee10c6b9 Mon Sep 17 00:00:00 2001
-+From: Richard Hacker <ha@igh.de>
-+Date: Mon, 18 Nov 2024 10:54:00 +0100
-+Subject: [PATCH] Remove unnecessary inline statement causing build -O0
-+ problems
-+
-+Fixes #147
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream: https://gitlab.com/etherlab.org/ethercat/-/commit/5802c72818df07d34469630a8943915cce738626
-+---
-+ lib/slave_config.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/lib/slave_config.c b/lib/slave_config.c
-+index 7bef3a99..58d6c7b4 100644
-+--- a/lib/slave_config.c
-++++ b/lib/slave_config.c
-+@@ -40,6 +40,7 @@
-+ void ec_slave_config_add_sdo_request(ec_slave_config_t *, ec_sdo_request_t *);
-+ void ec_slave_config_add_reg_request(ec_slave_config_t *, ec_reg_request_t *);
-+ void ec_slave_config_add_voe_handler(ec_slave_config_t *, ec_voe_handler_t *);
-++void ec_slave_config_add_soe_request(ec_slave_config_t *, ec_soe_request_t *);
-+ 
-+ /****************************************************************************/
-+ 
-+@@ -625,7 +626,7 @@ ec_sdo_request_t *ecrt_slave_config_create_sdo_request(ec_slave_config_t *sc,
-+ 
-+ /****************************************************************************/
-+ 
-+-inline void ec_slave_config_add_soe_request(ec_slave_config_t *sc,
-++void ec_slave_config_add_soe_request(ec_slave_config_t *sc,
-+         ec_soe_request_t *req)
-+ {
-+     if (sc->first_soe_request) {
-+-- 
-+2.47.1
-+
--- 
-2.47.1
-
+diff --git a/package/python-tomli/python-tomli.hash b/package/python-tomli/python-tomli.hash
+index 8ee4939af0..ec30f06db2 100644
+--- a/package/python-tomli/python-tomli.hash
++++ b/package/python-tomli/python-tomli.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/tomli/json
+-md5  e65b234adc4513d94792c69bb025b622  tomli-2.0.2.tar.gz
+-sha256  d46d457a85337051c36524bc5349dd91b1877838e2979ac5ced3e710ed8a60ed  tomli-2.0.2.tar.gz
++md5  1e0e2fb2e29f3d77f0507bee71fb4ab4  tomli-2.2.1.tar.gz
++sha256  cd45e1dc79c835ce60f7404ec8119f2eb06d38b1deba146f07ced3bbc44505ff  tomli-2.2.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b80816b0d530b8accb4c2211783790984a6e3b61922c2b5ee92f3372ab2742fe  LICENSE
+diff --git a/package/python-tomli/python-tomli.mk b/package/python-tomli/python-tomli.mk
+index 3c3d4dc182..c23ae94758 100644
+--- a/package/python-tomli/python-tomli.mk
++++ b/package/python-tomli/python-tomli.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TOMLI_VERSION = 2.0.2
++PYTHON_TOMLI_VERSION = 2.2.1
+ PYTHON_TOMLI_SOURCE = tomli-$(PYTHON_TOMLI_VERSION).tar.gz
+-PYTHON_TOMLI_SITE = https://files.pythonhosted.org/packages/35/b9/de2a5c0144d7d75a57ff355c0c24054f965b2dc3036456ae03a51ea6264b
++PYTHON_TOMLI_SITE = https://files.pythonhosted.org/packages/18/87/302344fed471e44a87289cf4967697d07e532f2421fdaf868a303cbae4ff
+ PYTHON_TOMLI_LICENSE = MIT
+ PYTHON_TOMLI_LICENSE_FILES = LICENSE
+ PYTHON_TOMLI_SETUP_TYPE = flit
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
