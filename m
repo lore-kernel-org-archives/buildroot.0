@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D638DC282D1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:56:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4701BC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:56:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA6EA706C5;
-	Fri, 28 Feb 2025 16:56:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1DAE8849AA;
+	Fri, 28 Feb 2025 16:56:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cVVtEGQHzZpQ; Fri, 28 Feb 2025 16:56:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2xXvzw9KwFzW; Fri, 28 Feb 2025 16:56:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A60E8706C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0537F84EC3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A60E8706C2;
-	Fri, 28 Feb 2025 16:56:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0537F84EC3;
+	Fri, 28 Feb 2025 16:56:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 09AE31DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:38:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 09C48711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:38:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D5DB547121
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 011B4471B5
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sddZjJTQB8OJ for <buildroot@buildroot.org>;
+ id nRzoCxvt5JdM for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:30:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEBB942563
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E24EE42553
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EEBB942563
+ by smtp4.osuosl.org (Postfix) with ESMTP id E24EE42553
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E9C3887C2C; Fri, 28 Feb 2025 16:30:07 +0000 (UTC)
+ id D792F87A8B; Fri, 28 Feb 2025 16:30:07 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Jan 2025 12:22:22 +0100
+Date: Sun, 12 Jan 2025 12:22:19 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e0e55920eda4c5830aa3bd5e90a2936b36745192
-X-Git-Newrev: cec35d11418a4cb7704c96f69957669ddbabdc21
+X-Git-Oldrev: 0ab41ed0f1f289a96a5900b9e075599aa73b0e96
+X-Git-Newrev: e0e55920eda4c5830aa3bd5e90a2936b36745192
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163007.E9C3887C2C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/python-types-python-dateutil: bump to version 2.9.0.20241206
+Message-Id: <20250228163007.D792F87A8B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-typepy: bump to
+ version 1.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,47 +65,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cec35d11418a4cb7704c96f69957669ddbabdc21
+commit: https://git.buildroot.net/buildroot/commit/?id=e0e55920eda4c5830aa3bd5e90a2936b36745192
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add license file which was previously missing.
+Add new host-python-setuptools-scm build dependency.
+
+License hash changed due to year update:
+https://github.com/thombashi/typepy/commit/974f6c5665c4ff0ee9f030e5d2e89b07bcea2073
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../python-types-python-dateutil/python-types-python-dateutil.hash | 6 ++++--
- .../python-types-python-dateutil/python-types-python-dateutil.mk   | 7 ++++---
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ package/python-typepy/python-typepy.hash | 6 +++---
+ package/python-typepy/python-typepy.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-types-python-dateutil/python-types-python-dateutil.hash b/package/python-types-python-dateutil/python-types-python-dateutil.hash
-index 6143f7bb2d..321e7f56c5 100644
---- a/package/python-types-python-dateutil/python-types-python-dateutil.hash
-+++ b/package/python-types-python-dateutil/python-types-python-dateutil.hash
-@@ -1,3 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/types-python-dateutil/json
--md5  986aa3f3706c4b38dfcd141572a4f515  types-python-dateutil-2.9.0.20241003.tar.gz
--sha256  58cb85449b2a56d6684e41aeefb4c4280631246a0da1a719bdbe6f3fb0317446  types-python-dateutil-2.9.0.20241003.tar.gz
-+md5  75621f393711ce76bb7a7e46902384db  types_python_dateutil-2.9.0.20241206.tar.gz
-+sha256  18f493414c26ffba692a72369fea7a154c502646301ebfe3d56a04b3767284cb  types_python_dateutil-2.9.0.20241206.tar.gz
-+# Locally computed sha256 checksums
-+sha256  295f8538c94ae5c3043301cf7cff1c852dab6a786a8ddee471e061b40d5ecabe  LICENSE
-diff --git a/package/python-types-python-dateutil/python-types-python-dateutil.mk b/package/python-types-python-dateutil/python-types-python-dateutil.mk
-index 53d16de74c..f07e327b86 100644
---- a/package/python-types-python-dateutil/python-types-python-dateutil.mk
-+++ b/package/python-types-python-dateutil/python-types-python-dateutil.mk
-@@ -4,10 +4,11 @@
+diff --git a/package/python-typepy/python-typepy.hash b/package/python-typepy/python-typepy.hash
+index 0b73f9f4df..5cf3daded9 100644
+--- a/package/python-typepy/python-typepy.hash
++++ b/package/python-typepy/python-typepy.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/typepy/json
+-md5  2637fdf609b8a7b9b8ec722852efc706  typepy-1.3.2.tar.gz
+-sha256  b69fd48b9f50cdb3809906eef36b855b3134ff66c8893a4f8580abddb0b39517  typepy-1.3.2.tar.gz
++md5  f7ba433b3ea79aa36699be634b36aef1  typepy-1.3.4.tar.gz
++sha256  89c1f66de6c6133209c43a94d23431d320ba03ef5db18f241091ea594035d9de  typepy-1.3.4.tar.gz
+ # Locally computed sha256 checksums
+-sha256  bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
++sha256  4434f353a12dd0236a99e5d3fd07fe3b3a453f9164fe10c57a11d6ca86b50c08  LICENSE
+diff --git a/package/python-typepy/python-typepy.mk b/package/python-typepy/python-typepy.mk
+index cd67d4e888..03760f1d5f 100644
+--- a/package/python-typepy/python-typepy.mk
++++ b/package/python-typepy/python-typepy.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--PYTHON_TYPES_PYTHON_DATEUTIL_VERSION = 2.9.0.20241003
--PYTHON_TYPES_PYTHON_DATEUTIL_SOURCE = types-python-dateutil-$(PYTHON_TYPES_PYTHON_DATEUTIL_VERSION).tar.gz
--PYTHON_TYPES_PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/31/f8/f6ee4c803a7beccffee21bb29a71573b39f7037c224843eff53e5308c16e
-+PYTHON_TYPES_PYTHON_DATEUTIL_VERSION = 2.9.0.20241206
-+PYTHON_TYPES_PYTHON_DATEUTIL_SOURCE = types_python_dateutil-$(PYTHON_TYPES_PYTHON_DATEUTIL_VERSION).tar.gz
-+PYTHON_TYPES_PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/a9/60/47d92293d9bc521cd2301e423a358abfac0ad409b3a1606d8fbae1321961
- PYTHON_TYPES_PYTHON_DATEUTIL_SETUP_TYPE = setuptools
- PYTHON_TYPES_PYTHON_DATEUTIL_LICENSE = Apache-2.0
-+PYTHON_TYPES_PYTHON_DATEUTIL_LICENSE_FILES = LICENSE
+-PYTHON_TYPEPY_VERSION = 1.3.2
++PYTHON_TYPEPY_VERSION = 1.3.4
+ PYTHON_TYPEPY_SOURCE = typepy-$(PYTHON_TYPEPY_VERSION).tar.gz
+-PYTHON_TYPEPY_SITE = https://files.pythonhosted.org/packages/cc/86/9672794fb1c87a17b839666976ed4c8cb779ce05d471bed3166a39a53c4d
++PYTHON_TYPEPY_SITE = https://files.pythonhosted.org/packages/79/59/4c39942077d7de285f762a91024dbda731be693591732977358f77d120fb
+ PYTHON_TYPEPY_SETUP_TYPE = setuptools
+ PYTHON_TYPEPY_LICENSE = MIT
+ PYTHON_TYPEPY_LICENSE_FILES = LICENSE
++PYTHON_TYPEPY_DEPENDENCIES = host-python-setuptools-scm
  
  $(eval $(python-package))
 _______________________________________________
