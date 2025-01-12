@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81BE5E7719D
-	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:14:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3CC5E7719C
+	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:14:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E7C883A89;
-	Sun, 12 Jan 2025 11:14:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E32683A90;
+	Sun, 12 Jan 2025 11:14:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6Iw7HfeiTRed; Sun, 12 Jan 2025 11:14:23 +0000 (UTC)
+ id HB1SeXP22uyg; Sun, 12 Jan 2025 11:14:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 549D083A90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BBA583ACC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 549D083A90;
-	Sun, 12 Jan 2025 11:14:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7BBA583ACC;
+	Sun, 12 Jan 2025 11:14:27 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1E3F768
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:14:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 06332942
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:14:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F2D67408D8
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:14:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 81AE5408DF
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:14:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qWCia-o6R9PZ for <buildroot@buildroot.org>;
+ id DfL9EwKUvISa for <buildroot@buildroot.org>;
  Sun, 12 Jan 2025 11:14:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D94D9408DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E625408F8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D94D9408DF
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:14:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E625408F8
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:14:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D13C284ED8; Sun, 12 Jan 2025 11:14:02 +0000 (UTC)
+ id F329584ED3; Sun, 12 Jan 2025 11:14:02 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Jan 2025 12:03:29 +0100
+Date: Sun, 12 Jan 2025 12:03:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fd311f171e7466b3f6759c832c3ec4330173c316
-X-Git-Newrev: e08b2b0fe64e7ece4bd75908ca9c7e3a7579629b
+X-Git-Oldrev: b74a5a1e929dd15e01108d94db51a3a1ea74d3f6
+X-Git-Newrev: 0fb0ade539a0856790d08bedac4a9d70b8e5607e
 X-Patchwork-Hint: ignore
-Message-Id: <20250112111402.D13C284ED8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-sqlparse: bump to version
- 0.5.3
+Message-Id: <20250112111402.F329584ED3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tempora: bump to version
+ 5.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e08b2b0fe64e7ece4bd75908ca9c7e3a7579629b
+commit: https://git.buildroot.net/buildroot/commit/?id=0fb0ade539a0856790d08bedac4a9d70b8e5607e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Replace python-pytz runtime dependency with python-dateutil.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-sqlparse/python-sqlparse.hash | 4 ++--
- package/python-sqlparse/python-sqlparse.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-tempora/Config.in           | 2 +-
+ package/python-tempora/python-tempora.hash | 4 ++--
+ package/python-tempora/python-tempora.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-sqlparse/python-sqlparse.hash b/package/python-sqlparse/python-sqlparse.hash
-index 1fe8429724..3e54d227f4 100644
---- a/package/python-sqlparse/python-sqlparse.hash
-+++ b/package/python-sqlparse/python-sqlparse.hash
+diff --git a/package/python-tempora/Config.in b/package/python-tempora/Config.in
+index 3f4481422a..1e496faa27 100644
+--- a/package/python-tempora/Config.in
++++ b/package/python-tempora/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_TEMPORA
+ 	bool "python-tempora"
++	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
+ 	select BR2_PACKAGE_PYTHON_JARACO_FUNCTOOLS # runtime
+-	select BR2_PACKAGE_PYTHON_PYTZ # runtime
+ 	help
+ 	  Objects and routines pertaining to date and time.
+ 
+diff --git a/package/python-tempora/python-tempora.hash b/package/python-tempora/python-tempora.hash
+index 9d3487d67b..15bdaaf783 100644
+--- a/package/python-tempora/python-tempora.hash
++++ b/package/python-tempora/python-tempora.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sqlparse/json
--md5  969a64f03d7da1144fc74aad390f9db4  sqlparse-0.5.1.tar.gz
--sha256  bb6b4df465655ef332548e24f08e205afc81b9ab86cb1c45657a7ff173a3a00e  sqlparse-0.5.1.tar.gz
-+md5  9764a42264c9a3102526c87260e73d11  sqlparse-0.5.3.tar.gz
-+sha256  09f67787f56a0b16ecdbde1bfc7f5d9c3371ca683cfeaa8e6ff60b4807ec9272  sqlparse-0.5.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/tempora/json
+-md5  e4ca48a06f4c8b9aa21b8081937353f2  tempora-5.7.0.tar.gz
+-sha256  888190a2dbe3255ff26dfa9fcecb25f4d38434c0f1943cd61de98bb41c410c50  tempora-5.7.0.tar.gz
++md5  ca7fb7c9523fb5232b734a19dae05c6a  tempora-5.8.0.tar.gz
++sha256  1e9606e65a3f2063460961d68515dee07bdaca0859305a8d3e6604168175fef1  tempora-5.8.0.tar.gz
  # Locally computed sha256 checksums
- sha256  c1938235b80d39e93138eae89edc3af67e18ecbc40d266529fa57b2dce426310  LICENSE
-diff --git a/package/python-sqlparse/python-sqlparse.mk b/package/python-sqlparse/python-sqlparse.mk
-index de5ee15bee..0140961393 100644
---- a/package/python-sqlparse/python-sqlparse.mk
-+++ b/package/python-sqlparse/python-sqlparse.mk
+ sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
+diff --git a/package/python-tempora/python-tempora.mk b/package/python-tempora/python-tempora.mk
+index aeb2e4687c..3b6c644b53 100644
+--- a/package/python-tempora/python-tempora.mk
++++ b/package/python-tempora/python-tempora.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SQLPARSE_VERSION = 0.5.1
-+PYTHON_SQLPARSE_VERSION = 0.5.3
- PYTHON_SQLPARSE_SOURCE = sqlparse-$(PYTHON_SQLPARSE_VERSION).tar.gz
--PYTHON_SQLPARSE_SITE = https://files.pythonhosted.org/packages/73/82/dfa23ec2cbed08a801deab02fe7c904bfb00765256b155941d789a338c68
-+PYTHON_SQLPARSE_SITE = https://files.pythonhosted.org/packages/e5/40/edede8dd6977b0d3da179a342c198ed100dd2aba4be081861ee5911e4da4
- PYTHON_SQLPARSE_SETUP_TYPE = hatch
- PYTHON_SQLPARSE_LICENSE = BSD-3-Clause
- PYTHON_SQLPARSE_LICENSE_FILES = LICENSE
+-PYTHON_TEMPORA_VERSION = 5.7.0
++PYTHON_TEMPORA_VERSION = 5.8.0
+ PYTHON_TEMPORA_SOURCE = tempora-$(PYTHON_TEMPORA_VERSION).tar.gz
+-PYTHON_TEMPORA_SITE = https://files.pythonhosted.org/packages/5d/52/b4ff0ca21695a4f8ac0f158d884587b5eba08b0e95356b0ea210e00446ac
++PYTHON_TEMPORA_SITE = https://files.pythonhosted.org/packages/c3/f2/bbd6d2178791eaf8bac06857cb0ee39840e69f7b64ecb0c414bf8f46daff
+ PYTHON_TEMPORA_LICENSE = MIT
+ PYTHON_TEMPORA_LICENSE_FILES = LICENSE
+ PYTHON_TEMPORA_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
