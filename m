@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38813C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:56:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A8F7C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:56:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 085FB84E92;
-	Fri, 28 Feb 2025 16:56:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47CC770434;
+	Fri, 28 Feb 2025 16:56:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XdjQutsuEfV4; Fri, 28 Feb 2025 16:56:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0vF9Wm4xDsaA; Fri, 28 Feb 2025 16:56:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F07B884E90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5097D706AA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F07B884E90;
-	Fri, 28 Feb 2025 16:56:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5097D706AA;
+	Fri, 28 Feb 2025 16:56:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 106351DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:38:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1461A711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:38:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B706044A94
+ by smtp4.osuosl.org (Postfix) with ESMTP id D9BC646D47
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f0m2M3qoDmct for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:42 +0000 (UTC)
+ id 3aKHkqvaJWIw for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F34C42558
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A0314252E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F34C42558
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A0314252E
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 39EEF8118C; Fri, 28 Feb 2025 16:30:08 +0000 (UTC)
+ id 5F8A6879BF; Fri, 28 Feb 2025 16:30:08 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Jan 2025 12:22:36 +0100
+Date: Sun, 12 Jan 2025 12:22:44 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6189f6154738db45629d76d31ab92b7d5bc9d671
-X-Git-Newrev: 2646d3cbac2042f6b8c61e5b252e3daa8a4b5f04
+X-Git-Oldrev: 872919427e4bae7cfcb680fb27aab68bfc04828e
+X-Git-Newrev: b2b4bc92d7f753465b001074496159d53369a1dd
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163008.39EEF8118C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-wrapt: bump to
- version 1.17.1
+Message-Id: <20250228163008.5F8A6879BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-yarl: bump to
+ version 1.18.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2646d3cbac2042f6b8c61e5b252e3daa8a4b5f04
+commit: https://git.buildroot.net/buildroot/commit/?id=b2b4bc92d7f753465b001074496159d53369a1dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-wrapt/python-wrapt.hash | 4 ++--
- package/python-wrapt/python-wrapt.mk   | 4 ++--
+ package/python-yarl/python-yarl.hash | 4 ++--
+ package/python-yarl/python-yarl.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-wrapt/python-wrapt.hash b/package/python-wrapt/python-wrapt.hash
-index b89c805bf6..b83d7fc575 100644
---- a/package/python-wrapt/python-wrapt.hash
-+++ b/package/python-wrapt/python-wrapt.hash
+diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
+index 3918383548..ca2d42bf58 100644
+--- a/package/python-yarl/python-yarl.hash
++++ b/package/python-yarl/python-yarl.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/wrapt/json
--md5  3e370b4bc08f7dcc518cf8895673b19c  wrapt-1.16.0.tar.gz
--sha256  5f370f952971e7d17c7d1ead40e49f32345a7f7a5373571ef44d800d06b1899d  wrapt-1.16.0.tar.gz
-+md5  31bef7bc31a8ba7da00cb33a70aca7a1  wrapt-1.17.1.tar.gz
-+sha256  16b2fdfa09a74a3930175b6d9d7d008022aa72a4f02de2b3eecafcc1adfd3cfe  wrapt-1.17.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/yarl/json
+-md5  d356afad18b20095b766ad47bedcb34a  yarl-1.17.1.tar.gz
+-sha256  067a63fcfda82da6b198fa73079b1ca40b7c9b7994995b6ee38acda728b64d47  yarl-1.17.1.tar.gz
++md5  80b89d2b28be7345a38f099b2f839d7d  yarl-1.18.3.tar.gz
++sha256  ac1801c45cbf77b6c99242eeff4fffb5e4e73a800b5c4ad4fc0be5def634d2e1  yarl-1.18.3.tar.gz
  # Locally computed sha256 checksums
- sha256  5974efbbc8b626b2050810d63c3a907ee21c92bf64b3740fc623ad05eb3448ab  LICENSE
-diff --git a/package/python-wrapt/python-wrapt.mk b/package/python-wrapt/python-wrapt.mk
-index ed4a911e14..32bac19d61 100644
---- a/package/python-wrapt/python-wrapt.mk
-+++ b/package/python-wrapt/python-wrapt.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
+index c7d846521f..160dec8a1b 100644
+--- a/package/python-yarl/python-yarl.mk
++++ b/package/python-yarl/python-yarl.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WRAPT_VERSION = 1.16.0
-+PYTHON_WRAPT_VERSION = 1.17.1
- PYTHON_WRAPT_SOURCE = wrapt-$(PYTHON_WRAPT_VERSION).tar.gz
--PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/95/4c/063a912e20bcef7124e0df97282a8af3ff3e4b603ce84c481d6d7346be0a
-+PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/c8/dd/35c573cc2b4b8d65ea96bba0247d05710f284857d30e2266d1874f1c727d
- PYTHON_WRAPT_SETUP_TYPE = setuptools
- PYTHON_WRAPT_LICENSE = BSD-2-Clause
- PYTHON_WRAPT_LICENSE_FILES = LICENSE
+-PYTHON_YARL_VERSION = 1.17.1
++PYTHON_YARL_VERSION = 1.18.3
+ PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
+-PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/54/9c/9c0a9bfa683fc1be7fdcd9687635151544d992cccd48892dc5e0a5885a29
++PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/b7/9d/4b94a8e6d2b51b599516a5cb88e5bc99b4d8d4583e468057eaa29d5f0918
+ PYTHON_YARL_LICENSE = Apache-2.0
+ PYTHON_YARL_LICENSE_FILES = LICENSE
+ PYTHON_YARL_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
