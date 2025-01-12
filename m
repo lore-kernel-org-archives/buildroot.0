@@ -4,74 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A6D7E77188
-	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:38:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AACDE77188
+	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 16:41:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6AF7E606A3;
-	Sun, 12 Jan 2025 11:38:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E869460618;
+	Sun, 12 Jan 2025 16:41:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9BVp8IXTisDz; Sun, 12 Jan 2025 11:38:51 +0000 (UTC)
+ id sNjSihbhkUO1; Sun, 12 Jan 2025 16:41:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BAA76088F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED10E60647
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8BAA76088F;
-	Sun, 12 Jan 2025 11:38:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A13FA942
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:38:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED10E60647;
+	Sun, 12 Jan 2025 16:41:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 98C1B68
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 16:41:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80C53404C9
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:38:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 861234015F
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 16:41:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lY7Rq-YF_D8Z for <buildroot@buildroot.org>;
- Sun, 12 Jan 2025 11:38:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C391840683
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C391840683
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C391840683
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:38:49 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 1FAD55FFB7;
- Sun, 12 Jan 2025 12:38:47 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:41924])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 12 Jan 2025 12:38:47 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oCuN1SgKT9s1 for <buildroot@buildroot.org>;
+ Sun, 12 Jan 2025 16:41:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F061740129
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F061740129
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F061740129
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 16:41:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id AA6B840002;
+ Sun, 12 Jan 2025 16:41:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 12 Jan 2025 17:41:35 +0100
+Message-ID: <20250112164136.213929-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.47.1
 MIME-Version: 1.0
-Date: Sun, 12 Jan 2025 12:38:47 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250111193616.2972188-1-james.hilliard1@gmail.com>
-References: <20250111193616.2972188-1-james.hilliard1@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <cc457e4542653f743eebee8e4ecdecfb@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1736681928;
- bh=w9zWhtsqejyNcFR6Ytm81oeySjA3vIolJMp6TdGPnV0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Gkkff/kjEgUJNYTfh13a/4ZrS4ZjdoCkbqocuH7vkKT9knKwoXRFLjGdq00/79/rW
- f7FFyvm3w/kEMpf2j7qFeKrghtgJviYbmTnt/tw5SyxRxkkAUgIU059jS5o27svBmP
- X3qy3lZ89qjpWuVZYOKuvmLaodBs4du/f6GkF2x/EKKmguoKedw+w/aEBLYln8sTTK
- MyluPDrhBhnESB0YmxANwbc/MAqHcr+6ijgB/WfvPXT7JZ1DQN5ufUAw0K8hrWbTFK
- JnTpdxLAxDCZ8VOyjlei+qn4ZtVj4jl3tU9GGDYLKF172JRRs8EbGo/iYIzH6Od4/G
- MhdaIcQgPUVhQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Gkkff/kj
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-zope-interface: bump to
- version 7.2
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1736700097;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=ocoeiQkR5yP1hxqkphrVUndGYm3VTmRfxpMYpyZyUBk=;
+ b=DfdixzcDeHCIH/f1q0lCBqTj9awIbYgVmaWCC/0TKvKTfU/EBYwJZzitmZ/FRT88sC1Fjx
+ WoRX9zGAZo9mVlpsGqXwa7nYTZb2KuzLuiL24bLul28K84zfE8Q8QUbDKaHnhZ98tKp2Zn
+ AIvPzN4arYL2nrgk1yYrJ68S98stomPfHQk+jRWzCHD8KAsbUlmOwFCp6f+zxTb/RRKS1a
+ OOiqKg35Aa/JySByuuHkOPHHwYzHr1XMLoAaa6vE+8nxAMlfQQLRJSZynYExKvtHsWfh5g
+ /2uMsCYDVQcLXLneHRYUUQQRs/ZIouTH+wx9ajztTfbRh4uDHUsP2EEFf9skaw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=DfdixzcD
+Subject: [Buildroot] [PATCH] package/igh-ethercat: backport upstream commit
+ to fix build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,15 +78,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 11/01/2025 20:36, James Hilliard wrote:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+This patch backports an upstream igh-ethercat commit to fix build
+issues at -O0 or -Os. The commit message says -O0, but in the context
+of Buildroot, the issue was encountered at -Os, due to dead-code
+elimination.
 
-Applied to master, thanks.
+Fixes:
+
+  https://autobuild.buildroot.org/results/bfa074afee8a70abe597b117ecf815e234f16b40/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ry-inline-statement-causing-build-O0.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/igh-ethercat/0004-Remove-unnecessary-inline-statement-causing-build-O0.patch
+
+diff --git a/package/igh-ethercat/0004-Remove-unnecessary-inline-statement-causing-build-O0.patch b/package/igh-ethercat/0004-Remove-unnecessary-inline-statement-causing-build-O0.patch
+new file mode 100644
+index 0000000000..2cbb9c3ce7
+--- /dev/null
++++ b/package/igh-ethercat/0004-Remove-unnecessary-inline-statement-causing-build-O0.patch
+@@ -0,0 +1,38 @@
++From 39d065d5fb56525c1171c4fcb643b798ee10c6b9 Mon Sep 17 00:00:00 2001
++From: Richard Hacker <ha@igh.de>
++Date: Mon, 18 Nov 2024 10:54:00 +0100
++Subject: [PATCH] Remove unnecessary inline statement causing build -O0
++ problems
++
++Fixes #147
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream: https://gitlab.com/etherlab.org/ethercat/-/commit/5802c72818df07d34469630a8943915cce738626
++---
++ lib/slave_config.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/lib/slave_config.c b/lib/slave_config.c
++index 7bef3a99..58d6c7b4 100644
++--- a/lib/slave_config.c
+++++ b/lib/slave_config.c
++@@ -40,6 +40,7 @@
++ void ec_slave_config_add_sdo_request(ec_slave_config_t *, ec_sdo_request_t *);
++ void ec_slave_config_add_reg_request(ec_slave_config_t *, ec_reg_request_t *);
++ void ec_slave_config_add_voe_handler(ec_slave_config_t *, ec_voe_handler_t *);
+++void ec_slave_config_add_soe_request(ec_slave_config_t *, ec_soe_request_t *);
++ 
++ /****************************************************************************/
++ 
++@@ -625,7 +626,7 @@ ec_sdo_request_t *ecrt_slave_config_create_sdo_request(ec_slave_config_t *sc,
++ 
++ /****************************************************************************/
++ 
++-inline void ec_slave_config_add_soe_request(ec_slave_config_t *sc,
+++void ec_slave_config_add_soe_request(ec_slave_config_t *sc,
++         ec_soe_request_t *req)
++ {
++     if (sc->first_soe_request) {
++-- 
++2.47.1
++
+-- 
+2.47.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
