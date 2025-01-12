@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79F7AE7719C
-	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:14:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA430E77188
+	for <buildroot@archiver.kernel.org>; Sun, 12 Jan 2025 11:14:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E35883A81;
-	Sun, 12 Jan 2025 11:14:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86DB360AF4;
+	Sun, 12 Jan 2025 11:14:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lKu28rn3wRFx; Sun, 12 Jan 2025 11:14:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DHQg7FA0B1zJ; Sun, 12 Jan 2025 11:14:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4010683A87
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 791EF60B14
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4010683A87;
-	Sun, 12 Jan 2025 11:14:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D589C95D
- for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:14:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 791EF60B14;
+	Sun, 12 Jan 2025 11:14:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1481A942
+ for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:14:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B724783A8B
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4B8740908
  for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:14:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PcF5b7u3Hp4t for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QG7S037RexdR for <buildroot@buildroot.org>;
  Sun, 12 Jan 2025 11:14:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC91F83A81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE0E8408DE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CC91F83A81
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE0E8408DE
  for <buildroot@buildroot.org>; Sun, 12 Jan 2025 11:14:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B96A484ED4; Sun, 12 Jan 2025 11:14:02 +0000 (UTC)
+ id 9877284ED3; Sun, 12 Jan 2025 11:14:02 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Jan 2025 12:03:21 +0100
+Date: Sun, 12 Jan 2025 12:03:11 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5fa89d755c3f4a0479e43d9f177da6dad7756868
-X-Git-Newrev: 6633640e319a72a2e39e1415d7f42ccacd82a9e2
+X-Git-Oldrev: 943d3390c67bc899026c7ddcdc1b0288256bde04
+X-Git-Newrev: c6fe2b999797b76a3606fba1cf608e4831a5d8db
 X-Patchwork-Hint: ignore
-Message-Id: <20250112111402.B96A484ED4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-socketio: bump to version
- 5.12.1
+Message-Id: <20250112111402.9877284ED3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-simplesqlite: bump to
+ version 1.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6633640e319a72a2e39e1415d7f42ccacd82a9e2
+commit: https://git.buildroot.net/buildroot/commit/?id=c6fe2b999797b76a3606fba1cf608e4831a5d8db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License hash changed due to year update:
+https://github.com/thombashi/SimpleSQLite/commit/1f6e12a532cdee1408d6c34e38829b94c08b6cc7
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-socketio/python-socketio.hash | 4 ++--
- package/python-socketio/python-socketio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-simplesqlite/python-simplesqlite.hash | 6 +++---
+ package/python-simplesqlite/python-simplesqlite.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-socketio/python-socketio.hash b/package/python-socketio/python-socketio.hash
-index 709278fd5f..3535c00819 100644
---- a/package/python-socketio/python-socketio.hash
-+++ b/package/python-socketio/python-socketio.hash
+diff --git a/package/python-simplesqlite/python-simplesqlite.hash b/package/python-simplesqlite/python-simplesqlite.hash
+index 8060437718..a17f20ff97 100644
+--- a/package/python-simplesqlite/python-simplesqlite.hash
++++ b/package/python-simplesqlite/python-simplesqlite.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-socketio/json
--md5  d55f0439cf7d056c0dca99fe13ad8054  python_socketio-5.11.4.tar.gz
--sha256  8b0b8ff2964b2957c865835e936310190639c00310a47d77321a594d1665355e  python_socketio-5.11.4.tar.gz
-+md5  fa264f1d5086cda8df1e01e7feb4a09c  python_socketio-5.12.1.tar.gz
-+sha256  0299ff1f470b676c09c1bfab1dead25405077d227b2c13cf217a34dadc68ba9c  python_socketio-5.12.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/simplesqlite/json
+-md5  a907352592539345bf8145c3e39015cb  SimpleSQLite-1.5.2.tar.gz
+-sha256  f9a25b9e43d7aa28f551d170a42cfae10139c5c81a1bcb8776f857816ef5ae0f  SimpleSQLite-1.5.2.tar.gz
++md5  a80e1e92454eac4c33c684c9f2a7f4a8  simplesqlite-1.5.3.tar.gz
++sha256  b0841881422107fc1bd26f8393e6a114b0fc54dc9bb74282556dd6e055ed06c5  simplesqlite-1.5.3.tar.gz
  # Locally computed sha256 checksums
- sha256  c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
-diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
-index bc6cef6fc6..b07e6a689c 100644
---- a/package/python-socketio/python-socketio.mk
-+++ b/package/python-socketio/python-socketio.mk
+-sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
++sha256  130a35b917df1951aefbf366120491d5124045a87ded123f20ded21521f4e3a2  LICENSE
+diff --git a/package/python-simplesqlite/python-simplesqlite.mk b/package/python-simplesqlite/python-simplesqlite.mk
+index d8efe23a6c..81399b9941 100644
+--- a/package/python-simplesqlite/python-simplesqlite.mk
++++ b/package/python-simplesqlite/python-simplesqlite.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SOCKETIO_VERSION = 5.11.4
-+PYTHON_SOCKETIO_VERSION = 5.12.1
- PYTHON_SOCKETIO_SOURCE = python_socketio-$(PYTHON_SOCKETIO_VERSION).tar.gz
--PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/32/31/4ba0d9d86c645ba335d645f49167ca58b0874ca0e421682f97964e8adb42
-+PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/ce/d0/40ed38076e8aee94785d546d3e3a1cae393da5806a8530be877187e2875f
- PYTHON_SOCKETIO_SETUP_TYPE = setuptools
- PYTHON_SOCKETIO_LICENSE = MIT
- PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
+-PYTHON_SIMPLESQLITE_VERSION = 1.5.2
+-PYTHON_SIMPLESQLITE_SOURCE = SimpleSQLite-$(PYTHON_SIMPLESQLITE_VERSION).tar.gz
+-PYTHON_SIMPLESQLITE_SITE = https://files.pythonhosted.org/packages/c8/07/92e3291fda6f1bbf6e7ff4721d87566e1615572d9c205ef64398c5d22efe
++PYTHON_SIMPLESQLITE_VERSION = 1.5.3
++PYTHON_SIMPLESQLITE_SOURCE = simplesqlite-$(PYTHON_SIMPLESQLITE_VERSION).tar.gz
++PYTHON_SIMPLESQLITE_SITE = https://files.pythonhosted.org/packages/59/a8/c8f4af95618dda725d91a081476036656fbf3660bb6f1728d1a5d088d6cc
+ PYTHON_SIMPLESQLITE_SETUP_TYPE = setuptools
+ PYTHON_SIMPLESQLITE_LICENSE = MIT
+ PYTHON_SIMPLESQLITE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
