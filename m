@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF6F1C02180
-	for <buildroot@archiver.kernel.org>; Mon, 13 Jan 2025 21:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3A6EC02180
+	for <buildroot@archiver.kernel.org>; Mon, 13 Jan 2025 21:42:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A9C9780561;
-	Mon, 13 Jan 2025 21:40:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8FEC480874;
+	Mon, 13 Jan 2025 21:42:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Adja8usHS8C2; Mon, 13 Jan 2025 21:40:10 +0000 (UTC)
+ id KNFa0w4Y-HJF; Mon, 13 Jan 2025 21:42:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B77C180842
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93F7780DF4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B77C180842;
-	Mon, 13 Jan 2025 21:40:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 93F7780DF4;
+	Mon, 13 Jan 2025 21:42:06 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 72C8FF05
- for <buildroot@buildroot.org>; Mon, 13 Jan 2025 21:40:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2E634AF8
+ for <buildroot@buildroot.org>; Mon, 13 Jan 2025 21:42:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 605996082A
- for <buildroot@buildroot.org>; Mon, 13 Jan 2025 21:40:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0EFB0607CF
+ for <buildroot@buildroot.org>; Mon, 13 Jan 2025 21:42:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YCTwNnhtIEKf for <buildroot@buildroot.org>;
- Mon, 13 Jan 2025 21:40:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
+ id i1LFGPyzeOk9 for <buildroot@buildroot.org>;
+ Mon, 13 Jan 2025 21:42:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 416E1607CF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 416E1607CF
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 416E1607CF
- for <buildroot@buildroot.org>; Mon, 13 Jan 2025 21:40:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E4FD9607C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4FD9607C5
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E4FD9607C5
+ for <buildroot@buildroot.org>; Mon, 13 Jan 2025 21:42:03 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [192.168.7.2] ([85.22.119.64]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MZkpR-1u1YQR3tB9-00JFBx; Mon, 13
- Jan 2025 22:40:01 +0100
-Message-ID: <f73b2857-8857-46df-a182-697731146196@gmx.de>
-Date: Mon, 13 Jan 2025 22:40:00 +0100
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MqJm5-1tBeAN2GZ9-00ZWtF; Mon, 13
+ Jan 2025 22:42:00 +0100
+Message-ID: <f38083f3-dc23-47a5-92b4-41625623f955@gmx.de>
+Date: Mon, 13 Jan 2025 22:41:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 References: <20250113200454.3108562-1-fiona.klute@gmx.de>
- <20250113200454.3108562-4-fiona.klute@gmx.de>
- <20250113213003.0b2ef4ec@windsurf>
- <c8ac2b3f-4652-4764-a302-c518bd0f1696@gmx.de>
- <20250113222223.7e909bca@windsurf>
+ <20250113200454.3108562-5-fiona.klute@gmx.de>
+ <20250113213115.6e74bfb4@windsurf>
+ <932425e2-f575-44e2-965c-5131e1afc9b8@gmx.de>
+ <20250113222319.4f0194fc@windsurf>
 Content-Language: en-US, de-DE-1901, de-DE
 Autocrypt: addr=fiona.klute@gmx.de; keydata=
  xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
@@ -94,51 +94,51 @@ Autocrypt: addr=fiona.klute@gmx.de; keydata=
  MCTaUC2HWAAsiG90beT7JkkKKgMLS9DxmX9BN5Cm18Azckexy+vMg79LCcfw/gocQ4+lQn4/
  3BjqSuHfj+dXG+qcQ9pgB5+4/812hHog78dKT2r8l3ax3mHZCDTAC9Ks3LQU9/pMBm6K6nnL
  a4ASpGZSg2zLGIT0gnzi5h8EcIu9J1BFq6zRPZIjxBlhswF6J0BXjlDVe/3JzmeTTts=
-In-Reply-To: <20250113222223.7e909bca@windsurf>
-X-Provags-ID: V03:K1:9dXU4eUB7xrg9gbFADNa9Zc4W5285cG8GPEHrP4RrbgWdXvTg4r
- RfPP4kt3M3/W7eUAGcObB3SIMmb6lfQ6+V06L0gaioBcm9syzOFZebdk62DkRtTzvvze6hl
- IJGZ+NHq1y1WmgZt2hUoOtdUs5szq2IPBw5XgwcZODvsZIqhBjaUEhKOK1OUdVV4mkJtEm/
- UxvbKainf4WunELQg4y1A==
-UI-OutboundReport: notjunk:1;M01:P0:jkpB1bxVogo=;ke2P/aFxwnSunD9i2JxFw/cqa2T
- OcDhFJzd1TWhGmLUL1v9KuuuHqtYBoqCStB6Q6Igh1MLqWRgrAb3n4b1kJ+A+9Ec+UQ6s1LAg
- iUc8ZjgckuiA07NVK17SSI8qY0otFQjo3hOvs+44hS2hVYvatLAfBu0tMpkOwVDCuzK2k8+D2
- pq40NHp/mPWvq+j4xCJ3Uur15ohkQlqziAi/lsSgmuvAB0qmFILsU+IgFX9BoNlh4Skb16H/+
- sFoaJSV0mvQamnHvAAiJtgTyv0xFe8hGQye/wWDzQx3JqYVuK4VMi9GGgyy0H6ixOF8uLoeoB
- DTthV70bnXY/8Foa45L5DAbOg8ONyVyIOOk5aovozKHfH1Hb2MKiePUU56c8vJxlSEfCd9GTl
- KlG6eFIOYtn/76WgMCR3C7FbhuaDH5wcRDbtj63Ns+JlnMosaWkBm0K8DdNwD991vbM/T2Wln
- pS0wGQPJzMFbCVBlPxocZEdTyRlI4mFhJlxDOrGIpyDR4o9VQp2wI/cBXqcuVr7nAXOJKxO2r
- Dm4XDKz+Aq1smj8m2/1spfsCRLfU5LY8u1UOWpXmgtrQo8uX5c55Qwo9Q/VV/i2bl6KLGYKDI
- kGLZ+HXLdvubLJVF2xYUF3RQbJybbyVHt/rxS1oYG3hsRFio8oHuQqLKKuF/+hbZ2SZNlUnpG
- Se9+vAa3Y2zJl1qiXmH6juAeROVWQRZ2PEo0TM1tKTXqL95MS1hmvfwCESlCgy39rqczmimJA
- e4XMBM7pdz40i+gJ25FCHdQ2oFR2rs2lcJHkU2xniS+Blw95pBBBT4A7S36hhgInE6AsJUhG3
- pCXm8bMTwIT3Z0EDDQdL8JRsY0WCyIKLRqvcJIGNIZ0F8udwvF1aaJdyq493jBtuiCttakE1M
- CzuK0zwvFdCO7cAoFifN4t0YXEpmsj1wnEW+s9Tc05JV6w8qf3oPaQbsbHyT+Jn3K8UPinT1c
- NkBMYYfzAXFTuEj4RhY8KCmj/SpyfhDxQf43W+2Rnu7N55JeGo2KNao9VKJFVGTHyTMBLyccz
- o3EhIzKcjOzDcA1V1UnxV/mNbL+dNvCsPZWqv4Rp3k5vByUNYNF1IAMQ8kFdO1cZC1jsjPZsQ
- J3aY1D3mO3MPVW2YUscS48UrsGvm+2
+In-Reply-To: <20250113222319.4f0194fc@windsurf>
+X-Provags-ID: V03:K1:OUtvbprfUrzBkQboDkBJbv/SKrQd829CQzHXjDpZsNX3+wlqNEH
+ tEWwTubkIJW3698jlWYfyaXTCwSJQVyyL2sk5AS4P59bQYqxv8GavppfQZhlYI5TmFVvaRT
+ UulBBzChEyqQ/YcB2jwHjOJldTIMX+Nh6Dkl0EJgHxPPYW/w1LDd1BN98ZVprh00lOGVhYe
+ gHAHf8NANKkdB4p/6S0jQ==
+UI-OutboundReport: notjunk:1;M01:P0:KYPQZlaJWKQ=;4Yq967wTn3Sght3aH6g5WtNfEfR
+ 1mAVfVMA4SjcanT1hmwCRruE94OPcKZ0U90kXeMw8QhPnjRCW6hV8N4Ag3/R7wx/GdBN2XSA6
+ d15XBBbsnp4XJR4u7xDn+Qcq/hOeP3mVj8GUMjPW718kthgVyf8y+tx0139uwVOHgY8vMwWzc
+ WHbFHeYgJU1fzhCNWSAYRwU2LTK+O/3sTWrwybUGR5jb588ZZXpeGr/sEhwflOw3QPb2O5Tr9
+ 1mePmoatvY0ZIvcnk3RNJPqagPstcPln69P0Iot4ZKh8snMW5PvwsOTcKeIxvncSVsSlfkNti
+ pIGnjcJr81vwOQ0TP7nkq6//JmXwFgdygqcPviw/TMSgh6wSBOLa4PNSL4/qvCggwQd5xI3LE
+ wDFF2+A3hqj4F/RYpgrzbx21cS2SLfhBCJ8TwRiSQMEN9fN+vHBb82izkGcu2207Q4q5LGzwi
+ LetoTCi9OetbFW8qmBQM/nf8KIbNWV8+tm0jtVKBa+MLfy+bex45VXJUEsYW8w+V2SoqBAzPn
+ q4iESaoci0XnEnT+qgicd/db/hMpTzkGwdMY2j5K3iTaAYPk27bTwbQ4I8S7dfJ9eSj/ud1HJ
+ bkOkK9DfO1VGy921mzMoSxzRWUdOckNTLmQLqMRKp9HaYVXMzbEpQD5YH1Ptm0tPs+CWlzK8D
+ zl/OF/hBTNRisb4Vc2lBRwkfs1zqZiz2SjZWnnbNX901JktQB4SwVnSzyRB1tDEbhFZkP/8/5
+ vWXMjp350jkfT/60qztDIjm6xuD11R/RAN7EkesockQJMU2rtjur8pDIGCiB9oaQtWjEgEStO
+ mGFhM9DdryDYJBkfH0fbb9+hFVrGS1S3SOV/bxzxX6j8QmnwkykmnZ09c6hbOrr3YY5dwZ4sd
+ SJL9vjN1GKfiNeQpCzdXNGVRfGyEoEWCTLgs81DCi8TAfW22hx/MWa7R8oqpEr/LKTuQwxt8B
+ a7kwD0Srg+g0fTMLgaaWK6X1KJW3fMlxAsqfY0a8YhFWhYGr5VAMVlQOFMk3mHVnXMhO2bcI3
+ EBuVescjQKcC7Udgm+FViORQE8TSqJS6oOZEYIPK8jQSj3bn5/HySjy/41okoChRtQbcaQn4T
+ bPGIvkBRC49kEYxU9kD4235q1SNydD
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1736804401; x=1737409201; i=fiona.klute@gmx.de;
- bh=JzI00vw5qIcYvoySGVXJLxRJqTmO6BB4pSkEjwtXRgs=;
+ s=s31663417; t=1736804520; x=1737409320; i=fiona.klute@gmx.de;
+ bh=tabiCwmTY0yjEqiAY9Vrx4eFVCzihBF9yTtla2wF11s=;
  h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
  References:From:In-Reply-To:Content-Type:
  Content-Transfer-Encoding:cc:content-transfer-encoding:
  content-type:date:from:message-id:mime-version:reply-to:subject:
  to;
- b=qdoBZUpejYyioyIcl/w4xdCHISopgcX13yyDBk4zn3DacHK3zpeHIfs36oMKflYm
- O+VU49UV1jfpHYQ4j6+dV1Ixg8Yq2k0jGzi+f2SBb31zlqGnOoftI+XJpSsMVoLNX
- 59MeCzrId/bH6fHjIU8g9cvXQAPwBMSGz0KWrj6cjTSyaMyxA8nUImSgT9Vs4w0Fn
- FY54Bi8tI1pAVtMXApv0UvzZjZ+itAbPV/5WNxhCwY4nnR0SJRQeiSwyw8dE9YEba
- XnoGXOpDkA48nRD1FaJIA0itW+bST5+QK9Sz3OQuxKpy76fikLrsRKXSXsZwZ2RU9
- lDeRnl9cFq3ac53M6A==
+ b=QEo3XAM0Tr/D58b5j+Y9Nlo4aRkFGwSsbuQVLExV87DyfHWwRSeGWyuSyR6QN6up
+ h3LfdL8VPUj0bnPjsbdpebekruU95aUspoTqBypDS0DR/CXPLozvBMnJNYPdnYZYz
+ VmG761zspdBKa15mlsesjxlWDKio91lMKzNshfN/tyVXSLqraB4P+j/615+JbdtT5
+ Nz2+TgXW1TB3eSIU44jxMGthKWUlEGjD+qqBLjp3Ndgs9w7WxquYAH968GuzvHp5g
+ X9ZdCvaQ6NnmI1ZQZ1Ct6HGeIzU9rnsqXF/YTkN8+LmzzVSnubwDTrw9RXCQ1LENO
+ ajVQnxoG+FChg5Ne0w==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=qdoBZUpe
-Subject: Re: [Buildroot] [PATCH v7 3/5] package/python-gobject: bump to
- version 3.50.0
+ header.a=rsa-sha256 header.s=s31663417 header.b=QEo3XAM0
+Subject: Re: [Buildroot] [PATCH v7 4/5] package/network-manager: optional
+ gobject-introspection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,23 +161,21 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am 13.01.25 um 22:22 schrieb Thomas Petazzoni:
-> On Mon, 13 Jan 2025 21:58:49 +0100
+Am 13.01.25 um 22:23 schrieb Thomas Petazzoni:
+> On Mon, 13 Jan 2025 22:02:59 +0100
 > Fiona Klute <fiona.klute@gmx.de> wrote:
 >
->>> Is this change thanks to the bump of python-gobject to 3.50.0, or
->>> related to the previous patch? I'm trying to figure out if this
->>> dependency change has anything to do with the version bump.
->>
->> This part is related to the previous patch. python-gobject requires GOI,
->> and if that works with musl python-gobject will, too.
+>>> 	package/network-manager: add optional dependency on gobject-introspection
+>> That would be incorrect: What the patch does is enable GOI support in NM
+>> *if* the GOI package is enabled, when before it was disabled
+>> unconditionally.
 >
-> So the enabling of python-gobject for musl toolchains is independent
-> from the version bump of python-gobject?
-It should be, yes. Alpine hasn't had any compatibility for the currently
-packaged version (3.42.2) and newer.
-
-Should I split the commit in that case?
+> That's exactly what we call an optional dependency: a dependency that
+> gets used if available, otherwise not.
+I understand "optional" as something that can be explicitly
+enabled/disabled in the config, not as something that's chosen
+automatically based on other items. But if that phrasing will get it
+merged I'm okay with it.
 
 Best regards,
 Fiona
