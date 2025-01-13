@@ -4,52 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3A6EC02180
-	for <buildroot@archiver.kernel.org>; Mon, 13 Jan 2025 21:42:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02E31C02180
+	for <buildroot@archiver.kernel.org>; Mon, 13 Jan 2025 21:57:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FEC480874;
-	Mon, 13 Jan 2025 21:42:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A619480D46;
+	Mon, 13 Jan 2025 21:57:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KNFa0w4Y-HJF; Mon, 13 Jan 2025 21:42:06 +0000 (UTC)
+ id 6-Uc2Jl3S04U; Mon, 13 Jan 2025 21:57:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93F7780DF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B924580D76
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93F7780DF4;
-	Mon, 13 Jan 2025 21:42:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E634AF8
- for <buildroot@buildroot.org>; Mon, 13 Jan 2025 21:42:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B924580D76;
+	Mon, 13 Jan 2025 21:57:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 807CCAF8
+ for <buildroot@buildroot.org>; Mon, 13 Jan 2025 21:57:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0EFB0607CF
- for <buildroot@buildroot.org>; Mon, 13 Jan 2025 21:42:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7969640586
+ for <buildroot@buildroot.org>; Mon, 13 Jan 2025 21:57:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i1LFGPyzeOk9 for <buildroot@buildroot.org>;
- Mon, 13 Jan 2025 21:42:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fkM8-9zp6tKQ for <buildroot@buildroot.org>;
+ Mon, 13 Jan 2025 21:57:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E4FD9607C5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4FD9607C5
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E4FD9607C5
- for <buildroot@buildroot.org>; Mon, 13 Jan 2025 21:42:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 17764401D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17764401D5
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 17764401D5
+ for <buildroot@buildroot.org>; Mon, 13 Jan 2025 21:57:55 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.7.2] ([85.22.119.64]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MqJm5-1tBeAN2GZ9-00ZWtF; Mon, 13
- Jan 2025 22:42:00 +0100
-Message-ID: <f38083f3-dc23-47a5-92b4-41625623f955@gmx.de>
-Date: Mon, 13 Jan 2025 22:41:59 +0100
+Received: from [192.168.7.2] ([85.22.119.64]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MHoRK-1tk9kl1ili-00E2Cu; Mon, 13
+ Jan 2025 22:57:53 +0100
+Message-ID: <cbdc2f31-5569-44ae-977f-93f45a5c5c84@gmx.de>
+Date: Mon, 13 Jan 2025 22:57:52 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 References: <20250113200454.3108562-1-fiona.klute@gmx.de>
- <20250113200454.3108562-5-fiona.klute@gmx.de>
- <20250113213115.6e74bfb4@windsurf>
- <932425e2-f575-44e2-965c-5131e1afc9b8@gmx.de>
- <20250113222319.4f0194fc@windsurf>
+ <20250113200454.3108562-6-fiona.klute@gmx.de>
+ <20250113213300.4ba5d4b8@windsurf>
+ <096f7ff9-4032-40bc-9c03-cccbca4d675f@gmx.de>
 Content-Language: en-US, de-DE-1901, de-DE
 Autocrypt: addr=fiona.klute@gmx.de; keydata=
  xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
@@ -94,51 +93,50 @@ Autocrypt: addr=fiona.klute@gmx.de; keydata=
  MCTaUC2HWAAsiG90beT7JkkKKgMLS9DxmX9BN5Cm18Azckexy+vMg79LCcfw/gocQ4+lQn4/
  3BjqSuHfj+dXG+qcQ9pgB5+4/812hHog78dKT2r8l3ax3mHZCDTAC9Ks3LQU9/pMBm6K6nnL
  a4ASpGZSg2zLGIT0gnzi5h8EcIu9J1BFq6zRPZIjxBlhswF6J0BXjlDVe/3JzmeTTts=
-In-Reply-To: <20250113222319.4f0194fc@windsurf>
-X-Provags-ID: V03:K1:OUtvbprfUrzBkQboDkBJbv/SKrQd829CQzHXjDpZsNX3+wlqNEH
- tEWwTubkIJW3698jlWYfyaXTCwSJQVyyL2sk5AS4P59bQYqxv8GavppfQZhlYI5TmFVvaRT
- UulBBzChEyqQ/YcB2jwHjOJldTIMX+Nh6Dkl0EJgHxPPYW/w1LDd1BN98ZVprh00lOGVhYe
- gHAHf8NANKkdB4p/6S0jQ==
-UI-OutboundReport: notjunk:1;M01:P0:KYPQZlaJWKQ=;4Yq967wTn3Sght3aH6g5WtNfEfR
- 1mAVfVMA4SjcanT1hmwCRruE94OPcKZ0U90kXeMw8QhPnjRCW6hV8N4Ag3/R7wx/GdBN2XSA6
- d15XBBbsnp4XJR4u7xDn+Qcq/hOeP3mVj8GUMjPW718kthgVyf8y+tx0139uwVOHgY8vMwWzc
- WHbFHeYgJU1fzhCNWSAYRwU2LTK+O/3sTWrwybUGR5jb588ZZXpeGr/sEhwflOw3QPb2O5Tr9
- 1mePmoatvY0ZIvcnk3RNJPqagPstcPln69P0Iot4ZKh8snMW5PvwsOTcKeIxvncSVsSlfkNti
- pIGnjcJr81vwOQ0TP7nkq6//JmXwFgdygqcPviw/TMSgh6wSBOLa4PNSL4/qvCggwQd5xI3LE
- wDFF2+A3hqj4F/RYpgrzbx21cS2SLfhBCJ8TwRiSQMEN9fN+vHBb82izkGcu2207Q4q5LGzwi
- LetoTCi9OetbFW8qmBQM/nf8KIbNWV8+tm0jtVKBa+MLfy+bex45VXJUEsYW8w+V2SoqBAzPn
- q4iESaoci0XnEnT+qgicd/db/hMpTzkGwdMY2j5K3iTaAYPk27bTwbQ4I8S7dfJ9eSj/ud1HJ
- bkOkK9DfO1VGy921mzMoSxzRWUdOckNTLmQLqMRKp9HaYVXMzbEpQD5YH1Ptm0tPs+CWlzK8D
- zl/OF/hBTNRisb4Vc2lBRwkfs1zqZiz2SjZWnnbNX901JktQB4SwVnSzyRB1tDEbhFZkP/8/5
- vWXMjp350jkfT/60qztDIjm6xuD11R/RAN7EkesockQJMU2rtjur8pDIGCiB9oaQtWjEgEStO
- mGFhM9DdryDYJBkfH0fbb9+hFVrGS1S3SOV/bxzxX6j8QmnwkykmnZ09c6hbOrr3YY5dwZ4sd
- SJL9vjN1GKfiNeQpCzdXNGVRfGyEoEWCTLgs81DCi8TAfW22hx/MWa7R8oqpEr/LKTuQwxt8B
- a7kwD0Srg+g0fTMLgaaWK6X1KJW3fMlxAsqfY0a8YhFWhYGr5VAMVlQOFMk3mHVnXMhO2bcI3
- EBuVescjQKcC7Udgm+FViORQE8TSqJS6oOZEYIPK8jQSj3bn5/HySjy/41okoChRtQbcaQn4T
- bPGIvkBRC49kEYxU9kD4235q1SNydD
+In-Reply-To: <096f7ff9-4032-40bc-9c03-cccbca4d675f@gmx.de>
+X-Provags-ID: V03:K1:1xyMqHAf2N1N/EjlO3lhLUB998f8tsYVtw3fV/rwQKwEoz6sar2
+ eV8+X6iULEnaI/7iFV5pGPM0N175PON4/upW2HGGHo0ulpZQtvqBvngvy+TiH7n3e3I2VJQ
+ 42CYcbo2GdB+wFUsPFruaKEIOKVbUCzijAT984skz1vmKQ6ZRgoRTnYftzc/pwZB6DS12QZ
+ k1AO7KzePAh8j7uNH4XiA==
+UI-OutboundReport: notjunk:1;M01:P0:TbyHmfHBL7M=;qvJq4vazjHnmE+bkzPVQ47lHr1W
+ Z1FM1sr4715Zwf9K2ZaNzRzvccKhYeGFCVkN30LPLXsq8VHRU44O00Qwe8zHuIiK1AYD24xV+
+ LDc5FSP2dioVdgkdzrq7TAi5anfIF0kdTkY/A5mMqmp0x8yz7/fDnVXG6oEqKC0GQUWnyHkxy
+ rXwdoK+p0M7I0zcmbzi2lLWZLMUw2iCjvGA8WFgkK1x8jpfVtyK5rWYuHGqt69xSF0BvGOhTf
+ H2wiVGCGUYNO/RQvWN05JS8R7g+2S03PrIvIgST2lU253RJJt24WeZRe6CR97T7FxRixsg4JH
+ PxK3XstUQAOd5YR645R0KcmzcFkY2sX9dA046fsQD51uFIu5YhecUFUY70ymvIUH1RVlu0ys2
+ c2ce6b3vE5sbQeBCPXh01hVHtWWe6u4JgtFOcJ0BCHceaB2BYpumIQgGVOh8mXPTJ/FccVwOX
+ g0Rur/W2s/1nW5kgx2Yp/+dnP6AR8HcNxnMjqVWfdV5NY+mhO9vp2YXkk35yTyjN6nup6jvTw
+ cwzWo187QqHXImbHcixtORx/gNgT4msAu03kxlmp7Dum4SyOubUmPTpVAGk3B+mDIPFz4dGDe
+ iSXBSc++649v5bDOQGKmdTFuTaL10AbtF4THgLf1qdPPm6yx2BoWat8iNiI6jsO28BGC57xVy
+ BRJC/KE5ptX95nDtbR0citEck6dRO3A9GCUW+AKbFw6Ui038jw1wVlSe7qUvJxtMNVK2BgORC
+ hMTpfMC6wBgLEsGTQc9XUbopSbM5H/hNE3Rrfdt6zk1L1TENuqVAx2QYbr65CCpU7JCShCBEq
+ ebc1MMU0ZrbiDdzy5SLucF0SSfZD7JCTwAtDi9xV19MKYj6DScaFmT0BWPAu+by5fIafPCExa
+ ZroECROvNmUVtvQ7ReT36q8tvohzEhignYMafMeybNeXZnzL47D5k9DL5mwhOJp9M11P/Rayk
+ Mau+BeU14wxtt9fWhRKqZglh+TjWjn3gKQzWmGXvh1SJ6JNaLsDSohEgmxVXR2bbygS1AYnod
+ a4LxK+CCcIMJ9abDeqcmJ/Q2I6HboazVKklAkYGaFahhaxndjROiphq6uHHyLXeyIaHmXS+Y5
+ z8soLd28E=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1736804520; x=1737409320; i=fiona.klute@gmx.de;
- bh=tabiCwmTY0yjEqiAY9Vrx4eFVCzihBF9yTtla2wF11s=;
- h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
- References:From:In-Reply-To:Content-Type:
- Content-Transfer-Encoding:cc:content-transfer-encoding:
- content-type:date:from:message-id:mime-version:reply-to:subject:
- to;
- b=QEo3XAM0Tr/D58b5j+Y9Nlo4aRkFGwSsbuQVLExV87DyfHWwRSeGWyuSyR6QN6up
- h3LfdL8VPUj0bnPjsbdpebekruU95aUspoTqBypDS0DR/CXPLozvBMnJNYPdnYZYz
- VmG761zspdBKa15mlsesjxlWDKio91lMKzNshfN/tyVXSLqraB4P+j/615+JbdtT5
- Nz2+TgXW1TB3eSIU44jxMGthKWUlEGjD+qqBLjp3Ndgs9w7WxquYAH968GuzvHp5g
- X9ZdCvaQ6NnmI1ZQZ1Ct6HGeIzU9rnsqXF/YTkN8+LmzzVSnubwDTrw9RXCQ1LENO
- ajVQnxoG+FChg5Ne0w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=s31663417; t=1736805473; x=1737410273; i=fiona.klute@gmx.de;
+ bh=3kYYD0xO5Pn5TIiSiMEb+OQgo8E3tdcIicEY1HvH1cY=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:From:To:
+ Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+ cc:content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=NXrxFDMx8zKl5DIHG93POAGGoLd/QfQcX7rra5LqKL8v+i/EMQy4YNDvyNOjvrYB
+ pJhjthjRSGTr2OpP0e228L0iEi7GtAEciJTEGUUuZPbRKT/8odLOtDpMcTOAGxGtH
+ oRnUFCXY40ifefaeYQR42pD4A4NbNd+g0G1LYe5srs+nOZ/YLVii6RY8us1abhFsh
+ d99KxfzdUGsX9TA0xzqVUghqfKEiN/ELEWuIx0IPOy/qnk3mOPcjFBJ8dDWj4KyFg
+ K5bljiFzJ+kwS9wmYJNT0tMJfaaa4LJUNdRP/MNS1PJV9+ADHLi3lWapIbX5nTw3Z
+ 7LXULtH2cYG2+l1RsQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=QEo3XAM0
-Subject: Re: [Buildroot] [PATCH v7 4/5] package/network-manager: optional
- gobject-introspection
+ header.a=rsa-sha256 header.s=s31663417 header.b=NXrxFDMx
+Subject: Re: [Buildroot] [PATCH v7 5/5] package/json-glib: bump to version
+ 1.10.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -153,29 +151,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Fiona Klute via buildroot <buildroot@buildroot.org>
 Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ James Hilliard <james.hilliard1@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am 13.01.25 um 22:23 schrieb Thomas Petazzoni:
-> On Mon, 13 Jan 2025 22:02:59 +0100
-> Fiona Klute <fiona.klute@gmx.de> wrote:
+Am 13.01.25 um 22:07 schrieb Fiona Klute:
+> Am 13.01.25 um 21:33 schrieb Thomas Petazzoni:
+>> Hello,
+>>
+>> On Mon, 13 Jan 2025 21:04:54 +0100
+>> Fiona Klute <fiona.klute@gmx.de> wrote:
+>>
+>>> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+>>>
+>>> Fixes a build failure due to warnings from g-ir-scanner:
+>>
+>> Does this happen due to the bump in PATCH 1/5 ? Does it happen already
+>> before ? If it is happen due to the bump in PATCH 1/5, can this patch
+>> be added *before* PATCH 1/5 in the series, i.e does it work with
+>> earlier versions of glib/GOI ?
 >
->>> 	package/network-manager: add optional dependency on gobject-introspection
->> That would be incorrect: What the patch does is enable GOI support in NM
->> *if* the GOI package is enabled, when before it was disabled
->> unconditionally.
->
-> That's exactly what we call an optional dependency: a dependency that
-> gets used if available, otherwise not.
-I understand "optional" as something that can be explicitly
-enabled/disabled in the config, not as something that's chosen
-automatically based on other items. But if that phrasing will get it
-merged I'm okay with it.
+> I'll have to test a clean build to answer that, the upstream changelog
+> doesn't mention a specific version dependency. My notes say the issue
+> first appeared with the gobject-introspection update to 1.82.0, probably
+> some checks became stricter there.
+I did a test build with the json-glib bump only, it works. In that case
+it becomes a "normal" version bump, though necessary to build with the
+new GOI version.
 
 Best regards,
 Fiona
