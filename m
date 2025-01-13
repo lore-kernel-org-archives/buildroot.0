@@ -4,77 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 530BFC02181
-	for <buildroot@archiver.kernel.org>; Mon, 13 Jan 2025 08:24:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 879CFE7719E
+	for <buildroot@archiver.kernel.org>; Mon, 13 Jan 2025 09:02:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 152AA405B9;
-	Mon, 13 Jan 2025 08:24:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B53041289;
+	Mon, 13 Jan 2025 09:02:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kNZ3AcodAfm4; Mon, 13 Jan 2025 08:24:04 +0000 (UTC)
+ id X3MG2qIJD8Dk; Mon, 13 Jan 2025 09:02:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6ACF406C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 060094128A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6ACF406C1;
-	Mon, 13 Jan 2025 08:24:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 79E4A940
- for <buildroot@buildroot.org>; Mon, 13 Jan 2025 08:24:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 060094128A;
+	Mon, 13 Jan 2025 09:02:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A08C595D
+ for <buildroot@buildroot.org>; Mon, 13 Jan 2025 09:02:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 725844011D
- for <buildroot@buildroot.org>; Mon, 13 Jan 2025 08:24:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 80FA661132
+ for <buildroot@buildroot.org>; Mon, 13 Jan 2025 09:02:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O58e8665cCdh for <buildroot@buildroot.org>;
- Mon, 13 Jan 2025 08:23:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UtC3xSL725aq for <buildroot@buildroot.org>;
+ Mon, 13 Jan 2025 09:02:35 +0000 (UTC)
+X-Greylist: delayed 3394 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 13 Jan 2025 09:02:33 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EC5956111D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC5956111D
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.132.182.106;
+ helo=mx07-00178001.pphosted.com;
+ envelope-from=prvs=31083e9d08=etienne.carriere@foss.st.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 36A814011C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36A814011C
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 36A814011C
- for <buildroot@buildroot.org>; Mon, 13 Jan 2025 08:23:58 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 4A442240008;
- Mon, 13 Jan 2025 08:23:56 +0000 (UTC)
-To: Buildroot List <buildroot@buildroot.org>
-Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
- Yuriy Kolerov <Yuriy.Kolerov@synopsys.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>
-Date: Mon, 13 Jan 2025 09:23:49 +0100
-Message-ID: <20250113082350.241613-2-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250113082350.241613-1-thomas.petazzoni@bootlin.com>
-References: <20250113082350.241613-1-thomas.petazzoni@bootlin.com>
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com
+ [185.132.182.106])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EC5956111D
+ for <buildroot@buildroot.org>; Mon, 13 Jan 2025 09:02:33 +0000 (UTC)
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+ by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50D2Li9G024977;
+ Mon, 13 Jan 2025 09:05:56 +0100
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+ by mx07-00178001.pphosted.com (PPS) with ESMTPS id 444333kc0n-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Mon, 13 Jan 2025 09:05:56 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+ by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id A74B84004F;
+ Mon, 13 Jan 2025 09:05:16 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+ by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D372022C007;
+ Mon, 13 Jan 2025 09:04:16 +0100 (CET)
+Received: from SHFDAG1NODE1.st.com (10.75.129.69) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Mon, 13 Jan
+ 2025 09:04:16 +0100
+Received: from SHFDAG1NODE1.st.com ([fe80::b848:dbeb:cd0:84a0]) by
+ SHFDAG1NODE1.st.com ([fe80::b848:dbeb:cd0:84a0%13]) with mapi id
+ 15.01.2507.037; Mon, 13 Jan 2025 09:04:16 +0100
+From: Etienne CARRIERE - foss <etienne.carriere@foss.st.com>
+To: Julien Olivain <ju.o@free.fr>, =?iso-8859-1?Q?Vincent_Stehl=E9?=
+ <vincent.stehle@arm.com>
+CC: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: [Buildroot] [PATCH] boot/optee-os: add custom version option
+Thread-Index: AQHbUvIG4db9wgfxb0SYuwTS9NvbGbMNeFIAgAcBiU0=
+Date: Mon, 13 Jan 2025 08:04:16 +0000
+Message-ID: <2b42675830d448ca94f18b1ab3938824@foss.st.com>
+References: <20241220151531.59770-1-vincent.stehle@arm.com>,
+ <b5403f615bdbba4f0571fdefc5d16849@free.fr>
+In-Reply-To: <b5403f615bdbba4f0571fdefc5d16849@free.fr>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.48.86.128]
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1736756636;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=OEDPORV3u4674aRUCt0FXYZjiVDo6le4hsfZFfuCld4=;
- b=DoBRYLPvq+1aQOpWTCdFRaKXKj5ycg7J9wTPS5xUK7e1my8mNez9hUg96/VVOI82R+Q4Nb
- zyPHA4NzGsSILRFIe0g57LQGfpB1st4N03pzTmNRlog2CWcQS7+ZqS5NAVbi+3Ku3zBUQy
- w0sHDYXrBuUJyYWpK4N7fULuC/MyUo5YZRE+0jAS/IYdHgjir1c71Mxhhhzbtpzhcyausu
- tTy1Jb18G+ouEkFhLxjhhN1Gvgd+i53Dja88VLNLyWWNMR6z6+MLlsBwuwmzihZrSsfR83
- 9qqu6NOG1sl8RJwapD2eN0xCHm2QakTvg8YWqmFE5FhA5PEPX9XsirEilAkXOQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=foss.st.com; h=
+ cc:content-transfer-encoding:content-type:date:from:in-reply-to
+ :message-id:mime-version:references:subject:to; s=selector1; bh=
+ Pn30ABcXIXED9oOkLAsOjuPTGmT5TBC/OnEIWkY6Fd4=; b=0PxgA1LCBy8y3Zmp
+ JoPvuNvtOUE6XI/Dr+9pVa1PPZd8aDZ391rFcO8Y3mPh1au3rlD+PbK7YJJEn/+B
+ c7xORXHRckKQn1Ceba3Xu58yOTB2cdtq836DdsAlkD6qK8K5txMjMoKD0RWkw6Ne
+ Ag8KqtZrdjj9nIpQTWbfuWs3n4Ek1r4Y/7n1JfuQrB61nslZaavF+7wpi5gnpDMh
+ xPHRgt8EG4kVA+AG6kBcQ4pT8b0h63UXKAUGadFNAW4wYLrGwi4geWZSnL5lyNNn
+ QKPanPWCqif7nNUXaGUZd+RzRRgzvQErtFStthL8b7p7vGadt3O+RyVrWD+IK6Ks
+ GeMq2g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=foss.st.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=DoBRYLPv
-Subject: [Buildroot] [PATCH 2/2]
- toolchain/toolchain-external/toolchain-external-synopsys-arc: mark as
- broken
+ unprotected) header.d=foss.st.com header.i=@foss.st.com header.a=rsa-sha256
+ header.s=selector1 header.b=0PxgA1LC
+Subject: Re: [Buildroot] [PATCH] boot/optee-os: add custom version option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,49 +111,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The ARC toolchains from Synopsys unfortunately are not "pure"
-toolchains: their sysroot no only contains the C library, but also
-additional libraries, most notably libncurses and libexpat.
+Hello Julien, Vincent,
 
-This confuses Buildroot, and causes build issues, and is anyway not a
-supported situation. Until the toolchains get fixed, let's mark them
-as broken.
+On Wednesday, January 8, 2025, Julien Olivain wrote:
+> Hi Vincent, =C9tienne,
+>
+> On 20/12/2024 16:15, Vincent Stehl=E9 wrote:
+> > Add custom version option, to enable easily specifying an official
+> > OP-TEE
+> > version to use.
+> > This is similar to what is done in other packages, such as linux, uboot
+> > or
+> > arm-trusted-firmware.
+> >
+> > Signed-off-by: Vincent Stehl=E9 <vincent.stehle@arm.com>
+> > Cc: =C9tienne Carri=E8re <etienne.carriere@foss.st.com>
+> =
 
-Fixes:
+> I applied this patch to master, thanks.
+> =
 
-  http://autobuild.buildroot.net/results/38766332c391ce97a566c6e2255a947e6074152b/
-  (and possibly a number of others)
+> Do you think the same logic should also be added to the optee-client,
+> optee-examples and optee-test packages?
+>
+>
+> I currently believe so.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../toolchain-external-synopsys-arc/Config.in                 | 4 ++++
- 1 file changed, 4 insertions(+)
+I do also since O-TEE test source tree should be synced with OP-TEE OS sour=
+ce tree.
 
-diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-index 98bfc2513c..07688a1416 100644
---- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-@@ -5,6 +5,10 @@ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
- 		BR2_archs4x_rel31 || BR2_archs4x
- 	depends on BR2_HOSTARCH = "x86_64"
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
-+	# The toolchains have libncurses and libexpat in their
-+	# sysroot, confusing Buildroot and causing build
-+	# issues. Disable until the toolchains get fixed.
-+	depends on BR2_BROKEN
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
--- 
-2.47.1
+Best regards,
+Etienne
 
+> =
+
+> Best regards,
+> =
+
+> Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
