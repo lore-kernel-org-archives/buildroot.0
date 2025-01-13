@@ -4,82 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2451CE7719E
-	for <buildroot@archiver.kernel.org>; Mon, 13 Jan 2025 10:25:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 934ABE7719E
+	for <buildroot@archiver.kernel.org>; Mon, 13 Jan 2025 10:51:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C061560688;
-	Mon, 13 Jan 2025 10:25:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 418CE6080F;
+	Mon, 13 Jan 2025 10:51:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L1VkDGr7FDuV; Mon, 13 Jan 2025 10:25:46 +0000 (UTC)
+ id HpAgr8JqVJtF; Mon, 13 Jan 2025 10:51:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBAB5606D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BD0660810
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBAB5606D6;
-	Mon, 13 Jan 2025 10:25:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C384195D
- for <buildroot@buildroot.org>; Mon, 13 Jan 2025 10:25:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5BD0660810;
+	Mon, 13 Jan 2025 10:51:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 217CD940
+ for <buildroot@buildroot.org>; Mon, 13 Jan 2025 10:51:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A28EF40131
- for <buildroot@buildroot.org>; Mon, 13 Jan 2025 10:25:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 020616080F
+ for <buildroot@buildroot.org>; Mon, 13 Jan 2025 10:51:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dzUTqp5bllwX for <buildroot@buildroot.org>;
- Mon, 13 Jan 2025 10:25:43 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom; client-ip=198.175.65.15;
- helo=mgamail.intel.com; envelope-from=mika.westerberg@linux.intel.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g6qli5LFkW2t for <buildroot@buildroot.org>;
+ Mon, 13 Jan 2025 10:51:53 +0000 (UTC)
+X-Greylist: delayed 528 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 13 Jan 2025 10:51:52 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E66D1607C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E66D1607C8
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=188.165.44.123;
+ helo=mail1.insia.net; envelope-from=guillaume.chaye@zeetim.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BE6E340129
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE6E340129
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BE6E340129
- for <buildroot@buildroot.org>; Mon, 13 Jan 2025 10:25:43 +0000 (UTC)
-X-CSE-ConnectionGUID: Eg9g30zmSXWCHpzS3AGO3w==
-X-CSE-MsgGUID: TkWzGZbxT8qjv8vZt2cxjw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11313"; a="40698503"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; d="scan'208";a="40698503"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
- by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 13 Jan 2025 02:25:43 -0800
-X-CSE-ConnectionGUID: T/5mGykjQKW1xJuo+p2oyQ==
-X-CSE-MsgGUID: /VXFRSTmRpm49IYZRGGY4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; d="scan'208";a="141722843"
-Received: from black.fi.intel.com ([10.237.72.28])
- by orviesa001.jf.intel.com with ESMTP; 13 Jan 2025 02:25:42 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
- id EFCB9329; Mon, 13 Jan 2025 12:25:40 +0200 (EET)
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
+Received: from mail1.insia.net (mail1.insia.net [188.165.44.123])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E66D1607C8
+ for <buildroot@buildroot.org>; Mon, 13 Jan 2025 10:51:52 +0000 (UTC)
+Received: from smtp.insia.net (unknown [192.168.1.24])
+ by mail1.insia.net (Postfix) with ESMTP id 1C3E83FF69;
+ Mon, 13 Jan 2025 11:51:46 +0100 (CET)
+Received: from sb-dev-build.insia.net. (gw-servers.insia.net [192.168.1.1])
+ by smtp.insia.net (Postfix) with ESMTP id 41BC75F497;
+ Mon, 13 Jan 2025 11:37:36 +0100 (CET)
+From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
 To: buildroot@buildroot.org
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-Date: Mon, 13 Jan 2025 12:25:40 +0200
-Message-ID: <20250113102540.1940023-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.45.2
+Date: Mon, 13 Jan 2025 11:51:31 +0100
+Message-Id: <20250113105132.890144-1-guillaume.chaye@zeetim.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
- t=1736763944; x=1768299944;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=yqjZetdwFxAogGYLcqtgiEZpvnMJxedcaIDKwijJSwA=;
- b=R5PdTXHpw4uyuAfejRg05SIIjDuuxZfx9MxVp0u2cAr8fT5PrIO5qe3X
- WHLAJ1yS4jmOo/FTTovV9Go3uTdOsWw3mYit5dVAkPHUGnXaCbp2GJ2n5
- zNbSyKvIeyn7j/DBDeWnu1+3KH6Aj9bd9gW5Tmw6lUVUERiAugK3Kn4/n
- AXuLvFcBbl9wuCBvE20T4mSTqQuS7LZF0tm8DdDKHxQgKS9paycf8Cv3r
- PgvY6ZmjGVlNKvAEdJsbYwwgNRVd0WLEJX8efCkfxTwqUR9m3ozyGtjUZ
- /fyXrB3ScB0ciICWuq30IfaPQFp/X7WgJ461uI5+2bL3oCsHHYiHcJpwy
- A==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=zeetim.com; s=mail1; t=1736765506;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=Ybn+NHEO9s+3IYjU8NvtFq57rZLgpD9r5u06PSBsNjk=;
+ b=dG+8Kq1114GB9W1IECUfH95WmERTY/2FRsaOx9vAO2PMTtn7nMUrDLie2ql+Y0q+zjaHE0
+ zEsmVCPo6v/ynwYYo914D1qsIj8pddU8zj2qiBPQJ8H/BnOFztKTqRyWv3htwXb16BMB80
+ ccPRYBX8JwYWsfGQwULuw3woQHkI3q/n1lDP0FJGcGoi59Iq3ln2BVfD29J03U9+jgz7+9
+ iuhF0GV0s+YjaZrwee+jlGT2S4idQk5FBrHDqgcQ7FYd2VWW0pfVUTqnWWSoQBmBOsTP2u
+ M9OFheiN87kNWHxn0Nl/LnLXWktnSeo3Z6DDq/x9+dcAMTBaLmkEdW74PYaYhQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=linux.intel.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=zeetim.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256
- header.s=Intel header.b=R5PdTXHp
-Subject: [Buildroot] [PATCH] package/tbtools: bump to version 0.5.0
+ unprotected) header.d=zeetim.com header.i=@zeetim.com header.a=rsa-sha256
+ header.s=mail1 header.b=dG+8Kq11
+Subject: [Buildroot] [PATCHv3 1/2] package/perl-file-slurp: add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,43 +81,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Christopher McCrory <chrismcc@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update to the latest release of tbtools.
+Some project like efitools requires host version of this package to build properly.
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
 ---
- package/tbtools/tbtools.hash | 2 +-
- package/tbtools/tbtools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/perl-file-slurp/perl-file-slurp.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/tbtools/tbtools.hash b/package/tbtools/tbtools.hash
-index 25879c2780..58793dee0c 100644
---- a/package/tbtools/tbtools.hash
-+++ b/package/tbtools/tbtools.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6ec94630bc4e1afec1342cfd635d1c7da7d82f6c5f00adac61d164505c2a0717  tbtools-0.4.2-cargo2.tar.gz
-+sha256  377d2fab96cf78d24dfd1b16b737afb4e47f0b712e13abb7ac1443fc2aa0931a  tbtools-0.5.0-cargo2.tar.gz
- sha256  9b16a3add311d607af8d9b348a842a37840d0f47dfcc6cf2a7756ee02c24ed69  LICENSE
-diff --git a/package/tbtools/tbtools.mk b/package/tbtools/tbtools.mk
-index 13b2ee65f9..1200e1c669 100644
---- a/package/tbtools/tbtools.mk
-+++ b/package/tbtools/tbtools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/perl-file-slurp/perl-file-slurp.mk b/package/perl-file-slurp/perl-file-slurp.mk
+index 0d4ab94034..7cada58070 100644
+--- a/package/perl-file-slurp/perl-file-slurp.mk
++++ b/package/perl-file-slurp/perl-file-slurp.mk
+@@ -12,3 +12,4 @@ PERL_FILE_SLURP_LICENSE_FILES = README.md
+ PERL_FILE_SLURP_DISTNAME = File-Slurp
  
--TBTOOLS_VERSION = 0.4.2
-+TBTOOLS_VERSION = 0.5.0
- TBTOOLS_SITE = $(call github,intel,tbtools,v$(TBTOOLS_VERSION))
- TBTOOLS_LICENSE = MIT
- TBTOOLS_LICENSE_FILES = LICENSE
+ $(eval $(perl-package))
++$(eval $(host-perl-package))
 -- 
-2.45.2
+2.39.2
 
 _______________________________________________
 buildroot mailing list
