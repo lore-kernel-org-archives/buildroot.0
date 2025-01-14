@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B53AAE77188
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08F2EC02183
 	for <buildroot@archiver.kernel.org>; Tue, 14 Jan 2025 22:13:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7223B607E3;
-	Tue, 14 Jan 2025 22:13:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E4664049B;
+	Tue, 14 Jan 2025 22:13:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7HnEe9BWYVV7; Tue, 14 Jan 2025 22:13:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6Jsi-v2T1ZgK; Tue, 14 Jan 2025 22:13:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7820160817
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9482E4055E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7820160817;
-	Tue, 14 Jan 2025 22:13:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D0BEAF0D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9482E4055E;
+	Tue, 14 Jan 2025 22:13:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CA97EB8C
  for <buildroot@buildroot.org>; Tue, 14 Jan 2025 22:13:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B153560817
+ by smtp4.osuosl.org (Postfix) with ESMTP id A372040497
  for <buildroot@buildroot.org>; Tue, 14 Jan 2025 22:13:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id op2BAXFZSDzs for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wmXUBNVO2Bv3 for <buildroot@buildroot.org>;
  Tue, 14 Jan 2025 22:13:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9057607E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACA88403BE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9057607E3
+ by smtp4.osuosl.org (Postfix) with ESMTP id ACA88403BE
  for <buildroot@buildroot.org>; Tue, 14 Jan 2025 22:13:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B51EB85CBF; Tue, 14 Jan 2025 22:13:22 +0000 (UTC)
+ id 97B9185C5C; Tue, 14 Jan 2025 22:13:22 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Date: Tue, 14 Jan 2025 22:16:56 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cfe69076bbe99a3a6381b5d3e4e4a3fa3bcb0e30
-X-Git-Newrev: e5a965a648adfc0bcd571fed04ee50b2ec3ebd29
+X-Git-Oldrev: 203abefcf6c0ca54d28523bcd8ac7c56c249fefe
+X-Git-Newrev: 299967723354c9ad50f7faf945ac809d32bf4108
 X-Patchwork-Hint: ignore
-Message-Id: <20250114221322.B51EB85CBF@busybox.osuosl.org>
+Message-Id: <20250114221322.97B9185C5C@busybox.osuosl.org>
 Subject: [Buildroot] [git commit]
- toolchain/toolchain-external/toolchain-external-arm-aarch64: bump to
- 14.2.rel1
+ toolchain/toolchain-external/toolchain-external-arm-aarch64: fix
+ BR2_ARCH_NEEDS_GCC_AT_LEAST_X guard
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,62 +66,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5a965a648adfc0bcd571fed04ee50b2ec3ebd29
+commit: https://git.buildroot.net/buildroot/commit/?id=299967723354c9ad50f7faf945ac809d32bf4108
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tested with qemu_aarch64_virt_defconfig.
+BR2_ARCH_NEEDS_GCC_AT_LEAST_X guards has been introduced by [1] to
+prevent selecting an external toolchain that did not support the GCC
+arch tuning the user had selected.
 
+But it was not changed while updating to version 13.2-rel1.
+
+Fixes: 7b4b3c2c78034fb3b16ad9658057f05066dcc4dd
+
+[1] eed1670d8a6f0899f5fdfc26bd6d1609ebc19c7a
+
+Cc: Antoine Coutant <antoine.coutant@smile.fr>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../toolchain-external/toolchain-external-arm-aarch64/Config.in     | 6 +++---
- .../toolchain-external-arm-aarch64.hash                             | 4 ++--
- .../toolchain-external-arm-aarch64.mk                               | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
-index 38f4dafeee..309994d014 100644
+index 7f4fc61f2f..38f4dafeee 100644
 --- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
 +++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
-@@ -1,13 +1,13 @@
- config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
--	bool "Arm AArch64 13.3.rel1"
-+	bool "Arm AArch64 14.2.rel1"
+@@ -2,7 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
+ 	bool "Arm AArch64 13.3.rel1"
  	depends on BR2_aarch64
  	depends on BR2_HOSTARCH = "x86_64"
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
  	select BR2_TOOLCHAIN_HAS_SSP
  	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
- 	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
-index 75478913b0..ed80511f7f 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
-@@ -1,2 +1,2 @@
--# From https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz.sha256asc
--sha256  322f0b4482fc0d9fa0bb468134841f08d8c554c54ff5aa29a13a7a24bf7e1eb5  arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
-+# From https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz.sha256asc
-+sha256  47aeefc02b0ee39f6d4d1812110952975542d365872a7474b5306924bca4faa1  arm-gnu-toolchain-14.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
-index b6c75ecf3f..7f9c97c5e5 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 13.3.rel1
-+TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 14.2.rel1
- TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)/binrel
- 
- TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = arm-gnu-toolchain-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-x86_64-aarch64-none-linux-gnu.tar.xz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
