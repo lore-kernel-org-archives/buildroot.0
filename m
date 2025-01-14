@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E997C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE583C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:58:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B984D84F8A;
-	Fri, 28 Feb 2025 16:58:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 745E460598;
+	Fri, 28 Feb 2025 16:58:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nGYXx7odOw5M; Fri, 28 Feb 2025 16:58:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9xuVjxSVwO41; Fri, 28 Feb 2025 16:58:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B163C84807
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5551E6062F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B163C84807;
-	Fri, 28 Feb 2025 16:58:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5551E6062F;
+	Fri, 28 Feb 2025 16:58:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D03568
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:38:37 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 03F131DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:38:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 68A1A491FC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7E43043EA2
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pmP2QVnztqSm for <buildroot@buildroot.org>;
+ id obhBG0CC72-S for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:30:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8326142DF3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D63D42DF7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8326142DF3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D63D42DF7
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7528B7FCEA; Fri, 28 Feb 2025 16:30:10 +0000 (UTC)
+ id 9558C8118C; Fri, 28 Feb 2025 16:30:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 14 Jan 2025 23:31:10 +0100
+Date: Tue, 14 Jan 2025 23:31:16 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 012f03bd271db27d9478dc0c3f161d3e80e0ef0b
-X-Git-Newrev: 2528672d3978c00559bf9c2b6ab64c5e53d78359
+X-Git-Oldrev: b171b7bd78eacd277dafb82a8524cc224f97ba6b
+X-Git-Newrev: 2eba7b1a97d9a0503defe667c25011cdfba7a7cd
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163010.7528B7FCEA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/cross-ldd: new package
+Message-Id: <20250228163010.9558C8118C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/prelink-cross: remove
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,110 +61,181 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0293691040998844255=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2528672d3978c00559bf9c2b6ab64c5e53d78359
+--===============0293691040998844255==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=2eba7b1a97d9a0503defe667c25011cdfba7a7cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit introduces a new cross-ldd package which installs the
-cross ldd implementation that comes from Crosstool-NG, and which can
-be used like ldd, but when cross-compiling. We intend to use it as a
-replacement of host-prelink-cross for our dracut package.
-
-The cross-ldd from Crosstool-NG is in fact even recommended by the
-Dracut documentation, in its docs/README.cross document:
-
-   To support cross-compiled binaries, a different ldd variant is needed that
-   works on those binaries. One such ldd script is found at
-   https://gist.github.com/jerome-pouiller/c403786c1394f53f44a3b61214489e6f
-
-This Github Gist in fact contains the xldd.in code from Crosstool-NG.
-
-Our package downloads the full tarball of Crosstool-NG. We tried to
-download only the script and the license file, but we couldn't figure
-out a way of downloading them *and* have the version in the filename
-to make sure that when doing an upgrade to a newer version, we
-wouldn't have a clash between old/new files having the same name (and
-causing conflicts with the hash verification). So in the end, we opted
-for download the whole tarball.
+We are now using cross-ldd instead of prelink-cross, so we can drop
+this package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- DEVELOPERS                       |  1 +
- package/cross-ldd/cross-ldd.hash |  4 ++++
- package/cross-ldd/cross-ldd.mk   | 37 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 42 insertions(+)
+ .checkpackageignore                                |  1 -
+ ...-tls.c-Fix-TLS-offsets-computation-for-s3.patch | 43 ---------------------
+ ...002-src-execstack.c-fix-prelink_path-type.patch | 44 ----------------------
+ package/prelink-cross/prelink-cross.hash           |  3 --
+ package/prelink-cross/prelink-cross.mk             | 16 --------
+ 5 files changed, 107 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 47644c8d5c..9cc27025f8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3145,6 +3145,7 @@ F:	package/cifs-utils/
- F:	package/cloop/
- F:	package/cmake/
- F:	package/cramfs/
-+F:	package/cross-ldd/
- F:	package/dmidecode/
- F:	package/double-conversion/
- F:	package/flashrom/
-diff --git a/package/cross-ldd/cross-ldd.hash b/package/cross-ldd/cross-ldd.hash
-new file mode 100644
-index 0000000000..b179aec5e0
---- /dev/null
-+++ b/package/cross-ldd/cross-ldd.hash
-@@ -0,0 +1,4 @@
-+# From http://crosstool-ng.org/download/crosstool-ng/crosstool-ng-1.26.0.tar.xz.sha512
-+sha512  7834184ae5792fd347455f9f48fee826248dcb82d271954ed4304b1a18f63995ff8a2c3b817564dcf147ac7e16e02d779195b26d97eb57db27f1118a1837002a  crosstool-ng-1.26.0.tar.xz
-+# Locally calculated
-+sha256  07bc0ccd386469c748c4cf6c8faca5667fbf8c4400386714287fa233acfd68ba  COPYING
-diff --git a/package/cross-ldd/cross-ldd.mk b/package/cross-ldd/cross-ldd.mk
-new file mode 100644
-index 0000000000..357133cdd2
---- /dev/null
-+++ b/package/cross-ldd/cross-ldd.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# cross-ldd
-+#
-+################################################################################
-+
-+CROSS_LDD_VERSION = 1.26.0
-+CROSS_LDD_SITE = http://crosstool-ng.org/download/crosstool-ng
-+CROSS_LDD_SOURCE = crosstool-ng-$(CROSS_LDD_VERSION).tar.xz
-+CROSS_LDD_LICENSE = GPL-2.0
-+CROSS_LDD_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_ARCH_IS_64),y)
-+CROSS_LDD_BITNESS = 64
-+else
-+CROSS_LDD_BITNESS = 32
-+endif
-+
-+CROSS_LDD_TOOLS_PREFIX = $(patsubst %-,%,$(TARGET_CROSS))
-+
-+define HOST_CROSS_LDD_CONFIGURE_CMDS
-+	sed \
-+		-e "s%@@CT_bash@@%/usr/bin/env bash%" \
-+		-e "s%@@CT_VERSION@@%$(CROSS_LDD_VERSION)%" \
-+		-e "s%@@CT_BITS@@%$(CROSS_LDD_BITNESS)%" \
-+		-e "s%@@CT_sed@@%sed%" \
-+		-e "s%@@CT_grep@@%grep%" \
-+		-e "s%^prefix=.*%prefix=$(CROSS_LDD_TOOLS_PREFIX)%" \
-+		$(@D)/scripts/xldd.in > \
-+		$(@D)/scripts/xldd
-+endef
-+
-+define HOST_CROSS_LDD_INSTALL_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/scripts/xldd $(TARGET_CROSS)xldd
-+endef
-+
-+$(eval $(host-generic-package))
+diff --git a/.checkpackageignore b/.checkpackageignore
+index ee89f7e4bf..ab9c925002 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -996,7 +996,6 @@ package/pptp-linux/0001-susv3-legacy.patch lib_patch.Upstream
+ package/pptp-linux/0002-fix-parallel-build.patch lib_patch.Upstream
+ package/prboom/0001-libpng-1.4.patch lib_patch.Upstream
+ package/prboom/0002-configure-remove-predefined-O2-optimization-flag.patch lib_patch.Upstream
+-package/prelink-cross/0001-src-rtld-dl-tls.c-Fix-TLS-offsets-computation-for-s3.patch lib_patch.Upstream
+ package/procps-ng/S02sysctl lib_sysv.Variables
+ package/proftpd/S50proftpd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/prosody/0001-enable-syslog.patch lib_patch.Upstream
+diff --git a/package/prelink-cross/0001-src-rtld-dl-tls.c-Fix-TLS-offsets-computation-for-s3.patch b/package/prelink-cross/0001-src-rtld-dl-tls.c-Fix-TLS-offsets-computation-for-s3.patch
+deleted file mode 100644
+index cea1357d1d..0000000000
+--- a/package/prelink-cross/0001-src-rtld-dl-tls.c-Fix-TLS-offsets-computation-for-s3.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 4064f77d2f550762cbf220fec7c26a8ce4219ea4 Mon Sep 17 00:00:00 2001
+-From: Alexander Egorenkov <egorenar@linux.ibm.com>
+-Date: Sun, 8 Aug 2021 11:19:52 +0200
+-Subject: [PATCH] src/rtld/dl-tls.c: Fix TLS offsets computation for s390 arch
+-
+-rtld_determine_tlsoffsets() didn't handle s390 arch properly by falling
+-back to the default case. If TLS_TCB_AT_TP is 1, then set offset to -1.
+-
+-From glibc's sysdeps/s390/nptl/tls.h:
+--------------------------------------
+-/* The TCB can have any size and the memory following the address the
+-   thread pointer points to is unspecified.  Allocate the TCB there.  */
+-define TLS_TCB_AT_TP	1
+-define TLS_DTV_AT_TP	0
+-
+-This lead to the following error:
+----------------------------------
+-prelink-rtld: error while loading shared libraries: /lib64/libc.so.6: cannot handle TLS data
+-
+-Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+----
+- src/rtld/dl-tls.c | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/src/rtld/dl-tls.c b/src/rtld/dl-tls.c
+-index 280cee45f950..29422dcfd25e 100644
+---- a/src/rtld/dl-tls.c
+-+++ b/src/rtld/dl-tls.c
+-@@ -143,6 +143,11 @@ rtld_determine_tlsoffsets (int e_machine, struct r_scope_elem *search_list)
+-       tls_tcb_size = 0;
+-       break;
+- 
+-+    case EM_S390:
+-+      tls_tcb_at_tp = 1;
+-+      tls_tcb_size = -1;
+-+      break;
+-+
+-     default:
+-       /* Hope there's no TLS!  */
+-       for (i = 0; i < search_list->r_nlist; i++)
+--- 
+-2.31.1
+-
+diff --git a/package/prelink-cross/0002-src-execstack.c-fix-prelink_path-type.patch b/package/prelink-cross/0002-src-execstack.c-fix-prelink_path-type.patch
+deleted file mode 100644
+index 26a68d8f5d..0000000000
+--- a/package/prelink-cross/0002-src-execstack.c-fix-prelink_path-type.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 516030f287f65ca8bdab92c979ba2d328ee40506 Mon Sep 17 00:00:00 2001
+-From: James Hilliard <james.hilliard1@gmail.com>
+-Date: Fri, 31 May 2024 12:51:01 -0600
+-Subject: [PATCH] src/execstack.c: fix prelink_path type
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Fixes:
+-execstack.c: In function ‘execstack_make_rdwr’:
+-execstack.c:127:17: error: passing argument 1 of ‘asprintf’ from incompatible pointer type [-Wincompatible-pointer-types]
+-  127 |       asprintf (&prelink_path, "%s/%s", dirname, PRELINK_PROG EXEEXT);
+-      |                 ^~~~~~~~~~~~~
+-      |                 |
+-      |                 const char **
+-In file included from execstack.c:10:
+-/usr/include/stdio.h:403:40: note: expected ‘char ** restrict’ but argument is of type ‘const char **’
+-  403 | extern int asprintf (char **__restrict __ptr,
+-      |                      ~~~~~~~~~~~~~~~~~~^~~~~
+-
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-Signed-off-by: Richard Purdie <richard.purdie@linuxfoundation.org>
+-Upstream: https://git.yoctoproject.org/prelink-cross/commit/?id=ff2561c02ade96c5d4d56ddd4e27ff064840a176
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- src/execstack.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/execstack.c b/src/execstack.c
+-index dda6bc7..5413fa2 100644
+---- a/src/execstack.c
+-+++ b/src/execstack.c
+-@@ -52,7 +52,7 @@ const char *program_path;
+- 
+- /* The full pathname of the prelink tool, or NULL if it hasn't been
+-    computed yet.  */
+--const char *prelink_path;
+-+char *prelink_path;
+- 
+- static error_t
+- parse_opt (int key, char *arg, struct argp_state *state)
+--- 
+-2.45.2
+-
+diff --git a/package/prelink-cross/prelink-cross.hash b/package/prelink-cross/prelink-cross.hash
+deleted file mode 100644
+index 6776d407b8..0000000000
+--- a/package/prelink-cross/prelink-cross.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  555fd65c1b907f9b78d6d41ec04cb6e242d2ecb0667867e39cdd517b3f182dd3  prelink-cross-a853a5d715d84eec93aa68e8f2df26b7d860f5b2-git4.tar.gz
+-sha256  b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  COPYING
+diff --git a/package/prelink-cross/prelink-cross.mk b/package/prelink-cross/prelink-cross.mk
+deleted file mode 100644
+index 2312ee53e6..0000000000
+--- a/package/prelink-cross/prelink-cross.mk
++++ /dev/null
+@@ -1,16 +0,0 @@
+-################################################################################
+-#
+-# host-prelink-cross
+-#
+-################################################################################
+-
+-PRELINK_CROSS_VERSION = a853a5d715d84eec93aa68e8f2df26b7d860f5b2
+-PRELINK_CROSS_SITE = https://git.yoctoproject.org/git/prelink-cross
+-PRELINK_CROSS_SITE_METHOD = git
+-PRELINK_CROSS_LICENSE = GPL-2.0+
+-PRELINK_CROSS_LICENSE_FILES = COPYING
+-# Sources from git, no configure script present
+-PRELINK_CROSS_AUTORECONF = YES
+-HOST_PRELINK_CROSS_DEPENDENCIES = host-elfutils host-libiberty
+-
+-$(eval $(host-autotools-package))
+
+--===============0293691040998844255==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0293691040998844255==--
