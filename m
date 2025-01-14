@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA39AC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:58:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63702C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:58:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3042184D48;
-	Fri, 28 Feb 2025 16:58:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33BD66FBCC;
+	Fri, 28 Feb 2025 16:58:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SoGHgFnM47O0; Fri, 28 Feb 2025 16:58:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TNo8FBFnAyow; Fri, 28 Feb 2025 16:58:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 337FC81332
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 392416FC46
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 337FC81332;
-	Fri, 28 Feb 2025 16:58:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 392416FC46;
+	Fri, 28 Feb 2025 16:58:09 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 093F7711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:38:34 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 151C0711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:38:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B6C548F6D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1AD9F424C7
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8TBbEswt_kwq for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
+ id lqmHCIf9iNYQ for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E560F42DDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 910D442DF5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E560F42DDC
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 910D442DF5
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D9E3B8118C; Fri, 28 Feb 2025 16:30:09 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 84CAF83ACF; Fri, 28 Feb 2025 16:30:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 14 Jan 2025 21:31:56 +0100
+Date: Tue, 14 Jan 2025 23:31:13 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 521d6b851207d3f09421da7d5d979cab743ce782
-X-Git-Newrev: 460c5fec652251cf17fa92552b0edf381c57ae74
+X-Git-Oldrev: 2528672d3978c00559bf9c2b6ab64c5e53d78359
+X-Git-Newrev: b171b7bd78eacd277dafb82a8524cc224f97ba6b
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163009.D9E3B8118C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/python-grpcio-reflection: bump to version 1.69.0
+Message-Id: <20250228163010.84CAF83ACF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dracut: use
+ host-cross-ldd instead of host-prelink-cross
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +58,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=460c5fec652251cf17fa92552b0edf381c57ae74
+commit: https://git.buildroot.net/buildroot/commit/?id=b171b7bd78eacd277dafb82a8524cc224f97ba6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-grpcio-reflection/python-grpcio-reflection.hash | 4 ++--
- package/python-grpcio-reflection/python-grpcio-reflection.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+This commit reworks the dracut package to use the cross-ldd installed
+by host-cross-ldd instead of prelink-rtld installed by
+host-prelink-cross.
 
-diff --git a/package/python-grpcio-reflection/python-grpcio-reflection.hash b/package/python-grpcio-reflection/python-grpcio-reflection.hash
-index a64fbeae54..afd3e50ab2 100644
---- a/package/python-grpcio-reflection/python-grpcio-reflection.hash
-+++ b/package/python-grpcio-reflection/python-grpcio-reflection.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/grpcio-reflection/json
--md5  e9a0f06f8886b5f95da4e599b0960ef5  grpcio_reflection-1.67.1.tar.gz
--sha256  507d9785a72032816e9bb5add4a660c655813a6bc1537b957822c652c88bf458  grpcio_reflection-1.67.1.tar.gz
-+md5  f1b2d22885a2a70fbcc499211059e2be  grpcio_reflection-1.69.0.tar.gz
-+sha256  3474aaedfb10d8da5503135a2fb9fbb4e1f72044ad7ee2d0bf22090934e80908  grpcio_reflection-1.69.0.tar.gz
- # Locally computed sha256 checksums
- sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
-diff --git a/package/python-grpcio-reflection/python-grpcio-reflection.mk b/package/python-grpcio-reflection/python-grpcio-reflection.mk
-index 4e8c3e8dc3..c209b093b1 100644
---- a/package/python-grpcio-reflection/python-grpcio-reflection.mk
-+++ b/package/python-grpcio-reflection/python-grpcio-reflection.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Indeed, prelink-cross is not maintained upstream, and its dependency
+on host-libiberty causes problems in Buildroot with other packages.
+
+The only change needed is that the dracut_wrapper script needs to be
+generated, as we now need to know the prefix of the cross-compilation
+tool (TARGET_CROSS).
+
+Tested by running the dracut tests of the test suite.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ package/dracut/dracut.mk                             | 8 +++++---
+ package/dracut/{dracut_wrapper => dracut_wrapper.in} | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
+index 8573e64055..cb6044415e 100644
+--- a/package/dracut/dracut.mk
++++ b/package/dracut/dracut.mk
+@@ -10,12 +10,14 @@ DRACUT_LICENSE = GPL-2.0
+ DRACUT_LICENSE_FILES = COPYING
+ DRACUT_CPE_ID_VALID = YES
  
--PYTHON_GRPCIO_REFLECTION_VERSION = 1.67.1
-+PYTHON_GRPCIO_REFLECTION_VERSION = 1.69.0
- PYTHON_GRPCIO_REFLECTION_SOURCE = grpcio_reflection-$(PYTHON_GRPCIO_REFLECTION_VERSION).tar.gz
--PYTHON_GRPCIO_REFLECTION_SITE = https://files.pythonhosted.org/packages/17/61/618d56bd1f7069dea5fee8fa6efb5e6548b6edb52000ef1a7b242c0c1b04
-+PYTHON_GRPCIO_REFLECTION_SITE = https://files.pythonhosted.org/packages/bd/88/064538adae2e526f4626ad57f53a99fca5ae5013e627214093ef1d47cc35
- PYTHON_GRPCIO_REFLECTION_SETUP_TYPE = setuptools
- PYTHON_GRPCIO_REFLECTION_LICENSE = Apache-2.0
- PYTHON_GRPCIO_REFLECTION_LICENSE_FILES = LICENSE
+-HOST_DRACUT_DEPENDENCIES = host-pkgconf host-kmod host-prelink-cross
++HOST_DRACUT_DEPENDENCIES = host-pkgconf host-kmod host-cross-ldd
+ 
+ define HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
+ 	mv $(HOST_DIR)/bin/dracut $(HOST_DIR)/bin/dracut.real
+-	install -D -m 0755 $(HOST_DRACUT_PKGDIR)/dracut_wrapper \
+-		$(HOST_DIR)/bin/dracut
++	sed -e "s%@@TARGET_CROSS@@%$(TARGET_CROSS)%" \
++		$(HOST_DRACUT_PKGDIR)/dracut_wrapper.in > \
++		$(@D)/dracut_wrapper
++	install -D -m 0755 $(@D)/dracut_wrapper $(HOST_DIR)/bin/dracut
+ endef
+ HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
+ 
+diff --git a/package/dracut/dracut_wrapper b/package/dracut/dracut_wrapper.in
+similarity index 94%
+rename from package/dracut/dracut_wrapper
+rename to package/dracut/dracut_wrapper.in
+index 968d65cbeb..33012853d5 100644
+--- a/package/dracut/dracut_wrapper
++++ b/package/dracut/dracut_wrapper.in
+@@ -34,7 +34,7 @@ topdir="$(dirname "$(realpath "$(dirname "${0}")")")"
+ DRACUT_LDD="$(mktemp /tmp/dracut-ldd.XXXXXX)"
+ cat >"${DRACUT_LDD}" <<EOL
+ #!/bin/bash
+-${topdir}/sbin/prelink-rtld --root='${sysroot}' \${1}
++@@TARGET_CROSS@@xldd --root='${sysroot}' \${1}
+ EOL
+ chmod +x "${DRACUT_LDD}"
+ export DRACUT_LDD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
