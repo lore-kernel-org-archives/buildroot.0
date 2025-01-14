@@ -1,75 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A47DC02198
-	for <buildroot@archiver.kernel.org>; Mon, 10 Feb 2025 22:56:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F05AE77188
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jan 2025 16:24:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C0D860D62;
-	Mon, 10 Feb 2025 22:56:57 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QEplMmNVZ8XW; Mon, 10 Feb 2025 22:56:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 413C960D63
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 413C960D63;
-	Mon, 10 Feb 2025 22:56:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B6196C
- for <buildroot@buildroot.org>; Mon, 10 Feb 2025 22:56:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C4D5381F4E
- for <buildroot@buildroot.org>; Mon, 10 Feb 2025 22:56:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C817F83F59;
+	Tue, 14 Jan 2025 16:24:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DK1Fzt9z2N3h for <buildroot@buildroot.org>;
- Mon, 10 Feb 2025 22:56:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C603281F59
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C603281F59
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C603281F59
- for <buildroot@buildroot.org>; Mon, 10 Feb 2025 22:56:53 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id A0EB4780383;
- Mon, 10 Feb 2025 23:56:49 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 10 Feb 2025 23:56:49 +0100
-MIME-Version: 1.0
-Date: Mon, 10 Feb 2025 23:56:49 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Adrian Perez de Castro <aperez@igalia.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250210102112.273298-1-aperez@igalia.com>
-References: <20250210102112.273298-1-aperez@igalia.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <b0b57cced17c219f0cece5858efa64f3@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1739228211;
- bh=c6q0xRk8LQGZLBsbQyte4aJi28M7+CxwcruYUBX8D08=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=N3GuvDMWUyYut5MVmFMKXb2vXaQiC3Txu+AYQFxGDrKaCdYUywXYPCgdkyS0u3d/3
- znEwG4rH27bKThiLXoLKBLJRbieBJznGju4PafpefC6O9Rqb3oA2ZIqaZjXnRxN3Y8
- MVSz8EYfmYFJqBqY3+W6iY7FyHdviGKXPdCIx6/gJ0PAc9c3+K4T+FMESKGLlxNc78
- JU71uu3hVXQouYEqHsnfdwY3wN4/VfsQLlyQz09xunLDm+1GLGtTz7InwCL3tTD4Du
- euNgKe8nr21CsxjPTaoC1B+U1sWLdSxkfeXvep1f4Tn3HteKp8LujZYnAds4+T9RUK
- XeBffm9kimH4Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=N3GuvDMW
-Subject: Re: [Buildroot] [PATCH 1/1] libwpe: bump to version 1.16.2
+ id Co4Schg3xhKy; Tue, 14 Jan 2025 16:24:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E887D83F5A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E887D83F5A;
+	Tue, 14 Jan 2025 16:24:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 47BCF94B
+ for <buildroot@buildroot.org>; Tue, 14 Jan 2025 16:24:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3570040F73
+ for <buildroot@buildroot.org>; Tue, 14 Jan 2025 16:24:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2Kecgt9hkLpP for <buildroot@buildroot.org>;
+ Tue, 14 Jan 2025 16:24:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
+ helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6105040F4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6105040F4A
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6105040F4A
+ for <buildroot@uclibc.org>; Tue, 14 Jan 2025 16:24:19 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1tXjiC-0005SZ-IQ
+ for buildroot@uclibc.org; Tue, 14 Jan 2025 17:24:16 +0100
+X-Injected-Via-Gmane: http://gmane.org/
+To: buildroot@uclibc.org
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 14 Jan 2025 16:24:12 -0000 (UTC)
+Message-ID: <vm633c$k42$1@ciao.gmane.io>
+User-Agent: slrn/1.0.3 (Linux)
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=gmail.com
+Subject: [Buildroot] Can we build static host tools (e.g. tar)?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,24 +61,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10/02/2025 11:21, Adrian Perez de Castro wrote:
-> This minor release brings in support for analog gamepad/joystick
-> inputs. Version 1.16.1 was deliberately skipped because it introduced
-> accidental ABI breakage, which was fixed in 1.16.2.
-> 
-> Release notes:
-> 
->   https://wpewebkit.org/release/libwpe-1.16.1.html
->   https://wpewebkit.org/release/libwpe-1.16.2.html
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+I'm having problems with the SDK that Buildroot builds.  Things like
+opkg-build are failing because they're using buildroot's SDK version
+of tar, and the glibc version isn't compatible between the host where
+the sdk was built and the devleoper host where the sdk is being used.
 
-Applied to master, thanks.
+--
+Grant
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
