@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4842FC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:57:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34075C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:57:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A92C706E1;
-	Fri, 28 Feb 2025 16:57:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B-jy_iMaMNSe; Fri, 28 Feb 2025 16:57:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 127AB706DE
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 127AB706DE;
-	Fri, 28 Feb 2025 16:57:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B68F1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:38:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A0EC848178
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FE9640B6C;
+	Fri, 28 Feb 2025 16:57:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id elAknNM58S-w for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:45 +0000 (UTC)
+ id hi_caG39Gxya; Fri, 28 Feb 2025 16:57:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FBB750262
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3FBB750262;
+	Fri, 28 Feb 2025 16:57:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1059B711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:38:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 13C33485B0
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eWleZQMmR0sI for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E375242493
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3166B42DBF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E375242493
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3166B42DBF
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE41D818FE; Fri, 28 Feb 2025 16:30:08 +0000 (UTC)
+ id 2C3EA8118C; Fri, 28 Feb 2025 16:30:09 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Jan 2025 20:44:30 +0100
+Date: Tue, 14 Jan 2025 20:39:12 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f93c3f16f00fa197224e82a3908fb0e0b6e497e4
-X-Git-Newrev: db459859fa3c8fb7a2c0c8b8616637644d9c12bf
+X-Git-Oldrev: 11a8cdd2bbbd0ef4adf600e4792d75f6f2122ec8
+X-Git-Newrev: 1da57d0edf91598695c4a7bcdc712661efff826a
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163008.DE41D818FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/e2fsprogs: bump
- version to 1.47.2
+Message-Id: <20250228163009.2C3EA8118C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/uuu: bump to version
+ 1.5.201
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db459859fa3c8fb7a2c0c8b8616637644d9c12bf
+commit: https://git.buildroot.net/buildroot/commit/?id=1da57d0edf91598695c4a7bcdc712661efff826a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Release notes:
-https://github.com/tytso/e2fsprogs/blob/v1.47.2/doc/RelNotes/v1.47.2.txt
+https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.197
+https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.201
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/e2fsprogs/e2fsprogs.hash | 4 ++--
- package/e2fsprogs/e2fsprogs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/uuu/uuu.hash | 2 +-
+ package/uuu/uuu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index 94ce2d5bc9..1e97e4363a 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -1,5 +1,5 @@
--# From https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.47.1/sha256sums.asc
--sha256  5a33dc047fd47284bca4bb10c13cfe7896377ae3d01cb81a05d406025d99e0d1  e2fsprogs-1.47.1.tar.xz
-+# From https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.47.2/sha256sums.asc
-+sha256  08242e64ca0e8194d9c1caad49762b19209a06318199b63ce74ae4ef2d74e63c  e2fsprogs-1.47.2.tar.xz
- # Locally calculated
- sha256  5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
- sha256  032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 7e2d9a739d..61d89add3c 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
+diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
+index 8460481e0f..9f978f55cc 100644
+--- a/package/uuu/uuu.hash
++++ b/package/uuu/uuu.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  28792a9776d1ee73f6f20f7c49a7b81dcab10311733c5becac8928145fc86170  uuu_source-uuu_1.5.191.tar.gz
++sha256  c763b87ffdf10ac5499a0c319463759caa336bc6567b56d6d0ef448590c1a76d  uuu_source-uuu_1.5.201.tar.gz
+ sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
+diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
+index 8faadc0201..4683cbeec1 100644
+--- a/package/uuu/uuu.mk
++++ b/package/uuu/uuu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--E2FSPROGS_VERSION = 1.47.1
-+E2FSPROGS_VERSION = 1.47.2
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
+-UUU_VERSION = 1.5.191
++UUU_VERSION = 1.5.201
+ UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
+ UUU_SITE = https://github.com/nxp-imx/mfgtools/releases/download/uuu_$(UUU_VERSION)
+ UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
