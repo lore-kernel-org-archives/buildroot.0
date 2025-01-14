@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 481B0E77188
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jan 2025 22:33:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 252C8C02185
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jan 2025 22:33:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0686F82EAD;
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3C0860AED;
 	Tue, 14 Jan 2025 22:33:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xnn-Lz3j92l2; Tue, 14 Jan 2025 22:33:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98CD981454
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98CD981454;
-	Tue, 14 Jan 2025 22:33:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E1E7FB8B
- for <buildroot@buildroot.org>; Tue, 14 Jan 2025 22:33:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C268B60B07
- for <buildroot@buildroot.org>; Tue, 14 Jan 2025 22:33:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EMA3EQMouWSz for <buildroot@buildroot.org>;
+ id wvNwW4tc14lu; Tue, 14 Jan 2025 22:33:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA81960B07
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA81960B07;
+	Tue, 14 Jan 2025 22:33:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 051BC94B
+ for <buildroot@buildroot.org>; Tue, 14 Jan 2025 22:33:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E48184139A
+ for <buildroot@buildroot.org>; Tue, 14 Jan 2025 22:33:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2z90o3Teot8T for <buildroot@buildroot.org>;
  Tue, 14 Jan 2025 22:33:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B899760ADF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 939B741396
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B899760ADF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 939B741396
  for <buildroot@buildroot.org>; Tue, 14 Jan 2025 22:33:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6834085CB2; Tue, 14 Jan 2025 22:33:24 +0000 (UTC)
+ id 8006B85D1A; Tue, 14 Jan 2025 22:33:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 14 Jan 2025 23:31:13 +0100
+Date: Tue, 14 Jan 2025 23:31:19 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2528672d3978c00559bf9c2b6ab64c5e53d78359
-X-Git-Newrev: b171b7bd78eacd277dafb82a8524cc224f97ba6b
+X-Git-Oldrev: 2eba7b1a97d9a0503defe667c25011cdfba7a7cd
+X-Git-Newrev: 9347328193221d1c24a6024eded39e8b74d00433
 X-Patchwork-Hint: ignore
-Message-Id: <20250114223324.6834085CB2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dracut: use host-cross-ldd instead
- of host-prelink-cross
+Message-Id: <20250114223324.8006B85D1A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libiberty: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,67 +65,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b171b7bd78eacd277dafb82a8524cc224f97ba6b
+commit: https://git.buildroot.net/buildroot/commit/?id=9347328193221d1c24a6024eded39e8b74d00433
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit reworks the dracut package to use the cross-ldd installed
-by host-cross-ldd instead of prelink-rtld installed by
-host-prelink-cross.
+host-libiberty was only used by host-prelink-cross, which has now been
+removed.
 
-Indeed, prelink-cross is not maintained upstream, and its dependency
-on host-libiberty causes problems in Buildroot with other packages.
+The dependency of host-gdb on host-libiberty was not because it was
+needed, but because if both host-libiberty and host-gdb were built,
+host-gdb should be built after host-liberty. See commit
+f0a583ddc4c2cab121330284e316f54229dee492 ("package/gdb: depend on
+libiberty")
 
-The only change needed is that the dracut_wrapper script needs to be
-generated, as we now need to know the prefix of the cross-compilation
-tool (TARGET_CROSS).
+Fixes:
 
-Tested by running the dracut tests of the test suite.
+  http://autobuild.buildroot.net/results/82d2d7d30c8e00bf6e9918c3d989f65a7330d381/ (host-binutils)
+  http://autobuild.buildroot.net/results/a4674122a683e4842c1fd913da80a3e6e484d5a5/ (host-binutils-bare-metal)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/dracut/dracut.mk                             | 8 +++++---
- package/dracut/{dracut_wrapper => dracut_wrapper.in} | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/gdb/gdb.mk               |  4 +---
+ package/libiberty/libiberty.hash |  1 -
+ package/libiberty/libiberty.mk   | 32 --------------------------------
+ 3 files changed, 1 insertion(+), 36 deletions(-)
 
-diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
-index 8573e64055..cb6044415e 100644
---- a/package/dracut/dracut.mk
-+++ b/package/dracut/dracut.mk
-@@ -10,12 +10,14 @@ DRACUT_LICENSE = GPL-2.0
- DRACUT_LICENSE_FILES = COPYING
- DRACUT_CPE_ID_VALID = YES
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index c966cdc10b..69f7979149 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -30,9 +30,7 @@ GDB_PRE_CONFIGURE_HOOKS += GDB_CONFIGURE_SYMLINK
+ # For the host variant, we really want to build with XML support,
+ # which is needed to read XML descriptions of target architectures. We
+ # also need ncurses.
+-# As for libiberty, gdb may use a system-installed one if present, so
+-# we must ensure ours is installed first.
+-HOST_GDB_DEPENDENCIES = host-expat host-libiberty host-ncurses host-zlib
++HOST_GDB_DEPENDENCIES = host-expat host-ncurses host-zlib
  
--HOST_DRACUT_DEPENDENCIES = host-pkgconf host-kmod host-prelink-cross
-+HOST_DRACUT_DEPENDENCIES = host-pkgconf host-kmod host-cross-ldd
- 
- define HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
- 	mv $(HOST_DIR)/bin/dracut $(HOST_DIR)/bin/dracut.real
--	install -D -m 0755 $(HOST_DRACUT_PKGDIR)/dracut_wrapper \
--		$(HOST_DIR)/bin/dracut
-+	sed -e "s%@@TARGET_CROSS@@%$(TARGET_CROSS)%" \
-+		$(HOST_DRACUT_PKGDIR)/dracut_wrapper.in > \
-+		$(@D)/dracut_wrapper
-+	install -D -m 0755 $(@D)/dracut_wrapper $(HOST_DIR)/bin/dracut
- endef
- HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
- 
-diff --git a/package/dracut/dracut_wrapper b/package/dracut/dracut_wrapper.in
-similarity index 94%
-rename from package/dracut/dracut_wrapper
-rename to package/dracut/dracut_wrapper.in
-index 968d65cbeb..33012853d5 100644
---- a/package/dracut/dracut_wrapper
-+++ b/package/dracut/dracut_wrapper.in
-@@ -34,7 +34,7 @@ topdir="$(dirname "$(realpath "$(dirname "${0}")")")"
- DRACUT_LDD="$(mktemp /tmp/dracut-ldd.XXXXXX)"
- cat >"${DRACUT_LDD}" <<EOL
- #!/bin/bash
--${topdir}/sbin/prelink-rtld --root='${sysroot}' \${1}
-+@@TARGET_CROSS@@xldd --root='${sysroot}' \${1}
- EOL
- chmod +x "${DRACUT_LDD}"
- export DRACUT_LDD
+ # Disable building documentation
+ GDB_MAKE_OPTS += MAKEINFO=true
+diff --git a/package/libiberty/libiberty.hash b/package/libiberty/libiberty.hash
+deleted file mode 120000
+index e0655d3af3..0000000000
+--- a/package/libiberty/libiberty.hash
++++ /dev/null
+@@ -1 +0,0 @@
+-../binutils/binutils.hash
+\ No newline at end of file
+diff --git a/package/libiberty/libiberty.mk b/package/libiberty/libiberty.mk
+deleted file mode 100644
+index ac6afc44ca..0000000000
+--- a/package/libiberty/libiberty.mk
++++ /dev/null
+@@ -1,32 +0,0 @@
+-################################################################################
+-#
+-# libiberty
+-#
+-################################################################################
+-
+-LIBIBERTY_VERSION = 2.41
+-LIBIBERTY_SOURCE = binutils-$(LIBIBERTY_VERSION).tar.xz
+-LIBIBERTY_SITE = $(BR2_GNU_MIRROR)/binutils
+-HOST_LIBIBERTY_DL_SUBDIR = binutils
+-
+-# We're only building libiberty here, not the full binutils suite
+-LIBIBERTY_LICENSE = LGPL-2.1+
+-LIBIBERTY_LICENSE_FILES = COPYING.LIB
+-
+-LIBIBERTY_SUBDIR = libiberty
+-
+-# We explicitly disable multilib, as we do in binutils.
+-# By default, libiberty installs nothing, so we must force it.
+-HOST_LIBIBERTY_CONF_OPTS = \
+-	--disable-multilib \
+-	--enable-install-libiberty
+-
+-# Some packages (e.g. host-gdb) will pick this library and build shared
+-# objects with it. But libiberty does not honour the --enable-shared and
+-# --disable-static flags; it only ever builds a static library no matter
+-# what. So we must force -fPIC in build flags.
+-HOST_LIBIBERTY_CONF_ENV = \
+-	CFLAGS="$(HOST_CFLAGS) -fPIC" \
+-	LDFLAGS="$(HOST_LDFLAGS) -fPIC"
+-
+-$(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
