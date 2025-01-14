@@ -1,77 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDF4BE77188
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jan 2025 20:31:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A991E77188
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jan 2025 20:53:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0942606A7;
-	Tue, 14 Jan 2025 20:31:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9A3A406F3;
+	Tue, 14 Jan 2025 20:53:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oDTkekYAzrPe; Tue, 14 Jan 2025 20:31:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wKhnn2t2cRzO; Tue, 14 Jan 2025 20:53:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFAC760737
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FB5940707
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFAC760737;
-	Tue, 14 Jan 2025 20:31:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9007AB89
- for <buildroot@buildroot.org>; Tue, 14 Jan 2025 20:31:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FB5940707;
+	Tue, 14 Jan 2025 20:53:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9A7F394B
+ for <buildroot@buildroot.org>; Tue, 14 Jan 2025 20:53:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7D7EA810B6
- for <buildroot@buildroot.org>; Tue, 14 Jan 2025 20:31:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B72882231
+ for <buildroot@buildroot.org>; Tue, 14 Jan 2025 20:53:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ENSH6r2xQp2D for <buildroot@buildroot.org>;
- Tue, 14 Jan 2025 20:31:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 81CCB810A3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81CCB810A3
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 81CCB810A3
- for <buildroot@buildroot.org>; Tue, 14 Jan 2025 20:31:40 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id F131D13FA3D;
- Tue, 14 Jan 2025 21:31:35 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:57344])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 14 Jan 2025 21:31:35 +0100
-MIME-Version: 1.0
-Date: Tue, 14 Jan 2025 21:31:35 +0100
+ id 7fuGIjR7PwFM for <buildroot@buildroot.org>;
+ Tue, 14 Jan 2025 20:53:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF37D82140
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF37D82140
+ for <buildroot@buildroot.org>; Tue, 14 Jan 2025 20:53:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 98A9585C5F; Tue, 14 Jan 2025 20:53:15 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org, Angelo Compagnucci <angelo.compagnucci@gmail.com>
-In-Reply-To: <20250113182725.3008743-1-james.hilliard1@gmail.com>
-References: <20250113182725.3008743-1-james.hilliard1@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <b20558b95520a9e6be0f75e0787000f3@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1736886698;
- bh=zJbp9i+iYNa0FpXCCC6QAp8gifXs6uvDJ2ET91f9A7Q=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=bTNPKbKZsF+pjpG4kor9toTH5moVB69UBQHqLtB+6VqQ3RHjlQEqHtyuXIh8rKW71
- OhJbqQ8gO98vtTLGPCP1wCZvFx4hn9xYKD+Bl6E6yCPLV8vI3Rhe0B3sn43iWxjvaY
- +WwITBub3U/TJEqERfG0EV/XmHgTBbZkbdmhPEQ2Tj63N0AcN5xV9Ty7s3nBMAHsD3
- xHmELXjv6pEabD/1G6G7jnpPhPiR8ZeTJR/qgITPAlK40+PBX422i9zMrBNhUdxr7b
- TyGWBu9LMzrSYhDI9JnfvJ7+bBQLyfstFOC5Wy0SXslzymrj5jgBec75ZBO7Pegqkc
- bRKhRF84E/tzg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=bTNPKbKZ
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-web2py: bump to version
- 3.0.11
+To: buildroot@buildroot.org
+Date: Tue, 14 Jan 2025 21:31:56 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4a959760cbbd3a1fb08fa840ff534c18a5e06c8f
+X-Git-Newrev: bbdcb75d7f19dd7d6da65b56d74404c5dd028bac
+X-Patchwork-Hint: ignore
+Message-Id: <20250114205315.98A9585C5F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyopenssl: bump to version
+ 25.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,47 +59,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi James,
+commit: https://git.buildroot.net/buildroot/commit/?id=bbdcb75d7f19dd7d6da65b56d74404c5dd028bac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 13/01/2025 19:27, James Hilliard wrote:
-> Drop patch which is now upstream.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/python-pyopenssl/python-pyopenssl.hash | 4 ++--
+ package/python-pyopenssl/python-pyopenssl.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-[...]
-
-> diff --git a/package/python-web2py/python-web2py.hash 
-> b/package/python-web2py/python-web2py.hash
-> index ce3896a1ad..f43d4546c0 100644
-> --- a/package/python-web2py/python-web2py.hash
-> +++ b/package/python-web2py/python-web2py.hash
-> @@ -1,3 +1,3 @@
->  # sha256 locally computed
-> -sha256  
-> 2221840e4ef2c1e3810017921b2a72f2d5d1f888ca1f771cf7263bfead60570c  
-> python-web2py-2.27.1.tar.gz
-> +sha256  
-> 52b3e2bc1ab300e2546bfa12cb2d836607853f3c74cd86e777ea57d493458224  
-> python-web2py-3.0.11.tar.gz
->  sha256  
-> 2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  
-> LICENSE
-
-"make python-web2py-legal-info" is failing. Apparently, the license file
-has been renamed upstream. See:
-https://github.com/web2py/web2py/commit/e933c299aeab30b3b0db3dc8250df93a8f7a7fa3
-
-Could you send an updated version of this patch, please?
-
-Best regards,
-
-Julien.
+diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
+index 7afa41a908..8237b1cfcc 100644
+--- a/package/python-pyopenssl/python-pyopenssl.hash
++++ b/package/python-pyopenssl/python-pyopenssl.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyopenssl/json
+-md5  2c94bb542cd351fe103d72dca07ca7a1  pyopenssl-24.3.0.tar.gz
+-sha256  49f7a019577d834746bc55c5fce6ecbcec0f2b4ec5ce1cf43a9a173b8138bb36  pyopenssl-24.3.0.tar.gz
++md5  b5b79d0bab00c40160cf983ef7ac3771  pyopenssl-25.0.0.tar.gz
++sha256  cd2cef799efa3936bb08e8ccb9433a575722b9dd986023f1cabc4ae64e9dac16  pyopenssl-25.0.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
+index 6416abb257..33884f8d6c 100644
+--- a/package/python-pyopenssl/python-pyopenssl.mk
++++ b/package/python-pyopenssl/python-pyopenssl.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYOPENSSL_VERSION = 24.3.0
++PYTHON_PYOPENSSL_VERSION = 25.0.0
+ PYTHON_PYOPENSSL_SOURCE = pyopenssl-$(PYTHON_PYOPENSSL_VERSION).tar.gz
+-PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/c1/d4/1067b82c4fc674d6f6e9e8d26b3dff978da46d351ca3bac171544693e085
++PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/9f/26/e25b4a374b4639e0c235527bbe31c0524f26eda701d79456a7e1877f4cc5
+ PYTHON_PYOPENSSL_LICENSE = Apache-2.0
+ PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
+ PYTHON_PYOPENSSL_CPE_ID_VENDOR = pyopenssl
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
