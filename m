@@ -1,78 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13973E77188
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jan 2025 19:45:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1E53E77188
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jan 2025 19:53:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A9D0683ED3;
-	Tue, 14 Jan 2025 19:45:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CE1660B95;
+	Tue, 14 Jan 2025 19:53:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MSZbP4d7RpWH; Tue, 14 Jan 2025 19:45:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZOHiTbzdk7JQ; Tue, 14 Jan 2025 19:53:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E0BD83BAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C52560BD2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E0BD83BAF;
-	Tue, 14 Jan 2025 19:45:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C52560BD2;
+	Tue, 14 Jan 2025 19:53:00 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6559194B
- for <buildroot@buildroot.org>; Tue, 14 Jan 2025 19:45:02 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id DFD9294B
+ for <buildroot@buildroot.org>; Tue, 14 Jan 2025 19:52:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 53AFA83BAF
- for <buildroot@buildroot.org>; Tue, 14 Jan 2025 19:45:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C123980C6A
+ for <buildroot@buildroot.org>; Tue, 14 Jan 2025 19:52:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UTbJtvKn6D1R for <buildroot@buildroot.org>;
- Tue, 14 Jan 2025 19:45:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.bonnefille@bootlin.com;
+ id AVDh2_DfB3lC for <buildroot@buildroot.org>;
+ Tue, 14 Jan 2025 19:52:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 09A0183BAC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09A0183BAC
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 09A0183BAC
- for <buildroot@buildroot.org>; Tue, 14 Jan 2025 19:45:00 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 23AE11C0006;
- Tue, 14 Jan 2025 19:44:57 +0000 (UTC)
-Date: Tue, 14 Jan 2025 20:44:55 +0100
-MIME-Version: 1.0
-Message-Id: <20250114-fix_curlpp-v1-1-24daadf0f798@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIALa+hmcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDQ0Mj3bTMivjk0qKcggJdCyNDyzQjw7RkEwMLJaCGgqJUoCzYsOjY2lo
- A6Iwf3VwAAAA=
-X-Change-ID: 20250112-fix_curlpp-8219f21fc408
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D23680C51
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8D23680C51
+ for <buildroot@buildroot.org>; Tue, 14 Jan 2025 19:52:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 78CBF7FCBA; Tue, 14 Jan 2025 19:52:57 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- =?utf-8?q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>, 
- Sergio Prado <sergio.prado@e-labworks.com>, 
- Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-Sasl: thomas.bonnefille@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1736883897;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=xUAp2+l9R74hL4brYaMZet47xlKVf65qmY98beuFWjE=;
- b=lq8rLbv1GOkeS9ulgSKsIjhGUYRvhwy+Lu99UnMjynE2MsAhghLHpth4O1iCXzylyLKkFB
- Sh8z4LYH3b382FxX0jz2sFHv1ztkA9xDg46FK8uwX5HjRPBDsSOKgVUvkjDr4I/Ra8/5+c
- 76DOn0c7FoREg9kjufr3h0jTRTBlFNDvspJOVvqjqA952Jc15J62JFmGVdY7DpZbUlfA3e
- CY/scg64HtoScBIY9CuydXX88XTwuqcj/blkoHComrAXBtiV700NnmxtXSMZ8lwES0Jbmb
- Oh0XXYiZFmHSf01vlX9/y8FDbyaVCMdbf90IptUxaLmDh31j3CxZy5S1jYT71w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lq8rLbv1
-Subject: [Buildroot] [PATCH] package/libcurlpp: fix invalid conversion
+Date: Tue, 14 Jan 2025 20:51:47 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1da57d0edf91598695c4a7bcdc712661efff826a
+X-Git-Newrev: fb032bd34acf57f86f62bd474cbabd4e1e750e67
+X-Patchwork-Hint: ignore
+Message-Id: <20250114195257.78CBF7FCBA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zxing-cpp: bump to version 2.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,68 +58,237 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Bonnefille via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Libcurlpp is broken since the bump of libcurl to 8.10.0.
-This patch backport a pull request from upstream to solve it.
+commit: https://git.buildroot.net/buildroot/commit/?id=fb032bd34acf57f86f62bd474cbabd4e1e750e67
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This commit bumps the zxing-cpp version to 2.3.0.
+For the release note, see:
+https://github.com/zxing-cpp/zxing-cpp/releases/tag/v2.3.0
+
+The compilation of this package has been broken since the bump to v2.2.1
+when it is compiled with reader support, due to the added patch.
+
+This patch was not added upstream, but another set of more generic
+patches [1] that do not change the API were added instead. The error
+that the Buildroot patch was fixing no longer exists in 2.3.0.
+
+[1]:
+    - https://github.com/zxing-cpp/zxing-cpp/commit/d0c8f226e22cd978fd42a25a6cff6d65b47ab6e9
+    - https://github.com/zxing-cpp/zxing-cpp/commit/d979b765a14423f6d7747827b72193a0da9f3030
 
 Fixes:
-    https://autobuild.buildroot.org/results/4a4d3b248898f0e73620fcb1a7a94dcfb6e6866e/
+    https://autobuild.buildroot.org/results/ba4573a1bcc0110d4d0b45642e07009ec949d66a/build-end.log
 
 Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Reviewed-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+[Julien: add link to release note]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-Buildroot 2024.02 isn't affected by the issue
----
- package/curlpp/0001-fix-invalid-conversion.patch | 27 ++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ ...lding-when-only-writer-support-is-enabled.patch | 164 ---------------------
+ package/zxing-cpp/zxing-cpp.hash                   |   2 +-
+ package/zxing-cpp/zxing-cpp.mk                     |   2 +-
+ 3 files changed, 2 insertions(+), 166 deletions(-)
 
-diff --git a/package/curlpp/0001-fix-invalid-conversion.patch b/package/curlpp/0001-fix-invalid-conversion.patch
-new file mode 100644
-index 0000000000000000000000000000000000000000..e95e9cd7c5589f9c5b1cd87a684cd930b2fd0d80
---- /dev/null
-+++ b/package/curlpp/0001-fix-invalid-conversion.patch
-@@ -0,0 +1,27 @@
-+From b945d57a5acd12bda320a63eb9e45bbb7586cdde Mon Sep 17 00:00:00 2001
-+From: Aaron Smith <aaron@soccergeek.net>
-+Date: Mon, 16 Dec 2024 11:48:33 -0800
-+Subject: [PATCH] Fix "invalid conversion from 'int' to 'CURLoption'" error
-+
-+Use cast to 'Curloption' to fix compiler error regarding invalid conversion from 'int' to 'CURLoption'.
-+
-+Upstream: https://github.com/jpbarrette/curlpp/pull/178
-+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-+---
-+ include/curlpp/Options.hpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/curlpp/Options.hpp b/include/curlpp/Options.hpp
-+index 40b64ed..292eaa7 100644
-+--- a/include/curlpp/Options.hpp
-++++ b/include/curlpp/Options.hpp
-+@@ -308,7 +308,7 @@ namespace options
-+ 	typedef curlpp::OptionTrait<long, CURLOPT_LOW_SPEED_LIMIT> LowSpeedLimit;
-+ 	typedef curlpp::OptionTrait<long, CURLOPT_LOW_SPEED_TIME> LowSpeedTime;
-+ 	typedef curlpp::OptionTrait<long, CURLOPT_MAXCONNECTS> MaxConnects;
-+-	typedef curlpp::OptionTrait<curl_closepolicy, CURLOPT_CLOSEPOLICY> ClosePolicy;
-++	typedef curlpp::OptionTrait<curl_closepolicy, (CURLoption)CURLOPT_CLOSEPOLICY> ClosePolicy;
-+ 	typedef curlpp::OptionTrait<bool, CURLOPT_FRESH_CONNECT> FreshConnect;
-+ 	typedef curlpp::OptionTrait<bool, CURLOPT_FORBID_REUSE> ForbidReuse;
-+ 	typedef curlpp::OptionTrait<long, CURLOPT_CONNECTTIMEOUT> ConnectTimeout;
-+
-
----
-base-commit: a320dbd96d08dc5bc28614915bc664f81eb0fba0
-change-id: 20250112-fix_curlpp-8219f21fc408
-
-Best regards,
--- 
-Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-
+diff --git a/package/zxing-cpp/0001-Fix-building-when-only-writer-support-is-enabled.patch b/package/zxing-cpp/0001-Fix-building-when-only-writer-support-is-enabled.patch
+deleted file mode 100644
+index 0d2a90f7a5..0000000000
+--- a/package/zxing-cpp/0001-Fix-building-when-only-writer-support-is-enabled.patch
++++ /dev/null
+@@ -1,164 +0,0 @@
+-From aef33b66df0ad6f085dc55b50d7847e0b8a2ccd8 Mon Sep 17 00:00:00 2001
+-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-Date: Wed, 17 Jul 2024 14:53:35 +0200
+-Subject: [PATCH] Fix building when only writer support is enabled
+-
+-The compilation of the following code, which links the zxing-cpp library
+-built with only the writer (encoder) support, raises the following
+-linking errors:
+-
+-using namespace ZXing;
+-
+-int main(void)
+-{
+-	std::string str = "01";
+-	BitHacks::NumberOfLeadingZeros(0);
+-	auto writer = MultiFormatWriter(BarcodeFormat::Code128);
+-	writer.setEncoding(CharacterSet::UTF8);
+-	writer.setMargin(0);
+-	auto matrix = writer.encode(str, 0, 0 /*scaledImageWidth, pixelHeight*/);
+-
+-	return EXIT_SUCCESS;
+-}
+-
+-arm-buildroot-linux-uclibcgnueabihf/bin/ld:host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libZXing.so:
+-undefined reference to `ZXing::TextDecoder::GuessEncoding(unsigned char const*, unsigned int, ZXing::CharacterSet)'
+-arm-buildroot-linux-uclibcgnueabihf/bin/ld: host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libZXing.so:
+-undefined reference to `ZXing::HRIFromGS1[abi:cxx11](std::basic_string_view<char, std::char_traits<char> >)'
+-arm-buildroot-linux-uclibcgnueabihf/bin/ld: host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libZXing.so:
+-undefined reference to `ZXing::TextDecoder::Append(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, unsigned char const*, unsigned int, ZXing::CharacterSet, bool)'
+-arm-buildroot-linux-uclibcgnueabihf/bin/ld: host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libZXing.so:
+-undefined reference to `ZXing::HRIFromISO15434[abi:cxx11](std::basic_string_view<char, std::char_traits<char> >)'
+-collect2: error: ld returned 1 exit status
+-
+-The patch fixes these errors.
+-
+-Co-Developed-by: Francesco Nicoletta Puzzillo <francesco.nicolettap@amarula>
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-Upstream: backport from upstream https://github.com/zxing-cpp/zxing-cpp/pull/811
+----
+- core/src/Content.cpp     | 4 ++++
+- core/src/Content.h       | 6 ++++++
+- core/src/DecoderResult.h | 2 ++
+- core/src/GTIN.cpp        | 2 ++
+- core/src/GTIN.h          | 2 ++
+- 5 files changed, 16 insertions(+)
+-
+-diff --git a/core/src/Content.cpp b/core/src/Content.cpp
+-index 4d3c44657cf9..569d4e35614a 100644
+---- a/core/src/Content.cpp
+-+++ b/core/src/Content.cpp
+-@@ -93,6 +93,7 @@ bool Content::canProcess() const
+- 	return std::all_of(encodings.begin(), encodings.end(), [](Encoding e) { return CanProcess(e.eci); });
+- }
+- 
+-+#ifdef ZXING_READERS
+- std::string Content::render(bool withECI) const
+- {
+- 	if (empty() || !canProcess())
+-@@ -165,6 +166,7 @@ std::wstring Content::utfW() const
+- {
+- 	return FromUtf8(render(false));
+- }
+-+#endif // ZXING_READERS
+- 
+- ByteArray Content::bytesECI() const
+- {
+-@@ -188,6 +190,7 @@ ByteArray Content::bytesECI() const
+- 	return ByteArray(res);
+- }
+- 
+-+#ifdef ZXING_READERS
+- CharacterSet Content::guessEncoding() const
+- {
+- 	// assemble all blocks with unknown encoding
+-@@ -236,5 +239,6 @@ ContentType Content::type() const
+- 
+- 	return ContentType::Mixed;
+- }
+-+#endif // ZXING_READERS
+- 
+- } // namespace ZXing
+-diff --git a/core/src/Content.h b/core/src/Content.h
+-index 99e5a01e7140..aa77bda94d54 100644
+---- a/core/src/Content.h
+-+++ b/core/src/Content.h
+-@@ -38,7 +38,9 @@ class Content
+- 	void ForEachECIBlock(FUNC f) const;
+- 
+- 	void switchEncoding(ECI eci, bool isECI);
+-+#ifdef ZXING_READERS
+- 	std::string render(bool withECI) const;
+-+#endif // ZXING_READERS
+- 
+- public:
+- 	struct Encoding
+-@@ -75,13 +77,17 @@ public:
+- 	bool empty() const { return bytes.empty(); }
+- 	bool canProcess() const;
+- 
+-+#ifdef ZXING_READERS
+- 	std::string text(TextMode mode) const;
+- 	std::wstring utfW() const; // utf16 or utf32 depending on the platform, i.e. on size_of(wchar_t)
+- 	std::string utf8() const { return render(false); }
+-+#endif // ZXING_READERS
+- 
+- 	ByteArray bytesECI() const;
+-+#ifdef ZXING_READERS
+- 	CharacterSet guessEncoding() const;
+- 	ContentType type() const;
+-+#endif // ZXING_READERS
+- };
+- 
+- } // ZXing
+-diff --git a/core/src/DecoderResult.h b/core/src/DecoderResult.h
+-index 02b285084195..3117b03a923a 100644
+---- a/core/src/DecoderResult.h
+-+++ b/core/src/DecoderResult.h
+-@@ -50,7 +50,9 @@ public:
+- 	Content&& content() && { return std::move(_content); }
+- 
+- 	// to keep the unit tests happy for now:
+-+#ifdef ZXING_READERS
+- 	std::wstring text() const { return _content.utfW(); }
+-+#endif // ZXING_READERS
+- 	std::string symbologyIdentifier() const { return _content.symbology.toString(false); }
+- 
+- 	// Simple macro to set up getter/setter methods that save lots of boilerplate.
+-diff --git a/core/src/GTIN.cpp b/core/src/GTIN.cpp
+-index 256855a03070..690901062301 100644
+---- a/core/src/GTIN.cpp
+-+++ b/core/src/GTIN.cpp
+-@@ -199,6 +199,7 @@ std::string LookupCountryIdentifier(const std::string& GTIN, const BarcodeFormat
+- 	return it != std::end(COUNTRIES) && prefix >= it->first && prefix <= it->last ? it->id : std::string();
+- }
+- 
+-+#ifdef ZXING_READERS
+- std::string EanAddOn(const Result& result)
+- {
+- 	if (!(BarcodeFormat::EAN13 | BarcodeFormat::UPCA | BarcodeFormat::UPCE | BarcodeFormat::EAN8)
+-@@ -208,6 +209,7 @@ std::string EanAddOn(const Result& result)
+- 	auto pos = txt.find(' ');
+- 	return pos != std::string::npos ? std::string(txt.substr(pos + 1)) : std::string();
+- }
+-+#endif // ZXING_READERS
+- 
+- std::string IssueNr(const std::string& ean2AddOn)
+- {
+-diff --git a/core/src/GTIN.h b/core/src/GTIN.h
+-index d56b604e5f71..9af0b01200ce 100644
+---- a/core/src/GTIN.h
+-+++ b/core/src/GTIN.h
+-@@ -47,7 +47,9 @@ bool IsCheckDigitValid(const std::basic_string<T>& s)
+-  */
+- std::string LookupCountryIdentifier(const std::string& GTIN, const BarcodeFormat format = BarcodeFormat::None);
+- 
+-+#ifdef ZXING_READERS
+- std::string EanAddOn(const Result& result);
+-+#endif // ZXING_READERS
+- 
+- std::string IssueNr(const std::string& ean2AddOn);
+- std::string Price(const std::string& ean5AddOn);
+--- 
+-2.43.0
+-
+diff --git a/package/zxing-cpp/zxing-cpp.hash b/package/zxing-cpp/zxing-cpp.hash
+index ff11896f4b..c0758579db 100644
+--- a/package/zxing-cpp/zxing-cpp.hash
++++ b/package/zxing-cpp/zxing-cpp.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  02078ae15f19f9d423a441f205b1d1bee32349ddda7467e2c84e8f08876f8635  zxing-cpp-2.2.1.tar.gz
++sha256  64e4139103fdbc57752698ee15b5f0b0f7af9a0331ecbdc492047e0772c417ba  zxing-cpp-2.3.0.tar.gz
+ 
+ # License files
+ sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  LICENSE
+diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
+index 5f91bf2f71..515daf590f 100644
+--- a/package/zxing-cpp/zxing-cpp.mk
++++ b/package/zxing-cpp/zxing-cpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZXING_CPP_VERSION = 2.2.1
++ZXING_CPP_VERSION = 2.3.0
+ ZXING_CPP_SITE = $(call github,zxing-cpp,zxing-cpp,v$(ZXING_CPP_VERSION))
+ ZXING_CPP_LICENSE = Apache-2.0
+ ZXING_CPP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
