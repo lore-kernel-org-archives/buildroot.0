@@ -4,98 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54538C02180
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 03:40:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC416C02180
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 03:49:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED38F4071C;
-	Wed, 15 Jan 2025 03:40:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 581FF4150F;
+	Wed, 15 Jan 2025 03:49:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sojGMN0P8Jbk; Wed, 15 Jan 2025 03:40:26 +0000 (UTC)
+ id wDJwc5KOibcx; Wed, 15 Jan 2025 03:48:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9FEC4071E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C21334077C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B9FEC4071E;
-	Wed, 15 Jan 2025 03:40:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E1C3B8B
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 03:40:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C21334077C;
+	Wed, 15 Jan 2025 03:48:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5DE29B8B
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 03:48:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D107F8305A
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 03:40:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 874DA41057
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 03:48:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dSqlgsS5uxVQ for <buildroot@buildroot.org>;
- Wed, 15 Jan 2025 03:40:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fxV06boWAVuR for <buildroot@buildroot.org>;
+ Wed, 15 Jan 2025 03:48:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::636; helo=mail-pl1-x636.google.com;
+ client-ip=2607:f8b0:4864:20::b29; helo=mail-yb1-xb29.google.com;
  envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DC23784067
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC23784067
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com
- [IPv6:2607:f8b0:4864:20::636])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DC23784067
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 03:40:24 +0000 (UTC)
-Received: by mail-pl1-x636.google.com with SMTP id
- d9443c01a7336-2167141dfa1so7431585ad.1
- for <buildroot@buildroot.org>; Tue, 14 Jan 2025 19:40:24 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CA94F41025
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA94F41025
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com
+ [IPv6:2607:f8b0:4864:20::b29])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CA94F41025
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 03:48:53 +0000 (UTC)
+Received: by mail-yb1-xb29.google.com with SMTP id
+ 3f1490d57ef6-e3c8ae3a3b2so8747607276.0
+ for <buildroot@buildroot.org>; Tue, 14 Jan 2025 19:48:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736912424; x=1737517224;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1736912932; x=1737517732;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=a5BlZ/VRYmyqbb3XNyQY0dzkvoA6IV3DW9YTWudsm6M=;
- b=XyCkyZSBCPpVdOvEZp+bKVbuCZbuDtK0MgCh51rYUhaj7eO7mIlvcBGjDV3m404vC2
- 7M/CaN7jrHnCTJOFL1YloKs0MhaGiC2wCaTbjtNYc44tgfQh/qeJ7lsbbU4xWocSm+xp
- GqiI3V8YCwc/yL2ATd2Q6p3w1jZHEZku/SfD2sSM8CHDEFUtq/hW5GikTVZJf8tmwDr3
- a22uBK0PPnhS789rfIiHe1uXy3v+RpxKH2VpdaT8Z51gooBw/6Th+dSj+kJm4CGCpvur
- dxjP0I3vKbLPGHIKYLFQOrn454XzlN9o63Bl+uC7r4YhALN/7mwsqnHuxSe8WiISB0AL
- 2REA==
-X-Gm-Message-State: AOJu0YwgHdxd6XVTIX63WL+IH5mWTgVZho3LBl7zi38jEyN69ws1KbqT
- +B1zCB2vNtcm2/YXnxu1AtLc7b8BRaLaUGSkFv7zX9fQnHzddrEq/9dGzVnZ
-X-Gm-Gg: ASbGnctp8xgPveZU46cU4AXFtMQGTlT/SPiIEjDS17vTM+fNEaAWKyEA8bZcMhl4BxE
- wvqSzZUq6VBBWN5oGI8pOsa5vFTfdP/8S9OzhpMLYCs9i0GkOGUqTqGiXo02BR26/io91bLoKlm
- 62wpK484D0oDXPg93lJgeCiKTYIxwQpB0+nIG/HmbRjzybQ4egOJwGSxhx7TxoRnhwsKPM0fX3I
- 170qY995b8G2KKjZ3WM7n8TR9NQPTzpjyODtL6z/Bjxcvbnz2C4WTVFnaX49GmXiMvgkONIjcIq
- qjUqDdpcvBMUdQJvuWSgCcbVMG5OxvxxMhZmPXRL
-X-Google-Smtp-Source: AGHT+IEX9E0CFjX+091wK/SVRpnew2Ss/wvTompkTwS1py9KzIwKLvS7n5AxlRaHvA62bkQTq6xOcg==
-X-Received: by 2002:a17:903:238e:b0:216:311e:b1c4 with SMTP id
- d9443c01a7336-21bf029e049mr19397705ad.4.1736912423346; 
- Tue, 14 Jan 2025 19:40:23 -0800 (PST)
-Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
- [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-21a9f12f8dcsm74049155ad.66.2025.01.14.19.40.22
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Jan 2025 19:40:22 -0800 (PST)
-From: Akhilesh Nema <nemaakhilesh@gmail.com>
-To: buildroot@buildroot.org
-Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
- Akhilesh Nema <nemaakhilesh@gmail.com>
-Date: Tue, 14 Jan 2025 19:40:20 -0800
-Message-Id: <20250115034020.792083-1-nemaakhilesh@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ bh=ROf/7tAccI3mgIbZjvaRtnp6+uPcod2xudvuCVkCmZ4=;
+ b=A/MPSdGygpZKERvoQiY+VbeqRG1wlMqIl+RsNizfucl8VeII+OKWu1UT387ZPI1JCU
+ qF7hjY3W9czpeTxmijRuV0dg5CruM4tCpn2WPmRMgiu7NEWWPFpQMnFIgdAzTEGOfsPU
+ JdgX/mkU2OPaL7C+1xLs8vWWCqvqd4bs2MbNAon8CmRJE0NOh4A+V45oXLcTTxtj15tW
+ elLC+2ba3UiY6LGbxtJxK7XBaZMfi8Or9noSlQyeuEYuga3KwBIR1zJH6CrxoN7xHMV9
+ WfZMOIiq5wZszn0a4RxXQ1KbpKmLkpK7K98S6z9ednVunW7VUu4azdIgwuQ1Zni8Dnqi
+ skOw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVeAQdAsK/HxZfH5h4Td6bYQVc8Zc6AdaaY61RfBiNF5tDuPhyRIb12aK5T1efQmX483lKfg4JlFps=@buildroot.org
+X-Gm-Message-State: AOJu0Yxjpzg166q6Kel/2FYadavegwGQTzFsYFX2pzUyPdluJsJhn5bx
+ mFmFbZnxlujjpi8nD62uAjak1Dih4HzqDF8ghiTv6Cw17MbJDPVAnwaEyXIVM3fJaob2wd/PUwg
+ 6Ox24Ao8RwM+B3sWQQvSJgRV50ww=
+X-Gm-Gg: ASbGncvT6WCaJ3BQIj0dSFZJr5a6bndGdJGGGdNFudvP1zCC5ECaQHRwQINENacVEJV
+ dS8vIOmqfOUeVkAZCJeVJweZowpbZYsXibiG98Q==
+X-Google-Smtp-Source: AGHT+IFc4LHtF52pP7rld5f6P0ZCUPvYlWWNqWzS2uUK9j4hBPy8yWElE88roIdlNRTKj6j3oPchGZpaoHivJ9uWqjY=
+X-Received: by 2002:a25:1ec2:0:b0:e4a:c0bb:7b25 with SMTP id
+ 3f1490d57ef6-e54ee1daa87mr15289306276.41.1736912932320; Tue, 14 Jan 2025
+ 19:48:52 -0800 (PST)
 MIME-Version: 1.0
+References: <20250112223142.770914-1-nemaakhilesh@gmail.com>
+ <20250113153412.51ff0e04@windsurf> <fcaf9348ede608925bad155bdbd2bf53@free.fr>
+In-Reply-To: <fcaf9348ede608925bad155bdbd2bf53@free.fr>
+From: Akhilesh Nema <nemaakhilesh@gmail.com>
+Date: Tue, 14 Jan 2025 19:48:26 -0800
+X-Gm-Features: AbW1kvZ9_-cVDXKgqpxwP10XiwdVmoct-ixRTWqzhFoWg_D3976BeKgpA2iZVkU
+Message-ID: <CAMV0Ro9is6f9xu3Z4sEeHPt9+1m3=88Kz=_gTD4wboU+sfauaQ@mail.gmail.com>
+To: Julien Olivain <ju.o@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org, 
+ Guillaume William Brs <guillaume.bressaix@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1736912424; x=1737517224; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=a5BlZ/VRYmyqbb3XNyQY0dzkvoA6IV3DW9YTWudsm6M=;
- b=SHXSOI5g03aaOTOEOsCSr+jm9fr10WgNF+Rh0GQXssllqnloj8sHysbJiggptF5iiK
- NEqbyiuQYgQjTaoA4tCFaoqFvqr0upTI276T3VGMVD8u9RSipnSCgKn5hMmUiYxIi6F+
- 0fUKFbAgvXBX5uUI40UusoMG62jrh/NQueqaFvV7PfEwvNImObsAxZAiEHgXnFPOMWmN
- j3+5s5D6XamZwrQgkMdDBsJ+hpKwgi3nARnzU4zbKRDhQwL9egWjeWvwO3cSZlQ9EdTH
- 5hQqEezTOD3MtjZAIrSKv/VwRZ6pcDUvb/8RHA2kj+gALRArnMSIV2U4blFi38FoNerP
- bx7Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1736912932; x=1737517732; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=ROf/7tAccI3mgIbZjvaRtnp6+uPcod2xudvuCVkCmZ4=;
+ b=GUItPP7GOPwsEUHx2MxouZnyRt/Tr2UB6u20CF+CLeZTWfL8oOhigiq1VSarm4x/0z
+ Uu/WiR+H72zB3TAZhx58HBak1UeAqWr9DJ9AsfFmD6vrzRi4L/TUmKhb+qk/KaN6sszR
+ H1gFGDGu0WZSiqiNUT1hb9LTDKqW+20eEqtoOMP1qPsKTOmVRCJ9LVAT5eBzkpU7HKb1
+ K88HvXqoACSJ8ECR48zRSJ2ms042qSFDqWNKPUX48LuJGBmFsD7fdHS0g7EJIORkfjkU
+ qD3pXlXNdM3r2o8R3DC+dRXRfTEZpv+/vb6pK+bqMXMmIZDSMBF0FPrifK85qhG/+JEw
+ xixw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=SHXSOI5g
-Subject: [Buildroot] [PATCH 1/1] package/libxcrypt: bump version to 4.4.38
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=GUItPP7G
+Subject: Re: [Buildroot] [PATCH 1/1] package/libxcrypt: bump version to
+ 4.4.37
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,96 +105,157 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5603662514934330184=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/besser82/libxcrypt/releases/tag/v4.4.38
-https://github.com/besser82/libxcrypt/releases/tag/v4.4.37
+--===============5603662514934330184==
+Content-Type: multipart/alternative; boundary="00000000000056411f062bb68e72"
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
----
+--00000000000056411f062bb68e72
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Notes:
-    $ utils/test-pkg -a -p libxcrypt
-                                 arm-aarch64 [ 1/41]: OK
-                       bootlin-aarch64-glibc [ 2/41]: OK
-                   bootlin-arcle-hs38-uclibc [ 3/41]: SKIPPED
-                        bootlin-armv5-uclibc [ 4/41]: SKIPPED
-                         bootlin-armv7-glibc [ 5/41]: OK
-                       bootlin-armv7m-uclibc [ 6/41]: SKIPPED
-                          bootlin-armv7-musl [ 7/41]: SKIPPED
-                    bootlin-m68k-5208-uclibc [ 8/41]: SKIPPED
-                   bootlin-m68k-68040-uclibc [ 9/41]: SKIPPED
-                 bootlin-microblazeel-uclibc [10/41]: SKIPPED
-                    bootlin-mipsel32r6-glibc [11/41]: OK
-                       bootlin-mipsel-uclibc [12/41]: SKIPPED
-                         bootlin-nios2-glibc [13/41]: OK
-                     bootlin-openrisc-uclibc [14/41]: SKIPPED
-            bootlin-powerpc64le-power8-glibc [15/41]: OK
-               bootlin-powerpc-e500mc-uclibc [16/41]: SKIPPED
-                       bootlin-riscv32-glibc [17/41]: OK
-                       bootlin-riscv64-glibc [18/41]: OK
-                        bootlin-riscv64-musl [19/41]: SKIPPED
-                     bootlin-s390x-z13-glibc [20/41]: OK
-                          bootlin-sh4-uclibc [21/41]: SKIPPED
-                       bootlin-sparc64-glibc [22/41]: OK
-                        bootlin-sparc-uclibc [23/41]: SKIPPED
-                        bootlin-x86-64-glibc [24/41]: OK
-                         bootlin-x86-64-musl [25/41]: SKIPPED
-                       bootlin-x86-64-uclibc [26/41]: SKIPPED
-                       bootlin-x86-i686-musl [27/41]: SKIPPED
-                       bootlin-xtensa-uclibc [28/41]: SKIPPED
-                                br-arm-basic [29/41]: SKIPPED
-                        br-arm-full-nothread [30/41]: SKIPPED
-                          br-arm-full-static [31/41]: SKIPPED
-                       br-i386-pentium4-full [32/41]: SKIPPED
-                          br-mips64-n64-full [33/41]: SKIPPED
-                     br-mips64r6-el-hf-glibc [34/41]: OK
-                   br-powerpc-603e-basic-cpp [35/41]: SKIPPED
-                   br-powerpc64-power7-glibc [36/41]: OK
-                           linaro-aarch64-be [37/41]: OK
-                              linaro-aarch64 [38/41]: OK
-                                  linaro-arm [39/41]: OK
-                             sourcery-mips64 [40/41]: OK
-                               sourcery-mips [41/41]: OK
-    41 builds, 23 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+Hi Everyone,
 
- package/libxcrypt/libxcrypt.hash | 4 ++--
- package/libxcrypt/libxcrypt.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Tue, Jan 14, 2025 at 10:18=E2=80=AFAM Julien Olivain <ju.o@free.fr> wrot=
+e:
 
-diff --git a/package/libxcrypt/libxcrypt.hash b/package/libxcrypt/libxcrypt.hash
-index 9bcf119077..88abb79ee0 100644
---- a/package/libxcrypt/libxcrypt.hash
-+++ b/package/libxcrypt/libxcrypt.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/besser82/libxcrypt/releases/download/v4.4.36/libxcrypt-4.4.36.tar.xz.sha256sum
--sha256  e5e1f4caee0a01de2aee26e3138807d6d3ca2b8e67287966d1fefd65e1fd8943  libxcrypt-4.4.36.tar.xz
-+# From https://github.com/besser82/libxcrypt/releases/download/v4.4.38/libxcrypt-4.4.38.tar.xz.sha256sum
-+sha256  80304b9c306ea799327f01d9a7549bdb28317789182631f1b54f4511b4206dd6  libxcrypt-4.4.38.tar.xz
- 
- # Locally calculated
- sha256  f9b48b0bc67a92b752780710aa774cf08b62ec2ebaa3f4aebd00069fba6effd2  LICENSING
-diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
-index 60901988ac..c2b2ed3e4a 100644
---- a/package/libxcrypt/libxcrypt.mk
-+++ b/package/libxcrypt/libxcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXCRYPT_VERSION = 4.4.36
-+LIBXCRYPT_VERSION = 4.4.38
- LIBXCRYPT_SITE = https://github.com/besser82/libxcrypt/releases/download/v$(LIBXCRYPT_VERSION)
- LIBXCRYPT_SOURCE = libxcrypt-$(LIBXCRYPT_VERSION).tar.xz
- LIBXCRYPT_LICENSE = LGPL-2.1+
--- 
-2.25.1
+> Hi Thomas, Akhilesh,
+>
+> On 13/01/2025 15:34, Thomas Petazzoni via buildroot wrote:
+> > On Sun, 12 Jan 2025 14:31:42 -0800
+> > Akhilesh Nema <nemaakhilesh@gmail.com> wrote:
+> >
+> >> diff --git a/package/libxcrypt/Config.in b/package/libxcrypt/Config.in
+> >> index 38c75b5e63..508e1a43cd 100644
+> >> --- a/package/libxcrypt/Config.in
+> >> +++ b/package/libxcrypt/Config.in
+> >> @@ -1,6 +1,7 @@
+> >>  config BR2_PACKAGE_LIBXCRYPT
+> >>      bool "libxcrypt"
+> >>      depends on BR2_TOOLCHAIN_USES_GLIBC
+> >> +    select BR2_PACKAGE_HOST_PKGCONF
+> >
+> > We really don't enforce selecting this option, so I'd rather see it not
+> > done, than done inconsistently between packages.
+> >
+> >> +LIBXCRYPT_DEPENDENCIES =3D host-pkgconf
+> >> +HOST_LIBXCRYPT_DEPENDENCIES =3D host-pkgconf
+> >
+> > I'm actually surprised by the dependency on host-pkgconf. host-pkgconf
+> > is normally used to detect dependencies, but libxcrypt has no
+> > dependencies other than the toolchain. So why is it needed now?
+> > Explanations in your commit log would be very useful.
+>
+> As Akhilesh pointed out in the v1 thread, this was an upstream issue:
+> https://github.com/besser82/libxcrypt/issues/198
+>
+> Hopefully, this was quickly fixed upstream. There is already a
+> new version:
+> https://github.com/besser82/libxcrypt/releases/tag/v4.4.38
+>
+> So we could just skip this 4.4.37 version, and bump directly
+> to 4.4.38 (and not add the dependencies).
+>
+> Akhilesh: could make sure to test this new bump with at least
+> a "utils/test-pkg -a -p libxcrypt" please? (or add in a comment
+> the test you did).
+>
+> Best regards,
+>
+> Julien.
+>
+
+Thank you so much for the review.  I have submitted a 4.4.38 bump patch
+along with the test-pkg results.
+-
+https://patchwork.ozlabs.org/project/buildroot/patch/20250115034020.792083-=
+1-nemaakhilesh@gmail.com/
+
+Thanks
+Akhilesh
+
+--00000000000056411f062bb68e72
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi Everyone,</div><div></div><div><br></div><div></di=
+v><div class=3D"gmail_quote gmail_quote_container"><div dir=3D"ltr" class=
+=3D"gmail_attr">On Tue, Jan 14, 2025 at 10:18=E2=80=AFAM Julien Olivain &lt=
+;<a href=3D"mailto:ju.o@free.fr">ju.o@free.fr</a>&gt; wrote:<br></div><bloc=
+kquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:=
+1px solid rgb(204,204,204);padding-left:1ex">Hi Thomas, Akhilesh,<br>
+<br>
+On 13/01/2025 15:34, Thomas Petazzoni via buildroot wrote:<br>
+&gt; On Sun, 12 Jan 2025 14:31:42 -0800<br>
+&gt; Akhilesh Nema &lt;<a href=3D"mailto:nemaakhilesh@gmail.com" target=3D"=
+_blank">nemaakhilesh@gmail.com</a>&gt; wrote:<br>
+&gt; <br>
+&gt;&gt; diff --git a/package/libxcrypt/Config.in b/package/libxcrypt/Confi=
+g.in<br>
+&gt;&gt; index 38c75b5e63..508e1a43cd 100644<br>
+&gt;&gt; --- a/package/libxcrypt/Config.in<br>
+&gt;&gt; +++ b/package/libxcrypt/Config.in<br>
+&gt;&gt; @@ -1,6 +1,7 @@<br>
+&gt;&gt;=C2=A0 config BR2_PACKAGE_LIBXCRYPT<br>
+&gt;&gt;=C2=A0 =C2=A0 =C2=A0 bool &quot;libxcrypt&quot;<br>
+&gt;&gt;=C2=A0 =C2=A0 =C2=A0 depends on BR2_TOOLCHAIN_USES_GLIBC<br>
+&gt;&gt; +=C2=A0 =C2=A0 select BR2_PACKAGE_HOST_PKGCONF<br>
+&gt; <br>
+&gt; We really don&#39;t enforce selecting this option, so I&#39;d rather s=
+ee it not<br>
+&gt; done, than done inconsistently between packages.<br>
+&gt; <br>
+&gt;&gt; +LIBXCRYPT_DEPENDENCIES =3D host-pkgconf<br>
+&gt;&gt; +HOST_LIBXCRYPT_DEPENDENCIES =3D host-pkgconf<br>
+&gt; <br>
+&gt; I&#39;m actually surprised by the dependency on host-pkgconf. host-pkg=
+conf<br>
+&gt; is normally used to detect dependencies, but libxcrypt has no<br>
+&gt; dependencies other than the toolchain. So why is it needed now?<br>
+&gt; Explanations in your commit log would be very useful.<br>
+<br>
+As Akhilesh pointed out in the v1 thread, this was an upstream issue:<br>
+<a href=3D"https://github.com/besser82/libxcrypt/issues/198" rel=3D"norefer=
+rer" target=3D"_blank">https://github.com/besser82/libxcrypt/issues/198</a>=
+<br>
+<br>
+Hopefully, this was quickly fixed upstream. There is already a<br>
+new version:<br>
+<a href=3D"https://github.com/besser82/libxcrypt/releases/tag/v4.4.38" rel=
+=3D"noreferrer" target=3D"_blank">https://github.com/besser82/libxcrypt/rel=
+eases/tag/v4.4.38</a><br>
+<br>
+So we could just skip this 4.4.37 version, and bump directly<br>
+to 4.4.38 (and not add the dependencies).<br>
+<br>
+Akhilesh: could make sure to test this new bump with at least<br>
+a &quot;utils/test-pkg -a -p libxcrypt&quot; please? (or add in a comment<b=
+r>
+the test you did).<br>
+<br>
+Best regards,<br>
+<br>
+Julien.<br></blockquote><div><br></div><div>Thank you so much for the revie=
+w.=C2=A0 I have submitted a 4.4.38 bump patch along with the test-pkg resul=
+ts.<br></div><div><div dir=3D"ltr">- <a href=3D"https://patchwork.ozlabs.or=
+g/project/buildroot/patch/20250115034020.792083-1-nemaakhilesh@gmail.com/">=
+https://patchwork.ozlabs.org/project/buildroot/patch/20250115034020.792083-=
+1-nemaakhilesh@gmail.com/</a></div><div><br></div><div>Thanks</div><div>Akh=
+ilesh</div>=C2=A0</div></div></div>
+
+--00000000000056411f062bb68e72--
+
+--===============5603662514934330184==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5603662514934330184==--
