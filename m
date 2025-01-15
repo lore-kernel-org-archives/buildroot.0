@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D0D5C02183
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 20:35:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DBF1C02180
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 20:35:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54DB141A15;
-	Wed, 15 Jan 2025 20:35:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C835741E5D;
+	Wed, 15 Jan 2025 20:35:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BiA17n1grqh6; Wed, 15 Jan 2025 20:35:36 +0000 (UTC)
+ id YGlWjumDjZat; Wed, 15 Jan 2025 20:35:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98D0E41E4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A375A41E5F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98D0E41E4D;
-	Wed, 15 Jan 2025 20:35:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 51AE31D8B
+	by smtp4.osuosl.org (Postfix) with ESMTP id A375A41E5F;
+	Wed, 15 Jan 2025 20:35:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 718F0B89
  for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:35:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3EFF46F734
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F6FF419F3
  for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:35:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s9jCf9ZYxraZ for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Irbis2BtsRfZ for <buildroot@buildroot.org>;
  Wed, 15 Jan 2025 20:35:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 684D66F712
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54F7B419F5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 684D66F712
+ by smtp4.osuosl.org (Postfix) with ESMTP id 54F7B419F5
  for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:35:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61D7685DA3; Wed, 15 Jan 2025 20:35:30 +0000 (UTC)
+ id 3F76085DB2; Wed, 15 Jan 2025 20:35:30 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 15 Jan 2025 21:30:23 +0100
+Date: Wed, 15 Jan 2025 21:30:13 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 49cc81057b35f07223a98ef36f5f3ec28a626ecc
-X-Git-Newrev: 5cb7e4ad3dee83ef6e4b98441af26417b4b32fff
+X-Git-Oldrev: e56ae61ff9f29fb0b3713001f8df3134612b95e6
+X-Git-Newrev: 9fb788dc175efecdcd6bbb456893337def82addf
 X-Patchwork-Hint: ignore
-Message-Id: <20250115203530.61D7685DA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/glibc: remove nios2 support
+Message-Id: <20250115203530.3F76085DB2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/gen-bootlin-toolchains:
+ remove nios2 toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,58 +65,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cb7e4ad3dee83ef6e4b98441af26417b4b32fff
+commit: https://git.buildroot.net/buildroot/commit/?id=9fb788dc175efecdcd6bbb456893337def82addf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Doing so, we remove nios2 support from the internal toolchain backend.
+Nios2 will be removed from Buildroot, so Bootlin toolchains will
+no longer provide nios2 toolchain in further releases.
 
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- arch/Config.in          | 1 +
- package/glibc/Config.in | 1 -
- package/glibc/glibc.mk  | 4 ----
- 3 files changed, 1 insertion(+), 5 deletions(-)
+ support/scripts/gen-bootlin-toolchains | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index e57f4b2baa..7da2dc69e4 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -145,6 +145,7 @@ config BR2_mips64el
- 
- config BR2_nios2
- 	bool "Nios II"
-+	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
- 	select BR2_USE_MMU
- 	help
- 	  Nios II is a soft core processor from Altera Corporation.
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index 6075d28874..d464b3def8 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -20,7 +20,6 @@ config BR2_PACKAGE_GLIBC_ARCH_SUPPORTS
- 	default y if BR2_sparc64
- 	default y if BR2_x86_64
- 	default y if BR2_microblaze
--	default y if BR2_nios2
- 	default y if BR2_arc && BR2_ARC_ATOMIC_EXT && !BR2_arc750d && !BR2_arc770d
- 	depends on !BR2_POWERPC_CPU_HAS_SPE
- 	depends on BR2_RISCV_ISA_RVA || !BR2_riscv
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index cee03a16fd..e026c18762 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -143,10 +143,6 @@ endif
- # Glibc nowadays can be build with optimization flags f.e. -Os
- 
- GLIBC_CFLAGS = $(TARGET_OPTIMIZATION)
--# crash in qemu-system-nios2 with -Os
--ifeq ($(BR2_nios2),y)
--GLIBC_CFLAGS += -O2
--endif
- 
- # glibc can't be built without optimization
- ifeq ($(BR2_OPTIMIZE_0),y)
+diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
+index bd1beec995..df16cff5c4 100755
+--- a/support/scripts/gen-bootlin-toolchains
++++ b/support/scripts/gen-bootlin-toolchains
+@@ -118,10 +118,6 @@ arches = {
+         'conditions': ['BR2_mips64el', 'BR2_mips_64r6', 'BR2_MIPS_NABI32', '!BR2_MIPS_SOFT_FLOAT'],
+         'prefix': 'mips64el',
+     },
+-    'nios2': {
+-        'conditions': ['BR2_nios2'],
+-        'prefix': 'nios2',
+-    },
+     'openrisc': {
+         'conditions': ['BR2_or1k'],
+         'prefix': 'or1k',
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
