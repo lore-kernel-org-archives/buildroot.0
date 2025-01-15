@@ -1,154 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 159BBC02183
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 09:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DEB5C02180
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 10:28:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AAD0F4168F;
-	Wed, 15 Jan 2025 09:50:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZVFWEF7RTacO; Wed, 15 Jan 2025 09:50:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 969574167A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 969574167A;
-	Wed, 15 Jan 2025 09:50:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1E0CC94B
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 09:50:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F3EE683F70
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 09:50:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF05383FAF;
+	Wed, 15 Jan 2025 10:28:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id upRM4y201Ys0 for <buildroot@buildroot.org>;
- Wed, 15 Jan 2025 09:50:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2416::62c;
- helo=nam11-co1-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 398ED833C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 398ED833C9
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com
- (mail-co1nam11on2062c.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2416::62c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 398ED833C9
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 09:50:24 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=c4+VOk5Pn502RI6HdXwvjlfMw6izd9M1Qr2bSzkWWYyefEOOuhKv2wTCVIpEBwgJ2RJObRTYrug3iNrF2m0R6sxC/bNbsSyMVJxkn7JdED+RSxpvA9PYmKNjld+DwlbCbD62UxwAR0wh8yRamcJqXbYG/gWq0yzDP5HA8teeCSTCmRq9bquHy3CwOCTNiv8dK9rlS+sQBzHYPmkjYYn4DntsMPvnNLuKXvM4A2ZLbMS5BsnO93PrxGyfiGJzgAgGZaosHEsYk6vBoxgGgIi5oz7nmic2mkD43GSvy7Sk+TbO5c6nBnPdDFNOKIFflGVvdGdZNVLXTA7yDTzOvobiJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PWtqqmZRfsVGlM9hCD5oI3iIv65yy4Jr4kf4vuuUiDc=;
- b=tlCwYXllmBMQmFrV8zEHGOPtzP1pjNbfpvzOhXcZptGHlr6aVhl6CxBAEG3FfB+kpGUbmt+pRX7XfhsI68SsffAn4cOK6PW045yaITWYAkDD9OBKtBbIrFSocBk/QHZlGWO+uMhivD1SplhlpYXcutd/qapXBax6KeoRNt//jgiZvg8Jan6jDDgJKalFSaGeFMjuhnqsnEt//R+hVIO7G3klhKOp6tAdo61LYIVIeY/w4XlD4g38vXkwRkXjHHH64lYmKLUKNqayh0HAuB51ujE2Wo6v73HgFXiChpMY56VqeXQ0LfBS/wXShZj02bJW967+q3MgiXzNG/fSJJ7fug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from SA0PR11CA0168.namprd11.prod.outlook.com (2603:10b6:806:1bb::23)
- by CH2PR12MB4309.namprd12.prod.outlook.com (2603:10b6:610:a4::17)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.13; Wed, 15 Jan
- 2025 09:50:20 +0000
-Received: from SN1PEPF00026369.namprd02.prod.outlook.com
- (2603:10b6:806:1bb:cafe::dc) by SA0PR11CA0168.outlook.office365.com
- (2603:10b6:806:1bb::23) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8356.14 via Frontend Transport; Wed,
- 15 Jan 2025 09:50:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SN1PEPF00026369.mail.protection.outlook.com (10.167.241.134) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8356.11 via Frontend Transport; Wed, 15 Jan 2025 09:50:19 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 15 Jan
- 2025 03:50:19 -0600
-Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Wed, 15 Jan 2025 03:50:17 -0600
-To: <buildroot@buildroot.org>
-Date: Wed, 15 Jan 2025 09:50:11 +0000
-Message-ID: <20250115095011.2469162-3-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250115095011.2469162-1-neal.frager@amd.com>
-References: <20250115095011.2469162-1-neal.frager@amd.com>
+ id oWrjMgcCakNP; Wed, 15 Jan 2025 10:28:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C0AD83FA4
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C0AD83FA4;
+	Wed, 15 Jan 2025 10:28:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4E32BB89
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 10:28:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B5AC60B18
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 10:28:53 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3Z7LoL24cSbw for <buildroot@buildroot.org>;
+ Wed, 15 Jan 2025 10:28:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6B72360679
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B72360679
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6B72360679
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 10:28:50 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.124.111]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N9MpS-1tSUHE1lTw-00xFyg; Wed, 15
+ Jan 2025 11:28:48 +0100
+To: buildroot@buildroot.org
+Cc: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+Date: Wed, 15 Jan 2025 11:28:27 +0100
+Message-ID: <20250115102827.3479245-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.47.1
 MIME-Version: 1.0
-Received-SPF: None (SATLEXMB04.amd.com: neal.frager@amd.com does not designate
- permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF00026369:EE_|CH2PR12MB4309:EE_
-X-MS-Office365-Filtering-Correlation-Id: eb8e20d7-3707-4d1a-818b-08dd354a05dd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|82310400026|36860700013|1800799024|376014|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?638mL7lFYYqm2acxmtRD1jMq8N9hLI56wUBs9Fw0Rs9Dxqy/JBvkfhhwtIfM?=
- =?us-ascii?Q?SVrTHVc26eQz+WtOsLV1Or2whhxLdzGs+3tT1ojBUkZk7ZpZH26zvFUvbrrX?=
- =?us-ascii?Q?yZLzVkpWpfmPlol1zPlJj0cxp2XRUtnRULHtM5MRvMDj6A92edkz/vRU/LAB?=
- =?us-ascii?Q?V6R5C+zVUIKTRGOou4cx17VUed5xgkl8Bw3tajrQBXcsaFPt3SApVDzybUvn?=
- =?us-ascii?Q?YHBDjjwfUHLuqS7c2GNREI6V8vK/NtC8KJYvPRaBJP4tdXsglddgjQP/4HPx?=
- =?us-ascii?Q?QMDZKwt43CxJTwpv5DWHI6xKkI5Dgy3jaxPzD86Vaf7ObAlCdSP8mDtEBDS0?=
- =?us-ascii?Q?DMR1f4KM/f72XOExc4cTco+Q4nEv/LzWFy6IU9vS8R81oqt6e7jAud/CQJ/0?=
- =?us-ascii?Q?5HjcdZbkwxlajsm/W/bu4VFh+pVhi75WEF0KE71LD3U8Q4V5lgFPXmAqkM5f?=
- =?us-ascii?Q?99EUDsM1RWycBUjo9KY+U/JOGCEoMJYzphK8qEj8cnxErrQid6PZyf6qUOcj?=
- =?us-ascii?Q?q+TLphwITnH+QOeIVzqXTWBEdyoTSqYv2pELKIDBpr8eWZ82aFVp4FcmhaZb?=
- =?us-ascii?Q?oRyVhZe4XuIwngbNOjWiSoLT9L95zxndkOUJERmYs+PVYeVRK3i7dH8cecrg?=
- =?us-ascii?Q?ArVXqxjxXrDe2balCcaiPjpUvdltVPY8/nvGSuB0qDVeW1Xai9M9VR2HZVSL?=
- =?us-ascii?Q?/PMiMIgU/sdApjIhZrjT2mwrcQapOq7P/hq1d12pHgagLsbEuULlAZgw+Db8?=
- =?us-ascii?Q?WueSkQyvYTO5V9QeWlEZTPLitYyE8WZmi8xjJNO4sVovARWsnxPZLVeFSs9i?=
- =?us-ascii?Q?neXs65GVBbupkoL2GpaDJIQKyvWR2loi++c5LUhmtr2LOC5xApfvkqqlH3bH?=
- =?us-ascii?Q?DNARAaf2l3E+h6x30bsgO8fftN0N+Pm9HphpZyegHFKGUVSF+XoGlWrAW1xi?=
- =?us-ascii?Q?3QSN9BhN/ms0VI610EdkH2E0cPvtzIZIyv9KgwPorlCbtxcAedgiYgeEdVUW?=
- =?us-ascii?Q?MH9WETEcW0njqxkX5VX4Iv9/BFFKXK8s9bld74zg9Du9UErsyGWjjUQ9gxzF?=
- =?us-ascii?Q?l0VWaWRgDQWX+FnG0FsaGQbtoMhp+WPMwtPSwub6SXjHuSU8UbJ+JJfR8lrC?=
- =?us-ascii?Q?rh95w2IelJ8Hi0QJr1NxrxJAjbTCwjhc26RLwrbhWTIGZz/U5h+/Y5J9xWKe?=
- =?us-ascii?Q?hTzrwJnTXi8Gh23xMHA4sxzbznnhRwhb59Dok+3rYwlqVd0SssCXkrF09BW0?=
- =?us-ascii?Q?1WeoP2gZcrbsD3edwLn3cYRjCYuA3JrYR49VZLmVJsquYj8IyM+F3Ys0e8IZ?=
- =?us-ascii?Q?9QOb+tH5t1lHKewC2atcrhC7jEjBXYA0iZPNMe9lnvPEfGiNBo241bXoDgOT?=
- =?us-ascii?Q?AHkaevdzk7UQKb10S/ucv5a6Ly/48zD9oFg+MUvyuCzX8ZK1ojPSYlmJh9Si?=
- =?us-ascii?Q?iT9C5SYJFu7ZgBvpGzL5X2igyn49vos/AFcT8OAnxbvBR3P9G+Lm8Pt+41XF?=
- =?us-ascii?Q?5twQnKuK68shcWUSffvvIMel79Z2jzDzmOPM?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(82310400026)(36860700013)(1800799024)(376014)(41080700001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2025 09:50:19.7951 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb8e20d7-3707-4d1a-818b-08dd354a05dd
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1PEPF00026369.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4309
+X-Provags-ID: V03:K1:XI4B/Cb9ztE66MYGCsSmbU4E8mtiipnxDoH9mpiTONBzSqQMWCo
+ IgYPJvQKD4bFZiiSGywT1wk9LU/Eh3RUkwdu9Uc+HF7KJR4uuhO8O6LhFcHwWuSMxA4hU2z
+ eSM7JP/N4EGOAKusu5EqplRon9h1V2fBJUgccpawar5sXCzJ+HmaWJlYTkR/nKuCu6daEY7
+ GBfzXu+pCy1IzHDScapGw==
+UI-OutboundReport: notjunk:1;M01:P0:rJ1URLaJhSA=;GroeZvEqH1ps18fK19wIKCd59nq
+ 47RPsCCkk/AhGv4klfBH04fh0AkkHFrEEBu0+HauHt6iWvTJTya2NFmBdjNiZQ4LOI5hKkh5F
+ ACy2RMTM3yMdla9gNy1BvcZVH2M0jhOsjlTsdqhEGJKox9TLr0IUZ/m5e5W4q5/qhPy147pty
+ jAXwt/iqMFFsWowRRv6VMIUfDsPEjd6cfLywPjCkS9dabPbSOkRqNFYv5N+U1ubcTp2n26JcE
+ tFvjhNHDITwUuEmxJv6eN4wIwiYhv/zl1tdmhuZYg6GwK8X3rGwTQ5p6I7jESYD2Tguck+PiI
+ pns6EWf1GTkrsl3rbJ3U9fhOfvTevRtrWJb4i7rqeV3xwR6cIM3MvnlrKZ0UfgT7e1ReR0EI7
+ b468js67n7ygOT8hysQYf7hMRgfLrpN+j49Emr5wcIPRlJxegqDpJkYhmPaXACLrvXObm/OBp
+ gzn1fTfFulxO3DCP9frVTUx98HBaP1EtDGj5avp6Ij+O9gxc39+32WL2MChRmiIlPi5hjaIbi
+ hqZGuppr6HWbJYpYHdP9oP5J8sxKNeN0rQp8Y8L+sMRBb3CcPos9PUuzzrocNfzfv8O4BEUXP
+ gIa/pAHWxAY1vKjbKeCXKOrXCMTm8Ro7z65J8eYWLoAYX6cCdhoAayReJMtRpih20eEtP8giD
+ FrkC8DDID8PBSYIchmxCw3RtPnlsEMKHXCiS5mHDYm7CFvif4pOG8KAhcJvmuFgToUK4b/fRq
+ mJN+W5sv53Yrk+G43rJ6xPN6ujg83UCcok8RqSvnjpuj9LP0echtqdLB0ucAB4bh1KMtmHiS3
+ nrIr+HdXwJum121sQlVTpDlaOpXEkeT+FT1aK6rIqyzscWU5rkh4xJTAXYu1pKnu1Hm48k0vs
+ RWGzIvIdN0y9vGF/HTedUAXYkjLCBqqkJJgs6zVupPw380fe0UELFJZqTiudaeh87fhCE114D
+ TSP+usQKDOpJsx+CAoZyD0YWC1/L+f+SPUeg1c9o4MoBwxKHVvqlKXwOzErEyH8veLexvF+2U
+ ClU/dgssqvMAz8sfCbkkSj/1B4VkkPFRwbqK004PYHIhGMhlfZCfHAvEIlkSMtAyAniDkPvsE
+ mvJm16DWXa5y1WR9EGZ5U4EJEfD0mk
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PWtqqmZRfsVGlM9hCD5oI3iIv65yy4Jr4kf4vuuUiDc=;
- b=R4ETjxkfhz+/ibLtJj81CgtXna1u+bmLSRDnWLtQJFrB0HwarWsB4no47ObX0HVgD+04YDyP56Z2bBKIiRmhiy3LKk7Bk0mBzjQ4EbHQtB5OgB69ZgBc7CzDN4bE0oX1Qv2aBladvsmQxtCINzFMdggbCYnbYCAHsFCz/RslFVk=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmx.de; 
+ s=s31663417; t=1736936928; x=1737541728; i=fiona.klute@gmx.de;
+ bh=nNxIDqi9SC6zWTF5EWq+G6SbP2gvUtQSxpHPtV9NktE=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=rmoNfM7oSSraSkjC3UWpin3J8G517tAI8taMf/r9DOffEe2wj1SruWCfVWK+ahuL
+ Zh7OLD2t2HkYyd4LcUEe7Noz9Vvzw5GSTh4zktM/SYefkOhPf/NtXGhPZtcdhx5/z
+ Tu+JjfVXNqU6Yw3EUsKTTeupKbuWM7jiXaU/7q+VB92cT9C/UcDPFD7e8PeqtX1Pd
+ ZWmc5/iAPUj5gzD6vwCL2jjEMBT4TjNYTf/NAWpdbeL0jgMXEz0d3mPp9N1xY5uHz
+ Lx0CXagHQr2km9msbWg51nByjwkDxpSHJ7A6kOHVLRuSdJOyQypVa5+cUUFEUB1gS
+ uqXBy4rjZHTkH8YK5w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=R4ETjxkf
-Subject: [Buildroot] [PATCH v1 3/3] configs/zynqmp_zcu106_defconfig: bump to
- Linux 6.6.60
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=rmoNfM7o
+Subject: [Buildroot] [PATCH 1/1] package/network-manager: bump to version
+ 1.50.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -160,38 +101,138 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- brandon.maier@collins.com, ju.o@free.fr, thomas.petazzoni@bootlin.com,
- Neal Frager <neal.frager@amd.com>, romain.naour@smile.fr, michal.simek@amd.com
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch bumps the zynqmp_zcu106_defconfig to Linux kernel 6.6.60.
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Upstream changelog: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/1.50.1/NEWS?ref_type=tags
+
+Release downloads have moved to gitlab.freedesktop.org, see [1, 2].
+
+Drop patch included upstream.
+
+[1] https://lists.freedesktop.org/archives/networkmanager/2024-December/000364.html
+[2] https://download.gnome.org/sources/NetworkManager/IMPORTANT-NetworkManager-releases-moved.txt
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- configs/zynqmp_zcu106_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...isable-sd_dhcp6_client_set_duid_uuid.patch | 68 -------------------
+ package/network-manager/network-manager.hash  |  4 +-
+ package/network-manager/network-manager.mk    |  6 +-
+ 3 files changed, 5 insertions(+), 73 deletions(-)
+ delete mode 100644 package/network-manager/0001-libnm-systemd-core-disable-sd_dhcp6_client_set_duid_uuid.patch
 
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index 4c5ac16f0c..2f3edf7972 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.2)/xlnx_rebase_v6.6_LTS_2024.2.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.60)/xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
+diff --git a/package/network-manager/0001-libnm-systemd-core-disable-sd_dhcp6_client_set_duid_uuid.patch b/package/network-manager/0001-libnm-systemd-core-disable-sd_dhcp6_client_set_duid_uuid.patch
+deleted file mode 100644
+index 7c5d4bde78..0000000000
+--- a/package/network-manager/0001-libnm-systemd-core-disable-sd_dhcp6_client_set_duid_uuid.patch
++++ /dev/null
+@@ -1,68 +0,0 @@
+-From 118e3117fe48f18cb2175b3cbc95a6ea3ced28b2 Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Fri, 7 Jun 2024 14:03:15 -0700
+-Subject: [PATCH] libnm-systemd-core: Disable sd_dhcp6_client_set_duid_uuid
+- function
+-
+-When building on musl systems ( with out systemd ), and using LLD linker
+-from LLVM project we fail to link with undefined symbols.
+-
+-This symbol is in sd_id128.c but its disabled, so let disable the functions
+-which need this function.
+-
+-| x86_64-yoe-linux-musl-ld.lld: error: undefined symbol: sd_id128_get_machine_app_specific
+-| >>> referenced by sd-dhcp-duid.c:202 (/usr/src/debug/networkmanager/1.48.0/../NetworkManager-1.48.0/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c:202)
+-| >>>               libnm-systemd-core.a.p/src_libsystemd-network_sd-dhcp-duid.c.o:(sd_dhcp_duid_set_uuid) in archive src/libnm-systemd-core/libnm-systemd-core.a
+-| x86_64-yoe-linux-musl-clang: error: linker command failed with exit code 1 (use -v to see invocation)
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Upstream: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/118e3117fe48f18cb2175b3cbc95a6ea3ced28b2
+-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+----
+- src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c    | 2 ++
+- src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c | 2 ++
+- 2 files changed, 4 insertions(+)
+-
+-diff --git a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
+-index e664a4a7207..28abddfbc5e 100644
+---- a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
+-+++ b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
+-@@ -193,6 +193,7 @@ int sd_dhcp_duid_set_en(sd_dhcp_duid *duid) {
+-         return 0;
+- }
+-
+-+#if 0  /* NM_IGNORED */
+- int sd_dhcp_duid_set_uuid(sd_dhcp_duid *duid) {
+-         sd_id128_t machine_id;
+-         int r;
+-@@ -209,6 +210,7 @@ int sd_dhcp_duid_set_uuid(sd_dhcp_duid *duid) {
+-         duid->size = offsetof(struct duid, uuid.uuid) + sizeof(machine_id);
+-         return 0;
+- }
+-+#endif /* NM_IGNORED */
+-
+- int dhcp_duid_to_string_internal(uint16_t type, const void *data, size_t data_size, char **ret) {
+-         _cleanup_free_ char *p = NULL, *x = NULL;
+-diff --git a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
+-index 7c20116409e..a6b55d07e0b 100644
+---- a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
+-+++ b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
+-@@ -244,6 +244,7 @@ int sd_dhcp6_client_set_duid_en(sd_dhcp6_client *client) {
+-         return 0;
+- }
+-
+-+#if 0  /* NM_IGNORED */
+- int sd_dhcp6_client_set_duid_uuid(sd_dhcp6_client *client) {
+-         int r;
+-
+-@@ -256,6 +257,7 @@ int sd_dhcp6_client_set_duid_uuid(sd_dhcp6_client *client) {
+-
+-         return 0;
+- }
+-+#endif /* NM_IGNORED */
+-
+- int sd_dhcp6_client_set_duid_raw(sd_dhcp6_client *client, uint16_t duid_type, const uint8_t *duid, size_t duid_len) {
+-         int r;
+---
+-GitLab
+-
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 9fe9ce4e8b..ffa438aa01 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/NetworkManager/1.48/NetworkManager-1.48.8.sha256sum
+-sha256  5dc188fdffcf2d23c89d34b1e6319a6b20203e12eaec24b30037b7ea8ac8c613  NetworkManager-1.48.10.tar.xz
++# From https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/1.50.1/downloads/NetworkManager-1.50.1.tar.xz.sha256sum
++sha256  5f9b881810e83a9f7c152f9c0051ee0bf922bd23053208f642c8fcaa1bdcdd25  NetworkManager-1.50.1.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 785976a0aa..015e6b212a 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-NETWORK_MANAGER_VERSION_MAJOR = 1.48
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10
++NETWORK_MANAGER_VERSION_MAJOR = 1.50
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).1
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+-NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
++NETWORK_MANAGER_SITE = https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/$(NETWORK_MANAGER_VERSION)/downloads
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+ NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL
 -- 
-2.25.1
+2.47.1
 
 _______________________________________________
 buildroot mailing list
