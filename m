@@ -1,78 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 537FAC02183
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 19:59:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EE15C02185
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 20:15:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0BA1C417A1;
-	Wed, 15 Jan 2025 19:59:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E737560E4F;
+	Wed, 15 Jan 2025 20:15:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UKy54IYX7sA3; Wed, 15 Jan 2025 19:59:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MHFN4N9rP45S; Wed, 15 Jan 2025 20:15:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA394417A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EE0A60EBD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA394417A4;
-	Wed, 15 Jan 2025 19:59:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CA11E94B
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 19:59:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9EE0A60EBD;
+	Wed, 15 Jan 2025 20:15:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9E631B89
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:15:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AB5B084071
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 19:59:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8C78D4028D
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:15:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3tH5s6__witx for <buildroot@buildroot.org>;
- Wed, 15 Jan 2025 19:59:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AA67984040
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA67984040
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AA67984040
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 19:59:36 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id A0C8E13FA3F;
- Wed, 15 Jan 2025 20:59:30 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:46416])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 15 Jan 2025 20:59:30 +0100
-MIME-Version: 1.0
-Date: Wed, 15 Jan 2025 20:59:30 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B7wEg4hmCryy for <buildroot@buildroot.org>;
+ Wed, 15 Jan 2025 20:15:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5896A404B1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5896A404B1
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:15:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3FD7485D1F; Wed, 15 Jan 2025 20:15:41 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-Cc: buildroot@buildroot.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, =?UTF-8?Q?Miqu=C3=A8l_Raynal?=
- <miquel.raynal@bootlin.com>, Sergio Prado <sergio.prado@e-labworks.com>
-In-Reply-To: <20250114-fix_curlpp-v1-1-24daadf0f798@bootlin.com>
-References: <20250114-fix_curlpp-v1-1-24daadf0f798@bootlin.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <df0f46f55b77c0cb7b29f3bdc31399b1@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1736971175;
- bh=JUwUYPo67qhlyrlbJWyKyAI2n1JstulJEgAhAVXnQrM=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Psp1f0VOTJ1oXnc4ez95phWqD0khiFv//ezewMJJfl/eNl4hC251Tc30suGvU4ati
- l9x2FOCXXqIS18+TZZGL3FPPYtkk3obOeH0+ehCJzuMJ960ncjMY4Ijsi1ClztSR6d
- H+Bcd0bIEBtdN1ABkQc/2c0HbPjqutEGpueKEeeaN3G0bx7wxYsmB8leuq1y/ze1tz
- AybXN1+oZK+DzjSjwIvTBO9wgDgzNJbn4C6OIlvx0aUdQD1D2MYQQP7soYU5HVFAOS
- j9PLpWi2MipEpmfhDg0TGMhvi6nPm236uDYm/YhDZ/+Apn+RF+Sb4hxW1EOTnTXLZX
- O5/we/WGfp/lA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Psp1f0VO
-Subject: Re: [Buildroot] [PATCH] package/libcurlpp: fix invalid conversion
+To: buildroot@buildroot.org
+Date: Wed, 15 Jan 2025 21:00:34 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f06c28d1afef98e80f358c35ae65e035aa64f6ea
+X-Git-Newrev: 489d1f924979f7a94008e887393702e3c3663705
+X-Patchwork-Hint: ignore
+Message-Id: <20250115201541.3FD7485D1F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/network-manager: bump to version
+ 1.50.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,30 +59,136 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=489d1f924979f7a94008e887393702e3c3663705
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 14/01/2025 20:44, Thomas Bonnefille via buildroot wrote:
-> Libcurlpp is broken since the bump of libcurl to 8.10.0.
-> This patch backport a pull request from upstream to solve it.
-> 
-> Fixes:
->     
-> https://autobuild.buildroot.org/results/4a4d3b248898f0e73620fcb1a7a94dcfb6e6866e/
-> 
-> Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Upstream changelog: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/1.50.1/NEWS?ref_type=tags
 
-I applied this patch to master, thanks!
-I slightly reworded the commit log, see:
-https://gitlab.com/buildroot.org/buildroot/-/commit/f06c28d1afef98e80f358c35ae65e035aa64f6ea
+Release downloads have moved to gitlab.freedesktop.org, see [1, 2].
 
-Best regards,
+Drop patch included upstream.
 
-Julien.
+[1] https://lists.freedesktop.org/archives/networkmanager/2024-December/000364.html
+[2] https://download.gnome.org/sources/NetworkManager/IMPORTANT-NetworkManager-releases-moved.txt
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...ore-disable-sd_dhcp6_client_set_duid_uuid.patch | 68 ----------------------
+ package/network-manager/network-manager.hash       |  4 +-
+ package/network-manager/network-manager.mk         |  6 +-
+ 3 files changed, 5 insertions(+), 73 deletions(-)
+
+diff --git a/package/network-manager/0001-libnm-systemd-core-disable-sd_dhcp6_client_set_duid_uuid.patch b/package/network-manager/0001-libnm-systemd-core-disable-sd_dhcp6_client_set_duid_uuid.patch
+deleted file mode 100644
+index 7c5d4bde78..0000000000
+--- a/package/network-manager/0001-libnm-systemd-core-disable-sd_dhcp6_client_set_duid_uuid.patch
++++ /dev/null
+@@ -1,68 +0,0 @@
+-From 118e3117fe48f18cb2175b3cbc95a6ea3ced28b2 Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Fri, 7 Jun 2024 14:03:15 -0700
+-Subject: [PATCH] libnm-systemd-core: Disable sd_dhcp6_client_set_duid_uuid
+- function
+-
+-When building on musl systems ( with out systemd ), and using LLD linker
+-from LLVM project we fail to link with undefined symbols.
+-
+-This symbol is in sd_id128.c but its disabled, so let disable the functions
+-which need this function.
+-
+-| x86_64-yoe-linux-musl-ld.lld: error: undefined symbol: sd_id128_get_machine_app_specific
+-| >>> referenced by sd-dhcp-duid.c:202 (/usr/src/debug/networkmanager/1.48.0/../NetworkManager-1.48.0/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c:202)
+-| >>>               libnm-systemd-core.a.p/src_libsystemd-network_sd-dhcp-duid.c.o:(sd_dhcp_duid_set_uuid) in archive src/libnm-systemd-core/libnm-systemd-core.a
+-| x86_64-yoe-linux-musl-clang: error: linker command failed with exit code 1 (use -v to see invocation)
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Upstream: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/118e3117fe48f18cb2175b3cbc95a6ea3ced28b2
+-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+----
+- src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c    | 2 ++
+- src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c | 2 ++
+- 2 files changed, 4 insertions(+)
+-
+-diff --git a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
+-index e664a4a7207..28abddfbc5e 100644
+---- a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
+-+++ b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
+-@@ -193,6 +193,7 @@ int sd_dhcp_duid_set_en(sd_dhcp_duid *duid) {
+-         return 0;
+- }
+-
+-+#if 0  /* NM_IGNORED */
+- int sd_dhcp_duid_set_uuid(sd_dhcp_duid *duid) {
+-         sd_id128_t machine_id;
+-         int r;
+-@@ -209,6 +210,7 @@ int sd_dhcp_duid_set_uuid(sd_dhcp_duid *duid) {
+-         duid->size = offsetof(struct duid, uuid.uuid) + sizeof(machine_id);
+-         return 0;
+- }
+-+#endif /* NM_IGNORED */
+-
+- int dhcp_duid_to_string_internal(uint16_t type, const void *data, size_t data_size, char **ret) {
+-         _cleanup_free_ char *p = NULL, *x = NULL;
+-diff --git a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
+-index 7c20116409e..a6b55d07e0b 100644
+---- a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
+-+++ b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
+-@@ -244,6 +244,7 @@ int sd_dhcp6_client_set_duid_en(sd_dhcp6_client *client) {
+-         return 0;
+- }
+-
+-+#if 0  /* NM_IGNORED */
+- int sd_dhcp6_client_set_duid_uuid(sd_dhcp6_client *client) {
+-         int r;
+-
+-@@ -256,6 +257,7 @@ int sd_dhcp6_client_set_duid_uuid(sd_dhcp6_client *client) {
+-
+-         return 0;
+- }
+-+#endif /* NM_IGNORED */
+-
+- int sd_dhcp6_client_set_duid_raw(sd_dhcp6_client *client, uint16_t duid_type, const uint8_t *duid, size_t duid_len) {
+-         int r;
+---
+-GitLab
+-
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 9fe9ce4e8b..ffa438aa01 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/NetworkManager/1.48/NetworkManager-1.48.8.sha256sum
+-sha256  5dc188fdffcf2d23c89d34b1e6319a6b20203e12eaec24b30037b7ea8ac8c613  NetworkManager-1.48.10.tar.xz
++# From https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/1.50.1/downloads/NetworkManager-1.50.1.tar.xz.sha256sum
++sha256  5f9b881810e83a9f7c152f9c0051ee0bf922bd23053208f642c8fcaa1bdcdd25  NetworkManager-1.50.1.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 8349b6c79b..079f9aa98f 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-NETWORK_MANAGER_VERSION_MAJOR = 1.48
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10
++NETWORK_MANAGER_VERSION_MAJOR = 1.50
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).1
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+-NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
++NETWORK_MANAGER_SITE = https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/$(NETWORK_MANAGER_VERSION)/downloads
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+ NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
