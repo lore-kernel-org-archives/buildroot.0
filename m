@@ -1,95 +1,139 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DEB5C02180
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 10:28:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A9D6C02180
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 11:11:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF05383FAF;
-	Wed, 15 Jan 2025 10:28:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oWrjMgcCakNP; Wed, 15 Jan 2025 10:28:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C0AD83FA4
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C0AD83FA4;
-	Wed, 15 Jan 2025 10:28:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4E32BB89
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 10:28:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3B5AC60B18
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 10:28:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 23F4060B9B;
+	Wed, 15 Jan 2025 11:11:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Z7LoL24cSbw for <buildroot@buildroot.org>;
- Wed, 15 Jan 2025 10:28:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+ id NojfoJafk08D; Wed, 15 Jan 2025 11:11:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1574C61070
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1574C61070;
+	Wed, 15 Jan 2025 11:11:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C457B89
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 11:11:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6BFCB4156C
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 11:11:31 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hEms6MR6akkL for <buildroot@buildroot.org>;
+ Wed, 15 Jan 2025 11:11:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6B72360679
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B72360679
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6B72360679
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 10:28:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A41F540881
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A41F540881
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A41F540881
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 11:11:29 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.lan ([85.22.124.111]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N9MpS-1tSUHE1lTw-00xFyg; Wed, 15
- Jan 2025 11:28:48 +0100
-To: buildroot@buildroot.org
-Cc: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-Date: Wed, 15 Jan 2025 11:28:27 +0100
-Message-ID: <20250115102827.3479245-1-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.47.1
+Received: from [192.168.7.2] ([85.22.124.111]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mw9QC-1tFFOr34aK-0158FT; Wed, 15
+ Jan 2025 12:11:25 +0100
+Message-ID: <089b9f07-82b1-41ec-8600-ebc7af8263e9@gmx.de>
+Date: Wed, 15 Jan 2025 12:11:24 +0100
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:XI4B/Cb9ztE66MYGCsSmbU4E8mtiipnxDoH9mpiTONBzSqQMWCo
- IgYPJvQKD4bFZiiSGywT1wk9LU/Eh3RUkwdu9Uc+HF7KJR4uuhO8O6LhFcHwWuSMxA4hU2z
- eSM7JP/N4EGOAKusu5EqplRon9h1V2fBJUgccpawar5sXCzJ+HmaWJlYTkR/nKuCu6daEY7
- GBfzXu+pCy1IzHDScapGw==
-UI-OutboundReport: notjunk:1;M01:P0:rJ1URLaJhSA=;GroeZvEqH1ps18fK19wIKCd59nq
- 47RPsCCkk/AhGv4klfBH04fh0AkkHFrEEBu0+HauHt6iWvTJTya2NFmBdjNiZQ4LOI5hKkh5F
- ACy2RMTM3yMdla9gNy1BvcZVH2M0jhOsjlTsdqhEGJKox9TLr0IUZ/m5e5W4q5/qhPy147pty
- jAXwt/iqMFFsWowRRv6VMIUfDsPEjd6cfLywPjCkS9dabPbSOkRqNFYv5N+U1ubcTp2n26JcE
- tFvjhNHDITwUuEmxJv6eN4wIwiYhv/zl1tdmhuZYg6GwK8X3rGwTQ5p6I7jESYD2Tguck+PiI
- pns6EWf1GTkrsl3rbJ3U9fhOfvTevRtrWJb4i7rqeV3xwR6cIM3MvnlrKZ0UfgT7e1ReR0EI7
- b468js67n7ygOT8hysQYf7hMRgfLrpN+j49Emr5wcIPRlJxegqDpJkYhmPaXACLrvXObm/OBp
- gzn1fTfFulxO3DCP9frVTUx98HBaP1EtDGj5avp6Ij+O9gxc39+32WL2MChRmiIlPi5hjaIbi
- hqZGuppr6HWbJYpYHdP9oP5J8sxKNeN0rQp8Y8L+sMRBb3CcPos9PUuzzrocNfzfv8O4BEUXP
- gIa/pAHWxAY1vKjbKeCXKOrXCMTm8Ro7z65J8eYWLoAYX6cCdhoAayReJMtRpih20eEtP8giD
- FrkC8DDID8PBSYIchmxCw3RtPnlsEMKHXCiS5mHDYm7CFvif4pOG8KAhcJvmuFgToUK4b/fRq
- mJN+W5sv53Yrk+G43rJ6xPN6ujg83UCcok8RqSvnjpuj9LP0echtqdLB0ucAB4bh1KMtmHiS3
- nrIr+HdXwJum121sQlVTpDlaOpXEkeT+FT1aK6rIqyzscWU5rkh4xJTAXYu1pKnu1Hm48k0vs
- RWGzIvIdN0y9vGF/HTedUAXYkjLCBqqkJJgs6zVupPw380fe0UELFJZqTiudaeh87fhCE114D
- TSP+usQKDOpJsx+CAoZyD0YWC1/L+f+SPUeg1c9o4MoBwxKHVvqlKXwOzErEyH8veLexvF+2U
- ClU/dgssqvMAz8sfCbkkSj/1B4VkkPFRwbqK004PYHIhGMhlfZCfHAvEIlkSMtAyAniDkPvsE
- mvJm16DWXa5y1WR9EGZ5U4EJEfD0mk
+User-Agent: Mozilla Thunderbird
+To: buildroot@buildroot.org
+References: <20241204182913.4085670-1-fiona.klute@gmx.de>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <20241204182913.4085670-1-fiona.klute@gmx.de>
+X-Provags-ID: V03:K1:PkhLc46w8mTqO5ddDkQMgPF4H4aZ/fxLA1GctPYsdQQWi3KQc4p
+ IcRa9p+ipWtEpUhnhWQQtCv2g7OrAfxCZ/oWLbxI3reXHVCxbFqUP1pxw8BruA5mGyQw0+X
+ 27For4FvFSHwevVg/TDPE346D8D9maAlYptC2ZWTseL5dCFJhzJa/Kctk10sih5AVrWiRgq
+ HMlOAdBvadjmJhSze1kWg==
+UI-OutboundReport: notjunk:1;M01:P0:yaq+9euk4yI=;X+lxytPSKHw2wROK7KPKXERL/+U
+ nN2Nak3vpVs167P+3j8Y9HChF52QIxgjMugV+jKnbYntpqJ2GJYwLqi/WoayNEsLn5cv16e8Z
+ uRV+l3aOwHLA+2VB2wd1Q5F04rr7XVpSgAE7PUEBEOQ17kIJGQzNcAwnvDofcZkfqg2uUYc7E
+ lJumEuTqF4qxy0K4RmwXBb7tiU7AVOnhj9sc5eG5b8giUI1me+vOBR5ygVXcET+t4TKqTUMVt
+ ESJI7EB5+vlH/DH3cpZ4HmppgZhB9q/xgX8tqpvVGR4rFk0EisF4EFptuD2ra9vftpGECCSuW
+ DNQ0PVSNNWhhNKAk5jtD+h6yc4nZObucqyWIEpxksYId8wj4f5Dq9YE8lcSKsBxTtEasch18G
+ BRUmPfNMdHyqabk2rF6YMvu6eVQc4CSI81I8etJV62+EfmLc4F17z+76Z0E+VW4/Ci9icGPhb
+ H4F50c+QdDSGQJotTOdi7Kib/eHRg/FoH7pfOXr+FB09/W0gfSAGFDEJsEqI1LwF+TRWTU+Yu
+ kiHQ6KEvktySyIsN+Qk449K+bGTE8ofdOPoNa8LSusYnQD06CwHfp35Q7/L8tDhM/TZ8FpY2T
+ 84js65EYh0vjt3+Mn4SCVC3hLMsEuNsnpg59HdGunwDkrA50iJ6s2HZsnoZZplrMFL3SZLXoJ
+ YCfHylBaavq3Ps3eG/xb0c/uaGuE4mRLyUpRZtDtaGuzAbWrD1vRrhn3dTg6bgyv4q5UD0eCy
+ A/dR85+v7GICKV1tenmuxF1w6och60ZPuoTFxifye7uz3s3typm0Sp4sXE4qfUWV/jVUJ0Hz0
+ SVy7ZEQWmtRHiC3I9AC1zd/Dpqf7mpIyOQ1ZM261yM4/w3dRekq4Aik3na81Vb25s/SYFtpw7
+ dq1NApUvvrbckJ64+pwZcRxFEaQXvJdf9EV5HEyGqhAJbUwldhXW8OF0gor1u8yvINBeS42Lu
+ u625j71He0U5DNiqJrwp0ygZGgm7EZFDTQD64EjQUUJXfPl3hASnKZ9AVhVFdchTSh4CrDcyK
+ /+qpGf0sYQcCIY7u94wtFzUpvpftZw4poe65DlV97IF1iRUSebRhh466sbWQv7rAz0YeioORq
+ y9oEzVrQg1u6JpDNIES1Rze1PyQOzD
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1736936928; x=1737541728; i=fiona.klute@gmx.de;
- bh=nNxIDqi9SC6zWTF5EWq+G6SbP2gvUtQSxpHPtV9NktE=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=rmoNfM7oSSraSkjC3UWpin3J8G517tAI8taMf/r9DOffEe2wj1SruWCfVWK+ahuL
- Zh7OLD2t2HkYyd4LcUEe7Noz9Vvzw5GSTh4zktM/SYefkOhPf/NtXGhPZtcdhx5/z
- Tu+JjfVXNqU6Yw3EUsKTTeupKbuWM7jiXaU/7q+VB92cT9C/UcDPFD7e8PeqtX1Pd
- ZWmc5/iAPUj5gzD6vwCL2jjEMBT4TjNYTf/NAWpdbeL0jgMXEz0d3mPp9N1xY5uHz
- Lx0CXagHQr2km9msbWg51nByjwkDxpSHJ7A6kOHVLRuSdJOyQypVa5+cUUFEUB1gS
- uqXBy4rjZHTkH8YK5w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=s31663417; t=1736939486; x=1737544286; i=fiona.klute@gmx.de;
+ bh=j6GANyxNdoG6rOZG605pmL8C2CqBxVfJ6D7tBuNC794=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=K0LrLcA1KSWKrm9oubPM9jK2mglaohTuA5HAKWia7mlx17q/FSPm9TGLOYN4CUuz
+ 2kO+7uBCSKvPzSuA7MdtVgoyRfEtIWMwO38REGxRTODXtTO9TJmHI6dgQPQeZNAF/
+ c9JOWFeAH7O2N3kx6lu3KOllUfLvscmu6PmKzt8Y6NNRNG16qWm8l3u5Jo/puogmh
+ /2ERyR2ZoveCH/DffEMRrizpyx0oTXncA+3E5rOPSRz13F47A1mqm3d4jcGdFC3Yp
+ gHsAiAX2CRTiQ5B5Ca4enNfTmhv5ySzKELErWp5NMhKbPYBF6IxRSx+5hAuiFnxCN
+ vzFPD5yPujtMIUbdXA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=rmoNfM7o
-Subject: [Buildroot] [PATCH 1/1] package/network-manager: bump to version
- 1.50.1
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=K0LrLcA1
+Subject: Re: [Buildroot] [PATCH v5 0/6] nftables firewall support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,136 +147,91 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Fiona Klute via buildroot <buildroot@buildroot.org>
 Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Julien Olivain <ju.o@free.fr>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+Hi,
 
-Upstream changelog: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/1.50.1/NEWS?ref_type=tags
+is there anything I can do to get this series merged? Having a proper
+firewall is important, and I'd rather get it into shape and merged than
+keep carrying local patches. :-)
 
-Release downloads have moved to gitlab.freedesktop.org, see [1, 2].
+AFAIK the only open question is if the current approach of warning on
+reload if the rules file doesn't contain a flush (to replace current
+rules, instead of adding to them) is good, or if doing a flush
+unconditionally, or nothing at all is better. I can quickly adjust that
+if needed.
 
-Drop patch included upstream.
+Patchwork link for the series:
+https://patchwork.ozlabs.org/project/buildroot/list/?series=435291
 
-[1] https://lists.freedesktop.org/archives/networkmanager/2024-December/000364.html
-[2] https://download.gnome.org/sources/NetworkManager/IMPORTANT-NetworkManager-releases-moved.txt
+Best regards,
+Fiona
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
----
- ...isable-sd_dhcp6_client_set_duid_uuid.patch | 68 -------------------
- package/network-manager/network-manager.hash  |  4 +-
- package/network-manager/network-manager.mk    |  6 +-
- 3 files changed, 5 insertions(+), 73 deletions(-)
- delete mode 100644 package/network-manager/0001-libnm-systemd-core-disable-sd_dhcp6_client_set_duid_uuid.patch
-
-diff --git a/package/network-manager/0001-libnm-systemd-core-disable-sd_dhcp6_client_set_duid_uuid.patch b/package/network-manager/0001-libnm-systemd-core-disable-sd_dhcp6_client_set_duid_uuid.patch
-deleted file mode 100644
-index 7c5d4bde78..0000000000
---- a/package/network-manager/0001-libnm-systemd-core-disable-sd_dhcp6_client_set_duid_uuid.patch
-+++ /dev/null
-@@ -1,68 +0,0 @@
--From 118e3117fe48f18cb2175b3cbc95a6ea3ced28b2 Mon Sep 17 00:00:00 2001
--From: Khem Raj <raj.khem@gmail.com>
--Date: Fri, 7 Jun 2024 14:03:15 -0700
--Subject: [PATCH] libnm-systemd-core: Disable sd_dhcp6_client_set_duid_uuid
-- function
--
--When building on musl systems ( with out systemd ), and using LLD linker
--from LLVM project we fail to link with undefined symbols.
--
--This symbol is in sd_id128.c but its disabled, so let disable the functions
--which need this function.
--
--| x86_64-yoe-linux-musl-ld.lld: error: undefined symbol: sd_id128_get_machine_app_specific
--| >>> referenced by sd-dhcp-duid.c:202 (/usr/src/debug/networkmanager/1.48.0/../NetworkManager-1.48.0/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c:202)
--| >>>               libnm-systemd-core.a.p/src_libsystemd-network_sd-dhcp-duid.c.o:(sd_dhcp_duid_set_uuid) in archive src/libnm-systemd-core/libnm-systemd-core.a
--| x86_64-yoe-linux-musl-clang: error: linker command failed with exit code 1 (use -v to see invocation)
--
--Signed-off-by: Khem Raj <raj.khem@gmail.com>
--Upstream: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/118e3117fe48f18cb2175b3cbc95a6ea3ced28b2
--Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-----
-- src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c    | 2 ++
-- src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c | 2 ++
-- 2 files changed, 4 insertions(+)
--
--diff --git a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
--index e664a4a7207..28abddfbc5e 100644
----- a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
--+++ b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
--@@ -193,6 +193,7 @@ int sd_dhcp_duid_set_en(sd_dhcp_duid *duid) {
--         return 0;
-- }
--
--+#if 0  /* NM_IGNORED */
-- int sd_dhcp_duid_set_uuid(sd_dhcp_duid *duid) {
--         sd_id128_t machine_id;
--         int r;
--@@ -209,6 +210,7 @@ int sd_dhcp_duid_set_uuid(sd_dhcp_duid *duid) {
--         duid->size = offsetof(struct duid, uuid.uuid) + sizeof(machine_id);
--         return 0;
-- }
--+#endif /* NM_IGNORED */
--
-- int dhcp_duid_to_string_internal(uint16_t type, const void *data, size_t data_size, char **ret) {
--         _cleanup_free_ char *p = NULL, *x = NULL;
--diff --git a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
--index 7c20116409e..a6b55d07e0b 100644
----- a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
--+++ b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
--@@ -244,6 +244,7 @@ int sd_dhcp6_client_set_duid_en(sd_dhcp6_client *client) {
--         return 0;
-- }
--
--+#if 0  /* NM_IGNORED */
-- int sd_dhcp6_client_set_duid_uuid(sd_dhcp6_client *client) {
--         int r;
--
--@@ -256,6 +257,7 @@ int sd_dhcp6_client_set_duid_uuid(sd_dhcp6_client *client) {
--
--         return 0;
-- }
--+#endif /* NM_IGNORED */
--
-- int sd_dhcp6_client_set_duid_raw(sd_dhcp6_client *client, uint16_t duid_type, const uint8_t *duid, size_t duid_len) {
--         int r;
----
--GitLab
--
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index 9fe9ce4e8b..ffa438aa01 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/NetworkManager/1.48/NetworkManager-1.48.8.sha256sum
--sha256  5dc188fdffcf2d23c89d34b1e6319a6b20203e12eaec24b30037b7ea8ac8c613  NetworkManager-1.48.10.tar.xz
-+# From https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/1.50.1/downloads/NetworkManager-1.50.1.tar.xz.sha256sum
-+sha256  5f9b881810e83a9f7c152f9c0051ee0bf922bd23053208f642c8fcaa1bdcdd25  NetworkManager-1.50.1.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 785976a0aa..015e6b212a 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--NETWORK_MANAGER_VERSION_MAJOR = 1.48
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10
-+NETWORK_MANAGER_VERSION_MAJOR = 1.50
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).1
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
--NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
-+NETWORK_MANAGER_SITE = https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/$(NETWORK_MANAGER_VERSION)/downloads
- NETWORK_MANAGER_INSTALL_STAGING = YES
- NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
- NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL
--- 
-2.47.1
+Am 04.12.24 um 19:29 schrieb Fiona Klute:
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+>
+> This series builds on two patches I've sent previously before, with
+> the main goal of supporting firewall configuration through an nftables
+> rules file. Offering the choice of iptables-nft as the default
+> iptables implementation (smilar to e.g. update-alternatives on Debian)
+> makes it easier to integrate that with legacy applications that rely
+> on the iptables command (e.g. Docker).
+>
+> Changes v4 -> v5:
+> * nftables init script: run any target only if rules file exists
+> * iptables init script: run any target only if rules file exists,
+>    except for "save" (which may be used to create it)
+> * rename series to clarify that nftables firewall support is
+>    non-existent otherwise
+> * v4 for reference:
+>    https://patchwork.ozlabs.org/project/buildroot/list/?series=416810
+>
+> Changes v3 -> v4:
+> * set ip6tables symlinks when selecting nftables compat
+>
+> Changes v2 -> v3:
+> * move change from "iptables -F" to "iptables --flush" to the correct
+>    patch (3/6)
+>
+> Changes v1 -> v2:
+> * add patches 3-6
+> * clarify comments & commit messages
+> * nftables init script: Warning about missing flush in ruleset on reload
+> * nftables init script: check for rules file only on start
+> * nftables init script: return nft return code from start/stop functions
+> * iptables init script: start only if rules file exists
+> * add tests for init scripts
+> * use long form options in init scripts
+> * fix typecheck warnings
+>
+> Fiona Klute (WIWA) (6):
+>    package/nftables: add init script
+>    package/iptables: optionally default to nftables compat
+>    package/iptables: check for rules in init script
+>    support/testing: test for nftables init script
+>    support/testing: include init script in iptables test
+>    support/testing: fix MyPy warnings about BRConfigTest
+>
+>   .checkpackageignore                           |  1 -
+>   DEVELOPERS                                    |  1 +
+>   package/iptables/Config.in                    | 12 ++++
+>   package/iptables/S35iptables                  | 16 +++--
+>   package/iptables/iptables.mk                  | 13 +++-
+>   package/nftables/S35nftables                  | 67 +++++++++++++++++++
+>   package/nftables/nftables.mk                  |  5 ++
+>   support/testing/infra/basetest.py             |  4 +-
+>   .../testing/tests/package/test_iptables.py    | 18 +++++
+>   .../testing/tests/package/test_nftables.py    | 37 +++++++++-
+>   .../rootfs-overlay/etc/nftables.conf          |  8 +++
+>   11 files changed, 172 insertions(+), 10 deletions(-)
+>   create mode 100644 package/nftables/S35nftables
+>   create mode 100644 support/testing/tests/package/test_nftables/rootfs-overlay/etc/nftables.conf
+>
 
 _______________________________________________
 buildroot mailing list
