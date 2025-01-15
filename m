@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2691FC02183
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 20:36:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F3D4C02180
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 20:36:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E5299423C2;
-	Wed, 15 Jan 2025 20:36:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 188C941E61;
+	Wed, 15 Jan 2025 20:36:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TytjqL_92J4x; Wed, 15 Jan 2025 20:36:00 +0000 (UTC)
+ id 9qzPtt-r9GwB; Wed, 15 Jan 2025 20:36:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B620423B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF149423DD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B620423B5;
-	Wed, 15 Jan 2025 20:36:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF149423DD;
+	Wed, 15 Jan 2025 20:36:03 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 78C3B94B
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:35:35 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8D796B89
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:35:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 613056F712
+ by smtp3.osuosl.org (Postfix) with ESMTP id A43256F716
  for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:35:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nmA-BH10yHfJ for <buildroot@buildroot.org>;
- Wed, 15 Jan 2025 20:35:31 +0000 (UTC)
+ id e2ehPvwBGf7B for <buildroot@buildroot.org>;
+ Wed, 15 Jan 2025 20:35:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B874E6F72C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB5566F722
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B874E6F72C
+ by smtp3.osuosl.org (Postfix) with ESMTP id AB5566F722
  for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:35:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B425B83B09; Wed, 15 Jan 2025 20:35:30 +0000 (UTC)
+ id A6E3885DB7; Wed, 15 Jan 2025 20:35:30 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 15 Jan 2025 21:30:46 +0100
+Date: Wed, 15 Jan 2025 21:30:43 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: febe8a888c0ea3e1d5ec5b19858fcc359dc6f40f
-X-Git-Newrev: 237bd32f0bf9aaf3b24e494b0bdaa63f8dbc3069
+X-Git-Oldrev: 895fe8d0f775095bbc7294b8366dbe9fa7a4968a
+X-Git-Newrev: febe8a888c0ea3e1d5ec5b19858fcc359dc6f40f
 X-Patchwork-Hint: ignore
-Message-Id: <20250115203530.B425B83B09@busybox.osuosl.org>
+Message-Id: <20250115203530.A6E3885DB7@busybox.osuosl.org>
 Subject: [Buildroot] [git commit] toolchain: remove
- BR2_TOOLCHAIN_HAS_GCC_BUG_99410 (nios2 only)
+ BR2_TOOLCHAIN_HAS_GCC_BUG_93847 (nios2 only)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,68 +65,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=237bd32f0bf9aaf3b24e494b0bdaa63f8dbc3069
+commit: https://git.buildroot.net/buildroot/commit/?id=febe8a888c0ea3e1d5ec5b19858fcc359dc6f40f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/belle-sip/belle-sip.mk |  4 ----
- package/matio/matio.mk         |  4 ----
- toolchain/Config.in            | 10 ----------
- 3 files changed, 18 deletions(-)
+ package/asterisk/asterisk.mk | 4 ----
+ package/git/git.mk           | 2 +-
+ toolchain/Config.in          | 7 -------
+ 3 files changed, 1 insertion(+), 12 deletions(-)
 
-diff --git a/package/belle-sip/belle-sip.mk b/package/belle-sip/belle-sip.mk
-index c9bcc3f55d..b4de3612ce 100644
---- a/package/belle-sip/belle-sip.mk
-+++ b/package/belle-sip/belle-sip.mk
-@@ -35,10 +35,6 @@ endif
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index e27aa2f760..7b99d30fd9 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -290,10 +290,6 @@ ASTERISK_MAKE_OPTS += OPTIMIZE=""
  
- BELLE_SIP_CFLAGS = $(TARGET_CFLAGS)
+ ASTERISK_CFLAGS = $(TARGET_CFLAGS)
  
--ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_99410),y)
--BELLE_SIP_CFLAGS += -O0
+-ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_93847),y)
+-ASTERISK_CFLAGS += -O0
 -endif
 -
- BELLE_SIP_CONF_OPTS += -DCMAKE_C_FLAGS="$(BELLE_SIP_CFLAGS)"
+ ASTERISK_CONF_OPTS += CFLAGS="$(ASTERISK_CFLAGS)"
  
- $(eval $(cmake-package))
-diff --git a/package/matio/matio.mk b/package/matio/matio.mk
-index dc9be2ac18..d378f06e5b 100644
---- a/package/matio/matio.mk
-+++ b/package/matio/matio.mk
-@@ -19,10 +19,6 @@ MATIO_CONF_ENV = ac_cv_va_copy=yes
+ # We want to install sample configuration files, too.
+diff --git a/package/git/git.mk b/package/git/git.mk
+index f56807a00f..bc17c9a993 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -66,7 +66,7 @@ endif
  
- MATIO_CFLAGS = $(TARGET_CFLAGS)
+ GIT_CFLAGS = $(TARGET_CFLAGS)
  
--ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_99410),y)
--MATIO_CFLAGS += -O0
--endif
--
- MATIO_CONF_ENV += CFLAGS="$(MATIO_CFLAGS)"
+-ifneq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180)$(BR2_TOOLCHAIN_HAS_GCC_BUG_93847),)
++ifneq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),)
+ GIT_CFLAGS += -O0
+ endif
  
- # mat73 require hdf5 (not available), extented-sparse take 2KB
 diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 23123138e5..86ab3710a0 100644
+index 87160af3d7..23123138e5 100644
 --- a/toolchain/Config.in
 +++ b/toolchain/Config.in
-@@ -180,16 +180,6 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_90620
+@@ -180,13 +180,6 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_90620
  	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10 \
  		|| BR2_TOOLCHAIN_GCC_AT_LEAST_11
  
--# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99410
--# Error: branch offset out of range on Nios II. This bug
--# no longer exists in gcc 8.x but reappeared on gcc 9.x and still exists
--# on gcc 12.x
--config BR2_TOOLCHAIN_HAS_GCC_BUG_99410
+-# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93847
+-# ICE: compiler error: Segmentation fault on Nios II. This bug
+-# no longer exists in gcc 9.x.
+-config BR2_TOOLCHAIN_HAS_GCC_BUG_93847
 -	bool
--	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
--	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_9
--	depends on BR2_nios2
+-	default y if BR2_nios2 && !BR2_TOOLCHAIN_GCC_AT_LEAST_9
 -
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737
- # ICE: SH4 -Os causes internal compiler error. This bug
- # still exists in gcc = 11.1.0
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99410
+ # Error: branch offset out of range on Nios II. This bug
+ # no longer exists in gcc 8.x but reappeared on gcc 9.x and still exists
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
