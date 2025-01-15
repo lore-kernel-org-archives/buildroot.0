@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4837C02183
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 20:35:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2691FC02183
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 20:36:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A52E42398;
-	Wed, 15 Jan 2025 20:35:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E5299423C2;
+	Wed, 15 Jan 2025 20:36:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i7JNS1fVIJdz; Wed, 15 Jan 2025 20:35:57 +0000 (UTC)
+ id TytjqL_92J4x; Wed, 15 Jan 2025 20:36:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2127441E76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B620423B5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2127441E76;
-	Wed, 15 Jan 2025 20:35:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B620423B5;
+	Wed, 15 Jan 2025 20:36:00 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 72F8F94B
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:35:34 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 78C3B94B
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:35:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C9496F734
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:35:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 613056F712
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:35:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nreh1MYuWd9C for <buildroot@buildroot.org>;
+ id nmA-BH10yHfJ for <buildroot@buildroot.org>;
  Wed, 15 Jan 2025 20:35:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFBBE6F730
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B874E6F72C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFBBE6F730
+ by smtp3.osuosl.org (Postfix) with ESMTP id B874E6F72C
  for <buildroot@buildroot.org>; Wed, 15 Jan 2025 20:35:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD11B85DB7; Wed, 15 Jan 2025 20:35:30 +0000 (UTC)
+ id B425B83B09; Wed, 15 Jan 2025 20:35:30 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 15 Jan 2025 21:30:52 +0100
+Date: Wed, 15 Jan 2025 21:30:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a24bb5f703fd05a5fbdf0e5963ab26fa80711047
-X-Git-Newrev: 6775ccc5a199d574ad70b5f79ec58cce97a07c6f
+X-Git-Oldrev: febe8a888c0ea3e1d5ec5b19858fcc359dc6f40f
+X-Git-Newrev: 237bd32f0bf9aaf3b24e494b0bdaa63f8dbc3069
 X-Patchwork-Hint: ignore
-Message-Id: <20250115203530.CD11B85DB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] arch/nios2: drop architecture
+Message-Id: <20250115203530.B425B83B09@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain: remove
+ BR2_TOOLCHAIN_HAS_GCC_BUG_99410 (nios2 only)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,122 +65,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6775ccc5a199d574ad70b5f79ec58cce97a07c6f
+commit: https://git.buildroot.net/buildroot/commit/?id=237bd32f0bf9aaf3b24e494b0bdaa63f8dbc3069
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The nios2 architecture was deprecated in gcc-14 and has been removed
-in the upcoming gcc-15 [1][2].
-
-This commit removes nios2 from the architecture entry.
-
-[1] https://sourceware.org/pipermail/binutils/2024-April/133675.html
-[2] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=e876acab6cdd84bb2b32c98fc69fb0ba29c81153
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- Config.in            |  2 --
- Config.in.legacy     |  7 +++++++
- DEVELOPERS           |  1 -
- arch/Config.in       | 14 --------------
- arch/Config.in.nios2 | 14 --------------
- 5 files changed, 7 insertions(+), 31 deletions(-)
+ package/belle-sip/belle-sip.mk |  4 ----
+ package/matio/matio.mk         |  4 ----
+ toolchain/Config.in            | 10 ----------
+ 3 files changed, 18 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 28d34c8721..c0c1a6079d 100644
---- a/Config.in
-+++ b/Config.in
-@@ -808,8 +808,6 @@ config BR2_PIC_PIE_ARCH_SUPPORTS
- 	default y
- 	# Microblaze glibc toolchains don't work with PIC/PIE enabled
- 	depends on !BR2_microblaze
--	# Nios2 toolchains produce non working binaries with -fPIC
--	depends on !BR2_nios2
+diff --git a/package/belle-sip/belle-sip.mk b/package/belle-sip/belle-sip.mk
+index c9bcc3f55d..b4de3612ce 100644
+--- a/package/belle-sip/belle-sip.mk
++++ b/package/belle-sip/belle-sip.mk
+@@ -35,10 +35,6 @@ endif
  
- config BR2_PIC_PIE
- 	bool "Build code with PIC/PIE"
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 54c251be1f..e091fd8c0a 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+ BELLE_SIP_CFLAGS = $(TARGET_CFLAGS)
  
- comment "Legacy options removed in 2025.02"
- 
-+config BR2_nios2
-+	bool "nios2 architecture removed"
-+	select BR2_LEGACY
-+	help
-+	  The nios2 architecture was removed, by lack of toolchain
-+	  support.
-+
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_NIOS2_GLIBC_BLEEDING_EDGE
- 	bool "Bootlin nios2 glibc bleeding-edge toolchain removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9cc27025f8..2d8ae8289b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -950,7 +950,6 @@ F:	package/tcf-agent/
- N:	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
- F:	board/ci20/
- F:	configs/ci20_defconfig
--F:	arch/Config.in.nios2
- F:	package/fio/
- F:	package/iptraf-ng/
- F:	package/jimtcl/
-diff --git a/arch/Config.in b/arch/Config.in
-index 6254cb6467..6b54c65df9 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -143,16 +143,6 @@ config BR2_mips64el
- 	  http://www.mips.com/
- 	  http://en.wikipedia.org/wiki/MIPS_Technologies
- 
--config BR2_nios2
--	bool "Nios II"
--	depends on BR2_BROKEN
--	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
--	select BR2_USE_MMU
--	help
--	  Nios II is a soft core processor from Altera Corporation.
--	  http://www.altera.com/
--	  http://en.wikipedia.org/wiki/Nios_II
--
- config BR2_or1k
- 	bool "OpenRISC"
- 	select BR2_USE_MMU
-@@ -395,10 +385,6 @@ if BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el
- source "arch/Config.in.mips"
- endif
- 
--if BR2_nios2
--source "arch/Config.in.nios2"
+-ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_99410),y)
+-BELLE_SIP_CFLAGS += -O0
 -endif
 -
- if BR2_or1k
- source "arch/Config.in.or1k"
- endif
-diff --git a/arch/Config.in.nios2 b/arch/Config.in.nios2
-deleted file mode 100644
-index a5d7e66d40..0000000000
---- a/arch/Config.in.nios2
-+++ /dev/null
-@@ -1,14 +0,0 @@
--config BR2_ARCH
--	default "nios2"
+ BELLE_SIP_CONF_OPTS += -DCMAKE_C_FLAGS="$(BELLE_SIP_CFLAGS)"
+ 
+ $(eval $(cmake-package))
+diff --git a/package/matio/matio.mk b/package/matio/matio.mk
+index dc9be2ac18..d378f06e5b 100644
+--- a/package/matio/matio.mk
++++ b/package/matio/matio.mk
+@@ -19,10 +19,6 @@ MATIO_CONF_ENV = ac_cv_va_copy=yes
+ 
+ MATIO_CFLAGS = $(TARGET_CFLAGS)
+ 
+-ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_99410),y)
+-MATIO_CFLAGS += -O0
+-endif
 -
--config BR2_NORMALIZED_ARCH
--	default "nios2"
+ MATIO_CONF_ENV += CFLAGS="$(MATIO_CFLAGS)"
+ 
+ # mat73 require hdf5 (not available), extented-sparse take 2KB
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 23123138e5..86ab3710a0 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -180,16 +180,6 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_90620
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10 \
+ 		|| BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 
+-# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99410
+-# Error: branch offset out of range on Nios II. This bug
+-# no longer exists in gcc 8.x but reappeared on gcc 9.x and still exists
+-# on gcc 12.x
+-config BR2_TOOLCHAIN_HAS_GCC_BUG_99410
+-	bool
+-	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+-	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_9
+-	depends on BR2_nios2
 -
--config BR2_ENDIAN
--	default "LITTLE"
--
--config BR2_READELF_ARCH_NAME
--	default "Altera Nios II"
--
--# vim: ft=kconfig
--# -*- mode:kconfig; -*-
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737
+ # ICE: SH4 -Os causes internal compiler error. This bug
+ # still exists in gcc = 11.1.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
