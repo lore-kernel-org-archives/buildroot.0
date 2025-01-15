@@ -4,153 +4,150 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A16C2C02180
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 09:50:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 159BBC02183
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 09:50:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DC584160B;
-	Wed, 15 Jan 2025 09:50:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AAD0F4168F;
+	Wed, 15 Jan 2025 09:50:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mkvn4Xtw4ZOA; Wed, 15 Jan 2025 09:50:26 +0000 (UTC)
+ id ZVFWEF7RTacO; Wed, 15 Jan 2025 09:50:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F1E241674
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 969574167A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F1E241674;
-	Wed, 15 Jan 2025 09:50:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D683B8B
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 09:50:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 969574167A;
+	Wed, 15 Jan 2025 09:50:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E0CC94B
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 09:50:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C56B404D1
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 09:50:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F3EE683F70
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 09:50:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BgJ9WDvI5Wnf for <buildroot@buildroot.org>;
- Wed, 15 Jan 2025 09:50:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id upRM4y201Ys0 for <buildroot@buildroot.org>;
+ Wed, 15 Jan 2025 09:50:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2405::60d;
- helo=nam02-dm3-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2416::62c;
+ helo=nam11-co1-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 56DE440454
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56DE440454
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com
- (mail-dm3nam02on2060d.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2405::60d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 56DE440454
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 09:50:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 398ED833C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 398ED833C9
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com
+ (mail-co1nam11on2062c.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2416::62c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 398ED833C9
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 09:50:24 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bDC23ClmHvnAw7P9QVmMvIAf6CQW92s3p9fxjGzCl+Z0uYvFyUha6WoSj8TbLArEqwkZ2SAyV/tKwyoA8P0+TdcfUHwW8YNP1dy5S0pHJJXvaDNZAmOdPRL+OKKxtrU2d4mt5vs5121QtCYESSkCaSVe8beZfHAy5KlUkFi0+/LDkikRCoWbz4mDTWSTvjaByl0WeRwjZPjqqM/l7kpGK9r5KXZs0E7UAMCLjTBoBC2u/Ll0pJ06Ue92n/RdNRUEz/XKX0b8OexeaBCrYR0ACrepQMmwSm5gZXGxS73b+Kk/noqweeFd5/sGwV+BVJPAlaeYsmsaQdrXolJRoDPeew==
+ b=c4+VOk5Pn502RI6HdXwvjlfMw6izd9M1Qr2bSzkWWYyefEOOuhKv2wTCVIpEBwgJ2RJObRTYrug3iNrF2m0R6sxC/bNbsSyMVJxkn7JdED+RSxpvA9PYmKNjld+DwlbCbD62UxwAR0wh8yRamcJqXbYG/gWq0yzDP5HA8teeCSTCmRq9bquHy3CwOCTNiv8dK9rlS+sQBzHYPmkjYYn4DntsMPvnNLuKXvM4A2ZLbMS5BsnO93PrxGyfiGJzgAgGZaosHEsYk6vBoxgGgIi5oz7nmic2mkD43GSvy7Sk+TbO5c6nBnPdDFNOKIFflGVvdGdZNVLXTA7yDTzOvobiJw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=36kwk5lsG+GHUN3hELdwAR2qL9BNV4XwzEfwLtDMwdw=;
- b=ci9Dhh1Ohw/WSJ3oVEQKFKoEfOxccu+m+af7iqdrMNX82/+WowtABC+crh6W2dnzNpH0HZ5bdal6K698I0T+U2pMliGnElU9otS9AnyAIyI7Tg7fUe6VttHSkixIcWjCjquTRnfwBwCGkGoTB7fw+O0FXm9u56s7ljev4lF7TG1ptZ8yzs+c9ICOW2nnbxoqFQ+ExO/kM9W++it1bSHjKNZ98Dnpdz4gfrdWvbY0Vh1iga7P7muXRwWb36ir4fvgoMTftRGfOh4c3CphwmpWxqcrDFW2r3UcRgcG+nzOiwFJrjSjKopGTsX+byUTaneKKp7eugCHKu+ooY9AUJ3b3A==
+ bh=PWtqqmZRfsVGlM9hCD5oI3iIv65yy4Jr4kf4vuuUiDc=;
+ b=tlCwYXllmBMQmFrV8zEHGOPtzP1pjNbfpvzOhXcZptGHlr6aVhl6CxBAEG3FfB+kpGUbmt+pRX7XfhsI68SsffAn4cOK6PW045yaITWYAkDD9OBKtBbIrFSocBk/QHZlGWO+uMhivD1SplhlpYXcutd/qapXBax6KeoRNt//jgiZvg8Jan6jDDgJKalFSaGeFMjuhnqsnEt//R+hVIO7G3klhKOp6tAdo61LYIVIeY/w4XlD4g38vXkwRkXjHHH64lYmKLUKNqayh0HAuB51ujE2Wo6v73HgFXiChpMY56VqeXQ0LfBS/wXShZj02bJW967+q3MgiXzNG/fSJJ7fug==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from SN7P220CA0018.NAMP220.PROD.OUTLOOK.COM (2603:10b6:806:123::23)
- by IA0PR12MB8208.namprd12.prod.outlook.com (2603:10b6:208:409::17)
+Received: from SA0PR11CA0168.namprd11.prod.outlook.com (2603:10b6:806:1bb::23)
+ by CH2PR12MB4309.namprd12.prod.outlook.com (2603:10b6:610:a4::17)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.18; Wed, 15 Jan
- 2025 09:50:18 +0000
-Received: from SN1PEPF0002636E.namprd02.prod.outlook.com
- (2603:10b6:806:123:cafe::24) by SN7P220CA0018.outlook.office365.com
- (2603:10b6:806:123::23) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8356.13 via Frontend Transport; Wed,
- 15 Jan 2025 09:50:17 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.13; Wed, 15 Jan
+ 2025 09:50:20 +0000
+Received: from SN1PEPF00026369.namprd02.prod.outlook.com
+ (2603:10b6:806:1bb:cafe::dc) by SA0PR11CA0168.outlook.office365.com
+ (2603:10b6:806:1bb::23) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8356.14 via Frontend Transport; Wed,
+ 15 Jan 2025 09:50:20 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- SN1PEPF0002636E.mail.protection.outlook.com (10.167.241.139) with Microsoft
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SN1PEPF00026369.mail.protection.outlook.com (10.167.241.134) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8356.11 via Frontend Transport; Wed, 15 Jan 2025 09:50:17 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.8356.11 via Frontend Transport; Wed, 15 Jan 2025 09:50:19 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 15 Jan
- 2025 03:50:17 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 15 Jan
- 2025 03:50:16 -0600
+ 2025 03:50:19 -0600
 Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Wed, 15 Jan 2025 03:50:15 -0600
-From: Neal Frager <neal.frager@amd.com>
+ Transport; Wed, 15 Jan 2025 03:50:17 -0600
 To: <buildroot@buildroot.org>
-Date: Wed, 15 Jan 2025 09:50:10 +0000
-Message-ID: <20250115095011.2469162-2-neal.frager@amd.com>
+Date: Wed, 15 Jan 2025 09:50:11 +0000
+Message-ID: <20250115095011.2469162-3-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250115095011.2469162-1-neal.frager@amd.com>
 References: <20250115095011.2469162-1-neal.frager@amd.com>
 MIME-Version: 1.0
+Received-SPF: None (SATLEXMB04.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF0002636E:EE_|IA0PR12MB8208:EE_
-X-MS-Office365-Filtering-Correlation-Id: 007a3df6-f435-4381-05a5-08dd354a048b
+X-MS-TrafficTypeDiagnostic: SN1PEPF00026369:EE_|CH2PR12MB4309:EE_
+X-MS-Office365-Filtering-Correlation-Id: eb8e20d7-3707-4d1a-818b-08dd354a05dd
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
  ARA:13230040|82310400026|36860700013|1800799024|376014|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?c8dB4CpuBF6+Ny5FrZ6PgfYcs6bjSmEPpyEykYUOuzkGDUqRpxxgYSp8QWoq?=
- =?us-ascii?Q?WztlZ2JXAHg0dfN8v83hdbqf/FALl+OPhZRHUOlBXHyO5tn7dGsviRXXc0jH?=
- =?us-ascii?Q?2dbDsk53hAQC2uSISqpIuyped7u5jDGAWEWMir1RCEWmVLag+fxz9nsoQXXz?=
- =?us-ascii?Q?CRHD1rf8JJDVAiCS1KYPEzPOjrhhvCtm1T1UTnvktv5hq/h46HUTn0VDMuor?=
- =?us-ascii?Q?3R+Bt477z8Mjj0ZC2VuXQB5sA+Xr2/XKHhG8VThOyxGiCNbYOomlOLpJaEbd?=
- =?us-ascii?Q?nrsUe/Y5H0/Z94ZMc2dUgdrvyarFB9XCJ2VrL6N0ZkdoD+ylJLBAX3vKllza?=
- =?us-ascii?Q?ZcsFgQ773/6AY8MKcDHYiMrDGOIBuhqlicvOjC78KGAvkIAIb9w+42jMVjdf?=
- =?us-ascii?Q?h0pDI0KqBocPVe0TkdE3ydAWpn8lhpkQn0kKqSgnZCklEHI5Dl4FzmGvDOBe?=
- =?us-ascii?Q?T83+kOhnisR+wyBDPCZZQyHKGwqefXBDD6y/q3NwPbOgz7aVSciadW+tte3I?=
- =?us-ascii?Q?Ufbg56R0IPssG7ArQxuFQInBvuuS4PPSTRz6ZC6MkIBbLac+zeTJGOma0dSY?=
- =?us-ascii?Q?cXcJ0B0rxzZCLZE8VrzAotm6zRoxsfL5HcGVcwiEJHvSqlGDd1snV5bbQoFR?=
- =?us-ascii?Q?MX2HJEEwQNJ+/dv9T69R4WAvH7C3GY8+h5AgiX6u0Idz9d0po1V7pCbGfDxd?=
- =?us-ascii?Q?2b3vd7WhzlYqcn5GllwRI/Ic64R2P6sS2xGSbj46gKV9rUkEc+2GykzXNdVw?=
- =?us-ascii?Q?gjSuZJY+mARAhs98ifK3S2ocr2BHhBvZNoYum43Jc5Nt+9xRXVfxcIa3x6cM?=
- =?us-ascii?Q?lyIe+Qb1kFWQ0CNXA5BB6X9EpxEPIu8k2iJH1+yzJ2Pf6IMc4czEcQLVRy9d?=
- =?us-ascii?Q?2GBWQ/YsTb2a+E2PY4nU9WFbWCrtV/1uKyjPjWI3R6pXYXMrv4qhIVWnjmp2?=
- =?us-ascii?Q?3Tqwf7/CzKfTTWHNIFGxeOYcjDCd2rloGWy6CHgrFWpTevAuEuhWfGmsTNYD?=
- =?us-ascii?Q?24tha7Tcwv0lkTAHIoddhICOczV1HzUW7eLGW31NXFPEh9tdIQjP+Hnzjc+3?=
- =?us-ascii?Q?h0f4zDcJsKsVFrBKq8EAED1rntgokE05KHaCqvNtzR/q1oUur/Z1oruVgCMd?=
- =?us-ascii?Q?s01+gDmPbo1wKCJTKT9kXQx6bdZJg6P4UkMZR4xT8a/sMrf8RzI4uSk31wnf?=
- =?us-ascii?Q?Posj6Lhe/I5zNtGxDVKt1rqbOFAmerDrIZz4V03qT65yCSOWAvtjAUJZbWEm?=
- =?us-ascii?Q?gRe0sVhby9/fMrCDBwgT9k3TmUlqdtrNt1FYzOcAftd/vRcGr0s1fIVJePXC?=
- =?us-ascii?Q?Db39z4IdUYCBbUo6PuVjX7aKO/0m54GBKHF0+I1ygph1yzVsKiWTndRkEYsC?=
- =?us-ascii?Q?MhJKGamWxyq/pn13434/01Yy6ldNqbZ1dVEyfOPDkC0HWCMnLzXPvXvCoBjl?=
- =?us-ascii?Q?ENpanaPkx7VJvEWz5VRBrc4OoQd0HONcg7N0QQbyRxC28s1D/I/5WmwLrY2i?=
- =?us-ascii?Q?BO61QcT1tvcSjHgI14aduuYciINgVsD56TTf?=
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?638mL7lFYYqm2acxmtRD1jMq8N9hLI56wUBs9Fw0Rs9Dxqy/JBvkfhhwtIfM?=
+ =?us-ascii?Q?SVrTHVc26eQz+WtOsLV1Or2whhxLdzGs+3tT1ojBUkZk7ZpZH26zvFUvbrrX?=
+ =?us-ascii?Q?yZLzVkpWpfmPlol1zPlJj0cxp2XRUtnRULHtM5MRvMDj6A92edkz/vRU/LAB?=
+ =?us-ascii?Q?V6R5C+zVUIKTRGOou4cx17VUed5xgkl8Bw3tajrQBXcsaFPt3SApVDzybUvn?=
+ =?us-ascii?Q?YHBDjjwfUHLuqS7c2GNREI6V8vK/NtC8KJYvPRaBJP4tdXsglddgjQP/4HPx?=
+ =?us-ascii?Q?QMDZKwt43CxJTwpv5DWHI6xKkI5Dgy3jaxPzD86Vaf7ObAlCdSP8mDtEBDS0?=
+ =?us-ascii?Q?DMR1f4KM/f72XOExc4cTco+Q4nEv/LzWFy6IU9vS8R81oqt6e7jAud/CQJ/0?=
+ =?us-ascii?Q?5HjcdZbkwxlajsm/W/bu4VFh+pVhi75WEF0KE71LD3U8Q4V5lgFPXmAqkM5f?=
+ =?us-ascii?Q?99EUDsM1RWycBUjo9KY+U/JOGCEoMJYzphK8qEj8cnxErrQid6PZyf6qUOcj?=
+ =?us-ascii?Q?q+TLphwITnH+QOeIVzqXTWBEdyoTSqYv2pELKIDBpr8eWZ82aFVp4FcmhaZb?=
+ =?us-ascii?Q?oRyVhZe4XuIwngbNOjWiSoLT9L95zxndkOUJERmYs+PVYeVRK3i7dH8cecrg?=
+ =?us-ascii?Q?ArVXqxjxXrDe2balCcaiPjpUvdltVPY8/nvGSuB0qDVeW1Xai9M9VR2HZVSL?=
+ =?us-ascii?Q?/PMiMIgU/sdApjIhZrjT2mwrcQapOq7P/hq1d12pHgagLsbEuULlAZgw+Db8?=
+ =?us-ascii?Q?WueSkQyvYTO5V9QeWlEZTPLitYyE8WZmi8xjJNO4sVovARWsnxPZLVeFSs9i?=
+ =?us-ascii?Q?neXs65GVBbupkoL2GpaDJIQKyvWR2loi++c5LUhmtr2LOC5xApfvkqqlH3bH?=
+ =?us-ascii?Q?DNARAaf2l3E+h6x30bsgO8fftN0N+Pm9HphpZyegHFKGUVSF+XoGlWrAW1xi?=
+ =?us-ascii?Q?3QSN9BhN/ms0VI610EdkH2E0cPvtzIZIyv9KgwPorlCbtxcAedgiYgeEdVUW?=
+ =?us-ascii?Q?MH9WETEcW0njqxkX5VX4Iv9/BFFKXK8s9bld74zg9Du9UErsyGWjjUQ9gxzF?=
+ =?us-ascii?Q?l0VWaWRgDQWX+FnG0FsaGQbtoMhp+WPMwtPSwub6SXjHuSU8UbJ+JJfR8lrC?=
+ =?us-ascii?Q?rh95w2IelJ8Hi0QJr1NxrxJAjbTCwjhc26RLwrbhWTIGZz/U5h+/Y5J9xWKe?=
+ =?us-ascii?Q?hTzrwJnTXi8Gh23xMHA4sxzbznnhRwhb59Dok+3rYwlqVd0SssCXkrF09BW0?=
+ =?us-ascii?Q?1WeoP2gZcrbsD3edwLn3cYRjCYuA3JrYR49VZLmVJsquYj8IyM+F3Ys0e8IZ?=
+ =?us-ascii?Q?9QOb+tH5t1lHKewC2atcrhC7jEjBXYA0iZPNMe9lnvPEfGiNBo241bXoDgOT?=
+ =?us-ascii?Q?AHkaevdzk7UQKb10S/ucv5a6Ly/48zD9oFg+MUvyuCzX8ZK1ojPSYlmJh9Si?=
+ =?us-ascii?Q?iT9C5SYJFu7ZgBvpGzL5X2igyn49vos/AFcT8OAnxbvBR3P9G+Lm8Pt+41XF?=
+ =?us-ascii?Q?5twQnKuK68shcWUSffvvIMel79Z2jzDzmOPM?=
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
  SFS:(13230040)(82310400026)(36860700013)(1800799024)(376014)(41080700001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2025 09:50:17.5769 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 007a3df6-f435-4381-05a5-08dd354a048b
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2025 09:50:19.7951 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb8e20d7-3707-4d1a-818b-08dd354a05dd
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1PEPF0002636E.namprd02.prod.outlook.com
+ Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1PEPF00026369.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8208
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4309
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=36kwk5lsG+GHUN3hELdwAR2qL9BNV4XwzEfwLtDMwdw=;
- b=a3OSgUOm0Y7vbd9Zz5b3TT+JT3KR0bKRop0cIztWMYEEYWUOzxNqAYmmzz1VdoI2ol7vYspnvZRd7Tu3wHXcTFQbgrdJW75fgN+bcButUkwPIVq4b8nKK8MNfK4bkbzX+Mj02+PEO4VBPT8BomFIf/VB6hBUpOAWEDnA/aeFuIo=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=PWtqqmZRfsVGlM9hCD5oI3iIv65yy4Jr4kf4vuuUiDc=;
+ b=R4ETjxkfhz+/ibLtJj81CgtXna1u+bmLSRDnWLtQJFrB0HwarWsB4no47ObX0HVgD+04YDyP56Z2bBKIiRmhiy3LKk7Bk0mBzjQ4EbHQtB5OgB69ZgBc7CzDN4bE0oX1Qv2aBladvsmQxtCINzFMdggbCYnbYCAHsFCz/RslFVk=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=a3OSgUOm
-Subject: [Buildroot] [PATCH v1 2/3] configs/zynqmp_zcu104_defconfig: bump to
+ header.s=selector1 header.b=R4ETjxkf
+Subject: [Buildroot] [PATCH v1 3/3] configs/zynqmp_zcu106_defconfig: bump to
  Linux 6.6.60
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -163,6 +160,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
 Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
  brandon.maier@collins.com, ju.o@free.fr, thomas.petazzoni@bootlin.com,
  Neal Frager <neal.frager@amd.com>, romain.naour@smile.fr, michal.simek@amd.com
@@ -171,17 +170,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch bumps the zynqmp_zcu104_defconfig to Linux kernel 6.6.60.
+This patch bumps the zynqmp_zcu106_defconfig to Linux kernel 6.6.60.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- configs/zynqmp_zcu104_defconfig | 2 +-
+ configs/zynqmp_zcu106_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
-index 4856c9b958..c52bac1462 100644
---- a/configs/zynqmp_zcu104_defconfig
-+++ b/configs/zynqmp_zcu104_defconfig
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 4c5ac16f0c..2f3edf7972 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
 @@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
  BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
  BR2_LINUX_KERNEL=y
@@ -190,7 +189,7 @@ index 4856c9b958..c52bac1462 100644
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.60)/xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz"
  BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu104-revC"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
 -- 
 2.25.1
 
