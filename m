@@ -4,97 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4778C02180
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 07:59:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5314CC02180
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jan 2025 08:01:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5082F4161B;
-	Wed, 15 Jan 2025 07:59:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 00E5841678;
+	Wed, 15 Jan 2025 08:01:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 55dYyuRjf80D; Wed, 15 Jan 2025 07:59:37 +0000 (UTC)
+ id bb2bD7Rwj6ut; Wed, 15 Jan 2025 08:00:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EAFF4161D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B08D841680
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EAFF4161D;
-	Wed, 15 Jan 2025 07:59:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10AD694B
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 07:59:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B08D841680;
+	Wed, 15 Jan 2025 08:00:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4571A94B
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 08:00:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F27A34161D
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 07:59:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 26E4C84807
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 08:00:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TtcBRhILUilA for <buildroot@buildroot.org>;
- Wed, 15 Jan 2025 07:59:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 93Qb6DIIb9su for <buildroot@buildroot.org>;
+ Wed, 15 Jan 2025 08:00:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::635; helo=mail-pl1-x635.google.com;
+ client-ip=2607:f8b0:4864:20::633; helo=mail-pl1-x633.google.com;
  envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E63AE4161B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E63AE4161B
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com
- [IPv6:2607:f8b0:4864:20::635])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E63AE4161B
- for <buildroot@buildroot.org>; Wed, 15 Jan 2025 07:59:33 +0000 (UTC)
-Received: by mail-pl1-x635.google.com with SMTP id
- d9443c01a7336-2166360285dso113355495ad.1
- for <buildroot@buildroot.org>; Tue, 14 Jan 2025 23:59:33 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3045A84805
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3045A84805
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com
+ [IPv6:2607:f8b0:4864:20::633])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3045A84805
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 08:00:56 +0000 (UTC)
+Received: by mail-pl1-x633.google.com with SMTP id
+ d9443c01a7336-21669fd5c7cso116872245ad.3
+ for <buildroot@buildroot.org>; Wed, 15 Jan 2025 00:00:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1736927973; x=1737532773;
+ d=1e100.net; s=20230601; t=1736928055; x=1737532855;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=6/A++uZU/OSjxPArKQUBplkt9Azx/pj3jztTX0OYXOQ=;
- b=BiDdV52EcIEJwipwO1cUhg9hLPx5/fpOr99uEUpPWYgJ7/scgT+IGuLcy5NtBXYtZB
- 6LpNiJrinPoAN7mVdcPP95JGSIzl6iykQlLRj9nnveJjQ8jZdYrl4XcCG93fqqDj082h
- BMA+iNjC684d5eK8+m6TK8bYlg44b1tqiEAvX5abIK9Z7stgI7uoLMaCh5NOBhiINzOJ
- P0wy4pZ+tPIudCTs/3mPOO991U86ZVLjuXEKL344iuZVQqt4JXSwfSMi58GvxTe+4sKv
- Bitwy+D2o8BsMNamYi8U5Y1tlesPQQTpvpjQY9v7oIE5opBtdQwPs220rGjCOmtzbChm
- am3g==
-X-Gm-Message-State: AOJu0YyJSLWXtSL2PBxdp0iM5k/NIb368CgLQ9N358sXhlS+ehoH2DF5
- 5gHH0MLBt9eCeqOIRlmXiw+pfJjdAS2XYHjSNzSRnWBANR7NrBI/yS1g5CZ9
-X-Gm-Gg: ASbGncth+24S/E59LcNOXRIqzCTX1MkEiiFd+dGwlctnk1rLuC8FfpLi9SyqePtP2GJ
- PpP4FMedNx7CV9BeThFRA4okbpiVRrmLjgV4rPZDJXuVCu62IShkx9HBf6Mp9W9yK7+oTCF5DEA
- raSYFJEoq4M7+nGp97JmHz3E/tHjl0+OfYapUIIXDTKUkQfkc2asGUpoEItjWHJm6IYXetwFyzM
- yQR08g6Oz7PBTpxjEG/ROdyyftqnanu0ERG2wQWfAcNScGiPsWfpMvXfi3VHpx6COs6V+gLT7QY
- PrTZoWjyOGoaHFedV8AZtAfV+Tm/j3+9Lop0Uj07
-X-Google-Smtp-Source: AGHT+IGcdsT+ArulB3W/ItTRlEs44rVc5SxotqlO2hOjQlg6SVcc6lesK1AZERk3NsHeSxKZHvC7SQ==
-X-Received: by 2002:a05:6a20:a127:b0:1e1:bf3d:a191 with SMTP id
- adf61e73a8af0-1e88d2d4fd8mr41102887637.33.1736927972967; 
- Tue, 14 Jan 2025 23:59:32 -0800 (PST)
+ bh=9Jg+kNlq2NkYPuWzw6cr0kCp0WTvMbqBDbAhpvK8B1Y=;
+ b=F2PhMIS9b+6heKAKRaNSIPH+XyXA4d8FrqNGPQdzOcXOwAcSgJHxuY2/9pt8ICZl/Z
+ IWnoe7b2UR64zJdgOl8YC4ESKjQe8ve1oQ8Trp+/QquwnLYiAfFwiwjLe+IqFgHc2xtW
+ mkvQvSOhpRsevZnN36THay1a5CPsbBoozAj8JdQU96GrrPdgkj2b1Zh1/1+ZIPiAd/TU
+ IsXi4XLIdv4gonS4yO03WoR4XXAlP6MPKlRxt9XkGzMROmAxfLq4d2mJt7SVLw0gjL4c
+ 30SiteyvMW4GQdCzGZDL0cx8pvHWPG8eAaxeYC/xzG9o6zMR4kEnOLLsufi5jn/D68eI
+ uSww==
+X-Gm-Message-State: AOJu0Yz9QoDl634aCoH8rEQVE8yHVyqimb6Er9kLnArmpaLvpIvvck3y
+ NQEFdwW/c+F7DnMDYJlt2iLc8gwQGBKswhDUgfUm8OhQ6ZfLDBexp9qntoev
+X-Gm-Gg: ASbGnct0E3wMK0WXH9bS6VreGLaA877zC5CdzF4ZPuq/VCOYm8uzWHSVz8UnZC7OUPh
+ H4FHtYZIAdwBU6CmYYnSyrYr7DYboe/MQ88yHsci5QUJNLv8bBm02p8Jw06vRR6aCZlu76UrgK8
+ FUtB3lglp45pXvs63Md921+Nz1dTwPAgp0e1REffCAl8JdrLXX3QQ98VxGQ1cK8VpxDWOlieSJY
+ uTPPogdtiID8NbvsN02UlVQuem3rujxJAn7oes5NIMaWkemaMV8HQaB6hX58hv7mXYKRy0Jiu/8
+ fzicPN4+zT96uFNvJKz87ZpCPLVmKchaDmrMkYuQ
+X-Google-Smtp-Source: AGHT+IG6FsJE/hUI5c1hvCgvQH83OlVBiT6GFF46QFJ9hXrIUMqg9bT837/oT83x2+X/mAdmH1mwKg==
+X-Received: by 2002:a05:6a20:3d84:b0:1e1:b224:74c0 with SMTP id
+ adf61e73a8af0-1e88d0f074emr27410102637.38.1736928055089; 
+ Wed, 15 Jan 2025 00:00:55 -0800 (PST)
 Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
  [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-72d406817absm8912267b3a.147.2025.01.14.23.59.32
+ d2e1a72fcca58-72d40569fddsm8521247b3a.39.2025.01.15.00.00.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Jan 2025 23:59:32 -0800 (PST)
+ Wed, 15 Jan 2025 00:00:54 -0800 (PST)
 From: Akhilesh Nema <nemaakhilesh@gmail.com>
 To: buildroot@buildroot.org
-Cc: Bernd Kuhls <bernd@kuhls.net>,
-	Akhilesh Nema <nemaakhilesh@gmail.com>
-Date: Tue, 14 Jan 2025 23:59:29 -0800
-Message-Id: <20250115075929.794762-1-nemaakhilesh@gmail.com>
+Cc: Alexander Egorenkov <egorenar-dev@posteo.net>,
+ Akhilesh Nema <nemaakhilesh@gmail.com>
+Date: Wed, 15 Jan 2025 00:00:52 -0800
+Message-Id: <20250115080052.794978-1-nemaakhilesh@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1736927973; x=1737532773; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1736928055; x=1737532855; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=6/A++uZU/OSjxPArKQUBplkt9Azx/pj3jztTX0OYXOQ=;
- b=d6yxlejM7uwO6UJCvaeRGAcTINWpKMN5m1D67WMthK9nhnw/e7ffedmERV6Qw+UWvm
- MJ2hpzv/5rXJJUwWe2ua+ejvZQmpMY/iV0xtdNDMViKrNdlCRQd7C/8/OJniAfCjwhVb
- 6ag3n6gFw7vNfU5V3rVw0d8YWlsTw4jJIC5Td/a9RG8ovc7E9fy+svDjdX5ZV4cJwJQE
- T6hrnnSuEoslLabQp6AW8LQOgOa2w3EbB3MLHwGD5uVVcVrFW/77WPajaqTsBLnTYbjE
- ckw7H0mBVGD4ru063aIbp+KWo06mgKVpe3J2/YXcyRxdRRcB9TFIAD9Yjm+8L3EPUnS+
- YLsA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=9Jg+kNlq2NkYPuWzw6cr0kCp0WTvMbqBDbAhpvK8B1Y=;
+ b=eGn/q1zB1BOp99fqYYYrE0R3sbKz6V7nOhJZ3oq4qxqhneHSf/gdk3cvhygpof8nlb
+ anRHCkmFW6IFh/TlUmKxd65yKk/NBs3E/xgll0c8RWwKJ/PXWvLp45+2iLKgiY4OlTh7
+ k6DCeOGKWFf5+zD7RHjBrIOTD4rr5Ov7GHXX9kSFUmfe3xj9jI3mVv6GR+kboJvdUEjp
+ HosnKD4K+Og+LQdNmNYOmkvG50jRPBVAd7VyXfjoLJFuafKx1Up32SRRlmV9FSlcoiim
+ Ihw2tITB6WCYLVuJzOemGFeXGQzAFArlIRLPBVBg/jh6Z1+wt/Uu98kq0wh4ogwxF5M7
+ aQ9Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=d6yxlejM
-Subject: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.48.0
+ header.a=rsa-sha256 header.s=20230601 header.b=eGn/q1zB
+Subject: [Buildroot] [PATCH 1/1] package/makedumpfile: bump version to 1.7.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,43 +111,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Updated SQLITE_SITE.
+- Rebase 0002-Handle-__mips64.patch
+- Fix a check-package warning related to Upstream tag.
 
-Release notes: https://www.sqlite.org/releaselog/3_48_0.html
+Release notes: https://github.com/makedumpfile/makedumpfile/releases/tag/1.7.6
 
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 ---
- package/sqlite/sqlite.hash | 2 +-
- package/sqlite/sqlite.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/makedumpfile/0002-Handle-__mips64.patch | 8 ++++----
+ package/makedumpfile/makedumpfile.hash          | 2 +-
+ package/makedumpfile/makedumpfile.mk            | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 788e89f99d..5b933fba8f 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
+diff --git a/package/makedumpfile/0002-Handle-__mips64.patch b/package/makedumpfile/0002-Handle-__mips64.patch
+index fd3fdbbb39..b3fc6fba05 100644
+--- a/package/makedumpfile/0002-Handle-__mips64.patch
++++ b/package/makedumpfile/0002-Handle-__mips64.patch
+@@ -14,7 +14,7 @@ Fixes:
+  - http://autobuild.buildroot.org/results/94824fa8baa8edb99a5ca245e5561e0c4e430638
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/makedumpfile/makedumpfile/pull/11]
++Upstream: https://github.com/makedumpfile/makedumpfile/pull/11
+ ---
+  arch/mips64.c  | 2 +-
+  makedumpfile.h | 6 +++---
+@@ -37,7 +37,7 @@ diff --git a/makedumpfile.h b/makedumpfile.h
+ index 70a1a91..3842f9c 100644
+ --- a/makedumpfile.h
+ +++ b/makedumpfile.h
+-@@ -963,7 +963,7 @@ typedef unsigned long pgd_t;
++@@ -972,7 +972,7 @@ typedef unsigned long pgd_t;
+  
+  #endif          /* sparc64 */
+  
+@@ -46,7 +46,7 @@ index 70a1a91..3842f9c 100644
+  #define KVBASE			PAGE_OFFSET
+  
+  #ifndef _XKPHYS_START_ADDR
+-@@ -1204,7 +1204,7 @@ unsigned long long vaddr_to_paddr_sparc64(unsigned long vaddr);
++@@ -1285,7 +1285,7 @@ unsigned long long vaddr_to_paddr_sparc64(unsigned long vaddr);
+  #define arch_crashkernel_mem_size()	stub_false()
+  #endif		/* sparc64 */
+  
+@@ -55,7 +55,7 @@ index 70a1a91..3842f9c 100644
+  int get_phys_base_mips64(void);
+  int get_machdep_info_mips64(void);
+  int get_versiondep_info_mips64(void);
+-@@ -2364,7 +2364,7 @@ int get_xen_info_ia64(void);
++@@ -2513,7 +2513,7 @@ int get_xen_info_ia64(void);
+  #define get_xen_info_arch(X) FALSE
+  #endif	/* sparc64 */
+  
+diff --git a/package/makedumpfile/makedumpfile.hash b/package/makedumpfile/makedumpfile.hash
+index 9083ced423..1eb51f1edb 100644
+--- a/package/makedumpfile/makedumpfile.hash
++++ b/package/makedumpfile/makedumpfile.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  f1b2ee412c28d7472bc95ba996368d6f0cdcf00362affdadb27ed286c179540b  sqlite-autoconf-3470200.tar.gz
-+sha256  ac992f7fca3989de7ed1fe99c16363f848794c8c32a158dafd4eb927a2e02fd5  sqlite-autoconf-3480000.tar.gz
- sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 30505a9dbc..c8f12a427a 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,10 +4,10 @@
+ # Locally computed:
+-sha256  0c53f1e5e11e75e4896197df795bee63b3d46b8821fbc3368f7a240861b543b5  makedumpfile-1.7.5.tar.gz
++sha256  c949a5b2ad95e5f83a6d1b4faac0972510e4286b0e3257020762e45357816a61  makedumpfile-1.7.6.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
+index 5fa1331910..b06f3d0cb4 100644
+--- a/package/makedumpfile/makedumpfile.mk
++++ b/package/makedumpfile/makedumpfile.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3.47.2
--SQLITE_TAR_VERSION = 3470200
-+SQLITE_VERSION = 3.48.0
-+SQLITE_TAR_VERSION = 3480000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
--SQLITE_SITE = https://www.sqlite.org/2024
-+SQLITE_SITE = https://www.sqlite.org/2025
- SQLITE_LICENSE = blessing
- SQLITE_LICENSE_FILES = tea/license.terms
- SQLITE_CPE_ID_VENDOR = sqlite
+-MAKEDUMPFILE_VERSION = 1.7.5
++MAKEDUMPFILE_VERSION = 1.7.6
+ MAKEDUMPFILE_SITE = https://github.com/makedumpfile/makedumpfile/releases/download/$(MAKEDUMPFILE_VERSION)
+ MAKEDUMPFILE_DEPENDENCIES = bzip2 elfutils xz zlib
+ MAKEDUMPFILE_LICENSE = GPL-2.0
 -- 
 2.25.1
 
