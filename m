@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53349C02183
-	for <buildroot@archiver.kernel.org>; Thu, 16 Jan 2025 18:56:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C604C02188
+	for <buildroot@archiver.kernel.org>; Thu, 16 Jan 2025 18:56:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F21C94202E;
-	Thu, 16 Jan 2025 18:56:26 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rymfnHokW9nq; Thu, 16 Jan 2025 18:56:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3C8C42386
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C3C8C42386;
-	Thu, 16 Jan 2025 18:56:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A425294B
- for <buildroot@buildroot.org>; Thu, 16 Jan 2025 18:56:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 917C860F6C
- for <buildroot@buildroot.org>; Thu, 16 Jan 2025 18:56:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 271576FAF7;
+	Thu, 16 Jan 2025 18:56:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TLt_KObokcpD for <buildroot@buildroot.org>;
+ id 9IbjPhNMNILl; Thu, 16 Jan 2025 18:56:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FAB560F6C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FAB560F6C;
+	Thu, 16 Jan 2025 18:56:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B376C2BA6
+ for <buildroot@buildroot.org>; Thu, 16 Jan 2025 18:56:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 93C9384CCA
+ for <buildroot@buildroot.org>; Thu, 16 Jan 2025 18:56:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HpW5ExA6kIEr for <buildroot@buildroot.org>;
  Thu, 16 Jan 2025 18:56:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBAA4608FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB8EC84CCD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CBAA4608FA
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB8EC84CCD
  for <buildroot@buildroot.org>; Thu, 16 Jan 2025 18:56:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8DDE85DFF; Thu, 16 Jan 2025 18:56:23 +0000 (UTC)
+ id A246785DFD; Thu, 16 Jan 2025 18:56:23 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 16 Jan 2025 19:03:16 +0100
+Date: Thu, 16 Jan 2025 19:03:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d0bcae56af53497810f0ad71f803dc008143fdc7
-X-Git-Newrev: 14a88752931de7766d96137c57ea7580eeea83c1
+X-Git-Oldrev: 6775ccc5a199d574ad70b5f79ec58cce97a07c6f
+X-Git-Newrev: 794a17f6032fe67f14becc10bf50e02795d473f1
 X-Patchwork-Hint: ignore
-Message-Id: <20250116185623.B8DDE85DFF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynqmp_kria_kv260_defconfig: bump
+Message-Id: <20250116185623.A246785DFD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/zynqmp_kria_kd240_defconfig: bump
  to Linux 6.6.60
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -65,30 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14a88752931de7766d96137c57ea7580eeea83c1
+commit: https://git.buildroot.net/buildroot/commit/?id=794a17f6032fe67f14becc10bf50e02795d473f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps the zynqmp_kria_kv260_defconfig to Linux kernel 6.6.60.
+This patch bumps the zynqmp_kria_kd240_defconfig to Linux kernel 6.6.60.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/zynqmp_kria_kv260_defconfig | 2 +-
+ configs/zynqmp_kria_kd240_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index 92d44c2b64..711f43c3a6 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
+diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
+index 8e841df2e8..38a5aa378a 100644
+--- a/configs/zynqmp_kria_kd240_defconfig
++++ b/configs/zynqmp_kria_kd240_defconfig
 @@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2 ${UBOOT_DIR}"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 sda2 ${UBOOT_DIR}"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
 -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.2)/xlnx_rebase_v6.6_LTS_2024.2.tar.gz"
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.60)/xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz"
  BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kv-g-revB"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k24-revA-sck-kd-g-revA"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
