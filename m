@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 536DFC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:59:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1699C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:59:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B7F64FAC5;
-	Fri, 28 Feb 2025 16:59:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B36C28196A;
+	Fri, 28 Feb 2025 16:59:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OwlQAtLJS8Ll; Fri, 28 Feb 2025 16:59:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4ygR4rZas0Bv; Fri, 28 Feb 2025 16:59:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34486503B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A052F8175B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 34486503B8;
-	Fri, 28 Feb 2025 16:59:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A052F8175B;
+	Fri, 28 Feb 2025 16:59:53 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 06542711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:39:18 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EF781DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:39:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 35DCA42476
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F97042E18
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EOgahsuFXF6w for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:54 +0000 (UTC)
+ id rvpC-_FTKU5c for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01B8D42E1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A415B42E1B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 01B8D42E1F
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A415B42E1B
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EFC4B83B5A; Fri, 28 Feb 2025 16:30:12 +0000 (UTC)
+ id A11DD818ED; Fri, 28 Feb 2025 16:30:12 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 17 Jan 2025 19:26:07 +0100
+Date: Thu, 16 Jan 2025 23:16:14 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cfe0e945b30ec61eddc6b8ea572118630cfd1cb1
-X-Git-Newrev: 6ff1a66e2085644ff4f5df50f75d3b4b63a62ef1
+X-Git-Oldrev: 593755f527a77fe8bf2513f14118ab51b76f17b7
+X-Git-Newrev: 93bcd8b06a952ab34c1d53541b324a48f8eb6dc0
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163012.EFC4B83B5A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot/uboot: bump to version
- 2025.01
+Message-Id: <20250228163012.A11DD818ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libzenoh-c: bump to
+ version 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,62 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ff1a66e2085644ff4f5df50f75d3b4b63a62ef1
+commit: https://git.buildroot.net/buildroot/commit/?id=93bcd8b06a952ab34c1d53541b324a48f8eb6dc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release announcement:
-https://lists.denx.de/pipermail/u-boot/2025-January/576668.html
+https://github.com/eclipse-zenoh/zenoh-c/releases/tag/1.1.0
 
-Changelog:
-https://github.com/u-boot/u-boot/compare/v2024.10...v2025.01
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- boot/uboot/Config.in  | 6 +++---
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libzenoh-c/libzenoh-c.hash | 2 +-
+ package/libzenoh-c/libzenoh-c.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index f6823d537b..b6ac2f9380 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -41,7 +41,7 @@ choice
- 	  Select the specific U-Boot version you want to use
- 
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2024.10"
-+	bool "2025.01"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -85,7 +85,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2024.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2025.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-@@ -339,7 +339,7 @@ config BR2_TARGET_UBOOT_USE_BINMAN
- 	help
- 	  Use binman tool for generation and signing of boot images.
- 
--	  https://docs.u-boot.org/en/v2024.10/develop/package/binman.html
-+	  https://docs.u-boot.org/en/v2025.01/develop/package/binman.html
- 
- menu "U-Boot binary format"
- 
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index af025a583e..b619a70423 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
+diff --git a/package/libzenoh-c/libzenoh-c.hash b/package/libzenoh-c/libzenoh-c.hash
+index 058909eaec..f83e23eed4 100644
+--- a/package/libzenoh-c/libzenoh-c.hash
++++ b/package/libzenoh-c/libzenoh-c.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-+sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+ # Locally computed
+-sha256  12401035b4652eaa95d5835db85f6597358f3245c2646abb3986291104be566c  libzenoh-c-1.0.4-cargo2.tar.gz
++sha256  9e7a2bf47edaa5c73bb6dd44558eb2b1367a9e0a0bbbddead463df45c400cb54  libzenoh-c-1.1.0-cargo2.tar.gz
+ sha256  01a44774f7b1a453595c7c6d7f7308284ba6a1059dc49e14dad6647e1d44a338  LICENSE
+diff --git a/package/libzenoh-c/libzenoh-c.mk b/package/libzenoh-c/libzenoh-c.mk
+index 6112eda842..9258db56bd 100644
+--- a/package/libzenoh-c/libzenoh-c.mk
++++ b/package/libzenoh-c/libzenoh-c.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBZENOH_C_VERSION = 1.0.4
++LIBZENOH_C_VERSION = 1.1.0
+ LIBZENOH_C_SITE = $(call github,eclipse-zenoh,zenoh-c,$(LIBZENOH_C_VERSION))
+ LIBZENOH_C_LICENSE = Apache-2.0 or EPL-2.0
+ LIBZENOH_C_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
