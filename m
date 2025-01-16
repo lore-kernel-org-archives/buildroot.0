@@ -4,74 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2815C02183
-	for <buildroot@archiver.kernel.org>; Thu, 16 Jan 2025 22:25:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9FB1C02187
+	for <buildroot@archiver.kernel.org>; Thu, 16 Jan 2025 22:37:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8CE0B6FB56;
-	Thu, 16 Jan 2025 22:25:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8AADD605C4;
+	Thu, 16 Jan 2025 22:37:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gXK_2rp2C1Te; Thu, 16 Jan 2025 22:25:41 +0000 (UTC)
+ id MMoj8gcvWrg5; Thu, 16 Jan 2025 22:37:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BA2B6FB43
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B31060652
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1BA2B6FB43;
-	Thu, 16 Jan 2025 22:25:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 61EF5B89
- for <buildroot@buildroot.org>; Thu, 16 Jan 2025 22:25:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B31060652;
+	Thu, 16 Jan 2025 22:37:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 03DB431
+ for <buildroot@buildroot.org>; Thu, 16 Jan 2025 22:37:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 412DF41691
- for <buildroot@buildroot.org>; Thu, 16 Jan 2025 22:25:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E65F4605C4
+ for <buildroot@buildroot.org>; Thu, 16 Jan 2025 22:37:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KwnwKmbYAgOb for <buildroot@buildroot.org>;
- Thu, 16 Jan 2025 22:25:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2B60741686
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B60741686
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2B60741686
- for <buildroot@buildroot.org>; Thu, 16 Jan 2025 22:25:37 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id E8C8013F86E;
- Thu, 16 Jan 2025 23:25:34 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:48888])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 16 Jan 2025 23:25:34 +0100
-MIME-Version: 1.0
-Date: Thu, 16 Jan 2025 23:25:34 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LsnPlpD5vWRO for <buildroot@buildroot.org>;
+ Thu, 16 Jan 2025 22:37:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D9FC60AAA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D9FC60AAA
+ for <buildroot@buildroot.org>; Thu, 16 Jan 2025 22:37:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EB4C785E20; Thu, 16 Jan 2025 22:37:36 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Michel Alex <Alex.Michel@wiedemann-group.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <AS1P250MB06087379AC560B82EAB3B466A91A2@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
-References: <AS1P250MB06087379AC560B82EAB3B466A91A2@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <6f97746da9be1d3e42586736fd555bc6@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737066336;
- bh=RQVu+LIE9pz+lSSUbJSqNJvIo85/9XvoZD/AFrbjKgM=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=MjOvBMvV6i6Ntu8qlyg/wy419lH+lqZZSHfG1BN/4btlQt64OTis+CUtywjNJnJtd
- NVfEgy3bZcvCup6AP3RSO5TZvuW9Rakm3xbYGMQuDd/tDAjnlMPyUHVsmx7o+DnmzP
- jFh0MzAEVO0FtvMEyzrYKW9D6GAhG32tEIqB1l4xItK/gFvCAbpX06sqOftl+e0CbY
- l0QyEVLCaz93T+Qi1d6QCNQFqZ2kStezbTULHqK7TNLww59vRqP36mMsqODh8MgAoz
- JZic7zLmNN5AhTpkYuCerRX57VF5d6/Qs2JFNDKawFW6M9Xlfw0D3r35tQ5NRbvHIL
- w4biL9BYAdcEQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=MjOvBMvV
-Subject: Re: [Buildroot] [PATCH 1/2] package/libzenoh-c: bump to version
- 1.1.0
+To: buildroot@buildroot.org
+Date: Thu, 16 Jan 2025 23:29:54 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 30b05ce90d3368c0c74d2602735afdadbe50ec54
+X-Git-Newrev: e2e152496a588cbb9a877b9f53b261a83692c52d
+X-Patchwork-Hint: ignore
+Message-Id: <20250116223736.EB4C785E20@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libxml2: fix segfault with
+ python-lxml
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,17 +59,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/01/2025 08:17, Michel Alex wrote:
-> https://github.com/eclipse-zenoh/zenoh-c/releases/tag/1.1.0
-> 
-> Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=e2e152496a588cbb9a877b9f53b261a83692c52d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+Backport a patch fixing a segfault first introduced by
+ca63c4409b3c811e8c4ee19c2860c53af35c4ce1 in buildroot.
+
+Fixes:
+==4792== Invalid read of size 8
+==4792==    at 0x4FE7661: __gconv_close (gconv_close.c:33)
+==4792==    by 0x4FE70EE: iconv_close (iconv_close.c:34)
+==4792==    by 0x5AED422: xmlCharEncCloseFunc (encoding.c:2678)
+==4792==    by 0x587A78C: __pyx_f_4lxml_5etree__find_PyUCS4EncodingName (etree.c:126676)
+==4792==    by 0x5888666: __pyx_pymod_exec_etree (etree.c:289773)
+==4792==    by 0x4A06345: PyModule_ExecDef (moduleobject.c:440)
+==4792==    by 0x4AE23A8: _imp_exec_dynamic_impl (import.c:3801)
+==4792==    by 0x4AE23A8: _imp_exec_dynamic (import.c.h:534)
+==4792==    by 0x4A046A3: cfunction_vectorcall_O (methodobject.c:509)
+==4792==    by 0x4AAA203: _PyEval_EvalFrameDefault (bytecodes.c:3263)
+==4792==    by 0x49B9D2B: _PyObject_VectorcallTstate (pycore_call.h:92)
+==4792==    by 0x49B9D2B: object_vacall (call.c:850)
+==4792==    by 0x49B9F44: PyObject_CallMethodObjArgs (call.c:911)
+==4792==    by 0x4AE648A: import_find_and_load (import.c:2781)
+==4792==    by 0x4AE648A: PyImport_ImportModuleLevelObject (import.c:2864)
+==4792==  Address 0x8 is not stack'd, malloc'd or (recently) free'd
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../0002-Fix-Fix-compilation-with-uclibc.patch     | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+
+diff --git a/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch b/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch
+new file mode 100644
+index 0000000000..76ea711962
+--- /dev/null
++++ b/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch
+@@ -0,0 +1,31 @@
++From 539663626b91567159a70791c0f2b3b167135e9b Mon Sep 17 00:00:00 2001
++From: Nick Wellnhofer <wellnhofer@aevum.de>
++Date: Thu, 16 Jan 2025 15:50:46 +0100
++Subject: [PATCH] Fix "Fix compilation with uclibc"
++
++The ICU code must initialize the iconv members as well.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/commit/539663626b91567159a70791c0f2b3b167135e9b
++---
++ encoding.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/encoding.c b/encoding.c
++index 41ecde18..0ce8d479 100644
++--- a/encoding.c
+++++ b/encoding.c
++@@ -1641,6 +1641,10 @@ xmlCreateUconvHandler(const char *name, xmlCharEncodingHandler **out) {
++     }
++     enc->input = NULL;
++     enc->output = NULL;
+++#ifdef LIBXML_ICONV_ENABLED
+++    enc->iconv_in = (iconv_t) -1;
+++    enc->iconv_out = (iconv_t) -1;
+++#endif
++     enc->uconv_in = ucv_in;
++     enc->uconv_out = ucv_out;
++ 
++-- 
++2.34.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
