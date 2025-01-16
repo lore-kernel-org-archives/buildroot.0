@@ -4,51 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C991AE77188
-	for <buildroot@archiver.kernel.org>; Thu, 16 Jan 2025 07:25:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5255FE77188
+	for <buildroot@archiver.kernel.org>; Thu, 16 Jan 2025 07:25:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74BAF416B6;
-	Thu, 16 Jan 2025 07:25:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11D24416D7;
+	Thu, 16 Jan 2025 07:25:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9hMHpxauL7aM; Thu, 16 Jan 2025 07:25:15 +0000 (UTC)
+ id GgEBlRDTqgR3; Thu, 16 Jan 2025 07:25:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BC69416C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA81941728
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4BC69416C6;
-	Thu, 16 Jan 2025 07:25:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA81941728;
+	Thu, 16 Jan 2025 07:25:18 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B99DDB89
- for <buildroot@buildroot.org>; Thu, 16 Jan 2025 07:25:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2C921B8B
+ for <buildroot@buildroot.org>; Thu, 16 Jan 2025 07:25:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 99D1360A63
- for <buildroot@buildroot.org>; Thu, 16 Jan 2025 07:25:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 18DD4608D6
+ for <buildroot@buildroot.org>; Thu, 16 Jan 2025 07:25:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DcVdcHLT45lx for <buildroot@buildroot.org>;
- Thu, 16 Jan 2025 07:25:12 +0000 (UTC)
-X-Greylist: delayed 437 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 16 Jan 2025 07:25:10 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A0488608D6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0488608D6
+ id zU58bd7bNj94 for <buildroot@buildroot.org>;
+ Thu, 16 Jan 2025 07:25:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.150.181.156;
  helo=mail.sensor-technik.de; envelope-from=alex.michel@wiedemann-group.com;
  receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1098F606F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1098F606F6
 Received: from mail.sensor-technik.de (mail.sensor-technik.de [80.150.181.156])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A0488608D6
- for <buildroot@buildroot.org>; Thu, 16 Jan 2025 07:25:09 +0000 (UTC)
-X-CSE-ConnectionGUID: HKh7wheSR86so9ZeSNnF5Q==
-X-CSE-MsgGUID: R2qnI1FwS7m2Wjktmo+mlg==
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1098F606F6
+ for <buildroot@buildroot.org>; Thu, 16 Jan 2025 07:25:12 +0000 (UTC)
+X-CSE-ConnectionGUID: 9DTIHTJQTgabsyR9jizdcQ==
+X-CSE-MsgGUID: bvTTQf9GT0i07h1XKwZHUw==
 Received: from stwz1.stww2k.local (HELO stwz1.wiedemann-group.com)
  ([172.25.209.3])
  by mail.sensor-technik.de with ESMTP; 16 Jan 2025 08:17:50 +0100
 Received: from stwz1.stww2k.local (localhost [127.0.0.1])
- by stwz1.wiedemann-group.com (Postfix) with ESMTP id 3F395B5A89
+ by stwz1.wiedemann-group.com (Postfix) with ESMTP id 43277B5A8A
  for <buildroot@buildroot.org>; Thu, 16 Jan 2025 08:17:50 +0100 (CET)
 Received: from mail.wiedemann-group.com (stwexm.stww2k.local [172.25.2.110])
- by stwz1.wiedemann-group.com (Postfix) with ESMTP id 88FA0B5A86
+ by stwz1.wiedemann-group.com (Postfix) with ESMTP id B5C1AB5A87
  for <buildroot@buildroot.org>; Thu, 16 Jan 2025 08:17:47 +0100 (CET)
 Received: from stwexm.stww2k.local (172.25.2.111) by stwexm.stww2k.local
  (172.25.2.111) with Microsoft SMTP Server (version=TLS1_2,
@@ -59,12 +57,12 @@ Received: from EUR05-VI1-obe.outbound.protection.outlook.com (104.47.17.170)
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.39 via Frontend Transport; Thu, 16 Jan 2025 08:17:47 +0100
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vxJ91Y4Hyix6hZ6yRkhBKYUWGvBxx2IhbDeBhDmr92FzbXyAKBLAebem5iPobjXQUvTvGpwiTDPDJxdqPMVEaLFPeTWoe1n5uXq0eCE/U12DWPLkykddDwyYp4jtAR7S7ioOtkEbCmtmITzprXqNsAb1RYEqGnwlvusE2b6MGmWxlSsTstkHxW5ave6C9EFOOlVa7PAuKsfdNWdtlhxuqqDDgUgKtyaWt/AFXHdDCTMBuampqSkTZ7hG094VDsnJ/dW1z7F+MhDOs+EyuJZt/DtGMZ6hKsxb5jmjQPwuuup43dvVyvnbDcexi/1iULvULUMB53rvHldcqV7UGt1erA==
+ b=ayO1MoHtxIMo7lP/vmX2lRPLmIdQxSVVNXtN+hEy+3Ea5bpdFygj1NL+pAR2dK+GG3DzaMQDVQyKTa8Hmn/v+nIlpp9EKJNgTaKASG6cjwgM8Oh+s33PA+OI2ess9Gm6/XWRQvJZti1Jxej9Z5zbQynX3i7SmBZVXF/ZmiwIPO2XsJ6p6LbdyfMRMjJC1sOPcggj06ib/25lqKMCjfaDxWU3w4fIZJh1/bXc/daNIuo2/ACG2ClvH9DJNjudnPbfWhMrN7mubgC8W0ytrBrAMcw0VZB4jhWf6FEGOmH95SjjpCTHEv8o1lcVzkdhIABpwv4YSRU3LMikNqOMx9DsWA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZwPxRmJoZrOo4q37LIL0TI4wSthQS27iuMfIQuXxi3g=;
- b=GPOw6xEKnyfawErJHk5UD15ORAQWSbzD1Q5HSDh2HSrLEFsTVmARVa79QTgOmlyrjqiGhOhp7sFapahQxMgXvQOSE3Wz5ELWBzvK3tytvhMRBXQ5Z3Ue4wmpyN1AA9btiVZdPoEcNPVDeB967mzdZl2FK/60oFL3RtfcYpzT3maJ9F3yfMNUDpjCMBzVzxMmDUw7I1Igk0fgKsneb1+P4TQCxRBm7FrVHdhir7lGD/4KsOW6mI5iDAOAkFlb1IF8+vEj+X4vZ3efE6xkpVO/7Z5/9upyBNHVBYP21/8U/3/60mykeONJFAmlpGaVIbU81ItZLQZnlm5l+N7bPNvPRQ==
+ bh=GCmpKxppTAuIdbooxeX3YYnjAeXc0XFs3aHwitMHrzE=;
+ b=p5LZAmMPIec8GzgG7NFMCi9xeaI30/rRIS89SVioxjoZ2nH/6tROR6OXgNoLuTV+O0OmY983h/mEPD2+Nz4uYLkuCa0yQ8VfnGt2JxbYzx7YEXkt8CqSm8YJrSXOM0S+5lH4bOfyhdh+s4faoKcslgU8BU9SFvwPFKAh27Oh1xHhVh6nwT2Wp5I+3CQ20uWZWwL7QDznoA0aAUMXmLY2ZQqOogQV8NjKPNFabPBCTTL28MyODz8SS3TOjITWgK5N+TC7+hzyziPj0FvBR7RBM/9SgG/nX8EETfu9ByN7VFgeMjHRBGjBeBlWp2jgK5RWl25WMeJAfTMHo8wOyth66w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wiedemann-group.com; dmarc=pass action=none
  header.from=wiedemann-group.com; dkim=pass header.d=wiedemann-group.com;
@@ -73,95 +71,95 @@ Received: from AS1P250MB0608.EURP250.PROD.OUTLOOK.COM (2603:10a6:20b:48d::22)
  by DU2P250MB0368.EURP250.PROD.OUTLOOK.COM (2603:10a6:10:27d::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.13; Thu, 16 Jan
- 2025 07:17:40 +0000
+ 2025 07:17:42 +0000
 Received: from AS1P250MB0608.EURP250.PROD.OUTLOOK.COM
  ([fe80::b4a:3a:227e:8da2]) by AS1P250MB0608.EURP250.PROD.OUTLOOK.COM
  ([fe80::b4a:3a:227e:8da2%6]) with mapi id 15.20.8356.010; Thu, 16 Jan 2025
- 07:17:40 +0000
+ 07:17:42 +0000
 From: Michel Alex <Alex.Michel@wiedemann-group.com>
 To: "buildroot@buildroot.org" <buildroot@buildroot.org>
 CC: Michel Alex <Alex.Michel@wiedemann-group.com>
-Thread-Topic: [PATCH 1/2] package/libzenoh-c: bump to version 1.1.0
-Thread-Index: Adtn5m+ftu2VSU+UQiuKcVrEQUWCzQ==
-Date: Thu, 16 Jan 2025 07:17:39 +0000
-Message-ID: <AS1P250MB06087379AC560B82EAB3B466A91A2@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
+Thread-Topic: [PATCH 2/2] package/libzenoh-pico: bump to version 1.1.0
+Thread-Index: Adtn5oXKF1MYg5YWTZ+lqHDdqrh4qQ==
+Date: Thu, 16 Jan 2025 07:17:42 +0000
+Message-ID: <AS1P250MB060890093CBB03093F29F955A91A2@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
 Accept-Language: de-DE, en-US
 Content-Language: de-DE
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: AS1P250MB0608:EE_|DU2P250MB0368:EE_
-x-ms-office365-filtering-correlation-id: 06f659a3-c0e8-438c-053c-08dd35fddc95
+x-ms-office365-filtering-correlation-id: 2a52f84f-7764-432c-c3ad-08dd35fdde4b
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0; ARA:13230040|366016|1800799024|376014|38070700018;
-x-microsoft-antispam-message-info: =?us-ascii?Q?ccXS3Gr0rX9AKPGpLQFOt2e4KN9r/cu8o/tw7d7e78qjNp44tU9OgkVcE+4B?=
- =?us-ascii?Q?oeqqcel9pbjB7cZi3fJ8A+x+cDtk5tzE7wn9nU+/B1LMnU5ydkVAbmLrcHaA?=
- =?us-ascii?Q?wRga2n55Q8qQXJhsyB1EX8Och83xFHi31LdI5+vL3pqoHRC0q8OMrTfxQvj+?=
- =?us-ascii?Q?LHgnKbFDfRDQgDDuCPVk18nZV3yn5A943FkZkhPteGvpttifw2IN4sQIhWpp?=
- =?us-ascii?Q?R+RJjJCAecfi0GCVZq+fQH2UWeqPxVlmaeomTwTT3jL143z+BcqopwGPAx9R?=
- =?us-ascii?Q?DexsphMT0AIubdzayEjNOAe67N0404XOo/AKHXxf0elHDPKdJsxxEA5Ey7FE?=
- =?us-ascii?Q?O3ahNjL/s4dVZLk3bPyG74EoHHFpf40pASqozTx9GcR0LMYHuU6MMmsz8hbr?=
- =?us-ascii?Q?5YRENxg5Co0AWqUJGDCFoRXnuU5ogzwzBoSTmm5fwVV563WXiiP0I6FkPcVQ?=
- =?us-ascii?Q?7v/i5gqkZDQHupzhJ2dYKw2O1frQKVoipYTT0lEYDIC6sYzYDrp36P82YdH2?=
- =?us-ascii?Q?nn2eurOhkhHK3hd7vhEJ/DIgZPTBVEGTDBek2dd1FIuZtHOfyIV5LHyxslJi?=
- =?us-ascii?Q?TUvxDziw5+ZJuD7x/rZqzTWTbcynCIwieWGF0PVskJeqEDJSRFnZbOdvfF1m?=
- =?us-ascii?Q?2jR7vhYhk4NhgqKCiEbmPoO6ewNAUHIllY+44GqN3yLXRp/I2Z3VgeraArGF?=
- =?us-ascii?Q?7R8wIVfJESIfNQXe/e6bXGx9Q4PNqiqAG+WCwKbF7r4/3shCVbMUL3kaARrz?=
- =?us-ascii?Q?nam0zVAcQxb/ZUZQfxGsQFGIN48YtBajHD+eUPVv9vwiBJlHmOAVMOPHT0X9?=
- =?us-ascii?Q?rmIGkBPrfd5HmWB/fK5zH2xikmf33LoM7LD0wEhOKr7lYm2f9V3Z69mn/UuQ?=
- =?us-ascii?Q?NzXzLeJvbrkOzNeRbfglUQlajWEHZaQB/0de+chqk/b0I67o/2oNK/UF5K7L?=
- =?us-ascii?Q?yY7aqxvxTOSCuJuT5GuCz8MUXjDr4nY50NN4iqbiYmCvEzd3SMqRxbWdwtYr?=
- =?us-ascii?Q?65vIVsUT01Q7k4HcKUt/RHetl2dnK7t2rS6KwhGRSMIf0V0tANhmXhTSlN1u?=
- =?us-ascii?Q?dV0KqqFQdU/+zKrx47jZdr9HaMY5rBJIsTNmGBQrZbt5TXqJX5Rwv/4REZeL?=
- =?us-ascii?Q?a5UByrfXXRxyqvaGmlXUBXAH2k3j1JWekBlngyME27Syf4yDU538SbGtv6lT?=
- =?us-ascii?Q?NivpngUjNvPeeJtR8EassIIGGm4xVoOTyuM1AVAhS9PZxpMZ79xahb9tnsaq?=
- =?us-ascii?Q?bZgMEtOlVYIpOnIuwMzhsQ0LkfIckAu8xe66steHRfhDg4C0dRPI8oOqBwJR?=
- =?us-ascii?Q?gXn7vPu3yEAqbuq+VfVgFXilfkV3no1xrXI+Xv4V0vl4F9jsqLc8St4Esa0H?=
- =?us-ascii?Q?2Zbckf6tWXvjYaqKtsbDa20HWrXjlXR1CR54mR7rMeIQB8fBhw=3D=3D?=
+x-microsoft-antispam-message-info: =?us-ascii?Q?uFiOJuYInNcxbotFU4u2qTJLMjjZZ1zROw0wlDR+FG6d+mPu20cV4QmUjZ5D?=
+ =?us-ascii?Q?ofidu7nOLsFdovqQqDNKT8XbrAncrcb1+wRy+9DZCW4XFfE6aYR+748Zscyb?=
+ =?us-ascii?Q?1nvOAm+tyktJTUcyWM7STPCGdaGhO+dJCkvmenQZk9uUjEQDXNns65PkbQV2?=
+ =?us-ascii?Q?E6yOFc8ifAeVj1o2o5bE406eEtlzJtd0Tjy4Dwm3EVYgoL4qc4P6v44l5PKu?=
+ =?us-ascii?Q?ayNODqVST58GbBsJ+hbwl2Ju9CPBGCDqPNhrheAd7Wqfe6NVNTBi71gxKVG1?=
+ =?us-ascii?Q?h0DsLjGsGLdBG0aGIui8lHN30cyZAeUZfySXKEP4wtTTstn+RWCjTBqYSxRb?=
+ =?us-ascii?Q?0lEcszxO0ZHIUBNmwJ6eoHjwgIcKVyYGa3TP3prNlnxwkZU6EV+Png235Oe3?=
+ =?us-ascii?Q?uLybzJ0yMRfVXSxbrIFuVaO2KssvZi7uvhDDFbGGpVLEyx3zZcpIVFaOaHfM?=
+ =?us-ascii?Q?hYqzaS45yUbXOHTe8QN1Zm7vtjEGI4Ta4YRM4RoqWGaKKxCq6bjUPVK5wkqi?=
+ =?us-ascii?Q?gjkLNM1EEmuc4tAPp9r6GkqLcqntjI+jqaLX5P7OkyxiPV1CXLUw8R+7lAGK?=
+ =?us-ascii?Q?VWoT+K95ewwMGimGA9VwmeoWrnhqaTxw2W87K7XJ8gdXi8F+v15Mq9yQg4q4?=
+ =?us-ascii?Q?LEae1FpC/R8/ULDWacmFq8vjR/C/ojFESwwZotjmb0CtCvjirvAOUiCLMf2R?=
+ =?us-ascii?Q?I8Jha6ZUP/Gpk99Hwctt2PD3nhZNN87C3W38uLepofxTyd9txV42gxPvpK/1?=
+ =?us-ascii?Q?50/vPII3BKwLKJnl7eFhu4kYjpddQ0VlBX24evojJm2fo0CgJqvK8kckIPBm?=
+ =?us-ascii?Q?Wgj53W3rD1LaCrotu+opHfRAgpPk8WGTTaJwVbie/F5Bw+E/JOWzLVArziAI?=
+ =?us-ascii?Q?NrLm7g2Fr3awzaZIqW46bABXwGsK+l1NADaSRx9PNp7WRewDxEwrJfzqU+p8?=
+ =?us-ascii?Q?U0i5LzfyMXtxxWGu+EcPasKI4kwODZuk/EAm27mFSNkaLPFd+9XXWXHkqM4A?=
+ =?us-ascii?Q?1nxApzKET/PIVdlJ7w5/N4xra0/oaURnCbGjrcWH3PxWWh/dKQO9/hJOAItS?=
+ =?us-ascii?Q?m/rWQX5yzJ3HWFLIbya1NISh3gUdWr/nzPB8xvg5KL+MWf1CcSAaEXDShipV?=
+ =?us-ascii?Q?3Taxk0DHt7TILW5yl4dicbKCNoUi4X9CtpeHFbQtV2qe6F0CvmvJj46tC0jo?=
+ =?us-ascii?Q?1XHou+U5EZHi7SaKH4N82fdU+/LmM11TxukhhZ9byYP0SNXPT5c8kjDyfqhp?=
+ =?us-ascii?Q?1o0RofBXQdlZyB9MELJoEE6GqOj6s2/rwndkl/iTIN+mdXVlqprrh3sG0gbQ?=
+ =?us-ascii?Q?yZ3w9M1Pw5qGSFNBlrVAIj9YVymZ23wZ32vuoBHo/JLeXLOqgRir87aaHSjp?=
+ =?us-ascii?Q?9bZacp9lOiYTEG55UvxpJus4+Vm0Qp4dwbdtetDw+2soO0Yf4g=3D=3D?=
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:AS1P250MB0608.EURP250.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
  SFS:(13230040)(366016)(1800799024)(376014)(38070700018); DIR:OUT; SFP:1102; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?yr9VWpsIBIQbA61TZ6pOiD8pgH/6I8sPm6Kb8H20VqPYL5P37kCmexnhPvlL?=
- =?us-ascii?Q?mk138ge/dMWWYNTX7AyW+cxBYYcze9Xx43JAaoQ03aZlmlEk9f3pjsYTBX3F?=
- =?us-ascii?Q?g92gmuQXye4H7QIvcHlzsyNs3qmn9br9esRbsgNjr0Ls2Wi65RrTp1I4DHgM?=
- =?us-ascii?Q?H6w1EWUcy86EvAiD4o0d6HtXxWTdUWiz+5eeUYZJS5cGJPBvGeZsT0gN3g30?=
- =?us-ascii?Q?AdoTHzSX3543CyASnETiMZT4mqvrF0PpBKUc20jxHA4sB83ySbTMJAmYRIJo?=
- =?us-ascii?Q?oxEi2ZWboAjzLNlaaCtfgOpoeL1AByvM9d28QASGqszj2nAPX7OI0lf5EuFg?=
- =?us-ascii?Q?81DCPOwSrbiK/cxCwK+5xnjrQjlRRp8ceZ3hW8ID/pjlGgvwdLlVuRt96u+/?=
- =?us-ascii?Q?RKaOCjO7VLEa1xVJdxYfKiA059BtMYKcaObd26gVOgLuP38bndfkamZqA9g1?=
- =?us-ascii?Q?jyMz5T0+qsduE5oYswZOzXv80jOycPmqpOapMNGFc8e2ybG0dzhUCaTgowQ5?=
- =?us-ascii?Q?CkaNdFxNY51RZkqmBNFRt8VZ3Fm482SYDCIBdp1x0q/UohH4ofBCkZa7vgcY?=
- =?us-ascii?Q?BgAXkKle+UzTI+OQ6dY1HiIHZDIe6hWmIEAdJKhQ6MWhJYBQsyalQh1WzGHr?=
- =?us-ascii?Q?lTsCcQbv2s/EuvpN4dXqxdiExnh8qTjvWi2dP6iPyPPdavdF0nQTN1o2hdqv?=
- =?us-ascii?Q?xE6Pr0N+Z/7GDDE3JnIfKi3TBE5QrjcbvC3XIYKTKqLQbcH0Ez9uz0IsahCx?=
- =?us-ascii?Q?7f53xj2o9wGBAUUcfW6TpRBTDZXOQl4v6O62NrU0gwGFxVwJkmRTWe7dEb/m?=
- =?us-ascii?Q?jrLi7V5En8TBsJtoDWwYk2geICw4ZD1X+B9w3iSWl1VFdeJ3O9k9uzFvr1ky?=
- =?us-ascii?Q?sJ0/X0mKV/6Pf+HUZRzA1WDX1yio+LR87jAHRq2hjN4oQHK6vQQFqa7VddAd?=
- =?us-ascii?Q?4Oe1lVjvnQT0ifA0x17mBocUuJCLqezlEYvYHprWA1wvcF88CbSIPu6jVZsS?=
- =?us-ascii?Q?QHuzMlWV5UcK3L4XqUwiaEu6nFhIx4D3/SSdIkLBgpWzNGEr47h79cnCw1Xk?=
- =?us-ascii?Q?G8PRhdxEzBxc3hJzIPDIhqmrTDWpYk+UsLI7LHkSITRrYjEh797nfhO/r+Dc?=
- =?us-ascii?Q?q/HAnyY+a9lXmzJd6tt2c1nDPZYoxZrM7xn9h4uwIGMNBMgi9HXtR8hwDfow?=
- =?us-ascii?Q?93gOlGvqQYM0sHCDOJYLbIwxKAquKhP8PZfMezxNBeiqXZ5EkRlFIYd+8v79?=
- =?us-ascii?Q?R52Oc2iNydoO50wSIulPcqLCD1X81gpZfltIts+eQL5fuSg5VqyuCfLZCS5H?=
- =?us-ascii?Q?uD9QAqG88tutZbk95yB3T3I6E5oQ5U6Sj105oDGYpSCnoOd4lce0bF+qFHr7?=
- =?us-ascii?Q?NxPZw1qZ8aHoV2am2oEmI1BSBvyurG1IRSAuq0F+LjCHywUmCu9hXLUzJnyz?=
- =?us-ascii?Q?Cvx9i52JtPvGAK7KSV+5wjEi9UP04ip62NWrV36FimD//Hv+VlCsCNB0Qxwd?=
- =?us-ascii?Q?8EeNCkYQCKqw2D4KikMdHwlh8W+54z19K5G2N8P/1/ptl0703kw7xZEGAadD?=
- =?us-ascii?Q?RQ+Jcj6PC5Ovg/qrxjFD+iTW6a4MqZO9edObgKh+hfZDp72wHBTVh2N2pPbx?=
- =?us-ascii?Q?Ig=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?TjQ1jsTNtH78+2R/Jw2jcID88Li+r4DPDDCqP0+2FJ+wYTukQYxtPPcazdAV?=
+ =?us-ascii?Q?l2qCBj+TmrAScYc21pyr80LRcMti/S7eQLyYV8gaPaellAsRciJKFZUtjV+i?=
+ =?us-ascii?Q?U2Zj3tVm8zENPquaZRyiz7xmMuj9Pt9HrycBotbhWzkskZQVe03AxA/geTZZ?=
+ =?us-ascii?Q?maIOcs0B2jEYZQjIkbQvnvwvMyJby8TkT54gMPD/pmpuvWxyyFAsNkb+4ua9?=
+ =?us-ascii?Q?605jllqFpdr3yslaSn6ANHJL5h2bS++HlhZtKmoTjbO/QOrHHKNuRzMX0U7x?=
+ =?us-ascii?Q?349GbjI1ydpc/PtuSZsUxcwNib/MYbfjNdMPX+kewgnZe3U+QlmGOkCaEIYh?=
+ =?us-ascii?Q?Lfn2IAXK2B6qFKqZh1HQeegVPgIDVX+ypnIfjyrmkXzML7RQfHEwpORxnAi0?=
+ =?us-ascii?Q?CBvlsGPsQUODfXv11AglEM45SuaBTRGJml+WL5vRM/El4nnUgdMqt092cxBl?=
+ =?us-ascii?Q?Rzd1OsXHKTLuBxhnUI1wUvboGlX1FeepoHUNeRukdlDDfm7D/59xVT6RptsC?=
+ =?us-ascii?Q?4cGUl+cNmhO1sKFf6pZ5CB8XcUMQOgHxDZMUo6ftWeU/uYdrQUI74dMeae3V?=
+ =?us-ascii?Q?QxFXzwNTzhXxyW2oUgW3uRtAFOMevIjBVj4jiy/zfpjSqxslD1G3m0sEtsma?=
+ =?us-ascii?Q?Y96cN8beJZZk/JQdZLFI+bROKQZestrelCaIXES27L9W9cWbcwcstIuxr/m8?=
+ =?us-ascii?Q?DQ8lpx8Dvh1ivNtyERKE1Sp3p0/oK8OVSIe/A7kCphaPtUu0gZ+jflwu7xu4?=
+ =?us-ascii?Q?DJLLTWbj3l7EsMpNhdVCgsV4SRlTJwFjRM/4rN9yHgjbpqYUSUIQkF7NlGcf?=
+ =?us-ascii?Q?eKQyGLx2FpiIaJCU2YsyyzQK38yzLVAtnc0WeV/uEUR2aeV0RuG7XiKYYVXT?=
+ =?us-ascii?Q?a04qkiPlG8iOUPT5m4zcmVGq/64pHLKPm8eLt1243LRS0DBD1ODOOa5ZnTlw?=
+ =?us-ascii?Q?TJkCp95fUiRwRIMiRsZjscFOHR1h9izyLUe98saANLm71wJb/wlsFf+L8tjS?=
+ =?us-ascii?Q?lCHG0ABaUX/Gk2yZQDLZ5iLEFgOdC82wI4IIx7la45DKLIWiNo4Ustt4STtE?=
+ =?us-ascii?Q?7MoFT/IeHe7lPdOmvK1PdssRDpQij8teHVGqXwfSvkANz1kBX8EDc3gw/WsK?=
+ =?us-ascii?Q?xP2J7qLbTbk4czQGjW2Lmz/9nNJmrsx4X/Afsd4JppqmWd8xHtjSaQUVVYnG?=
+ =?us-ascii?Q?vauixlbvpsyxSz5RUDMWAaoIRpxxUe2UJclxPpKkcY9L8LgUPUuCpu05QV5Z?=
+ =?us-ascii?Q?wODwEMFb9L499bIXVSU99iPEalW7M4zqk8SGGN5hj5Lk77e/UJIQjPcKZlEu?=
+ =?us-ascii?Q?9my2CWG17vffKEsaKYNwKlqAr8puyeaDOBlgvwg20HIuhk6UvWgpzuisCjuU?=
+ =?us-ascii?Q?P5TuoH68nCSGQdKL6kYi9jWG1mzsXfKAddERl73KJZ0G6YGU0rphG5IJNPcr?=
+ =?us-ascii?Q?r+zpJGGtC9LtaJNvIhsKyajG6OrFdvVMZot3ZT0qNEBBhCQCrzzNk+XPCPM8?=
+ =?us-ascii?Q?glSUM0PXVN02DuZ50V21oHv7songlpeZIZB8t2cd15EvjL7UiGUSjzoX02UG?=
+ =?us-ascii?Q?xP0QUJ+rLpNr+WAPDtBvKChafbenFLhYkTLJbukN/PpsgSDv+XIGA0dS1AI4?=
+ =?us-ascii?Q?MA=3D=3D?=
 MIME-Version: 1.0
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: Gq9QqZ2OeOHLwr9FyvuU3Zlp4CEEJyeyeqaaCpFL+CsO1KYLJdhOcjiFx9ohyUSKTo5szJ74GvbdmxEzZANQwqRM0WBy3BDKaH8nRHV3wq/m+XlODAENZE4rvc9Y/hhYWuyPuFVZN2n03yWwiPYDYF6D2mDgbDsalHErj4RJiPOp2ZUatreuV+EkJvjj0ntKK10eSIL2t44Y+cR9dLRyMDo9NV03waTZDjO5B0IE1csYOe0xgbnsDq26sL0usCFqyw+NTkaAieoK59S1WA+JdmikfqkFkb8uivxsyIttLspxzzno0qhdtqfLYS189DyDOeMAr47FfO0LzEAc58yhNabwh6uHNZ+xOeHYnDxLYOuR22W1J2xrtHsyeJB13JzIks7YQbmpOg+zpjqMxXdjO4taMJKy2nSy8GnCQz/10zS6VxrBlFPbtlWhm6sdjpy8aA8qoEqlTeioXTvNONok1mzscBROoKLh9MBYlq7ESy2CRbUhvuA9j4ZdUfy/zyTZTMb7nkm5lrBlUN801+ME6z0W1iRBZpxz5RBK6nkrLVZqcs6xe72F5vLsF7mDpuOZOKq0OgJSGznEEKIwzH0zYA==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: sY+1zOha0YxFPr/TFuEnuU5zxLn3rjeQAwKs0c2EgWI+6wyYtZRDKLBYpqZ+dyizczm3Th3TH0tPdw0a1dmBb0azg6iNFh548YU/C7A/93cGJTJYiPqOeMIM4nT981jOm/3ykBS4m5LBlC9xiIrXqZEmf6wRNO8+Zum+iSeVchL2RALRNusPzSuXXbbJfntcPPg/4HNFhoPwdankDmFxvxjFTc3XvmacR4y1ROGXb+SeoVsZkSreWG5USrLVKonoDX+EvHxQvk9ffinN1bxricJmCVkF6Mg/LDcy6r0oAqnFKFBFioVEVOcbUg69+4KaLa2Zl6Cb5BJBGWHIGcg8tyDzSZnXnhCkSHdj+PGpqkOHp4hWo1KBBvOAogSw619Rx14AnlDUPwy6fTzEZflexr2WbM/WTUcB5mIfqaZyBaRFaTHTynASfnpaSOm4iC8F/+pajssViHtXdyeM1C6ccgoy6gQAl2zeqZjc1ux3DAmM2pTmjiSFaCBE4DEdxkKoY7WGkXrTQ0aUYwngybtZJekwJjytH2zN3fv3/6fiAEd7zC5k4tAVXj51OXJnxAc9EotvQbRwzVFPYbEJIZypLQ==
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: AS1P250MB0608.EURP250.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06f659a3-c0e8-438c-053c-08dd35fddc95
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2025 07:17:39.9688 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a52f84f-7764-432c-c3ad-08dd35fdde4b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2025 07:17:42.8404 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: f92d38a3-9c84-427f-afc3-aef091509c71
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eLSHe0Ih0ksl75Iga9d/O/D4MK0d/gYZrqUcmoenqExyVvPc7gb6xeR7MdgAhumcwtspA2tSwIoYqtwrGiLGusmBN14A6BvnXMDHskaqYXw=
+X-MS-Exchange-CrossTenant-userprincipalname: MRgZXFW5KvNfzCPpxcE4QtidOfE6kqyOTD0FSQ+rfE48hl3gzfFNEwsu7n6f8ttViZt6OcR4hem2cjmt2UVaf9SKj/nBjNtVJahi+5mxm5s=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2P250MB0368
 X-C2ProcessedOrg: 71f8fb5e-29e9-40bb-a2d4-613e155b19df
 X-TBoneOriginalFrom: Michel Alex <Alex.Michel@wiedemann-group.com>
@@ -172,19 +170,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=stwmm.onmicrosoft.com; 
  s=selector1-stwmm-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZwPxRmJoZrOo4q37LIL0TI4wSthQS27iuMfIQuXxi3g=;
- b=Uz+UcfJfV7u6S0dFX1ld1nRkYtStWnNn2SYl7cC5y7dvhltj3WNHgfcDjMIgWIq5CxwIZiPV7uF/yiPubtqqX/b4fKiHajnfvhrfPsN4db62pLlMk3kwd19EaIsiutS3+Ej0K6XRGbPRaQVy3gm+b8cnIfFOFzMamRBODqpqBZc=
+ bh=GCmpKxppTAuIdbooxeX3YYnjAeXc0XFs3aHwitMHrzE=;
+ b=P6hITzXL0zKdAf48uStXhlT1ENtvktTnYS7B+OGg0VKONPrp+iLTLND7PbFF9a1Abx2KyLrJBiNGtieM2y/QP3vcz+vl4F3l4GyzcdvXg2VLsvb7WT3a7dmURG0Y5YuUEJmZq0XvDtxnnT0FRJ9fjSZiWblwdgqh3lY61Uxej4s=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=wiedemann-group.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=stwmm.onmicrosoft.com header.i=@stwmm.onmicrosoft.com
- header.a=rsa-sha256 header.s=selector1-stwmm-onmicrosoft-com
- header.b=Uz+UcfJf
+ dkim=pass (1024-bit key) header.d=stwmm.onmicrosoft.com
+ header.i=@stwmm.onmicrosoft.com header.a=rsa-sha256
+ header.s=selector1-stwmm-onmicrosoft-com header.b=P6hITzXL
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=wiedemann-group.com;
-Subject: [Buildroot] [PATCH 1/2] package/libzenoh-c: bump to version 1.1.0
+Subject: [Buildroot] [PATCH 2/2] package/libzenoh-pico: bump to version 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -201,36 +198,85 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/eclipse-zenoh/zenoh-c/releases/tag/1.1.0
+Fixed CMakeLists.txt patch
+
+https://github.com/eclipse-zenoh/zenoh-pico/releases/tag/1.1.0
 
 Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
 ---
- package/libzenoh-c/libzenoh-c.hash | 2 +-
- package/libzenoh-c/libzenoh-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...xt-don-t-override-the-optimization-level.patch | 15 +++++++++------
+ package/libzenoh-pico/libzenoh-pico.hash          |  2 +-
+ package/libzenoh-pico/libzenoh-pico.mk            |  2 +-
+ 3 files changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/package/libzenoh-c/libzenoh-c.hash b/package/libzenoh-c/libzenoh-c.hash
-index 058909eaec..f83e23eed4 100644
---- a/package/libzenoh-c/libzenoh-c.hash
-+++ b/package/libzenoh-c/libzenoh-c.hash
+diff --git a/package/libzenoh-pico/0001-CMakeLists.txt-don-t-override-the-optimization-level.patch b/package/libzenoh-pico/0001-CMakeLists.txt-don-t-override-the-optimization-level.patch
+index 9f911a750b..e9a3520407 100644
+--- a/package/libzenoh-pico/0001-CMakeLists.txt-don-t-override-the-optimization-level.patch
++++ b/package/libzenoh-pico/0001-CMakeLists.txt-don-t-override-the-optimization-level.patch
+@@ -30,10 +30,10 @@ Upstream: https://github.com/eclipse-zenoh/zenoh-pico/pull/847
+  1 file changed, 4 insertions(+), 4 deletions(-)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 7a9fb6d1..97fba56a 100644
++index 25b62fb5..623d13f8 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -85,13 +85,13 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
++@@ -86,15 +86,15 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
+  # Compile options
+  if(CMAKE_BUILD_TYPE MATCHES "RELEASE" OR "Release")
+    if(UNIX)
+@@ -44,13 +44,16 @@ index 7a9fb6d1..97fba56a 100644
+ +    add_compile_options(-pipe)
+    endif()
+  else()
+-   if(UNIX)
++   if(CMAKE_SYSTEM_NAME MATCHES "PICO")
++-    add_compile_options(-c -Wall -Wextra -Wno-unused -Wno-strict-prototypes -pipe -g -O0)
+++    add_compile_options(-c -Wall -Wextra -Wno-unused -Wno-strict-prototypes -pipe -g)
++   elseif(UNIX)
+ -    add_compile_options(-c -Wall -Wextra -Werror -Wshadow -Wunused -Wstrict-prototypes -pipe -g -O0)
+ +    add_compile_options(-c -Wall -Wextra -Werror -Wshadow -Wunused -Wstrict-prototypes -pipe -g)
+      # C99 pedantic doesn't like struct anonymous in unix header
+      if (NOT CMAKE_C_STANDARD STREQUAL "99")
+        add_compile_options(-Wpedantic)
+-@@ -100,7 +100,7 @@ else()
++@@ -103,7 +103,7 @@ else()
+    elseif(MSVC)
+      add_compile_options(/W4 /WX /Od /wd4127)
+    elseif(CMAKE_SYSTEM_NAME MATCHES "Generic")
+@@ -58,7 +61,7 @@ index 7a9fb6d1..97fba56a 100644
+ +    add_compile_options(-Wall -Wextra -Wno-unused-parameter -Wmissing-prototypes -pipe -g)
+    endif()
+  endif()
+- 
+--- 
++
++--
+ 2.47.1
+ 
+diff --git a/package/libzenoh-pico/libzenoh-pico.hash b/package/libzenoh-pico/libzenoh-pico.hash
+index 4f95f2215e..5bf924987a 100644
+--- a/package/libzenoh-pico/libzenoh-pico.hash
++++ b/package/libzenoh-pico/libzenoh-pico.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  12401035b4652eaa95d5835db85f6597358f3245c2646abb3986291104be566c  libzenoh-c-1.0.4-cargo2.tar.gz
-+sha256  9e7a2bf47edaa5c73bb6dd44558eb2b1367a9e0a0bbbddead463df45c400cb54  libzenoh-c-1.1.0-cargo2.tar.gz
- sha256  01a44774f7b1a453595c7c6d7f7308284ba6a1059dc49e14dad6647e1d44a338  LICENSE
-diff --git a/package/libzenoh-c/libzenoh-c.mk b/package/libzenoh-c/libzenoh-c.mk
-index 6112eda842..9258db56bd 100644
---- a/package/libzenoh-c/libzenoh-c.mk
-+++ b/package/libzenoh-c/libzenoh-c.mk
+-sha256  c9002b4e348337c6fa522a2c80e175f512fa94d1837a9332fe095cf254e77242  libzenoh-pico-1.0.4.tar.gz
++sha256  4033d3867a8e94e587355639de2ad9045c0a1ed0409c7901a93dbd2cf2d9308b  libzenoh-pico-1.1.0.tar.gz
+ sha256  d386df32cf327bbb25abe894277d3d7e0f447bafc59f4ad362615b0136f30db5  LICENSE
+diff --git a/package/libzenoh-pico/libzenoh-pico.mk b/package/libzenoh-pico/libzenoh-pico.mk
+index bd1dd763d6..e243ec64fe 100644
+--- a/package/libzenoh-pico/libzenoh-pico.mk
++++ b/package/libzenoh-pico/libzenoh-pico.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBZENOH_C_VERSION = 1.0.4
-+LIBZENOH_C_VERSION = 1.1.0
- LIBZENOH_C_SITE = $(call github,eclipse-zenoh,zenoh-c,$(LIBZENOH_C_VERSION))
- LIBZENOH_C_LICENSE = Apache-2.0 or EPL-2.0
- LIBZENOH_C_LICENSE_FILES = LICENSE
+-LIBZENOH_PICO_VERSION = 1.0.4
++LIBZENOH_PICO_VERSION = 1.1.0
+ LIBZENOH_PICO_SITE = $(call github,eclipse-zenoh,zenoh-pico,$(LIBZENOH_PICO_VERSION))
+ LIBZENOH_PICO_LICENSE = Apache-2.0 or EPL-2.0
+ LIBZENOH_PICO_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
