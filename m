@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD30CC02183
-	for <buildroot@archiver.kernel.org>; Thu, 16 Jan 2025 22:07:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12413C02183
+	for <buildroot@archiver.kernel.org>; Thu, 16 Jan 2025 22:07:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 98F8B607DA;
-	Thu, 16 Jan 2025 22:07:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CAFBC605F1;
+	Thu, 16 Jan 2025 22:07:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YpmdNa61B_qA; Thu, 16 Jan 2025 22:07:07 +0000 (UTC)
+ id Nnx7zMEwXmtz; Thu, 16 Jan 2025 22:07:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A07860AAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4D5860705
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A07860AAA;
-	Thu, 16 Jan 2025 22:07:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D769494B
- for <buildroot@buildroot.org>; Thu, 16 Jan 2025 22:07:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4D5860705;
+	Thu, 16 Jan 2025 22:07:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D022794B
+ for <buildroot@buildroot.org>; Thu, 16 Jan 2025 22:07:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B78EC41361
- for <buildroot@buildroot.org>; Thu, 16 Jan 2025 22:07:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1D0D415C2
+ for <buildroot@buildroot.org>; Thu, 16 Jan 2025 22:07:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 45WOL3B3WCyC for <buildroot@buildroot.org>;
- Thu, 16 Jan 2025 22:07:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC91D415DC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AC91D415DC
- for <buildroot@buildroot.org>; Thu, 16 Jan 2025 22:07:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9679385E0E; Thu, 16 Jan 2025 22:07:04 +0000 (UTC)
+ id po1osYwRy1Bz for <buildroot@buildroot.org>;
+ Thu, 16 Jan 2025 22:07:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7C25541361
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C25541361
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7C25541361
+ for <buildroot@buildroot.org>; Thu, 16 Jan 2025 22:07:36 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 2F0AB19F59C;
+ Thu, 16 Jan 2025 23:07:32 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:39564])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 16 Jan 2025 23:07:32 +0100
+MIME-Version: 1.0
+Date: Thu, 16 Jan 2025 23:07:32 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 16 Jan 2025 23:04:13 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 83453910d93f63867f56c0cf51485dbf41a023e0
-X-Git-Newrev: 593755f527a77fe8bf2513f14118ab51b76f17b7
-X-Patchwork-Hint: ignore
-Message-Id: <20250116220704.9679385E0E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rsync: bump version to 3.4.1
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>
+In-Reply-To: <20250116070420.369915-1-peter@korsgaard.com>
+References: <20250116070420.369915-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <3f0e048e4ea8520447aae30d8990d0bf@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1737065254;
+ bh=DuY/bSWgSzLIy78jhRGgLW41cHOxYmgXQ+WcbzAZ+84=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=YG0ZXn2Xhe6WCGv+fqSuAcGnccIU955J+73xqgzD9i2OMztmHgB39R/wlGGRDUuRi
+ 2QHRJfNpNfokB+WrgLNX4/76FcYVJtXW6HFaokyXqTvzNS+goj0MEIH3a2HculU9NX
+ 3M2hhBxdI2XvdaEyXBRYaYYVqtrvEmsZgSncK7sovUYMJNBNxPv7ioL/Ffc2TrKyG5
+ tOi+zffNjW4HWiNveHc/RHVwd3bEO48mdyuZUt5c9KrWftHt10JU6TPk5HX65WaEDb
+ S0yWguaZjC8Xr6O/aOz1JXyakape+HUBC6XBiZvu6GGQxHY++wocn57RNNSyPYRayv
+ hlDdkwQN6qC2g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=YG0ZXn2X
+Subject: Re: [Buildroot] [PATCH] package/rsync: bump version to 3.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,57 +82,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=593755f527a77fe8bf2513f14118ab51b76f17b7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 16/01/2025 08:04, Peter Korsgaard wrote:
+> Bugfix release fixing regressions in 3.4.0:
+> 
+> - fixed handling of -H flag with conflict in internal flag values
+> - fixed a use after free in logging of failed rename
+> - fixed build on systems without openat()
+> - removed dependency on alloca() in bundled popt
+> 
+> For more details, see:
+> https://download.samba.org/pub/rsync/NEWS#3.4.1
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Bugfix release fixing regressions in 3.4.0:
-
-- fixed handling of -H flag with conflict in internal flag values
-- fixed a use after free in logging of failed rename
-- fixed build on systems without openat()
-- removed dependency on alloca() in bundled popt
-
-For more details, see:
-https://download.samba.org/pub/rsync/NEWS#3.4.1
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/rsync/rsync.hash | 4 ++--
- package/rsync/rsync.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
-index 336d785153..5feacd0663 100644
---- a/package/rsync/rsync.hash
-+++ b/package/rsync/rsync.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://rsync.samba.org/ftp/rsync/src/rsync-3.4.0.tar.gz.asc
--sha256  8e942f95a44226a012fe822faffa6c7fc38c34047add3a0c941e9bc8b8b93aa4  rsync-3.4.0.tar.gz
-+# https://rsync.samba.org/ftp/rsync/src/rsync-3.4.1.tar.gz.asc
-+sha256  2924bcb3a1ed8b551fc101f740b9f0fe0a202b115027647cf69850d65fd88c52  rsync-3.4.1.tar.gz
- # Locally calculated
- sha256  85c19ea50a224c2d0067a69c083584e5717b40b76610ec1218f91385775067dd  COPYING
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index 4613778a7f..e4c02a756f 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RSYNC_VERSION = 3.4.0
-+RSYNC_VERSION = 3.4.1
- RSYNC_SITE = https://rsync.samba.org/ftp/rsync/src
- RSYNC_LICENSE = GPL-3.0+ with exceptions
- RSYNC_LICENSE_FILES = COPYING
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
