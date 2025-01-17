@@ -1,52 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33512C02183
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jan 2025 20:50:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71F68C02183
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jan 2025 20:51:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDD10424F4;
-	Fri, 17 Jan 2025 20:50:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D6416FB58;
+	Fri, 17 Jan 2025 20:51:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hA11mzEaLrtA; Fri, 17 Jan 2025 20:50:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3OwwbPXIEq9y; Fri, 17 Jan 2025 20:51:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2656424DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58E976FC77
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2656424DA;
-	Fri, 17 Jan 2025 20:50:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F79494B
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 20:50:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58E976FC77;
+	Fri, 17 Jan 2025 20:51:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C510194B
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 20:51:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2CAE6400C5
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 20:50:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B190C70490
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 20:51:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XFii8Zj4tTHm for <buildroot@buildroot.org>;
- Fri, 17 Jan 2025 20:50:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29D7040015
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 29D7040015
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 20:50:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 13E3B85DCA; Fri, 17 Jan 2025 20:50:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uVXUY6N-Ktkb for <buildroot@buildroot.org>;
+ Fri, 17 Jan 2025 20:51:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BE0FE6FB58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE0FE6FB58
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BE0FE6FB58
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 20:51:23 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id A7ABD780368;
+ Fri, 17 Jan 2025 21:51:19 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:38676])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 17 Jan 2025 21:51:19 +0100
+MIME-Version: 1.0
+Date: Fri, 17 Jan 2025 21:51:19 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 17 Jan 2025 21:46:39 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fa8794a333b60ad5291a7d793b93881de495e745
-X-Git-Newrev: fa06ef964e86523077ace43d2f91a8555e8dcc11
-X-Patchwork-Hint: ignore
-Message-Id: <20250117205049.13E3B85DCA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/paho-mqtt-c: bump version to 1.3.14
+To: Akhilesh Nema <nemaakhilesh@gmail.com>
+Cc: buildroot@buildroot.org, Julien Grossholtz <julien.grossholtz@openest.io>
+In-Reply-To: <20250117073412.840238-1-nemaakhilesh@gmail.com>
+References: <20250117073412.840238-1-nemaakhilesh@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <3a92a3ed755f1331158dac44b55bbe49@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1737147082;
+ bh=XEo+e19N+88wcUyszpHIPhrgN21gFDtMHUASuhjKMEM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=OZM3UgmEXE6ay7f9aErU2QP+WdRYPAgbr2UAhlhejmX96JvAfcKDOjn17Wf9JLVpI
+ Oxp9Qmi1rcklxi8hyi2Rx0zIRAms07WdHL5oporJp0kmtopNZuA7VBzOBCPfYHpXs+
+ zOJzcCVI6ZDePk6r/D6xb56H34fs5twb9HfKJd7J9WYWGa+ZBBBkabwWnJFqRNNjnP
+ Nhmf38MIFAuD5BG2XRx498OgpBUbZ3xbwNc0QacTrha1AMdeTCr8o1ko3YMqPzK0GO
+ u9KPyXuvbL2JvaFxinHee7hsN5094gnwHiMz5ZPJWAsL/+9Nq+HH93DUnTqjUrTspA
+ 7tY9TRej96pmQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=OZM3UgmE
+Subject: Re: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: bump version to
+ 1.3.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,49 +83,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa06ef964e86523077ace43d2f91a8555e8dcc11
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 17/01/2025 08:34, Akhilesh Nema wrote:
+> Release notes:
+> https://github.com/eclipse-paho/paho.mqtt.c/releases/tag/v1.3.14
+> 
+> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 
-Release notes:
-https://github.com/eclipse-paho/paho.mqtt.c/releases/tag/v1.3.14
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
- package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index d359edf36e..915897d082 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  47c77e95609812da82feee30db435c3b7c720d4fd3147d466ead126e657b6d9c  paho-mqtt-c-1.3.13.tar.gz
-+sha256  7af7d906e60a696a80f1b7c2bd7d6eb164aaad908ff4c40c3332ac2006d07346  paho-mqtt-c-1.3.14.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
- sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index ec4e96c77f..0486d2ce80 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PAHO_MQTT_C_VERSION = 1.3.13
-+PAHO_MQTT_C_VERSION = 1.3.14
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
- PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
