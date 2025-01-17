@@ -1,76 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ED1AC02183
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jan 2025 21:15:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 591F8C02183
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jan 2025 22:36:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D34A24252F;
-	Fri, 17 Jan 2025 21:15:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D05B84CE2;
+	Fri, 17 Jan 2025 22:36:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p5ZK0VRus0mD; Fri, 17 Jan 2025 22:36:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2A3B84CDE
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E2A3B84CDE;
+	Fri, 17 Jan 2025 22:36:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F420F94B
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 22:36:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DF57642979
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 22:36:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fUMT2T8Wpgas; Fri, 17 Jan 2025 21:15:01 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9775542531
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9775542531;
-	Fri, 17 Jan 2025 21:15:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id EC24A94B
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 21:14:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D98567048F
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 21:14:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bfpcxzm59k9p for <buildroot@buildroot.org>;
- Fri, 17 Jan 2025 21:14:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EAEA16FBC0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAEA16FBC0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EAEA16FBC0
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 21:14:58 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id A2D3913F88E;
- Fri, 17 Jan 2025 22:14:55 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:34372])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 17 Jan 2025 22:14:54 +0100
+ id dU6_Av2xxiMG for <buildroot@buildroot.org>;
+ Fri, 17 Jan 2025 22:36:14 +0000 (UTC)
+X-Greylist: delayed 599 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 17 Jan 2025 22:36:12 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F002E429AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F002E429AC
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=46.105.40.108;
+ helo=3.mo583.mail-out.ovh.net; envelope-from=sebastien.szymanski@armadeus.com;
+ receiver=<UNKNOWN> 
+Received: from 3.mo583.mail-out.ovh.net (3.mo583.mail-out.ovh.net
+ [46.105.40.108])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F002E429AC
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 22:36:12 +0000 (UTC)
+Received: from director3.ghost.mail-out.ovh.net (unknown [10.109.140.166])
+ by mo583.mail-out.ovh.net (Postfix) with ESMTP id 4YZYwk3DHkz1RNx
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 22:16:22 +0000 (UTC)
+Received: from ghost-submission-5b5ff79f4f-xcbmk (unknown [10.110.188.136])
+ by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 31CFA1FD2D;
+ Fri, 17 Jan 2025 22:16:22 +0000 (UTC)
+Received: from armadeus.com ([37.59.142.103])
+ by ghost-submission-5b5ff79f4f-xcbmk with ESMTPSA
+ id tGZEA7bWimedFwAA2bCKiA
+ (envelope-from <sebastien.szymanski@armadeus.com>);
+ Fri, 17 Jan 2025 22:16:22 +0000
+X-OVh-ClientIp: 92.148.253.243
+From: =?utf-8?q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Fri, 17 Jan 2025 23:16:18 +0100
 MIME-Version: 1.0
-Date: Fri, 17 Jan 2025 22:14:54 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: buildroot@buildroot.org
-In-Reply-To: <Z4k7Buqxh0PqMEa2@waldemar-brodkorb.de>
-References: <Z4k7Buqxh0PqMEa2@waldemar-brodkorb.de>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <e8ee470c338efa53aa4c0f172825c759@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737148496;
- bh=nyoL4u9KN3BMNlAJGhpOg5gRKCtweeglGgUbTa5cHXk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=XhYntMswYvqrCRYWC9Cb5omEOkviG0RmHstPmhyK79YbmWeMUsLcrM5K+ylan2vk/
- AIBiGAj9brnVeIuLrfmEbMGSga7g6vqjdD4CQJXzhyW7dsVDnzhanc2yUYVSGKp5Ij
- nk6QjZwL8iLaO4L53cVjmjv4JSJnzrfsK83sEfPQXK+u3lFzlb6tD4ayZR+XTUz4Rf
- OQ7KzcwhmTfSM/fCmNLeHu5BG6KBFSNeq+d+szALehXOUUUs/I/wJfAz8Pv5GWP+th
- QKvTTLCAKqzJonWA4sFjgCj/6Wudgb4LnWks6W87F+JR1aFUr29J3eJE52iTmNKQ1c
- wLceKCFabMh6A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=XhYntMsw
-Subject: Re: [Buildroot] [PATCH] package/uclibc: update to 1.0.51
+Message-Id: <20250117-add-wlr-randr-package-v1-1-02329e65c76f@armadeus.com>
+X-B4-Tracking: v=1; b=H4sIALHWimcC/x2MQQqDQAwAvyI5G9is2JV+pXgIJq1B2UoWWkH8u
+ 4vHgZk5oKibFng2B7j+rNg3V6C2gWnm/FE0qQwxxD4QJWQR/K+OzlkcN54WrhLLg9JAxB1HqO3
+ m+rb9/r7G87wA8E19tmcAAAA=
+X-Change-ID: 20250117-add-wlr-randr-package-ad617811a3a2
+To: buildroot@buildroot.org
+X-Mailer: b4 0.14.2
+X-Ovh-Tracer-Id: 15471553572895648747
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrudeifedgudehjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephfffufggtgfgkffvvefosehtkeertdertdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeelgfefueffgfekudefveehffetteevtdejkedujefgvdegjeehteevhedvieelffenucffohhmrghinhepshhrrdhhthenucfkphepuddvjedrtddrtddruddpledvrddugeekrddvheefrddvgeefpdefjedrheelrddugedvrddutdefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehkeefmgdpmhhouggvpehsmhhtphhouhht
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ bh=NnwW399fWEPf5aKy3UC0aJvBqzn/V2iGj5LnRh+yWGI=; 
+ c=relaxed/relaxed; d=armadeus.com; h=From; s=ovhmo103079-selector1;
+ t=1737152182; v=1;
+ b=HFxXJkq3CLLzwx98PQrI9TpuilJtP+k4g9dkV8Snmq1fGDO9XUPmm47Yp9d4dtYauKS69fG6
+ qOOCcnE0pNQ8sW0yzmLDQW9bznJN+zwx5FeotqOmsl0OwPxynAuMYBqacmS5DM673xghipfsnTz
+ Mog245QH+WLq+w8L6xctmBBxxl1x4/DosPNsogLm53YaimNGfThAuRyeH1gKcAWnJ9S2vTJJ9KU
+ RTy4ivIEDdGv3iavWsGgq/+u1h8L1fVWAl2T21jjtYTmYNFOQdrpu6aiv4TzrFlpEwO4yiKffQg
+ 9Um4f2susaBxHGV2+CQ7O700hoQZwcKxRdzUjjBgEw/pQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=armadeus.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=armadeus.com header.i=@armadeus.com header.a=rsa-sha256
+ header.s=ovhmo103079-selector1 header.b=HFxXJkq3
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-103G005c55c9624-108d-4981-9b16-fa190909d21b,
+ B049E90426917BB4F3A6CFC693788001C48801E2)
+ smtp.auth=sebastien.szymanski@armadeus.com
+Subject: [Buildroot] [PATCH] package/wlr-randr: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,19 +98,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/01/2025 17:59, Waldemar Brodkorb wrote:
-> See here for a changes made to this release:
-> https://mailman.openadk.org/mailman3/hyperkitty/list/devel@uclibc-ng.org/thread/4AHYRGXTYIYVUACYB3Q4JK5Y44ALZRAU/
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-
-Applied to master, thanks.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VXRpbGl0eSB0byBtYW5hZ2Ugb3V0cHV0cyBvZiBhIFdheWxhbmQgY29tcG9zaXRvci4KClNpZ25l
+ZC1vZmYtYnk6IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFk
+ZXVzLmNvbT4KLS0tCiBERVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKIHBh
+Y2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS93bHItcmFuZHIv
+Q29uZmlnLmluICAgICAgfCAgNyArKysrKysrCiBwYWNrYWdlL3dsci1yYW5kci93bHItcmFuZHIu
+aGFzaCB8ICA1ICsrKysrCiBwYWNrYWdlL3dsci1yYW5kci93bHItcmFuZHIubWsgICB8IDE0ICsr
+KysrKysrKysrKysrCiA1IGZpbGVzIGNoYW5nZWQsIDI4IGluc2VydGlvbnMoKykKCmRpZmYgLS1n
+aXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwppbmRleCAyZDhhZTgyODliNzZhMzIyMDlhZWNh
+YTNmZTU3NWExNWM0YTg3YTczLi4xMjkyNzkwZWM2MDBhYzY1Y2EyZmM1NjljMGZkZjNkMDc4ZDlk
+ZjZlIDEwMDY0NAotLS0gYS9ERVZFTE9QRVJTCisrKyBiL0RFVkVMT1BFUlMKQEAgLTI5MjQsNiAr
+MjkyNCw3IEBAIEY6CWNvbmZpZ3MvYXJtYWRldXMqCiBGOglwYWNrYWdlL21tYy11dGlscy8KIEY6
+CXBhY2thZ2UvcHl0aG9uLWZsYXNrLWpzb25ycGMvCiBGOglwYWNrYWdlL3B5dGhvbi1mbGFzay1s
+b2dpbi8KK0Y6CXBhY2thZ2Uvd2xyLXJhbmRyLwogRjoJcGFja2FnZS9xdDUvcXQ1Y2hhcnRzLwog
+CiBOOglTZW15b24gS29sZ2Fub3YgPHNlbWVuYWs5NEBtYWlsLnJ1PgpkaWZmIC0tZ2l0IGEvcGFj
+a2FnZS9Db25maWcuaW4gYi9wYWNrYWdlL0NvbmZpZy5pbgppbmRleCA0MDAxODM1MTZlNjU5ZWM5
+OGNhY2MwMWQ5MzllYjk2ZWU3MTVhYjJkLi5hMWEyODcxNDkxODY5MDIyMzUzY2Q5MjE3NDU3YzI0
+NTViZDEzMDIyIDEwMDY0NAotLS0gYS9wYWNrYWdlL0NvbmZpZy5pbgorKysgYi9wYWNrYWdlL0Nv
+bmZpZy5pbgpAQCAtMjc4Myw2ICsyNzgzLDcgQEAgY29tbWVudCAiVXRpbGl0aWVzIgogCXNvdXJj
+ZSAicGFja2FnZS90bXV4L0NvbmZpZy5pbiIKIAlzb3VyY2UgInBhY2thZ2UvdHR5ZC9Db25maWcu
+aW4iCiAJc291cmNlICJwYWNrYWdlL3doaWNoL0NvbmZpZy5pbiIKKwlzb3VyY2UgInBhY2thZ2Uv
+d2xyLXJhbmRyL0NvbmZpZy5pbiIKIAlzb3VyY2UgInBhY2thZ2Uvd3RmdXRpbC9Db25maWcuaW4i
+CiAJc291cmNlICJwYWNrYWdlL3htbHN0YXJsZXQvQ29uZmlnLmluIgogCXNvdXJjZSAicGFja2Fn
+ZS94eGhhc2gvQ29uZmlnLmluIgpkaWZmIC0tZ2l0IGEvcGFja2FnZS93bHItcmFuZHIvQ29uZmln
+LmluIGIvcGFja2FnZS93bHItcmFuZHIvQ29uZmlnLmluCm5ldyBmaWxlIG1vZGUgMTAwNjQ0Cmlu
+ZGV4IDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAuLjQ1NmM4NDU0OWI2
+NTk3ZjU1MTZlODFhMjNmNGRhOTMyOTExOWNiODgKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdl
+L3dsci1yYW5kci9Db25maWcuaW4KQEAgLTAsMCArMSw3IEBACitjb25maWcgQlIyX1BBQ0tBR0Vf
+V0xSX1JBTkRSCisJYm9vbCAid2xyLXJhbmRyIgorCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfV0FZ
+TEFORCAjIHdheWxhbmQtY2xpZW50CisJaGVscAorCSAgVXRpbGl0eSB0byBtYW5hZ2Ugb3V0cHV0
+cyBvZiBhIFdheWxhbmQgY29tcG9zaXRvci4KKworCSAgaHR0cHM6Ly9naXQuc3IuaHQvfmVtZXJz
+aW9uL3dsci1yYW5kcgpkaWZmIC0tZ2l0IGEvcGFja2FnZS93bHItcmFuZHIvd2xyLXJhbmRyLmhh
+c2ggYi9wYWNrYWdlL3dsci1yYW5kci93bHItcmFuZHIuaGFzaApuZXcgZmlsZSBtb2RlIDEwMDY0
+NAppbmRleCAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwLi44MGNmZGUw
+NjMzODM2ZTRlZmZhMmQ1MmI0MTc3MzFhOTM3NDYzYWIyCi0tLSAvZGV2L251bGwKKysrIGIvcGFj
+a2FnZS93bHItcmFuZHIvd2xyLXJhbmRyLmhhc2gKQEAgLTAsMCArMSw1IEBACisjIEhhc2ggZnJv
+bSBodHRwczovL2dpdC5zci5odC9+ZW1lcnNpb24vd2xyLXJhbmRyL3JlZnMvdjAuNC4xCitzaGEy
+NTYgIGZkNTc4MzAwMmMxM2QzNzI2Nzg5OGU1NzFmMDNiNjE4MzYzZDEzOTUyYTI2NGNmM2Q2MWEz
+NTM4Mzg2OWQ2MzEgIHdsci1yYW5kci0wLjQuMS50YXIuZ3oKKworIyBIYXNoIGZvciBsaWNlbnNl
+IGZpbGVzOgorc2hhMjU2ICA3ZjNlODQ0YTU1MGRhNzRkNWYwYTYzNWFlMTI2M2NiN2RhZmRhN2Jk
+MTVhYzM3MzY0ZGRkZTg1ZGU4M2E3OGM3ICBMSUNFTlNFCmRpZmYgLS1naXQgYS9wYWNrYWdlL3ds
+ci1yYW5kci93bHItcmFuZHIubWsgYi9wYWNrYWdlL3dsci1yYW5kci93bHItcmFuZHIubWsKbmV3
+IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
+MDAwMDAwMC4uMjI3OWUyMjkyNjhlM2Y1OTI4NTAyZTJmNTkxNjUyZGIxZWIxZWI0NQotLS0gL2Rl
+di9udWxsCisrKyBiL3BhY2thZ2Uvd2xyLXJhbmRyL3dsci1yYW5kci5tawpAQCAtMCwwICsxLDE0
+IEBACisjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIworIworIyB3bHItcmFuZHIKKyMKKyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjCisKK1dMUl9SQU5EUl9WRVJTSU9OID0gMC40LjEKK1dMUl9SQU5EUl9T
+SVRFID0gaHR0cHM6Ly9naXQuc3IuaHQvfmVtZXJzaW9uL3dsci1yYW5kci9yZWZzL2Rvd25sb2Fk
+L3YkKFdMUl9SQU5EUl9WRVJTSU9OKQorV0xSX1JBTkRSX0xJQ0VOU0UgPSBNSVQKK1dMUl9SQU5E
+Ul9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQorIyBob3N0LXdheWxhbmQgaXMgZm9yIHdheWxhbmQt
+c2Nhbm5lcgorV0xSX1JBTkRSX0RFUEVOREVOQ0lFUyA9IGhvc3QtcGtnY29uZiBob3N0LXdheWxh
+bmQgd2F5bGFuZAorCiskKGV2YWwgJChtZXNvbi1wYWNrYWdlKSkKCi0tLQpiYXNlLWNvbW1pdDog
+Y2ZlMGU5NDViMzBlYzYxZWRkYzZiOGVhNTcyMTE4NjMwY2ZkMWNiMQpjaGFuZ2UtaWQ6IDIwMjUw
+MTE3LWFkZC13bHItcmFuZHItcGFja2FnZS1hZDYxNzgxMWEzYTIKCkJlc3QgcmVnYXJkcywKLS0g
+ClPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFkZXVzLmNvbT4K
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
+dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
+ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
