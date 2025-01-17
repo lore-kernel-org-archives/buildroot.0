@@ -1,167 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85926C02183
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jan 2025 08:27:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B13DC02183
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jan 2025 10:49:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 51B1083BD8;
-	Fri, 17 Jan 2025 08:27:03 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OOIiGF2g6BDc; Fri, 17 Jan 2025 08:27:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51D0E83BDB
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 51D0E83BDB;
-	Fri, 17 Jan 2025 08:27:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6DC11B89
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 08:27:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 45D596FB50
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 08:27:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BAD576119F;
+	Fri, 17 Jan 2025 10:49:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QBMnDBoOtldB for <buildroot@buildroot.org>;
- Fri, 17 Jan 2025 08:26:59 +0000 (UTC)
+ id 9eOrTLhBBKUY; Fri, 17 Jan 2025 10:49:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50728607C4
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50728607C4;
+	Fri, 17 Jan 2025 10:49:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B9D6CB89
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 10:49:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9AAEB8148A
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 10:49:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3bmaysKesp0J for <buildroot@buildroot.org>;
+ Fri, 17 Jan 2025 10:49:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2412::616;
- helo=nam10-mw2-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4065D6FB4B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4065D6FB4B
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam10on20616.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2412::616])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4065D6FB4B
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 08:26:58 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rOM9jiizoDDjDqFHJd3Bp3oMkgYAj7UsuMH1VTurcjzI5aWhzFbPCLMjHrmvaxM+lqGt1GLJkSR8/6wFAS3x0cuYIZRnoAP8cbvBL7q4bLd201HYANqa1mgl7W8qEFmKo9lHkksoAnBu6sBgW5aJ33dhfBSELC7AKTE46TTZKls2zIzmU2FSz9dntWPBRCqWlpbYt6OrR1w3NgcNJjSbWnHEC64Z700Xsda4kxX0Ax4/NYco4mOhN5SPw920fmxSW2Pg7qaZGhESN7zMWIUO2cRKTpkZlZfghYH7gAiLuSxHnykOjgquF6NLonWjnwqG9q2mZjh+GsCGRV36JMDwXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FU0khCTeSd11dVusuJhVzdJEiVIyxUWcEshNC06f39U=;
- b=ZEPeWYYGSM4WxKUbB+Cu5xp4GBfaXp/WYq9rkKptEsDHmh9eDH+bQfTud0PAx8ZzeAlsiLBvGiuyhe9vdJnHRZ9teAUI0MPOGozPFmzomOH0uX7B6m/PIc1+nOrSu+S4mIplbkdurHMtx/hE7OS9adavPWrHcOntWwySV0jqMffR7x7hr1oPwk0cq84H6hhvNGOb332cBD4ceDF4Ka/REGyGK8nHV7jwmXw/xbScdY1nr5FlBseYFuk1ErYygwiU+vPXM8enrDc67P1JsqfJGKkn7qRcNLmE/yNFMG2NsCmGXRt6KENyfiejpu5chQXXN9RPAfCp0gejnMGviNSxig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from SA1PR12MB5615.namprd12.prod.outlook.com (2603:10b6:806:229::17)
- by SN7PR12MB7322.namprd12.prod.outlook.com (2603:10b6:806:299::6)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.13; Fri, 17 Jan
- 2025 08:26:54 +0000
-Received: from SA1PR12MB5615.namprd12.prod.outlook.com
- ([fe80::7557:587c:4ec:1913]) by SA1PR12MB5615.namprd12.prod.outlook.com
- ([fe80::7557:587c:4ec:1913%7]) with mapi id 15.20.8356.010; Fri, 17 Jan 2025
- 08:26:54 +0000
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>,
- "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>
-Thread-Topic: [PATCH v5 4/6] configs/zynqmp_*: migrate to binman
-Thread-Index: AQHbaLXi2ZXN8rO65kOXxRhp1twOlbMan1dA
-Date: Fri, 17 Jan 2025 08:26:54 +0000
-Message-ID: <SA1PR12MB56151FFC38BE2D8926ECBDBAF01B2@SA1PR12MB5615.namprd12.prod.outlook.com>
-References: <20250117080009.774814-1-neal.frager@amd.com>
- <20250117080009.774814-4-neal.frager@amd.com>
-In-Reply-To: <20250117080009.774814-4-neal.frager@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|SN7PR12MB7322:EE_
-x-ms-office365-filtering-correlation-id: 570a9935-59bc-41e1-ef71-08dd36d0b2fe
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|376014|366016|1800799024|38070700018|41080700001; 
-x-microsoft-antispam-message-info: =?us-ascii?Q?BcjyUWJWRtT92GzeRsfjc40Z0fLrN6fcj+wCJRgvIKVkGxLsrrjPrWsVkPcA?=
- =?us-ascii?Q?VyMPjYf9Tp9sBgVdLoIzanGw3XtSs1OL0h5emaPluFGmoSrFaAB4RREbg6X4?=
- =?us-ascii?Q?5vBLHso0v7cIk33MyRBlizcGJuR6ddKAeLQztORcUwV83NesByjalhCV1Z+E?=
- =?us-ascii?Q?neu8MlCFZ5I8qAj+ViE0i0KoZdwvRWMcysMqnydr5MhbE69bGBeB8GF5JRtn?=
- =?us-ascii?Q?BqIvQ6I94kKV5ZNEMAjTCdKuYLDAvEBgAn/MJ+6y/XaKTXZxpwgFv9CFx2oP?=
- =?us-ascii?Q?UaSFbv8tptFq9EMRl8hV7c/Zj2csSeYm/kzAOXefGi3gZ023vbQe81knW9bE?=
- =?us-ascii?Q?tHBECmzHBBhc3caKOx+0sCTMTx0zz7BBPROV/CzCywnBTz2oL4v6rRiATYK7?=
- =?us-ascii?Q?nS64otC7d6Bau6t3Cfd8oawq2XALFBh/9R944kQOgg0G07c/gi2UHim6ALLW?=
- =?us-ascii?Q?cohLVmLCtZYi0BbWiJNSbrAo2qSaf36kutMx6Jyz5FZyIqzTVTdL20yi7qCj?=
- =?us-ascii?Q?JY6mznT7sWaTLAz+2cRC9ttcFQ8xqHcazhVFAeFVnY7PQqby6+i18Q2yEc0J?=
- =?us-ascii?Q?uze5PQnxfW8AAqD+iZVy447KgKHTXVk7jyJu0tn53cIn5584yPQ8DyBd17gi?=
- =?us-ascii?Q?sah7L89VWTY22Wig5ssO3kEbxM/yXBgjRBFZPYNvaAm+riuGcqSE7hhKATW7?=
- =?us-ascii?Q?/5QILDHmP0dq9zeOJt+tJ1JkqPcnRgXRkfvvp16enW1tNwGYG5nzwruJFWwS?=
- =?us-ascii?Q?pskEQ1/8QfDTzQyuZzmh33PxkhoxbO0++rAaDHoJDd3beQiGCr9AmPXKs9XQ?=
- =?us-ascii?Q?qvXtotIhgqBAm0GqS/7O4Fw6WmxzGm532idncFq7hMUi/oaKuo04p7aP0wQb?=
- =?us-ascii?Q?PWte3X7HhV/sDbm5t6wMg4o6rZcTpGBh2yr1gWk61aZ/gJxpkBWD469B84Ca?=
- =?us-ascii?Q?vcDHuvtf+eFOK6WDhr5ySxbZ3o3wJ+rfo6VARpkuOfQIWkuM7rPoQWM0QRMo?=
- =?us-ascii?Q?WaFOKbkVsIAhonrSDPC6VxDV80pJT/UaSOpOtg0/ZjPycsYAhgdGN2tKkPIn?=
- =?us-ascii?Q?C8mhlB3GOcMyuXhv08xAk5ihrYIxxcJZh73kcjeWEhXdAsZut+cwXyQrdHxS?=
- =?us-ascii?Q?Bnz3CjNZycSHQzEuYs2orhKbD0utoseQ7PyrNtluNYy54akZtdfSsmi5H0ML?=
- =?us-ascii?Q?1e6JS9Fb4Bnd537+l4LvuiZNA9RIOpykUeWXdRhb17BBvRDT6XQ9UZAF3TPz?=
- =?us-ascii?Q?pfqLEqxdyyssclLV08B39uVIAkBZnXWvRZCxhPcN/r9UxLVmaLN4lHdjUxtI?=
- =?us-ascii?Q?/coZudj6fsqqM9Nf1lUnJrAw0N3b+L/hwzcJowA6Qg0CH3q4iFM8AqKSoSmO?=
- =?us-ascii?Q?7ri5dOMdU/FA3IITTX1+EMmAS4zdj233pbgi3RFdnpUnVDUsXD8kARlrw5/8?=
- =?us-ascii?Q?wwvFj0RcY+NlCfvXcTdKx9bR3t4e/Lhn2VShWUSonwoT/I99TbSuEA=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SA1PR12MB5615.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(366016)(1800799024)(38070700018)(41080700001); DIR:OUT;
- SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?mNrU01A1l3YEPfgdHKuJFLBTZ0VOtU1w4kgttUat/D9amO1TCNgdhQE948Mx?=
- =?us-ascii?Q?65+tbm2Cx88ZPY3omgxrxmGAv9iqCZGNaDZj9BAsvr1Msfxs1aOP2sk6sOd/?=
- =?us-ascii?Q?rkEOFVQp3vU2MxlxWTtsL8kb79i69TInhFoEnwsR+x+uk1t33rMiUhLYNWBR?=
- =?us-ascii?Q?NQACU5hSy92o+C4+qKRNr7PMoJWQ6cK+yVGkQMfR/n4uxBd2UTgTfomunxIX?=
- =?us-ascii?Q?PiiY3K8aVTOMIPYIpFNC0fOpMbGSbIPtOlyFDg7IH9Xi4nlZ/3Ard5r3msla?=
- =?us-ascii?Q?pQ1Ki0xaW4hkFYlY9/2j4K13YnZJaNT8LS/JuJCaPqgHJBwDqzH6csmphFOO?=
- =?us-ascii?Q?dhREAs9YT5DNxF/HYAxMRjdYdBIJAuIVRztcVoTrtTB3deSAbbcM1m/iQDSm?=
- =?us-ascii?Q?ZJSRm/ga2aAaEdz0uN+htI0E4V7+CiU/PT4Bzl6FVl8aZCZ9+FC71AIXM5xm?=
- =?us-ascii?Q?ue8MAEGA6MtCpfw9LySwJgMAaR7OtSuX06cj9sH+Hq3Rlk+s6AXuXImT6bvK?=
- =?us-ascii?Q?sqJH0oGoRzIGdFxIzm5SL9z3Go+uLVCeIH0xOPaXvd8k3zQY4gfsFHdzpovr?=
- =?us-ascii?Q?X+EWittP6GUO/XSi4ieJL9KL0C7ezvz9mj0/vMe1ZiuACy+WhhJzc216t8DA?=
- =?us-ascii?Q?jSnJpFbEBzHqrBEGbapZkfBkzVJbLu/0jKwYeOEbjtqD6Q3ZwfKLvH0OmHyE?=
- =?us-ascii?Q?TLaFIPPP71UKe6ImudWOxGphwGdTWewX7Ndi+wcc2EmNKdwsI45L2X2uj1Qs?=
- =?us-ascii?Q?weiIR62w9H0zY+aKb35IYRBsxfaVhxqw42/+jladR6lv9qbxKUVaWbu9sqOO?=
- =?us-ascii?Q?FRK/icsrOI6eUPny7ooq+kHoOnyDwwjrzr7juPGbp6R/HqyWTeSZ8ujgDrgJ?=
- =?us-ascii?Q?xQRwj2itB5eI6sVTpuqzhlQkppIKe+cPIjEHNTWxsXpCZLvRKLmM7lY87Mg8?=
- =?us-ascii?Q?bExknG5UUf/FdnSuup7bbeJ982reNUTBW/5suaZqrx32tW4OKsuDEsEJq3hj?=
- =?us-ascii?Q?je20LqCeckpuin78GmZqSO7HiwKWgqDEFprZh/fzTWb6yoDtxMVENHVBxg+0?=
- =?us-ascii?Q?5d4IZ6HXfrNR+lpNP5wvhA9JfWxNKWfqrE3JOETfr7geE+gxgquVpv74Wfkv?=
- =?us-ascii?Q?JAdZPKk0bgJ0dRVh0NmJuBUQ79Xk/bUrijC8XA85j2QqH59OeBIQ7L7bV0CD?=
- =?us-ascii?Q?jNEQXL9Vc1JsENtKrjGZ2tfIBF3MSSmEVyRtCTPcV/9A/WXA+RCVE/m4uktK?=
- =?us-ascii?Q?Csl4kE6jlszLfoO7rrSVCR0OYhHHqV+IZttPUyIlptszFT6kv4wIlLtQFH8M?=
- =?us-ascii?Q?HErBhvF42yT5a8Sb8ZggcvMoRARQsGqPvhbEYDHfbeicq/gypTdBfziAU2c5?=
- =?us-ascii?Q?orsD314PweqgSuNvHi0K3Y1KsC0tpyq6G7tn5DvWrxKfCruZloYVi5HyBMlh?=
- =?us-ascii?Q?iyKjyeTUNdgfWD9l3gWG/y1+6B/UvW5dAk8n+7XYeLwyuZ8lbR5+BgF3FzVt?=
- =?us-ascii?Q?BcO2uTI+scT9uEgZXucsM14MeKDP4Ypf3X90aeIYKpAnTDu14YUk9/pX51dz?=
- =?us-ascii?Q?Dvx46Evwfqz8HybbPIg=3D?=
+ client-ip=2a00:1450:4864:20::12b; helo=mail-lf1-x12b.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0C21C8174A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C21C8174A
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
+ [IPv6:2a00:1450:4864:20::12b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0C21C8174A
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 10:49:31 +0000 (UTC)
+Received: by mail-lf1-x12b.google.com with SMTP id
+ 2adb3069b0e04-5401c52000fso1963858e87.2
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 02:49:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1737110969; x=1737715769;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Bx0w/uH63FQjwNUXhGz0JjZbKa3oVnnUOfYFXgpPkBU=;
+ b=ZpJPy9HSXKA08jQhdjm0uvU4JtYjs+yTq9pl+i4zwgTAZ7YuwaodC4JFfw0OGG7fTv
+ fEci/e7RuaQujhCDa0U+hVoGk73TRzyfqbKP+ICgkyrjMk58l+Bgs2X6UKht3sT78jCC
+ ughWXh+I+LsmVYZF5tiUcJIvF4YzioYHM7jyIA+yBPWK9gcc8eP2eNn/acL/aZeJNnh6
+ wW4jWMYNiTiUcOaDVliMRaf5KY6QrUtP725Ghe3MzRq+COXF3TBatdBl2lyN7livorJU
+ XVGJvqCP/9vDxuMK4DZnelEX4BTI1nkFwx/65QiBEep1c5xIjXNN9yYMK8T67nzESfXF
+ P1iA==
+X-Gm-Message-State: AOJu0YyxABm+0vb0Dzb1CMVatsKKH0WcFOLEYE92Sz2otHq3Xo/TwN0e
+ rFD2POF5UWm/6HJrrEj8G8ldiQ0htgh7uT3e3JmraXr5XfxyCA3fPawOiw==
+X-Gm-Gg: ASbGnctttOXhEc8KoppZ9MzxPTwlfEXtlFQPt64YtYeGZVOtrXHSNAUIXNB9olnGdUX
+ TKf2hZURaFuoP980ynb22p8C/pDtls1qiaplNXpnMxUMU66E8W1cMAM+yEl6WyYp3A90Wg6u9oy
+ XSKyqjRsa0uoT6DhOzfC7d2UHXyvFHulP7nTASApQa6wR19yR3X43r8lQKOdx3bOxLAmI2TcDM1
+ E+B4pFrF3dj2AMC7/O6PB/Iy7NrPf6YCIdGzNw3MCarAhR1qUmvXVXOG0DDpvlLFFLRigoZq5oZ
+ AWnmxgLbopA=
+X-Google-Smtp-Source: AGHT+IFIQLKPqz88MZT0i/v7eUqmBytnFAa2ENXzCXp+XDqEkltipLSP6C0n0vonLX5h9rnCsH9Hyg==
+X-Received: by 2002:a05:6512:124e:b0:540:1c16:f2f7 with SMTP id
+ 2adb3069b0e04-5439c2478cfmr635469e87.14.1737110969131; 
+ Fri, 17 Jan 2025 02:49:29 -0800 (PST)
+Received: from precision7530-arch-roy.lan ([79.161.254.156])
+ by smtp.gmail.com with ESMTPSA id
+ 2adb3069b0e04-5439af0ec7csm313520e87.97.2025.01.17.02.49.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 17 Jan 2025 02:49:27 -0800 (PST)
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+To: buildroot@buildroot.org
+Cc: Baxiche Su <baxiche@gmail.com>, Jesse Van Gavere <jesseevg@gmail.com>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 17 Jan 2025 11:48:41 +0100
+Message-ID: <20250117104911.613221-1-roykollensvendsen@gmail.com>
+X-Mailer: git-send-email 2.47.1
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB5615.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 570a9935-59bc-41e1-ef71-08dd36d0b2fe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2025 08:26:54.0561 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fx4OAmL+dAOkaqDrD6WIOLgcszqfDvCokMFOjHkArbk111CDlVlI+TFMVRBrGjJT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7322
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FU0khCTeSd11dVusuJhVzdJEiVIyxUWcEshNC06f39U=;
- b=H6PSdySMAylhNpoR/cInFX4RVoJFcUUYDud0ymO/TorU9kmXR7iGA/OBNtpIiOBSjidwgaSgnVjDvZuaaGK63nx8o+B4YA1rGHgXqh3OAPkfSQi8vcALmIKRZJpGicrVPaTBJbwDnfpsVTlIxJ8WgxPDV2grg4aFtvqchI6uyy4=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=H6PSdySM
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v5 4/6] configs/zynqmp_*: migrate to binman
+ d=gmail.com; s=20230601; t=1737110969; x=1737715769; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Bx0w/uH63FQjwNUXhGz0JjZbKa3oVnnUOfYFXgpPkBU=;
+ b=P9qLELOSAEtJJAsUi9uhcDEhxkH2L8kqa7kwJiOfSz496NEhg+rgzJNA7QVkNsnk4C
+ FxwkHDcBKCqyxvBqdOObwvQXF0/XZIhn4u/qx6q/tOZMUpo1+/+rA0O9Xl8egdfNh7jf
+ SF78/czDqfLiYFI9z/ulz8qa27TGDYy4EWgx3O/wgNfog/3WC9TItRrvAZu01h8I+1tt
+ IwbeSuUbszQt98yR7YcotygDZXHvRByT+qqC1gN7PlSaRWiEDji3DtJUzh+NsxtqhyF4
+ 1rdbEeVepvz2mnKWBt2lPJid1BxDCPAOSsBA7PL2P1cSX0XuQuVsCjbJkBaUIAFsEcPA
+ ZANA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=P9qLELOS
+Subject: [Buildroot] [PATCH 01/19] package/qt6: add qt6 multimedia
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -173,74 +107,353 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>,
- "brandon.maier@collins.com" <brandon.maier@collins.com>,
- "ju.o@free.fr" <ju.o@free.fr>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
- Michal" <michal.simek@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Luca,
+From: baxiche su <baxiche@gmail.com>
 
-> This patch migrates the zynqmp defconfigs to binman applying the necessary
-> upstream uboot patches.
+Signed-off-by: baxiche su <baxiche@gmail.com>
+Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+---
+ DEVELOPERS                                   |   3 +
+ package/qt6/Config.in                        |   1 +
+ package/qt6/qt6multimedia/Config.in          | 117 ++++++++++++++++
+ package/qt6/qt6multimedia/qt6multimedia.hash |  26 ++++
+ package/qt6/qt6multimedia/qt6multimedia.mk   | 137 +++++++++++++++++++
+ 5 files changed, 284 insertions(+)
+ create mode 100644 package/qt6/qt6multimedia/Config.in
+ create mode 100644 package/qt6/qt6multimedia/qt6multimedia.hash
+ create mode 100644 package/qt6/qt6multimedia/qt6multimedia.mk
 
-> With binman, u-boot can now build the correct u-boot.itb files for kria
-> natively.  So the post-build fixup scripts are no longer needed and can
-> be removed.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2d8ae8289b..a047fdfc19 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -329,6 +329,9 @@ F:	package/tcpdump/
+ F:	package/ti-uim/
+ F:	package/uhubctl/
+ 
++N:	Baxiche Su <baxiche@gmail.com>
++F:	package/qt6/qt6multimedia
++
+ N:	Ben Boeckel <mathstuf@gmail.com>
+ F:	package/taskd/
+ 
+diff --git a/package/qt6/Config.in b/package/qt6/Config.in
+index 80c417809d..10594691cf 100644
+--- a/package/qt6/Config.in
++++ b/package/qt6/Config.in
+@@ -50,6 +50,7 @@ source "package/qt6/qt6declarative/Config.in"
+ source "package/qt6/qt6graphs/Config.in"
+ source "package/qt6/qt6languageserver/Config.in"
+ source "package/qt6/qt6mqtt/Config.in"
++source "package/qt6/qt6multimedia/Config.in"
+ source "package/qt6/qt6opcua/Config.in"
+ source "package/qt6/qt6quick3d/Config.in"
+ source "package/qt6/qt6quicktimeline/Config.in"
+diff --git a/package/qt6/qt6multimedia/Config.in b/package/qt6/qt6multimedia/Config.in
+new file mode 100644
+index 0000000000..1aebef840d
+--- /dev/null
++++ b/package/qt6/qt6multimedia/Config.in
+@@ -0,0 +1,117 @@
++config BR2_PACKAGE_QT6MULTIMEDIA
++	bool "qt6multimedia"
++	select BR2_PACKAGE_QT6BASE_GUI
++	select BR2_PACKAGE_QT6BASE_NETWORK
++	select BR2_PACKAGE_QT6SHADERTOOLS
++
++	help
++    	  Qt Multimedia is an add-on module that provides 
++  	  a rich set of QML types and C++ classes to handle 
++  	  multimedia content. It contains an easy to use API 
++  	  for playing back audio and video files and rendering 
++  	  those on screen, as well as a comprehensive API for 
++  	  recording audio and video from the system's cameras 
++  	  and microphones.
++
++	  https://doc.qt.io/qt-6/qtmultimedia-index.html
++
++if BR2_PACKAGE_QT6MULTIMEDIA
++
++comment "alsa support requires disabling pulseaudio"
++	depends on BR2_PACKAGE_QT6MULTIMEDIA_PULSEAUDIO
++
++config BR2_PACKAGE_QT6MULTIMEDIA_ALSA
++	bool "alsa support"
++	# qt6-multimedia audio backend requires selection 
++	# of either PulseAudio or ALSA.
++	depends on !BR2_PACKAGE_QT6MULTIMEDIA_PULSEAUDIO
++	select BR2_PACKAGE_ALSA_LIB
++	help 
++	  This option select Alsa as audio backend.
++
++config BR2_PACKAGE_QT6MULTIMEDIA_FFMPEG
++	bool "ffmpeg plugin"
++	# qt6-multimedia ffmpeg plugin needs 
++	# qt6base-concurrent, PulseAudio and ffmpeg-swcale.
++	select BR2_PACKAGE_QT6BASE_CONCURRENT
++	select BR2_PACKAGE_QT6MULTIMEDIA_PULSEAUDIO
++	select BR2_PACKAGE_FFMPEG
++	select BR2_PACKAGE_FFMPEG_SWSCALE
++	select BR2_PACKAGE_PULSEAUDIO
++	help 
++	  This option enables ffmpeg media backend
++
++if BR2_PACKAGE_QT6MULTIMEDIA_FFMPEG
++
++comment "VAAPI support needs Linux DMA buffer feature"
++	depends on !BR2_PACKAGE_QT6MULTIMEDIA_LINUX_DMA_BUF
++
++config BR2_PACKAGE_QT6MULTIMEDIA_VAAPI
++	bool "vaapi support"
++	depends on BR2_PACKAGE_QT6MULTIMEDIA_LINUX_DMA_BUF
++	select BR2_PACKAGE_LIBVA
++	# ffmpeg-vaapi support needs qt6base-opengl
++	select BR2_PACKAGE_QT6BASE_OPENGL
++	help 
++	  This option enables the vaapi support.
++endif
++
++config BR2_PACKAGE_QT6MULTIMEDIA_GSTREAMER
++	bool "gstreamer plugin"
++	# gstreamer 1.x and gst-plugins-base-app are required 
++	# for gstreamer support in qt6-multimedia
++	select BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
++	help 
++	  This option enables gstreamer media backend
++
++if BR2_PACKAGE_QT6MULTIMEDIA_GSTREAMER
++
++comment "GStreamer OpenGL support needs an OpenGL-capable backend"
++	depends on !BR2_PACKAGE_HAS_LIBGL && !BR2_PACKAGE_HAS_LIBGLES
++
++config BR2_PACKAGE_QT6MULTIMEDIA_GST1_PLUGINS_OPENGL
++	bool "opengl support"
++	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL
++	help
++	  This option enables gstreamer-opengl support
++
++config BR2_PACKAGE_QT6MULTIMEDIA_GST1_PLUGINS_PHOTOGRAPHY
++	bool "photography support"
++	select BR2_PACKAGE_GST1_PLUGINS_BAD
++	help
++	  This option enables gstreamer-photography support
++
++endif
++
++comment "Linux DMA buffer support needs DMA buffer feature of libgbm"
++	depends on !BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
++
++config BR2_PACKAGE_QT6MULTIMEDIA_LINUX_DMA_BUF
++	bool "linux dma buffer support"
++	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
++	# qt6 configure script needs EGL to check 
++	# for linux dma buffer support
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	help 
++	  This option enables the linux dma buffer support
++
++config BR2_PACKAGE_QT6MULTIMEDIA_LINUX_V4L
++	bool "v4l support"
++	help 
++	  This option enables the video for linux support
++
++config BR2_PACKAGE_QT6MULTIMEDIA_PULSEAUDIO
++	bool "pulseaudio support"
++	select BR2_PACKAGE_PULSEAUDIO
++	help 
++	  This option select PulseAudio as audio backend.
++
++config BR2_PACKAGE_QT6MULTIMEDIA_SPATIALAUDIO
++	bool "spatial audio module"
++	help 
++	  This option enables the Qt6SpatialAudio library.
++
++endif
+diff --git a/package/qt6/qt6multimedia/qt6multimedia.hash b/package/qt6/qt6multimedia/qt6multimedia.hash
+new file mode 100644
+index 0000000000..b63aedc1d9
+--- /dev/null
++++ b/package/qt6/qt6multimedia/qt6multimedia.hash
+@@ -0,0 +1,26 @@
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.2/submodules/qtmultimedia-everywhere-src-6.7.2.tar.xz.sha256
++sha256  8ef835115acb9a1d3d2c9f23cfacb43f2c537e3786a8ab822299a2a7765651d3  qtmultimedia-everywhere-src-6.7.2.tar.xz
++
++# Hashes for license files
++sha256  f32fb3b417a194167cfad068223fc975ba96c5960513a10f66a3c28720aec1df  LICENSES/BSD-2-Clause.txt
++sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
++sha256  1f1b677d26ab73e159a55c3a914cf12d888e18a9d0d469fedab4aa6e5a48b1c0  LICENSES/BSD-Source-Code.txt
++sha256  84c6ef3ea9e3254a54d0acf5d3e0c61ae011b8fef7dd6940591cf060e6380a8f  LICENSES/BSL-1.0.txt
++sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
++sha256  7658542977bfdced9e1059a6c934ce4281de76d103b831007b825917dc62511a  LICENSES/IJG.txt
++sha256  f2ec607f67bb0dd3053b49835b02110d5cd0f8eb6da3aac4dc0b142a6b299be9  LICENSES/ISC.txt
++sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  LICENSES/LGPL-2.1-or-later.txt
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
++sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
++sha256  66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172  LICENSES/MPL-2.0.txt
++sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
++sha256  bfb1112d49db5b1daecdfef24bd7e2f3ea0bafb33aa67aa0ab51e2bf8407c03d  LICENSES/Zlib.txt
++sha256  85da7c29c2d2f2e6b3116b1219584cb513474cab797b3312a779be4c2181e51e  src/3rdparty/eigen/COPYING.BSD
++sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  src/3rdparty/eigen/COPYING.MPL2
++sha256  8b69cf3ac3ddd34df478c4ae6eaacf5e6c63ea7ee6403c8dad97e4d1438bc3c4  src/3rdparty/eigen/COPYRIGHTS
++sha256  b522f821df94da3bad917e98ef04817b3af421c3b8c23e8247ae7e517b289934  src/3rdparty/pffft/COPYRIGHTS
++sha256  a46200592eb193853527250da098e6bb0c75424e7a2c7db8da526c4f301c3d88  src/3rdparty/pffft/LICENSE
++sha256  2513c5ad87ce9e7feed2c9a159d336f0a0d12ff93adcd411f7a15a1ab678f7ac  src/3rdparty/resonance-audio/COPYRIGHTS
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/resonance-audio/LICENSE
+diff --git a/package/qt6/qt6multimedia/qt6multimedia.mk b/package/qt6/qt6multimedia/qt6multimedia.mk
+new file mode 100644
+index 0000000000..ec81abc1de
+--- /dev/null
++++ b/package/qt6/qt6multimedia/qt6multimedia.mk
+@@ -0,0 +1,137 @@
++################################################################################
++#
++# qt6multimedia
++#
++################################################################################
++
++QT6MULTIMEDIA_VERSION = $(QT6_VERSION)
++QT6MULTIMEDIA_SITE = $(QT6_SITE)
++QT6MULTIMEDIA_SOURCE = qtmultimedia-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6MULTIMEDIA_VERSION).tar.xz
++QT6MULTIMEDIA_INSTALL_STAGING = YES
++QT6MULTIMEDIA_SUPPORTS_IN_SOURCE_BUILD = NO
++QT6MULTIMEDIA_CMAKE_BACKEND = ninja
++
++QT6MULTIMEDIA_LICENSE = \
++    BSD-3-Clause (buildsystem, examples, pfft,  snippets), \
++    GFDL-1.3-no-invariants (docs), \
++    GPL-3.0 (tests), \
++    GPL-3.0 with Qt-GPL-exception-1.0 (utils), \
++    LGPL-3.0 or GPL-2.0 or GPL-3.0 (modules, plugins)
++
++QT6MULTIMEDIA_LICENSE_FILES = \
++    LICENSES/BSD-3-Clause.txt \
++    LICENSES/GFDL-1.3-no-invariants-only.txt \
++    LICENSES/GPL-2.0-only.txt \
++    LICENSES/GPL-3.0-only.txt \
++    LICENSES/LGPL-3.0-only.txt \
++    LICENSES/Qt-GPL-exception-1.0.txt \
++
++QT6MULTIMEDIA_DEPENDENCIES = \
++    qt6base \
++    qt6shadertools
++
++QT6MULTIMEDIA_CONF_OPTS = \
++    -DQT_HOST_PATH=$(HOST_DIR) \
++    -DQT_BUILD_EXAMPLES=OFF \
++    -DQT_BUILD_TESTS=OFF \
++    -DFEATURE_alsa=OFF \
++    -DFEATURE_ffmpeg=OFF \
++    -DFEATURE_gstreamer=OFF \
++    -DFEATURE_gstreamer_1_0=OFF \
++    -DFEATURE_gstreamer_app=OFF \
++    -DFEATURE_gstreamer_gl=OFF \
++    -DFEATURE_gstreamer_photography=OFF \
++    -DFEATURE_linux_dmabuf=OFF \
++    -DFEATURE_linux_v4l=OFF \
++    -DFEATURE_pulseaudio=OFF \
++    -DFEATURE_spatialaudio=OFF \
++    -DFEATURE_spatialaudio_quick3d=OFF \
++    -DFEATURE_vaapi=OFF
++
++# for multimedia quick module
++ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
++QT6MULTIMEDIA_DEPENDENCIES += qt6declarative
++endif
++
++ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_ALSA),y)
++QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_alsa=ON
++QT6MULTIMEDIA_DEPENDENCIES += alsa-lib
++endif
++
++ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_FFMPEG),y)
++QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_ffmpeg=ON
++QT6MULTIMEDIA_DEPENDENCIES += ffmpeg
++QT6MULTIMEDIA_LICENSE += , \
++    BSL-1.0 (ffmpeg-boost), \
++    IJG (ffmpeg-libjpeg), \
++    LGPL-2.1+ and BSD-3-Clause and BSD-2-Clause and BSD-Source-Code and ISC and MIT and MPL-2.0 (ffmpeg), \
++    Zlib (ffmpeg-zlib)
++QT6MULTIMEDIA_LICENSE_FILES += \
++    LICENSES/BSD-2-Clause.txt \
++    LICENSES/BSD-Source-Code.txt \
++    LICENSES/BSL-1.0.txt \
++    LICENSES/IJG.txt \
++    LICENSES/ISC.txt \
++    LICENSES/LGPL-2.1-or-later.txt \
++    LICENSES/MIT.txt \
++    LICENSES/MPL-2.0.txt \
++    LICENSES/Zlib.txt
++endif
++
++ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_GSTREAMER),y)
++QT6MULTIMEDIA_CONF_OPTS += \
++    -DFEATURE_gstreamer=ON \
++    -DFEATURE_gstreamer_1_0=ON \
++    -DFEATURE_gstreamer_app=ON 
++QT6MULTIMEDIA_DEPENDENCIES += gstreamer1 gst1-plugins-base
++endif
++
++ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_GST_PLUGINS_PHOTOGRAPHY),y)
++QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_gstreamer_photography=ON
++QT6MULTIMEDIA_DEPENDENCIES += gst1-plugins-bad
++endif
++
++ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_LINUX_DMA_BUF),y)
++QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_linux_dmabuf=ON
++QT6MULTIMEDIA_DEPENDENCIES += libgbm libegl
++endif
++
++ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_LINUX_V4L),y)
++QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_linux_v4l=ON
++QT6MULTIMEDIA_DEPENDENCIES += linux
++endif
++
++ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_PULSEAUDIO),y)
++QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_pulseaudio=ON
++QT6MULTIMEDIA_DEPENDENCIES += pulseaudio
++endif
++
++ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_SPATIALAUDIO),y)
++QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_spatialaudio=ON
++QT6MULTIMEDIA_LICENSE += , \
++    Apache-2.0 (resonance-audio, eigen), \
++    LGPL-3.0 or GPL-3.0 (resonance-audio, spatialaudio, spatialaudioquick3d), \
++    MPL-2.0 and BSD-3-Clause (eigen)
++QT6MULTIMEDIA_LICENSE_FILES += \
++    LICENSES/MPL-2.0.txt \
++    src/3rdparty/eigen/COPYING.BSD \
++    src/3rdparty/eigen/COPYING.MPL2 \
++    src/3rdparty/eigen/COPYRIGHTS \
++    src/3rdparty/pffft/COPYRIGHTS \
++    src/3rdparty/pffft/LICENSE \
++    src/3rdparty/resonance-audio/COPYRIGHTS \
++    src/3rdparty/resonance-audio/LICENSE
++
++# for spatialaudio quick3d module
++ifeq ($(BR2_PACKAGE_QT6QUICK3D),y)
++QT6MULTIMEDIA_DEPENDENCIES += qt6quick3d
++QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_spatialaudio_quick3d=ON
++endif
++endif
++
++ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_VAAPI),y)
++QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_vaapi=ON
++QT6MULTIMEDIA_DEPENDENCIES += libva
++endif
++
++$(eval $(cmake-package))
+-- 
+2.47.1
 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
-> V1->V2:
->  - new to patch series
-> V2->V3:
->  - squashed patch that removes the kria post-build fixup scripts
-> V3->V4:
->  - no changes
-> V4->V5:
->  - rebase Buildroot for zynqmp_kria defconfig changes
-
--- SNIP ---
-
-Since bumping the zynqmp and kria defconfigs to Linux 6.6.60, I needed to
-rebase this patch of the series, so it can apply to master.
-
-Since absolutely nothing else changed, I kept your reviewed-by and tested-by
-comments on patches 1-3 of the series, but since technically patch 4 is
-"slightly" different, I removed the comments from patches 4-6 of the series.
-
-You are welcome to re-add them once you have tested the rebased series.
-
-Please let me know if you have any questions.
-
-> --- a/configs/zynqmp_kria_kv260_defconfig
-> +++ b/configs/zynqmp_kria_kv260_defconfig
-> @@ -1,10 +1,10 @@
-> BR2_aarch64=y
-> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-> -BR2_GLOBAL_PATCH_DIR="board/zynqmp/kria/patches board/xilinx/patches"
-> +BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/zynqmp/kria/patches board/xilinx/patches"
-> BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-> -BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh board/zynqmp/kria/kv260/kv260.sh"
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
-> BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
-> -BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2 ${UBOOT_DIR}"
->+BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2"
-> BR2_LINUX_KERNEL=y
-> BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.60)/xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz"
-
-This is the line of the kria defconfigs which changed and required a rebase.
-
-Best regards,
-Neal Frager
-AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
