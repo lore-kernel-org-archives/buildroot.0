@@ -1,77 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28F4DC02183
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jan 2025 14:17:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4A08C02183
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jan 2025 15:50:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9A1260A8E;
-	Fri, 17 Jan 2025 14:17:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1925E41E35;
+	Fri, 17 Jan 2025 15:50:40 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UYeo5l1XAq3l; Fri, 17 Jan 2025 15:50:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FC4741A6B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FC4741A6B;
+	Fri, 17 Jan 2025 15:50:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 76A60B89
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 15:50:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 710406FAAB
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 15:50:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f8cWOUMVTv-c; Fri, 17 Jan 2025 14:17:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 083B660F35
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 083B660F35;
-	Fri, 17 Jan 2025 14:17:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 06ED294B
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 14:17:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DB7EE40533
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 14:16:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Svg-znIVl_lb for <buildroot@buildroot.org>;
- Fri, 17 Jan 2025 14:16:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=163.172.193.142;
- helo=mail0.insia.net; envelope-from=guillaume.chaye@zeetim.com;
+ id xu_PB32Dlrfy for <buildroot@buildroot.org>;
+ Fri, 17 Jan 2025 15:50:36 +0000 (UTC)
+X-Greylist: delayed 701 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 17 Jan 2025 15:50:35 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1460F60661
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1460F60661
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=kory.maincent@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4D72F404F9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D72F404F9
-Received: from mail0.insia.net (mail0.insia.net [163.172.193.142])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4D72F404F9
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 14:16:57 +0000 (UTC)
-Received: from smtp.insia.net (unknown [192.168.1.24])
- by mail0.insia.net (Postfix) with ESMTP id 590381FB9F;
- Fri, 17 Jan 2025 15:16:21 +0100 (CET)
-Received: from sb-dev-build.insia.net. (gw-servers.insia.net [192.168.1.1])
- by smtp.insia.net (Postfix) with ESMTP id 6BA7E5F499;
- Fri, 17 Jan 2025 15:16:21 +0100 (CET)
-From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1460F60661
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 15:50:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 97613FF80A;
+ Fri, 17 Jan 2025 15:50:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 17 Jan 2025 15:16:09 +0100
-Message-Id: <20250117141609.3384660-2-guillaume.chaye@zeetim.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250117141609.3384660-1-guillaume.chaye@zeetim.com>
-References: <20250117141609.3384660-1-guillaume.chaye@zeetim.com>
+Cc: Kory Maincent <kory.maincent@bootlin.com>, thomas.petazzoni@bootlin.com,
+ Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Fri, 17 Jan 2025 15:50:30 +0000
+Message-Id: <20250117155030.3238710-1-kory.maincent@bootlin.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+X-GND-Sasl: kory.maincent@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=zeetim.com; s=mail0; t=1737123381;
+ d=bootlin.com; s=gm1; t=1737129033;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=N99I1GQ881DGQq/uRpHzWFFTGPNjWltxk2aGYrL1hhI=;
- b=FRlT7wPKlFTpOJ2nKGxswDEaHvzch7uSPCJ6otXkEI7PnMtita8RH593xbHHrPcfyPoSpM
- 9/2O/mU4Nc/MPzgingmhZlsWAV2bRPt82EJn6SKPxJCDStbdFOqrJecWE6BiIj4kEPJKjC
- sJ1zszwZ5S6AkaK58Cbu2loD21wV9J/Xx9HgBK9URVjuSbiZQKCscnE/QzilDtpQVhd+B2
- QWY55Q0Wfwk/350PcrBylYuBqG6AwaVN/dNv6xt3bUodUSTGa1+F/L9IgafWoz7CFrl74K
- 6wRLps8XqjdKixRlo7RGbZr2FRjenTPC0J4oFB/3T2eq9EInQuWIC7Ohk1pl/w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=zeetim.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ content-transfer-encoding:content-transfer-encoding;
+ bh=R0meyPrQcY1XRpR6Cljk/ta9U0jid199ezge7csrAt0=;
+ b=VccqF3qgfvhOtF8LL3bVEaibrUW/Llt6EZUteuCQpW2fYhweAlSCqKg0ozI5FXeRh0Ez4W
+ x6G5e8Vb31Z8vS5L01Q2yA+vRJdmumCKLAMNj4BJNgjhh3MyK2OeL86te97PncUP0y+tso
+ tNsoOLk4MClQtJZ8iMTDtAQ4aSdbAGYTCCW5UlW9WYSac4elM/+VYuJBeKgogJorv0dih7
+ WAVZviGIyMt4w0Wiuc/vb47UHZkWgNaSWk/Sbg181HWEpl0I5K0uUlTykE4hFWqjXXFpoa
+ MgouM3wn0HPlYSV2Mi9NNvEUBiaGw9aauf8isF9TkkUOUk3hwuAOnKE0OVTWuw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=zeetim.com header.i=@zeetim.com header.a=rsa-sha256
- header.s=mail0 header.b=FRlT7wPK
-Subject: [Buildroot] [PATCH 2/2] [PATCHv4 2/2] package/efitools: efitools is
- a set of utilities to manipulate efi variables
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=VccqF3qg
+Subject: [Buildroot] [PATCH] package/murata-cyw-fw: Bump to last revision
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,425 +80,201 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christopher McCrory <chrismcc@gmail.com>,
- =?UTF-8?q?Guillaume=20Chay=C3=A9?= <guillaume.chaye@zeetim.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Kory Maincent via buildroot <buildroot@buildroot.org>
+Reply-To: Kory Maincent <kory.maincent@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
----
- DEVELOPERS                                    |  3 +
- package/Config.in                             |  1 +
- ...ve-EFISIGNED-variable-from-makefiles.patch | 41 +++++++++++
- ...d-SYSROOT_DIR-variable-to-Make.rules.patch | 43 +++++++++++
- ...d-EXTRA_LDFLAGS-variable-to-Makefile.patch | 60 +++++++++++++++
- ...-to-efi-updatevar-to-read-from-stdin.patch | 73 +++++++++++++++++++
- package/efitools/Config.in                    | 14 ++++
- package/efitools/efitools.mk                  | 35 +++++++++
- ...d-only-binaries-when-cross-compiling.patch | 55 ++++++++++++++
- 9 files changed, 325 insertions(+)
- create mode 100644 package/efitools/0001-Remove-EFISIGNED-variable-from-makefiles.patch
- create mode 100644 package/efitools/0002-Add-SYSROOT_DIR-variable-to-Make.rules.patch
- create mode 100644 package/efitools/0003-Add-EXTRA_LDFLAGS-variable-to-Makefile.patch
- create mode 100644 package/efitools/0004-Add-option-to-efi-updatevar-to-read-from-stdin.patch
- create mode 100644 package/efitools/Config.in
- create mode 100644 package/efitools/efitools.mk
- create mode 100644 package/efitools/target/0001-Build-only-binaries-when-cross-compiling.patch
+Bump to last revision and install the newly added CYW43439 firmware.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2d8ae8289b..dd761d27ec 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1330,6 +1330,9 @@ F:	package/python-rpi-ws281x/
- F:	package/python-wtforms/
- F:	package/rpi-rgb-led-matrix/
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+---
+ package/murata-cyw-fw/Config.in          | 20 ++----
+ package/murata-cyw-fw/murata-cyw-fw.hash |  6 +-
+ package/murata-cyw-fw/murata-cyw-fw.mk   | 85 ++++++++++++------------
+ 3 files changed, 51 insertions(+), 60 deletions(-)
+
+diff --git a/package/murata-cyw-fw/Config.in b/package/murata-cyw-fw/Config.in
+index 7530477511..8a2795e806 100644
+--- a/package/murata-cyw-fw/Config.in
++++ b/package/murata-cyw-fw/Config.in
+@@ -25,20 +25,9 @@ config BR2_PACKAGE_MURATA_CYW_FW_CYW43362
+ 	  Murata Wireless CYW43362 (SN8000) module firmware files.
  
-+N:	Guillaume Chaye <guillaume.chaye@zeetim.com>
-+F:	package/efitools/
+ config BR2_PACKAGE_MURATA_CYW_FW_CYW4339
+-	bool "CYW4339 (1CK/ZP)"
++	bool "CYW4339 (ZP)"
+ 	help
+-	  Murata Wireless CYW4339 (1CK/ZP) module firmware files.
+-
+-choice
+-	prompt "CYW4339 module" if BR2_PACKAGE_MURATA_CYW_FW_CYW4339
+-
+-config BR2_PACKAGE_MURATA_CYW_FW_CYW4339_1CK
+-	bool "1CK"
+-
+-config BR2_PACKAGE_MURATA_CYW_FW_CYW4339_ZP
+-	bool "ZP"
+-
+-endchoice
++	  Murata Wireless CYW4339 (ZP) module firmware files.
+ 
+ config BR2_PACKAGE_MURATA_CYW_FW_CYW43430
+ 	bool "CYW43430/CYW4343W/CYW43364 (1DX/1FX/1LN)"
+@@ -60,6 +49,11 @@ config BR2_PACKAGE_MURATA_CYW_FW_CYW43430_1LN
+ 
+ endchoice
+ 
++config BR2_PACKAGE_MURATA_CYW_FW_CYW43439
++	bool "CYW43439 (1YN)"
++	help
++	  Murata Wireless CYW43439 (1YN) module firmware files.
 +
- N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
- F:	package/libnids/
- F:	package/libxcrypt/
-diff --git a/package/Config.in b/package/Config.in
-index 400183516e..fb0e06f664 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -503,6 +503,7 @@ endmenu
- 	source "package/edid-decode/Config.in"
- 	source "package/edk2-non-osi/Config.in"
- 	source "package/edk2-platforms/Config.in"
-+	source "package/efitools/Config.in"
- 	source "package/esp-hosted/Config.in"
- 	source "package/espflash/Config.in"
- 	source "package/eudev/Config.in"
-diff --git a/package/efitools/0001-Remove-EFISIGNED-variable-from-makefiles.patch b/package/efitools/0001-Remove-EFISIGNED-variable-from-makefiles.patch
-new file mode 100644
-index 0000000000..2c41d05859
---- /dev/null
-+++ b/package/efitools/0001-Remove-EFISIGNED-variable-from-makefiles.patch
-@@ -0,0 +1,41 @@
-+From d494f5d5de8121ce586377f48ceb8651a17996ab Mon Sep 17 00:00:00 2001
-+From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
-+Date: Fri, 11 Oct 2024 11:01:25 +0200
-+Subject: [PATCH 1/4] efitools: remove EFISIGNED variable from makefiles
-+
-+Efitools sign efi files with a key generated during build.
-+We disable it to remove a build dependencie to sbsigntools.
-+These signed files were not actually installed to the target.
-+
-+Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
-+---
-+ Makefile | 6 ++----
-+ 1 file changed, 2 insertions(+), 4 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 7d471da..0387bbd 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -25,9 +25,7 @@ export TOPDIR	:= $(shell pwd)/
-+ 
-+ include Make.rules
-+ 
-+-EFISIGNED = $(patsubst %.efi,%-signed.efi,$(EFIFILES))
-+-
-+-all: $(EFISIGNED) $(BINARIES) $(MANPAGES) noPK.auth $(KEYAUTH) \
-++all: $(EFIFILES) $(BINARIES) $(MANPAGES) noPK.auth $(KEYAUTH) \
-+ 	$(KEYUPDATEAUTH) $(KEYBLACKLISTAUTH) $(KEYHASHBLACKLISTAUTH)
-+ 
-+ 
-+@@ -115,7 +113,7 @@ flash-var: flash-var.o lib/lib.a
-+ 	$(CC) $(ARCH3264) -o $@ $< lib/lib.a
-+ 
-+ clean:
-+-	rm -f PK.* KEK.* DB.* $(EFIFILES) $(EFISIGNED) $(BINARIES) *.o *.so
-++	rm -f PK.* KEK.* DB.* $(EFIFILES) $(BINARIES) *.o *.so
-+ 	rm -f noPK.*
-+ 	rm -f doc/*.1
-+ 	$(MAKE) -C lib clean
-+-- 
-+2.39.5
-+
-diff --git a/package/efitools/0002-Add-SYSROOT_DIR-variable-to-Make.rules.patch b/package/efitools/0002-Add-SYSROOT_DIR-variable-to-Make.rules.patch
-new file mode 100644
-index 0000000000..a8b21c059d
---- /dev/null
-+++ b/package/efitools/0002-Add-SYSROOT_DIR-variable-to-Make.rules.patch
-@@ -0,0 +1,43 @@
-+From bc8b77009b94e644d056eecca667c6f2a8f563f1 Mon Sep 17 00:00:00 2001
-+From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
-+Date: Fri, 11 Oct 2024 11:02:58 +0200
-+Subject: [PATCH 2/4] efitools: Add SYSROOT_DIR variable to Make.rules
-+
-+We need to be able to change the root directory of include paths and library
-+paths in order to cross compile efitools
-+
-+Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
-+---
-+ Make.rules | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/Make.rules b/Make.rules
-+index 903a5a4..dddc149 100644
-+--- a/Make.rules
-++++ b/Make.rules
-+@@ -13,18 +13,19 @@ ARCH3264 =
-+ else
-+ $(error unknown architecture $(ARCH))
-+ endif
-+-INCDIR	   = -I$(TOPDIR)include/ -I/usr/include/efi -I/usr/include/efi/$(ARCH) -I/usr/include/efi/protocol
-++SYSROOT_DIR=
-++INCDIR	   = -I$(TOPDIR)include/ -I$(SYSROOT_DIR)/usr/include -I$(SYSROOT_DIR)/usr/include/efi -I$(SYSROOT_DIR)/usr/include/efi/$(ARCH) -I$(SYSROOT_DIR)/usr/include/efi/protocol
-+ CPPFLAGS   = -DCONFIG_$(ARCH)
-+ CFLAGS	   = -O2 -g $(ARCH3264) -fpic -Wall -fshort-wchar -fno-strict-aliasing -fno-merge-constants -fno-stack-protector -ffreestanding -fno-stack-check
-+ LDFLAGS	   = -nostdlib
-+ CRTOBJ		= crt0-efi-$(ARCH).o
-+-CRTPATHS	= /lib /lib64 /lib/efi /lib64/efi /usr/lib /usr/lib64 /usr/lib/efi /usr/lib64/efi /usr/lib/gnuefi /usr/lib64/gnuefi
-++CRTPATHS	= $(SYSROOT_DIR)/lib $(SYSROOT_DIR)/lib64 $(SYSROOT_DIR)/lib/efi $(SYSROOT_DIR)/lib64/efi $(SYSROOT_DIR)/usr/lib $(SYSROOT_DIR)/usr/lib64 $(SYSROOT_DIR)/usr/lib/efi $(SYSROOT_DIR)/usr/lib64/efi $(SYSROOT_DIR)/usr/lib/gnuefi $(SYSROOT_DIR)/usr/lib64/gnuefi
-+ CRTPATH		= $(shell for f in $(CRTPATHS); do if [ -e $$f/$(CRTOBJ) ]; then echo $$f; break; fi; done)
-+ CRTOBJS		= $(CRTPATH)/$(CRTOBJ)
-+ # there's a bug in the gnu tools ... the .reloc section has to be
-+ # aligned otherwise the file alignment gets screwed up
-+ LDSCRIPT	= elf_$(ARCH)_efi.lds
-+-LDFLAGS		+= -shared -Bsymbolic $(CRTOBJS) -L $(CRTPATH) -L /usr/lib -L /usr/lib64 -T $(LDSCRIPT)
-++LDFLAGS		+= -shared -Bsymbolic $(CRTOBJS) -L $(CRTPATH) -L $(SYSROOT_DIR)/usr/lib -L $(SYSROOT_DIR)/usr/lib64 -T $(LDSCRIPT)
-+ LOADLIBES	= -lefi -lgnuefi $(shell $(CC) $(ARCH3264) -print-libgcc-file-name)
-+ FORMAT		= --target=efi-app-$(ARCH)
-+ OBJCOPY		= objcopy
-+-- 
-+2.39.5
-+
-diff --git a/package/efitools/0003-Add-EXTRA_LDFLAGS-variable-to-Makefile.patch b/package/efitools/0003-Add-EXTRA_LDFLAGS-variable-to-Makefile.patch
-new file mode 100644
-index 0000000000..cab10bba98
---- /dev/null
-+++ b/package/efitools/0003-Add-EXTRA_LDFLAGS-variable-to-Makefile.patch
-@@ -0,0 +1,60 @@
-+From d2a1c8a6ea82ce975dd503e2090f0f7dc3f2e068 Mon Sep 17 00:00:00 2001
-+From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
-+Date: Fri, 11 Oct 2024 11:07:08 +0200
-+Subject: [PATCH 3/4] efitools: Add EXTRA_LDFLAGS variable to Makefile
-+
-+This patch allows to build binaries with proper rpath
-+
-+Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
-+---
-+ Makefile | 18 +++++++++---------
-+ 1 file changed, 9 insertions(+), 9 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 0387bbd..f7b616b 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -86,31 +86,31 @@ HelloWorld.so: lib/lib-efi.a
-+ ShimReplace.so: lib/lib-efi.a
-+ 
-+ cert-to-efi-sig-list: cert-to-efi-sig-list.o lib/lib.a
-+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a -lcrypto
-++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(EXTRA_LDFLAGS) -lcrypto
-+ 
-+ sig-list-to-certs: sig-list-to-certs.o lib/lib.a
-+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a -lcrypto
-++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(EXTRA_LDFLAGS) -lcrypto
-+ 
-+ sign-efi-sig-list: sign-efi-sig-list.o lib/lib.a
-+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a -lcrypto
-++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(EXTRA_LDFLAGS) -lcrypto
-+ 
-+ hash-to-efi-sig-list: hash-to-efi-sig-list.o lib/lib.a
-+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a
-++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(EXTRA_LDFLAGS)
-+ 
-+ cert-to-efi-hash-list: cert-to-efi-hash-list.o lib/lib.a
-+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a -lcrypto
-++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(EXTRA_LDFLAGS) -lcrypto
-+ 
-+ efi-keytool: efi-keytool.o lib/lib.a
-+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a
-++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(EXTRA_LDFLAGS)
-+ 
-+ efi-readvar: efi-readvar.o lib/lib.a
-+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a -lcrypto
-++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(EXTRA_LDFLAGS) -lcrypto
-+ 
-+ efi-updatevar: efi-updatevar.o lib/lib.a
-+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a -lcrypto
-++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(EXTRA_LDFLAGS) -lcrypto
-+ 
-+ flash-var: flash-var.o lib/lib.a
-+-	$(CC) $(ARCH3264) -o $@ $< lib/lib.a
-++	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(EXTRA_LDFLAGS)
-+ 
-+ clean:
-+ 	rm -f PK.* KEK.* DB.* $(EFIFILES) $(BINARIES) *.o *.so
-+-- 
-+2.39.5
-+
-diff --git a/package/efitools/0004-Add-option-to-efi-updatevar-to-read-from-stdin.patch b/package/efitools/0004-Add-option-to-efi-updatevar-to-read-from-stdin.patch
-new file mode 100644
-index 0000000000..793899bd02
---- /dev/null
-+++ b/package/efitools/0004-Add-option-to-efi-updatevar-to-read-from-stdin.patch
-@@ -0,0 +1,73 @@
-+From 3c7fbc5e24634e229ea785e106382cef4c8eec5c Mon Sep 17 00:00:00 2001
-+From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
-+Date: Wed, 11 Sep 2024 10:52:19 +0200
-+Subject: [PATCH 4/4] efitools: add option to efi-updatevar to read from stdin
-+ using -f- option
-+
-+The option "-f /dev/stdin" is actually not working.
-+This patch allow to pipe keys in your script without having errors.
-+
-+Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
-+---
-+ efi-updatevar.c | 17 +++++++++++++++--
-+ 1 file changed, 15 insertions(+), 2 deletions(-)
-+
-+diff --git a/efi-updatevar.c b/efi-updatevar.c
-+index 4247105..89d7c92 100644
-+--- a/efi-updatevar.c
-++++ b/efi-updatevar.c
-+@@ -14,6 +14,7 @@
-+ #include <sys/stat.h>
-+ #include <fcntl.h>
-+ #include <unistd.h>
-++#include <stdbool.h>
-+ 
-+ #include <openssl/x509.h>
-+ #include <openssl/bio.h>
-+@@ -72,6 +73,7 @@ main(int argc, char *argv[])
-+ 		| EFI_VARIABLE_TIME_BASED_AUTHENTICATED_WRITE_ACCESS;
-+ 	char *hash_mode = NULL, *file = NULL, *var, *progname = argv[0], *buf,
-+ 		*name, *crt_file = NULL, *key_file = NULL;
-++	bool read_stdin=false;
-+ 	
-+ 
-+ 	while (argc > 1 && argv[1][0] == '-') {
-+@@ -97,6 +99,10 @@ main(int argc, char *argv[])
-+ 			file = argv[2];
-+ 			argv += 2;
-+ 			argc -= 2;
-++		} else if (strcmp(argv[1], "-f-") == 0) {
-++			read_stdin=true;
-++			argv += 1;
-++			argc -= 1;
-+ 		} else if (strcmp(argv[1], "-g") == 0) {
-+ 			if (str_to_guid(argv[2], &guid)) {
-+ 				fprintf(stderr, "Invalid GUID %s\n", argv[2]);
-+@@ -147,7 +153,7 @@ main(int argc, char *argv[])
-+ 		exit(1);
-+ 	}
-+ 
-+-	if (delsig == -1 && (!!file + !!hash_mode + !!crt_file != 1)) {
-++	if (delsig == -1 && !read_stdin && (!!file + !!hash_mode + !!crt_file != 1)) {
-+ 		fprintf(stderr, "must specify exactly one of -f, -b or -c\n");
-+ 		exit(1);
-+ 	}
-+@@ -219,7 +225,14 @@ main(int argc, char *argv[])
-+ 		buf = malloc(st.st_size);
-+ 		read(fd, buf, st.st_size);
-+ 		close(fd);
-+-	} else {
-++	}else if (read_stdin){
-++		buf=malloc(0x400);
-++		st.st_size=0;
-++		while (read(STDIN_FILENO,buf+st.st_size,1)){
-++			st.st_size++;
-++			if (!(st.st_size&0x3FF)) buf=realloc(buf,st.st_size+0x400);
-++		}
-++	}else {
-+ 		X509 *X = NULL;
-+ 		BIO *bio;
-+ 		char *crt_file_ext = &crt_file[strlen(crt_file) - 4];
-+-- 
-+2.39.2
-+
-diff --git a/package/efitools/Config.in b/package/efitools/Config.in
-new file mode 100644
-index 0000000000..5b8fdc9145
---- /dev/null
-+++ b/package/efitools/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_EFITOOLS
-+    bool "efitools"
-+    depends on BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
-+    select BR2_PACKAGE_GNU_EFI
-+    select BR2_PACKAGE_OPENSSL
-+    select BR2_PACKAGE_LIBOPENSSL
-+    select BR2_PACKAGE_LIBOPENSSL_ENGINES
-+    help
-+        A variety of tools for manipulating keys and binary signatures
-+        on UEFI secure boot platforms. The tools provide access to the 
-+        keys and certificates stored in the secure variables of the 
-+        UEFI firmware, usually in the NVRAM area.
-+
-+        https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git
-diff --git a/package/efitools/efitools.mk b/package/efitools/efitools.mk
-new file mode 100644
-index 0000000000..4aaf72dffe
---- /dev/null
-+++ b/package/efitools/efitools.mk
-@@ -0,0 +1,35 @@
-+################################################################################
-+#
-+# efitools
-+#
-+################################################################################
-+
-+EFITOOLS_VERSION = 1.9.2
-+EFITOOLS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git/snapshot
-+EFITOOLS_LICENSE = GPL-2.0
-+EFITOOLS_DEPENDENCIES = gnu-efi openssl
-+HOST_EFITOOLS_DEPENDENCIES = host-gnu-efi host-openssl host-perl-file-slurp
-+
-+define EFITOOLS_BUILD_CMDS
-+	cd $(@D); $(TARGET_CONFIGURE_OPTS) $(MAKE) SYSROOT_DIR=$(STAGING_DIR) EXTRA_LDFLAGS="$(TARGET_LDFLAGS)"
-+endef
-+
-+define HOST_EFITOOLS_BUILD_CMDS
-+	cd $(@D); $(HOST_CONFIGURE_OPTS) $(MAKE) SYSROOT_DIR=$(HOST_DIR) EXTRA_LDFLAGS="$(HOST_LDFLAGS)"
-+endef
-+
-+define EFITOOLS_INSTALL_TARGET_CMDS
-+	cd $(@D); $(TARGET_CONFIGURE_OPTS) $(MAKE) install DESTDIR=$(TARGET_DIR)
-+endef
-+
-+define HOST_EFITOOLS_INSTALL_CMDS
-+	cd $(@D); $(HOST_CONFIGURE_OPTS) $(MAKE) install DESTDIR=$(HOST_DIR)
-+endef
-+
-+define EFITOOLS_APPLY_ADDITIONAL_PATCHES
-+	$(APPLY_PATCHES) $(@D) $(EFITOOLS_PKGDIR)/target *.patch
-+endef
-+EFITOOLS_POST_PATCH_HOOKS+=  EFITOOLS_APPLY_ADDITIONAL_PATCHES
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
-diff --git a/package/efitools/target/0001-Build-only-binaries-when-cross-compiling.patch b/package/efitools/target/0001-Build-only-binaries-when-cross-compiling.patch
-new file mode 100644
-index 0000000000..6836288f5f
---- /dev/null
-+++ b/package/efitools/target/0001-Build-only-binaries-when-cross-compiling.patch
-@@ -0,0 +1,55 @@
-+From 83c40badb624f871245d9e9910e0fc7cdff4b310 Mon Sep 17 00:00:00 2001
-+From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
-+Date: Fri, 11 Oct 2024 11:14:06 +0200
-+Subject: [PATCH 4/4] efitools: Build only binaries when cross compiling
-+
-+We cannot execute binaries to generate "auth" files when compiling
-+for another architecture.
-+help2man is also not working properly when cross compiling.
-+
-+Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
-+---
-+ Makefile | 17 ++++++++---------
-+ 1 file changed, 8 insertions(+), 9 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index f7b616b..64f0afa 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -25,15 +25,14 @@ export TOPDIR	:= $(shell pwd)/
-+ 
-+ include Make.rules
-+ 
-+-all: $(EFIFILES) $(BINARIES) $(MANPAGES) noPK.auth $(KEYAUTH) \
-+-	$(KEYUPDATEAUTH) $(KEYBLACKLISTAUTH) $(KEYHASHBLACKLISTAUTH)
-++all: $(BINARIES)
-+ 
-+ 
-+ install: all
-+-	$(INSTALL) -m 755 -d $(MANDIR)
-+-	$(INSTALL) -m 644 $(MANPAGES) $(MANDIR)
-+-	$(INSTALL) -m 755 -d $(EFIDIR)
-+-	$(INSTALL) -m 755 $(EFIFILES) $(EFIDIR)
-++#	$(INSTALL) -m 755 -d $(MANDIR)
-++#	$(INSTALL) -m 644 $(MANPAGES) $(MANDIR)
-++#	$(INSTALL) -m 755 -d $(EFIDIR)
-++#	$(INSTALL) -m 755 $(EFIFILES) $(EFIDIR)
-+ 	$(INSTALL) -m 755 -d $(BINDIR)
-+ 	$(INSTALL) -m 755 $(BINARIES) $(BINDIR)
-+ 	$(INSTALL) -m 755 mkusb.sh $(BINDIR)/efitool-mkusb
-+@@ -113,9 +112,9 @@ flash-var: flash-var.o lib/lib.a
-+ 	$(CC) $(ARCH3264) -o $@ $< lib/lib.a $(EXTRA_LDFLAGS)
-+ 
-+ clean:
-+-	rm -f PK.* KEK.* DB.* $(EFIFILES) $(BINARIES) *.o *.so
-+-	rm -f noPK.*
-+-	rm -f doc/*.1
-++	rm -f $(BINARIES) *.o
-++#	rm -f noPK.*
-++#	rm -f doc/*.1
-+ 	$(MAKE) -C lib clean
-+ 	$(MAKE) -C lib/asn1 clean
-+ 
-+-- 
-+2.39.5
-+
+ config BR2_PACKAGE_MURATA_CYW_FW_CYW43455
+ 	bool "CYW43455 (1HK/1LC/1MW)"
+ 	help
+diff --git a/package/murata-cyw-fw/murata-cyw-fw.hash b/package/murata-cyw-fw/murata-cyw-fw.hash
+index d3c23dca71..cf199929a6 100644
+--- a/package/murata-cyw-fw/murata-cyw-fw.hash
++++ b/package/murata-cyw-fw/murata-cyw-fw.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  c3ecf357786d6db6f3283c0ea36ec067b1728f801fd8871694aed1502a82e9bc  murata-cyw-fw-8d87950bfad28c65926695b7357bd8995b60016a.tar.gz
+-sha256  03c140ae04f9c2036678262d6457b9c4b4a9ebb523c5e681af6d57b97c11da37  cyw-fmac-nvram-d27f1bf105fa1e5b828e355793b88d4b66188411.tar.gz
+-sha256  8f23ebb9a262112b62ace1e1bedcdeb00523d9a45e8d48a829d4ca35db4f0280  cyw-bt-patch-748462f0b02ec4aeb500bedd60780ac51c37be31.tar.gz
++sha256  2b71cb2a9376d3dda36185f2afff294322f6d1b60dd26c534b5fbeeb6155ea14  murata-cyw-fw-35459425949f0fa7de0b5c9f0c8bc0560087e1de.tar.gz
++sha256  59b6f9c117023226ea7e614265a71dc3ed4991774298609fd9f516a5581d3cba  cyw-fmac-nvram-fd6587f8183b612ea52404c7a73aeb2698099587.tar.gz
++sha256  d80f8a03095f0a63284bbc83e6b878d41f94d402c569a49a1a8c8105983d7d34  cyw-bt-patch-83f8e16423c47e195f52a06fd68ac92a20a80a9f.tar.gz
+ sha256  3a892759b73e8b459f1a750954b316118b0061fd9d1868d11fa258c104ee7e0c  LICENCE.cypress
+diff --git a/package/murata-cyw-fw/murata-cyw-fw.mk b/package/murata-cyw-fw/murata-cyw-fw.mk
+index b99168b875..e482629e49 100644
+--- a/package/murata-cyw-fw/murata-cyw-fw.mk
++++ b/package/murata-cyw-fw/murata-cyw-fw.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-MURATA_CYW_FW_VERSION = 8d87950bfad28c65926695b7357bd8995b60016a
+-MURATA_CYW_FW_VERSION_NVRAM = d27f1bf105fa1e5b828e355793b88d4b66188411
+-MURATA_CYW_FW_VERSION_BT_PATCH = 748462f0b02ec4aeb500bedd60780ac51c37be31
++MURATA_CYW_FW_VERSION = 35459425949f0fa7de0b5c9f0c8bc0560087e1de
++MURATA_CYW_FW_VERSION_NVRAM = fd6587f8183b612ea52404c7a73aeb2698099587
++MURATA_CYW_FW_VERSION_BT_PATCH = 83f8e16423c47e195f52a06fd68ac92a20a80a9f
+ MURATA_CYW_FW_SITE = $(call github,murata-wireless,cyw-fmac-fw,$(MURATA_CYW_FW_VERSION))
+ MURATA_CYW_FW_EXTRA_DOWNLOADS = \
+ 	$(call github,murata-wireless,cyw-fmac-nvram,$(MURATA_CYW_FW_VERSION_NVRAM))/cyw-fmac-nvram-$(MURATA_CYW_FW_VERSION_NVRAM).tar.gz \
+@@ -24,69 +24,66 @@ endef
+ MURATA_CYW_FW_POST_EXTRACT_HOOKS += MURATA_CYW_FW_EXTRACT_NVRAM_PATCH
+ 
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43012) += \
+-	brcmfmac43012-sdio.bin \
+-	brcmfmac43012-sdio.1LV.clm_blob \
+-	brcmfmac43012-sdio.1LV.txt \
+-	CYW43012C0.1LV.hcd
++	cyfmac43012-sdio.bin \
++	cyfmac43012-sdio.1LV.clm_blob \
++	cyfmac43012-sdio.1LV.txt \
++	BCM43012C0_003.001.015.0303.0267.1LV.sAnt.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43340) += \
+-	brcmfmac43340-sdio.bin \
+-	brcmfmac43340-sdio.1BW.txt \
++	cyfmac43340-sdio.bin \
++	cyfmac43340-sdio.1BW.txt \
+ 	CYW43341B0.1BW.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43362) += \
+-	brcmfmac43362-sdio.bin \
+-	brcmfmac43362-sdio.SN8000.txt
++	cyfmac43362-sdio.bin
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4339) += \
+-	brcmfmac4339-sdio.bin
+-MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4339_1CK) += \
+-	brcmfmac4339-sdio.1CK.txt
+-MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4339_ZP) += \
+-	brcmfmac4339-sdio.ZP.txt \
++	cyfmac4339-sdio.bin \
+ 	CYW4335C0.ZP.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43430) += \
+-	brcmfmac43430-sdio.bin
++	cyfmac43430-sdio.bin
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43430_1DX) += \
+-	brcmfmac43430-sdio.1DX.clm_blob \
+-	brcmfmac43430-sdio.1DX.txt \
+-	CYW43430A1.1DX.hcd
++	cyfmac43430-sdio.1DX.clm_blob \
++	cyfmac43430-sdio.1DX.txt \
++	BCM43430A1_001.002.009.0159.0528.1DX.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43430_1FX) += \
+-	brcmfmac43430-sdio.1FX.clm_blob \
+-	brcmfmac43430-sdio.1FX.txt
++	cyfmac43430-sdio.1FX.clm_blob \
++	cyfmac43430-sdio.1FX.txt
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43430_1LN) += \
+-	brcmfmac43430-sdio.1LN.clm_blob \
+-	brcmfmac43430-sdio.1LN.txt
++	cyfmac43430-sdio.1LN.clm_blob
++MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43439) += \
++	cyfmac43439-sdio.bin \
++	cyfmac43439-sdio.1YN.clm_blob \
++	cyfmac43439-sdio.1YN.txt \
++	CYW4343A2_001.003.016.0031.0000.1YN.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43455) += \
+-	brcmfmac43455-sdio.bin
++	cyfmac43455-sdio.bin
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43455_1HK) += \
+-	brcmfmac43455-sdio.1HK.clm_blob \
+-	brcmfmac43455-sdio.1HK.txt
++	cyfmac43455-sdio.1HK.clm_blob
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43455_1LC) += \
+-	brcmfmac43455-sdio.1LC.clm_blob \
+-	brcmfmac43455-sdio.1LC.txt
++	cyfmac43455-sdio.1LC.clm_blob \
++	cyfmac43455-sdio.1LC.txt
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43455_1MW) += \
+-	brcmfmac43455-sdio.1MW.clm_blob \
+-	brcmfmac43455-sdio.1MW.txt \
+-	CYW4345C0.1MW.hcd
++	cyfmac43455-sdio.1MW.clm_blob \
++	cyfmac43455-sdio.1MW.txt \
++	BCM4345C0_003.001.025.0187.0366.1MW.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4354) += \
+-	brcmfmac4354-sdio.bin \
+-	brcmfmac4354-sdio.1BB.clm_blob \
+-	brcmfmac4354-sdio.1BB.txt \
++	cyfmac4354-sdio.bin \
++	cyfmac4354-sdio.1BB.clm_blob \
+ 	CYW4350C0.1BB.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4356) += \
+-	brcmfmac4356-pcie.bin \
+-	brcmfmac4356-pcie.1CX.clm_blob \
+-	brcmfmac4356-pcie.1CX.txt \
+-	CYW4354A2.1CX.hcd
++	cyfmac4356-pcie.bin \
++	cyfmac4356-pcie.1CX.clm_blob \
++	BCM4356A2_001.003.015.0112.0410.1CX.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4359) += \
+-	brcmfmac4359-pcie.bin \
+-	brcmfmac4359-pcie.1FD.clm_blob
++	cyfmac4359-pcie.bin \
++	cyfmac4359-sdio.bin
+ 
+ # Helper that assumes filename with model has two dots (CHIP.MODEL.EXT),
+-# but filename without model has only single dot (CHIP.EXT).
+-murata-cyw-fw-strip-model = $(shell echo -n $(1) | sed 's/\..*\./\./')
++# or a underscore with several dots (CHIP_MODEL.MODEL.MODEL.EXT), but
++# filename without model has only single dot (CHIP.EXT).
++murata-cyw-fw-strip-model = $(shell echo -n $(1) | sed -e 's/\..*\./\./' -e 's/_.*\./\./')
+ 
+ # Helper that strips model name and renames Bluetooth patch files to the ones
+ # expected by Linux kernel.
+-murata-cyw-fw-file-rename = $(call murata-cyw-fw-strip-model,$(patsubst CYW%,BCM%,$(f)))
++murata-cyw-fw-file-rename = $(call murata-cyw-fw-strip-model,$(patsubst CYW%,BCM%,$(patsubst cy%,brcm%,$(f))))
+ 
+ define MURATA_CYW_FW_INSTALL_TARGET_CMDS
+ 	$(foreach f,$(MURATA_CYW_FW_FILES_y), \
 -- 
-2.39.5
+2.25.1
 
 _______________________________________________
 buildroot mailing list
