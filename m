@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D4F4C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:59:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5309EC282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:59:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11FD070775;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D2424FA62;
 	Fri, 28 Feb 2025 16:59:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XDZO1ftxSZg9; Fri, 28 Feb 2025 16:59:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id visZakLAD_dy; Fri, 28 Feb 2025 16:59:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20A696FCCD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CE45503A0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20A696FCCD;
-	Fri, 28 Feb 2025 16:59:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CE45503A0;
+	Fri, 28 Feb 2025 16:59:36 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 14CFC68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:39:11 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 03D5968
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:39:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C99541810
+ by smtp4.osuosl.org (Postfix) with ESMTP id 255AC42E16
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X10SfgvxEgvt for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:53 +0000 (UTC)
+ id 9_1LlPeqG1b9 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD8BD41A15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12BCC42E22
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD8BD41A15
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 12BCC42E22
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C5A2883B5A; Fri, 28 Feb 2025 16:30:12 +0000 (UTC)
+ id 0D0CA82A68; Fri, 28 Feb 2025 16:30:13 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 16 Jan 2025 23:29:54 +0100
+Date: Fri, 17 Jan 2025 19:32:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 30b05ce90d3368c0c74d2602735afdadbe50ec54
-X-Git-Newrev: e2e152496a588cbb9a877b9f53b261a83692c52d
+X-Git-Oldrev: 6ff1a66e2085644ff4f5df50f75d3b4b63a62ef1
+X-Git-Newrev: d7c9c1127ac4ba7f6c93b17fa10d9552d3b2b897
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163012.C5A2883B5A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libxml2: fix segfault
- with python-lxml
+Message-Id: <20250228163013.0D0CA82A68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/xilinx: remove Linux
+ 2024.2 hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,74 +65,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e2e152496a588cbb9a877b9f53b261a83692c52d
+commit: https://git.buildroot.net/buildroot/commit/?id=d7c9c1127ac4ba7f6c93b17fa10d9552d3b2b897
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Backport a patch fixing a segfault first introduced by
-ca63c4409b3c811e8c4ee19c2860c53af35c4ce1 in buildroot.
+Now that all of the Xilinx boards have been bumped to Linux 6.6.60, the
+Linux 2024.2 (6.6.40) hash can be removed.
 
-Fixes:
-==4792== Invalid read of size 8
-==4792==    at 0x4FE7661: __gconv_close (gconv_close.c:33)
-==4792==    by 0x4FE70EE: iconv_close (iconv_close.c:34)
-==4792==    by 0x5AED422: xmlCharEncCloseFunc (encoding.c:2678)
-==4792==    by 0x587A78C: __pyx_f_4lxml_5etree__find_PyUCS4EncodingName (etree.c:126676)
-==4792==    by 0x5888666: __pyx_pymod_exec_etree (etree.c:289773)
-==4792==    by 0x4A06345: PyModule_ExecDef (moduleobject.c:440)
-==4792==    by 0x4AE23A8: _imp_exec_dynamic_impl (import.c:3801)
-==4792==    by 0x4AE23A8: _imp_exec_dynamic (import.c.h:534)
-==4792==    by 0x4A046A3: cfunction_vectorcall_O (methodobject.c:509)
-==4792==    by 0x4AAA203: _PyEval_EvalFrameDefault (bytecodes.c:3263)
-==4792==    by 0x49B9D2B: _PyObject_VectorcallTstate (pycore_call.h:92)
-==4792==    by 0x49B9D2B: object_vacall (call.c:850)
-==4792==    by 0x49B9F44: PyObject_CallMethodObjArgs (call.c:911)
-==4792==    by 0x4AE648A: import_find_and_load (import.c:2781)
-==4792==    by 0x4AE648A: PyImport_ImportModuleLevelObject (import.c:2864)
-==4792==  Address 0x8 is not stack'd, malloc'd or (recently) free'd
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../0002-Fix-Fix-compilation-with-uclibc.patch     | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ board/xilinx/patches/linux/linux.hash | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch b/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch
-new file mode 100644
-index 0000000000..76ea711962
---- /dev/null
-+++ b/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch
-@@ -0,0 +1,31 @@
-+From 539663626b91567159a70791c0f2b3b167135e9b Mon Sep 17 00:00:00 2001
-+From: Nick Wellnhofer <wellnhofer@aevum.de>
-+Date: Thu, 16 Jan 2025 15:50:46 +0100
-+Subject: [PATCH] Fix "Fix compilation with uclibc"
-+
-+The ICU code must initialize the iconv members as well.
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/commit/539663626b91567159a70791c0f2b3b167135e9b
-+---
-+ encoding.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/encoding.c b/encoding.c
-+index 41ecde18..0ce8d479 100644
-+--- a/encoding.c
-++++ b/encoding.c
-+@@ -1641,6 +1641,10 @@ xmlCreateUconvHandler(const char *name, xmlCharEncodingHandler **out) {
-+     }
-+     enc->input = NULL;
-+     enc->output = NULL;
-++#ifdef LIBXML_ICONV_ENABLED
-++    enc->iconv_in = (iconv_t) -1;
-++    enc->iconv_out = (iconv_t) -1;
-++#endif
-+     enc->uconv_in = ucv_in;
-+     enc->uconv_out = ucv_out;
-+ 
-+-- 
-+2.34.1
-+
+diff --git a/board/xilinx/patches/linux/linux.hash b/board/xilinx/patches/linux/linux.hash
+index ce93e4016f..09e59ceeb9 100644
+--- a/board/xilinx/patches/linux/linux.hash
++++ b/board/xilinx/patches/linux/linux.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256  8ebbbe2d40597d9a5f36d47a1dfe4caffcef3d9f5ffa059ed4504bb761282593  xlnx_rebase_v6.6_LTS_2024.2.tar.gz
+ sha256  f59c7d260794d73ee519ba2579ef41aa8ac4985ac5af9461f94fa314969acd2e  xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
