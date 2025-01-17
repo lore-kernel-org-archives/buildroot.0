@@ -1,97 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A80D4C02183
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jan 2025 04:14:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94D83C02183
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jan 2025 05:40:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 066BB6FADD;
-	Fri, 17 Jan 2025 04:14:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C8A141E64;
+	Fri, 17 Jan 2025 05:40:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QZ34x2hzT4LI; Fri, 17 Jan 2025 04:14:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sqITPw5p5y2S; Fri, 17 Jan 2025 05:40:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE0746FAC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00FA2417F7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CE0746FAC5;
-	Fri, 17 Jan 2025 04:14:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B2CE1B89
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 04:14:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 00FA2417F7;
+	Fri, 17 Jan 2025 05:40:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id F194431
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 05:40:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9DBDA6FAC5
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 04:14:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C019B40520
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 05:40:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F-ZioeoN3Fx2 for <buildroot@buildroot.org>;
- Fri, 17 Jan 2025 04:14:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QPTorJCG7Fw2 for <buildroot@buildroot.org>;
+ Fri, 17 Jan 2025 05:40:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
- envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 10E72611C7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10E72611C7
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 10E72611C7
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 04:14:29 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id
- a640c23a62f3a-aaf0f1adef8so349729966b.3
- for <buildroot@buildroot.org>; Thu, 16 Jan 2025 20:14:29 -0800 (PST)
+ client-ip=2607:f8b0:4864:20::b29; helo=mail-yb1-xb29.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 79B4B40191
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79B4B40191
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com
+ [IPv6:2607:f8b0:4864:20::b29])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 79B4B40191
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 05:40:01 +0000 (UTC)
+Received: by mail-yb1-xb29.google.com with SMTP id
+ 3f1490d57ef6-e5372a2fbddso2902130276.3
+ for <buildroot@buildroot.org>; Thu, 16 Jan 2025 21:40:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1737087268; x=1737692068;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1737092400; x=1737697200;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=1qatoxMJBLFE5jg6xu2MXhaEAYYd2N81h1CEUgKJEzw=;
- b=bNLi/6+7f0AANo3DZnU4Ti2zTSNGtfEOnArKhn9AjV5L6uOl1KC4ju3jaZXyfTZB1M
- l1cIBRyaMuT+9qKx6VBY71vz68TUEZmjy5aUdZVG2mKU5+mT1XW/T6mBg717NFgbcwPa
- y9AG0Jk48NtfxK7xBp9cNsCV5XZ+JaoqhPzkQtAGFcqc9Rx0wAMS2Tyrgs/K3Myb4ByR
- XtATT3sVWFgRx3hvWoK1OChu/TfxiHA8LGs1H9VEpT/0UvdC+W9zgJEyUdivvjQbEy+D
- xPu0Jz8dhwI1x4whda39iiLxUp3IRxgi/0FOxs82hDlqziWOk/RK2bkVneNcYlMlSR5t
- PJ5Q==
-X-Gm-Message-State: AOJu0YyAnPOxdaJSH+5wMZyb6Gs+IP2VkrjHYF60ehc/rKkY0nov/mAv
- lGHEdWeuhexha8Cz/OZOLzbAb2CR9AS2E5LFKNMhVzPFHNCxVVk81Nu/HQ==
-X-Gm-Gg: ASbGnct1g63JJLkHbGOwoluFlmRH7jVIHCVPWoGLyYspmsJtPj89lGleNLolxscqQti
- hXOHEMS/xCUlwlHeLrSsrL7OhNgqKaTzbyORi4L7AchnldzwpU0EA9T7079FsgmGJJD0KkdlpEB
- sxRuEPW1woCY+eNqkpJD7T+/dKC5UKAJOaSZ4g9FlCcNP6oz1CgI6p9lf/DCsd6LvoG3A0JnxsM
- wx9g90sZJeQYMTIUuIzzIB45jWOiLQ2EOJ4byTkdQJwVGYJV0x75myfkvuR
-X-Google-Smtp-Source: AGHT+IGVotlNmxeLjMQXlIcaghR4x26lFG+nveioQLDy8Ch08Z8nsS6G3c2lmwOYGXKYsOrfFZrZLg==
-X-Received: by 2002:a17:907:7b9e:b0:aa6:75e1:1864 with SMTP id
- a640c23a62f3a-ab38b0ba2aamr123276266b.4.1737087267736; 
- Thu, 16 Jan 2025 20:14:27 -0800 (PST)
-Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ab384ce105dsm100182766b.39.2025.01.16.20.14.27
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 16 Jan 2025 20:14:27 -0800 (PST)
-Message-ID: <6789d923.170a0220.ab17a.335e@mx.google.com>
+ bh=COBRgbRx9OVSd4GDWd0T/MBHW4NgibnHjUGFillarhk=;
+ b=veiYfEQ5/d/ZVJYYd5FZOOzKT3RTOkRYyWj72nznqK0mpQ/S4iotT5RAKuvVfYxRF2
+ Pe19b/MIjOpweL9rijlUdkSBD2rE9bcyOVG0BRS+5JiRy6LH41vhhqpYW29AU/++9Tnl
+ /R5J5P2zHtgwVBPazdI/uRX2Z39VlCfG1bdaXEG3MkrZmEuFinRVtXMnMQs3AACoJYzL
+ ModKEmbq4HWJV1UV/nRZNKFffRPA0R5owfRJp12MytrU04Xk1vUwLxhxA8Hskf1DrOgn
+ A0GmICUdxfB1a+A3NLyxjBDqgJpOvGAyGFFwNaoRjwR0ciDExzLxBQ/hqTrJutL/HM8t
+ j3Uw==
+X-Gm-Message-State: AOJu0Yyeh5xh2RwX3vasmkZ/7No9XxfkEZ587aOnfeRdPjo93h7vapAK
+ ny7586ys9xVwPMP+qAH8kwK+9xPqzHeqLySDgr/Cy8UchVGPGfNoKpVrWX9mGd/6VmZYgKel3vR
+ 3UyCGCD3Lv0kdayJFFrNpRpmCqhvUGA==
+X-Gm-Gg: ASbGncvIR2dPVgMACVZVQ+TrOZsEJx5uBTusNue4PrYyQlqH+mQQ6eZAuP/cACsocy6
+ pZl83W9sWM3TAnDB9ud5ZsrUl5XZHctH7YxAeDLk=
+X-Google-Smtp-Source: AGHT+IG1MOK4cYl5k06X2PXmiLAnr9vdnh8PstpXjAXUHGkgTYZF3eWCiRZfAaiJNdBwe7zPCxYLNMdFdmcfl7TAzIc=
+X-Received: by 2002:a05:6902:200e:b0:e4d:89e9:6a96 with SMTP id
+ 3f1490d57ef6-e57b1052cd4mr872561276.18.1737092400036; Thu, 16 Jan 2025
+ 21:40:00 -0800 (PST)
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-From: Buildroot Notifications <buildroot.notifications@gmail.com>
-Date: Fri, 17 Jan 2025 04:14:27 -0000
+References: <CAJ6EmCe5duhjeanDC8NPgR6CWdaUstRc5TcxWnVSBEkF2_dK3Q@mail.gmail.com>
+ <CA+R_derbD_Ddd73fddoSaUri7Y+4_YWqZc-VyDjMF0dtd1_OBg@mail.gmail.com>
+ <CA+R_deo_Cp-BtFUr2f7Wt0HCpzg8nNqnOzQspgRTZXgc3bCq_Q@mail.gmail.com>
+ <CA+R_deow-0ETOu-RnsrNrB=HL573WKj8515yRqa5ngxo2LYr7g@mail.gmail.com>
+ <CAJ6EmCcMh1HKi16b0gWeTYudz2Qqv0gDS83D_8x5FEw6Vkzvbw@mail.gmail.com>
+ <CAJ6EmCeAXV=d94-Da-PjO36X17YhWqHKeMWyzfo-u8zvpw3vWQ@mail.gmail.com>
+ <CAJ6EmCeQbJ9LSY7DPiMS8h9Sgti8qHzgKni63KSRDRTHqG34aA@mail.gmail.com>
+In-Reply-To: <CAJ6EmCeQbJ9LSY7DPiMS8h9Sgti8qHzgKni63KSRDRTHqG34aA@mail.gmail.com>
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Date: Fri, 17 Jan 2025 06:39:48 +0100
+X-Gm-Features: AbW1kvb9XE-6ANoWKXH8dfTk8WAGj6JRDhWdHLEs3RQRFU6jiOmaOFkkSUUj9Hg
+Message-ID: <CA+R_deqY7orDSBq2ORTiapbjJjNs-ZLfb7ZtKyxUvjY7GZK1hw@mail.gmail.com>
+To: Patricia Holden <pholden@nklabs.com>
+Cc: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1737087268; x=1737692068; darn=buildroot.org;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=1qatoxMJBLFE5jg6xu2MXhaEAYYd2N81h1CEUgKJEzw=;
- b=nPVWgydDn4JuStXL8pTgFv2Tna4glackIMiGIgMbBEbh26v2ykBtz/3PbQNVIdwPRA
- JVa/eNWToAl2EEB3uvKz0zkxn+K4AxhaNDIeFFtyYJN+8t+gjM/07TdTqKcW/0UcYd43
- F6V8/PBCeAhfZ8tJK6f4Qw/61/bp6TJO8dMNohENSkq4Im5gmFUt01vDVuSZZTfLiLeX
- xWZDBgcJtqbDcm0phZbOtGFnprSn1hwBUgvQAu5Mqkde+Rg9TNhrLyiUL4Er+65Xxic0
- DMFsb5wvcRaVDsx6eeR4TW+IjVCCbisu9vgbkfbtEnqHBmWM3mjX5G8YcX49AgY1Xqur
- tnkA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1737092400; x=1737697200; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=COBRgbRx9OVSd4GDWd0T/MBHW4NgibnHjUGFillarhk=;
+ b=IGHKjVVEfWjoiS0iSZbGT2zc5HuwSIFJjRJ4SxSc+w32gCbCpZ0kVQFtSHy+vZaTwe
+ lFa/sTHxRT8wGDwEWSILrcYltetd/tH8EDTq0lPrX+xmr37NLkM2lDBUfMvZfm8qTnQm
+ nzen1EDcl7P61NOxZYX74AVW768uI8qgcA49yQBS7dE35M6HiRIKETsfX17Jps0hhGvO
+ VP9HYZK+DfsNnNuDjaEuPn+d+ADg9emFpltj3ihwcO2pEHF9cVgNbRMPLwBy/GGfbds1
+ jnkVe/sPsWXdrV9E5fOPVu/H115JdzdVZkrww3mTmzmG1rYVKGSqcopd0ccHneId/Fw1
+ gJmw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=nPVWgydD
-Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2025-01-16
+ header.a=rsa-sha256 header.s=20230601 header.b=IGHKjVVE
+Subject: Re: [Buildroot] Host QT6 Tools Linguistics fails to build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,168 +106,999 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5210541162698451677=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+--===============5210541162698451677==
+Content-Type: multipart/alternative; boundary="000000000000724748062be057b4"
 
-Autobuild statistics for 2025-01-16
-===================================
+--000000000000724748062be057b4
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-      branch |  OK | NOK | TIM | TOT |
-  2024.02.x  |  4  |  3  |  0  |  7  |
-  2024.11.x  |  3  |  8  |  0  | 11  |
-    master   | 13  | 48  |  0  | 61  |
+I don't understand why the build depends on what packages are installed on
+your Ubuntu workstation.
 
-Classification of failures by reason for master
------------------------------------------------
-
-    host-python-greenlet-3.1.1 | 4 
-               iproute2-6.12.0 | 4 
-                  ntp-4.2.8p18 | 3 
-                   foot-1.16.2 | 2 
-                   perl-5.40.0 | 2 
-             util-linux-2.40.2 | 2 
-               aircrack-ng-1.7 | 1 
-                  assimp-5.3.1 | 1 
-           at-spi2-core-2.50.0 | 1 
-               bctoolbox-4.4.8 | 1 
-  binutils-arc-2023.09-release | 1 
-              capnproto-0.10.4 | 1 
-                  ffmpeg-6.1.2 | 1 
-              fftw-quad-3.3.10 | 1 
-fs/axfs/axfs.mk:32: /home/a... | 1 
-fs/ext2/ext2.mk:66: /home/a... | 1 
-glibc-2.40-18-g564178076272... | 1 
-host-heimdal-f4faaeaba371ff... | 1 
-jailhouse-e57d1eff6d55aeed5... | 1 
-                latencytop-0.5 | 1 
-libsvgtiny-ea9d99fc8b231c22... | 1 
-              libunistring-1.3 | 1 
-               libunwind-1.8.1 | 1 
-                 libv4l-1.28.1 | 1 
-          linux-5.10.162-cip24 | 1 
-     linux-5.10.162-cip24-rt10 | 1 
-                  linux-6.12.9 | 1 
-             matchbox-lib-1.12 | 1 
-                  nginx-1.26.2 | 1 
-               openblas-0.3.28 | 1 
-                      opus-1.4 | 1 
-        s6-linux-utils-2.6.2.0 | 1 
-              sdl2_mixer-2.6.3 | 1 
-squeezelite-71c012ad9ba102f... | 1 
-ulog-0389d243352255f6182326... | 1 
-                       unknown | 1 
-                  usbutils-018 | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-microblazeel |        aircrack-ng-1.7         | NOK | https://autobuild.buildroot.org/results/2a3faea6a75ec130ab293d5737090b875f02391d |     
-   armeb     |          assimp-5.3.1          | NOK | https://autobuild.buildroot.org/results/051b1eee7f06d7b5741724faf419f76fb86d2b13 | ORPH
-   mipsel    |      at-spi2-core-2.50.0       | NOK | https://autobuild.buildroot.org/results/68a47526c496d00be228125b11b28e26c50addb2 |     
-microblazeel |        bctoolbox-4.4.8         | NOK | https://autobuild.buildroot.org/results/4e287be5fc90d29758ff45d7a1d2f5fd32b142c0 | ORPH
-    arc      |  binutils-arc-2023.09-release  | NOK | https://autobuild.buildroot.org/results/7d6a7966243034f3a9fd81d70287060207068ea2 |     
-microblazeel |        capnproto-0.10.4        | NOK | https://autobuild.buildroot.org/results/d9731098450eef5b1d05e79dc71ed0d23cabf8c9 |     
-   s390x     |          ffmpeg-6.1.2          | NOK | https://autobuild.buildroot.org/results/61bec1679fc585a4935774535ad26d5f91f93011 |     
-powerpc64le  |        fftw-quad-3.3.10        | NOK | https://autobuild.buildroot.org/results/ef6601a37e6b4003a2767861a19e267b0529719b | ORPH
-microblazeel |          foot-1.16.2           | NOK | https://autobuild.buildroot.org/results/024e0d2a9b2eb4b8e6723a6fb26374e5825579a7 |     
- microblaze  |          foot-1.16.2           | NOK | https://autobuild.buildroot.org/results/dde4f30298c0caebde7149c1c16a7171cd3521ef |     
-   armeb     | fs/axfs/axfs.mk:32: /home/a... | NOK | https://autobuild.buildroot.org/results/40281ec9fda3666809e871b85ff45c4004720376 |     
-  powerpc    | fs/ext2/ext2.mk:66: /home/a... | NOK | https://autobuild.buildroot.org/results/0d803ac6c2cd25615a2a9f609c807fa09f5da709 |     
-   arceb     | glibc-2.40-18-g564178076272... | NOK | https://autobuild.buildroot.org/results/7928eab9e84995c2b309194f51d0afc09f8ea5d2 |     
-   s390x     | host-heimdal-f4faaeaba371ff... | NOK | https://autobuild.buildroot.org/results/d12ece6eca3841b085f1497582651839ebf55b41 | ORPH
-  mips64el   |   host-python-greenlet-3.1.1   | NOK | https://autobuild.buildroot.org/results/def56c4333d06b772e7094e5823f422316c44bc8 |     
-   x86_64    |   host-python-greenlet-3.1.1   | NOK | https://autobuild.buildroot.org/results/eadca3e3940ccd480638c27ee25734a9ea239945 |     
-   mipsel    |   host-python-greenlet-3.1.1   | NOK | https://autobuild.buildroot.org/results/e3b815036bd75420e172411e6e02147bd7226b81 |     
-   armeb     |   host-python-greenlet-3.1.1   | NOK | https://autobuild.buildroot.org/results/64b4866d6208fe738fd4d72ab6b9d31ee9b3c686 |     
- microblaze  |        iproute2-6.12.0         | NOK | https://autobuild.buildroot.org/results/0c6e73bfaf9ba543a61465590f59784c36a17a1f |     
-  aarch64    |        iproute2-6.12.0         | NOK | https://autobuild.buildroot.org/results/029493e02f5c2858fc987ba7a4c8fe53deb27017 |     
-   armeb     |        iproute2-6.12.0         | NOK | https://autobuild.buildroot.org/results/ef7edd57342191cf19ff1cf91088948610e46968 |     
-    m68k     |        iproute2-6.12.0         | NOK | https://autobuild.buildroot.org/results/1be35f438ce75074be39b42066d1281c6fdae594 |     
-   x86_64    | jailhouse-e57d1eff6d55aeed5... | NOK | https://autobuild.buildroot.org/results/7c2620f6bae6698335f8e79a6fadc32986d522cf |     
- aarch64_be  |         latencytop-0.5         | NOK | https://autobuild.buildroot.org/results/f6b09f29abb2058135ef50648136b02ccedcd5e2 | ORPH
-  sparc64    | libsvgtiny-ea9d99fc8b231c22... | NOK | https://autobuild.buildroot.org/results/f839341ae9cf3ca9f8dac5793683c72bc490511c | ORPH
-   armeb     |        libunistring-1.3        | NOK | https://autobuild.buildroot.org/results/4cbe6df98d2e91604241b52e2e73ea223da0ac9c |     
-   mipsel    |        libunwind-1.8.1         | NOK | https://autobuild.buildroot.org/results/f764bcc7963bb5f0210cd785dd990da46e9e9dbe | ORPH
-   sh4eb     |         libv4l-1.28.1          | NOK | https://autobuild.buildroot.org/results/e3f4f83f02fe9f01893881cabca2c5551408e782 |     
-   mipsel    |      linux-5.10.162-cip24      | NOK | https://autobuild.buildroot.org/results/bf60248538c36994d7c21c92a950367199b83b4d | ORPH
-    i686     |   linux-5.10.162-cip24-rt10    | NOK | https://autobuild.buildroot.org/results/ca4deccc7dac8938cc4ca17b3f421023c497de1a | ORPH
-powerpc64le  |          linux-6.12.9          | NOK | https://autobuild.buildroot.org/results/223e2e52f50a4edcf503731e20f97977b094478c | ORPH
-   mipsel    |       matchbox-lib-1.12        | NOK | https://autobuild.buildroot.org/results/df5ccd64a8dea767c52a21f2f97493701b2318b0 | ORPH
-  riscv32    |          nginx-1.26.2          | NOK | https://autobuild.buildroot.org/results/a3388e027c4837593176485fea7774afb9ab6abb | ORPH
-   arceb     |          ntp-4.2.8p18          | NOK | https://autobuild.buildroot.org/results/dd2dcbce2bc6c534b142538a1856e6f01567f649 |     
-    arc      |          ntp-4.2.8p18          | NOK | https://autobuild.buildroot.org/results/05dc084d3aa7274679d86771852b49cd2f71b522 |     
-    mips     |          ntp-4.2.8p18          | NOK | https://autobuild.buildroot.org/results/ca82831e3596a1698fc4016f886bc79f31aec27e |     
-   mips64    |        openblas-0.3.28         | NOK | https://autobuild.buildroot.org/results/5ede593de4a746627350c4092fd9043123a84f3e |     
-   arceb     |            opus-1.4            | NOK | https://autobuild.buildroot.org/results/27b2d7be9b358ed841ea90abcd505e0358fa9283 |     
- aarch64_be  |          perl-5.40.0           | NOK | https://autobuild.buildroot.org/results/8cb2d6a24e2f57530cf67bdb3a810a52a6690f57 |     
-microblazeel |          perl-5.40.0           | NOK | https://autobuild.buildroot.org/results/f02df1e4e4fa661b38d3093ca3869db9bf8ec98d |     
-   arceb     |     s6-linux-utils-2.6.2.0     | NOK | https://autobuild.buildroot.org/results/ecc44f0d3cdb3db052c41942794cc047e38e8e15 |     
-   arceb     |        sdl2_mixer-2.6.3        | NOK | https://autobuild.buildroot.org/results/fd0f96c2a11c57f4588d4adfed0a1bdc9669f5b3 | ORPH
- aarch64_be  | squeezelite-71c012ad9ba102f... | NOK | https://autobuild.buildroot.org/results/348c9265c5ac5349be23a1304bfc155622cff82f |     
-    or1k     | ulog-0389d243352255f6182326... | NOK | https://autobuild.buildroot.org/results/e72900c04b1f5e418322c5a37718341ff91ab4a2 |     
-powerpc64le  |            unknown             | NOK | https://autobuild.buildroot.org/results/989a8de6a281148974759c49e02412f34f51ee77 |     
- aarch64_be  |          usbutils-018          | NOK | https://autobuild.buildroot.org/results/665c064bf28a325a8bc4d9fe16f453be48472e57 | ORPH
-   mips64    |       util-linux-2.40.2        | NOK | https://autobuild.buildroot.org/results/8585a53125e18b75c8b530f1ceb30c69d1c481b8 | ORPH
-   x86_64    |       util-linux-2.40.2        | NOK | https://autobuild.buildroot.org/results/43736beb271732d3a62f3912e318dfaa65bfbd03 | ORPH
-
-
-Classification of failures by reason for 2024.02.x
---------------------------------------------------
-
-           crucible-2023.11.02 | 1 
-ulog-0389d243352255f6182326... | 1 
-                       unknown | 1 
-
-
-Detail of failures for 2024.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   mips64    |      crucible-2023.11.02       | NOK | https://autobuild.buildroot.org/results/fed09f01dead4bda03199fde45fd4c8f6c85e021 |     
-   nios2     | ulog-0389d243352255f6182326... | NOK | https://autobuild.buildroot.org/results/b10c92157fbf203b153c6f4698ef8ded3620c6dd |     
-   sh4eb     |            unknown             | NOK | https://autobuild.buildroot.org/results/3eb7a7cee489398ab8e7784f748c5da6372daaaf |     
-
-
-Classification of failures by reason for 2024.11.x
---------------------------------------------------
-
-                    bat-0.24.0 | 1 
-              host-rust-1.82.0 | 1 
- host-softether-4.30-9700-beta | 1 
-                latencytop-0.5 | 1 
-               libsigsegv-2.14 | 1 
-           oath-toolkit-2.6.12 | 1 
-                   perl-5.40.0 | 1 
-                       unknown | 1 
-
-
-Detail of failures for 2024.11.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   armeb     |           bat-0.24.0           | NOK | https://autobuild.buildroot.org/results/6bc145386b973a2b099cae5e34ffee9d40aae84d |     
-    arm      |        host-rust-1.82.0        | NOK | https://autobuild.buildroot.org/results/197cc7634e35b27c7861a983d4880d131444345b |     
-   sh4eb     | host-softether-4.30-9700-beta  | NOK | https://autobuild.buildroot.org/results/a44e5b3ac0ad4889012665f99b459d733101ee3c | ORPH
-microblazeel |         latencytop-0.5         | NOK | https://autobuild.buildroot.org/results/b2fe6583dd25797e18e32763c674091d9d6811bb | ORPH
-   arceb     |        libsigsegv-2.14         | NOK | https://autobuild.buildroot.org/results/2b45357a2e851e5bf8a4848c4ec710f503239f02 |     
-   armeb     |      oath-toolkit-2.6.12       | NOK | https://autobuild.buildroot.org/results/3a067c6fd8e92f824c8c618082643cbdd327658f |     
-   sparc     |          perl-5.40.0           | NOK | https://autobuild.buildroot.org/results/53ebd32bb36b7c59c4b5e9e29f5713c5f1b14e14 |     
-  aarch64    |            unknown             | NOK | https://autobuild.buildroot.org/results/f2a94d67a47f7b3fe09950a762603ca5ab6f511f |     
+Does this make sense to you?
 
 
 
--- 
-https://autobuild.buildroot.org
+
+tor. 16. jan. 2025 kl. 18:17 skrev Patricia Holden <pholden@nklabs.com>:
+
+> I was able to resolve the problem by installing "clang-format".  We had
+> one Ubuntu workstation that was building host-qt6tools just fine and did =
+a
+> comparison of packages installed.  Once I installed clang-format, build
+> completed no errors and ran fine on our target system.
+>
+> Thanks for your assistance.
+>
+> On Thu, Jan 16, 2025 at 11:34=E2=80=AFAM Patricia Holden <pholden@nklabs.=
+com>
+> wrote:
+>
+>> I attempted to install Clang, version 17 but am unable to find it.  Is
+>> this an experimental version of Clang?  Do you have instructions on how =
+to
+>> install it for Ubuntu?
+>>
+>> On Thu, Jan 16, 2025 at 11:29=E2=80=AFAM Patricia Holden <pholden@nklabs=
+.com>
+>> wrote:
+>>
+>>> Our defconfig is as follows:
+>>>
+>>> BR2_aarch64=3Dy
+>>> BR2_KERNEL_HEADERS_VERSION=3Dy
+>>> BR2_DEFAULT_KERNEL_VERSION=3D"6.1.80"
+>>> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=3Dy
+>>> BR2_TOOLCHAIN_BUILDROOT_CXX=3Dy
+>>> BR2_SHARED_STATIC_LIBS=3Dy
+>>> BR2_PACKAGE_OVERRIDE_FILE=3D"$(BR2_EXTERNAL_edvo_PATH)/local.mk"
+>>> BR2_TARGET_GENERIC_HOSTNAME=3D"edvocycler3"
+>>> BR2_TARGET_GENERIC_ISSUE=3D"Welcome to Edvocycler3"
+>>> BR2_INIT_SYSTEMD=3Dy
+>>> BR2_TARGET_GENERIC_ROOT_PASSWD=3D"temp1234"
+>>> BR2_SYSTEM_DHCP=3D"wlan0"
+>>> BR2_SYSTEM_DEFAULT_PATH=3D"/bin:/sbin:/usr/bin:/usr/sbin"
+>>>
+>>> BR2_ROOTFS_OVERLAY=3D"$(BR2_EXTERNAL_edvo_PATH)/board/edvotek/rootfs-ov=
+erlay"
+>>> BR2_ROOTFS_POST_IMAGE_SCRIPT=3D"$(BR2_EXTERNAL_edvo_PATH)/board/edvotek=
+/post-build.sh
+>>> "
+>>> BR2_LINUX_KERNEL=3Dy
+>>> BR2_LINUX_KERNEL_CUSTOM_VERSION=3Dy
+>>> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D"6.1.80"
+>>> BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=3Dy
+>>>
+>>> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=3D"$(BR2_EXTERNAL_edvo_PATH)/board/=
+edvotek/edvo3_defconfig"
+>>> BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy
+>>> BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT=3Dy
+>>> BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D"ti/k3-am623-edvocycler3.dtb"
+>>> BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=3Dy
+>>> BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=3Dy
+>>>
+>>> BR2_PACKAGE_BUSYBOX_CONFIG=3D"$(BR2_EXTERNAL_edvo_PATH)/board/edvotek/e=
+dvo3br_busybox_defconfig"
+>>> BR2_PACKAGE_FFMPEG=3Dy
+>>> BR2_PACKAGE_FFMPEG_SWSCALE=3Dy
+>>> BR2_PACKAGE_BZIP2=3Dy
+>>> BR2_PACKAGE_GZIP=3Dy
+>>> BR2_PACKAGE_XZ=3Dy
+>>> BR2_PACKAGE_SPIDEV_TEST=3Dy
+>>> BR2_PACKAGE_VALGRIND=3Dy
+>>> BR2_PACKAGE_BINUTILS=3Dy
+>>> BR2_PACKAGE_BINUTILS_TARGET=3Dy
+>>> BR2_PACKAGE_LIBTOOL=3Dy
+>>> BR2_PACKAGE_E2FSPROGS=3Dy
+>>> BR2_PACKAGE_E2FSPROGS_RESIZE2FS=3Dy
+>>> BR2_PACKAGE_DEJAVU=3Dy
+>>> BR2_PACKAGE_LIBERATION=3Dy
+>>> BR2_PACKAGE_HICOLOR_ICON_THEME=3Dy
+>>> BR2_PACKAGE_KMSCUBE=3Dy
+>>> BR2_PACKAGE_MESA3D_DEMOS=3Dy
+>>> BR2_PACKAGE_MESA3D=3Dy
+>>> BR2_PACKAGE_MESA3D_OSMESA_GALLIUM=3Dy
+>>> BR2_PACKAGE_MESA3D_OPENGL_EGL=3Dy
+>>> BR2_PACKAGE_MESA3D_OPENGL_ES=3Dy
+>>> BR2_PACKAGE_QT6BASE_DEFAULT_QPA=3D"linuxfb"
+>>> BR2_PACKAGE_QT6BASE_FONTCONFIG=3Dy
+>>> BR2_PACKAGE_QT6BASE_HARFBUZZ=3Dy
+>>> BR2_PACKAGE_QT6BASE_JPEG=3Dy
+>>> BR2_PACKAGE_QT6BASE_PNG=3Dy
+>>> BR2_PACKAGE_QT6BASE_SYSLOG=3Dy
+>>> BR2_PACKAGE_QT6CORE5COMPAT=3Dy
+>>> BR2_PACKAGE_QT6DECLARATIVE_QUICK=3Dy
+>>> BR2_PACKAGE_QT6LANGUAGESERVER=3Dy
+>>> BR2_PACKAGE_QT6VIRTUALKEYBOARD=3Dy
+>>> BR2_PACKAGE_LINUX_FIRMWARE=3Dy
+>>> BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX=3Dy
+>>> BR2_PACKAGE_18XX_TI_UTILS=3Dy
+>>> BR2_PACKAGE_EVTEST=3Dy
+>>> BR2_PACKAGE_I2C_TOOLS=3Dy
+>>> BR2_PACKAGE_LIBMANETTE=3Dy
+>>> BR2_PACKAGE_LSHW=3Dy
+>>> BR2_PACKAGE_PARTED=3Dy
+>>> BR2_PACKAGE_PICOCOM=3Dy
+>>> BR2_PACKAGE_SPI_TOOLS=3Dy
+>>> BR2_PACKAGE_STATSERIAL=3Dy
+>>> BR2_PACKAGE_STM32FLASH=3Dy
+>>> BR2_PACKAGE_SYSSTAT=3Dy
+>>> BR2_PACKAGE_TI_UIM=3Dy
+>>> BR2_PACKAGE_TI_UTILS=3Dy
+>>> BR2_PACKAGE_ENSCRIPT=3Dy
+>>> BR2_PACKAGE_LUA=3Dy
+>>> BR2_PACKAGE_LSQLITE3=3Dy
+>>> BR2_PACKAGE_LZLIB=3Dy
+>>> BR2_PACKAGE_PYTHON3=3Dy
+>>> BR2_PACKAGE_PYTHON3_SQLITE=3Dy
+>>> BR2_PACKAGE_PYTHON_CFFI=3Dy
+>>> BR2_PACKAGE_PYTHON_CYCLER=3Dy
+>>> BR2_PACKAGE_PYTHON_FLASK_CORS=3Dy
+>>> BR2_PACKAGE_PYTHON_JSONMODELS=3Dy
+>>> BR2_PACKAGE_PYTHON_JSONSCHEMA=3Dy
+>>> BR2_PACKAGE_PYTHON_KIWISOLVER=3Dy
+>>> BR2_PACKAGE_PYTHON_LIBEVDEV=3Dy
+>>> BR2_PACKAGE_PYTHON_MSGPACK=3Dy
+>>> BR2_PACKAGE_PYTHON_NUMPY=3Dy
+>>> BR2_PACKAGE_PYTHON_PACKAGING=3Dy
+>>> BR2_PACKAGE_PYTHON_PILLOW=3Dy
+>>> BR2_PACKAGE_PYTHON_PIP=3Dy
+>>> BR2_PACKAGE_PYTHON_PYELFTOOLS=3Dy
+>>> BR2_PACKAGE_PYTHON_PYPARSING=3Dy
+>>> BR2_PACKAGE_PYTHON_REGEX=3Dy
+>>> BR2_PACKAGE_PYTHON_SIMPLEJSON=3Dy
+>>> BR2_PACKAGE_PYTHON_SPIDEV=3Dy
+>>> BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS=3Dy
+>>> BR2_PACKAGE_PYTHON_WRAPT=3Dy
+>>> BR2_PACKAGE_PYTHON_ZOPE_INTERFACE=3Dy
+>>> BR2_PACKAGE_CA_CERTIFICATES=3Dy
+>>> BR2_PACKAGE_LIBGCRYPT=3Dy
+>>> BR2_PACKAGE_LIBNSS=3Dy
+>>> BR2_PACKAGE_LIBSECRET=3Dy
+>>> BR2_PACKAGE_LEVELDB=3Dy
+>>> BR2_PACKAGE_CAIRO_TEE=3Dy
+>>> BR2_PACKAGE_CAIROMM=3Dy
+>>> BR2_PACKAGE_CAIROMM1_14=3Dy
+>>> BR2_PACKAGE_GD=3Dy
+>>> BR2_PACKAGE_GIFLIB=3Dy
+>>> BR2_PACKAGE_KMSXX=3Dy
+>>> BR2_PACKAGE_KMSXX_INSTALL_TESTS=3Dy
+>>> BR2_PACKAGE_LIBGTK3=3Dy
+>>> BR2_PACKAGE_LIBJXL=3Dy
+>>> BR2_PACKAGE_LIBSVG_CAIRO=3Dy
+>>> BR2_PACKAGE_OPENJPEG=3Dy
+>>> BR2_PACKAGE_POPPLER=3Dy
+>>> BR2_PACKAGE_WOFF2=3Dy
+>>> BR2_PACKAGE_LIBCEC=3Dy
+>>> BR2_PACKAGE_LIBGPIOD=3Dy
+>>> BR2_PACKAGE_LIBGPIOD_TOOLS=3Dy
+>>> BR2_PACKAGE_LIBINPUT=3Dy
+>>> BR2_PACKAGE_LIBPCIACCESS=3Dy
+>>> BR2_PACKAGE_LIBSERIAL=3Dy
+>>> BR2_PACKAGE_LIBSERIALPORT=3Dy
+>>> BR2_PACKAGE_LIBUSB=3Dy
+>>> BR2_PACKAGE_TSLIB=3Dy
+>>> BR2_PACKAGE_BOOTSTRAP=3Dy
+>>> BR2_PACKAGE_CHARTJS=3Dy
+>>> BR2_PACKAGE_JSON_JAVASCRIPT=3Dy
+>>> BR2_PACKAGE_VUEJS=3Dy
+>>> BR2_PACKAGE_CJSON=3Dy
+>>> BR2_PACKAGE_CJSON_UTILS=3Dy
+>>> BR2_PACKAGE_JANSSON=3Dy
+>>> BR2_PACKAGE_JSON_C=3Dy
+>>> BR2_PACKAGE_JSON_FOR_MODERN_CPP=3Dy
+>>> BR2_PACKAGE_JSON_GLIB=3Dy
+>>> BR2_PACKAGE_JSONCPP=3Dy
+>>> BR2_PACKAGE_LIBJSON=3Dy
+>>> BR2_PACKAGE_LIBUCL=3Dy
+>>> BR2_PACKAGE_LIBXMLPP=3Dy
+>>> BR2_PACKAGE_LIBXSLT=3Dy
+>>> BR2_PACKAGE_LIBYAML=3Dy
+>>> BR2_PACKAGE_YAML_CPP=3Dy
+>>> BR2_PACKAGE_LIBVPX=3Dy
+>>> BR2_PACKAGE_GEOIP=3Dy
+>>> BR2_PACKAGE_LIBCURL=3Dy
+>>> BR2_PACKAGE_LIBIDN2=3Dy
+>>> BR2_PACKAGE_LIBNDP=3Dy
+>>> BR2_PACKAGE_LIBPCAP=3Dy
+>>> BR2_PACKAGE_LIBSOUP3=3Dy
+>>> BR2_PACKAGE_LIBSOUP3_SSL=3Dy
+>>> BR2_PACKAGE_LIBVNCSERVER=3Dy
+>>> BR2_PACKAGE_BOOST_JSON=3Dy
+>>> BR2_PACKAGE_GLM=3Dy
+>>> BR2_PACKAGE_GOBJECT_INTROSPECTION=3Dy
+>>> BR2_PACKAGE_GTEST=3Dy
+>>> BR2_PACKAGE_LIBATOMIC_OPS=3Dy
+>>> BR2_PACKAGE_LIBSECCOMP=3Dy
+>>> BR2_PACKAGE_LIBSOLV=3Dy
+>>> BR2_PACKAGE_LIBUV=3Dy
+>>> BR2_PACKAGE_LINUX_PAM=3Dy
+>>> BR2_PACKAGE_ORC=3Dy
+>>> BR2_PACKAGE_QHULL=3Dy
+>>> BR2_PACKAGE_ENCHANT=3Dy
+>>> BR2_PACKAGE_ICU=3Dy
+>>> BR2_PACKAGE_NCURSES_WCHAR=3Dy
+>>> BR2_PACKAGE_UTF8PROC=3Dy
+>>> BR2_PACKAGE_SHARED_MIME_INFO=3Dy
+>>> BR2_PACKAGE_APACHE=3Dy
+>>> BR2_PACKAGE_AVAHI=3Dy
+>>> BR2_PACKAGE_DHCP=3Dy
+>>> BR2_PACKAGE_DHCP_CLIENT=3Dy
+>>> BR2_PACKAGE_DHCPCD=3Dy
+>>> BR2_PACKAGE_IFUPDOWN=3Dy
+>>> BR2_PACKAGE_IPROUTE2=3Dy
+>>> BR2_PACKAGE_IPUTILS=3Dy
+>>> BR2_PACKAGE_IW=3Dy
+>>> BR2_PACKAGE_IWD=3Dy
+>>> BR2_PACKAGE_NET_TOOLS=3Dy
+>>> BR2_PACKAGE_NTP=3Dy
+>>> BR2_PACKAGE_NTP_NTPDATE=3Dy
+>>> BR2_PACKAGE_NTP_NTPTIME=3Dy
+>>> BR2_PACKAGE_OPENSSH=3Dy
+>>> BR2_PACKAGE_PPPD=3Dy
+>>> BR2_PACKAGE_RSYNC=3Dy
+>>> BR2_PACKAGE_TFTPD=3Dy
+>>> BR2_PACKAGE_WIRELESS_REGDB=3Dy
+>>> BR2_PACKAGE_WIRELESS_TOOLS=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT_WEXT=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT_WIRED=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT_IBSS_RSN=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT_WPS=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT_WPA3=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT_CLI=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=3Dy
+>>> BR2_PACKAGE_WPA_SUPPLICANT_DBUS=3Dy
+>>> BR2_PACKAGE_WPAN_TOOLS=3Dy
+>>> BR2_PACKAGE_XINETD=3Dy
+>>> BR2_PACKAGE_XTABLES_ADDONS=3Dy
+>>> BR2_PACKAGE_BASH=3Dy
+>>> BR2_PACKAGE_SUDO=3Dy
+>>> BR2_PACKAGE_BUBBLEWRAP=3Dy
+>>> BR2_PACKAGE_HTOP=3Dy
+>>> BR2_PACKAGE_PROCPS_NG=3Dy
+>>> BR2_PACKAGE_SEATD=3Dy
+>>> BR2_PACKAGE_SEATD_DAEMON=3Dy
+>>> BR2_PACKAGE_SYSTEMD_RFKILL=3Dy
+>>> BR2_PACKAGE_UTIL_LINUX_BINARIES=3Dy
+>>> BR2_PACKAGE_UTIL_LINUX_KILL=3Dy
+>>> BR2_PACKAGE_UTIL_LINUX_RFKILL=3Dy
+>>> BR2_PACKAGE_XDG_DBUS_PROXY=3Dy
+>>> BR2_PACKAGE_NANO=3Dy
+>>> BR2_TARGET_ROOTFS_TAR_GZIP=3Dy
+>>> BR2_PACKAGE_HOST_CMAKE=3Dy
+>>> BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy
+>>> BR2_PACKAGE_HOST_DTC=3Dy
+>>> BR2_PACKAGE_HOST_E2FSPROGS=3Dy
+>>> BR2_PACKAGE_HOST_GENIMAGE=3Dy
+>>> BR2_PACKAGE_HOST_IMAGEMAGICK=3Dy
+>>> BR2_PACKAGE_HOST_IMAGEMAGICK_XML=3Dy
+>>> BR2_PACKAGE_HOST_KMOD_XZ=3Dy
+>>> BR2_PACKAGE_HOST_MESON_TOOLS=3Dy
+>>> BR2_PACKAGE_HOST_MTOOLS=3Dy
+>>> BR2_PACKAGE_HOST_PYTHON_CYTHON=3Dy
+>>> BR2_PACKAGE_HOST_PYTHON_GREENLET=3Dy
+>>> BR2_PACKAGE_HOST_PYTHON_LXML=3Dy
+>>> BR2_PACKAGE_HOST_PYTHON_PYYAML=3Dy
+>>> BR2_PACKAGE_HOST_PYTHON_XLRD=3Dy
+>>> BR2_PACKAGE_HOST_PYTHON3=3Dy
+>>> BR2_PACKAGE_HOST_PYTHON3_BZIP2=3Dy
+>>> BR2_PACKAGE_HOST_PYTHON3_XZ=3Dy
+>>> BR2_PACKAGE_HOST_PYTHON3_SSL=3Dy
+>>> BR2_PACKAGE_HOST_QT6TOOLS=3Dy
+>>> BR2_PACKAGE_HOST_QT6TOOLS_LINGUIST_TOOLS=3Dy
+>>>
+>>> I applied the patch to qt6tools.mk and still getting the same error.  I
+>>> see in output that the compile flag is present to disable Clang.
+>>>
+>>> Output:
+>>> >>> host-qt6tools 6.7.3 Extracting
+>>> xzcat
+>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-20=
+24.11-rc1/dl/qt6tools/qttools-everywhere-src-6.7.3.tar.xz
+>>> |
+>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-20=
+24.11-rc1/output/host/bin/tar
+>>> --strip-components=3D1 -C
+>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-20=
+24.11-rc1/output/build/host-qt6tools-6.7.3
+>>>   -xf -
+>>> >>> host-qt6tools 6.7.3 Patching
+>>> >>> host-qt6tools 6.7.3 Configuring
+>>> (mkdir -p
+>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-20=
+24.11-rc1/output/build/host-qt6tools-6.7.3//buildroot-build
+>>> && cd
+>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-20=
+24.11-rc1/output/build/host-qt6tools-6.7.3//buildroot-build
+>>> && rm -f CMakeCache.txt &&
+>>> PATH=3D"/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buil=
+droot-2024.11-rc1/output/host/bin:/home/pholden/Projects/Edvotek01072025/ed=
+votek-edvocycler3/buildroot-2024.11-rc1/output/host/sbin:/home/pholden/.pye=
+nv/shims:/home/pholden/.pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:=
+/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin"
+>>> PKG_CONFIG=3D"/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler=
+3/buildroot-2024.11-rc1/output/host/bin/pkg-config"
+>>> PKG_CONFIG_SYSROOT_DIR=3D"/"
+>>> PKG_CONFIG_LIBDIR=3D"/home/pholden/Projects/Edvotek01072025/edvotek-edv=
+ocycler3/buildroot-2024.11-rc1/output/host/lib/pkgconfig:/home/pholden/Proj=
+ects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host/=
+share/pkgconfig"
+>>> PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=3D1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=3D1
+>>>  /usr/bin/cmake
+>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-20=
+24.11-rc1/output/build/host-qt6tools-6.7.3/
+>>> -G"Ninja"
+>>> -DCMAKE_MAKE_PROGRAM=3D"/home/pholden/Projects/Edvotek01072025/edvotek-=
+edvocycler3/buildroot-2024.11-rc1/output/host/bin/ninja"
+>>> -DCMAKE_INSTALL_SO_NO_EXE=3D0
+>>> -DCMAKE_FIND_ROOT_PATH=3D"/home/pholden/Projects/Edvotek01072025/edvote=
+k-edvocycler3/buildroot-2024.11-rc1/output/host"
+>>> -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=3D"BOTH"
+>>> -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=3D"BOTH"
+>>> -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=3D"BOTH"
+>>> -DCMAKE_INSTALL_PREFIX=3D"/home/pholden/Projects/Edvotek01072025/edvote=
+k-edvocycler3/buildroot-2024.11-rc1/output/host"
+>>> -DCMAKE_C_FLAGS=3D"-O2
+>>> -I/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-=
+2024.11-rc1/output/host/include"
+>>> -DCMAKE_CXX_FLAGS=3D"-O2
+>>> -I/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-=
+2024.11-rc1/output/host/include"
+>>> -DCMAKE_EXE_LINKER_FLAGS=3D"-L/home/pholden/Projects/Edvotek01072025/ed=
+votek-edvocycler3/buildroot-2024.11-rc1/output/host/lib
+>>> -Wl,-rpath,/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/b=
+uildroot-2024.11-rc1/output/host/lib"
+>>> -DCMAKE_SHARED_LINKER_FLAGS=3D"-L/home/pholden/Projects/Edvotek01072025=
+/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host/lib
+>>> -Wl,-rpath,/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/b=
+uildroot-2024.11-rc1/output/host/lib"
+>>> -DCMAKE_C_COMPILER=3D"/usr/bin/gcc" -DCMAKE_CXX_COMPILER=3D"/usr/bin/g+=
++"
+>>>  -DCMAKE_C_COMPILER_LAUNCHER=3D"" -DCMAKE_CXX_COMPILER_LAUNCHER=3D""
+>>>  -DCMAKE_COLOR_MAKEFILE=3DOFF -DBUILD_DOC=3DOFF -DBUILD_DOCS=3DOFF
+>>> -DBUILD_EXAMPLE=3DOFF -DBUILD_EXAMPLES=3DOFF -DBUILD_TEST=3DOFF -DBUILD=
+_TESTS=3DOFF
+>>> -DBUILD_TESTING=3DOFF -DBUILD_SHARED_LIBS=3DON  -DFEATURE_clang=3DOFF
+>>> -DQT_BUILD_EXAMPLES=3DOFF -DQT_BUILD_TESTS=3DOFF -DFEATURE_linguist=3DO=
+FF )
+>>> -- The CXX compiler identification is GNU 11.4.0
+>>> -- The C compiler identification is GNU 11.4.0
+>>> -- Detecting CXX compiler ABI info
+>>> -- Detecting CXX compiler ABI info - done
+>>> -- Check for working CXX compiler: /usr/bin/g++ - skipped
+>>> -- Detecting CXX compile features
+>>> -- Detecting CXX compile features - done
+>>> -- Detecting C compiler ABI info
+>>> -- Detecting C compiler ABI info - done
+>>> -- Check for working C compiler: /usr/bin/gcc - skipped
+>>> -- Detecting C compile features
+>>> -- Detecting C compile features - done
+>>> -- Looking for pthread.h
+>>> -- Looking for pthread.h - found
+>>> -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+>>> -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+>>> -- Found Threads: TRUE
+>>> -- Performing Test HAVE_STDATOMIC
+>>> -- Performing Test HAVE_STDATOMIC - Success
+>>> -- Found WrapAtomic: TRUE
+>>> -- Force setting build type to 'Release'.
+>>> CMake Error at /usr/lib/llvm-14/lib/cmake/clang/ClangTargets.cmake:750
+>>> (message):
+>>>   The imported target "clangBasic" references the file
+>>>
+>>>      "/usr/lib/llvm-14/lib/libclangBasic.a"
+>>>
+>>>   but this file does not exist.  Possible reasons include:
+>>>
+>>>   * The file was deleted, renamed, or moved to another location.
+>>>
+>>>   * An install or uninstall procedure did not complete successfully.
+>>>
+>>>   * The installation package was faulty and contained
+>>>
+>>>      "/usr/lib/llvm-14/lib/cmake/clang/ClangTargets.cmake"
+>>>
+>>>   but not all the files it references.
+>>>
+>>> Call Stack (most recent call first):
+>>>   /usr/lib/cmake/clang-14/ClangConfig.cmake:19 (include)
+>>>   cmake/FindWrapLibClang.cmake:17 (find_package)
+>>>
+>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-20=
+24.11-rc1/output/build/host-qt6base-6.7.3/cmake/QtFindPackageHelpers.cmake:=
+156
+>>> (find_package)
+>>>   configure.cmake:20 (qt_find_package)
+>>>
+>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-20=
+24.11-rc1/output/build/host-qt6base-6.7.3/cmake/QtFeature.cmake:678
+>>> (include)
+>>>   src/CMakeLists.txt:18 (qt_feature_evaluate_features)
+>>>
+>>>
+>>> -- Configuring incomplete, errors occurred!
+>>> See also
+>>> "/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-2=
+024.11-rc1/output/build/host-qt6tools-6.7.3/buildroot-build/CMakeFiles/CMak=
+eOutput.log".
+>>> make[1]: *** [package/pkg-generic.mk:279:
+>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-20=
+24.11-rc1/output/build/host-qt6tools-6.7.3/.stamp_configured]
+>>> Error 1
+>>> make: *** [Makefile:83: _all] Error 2
+>>>
+>>> On Thu, Jan 16, 2025 at 8:00=E2=80=AFAM Roy Kollen Svendsen <
+>>> roykollensvendsen@gmail.com> wrote:
+>>>
+>>>> Hi,
+>>>>
+>>>> Since I'm the root cause of the problem I sent you a patch here:
+>>>>
+>>>>
+>>>> https://patchwork.ozlabs.org/project/buildroot/patch/20250116125537.53=
+1666-1-roykollensvendsen@gmail.com/
+>>>>
+>>>> Please test if this fixes your problem add you Tested-By etc.
+>>>>
+>>>> Roy
+>>>>
+>>>> tor. 16. jan. 2025 kl. 13:17 skrev Roy Kollen Svendsen <
+>>>> roykollensvendsen@gmail.com>:
+>>>>
+>>>>>
+>>>>> qttools require at least clang 17. So we should not try to enable
+>>>>> support unless suitable version is available.
+>>>>>
+>>>>> So we should set -DFEATURE_clang=3DOFF
+>>>>>
+>>>>> -Roy
+>>>>>
+>>>>>
+>>>>> tor. 16. jan. 2025 kl. 11:23 skrev Roy Kollen Svendsen <
+>>>>> roykollensvendsen@gmail.com>:
+>>>>>
+>>>>>> Hi Patricia,
+>>>>>>
+>>>>>> I'll take look at this as soon as I get a chance. Can you send me a
+>>>>>> minimal config that recreate the problem?
+>>>>>>
+>>>>>> Thanks in advance,
+>>>>>>
+>>>>>> Roy
+>>>>>>
+>>>>>> tir. 14. jan. 2025 kl. 20:16 skrev Patricia Holden <
+>>>>>> pholden@nklabs.com>:
+>>>>>>
+>>>>>>> We are using Buildroot version "2024.11-rc1.  We just turned on
+>>>>>>> "Host Utilities->host qt6 tools->host linguistic tools".  I run mak=
+e, get
+>>>>>>> the error and output below.  Is there a fix for this?  Am I missing=
+ a
+>>>>>>> dependency I need to install on my host PC?
+>>>>>>>
+>>>>>>> Thanks!
+>>>>>>> Pat
+>>>>>>>
+>>>>>>> make BR2_EXTERNAL=3D../edvo_br host-qt6tools
+>>>>>>> >>> host-qt6tools 6.7.3 Configuring
+>>>>>>> (mkdir -p
+>>>>>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroo=
+t-2024.11-rc1/output/build/host-qt6tools-6.7.3//buildroot-build
+>>>>>>> && cd
+>>>>>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroo=
+t-2024.11-rc1/output/build/host-qt6tools-6.7.3//buildroot-build
+>>>>>>> && rm -f CMakeCache.txt &&
+>>>>>>> PATH=3D"/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/=
+buildroot-2024.11-rc1/output/host/bin:/home/pholden/Projects/Edvotek0107202=
+5/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host/sbin:/home/pholden/=
+.pyenv/shims:/home/pholden/.pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/s=
+bin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin"
+>>>>>>> PKG_CONFIG=3D"/home/pholden/Projects/Edvotek01072025/edvotek-edvocy=
+cler3/buildroot-2024.11-rc1/output/host/bin/pkg-config"
+>>>>>>> PKG_CONFIG_SYSROOT_DIR=3D"/"
+>>>>>>> PKG_CONFIG_LIBDIR=3D"/home/pholden/Projects/Edvotek01072025/edvotek=
+-edvocycler3/buildroot-2024.11-rc1/output/host/lib/pkgconfig:/home/pholden/=
+Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/h=
+ost/share/pkgconfig"
+>>>>>>> PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=3D1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=3D1
+>>>>>>>  /usr/bin/cmake
+>>>>>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroo=
+t-2024.11-rc1/output/build/host-qt6tools-6.7.3/
+>>>>>>> -G"Ninja"
+>>>>>>> -DCMAKE_MAKE_PROGRAM=3D"/home/pholden/Projects/Edvotek01072025/edvo=
+tek-edvocycler3/buildroot-2024.11-rc1/output/host/bin/ninja"
+>>>>>>> -DCMAKE_INSTALL_SO_NO_EXE=3D0
+>>>>>>> -DCMAKE_FIND_ROOT_PATH=3D"/home/pholden/Projects/Edvotek01072025/ed=
+votek-edvocycler3/buildroot-2024.11-rc1/output/host"
+>>>>>>> -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=3D"BOTH"
+>>>>>>> -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=3D"BOTH"
+>>>>>>> -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=3D"BOTH"
+>>>>>>> -DCMAKE_INSTALL_PREFIX=3D"/home/pholden/Projects/Edvotek01072025/ed=
+votek-edvocycler3/buildroot-2024.11-rc1/output/host"
+>>>>>>> -DCMAKE_C_FLAGS=3D"-O2
+>>>>>>> -I/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildr=
+oot-2024.11-rc1/output/host/include"
+>>>>>>> -DCMAKE_CXX_FLAGS=3D"-O2
+>>>>>>> -I/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildr=
+oot-2024.11-rc1/output/host/include"
+>>>>>>> -DCMAKE_EXE_LINKER_FLAGS=3D"-L/home/pholden/Projects/Edvotek0107202=
+5/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host/lib
+>>>>>>> -Wl,-rpath,/home/pholden/Projects/Edvotek01072025/edvotek-edvocycle=
+r3/buildroot-2024.11-rc1/output/host/lib"
+>>>>>>> -DCMAKE_SHARED_LINKER_FLAGS=3D"-L/home/pholden/Projects/Edvotek0107=
+2025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host/lib
+>>>>>>> -Wl,-rpath,/home/pholden/Projects/Edvotek01072025/edvotek-edvocycle=
+r3/buildroot-2024.11-rc1/output/host/lib"
+>>>>>>> -DCMAKE_C_COMPILER=3D"/usr/bin/gcc" -DCMAKE_CXX_COMPILER=3D"/usr/bi=
+n/g++"
+>>>>>>>  -DCMAKE_C_COMPILER_LAUNCHER=3D"" -DCMAKE_CXX_COMPILER_LAUNCHER=3D"=
+"
+>>>>>>>  -DCMAKE_COLOR_MAKEFILE=3DOFF -DBUILD_DOC=3DOFF -DBUILD_DOCS=3DOFF
+>>>>>>> -DBUILD_EXAMPLE=3DOFF -DBUILD_EXAMPLES=3DOFF -DBUILD_TEST=3DOFF -DB=
+UILD_TESTS=3DOFF
+>>>>>>> -DBUILD_TESTING=3DOFF -DBUILD_SHARED_LIBS=3DON  -DQT_BUILD_EXAMPLES=
+=3DOFF
+>>>>>>> -DQT_BUILD_TESTS=3DOFF -DFEATURE_linguist=3DON )
+>>>>>>> -- The CXX compiler identification is GNU 11.4.0
+>>>>>>> -- The C compiler identification is GNU 11.4.0
+>>>>>>> -- Detecting CXX compiler ABI info
+>>>>>>> -- Detecting CXX compiler ABI info - done
+>>>>>>> -- Check for working CXX compiler: /usr/bin/g++ - skipped
+>>>>>>> -- Detecting CXX compile features
+>>>>>>> -- Detecting CXX compile features - done
+>>>>>>> -- Detecting C compiler ABI info
+>>>>>>> -- Detecting C compiler ABI info - done
+>>>>>>> -- Check for working C compiler: /usr/bin/gcc - skipped
+>>>>>>> -- Detecting C compile features
+>>>>>>> -- Detecting C compile features - done
+>>>>>>> -- Looking for pthread.h
+>>>>>>> -- Looking for pthread.h - found
+>>>>>>> -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+>>>>>>> -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+>>>>>>> -- Found Threads: TRUE
+>>>>>>> -- Performing Test HAVE_STDATOMIC
+>>>>>>> -- Performing Test HAVE_STDATOMIC - Success
+>>>>>>> -- Found WrapAtomic: TRUE
+>>>>>>> -- Force setting build type to 'Release'.
+>>>>>>> CMake Error at
+>>>>>>> /usr/lib/llvm-14/lib/cmake/clang/ClangTargets.cmake:750 (message):
+>>>>>>>   The imported target "clangBasic" references the file
+>>>>>>>
+>>>>>>>      "/usr/lib/llvm-14/lib/libclangBasic.a"
+>>>>>>>
+>>>>>>>   but this file does not exist.  Possible reasons include:
+>>>>>>>
+>>>>>>>   * The file was deleted, renamed, or moved to another location.
+>>>>>>>
+>>>>>>>   * An install or uninstall procedure did not complete successfully=
+.
+>>>>>>>
+>>>>>>>   * The installation package was faulty and contained
+>>>>>>>
+>>>>>>>      "/usr/lib/llvm-14/lib/cmake/clang/ClangTargets.cmake"
+>>>>>>>
+>>>>>>>   but not all the files it references.
+>>>>>>>
+>>>>>>> Call Stack (most recent call first):
+>>>>>>>   /usr/lib/cmake/clang-14/ClangConfig.cmake:19 (include)
+>>>>>>>   cmake/FindWrapLibClang.cmake:17 (find_package)
+>>>>>>>
+>>>>>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroo=
+t-2024.11-rc1/output/build/host-qt6base-6.7.3/cmake/QtFindPackageHelpers.cm=
+ake:156
+>>>>>>> (find_package)
+>>>>>>>   configure.cmake:20 (qt_find_package)
+>>>>>>>
+>>>>>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroo=
+t-2024.11-rc1/output/build/host-qt6base-6.7.3/cmake/QtFeature.cmake:678
+>>>>>>> (include)
+>>>>>>>   src/CMakeLists.txt:18 (qt_feature_evaluate_features)
+>>>>>>>
+>>>>>>>
+>>>>>>> -- Configuring incomplete, errors occurred!
+>>>>>>> See also
+>>>>>>> "/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildro=
+ot-2024.11-rc1/output/build/host-qt6tools-6.7.3/buildroot-build/CMakeFiles/=
+CMakeOutput.log".
+>>>>>>> make[1]: *** [package/pkg-generic.mk:279:
+>>>>>>> /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroo=
+t-2024.11-rc1/output/build/host-qt6tools-6.7.3/.stamp_configured]
+>>>>>>> Error 1
+>>>>>>> make: *** [Makefile:83: _all] Error 2
+>>>>>>> _______________________________________________
+>>>>>>> buildroot mailing list
+>>>>>>> buildroot@buildroot.org
+>>>>>>> https://lists.buildroot.org/mailman/listinfo/buildroot
+>>>>>>>
+>>>>>>
+
+--000000000000724748062be057b4
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div></div><div>I don&#39;t understand why the build depen=
+ds on what packages are installed on your Ubuntu workstation.</div><div><br=
+></div><div>Does this make sense to you?<br></div><div><br></div><div><br><=
+/div></div><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote"><div d=
+ir=3D"ltr" class=3D"gmail_attr">tor. 16. jan. 2025 kl. 18:17 skrev Patricia=
+ Holden &lt;<a href=3D"mailto:pholden@nklabs.com" target=3D"_blank">pholden=
+@nklabs.com</a>&gt;:<br></div><blockquote class=3D"gmail_quote" style=3D"ma=
+rgin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:=
+1ex"><div dir=3D"ltr">I was able to resolve the problem by installing &quot=
+;clang-format&quot;.=C2=A0 We had one Ubuntu workstation that was building =
+host-qt6tools just fine and did a comparison of packages installed.=C2=A0 O=
+nce I installed clang-format, build completed no errors and ran fine on our=
+ target system.<div><br></div><div>Thanks for your assistance.</div></div><=
+br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Thu,=
+ Jan 16, 2025 at 11:34=E2=80=AFAM Patricia Holden &lt;<a href=3D"mailto:pho=
+lden@nklabs.com" target=3D"_blank">pholden@nklabs.com</a>&gt; wrote:<br></d=
+iv><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bord=
+er-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr">I att=
+empted to install Clang, version 17 but am unable to find it.=C2=A0 Is this=
+ an experimental version of Clang?=C2=A0 Do you have instructions on how to=
+ install it for Ubuntu?</div><br><div class=3D"gmail_quote"><div dir=3D"ltr=
+" class=3D"gmail_attr">On Thu, Jan 16, 2025 at 11:29=E2=80=AFAM Patricia Ho=
+lden &lt;<a href=3D"mailto:pholden@nklabs.com" target=3D"_blank">pholden@nk=
+labs.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D=
+"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-le=
+ft:1ex"><div dir=3D"ltr"><div dir=3D"ltr">Our defconfig is as follows:<div>=
+<br></div><div>BR2_aarch64=3Dy<br>BR2_KERNEL_HEADERS_VERSION=3Dy<br>BR2_DEF=
+AULT_KERNEL_VERSION=3D&quot;6.1.80&quot;<br>BR2_PACKAGE_HOST_LINUX_HEADERS_=
+CUSTOM_6_1=3Dy<br>BR2_TOOLCHAIN_BUILDROOT_CXX=3Dy<br>BR2_SHARED_STATIC_LIBS=
+=3Dy<br>BR2_PACKAGE_OVERRIDE_FILE=3D&quot;$(BR2_EXTERNAL_edvo_PATH)/<a href=
+=3D"http://local.mk" target=3D"_blank">local.mk</a>&quot;<br>BR2_TARGET_GEN=
+ERIC_HOSTNAME=3D&quot;edvocycler3&quot;<br>BR2_TARGET_GENERIC_ISSUE=3D&quot=
+;Welcome to Edvocycler3&quot;<br>BR2_INIT_SYSTEMD=3Dy<br>BR2_TARGET_GENERIC=
+_ROOT_PASSWD=3D&quot;temp1234&quot;<br>BR2_SYSTEM_DHCP=3D&quot;wlan0&quot;<=
+br>BR2_SYSTEM_DEFAULT_PATH=3D&quot;/bin:/sbin:/usr/bin:/usr/sbin&quot;<br>B=
+R2_ROOTFS_OVERLAY=3D&quot;$(BR2_EXTERNAL_edvo_PATH)/board/edvotek/rootfs-ov=
+erlay&quot;<br>BR2_ROOTFS_POST_IMAGE_SCRIPT=3D&quot;$(BR2_EXTERNAL_edvo_PAT=
+H)/board/edvotek/post-build.sh &quot;<br>BR2_LINUX_KERNEL=3Dy<br>BR2_LINUX_=
+KERNEL_CUSTOM_VERSION=3Dy<br>BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D&quot;=
+6.1.80&quot;<br>BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=3Dy<br>BR2_LINUX_KERNEL_=
+CUSTOM_CONFIG_FILE=3D&quot;$(BR2_EXTERNAL_edvo_PATH)/board/edvotek/edvo3_de=
+fconfig&quot;<br>BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy<br>BR2_LINUX_KERNEL_DTB_I=
+S_SELF_BUILT=3Dy<br>BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D&quot;ti/k3-am623-ed=
+vocycler3.dtb&quot;<br>BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=3Dy<br>BR2_LINUX_K=
+ERNEL_DTB_OVERLAY_SUPPORT=3Dy<br>BR2_PACKAGE_BUSYBOX_CONFIG=3D&quot;$(BR2_E=
+XTERNAL_edvo_PATH)/board/edvotek/edvo3br_busybox_defconfig&quot;<br>BR2_PAC=
+KAGE_FFMPEG=3Dy<br>BR2_PACKAGE_FFMPEG_SWSCALE=3Dy<br>BR2_PACKAGE_BZIP2=3Dy<=
+br>BR2_PACKAGE_GZIP=3Dy<br>BR2_PACKAGE_XZ=3Dy<br>BR2_PACKAGE_SPIDEV_TEST=3D=
+y<br>BR2_PACKAGE_VALGRIND=3Dy<br>BR2_PACKAGE_BINUTILS=3Dy<br>BR2_PACKAGE_BI=
+NUTILS_TARGET=3Dy<br>BR2_PACKAGE_LIBTOOL=3Dy<br>BR2_PACKAGE_E2FSPROGS=3Dy<b=
+r>BR2_PACKAGE_E2FSPROGS_RESIZE2FS=3Dy<br>BR2_PACKAGE_DEJAVU=3Dy<br>BR2_PACK=
+AGE_LIBERATION=3Dy<br>BR2_PACKAGE_HICOLOR_ICON_THEME=3Dy<br>BR2_PACKAGE_KMS=
+CUBE=3Dy<br>BR2_PACKAGE_MESA3D_DEMOS=3Dy<br>BR2_PACKAGE_MESA3D=3Dy<br>BR2_P=
+ACKAGE_MESA3D_OSMESA_GALLIUM=3Dy<br>BR2_PACKAGE_MESA3D_OPENGL_EGL=3Dy<br>BR=
+2_PACKAGE_MESA3D_OPENGL_ES=3Dy<br>BR2_PACKAGE_QT6BASE_DEFAULT_QPA=3D&quot;l=
+inuxfb&quot;<br>BR2_PACKAGE_QT6BASE_FONTCONFIG=3Dy<br>BR2_PACKAGE_QT6BASE_H=
+ARFBUZZ=3Dy<br>BR2_PACKAGE_QT6BASE_JPEG=3Dy<br>BR2_PACKAGE_QT6BASE_PNG=3Dy<=
+br>BR2_PACKAGE_QT6BASE_SYSLOG=3Dy<br>BR2_PACKAGE_QT6CORE5COMPAT=3Dy<br>BR2_=
+PACKAGE_QT6DECLARATIVE_QUICK=3Dy<br>BR2_PACKAGE_QT6LANGUAGESERVER=3Dy<br>BR=
+2_PACKAGE_QT6VIRTUALKEYBOARD=3Dy<br>BR2_PACKAGE_LINUX_FIRMWARE=3Dy<br>BR2_P=
+ACKAGE_LINUX_FIRMWARE_TI_WL18XX=3Dy<br>BR2_PACKAGE_18XX_TI_UTILS=3Dy<br>BR2=
+_PACKAGE_EVTEST=3Dy<br>BR2_PACKAGE_I2C_TOOLS=3Dy<br>BR2_PACKAGE_LIBMANETTE=
+=3Dy<br>BR2_PACKAGE_LSHW=3Dy<br>BR2_PACKAGE_PARTED=3Dy<br>BR2_PACKAGE_PICOC=
+OM=3Dy<br>BR2_PACKAGE_SPI_TOOLS=3Dy<br>BR2_PACKAGE_STATSERIAL=3Dy<br>BR2_PA=
+CKAGE_STM32FLASH=3Dy<br>BR2_PACKAGE_SYSSTAT=3Dy<br>BR2_PACKAGE_TI_UIM=3Dy<b=
+r>BR2_PACKAGE_TI_UTILS=3Dy<br>BR2_PACKAGE_ENSCRIPT=3Dy<br>BR2_PACKAGE_LUA=
+=3Dy<br>BR2_PACKAGE_LSQLITE3=3Dy<br>BR2_PACKAGE_LZLIB=3Dy<br>BR2_PACKAGE_PY=
+THON3=3Dy<br>BR2_PACKAGE_PYTHON3_SQLITE=3Dy<br>BR2_PACKAGE_PYTHON_CFFI=3Dy<=
+br>BR2_PACKAGE_PYTHON_CYCLER=3Dy<br>BR2_PACKAGE_PYTHON_FLASK_CORS=3Dy<br>BR=
+2_PACKAGE_PYTHON_JSONMODELS=3Dy<br>BR2_PACKAGE_PYTHON_JSONSCHEMA=3Dy<br>BR2=
+_PACKAGE_PYTHON_KIWISOLVER=3Dy<br>BR2_PACKAGE_PYTHON_LIBEVDEV=3Dy<br>BR2_PA=
+CKAGE_PYTHON_MSGPACK=3Dy<br>BR2_PACKAGE_PYTHON_NUMPY=3Dy<br>BR2_PACKAGE_PYT=
+HON_PACKAGING=3Dy<br>BR2_PACKAGE_PYTHON_PILLOW=3Dy<br>BR2_PACKAGE_PYTHON_PI=
+P=3Dy<br>BR2_PACKAGE_PYTHON_PYELFTOOLS=3Dy<br>BR2_PACKAGE_PYTHON_PYPARSING=
+=3Dy<br>BR2_PACKAGE_PYTHON_REGEX=3Dy<br>BR2_PACKAGE_PYTHON_SIMPLEJSON=3Dy<b=
+r>BR2_PACKAGE_PYTHON_SPIDEV=3Dy<br>BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS=3Dy=
+<br>BR2_PACKAGE_PYTHON_WRAPT=3Dy<br>BR2_PACKAGE_PYTHON_ZOPE_INTERFACE=3Dy<b=
+r>BR2_PACKAGE_CA_CERTIFICATES=3Dy<br>BR2_PACKAGE_LIBGCRYPT=3Dy<br>BR2_PACKA=
+GE_LIBNSS=3Dy<br>BR2_PACKAGE_LIBSECRET=3Dy<br>BR2_PACKAGE_LEVELDB=3Dy<br>BR=
+2_PACKAGE_CAIRO_TEE=3Dy<br>BR2_PACKAGE_CAIROMM=3Dy<br>BR2_PACKAGE_CAIROMM1_=
+14=3Dy<br>BR2_PACKAGE_GD=3Dy<br>BR2_PACKAGE_GIFLIB=3Dy<br>BR2_PACKAGE_KMSXX=
+=3Dy<br>BR2_PACKAGE_KMSXX_INSTALL_TESTS=3Dy<br>BR2_PACKAGE_LIBGTK3=3Dy<br>B=
+R2_PACKAGE_LIBJXL=3Dy<br>BR2_PACKAGE_LIBSVG_CAIRO=3Dy<br>BR2_PACKAGE_OPENJP=
+EG=3Dy<br>BR2_PACKAGE_POPPLER=3Dy<br>BR2_PACKAGE_WOFF2=3Dy<br>BR2_PACKAGE_L=
+IBCEC=3Dy<br>BR2_PACKAGE_LIBGPIOD=3Dy<br>BR2_PACKAGE_LIBGPIOD_TOOLS=3Dy<br>=
+BR2_PACKAGE_LIBINPUT=3Dy<br>BR2_PACKAGE_LIBPCIACCESS=3Dy<br>BR2_PACKAGE_LIB=
+SERIAL=3Dy<br>BR2_PACKAGE_LIBSERIALPORT=3Dy<br>BR2_PACKAGE_LIBUSB=3Dy<br>BR=
+2_PACKAGE_TSLIB=3Dy<br>BR2_PACKAGE_BOOTSTRAP=3Dy<br>BR2_PACKAGE_CHARTJS=3Dy=
+<br>BR2_PACKAGE_JSON_JAVASCRIPT=3Dy<br>BR2_PACKAGE_VUEJS=3Dy<br>BR2_PACKAGE=
+_CJSON=3Dy<br>BR2_PACKAGE_CJSON_UTILS=3Dy<br>BR2_PACKAGE_JANSSON=3Dy<br>BR2=
+_PACKAGE_JSON_C=3Dy<br>BR2_PACKAGE_JSON_FOR_MODERN_CPP=3Dy<br>BR2_PACKAGE_J=
+SON_GLIB=3Dy<br>BR2_PACKAGE_JSONCPP=3Dy<br>BR2_PACKAGE_LIBJSON=3Dy<br>BR2_P=
+ACKAGE_LIBUCL=3Dy<br>BR2_PACKAGE_LIBXMLPP=3Dy<br>BR2_PACKAGE_LIBXSLT=3Dy<br=
+>BR2_PACKAGE_LIBYAML=3Dy<br>BR2_PACKAGE_YAML_CPP=3Dy<br>BR2_PACKAGE_LIBVPX=
+=3Dy<br>BR2_PACKAGE_GEOIP=3Dy<br>BR2_PACKAGE_LIBCURL=3Dy<br>BR2_PACKAGE_LIB=
+IDN2=3Dy<br>BR2_PACKAGE_LIBNDP=3Dy<br>BR2_PACKAGE_LIBPCAP=3Dy<br>BR2_PACKAG=
+E_LIBSOUP3=3Dy<br>BR2_PACKAGE_LIBSOUP3_SSL=3Dy<br>BR2_PACKAGE_LIBVNCSERVER=
+=3Dy<br>BR2_PACKAGE_BOOST_JSON=3Dy<br>BR2_PACKAGE_GLM=3Dy<br>BR2_PACKAGE_GO=
+BJECT_INTROSPECTION=3Dy<br>BR2_PACKAGE_GTEST=3Dy<br>BR2_PACKAGE_LIBATOMIC_O=
+PS=3Dy<br>BR2_PACKAGE_LIBSECCOMP=3Dy<br>BR2_PACKAGE_LIBSOLV=3Dy<br>BR2_PACK=
+AGE_LIBUV=3Dy<br>BR2_PACKAGE_LINUX_PAM=3Dy<br>BR2_PACKAGE_ORC=3Dy<br>BR2_PA=
+CKAGE_QHULL=3Dy<br>BR2_PACKAGE_ENCHANT=3Dy<br>BR2_PACKAGE_ICU=3Dy<br>BR2_PA=
+CKAGE_NCURSES_WCHAR=3Dy<br>BR2_PACKAGE_UTF8PROC=3Dy<br>BR2_PACKAGE_SHARED_M=
+IME_INFO=3Dy<br>BR2_PACKAGE_APACHE=3Dy<br>BR2_PACKAGE_AVAHI=3Dy<br>BR2_PACK=
+AGE_DHCP=3Dy<br>BR2_PACKAGE_DHCP_CLIENT=3Dy<br>BR2_PACKAGE_DHCPCD=3Dy<br>BR=
+2_PACKAGE_IFUPDOWN=3Dy<br>BR2_PACKAGE_IPROUTE2=3Dy<br>BR2_PACKAGE_IPUTILS=
+=3Dy<br>BR2_PACKAGE_IW=3Dy<br>BR2_PACKAGE_IWD=3Dy<br>BR2_PACKAGE_NET_TOOLS=
+=3Dy<br>BR2_PACKAGE_NTP=3Dy<br>BR2_PACKAGE_NTP_NTPDATE=3Dy<br>BR2_PACKAGE_N=
+TP_NTPTIME=3Dy<br>BR2_PACKAGE_OPENSSH=3Dy<br>BR2_PACKAGE_PPPD=3Dy<br>BR2_PA=
+CKAGE_RSYNC=3Dy<br>BR2_PACKAGE_TFTPD=3Dy<br>BR2_PACKAGE_WIRELESS_REGDB=3Dy<=
+br>BR2_PACKAGE_WIRELESS_TOOLS=3Dy<br>BR2_PACKAGE_WPA_SUPPLICANT=3Dy<br>BR2_=
+PACKAGE_WPA_SUPPLICANT_WEXT=3Dy<br>BR2_PACKAGE_WPA_SUPPLICANT_WIRED=3Dy<br>=
+BR2_PACKAGE_WPA_SUPPLICANT_IBSS_RSN=3Dy<br>BR2_PACKAGE_WPA_SUPPLICANT_AP_SU=
+PPORT=3Dy<br>BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY=3Dy<br>BR2_PACKAGE_WPA=
+_SUPPLICANT_MESH_NETWORKING=3Dy<br>BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=3Dy<=
+br>BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG=3Dy<br>BR2_PACKAGE_WPA_SUPPLICAN=
+T_WPS=3Dy<br>BR2_PACKAGE_WPA_SUPPLICANT_WPA3=3Dy<br>BR2_PACKAGE_WPA_SUPPLIC=
+ANT_CLI=3Dy<br>BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO=3Dy<br>BR2_PACKAGE_=
+WPA_SUPPLICANT_PASSPHRASE=3Dy<br>BR2_PACKAGE_WPA_SUPPLICANT_DBUS=3Dy<br>BR2=
+_PACKAGE_WPAN_TOOLS=3Dy<br>BR2_PACKAGE_XINETD=3Dy<br>BR2_PACKAGE_XTABLES_AD=
+DONS=3Dy<br>BR2_PACKAGE_BASH=3Dy<br>BR2_PACKAGE_SUDO=3Dy<br>BR2_PACKAGE_BUB=
+BLEWRAP=3Dy<br>BR2_PACKAGE_HTOP=3Dy<br>BR2_PACKAGE_PROCPS_NG=3Dy<br>BR2_PAC=
+KAGE_SEATD=3Dy<br>BR2_PACKAGE_SEATD_DAEMON=3Dy<br>BR2_PACKAGE_SYSTEMD_RFKIL=
+L=3Dy<br>BR2_PACKAGE_UTIL_LINUX_BINARIES=3Dy<br>BR2_PACKAGE_UTIL_LINUX_KILL=
+=3Dy<br>BR2_PACKAGE_UTIL_LINUX_RFKILL=3Dy<br>BR2_PACKAGE_XDG_DBUS_PROXY=3Dy=
+<br>BR2_PACKAGE_NANO=3Dy<br>BR2_TARGET_ROOTFS_TAR_GZIP=3Dy<br>BR2_PACKAGE_H=
+OST_CMAKE=3Dy<br>BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy<br>BR2_PACKAGE_HOST_DTC=3D=
+y<br>BR2_PACKAGE_HOST_E2FSPROGS=3Dy<br>BR2_PACKAGE_HOST_GENIMAGE=3Dy<br>BR2=
+_PACKAGE_HOST_IMAGEMAGICK=3Dy<br>BR2_PACKAGE_HOST_IMAGEMAGICK_XML=3Dy<br>BR=
+2_PACKAGE_HOST_KMOD_XZ=3Dy<br>BR2_PACKAGE_HOST_MESON_TOOLS=3Dy<br>BR2_PACKA=
+GE_HOST_MTOOLS=3Dy<br>BR2_PACKAGE_HOST_PYTHON_CYTHON=3Dy<br>BR2_PACKAGE_HOS=
+T_PYTHON_GREENLET=3Dy<br>BR2_PACKAGE_HOST_PYTHON_LXML=3Dy<br>BR2_PACKAGE_HO=
+ST_PYTHON_PYYAML=3Dy<br>BR2_PACKAGE_HOST_PYTHON_XLRD=3Dy<br>BR2_PACKAGE_HOS=
+T_PYTHON3=3Dy<br>BR2_PACKAGE_HOST_PYTHON3_BZIP2=3Dy<br>BR2_PACKAGE_HOST_PYT=
+HON3_XZ=3Dy<br>BR2_PACKAGE_HOST_PYTHON3_SSL=3Dy<br>BR2_PACKAGE_HOST_QT6TOOL=
+S=3Dy<br>BR2_PACKAGE_HOST_QT6TOOLS_LINGUIST_TOOLS=3Dy<br><br></div><div>I a=
+pplied the patch to <a href=3D"http://qt6tools.mk" target=3D"_blank">qt6too=
+ls.mk</a> and still getting the same error.=C2=A0 I see in output that the =
+compile flag is present to disable Clang.<div><br></div><div>Output:</div><=
+div>&gt;&gt;&gt; host-qt6tools 6.7.3 Extracting<br>xzcat /home/pholden/Proj=
+ects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/dl/qt6tools/=
+qttools-everywhere-src-6.7.3.tar.xz | /home/pholden/Projects/Edvotek0107202=
+5/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host/bin/tar --strip-com=
+ponents=3D1 -C /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/b=
+uildroot-2024.11-rc1/output/build/host-qt6tools-6.7.3 =C2=A0 -xf -<br>&gt;&=
+gt;&gt; host-qt6tools 6.7.3 Patching<br>&gt;&gt;&gt; host-qt6tools 6.7.3 Co=
+nfiguring<br>(mkdir -p /home/pholden/Projects/Edvotek01072025/edvotek-edvoc=
+ycler3/buildroot-2024.11-rc1/output/build/host-qt6tools-6.7.3//buildroot-bu=
+ild &amp;&amp; cd /home/pholden/Projects/Edvotek01072025/edvotek-edvocycler=
+3/buildroot-2024.11-rc1/output/build/host-qt6tools-6.7.3//buildroot-build &=
+amp;&amp; rm -f CMakeCache.txt &amp;&amp; PATH=3D&quot;/home/pholden/Projec=
+ts/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host/bi=
+n:/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024=
+.11-rc1/output/host/sbin:/home/pholden/.pyenv/shims:/home/pholden/.pyenv/bi=
+n:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/=
+usr/local/games:/snap/bin:/snap/bin&quot; PKG_CONFIG=3D&quot;/home/pholden/=
+Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/h=
+ost/bin/pkg-config&quot; PKG_CONFIG_SYSROOT_DIR=3D&quot;/&quot; PKG_CONFIG_=
+LIBDIR=3D&quot;/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/b=
+uildroot-2024.11-rc1/output/host/lib/pkgconfig:/home/pholden/Projects/Edvot=
+ek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host/share/pkgc=
+onfig&quot; PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=3D1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=
+=3D1 =C2=A0/usr/bin/cmake /home/pholden/Projects/Edvotek01072025/edvotek-ed=
+vocycler3/buildroot-2024.11-rc1/output/build/host-qt6tools-6.7.3/ -G&quot;N=
+inja&quot; -DCMAKE_MAKE_PROGRAM=3D&quot;/home/pholden/Projects/Edvotek01072=
+025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host/bin/ninja&quot; -=
+DCMAKE_INSTALL_SO_NO_EXE=3D0 -DCMAKE_FIND_ROOT_PATH=3D&quot;/home/pholden/P=
+rojects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/ho=
+st&quot; -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=3D&quot;BOTH&quot; -DCMAKE_FIN=
+D_ROOT_PATH_MODE_LIBRARY=3D&quot;BOTH&quot; -DCMAKE_FIND_ROOT_PATH_MODE_INC=
+LUDE=3D&quot;BOTH&quot; -DCMAKE_INSTALL_PREFIX=3D&quot;/home/pholden/Projec=
+ts/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host&qu=
+ot; -DCMAKE_C_FLAGS=3D&quot;-O2 -I/home/pholden/Projects/Edvotek01072025/ed=
+votek-edvocycler3/buildroot-2024.11-rc1/output/host/include&quot; -DCMAKE_C=
+XX_FLAGS=3D&quot;-O2 -I/home/pholden/Projects/Edvotek01072025/edvotek-edvoc=
+ycler3/buildroot-2024.11-rc1/output/host/include&quot; -DCMAKE_EXE_LINKER_F=
+LAGS=3D&quot;-L/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/b=
+uildroot-2024.11-rc1/output/host/lib -Wl,-rpath,/home/pholden/Projects/Edvo=
+tek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host/lib&quot;=
+ -DCMAKE_SHARED_LINKER_FLAGS=3D&quot;-L/home/pholden/Projects/Edvotek010720=
+25/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host/lib -Wl,-rpath,/ho=
+me/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-r=
+c1/output/host/lib&quot; -DCMAKE_C_COMPILER=3D&quot;/usr/bin/gcc&quot; -DCM=
+AKE_CXX_COMPILER=3D&quot;/usr/bin/g++&quot; =C2=A0-DCMAKE_C_COMPILER_LAUNCH=
+ER=3D&quot;&quot; -DCMAKE_CXX_COMPILER_LAUNCHER=3D&quot;&quot; =C2=A0-DCMAK=
+E_COLOR_MAKEFILE=3DOFF -DBUILD_DOC=3DOFF -DBUILD_DOCS=3DOFF -DBUILD_EXAMPLE=
+=3DOFF -DBUILD_EXAMPLES=3DOFF -DBUILD_TEST=3DOFF -DBUILD_TESTS=3DOFF -DBUIL=
+D_TESTING=3DOFF -DBUILD_SHARED_LIBS=3DON =C2=A0<font color=3D"#ff0000">-DFE=
+ATURE_clang=3DOFF</font> -DQT_BUILD_EXAMPLES=3DOFF -DQT_BUILD_TESTS=3DOFF -=
+DFEATURE_linguist=3DOFF )<br>-- The CXX compiler identification is GNU 11.4=
+.0<br>-- The C compiler identification is GNU 11.4.0<br>-- Detecting CXX co=
+mpiler ABI info<br>-- Detecting CXX compiler ABI info - done<br>-- Check fo=
+r working CXX compiler: /usr/bin/g++ - skipped<br>-- Detecting CXX compile =
+features<br>-- Detecting CXX compile features - done<br>-- Detecting C comp=
+iler ABI info<br>-- Detecting C compiler ABI info - done<br>-- Check for wo=
+rking C compiler: /usr/bin/gcc - skipped<br>-- Detecting C compile features=
+<br>-- Detecting C compile features - done<br>-- Looking for pthread.h<br>-=
+- Looking for pthread.h - found<br>-- Performing Test CMAKE_HAVE_LIBC_PTHRE=
+AD<br>-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success<br>-- Found Thre=
+ads: TRUE =C2=A0<br>-- Performing Test HAVE_STDATOMIC<br>-- Performing Test=
+ HAVE_STDATOMIC - Success<br>-- Found WrapAtomic: TRUE =C2=A0<br>-- Force s=
+etting build type to &#39;Release&#39;.<br>CMake Error at /usr/lib/llvm-14/=
+lib/cmake/clang/ClangTargets.cmake:750 (message):<br>=C2=A0 The imported ta=
+rget &quot;clangBasic&quot; references the file<br><br>=C2=A0 =C2=A0 =C2=A0=
+&quot;/usr/lib/llvm-14/lib/libclangBasic.a&quot;<br><br>=C2=A0 but this fil=
+e does not exist.=C2=A0 Possible reasons include:<br><br>=C2=A0 * The file =
+was deleted, renamed, or moved to another location.<br><br>=C2=A0 * An inst=
+all or uninstall procedure did not complete successfully.<br><br>=C2=A0 * T=
+he installation package was faulty and contained<br><br>=C2=A0 =C2=A0 =C2=
+=A0&quot;/usr/lib/llvm-14/lib/cmake/clang/ClangTargets.cmake&quot;<br><br>=
+=C2=A0 but not all the files it references.<br><br>Call Stack (most recent =
+call first):<br>=C2=A0 /usr/lib/cmake/clang-14/ClangConfig.cmake:19 (includ=
+e)<br>=C2=A0 cmake/FindWrapLibClang.cmake:17 (find_package)<br>=C2=A0 /home=
+/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1=
+/output/build/host-qt6base-6.7.3/cmake/QtFindPackageHelpers.cmake:156 (find=
+_package)<br>=C2=A0 configure.cmake:20 (qt_find_package)<br>=C2=A0 /home/ph=
+olden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/ou=
+tput/build/host-qt6base-6.7.3/cmake/QtFeature.cmake:678 (include)<br>=C2=A0=
+ src/CMakeLists.txt:18 (qt_feature_evaluate_features)<br><br><br>-- Configu=
+ring incomplete, errors occurred!<br>See also &quot;/home/pholden/Projects/=
+Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/build/host=
+-qt6tools-6.7.3/buildroot-build/CMakeFiles/CMakeOutput.log&quot;.<br>make[1=
+]: *** [package/<a href=3D"http://pkg-generic.mk:279" target=3D"_blank">pkg=
+-generic.mk:279</a>: /home/pholden/Projects/Edvotek01072025/edvotek-edvocyc=
+ler3/buildroot-2024.11-rc1/output/build/host-qt6tools-6.7.3/.stamp_configur=
+ed] Error 1<br>make: *** [Makefile:83: _all] Error 2<br></div></div></div><=
+br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Thu,=
+ Jan 16, 2025 at 8:00=E2=80=AFAM Roy Kollen Svendsen &lt;<a href=3D"mailto:=
+roykollensvendsen@gmail.com" target=3D"_blank">roykollensvendsen@gmail.com<=
+/a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0=
+px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><=
+div dir=3D"ltr"><div>Hi,</div><div><br></div><div>Since I&#39;m the root ca=
+use of the problem I sent you a patch here:<br></div><div><br></div><div><a=
+ href=3D"https://patchwork.ozlabs.org/project/buildroot/patch/2025011612553=
+7.531666-1-roykollensvendsen@gmail.com/" target=3D"_blank">https://patchwor=
+k.ozlabs.org/project/buildroot/patch/20250116125537.531666-1-roykollensvend=
+sen@gmail.com/</a></div><div><br></div><div>Please test if this fixes your =
+problem add you Tested-By etc.</div><div><br></div><div>Roy<br></div></div>=
+<br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">tor. 1=
+6. jan. 2025 kl. 13:17 skrev Roy Kollen Svendsen &lt;<a href=3D"mailto:royk=
+ollensvendsen@gmail.com" target=3D"_blank">roykollensvendsen@gmail.com</a>&=
+gt;:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px=
+ 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=3D=
+"ltr"><div><br></div><div>qttools require at least clang 17. So we should n=
+ot try to enable support unless suitable version is available.</div><div><b=
+r></div><div>So we should set -DFEATURE_clang=3DOFF</div><div><br></div><di=
+v>-Roy<br></div><br></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" c=
+lass=3D"gmail_attr">tor. 16. jan. 2025 kl. 11:23 skrev Roy Kollen Svendsen =
+&lt;<a href=3D"mailto:roykollensvendsen@gmail.com" target=3D"_blank">roykol=
+lensvendsen@gmail.com</a>&gt;:<br></div><blockquote class=3D"gmail_quote" s=
+tyle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pad=
+ding-left:1ex"><div dir=3D"ltr"><div>Hi Patricia,</div><div><br></div><div>=
+I&#39;ll take look at this as soon as I get a chance. Can you send me a min=
+imal config that recreate the problem?</div><div><br></div><div>Thanks in a=
+dvance,</div><div><br></div><div>Roy</div></div><br><div class=3D"gmail_quo=
+te"><div dir=3D"ltr" class=3D"gmail_attr">tir. 14. jan. 2025 kl. 20:16 skre=
+v Patricia Holden &lt;<a href=3D"mailto:pholden@nklabs.com" target=3D"_blan=
+k">pholden@nklabs.com</a>&gt;:<br></div><blockquote class=3D"gmail_quote" s=
+tyle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pad=
+ding-left:1ex"><div dir=3D"ltr">We are using Buildroot version &quot;2024.1=
+1-rc1.=C2=A0 We just turned on &quot;Host Utilities-&gt;host qt6 tools-&gt;=
+host linguistic tools&quot;.=C2=A0 I run make, get the error and output bel=
+ow.=C2=A0 Is there a fix for this?=C2=A0 Am I missing a dependency I need t=
+o install on my host PC?<div><br></div><div>Thanks!</div><div>Pat<br><div><=
+br></div><div>make BR2_EXTERNAL=3D../edvo_br host-qt6tools<br>&gt;&gt;&gt; =
+host-qt6tools 6.7.3 Configuring<br>(mkdir -p /home/pholden/Projects/Edvotek=
+01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/build/host-qt6too=
+ls-6.7.3//buildroot-build &amp;&amp; cd /home/pholden/Projects/Edvotek01072=
+025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/build/host-qt6tools-6.=
+7.3//buildroot-build &amp;&amp; rm -f CMakeCache.txt &amp;&amp; PATH=3D&quo=
+t;/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024=
+.11-rc1/output/host/bin:/home/pholden/Projects/Edvotek01072025/edvotek-edvo=
+cycler3/buildroot-2024.11-rc1/output/host/sbin:/home/pholden/.pyenv/shims:/=
+home/pholden/.pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/=
+sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin&quot; PKG_CONFIG=
+=3D&quot;/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildro=
+ot-2024.11-rc1/output/host/bin/pkg-config&quot; PKG_CONFIG_SYSROOT_DIR=3D&q=
+uot;/&quot; PKG_CONFIG_LIBDIR=3D&quot;/home/pholden/Projects/Edvotek0107202=
+5/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host/lib/pkgconfig:/home=
+/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1=
+/output/host/share/pkgconfig&quot; PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=3D1 PKG_C=
+ONFIG_ALLOW_SYSTEM_LIBS=3D1 =C2=A0/usr/bin/cmake /home/pholden/Projects/Edv=
+otek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/build/host-qt=
+6tools-6.7.3/ -G&quot;Ninja&quot; -DCMAKE_MAKE_PROGRAM=3D&quot;/home/pholde=
+n/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output=
+/host/bin/ninja&quot; -DCMAKE_INSTALL_SO_NO_EXE=3D0 -DCMAKE_FIND_ROOT_PATH=
+=3D&quot;/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildro=
+ot-2024.11-rc1/output/host&quot; -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=3D&quo=
+t;BOTH&quot; -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=3D&quot;BOTH&quot; -DCMAKE=
+_FIND_ROOT_PATH_MODE_INCLUDE=3D&quot;BOTH&quot; -DCMAKE_INSTALL_PREFIX=3D&q=
+uot;/home/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-20=
+24.11-rc1/output/host&quot; -DCMAKE_C_FLAGS=3D&quot;-O2 -I/home/pholden/Pro=
+jects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host=
+/include&quot; -DCMAKE_CXX_FLAGS=3D&quot;-O2 -I/home/pholden/Projects/Edvot=
+ek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host/include&qu=
+ot; -DCMAKE_EXE_LINKER_FLAGS=3D&quot;-L/home/pholden/Projects/Edvotek010720=
+25/edvotek-edvocycler3/buildroot-2024.11-rc1/output/host/lib -Wl,-rpath,/ho=
+me/pholden/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-r=
+c1/output/host/lib&quot; -DCMAKE_SHARED_LINKER_FLAGS=3D&quot;-L/home/pholde=
+n/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output=
+/host/lib -Wl,-rpath,/home/pholden/Projects/Edvotek01072025/edvotek-edvocyc=
+ler3/buildroot-2024.11-rc1/output/host/lib&quot; -DCMAKE_C_COMPILER=3D&quot=
+;/usr/bin/gcc&quot; -DCMAKE_CXX_COMPILER=3D&quot;/usr/bin/g++&quot; =C2=A0-=
+DCMAKE_C_COMPILER_LAUNCHER=3D&quot;&quot; -DCMAKE_CXX_COMPILER_LAUNCHER=3D&=
+quot;&quot; =C2=A0-DCMAKE_COLOR_MAKEFILE=3DOFF -DBUILD_DOC=3DOFF -DBUILD_DO=
+CS=3DOFF -DBUILD_EXAMPLE=3DOFF -DBUILD_EXAMPLES=3DOFF -DBUILD_TEST=3DOFF -D=
+BUILD_TESTS=3DOFF -DBUILD_TESTING=3DOFF -DBUILD_SHARED_LIBS=3DON =C2=A0-DQT=
+_BUILD_EXAMPLES=3DOFF -DQT_BUILD_TESTS=3DOFF -DFEATURE_linguist=3DON )<br>-=
+- The CXX compiler identification is GNU 11.4.0<br>-- The C compiler identi=
+fication is GNU 11.4.0<br>-- Detecting CXX compiler ABI info<br>-- Detectin=
+g CXX compiler ABI info - done<br>-- Check for working CXX compiler: /usr/b=
+in/g++ - skipped<br>-- Detecting CXX compile features<br>-- Detecting CXX c=
+ompile features - done<br>-- Detecting C compiler ABI info<br>-- Detecting =
+C compiler ABI info - done<br>-- Check for working C compiler: /usr/bin/gcc=
+ - skipped<br>-- Detecting C compile features<br>-- Detecting C compile fea=
+tures - done<br>-- Looking for pthread.h<br>-- Looking for pthread.h - foun=
+d<br>-- Performing Test CMAKE_HAVE_LIBC_PTHREAD<br>-- Performing Test CMAKE=
+_HAVE_LIBC_PTHREAD - Success<br>-- Found Threads: TRUE =C2=A0<br>-- Perform=
+ing Test HAVE_STDATOMIC<br>-- Performing Test HAVE_STDATOMIC - Success<br>-=
+- Found WrapAtomic: TRUE =C2=A0<br>-- Force setting build type to &#39;Rele=
+ase&#39;.<br>CMake Error at /usr/lib/llvm-14/lib/cmake/clang/ClangTargets.c=
+make:750 (message):<br>=C2=A0 The imported target &quot;clangBasic&quot; re=
+ferences the file<br><br>=C2=A0 =C2=A0 =C2=A0&quot;/usr/lib/llvm-14/lib/lib=
+clangBasic.a&quot;<br><br>=C2=A0 but this file does not exist.=C2=A0 Possib=
+le reasons include:<br><br>=C2=A0 * The file was deleted, renamed, or moved=
+ to another location.<br><br>=C2=A0 * An install or uninstall procedure did=
+ not complete successfully.<br><br>=C2=A0 * The installation package was fa=
+ulty and contained<br><br>=C2=A0 =C2=A0 =C2=A0&quot;/usr/lib/llvm-14/lib/cm=
+ake/clang/ClangTargets.cmake&quot;<br><br>=C2=A0 but not all the files it r=
+eferences.<br><br>Call Stack (most recent call first):<br>=C2=A0 /usr/lib/c=
+make/clang-14/ClangConfig.cmake:19 (include)<br>=C2=A0 cmake/FindWrapLibCla=
+ng.cmake:17 (find_package)<br>=C2=A0 /home/pholden/Projects/Edvotek01072025=
+/edvotek-edvocycler3/buildroot-2024.11-rc1/output/build/host-qt6base-6.7.3/=
+cmake/QtFindPackageHelpers.cmake:156 (find_package)<br>=C2=A0 configure.cma=
+ke:20 (qt_find_package)<br>=C2=A0 /home/pholden/Projects/Edvotek01072025/ed=
+votek-edvocycler3/buildroot-2024.11-rc1/output/build/host-qt6base-6.7.3/cma=
+ke/QtFeature.cmake:678 (include)<br>=C2=A0 src/CMakeLists.txt:18 (qt_featur=
+e_evaluate_features)<br><br><br>-- Configuring incomplete, errors occurred!=
+<br>See also &quot;/home/pholden/Projects/Edvotek01072025/edvotek-edvocycle=
+r3/buildroot-2024.11-rc1/output/build/host-qt6tools-6.7.3/buildroot-build/C=
+MakeFiles/CMakeOutput.log&quot;.<br>make[1]: *** [package/<a href=3D"http:/=
+/pkg-generic.mk:279" target=3D"_blank">pkg-generic.mk:279</a>: /home/pholde=
+n/Projects/Edvotek01072025/edvotek-edvocycler3/buildroot-2024.11-rc1/output=
+/build/host-qt6tools-6.7.3/.stamp_configured] Error 1<br>make: *** [Makefil=
+e:83: _all] Error 2<br></div></div></div>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div>
+</blockquote></div>
+</blockquote></div>
+</blockquote></div></div>
+</blockquote></div>
+</blockquote></div>
+</blockquote></div>
+
+--000000000000724748062be057b4--
+
+--===============5210541162698451677==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5210541162698451677==--
