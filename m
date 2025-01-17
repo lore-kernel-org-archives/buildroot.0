@@ -1,105 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32512C02185
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jan 2025 10:54:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80388C02188
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jan 2025 10:54:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE7FD40873;
-	Fri, 17 Jan 2025 10:54:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qxVqktaohCMj; Fri, 17 Jan 2025 10:54:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB00540890
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB00540890;
-	Fri, 17 Jan 2025 10:54:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0A80794B
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 10:54:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DA1A160872
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 10:54:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3DC3E607A9;
+	Fri, 17 Jan 2025 10:54:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z9Dp8zmvPOor for <buildroot@buildroot.org>;
- Fri, 17 Jan 2025 10:54:14 +0000 (UTC)
+ id NQRgFyJ-wx0V; Fri, 17 Jan 2025 10:54:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4627160B19
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4627160B19;
+	Fri, 17 Jan 2025 10:54:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A6077B89
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 10:54:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7AFA460872
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 10:54:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bTbt1fkbZKPj for <buildroot@buildroot.org>;
+ Fri, 17 Jan 2025 10:54:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12e; helo=mail-lf1-x12e.google.com;
+ client-ip=2a00:1450:4864:20::12a; helo=mail-lf1-x12a.google.com;
  envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D276A6FA6C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D276A6FA6C
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com
- [IPv6:2a00:1450:4864:20::12e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D276A6FA6C
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 10:54:13 +0000 (UTC)
-Received: by mail-lf1-x12e.google.com with SMTP id
- 2adb3069b0e04-5401c52000fso1968749e87.2
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 02:54:13 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5719B607D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5719B607D0
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
+ [IPv6:2a00:1450:4864:20::12a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5719B607D0
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 10:54:17 +0000 (UTC)
+Received: by mail-lf1-x12a.google.com with SMTP id
+ 2adb3069b0e04-53e3778bffdso2183982e87.0
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 02:54:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1737111252; x=1737716052;
+ d=1e100.net; s=20230601; t=1737111255; x=1737716055;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=wQKhb47wo+TlhDw2DVjCfnYB6u9hoXQoGintDG/89VM=;
- b=ge6hlnWYZ0pln6PVu8Ie7dWDloZNUPbAfCiRgoToxonljILehdYNbyT0sONnFRsibc
- CZ+52ALbL/ABvMxnNEgp/ndVHOEtMzroSuA6BiCFfRkEYezHR2JaXiGJBlmWDrH6U/z0
- 7g6Q7RawipHUxMcksCiEU4iCXmrgN7hNxaqoUz1ltygbybg2Se1Juo6B+Ns1SM1AXMFf
- f7+uHc5ec/wZ2HLGBG7ef4kAwUAptvVGrfMNg0XT4SYpI7/EBdEyWvB3eOLzKFW7UJC8
- +ggloUO3WjZ/e1dvK5jwdWfmCUn/h0w43J4EVxZbN1DROkYwXydSitNyU5z0aF+LI66e
- fMEw==
-X-Gm-Message-State: AOJu0YyO5olQ2T8ValrKJR4mpevmI0sL1omx4RdNtpaJ/AMGs/yEMAHb
- gUJXguKZW94gYNXNT0BAADrqICzAd4+vyxEkYKxiOk4u6qo/F/6/nHacxg==
-X-Gm-Gg: ASbGncuH0sRPx0ITDqF75nwxzlsucJH+r0o78YskOj8UaFZp/aWNcNABbM56g0RGsGi
- zLOAaMPzvWN45YAw3Bvg76T7aL27IgWQnDxfeGmZo0PCBCsBD5Bl2l6h+2tAQiG3+RJ91oxW46j
- eY77VWUwBjzvr4fWBUTYsCSNOmZyrt7klqUvzQk8pKTn/pt5l1oOAVhR87WXoEwGdOh/D4gL7zy
- zqWliBQKW//qaLhP7kjmt1Dp/azJwKUWo3obG//WGKhUFspIQSuEvxG6vx0WQLlghpM9eDt9EIZ
- FwI6iiUYJQE=
-X-Google-Smtp-Source: AGHT+IHUvzu6dwfkNucMy5uKp3gyzq5p+TPN/5M7TnVXdj7MI3DMzq767VArHvX6DeIfOCsXrjOYFw==
-X-Received: by 2002:ac2:5a4e:0:b0:540:1d0a:581e with SMTP id
- 2adb3069b0e04-5439c253dcbmr543748e87.28.1737111251457; 
- Fri, 17 Jan 2025 02:54:11 -0800 (PST)
+ bh=Gp+nUQcAPT6lIDrasKlZTkZsKr8/wou8W+TtZWLO2mE=;
+ b=l202SptUxOF1hUhuG0R+X6J7t1s14GIhEkhwaCI54b9KYJApS2S2BuiDTJcyZ1Msuv
+ EcEyaUXlymA7DfyOk3jSNmRaBFGEeZDAyep9h7cnOfYqiF3sfedwcNHFnFnV5FUlkAhe
+ WEtJDckrfgKVB075qow3X6YKWOnYQcCjbFAZId4ZmauJ24tVdoqFxvqBDR9dGIfkrXWN
+ QjKrgqhCzYrKMhyISCnkgLeU4YrHMwpRWhlHKMOGC1aNB+fJEtvEV0IYzic8YzKM1ZkF
+ WwkFj5aNDUB0HgfRgWd08YVBZQk7UnZqktiZ8ZxwayE0VOHsJxAj7fUyckiFxqujW00z
+ liMQ==
+X-Gm-Message-State: AOJu0YzyXyFmBqir4JbraKV+9v7MhT2TPqgjGYvo3LlqJbjPmZSavDqB
+ uv0fFj48GLc6+tppkKGCWbDCPOXyTkmZHGVd7Klo6LuVFfELIhNfZpSJvw==
+X-Gm-Gg: ASbGnct8INR7bbUD1Bsrjt6cloGpkaWPG10MeB94IaUE6k7vrvsw0fBKIvwLDv5t2mY
+ L7FGCB+XqUWv/CcWc1TA6hcMgmQHm83wpsZoJt5FvUEWa0qVhY+dCNIds8GbtOabUyIn9f03AdA
+ 3X8judJvYBd77wTc0tPl5GAIdpwCP+m30nDe/pAwpm7UCfmFmtlVDIUvTZWFzLA2uNK3zxYshtX
+ y483PPtz8AlSzyRSpJCEmzCbEF1CRzpMburBN1oiLOIiOP+HZKlUIRCkwkjGgv4wa0jsmx1nqx4
+ sBO94m310zU=
+X-Google-Smtp-Source: AGHT+IFPlqdJvO1yVPnYOnqTmAekZ64iopTWUGZX3eyDzMpjro/YKAvJwNrc5q92AszdmN3qiVon7Q==
+X-Received: by 2002:ac2:46ce:0:b0:542:2999:2f18 with SMTP id
+ 2adb3069b0e04-5439c22a84emr441516e87.8.1737111254869; 
+ Fri, 17 Jan 2025 02:54:14 -0800 (PST)
 Received: from precision7530-arch-roy.lan ([79.161.254.156])
  by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-5439af78d91sm307474e87.237.2025.01.17.02.54.09
+ 2adb3069b0e04-5439af78d91sm307474e87.237.2025.01.17.02.54.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Jan 2025 02:54:10 -0800 (PST)
+ Fri, 17 Jan 2025 02:54:13 -0800 (PST)
 From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
 Cc: Baxiche Su <baxiche@gmail.com>, Jesse Van Gavere <jesseevg@gmail.com>,
  Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Jan 2025 11:53:28 +0100
-Message-ID: <20250117105354.618220-5-roykollensvendsen@gmail.com>
+Date: Fri, 17 Jan 2025 11:53:29 +0100
+Message-ID: <20250117105354.618220-6-roykollensvendsen@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250117105354.618220-1-roykollensvendsen@gmail.com>
 References: <20250117105354.618220-1-roykollensvendsen@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1737111252; x=1737716052; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1737111255; x=1737716055; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=wQKhb47wo+TlhDw2DVjCfnYB6u9hoXQoGintDG/89VM=;
- b=WGi2qOEgxfPfi4UbxECDOnq1NSM9ZtUvkhaJGCwU2MOX9v8s1teZCZBMTDQMZygWNP
- RhAbmvJlhtkZNvocg/f3f7+hdyHfp7+MwNC2vjGOsOdUYmtApqMNx/9H/yC77ass58vg
- CpVy8Iz0OVBY7/mQYdSGvhLeyLJQukvx3rqwslMj2KxGwxYOK5hW9taR4x4BOhzWa20M
- 6a8N34w9fuZQZdE/RGbFA93V/zN+9wy8o/5DNhySFZvFc7PAKCHEx/Xz0adJJnDsTygx
- rYj/EkZuZLrt+agDy/1KC5Y6/jk4zSA/CO3oHHTMiJnw/mPLHgptb9TLgWmdb/QScTio
- 7yDA==
+ bh=Gp+nUQcAPT6lIDrasKlZTkZsKr8/wou8W+TtZWLO2mE=;
+ b=ndUkZXb/lHOv+igyFnMTV5sA7UeRs/qqI3slclHC5ibzhRKeXSmuvNAaTx8g+59baB
+ pDKd2Shg0Z/Fc6igRivUeRR/oQDLo5v1bkbREs7X53myyS0O/ZR7YREpuabD/71YW+2h
+ 0Kt7bW3ez+luSRVFHTsG5h4sx3Trt5MJYvGvpTEV5Hm9fpuzSmWE1VU1AjdX6btRtwv7
+ 24/6824EiXjtkE7OuoLqlkOSzSRxMM2Om41MjAVN+CqR2LLzdenPB17vLYgEEM4fsM9S
+ +esBLSBLueRfkpvW8j+pHtZ5P4JusNeYpzxCM89bNjStubKj6eOGdVncPE/fPnwdnfVx
+ 119g==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=WGi2qOEg
-Subject: [Buildroot] [PATCH 05/19] package/qt6/qt6multimedia: list only
- overall license
+ header.a=rsa-sha256 header.s=20230601 header.b=ndUkZXb/
+Subject: [Buildroot] [PATCH 06/19] package/qt6/qt6multimedia: set license
+ files unconditionally
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,51 +118,72 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 ---
- package/qt6/qt6multimedia/qt6multimedia.mk | 17 +----------------
- 1 file changed, 1 insertion(+), 16 deletions(-)
+ package/qt6/qt6multimedia/qt6multimedia.mk | 33 ++++++++++------------
+ 1 file changed, 15 insertions(+), 18 deletions(-)
 
 diff --git a/package/qt6/qt6multimedia/qt6multimedia.mk b/package/qt6/qt6multimedia/qt6multimedia.mk
-index af50612e1c..01bf9adf96 100644
+index 01bf9adf96..6aef78bf02 100644
 --- a/package/qt6/qt6multimedia/qt6multimedia.mk
 +++ b/package/qt6/qt6multimedia/qt6multimedia.mk
-@@ -10,13 +10,7 @@ QT6MULTIMEDIA_SOURCE = qtmultimedia-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6MULTIMEDIA
- QT6MULTIMEDIA_INSTALL_STAGING = YES
- QT6MULTIMEDIA_SUPPORTS_IN_SOURCE_BUILD = NO
- QT6MULTIMEDIA_CMAKE_BACKEND = ninja
--
--QT6MULTIMEDIA_LICENSE = \
--	BSD-3-Clause (buildsystem, examples, pfft,  snippets), \
--	GFDL-1.3-no-invariants (docs), \
--	GPL-3.0 (tests), \
--	GPL-3.0 with Qt-GPL-exception-1.0 (utils), \
--	LGPL-3.0 or GPL-2.0 or GPL-3.0 (modules, plugins)
-+QT6MULTIMEDIA_LICENSE = GPL-3.0, LGPL-3.0
+@@ -13,12 +13,26 @@ QT6MULTIMEDIA_CMAKE_BACKEND = ninja
+ QT6MULTIMEDIA_LICENSE = GPL-3.0, LGPL-3.0
  
  QT6MULTIMEDIA_LICENSE_FILES = \
++	LICENSES/BSD-2-Clause.txt \
  	LICENSES/BSD-3-Clause.txt \
-@@ -61,11 +55,6 @@ endif
++	LICENSES/BSD-Source-Code.txt \
++	LICENSES/BSL-1.0.txt \
+ 	LICENSES/GFDL-1.3-no-invariants-only.txt \
+ 	LICENSES/GPL-2.0-only.txt \
+ 	LICENSES/GPL-3.0-only.txt \
++	LICENSES/IJG.txt \
++	LICENSES/ISC.txt \
++	LICENSES/LGPL-2.1-or-later.txt \
+ 	LICENSES/LGPL-3.0-only.txt \
+-	LICENSES/Qt-GPL-exception-1.0.txt
++	LICENSES/MIT.txt \
++	LICENSES/MPL-2.0.txt \
++	LICENSES/Qt-GPL-exception-1.0.txt \
++	LICENSES/Zlib.txt \
++	src/3rdparty/eigen/COPYING.BSD \
++	src/3rdparty/eigen/COPYING.MPL2 \
++	src/3rdparty/eigen/COPYRIGHTS \
++	src/3rdparty/pffft/COPYRIGHTS \
++	src/3rdparty/pffft/LICENSE
+ 
+ QT6MULTIMEDIA_DEPENDENCIES = \
+ 	qt6base \
+@@ -55,16 +69,6 @@ endif
  ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_FFMPEG),y)
  QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_ffmpeg=ON
  QT6MULTIMEDIA_DEPENDENCIES += ffmpeg
--QT6MULTIMEDIA_LICENSE += , \
--	BSL-1.0 (ffmpeg-boost), \
--	IJG (ffmpeg-libjpeg), \
--	LGPL-2.1+ and BSD-3-Clause and BSD-2-Clause and BSD-Source-Code and ISC and MIT and MPL-2.0 (ffmpeg), \
--	Zlib (ffmpeg-zlib)
- QT6MULTIMEDIA_LICENSE_FILES += \
- 	LICENSES/BSD-2-Clause.txt \
- 	LICENSES/BSD-Source-Code.txt \
-@@ -108,10 +97,6 @@ endif
+-QT6MULTIMEDIA_LICENSE_FILES += \
+-	LICENSES/BSD-2-Clause.txt \
+-	LICENSES/BSD-Source-Code.txt \
+-	LICENSES/BSL-1.0.txt \
+-	LICENSES/IJG.txt \
+-	LICENSES/ISC.txt \
+-	LICENSES/LGPL-2.1-or-later.txt \
+-	LICENSES/MIT.txt \
+-	LICENSES/MPL-2.0.txt \
+-	LICENSES/Zlib.txt
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_GSTREAMER),y)
+@@ -97,13 +101,6 @@ endif
  
  ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_SPATIALAUDIO),y)
  QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_spatialaudio=ON
--QT6MULTIMEDIA_LICENSE += , \
--	Apache-2.0 (resonance-audio, eigen), \
--	LGPL-3.0 or GPL-3.0 (resonance-audio, spatialaudio, spatialaudioquick3d), \
--	MPL-2.0 and BSD-3-Clause (eigen)
- QT6MULTIMEDIA_LICENSE_FILES += \
- 	LICENSES/MPL-2.0.txt \
- 	src/3rdparty/eigen/COPYING.BSD \
+-QT6MULTIMEDIA_LICENSE_FILES += \
+-	LICENSES/MPL-2.0.txt \
+-	src/3rdparty/eigen/COPYING.BSD \
+-	src/3rdparty/eigen/COPYING.MPL2 \
+-	src/3rdparty/eigen/COPYRIGHTS \
+-	src/3rdparty/pffft/COPYRIGHTS \
+-	src/3rdparty/pffft/LICENSE
+ 
+ # for spatialaudio quick3d module
+ ifeq ($(BR2_PACKAGE_QT6QUICK3D),y)
 -- 
 2.47.1
 
