@@ -4,74 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47E3BC02185
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jan 2025 18:31:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7419EC02183
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jan 2025 18:32:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB56F83BC8;
-	Fri, 17 Jan 2025 18:31:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 008C980E78;
+	Fri, 17 Jan 2025 18:32:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fxiyXvDCYllp; Fri, 17 Jan 2025 18:31:15 +0000 (UTC)
+ id wKEzb-NArUfU; Fri, 17 Jan 2025 18:32:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 090B083BD8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6EDA80E8C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 090B083BD8;
-	Fri, 17 Jan 2025 18:31:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E2B994B
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 18:31:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6EDA80E8C;
+	Fri, 17 Jan 2025 18:32:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CFE6E94B
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 18:32:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F81983C0B
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 18:31:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B064C60605
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 18:32:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7O3E_g3xiFF6 for <buildroot@buildroot.org>;
- Fri, 17 Jan 2025 18:31:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1697083BC8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1697083BC8
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1697083BC8
- for <buildroot@buildroot.org>; Fri, 17 Jan 2025 18:31:11 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id E448AB0051E;
- Fri, 17 Jan 2025 19:31:07 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:58398])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 17 Jan 2025 19:31:07 +0100
-MIME-Version: 1.0
-Date: Fri, 17 Jan 2025 19:31:07 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QBK3uAnl3b2i for <buildroot@buildroot.org>;
+ Fri, 17 Jan 2025 18:32:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3C8D605E7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3C8D605E7
+ for <buildroot@buildroot.org>; Fri, 17 Jan 2025 18:32:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E676085C7A; Fri, 17 Jan 2025 18:32:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Akhilesh Nema <nemaakhilesh@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250109075957.758942-1-nemaakhilesh@gmail.com>
-References: <20250109075957.758942-1-nemaakhilesh@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <6b06bc423eee34020c8c29b9d1ee08da@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737138669;
- bh=ZfyYuf6OKvhubJdPdmKh2rjeiffVv37NqCHffJo9MDo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=CYleLyjOo/ssvD8pcjQdVxvVKsKp8zK9AF/N2NN6ohio9Xq3BALHr4HaUeR7a179A
- GcG/lyzvLhuv5rnnwpYCUTC0h8QbAoL2NXx0+pW0fBEciRd6mhni1o2x94tfKzNs1R
- hEKv3eIJLY+7/i7Y/RK5Tu0OMRxUbSk7eSDyZ+lq37eq748ZVTkcoutEAGClMWHR8u
- uVedmxcm/h7YaUoIXAdjz0aZxx+V1Gdm9X8rPFhM42AZRgxwNXqRSksmWblDqZJhKD
- avpFsCck83YXyR2t4B9TgzHcEYGkGrYMpC72hKWCNQbqthYRBk19UwqG0Ji3Basstv
- 7gXl5ep3biOIA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=CYleLyjO
-Subject: Re: [Buildroot] [PATCH 1/1] boot/uboot: bump to version 2025.01
+To: buildroot@buildroot.org
+Date: Fri, 17 Jan 2025 19:32:09 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6ff1a66e2085644ff4f5df50f75d3b4b63a62ef1
+X-Git-Newrev: d7c9c1127ac4ba7f6c93b17fa10d9552d3b2b897
+X-Patchwork-Hint: ignore
+Message-Id: <20250117183247.E676085C7A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/xilinx: remove Linux 2024.2 hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,21 +58,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 09/01/2025 08:59, Akhilesh Nema wrote:
-> Release announcement:
-> https://lists.denx.de/pipermail/u-boot/2025-January/576668.html
-> 
-> Changelog:
-> https://github.com/u-boot/u-boot/compare/v2024.10...v2025.01
-> 
-> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=d7c9c1127ac4ba7f6c93b17fa10d9552d3b2b897
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Now that all of the Xilinx boards have been bumped to Linux 6.6.60, the
+Linux 2024.2 (6.6.40) hash can be removed.
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ board/xilinx/patches/linux/linux.hash | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/board/xilinx/patches/linux/linux.hash b/board/xilinx/patches/linux/linux.hash
+index ce93e4016f..09e59ceeb9 100644
+--- a/board/xilinx/patches/linux/linux.hash
++++ b/board/xilinx/patches/linux/linux.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256  8ebbbe2d40597d9a5f36d47a1dfe4caffcef3d9f5ffa059ed4504bb761282593  xlnx_rebase_v6.6_LTS_2024.2.tar.gz
+ sha256  f59c7d260794d73ee519ba2579ef41aa8ac4985ac5af9461f94fa314969acd2e  xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
