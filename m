@@ -4,73 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DB94C02185
-	for <buildroot@archiver.kernel.org>; Sat, 18 Jan 2025 17:56:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDDDCC02185
+	for <buildroot@archiver.kernel.org>; Sat, 18 Jan 2025 18:33:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7785423FA;
-	Sat, 18 Jan 2025 17:56:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3219A408BF;
+	Sat, 18 Jan 2025 18:33:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fo5tf-Va9ucL; Sat, 18 Jan 2025 17:56:08 +0000 (UTC)
+ id pwNpYeblx29f; Sat, 18 Jan 2025 18:33:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7BBC424BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CDAC40726
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7BBC424BC;
-	Sat, 18 Jan 2025 17:56:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D5B4B89
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 17:56:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CDAC40726;
+	Sat, 18 Jan 2025 18:33:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7BC59B89
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 18:33:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F1D2D4244F
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 17:56:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5BB3B61081
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 18:33:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nynK0TAwqhfN for <buildroot@buildroot.org>;
- Sat, 18 Jan 2025 17:56:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8AC60423FA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AC60423FA
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8AC60423FA
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 17:56:03 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 2665913F8A2;
- Sat, 18 Jan 2025 18:56:00 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:41776])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 18 Jan 2025 18:56:00 +0100
-MIME-Version: 1.0
-Date: Sat, 18 Jan 2025 18:56:00 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sbFtyOTWp_1m for <buildroot@buildroot.org>;
+ Sat, 18 Jan 2025 18:33:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9A55607B6
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E9A55607B6
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 18:33:00 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E09A085DD2; Sat, 18 Jan 2025 18:33:00 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250118012320.2252811-1-james.hilliard1@gmail.com>
-References: <20250118012320.2252811-1-james.hilliard1@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <c0d0962bfefcaf6945d089b3870d8f29@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737222961;
- bh=1saohi1oPly/47aZOvYU6tzulwkW0cbr7iIzno95uKM=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=i1jrl/xbKtON8rCg8aq9dR+ADvdOb8sIlhcWpsj7l/4WaaEUto+9OclKBYOkzWPNA
- ioAuf1ClAJizEmke5CGAKXOaRbkL/xJvcK64HAmspWem27bd43pxkMTaz+HvMSxGVQ
- gy8/QiTj5MNHeqY0qcdB02yWUtui6lFZxM3Mj63rxykvTuCijcE9nVjuQ8tvnbG6/n
- 2KrFPKWlKBjZcg+MjD9CbcCy2I+zaB2+yyCfdpaRibX8+0Xsecsq0VQajGprAQ1fi3
- b5u4EwaftBUztpwgGAdcT/wC/xWekSGVvGEfQJHoVMjVob+n3hKCeLcZpEQAEgrJRj
- 2aCIF1RrqdGdg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=i1jrl/xb
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/fwupd: bump to version 2.0.3
+To: buildroot@buildroot.org
+Date: Sat, 18 Jan 2025 19:13:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 027c9ce67ca21409faed9f9add7222cb3e5ba4d4
+X-Git-Newrev: ea55aa2819c83dc384131b6ca44ffbf997726f2c
+X-Patchwork-Hint: ignore
+Message-Id: <20250118183300.E09A085DD2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xen: fix build for gcc 14 and
+ aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,104 +59,384 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============6397665642124075014=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi James,
+--===============6397665642124075014==
+Content-Type: text/plain
 
-Thanks for the updated patch.
+commit: https://git.buildroot.net/buildroot/commit/?id=ea55aa2819c83dc384131b6ca44ffbf997726f2c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It still generates build failures when running
-"utils/test-pkg -a -p fwupd".
+Backport two commits from upstream Xen to fix the build for AArch64
+with gcc 14.
 
-See:
-https://gitlab.com/jolivain/buildroot/-/pipelines/1630902005
+This repairs the tests.package.test_xen.TestXen runtime test
+introduced in [1], which uses an external AArch64 toolchain that has
+been upgraded to gcc 14 in [2].
 
-I was able to spot two sources for the failures:
+Fixes:
+    utils/docker-run support/testing/run-tests \
+        -d dl -o output_folder -s \
+        tests.package.test_xen
+    ...
+    checking for openpty et al... configure: error: in '/build/xen-4.14.6/tools':
+    configure: error: Unable to find library for openpty and login_tty
 
-The first seems related to uclibc:
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/055f82ebbd07b582c992eed30ef5191f18873ba4
+[2] https://gitlab.com/buildroot.org/buildroot/-/commit/e5a965a648adfc0bcd571fed04ee50b2ec3ebd29
 
-In file included from ../libfwupdplugin/fu-block-device.c:12:
-/buildroot/br-test-pkg/br-i386-pentium4-full/host/i686-buildroot-linux-uclibc/sysroot/usr/include/scsi/sg.h:38:3: 
-error: unknown type name 'size_t'
-    38 |   size_t iov_len;             /* Length in bytes  */
-       |   ^~~~~~
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+Cc: Alistair Francis <alistair@alistair23.me>
+[Julien:
+  - fix "make check-package" errors
+  - add info in the commit log
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...tools-drop-bogus-and-obsolete-ptyfuncs.m4.patch | 253 +++++++++++++++++++++
+ ...ust-__irq_to_desc-to-fix-build-with-gcc14.patch |  62 +++++
+ 2 files changed, 315 insertions(+)
 
-See for example:
-https://gitlab.com/jolivain/buildroot/-/jobs/8888799791
+diff --git a/package/xen/0005-tools-drop-bogus-and-obsolete-ptyfuncs.m4.patch b/package/xen/0005-tools-drop-bogus-and-obsolete-ptyfuncs.m4.patch
+new file mode 100644
+index 0000000000..ce13f454f3
+--- /dev/null
++++ b/package/xen/0005-tools-drop-bogus-and-obsolete-ptyfuncs.m4.patch
+@@ -0,0 +1,253 @@
++From 13a088627ae0c99f6c7c763ce0883dc804b54b66 Mon Sep 17 00:00:00 2001
++From: Olaf Hering <olaf@aepfle.de>
++Date: Fri, 12 May 2023 12:26:14 +0000
++Subject: [PATCH] tools: drop bogus and obsolete ptyfuncs.m4
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++According to openpty(3) it is required to include <pty.h> to get the
++prototypes for openpty() and login_tty(). But this is not what the
++function AX_CHECK_PTYFUNCS actually does. It makes no attempt to include
++the required header.
++
++The two source files which call openpty() and login_tty() already contain
++the conditionals to include the required header.
++
++Remove the bogus m4 file to fix build with clang, which complains about
++calls to undeclared functions.
++
++Remove usage of INCLUDE_LIBUTIL_H in libxl_bootloader.c, it is already
++covered by inclusion of libxl_osdep.h.
++
++Remove usage of PTYFUNCS_LIBS in libxl/Makefile, it is already covered
++by UTIL_LIBS from config/StdGNU.mk.
++
++Signed-off-by: Olaf Hering <olaf@aepfle.de>
++Reviewed-by: Anthony PERARD <anthony.perard@citrix.com>
++[Vincent: backported to 4.14.6]
++Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
++Upstream: https://xenbits.xen.org/gitweb/?p=xen.git;a=commitdiff;h=42abf5b9c53eb1b1a902002fcda68708234152c3
++---
++ config/Tools.mk.in             |  2 -
++ m4/ptyfuncs.m4                 | 35 -----------------
++ tools/config.h.in              |  3 --
++ tools/configure                | 68 ----------------------------------
++ tools/configure.ac             |  2 -
++ tools/libxl/Makefile           |  2 +-
++ tools/libxl/libxl_bootloader.c |  4 --
++ 7 files changed, 1 insertion(+), 115 deletions(-)
++ delete mode 100644 m4/ptyfuncs.m4
++
++diff --git a/config/Tools.mk.in b/config/Tools.mk.in
++index 23df47af8d..4971c3f526 100644
++--- a/config/Tools.mk.in
+++++ b/config/Tools.mk.in
++@@ -31,8 +31,6 @@ PTHREAD_CFLAGS      := @PTHREAD_CFLAGS@
++ PTHREAD_LDFLAGS     := @PTHREAD_LDFLAGS@
++ PTHREAD_LIBS        := @PTHREAD_LIBS@
++ 
++-PTYFUNCS_LIBS       := @PTYFUNCS_LIBS@
++-
++ LIBNL3_LIBS         := @LIBNL3_LIBS@
++ LIBNL3_CFLAGS       := @LIBNL3_CFLAGS@
++ XEN_TOOLS_RPATH     := @rpath@
++diff --git a/m4/ptyfuncs.m4 b/m4/ptyfuncs.m4
++deleted file mode 100644
++index 3e37b5a23c..0000000000
++--- a/m4/ptyfuncs.m4
+++++ /dev/null
++@@ -1,35 +0,0 @@
++-AC_DEFUN([AX_CHECK_PTYFUNCS], [
++-    dnl This is a workaround for a bug in Debian package
++-    dnl libbsd-dev-0.3.0-1. Once we no longer support that
++-    dnl package we can remove the addition of -Werror to
++-    dnl CPPFLAGS.
++-    AX_SAVEVAR_SAVE(CPPFLAGS)
++-    CPPFLAGS="$CPPFLAGS -Werror"
++-    AC_CHECK_HEADER([libutil.h],[
++-      AC_DEFINE([INCLUDE_LIBUTIL_H],[<libutil.h>],[libutil header file name])
++-    ])
++-    AX_SAVEVAR_RESTORE(CPPFLAGS)
++-    AC_CACHE_CHECK([for openpty et al], [ax_cv_ptyfuncs_libs], [
++-        for ax_cv_ptyfuncs_libs in -lutil "" NOT_FOUND; do
++-            if test "x$ax_cv_ptyfuncs_libs" = "xNOT_FOUND"; then
++-                AC_MSG_FAILURE([Unable to find library for openpty and login_tty])
++-            fi
++-            AX_SAVEVAR_SAVE(LIBS)
++-            LIBS="$LIBS $ax_cv_ptyfuncs_libs"
++-            AC_LINK_IFELSE([AC_LANG_SOURCE([
++-#ifdef INCLUDE_LIBUTIL_H
++-#include INCLUDE_LIBUTIL_H
++-#endif
++-int main(void) {
++-  openpty(0,0,0,0,0);
++-  login_tty(0);
++-}
++-])],[
++-                break
++-            ],[])
++-            AX_SAVEVAR_RESTORE(LIBS)
++-        done
++-    ])
++-    PTYFUNCS_LIBS="$ax_cv_ptyfuncs_libs"
++-    AC_SUBST(PTYFUNCS_LIBS)
++-])
++diff --git a/tools/config.h.in b/tools/config.h.in
++index 5abf6092de..6b9a479928 100644
++--- a/tools/config.h.in
+++++ b/tools/config.h.in
++@@ -87,9 +87,6 @@
++ /* Define extfs header to use */
++ #undef INCLUDE_EXTFS_H
++ 
++-/* libutil header file name */
++-#undef INCLUDE_LIBUTIL_H
++-
++ /* IPXE path */
++ #undef IPXE_PATH
++ 
++diff --git a/tools/configure b/tools/configure
++index cf937c9b7a..5102297210 100755
++--- a/tools/configure
+++++ b/tools/configure
++@@ -636,7 +636,6 @@ LIBNL3_LIBS
++ LIBNL3_CFLAGS
++ argp_ldflags
++ libiconv
++-PTYFUNCS_LIBS
++ PTHREAD_LIBS
++ PTHREAD_LDFLAGS
++ PTHREAD_CFLAGS
++@@ -3739,8 +3738,6 @@ esac
++ 
++ 
++ 
++-
++-
++ # Fetched from http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_compare_version.m4
++ # Commit ID: 27948f49ca30e4222bb7cdd55182bd7341ac50c5
++ # ===========================================================================
++@@ -8871,71 +8868,6 @@ $as_echo "$ax_cv_pthread_flags" >&6; }
++ 
++ 
++ 
++-
++-
++-    saved_CPPFLAGS="$CPPFLAGS"
++-
++-    CPPFLAGS="$CPPFLAGS -Werror"
++-    ac_fn_c_check_header_mongrel "$LINENO" "libutil.h" "ac_cv_header_libutil_h" "$ac_includes_default"
++-if test "x$ac_cv_header_libutil_h" = xyes; then :
++-
++-
++-$as_echo "#define INCLUDE_LIBUTIL_H <libutil.h>" >>confdefs.h
++-
++-
++-fi
++-
++-
++-
++-    CPPFLAGS="$saved_CPPFLAGS"
++-
++-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for openpty et al" >&5
++-$as_echo_n "checking for openpty et al... " >&6; }
++-if ${ax_cv_ptyfuncs_libs+:} false; then :
++-  $as_echo_n "(cached) " >&6
++-else
++-
++-        for ax_cv_ptyfuncs_libs in -lutil "" NOT_FOUND; do
++-            if test "x$ax_cv_ptyfuncs_libs" = "xNOT_FOUND"; then
++-                { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
++-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
++-as_fn_error $? "Unable to find library for openpty and login_tty
++-See \`config.log' for more details" "$LINENO" 5; }
++-            fi
++-
++-    saved_LIBS="$LIBS"
++-
++-            LIBS="$LIBS $ax_cv_ptyfuncs_libs"
++-            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++-/* end confdefs.h.  */
++-
++-#ifdef INCLUDE_LIBUTIL_H
++-#include INCLUDE_LIBUTIL_H
++-#endif
++-int main(void) {
++-  openpty(0,0,0,0,0);
++-  login_tty(0);
++-}
++-
++-_ACEOF
++-if ac_fn_c_try_link "$LINENO"; then :
++-
++-                break
++-
++-fi
++-rm -f core conftest.err conftest.$ac_objext \
++-    conftest$ac_exeext conftest.$ac_ext
++-
++-    LIBS="$saved_LIBS"
++-
++-        done
++-
++-fi
++-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_ptyfuncs_libs" >&5
++-$as_echo "$ax_cv_ptyfuncs_libs" >&6; }
++-    PTYFUNCS_LIBS="$ax_cv_ptyfuncs_libs"
++-
++-
++ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for yajl_alloc in -lyajl" >&5
++ $as_echo_n "checking for yajl_alloc in -lyajl... " >&6; }
++ if ${ac_cv_lib_yajl_yajl_alloc+:} false; then :
++diff --git a/tools/configure.ac b/tools/configure.ac
++index 1808cffafb..9e5cf3aae0 100644
++--- a/tools/configure.ac
+++++ b/tools/configure.ac
++@@ -67,7 +67,6 @@ m4_include([../m4/uuid.m4])
++ m4_include([../m4/pkg.m4])
++ m4_include([../m4/curses.m4])
++ m4_include([../m4/pthread.m4])
++-m4_include([../m4/ptyfuncs.m4])
++ m4_include([../m4/extfs.m4])
++ m4_include([../m4/fetcher.m4])
++ m4_include([../m4/ax_compare_version.m4])
++@@ -417,7 +416,6 @@ AC_SUBST(zlib)
++ AC_SUBST(system_aio)
++ AX_CHECK_EXTFS
++ AX_CHECK_PTHREAD
++-AX_CHECK_PTYFUNCS
++ AC_CHECK_LIB([yajl], [yajl_alloc], [],
++     [AC_MSG_ERROR([Could not find yajl])])
++ AC_CHECK_LIB([z], [deflateCopy], [], [AC_MSG_ERROR([Could not find zlib])])
++diff --git a/tools/libxl/Makefile b/tools/libxl/Makefile
++index 38cd43abae..0f09be1624 100644
++--- a/tools/libxl/Makefile
+++++ b/tools/libxl/Makefile
++@@ -20,7 +20,7 @@ LIBUUID_LIBS += -luuid
++ endif
++ 
++ LIBXL_LIBS =
++-LIBXL_LIBS = $(LDLIBS_libxentoollog) $(LDLIBS_libxenevtchn) $(LDLIBS_libxenctrl) $(LDLIBS_libxenguest) $(LDLIBS_libxenhypfs) $(LDLIBS_libxenstore) $(LDLIBS_libxentoolcore) $(PTYFUNCS_LIBS) $(LIBUUID_LIBS)
+++LIBXL_LIBS = $(LDLIBS_libxentoollog) $(LDLIBS_libxenevtchn) $(LDLIBS_libxenctrl) $(LDLIBS_libxenguest) $(LDLIBS_libxenhypfs) $(LDLIBS_libxenstore) $(LDLIBS_libxentoolcore) $(UTIL_LIBS) $(LIBUUID_LIBS)
++ ifeq ($(CONFIG_LIBNL),y)
++ LIBXL_LIBS += $(LIBNL3_LIBS)
++ endif
++diff --git a/tools/libxl/libxl_bootloader.c b/tools/libxl/libxl_bootloader.c
++index 18e9ebd714..1bc6e51827 100644
++--- a/tools/libxl/libxl_bootloader.c
+++++ b/tools/libxl/libxl_bootloader.c
++@@ -19,10 +19,6 @@
++ #include <utmp.h>
++ #endif
++ 
++-#ifdef INCLUDE_LIBUTIL_H
++-#include INCLUDE_LIBUTIL_H
++-#endif
++-
++ #include "libxl_internal.h"
++ 
++ #define BOOTLOADER_BUF_OUT 65536
++-- 
++2.45.2
++
+diff --git a/package/xen/0006-Arm64-adjust-__irq_to_desc-to-fix-build-with-gcc14.patch b/package/xen/0006-Arm64-adjust-__irq_to_desc-to-fix-build-with-gcc14.patch
+new file mode 100644
+index 0000000000..ea810ed3f8
+--- /dev/null
++++ b/package/xen/0006-Arm64-adjust-__irq_to_desc-to-fix-build-with-gcc14.patch
+@@ -0,0 +1,62 @@
++From a17dda1d2bf9c25b91f9e72625696cf26b32673a Mon Sep 17 00:00:00 2001
++From: Jan Beulich <jbeulich@suse.com>
++Date: Thu, 29 Aug 2024 10:03:53 +0200
++Subject: [PATCH] Arm64: adjust __irq_to_desc() to fix build with gcc14
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++With the original code I observe
++
++In function ‘__irq_to_desc’,
++    inlined from ‘route_irq_to_guest’ at arch/arm/irq.c:465:12:
++arch/arm/irq.c:54:16: error: array subscript -2 is below array bounds of ‘irq_desc_t[32]’ {aka ‘struct irq_desc[32]’} [-Werror=array-bounds=]
++   54 |         return &this_cpu(local_irq_desc)[irq];
++      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++which looks pretty bogus: How in the world does the compiler arrive at
++-2 when compiling route_irq_to_guest()? Yet independent of that the
++function's parameter wants to be of unsigned type anyway, as shown by
++a vast majority of callers (others use plain int when they really mean
++non-negative quantities). With that adjustment the code compiles fine
++again.
++
++Signed-off-by: Jan Beulich <jbeulich@suse.com>
++Acked-by: Michal Orzel <michal.orzel@amd.com>
++[Vincent: backported to 4.14.6]
++Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
++Upstream: https://xenbits.xen.org/gitweb/?p=xen.git;a=commitdiff;h=99f942f3d410059dc223ee0a908827e928ef3592
++---
++ xen/arch/arm/irq.c        | 2 +-
++ xen/include/asm-arm/irq.h | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/xen/arch/arm/irq.c b/xen/arch/arm/irq.c
++index 3877657a52..2862de00d9 100644
++--- a/xen/arch/arm/irq.c
+++++ b/xen/arch/arm/irq.c
++@@ -66,7 +66,7 @@ hw_irq_controller no_irq_type = {
++ static irq_desc_t irq_desc[NR_IRQS];
++ static DEFINE_PER_CPU(irq_desc_t[NR_LOCAL_IRQS], local_irq_desc);
++ 
++-irq_desc_t *__irq_to_desc(int irq)
+++irq_desc_t *__irq_to_desc(unsigned int irq)
++ {
++     if ( irq < NR_LOCAL_IRQS )
++         return &this_cpu(local_irq_desc)[irq];
++diff --git a/xen/include/asm-arm/irq.h b/xen/include/asm-arm/irq.h
++index e45d574598..33fbbadb34 100644
++--- a/xen/include/asm-arm/irq.h
+++++ b/xen/include/asm-arm/irq.h
++@@ -57,7 +57,7 @@ extern const unsigned int nr_irqs;
++ struct irq_desc;
++ struct irqaction;
++ 
++-struct irq_desc *__irq_to_desc(int irq);
+++struct irq_desc *__irq_to_desc(unsigned int irq);
++ 
++ #define irq_to_desc(irq)    __irq_to_desc(irq)
++ 
++-- 
++2.45.2
++
 
-So a package patch might be needed.
+--===============6397665642124075014==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-On 18/01/2025 02:23, James Hilliard wrote:
-[...]
-> diff --git a/package/fwupd/fwupd.mk b/package/fwupd/fwupd.mk
-> index 9283eb43aa..5dc11dd953 100644
-> --- a/package/fwupd/fwupd.mk
-> +++ b/package/fwupd/fwupd.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
-> 
-> -FWUPD_VERSION = 1.9.20
-> +FWUPD_VERSION = 2.0.3
->  FWUPD_SITE = 
-> https://github.com/fwupd/fwupd/releases/download/$(FWUPD_VERSION)
->  FWUPD_SOURCE = fwupd-$(FWUPD_VERSION).tar.xz
->  FWUPD_LICENSE = LGPL-2.1+
-> @@ -14,6 +14,7 @@ FWUPD_DEPENDENCIES = \
->  	host-python-jinja2 \
->  	libglib2 \
->  	libjcat \
-> +	libusb \
->  	libxmlb \
->  	zlib
-> 
-> @@ -24,34 +25,47 @@ FWUPD_CONF_OPTS = \
->  	-Ddocs=disabled \
->  	-Dlvfs=true \
->  	-Dman=false \
-> -	-Dgusb=disabled \
->  	-Dpassim=disabled \
->  	-Dp2p_policy=none \
->  	-Dcbor=disabled \
->  	-Dplugin_acpi_phat=enabled \
-> +	-Dplugin_android_boot=enabled \
-> +	-Dplugin_bcm57xx=enabled \
->  	-Dplugin_cfu=disabled \
-> +	-Dplugin_emmc=enabled \
->  	-Dplugin_ep963x=enabled \
->  	-Dplugin_fastboot=disabled \
-> +	-Dplugin_igsc=enabled \
-> +	-Dplugin_intel_me=enabled \
-> +	-Dplugin_kinetic_dp=enabled \
->  	-Dplugin_logitech_bulkcontroller=disabled \
->  	-Dplugin_logitech_scribe=disabled \
->  	-Dplugin_logitech_tap=disabled \
-> +	-Dplugin_mediatek_scaler=enabled \
-> +	-Dplugin_mtd=enabled \
-> +	-Dplugin_nitrokey=enabled \
-> +	-Dplugin_nvme=enabled \
-
-The second seems to be related to "-Dplugin_nvme=enabled" which needs
-"linux/nvme_ioctl.h". This header is available in Kernel >= 4.5.
-For the details, you can have a look at:
-https://patchwork.ozlabs.org/project/buildroot/patch/20250111113625.326385-1-ju.o@free.fr/
-
-See for example:
-https://gitlab.com/jolivain/buildroot/-/jobs/8888799802
-
-So this option might need the same logic as you did
-for -Dplugin_gpio.
-
-Could you have a look to those issues, please?
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6397665642124075014==--
