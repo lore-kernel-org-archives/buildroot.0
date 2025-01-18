@@ -4,75 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D62FC02185
-	for <buildroot@archiver.kernel.org>; Sat, 18 Jan 2025 20:41:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3AA9C02185
+	for <buildroot@archiver.kernel.org>; Sat, 18 Jan 2025 21:00:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB6BB6061E;
-	Sat, 18 Jan 2025 20:41:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5255F60680;
+	Sat, 18 Jan 2025 21:00:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1fGe-0sn4Imv; Sat, 18 Jan 2025 20:41:49 +0000 (UTC)
+ id Tco9OSXCerK4; Sat, 18 Jan 2025 21:00:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1AF46074A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60F29606E0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1AF46074A;
-	Sat, 18 Jan 2025 20:41:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C76E7B89
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:41:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 60F29606E0;
+	Sat, 18 Jan 2025 21:00:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B0463B89
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 21:00:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B9FD840F4B
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:41:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 919BC81007
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 21:00:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3wijDp9KVzbL for <buildroot@buildroot.org>;
- Sat, 18 Jan 2025 20:41:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uFX1jlhynpp7 for <buildroot@buildroot.org>;
+ Sat, 18 Jan 2025 21:00:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
  helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 590EE4109F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 590EE4109F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9392183F64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9392183F64
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 590EE4109F
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:41:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9392183F64
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 21:00:07 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 494F513F854;
- Sat, 18 Jan 2025 21:41:43 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:35358])
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id EFE8F13F88D;
+ Sat, 18 Jan 2025 22:00:04 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:54588])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 18 Jan 2025 21:41:43 +0100
+ with HTTP (HTTP/1.0 POST); Sat, 18 Jan 2025 22:00:04 +0100
 MIME-Version: 1.0
-Date: Sat, 18 Jan 2025 21:41:43 +0100
+Date: Sat, 18 Jan 2025 22:00:04 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
+To: yann.morin@orange.com
 Cc: buildroot@buildroot.org
-In-Reply-To: <20250118083434.2882430-1-bernd@kuhls.net>
-References: <20250118083434.2882430-1-bernd@kuhls.net>
+In-Reply-To: <4668d7a62590995bc5d3ac5f6f3de278aaec5b6c.1734938835.git.yann.morin@orange.com>
+References: <cover.1734938835.git.yann.morin@orange.com>
+ <4668d7a62590995bc5d3ac5f6f3de278aaec5b6c.1734938835.git.yann.morin@orange.com>
 User-Agent: Webmail Free/1.6.9
-Message-ID: <2329929fe5e15b1067a5ffc5f940068f@free.fr>
+Message-ID: <dde1d4df5c6f6a8f8a3fe127a85bf18f@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737232904;
- bh=QRKR3P0BFTIfIMOcaTaGGpVQRyza77gThM4pBfzICZk=;
+ d=free.fr; s=smtp-20201208; t=1737234006;
+ bh=FFuU5SsDILHcFnIWoiAOkfN5BLPo3cAtCfQcVlps8Sk=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=j+An5uvrtDvVzxdSwjcFkB9FibD959DxPVOnbDkZ5UA0/Sz5gOharpSqVa6vIGqI2
- X1Nlpb//wFziKKfrZpzZ6/s4zBBzhJYCj1nZ2igbz+My7UQNpBHPEEmhJart9AFAd5
- TyVX4wq39dbSCs6acocO1SpjZwRwtIVHGftDJUQTOQlz71Z4eq69t+nKXvhz97z1P4
- Y3V120V4N2CnKU21u51YhGXkUjeBJ9C/gAuVlVAvCqnW0j8l48vg8gRZh3hMcNX9SK
- cU+YpE8LCFBuTVJXmU8GMLcEtVmw6PuuvRk5kzjzB2ymgdY4ktx7QmBPsOQ36XfjOB
- lYrUnI3opgluA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=Md3VLE380+XbxWKhyF6oC3LXhv1SshV1E4z1612a0mmoKAxp89IeGwl1emiXu403N
+ 3BDysjErW97ks/poeVvgEPBHQq2uJIhXIWR2cdCiBDVwsBRfAXRUEXNcPn8Y3JMZNC
+ lnECvYPJSe8qILXph3dkxGOO4VrZWNorskP+QTDAb1BjImioz9zS2deXngPk2Nyu0s
+ R96ARbTo8QPMNQWj3vBfGIERccvCVQhaVwuiuaCghQYO9QmUZsmwbzh+dcuCy4yQm3
+ QNY+vo5MdpWK5vQBmroCUwgI93IcImC9IHyKwH6VY/GXKSvMFIBKLj2wu08X9jYiMb
+ X2q7CYazGy2Ng==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=j+An5uvr
-Subject: Re: [Buildroot] [PATCH 1/2] package/intel-mediadriver: bump version
- to 25.1.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Md3VLE38
+Subject: Re: [Buildroot] [PATCH 3/5] utils/get-developers: read patch from
+ stdin when it's not a tty
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,10 +89,80 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 18/01/2025 09:34, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Hi Yann,
 
-Series applied to master, thanks.
+On 23/12/2024 08:27, yann.morin@orange.com wrote:
+> From: "Yann E. MORIN" <yann.morin@orange.com>
+> 
+> It is very common that get-developers be used with its stdin a pipe 
+> from
+> git-show:
+>     git show |./utils-get-developers -
+> 
+> In this case, the '-' is superfluous: we can very easily deduce that 
+> the
+> user wants to read stdin as the patch.
+> 
+> So, if no other action was requested, and stdin is not a tty, use it as
+> the source of the patch, and thus '-' is then no longer required.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> 
+> ---
+> Changes v2 -> v2:
+>   - fix typoes in commit log
+> ---
+>  utils/get-developers | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/utils/get-developers b/utils/get-developers
+> index 8e5796beaf..b45e617bff 100755
+> --- a/utils/get-developers
+> +++ b/utils/get-developers
+> @@ -42,7 +42,9 @@ def __main__():
+>      if action > 1:
+>          parser.error("Cannot do more than one action")
+>      if action == 0:
+> -        parser.error("No action specified")
+> +        if sys.stdin.isatty():
+> +            parser.error("No action specified")
+> +        args.patches.append(sys.stdin)
+
+This patch introduces runtime test failures. See for example:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/8830671800
+
+When running the test on a tty, the test succeed. For example:
+
+     support/testing/run-tests \
+         -d dl -o output_folder \
+         tests.utils.test_get_developers
+     ...
+     OK
+
+But when running the test _without_ a tty, the test fails.
+This is the case in the Gitlab CI.
+For example:
+
+     support/testing/run-tests \
+         -d dl -o output_folder \
+         tests.utils.test_get_developers < /dev/null
+     ...
+     FAILED (failures=1)
+
+Maybe the runtime test needs to adjust depending stdin is a tty
+or not.
+
+Could you have a look please?
+
+> 
+>      devs = getdeveloperlib.parse_developers(args.filename)
+>      if devs is None:
+> --
+> 2.34.1
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
