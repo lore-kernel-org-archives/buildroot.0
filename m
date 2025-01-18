@@ -4,74 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3359CC02185
-	for <buildroot@archiver.kernel.org>; Sat, 18 Jan 2025 08:38:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DB0CC02187
+	for <buildroot@archiver.kernel.org>; Sat, 18 Jan 2025 08:38:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBEAD60773;
-	Sat, 18 Jan 2025 08:38:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A95E5704A7;
+	Sat, 18 Jan 2025 08:38:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TlxYV8iEjPBn; Sat, 18 Jan 2025 08:38:42 +0000 (UTC)
+ id ZOfsZfl7-29z; Sat, 18 Jan 2025 08:38:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFD60704BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E278C70527
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFD60704BA;
-	Sat, 18 Jan 2025 08:38:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4922FB89
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 08:38:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E278C70527;
+	Sat, 18 Jan 2025 08:38:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F5B8B89
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 08:38:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2A00541061
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 08:38:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EFF25410A1
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 08:38:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fp7RWe1Q8WwS for <buildroot@buildroot.org>;
- Sat, 18 Jan 2025 08:38:25 +0000 (UTC)
+ id 34kNTHU38PqO for <buildroot@buildroot.org>;
+ Sat, 18 Jan 2025 08:38:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1643340C47
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1643340C47
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6F3DB40D5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F3DB40D5B
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1643340C47
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 08:38:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6F3DB40D5B
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 08:38:37 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c706.dip0.t-ipconnect.de [79.214.199.6])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 2D8CDA4C465E
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 7CAF2A4C465F
  for <buildroot@buildroot.org>; Sat, 18 Jan 2025 09:36:40 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:56018)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1tZ4Jr-000000001aJ-2l4G
+ (envelope-from <bernd@kuhls.net>) id 1tZ4Jr-000000001aJ-3xbq
  for buildroot@buildroot.org; Sat, 18 Jan 2025 08:36:40 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 18 Jan 2025 09:36:35 +0100
-Message-Id: <20250118083638.2882800-10-bernd@kuhls.net>
+Date: Sat, 18 Jan 2025 09:36:36 +0100
+Message-Id: <20250118083638.2882800-11-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250118083638.2882800-1-bernd@kuhls.net>
 References: <20250118083638.2882800-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++++++
-X-Spam: Yes
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202412041019; t=1737189400;
- bh=l5lT7ttLolqrG1+MCz/WKOkMFXvHO6ebF8Y+1m13PbU=;
+ bh=CFrBIhSe0N7Qi0BmJqDDYP1lgDap73PNxt4i+DlIWQE=;
  h=From:To:Subject:Date:In-Reply-To:References:From;
- b=G/YavA2058YjpLAEooxIhMSibDCQia/erH6Ep+YXofs+FqVTirckGXDsrsJX9vsiu
- e7bPK2fQ9QgyBUjMCqL5ayhTxvueY1FDWvWxcNJS42hf1fGG5g3TIuCbxL46tGYoTQ
- HYf7ktMui3BxLSy3xtKrHSXZoD1GkF3DdMt6d60svHxy+d/qZTJRHhW9LC6KDIQulV
- kKYvkQTtcm5es4eH0CmI7iONMqywr7pTIAENlhjCsaIyWUxovcjT8PFDgVIcnuEWRj
- N1xx0ZSluebCUZDOhyyhdLZM+YvQFziEMFkUJEF21vAYN77PSpC40F2L0LVsuhXSpO
- cph6xrGzekmfg==
+ b=m6md5Q0D4FyH79zbR4VDIoLfjmu6+0sq1ri2yWlXtPJnuJ58sOdVc7gkyddQV63LA
+ R8BtIjUZxSTit/gIGM5M/HCyfHtxZdFR0le2oVW4XZDQB8zWEjRigZ3wYV0uCdgPfv
+ tYLzNFNezO2S+EPwOJl9GTAPQ3Oeye2Tuhcg5GxzQYVB+98aKmUcGT1a5bPZi5oYiQ
+ 8fE4OIhoBJ9h/A7auP554fiaxjjXzvnXr8I0JMsAz2pkfhcI/E9JbUqGGnaMe4X4hc
+ XyT7vjvlvfgVn8J5Hy8b2MLaqtm125GxLiCGzA5Vh9RSFIt2eVuoYjUaYyoFoDdqoT
+ 5uEAec2d2GmHw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202412041019 header.b=G/YavA20
-Subject: [Buildroot] [PATCH 10/13] package/kodi-screensaver-*: mass version
- bump to 21.0.2-Omega
+ header.a=rsa-sha256 header.s=kas202412041019 header.b=m6md5Q0D
+Subject: [Buildroot] [PATCH 11/13] package/kodi-vfs-*: mass version bump to
+ 21.0.2-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,224 +89,82 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash  | 2 +-
- .../kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk    | 2 +-
- .../kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash  | 2 +-
- .../kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk    | 2 +-
- .../kodi-screensaver-biogenesis.hash                            | 2 +-
- .../kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk  | 2 +-
- package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash  | 2 +-
- package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk    | 2 +-
- .../kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash  | 2 +-
- .../kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk    | 2 +-
- .../kodi-screensaver-matrixtrails.hash                          | 2 +-
- .../kodi-screensaver-matrixtrails.mk                            | 2 +-
- .../kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash    | 2 +-
- package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk  | 2 +-
- package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash        | 2 +-
- package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk          | 2 +-
- package/kodi-screensaver-stars/kodi-screensaver-stars.hash      | 2 +-
- package/kodi-screensaver-stars/kodi-screensaver-stars.mk        | 2 +-
- 18 files changed, 18 insertions(+), 18 deletions(-)
+ package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash | 2 +-
+ package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk   | 2 +-
+ package/kodi-vfs-rar/kodi-vfs-rar.hash               | 2 +-
+ package/kodi-vfs-rar/kodi-vfs-rar.mk                 | 2 +-
+ package/kodi-vfs-sftp/kodi-vfs-sftp.hash             | 2 +-
+ package/kodi-vfs-sftp/kodi-vfs-sftp.mk               | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-index 21e1617412..0210157d2a 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
+index 729a569f9a..e65ba18fa5 100644
+--- a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
++++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  41c20f2fec17b60a3baa98edff80ba01053a80ada0ffd056459c2f4ae6588867  kodi-screensaver-asteroids-9cdcb84a4464fee5ae4b6ab3b300e6a3824ec084.tar.gz
-+sha256  468527220845a411af4dd021a907c6449327015fb848e61adfb46b47edde331a  kodi-screensaver-asteroids-21.0.2-Omega.tar.gz
+-sha256  23515c84f4a0cceaf845c1d6c0c39947a28be2d515cff995b384b29e93b11831  kodi-vfs-libarchive-0333aa5e189221e76282eeefb3f573e27b187551.tar.gz
++sha256  aab35cb6b03191609a7e97df02f2f102659c12e414f7b95595f9bb2047554daf  kodi-vfs-libarchive-21.0.2-Omega.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-index 53c71f73d2..878ab22c3b 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
+index 257a0d04f6..ee1ca59b52 100644
+--- a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
++++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_ASTEROIDS_VERSION = 9cdcb84a4464fee5ae4b6ab3b300e6a3824ec084
-+KODI_SCREENSAVER_ASTEROIDS_VERSION = 21.0.2-Omega
- KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,xbmc,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
- KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
-index 2825a7be83..c63d3be3e8 100644
---- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
-+++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
-@@ -1,3 +1,3 @@
+-KODI_VFS_LIBARCHIVE_VERSION = 0333aa5e189221e76282eeefb3f573e27b187551
++KODI_VFS_LIBARCHIVE_VERSION = 21.0.2-Omega
+ KODI_VFS_LIBARCHIVE_SITE = $(call github,xbmc,vfs.libarchive,$(KODI_VFS_LIBARCHIVE_VERSION))
+ KODI_VFS_LIBARCHIVE_LICENSE = GPL-2.0+
+ KODI_VFS_LIBARCHIVE_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.hash b/package/kodi-vfs-rar/kodi-vfs-rar.hash
+index e368515a5a..c69e57758f 100644
+--- a/package/kodi-vfs-rar/kodi-vfs-rar.hash
++++ b/package/kodi-vfs-rar/kodi-vfs-rar.hash
+@@ -1,5 +1,5 @@
  # Locally computed
--sha256  4cb21eed4a679bbebcc0ed4c4ec3f510f4a9319327eba8d896dd8944bb5ff0f8  kodi-screensaver-asterwave-701111a81875688f016ce62b25670608a7fcd2d2.tar.gz
-+sha256  de92f8773f23c77f388201d316273f1a06103965bdb9684cbda19a73180c1488  kodi-screensaver-asterwave-21.0.2-Omega.tar.gz
+-sha256  c1da0e8aafa5419ae414857893a59c22109138ad7245071e0678b26f401a7be1  kodi-vfs-rar-2f49a0de43bc9f4e91dfec73a13dcb04df285233.tar.gz
++sha256  7492cf73d52299218acc982c4b35b020ea801d36d47e40460341f4dde712de50  kodi-vfs-rar-21.0.2-Omega.tar.gz
+ # License files
+ sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  lib/UnrarXLib/license.txt
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
-index d2fffab74d..90507bf8b0 100644
---- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
-+++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
+diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.mk b/package/kodi-vfs-rar/kodi-vfs-rar.mk
+index 8dfd205c27..7cffe1274a 100644
+--- a/package/kodi-vfs-rar/kodi-vfs-rar.mk
++++ b/package/kodi-vfs-rar/kodi-vfs-rar.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_ASTERWAVE_VERSION = 701111a81875688f016ce62b25670608a7fcd2d2
-+KODI_SCREENSAVER_ASTERWAVE_VERSION = 21.0.2-Omega
- KODI_SCREENSAVER_ASTERWAVE_SITE = $(call github,xbmc,screensaver.asterwave,$(KODI_SCREENSAVER_ASTERWAVE_VERSION))
- KODI_SCREENSAVER_ASTERWAVE_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_ASTERWAVE_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-index a62070430d..865f31b201 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+-KODI_VFS_RAR_VERSION = 2f49a0de43bc9f4e91dfec73a13dcb04df285233
++KODI_VFS_RAR_VERSION = 21.0.2-Omega
+ KODI_VFS_RAR_SITE = $(call github,xbmc,vfs.rar,$(KODI_VFS_RAR_VERSION))
+ KODI_VFS_RAR_LICENSE = unrar, GPL-2.0+
+ KODI_VFS_RAR_LICENSE_FILES = lib/UnrarXLib/license.txt LICENSE.md
+diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
+index 12ddbae63d..3a59241d7b 100644
+--- a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
++++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  92491cbcb1abaa8ab2cf113a0eb4d0ad588f59c062c91e8e06b035c6eb0ea84f  kodi-screensaver-biogenesis-953947d07fdf69967e2dc64b289631c57c79e800.tar.gz
-+sha256  fdd5a5abf98318e01e22c88f81ae3838b2f3b76f99b39e01fc94af528a200849  kodi-screensaver-biogenesis-21.0.2-Omega.tar.gz
+-sha256  2197096f7081d140efb573e1afcee257e55bd0312e48c25e787bf10879e6bc92  kodi-vfs-sftp-9fe870e71a10a37f2d793b2261bac48b195f2705.tar.gz
++sha256  01a23958331cb0cd78fd2e9367d1269d4319c20b84db5b132632f9c1acd5f3c5  kodi-vfs-sftp-21.0.2-Omega.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-index bb40c7eb65..4455caedda 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
+diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
+index e3298465fe..18ea2bc099 100644
+--- a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
++++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_BIOGENESIS_VERSION = 953947d07fdf69967e2dc64b289631c57c79e800
-+KODI_SCREENSAVER_BIOGENESIS_VERSION = 21.0.2-Omega
- KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,xbmc,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
- KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-index 0d653a272c..bb6918a03b 100644
---- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-+++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  84213263bad9d5dbaadc704b28d79f4bd2603287f05f0264563cf560f23f5309  kodi-screensaver-cpblobs-cd96c71c22940014d5c79c58af99b60e0b418f71.tar.gz
-+sha256  f56b57dfc8535331e36527462bd820e06e287a5a48ffdb33d00bdf1a2dc62b90  kodi-screensaver-cpblobs-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-index 9e010ec774..8154bda2e1 100644
---- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-+++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_CPBLOBS_VERSION = cd96c71c22940014d5c79c58af99b60e0b418f71
-+KODI_SCREENSAVER_CPBLOBS_VERSION = 21.0.2-Omega
- KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,xbmc,screensaver.cpblobs,$(KODI_SCREENSAVER_CPBLOBS_VERSION))
- KODI_SCREENSAVER_CPBLOBS_LICENSE = GPL-2.0
- KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
-index a1678be4c9..df652f3286 100644
---- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
-+++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  0974661ce4725e685222cce04b9f43d24b4161f8af9400b6e739549368a0e1eb  kodi-screensaver-greynetic-2955c4105ea1223e9901dbc804812bdb3c0412a7.tar.gz
-+sha256  9ed9dba2040268bfd82648856b3e07da5cf51f39909c71c2579475221477e3a6  kodi-screensaver-greynetic-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
-index 4789cdfcd7..e484305485 100644
---- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
-+++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_GREYNETIC_VERSION = 2955c4105ea1223e9901dbc804812bdb3c0412a7
-+KODI_SCREENSAVER_GREYNETIC_VERSION = 21.0.2-Omega
- KODI_SCREENSAVER_GREYNETIC_SITE = $(call github,xbmc,screensaver.greynetic,$(KODI_SCREENSAVER_GREYNETIC_VERSION))
- KODI_SCREENSAVER_GREYNETIC_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_GREYNETIC_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-index 8bc932579f..27bba5d3ba 100644
---- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-+++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6016fc31cdb489417cf3c39d13403d5d8ff332e5b3aef5bf8916e70c61d479c4  kodi-screensaver-matrixtrails-364b7275fb02edf9a5c03bd56c8010431711b249.tar.gz
-+sha256  cc342d201606e682fc9def894a308784b74633f981209570c87d1bd206894311  kodi-screensaver-matrixtrails-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-index a00bcf85df..ab51a5bc2b 100644
---- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-+++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 364b7275fb02edf9a5c03bd56c8010431711b249
-+KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 21.0.2-Omega
- KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
- KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-index cd3a0315dd..867ebf865a 100644
---- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  861a752aa5090817670c378cc4be05e06f27b60f3c9e30503facc28cea45312d  kodi-screensaver-pingpong-a0b8b956002ddc64eb6d433e3230fa09619f2aef.tar.gz
-+sha256  4d7c15a0070e4792b4b56726d9a37ab6ca8c569186e0beebd256a57203d5e362  kodi-screensaver-pingpong-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-index 9b90da2912..5d1854b9a2 100644
---- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_PINGPONG_VERSION = a0b8b956002ddc64eb6d433e3230fa09619f2aef
-+KODI_SCREENSAVER_PINGPONG_VERSION = 21.0.2-Omega
- KODI_SCREENSAVER_PINGPONG_SITE = $(call github,xbmc,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
- KODI_SCREENSAVER_PINGPONG_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
-index 4a8d00de28..23d1e1b1f3 100644
---- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
-+++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  bea100644c2e29f645f379cc51f58b5b87b745cf51d2863649a16869d514e60d  kodi-screensaver-pyro-b0d14d3f8cfe7d0c71ce8df8a6b8d6f121b42908.tar.gz
-+sha256  4a6b5d7efd789be40226ffe337bac8f64c47335c40085d940d624d42cdaa1be0  kodi-screensaver-pyro-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-index b82d2e0f32..72bbf2e913 100644
---- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-+++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_PYRO_VERSION = b0d14d3f8cfe7d0c71ce8df8a6b8d6f121b42908
-+KODI_SCREENSAVER_PYRO_VERSION = 21.0.2-Omega
- KODI_SCREENSAVER_PYRO_SITE = $(call github,xbmc,screensaver.pyro,$(KODI_SCREENSAVER_PYRO_VERSION))
- KODI_SCREENSAVER_PYRO_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_PYRO_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
-index e4bedbfc3f..6f9ca93d8d 100644
---- a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
-+++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  84d63373984f83e04bb8990a00a5b57a95ddd595f6a2b5fdf56bbd424cd546c8  kodi-screensaver-stars-e31111555b41692fd373719a9ba74aba3e7f4790.tar.gz
-+sha256  86a479a4c6d0b27723a701330b83704f223566eabe7a25302ecf8f0a66e5b27e  kodi-screensaver-stars-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-index c9aef4dc79..cff60ae5db 100644
---- a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-+++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_STARS_VERSION = e31111555b41692fd373719a9ba74aba3e7f4790
-+KODI_SCREENSAVER_STARS_VERSION = 21.0.2-Omega
- KODI_SCREENSAVER_STARS_SITE = $(call github,xbmc,screensaver.stars,$(KODI_SCREENSAVER_STARS_VERSION))
- KODI_SCREENSAVER_STARS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_STARS_LICENSE_FILES = LICENSE.md
+-KODI_VFS_SFTP_VERSION = 9fe870e71a10a37f2d793b2261bac48b195f2705
++KODI_VFS_SFTP_VERSION = 21.0.2-Omega
+ KODI_VFS_SFTP_SITE = $(call github,xbmc,vfs.sftp,$(KODI_VFS_SFTP_VERSION))
+ KODI_VFS_SFTP_LICENSE = GPL-2.0+
+ KODI_VFS_SFTP_LICENSE_FILES = LICENSE.md
 -- 
 2.39.5
 
