@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4866DC02187
-	for <buildroot@archiver.kernel.org>; Sat, 18 Jan 2025 20:04:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90929C02185
+	for <buildroot@archiver.kernel.org>; Sat, 18 Jan 2025 20:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 092954252C;
-	Sat, 18 Jan 2025 20:04:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53FAD60793;
+	Sat, 18 Jan 2025 20:06:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4iZak5owSn6x; Sat, 18 Jan 2025 20:06:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FE60607A8
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FE60607A8;
+	Sat, 18 Jan 2025 20:06:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E31D069
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:06:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C17C14252C
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:06:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lh4kUZIPYmMJ; Sat, 18 Jan 2025 20:04:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0B7E4252E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E0B7E4252E;
-	Sat, 18 Jan 2025 20:04:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1E85F69
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:04:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0C1D5848D8
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:04:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c8elYlclPbzf for <buildroot@buildroot.org>;
- Sat, 18 Jan 2025 20:04:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 29B7C848C3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29B7C848C3
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 29B7C848C3
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:04:47 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 42C8D60128;
- Sat, 18 Jan 2025 21:04:43 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:60034])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 18 Jan 2025 21:04:43 +0100
-MIME-Version: 1.0
-Date: Sat, 18 Jan 2025 21:04:43 +0100
+ id 2CT0bJBF27wQ for <buildroot@buildroot.org>;
+ Sat, 18 Jan 2025 20:06:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA415417C2
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AA415417C2
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:06:11 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3128A85E6B; Sat, 18 Jan 2025 20:06:11 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250118131911.1954770-1-thomas@devoogdt.com>
-References: <20250118131911.1954770-1-thomas@devoogdt.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <fb3ecc8b52ab4851d628503bec093f3c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737230684;
- bh=wjVozBPwFAs6HMLOXyY7j/v/IoankCJ/Ki0b0jipQFw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=hMS1z5wTBADapSxeBXkWCdS2vicARBxkCCg79I7W4E08EhOCQPSI8yaT7Skk8BJoC
- uwtTSCu1gyCvaa+mQYQMgKp1dzdKzf+klK65z2xqm4BczUkX6L9gHV44gOq0SnSOtg
- plgsAfudjkPw/zoWZmoEgDiG4eMhNDpPW+NQ2l3p+UWKTSI4rRVuQ/iVblXO/unFf8
- TkatwT8Sc746RC7zyGOPMYqwJ50WAgwh862/V+x9Ar5gbHegJMezeYX0Iu7RFrDn2Y
- eBHQVI98hfIv3OxyTz4IIRkMgQbj+UcvhbiulgMPbdshQxAqLPULzOPB/BTaPYBKeo
- sshmynLveakew==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=hMS1z5wT
-Subject: Re: [Buildroot] [PATCH 1/2] package/lighttpd: bump to 1.4.77
+To: buildroot@buildroot.org
+Date: Sat, 18 Jan 2025 21:05:34 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f7bb2765dc6dfd5df296499b1ffd574a932b6755
+X-Git-Newrev: 26a328f8ef178dab746b6cd766140661a5ee4c5d
+X-Patchwork-Hint: ignore
+Message-Id: <20250118200611.3128A85E6B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php: bump version to 8.3.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,18 +58,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 18/01/2025 14:19, Thomas Devoogdt wrote:
-> News:
-> - https://www.lighttpd.net/2025/1/10/1.4.77/
-> 
-> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=26a328f8ef178dab746b6cd766140661a5ee4c5d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_3
+Release notes: https://news-web.php.net/php.announce/450
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 535761f047..a27e934474 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  3df5d45637283f759eef8fc3ce03de829ded3e200c3da278936a684955d2f94f  php-8.3.15.tar.xz
++sha256  40d3b4e6cac33d3bcefe096d75a28d4fb4e3a9615eb20a4de55ba139fbfacdd5  php-8.3.16.tar.xz
+ 
+ # License file
+ sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index ebdd5c2a5a..c127473799 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 8.3.15
++PHP_VERSION = 8.3.16
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
