@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57552C282C1
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C75BFC282D0
 	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:00:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3087642D35;
-	Fri, 28 Feb 2025 17:00:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A88785086;
+	Fri, 28 Feb 2025 17:00:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bfA5KsM7js82; Fri, 28 Feb 2025 17:00:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9C1wRgRhkrKR; Fri, 28 Feb 2025 17:00:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC69C50421
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6091685088
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC69C50421;
-	Fri, 28 Feb 2025 17:00:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6091685088;
+	Fri, 28 Feb 2025 17:00:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 05E7C68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:39:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 07D4C1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:39:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 23011424DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 45453424E0
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6PQcq1leyUuT for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:58 +0000 (UTC)
+ id X5JyojklhP1e for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABB43424E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B71042642
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ABB43424E0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B71042642
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A794B85EF6; Fri, 28 Feb 2025 16:30:14 +0000 (UTC)
+ id 0775583B5A; Fri, 28 Feb 2025 16:30:14 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 18 Jan 2025 21:25:20 +0100
+Date: Sat, 18 Jan 2025 20:23:49 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 156bfd29fc8149cec6aeb7c6e1895fe080840c23
-X-Git-Newrev: ae0cb9abe097bbc83c221a053a817408fbb3315d
+X-Git-Oldrev: 8867b238efa66f602301667ce98a847bbe564da6
+X-Git-Newrev: ef1f9fa20e3886f61b88f88c4a13e162fe8ad1a8
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163014.A794B85EF6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/intel-vpl-gpu-rt: bump
- version to 25.1.0
+Message-Id: <20250228163014.0775583B5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lsof: bump to version
+ 4.99.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,38 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae0cb9abe097bbc83c221a053a817408fbb3315d
+commit: https://git.buildroot.net/buildroot/commit/?id=ef1f9fa20e3886f61b88f88c4a13e162fe8ad1a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Release notes:
+https://github.com/lsof-org/lsof/releases/tag/4.99.4
+
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash | 2 +-
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk   | 2 +-
+ package/lsof/lsof.hash | 2 +-
+ package/lsof/lsof.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-index 0f62867991..f75307a552 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
+diff --git a/package/lsof/lsof.hash b/package/lsof/lsof.hash
+index 90d8aede92..e8e2aac1cd 100644
+--- a/package/lsof/lsof.hash
++++ b/package/lsof/lsof.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  2ee3517e4015ab333230a6ef921159164c1dc912dcae412d2901308c53a53ab8  intel-vpl-gpu-rt-24.4.4.tar.gz
-+sha256  f2f2fba823c885cdd847af646e5639d657e411e0afeff4667b73eb6e524b0dc4  intel-vpl-gpu-rt-25.1.0.tar.gz
- sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-index 5848efc131..94c81679c8 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+ # Locally calculated
+-sha256  b9c56468b927d9691ab168c0b1e9f8f1f835694a35ff898c549d383bd8d09bd4  lsof-4.99.3.tar.gz
++sha256  90d02ae35cd14341bfb04ce80e0030767476b0fc414a0acb115d49e79b13d56c  lsof-4.99.4.tar.gz
+ sha256  225222ff9bf38abc2cef7205e9b05c60935efa9ec28d1fd01e503c9316088718  COPYING
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index cb4e987bd5..fb2309ae7b 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_VPL_GPU_RT_VERSION = 24.4.4
-+INTEL_VPL_GPU_RT_VERSION = 25.1.0
- INTEL_VPL_GPU_RT_SITE = $(call github,intel,vpl-gpu-rt,intel-onevpl-$(INTEL_VPL_GPU_RT_VERSION))
- INTEL_VPL_GPU_RT_LICENSE = MIT
- INTEL_VPL_GPU_RT_LICENSE_FILES = LICENSE
+-LSOF_VERSION = 4.99.3
++LSOF_VERSION = 4.99.4
+ LSOF_SITE = $(call github,lsof-org,lsof,$(LSOF_VERSION))
+ LSOF_LICENSE = lsof license
+ LSOF_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
