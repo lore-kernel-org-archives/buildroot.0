@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F0DDC282C1
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2CD1C282C6
 	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:01:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0CE88512F;
-	Fri, 28 Feb 2025 17:01:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 981E75025B;
+	Fri, 28 Feb 2025 17:01:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A3sDI2sBeTwC; Fri, 28 Feb 2025 17:01:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RmUjK5lsuk06; Fri, 28 Feb 2025 17:01:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0B2985125
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2C355046E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D0B2985125;
-	Fri, 28 Feb 2025 17:01:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2C355046E;
+	Fri, 28 Feb 2025 17:01:10 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1109094F
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:39:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B56D68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:39:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3AFE142585
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1946C424EB
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g8c6ieFfMKu5 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:30:56 +0000 (UTC)
+ id oh9HdpsJOZtb for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:30:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED06D42E2A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05EA542E44
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED06D42E2A
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05EA542E44
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E8AA984109; Fri, 28 Feb 2025 16:30:13 +0000 (UTC)
+ id F2EB687A55; Fri, 28 Feb 2025 16:30:14 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 18 Jan 2025 20:15:00 +0100
+Date: Sat, 18 Jan 2025 22:12:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d548949f2e51f29f723a7a2534e34859ca6af8ab
-X-Git-Newrev: 8867b238efa66f602301667ce98a847bbe564da6
+X-Git-Oldrev: 32c66b585fc844b3d20801b132840236247163dd
+X-Git-Newrev: 9f887a660842cb589927d6b94f63ae92d8a47c2f
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163013.E8AA984109@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/tzdata: bump version
- to 2025a
+Message-Id: <20250228163014.F2EB687A55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi-imagedecoder-raw:
+ bump version to 21.0.2-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8867b238efa66f602301667ce98a847bbe564da6
+commit: https://git.buildroot.net/buildroot/commit/?id=9f887a660842cb589927d6b94f63ae92d8a47c2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/MWII7R3HMCEDNUCIYQKSSTYYR7UWK4OQ/
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kodi-imagedecoder-raw/kodi-imagedecoder-raw.hash | 2 +-
+ package/kodi-imagedecoder-raw/kodi-imagedecoder-raw.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index 3f84ec4f87..d347bc4560 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,4 +1,4 @@
--# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/IZ7AO6WRE3W3TWBL5IR6PMQUL433BQIE/
--sha512  0d86686e215672343debb3471b7e7ccb8a27f063f085c9b532d5e0470377843daa0dfb6aee0db4fb9068dd52810c69aeee914a1a7c7e603fdecda7e855020193  tzdata2024b.tar.gz
-+# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/MWII7R3HMCEDNUCIYQKSSTYYR7UWK4OQ/
-+sha512  93b8f939d39bdfe451e262666f9099c529c96c49d14c08e3611560ca660e12e16d08a22b145d615e00570fb194881618d6f9a0a617c119ab447be03279d747c3  tzdata2025a.tar.gz
- # Locally computed:
- sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index ba53ae7c38..46c65707a7 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
+diff --git a/package/kodi-imagedecoder-raw/kodi-imagedecoder-raw.hash b/package/kodi-imagedecoder-raw/kodi-imagedecoder-raw.hash
+index 8f9451048c..98adf46a9b 100644
+--- a/package/kodi-imagedecoder-raw/kodi-imagedecoder-raw.hash
++++ b/package/kodi-imagedecoder-raw/kodi-imagedecoder-raw.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  451ce58acf377dd4758d78baf46f3e8c35d1e76b1a073744963f7a837f336707  kodi-imagedecoder-raw-7be9cf4d985c277f3a059f64873d81b24e6edd70.tar.gz
++sha256  421812f6ca8d70e6736c920935461b43f1338ee04a919dcf7e5f7ce1879b54e2  kodi-imagedecoder-raw-21.0.2-Omega.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-imagedecoder-raw/kodi-imagedecoder-raw.mk b/package/kodi-imagedecoder-raw/kodi-imagedecoder-raw.mk
+index 87699ffaca..989742a901 100644
+--- a/package/kodi-imagedecoder-raw/kodi-imagedecoder-raw.mk
++++ b/package/kodi-imagedecoder-raw/kodi-imagedecoder-raw.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TZDATA_VERSION = 2024b
-+TZDATA_VERSION = 2025a
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
- TZDATA_SELINUX_MODULES = tzdata
+-KODI_IMAGEDECODER_RAW_VERSION = 7be9cf4d985c277f3a059f64873d81b24e6edd70
++KODI_IMAGEDECODER_RAW_VERSION = 21.0.2-Omega
+ KODI_IMAGEDECODER_RAW_SITE = $(call github,xbmc,imagedecoder.raw,$(KODI_IMAGEDECODER_RAW_VERSION))
+ KODI_IMAGEDECODER_RAW_LICENSE = GPL-2.0+
+ KODI_IMAGEDECODER_RAW_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
