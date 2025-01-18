@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA243C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:01:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54D26C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:01:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 90F4885101;
-	Fri, 28 Feb 2025 17:01:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25CCB706CB;
+	Fri, 28 Feb 2025 17:01:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 53PixvNk9QiW; Fri, 28 Feb 2025 17:01:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tl6OYXytnkV8; Fri, 28 Feb 2025 17:01:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02588850F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFA5B707E4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 02588850F9;
-	Fri, 28 Feb 2025 17:01:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFA5B707E4;
+	Fri, 28 Feb 2025 17:01:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 07F6B1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:39:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 104EE68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:39:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0080D42E30
+ by smtp4.osuosl.org (Postfix) with ESMTP id 09ADC4998D
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OdH3G1Byem-W for <buildroot@buildroot.org>;
+ id eHht1gK4Jbby for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:30:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C53442585
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EA9842E4F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C53442585
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7EA9842E4F
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 849D6818ED; Fri, 28 Feb 2025 16:30:15 +0000 (UTC)
+ id 7416387A55; Fri, 28 Feb 2025 16:30:15 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 18 Jan 2025 22:13:17 +0100
+Date: Sat, 18 Jan 2025 22:13:12 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5940088ffcb98460659b64a8840150cdf8c1f5ae
-X-Git-Newrev: fec8fca48056fa09ba458238d86d1230d82d0327
+X-Git-Oldrev: 41013bb615b9eb1e20874bbe6e2b47ed2fac062d
+X-Git-Newrev: 5940088ffcb98460659b64a8840150cdf8c1f5ae
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163015.849D6818ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/kodi-visualisation-*:
- mass version bump to 21.0.2-Omega
+Message-Id: <20250228163015.7416387A55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi-vfs-*: mass
+ version bump to 21.0.2-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,182 +65,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fec8fca48056fa09ba458238d86d1230d82d0327
+commit: https://git.buildroot.net/buildroot/commit/?id=5940088ffcb98460659b64a8840150cdf8c1f5ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash     | 2 +-
- package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk       | 2 +-
- package/kodi-visualisation-goom/kodi-visualisation-goom.hash           | 2 +-
- package/kodi-visualisation-goom/kodi-visualisation-goom.mk             | 2 +-
- package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash       | 2 +-
- package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk         | 2 +-
- package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash | 2 +-
- package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk   | 2 +-
- package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash   | 2 +-
- package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk     | 2 +-
- package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash | 2 +-
- package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk   | 2 +-
- package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash   | 2 +-
- package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk     | 2 +-
- 14 files changed, 14 insertions(+), 14 deletions(-)
+ package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash | 2 +-
+ package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk   | 2 +-
+ package/kodi-vfs-rar/kodi-vfs-rar.hash               | 2 +-
+ package/kodi-vfs-rar/kodi-vfs-rar.mk                 | 2 +-
+ package/kodi-vfs-sftp/kodi-vfs-sftp.hash             | 2 +-
+ package/kodi-vfs-sftp/kodi-vfs-sftp.mk               | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
-index 42d6cab712..3f5f761968 100644
---- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
-+++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
+index 729a569f9a..e65ba18fa5 100644
+--- a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
++++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  a21d1683cf648b188a39fd32b123c147ce7dad99fa1a67078652b28365ce6666  kodi-visualisation-fishbmc-daa4e6b3e952075b813768e3518ac6e6b0724f55.tar.gz
-+sha256  d7433e4e88e29f1dd3524d2d0b660ce529852561f14f479f4b83a9c5ac436ffc  kodi-visualisation-fishbmc-21.0.2-Omega.tar.gz
+-sha256  23515c84f4a0cceaf845c1d6c0c39947a28be2d515cff995b384b29e93b11831  kodi-vfs-libarchive-0333aa5e189221e76282eeefb3f573e27b187551.tar.gz
++sha256  aab35cb6b03191609a7e97df02f2f102659c12e414f7b95595f9bb2047554daf  kodi-vfs-libarchive-21.0.2-Omega.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
-index 2e27ed69a8..b1eb305620 100644
---- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
-+++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
+index 257a0d04f6..ee1ca59b52 100644
+--- a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
++++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_FISHBMC_VERSION = daa4e6b3e952075b813768e3518ac6e6b0724f55
-+KODI_VISUALISATION_FISHBMC_VERSION = 21.0.2-Omega
- KODI_VISUALISATION_FISHBMC_SITE = $(call github,xbmc,visualization.fishbmc,$(KODI_VISUALISATION_FISHBMC_VERSION))
- KODI_VISUALISATION_FISHBMC_LICENSE = GPL-2.0+
- KODI_VISUALISATION_FISHBMC_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-index 835fcf5685..71ce1c657e 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-@@ -1,3 +1,3 @@
+-KODI_VFS_LIBARCHIVE_VERSION = 0333aa5e189221e76282eeefb3f573e27b187551
++KODI_VFS_LIBARCHIVE_VERSION = 21.0.2-Omega
+ KODI_VFS_LIBARCHIVE_SITE = $(call github,xbmc,vfs.libarchive,$(KODI_VFS_LIBARCHIVE_VERSION))
+ KODI_VFS_LIBARCHIVE_LICENSE = GPL-2.0+
+ KODI_VFS_LIBARCHIVE_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.hash b/package/kodi-vfs-rar/kodi-vfs-rar.hash
+index e368515a5a..c69e57758f 100644
+--- a/package/kodi-vfs-rar/kodi-vfs-rar.hash
++++ b/package/kodi-vfs-rar/kodi-vfs-rar.hash
+@@ -1,5 +1,5 @@
  # Locally computed
--sha256  dcf46760c0b1e6eb90fff94684c907ca10261febae12c63d1253325452704ecc  kodi-visualisation-goom-a8cb12592900fcd099d65d7760cbb113489ec884.tar.gz
-+sha256  f87356122f91ea40d096d559d1180571e701e39867448768d14d6c2ba3b2e264  kodi-visualisation-goom-21.0.2-Omega.tar.gz
+-sha256  c1da0e8aafa5419ae414857893a59c22109138ad7245071e0678b26f401a7be1  kodi-vfs-rar-2f49a0de43bc9f4e91dfec73a13dcb04df285233.tar.gz
++sha256  7492cf73d52299218acc982c4b35b020ea801d36d47e40460341f4dde712de50  kodi-vfs-rar-21.0.2-Omega.tar.gz
+ # License files
+ sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  lib/UnrarXLib/license.txt
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-index 0f40b2ab23..6b35c64a87 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.mk b/package/kodi-vfs-rar/kodi-vfs-rar.mk
+index 8dfd205c27..7cffe1274a 100644
+--- a/package/kodi-vfs-rar/kodi-vfs-rar.mk
++++ b/package/kodi-vfs-rar/kodi-vfs-rar.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_GOOM_VERSION = a8cb12592900fcd099d65d7760cbb113489ec884
-+KODI_VISUALISATION_GOOM_VERSION = 21.0.2-Omega
- KODI_VISUALISATION_GOOM_SITE = $(call github,xbmc,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
- KODI_VISUALISATION_GOOM_LICENSE = GPL-2.0+
- KODI_VISUALISATION_GOOM_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
-index ed3ee016cd..a924eaa6f8 100644
---- a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
-+++ b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
+-KODI_VFS_RAR_VERSION = 2f49a0de43bc9f4e91dfec73a13dcb04df285233
++KODI_VFS_RAR_VERSION = 21.0.2-Omega
+ KODI_VFS_RAR_SITE = $(call github,xbmc,vfs.rar,$(KODI_VFS_RAR_VERSION))
+ KODI_VFS_RAR_LICENSE = unrar, GPL-2.0+
+ KODI_VFS_RAR_LICENSE_FILES = lib/UnrarXLib/license.txt LICENSE.md
+diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
+index 12ddbae63d..3a59241d7b 100644
+--- a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
++++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  2abe39666e64bb1b3e8d3b88876524ed022d2dbeeb141cb9bd43549d8b5b403c  kodi-visualisation-matrix-8a373e240e47f27f1289c1c606621403794eb0d1.tar.gz
-+sha256  b1d1f3da5470d657e70c4b914a77445fe1d0a0ba35007fc402982a8b1b4cf9b0  kodi-visualisation-matrix-21.0.2-Omega.tar.gz
+-sha256  2197096f7081d140efb573e1afcee257e55bd0312e48c25e787bf10879e6bc92  kodi-vfs-sftp-9fe870e71a10a37f2d793b2261bac48b195f2705.tar.gz
++sha256  01a23958331cb0cd78fd2e9367d1269d4319c20b84db5b132632f9c1acd5f3c5  kodi-vfs-sftp-21.0.2-Omega.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
-index 125aee1d46..fd885712ad 100644
---- a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
-+++ b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
+diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
+index e3298465fe..18ea2bc099 100644
+--- a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
++++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_MATRIX_VERSION = 8a373e240e47f27f1289c1c606621403794eb0d1
-+KODI_VISUALISATION_MATRIX_VERSION = 21.0.2-Omega
- KODI_VISUALISATION_MATRIX_SITE = $(call github,xbmc,visualization.matrix,$(KODI_VISUALISATION_MATRIX_VERSION))
- KODI_VISUALISATION_MATRIX_LICENSE = GPL-2.0+
- KODI_VISUALISATION_MATRIX_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
-index b74b0a76f6..508820876d 100644
---- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6144e32ee4c1f7e75be6b2827555b4999d251ebdd67d785cac0e8b38869ef529  kodi-visualisation-shadertoy-364132b12b6da78e281b6a1d678155d43aace83f.tar.gz
-+sha256  30a5081365cea1dbdf49ccbb059076d4c7abc28604a58749fcd0d025e2faa760  kodi-visualisation-shadertoy-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-index 45313a3e92..32d6d6f056 100644
---- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_SHADERTOY_VERSION = 364132b12b6da78e281b6a1d678155d43aace83f
-+KODI_VISUALISATION_SHADERTOY_VERSION = 21.0.2-Omega
- KODI_VISUALISATION_SHADERTOY_SITE = $(call github,xbmc,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
- KODI_VISUALISATION_SHADERTOY_LICENSE = GPL-2.0+
- KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
-index a6083e55c5..6bbd7b8c9a 100644
---- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
-+++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ae794542e8c7de00528bf486d381134f4da8b7c35903c5f5e06a1a6015878b12  kodi-visualisation-spectrum-8f2fc2135b34740af538ade3faf310f1a188db7f.tar.gz
-+sha256  7b6635789d226ee4cd4e17d54d57e880731d0762835802835d0d5ac4f0084b99  kodi-visualisation-spectrum-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-index c50eae3fae..1946cf598a 100644
---- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-+++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_SPECTRUM_VERSION = 8f2fc2135b34740af538ade3faf310f1a188db7f
-+KODI_VISUALISATION_SPECTRUM_VERSION = 21.0.2-Omega
- KODI_VISUALISATION_SPECTRUM_SITE = $(call github,xbmc,visualization.spectrum,$(KODI_VISUALISATION_SPECTRUM_VERSION))
- KODI_VISUALISATION_SPECTRUM_LICENSE = GPL-2.0+
- KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
-index 870c5088b0..a362fbd23d 100644
---- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
-+++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  3755544db4d633c411236ca2149f93c641c4c8d858a68f9eb4176b046fbf0ea4  kodi-visualisation-starburst-7923772cd986849531bdfee0a0bc989842b41996.tar.gz
-+sha256  a3f70985fee6b1014e7e7599431e646f36bd3870ead78bbc8936151b805e4241  kodi-visualisation-starburst-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
-index bd61e4c770..6adb21687e 100644
---- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
-+++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_STARBURST_VERSION = 7923772cd986849531bdfee0a0bc989842b41996
-+KODI_VISUALISATION_STARBURST_VERSION = 21.0.2-Omega
- KODI_VISUALISATION_STARBURST_SITE = $(call github,xbmc,visualization.starburst,$(KODI_VISUALISATION_STARBURST_VERSION))
- KODI_VISUALISATION_STARBURST_LICENSE = GPL-2.0+
- KODI_VISUALISATION_STARBURST_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-index 29bb077261..1041fd5287 100644
---- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  edda37479bc38eb129a9e83c30f14f21646b17693b5679130fd644787b63dce0  kodi-visualisation-waveform-a388be3b9c4a62a5087616d3c92a26d6cbbeb24f.tar.gz
-+sha256  fe6d2f3990ea5f2ea2d4a0a905f451b1c2c7f1300529d8957b5d93a97421f415  kodi-visualisation-waveform-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-index 925d76cbe4..819b064789 100644
---- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_WAVEFORM_VERSION = a388be3b9c4a62a5087616d3c92a26d6cbbeb24f
-+KODI_VISUALISATION_WAVEFORM_VERSION = 21.0.2-Omega
- KODI_VISUALISATION_WAVEFORM_SITE = $(call github,xbmc,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
- KODI_VISUALISATION_WAVEFORM_LICENSE = GPL-2.0+
- KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = LICENSE.md
+-KODI_VFS_SFTP_VERSION = 9fe870e71a10a37f2d793b2261bac48b195f2705
++KODI_VFS_SFTP_VERSION = 21.0.2-Omega
+ KODI_VFS_SFTP_SITE = $(call github,xbmc,vfs.sftp,$(KODI_VFS_SFTP_VERSION))
+ KODI_VFS_SFTP_LICENSE = GPL-2.0+
+ KODI_VFS_SFTP_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
