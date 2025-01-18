@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C26FC02187
-	for <buildroot@archiver.kernel.org>; Sat, 18 Jan 2025 21:28:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F4E3C02185
+	for <buildroot@archiver.kernel.org>; Sat, 18 Jan 2025 21:28:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE71C6083B;
-	Sat, 18 Jan 2025 21:28:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11CB870516;
+	Sat, 18 Jan 2025 21:28:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ecmVFT66iMQY; Sat, 18 Jan 2025 21:28:37 +0000 (UTC)
+ id 2l3mx1GaDc68; Sat, 18 Jan 2025 21:28:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E152161096
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00DB961177
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E152161096;
-	Sat, 18 Jan 2025 21:28:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D9FF2F6D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 00DB961177;
+	Sat, 18 Jan 2025 21:28:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C3F2E69
  for <buildroot@buildroot.org>; Sat, 18 Jan 2025 21:27:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5666361030
+ by smtp1.osuosl.org (Postfix) with ESMTP id 20CAF80EEB
  for <buildroot@buildroot.org>; Sat, 18 Jan 2025 21:27:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lQGiFnsmkQbK for <buildroot@buildroot.org>;
- Sat, 18 Jan 2025 21:27:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i_S8Jc07r0HG for <buildroot@buildroot.org>;
+ Sat, 18 Jan 2025 21:27:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52FBE60BD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2341F80EEF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52FBE60BD3
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 21:27:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2341F80EEF
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 21:27:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 37317801F8; Sat, 18 Jan 2025 21:27:22 +0000 (UTC)
+ id 204C8802AB; Sat, 18 Jan 2025 21:27:23 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 18 Jan 2025 22:12:25 +0100
+Date: Sat, 18 Jan 2025 22:13:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ae0cb9abe097bbc83c221a053a817408fbb3315d
-X-Git-Newrev: a0d2788c2ea5eca3a93fb7313bed0431e6c4e14d
+X-Git-Oldrev: fec8fca48056fa09ba458238d86d1230d82d0327
+X-Git-Newrev: 42c3b687e89365428a23c2c18956f73d2835bf25
 X-Patchwork-Hint: ignore
-Message-Id: <20250118212722.37317801F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-audiodecoder-*: mass version
- bump to 21.0.2-Omega
+Message-Id: <20250118212723.204C8802AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi: bump version to 21.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,182 +64,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0d2788c2ea5eca3a93fb7313bed0431e6c4e14d
+commit: https://git.buildroot.net/buildroot/commit/?id=42c3b687e89365428a23c2c18956f73d2835bf25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash     | 2 +-
- package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk       | 2 +-
- package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash   | 2 +-
- package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk     | 2 +-
- package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash     | 2 +-
- package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk       | 2 +-
- package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash     | 2 +-
- package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk       | 2 +-
- package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash     | 2 +-
- package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk       | 2 +-
- package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash   | 2 +-
- package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk     | 2 +-
- package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash | 2 +-
- package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk   | 2 +-
- 14 files changed, 14 insertions(+), 14 deletions(-)
+ package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
+ package/kodi/kodi.hash                                   | 2 +-
+ package/kodi/kodi.mk                                     | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-index 054e7581cc..d011e38fe9 100644
---- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-+++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  7c637f4e012e7e26a3431244a8444331f9bfeaf9c6af73cac799b58b9a0eefdf  kodi-audiodecoder-modplug-e697156054ea3eb5974fb9727e046287220985e5.tar.gz
-+sha256  b2828685f1c353bf7123d0f9e88b28f53064388f6ea3ee357b8fb22d5c237ac8  kodi-audiodecoder-modplug-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-index e435591cbf..15a1d96635 100644
---- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-+++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index 774c7e8e66..11f6e073e6 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
  
--KODI_AUDIODECODER_MODPLUG_VERSION = e697156054ea3eb5974fb9727e046287220985e5
-+KODI_AUDIODECODER_MODPLUG_VERSION = 21.0.2-Omega
- KODI_AUDIODECODER_MODPLUG_SITE = $(call github,xbmc,audiodecoder.modplug,$(KODI_AUDIODECODER_MODPLUG_VERSION))
- KODI_AUDIODECODER_MODPLUG_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
-index b2e3a36a0d..d743433027 100644
---- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
-+++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  fd0d12af9d3d59fbcf41e67d1f8ac9e1339c702219da4a3393688e89ff911ebb  kodi-audiodecoder-nosefart-92c6daeb278b02cd63fee724c96051421c9149f3.tar.gz
-+sha256  4c82bf0ffab2d09f26b84d382fd00f70695d5f6a6d781be2818f9f5e10bc675a  kodi-audiodecoder-nosefart-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-index 7425447115..ca45739a02 100644
---- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-+++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 21.1-Omega
++KODI_JSONSCHEMABUILDER_VERSION = 21.2-Omega
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index 426c8f1ed5..10d93dc996 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
  
--KODI_AUDIODECODER_NOSEFART_VERSION = 92c6daeb278b02cd63fee724c96051421c9149f3
-+KODI_AUDIODECODER_NOSEFART_VERSION = 21.0.2-Omega
- KODI_AUDIODECODER_NOSEFART_SITE = $(call github,xbmc,audiodecoder.nosefart,$(KODI_AUDIODECODER_NOSEFART_VERSION))
- KODI_AUDIODECODER_NOSEFART_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
-index 1f0da25fc3..87cf151859 100644
---- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
-+++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
-@@ -1,3 +1,3 @@
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 21.1-Omega
++KODI_TEXTUREPACKER_VERSION = 21.2-Omega
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index 5ece904a4a..e7851bde3a 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -3,7 +3,7 @@ sha512  743698979c801f3cfb36545888b5303e1e25dae5692bb45cab7ebbe102a6eda31f09abc6
+ sha512  8e7e62418a49ba810512c13a640a8bf35f878fcd54af32fdaab1111e37817f58b21b475980ba663fba4887e45ef8d88af8ff17796f20d202e929e8e2574546dc  commons-lang3-3.14.0-bin.tar.gz
+ sha512  2e94877000dd270b69e2e8cbf49f258a90b4c628b6b6b0814e300a2f0e9c391f0816dceb0707e596ae3b7c9532f93e7a4917df47c77f44b3a810e14042ce5f3f  commons-text-1.11.0-bin.tar.gz
  # Locally computed
--sha256  63090c74af51db7a859f8a2aa317ea2c4f2125be3306190502efc5522f00ec93  kodi-audiodecoder-sidplay-0ba1bc70faced93352cdd9ec1a5ec84e22a2e0f5.tar.gz
-+sha256  c7d10dd65baed2db1272ff57fde76f0b268a4a434d57022539c4dc5bf6f8b54e  kodi-audiodecoder-sidplay-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-index a08901328f..d98fc4a7f5 100644
---- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-+++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-sha256  ad6e40b0912c8318635f0501dc1f7f27ce3a29e671f2ddb608cad34babae80ef  kodi-21.1-Omega.tar.gz
++sha256  da3a5df663684664b9383b65f1c06568222629d935084a59e4e641fcdcb6c383  kodi-21.2-Omega.tar.gz
+ sha256  f38c4a4e7a4f4da6d8e83b8852489aa3bb6588a915dc41f5ee89d9aad305a06e  kodi-libdvdcss-1.4.3-Next-Nexus-Alpha2-2.tar.gz
+ sha256  584f62a3896794408d46368e2ecf2c6217ab9c676ce85921b2d68b8961f49dfc  kodi-libdvdnav-6.1.1-Next-Nexus-Alpha2-2.tar.gz
+ sha256  719130091e3adc9725ba72df808f24a14737a009dca5a4c38c601c0c76449b62  kodi-libdvdread-6.1.3-Next-Nexus-Alpha2-2.tar.gz
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index ae73cdffa6..f68c38f891 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
  
--KODI_AUDIODECODER_SIDPLAY_VERSION = 0ba1bc70faced93352cdd9ec1a5ec84e22a2e0f5
-+KODI_AUDIODECODER_SIDPLAY_VERSION = 21.0.2-Omega
- KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,xbmc,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
- KODI_AUDIODECODER_SIDPLAY_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
-index db8b33cb4b..0ebd6cf128 100644
---- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
-+++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4932d6d00c3b8662bc6e1600757bd85856c79028c5ecb920fa0d257bab30b7a2  kodi-audiodecoder-snesapu-532186702c49ba7fe007badc74fa6a6e9cac48fe.tar.gz
-+sha256  98afd81a9653efd9c6fe69dd7918755c75a4671322b793a35bce610acac0d128  kodi-audiodecoder-snesapu-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-index 5b6cafcc0f..aa8178c55a 100644
---- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-+++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_SNESAPU_VERSION = 532186702c49ba7fe007badc74fa6a6e9cac48fe
-+KODI_AUDIODECODER_SNESAPU_VERSION = 21.0.2-Omega
- KODI_AUDIODECODER_SNESAPU_SITE = $(call github,xbmc,audiodecoder.snesapu,$(KODI_AUDIODECODER_SNESAPU_VERSION))
- KODI_AUDIODECODER_SNESAPU_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
-index daa3f537fd..560c93b74f 100644
---- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
-+++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  bf292e364bd9bbc0286fb49815cd4c2f86e5952d9bd1c878f6d1952d081d87de  kodi-audiodecoder-stsound-b72c793e2ada7ab2358568ec5b01fd71ddf7cdb3.tar.gz
-+sha256  089ddd6c890e571f69eda0a85077d8ffe91c4b31fd0f9e20f47d4053c1e984a8  kodi-audiodecoder-stsound-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-index 36535cde60..2bd37a8e04 100644
---- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-+++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_STSOUND_VERSION = b72c793e2ada7ab2358568ec5b01fd71ddf7cdb3
-+KODI_AUDIODECODER_STSOUND_VERSION = 21.0.2-Omega
- KODI_AUDIODECODER_STSOUND_SITE = $(call github,xbmc,audiodecoder.stsound,$(KODI_AUDIODECODER_STSOUND_VERSION))
- KODI_AUDIODECODER_STSOUND_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_STSOUND_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-index 8714ebbdac..22e7015ff8 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6f8e72ab3c63db04fd863893bbc5afe2c8cfcc7a71d86b68ed5bfe26ea5bf066  kodi-audiodecoder-timidity-00bee97ded3bc824dc454104bd53d0f431404571.tar.gz
-+sha256  eb7bee9453825f86275ae05c4561fb52ee7fd9fa21857e303933cb57d28ccc4b  kodi-audiodecoder-timidity-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-index bef0d67214..c165492416 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_TIMIDITY_VERSION = 00bee97ded3bc824dc454104bd53d0f431404571
-+KODI_AUDIODECODER_TIMIDITY_VERSION = 21.0.2-Omega
- KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,xbmc,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
- KODI_AUDIODECODER_TIMIDITY_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
-index a39c49bbb2..010315db59 100644
---- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
-+++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  c198151522b082feef1855e8a94d45ee498388c6764d58b92af9de20c72896c0  kodi-audiodecoder-vgmstream-56bedfc90ca600401e6dda407a5b933da0976664.tar.gz
-+sha256  6f5dddc0e6161426b8c40bfd1136ca555588db27ae78c02178b6ac5da93b377c  kodi-audiodecoder-vgmstream-21.0.2-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-index 62d956892b..66beec0a37 100644
---- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-+++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_VGMSTREAM_VERSION = 56bedfc90ca600401e6dda407a5b933da0976664
-+KODI_AUDIODECODER_VGMSTREAM_VERSION = 21.0.2-Omega
- KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,xbmc,audiodecoder.vgmstream,$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
- KODI_AUDIODECODER_VGMSTREAM_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = LICENSE.md
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION_MAJOR = 21.1
++KODI_VERSION_MAJOR = 21.2
+ KODI_VERSION_NAME = Omega
+ KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
