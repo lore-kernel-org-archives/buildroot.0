@@ -1,76 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7AE2C02185
-	for <buildroot@archiver.kernel.org>; Sat, 18 Jan 2025 20:09:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1278C02185
+	for <buildroot@archiver.kernel.org>; Sat, 18 Jan 2025 20:18:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CFA841A57;
-	Sat, 18 Jan 2025 20:09:15 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lHOYCugeefB0; Sat, 18 Jan 2025 20:09:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 761C241A6B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 761C241A6B;
-	Sat, 18 Jan 2025 20:09:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6A28B69
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:09:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4AF6A6071F
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:09:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69696607B4;
+	Sat, 18 Jan 2025 20:18:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7NLbUkFJS7ku for <buildroot@buildroot.org>;
- Sat, 18 Jan 2025 20:09:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 66CD260793
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66CD260793
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 66CD260793
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:09:12 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id BD50B13F880;
- Sat, 18 Jan 2025 21:09:09 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:34578])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 18 Jan 2025 21:09:09 +0100
-MIME-Version: 1.0
-Date: Sat, 18 Jan 2025 21:09:09 +0100
+ id GL1vAyGDcdaC; Sat, 18 Jan 2025 20:18:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68600607CC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68600607CC;
+	Sat, 18 Jan 2025 20:18:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B327AB89
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:18:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92DA140352
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:18:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rJ5rnjjLAwbf for <buildroot@buildroot.org>;
+ Sat, 18 Jan 2025 20:18:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B4CC404D4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B4CC404D4
+ for <buildroot@buildroot.org>; Sat, 18 Jan 2025 20:18:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 557B385E76; Sat, 18 Jan 2025 20:18:37 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250118083233.2882216-1-bernd@kuhls.net>
-References: <20250118083233.2882216-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <00ce26d43a0cb0e2099f710d5a546c56@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737230950;
- bh=JotH7FySh1ejHgMXqFHi2LX8JmX3/C/MfMA9xwiDPQQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Jvs0kco32daP0BbZXeg9KlNZ1CIDIxSrZVIKC/C5uxqpOWgLuU0cryhwh2F4zbL7Q
- WHvHUAC+6TptVg8H1bk1RWhmlQztxFsGzizX+IdidqIJGS3imSoZOTzmdxpMvkqTvP
- 52fvxfGozXp4yL9TRvD/NgezVx8IE74ouzfE4K3b7lG0XmrxfxkpDQ3XJ7Qm48fyTT
- Cry07MUZDXi7wpM9+2XEOeD0AkLwyvITtxoJRQYf2O0+KfS2OjRprHwYi3a/3w3l3S
- bsBpo+YIgIHDs2JDMeJQa31gv9KUAr8/0IkI1sJ+Z+hXG9QM2ecc4Xl4gk74rsNw5T
- qwn5jvfvFtIug==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Jvs0kco3
-Subject: Re: [Buildroot] [PATCH 1/1] package/php: bump version to 8.3.16
+To: buildroot@buildroot.org
+Date: Sat, 18 Jan 2025 21:10:58 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 26a328f8ef178dab746b6cd766140661a5ee4c5d
+X-Git-Newrev: ae9b9e96dc931e20cf63821d7ffe7ab8d9e17273
+X-Patchwork-Hint: ignore
+Message-Id: <20250118201837.557B385E76@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/luajit: bump to version
+ a4f56a459a588ae768801074b46ba0adcfb49eb1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,18 +59,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 18/01/2025 09:32, Bernd Kuhls wrote:
-> Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_3
-> Release notes: https://news-web.php.net/php.announce/450
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=ae9b9e96dc931e20cf63821d7ffe7ab8d9e17273
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+diff COPYRIGHT:
+    -Copyright (C) 2005-2023 Mike Pall. All rights reserved.
+    +Copyright (C) 2005-2025 Mike Pall. All rights reserved.
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/luajit/0001-no-bin-symlink.patch | 4 ++--
+ package/luajit/0002-install-inc.patch    | 8 ++++----
+ package/luajit/luajit.hash               | 4 ++--
+ package/luajit/luajit.mk                 | 2 +-
+ 4 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/package/luajit/0001-no-bin-symlink.patch b/package/luajit/0001-no-bin-symlink.patch
+index ea0e5bf8d0..3141d2adba 100644
+--- a/package/luajit/0001-no-bin-symlink.patch
++++ b/package/luajit/0001-no-bin-symlink.patch
+@@ -6,7 +6,7 @@ Index: b/Makefile
+ ===================================================================
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -50,8 +50,7 @@
++@@ -51,8 +51,7 @@
+  INSTALL_MAN= $(INSTALL_SHARE)/man/man1
+  INSTALL_PKGCONFIG= $(INSTALL_LIB)/pkgconfig
+  
+@@ -16,7 +16,7 @@ Index: b/Makefile
+  INSTALL_ANAME= libluajit-$(ABIVER).a
+  INSTALL_SOSHORT1= libluajit-$(ABIVER).so
+  INSTALL_SOSHORT2= libluajit-$(ABIVER).so.$(MAJVER)
+-@@ -66,7 +65,6 @@
++@@ -67,7 +66,6 @@
+  INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT1)
+  INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT2)
+  INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
+diff --git a/package/luajit/0002-install-inc.patch b/package/luajit/0002-install-inc.patch
+index eec77a5f82..ff4d169afb 100644
+--- a/package/luajit/0002-install-inc.patch
++++ b/package/luajit/0002-install-inc.patch
+@@ -6,12 +6,12 @@ Index: b/Makefile
+ ===================================================================
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -38,7 +38,7 @@
+- INSTALL_BIN=   $(DPREFIX)/bin
++@@ -39,7 +39,7 @@
+  INSTALL_LIB=   $(DPREFIX)/$(MULTILIB)
+- INSTALL_SHARE= $(DPREFIX)/share
++ INSTALL_SHARE_= $(PREFIX)/share
++ INSTALL_SHARE= $(DESTDIR)$(INSTALL_SHARE_)
+ -INSTALL_DEFINC= $(DPREFIX)/include/luajit-$(MMVERSION)
+ +INSTALL_DEFINC= $(DPREFIX)/include
+  INSTALL_INC=   $(INSTALL_DEFINC)
+  
+- export INSTALL_LJLIBD= $(INSTALL_SHARE)/luajit-$(MMVERSION)
++ export INSTALL_LJLIBD= $(INSTALL_SHARE_)/luajit-$(MMVERSION)
+diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
+index eddd2a2419..e14bcc9063 100644
+--- a/package/luajit/luajit.hash
++++ b/package/luajit/luajit.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  cbf1647acbd340c62b9c342dae43290762efa1b26d8bf8457f143fabf8ed86c7  luajit-97813fb924edf822455f91a5fbbdfdb349e5984f.tar.gz
++sha256  b4120332a4191db9c9da2d81f9f11f0d4504fc4cff2dea0f642d3d8f1fcebd0e  luajit-a4f56a459a588ae768801074b46ba0adcfb49eb1.tar.gz
+ 
+ # Locally calculated
+-sha256  1130331ac861a4b4520e9c8ad0814efdc6f1e79ea55ea9c460c73733d13ccb5f  COPYRIGHT
++sha256  5b79fb4754728487cf43d55b213bb68369912484f2dd7ab68380435e994bce39  COPYRIGHT
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 301973db7e..b030a16cfc 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUAJIT_VERSION = 97813fb924edf822455f91a5fbbdfdb349e5984f
++LUAJIT_VERSION = a4f56a459a588ae768801074b46ba0adcfb49eb1
+ LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
+ LUAJIT_LICENSE = MIT
+ LUAJIT_LICENSE_FILES = COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
