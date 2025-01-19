@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E047FC282D2
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AED5C282D0
 	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFBA98516B;
-	Fri, 28 Feb 2025 17:01:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA8394066E;
+	Fri, 28 Feb 2025 17:01:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OIPkuETSOm8Q; Fri, 28 Feb 2025 17:01:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nb6vgZyESYJi; Fri, 28 Feb 2025 17:01:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D68078516D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26B7B40595
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D68078516D;
-	Fri, 28 Feb 2025 17:01:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26B7B40595;
+	Fri, 28 Feb 2025 17:01:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1277C68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:39:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1791C68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:39:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37E214199A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 042B242E52
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ixeqr6Ku777V for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:01 +0000 (UTC)
+ id ZmDkHE5IAmLp for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AEB742E5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E36694199A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3AEB742E5E
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E36694199A
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 36B5A82581; Fri, 28 Feb 2025 16:30:16 +0000 (UTC)
+ id DE55184109; Fri, 28 Feb 2025 16:30:15 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 21 Jan 2025 22:09:56 +0100
+Date: Sun, 19 Jan 2025 13:04:36 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 29e1af84308b80d83a8f45ba934fbb3e92d55bf6
-X-Git-Newrev: fbc4d5215f1094eda3f109e8ac755d2a8a119594
+X-Git-Oldrev: a311245ff7cf432de861ff095941ef53fc16460d
+X-Git-Newrev: d4fa17f44128929970632e6703a49bc40eb0492f
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163016.36B5A82581@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/testing: update zfs
- tests to Linux 6.12.9
+Message-Id: <20250228163015.DE55184109@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gnu-efi: fix build due
+ to short-wchar
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,40 +60,58 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5715111800428930444=="
+Content-Type: multipart/mixed; boundary="===============0610195647176390915=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5715111800428930444==
+--===============0610195647176390915==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbc4d5215f1094eda3f109e8ac755d2a8a119594
+commit: https://git.buildroot.net/buildroot/commit/?id=d4fa17f44128929970632e6703a49bc40eb0492f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The previous version, Linux 5.15.35, is outdated.
-Upgrade to the latest LTS release.
+The gnu-efi code base is so far built with -fshort-wchar:
 
-Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+‘-fshort-wchar’
+     Override the underlying type for ‘wchar_t’ to be ‘short unsigned
+     int’ instead of the default for the target.  This option is useful
+     for building programs to run under WINE.
+
+     *Warning:* the ‘-fshort-wchar’ switch causes GCC to generate code
+     that is not binary compatible with code generated without that
+     switch.  Use it to conform to a non-default application binary
+     interface.
+
+However, this is highly incompatible with the definitions of wchar_t
+by musl, causing build issues:
+
+/workdir/instance-0/output-1/build/gnu-efi-3.0.18//lib/console.c:84:68: error: passing argument 2 of 'ConOut->OutputString' from incompatible pointer type [-Werror=incompatible-pointer-types]
+[...]
+/workdir/instance-0/output-1/build/gnu-efi-3.0.18//lib/console.c:84:68: note: expected 'CHAR16 *' {aka 'int *'} but argument is of type 'short unsigned int *'
+
+These have been addressed upstream by simply not using -fshort-wchar
+anymore, so we backport the relevant patches.
+
+The patch 0003-Use-char16_t-literals.patch was directly backported, it
+was "redone" (it's a very mechanical patch) as backporting the patch
+and fixing the conflicts was more effort than redoing the patch from
+scratch. But in essence, it is the same patch as what is upstream.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/8b2f5b38284e70dde8c5619e5050e7f201a0bcc3/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Julien: fix patch 0003 EOL modified by the mailing list]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/testing/tests/package/test_zfs.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../gnu-efi/0002-Make-CHAR16-use-uint16_t.patch    |  164 ++
+ package/gnu-efi/0003-Use-char16_t-literals.patch   | 2103 ++++++++++++++++++++
+ 2 files changed, 2267 insertions(+)
 
-diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/tests/package/test_zfs.py
-index 27dbc2869b..967da098e1 100644
---- a/support/testing/tests/package/test_zfs.py
-+++ b/support/testing/tests/package/test_zfs.py
-@@ -13,7 +13,7 @@ class TestZfsBase(infra.basetest.BRTest):
-         BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.35"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
-         BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+Patch is too large, so refusing to show it
 
---===============5715111800428930444==
+--===============0610195647176390915==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -104,4 +122,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5715111800428930444==--
+--===============0610195647176390915==--
