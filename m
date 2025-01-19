@@ -4,96 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2419C02187
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jan 2025 23:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34121C02187
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jan 2025 23:33:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DBF484985;
-	Sun, 19 Jan 2025 23:11:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94F4581432;
+	Sun, 19 Jan 2025 23:33:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MaM8_uFTynWP; Sun, 19 Jan 2025 23:11:09 +0000 (UTC)
+ id Q8sCJR5xhyDm; Sun, 19 Jan 2025 23:33:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 155FE8497C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3EDE581479
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 155FE8497C;
-	Sun, 19 Jan 2025 23:11:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E3C88D7
- for <buildroot@buildroot.org>; Sun, 19 Jan 2025 23:11:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3EDE581479;
+	Sun, 19 Jan 2025 23:33:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A3C50D7
+ for <buildroot@buildroot.org>; Sun, 19 Jan 2025 23:33:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC7F784968
- for <buildroot@buildroot.org>; Sun, 19 Jan 2025 23:11:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 910084057E
+ for <buildroot@buildroot.org>; Sun, 19 Jan 2025 23:33:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gBXReRLm5icI for <buildroot@buildroot.org>;
- Sun, 19 Jan 2025 23:11:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 19T63ys0Wx9J for <buildroot@buildroot.org>;
+ Sun, 19 Jan 2025 23:33:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DA024849AE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA024849AE
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DA024849AE
- for <buildroot@buildroot.org>; Sun, 19 Jan 2025 23:11:03 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-38634c35129so3253518f8f.3
- for <buildroot@buildroot.org>; Sun, 19 Jan 2025 15:11:03 -0800 (PST)
+ client-ip=2607:f8b0:4864:20::12e; helo=mail-il1-x12e.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C49D640575
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C49D640575
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C49D640575
+ for <buildroot@buildroot.org>; Sun, 19 Jan 2025 23:33:01 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id
+ e9e14a558f8ab-3ce886a2d5bso35092375ab.1
+ for <buildroot@buildroot.org>; Sun, 19 Jan 2025 15:33:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1737328262; x=1737933062;
+ d=1e100.net; s=20230601; t=1737329580; x=1737934380;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=v0pvKtLpLkpIJ+EAj2cphVfLdblcaG/ULG+g4bZGNUc=;
- b=pmPQQy10xRSH8JLzVMrHqoDe/aWvE3z8eEkXKpLd7lXCKb/T50G5QH47bhnV+V0fJv
- sBVgfb0Wi1bvPrYyUJ+eyKX1LRGWLyfSC3xsMEu5I6YUwqxYLaq1kIyQjKjMSJxk3oG1
- sPyvNsWboaWqilebHfvNAhn1l0DydFbkvjXE3JMAp2w3oIFlfW0i27V3qMf6vgxMb8Si
- Bfi0/Pk+5+b7bDm+uHnwP290MhfmrpKYuh5ZcbDDaj4Jcf4y8iTSsct+omLeRZ/7jxHW
- TacSN+oW3NnCuKCmLcAYxy04llu+tHsqEXFNcuSXdJYJDaPHK52m3PBlohVR2BkRRRUv
- t4KA==
-X-Gm-Message-State: AOJu0YytlKDHIF1uBk4YnSPhlc+1eGD6zn5i37AQKoGIXNZHT+HgXB+M
- v9ym8wwEyf+MofnCCsLVY+N+n0DV2nmjDMI00Ytr0/bw3XvQ3UshK3gtfWgSJQ2EySXTsOFx+qE
- y
-X-Gm-Gg: ASbGncsrwzK6VGzN0VQ53w0Y+SVIu4N0mHKwmfRpD3wLKcUtk+5JUssUp8mvkaXWxbl
- R9O2Bua1O33EIlCCOh8rRL9vghRpnct4dWMzObCr/9OAOpspl3GlFCXmVGFh/AoyfjSCpRJusyW
- e6RezQWxrIZ1KvVDH4tITpjtLITCX14zcOTsYbuZO+HkZt5pqkQ9RoY7JEW0QIyLW7PQyd9zLrN
- vJi26/QCq8iaF6yqzgzQTFhl+5iFsKPQgmURDGCNoVrWFF2fLYKAWE64FIQF8GYVmxuaq0jNjcV
- 5nK1m3eW4Tj3L2BdkFpfYmReQ2B+eTmhbJVWxDmS8PXMowzrTa4YMU77b1ATIvnRP+I=
-X-Google-Smtp-Source: AGHT+IEhvOiOuwUbrt8lvHnl31TRwzy1YLVgAXAX/nkBAnqr+Nd8HSxY1YrWHRcYmumqjvrmyCU8wg==
-X-Received: by 2002:a5d:47af:0:b0:38b:ed7b:f77d with SMTP id
- ffacd0b85a97d-38bf59ed576mr10315566f8f.52.1737328261680; 
- Sun, 19 Jan 2025 15:11:01 -0800 (PST)
-Received: from P-NTS-Evian.home
- (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-38bf32758cfsm8781595f8f.62.2025.01.19.15.11.00
+ bh=9MKeCurM38CawN2hfXzvyyQB8RUqC8xnGKY7n4B3wjs=;
+ b=CcLJ7osNdi4b78tdFapaFkurebWGr+Hgx5m3RQpUCh6viirAOpRAyaMDoyzvoHvuzI
+ bBn2Jhw4MIwUsqMfEZrhqmbdeUjMxA7ms0ye8Atl8twcCdWKJQLEOrSR5prMb7SHxW7c
+ yfNXNtZhQutCiSxbv/HwdsSstl6JItVOoH7fuWM+SIj/8O4JkBFkfG1cW2wt2Qky0e9y
+ pJQH6orjURvOSOfvVD/4WPKD4Zk3lVgO0EHe2LAQ3aGXrQbBVXL0tSEVDWDJGBTFksp/
+ EGwUkQ4zSAd8HoQo6NxnteTo1aRUztw29cU14rpqEDVRBu0VX/EaDHPiNkxtBHFM6AhJ
+ xGXA==
+X-Gm-Message-State: AOJu0YwWalb2VAmDFO9vkYgbLopv4rgbuoekBilgiotb7oFHcxj1Fo8f
+ 4pv2x1KTkfaCqBeF7yiFTIhpFhzk/crmLYKvhdmG7m0vS8cdCbOy5p3BCfxP
+X-Gm-Gg: ASbGncvj+LthFsnlGKkeGgiwvRrB3EDyK678+/6o3KykWI9HSTLv15oT9JCQRcQfzQ/
+ Qw8F3TpaXYKsp3C4zLRirAekKNtFDifTxCGeQxAiUnmelsnXTXxqQ5HgWQDXBtGFPweNgYI6qZu
+ 7S9dO5vrew9O8plDvCr4XQ4QlVjRmDaVYlwLlRBtSccku3DYzCFv/Pb8Kguymq2lNpwc9XlsE2T
+ LkzmRY6IAoGyveNKWil/r2rENna1aBhI+LR3RLNoGLc811zEGuup3+zfKi2wJpBmXSzm/wnwPH1
+ ZrRTqq5hTFNF5HvaOFJRiH+iERKaaC63iqOP+9aE6oVH
+X-Google-Smtp-Source: AGHT+IHBgVaOr81LUjYuHww012wZkdb1J4pDUbkLhalgqpK8PQwD8d/UjUJjQqQnB+fnf+hTL9b1LA==
+X-Received: by 2002:a05:6e02:3992:b0:3a7:e452:db4 with SMTP id
+ e9e14a558f8ab-3cf7447e64amr86878625ab.16.1737329579008; 
+ Sun, 19 Jan 2025 15:32:59 -0800 (PST)
+Received: from james-x399.localdomain (71-218-115-58.hlrn.qwest.net.
+ [71.218.115.58]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4ea7564942fsm2082565173.82.2025.01.19.15.32.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 19 Jan 2025 15:11:01 -0800 (PST)
+ Sun, 19 Jan 2025 15:32:58 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 20 Jan 2025 00:10:58 +0100
-Message-ID: <20250119231058.715229-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.48.1
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 19 Jan 2025 16:32:56 -0700
+Message-Id: <20250119233256.1356954-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1737328262; x=1737933062; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1737329580; x=1737934380; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=v0pvKtLpLkpIJ+EAj2cphVfLdblcaG/ULG+g4bZGNUc=;
- b=vuxCwB93vT2wcCeAwbN1YyLDeBpKg99nI5JUtBSdXPkcIRYBfIpNHW9IBppI9y7t5f
- 3vogK6Xkb6CUGyXHYlSIubuwMb3iU37yamvIVE4S75Ck3hLIFso3Rv8k/RWtwvhuwSUH
- lFejUJd295RLZxP1/5aR0GI04Zl+CWTtblV98=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=vuxCwB93
-Subject: [Buildroot] [PATCH] configs/qemu: update defconfigs to Linux 6.12.9
+ bh=9MKeCurM38CawN2hfXzvyyQB8RUqC8xnGKY7n4B3wjs=;
+ b=hkb08eZ2qE6LbJBu1XKPmhHgbEqg5SZeSckzWLymaId0Es3KInl+jY746EpoBI61UK
+ O6HO8gAdYiY96xGBWDO/gt5RDl+Qi+f9R+e/jwmpyI1Vmcbh1/hiGnmpg6n7OT06vdDh
+ 4ORXd/zxkmr+RhQkkbzMpuqO+viEPFVn0K4h/YV3wAPa1xEhZFnuX1oVvFS4ox8u/Zo5
+ tw2Dv8XYmbDxQVuurXrSRhryDZwprcnaTdlkci+4ZuK+2pkTFbbLjD6zAn44R5Ut8zJg
+ JYKiNibNoiVGlvKYsfbE08fgYQIulSTiecdzs2pqRqWAufis0vqilgzzxggx/3wo40AG
+ pBMQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=hkb08eZ2
+Subject: [Buildroot] [PATCH v3 1/1] package/fwupd: bump to version 2.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,971 +106,240 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update all qemu defconfigs to the latest Kernel LTS version.
-
-Runtime tested locally (on a build server).
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- board/qemu/patches/linux/linux.hash       | 2 +-
- configs/qemu_aarch64_ebbr_defconfig       | 4 ++--
- configs/qemu_aarch64_sbsa_defconfig       | 4 ++--
- configs/qemu_aarch64_virt_defconfig       | 4 ++--
- configs/qemu_arm_ebbr_defconfig           | 4 ++--
- configs/qemu_arm_versatile_defconfig      | 4 ++--
- configs/qemu_arm_vexpress_defconfig       | 4 ++--
- configs/qemu_arm_vexpress_tz_defconfig    | 4 ++--
- configs/qemu_m68k_mcf5208_defconfig       | 4 ++--
- configs/qemu_m68k_q800_defconfig          | 4 ++--
- configs/qemu_microblazebe_mmu_defconfig   | 4 ++--
- configs/qemu_microblazeel_mmu_defconfig   | 4 ++--
- configs/qemu_mips32r2_malta_defconfig     | 4 ++--
- configs/qemu_mips32r2el_malta_defconfig   | 4 ++--
- configs/qemu_mips32r6_malta_defconfig     | 4 ++--
- configs/qemu_mips32r6el_malta_defconfig   | 4 ++--
- configs/qemu_mips64_malta_defconfig       | 4 ++--
- configs/qemu_mips64el_malta_defconfig     | 4 ++--
- configs/qemu_mips64r6_malta_defconfig     | 4 ++--
- configs/qemu_mips64r6el_malta_defconfig   | 4 ++--
- configs/qemu_or1k_defconfig               | 4 ++--
- configs/qemu_ppc64_e5500_defconfig        | 4 ++--
- configs/qemu_ppc64_pseries_defconfig      | 4 ++--
- configs/qemu_ppc64le_powernv8_defconfig   | 4 ++--
- configs/qemu_ppc64le_pseries_defconfig    | 4 ++--
- configs/qemu_ppc_bamboo_defconfig         | 4 ++--
- configs/qemu_ppc_e500mc_defconfig         | 4 ++--
- configs/qemu_ppc_g3beige_defconfig        | 4 ++--
- configs/qemu_ppc_mac99_defconfig          | 4 ++--
- configs/qemu_ppc_mpc8544ds_defconfig      | 4 ++--
- configs/qemu_riscv32_nommu_virt_defconfig | 4 ++--
- configs/qemu_riscv32_virt_defconfig       | 4 ++--
- configs/qemu_riscv64_nommu_virt_defconfig | 4 ++--
- configs/qemu_riscv64_virt_defconfig       | 4 ++--
- configs/qemu_riscv64_virt_efi_defconfig   | 4 ++--
- configs/qemu_s390x_defconfig              | 4 ++--
- configs/qemu_sh4_r2d_defconfig            | 4 ++--
- configs/qemu_sh4eb_r2d_defconfig          | 4 ++--
- configs/qemu_sparc64_sun4u_defconfig      | 4 ++--
- configs/qemu_sparc_ss10_defconfig         | 4 ++--
- configs/qemu_x86_64_defconfig             | 4 ++--
- configs/qemu_x86_defconfig                | 4 ++--
- configs/qemu_xtensa_lx60_defconfig        | 4 ++--
- configs/qemu_xtensa_lx60_nommu_defconfig  | 4 ++--
- 44 files changed, 87 insertions(+), 87 deletions(-)
-
-diff --git a/board/qemu/patches/linux/linux.hash b/board/qemu/patches/linux/linux.hash
-index deb1ad0ce5..464f5e4cd3 100644
---- a/board/qemu/patches/linux/linux.hash
-+++ b/board/qemu/patches/linux/linux.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256  aaa824eaf07f61911d22b75ff090a403c3dd0bd73e23933e0bba8b5971436ce1  linux-6.6.32.tar.xz
-+sha256  87be0360df0931b340d2bac35161a548070fbc3a8c352c49e21e96666c26aeb4  linux-6.12.9.tar.xz
- 
- # sha256 locally computed
- sha256  a76052c0c71d4025b117dcfc18ca7e189ac495a7645fa98c1bdaddca15cce815  xtensa_dc233c.tar.gz
-diff --git a/configs/qemu_aarch64_ebbr_defconfig b/configs/qemu_aarch64_ebbr_defconfig
-index cb6a06653c..d807f220bc 100644
---- a/configs/qemu_aarch64_ebbr_defconfig
-+++ b/configs/qemu_aarch64_ebbr_defconfig
-@@ -1,12 +1,12 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/aarch64-ebbr/post-image.sh support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/aarch64-ebbr/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_PACKAGE_OPTEE_CLIENT=y
-diff --git a/configs/qemu_aarch64_sbsa_defconfig b/configs/qemu_aarch64_sbsa_defconfig
-index 04bb2832d3..802f8c3d56 100644
---- a/configs/qemu_aarch64_sbsa_defconfig
-+++ b/configs/qemu_aarch64_sbsa_defconfig
-@@ -1,6 +1,6 @@
- BR2_aarch64=y
- BR2_neoverse_n1=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/aarch64-sbsa/a
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/aarch64-sbsa/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-index 6c206cea93..fb9db3f0fc 100644
---- a/configs/qemu_aarch64_virt_defconfig
-+++ b/configs/qemu_aarch64_virt_defconfig
-@@ -1,5 +1,5 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_arm_ebbr_defconfig b/configs/qemu_arm_ebbr_defconfig
-index 2cc222e2a4..587690a5d3 100644
---- a/configs/qemu_arm_ebbr_defconfig
-+++ b/configs/qemu_arm_ebbr_defconfig
-@@ -1,13 +1,13 @@
- BR2_arm=y
- BR2_cortex_a15=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/arm-ebbr/post-image.sh support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/arm-ebbr/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-ebbr/linux.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index e22ef33c06..febce57f92 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -1,5 +1,5 @@
- BR2_arm=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="versatile"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-versatile/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index 84be67045f..b65d893967 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -2,7 +2,7 @@ BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/vexpress-v2p-ca9"
-diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
-index 1c2da47282..8ad9fbd220 100644
---- a/configs/qemu_arm_vexpress_tz_defconfig
-+++ b/configs/qemu_arm_vexpress_tz_defconfig
-@@ -1,7 +1,7 @@
- BR2_arm=y
- BR2_cortex_a15=y
- BR2_ARM_FPU_VFPV3D16=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-vexpress-tz/linux.fragment"
- BR2_PACKAGE_OPENSSL=y
-diff --git a/configs/qemu_m68k_mcf5208_defconfig b/configs/qemu_m68k_mcf5208_defconfig
-index feb96bb533..be2eec0935 100644
---- a/configs/qemu_m68k_mcf5208_defconfig
-+++ b/configs/qemu_m68k_mcf5208_defconfig
-@@ -1,6 +1,6 @@
- BR2_m68k=y
- BR2_m68k_cf5208=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-mcf5208/linux.config"
- BR2_TARGET_ROOTFS_INITRAMFS=y
-diff --git a/configs/qemu_m68k_q800_defconfig b/configs/qemu_m68k_q800_defconfig
-index 689da54892..a440b0f071 100644
---- a/configs/qemu_m68k_q800_defconfig
-+++ b/configs/qemu_m68k_q800_defconfig
-@@ -1,5 +1,5 @@
- BR2_m68k=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-q800/linux.config"
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index 572f7c125f..6a218ef40f 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -1,5 +1,5 @@
- BR2_microblazebe=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
-diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
-index 03c80919dc..bc8e40eaf0 100644
---- a/configs/qemu_microblazeel_mmu_defconfig
-+++ b/configs/qemu_microblazeel_mmu_defconfig
-@@ -1,5 +1,5 @@
- BR2_microblazeel=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
-diff --git a/configs/qemu_mips32r2_malta_defconfig b/configs/qemu_mips32r2_malta_defconfig
-index ceb5f91b20..1a3c1bbc3e 100644
---- a/configs/qemu_mips32r2_malta_defconfig
-+++ b/configs/qemu_mips32r2_malta_defconfig
-@@ -1,6 +1,6 @@
- BR2_mips=y
- BR2_mips_32r2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips32r2el_malta_defconfig b/configs/qemu_mips32r2el_malta_defconfig
-index e5ce0c660b..127006ec73 100644
---- a/configs/qemu_mips32r2el_malta_defconfig
-+++ b/configs/qemu_mips32r2el_malta_defconfig
-@@ -1,6 +1,6 @@
- BR2_mipsel=y
- BR2_mips_32r2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips32r6_malta_defconfig b/configs/qemu_mips32r6_malta_defconfig
-index d8f3455b27..7cb1d83b7d 100644
---- a/configs/qemu_mips32r6_malta_defconfig
-+++ b/configs/qemu_mips32r6_malta_defconfig
-@@ -1,6 +1,6 @@
- BR2_mips=y
- BR2_mips_32r6=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips32r6el_malta_defconfig b/configs/qemu_mips32r6el_malta_defconfig
-index 89231a2c4f..80c3e33269 100644
---- a/configs/qemu_mips32r6el_malta_defconfig
-+++ b/configs/qemu_mips32r6el_malta_defconfig
-@@ -1,6 +1,6 @@
- BR2_mipsel=y
- BR2_mips_32r6=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
-index de0ba6d959..2341d2790f 100644
---- a/configs/qemu_mips64_malta_defconfig
-+++ b/configs/qemu_mips64_malta_defconfig
-@@ -1,6 +1,6 @@
- BR2_mips64=y
- BR2_MIPS_NABI64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
-index e8d4b4093d..983ac8b8d3 100644
---- a/configs/qemu_mips64el_malta_defconfig
-+++ b/configs/qemu_mips64el_malta_defconfig
-@@ -1,6 +1,6 @@
- BR2_mips64el=y
- BR2_MIPS_NABI64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64r6_malta_defconfig b/configs/qemu_mips64r6_malta_defconfig
-index 06530044e1..f3015c9102 100644
---- a/configs/qemu_mips64r6_malta_defconfig
-+++ b/configs/qemu_mips64r6_malta_defconfig
-@@ -1,7 +1,7 @@
- BR2_mips64=y
- BR2_mips_64r6=y
- BR2_MIPS_NABI64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64r6el_malta_defconfig b/configs/qemu_mips64r6el_malta_defconfig
-index d2e0bb7157..3ad6f3652f 100644
---- a/configs/qemu_mips64r6el_malta_defconfig
-+++ b/configs/qemu_mips64r6el_malta_defconfig
-@@ -1,7 +1,7 @@
- BR2_mips64el=y
- BR2_mips_64r6=y
- BR2_MIPS_NABI64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_or1k_defconfig b/configs/qemu_or1k_defconfig
-index 02c3882ed6..2ea8bfa190 100644
---- a/configs/qemu_or1k_defconfig
-+++ b/configs/qemu_or1k_defconfig
-@@ -1,5 +1,5 @@
- BR2_or1k=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/or1k/linux.config"
- BR2_TARGET_ROOTFS_INITRAMFS=y
-diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
-index dd778e7868..e3fb1490e1 100644
---- a/configs/qemu_ppc64_e5500_defconfig
-+++ b/configs/qemu_ppc64_e5500_defconfig
-@@ -1,6 +1,6 @@
- BR2_powerpc64=y
- BR2_powerpc_e5500=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
-index d006bee7a4..d3f8f57232 100644
---- a/configs/qemu_ppc64_pseries_defconfig
-+++ b/configs/qemu_ppc64_pseries_defconfig
-@@ -1,6 +1,6 @@
- BR2_powerpc64=y
- BR2_powerpc_power7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="pseries"
- BR2_LINUX_KERNEL_VMLINUX=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_ppc64le_powernv8_defconfig b/configs/qemu_ppc64le_powernv8_defconfig
-index d20a21618a..e1a9cfe661 100644
---- a/configs/qemu_ppc64le_powernv8_defconfig
-+++ b/configs/qemu_ppc64le_powernv8_defconfig
-@@ -1,5 +1,5 @@
- BR2_powerpc64le=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="powernv"
- BR2_LINUX_KERNEL_VMLINUX=y
- BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
-diff --git a/configs/qemu_ppc64le_pseries_defconfig b/configs/qemu_ppc64le_pseries_defconfig
-index 5cbacd3f17..86952b3461 100644
---- a/configs/qemu_ppc64le_pseries_defconfig
-+++ b/configs/qemu_ppc64le_pseries_defconfig
-@@ -1,5 +1,5 @@
- BR2_powerpc64le=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="pseries_le"
- BR2_LINUX_KERNEL_VMLINUX=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_ppc_bamboo_defconfig b/configs/qemu_ppc_bamboo_defconfig
-index bb7dca6930..7d2c61aa79 100644
---- a/configs/qemu_ppc_bamboo_defconfig
-+++ b/configs/qemu_ppc_bamboo_defconfig
-@@ -1,6 +1,6 @@
- BR2_powerpc=y
- BR2_powerpc_440fp=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="44x/bamboo"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-bamboo/linux.fragment"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_e500mc_defconfig b/configs/qemu_ppc_e500mc_defconfig
-index eccf86f6a3..590a049239 100644
---- a/configs/qemu_ppc_e500mc_defconfig
-+++ b/configs/qemu_ppc_e500mc_defconfig
-@@ -1,6 +1,6 @@
- BR2_powerpc=y
- BR2_powerpc_e500mc=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="corenet32_smp"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-e500mc/linux.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index f35c8557b1..9df8b8bc86 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -1,6 +1,6 @@
- BR2_powerpc=y
- BR2_powerpc_750=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_mac99_defconfig b/configs/qemu_ppc_mac99_defconfig
-index 13d9aba0b0..85c63aefa3 100644
---- a/configs/qemu_ppc_mac99_defconfig
-+++ b/configs/qemu_ppc_mac99_defconfig
-@@ -1,6 +1,6 @@
- BR2_powerpc=y
- BR2_powerpc_7400=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="pmac32"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-mac99/linux.fragment"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index 8da2a0472c..11808718e7 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -1,6 +1,6 @@
- BR2_powerpc=y
- BR2_powerpc_8548=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-mpc8544ds/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_riscv32_nommu_virt_defconfig b/configs/qemu_riscv32_nommu_virt_defconfig
-index 49580716bb..3115f20066 100644
---- a/configs/qemu_riscv32_nommu_virt_defconfig
-+++ b/configs/qemu_riscv32_nommu_virt_defconfig
-@@ -1,7 +1,7 @@
- BR2_riscv=y
- BR2_RISCV_32=y
- # BR2_RISCV_USE_MMU is not set
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux-nommu.config"
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-index 83ea0e91d9..a171ef4525 100644
---- a/configs/qemu_riscv32_virt_defconfig
-+++ b/configs/qemu_riscv32_virt_defconfig
-@@ -1,6 +1,6 @@
- BR2_riscv=y
- BR2_RISCV_32=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="rv32"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_OPENSBI=y
-diff --git a/configs/qemu_riscv64_nommu_virt_defconfig b/configs/qemu_riscv64_nommu_virt_defconfig
-index bb3fb2c5cb..169eead244 100644
---- a/configs/qemu_riscv64_nommu_virt_defconfig
-+++ b/configs/qemu_riscv64_nommu_virt_defconfig
-@@ -1,6 +1,6 @@
- BR2_riscv=y
- # BR2_RISCV_USE_MMU is not set
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv64-virt/linux-nommu.config"
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
-index d9f715198a..82c289e1af 100644
---- a/configs/qemu_riscv64_virt_defconfig
-+++ b/configs/qemu_riscv64_virt_defconfig
-@@ -1,5 +1,5 @@
- BR2_riscv=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_OPENSBI=y
-diff --git a/configs/qemu_riscv64_virt_efi_defconfig b/configs/qemu_riscv64_virt_efi_defconfig
-index 66a05d59e5..d7fdc861c6 100644
---- a/configs/qemu_riscv64_virt_efi_defconfig
-+++ b/configs/qemu_riscv64_virt_efi_defconfig
-@@ -1,5 +1,5 @@
- BR2_riscv=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/riscv64-virt-e
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/riscv64-virt-efi/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
-index 975633e3ab..a86df53aae 100644
---- a/configs/qemu_s390x_defconfig
-+++ b/configs/qemu_s390x_defconfig
-@@ -1,5 +1,5 @@
- BR2_s390x=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index 4b06017aec..8762cc2ea9 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -1,5 +1,5 @@
- BR2_sh=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttySC1"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_sh4eb_r2d_defconfig b/configs/qemu_sh4eb_r2d_defconfig
-index 9a80bb1065..01302a2e98 100644
---- a/configs/qemu_sh4eb_r2d_defconfig
-+++ b/configs/qemu_sh4eb_r2d_defconfig
-@@ -1,6 +1,6 @@
- BR2_sh=y
- BR2_sh4eb=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttySC1"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4eb-r2d/linux.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_sparc64_sun4u_defconfig b/configs/qemu_sparc64_sun4u_defconfig
-index d409a9ff47..bea866eea9 100644
---- a/configs/qemu_sparc64_sun4u_defconfig
-+++ b/configs/qemu_sparc64_sun4u_defconfig
-@@ -1,5 +1,5 @@
- BR2_sparc64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc64-sun4u/linux.config"
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-index 63ca7330b9..90d98ce6fa 100644
---- a/configs/qemu_sparc_ss10_defconfig
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -1,5 +1,5 @@
- BR2_sparc=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux.config"
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-index 8022e43a20..7c7fc374d9 100644
---- a/configs/qemu_x86_64_defconfig
-+++ b/configs/qemu_x86_64_defconfig
-@@ -1,5 +1,5 @@
- BR2_x86_64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
- BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index e4ff52a3d5..0a31327e88 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -1,5 +1,5 @@
- BR2_x86_pentiumpro=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
-index dca2e600d5..4a3e530aea 100644
---- a/configs/qemu_xtensa_lx60_defconfig
-+++ b/configs/qemu_xtensa_lx60_defconfig
-@@ -1,7 +1,7 @@
- BR2_xtensa=y
- BR2_XTENSA_CUSTOM=y
- BR2_XTENSA_OVERLAY_FILE="https://github.com/jcmvbkbc/xtensa-toolchain-build/raw/95291b7c39e6f790d0b2f062c945a630290f2c81/overlays/xtensa_dc233c.tar.gz"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
-index 52e28cb9c5..363ab27513 100644
---- a/configs/qemu_xtensa_lx60_nommu_defconfig
-+++ b/configs/qemu_xtensa_lx60_nommu_defconfig
-@@ -2,7 +2,7 @@ BR2_xtensa=y
- BR2_XTENSA_CUSTOM=y
- BR2_XTENSA_OVERLAY_FILE="https://github.com/jcmvbkbc/xtensa-toolchain-build/raw/95291b7c39e6f790d0b2f062c945a630290f2c81/overlays/xtensa_dc233c.tar.gz"
- # BR2_XTENSA_USE_MMU is not set
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-nommu.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--- 
-2.48.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RHJvcCBubyBsb25nZXIgcmVxdWlyZWQgbGliZ3VkZXYgZGVwZW5kZW5jeS4KCkFkZCBhIHBhdGNo
+IGZpeGluZyBhIHVjbGliYyBidWlsZCBpc3N1ZS4KCkFkZCBuZXcgbWFuZGF0b3J5IGxpYnVzYiBk
+ZXBlbmRlbmN5LgoKQWRkIG5ldyBvcHRpb25hbCBsaWJkcm0gY29uZmlnIG9wdGlvbi4KCkFkZCBu
+ZXcgb3B0aW9uYWwgbGliYmxraWQgZGVwZW5kZW5jeSBhbmQgY29uZmlnIG9wdGlvbi4KCkFkZCBu
+ZXcgb3B0aW9uYWwgdmFsZ3JpbmQgZGVwZW5kZW5jeSBhbmQgY29uZmlnIG9wdGlvbi4KCkFkZCBu
+ZXcgdWRldiBjb25maWcgb3B0aW9uLgoKQWRkIG5ldyB2ZW5kb3JfbWV0YWRhdGEgY29uZmlnIG9w
+dGlvbi4KCkFkZCBuZXcgdW1vY2tkZXZfdGVzdHMgY29uZmlnIG9wdGlvbi4KCkFkZCBuZXcgc3lz
+dGVtZF9zeXNjYWxsX2ZpbHRlciBjb25maWcgb3B0aW9uLgoKQWRkIG5ldyB2ZW5kb3JfaWRzX2Rp
+ciBjb25maWcgb3B0aW9uLgoKUmVtb3ZlIGd1c2IgY29uZmlnIG9wdGlvbi4KClJlbW92ZSBwbHVn
+aW5faW50ZWxfc3BpIGNvbmZpZyBvcHRpb24uCgpSZW1vdmUgY29tcGF0X2NsaSBjb25maWcgb3B0
+aW9uLgoKUmVtb3ZlIHRoaW5rbG1pX2NvbXBhdCBjb25maWcgb3B0aW9uLgoKU2lnbmVkLW9mZi1i
+eTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+Ci0tLQpDaGFuZ2Vz
+IHYyIC0+IHYzOgogIC0gYWRkIHBhdGNoIGZpeGluZyB1Y2xpYmMgYnVpbGRzCkNoYW5nZXMgdjEg
+LT4gdjI6CiAgLSBhbHNvIHNldCB2ZW5kb3JfaWRzX2RpciBjb25maWcgb3B0aW9uCiAgLSBtYWtl
+IHBsdWdpbl9ncGlvIGNvbmRpdGlvbmFsIHVwb24ga2VybmVsIGhlYWRlcnMgPj0gNS4xMAotLS0K
+IC4uLmRldmRpci13aGVuLWd1ZGV2LXN1cHBvcnQtaXMtZW5hYmxlZC5wYXRjaCB8ICAzNSAtLS0t
+LS0KIC4uLi8wMDAxLXRyaXZpYWwtZml4LWJ1aWxkLXdpdGgtdWNsaWJjLnBhdGNoICB8ICA3NCAr
+KysrKysrKysrKysKIHBhY2thZ2UvZnd1cGQvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAg
+ICB8ICAgOSArLQogcGFja2FnZS9md3VwZC9md3VwZC5oYXNoICAgICAgICAgICAgICAgICAgICAg
+IHwgICAyICstCiBwYWNrYWdlL2Z3dXBkL2Z3dXBkLm1rICAgICAgICAgICAgICAgICAgICAgICAg
+fCAxMDggKysrKysrKysrLS0tLS0tLS0tCiA1IGZpbGVzIGNoYW5nZWQsIDEzMiBpbnNlcnRpb25z
+KCspLCA5NiBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2Z3dXBkLzAw
+MDEtT25seS1yZXF1aXJlLXVkZXZkaXItd2hlbi1ndWRldi1zdXBwb3J0LWlzLWVuYWJsZWQucGF0
+Y2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2Z3dXBkLzAwMDEtdHJpdmlhbC1maXgtYnVp
+bGQtd2l0aC11Y2xpYmMucGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2Z3dXBkLzAwMDEtT25s
+eS1yZXF1aXJlLXVkZXZkaXItd2hlbi1ndWRldi1zdXBwb3J0LWlzLWVuYWJsZWQucGF0Y2ggYi9w
+YWNrYWdlL2Z3dXBkLzAwMDEtT25seS1yZXF1aXJlLXVkZXZkaXItd2hlbi1ndWRldi1zdXBwb3J0
+LWlzLWVuYWJsZWQucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDBmMTQ1MDg1
+MTYuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9md3VwZC8wMDAxLU9ubHktcmVxdWlyZS11ZGV2
+ZGlyLXdoZW4tZ3VkZXYtc3VwcG9ydC1pcy1lbmFibGVkLnBhdGNoCisrKyAvZGV2L251bGwKQEAg
+LTEsMzUgKzAsMCBAQAotRnJvbSBhNzg0ZWY5YjkwNDc3OGI1MTFhNjI4NGY0NmQ5ODM5MDY5Mzlk
+ZTZjIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogSmFtZXMgSGlsbGlhcmQgPGphbWVz
+LmhpbGxpYXJkMUBnbWFpbC5jb20+Ci1EYXRlOiBUaHUsIDE4IEp1bCAyMDI0IDA5OjQ0OjE1IC0w
+NjAwCi1TdWJqZWN0OiBbUEFUQ0hdIE9ubHkgcmVxdWlyZSB1ZGV2ZGlyIHdoZW4gZ3VkZXYgc3Vw
+cG9ydCBpcyBlbmFibGVkCi0KLVNpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5o
+aWxsaWFyZDFAZ21haWwuY29tPgotVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9md3VwZC9m
+d3VwZC9jb21taXQvYTc4NGVmOWI5MDQ3NzhiNTExYTYyODRmNDZkOTgzOTA2OTM5ZGU2YwotLS0t
+Ci0gbWVzb24uYnVpbGQgfCAxMCArKysrKystLS0tCi0gMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0
+aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKLQotZGlmZiAtLWdpdCBhL21lc29uLmJ1aWxkIGIvbWVz
+b24uYnVpbGQKLWluZGV4IDIyMjgyZDczZS4uZjQ5ZDA4ZDI5IDEwMDY0NAotLS0tIGEvbWVzb24u
+YnVpbGQKLSsrKyBiL21lc29uLmJ1aWxkCi1AQCAtMjczLDEwICsyNzMsMTIgQEAgaWYgYnVpbGRf
+ZGFlbW9uCi0gICBpZiBub3QgcG9sa2l0LmZvdW5kKCkKLSAgICAgd2FybmluZygnUG9sa2l0IGlz
+IGRpc2FibGVkLCB0aGUgZGFlbW9uIHdpbGwgYWxsb3cgQUxMIGNsaWVudCBhY3Rpb25zJykKLSAg
+IGVuZGlmCi0tICB1ZGV2ZGlyID0gZ2V0X29wdGlvbigndWRldmRpcicpCi0tICBpZiB1ZGV2ZGly
+ID09ICcnIGFuZCBob3N0X21hY2hpbmUuc3lzdGVtKCkgPT0gJ2xpbnV4JwotLSAgICB1ZGV2ID0g
+ZGVwZW5kZW5jeSgndWRldicpCi0tICAgIHVkZXZkaXIgPSB1ZGV2LmdldF92YXJpYWJsZShwa2dj
+b25maWc6ICd1ZGV2ZGlyJykKLSsgIGlmIGd1ZGV2LmZvdW5kKCkKLSsgICAgdWRldmRpciA9IGdl
+dF9vcHRpb24oJ3VkZXZkaXInKQotKyAgICBpZiB1ZGV2ZGlyID09ICcnIGFuZCBob3N0X21hY2hp
+bmUuc3lzdGVtKCkgPT0gJ2xpbnV4JwotKyAgICAgIHVkZXYgPSBkZXBlbmRlbmN5KCd1ZGV2JykK
+LSsgICAgICB1ZGV2ZGlyID0gdWRldi5nZXRfdmFyaWFibGUocGtnY29uZmlnOiAndWRldmRpcicp
+Ci0rICAgIGVuZGlmCi0gICBlbmRpZgotIGVuZGlmCi0gbGlibSA9IGNjLmZpbmRfbGlicmFyeSgn
+bScsIHJlcXVpcmVkOiBmYWxzZSkKLS0tIAotMi4zNC4xCi0KZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
+Znd1cGQvMDAwMS10cml2aWFsLWZpeC1idWlsZC13aXRoLXVjbGliYy5wYXRjaCBiL3BhY2thZ2Uv
+Znd1cGQvMDAwMS10cml2aWFsLWZpeC1idWlsZC13aXRoLXVjbGliYy5wYXRjaApuZXcgZmlsZSBt
+b2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi42NDE1OTljMmEzCi0tLSAvZGV2L251bGwKKysr
+IGIvcGFja2FnZS9md3VwZC8wMDAxLXRyaXZpYWwtZml4LWJ1aWxkLXdpdGgtdWNsaWJjLnBhdGNo
+CkBAIC0wLDAgKzEsNzQgQEAKK0Zyb20gNTcwOGFmZmFmMjZiMmQ4NGFhYTU0MDI3YjZlMjRmMjU3
+NmRmNTBlMSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKK0Zyb206IEphbWVzIEhpbGxpYXJkIDxq
+YW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPgorRGF0ZTogU3VuLCAxOSBKYW4gMjAyNSAwNToyMDoz
+MCAtMDcwMAorU3ViamVjdDogW1BBVENIXSB0cml2aWFsOiBmaXggYnVpbGQgd2l0aCB1Y2xpYmMK
+K01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRG
+LTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKKworV2UgbmVlZCB0byBpbmNsdWRl
+IHN0ZGRlZi5oIGJlZm9yZSBzY3NpL3NnLmggZm9yIGJ1aWxkcyB0byB3b3JrCit3aXRoIHVjbGli
+Yy4KKworRml4ZXM6CitJbiBmaWxlIGluY2x1ZGVkIGZyb20gLi4vbGliZnd1cGRwbHVnaW4vZnUt
+YmxvY2stZGV2aWNlLmM6MTI6CisvdXNyL2luY2x1ZGUvc2NzaS9zZy5oOjM4OjM6IGVycm9yOiB1
+bmtub3duIHR5cGUgbmFtZSDigJhzaXplX3TigJkKKyAgIDM4IHwgICBzaXplX3QgaW92X2xlbjsg
+ICAgICAgICAgICAgLyogTGVuZ3RoIGluIGJ5dGVzICAqLworICAgICAgfCAgIF5+fn5+fgorCitJ
+biBmaWxlIGluY2x1ZGVkIGZyb20gLi4vcGx1Z2lucy9hdGEvZnUtYXRhLWRldmljZS5jOjk6Cisv
+dXNyL2luY2x1ZGUvc2NzaS9zZy5oOjM4OjM6IGVycm9yOiB1bmtub3duIHR5cGUgbmFtZSDigJhz
+aXplX3TigJkKKyAgIDM4IHwgICBzaXplX3QgaW92X2xlbjsgICAgICAgICAgICAgLyogTGVuZ3Ro
+IGluIGJ5dGVzICAqLworICAgICAgfCAgIF5+fn5+fgorCitJbiBmaWxlIGluY2x1ZGVkIGZyb20g
+Li4vcGx1Z2lucy9zY3NpL2Z1LXNjc2ktZGV2aWNlLmM6OToKKy91c3IvaW5jbHVkZS9zY3NpL3Nn
+Lmg6Mzg6MzogZXJyb3I6IHVua25vd24gdHlwZSBuYW1lIOKAmHNpemVfdOKAmQorICAgMzggfCAg
+IHNpemVfdCBpb3ZfbGVuOyAgICAgICAgICAgICAvKiBMZW5ndGggaW4gYnl0ZXMgICovCisgICAg
+ICB8ICAgXn5+fn5+CisKK1NpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxs
+aWFyZDFAZ21haWwuY29tPgorVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9md3VwZC9md3Vw
+ZC9jb21taXQvNTcwOGFmZmFmMjZiMmQ4NGFhYTU0MDI3YjZlMjRmMjU3NmRmNTBlMQorLS0tCisg
+bGliZnd1cGRwbHVnaW4vZnUtYmxvY2stZGV2aWNlLmMgfCAxICsKKyBwbHVnaW5zL2F0YS9mdS1h
+dGEtZGV2aWNlLmMgICAgICB8IDEgKworIHBsdWdpbnMvc2NzaS9mdS1zY3NpLWRldmljZS5jICAg
+IHwgMSArCisgMyBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKykKKworZGlmZiAtLWdpdCBh
+L2xpYmZ3dXBkcGx1Z2luL2Z1LWJsb2NrLWRldmljZS5jIGIvbGliZnd1cGRwbHVnaW4vZnUtYmxv
+Y2stZGV2aWNlLmMKK2luZGV4IDNlZTNhZjcxNC4uZTljZTY2MWRkIDEwMDY0NAorLS0tIGEvbGli
+Znd1cGRwbHVnaW4vZnUtYmxvY2stZGV2aWNlLmMKKysrKyBiL2xpYmZ3dXBkcGx1Z2luL2Z1LWJs
+b2NrLWRldmljZS5jCitAQCAtOSw2ICs5LDcgQEAKKyAjaW5jbHVkZSAiY29uZmlnLmgiCisgCisg
+I2lmZGVmIEhBVkVfU0NTSV9TR19ICisrI2luY2x1ZGUgPHN0ZGRlZi5oPgorICNpbmNsdWRlIDxz
+Y3NpL3NnLmg+CisgI2VuZGlmCisgCitkaWZmIC0tZ2l0IGEvcGx1Z2lucy9hdGEvZnUtYXRhLWRl
+dmljZS5jIGIvcGx1Z2lucy9hdGEvZnUtYXRhLWRldmljZS5jCitpbmRleCBmZWM1YjllZTMuLmVm
+MWJiMDBhZiAxMDA2NDQKKy0tLSBhL3BsdWdpbnMvYXRhL2Z1LWF0YS1kZXZpY2UuYworKysrIGIv
+cGx1Z2lucy9hdGEvZnUtYXRhLWRldmljZS5jCitAQCAtNiw2ICs2LDcgQEAKKyAKKyAjaW5jbHVk
+ZSAiY29uZmlnLmgiCisgCisrI2luY2x1ZGUgPHN0ZGRlZi5oPgorICNpbmNsdWRlIDxzY3NpL3Nn
+Lmg+CisgCisgI2luY2x1ZGUgImZ1LWF0YS1kZXZpY2UuaCIKK2RpZmYgLS1naXQgYS9wbHVnaW5z
+L3Njc2kvZnUtc2NzaS1kZXZpY2UuYyBiL3BsdWdpbnMvc2NzaS9mdS1zY3NpLWRldmljZS5jCitp
+bmRleCAzOGRmYjNlMjcuLjYxN2MzY2U1OSAxMDA2NDQKKy0tLSBhL3BsdWdpbnMvc2NzaS9mdS1z
+Y3NpLWRldmljZS5jCisrKysgYi9wbHVnaW5zL3Njc2kvZnUtc2NzaS1kZXZpY2UuYworQEAgLTYs
+NiArNiw3IEBACisgCisgI2luY2x1ZGUgImNvbmZpZy5oIgorIAorKyNpbmNsdWRlIDxzdGRkZWYu
+aD4KKyAjaW5jbHVkZSA8c2NzaS9zZy5oPgorIAorICNpbmNsdWRlICJmdS1zY3NpLWRldmljZS5o
+IgorLS0gCisyLjM0LjEKKwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9md3VwZC9Db25maWcuaW4gYi9w
+YWNrYWdlL2Z3dXBkL0NvbmZpZy5pbgppbmRleCA2YTk2MzU4ZTViLi43NzhmNTliYmViIDEwMDY0
+NAotLS0gYS9wYWNrYWdlL2Z3dXBkL0NvbmZpZy5pbgorKysgYi9wYWNrYWdlL2Z3dXBkL0NvbmZp
+Zy5pbgpAQCAtMiwxMSArMiwxMyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfRldVUEQKIAlib29sICJm
+d3VwZCIKIAlkZXBlbmRzIG9uICFCUjJfU1RBVElDX0xJQlMgIyBsaWJ4bWxiCiAJZGVwZW5kcyBv
+biBCUjJfVVNFX1dDSEFSICMgbGliZ2xpYjIKLQlkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFT
+X1RIUkVBRFMgIyBsaWJnbGliMgorCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFE
+UyAjIGxpYmdsaWIyLCBsaWJ1c2IKKwlkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fR0NDX0FUX0xF
+QVNUXzRfOSAjIGxpYnVzYgogCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUgIyBsaWJnbGliMgogCXNl
+bGVjdCBCUjJfUEFDS0FHRV9MSUJHTElCMgogCXNlbGVjdCBCUjJfUEFDS0FHRV9MSUJKQ0FUCiAJ
+c2VsZWN0IEJSMl9QQUNLQUdFX0xJQlhNTEIKKwlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCVVNCCiAJ
+c2VsZWN0IEJSMl9QQUNLQUdFX1pMSUIKIAloZWxwCiAJICBGd3VwZCBpcyBhIHNpbXBsZSBkYWVt
+b24gdG8gYWxsb3cgc2Vzc2lvbiBzb2Z0d2FyZQpAQCAtMTQsNiArMTYsNyBAQCBjb25maWcgQlIy
+X1BBQ0tBR0VfRldVUEQKIAogCSAgaHR0cHM6Ly9md3VwZC5vcmcvCiAKLWNvbW1lbnQgImZ3dXBk
+IG5lZWRzIGEgdG9vbGNoYWluIHcvIHdjaGFyLCB0aHJlYWRzLCBkeW5hbWljIGxpYnJhcnkiCitj
+b21tZW50ICJmd3VwZCBuZWVkcyBhIHRvb2xjaGFpbiB3LyB3Y2hhciwgdGhyZWFkcywgZHluYW1p
+YyBsaWJyYXJ5LCBnY2MgPj0gNC45IgogCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUKLQlkZXBlbmRz
+IG9uICFCUjJfVVNFX1dDSEFSIHx8ICFCUjJfVE9PTENIQUlOX0hBU19USFJFQURTIHx8IEJSMl9T
+VEFUSUNfTElCUworCWRlcGVuZHMgb24gIUJSMl9VU0VfV0NIQVIgfHwgIUJSMl9UT09MQ0hBSU5f
+SEFTX1RIUkVBRFMgfHwgXAorCQlCUjJfU1RBVElDX0xJQlMgfHwgIUJSMl9UT09MQ0hBSU5fR0ND
+X0FUX0xFQVNUXzRfOQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9md3VwZC9md3VwZC5oYXNoIGIvcGFj
+a2FnZS9md3VwZC9md3VwZC5oYXNoCmluZGV4IDhkYTlkYzNjNjYuLmYzYTY3NTA4ZjIgMTAwNjQ0
+Ci0tLSBhL3BhY2thZ2UvZnd1cGQvZnd1cGQuaGFzaAorKysgYi9wYWNrYWdlL2Z3dXBkL2Z3dXBk
+Lmhhc2gKQEAgLTEsMyArMSwzIEBACiAjIExvY2FsbHkgY2FsY3VsYXRlZAotc2hhMjU2ICBiODZh
+MmQ3ZmUxYjZjYzBhYzRmNzVmMzM1MWE3OGNiM2MyMjU4ODBjOWUyMGI5MzJmYTA3OGVmNDcyZTlm
+Y2IyICBmd3VwZC0xLjkuMjAudGFyLnh6CitzaGEyNTYgIDczNjkwMTc1ZDBkZDgxODQ5ZDcyOWEw
+ZjI0N2M2OTE0NmVlOTEwNWMzYzhjNWQ4NDI4YjY0YWQ0MmQ0OWIyZjcgIGZ3dXBkLTIuMC4zLnRh
+ci54egogc2hhMjU2ICBkYzYyNjUyMGRjZDUzYTIyZjcyN2FmM2VlNDJjNzcwZTU2Yzk3YTY0ZmUz
+YWRiMDYzNzk5ZDhhYjAzMmZlNTUxICBDT1BZSU5HCmRpZmYgLS1naXQgYS9wYWNrYWdlL2Z3dXBk
+L2Z3dXBkLm1rIGIvcGFja2FnZS9md3VwZC9md3VwZC5tawppbmRleCA5MjgzZWI0M2FhLi41ZGMx
+MWRkOTUzIDEwMDY0NAotLS0gYS9wYWNrYWdlL2Z3dXBkL2Z3dXBkLm1rCisrKyBiL3BhY2thZ2Uv
+Znd1cGQvZnd1cGQubWsKQEAgLTQsNyArNCw3IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IwogCi1GV1VQRF9WRVJTSU9OID0gMS45LjIwCitGV1VQRF9WRVJTSU9OID0gMi4wLjMKIEZXVVBE
+X1NJVEUgPSBodHRwczovL2dpdGh1Yi5jb20vZnd1cGQvZnd1cGQvcmVsZWFzZXMvZG93bmxvYWQv
+JChGV1VQRF9WRVJTSU9OKQogRldVUERfU09VUkNFID0gZnd1cGQtJChGV1VQRF9WRVJTSU9OKS50
+YXIueHoKIEZXVVBEX0xJQ0VOU0UgPSBMR1BMLTIuMSsKQEAgLTE0LDYgKzE0LDcgQEAgRldVUERf
+REVQRU5ERU5DSUVTID0gXAogCWhvc3QtcHl0aG9uLWppbmphMiBcCiAJbGliZ2xpYjIgXAogCWxp
+YmpjYXQgXAorCWxpYnVzYiBcCiAJbGlieG1sYiBcCiAJemxpYgogCkBAIC0yNCwzNCArMjUsNDcg
+QEAgRldVUERfQ09ORl9PUFRTID0gXAogCS1EZG9jcz1kaXNhYmxlZCBcCiAJLURsdmZzPXRydWUg
+XAogCS1EbWFuPWZhbHNlIFwKLQktRGd1c2I9ZGlzYWJsZWQgXAogCS1EcGFzc2ltPWRpc2FibGVk
+IFwKIAktRHAycF9wb2xpY3k9bm9uZSBcCiAJLURjYm9yPWRpc2FibGVkIFwKIAktRHBsdWdpbl9h
+Y3BpX3BoYXQ9ZW5hYmxlZCBcCisJLURwbHVnaW5fYW5kcm9pZF9ib290PWVuYWJsZWQgXAorCS1E
+cGx1Z2luX2JjbTU3eHg9ZW5hYmxlZCBcCiAJLURwbHVnaW5fY2Z1PWRpc2FibGVkIFwKKwktRHBs
+dWdpbl9lbW1jPWVuYWJsZWQgXAogCS1EcGx1Z2luX2VwOTYzeD1lbmFibGVkIFwKIAktRHBsdWdp
+bl9mYXN0Ym9vdD1kaXNhYmxlZCBcCisJLURwbHVnaW5faWdzYz1lbmFibGVkIFwKKwktRHBsdWdp
+bl9pbnRlbF9tZT1lbmFibGVkIFwKKwktRHBsdWdpbl9raW5ldGljX2RwPWVuYWJsZWQgXAogCS1E
+cGx1Z2luX2xvZ2l0ZWNoX2J1bGtjb250cm9sbGVyPWRpc2FibGVkIFwKIAktRHBsdWdpbl9sb2dp
+dGVjaF9zY3JpYmU9ZGlzYWJsZWQgXAogCS1EcGx1Z2luX2xvZ2l0ZWNoX3RhcD1kaXNhYmxlZCBc
+CisJLURwbHVnaW5fbWVkaWF0ZWtfc2NhbGVyPWVuYWJsZWQgXAorCS1EcGx1Z2luX210ZD1lbmFi
+bGVkIFwKKwktRHBsdWdpbl9uaXRyb2tleT1lbmFibGVkIFwKKwktRHBsdWdpbl9udm1lPWVuYWJs
+ZWQgXAorCS1EcGx1Z2luX3BhcmFkZV9sc3Bjb249ZW5hYmxlZCBcCiAJLURwbHVnaW5fcGl4YXJ0
+X3JmPWVuYWJsZWQgXAorCS1EcGx1Z2luX3Bvd2VyZD1lbmFibGVkIFwKKwktRHBsdWdpbl9yZWFs
+dGVrX21zdD1lbmFibGVkIFwKKwktRHBsdWdpbl9zY3NpPWVuYWJsZWQgXAorCS1EcGx1Z2luX3N5
+bmFwdGljc19tc3Q9ZW5hYmxlZCBcCiAJLURwbHVnaW5fdHBtPWRpc2FibGVkIFwKIAktRHBsdWdp
+bl91ZWZpX2NhcHN1bGU9ZW5hYmxlZCBcCiAJLURwbHVnaW5fdWVmaV9jYXBzdWxlX3NwbGFzaD1m
+YWxzZSBcCi0JLURwbHVnaW5fbml0cm9rZXk9ZW5hYmxlZCBcCi0JLURwbHVnaW5fbXRkPWVuYWJs
+ZWQgXAotCS1EcGx1Z2luX2ludGVsX21lPWVuYWJsZWQgXAorCS1EcGx1Z2luX3VmMj1lbmFibGVk
+IFwKIAktRHBsdWdpbl91cG93ZXI9ZW5hYmxlZCBcCi0JLURwbHVnaW5fcG93ZXJkPWVuYWJsZWQg
+XAogCS1EcXViZXM9ZmFsc2UgXAogCS1Ec3VwcG9ydGVkX2J1aWxkPWVuYWJsZWQgXAogCS1EbGF1
+bmNoZD1kaXNhYmxlZCBcCiAJLUR0ZXN0cz1mYWxzZSBcCisJLUR1bW9ja2Rldl90ZXN0cz1kaXNh
+YmxlZCBcCiAJLURtZXRhaW5mbz10cnVlIFwKIAktRGZpc2hfY29tcGxldGlvbj1mYWxzZSBcCi0J
+LURjb21wYXRfY2xpPWZhbHNlIFwKLQktRHRoaW5rbG1pX2NvbXBhdD1mYWxzZSBcCisJLUR1ZGV2
+PWVuYWJsZWQgXAorCS1EdmVuZG9yX2lkc19kaXI9L3Vzci9zaGFyZS9od2RhdGEgXAorCS1EdmVu
+ZG9yX21ldGFkYXRhPWZhbHNlIFwKIAktRHB5dGhvbj0iJChIT1NUX0RJUikvYmluL3B5dGhvbjMi
+CiAKIGlmZXEgKCQoQlIyX1BBQ0tBR0VfR09CSkVDVF9JTlRST1NQRUNUSU9OKSx5KQpAQCAtNjgs
+NDEgKzgyLDYgQEAgZWxzZQogRldVUERfQ09ORl9PUFRTICs9IC1EbGliYXJjaGl2ZT1kaXNhYmxl
+ZAogZW5kaWYKIAotaWZlcSAoJChCUjJfUEFDS0FHRV9MSUJHVURFVikseSkKLUZXVVBEX0RFUEVO
+REVOQ0lFUyArPSBsaWJndWRldgotRldVUERfQ09ORl9PUFRTICs9IFwKLQktRGd1ZGV2PWVuYWJs
+ZWQgXAotCS1EcGx1Z2luX2FuZHJvaWRfYm9vdD1lbmFibGVkIFwKLQktRHBsdWdpbl9iY201N3h4
+PWVuYWJsZWQgXAotCS1EcGx1Z2luX2VtbWM9ZW5hYmxlZCBcCi0JLURwbHVnaW5fZ3Bpbz1lbmFi
+bGVkIFwKLQktRHBsdWdpbl9pZ3NjPWVuYWJsZWQgXAotCS1EcGx1Z2luX2tpbmV0aWNfZHA9ZW5h
+YmxlZCBcCi0JLURwbHVnaW5fcGFyYWRlX2xzcGNvbj1lbmFibGVkIFwKLQktRHBsdWdpbl9yZWFs
+dGVrX21zdD1lbmFibGVkIFwKLQktRHBsdWdpbl9zeW5hcHRpY3NfbXN0PWVuYWJsZWQgXAotCS1E
+cGx1Z2luX21lZGlhdGVrX3NjYWxlcj1lbmFibGVkIFwKLQktRHBsdWdpbl9zY3NpPWVuYWJsZWQg
+XAotCS1EcGx1Z2luX252bWU9ZW5hYmxlZCBcCi0JLURwbHVnaW5fdWYyPWVuYWJsZWQKLWVsc2UK
+LUZXVVBEX0NPTkZfT1BUUyArPSBcCi0JLURndWRldj1kaXNhYmxlZCBcCi0JLURwbHVnaW5fYW5k
+cm9pZF9ib290PWRpc2FibGVkIFwKLQktRHBsdWdpbl9iY201N3h4PWRpc2FibGVkIFwKLQktRHBs
+dWdpbl9lbW1jPWRpc2FibGVkIFwKLQktRHBsdWdpbl9ncGlvPWRpc2FibGVkIFwKLQktRHBsdWdp
+bl9pZ3NjPWRpc2FibGVkIFwKLQktRHBsdWdpbl9raW5ldGljX2RwPWRpc2FibGVkIFwKLQktRHBs
+dWdpbl9wYXJhZGVfbHNwY29uPWRpc2FibGVkIFwKLQktRHBsdWdpbl9yZWFsdGVrX21zdD1kaXNh
+YmxlZCBcCi0JLURwbHVnaW5fc3luYXB0aWNzX21zdD1kaXNhYmxlZCBcCi0JLURwbHVnaW5fbWVk
+aWF0ZWtfc2NhbGVyPWRpc2FibGVkIFwKLQktRHBsdWdpbl9zY3NpPWRpc2FibGVkIFwKLQktRHBs
+dWdpbl9udm1lPWRpc2FibGVkIFwKLQktRHBsdWdpbl91ZjI9ZGlzYWJsZWQKLWVuZGlmCi0KIGlm
+ZXEgKCQoQlIyX1BBQ0tBR0VfQkxVRVo1X1VUSUxTKSx5KQogRldVUERfREVQRU5ERU5DSUVTICs9
+IGJsdWV6NV91dGlscwogRldVUERfQ09ORl9PUFRTICs9IC1EYmx1ZXo9ZW5hYmxlZApAQCAtMTM0
+LDIwICsxMTMsMjkgQEAgZW5kaWYKIGlmZXEgKCQoQlIyX1BBQ0tBR0VfWFopLHkpCiBGV1VQRF9E
+RVBFTkRFTkNJRVMgKz0geHoKIEZXVVBEX0NPTkZfT1BUUyArPSAtRGx6bWE9ZW5hYmxlZAotaWZl
+cSAoJChCUjJfaTM4NikkKEJSMl94ODZfNjQpLHkpCi1GV1VQRF9DT05GX09QVFMgKz0gLURwbHVn
+aW5faW50ZWxfc3BpPXRydWUKIGVsc2UKLUZXVVBEX0NPTkZfT1BUUyArPSAtRHBsdWdpbl9pbnRl
+bF9zcGk9ZmFsc2UKK0ZXVVBEX0NPTkZfT1BUUyArPSAtRGx6bWE9ZGlzYWJsZWQKIGVuZGlmCisK
+K2lmZXEgKCQoQlIyX1BBQ0tBR0VfTElCRFJNX0FNREdQVSkseSkKK0ZXVVBEX0RFUEVOREVOQ0lF
+UyArPSBsaWJkcm0KK0ZXVVBEX0NPTkZfT1BUUyArPSAtRGxpYmRybT1lbmFibGVkIC1EcGx1Z2lu
+X2FtZGdwdT1lbmFibGVkCitlbHNlCitGV1VQRF9DT05GX09QVFMgKz0gLURsaWJkcm09ZGlzYWJs
+ZWQgLURwbHVnaW5fYW1kZ3B1PWRpc2FibGVkCitlbmRpZgorCitpZmVxICgkKEJSMl9QQUNLQUdF
+X1VUSUxfTElOVVhfTElCQkxLSUQpLHkpCitGV1VQRF9ERVBFTkRFTkNJRVMgKz0gdXRpbC1saW51
+eAorRldVUERfQ09ORl9PUFRTICs9IC1EYmxraWQ9ZW5hYmxlZAogZWxzZQotRldVUERfQ09ORl9P
+UFRTICs9IC1EbHptYT1kaXNhYmxlZCAtRHBsdWdpbl9pbnRlbF9zcGk9ZmFsc2UKK0ZXVVBEX0NP
+TkZfT1BUUyArPSAtRGJsa2lkPWRpc2FibGVkCiBlbmRpZgogCi1pZmVxICgkKEJSMl9QQUNLQUdF
+X0xJQkRSTV9BTURHUFUpJChCUjJfUEFDS0FHRV9MSUJHVURFVikseXkpCi1GV1VQRF9ERVBFTkRF
+TkNJRVMgKz0gbGliZHJtIGxpYmd1ZGV2Ci1GV1VQRF9DT05GX09QVFMgKz0gLURwbHVnaW5fYW1k
+Z3B1PWVuYWJsZWQKK2lmZXEgKCQoQlIyX1BBQ0tBR0VfVkFMR1JJTkQpLHkpCitGV1VQRF9ERVBF
+TkRFTkNJRVMgKz0gdmFsZ3JpbmQKK0ZXVVBEX0NPTkZfT1BUUyArPSAtRHZhbGdyaW5kPWVuYWJs
+ZWQKIGVsc2UKLUZXVVBEX0NPTkZfT1BUUyArPSAtRHBsdWdpbl9hbWRncHU9ZGlzYWJsZWQKK0ZX
+VVBEX0NPTkZfT1BUUyArPSAtRHZhbGdyaW5kPWRpc2FibGVkCiBlbmRpZgogCiBpZmVxICgkKEJS
+Ml9pMzg2KSQoQlIyX3g4Nl82NCkseSkKQEAgLTE1Niw4ICsxNDQsOCBAQCBlbHNlCiBGV1VQRF9D
+T05GX09QVFMgKz0gLURwbHVnaW5fY3B1PWRpc2FibGVkIC1EcGx1Z2luX21zcj1kaXNhYmxlZCAt
+RGhzaT1kaXNhYmxlZAogZW5kaWYKIAotaWZlcSAoJChCUjJfUEFDS0FHRV9HTlVUTFMpJChCUjJf
+UEFDS0FHRV9MSUJHVURFVikseXkpCi1GV1VQRF9ERVBFTkRFTkNJRVMgKz0gZ251dGxzIGxpYmd1
+ZGV2CitpZmVxICgkKEJSMl9QQUNLQUdFX0dOVVRMUykseSkKK0ZXVVBEX0RFUEVOREVOQ0lFUyAr
+PSBnbnV0bHMKIEZXVVBEX0NPTkZfT1BUUyArPSAtRHBsdWdpbl9zeW5hcHRpY3Nfcm1pPWVuYWJs
+ZWQKIGVsc2UKIEZXVVBEX0NPTkZfT1BUUyArPSAtRHBsdWdpbl9zeW5hcHRpY3Nfcm1pPWRpc2Fi
+bGVkCkBAIC0xNzAsOCArMTU4LDggQEAgZWxzZQogRldVUERfQ09ORl9PUFRTICs9IC1EcGx1Z2lu
+X3JlZGZpc2g9ZGlzYWJsZWQgLURjdXJsPWRpc2FibGVkCiBlbmRpZgogCi1pZmVxICgkKEJSMl9Q
+QUNLQUdFX0xJQkdVREVWKSQoQlIyX1BBQ0tBR0VfTElCTUJJTSkkKEJSMl9QQUNLQUdFX0xJQlFN
+SSkkKEJSMl9QQUNLQUdFX01PREVNX01BTkFHRVIpLHl5eXkpCi1GV1VQRF9ERVBFTkRFTkNJRVMg
+Kz0gbGliZ3VkZXYgbGlibWJpbSBsaWJxbWkgbW9kZW0tbWFuYWdlcgoraWZlcSAoJChCUjJfUEFD
+S0FHRV9MSUJNQklNKSQoQlIyX1BBQ0tBR0VfTElCUU1JKSQoQlIyX1BBQ0tBR0VfTU9ERU1fTUFO
+QUdFUikseXl5eSkKK0ZXVVBEX0RFUEVOREVOQ0lFUyArPSBsaWJtYmltIGxpYnFtaSBtb2RlbS1t
+YW5hZ2VyCiBGV1VQRF9DT05GX09QVFMgKz0gLURwbHVnaW5fbW9kZW1fbWFuYWdlcj1lbmFibGVk
+CiBlbHNlCiBGV1VQRF9DT05GX09QVFMgKz0gLURwbHVnaW5fbW9kZW1fbWFuYWdlcj1kaXNhYmxl
+ZApAQCAtMTg0LDExICsxNzIsMTcgQEAgZWxzZQogRldVUERfQ09ORl9PUFRTICs9IC1EcGx1Z2lu
+X2ZsYXNocm9tPWRpc2FibGVkCiBlbmRpZgogCitpZmVxICgkKEJSMl9UT09MQ0hBSU5fSEVBREVS
+U19BVF9MRUFTVF81XzEwKSx5KQorRldVUERfQ09ORl9PUFRTICs9IC1EcGx1Z2luX2dwaW89ZW5h
+YmxlZAorZWxzZQorRldVUERfQ09ORl9PUFRTICs9IC1EcGx1Z2luX2dwaW89ZGlzYWJsZWQKK2Vu
+ZGlmCisKIGlmZXEgKCQoQlIyX1BBQ0tBR0VfU1lTVEVNRCkseSkKIEZXVVBEX0RFUEVOREVOQ0lF
+UyArPSBzeXN0ZW1kCi1GV1VQRF9DT05GX09QVFMgKz0gLURzeXN0ZW1kPWVuYWJsZWQgLURlbG9n
+aW5kPWVuYWJsZWQgLURvZmZsaW5lPWVuYWJsZWQKK0ZXVVBEX0NPTkZfT1BUUyArPSAtRHN5c3Rl
+bWQ9ZW5hYmxlZCAtRHN5c3RlbWRfc3lzY2FsbF9maWx0ZXI9dHJ1ZSAtRGVsb2dpbmQ9ZW5hYmxl
+ZAogZWxzZQotRldVUERfQ09ORl9PUFRTICs9IC1Ec3lzdGVtZD1kaXNhYmxlZCAtRGVsb2dpbmQ9
+ZGlzYWJsZWQgLURvZmZsaW5lPWRpc2FibGVkCitGV1VQRF9DT05GX09QVFMgKz0gLURzeXN0ZW1k
+PWRpc2FibGVkIC1Ec3lzdGVtZF9zeXNjYWxsX2ZpbHRlcj1mYWxzZSAtRGVsb2dpbmQ9ZGlzYWJs
+ZWQKIGVuZGlmCiAKIGlmZXEgKCQoQlIyX1BBQ0tBR0VfRldVUERfRUZJKSx5KQotLSAKMi4zNC4x
+CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
+b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
+bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
