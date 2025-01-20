@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90945C02181
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jan 2025 20:18:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E944EC02182
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jan 2025 20:18:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39665814A1;
-	Mon, 20 Jan 2025 20:18:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93AD64061E;
+	Mon, 20 Jan 2025 20:18:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wErv5dNjq8bs; Mon, 20 Jan 2025 20:18:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fPjoT0imYgPx; Mon, 20 Jan 2025 20:18:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5197A814AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CA83408B0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5197A814AB;
-	Mon, 20 Jan 2025 20:18:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CA83408B0;
+	Mon, 20 Jan 2025 20:18:45 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7BB47959
- for <buildroot@buildroot.org>; Mon, 20 Jan 2025 20:18:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2F31169
+ for <buildroot@buildroot.org>; Mon, 20 Jan 2025 20:18:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5CB158169E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 76CD1814A1
  for <buildroot@buildroot.org>; Mon, 20 Jan 2025 20:18:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bpUa3YrMxjDg for <buildroot@buildroot.org>;
+ id rfBfxLrAJ_uQ for <buildroot@buildroot.org>;
  Mon, 20 Jan 2025 20:18:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9075D814A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9705281649
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9075D814A1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9705281649
  for <buildroot@buildroot.org>; Mon, 20 Jan 2025 20:18:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7AA2785F7B; Mon, 20 Jan 2025 20:18:40 +0000 (UTC)
+ id 83E1785F7C; Mon, 20 Jan 2025 20:18:40 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 20 Jan 2025 20:58:56 +0100
+Date: Mon, 20 Jan 2025 21:08:47 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 44075c19555df409ea7c2859729abb02d341df29
-X-Git-Newrev: 3778f704cde6b2b7ac7a10f9d21e1114ba2c2a9c
+X-Git-Oldrev: 3778f704cde6b2b7ac7a10f9d21e1114ba2c2a9c
+X-Git-Newrev: 29e1af84308b80d83a8f45ba934fbb3e92d55bf6
 X-Patchwork-Hint: ignore
-Message-Id: <20250120201840.7AA2785F7B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing/utils: fix get-developers
- test without a tty
+Message-Id: <20250120201840.83E1785F7C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing/utils: check patch on
+ stdin to get-developers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,52 +65,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3778f704cde6b2b7ac7a10f9d21e1114ba2c2a9c
+commit: https://git.buildroot.net/buildroot/commit/?id=29e1af84308b80d83a8f45ba934fbb3e92d55bf6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-get-developers will check its stdin to decide whether it is a tty or
-not, and behave differently whether it is or not. So, when we run the
-tests, we need an actual tty.
+Since commit d10d22221f93 (utils/get-developers: read patch from stdin
+when it's not a tty), get-developers accepts to read a patch fromn its
+stdin when it is not a tty.
 
-However, when running in a CI pipeline, like on Gitlab-CI, there is no
-tty available on stdin.
-
-Fake one. We don't need anything too fancy, so just a slave pty will
-suffice.
-
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/8830671800
-Fixes: d10d22221f93 (utils/get-developers: read patch from stdin when
-it's not a tty)
+Add a test for this.
 
 Reported-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/testing/tests/utils/test_get_developers.py | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ support/testing/tests/utils/test_get_developers.py | 28 +++++++++++++++-------
+ 1 file changed, 20 insertions(+), 8 deletions(-)
 
 diff --git a/support/testing/tests/utils/test_get_developers.py b/support/testing/tests/utils/test_get_developers.py
-index 3ec4edeadd..701c3acb1a 100644
+index 701c3acb1a..195e421332 100644
 --- a/support/testing/tests/utils/test_get_developers.py
 +++ b/support/testing/tests/utils/test_get_developers.py
-@@ -15,10 +15,16 @@ import infra
+@@ -13,26 +13,32 @@ import unittest
+ import infra
  
- def call_script(args, env, cwd):
+ 
+-def call_script(args, env, cwd):
++def call_script(args, env, cwd, stdin_data=None):
      """Call a script and return stdout and stderr as lists and the exit code."""
--    proc = subprocess.Popen(args, cwd=cwd, stdout=subprocess.PIPE,
-+    # We need stdin to be a tty, not just a pipe or whatever
-+    m_tty, s_tty = os.openpty()
-+    proc = subprocess.Popen(args, cwd=cwd,
-+                            stdin=s_tty,
-+                            stdout=subprocess.PIPE,
+-    # We need stdin to be a tty, not just a pipe or whatever
+-    m_tty, s_tty = os.openpty()
++    if stdin_data is None:
++        # We need stdin to be a tty, not just a pipe or whatever
++        m_tty, s_tty = os.openpty()
++        com_opts = dict()
++    else:
++        s_tty = subprocess.PIPE
++        com_opts = dict([("input", stdin_data)])
+     proc = subprocess.Popen(args, cwd=cwd,
+                             stdin=s_tty,
+                             stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE, env=env,
                              universal_newlines=True)
-     out, err = proc.communicate()
-+    os.close(s_tty)
-+    os.close(m_tty)
+-    out, err = proc.communicate()
+-    os.close(s_tty)
+-    os.close(m_tty)
++    out, err = proc.communicate(**com_opts)
++    if stdin_data is None:
++        os.close(s_tty)
++        os.close(m_tty)
      return out.splitlines(), err.splitlines(), proc.returncode
  
  
+-def call_get_developers(cmd, args, env, cwd, developers_content):
++def call_get_developers(cmd, args, env, cwd, developers_content, stdin_data=None):
+     """Call get-developers overrinding the default DEVELOPERS file."""
+     with tempfile.NamedTemporaryFile(buffering=0) as developers_file:
+         developers_file.write(developers_content)
+-        return call_script([cmd, "-d", developers_file.name] + args, env, cwd)
++        return call_script([cmd, "-d", developers_file.name] + args, env, cwd, stdin_data)
+ 
+ 
+ class TestGetDevelopers(unittest.TestCase):
+@@ -174,3 +180,9 @@ class TestGetDevelopers(unittest.TestCase):
+         self.assertIn('git send-email --to buildroot@buildroot.org --cc "dev1"', out)
+         self.assertEqual(rc, 0)
+         self.assertEqual(len(err), 0)
++        with open(abs_file, "r") as fd:
++            patch_data = fd.read()
++        out, err, rc = call_get_developers("./utils/get-developers", [], self.WITH_EMPTY_PATH, topdir, developers, patch_data)
++        self.assertIn('git send-email --to buildroot@buildroot.org --cc "dev1"', out)
++        self.assertEqual(rc, 0)
++        self.assertEqual(len(err), 0)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
