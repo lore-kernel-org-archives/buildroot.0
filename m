@@ -4,99 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F6EFC02182
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jan 2025 18:40:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A13B6C02181
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jan 2025 19:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECBED831C1;
-	Mon, 20 Jan 2025 18:40:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 410CB83A3F;
+	Mon, 20 Jan 2025 19:11:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Be_UF1bPKkyi; Mon, 20 Jan 2025 18:40:07 +0000 (UTC)
+ id wGbS_RtfsAZc; Mon, 20 Jan 2025 19:11:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74493831E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB558838B2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 74493831E3;
-	Mon, 20 Jan 2025 18:40:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D36A9959
- for <buildroot@buildroot.org>; Mon, 20 Jan 2025 18:40:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB558838B2;
+	Mon, 20 Jan 2025 19:11:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1BED3D7
+ for <buildroot@buildroot.org>; Mon, 20 Jan 2025 19:11:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCAC74094B
- for <buildroot@buildroot.org>; Mon, 20 Jan 2025 18:40:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 09BF060B45
+ for <buildroot@buildroot.org>; Mon, 20 Jan 2025 19:11:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C_c-6W4Dqvlt for <buildroot@buildroot.org>;
- Mon, 20 Jan 2025 18:40:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1EA2E408FB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EA2E408FB
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1EA2E408FB
- for <buildroot@buildroot.org>; Mon, 20 Jan 2025 18:40:03 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-38789e5b6a7so2712751f8f.1
- for <buildroot@buildroot.org>; Mon, 20 Jan 2025 10:40:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1737398402; x=1738003202;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=hVT5AT77mOd6jl0JAwiNu6pi/ND/6lEGmnJzMPIxi2c=;
- b=v9kcW4QgLq6j+DvxUkI+gEQQ6VAyvJg8q6kdah06LF41MbGKeIaIUFboRsCdrPqHVH
- G4w3C06cdSEKIzzNloZ1N0vh6IErRQpaLcCOOVO9VdYgjzXi8mBJI4rfnQEUjisHQU38
- P5zhNcqmfqkR7kYjGLZqwrdQOJaIUhjRhLpFtPnCHi5e8FhOaRJvhxecHmQqbSzjYpyr
- 6VXKhJy0FUXIq1vwlVUIwqxwUP9cnvnpUxpnJ7BU3FfyYI12aCTwY2yi2fNcxgmhp6LP
- BQcwfqAE5XLZ5UxknHKhIe/GhIanu1uVEoRrYizlgtFk/mtmo3BmJmUQSNAx8DCcXYyH
- oazg==
-X-Gm-Message-State: AOJu0YxKF3Dz3y4JfaTRK8WT1o5T3h9w+P3ahlLtcj5wpcfNEwVVyexm
- vCRkABGj/AREMwUsOzA2LPc9GUg/TeNmmbEsHkgy4c9MjibVniE8/R15DdFI8fQ/WM2jEFnyMiZ
- D
-X-Gm-Gg: ASbGncuw7Wuaa1gG685U79ed7/zKZ5iY1BBxygglsngD1/ueSxn/0bnqEBTsG974gqN
- endwwsS6JT9ZfyTkejGD5ZPQs1aZHA8IIJKGSNh3QBlMFTtbFFn6/uYK1lkaEUp/plLCG26KDuR
- F9GzqkHgeBq4oo262061pzw06h0MJ2Nd1q8qMqkmSuJonjvtnuwKF6eQvNjEJdpF0ZTwgXducnx
- wdJXph497LHrzyIOC/pJsUG4Tsm4br+jDZZ91AescHanqrdA4WAtCUHvCsmfMJWDlET6xs/R+X4
- opgPfVN9ACBy+NZDaAJNcTl71JgUA0GhuYGQJjxEMyCVsK+UvodaUN48KLcu
-X-Google-Smtp-Source: AGHT+IHNEofj1mh+BTJbkKdSDxXGQbill9D8tsajRvsuQFiqxvwL/J0GYDa8LzXdFi3/jPZrtxZYSw==
-X-Received: by 2002:a05:6000:1863:b0:385:faad:bfb9 with SMTP id
- ffacd0b85a97d-38bf564cc03mr13061462f8f.8.1737398401836; 
- Mon, 20 Jan 2025 10:40:01 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.43.136])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-43890420412sm152446365e9.18.2025.01.20.10.40.00
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Jan 2025 10:40:00 -0800 (PST)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
- linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Mon, 20 Jan 2025 19:39:58 +0100
-Message-ID: <20250120183958.3344525-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mYuP22cksSmT for <buildroot@buildroot.org>;
+ Mon, 20 Jan 2025 19:11:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E933D60A41
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E933D60A41
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E933D60A41
+ for <buildroot@buildroot.org>; Mon, 20 Jan 2025 19:11:32 +0000 (UTC)
+Received: from [192.168.178.36] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 92C602C80189;
+ Mon, 20 Jan 2025 20:11:30 +0100 (CET)
+Message-ID: <456ee4aa-9ca2-41f5-b535-eef3e9350b5c@bubu1.eu>
+Date: Mon, 20 Jan 2025 20:11:30 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1737398402; x=1738003202;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=hVT5AT77mOd6jl0JAwiNu6pi/ND/6lEGmnJzMPIxi2c=;
- b=JQNJa1BWdNt4hRcX2uTuu4VWXd9j5LdA4j7YzSCXdb4cU2/xyqmoox90rXR3LTOnZO
- 5WIDthBQCQZRibuGVa+K7G4ZPGE//Wzx0H8nyh1t1vaJ8QvuuXmOB2IMZKsWC+63pX/z
- a7f3+IRMmWmBZ7bUmTlUt97KrkRLXE89ZGD0U=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=JQNJa1BW
-Subject: [Buildroot] [PATCH 1/1] configs/stm32f429_disco_xip: bump Linux to
- 6.1.126
+User-Agent: Mozilla Thunderbird
+To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+References: <20250114113212.1791033-1-fiona.klute@gmx.de>
+ <20250114113212.1791033-2-fiona.klute@gmx.de>
+Content-Language: en-US
+In-Reply-To: <20250114113212.1791033-2-fiona.klute@gmx.de>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1737400290; bh=f5gWchNj6dCSQ/tIUw1/Dcj5IJLT58auauIkWaPwPXk=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=IeMAi2q3NwtNs8zK553F5Hoi80sYeDwaqCWs4g5LMCETUixeA30GOeRZ4PEZdWtLt
+ dhNg91GpbrFS2LuTU3iddJ8WLsi1TYDsDeEtVjLXK6MucDrj1AvYPoWUYsFAeRnpdh
+ 8cI3jq6w75zTTKzVBzc9YGdl3qWqkmaTYUThcfOttxd0a9Gcv/Gl8rZ6ha5QFQX2V8
+ TcIzUpKzCtKIjBlB9QNiiqTTiWDUWaqtPNQLw6jJiOwSrecKe11EfKnQJayNqnvb64
+ a93+C3iZJIUK85HnMK0tSgYhVJz0ZNfd2m0Wq9bEvXKNwpDQX4Zhwdyb3VcAgZePX4
+ RJx2pI7VciSkA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=IeMAi2q3
+Subject: Re: [Buildroot] [PATCH v8 1/6] package/json-glib: bump to version
+ 1.10.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,44 +85,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch bumps the Linux kernel to version 6.1.126. The size of xipImage
-has increased by only 284 bytes (1670242 bytes compared to 1670242 in
-version 6.1.112).
+Hi Fiona,
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- .../stmicroelectronics/stm32f429-disco/patches/linux/linux.hash | 2 +-
- configs/stm32f429_disco_xip_defconfig                           | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 14.01.25 12:32, Fiona Klute via buildroot wrote:
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+> 
+> Required to build with gobject-introspection >= 1.82.0, to be bumped
+> in a later commit.
+> 
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+> ---
+> Changes v7 -> v8 (Fiona):
+> * Move json-glib bump to start of series, to avoid broken state after
+>    GOI bump
+> 
+> Changes v6 -> v7 (Fiona):
+> * Bump json-glib to version 1.10.6
+> 
+>   package/json-glib/json-glib.hash | 4 ++--
+>   package/json-glib/json-glib.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
+> index b78d708391..0c0b2cbb73 100644
+> --- a/package/json-glib/json-glib.hash
+> +++ b/package/json-glib/json-glib.hash
+> @@ -1,5 +1,5 @@
+> -# From https://download.gnome.org/sources/json-glib/1.8/json-glib-1.8.0.sha256sum
+> -sha256  97ef5eb92ca811039ad50a65f06633f1aae64792789307be7170795d8b319454  json-glib-1.8.0.tar.xz
+> +# From https://download.gnome.org/sources/json-glib/1.10/json-glib-1.10.6.sha256sum
+> +sha256  77f4bcbf9339528f166b8073458693f0a20b77b7059dbc2db61746a1928b0293  json-glib-1.10.6.tar.xz
+>   
+>   # Hash for license file:
+>   sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
 
-diff --git a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-index fc2057c3f249..9330b9749e76 100644
---- a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  8bd8de3562fb006653e550a934e66ed9f80b7576258a03e2caa2e3ce1c1f9f24  linux-6.1.112.tar.xz
-+sha256  c91920b34aec412fa6deb6ae3f22ffb41879bf07115a5e224edf4f2778be1790  linux-6.1.126.tar.xz
-diff --git a/configs/stm32f429_disco_xip_defconfig b/configs/stm32f429_disco_xip_defconfig
-index 33f725e18530..7ba5d4ee3f12 100644
---- a/configs/stm32f429_disco_xip_defconfig
-+++ b/configs/stm32f429_disco_xip_defconfig
-@@ -8,7 +8,7 @@ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.112"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.126"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f429-disco/linux.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--- 
-2.43.0
+The Licensing hash changed. Actually the COPYING file is now a symlink 
+to LICENSES/LGPL-2.1-or-later.txt.
+
+This was changed here: 
+https://gitlab.gnome.org/GNOME/json-glib/-/commit/a06d43db36545aff10eb384d62548d96a7cf6020
+
+The license of the actual code didn't change. (some test files are MIT, 
+translations are CC0-1.0)
+
+Marcus
+
+> diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
+> index e216af20b1..04d696987b 100644
+> --- a/package/json-glib/json-glib.mk
+> +++ b/package/json-glib/json-glib.mk
+> @@ -4,8 +4,8 @@
+>   #
+>   ################################################################################
+>   
+> -JSON_GLIB_VERSION_MAJOR = 1.8
+> -JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).0
+> +JSON_GLIB_VERSION_MAJOR = 1.10
+> +JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).6
+>   JSON_GLIB_SITE = https://download.gnome.org/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
+>   JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
+>   JSON_GLIB_LICENSE = LGPL-2.1+
 
 _______________________________________________
 buildroot mailing list
