@@ -1,168 +1,169 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 694E8C02182
-	for <buildroot@archiver.kernel.org>; Tue, 21 Jan 2025 08:28:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A574C02182
+	for <buildroot@archiver.kernel.org>; Tue, 21 Jan 2025 08:40:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13AEC61128;
-	Tue, 21 Jan 2025 08:28:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 441DF810F5;
+	Tue, 21 Jan 2025 08:40:43 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P5d8W-zs6FUy; Tue, 21 Jan 2025 08:40:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C2D0810B1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C2D0810B1;
+	Tue, 21 Jan 2025 08:40:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D0BE5959
+ for <buildroot@buildroot.org>; Tue, 21 Jan 2025 08:40:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC0AB6105E
+ for <buildroot@buildroot.org>; Tue, 21 Jan 2025 08:40:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rm8aGBcQw7hs; Tue, 21 Jan 2025 08:28:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4A6E61115
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4A6E61115;
-	Tue, 21 Jan 2025 08:28:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 18D07959
- for <buildroot@buildroot.org>; Tue, 21 Jan 2025 08:28:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 05A1A40E40
- for <buildroot@buildroot.org>; Tue, 21 Jan 2025 08:28:16 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uYtvORbvP8ZO for <buildroot@buildroot.org>;
- Tue, 21 Jan 2025 08:28:14 +0000 (UTC)
+ id 78syOYXLu0Uy for <buildroot@buildroot.org>;
+ Tue, 21 Jan 2025 08:40:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2409::627;
- helo=nam04-dm6-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2412::623;
+ helo=nam10-mw2-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 556FE400E0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 556FE400E0
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam04on20627.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2409::627])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 556FE400E0
- for <buildroot@buildroot.org>; Tue, 21 Jan 2025 08:28:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 933A8608D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 933A8608D6
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam10on20623.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2412::623])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 933A8608D6
+ for <buildroot@buildroot.org>; Tue, 21 Jan 2025 08:40:37 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=s0x+JeDk6USZqzpkOmmtZxbdAwo+0sVfhSRIloFPAcoa2cP3cPOo1wFRNiEvq7vHKhBufh4Zz0W/9KTqOVr46rcrFAIf5IAjHV5CbkaGOKxODLt4bXNV2gKYn8Tcg7XeiEC1LfCFAsKRKni1Zf+djzgNjkVG1sAEayc7s4MGAEhYWBLoxNbNr9dbLbiVKwD0Pkr+xmPTPberR/IWVrtRE4iPsHpNNsHxCtOuvACmQpFwpgW50vRotBIj+W2kidcIkK8zLeqiMt3nr5Rk1GrZ9deQYg/D+JKi1w/32tBdAlyUeUNjTnZBsf2aFGAbj+Vn1tYrzd0DWLSKvgDBZDSOkw==
+ b=ShgOPRHu1j3usSLBDoqj/LwccZ7qabg8ATAMHaGZIYnHe41/umrAadsOR4gHJquddnG8wa7/0i+bzPsgVnVBdOTkAj93xSlTBpcrG5aoJe5Q8TThSBWRnTdVN07vgK0yn9MDZqbA+tqnaZBkJdP2GVNO+4yTScp4mbgYhWOhTxHtwh5wO+AudOoa4NJoaQa9NC8sx9w7VGDvNQwaPGZLe7LiZq7oYWhvKyDBcqg/xxMCljB0Tq8EZIAygiVMe0RBKQjPAWEmoCtvC4spnf8w6jIWUc2ob7t9BmKVGcWcC9dmyPVnC9KEtZ92nbd27WJlwOQRenyYBZc7jrQVF1pLEQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qitjO6T2Dve35ZNvIYLE0Kq3rExKKCZf/cEaApDP0Ck=;
- b=y8GxI60hyQhq1x6TH1LTyo6ObSh7HYcRpk1Yd0DR1ATcLmmxP4C9XXL+QfSwQq/tgkvH4qYXRfoSPbdvjKVeM/ikL/Z8nv6yIs9u/9eP3RVl9tOp8cDSQRQxQM/4nPWKgHYd4FEfcyQr9Um0vuHz4hdiG0NYmSjZNdK53OBimzlP/tSWvo7AVrMP4Jh2DbeYveHB0m1AkCC47Zj5v+hJHUY4nvc6pfK8JeA7E4YSnMU13Y5KRNPCvDgSUYE1+biZHx3SSt9TUKI/VIHVxBQawHAIfynGnCO+IrycBDZWcPFGzRMmR3WKKglLGcbgT1N+ctV8/k9LUwm+yAG5qh0K3A==
+ bh=Mmj3TYbNXKBY0U2W1+/qOZ5m0kf8VpQTIzJ71Ky150Y=;
+ b=o8AH5sQ55kFXeEoNyv8rtwdJjgfZILyRFrPCxik5UZqbqiKK7uVx8KdzNIxVaR4qPkpJ7zOB323SInWl0v7S5i5C7BtYWjeZ5SuiaZoAcH8CpddZ62sg2/b5VEjzsPyG6HjvknUBr2hCKkyMyx9EYObzXvia+0O9KIK+dfLL6tOloWdEyGy0KRNS3El85GQjNBoceQElsgn2oMtYtUqTR60W5gvn5/YmGCjdcCjhveX8yYmGNvE1up8uzTJibGJFFMIQ1fubjNcreZ6TeLfHqYmXDmYkA/txl4jV8Eg7eDM5iVGuq7hJ0MQAImMtJvtvFjRwQiZR/Fgv1KOMx9SE5g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 Received: from SA1PR12MB5615.namprd12.prod.outlook.com (2603:10b6:806:229::17)
- by DS0PR12MB7747.namprd12.prod.outlook.com (2603:10b6:8:138::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.21; Tue, 21 Jan
- 2025 08:28:10 +0000
+ by PH8PR12MB6842.namprd12.prod.outlook.com (2603:10b6:510:1c9::10)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.22; Tue, 21 Jan
+ 2025 08:40:33 +0000
 Received: from SA1PR12MB5615.namprd12.prod.outlook.com
  ([fe80::7557:587c:4ec:1913]) by SA1PR12MB5615.namprd12.prod.outlook.com
  ([fe80::7557:587c:4ec:1913%7]) with mapi id 15.20.8356.020; Tue, 21 Jan 2025
- 08:28:10 +0000
+ 08:40:33 +0000
 To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Thread-Topic: [PATCH v2 1/4] boot/xilinx-embeddedsw: new boot package
-Thread-Index: AQHbay89zGN8FoY7A0ilbt96TJtW2LMf7GMAgAD4ocA=
-Date: Tue, 21 Jan 2025 08:28:10 +0000
-Message-ID: <SA1PR12MB5615E5B94819EDC72F4E6D98F0E62@SA1PR12MB5615.namprd12.prod.outlook.com>
+Thread-Topic: [PATCH v2 2/4] boot/uboot.mk: new zynqmp pmufw embeddedsw option
+Thread-Index: AQHbay88Ve8J4p70k02V1wwxe6Nc5bMf7G6AgAD6ZrA=
+Date: Tue, 21 Jan 2025 08:40:33 +0000
+Message-ID: <SA1PR12MB5615DB0649E75B9C9349F308F0E62@SA1PR12MB5615.namprd12.prod.outlook.com>
 References: <20250120113405.3938838-1-neal.frager@amd.com>
- <20250120183312.073aafb3@booty>
-In-Reply-To: <20250120183312.073aafb3@booty>
+ <20250120113405.3938838-2-neal.frager@amd.com>
+ <20250120183321.2dd343a9@booty>
+In-Reply-To: <20250120183321.2dd343a9@booty>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|DS0PR12MB7747:EE_
-x-ms-office365-filtering-correlation-id: f9451dac-f6d7-4ddd-27e1-08dd39f58a5d
+x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|PH8PR12MB6842:EE_
+x-ms-office365-filtering-correlation-id: eb725fc2-cc52-4cdc-fc74-08dd39f744f0
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
- ARA:13230040|376014|1800799024|366016|13003099007|38070700018|41080700001; 
-x-microsoft-antispam-message-info: =?us-ascii?Q?nNfQcB9Kg41QiHD0vOAgU1E8JMxeOTlMDEqFIgPppg+kzq72YifGJJj/vlZP?=
- =?us-ascii?Q?/iVsInptJMLtzKytHNDJPXLV9W1BacG7iwZ8to/xdrco7O0CUpPAm56KWwRG?=
- =?us-ascii?Q?gt+yUbv1O9hZIEUBsF5XJ+G0dDxUu8b3/vzVFnIzguMBdQPXWGdJiVqFfPlM?=
- =?us-ascii?Q?KXHXKrui283TpdXi/yGj6Ppaxr8suOxx1pYmydeuA5ZftyC8mrMWtt9LKVIp?=
- =?us-ascii?Q?tijL/DituBs/YMYielwdX9TI2wpUVATMpSvMIclvE0zEWeVh0S6LSZa2Jr9h?=
- =?us-ascii?Q?BAi99FL2auXOTJ3JpU5Ey7IzrA19o8NVuYSgNzmgtwVpMf2qnw1eJ4na9bnM?=
- =?us-ascii?Q?85v64DvatvyV/AirT/gsuzVOVyZp1gCD6TgafpOPWJfmEftqg9my9LaIdwvf?=
- =?us-ascii?Q?J+XsJjseFVZ4uwAw+HykgvdmHz6ip0m2/bPRa5tNp3WA5h4pu8MuWXoauBeG?=
- =?us-ascii?Q?K8RAuZNkigGn/5kLnB4i7y1GmWaD2OykDl8IkQ68fQzctRKBqW96A4OsCV7j?=
- =?us-ascii?Q?tTbwhO4vsyQ7XKtSOL6atgNAhZrnaUxyTaBFGab9i4lZXteVoAAIp1rvQUp/?=
- =?us-ascii?Q?+depRSYTncuWBrrWC1eMsu03Rnw6c9niYCh0+6mCOmU5TpNB0DdIg8NrWhD2?=
- =?us-ascii?Q?5r9xW5ZkS0+vhKI4lKMX3P5qnIIrmsHikgWz/5X5pe2eIZIiwz0vA5fFllCC?=
- =?us-ascii?Q?Qh5KDuXXrhzLRGvGZLiTcU1eqV2XqmV96CuddEQnLJcb8YG2yVT3P3RlB2sH?=
- =?us-ascii?Q?+RfHeyjPcO6Xktjam6Oj4+kney/+MvfUo0poF1+B9KA+1ttuqEO0QiBHAZmY?=
- =?us-ascii?Q?+ghILE4443VnRd0wa5Mu+6+Mw4mQCrvCeAnmXnca7hCv4Y7+qMEU7SNDyUhe?=
- =?us-ascii?Q?Q/2IKbVDvloHrjpfnv5kNcDMVx7bwnvNRi7z4lLY0i5kRpkigQbIUfEBpgd6?=
- =?us-ascii?Q?l6NBGjfbhLrIMtVrTPV1UorHrOmIdhvXiqFxixCgMbDkH4qmaiXTj53rBh13?=
- =?us-ascii?Q?Ve5EFh9Ez1/i047LH0qL7Edc67CTr6HT6UiNOGX51okRIaxPNKVapqhTkvie?=
- =?us-ascii?Q?wrQ3cEyqDCsrnTRDpml0X14wDQ28wl+QLW13jTqh0rFybLeP+DUcBee5Trhq?=
- =?us-ascii?Q?TIEEzfDpB08vDu9qLQZ8z47uYdLUJCXb/dwkk1GNKOuK2l+GnxAbsaqjv4ox?=
- =?us-ascii?Q?PcLX1pZoy8MIWeTt9iVkJU8Cw0MPqRL0wpbjaEWyUMkBKH32NboyWgnXIALH?=
- =?us-ascii?Q?7oZUGpNIVpJqyEE+VE+Q4Ej/LfB+z9ngaR1YzsrPu0ILho3a9eZ7ONJtxaQS?=
- =?us-ascii?Q?H9eEo+0TesrMeC2+A8dx4LTFESEzesJZjtV6tXFulDQQpUD7sjvHKjCN02Ly?=
- =?us-ascii?Q?hDT0j8jV02S1exzh9QTR45Kk5a+MHaCCXv1kRPS8DvX5U3lzFcbYvWJ6MEo4?=
- =?us-ascii?Q?n4tVgzwOUzanAAyGVvWWuN0WD/CNBe0TGFAM0qAn0ewZcoX1VNFkPj2dwvFY?=
- =?us-ascii?Q?oqhPNRnMOy889Vw=3D?=
+ ARA:13230040|376014|366016|1800799024|38070700018|41080700001; 
+x-microsoft-antispam-message-info: =?us-ascii?Q?XbVQYiCaZcxZ9tOQ4kUDfu59siP8l7fJAFR5ffPCR0hjO01LeH448XnAvrPt?=
+ =?us-ascii?Q?FqauP5Yx5hf+pKPnuh5hhQhTE92FVFu0SDKXWiH/i+Emd9/pFWfdnp3kA+XZ?=
+ =?us-ascii?Q?lYAxZo0Zt8zCIfJ8OwN39VNr6zobzOixrzfuBRtjtf8As/rPXyeRLVXm+gJs?=
+ =?us-ascii?Q?OsRgRSQ2Z7gnwwApIHHfCYUtApEApts7ouqwHlOXgkbIzJ+mWcFau3w+Tbx+?=
+ =?us-ascii?Q?RnUGHL1jN6brVZtbEYUzZWmrgPYQV+mCfti9TjkrItyAdkEeVwifFjotI0km?=
+ =?us-ascii?Q?V0UA8Pli6oKkBPNbKrkg460qWBb3GR3QpubRPGfRmi88DcIwKHXniQNaTaeW?=
+ =?us-ascii?Q?3fdZ7wWVFgSF9AbWb1sXgAN3IcepXde9hMsVYUAwDgu4ckkt+r6OvSt9HrbO?=
+ =?us-ascii?Q?iMwvc1oPO9fwyu5/FtzzhcJo8SYiRl8/RLBsOfXH4mCY2Qt0I+6+yL+7svgO?=
+ =?us-ascii?Q?GJyLnko/WSKyZ6NeC0Jin3qXcpt92fEpIrERgbehbFnBuRZMoTfkWwxyL3W0?=
+ =?us-ascii?Q?L5Z9Qsjbe43HrJYolpctEV7lc5nbyGRmZthX3c/poxv0YQMGYRR3vmMhRkfC?=
+ =?us-ascii?Q?/wLAMNrDNDhRH0jjhzH61CHCxsy8JdhxeNRlnuoOVhlyUvlrtUQtlwJgIkPH?=
+ =?us-ascii?Q?FS6UXIEIdIwNP8EDoKvPK/YjbEkBGejCsn4MsDDjxQ4hFyWC6hrTyVLiXuNx?=
+ =?us-ascii?Q?ksGmWRw9SS1e9xvZyoYJ+/MPCj89JHOu1FUuv1Ec2B8q7szq1re3qwXhW0Sn?=
+ =?us-ascii?Q?TukvpsgjXBjpnT10fN4ZYmr52H+6xVhdbqlT4y3LfS+UDQrqvBY1/Own/rdy?=
+ =?us-ascii?Q?5pUAakpvIAzByi70iE+oXrcZShiXMjgwC8k6ETJeE6qhWaQ6Be3WIflRBhuk?=
+ =?us-ascii?Q?XNPnKc/VMpNu5TL+S9FWGCeQEv+xfntSHFChYOwbiC4iZhL7g5aMbZ2ZWVDp?=
+ =?us-ascii?Q?ViIQBfqbEUYk9i8nVZUD25c4MuL2VUxGLB8bRNOKUmwRK3Zjx/+gLqKS957u?=
+ =?us-ascii?Q?R83i7N/fz7pj4svC7BS3JYBRc3kR/OWIuvAoNEDYwsTUxgJCl3+YsAdCXgUg?=
+ =?us-ascii?Q?olYzTEKj3LcBFWBn9VVkFF/m867QZzeyhKpKcgWltLvAiKIEc1xzLz26vnX6?=
+ =?us-ascii?Q?+s+oQzTCvGGEPM6dYvCl0F9AK22hr+Z5aaMPXonViP83A3Aktdt5Mia8cLnt?=
+ =?us-ascii?Q?P9rbHKkusYzNU/wVKt4LC0MNbXeM/766mhqGOLsKCSIvSq/MyniaIwdNXLO+?=
+ =?us-ascii?Q?nYmWHrjCcbXdwEgD04/kXpQ6HK6UIABtnCdSiojde0GAVlwbLfj6Mzh5GsUA?=
+ =?us-ascii?Q?j4QkZtCAAYbCI5cjlk+gPO9DTIIhWTHPLje1e7RTjXEnyTHW438nmEVwvf+5?=
+ =?us-ascii?Q?aNl+09vDlz6CsXtytltCl9bx9HhDtyoQB4Sj3/Qj+k5LtwPXsG5tUj7GQ+5y?=
+ =?us-ascii?Q?gTrQJQ4M06HGCDRz6ErgUyE7luaE81hFwvHsQTjmXDgFuJtLinqhxaP/0IMh?=
+ =?us-ascii?Q?0JM5KOMDCwoTZa8=3D?=
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:SA1PR12MB5615.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(1800799024)(366016)(13003099007)(38070700018)(41080700001);
- DIR:OUT; SFP:1101; 
+ SFS:(13230040)(376014)(366016)(1800799024)(38070700018)(41080700001); DIR:OUT;
+ SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DaMf3vxenFz9OwdWPxfvRtmBCkYn2B/EjQhGET3yiIY1tvLY2X8FRhcTLN3e?=
- =?us-ascii?Q?mDLZEq498oUYYrSs7uKDycIF18KlyMkWgwymdS/HR1mbXGhZOfXBNTRajKc1?=
- =?us-ascii?Q?oXkrpz16jZoHYy8i6cODKwo4VH09os83MfwbunwrM25mwXBjV75m8bradNc2?=
- =?us-ascii?Q?hZF5yBaoPH4fTLqN09jKBcPgj/A8427bqxwWpmXds96Z8LoSdwlLB7KIsv8D?=
- =?us-ascii?Q?pdcljz9GMcj8sp+kFOetKZP6jzPOLvm1YaAbkp0FJql892KhsYcPn6KGJ8sg?=
- =?us-ascii?Q?PThQ4kwrAYdt48YCBynIWV0eY3sMupGMimn2iuk9KkYgfevpWRmmgCok7pEr?=
- =?us-ascii?Q?TSY6IUvPdxoksQpRX+mENBbiwmZrU5cJXJVAoc3VswbLdv6JepLWujkDBC+A?=
- =?us-ascii?Q?yEup9aa+LTmF0Ah2qgwR4WZ3MqxiNCC+s6lJ4hCGsV+rN9TgPV7KRg3fXRvH?=
- =?us-ascii?Q?Cmb6yF+OlPc/KqzEs58eZVdTl7eDDOlDo7jt7mQO/Uak/9i8PAnWkxBIDgul?=
- =?us-ascii?Q?FiEQIIqB793g64g6RC8lpnVcT7Bqtv8bY6qWH5jaSD2HclO2YG+N5Cr/oJsD?=
- =?us-ascii?Q?/mLuShgF49z1x0ci2yDbQ4iMptKOIKmnBjICq+Z7PP55yVv3DdzfJkuD4Fy4?=
- =?us-ascii?Q?txnMoixltvlU30tlUJlpsNjQBhDvwMcJCJ62T79j1ryRf4C3OeOStR8kfMJ3?=
- =?us-ascii?Q?G5Zo8E/2XsOYqSMp8YjMC4gucoAbHdh1LXr2DgVE4IOyY/SXZAe9tLrvHt9b?=
- =?us-ascii?Q?nDpC3cc2Po3tAVk+LTFgexkRWFsSr4mEqx7MFgLr1QB15fcLLmdtRJgJzsPI?=
- =?us-ascii?Q?HrgYgo4wa9LBUiE33UCtpPrT4umiOWOCr8p/Hj06RUqK3UyKqkdW2X6fcwLG?=
- =?us-ascii?Q?/50uYCy4YWQFBvicyWsqGVJ6oB+b6RAg1FEcVHCI10N6XnzX9rPXQNhq4yZw?=
- =?us-ascii?Q?KYV0uK0/V6M+IkX5AddSmlm6XzdnQJJeumfDHw3RJs+0fGafmJyjkRXW30/N?=
- =?us-ascii?Q?jaFHA5tGPDsJ6kNSLWZvq07ym7fjmIUV3eRGmPnLbeN3yYdegtWLJRDkjNCO?=
- =?us-ascii?Q?qQifkN0WTCENfQUhzFIEbJHiOfg0SNgAKisyhbien1kzcBQQUk6fepwithiI?=
- =?us-ascii?Q?tIdqQwZLxAup2Y9kI6yvPIHPCVgNbqsVAPLF0GEM3VRAtRno3QJ0ieaECbe/?=
- =?us-ascii?Q?Pp5u4TwQLMbbwSOCupcliWV2R+7uozZl7rxLOXuk3xOivtVhroOs4fWXxdWE?=
- =?us-ascii?Q?9cH7id/CPw670rK+dGBv8TzAWn2a/fzSC3OOeVp5TIOA/2bBDlH/cKP6vhb2?=
- =?us-ascii?Q?qYg4zBz+TS3YWagQ04bGaqQiM/HQSyNc0NcZ4H6Hk+RUPEr2Ez/HZN5N8a8j?=
- =?us-ascii?Q?s0sxGQJT1LkaPF3OcHRtSOQHg8ln5jNAWAU0+Ci6lw2vj0R5o7In0M+TVpmG?=
- =?us-ascii?Q?IzgUk9lHmrxFkcbhsxWsrPk0mJuzSr7GgMRnsaSqrt+Qj8aaWsHRR6ExRUd5?=
- =?us-ascii?Q?zjhk3lEM9y0dePqK85epW80snDarRJwjuuozUPUUwgXYaxHi0zkcToxQ84+S?=
- =?us-ascii?Q?cS93GmxPK9KT4hd7nT4=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0d3tEYko+HSl+IfwEr+Advt4IpEbSFjL/2CDX5W32ALzFd3zZwodfDBe5tJk?=
+ =?us-ascii?Q?bYFd8QQrPSJ0JEbxYf5N0IUI/Ml4Swd3KrX6aEjaigOPzqfbEWHmFydoP1fm?=
+ =?us-ascii?Q?c88Iq6SsrJof8XCHGTRAC4XymQ3RSNvMyjByxzI7Gw6BASlbwcARo4JgEtw8?=
+ =?us-ascii?Q?zVmu4zuRl5NZH/Ms/HE6SGuzyh6uHREFHCU2WjhOanaxzE1A4BH9MSPzw4jU?=
+ =?us-ascii?Q?MZX37q3wcZQ0htWlhYrQJfi1ct24c9CMXOGBDYmejSxHMwDirQELVN/dpVLC?=
+ =?us-ascii?Q?3YCbhCeGjSTELnn0sUaTiBx3RIHNZ3YZ/FUXZVGiIiamzVpTo7VP38dqIuhZ?=
+ =?us-ascii?Q?thZb5tMcIdaBKTwV3wyDlThyiv9QGwlKFO5atytv8T2G0dkzlvWnKQG55H1e?=
+ =?us-ascii?Q?Yy77yC/9/T2PJtCNhyq4t3H/wHWxA5RWIffsvhA8UMBZl6Dwbe8GWUfUboex?=
+ =?us-ascii?Q?V8JEq304UcEbRQRYgxxZVFhqJe23G/JJICGQ/fwdqAvsXRd1bE51rLYxVy4s?=
+ =?us-ascii?Q?ouO0G9PY8naa9a7MLMxSEQWHW84eY33q2AGHMG63Gu2v+SPu+ritpUaakZwR?=
+ =?us-ascii?Q?DNrmniIuvG6Xx1bEkCkZHKCDf03sbuBBXQVgifDpGdi0IK0IADQtaY7QiG/Q?=
+ =?us-ascii?Q?ibdOcPTKuqKFWXhUmBl1k1UNhymAcO1d3Qfwa/5B3a8NHNlo2NXqisM3i/vE?=
+ =?us-ascii?Q?M7VAcx0uFrmsNUwD008GDCQ/Qi/y6h0wysXoZJj0TZtOpUUi0bPi4I+tyFrC?=
+ =?us-ascii?Q?Sqhrjx87ctBpUSGFKLYYReNN+LsPnKGpxEs8KE2p3SkAomnE7HLkTH8jVQxN?=
+ =?us-ascii?Q?XKKzCz2D9zcs4FqbYKEHAsQD7YkoARk/V1HmnR3M58j6VM33u4k9sClYXu4z?=
+ =?us-ascii?Q?CPXpOUXbnVuasWMGXtRY9ehuj5dgxd9GdVNTu8egUojGDtZhTgsPT7o8tkW8?=
+ =?us-ascii?Q?aJIV7fhE+lclYzd23P5lzy1TYfb4fZhwUC+ILFhLCYSGov2XU5OzmKAXbQow?=
+ =?us-ascii?Q?9XUSZerwxfPMtwXdsvF9iJGNJmmPIffvwfPRQFnbFlAcfan5FeNt25TAchNK?=
+ =?us-ascii?Q?DSpQb5ueuNyY1WLd5w0TiODIzsArxC7I5CxSbbKDZQe8qz73tX9GJJpMMZVm?=
+ =?us-ascii?Q?hsNhSg2AOMsjARboKq1te50Df0LeMVUPw3T1VD/5UuT1aKGDja7Qnl15f6mc?=
+ =?us-ascii?Q?P2WnPkL/IvEyAGBOlPttJFQEbPa3fJPd0B0gMEgpAfNjvwagg+i5vhKiRFcY?=
+ =?us-ascii?Q?8Fkm61MFurEYzdxfo+bJqM09eAvQx4sUxgjzWM5K/yhuQIfZyB/uq2IMtIN1?=
+ =?us-ascii?Q?yZjbl6pG56Zn7MGCEA/cR7PJIMthFFDDOtTVdubrgKLBlafq6rGFz7Ywys33?=
+ =?us-ascii?Q?jbpozupfMkapHAYusMx6j/DwQbqmpBOS3vbrw0neBg50+vb4RRTKEThTrm73?=
+ =?us-ascii?Q?NCXRBJ3FDaXF7xmzHIvkd0U8oxj3+af6Qg1PbFO4bTarOHEA2ISmEM/Sgwgp?=
+ =?us-ascii?Q?i98do9rBBbzM9ZDbaompRk/iEaFUfitNCswkDp4zbjDh2Qk2sxg5FR35HQpJ?=
+ =?us-ascii?Q?F0J9RW7M+wjBwBKgeoU=3D?=
 MIME-Version: 1.0
 X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB5615.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f9451dac-f6d7-4ddd-27e1-08dd39f58a5d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2025 08:28:10.7429 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb725fc2-cc52-4cdc-fc74-08dd39f744f0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2025 08:40:33.2578 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FOh+pRob4TfrivSozeyCSqMKKAPtVUDi/v65Ui6hSj2PdZOHEK4tUwd1j1a7+Rd3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7747
+X-MS-Exchange-CrossTenant-userprincipalname: NenD716rHJzW/skp+0h2Ja3OAH1TGnS1ryKQUIeGfKoEtsOvicdlfL0R5j6G+Q9T
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6842
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qitjO6T2Dve35ZNvIYLE0Kq3rExKKCZf/cEaApDP0Ck=;
- b=0JIu1r6bqKq42oKBgMMvwbt9IluYmmumbnhbv/RNwLLIxLwvD+SwSJMHQKpSWWROeoRrlrb1iOd7wqzoTnT0U7ccSPaydg3F8aH4o9XyVgrWGM1z+5exqmEtBDXK0h6Ej7Dwk4GKOfDROHJGQNYDvXdKHdayTkoTANLs1yB6Mws=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Mmj3TYbNXKBY0U2W1+/qOZ5m0kf8VpQTIzJ71Ky150Y=;
+ b=MUZ2CGaCtXrMalnUo6z8HGIn6Ks16RkSfyXAY+ptXrsFSbzXy+5b/FE3apZwjOOpKLr1IylxlUDYlKPtWlnAG54IGrq5Mq+ANsqymm9w7ui/RGRWWpWG9wZY74SB4Rz02ZTmJVaJ3N+5aW8rSrxUa7SI/ly/kzIL8/PiyVRLxzw=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=0JIu1r6b
+ header.s=selector1 header.b=MUZ2CGaC
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v2 1/4] boot/xilinx-embeddedsw: new boot
- package
+Subject: Re: [Buildroot] [PATCH v2 2/4] boot/uboot.mk: new zynqmp pmufw
+ embeddedsw option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -190,142 +191,140 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello Luca,
 
-> This patch adds a new boot package to Buildroot for building boot firmware
-> applications from the https://github.com/Xilinx/embeddedsw repo.
+> The new BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW option will enable u-boot to
+> use the xilinx-embeddedsw package for building a pmufw.elf that gets included
+> in the generated boot.bin.
 > 
-> If a user chooses to build a boot firmware application, it will not be
-> installed by the xilinx-prebuilt package since it will come from the
-> xilinx-embeddedsw package.  In this way, users can mix and match applications
-> to be built by the xilinx-embeddedsw package and applications to be copied
-> from the xilinx-prebuilt package.  This is necessary for the versal platform
-> because the pdi file can only be built by AMD Vivado.
+> If the BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW option is enabled, then the
+> BR2_TARGET_UBOOT_ZYNQMP_PMUFW config for downloading a prebuilt pmufw from a
+> custom location will be ignored.
 > 
-> Support for additional applications in the https://github.com/Xilinx/embeddedsw
-> repo can always be added to this package as needed or requested.
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+> V1->V2:
+> - edited Config.in help text to fit within 70 characters
+> ---
+>  boot/uboot/Config.in | 27 +++++++++++++++++++++++++++
+>  boot/uboot/uboot.mk  |  5 ++++-
+>  2 files changed, 31 insertions(+), 1 deletion(-)
 > 
-> The xilinx-embeddedsw package replaces previous solutions including
-> zynqmp-firmware, versal-firmware and xilinx-source.
-> 
-> A patch is required for the xilinx-embeddedsw repo because the LICENSE file
-> has the name license.txt.  A patch is thus included to create a symbolic link
-> from LICENCE to licence.txt, so that the Buildroot hash check will succeed.
-> This patch is not upstreamable.
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index b6ac2f9380..430191d213 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -572,6 +572,27 @@ config BR2_TARGET_UBOOT_ZYNQMP
+>  
+>  if BR2_TARGET_UBOOT_ZYNQMP
+>  
+> +choice
+> +	prompt "xilinx-prebuilt pmufw.elf or build pmufw.elf from source"
 
-> Isn't changing the _LICENSE value the correct fix?
+> Not a very clear string IMO, it should not list the options in the
+> choice title. I'd rather change it to "PMUFW origin".
 
-> -XILINX_EMBEDDEDSW_LICENSE_FILES = LICENSE
-> +XILINX_EMBEDDEDSW_LICENSE_FILES = license.txt
+Agreed, thanks!
 
-Of course!  Thank you for this.  I knew I had to be missing something obvious!
-
-> ...
-
-> +if BR2_TARGET_XILINX_EMBEDDEDSW
-> +
-> +config BR2_TARGET_XILINX_EMBEDDEDSW_VERSION
-> +	string "xilinx-embeddedsw version"
-> +	default "xilinx_v2024.2"
+> +	default BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW
 > +	help
-> +	  Release version of Xilinx/embeddedsw.
-> +	  Must be xilinx_v2023.1 or newer.
+> +	  Choose between installing the pmufw.elf from
+> +	  xilinx-prebuilt or building the pmufw.elf from
+> +	  xilinx-embeddedsw.
 > +
-> +config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM
-> +	bool "versal plm"
+> +config BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW
+> +	bool "xilinx-embeddedsw build pmufw.elf from source"
+
+> And I'd change this to "Build from source via xilinx-embeddedsw"
+
+Ok, works for me.
+
+> +	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+> +	depends on BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW
+
+> Not sure what is best here:
+
+> a) if xilinx-embeddedsw is enabled, show the option in the choice menu
+> b) if the choice is selected in the menu, enable xilinx-embeddedsw
+
+> a) is what you implemented, b) is what I had in mind before reading
+> this patch and it would look more intuitive for users I think. The same
+> applies for the xilinx-prebuilt option.
+
+> Opinions from Buildroot maintainers would be welcome here.
+
+I thought about this as well.  Unfortunately, option b is more complicated
+than just enabling xilinx-embeddedsw or xilinx-prebuilt.  Not only do the
+zynqmp options in either package also need to be enabled, but in the case
+of xilinx-embeddedsw, the toolchain-bare-metal-buildroot also needs to be
+enabled along with configuring the tupple to microblaze.
+
+Since I do not think enabling all these options in other packages
+automatically from the uboot config is very clean, I think it is best we
+stay with option a.
+
+To go along with option a, I like your idea of making the choice three
+options as you speak of later on in this email.  For options not enabled,
+I would like to add a comment in the choice menu informing the user of
+what they need to enable to make the option available.  I think this is
+a better solution.
+
+And since the custom pmufw location option is the only one not dependent
+on another Buildroot package, I would recommend having it being the
+default choice, since it will always be available.
+
 > +	help
-> +	  Build versal plm application from Xilinx/embeddedsw repo.
-> +	  If selected, the xilinx-prebuilt package will not install
-> +	  the plm.elf since it will come from the xilinx-embeddedsw
-> +	  package.
+> +	  Use xilinx-embeddedsw boot package for building
+> +	  zynqmp pmufw.elf from
+> +	    https://github.com/Xilinx/embeddedsw repo.
 > +
-> +	  https://github.com/Xilinx/embeddedsw/tree/master/lib/sw_apps/versal_plm
+> +	  U-Boot build process will generate a boot.bin (to be loaded
+> +	  by the ZynqMP boot ROM) containing both the U-Boot SPL and
+> +	  the PMU firmware in the Xilinx-specific boot format.
 > +
-> +config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW
-> +	bool "versal psmfw"
-> +	help
-> +	  Build versal psmfw application from Xilinx/embeddedsw repo.
-> +	  If selected, the xilinx-prebuilt package will not install
-> +	  the psmfw.elf since it will come from the xilinx-embeddedsw
-> +	  package.
-> +
-> +	  https://github.com/Xilinx/embeddedsw/tree/master/lib/sw_apps/versal_psmfw
-> +
-> +config BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW
-> +	bool "zynqmp pmufw"
-> +	help
-> +	  Build zynqmp pmufw application from Xilinx/embeddedsw repo.
-> +	  If selected, the xilinx-prebuilt package will not install
-> +	  the pmufw.elf since it will come from the xilinx-embeddedsw
-> +	  package.
-> +
-> +	  https://github.com/Xilinx/embeddedsw/tree/master/lib/sw_apps/zynqmp_pmufw
-> +
-> +config BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS
-> +	string "xilinx-embeddedsw optional zynqmp_pmufw user cflags"
+>  config BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT
+>  	bool "xilinx-prebuilt pmufw.elf"
 
-> + depends on BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW
+> And this to "Prebuilt via xilinx-prebuilt"
 
-Good catch.
+Ok, sounds good to me.
 
-> +	help
-> +	  Add optional cflags when building xilinx zynqmp_pmufw.
+>  	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+> @@ -585,9 +606,15 @@ config BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT
+>  	  by the ZynqMP boot ROM) containing both the U-Boot SPL and the
+>  	  PMU firmware in the Xilinx-specific boot format.
+>  
+> +endchoice
 > +
-> +	  Example cflag options can be found here:
-> +	  https://github.com/Xilinx/embeddedsw/blob/master/lib/sw_apps/zynqmp_pmufw/src/xpfw_config.h
-> +
-> +endif # BR2_TARGET_XILINX_EMBEDDEDSW
+> +comment "If xilinx-embeddedsw or xilinx-prebuilt is selected for pmufw.elf, custom PMU firmware location will be ignored."
+> +	depends on BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW || BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT
 
-...
+> This is not needed. If any of those two is selected,
+> BR2_TARGET_UBOOT_ZYNQMP_PMUFW will not be visible. The commit message
+> needs to be updated accordingly. See below however.
 
-> diff --git a/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk b/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
-> new file mode 100644
-> index 0000000000..9a89f27d10
-> --- /dev/null
-> +++ b/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
-> @@ -0,0 +1,80 @@
-> +################################################################################
-> +#
-> +# xilinx-embeddedsw
-> +#
-> +################################################################################
-> +
-> +XILINX_EMBEDDEDSW_VERSION = $(call qstrip,$(BR2_TARGET_XILINX_EMBEDDEDSW_VERSION))
-> +XILINX_EMBEDDEDSW_SITE = $(call github,Xilinx,embeddedsw,$(XILINX_EMBEDDEDSW_VERSION))
-> +XILINX_EMBEDDEDSW_LICENSE = MIT
-> +XILINX_EMBEDDEDSW_LICENSE_FILES = LICENSE
-> +XILINX_EMBEDDEDSW_INSTALL_TARGET = NO
-> +XILINX_EMBEDDEDSW_INSTALL_IMAGES = YES
-> +XILINX_EMBEDDEDSW_DEPENDENCIES = toolchain-bare-metal-buildroot
-> +
-> +# ZYNQMP_PMUFW application allows users to add cflags
-> +XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS = \
-> +	$(call qstrip,$(BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS))
-> +XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_CFLAGS = \
-> +	"-Os -flto -ffat-lto-objects $(XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS)"
-> +
-> +XILINX_EMBEDDEDSW_CFLAGS = "-Os -flto -ffat-lto-objects"
-> +
-> +ifeq ($(BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM),y)
+Agreed.  Making this a three way choice is the best option.
 
-> I still think this looks like a good approach from a user point of
-> view. However I cannot say whether the implementation, based on a
-> package looking into the config knobs of another package, is clean or
-> not. I'll leave this to more experienced Buildroot reviewers to judge.
-> Same for the following options.
+>  config BR2_TARGET_UBOOT_ZYNQMP_PMUFW
+>  	string "Custom PMU firmware location"
+>  	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+> +	depends on !BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW
+>  	depends on !BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT
 
-I am curious to what experienced Buildroot users think as well.  From my view,
-I currently look at the xilinx-embeddedsw and xilinx-prebuilt as being a
-combined package that just happpens to work with two different repos.
+> I think BR2_TARGET_UBOOT_ZYNQMP_PMUFW should become a third option in
+> the choice you are adding above. In other words we should ask users
+> "How do you want to get the pmufw? Build from source, download from
+> xilinx-prebuilt or pre-built at a custom location you provide?".
 
-With the way I currently implemented the solution, the two packages a very
-much tied together.  In the end, they are only used for AMD-Xilinx boards, so
-since they are isolated from the rest of Buildroot, I hope my current solution
-of wiring them together is ok.
+I agree with the three option choice idea.  I had not thought of it earlier
+because choice options need to be boolean as far as I am aware.
 
-> Other than that it looks overall good.
+To make this possible, I am thinking of adding the third choice as:
+BR2_TARGET_UBOOT_ZYNQMP_PMUFW_CUSTOM
+    bool "Prebuilt from custom location"
 
-> I've also successfully tested on KV260.
+And then the BR2_TARGET_UBOOT_ZYNQMP_PMUFW would stay the same as before
+with just having a dependency on BR2_TARGET_UBOOT_ZYNQMP_PMUFW_CUSTOM.
 
-Great news!
+What do you think?
 
 Best regards,
 Neal Frager
