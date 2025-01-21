@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C727C02182
-	for <buildroot@archiver.kernel.org>; Tue, 21 Jan 2025 22:47:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 183AAC0218C
+	for <buildroot@archiver.kernel.org>; Tue, 21 Jan 2025 22:47:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2520B605BE;
-	Tue, 21 Jan 2025 22:47:54 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m8caFMBlbfqE; Tue, 21 Jan 2025 22:47:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F62960693
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F62960693;
-	Tue, 21 Jan 2025 22:47:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id CF146959
- for <buildroot@buildroot.org>; Tue, 21 Jan 2025 22:47:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ADA4C409D7
- for <buildroot@buildroot.org>; Tue, 21 Jan 2025 22:47:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEE3C40715;
+	Tue, 21 Jan 2025 22:47:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lOwMrJWdc4UF for <buildroot@buildroot.org>;
- Tue, 21 Jan 2025 22:47:50 +0000 (UTC)
+ id BuW2QlqiZ2Py; Tue, 21 Jan 2025 22:47:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55A19412E5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55A19412E5;
+	Tue, 21 Jan 2025 22:47:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 27280D7
+ for <buildroot@buildroot.org>; Tue, 21 Jan 2025 22:47:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0788F403BE
+ for <buildroot@buildroot.org>; Tue, 21 Jan 2025 22:47:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 19G4ABt3wFnt for <buildroot@buildroot.org>;
+ Tue, 21 Jan 2025 22:47:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAAB440715
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E56C740151
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DAAB440715
+ by smtp2.osuosl.org (Postfix) with ESMTP id E56C740151
  for <buildroot@buildroot.org>; Tue, 21 Jan 2025 22:47:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D0E3085FA4; Tue, 21 Jan 2025 22:47:50 +0000 (UTC)
+ id DAB0B85FA5; Tue, 21 Jan 2025 22:47:50 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 21 Jan 2025 22:09:56 +0100
+Date: Tue, 21 Jan 2025 22:10:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 29e1af84308b80d83a8f45ba934fbb3e92d55bf6
-X-Git-Newrev: fbc4d5215f1094eda3f109e8ac755d2a8a119594
+X-Git-Oldrev: fbc4d5215f1094eda3f109e8ac755d2a8a119594
+X-Git-Newrev: 16adbd4df05e5692c92ad015c1ec54d64d91dfa5
 X-Patchwork-Hint: ignore
-Message-Id: <20250121224750.D0E3085FA4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: update zfs tests to Linux
- 6.12.9
+Message-Id: <20250121224750.DAB0B85FA5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: replace x86-64 with
+ aarch64 for ZFS tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,40 +60,98 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0217820395316703544=="
+Content-Type: multipart/mixed; boundary="===============5170646915796978220=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0217820395316703544==
+--===============5170646915796978220==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbc4d5215f1094eda3f109e8ac755d2a8a119594
+commit: https://git.buildroot.net/buildroot/commit/?id=16adbd4df05e5692c92ad015c1ec54d64d91dfa5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The previous version, Linux 5.15.35, is outdated.
-Upgrade to the latest LTS release.
+Previously, ZFS tests were limited to x86-64 due to lack of cross-platform support.
+However, upstream efforts have improved cross-platform compatibility.
+Update the ZFS test platform from x86-64 to aarch64, aligning it with other tests.
 
 Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/testing/tests/package/test_zfs.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/tests/package/test_zfs.py | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
 diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/tests/package/test_zfs.py
-index 27dbc2869b..967da098e1 100644
+index 967da098e1..1b907ac4de 100644
 --- a/support/testing/tests/package/test_zfs.py
 +++ b/support/testing/tests/package/test_zfs.py
-@@ -13,7 +13,7 @@ class TestZfsBase(infra.basetest.BRTest):
+@@ -7,15 +7,16 @@ class TestZfsBase(infra.basetest.BRTest):
+     timeout = 60 * 3
+     config = \
+         """
+-        BR2_x86_64=y
+-        BR2_x86_corei7=y
++        BR2_aarch64=y
+         BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
          BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
          BR2_LINUX_KERNEL=y
          BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.35"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
+         BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
          BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
+-        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
          BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+         BR2_PACKAGE_ZFS=y
+         BR2_PACKAGE_PYTHON3=y
+@@ -28,13 +29,14 @@ class TestZfsBase(infra.basetest.BRTest):
+         """
+ 
+     def base_test_run(self):
+-        kernel = os.path.join(self.builddir, "images", "bzImage")
++        kernel = os.path.join(self.builddir, "images", "Image")
+         cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+         self.emulator.boot(
+-            arch="x86_64",
++            arch="aarch64",
+             kernel=kernel,
+-            kernel_cmdline=["console=ttyS0"],
+-            options=["-cpu", "Nehalem", "-m", "320", "-initrd", cpio_file],
++            kernel_cmdline=["console=ttyAMA0"],
++            options=["-M", "virt", "-cpu", "cortex-a57", "-m", "320M",
++                     "-initrd", cpio_file],
+         )
+         self.emulator.login()
+ 
+@@ -64,7 +66,7 @@ class TestZfsBase(infra.basetest.BRTest):
+ class TestZfsGlibc(TestZfsBase):
+     config = TestZfsBase.config + \
+         """
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_STABLE=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+         """
+ 
+     def test_run(self):
+@@ -74,7 +76,7 @@ class TestZfsGlibc(TestZfsBase):
+ class TestZfsUclibc(TestZfsBase):
+     config = TestZfsBase.config + \
+         """
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_UCLIBC_STABLE=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_UCLIBC_STABLE=y
+         """
+ 
+     def test_run(self):
+@@ -84,7 +86,7 @@ class TestZfsUclibc(TestZfsBase):
+ class TestZfsMusl(TestZfsBase):
+     config = TestZfsBase.config + \
+         """
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_MUSL_STABLE=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_MUSL_STABLE=y
+         """
+ 
+     def test_run(self):
 
---===============0217820395316703544==
+--===============5170646915796978220==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -104,4 +162,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0217820395316703544==--
+--===============5170646915796978220==--
