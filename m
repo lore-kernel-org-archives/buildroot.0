@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AED5C282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:01:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28BB6C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:01:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA8394066E;
-	Fri, 28 Feb 2025 17:01:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF85070824;
+	Fri, 28 Feb 2025 17:01:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nb6vgZyESYJi; Fri, 28 Feb 2025 17:01:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9fewumMHX3S8; Fri, 28 Feb 2025 17:01:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26B7B40595
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F22D970829
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26B7B40595;
-	Fri, 28 Feb 2025 17:01:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F22D970829;
+	Fri, 28 Feb 2025 17:01:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1791C68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:39:57 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 19610711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:39:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 042B242E52
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5947642479
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZmDkHE5IAmLp for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:00 +0000 (UTC)
+ id ujO2waXJ0IZm for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E36694199A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A58542E61
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E36694199A
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A58542E61
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE55184109; Fri, 28 Feb 2025 16:30:15 +0000 (UTC)
+ id 43A2F83AB0; Fri, 28 Feb 2025 16:30:16 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 19 Jan 2025 13:04:36 +0100
+Date: Tue, 21 Jan 2025 22:10:00 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a311245ff7cf432de861ff095941ef53fc16460d
-X-Git-Newrev: d4fa17f44128929970632e6703a49bc40eb0492f
+X-Git-Oldrev: fbc4d5215f1094eda3f109e8ac755d2a8a119594
+X-Git-Newrev: 16adbd4df05e5692c92ad015c1ec54d64d91dfa5
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163015.DE55184109@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gnu-efi: fix build due
- to short-wchar
+Message-Id: <20250228163016.43A2F83AB0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/testing: replace
+ x86-64 with aarch64 for ZFS tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,58 +60,98 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0610195647176390915=="
+Content-Type: multipart/mixed; boundary="===============1562253827533177242=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0610195647176390915==
+--===============1562253827533177242==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4fa17f44128929970632e6703a49bc40eb0492f
+commit: https://git.buildroot.net/buildroot/commit/?id=16adbd4df05e5692c92ad015c1ec54d64d91dfa5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The gnu-efi code base is so far built with -fshort-wchar:
+Previously, ZFS tests were limited to x86-64 due to lack of cross-platform support.
+However, upstream efforts have improved cross-platform compatibility.
+Update the ZFS test platform from x86-64 to aarch64, aligning it with other tests.
 
-‘-fshort-wchar’
-     Override the underlying type for ‘wchar_t’ to be ‘short unsigned
-     int’ instead of the default for the target.  This option is useful
-     for building programs to run under WINE.
-
-     *Warning:* the ‘-fshort-wchar’ switch causes GCC to generate code
-     that is not binary compatible with code generated without that
-     switch.  Use it to conform to a non-default application binary
-     interface.
-
-However, this is highly incompatible with the definitions of wchar_t
-by musl, causing build issues:
-
-/workdir/instance-0/output-1/build/gnu-efi-3.0.18//lib/console.c:84:68: error: passing argument 2 of 'ConOut->OutputString' from incompatible pointer type [-Werror=incompatible-pointer-types]
-[...]
-/workdir/instance-0/output-1/build/gnu-efi-3.0.18//lib/console.c:84:68: note: expected 'CHAR16 *' {aka 'int *'} but argument is of type 'short unsigned int *'
-
-These have been addressed upstream by simply not using -fshort-wchar
-anymore, so we backport the relevant patches.
-
-The patch 0003-Use-char16_t-literals.patch was directly backported, it
-was "redone" (it's a very mechanical patch) as backporting the patch
-and fixing the conflicts was more effort than redoing the patch from
-scratch. But in essence, it is the same patch as what is upstream.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/8b2f5b38284e70dde8c5619e5050e7f201a0bcc3/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Julien: fix patch 0003 EOL modified by the mailing list]
+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../gnu-efi/0002-Make-CHAR16-use-uint16_t.patch    |  164 ++
- package/gnu-efi/0003-Use-char16_t-literals.patch   | 2103 ++++++++++++++++++++
- 2 files changed, 2267 insertions(+)
+ support/testing/tests/package/test_zfs.py | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/tests/package/test_zfs.py
+index 967da098e1..1b907ac4de 100644
+--- a/support/testing/tests/package/test_zfs.py
++++ b/support/testing/tests/package/test_zfs.py
+@@ -7,15 +7,16 @@ class TestZfsBase(infra.basetest.BRTest):
+     timeout = 60 * 3
+     config = \
+         """
+-        BR2_x86_64=y
+-        BR2_x86_corei7=y
++        BR2_aarch64=y
+         BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+         BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+         BR2_PACKAGE_ZFS=y
+         BR2_PACKAGE_PYTHON3=y
+@@ -28,13 +29,14 @@ class TestZfsBase(infra.basetest.BRTest):
+         """
+ 
+     def base_test_run(self):
+-        kernel = os.path.join(self.builddir, "images", "bzImage")
++        kernel = os.path.join(self.builddir, "images", "Image")
+         cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+         self.emulator.boot(
+-            arch="x86_64",
++            arch="aarch64",
+             kernel=kernel,
+-            kernel_cmdline=["console=ttyS0"],
+-            options=["-cpu", "Nehalem", "-m", "320", "-initrd", cpio_file],
++            kernel_cmdline=["console=ttyAMA0"],
++            options=["-M", "virt", "-cpu", "cortex-a57", "-m", "320M",
++                     "-initrd", cpio_file],
+         )
+         self.emulator.login()
+ 
+@@ -64,7 +66,7 @@ class TestZfsBase(infra.basetest.BRTest):
+ class TestZfsGlibc(TestZfsBase):
+     config = TestZfsBase.config + \
+         """
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_STABLE=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+         """
+ 
+     def test_run(self):
+@@ -74,7 +76,7 @@ class TestZfsGlibc(TestZfsBase):
+ class TestZfsUclibc(TestZfsBase):
+     config = TestZfsBase.config + \
+         """
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_UCLIBC_STABLE=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_UCLIBC_STABLE=y
+         """
+ 
+     def test_run(self):
+@@ -84,7 +86,7 @@ class TestZfsUclibc(TestZfsBase):
+ class TestZfsMusl(TestZfsBase):
+     config = TestZfsBase.config + \
+         """
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_MUSL_STABLE=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_MUSL_STABLE=y
+         """
+ 
+     def test_run(self):
 
---===============0610195647176390915==
+--===============1562253827533177242==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -122,4 +162,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0610195647176390915==--
+--===============1562253827533177242==--
