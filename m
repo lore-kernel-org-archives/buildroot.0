@@ -1,100 +1,168 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9382C02182
-	for <buildroot@archiver.kernel.org>; Tue, 21 Jan 2025 07:42:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 694E8C02182
+	for <buildroot@archiver.kernel.org>; Tue, 21 Jan 2025 08:28:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E519404C8;
-	Tue, 21 Jan 2025 07:42:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13AEC61128;
+	Tue, 21 Jan 2025 08:28:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2Hq44QKmjrz5; Tue, 21 Jan 2025 07:42:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rm8aGBcQw7hs; Tue, 21 Jan 2025 08:28:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62FFA41239
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4A6E61115
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62FFA41239;
-	Tue, 21 Jan 2025 07:42:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B1572959
- for <buildroot@buildroot.org>; Tue, 21 Jan 2025 07:42:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4A6E61115;
+	Tue, 21 Jan 2025 08:28:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 18D07959
+ for <buildroot@buildroot.org>; Tue, 21 Jan 2025 08:28:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 762DD80302
- for <buildroot@buildroot.org>; Tue, 21 Jan 2025 07:42:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 05A1A40E40
+ for <buildroot@buildroot.org>; Tue, 21 Jan 2025 08:28:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QKtWS2_wh6q4 for <buildroot@buildroot.org>;
- Tue, 21 Jan 2025 07:42:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uYtvORbvP8ZO for <buildroot@buildroot.org>;
+ Tue, 21 Jan 2025 08:28:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::62c; helo=mail-pl1-x62c.google.com;
- envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 59CE48212D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59CE48212D
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com
- [IPv6:2607:f8b0:4864:20::62c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 59CE48212D
- for <buildroot@buildroot.org>; Tue, 21 Jan 2025 07:42:21 +0000 (UTC)
-Received: by mail-pl1-x62c.google.com with SMTP id
- d9443c01a7336-21680814d42so85906505ad.2
- for <buildroot@buildroot.org>; Mon, 20 Jan 2025 23:42:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1737445340; x=1738050140;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=xcYbg19mPdeY982NbnC/PUTkF6Y3OUaR7f//PkcwC68=;
- b=eXm0ftnopWlaiOTMQt7Je014xg9C6r+qUKGwHbBetlWNy4kARi8yd988icyQiYckn9
- eXcFqzW8HfzqNeUZe4NoeWx8rAFWuDhinfpFaS6nVTzEpqjKNeuLfETRrWRL9L1JeCjI
- WWeLyVLEGXttVZUtiit58x6feBZ8pGLTyrmfjQsiRVU7s6qX4WNuY3MpIk1jCiDDjik6
- xn35jnBRriySNv+ZJ8f4nhn5kgb5vv/ZTD/alyUDU/WL0VY09sp6oGawbBa7UFd2xy5I
- GcPFzQA/MfKB23GdHrUFEToeyEmgeUVzI3TebqleE8eWL7aSGq4EZANQHHRnjlPspRUo
- 5FTw==
-X-Gm-Message-State: AOJu0YycidbJXnWEj87nD7B+BB8fonnO1EudKWc/Svdlyr8qVHBkpTJT
- Nb+Eaj1M6c17WIE5qF5GoQBkyL9avz7v4TPUvT9dFOZ20ghke69S4AUiadxl
-X-Gm-Gg: ASbGnctjZJozMIU/oy16q8Brevs8xU5Ay4dHEZqK0YNm/9PP+GarKE3DSnyEgEQG9P6
- 6C121OH3a18jtDNEzXhMg5S3NAvUNL6DGO0gij6mh43SdA6zRgGSkjoOZLMLJbkbQVRdNZIqKla
- HRFaQZE3qUedRQcMOZjW+4Qf2muWmaqIaUGITYTLcqFBfzhout2W2JLXJSaaJCSm68vYpYRiOIP
- 8zV26Ib0IkQaxjEZ/u5L4a8GT/Ot7+2jmCLKflSorZqvUGpWYcoiGv0kg1GtRLVvsbQqikX3z90
- 0Q578yX0cFO2k/WsMjjAeSpLkuxYFP0PyssaA2Tf0uJ2VOVy1p9gYQ==
-X-Google-Smtp-Source: AGHT+IGl3YAL8TuOtpQk+ovsBV4HJRfnxS6QhI6di306fP2wbkItkurYCUue/F+oOPCpTfWsiv3taA==
-X-Received: by 2002:a17:902:f689:b0:215:5935:7eef with SMTP id
- d9443c01a7336-21c35549f0fmr204588705ad.22.1737445340250; 
- Mon, 20 Jan 2025 23:42:20 -0800 (PST)
-Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
- [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-21c2ce9e8ccsm71323225ad.27.2025.01.20.23.42.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Jan 2025 23:42:19 -0800 (PST)
-From: Akhilesh Nema <nemaakhilesh@gmail.com>
-To: buildroot@buildroot.org
-Cc: Petr Vorel <petr.vorel@gmail.com>, Akhilesh Nema <nemaakhilesh@gmail.com>
-Date: Mon, 20 Jan 2025 23:42:17 -0800
-Message-Id: <20250121074217.18241-1-nemaakhilesh@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ client-ip=2a01:111:f403:2409::627;
+ helo=nam04-dm6-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 556FE400E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 556FE400E0
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam04on20627.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2409::627])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 556FE400E0
+ for <buildroot@buildroot.org>; Tue, 21 Jan 2025 08:28:14 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=s0x+JeDk6USZqzpkOmmtZxbdAwo+0sVfhSRIloFPAcoa2cP3cPOo1wFRNiEvq7vHKhBufh4Zz0W/9KTqOVr46rcrFAIf5IAjHV5CbkaGOKxODLt4bXNV2gKYn8Tcg7XeiEC1LfCFAsKRKni1Zf+djzgNjkVG1sAEayc7s4MGAEhYWBLoxNbNr9dbLbiVKwD0Pkr+xmPTPberR/IWVrtRE4iPsHpNNsHxCtOuvACmQpFwpgW50vRotBIj+W2kidcIkK8zLeqiMt3nr5Rk1GrZ9deQYg/D+JKi1w/32tBdAlyUeUNjTnZBsf2aFGAbj+Vn1tYrzd0DWLSKvgDBZDSOkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qitjO6T2Dve35ZNvIYLE0Kq3rExKKCZf/cEaApDP0Ck=;
+ b=y8GxI60hyQhq1x6TH1LTyo6ObSh7HYcRpk1Yd0DR1ATcLmmxP4C9XXL+QfSwQq/tgkvH4qYXRfoSPbdvjKVeM/ikL/Z8nv6yIs9u/9eP3RVl9tOp8cDSQRQxQM/4nPWKgHYd4FEfcyQr9Um0vuHz4hdiG0NYmSjZNdK53OBimzlP/tSWvo7AVrMP4Jh2DbeYveHB0m1AkCC47Zj5v+hJHUY4nvc6pfK8JeA7E4YSnMU13Y5KRNPCvDgSUYE1+biZHx3SSt9TUKI/VIHVxBQawHAIfynGnCO+IrycBDZWcPFGzRMmR3WKKglLGcbgT1N+ctV8/k9LUwm+yAG5qh0K3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from SA1PR12MB5615.namprd12.prod.outlook.com (2603:10b6:806:229::17)
+ by DS0PR12MB7747.namprd12.prod.outlook.com (2603:10b6:8:138::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.21; Tue, 21 Jan
+ 2025 08:28:10 +0000
+Received: from SA1PR12MB5615.namprd12.prod.outlook.com
+ ([fe80::7557:587c:4ec:1913]) by SA1PR12MB5615.namprd12.prod.outlook.com
+ ([fe80::7557:587c:4ec:1913%7]) with mapi id 15.20.8356.020; Tue, 21 Jan 2025
+ 08:28:10 +0000
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Thread-Topic: [PATCH v2 1/4] boot/xilinx-embeddedsw: new boot package
+Thread-Index: AQHbay89zGN8FoY7A0ilbt96TJtW2LMf7GMAgAD4ocA=
+Date: Tue, 21 Jan 2025 08:28:10 +0000
+Message-ID: <SA1PR12MB5615E5B94819EDC72F4E6D98F0E62@SA1PR12MB5615.namprd12.prod.outlook.com>
+References: <20250120113405.3938838-1-neal.frager@amd.com>
+ <20250120183312.073aafb3@booty>
+In-Reply-To: <20250120183312.073aafb3@booty>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|DS0PR12MB7747:EE_
+x-ms-office365-filtering-correlation-id: f9451dac-f6d7-4ddd-27e1-08dd39f58a5d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|376014|1800799024|366016|13003099007|38070700018|41080700001; 
+x-microsoft-antispam-message-info: =?us-ascii?Q?nNfQcB9Kg41QiHD0vOAgU1E8JMxeOTlMDEqFIgPppg+kzq72YifGJJj/vlZP?=
+ =?us-ascii?Q?/iVsInptJMLtzKytHNDJPXLV9W1BacG7iwZ8to/xdrco7O0CUpPAm56KWwRG?=
+ =?us-ascii?Q?gt+yUbv1O9hZIEUBsF5XJ+G0dDxUu8b3/vzVFnIzguMBdQPXWGdJiVqFfPlM?=
+ =?us-ascii?Q?KXHXKrui283TpdXi/yGj6Ppaxr8suOxx1pYmydeuA5ZftyC8mrMWtt9LKVIp?=
+ =?us-ascii?Q?tijL/DituBs/YMYielwdX9TI2wpUVATMpSvMIclvE0zEWeVh0S6LSZa2Jr9h?=
+ =?us-ascii?Q?BAi99FL2auXOTJ3JpU5Ey7IzrA19o8NVuYSgNzmgtwVpMf2qnw1eJ4na9bnM?=
+ =?us-ascii?Q?85v64DvatvyV/AirT/gsuzVOVyZp1gCD6TgafpOPWJfmEftqg9my9LaIdwvf?=
+ =?us-ascii?Q?J+XsJjseFVZ4uwAw+HykgvdmHz6ip0m2/bPRa5tNp3WA5h4pu8MuWXoauBeG?=
+ =?us-ascii?Q?K8RAuZNkigGn/5kLnB4i7y1GmWaD2OykDl8IkQ68fQzctRKBqW96A4OsCV7j?=
+ =?us-ascii?Q?tTbwhO4vsyQ7XKtSOL6atgNAhZrnaUxyTaBFGab9i4lZXteVoAAIp1rvQUp/?=
+ =?us-ascii?Q?+depRSYTncuWBrrWC1eMsu03Rnw6c9niYCh0+6mCOmU5TpNB0DdIg8NrWhD2?=
+ =?us-ascii?Q?5r9xW5ZkS0+vhKI4lKMX3P5qnIIrmsHikgWz/5X5pe2eIZIiwz0vA5fFllCC?=
+ =?us-ascii?Q?Qh5KDuXXrhzLRGvGZLiTcU1eqV2XqmV96CuddEQnLJcb8YG2yVT3P3RlB2sH?=
+ =?us-ascii?Q?+RfHeyjPcO6Xktjam6Oj4+kney/+MvfUo0poF1+B9KA+1ttuqEO0QiBHAZmY?=
+ =?us-ascii?Q?+ghILE4443VnRd0wa5Mu+6+Mw4mQCrvCeAnmXnca7hCv4Y7+qMEU7SNDyUhe?=
+ =?us-ascii?Q?Q/2IKbVDvloHrjpfnv5kNcDMVx7bwnvNRi7z4lLY0i5kRpkigQbIUfEBpgd6?=
+ =?us-ascii?Q?l6NBGjfbhLrIMtVrTPV1UorHrOmIdhvXiqFxixCgMbDkH4qmaiXTj53rBh13?=
+ =?us-ascii?Q?Ve5EFh9Ez1/i047LH0qL7Edc67CTr6HT6UiNOGX51okRIaxPNKVapqhTkvie?=
+ =?us-ascii?Q?wrQ3cEyqDCsrnTRDpml0X14wDQ28wl+QLW13jTqh0rFybLeP+DUcBee5Trhq?=
+ =?us-ascii?Q?TIEEzfDpB08vDu9qLQZ8z47uYdLUJCXb/dwkk1GNKOuK2l+GnxAbsaqjv4ox?=
+ =?us-ascii?Q?PcLX1pZoy8MIWeTt9iVkJU8Cw0MPqRL0wpbjaEWyUMkBKH32NboyWgnXIALH?=
+ =?us-ascii?Q?7oZUGpNIVpJqyEE+VE+Q4Ej/LfB+z9ngaR1YzsrPu0ILho3a9eZ7ONJtxaQS?=
+ =?us-ascii?Q?H9eEo+0TesrMeC2+A8dx4LTFESEzesJZjtV6tXFulDQQpUD7sjvHKjCN02Ly?=
+ =?us-ascii?Q?hDT0j8jV02S1exzh9QTR45Kk5a+MHaCCXv1kRPS8DvX5U3lzFcbYvWJ6MEo4?=
+ =?us-ascii?Q?n4tVgzwOUzanAAyGVvWWuN0WD/CNBe0TGFAM0qAn0ewZcoX1VNFkPj2dwvFY?=
+ =?us-ascii?Q?oqhPNRnMOy889Vw=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:SA1PR12MB5615.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(376014)(1800799024)(366016)(13003099007)(38070700018)(41080700001);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DaMf3vxenFz9OwdWPxfvRtmBCkYn2B/EjQhGET3yiIY1tvLY2X8FRhcTLN3e?=
+ =?us-ascii?Q?mDLZEq498oUYYrSs7uKDycIF18KlyMkWgwymdS/HR1mbXGhZOfXBNTRajKc1?=
+ =?us-ascii?Q?oXkrpz16jZoHYy8i6cODKwo4VH09os83MfwbunwrM25mwXBjV75m8bradNc2?=
+ =?us-ascii?Q?hZF5yBaoPH4fTLqN09jKBcPgj/A8427bqxwWpmXds96Z8LoSdwlLB7KIsv8D?=
+ =?us-ascii?Q?pdcljz9GMcj8sp+kFOetKZP6jzPOLvm1YaAbkp0FJql892KhsYcPn6KGJ8sg?=
+ =?us-ascii?Q?PThQ4kwrAYdt48YCBynIWV0eY3sMupGMimn2iuk9KkYgfevpWRmmgCok7pEr?=
+ =?us-ascii?Q?TSY6IUvPdxoksQpRX+mENBbiwmZrU5cJXJVAoc3VswbLdv6JepLWujkDBC+A?=
+ =?us-ascii?Q?yEup9aa+LTmF0Ah2qgwR4WZ3MqxiNCC+s6lJ4hCGsV+rN9TgPV7KRg3fXRvH?=
+ =?us-ascii?Q?Cmb6yF+OlPc/KqzEs58eZVdTl7eDDOlDo7jt7mQO/Uak/9i8PAnWkxBIDgul?=
+ =?us-ascii?Q?FiEQIIqB793g64g6RC8lpnVcT7Bqtv8bY6qWH5jaSD2HclO2YG+N5Cr/oJsD?=
+ =?us-ascii?Q?/mLuShgF49z1x0ci2yDbQ4iMptKOIKmnBjICq+Z7PP55yVv3DdzfJkuD4Fy4?=
+ =?us-ascii?Q?txnMoixltvlU30tlUJlpsNjQBhDvwMcJCJ62T79j1ryRf4C3OeOStR8kfMJ3?=
+ =?us-ascii?Q?G5Zo8E/2XsOYqSMp8YjMC4gucoAbHdh1LXr2DgVE4IOyY/SXZAe9tLrvHt9b?=
+ =?us-ascii?Q?nDpC3cc2Po3tAVk+LTFgexkRWFsSr4mEqx7MFgLr1QB15fcLLmdtRJgJzsPI?=
+ =?us-ascii?Q?HrgYgo4wa9LBUiE33UCtpPrT4umiOWOCr8p/Hj06RUqK3UyKqkdW2X6fcwLG?=
+ =?us-ascii?Q?/50uYCy4YWQFBvicyWsqGVJ6oB+b6RAg1FEcVHCI10N6XnzX9rPXQNhq4yZw?=
+ =?us-ascii?Q?KYV0uK0/V6M+IkX5AddSmlm6XzdnQJJeumfDHw3RJs+0fGafmJyjkRXW30/N?=
+ =?us-ascii?Q?jaFHA5tGPDsJ6kNSLWZvq07ym7fjmIUV3eRGmPnLbeN3yYdegtWLJRDkjNCO?=
+ =?us-ascii?Q?qQifkN0WTCENfQUhzFIEbJHiOfg0SNgAKisyhbien1kzcBQQUk6fepwithiI?=
+ =?us-ascii?Q?tIdqQwZLxAup2Y9kI6yvPIHPCVgNbqsVAPLF0GEM3VRAtRno3QJ0ieaECbe/?=
+ =?us-ascii?Q?Pp5u4TwQLMbbwSOCupcliWV2R+7uozZl7rxLOXuk3xOivtVhroOs4fWXxdWE?=
+ =?us-ascii?Q?9cH7id/CPw670rK+dGBv8TzAWn2a/fzSC3OOeVp5TIOA/2bBDlH/cKP6vhb2?=
+ =?us-ascii?Q?qYg4zBz+TS3YWagQ04bGaqQiM/HQSyNc0NcZ4H6Hk+RUPEr2Ez/HZN5N8a8j?=
+ =?us-ascii?Q?s0sxGQJT1LkaPF3OcHRtSOQHg8ln5jNAWAU0+Ci6lw2vj0R5o7In0M+TVpmG?=
+ =?us-ascii?Q?IzgUk9lHmrxFkcbhsxWsrPk0mJuzSr7GgMRnsaSqrt+Qj8aaWsHRR6ExRUd5?=
+ =?us-ascii?Q?zjhk3lEM9y0dePqK85epW80snDarRJwjuuozUPUUwgXYaxHi0zkcToxQ84+S?=
+ =?us-ascii?Q?cS93GmxPK9KT4hd7nT4=3D?=
 MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB5615.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9451dac-f6d7-4ddd-27e1-08dd39f58a5d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2025 08:28:10.7429 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FOh+pRob4TfrivSozeyCSqMKKAPtVUDi/v65Ui6hSj2PdZOHEK4tUwd1j1a7+Rd3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7747
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1737445340; x=1738050140; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=xcYbg19mPdeY982NbnC/PUTkF6Y3OUaR7f//PkcwC68=;
- b=FJN3sQ0MQ6jbL7d2gmbMCSwCWXQykAzb4J5D5Uw6R3QLUWexX55BdIM0YReuklxWEm
- c9BV27tuCeO7RRQgWHHVat0F67bjh/OZp/oQR3Urk/VPXuGltcf0BZWbEoQAdlygfQEc
- C78KQXsK1/VETc8MyAtbdlscp8YDjc532BQTkZslMD8ByMdzGXzDSUi7BklVH6p6gR7v
- pAqzXiSZ4V4kS5iksc31QZguWRH+7WCWVMnGEJ9k1w/bwQyi3zFOTu0qiXwsVLFcAGHJ
- uIzBST3tU6YL7WItOwOH3ZeMdLscJADUAE2fEBC4Z7PmbiOrcSxxfT4g7TvoAt7ZuIPp
- SnHA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=FJN3sQ0M
-Subject: [Buildroot] [PATCH 1/1] package/iproute2: bump to version 6.13.0
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qitjO6T2Dve35ZNvIYLE0Kq3rExKKCZf/cEaApDP0Ck=;
+ b=0JIu1r6bqKq42oKBgMMvwbt9IluYmmumbnhbv/RNwLLIxLwvD+SwSJMHQKpSWWROeoRrlrb1iOd7wqzoTnT0U7ccSPaydg3F8aH4o9XyVgrWGM1z+5exqmEtBDXK0h6Ej7Dwk4GKOfDROHJGQNYDvXdKHdayTkoTANLs1yB6Mws=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=0JIu1r6b
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v2 1/4] boot/xilinx-embeddedsw: new boot
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,145 +174,162 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>,
+ "brandon.maier@collins.com" <brandon.maier@collins.com>,
+ "ju.o@free.fr" <ju.o@free.fr>,
+ "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
+ Michal" <michal.simek@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog - https://github.com/iproute2/iproute2/compare/v6.12.0...v6.13.0
+Hello Luca,
 
-Drop 0001-Fix-implicit-declaration-of-function-htobe64-in-gcc-.patch
-Upstream commit - https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=c8b3ecc22ed0edaf0259eaf7d1a5c04f300ad6e4
+> This patch adds a new boot package to Buildroot for building boot firmware
+> applications from the https://github.com/Xilinx/embeddedsw repo.
+> 
+> If a user chooses to build a boot firmware application, it will not be
+> installed by the xilinx-prebuilt package since it will come from the
+> xilinx-embeddedsw package.  In this way, users can mix and match applications
+> to be built by the xilinx-embeddedsw package and applications to be copied
+> from the xilinx-prebuilt package.  This is necessary for the versal platform
+> because the pdi file can only be built by AMD Vivado.
+> 
+> Support for additional applications in the https://github.com/Xilinx/embeddedsw
+> repo can always be added to this package as needed or requested.
+> 
+> The xilinx-embeddedsw package replaces previous solutions including
+> zynqmp-firmware, versal-firmware and xilinx-source.
+> 
+> A patch is required for the xilinx-embeddedsw repo because the LICENSE file
+> has the name license.txt.  A patch is thus included to create a symbolic link
+> from LICENCE to licence.txt, so that the Buildroot hash check will succeed.
+> This patch is not upstreamable.
 
-Drop 0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
-Upstream commit - https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=fa3949b792e275f75d7d6200dc2036ef7fff8816
+> Isn't changing the _LICENSE value the correct fix?
 
-Fixes:
-https://autobuild.buildroot.org/?reason=iproute2-6.12.0
+> -XILINX_EMBEDDEDSW_LICENSE_FILES = LICENSE
+> +XILINX_EMBEDDEDSW_LICENSE_FILES = license.txt
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
----
- ...laration-of-function-htobe64-in-gcc-.patch | 43 -------------------
- ...laration-of-function-basename-in-gcc.patch | 33 --------------
- package/iproute2/iproute2.hash                |  2 +-
- package/iproute2/iproute2.mk                  |  2 +-
- 4 files changed, 2 insertions(+), 78 deletions(-)
- delete mode 100644 package/iproute2/0001-Fix-implicit-declaration-of-function-htobe64-in-gcc-.patch
- delete mode 100644 package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
+Of course!  Thank you for this.  I knew I had to be missing something obvious!
 
-diff --git a/package/iproute2/0001-Fix-implicit-declaration-of-function-htobe64-in-gcc-.patch b/package/iproute2/0001-Fix-implicit-declaration-of-function-htobe64-in-gcc-.patch
-deleted file mode 100644
-index 318701e725..0000000000
---- a/package/iproute2/0001-Fix-implicit-declaration-of-function-htobe64-in-gcc-.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From ea78477cba25b50e7f63f02635e6870d72dcf68e Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@openadk.org>
--Date: Wed, 14 Aug 2024 19:10:09 +0200
--Subject: [PATCH] Fix implicit declaration of function 'htobe64' in gcc 14 on
-- musl systems
--
--On musl systems with GCC 14 and above, the htobe64 function cannot be
--found by default. From the man page[0], the function is from endian.h
--header file. If the file is not included in, then we get the following
--error message. The issue however cannot be reproduced on glibc systems.
--
--In file included from ../include/libgenl.h:5,
--                 from libgenl.c:12:
--../include/libnetlink.h: In function 'rta_getattr_be64':
--../include/libnetlink.h:281:16: error: implicit declaration of function 'htobe64' [-Wimplicit-function-declaration]
--  281 |         return htobe64(rta_getattr_u64(rta));
--      |                ^~~~~~~
--make[1]: *** [../config.include:24: libgenl.o] Error 1
--
--[0]: https://linux.die.net/man/3/htobe64
--
--Signed-off-by: Brahmajit Das <brahmajit.xyz@gmail.com>
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Upstream: https://lore.kernel.org/netdev/20240514084335.19f5b280@hermes.local/T/
-----
-- include/libnetlink.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/include/libnetlink.h b/include/libnetlink.h
--index 30f0c2d2..77e81815 100644
----- a/include/libnetlink.h
--+++ b/include/libnetlink.h
--@@ -12,6 +12,7 @@
-- #include <linux/neighbour.h>
-- #include <linux/netconf.h>
-- #include <arpa/inet.h>
--+#include <endian.h>
-- 
-- struct rtnl_handle {
-- 	int			fd;
---- 
--2.39.2
--
-diff --git a/package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch b/package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
-deleted file mode 100644
-index 3bce4b15bb..0000000000
---- a/package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 482b7362dedc57d0c9783bd83084919ccaa79e77 Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@openadk.org>
--Date: Wed, 14 Aug 2024 19:43:44 +0200
--Subject: [PATCH] Fix implicit declaration of function basename in gcc-14.x
--
--From Alpine Linux.
--https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/main/iproute2/basename.patch?ref_type=heads
--
--But also reported Upstream via netdev mailinglist by Gentoo people.
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Upstream: https://marc.info/?l=linux-netdev&m=172278781323421&w=2
-----
-- rdma/rdma.c | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/rdma/rdma.c b/rdma/rdma.c
--index 131c6b2a..1e7db382 100644
----- a/rdma/rdma.c
--+++ b/rdma/rdma.c
--@@ -8,6 +8,9 @@
-- #include "version.h"
-- #include "color.h"
-- 
--+/* For basename(3) prototype */
--+#include <libgen.h>
--+
-- /* Global utils flags */
-- int json;
-- 
---- 
--2.39.2
--
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index 97be9bb765..fad4debeab 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256  bbd141ef7b5d0127cc2152843ba61f274dc32814fa3e0f13e7d07a080bef53d9  iproute2-6.12.0.tar.xz
-+sha256  a43aa43338d882b44d01e549f3f105a92ae9feea32a82fae45a88e7a49302819  iproute2-6.13.0.tar.xz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index d609a28c0c..016b235469 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPROUTE2_VERSION = 6.12.0
-+IPROUTE2_VERSION = 6.13.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
--- 
-2.25.1
+> ...
 
+> +if BR2_TARGET_XILINX_EMBEDDEDSW
+> +
+> +config BR2_TARGET_XILINX_EMBEDDEDSW_VERSION
+> +	string "xilinx-embeddedsw version"
+> +	default "xilinx_v2024.2"
+> +	help
+> +	  Release version of Xilinx/embeddedsw.
+> +	  Must be xilinx_v2023.1 or newer.
+> +
+> +config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM
+> +	bool "versal plm"
+> +	help
+> +	  Build versal plm application from Xilinx/embeddedsw repo.
+> +	  If selected, the xilinx-prebuilt package will not install
+> +	  the plm.elf since it will come from the xilinx-embeddedsw
+> +	  package.
+> +
+> +	  https://github.com/Xilinx/embeddedsw/tree/master/lib/sw_apps/versal_plm
+> +
+> +config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW
+> +	bool "versal psmfw"
+> +	help
+> +	  Build versal psmfw application from Xilinx/embeddedsw repo.
+> +	  If selected, the xilinx-prebuilt package will not install
+> +	  the psmfw.elf since it will come from the xilinx-embeddedsw
+> +	  package.
+> +
+> +	  https://github.com/Xilinx/embeddedsw/tree/master/lib/sw_apps/versal_psmfw
+> +
+> +config BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW
+> +	bool "zynqmp pmufw"
+> +	help
+> +	  Build zynqmp pmufw application from Xilinx/embeddedsw repo.
+> +	  If selected, the xilinx-prebuilt package will not install
+> +	  the pmufw.elf since it will come from the xilinx-embeddedsw
+> +	  package.
+> +
+> +	  https://github.com/Xilinx/embeddedsw/tree/master/lib/sw_apps/zynqmp_pmufw
+> +
+> +config BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS
+> +	string "xilinx-embeddedsw optional zynqmp_pmufw user cflags"
+
+> + depends on BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW
+
+Good catch.
+
+> +	help
+> +	  Add optional cflags when building xilinx zynqmp_pmufw.
+> +
+> +	  Example cflag options can be found here:
+> +	  https://github.com/Xilinx/embeddedsw/blob/master/lib/sw_apps/zynqmp_pmufw/src/xpfw_config.h
+> +
+> +endif # BR2_TARGET_XILINX_EMBEDDEDSW
+
+...
+
+> diff --git a/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk b/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
+> new file mode 100644
+> index 0000000000..9a89f27d10
+> --- /dev/null
+> +++ b/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
+> @@ -0,0 +1,80 @@
+> +################################################################################
+> +#
+> +# xilinx-embeddedsw
+> +#
+> +################################################################################
+> +
+> +XILINX_EMBEDDEDSW_VERSION = $(call qstrip,$(BR2_TARGET_XILINX_EMBEDDEDSW_VERSION))
+> +XILINX_EMBEDDEDSW_SITE = $(call github,Xilinx,embeddedsw,$(XILINX_EMBEDDEDSW_VERSION))
+> +XILINX_EMBEDDEDSW_LICENSE = MIT
+> +XILINX_EMBEDDEDSW_LICENSE_FILES = LICENSE
+> +XILINX_EMBEDDEDSW_INSTALL_TARGET = NO
+> +XILINX_EMBEDDEDSW_INSTALL_IMAGES = YES
+> +XILINX_EMBEDDEDSW_DEPENDENCIES = toolchain-bare-metal-buildroot
+> +
+> +# ZYNQMP_PMUFW application allows users to add cflags
+> +XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS = \
+> +	$(call qstrip,$(BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS))
+> +XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_CFLAGS = \
+> +	"-Os -flto -ffat-lto-objects $(XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS)"
+> +
+> +XILINX_EMBEDDEDSW_CFLAGS = "-Os -flto -ffat-lto-objects"
+> +
+> +ifeq ($(BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM),y)
+
+> I still think this looks like a good approach from a user point of
+> view. However I cannot say whether the implementation, based on a
+> package looking into the config knobs of another package, is clean or
+> not. I'll leave this to more experienced Buildroot reviewers to judge.
+> Same for the following options.
+
+I am curious to what experienced Buildroot users think as well.  From my view,
+I currently look at the xilinx-embeddedsw and xilinx-prebuilt as being a
+combined package that just happpens to work with two different repos.
+
+With the way I currently implemented the solution, the two packages a very
+much tied together.  In the end, they are only used for AMD-Xilinx boards, so
+since they are isolated from the rest of Buildroot, I hope my current solution
+of wiring them together is ok.
+
+> Other than that it looks overall good.
+
+> I've also successfully tested on KV260.
+
+Great news!
+
+Best regards,
+Neal Frager
+AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
