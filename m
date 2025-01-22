@@ -1,64 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DF40C02181
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 15:51:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B26BBC02181
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 15:53:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1BB7380963;
-	Wed, 22 Jan 2025 15:51:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YXwn8UIoEFgt; Wed, 22 Jan 2025 15:51:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 174A884BF9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 174A884BF9;
-	Wed, 22 Jan 2025 15:51:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 93DF2959
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:51:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 744C9605EE
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:51:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 787F86065C;
+	Wed, 22 Jan 2025 15:53:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BznRFtLyxPLa for <buildroot@buildroot.org>;
- Wed, 22 Jan 2025 15:51:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id 3hCKd8sgqM4k; Wed, 22 Jan 2025 15:53:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72BDF6066B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72BDF6066B;
+	Wed, 22 Jan 2025 15:53:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 025D7959
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:53:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D780A84042
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:53:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UckLl3It7fo8 for <buildroot@buildroot.org>;
+ Wed, 22 Jan 2025 15:53:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 56228605AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56228605AC
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 56228605AC
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:51:52 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9D53EFF805;
- Wed, 22 Jan 2025 15:51:50 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tad1C-008w1F-01;
- Wed, 22 Jan 2025 16:51:50 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07E438402C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 07E438402C
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:53:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E80548606B; Wed, 22 Jan 2025 15:53:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-References: <20250116224513.73BC785E38@busybox.osuosl.org>
-Date: Wed, 22 Jan 2025 16:51:49 +0100
-In-Reply-To: <20250116224513.73BC785E38@busybox.osuosl.org> (Julien Olivain's
- message of "Thu, 16 Jan 2025 23:43:17 +0100")
-Message-ID: <87zfjilucq.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [git commit] package/asterisk: security bump to
- version 20.11.1
+To: buildroot@buildroot.org
+Date: Wed, 22 Jan 2025 16:50:18 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: 54721e452cd5b9c8917ae5b4bca4cd2cfd784503
+X-Git-Newrev: d4dcf369567206c066a86db7a524d9555f3fa20b
+X-Patchwork-Hint: ignore
+Message-Id: <20250122155314.E80548606B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/libxml2: fix
+ segfault with python-lxml
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,33 +59,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d4dcf369567206c066a86db7a524d9555f3fa20b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=cfe0e945b30ec61eddc6b8ea572118630cfd1cb1
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Backport a patch fixing a segfault first introduced by
+ca63c4409b3c811e8c4ee19c2860c53af35c4ce1 in buildroot.
 
- > Fixes the following security issues:
+Fixes:
+==4792== Invalid read of size 8
+==4792==    at 0x4FE7661: __gconv_close (gconv_close.c:33)
+==4792==    by 0x4FE70EE: iconv_close (iconv_close.c:34)
+==4792==    by 0x5AED422: xmlCharEncCloseFunc (encoding.c:2678)
+==4792==    by 0x587A78C: __pyx_f_4lxml_5etree__find_PyUCS4EncodingName (etree.c:126676)
+==4792==    by 0x5888666: __pyx_pymod_exec_etree (etree.c:289773)
+==4792==    by 0x4A06345: PyModule_ExecDef (moduleobject.c:440)
+==4792==    by 0x4AE23A8: _imp_exec_dynamic_impl (import.c:3801)
+==4792==    by 0x4AE23A8: _imp_exec_dynamic (import.c.h:534)
+==4792==    by 0x4A046A3: cfunction_vectorcall_O (methodobject.c:509)
+==4792==    by 0x4AAA203: _PyEval_EvalFrameDefault (bytecodes.c:3263)
+==4792==    by 0x49B9D2B: _PyObject_VectorcallTstate (pycore_call.h:92)
+==4792==    by 0x49B9D2B: object_vacall (call.c:850)
+==4792==    by 0x49B9F44: PyObject_CallMethodObjArgs (call.c:911)
+==4792==    by 0x4AE648A: import_find_and_load (import.c:2781)
+==4792==    by 0x4AE648A: PyImport_ImportModuleLevelObject (import.c:2864)
+==4792==  Address 0x8 is not stack'd, malloc'd or (recently) free'd
 
- > CVE-2024-53566: Path traversal via AMI ListCategories allows access to
- > outside files
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit e2e152496a588cbb9a877b9f53b261a83692c52d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0002-Fix-Fix-compilation-with-uclibc.patch     | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
- > https://github.com/asterisk/asterisk/security/advisories/GHSA-33x6-fj46-6rfh
-
- > Release notes:
- > https://www.asterisk.org/asterisk-news/asterisk-security-release-20-11-1-now-available/
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > Signed-off-by: Julien Olivain <ju.o@free.fr>
-
-Committed to 2024.02.x and 2024.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch b/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch
+new file mode 100644
+index 0000000000..76ea711962
+--- /dev/null
++++ b/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch
+@@ -0,0 +1,31 @@
++From 539663626b91567159a70791c0f2b3b167135e9b Mon Sep 17 00:00:00 2001
++From: Nick Wellnhofer <wellnhofer@aevum.de>
++Date: Thu, 16 Jan 2025 15:50:46 +0100
++Subject: [PATCH] Fix "Fix compilation with uclibc"
++
++The ICU code must initialize the iconv members as well.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/commit/539663626b91567159a70791c0f2b3b167135e9b
++---
++ encoding.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/encoding.c b/encoding.c
++index 41ecde18..0ce8d479 100644
++--- a/encoding.c
+++++ b/encoding.c
++@@ -1641,6 +1641,10 @@ xmlCreateUconvHandler(const char *name, xmlCharEncodingHandler **out) {
++     }
++     enc->input = NULL;
++     enc->output = NULL;
+++#ifdef LIBXML_ICONV_ENABLED
+++    enc->iconv_in = (iconv_t) -1;
+++    enc->iconv_out = (iconv_t) -1;
+++#endif
++     enc->uconv_in = ucv_in;
++     enc->uconv_out = ucv_out;
++ 
++-- 
++2.34.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
