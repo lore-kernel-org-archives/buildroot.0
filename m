@@ -1,96 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92428C02181
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 06:45:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A5C1C02181
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 06:48:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2DCC341E0B;
-	Wed, 22 Jan 2025 06:45:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9700761153;
+	Wed, 22 Jan 2025 06:48:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jj5pJ9LJgn35; Wed, 22 Jan 2025 06:45:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 83Y1ZKrPv-Gh; Wed, 22 Jan 2025 06:48:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDAD541E17
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9A7A61141
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDAD541E17;
-	Wed, 22 Jan 2025 06:45:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 600E6C1
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 06:45:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B9A7A61141;
+	Wed, 22 Jan 2025 06:48:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 38B3CD7
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 06:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17B9041E1C
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 06:45:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B1E141861
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 06:48:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0IUS8JtyL5PF for <buildroot@buildroot.org>;
- Wed, 22 Jan 2025 06:45:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.123;
+ id XJrjvo7cfFvq for <buildroot@buildroot.org>;
+ Wed, 22 Jan 2025 06:48:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.239;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A8A3941E0B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8A3941E0B
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.123])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A8A3941E0B
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 06:45:37 +0000 (UTC)
-X-CSE-ConnectionGUID: 5gHWosU+QF+N5HpvTKdlsQ==
-X-CSE-MsgGUID: C2aM1hsIQBCQwyifDtQE7A==
-Received: from unknown (HELO opfedv1rlp0e.nor.fr.ftgroup) ([x.x.x.x]) by
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6503240388
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6503240388
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6503240388
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 06:48:44 +0000 (UTC)
+X-CSE-ConnectionGUID: 6H2ESDQUQT+pbzR/d6JZ6Q==
+X-CSE-MsgGUID: TNZQEzaGSIqm4oyqHwhdmg==
+Received: from unknown (HELO opfedv1rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 22 Jan 2025 07:45:35 +0100
+ 22 Jan 2025 07:48:41 +0100
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0e.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 Jan 2025 07:45:34 +0100
+ ([x.x.x.x]) by opfedv1rlp0c.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 Jan 2025 07:48:41 +0100
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Wed, 22 Jan 2025 07:45:33 +0100
+ Wed, 22 Jan 2025 07:48:39 +0100
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Wed, 22 Jan 2025 07:45:32 +0100
-From: yann.morin@orange.com
-X-CSE-ConnectionGUID: aCHwP/aBRduIpO0zNqh8ZQ==
-X-CSE-MsgGUID: LJM7QraMRBmpNLV7HLs97w==
-X-IronPort-AV: E=Sophos;i="6.13,224,1732575600"; d="scan'208";a="242118279"
-Date: Wed, 22 Jan 2025 07:45:32 +0100
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-CC: <buildroot@buildroot.org>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <Z5CUDJNAXFkBy/zy@yd-6wlzhs3>
-References: <2d128a40f7b030365fcc63e13dbd48a641d912aa.1737456332.git.yann.morin@orange.com>
- <20250121165545.0acdc63a@booty> <Z4/IZbYmCGQLMG4m@yd-6wlzhs3>
- <20250121191044.36864ead@booty>
+ Wed, 22 Jan 2025 07:48:38 +0100
+X-CSE-ConnectionGUID: Qzg18hDKQQesQQvSXSYO7g==
+X-CSE-MsgGUID: uCJ94rM2TzKDptvUfN4vpw==
+X-IronPort-AV: E=Sophos;i="6.13,224,1732575600"; d="scan'208";a="245596045"
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+CC: <yann.morin@orange.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
+Date: Wed, 22 Jan 2025 07:48:38 +0100
+Message-ID: <b345d4f8d7c4dcb795ec6fcb9e4aaa5c5cd4553b.1737528518.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20250121191044.36864ead@booty>
-X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX204.corporate.adroot.infra.ftgroup (10.115.26.9)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-Originating-IP: [10.115.26.52]
+X-ClientProxiedBy: OPE16NORMBX407.corporate.adroot.infra.ftgroup
+ (10.115.27.16) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1737528338; x=1769064338;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=D5vv5c/InNzAJYqiqCJvh2lidIn1wgzrOTWWIhVl2sA=;
- b=KyfbGztD4yCVm6SSAwzK3AELWB5tzhiuO76XWGA8okX9rJkggEL8EVQy
- XzH+rz07wHD01xvm2/PphNchFELEx+nTHy2HptGA31nIgFntw5Yjpqrp1
- h704KTIrQ3XXUXtKR59Z6uBY+RkW+FXZT4MUkHruI4thjNTWS+ohcP/7y
- YFzjAXwY2l6nFpn0yPe5gr9eEB3tGJat6MNwxb195oVYv6HpikjeldqyT
- jB0ystZTzOHixmQKVbAFHRSZOWP+dVVPpaeCleYZnWOUlwB6BHqSRMEuw
- 6lSdq0yPMSi/G/pxKFNHW5NELucMeOYP6PrRaG5O4/moNhelTvI2qacIT
- w==;
+ t=1737528524; x=1769064524;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=GXh4mKdc7B9k2o4ZF7IlS7Y5hiIN9LBj9aCnuRtd5OY=;
+ b=Guo8/jYfabJW7/4oa8vesrdi7Fqvnnq7fJaeNjJ8jLv2iP4XyHlKfH6Z
+ vRBiAom5cHZzrHgPoi2O2zp3TVlbk3NRcvgGrzBudk5vNtSjPrzfo9p3m
+ LYdG3pliO5O17rCHMqTYWwiro8ZbvHhoRrd46KLeAIolj+qAMCLU4DY98
+ +zkJfjQ4/w0jus/MtCgofcKoXAlenNNbWTVFTkGomsXjyvbZGB0Z5xRVH
+ wcXLHOAbX8e1c6isiU1pgYOE6sArkM5Uc1UgwRNE2ZFUpVzz+O/6k7cbL
+ HEjdyDVPBFw6r0e7FYEZO7DRiHkDYjGFFCJvAP3YEWGlkDpVwVUXchDVP
+ A==;
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=KyfbGztD
-Subject: Re: [Buildroot] [PATCH] package/pkg-generic: store reall version in
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=orange002 header.b=Guo8/jYf
+Subject: [Buildroot] [PATCH v2] package/pkg-generic: store real version in
  legal manifest
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -108,65 +104,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Luca, All,
+From: "Yann E. MORIN" <yann.morin@orange.com>
 
-On 2025-01-21 19:10 +0100, Luca Ceresoli spake thusly:
-> On Tue, 21 Jan 2025 17:16:37 +0100
-> yann.morin@orange.com wrote:
-> > On 2025-01-21 16:55 +0100, Luca Ceresoli spake thusly:
-> > > On Tue, 21 Jan 2025 11:45:32 +0100
-> > > <yann.morin@orange.com> wrote:  
-[--SNIP--]
-> > > It would be nice to shot an actual example in the commit message. I did
-> > > a very quick search and couldn't find any package where the problem
-> > > happens.  
-[--SNIP--]
-> > Finally, private packages (used from a br2-external tree) may have such
-> > tags as well..
-> Sure, make sense. If it were me, I'd add an example with one of those
-> packages for which one can specify the version in a configuration
-> setting, like U-Boot or Linux, in case you send a v2.
+The legal manifest currently stores the $(PKG)_VERSION variable.
+However, that variable undergoes a set of changes so that it is
+suitable for creating files and Makefile rules; that new value
+is purely a technical, internal detail of how Buildroot handles
+things.
 
-Sorry, maybe I was not clear about linux and uboot: they were just given
-as an example where a slash could snick in; I don't know of any publicly
-accessible git repositories that has such tags for those pacakges. There
-is however Apache's ant that does have such tags (although it is not
-(yet) pacjaged in Buildroot).
+In the legal manifest, we need access to the real value for the
+version, as this is what will allow actual references to the
+upstream package. If the version string is mangled, like slashes
+replaced with underscores, this introduces ambiguities as to what
+exactly the version is.
 
-I'll send a v2 with a rewording of my previous explanations.
+In Buildroot, there is no package, with a constant version, that
+exhibits that issue; for those packages where it is possible to
+set a custom git tree and version, like linux or uboot, such a
+custom tree can have tags with a slash (not a colon or a space,
+forbidden by git); packages in a br2-external can also use such
+version strings as well.
 
-Thanks!
+The packages that do have such versions are not legion, but they
+do exist. For example, Apache's ant buildsystem does use a slash
+in their reelase tags, like rel/1.10.15:
+    https://github.com/apache/ant/tags
 
-[--SNIP--]
-> > > Not strictly specific about your patch, but IMO reusing the _DL_VERSION
-> > > variable makes code less readable. [--SNIP--]
-> > Vast subject. [--SNIP--]
+Change the legal manifest to include the actual, original value
+as was set in the .mk file.
 
-Ah, I think I remember some details now: the consensus was not about
-renaming _DL_VERSION, but getting rid of it, stop mangling _VERSION and
-keep it untouched, and instead introduce _VERSION_SANITISED (or
-whatev'). That was causing issues of which the details still evade me
-for now...
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-> I hereby forget about having suggest such an improvement. O:-)
+---
+Changes v1 -> v2:
+  - add example where that could happen  (Luca)
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-No worries, that was already something that was indeed discussed because
-_DL_VERSION is indeed ugly; it specifically prevents having things like
-an actual version as advertised upstream (which can get tracked by
-releasemonitoring.org), vs. the tag in git that often gets a 'v' prefix
-(or in the Apache ant case, a whole 'rel/' prefix). Hic sunt dracones.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index fe0a7bef38..fb9d9996c8 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1193,7 +1193,7 @@ else
+ endif # other packages
+ 
+ endif # redistribute
+-	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_VERSION),$$(subst $$(space)$$(comma),$$(comma),$$($(2)_LICENSE)),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call legal-deps,$(1)))
++	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_DL_VERSION),$$(subst $$(space)$$(comma),$$(comma),$$($(2)_LICENSE)),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call legal-deps,$(1)))
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+ 
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+2.34.1
 
 ____________________________________________________________________________________________________________
 Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
@@ -179,6 +173,7 @@ they should not be distributed, used or copied without authorisation.
 If you have received this email in error, please notify the sender and delete this message and its attachments.
 As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
 Thank you.
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
