@@ -1,76 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BD8EC02181
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 20:29:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6810DC02181
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 20:33:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15F484030D;
-	Wed, 22 Jan 2025 20:29:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E1C5830C2;
+	Wed, 22 Jan 2025 20:33:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 25JwvAOwCbyd; Wed, 22 Jan 2025 20:29:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZWHW_sDEBlCj; Wed, 22 Jan 2025 20:33:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D851840330
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17DC7830C5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D851840330;
-	Wed, 22 Jan 2025 20:29:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E2643959
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 20:29:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17DC7830C5;
+	Wed, 22 Jan 2025 20:33:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 58ED6959
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 20:33:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C353940330
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 20:29:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 46226607D0
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 20:33:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DVgaQcwXgU1w for <buildroot@buildroot.org>;
- Wed, 22 Jan 2025 20:29:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 822B84030D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 822B84030D
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 822B84030D
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 20:29:50 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id B76A878034E;
- Wed, 22 Jan 2025 21:29:44 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:49830])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 22 Jan 2025 21:29:44 +0100
-MIME-Version: 1.0
-Date: Wed, 22 Jan 2025 21:29:44 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7WNwEWbFTrXv for <buildroot@buildroot.org>;
+ Wed, 22 Jan 2025 20:33:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 723756067E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 723756067E
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 20:33:50 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 58AB186095; Wed, 22 Jan 2025 20:33:50 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Akhilesh Nema <nemaakhilesh@gmail.com>
-Cc: buildroot@buildroot.org, Petr Vorel <petr.vorel@gmail.com>
-In-Reply-To: <20250121074217.18241-1-nemaakhilesh@gmail.com>
-References: <20250121074217.18241-1-nemaakhilesh@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <a9dd315bd6d40b7a1c2e495ef180803b@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737577787;
- bh=+uW1cnHUbzPm6VDs1dA1TCuZ3A7HUDjcZitfhVn9Vfk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=nDAKla18ZO3I/F6VqhHIw4EreA6WVhD+XEn/M/IX2LwnhN/aUXblD51RvYldVv5/d
- c9Bu5QKVEqH4onxD3t75xB9b8XfEg4jh7+9zSEHslCm/GXrW+io6eBtibBQZVowBY2
- f5Jaw6jVI0DFnrhzsS9KYB1mvCighNOx3xjmV/gs0cQYABSmFnVH1GuoXx9ohnK9Fm
- u7Dq6IE5u+DWsocPygAxxwlMswLeMu7d4ZButaSSpswkw4NIv9AKDNV4SjL1MiBaNe
- NjOqWIvqbRLs84F4X6onhXQw8sYub2eBeugOTX5wcc6j40oxWM+8+W8edjfCLR32Bv
- Rz4Jt8klcN03w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=nDAKla18
-Subject: Re: [Buildroot] [PATCH 1/1] package/iproute2: bump to version 6.13.0
+To: buildroot@buildroot.org
+Date: Wed, 22 Jan 2025 21:31:13 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 739acecd1312025d543e0694314142004b962d6d
+X-Git-Newrev: 686694792b06b11b2cef0acf28d81e25a280cb72
+X-Patchwork-Hint: ignore
+Message-Id: <20250122203350.58AB186095@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-generic: store real version in
+ legal manifest
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,43 +59,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Akhilesh,
+commit: https://git.buildroot.net/buildroot/commit/?id=686694792b06b11b2cef0acf28d81e25a280cb72
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 21/01/2025 08:42, Akhilesh Nema wrote:
-> Changelog - 
-> https://github.com/iproute2/iproute2/compare/v6.12.0...v6.13.0
-> 
-> Drop 0001-Fix-implicit-declaration-of-function-htobe64-in-gcc-.patch
-> Upstream commit - 
-> https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=c8b3ecc22ed0edaf0259eaf7d1a5c04f300ad6e4
-> 
-> Drop 0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
-> Upstream commit - 
-> https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=fa3949b792e275f75d7d6200dc2036ef7fff8816
-> 
-> Fixes:
-> https://autobuild.buildroot.org/?reason=iproute2-6.12.0
-> 
-> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+The legal manifest currently stores the $(PKG)_VERSION variable.
+However, that variable undergoes a set of changes so that it is
+suitable for creating files and Makefile rules; that new value
+is purely a technical, internal detail of how Buildroot handles
+things.
 
-I applied this patch to master, thanks!
+In the legal manifest, we need access to the real value for the
+version, as this is what will allow actual references to the
+upstream package. If the version string is mangled, like slashes
+replaced with underscores, this introduces ambiguities as to what
+exactly the version is.
 
-I also see it is the third time you bump this iproute2 package.
-If you are interested to maintain specific packages (and receive
-build failure notifications about those), you can register yourself
-in the DEVELOPERS files. See:
-https://buildroot.org/downloads/manual/manual.html#DEVELOPERS
-and
-https://gitlab.com/buildroot.org/buildroot/-/blob/master/DEVELOPERS
+In Buildroot, there is no package, with a constant version, that
+exhibits that issue; for those packages where it is possible to
+set a custom git tree and version, like linux or uboot, such a
+custom tree can have tags with a slash (not a colon or a space,
+forbidden by git); packages in a br2-external can also use such
+version strings as well.
 
-Best regards,
+The packages that do have such versions are not legion, but they
+do exist. For example, Apache's ant buildsystem does use a slash
+in their reelase tags, like rel/1.10.15:
+    https://github.com/apache/ant/tags
 
-Julien.
+Change the legal manifest to include the actual, original value
+as was set in the .mk file.
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index fe0a7bef38..fb9d9996c8 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1193,7 +1193,7 @@ else
+ endif # other packages
+ 
+ endif # redistribute
+-	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_VERSION),$$(subst $$(space)$$(comma),$$(comma),$$($(2)_LICENSE)),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call legal-deps,$(1)))
++	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_DL_VERSION),$$(subst $$(space)$$(comma),$$(comma),$$($(2)_LICENSE)),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call legal-deps,$(1)))
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
