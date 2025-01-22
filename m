@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E862C02181
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 15:18:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E5F1C02182
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 15:18:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BD2584B9E;
-	Wed, 22 Jan 2025 15:18:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C236084C13;
+	Wed, 22 Jan 2025 15:18:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gC67LTqlS9Sn; Wed, 22 Jan 2025 15:18:32 +0000 (UTC)
+ id tksRju3SK9Sf; Wed, 22 Jan 2025 15:18:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFDF184BBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADA2B82D2F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DFDF184BBC;
-	Wed, 22 Jan 2025 15:18:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ADA2B82D2F;
+	Wed, 22 Jan 2025 15:18:35 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A962959
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:22 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 16E41D7
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D4F3860687
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0B209607A2
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XSwiENf1yC4I for <buildroot@buildroot.org>;
- Wed, 22 Jan 2025 15:18:20 +0000 (UTC)
+ id 6JlA-AaiaMOP for <buildroot@buildroot.org>;
+ Wed, 22 Jan 2025 15:18:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC201607D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F2E9607D7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DC201607D7
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3F2E9607D7
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CADA58602C; Wed, 22 Jan 2025 15:18:20 +0000 (UTC)
+ id 3B5D886031; Wed, 22 Jan 2025 15:18:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Jan 2025 16:02:02 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 50cd11d4efc577ac68b554ea8c1e4a4882c80ea4
-X-Git-Newrev: ade4f4b4e5e5257d7fca57863a7ef293c62bb343
+Date: Wed, 22 Jan 2025 15:44:33 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: 76666f8b696eceb7ecd65d54a33f18117b4b9fe8
+X-Git-Newrev: 399f75e636c5dd0571808eba0077eb944a297cea
 X-Patchwork-Hint: ignore
-Message-Id: <20250122151820.CADA58602C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/rsync: security
- bump to version 3.4.0
+Message-Id: <20250122151822.3B5D886031@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x]
+ toolchain/toolchain-external/toolchain-external-arm-arm: fix
+ BR2_ARCH_NEEDS_GCC_AT_LEAST_X guard
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,110 +66,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ade4f4b4e5e5257d7fca57863a7ef293c62bb343
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=399f75e636c5dd0571808eba0077eb944a297cea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Release note:
-https://download.samba.org/pub/rsync/NEWS#3.4.0
+BR2_ARCH_NEEDS_GCC_AT_LEAST_X guards has been introduced by [1] to
+prevent selecting an external toolchain that did not support the GCC
+arch tuning the user had selected.
 
-Fixes the following vulnerabilities:
+But it was not updated while updating to version 13.2-rel1.
 
-CVE-2024-12084: Heap Buffer Overflow in Rsync due to Improper Checksum
-Length Handling
+Fixes: 0dd599d171df7852ae801173c8212976e50b09e1
 
-Description: A heap-based buffer overflow flaw was found in the rsync
-daemon. This issue is due to improper handling of attacker-controlled
-checksum lengths (s2length) in the code. When MAX_DIGEST_LEN exceeds the
-fixed SUM_LENGTH (16 bytes), an attacker can write out of bounds in the
-sum2 buffer.
+[1] eed1670d8a6f0899f5fdfc26bd6d1609ebc19c7a
 
-CVE-2024-12085: Info Leak via Uninitialized Stack Contents
-
-Description: A flaw was found in the rsync daemon which could be triggered
-when rsync compares file checksums. This flaw allows an attacker to
-manipulate the checksum length (s2length) to cause a comparison between a
-checksum and uninitialized memory and leak one byte of uninitialized stack
-data at a time.
-
-CVE-2024-12086: Rsync Server Leaks Arbitrary Client Files
-
-Description: A flaw was found in rsync. It could allow a server to
-enumerate the contents of an arbitrary file from the client's machine. This
-issue occurs when files are being copied from a client to a server. During
-this process, the rsync server will send checksums of local data to the
-client to compare with in order to determine what data needs to be sent to
-the server. By sending specially constructed checksum values for arbitrary
-files, an attacker may be able to reconstruct the data of those files
-byte-by-byte based on the responses from the client.
-
-CVE-2024-12087: Path Traversal Vulnerability in Rsync
-
-Description: A path traversal vulnerability exists in rsync. It stems from
-behavior enabled by the `--inc-recursive` option, a default-enabled option
-for many client options and can be enabled by the server even if not
-explicitly enabled by the client. When using the `--inc-recursive` option,
-a lack of proper symlink verification coupled with deduplication checks
-occurring on a per-file-list basis could allow a server to write files
-outside of the client's intended destination directory. A malicious server
-could write malicious files to arbitrary locations named after valid
-directories/paths on the client.
-
-CVE-2024-12088: --safe-links Option Bypass Leads to Path Traversal
-
-Description: A flaw was found in rsync. When using the `--safe-links`
-option, rsync fails to properly verify if a symbolic link destination
-contains another symbolic link within it. This results in a path traversal
-vulnerability, which may lead to arbitrary file write outside the desired
-directory.
-
-CVE-2024-12747: Race Condition in Rsync Handling Symbolic Links
-
-Description: A flaw was found in rsync. This vulnerability arises from a
-race condition during rsync's handling of symbolic links. Rsync's default
-behavior when encountering symbolic links is to skip them. If an attacker
-replaced a regular file with a symbolic link at the right time, it was
-possible to bypass the default behavior and traverse symbolic links.
-Depending on the privileges of the rsync process, an attacker could leak
-sensitive information, potentially leading to privilege escalation.
-
-For more details, see the advisory:
-https://www.openwall.com/lists/oss-security/2025/01/14/3
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Julien: add link to release note]
+Cc: Antoine Coutant <antoine.coutant@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 017d74c943a03c7b36ef7d71886b29b27d817c12)
+(cherry picked from commit 203abefcf6c0ca54d28523bcd8ac7c56c249fefe)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsync/rsync.hash | 4 ++--
- package/rsync/rsync.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ toolchain/toolchain-external/toolchain-external-arm-arm/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
-index edeca9c4df..336d785153 100644
---- a/package/rsync/rsync.hash
-+++ b/package/rsync/rsync.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://rsync.samba.org/ftp/rsync/src/rsync-3.3.0.tar.gz.asc
--sha256  7399e9a6708c32d678a72a63219e96f23be0be2336e50fd1348498d07041df90  rsync-3.3.0.tar.gz
-+# https://rsync.samba.org/ftp/rsync/src/rsync-3.4.0.tar.gz.asc
-+sha256  8e942f95a44226a012fe822faffa6c7fc38c34047add3a0c941e9bc8b8b93aa4  rsync-3.4.0.tar.gz
- # Locally calculated
- sha256  85c19ea50a224c2d0067a69c083584e5717b40b76610ec1218f91385775067dd  COPYING
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index 188c87e1d4..4613778a7f 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RSYNC_VERSION = 3.3.0
-+RSYNC_VERSION = 3.4.0
- RSYNC_SITE = https://rsync.samba.org/ftp/rsync/src
- RSYNC_LICENSE = GPL-3.0+ with exceptions
- RSYNC_LICENSE_FILES = COPYING
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+index b110885a96..683854e05e 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+@@ -9,7 +9,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+ 	depends on BR2_ARM_CPU_HAS_NEON
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "aarch64"
+ 	depends on BR2_ARM_EABIHF
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
