@@ -1,72 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 794E4C02181
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 21:10:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 951FBC02181
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 22:04:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27FDD607A5;
-	Wed, 22 Jan 2025 21:10:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E71C7424F5;
+	Wed, 22 Jan 2025 22:04:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rf4UxYW-8Jr2; Wed, 22 Jan 2025 21:10:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OeI01aZCc3OM; Wed, 22 Jan 2025 22:04:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24FD060833
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C181424F2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24FD060833;
-	Wed, 22 Jan 2025 21:10:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B2ADCB88
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 21:10:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C181424F2;
+	Wed, 22 Jan 2025 22:04:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 38DAEF08
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 22:04:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A032340614
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 21:10:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C595424F2
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 22:04:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WR3_uMBLxDgz for <buildroot@buildroot.org>;
- Wed, 22 Jan 2025 21:10:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 40B55403DA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40B55403DA
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 40B55403DA
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 21:10:22 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id EA635B0055A;
- Wed, 22 Jan 2025 22:10:17 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4qI25maznh-D for <buildroot@buildroot.org>;
+ Wed, 22 Jan 2025 22:04:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 12098424F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12098424F0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 12098424F0
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 22:04:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id E6875240004;
+ Wed, 22 Jan 2025 22:04:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: =?UTF-8?q?Andr=C3=A9=20Zwing?= <nerv@dawncrow.de>,
- Julien Olivain <ju.o@free.fr>
-Date: Wed, 22 Jan 2025 22:10:09 +0100
-Message-ID: <20250122211009.1124558-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.48.1
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 22 Jan 2025 23:03:59 +0100
+Message-ID: <20250122220400.3205539-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.47.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737580220;
- bh=AiaHLS/wZ5IVT912jeLA2Y60/Yg3Krz26WCK4FWy01k=;
- h=From:To:Cc:Subject:Date:From;
- b=gZLhGNnehLAF+Sk9mXkZ7kBuoXSeg1OMspCHLTrXeR3lmMKLu0soPMfn1DoWlFjD0
- QjmTYfk865Nojoz0vdXAdfJPalT5mXg+yrqazXZQt5Nk/IS0rAfIhGIBLmAa7H9+Vs
- dW2LoFFySGepHUgG8Eb97mEH1zo100KIOHV9R8Ax1OcZzLxz+nl+rsdaTLMrplXWk0
- KF7YUnb4WTOuXBK/t/V1qqq6ublzZXx4Yc6nnIHovK7XvX5R3077R/h7B6ba0gm/Ni
- jgJpxOHiC0ntxpw1fphu6v74xOpTBUt6jWpQxxv8T8KJwOm7AfU02oA5l3zhfB+cH7
- 59xUb/PYfbWFw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1737583442;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=5HnLsP6rNaB3pW0S3kLF1SFEkRXVD6MBCjOOlILbfAE=;
+ b=RUdYpWXyiKVBoHjKpvJUtCH1V8y8PAvz/gw94f5XRYLdO+eWSyctI7OJkMu2VyovdzLBuD
+ 7KxWcTz738DxNN3ZVjv5it1sHspcgYe+eGNuYRFZq3gUayB5ah7EFbeajgiiaFC5FRxO32
+ zkcJJY+cGh4HWp95Jfk9DxR0jroDo0By6ddVbTCpVmcjwxPfFJ/TzyFaXUXTyPxm85YBbt
+ PduYw2ZJZnE3oaLSfZzWQ2QtkeY5TfJSoggaYwlPMlAItDZRlPVt32W1PNl4X8Xhzx9bwZ
+ HFi1n66rsa2P52MrhjXxf1E611AzXg52RFRyPoXvatNbWw7TcIOo3pUvw/3Hxw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=gZLhGNne
-Subject: [Buildroot] [PATCH 1/1] package/wine: bump to version 10.0
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RUdYpWXy
+Subject: [Buildroot] [PATCH v2] package/gnu-efi: change upstream,
+ bump to 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,68 +78,2459 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For a summary of changes since 9.19, see:
-https://www.winehq.org/news/
+https://sourceforge.net/projects/gnu-efi/ is dead and stuck at version
+3.0.18. At https://sourceforge.net/p/gnu-efi/feature-requests/11/ the
+upstream maintainer has indicated that the project is now maintained
+at https://github.com/ncroxon/gnu-efi/, so let's use this as upstream.
 
-This commit also adds a comment near _VERSION describing the intent to
-stick the package on stable versions. See [1].
+We can drop patches 0002 and 0003 since they are upstream. Patch 0001
+is just slightly refreshed.
 
-[1] https://lore.kernel.org/buildroot/ff5c88fb-c745-483c-9f8e-8aa49164e76b@dawncrow.de/
+Changes 3.0.18 -> 3.0.19:
+  https://github.com/ncroxon/gnu-efi/releases/tag/3.0.19
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Changes 3.0.19 -> 4.0.0:
+  https://github.com/ncroxon/gnu-efi/releases/tag/4.0.0
+
+The licensing files have changed:
+
+- A LICENSE file has been added, with the text of the GPLv2
+
+- The README.efilib file has been moved, unchanged to
+  licenses/LICENSE.efilib
+
+- A new file containing the EDK2 license has been added at
+  licenses/LICENSE.edk2. This requires an update in the list of
+  licenses
+
+Tested with the following defconfigs:
+
+ ARM defconfig testing gnu-efi + fwupd-efi
+
+ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE=y
+ BR2_INIT_NONE=y
+ BR2_SYSTEM_BIN_SH_NONE=y
+ # BR2_PACKAGE_BUSYBOX is not set
+ BR2_PACKAGE_FWUPD_EFI=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+
+ RISC-V defconfig testing gnu-efi + fwupd-efi
+
+ BR2_riscv=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_LP64D_MUSL_STABLE=y
+ BR2_INIT_NONE=y
+ BR2_SYSTEM_BIN_SH_NONE=y
+ # BR2_PACKAGE_BUSYBOX is not set
+ BR2_PACKAGE_FWUPD_EFI=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+
+ x86-64 defconfig testing gnu-efi + fwupd-efi + systemd-boot
+
+ BR2_x86_64=y
+ BR2_x86_corei7=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_BLEEDING_EDGE=y
+ BR2_INIT_SYSTEMD=y
+ BR2_SYSTEM_BIN_SH_NONE=y
+ BR2_SYSTEM_DEFAULT_PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+ # BR2_PACKAGE_BUSYBOX is not set
+ BR2_PACKAGE_SYSTEMD_BOOT=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_SYSLINUX=y
+ BR2_TARGET_SYSLINUX_EFI=y
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/8924998985
----
- package/wine/wine.hash |  6 +++---
- package/wine/wine.mk   | 10 ++++++++--
- 2 files changed, 11 insertions(+), 5 deletions(-)
+This v2 updates the licensing information, based on the feedback from
+Julien Olivain.
 
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index 61de6db80f..eb0d45ca0a 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,8 +1,8 @@
- # From:
--# https://dl.winehq.org/wine/source/9.x/sha512sums.asc
--sha512  530219c6a337f2996eac92d644ab603528b82cc6136cc37c1e6aa736d418f33c6f4b0d54f3537b04bceaf4487d84abcf926a2f5e9536ed4e966c4fe63c5b6ddd  wine-9.19.tar.xz
-+# https://dl.winehq.org/wine/source/10.0/sha512sums.asc
-+sha512  effb41c5641993e2e52eaa825cc19b7d9846e084992c5a5b066ead2339b24384d320898a9cee347a9a87106bcb3b0f54c8cd2c8d4de3a887a658052ddd5168d6  wine-10.0.tar.xz
- # Locally calculated after checking pgp signature
--sha256  2c13a0c3f31f25a54d415d86785a1ad46ef8a07ae973b6b699345a45206ac015  wine-9.19.tar.xz
-+sha256  c5e0b3f5f7efafb30e9cd4d9c624b85c583171d33549d933cd3402f341ac3601  wine-10.0.tar.xz
- # Locally calculated
- sha256  e237fa56668030e928551ddd60f05df5fe957f75eab874bbd017e085ed722e7c  COPYING.LIB
- sha256  51433d87540ee2f30e3cff986e00e1477880002bf993106a13775ed60d4e0af4  LICENSE
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 6b1ba19b0b..efee63a294 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -4,9 +4,15 @@
+However, I must say that the licensing is really unclear. The main
+LICENSE file contains the text of the GPLv2. Our LICENSE variable says
+it's mostly BSD-3-Clause or GPLv2+, but only a few source files seem
+to have this double license, and it seems to actually be BSD-2-Clause
+or GPLv2+. But the fact that there's a top-level GPLv2 license text is
+very confusing.
+---
+ ...n-t-override-ARCH-when-cross-compili.patch |    8 +-
+ .../0002-Make-CHAR16-use-uint16_t.patch       |  164 --
+ .../gnu-efi/0003-Use-char16_t-literals.patch  | 2103 -----------------
+ package/gnu-efi/Config.in                     |    2 +-
+ package/gnu-efi/gnu-efi.hash                  |    9 +-
+ package/gnu-efi/gnu-efi.mk                    |    9 +-
+ 6 files changed, 13 insertions(+), 2282 deletions(-)
+ delete mode 100644 package/gnu-efi/0002-Make-CHAR16-use-uint16_t.patch
+ delete mode 100644 package/gnu-efi/0003-Use-char16_t-literals.patch
+
+diff --git a/package/gnu-efi/0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch b/package/gnu-efi/0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
+index 2eb9c5a062..cbba80b00a 100644
+--- a/package/gnu-efi/0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
++++ b/package/gnu-efi/0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch
+@@ -1,4 +1,4 @@
+-From b2dbeec5063265eb0121342c24a900a4888712a7 Mon Sep 17 00:00:00 2001
++From 893a75202407e8ff3d75b217813a5df87da7c807 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Sun, 20 Jan 2019 21:07:11 +0100
+ Subject: [PATCH] Make.defaults: don't override ARCH when cross-compiling
+@@ -15,10 +15,10 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/Make.defaults b/Make.defaults
+-index 47ed361..7420344 100755
++index 1347aca..bb21874 100755
+ --- a/Make.defaults
+ +++ b/Make.defaults
+-@@ -67,7 +67,7 @@ ARCH         ?= $(shell $(HOSTCC) -dumpmachine | cut -f1 -d- | sed -e s,i[345678
++@@ -99,7 +99,7 @@ ARCH          ?= $(shell $(HOSTCC) -dumpmachine | cut -f1 -d- | sed -e s,i[34567
+  
+  # Get ARCH from the compiler if cross compiling 
+  ifneq ($(CROSS_COMPILE),)
+@@ -28,5 +28,5 @@ index 47ed361..7420344 100755
+  
+  # FreeBSD (and possibly others) reports amd64 instead of x86_64
+ -- 
+-2.36.1
++2.47.1
+ 
+diff --git a/package/gnu-efi/0002-Make-CHAR16-use-uint16_t.patch b/package/gnu-efi/0002-Make-CHAR16-use-uint16_t.patch
+deleted file mode 100644
+index 36a2ea2a8e..0000000000
+--- a/package/gnu-efi/0002-Make-CHAR16-use-uint16_t.patch
++++ /dev/null
+@@ -1,164 +0,0 @@
+-From f65e5db5666529abb18fe24f5c45331404a1ce99 Mon Sep 17 00:00:00 2001
+-From: Callum Farmer <gmbr3@opensuse.org>
+-Date: Wed, 29 May 2024 16:22:50 +0100
+-Subject: [PATCH] Make CHAR16 use uint16_t
+-
+-musl-libc doesn't like fshort-wchar so remove wchar_t usage
+-Use uint16_t as char16_t can be up to 32bits
+-Fixes ncroxon/gnu-efi#16
+-
+-Signed-off-by: Callum Farmer <gmbr3@opensuse.org>
+-Upstream: https://github.com/ncroxon/gnu-efi/commit/edfda7c396134c7109444b230ce4b0da1e61d524
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- Make.defaults             | 4 ++--
+- inc/aarch64/efibind.h     | 2 +-
+- inc/arm/efibind.h         | 2 +-
+- inc/ia32/efibind.h        | 2 +-
+- inc/ia64/efibind.h        | 2 +-
+- inc/loongarch64/efibind.h | 2 +-
+- inc/mips64el/efibind.h    | 2 +-
+- inc/riscv64/efibind.h     | 5 ++---
+- inc/x86_64/efibind.h      | 2 +-
+- 9 files changed, 11 insertions(+), 12 deletions(-)
+-
+-diff --git a/Make.defaults b/Make.defaults
+-index c9f9b4f..83204a6 100755
+---- a/Make.defaults
+-+++ b/Make.defaults
+-@@ -187,11 +187,11 @@ endif
+- 
+- ifeq (FreeBSD, $(findstring FreeBSD, $(OS)))
+- CFLAGS  += $(ARCH3264) -g -O2 -Wall -Wextra -Werror \
+--           -funsigned-char -fshort-wchar -fno-strict-aliasing \
+-+           -funsigned-char -fno-strict-aliasing \
+-            -ffreestanding -fno-stack-protector
+- else
+- CFLAGS  += $(ARCH3264) -g -O2 -Wall -Wextra -Wno-pointer-sign -Werror \
+--           -funsigned-char -fshort-wchar -fno-strict-aliasing \
+-+           -funsigned-char -fno-strict-aliasing \
+- 	   -ffreestanding -fno-stack-protector -fno-stack-check \
+-            $(if $(findstring gcc,$(CC)),-fno-merge-all-constants,)
+- endif
+-diff --git a/inc/aarch64/efibind.h b/inc/aarch64/efibind.h
+-index d6b5d0f..1a1fb79 100644
+---- a/inc/aarch64/efibind.h
+-+++ b/inc/aarch64/efibind.h
+-@@ -40,7 +40,7 @@ typedef int64_t             intptr_t;
+- 
+- #include <stddef.h>
+- 
+--typedef wchar_t CHAR16;
+-+typedef uint16_t CHAR16;
+- #define WCHAR CHAR16
+- 
+- typedef uint64_t   UINT64;
+-diff --git a/inc/arm/efibind.h b/inc/arm/efibind.h
+-index 8c578df..bc43931 100644
+---- a/inc/arm/efibind.h
+-+++ b/inc/arm/efibind.h
+-@@ -48,7 +48,7 @@ typedef int32_t             intptr_t;
+- 
+- #include <stddef.h>
+- 
+--typedef wchar_t CHAR16;
+-+typedef uint16_t CHAR16;
+- #define WCHAR CHAR16
+- 
+- typedef uint64_t   UINT64;
+-diff --git a/inc/ia32/efibind.h b/inc/ia32/efibind.h
+-index 718e8d1..1b33f2f 100644
+---- a/inc/ia32/efibind.h
+-+++ b/inc/ia32/efibind.h
+-@@ -87,7 +87,7 @@ Revision History
+- 
+- #include <stddef.h>
+- 
+--typedef wchar_t CHAR16;
+-+typedef uint16_t CHAR16;
+- #define WCHAR CHAR16
+- 
+- 
+-diff --git a/inc/ia64/efibind.h b/inc/ia64/efibind.h
+-index 1d2745b..1ad41f8 100644
+---- a/inc/ia64/efibind.h
+-+++ b/inc/ia64/efibind.h
+-@@ -74,7 +74,7 @@ Revision History
+- 
+- #include <stddef.h>
+- 
+--typedef wchar_t CHAR16;
+-+typedef uint16_t CHAR16;
+- #define WCHAR CHAR16
+- 
+- typedef uint64_t   UINT64;
+-diff --git a/inc/loongarch64/efibind.h b/inc/loongarch64/efibind.h
+-index 8ed83a5..806209d 100644
+---- a/inc/loongarch64/efibind.h
+-+++ b/inc/loongarch64/efibind.h
+-@@ -44,7 +44,7 @@ typedef int64_t             intptr_t;
+- 
+- #include <stddef.h>
+- 
+--typedef wchar_t CHAR16;
+-+typedef uint16_t CHAR16;
+- #define WCHAR CHAR16
+- 
+- typedef uint64_t   UINT64;
+-diff --git a/inc/mips64el/efibind.h b/inc/mips64el/efibind.h
+-index cf77ddc..9b396cc 100644
+---- a/inc/mips64el/efibind.h
+-+++ b/inc/mips64el/efibind.h
+-@@ -42,7 +42,7 @@ typedef int64_t             intptr_t;
+- 
+- #include <stddef.h>
+- 
+--typedef wchar_t CHAR16;
+-+typedef uint16_t CHAR16;
+- #define WCHAR CHAR16
+- 
+- typedef uint64_t   UINT64;
+-diff --git a/inc/riscv64/efibind.h b/inc/riscv64/efibind.h
+-index d8b4f39..b6d418c 100644
+---- a/inc/riscv64/efibind.h
+-+++ b/inc/riscv64/efibind.h
+-@@ -17,13 +17,12 @@
+-  */
+- 
+- #include <stdint.h>
+-+#include <stddef.h>
+- 
+- //
+- // Basic EFI types of various widths
+- //
+- 
+--#include <stddef.h>
+--
+- typedef uint64_t                UINT64;
+- typedef int64_t                 INT64;
+- typedef uint32_t                UINT32;
+-@@ -33,7 +32,7 @@ typedef int16_t                 INT16;
+- typedef uint8_t                 UINT8;
+- typedef int8_t                  INT8;
+- typedef char                    CHAR8;
+--typedef wchar_t                 CHAR16;
+-+typedef uint16_t                 CHAR16;
+- #define WCHAR                   CHAR16
+- #undef VOID
+- typedef void                    VOID;
+-diff --git a/inc/x86_64/efibind.h b/inc/x86_64/efibind.h
+-index e454ed2..8f431cb 100644
+---- a/inc/x86_64/efibind.h
+-+++ b/inc/x86_64/efibind.h
+-@@ -98,7 +98,7 @@ Revision History
+- 
+- #include <stddef.h>
+- 
+--typedef wchar_t CHAR16;
+-+typedef uint16_t CHAR16;
+- #define WCHAR CHAR16
+- 
+- typedef uint64_t   UINT64;
+--- 
+-2.47.1
+-
+diff --git a/package/gnu-efi/0003-Use-char16_t-literals.patch b/package/gnu-efi/0003-Use-char16_t-literals.patch
+deleted file mode 100644
+index 66c3bf2dbb..0000000000
+--- a/package/gnu-efi/0003-Use-char16_t-literals.patch
++++ /dev/null
+@@ -1,2103 +0,0 @@
+-From 5a4c02a43e36db71398c5a2f38d6cd9f0d54ebb6 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Sun, 12 Jan 2025 18:08:50 +0100
+-Subject: [PATCH] Use char16_t literals
+-
+-Add char16_t('u') literals
+-Remove wchar_t('L') literals
+-
+-Upstream: https://github.com/ncroxon/gnu-efi/commit/f8ebcfc077665013aba6f26f98404e246093bdd6
+-[Thomas: Originally authored by Callum Farmer <gmbr3@opensuse.org>,
+-but redone from scratch to be applicable to 3.0.18.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- apps/AllocPages.c                |  34 +++---
+- apps/FreePages.c                 |  26 ++---
+- apps/bltgrid.c                   |  18 +--
+- apps/ctors_dtors_priority_test.c |  10 +-
+- apps/ctors_fns.c                 |   8 +-
+- apps/ctors_test.c                |   2 +-
+- apps/debughook.c                 |  10 +-
+- apps/drv0.c                      |  10 +-
+- apps/drv0_use.c                  |  16 +--
+- apps/lfbgrid.c                   |  24 ++--
+- apps/modelist.c                  |  30 ++---
+- apps/printenv.c                  |   6 +-
+- apps/route80h.c                  |  12 +-
+- apps/setdbg.c                    |   8 +-
+- apps/setjmp.c                    |   6 +-
+- apps/t.c                         |   2 +-
+- apps/t2.c                        |   2 +-
+- apps/t3.c                        |  38 +++----
+- apps/t4.c                        |   4 +-
+- apps/t5.c                        |   6 +-
+- apps/t6.c                        |  14 +--
+- apps/t7.c                        |   8 +-
+- apps/t8.c                        |   6 +-
+- apps/tcc.c                       |  64 +++++------
+- apps/tpause.c                    |   2 +-
+- apps/unsetdbg.c                  |   8 +-
+- inc/efi.h                        |   2 +-
+- inc/efilib.h                     |  30 ++---
+- lib/cmdline.c                    |   6 +-
+- lib/console.c                    |   2 +-
+- lib/dpath.c                      | 190 +++++++++++++++----------------
+- lib/error.c                      |  84 +++++++-------
+- lib/guid.c                       | 102 ++++++++---------
+- lib/init.c                       |   2 +-
+- lib/print.c                      |  14 +--
+- 35 files changed, 403 insertions(+), 403 deletions(-)
+-
+-diff --git a/apps/AllocPages.c b/apps/AllocPages.c
+-index bb81849..790adba 100644
+---- a/apps/AllocPages.c
+-+++ b/apps/AllocPages.c
+-@@ -120,29 +120,29 @@ efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
+- 
+- 	InitializeLib(image, systab);
+- 
+--	Print(L"AllocatePage: __AllocType__ __MemType__ __NumPages__ [__Addr__]\n");
+--	Print(L"__AllocType__ {0,1,2} -- Any, MaxAddr, Addr\n"); 
+--	Print(L"__MemType__   {0..13}, Reserved ==0, LCode==1, LData==2, BSCode==3, BSData==4, ...\n");
+--	Print(L"__NumPages__  {0..%x}\n", MAX_NUM_PAGES);
+--	Print(L"[__Addr__]     0... %llx\n", MAX_ADDR);
+--	Print(L"All numbers in hex no leading 0x\n");
+--	Print(L"\n");
+-+	Print(u"AllocatePage: __AllocType__ __MemType__ __NumPages__ [__Addr__]\n");
+-+	Print(u"__AllocType__ {0,1,2} -- Any, MaxAddr, Addr\n"); 
+-+	Print(u"__MemType__   {0..13}, Reserved ==0, LCode==1, LData==2, BSCode==3, BSData==4, ...\n");
+-+	Print(u"__NumPages__  {0..%x}\n", MAX_NUM_PAGES);
+-+	Print(u"[__Addr__]     0... %llx\n", MAX_ADDR);
+-+	Print(u"All numbers in hex no leading 0x\n");
+-+	Print(u"\n");
+- 
+- #if DEBUG
+--	Print(L"Now get argc/argv\n");
+-+	Print(u"Now get argc/argv\n");
+- #endif
+- 	argc = GetShellArgcArgv(image, &argv);
+- #if DEBUG
+--	Print(L"argc = %d\n", argc);
+-+	Print(u"argc = %d\n", argc);
+- #endif
+- 
+- #if DEBUG
+- 	for (c = 0;  c < argc;  c++ ) {
+--		Print(L"argv[%d] = <%s>\n", c, argv[c]);
+-+		Print(u"argv[%d] = <%s>\n", c, argv[c]);
+- 	}
+- #endif
+- 	if ( (argc < 4) || (argc > 5) ) {
+--		Print(L"Wrong argument count\n");
+-+		Print(u"Wrong argument count\n");
+- 		return EFI_SUCCESS;
+- 	}
+- 
+-@@ -152,31 +152,31 @@ efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
+- 	if ( argc == 5 ) Addr = xtoi(argv[4]);
+- 
+- 	if ( (AllocType < 0) || (AllocType > 2)) {
+--		Print(L"Invalid AllocType\n");
+-+		Print(u"Invalid AllocType\n");
+- 		err++;
+- 	}
+- 	if ( (MemType < 0) || (MemType > 13) ) {
+--		Print(L"Invalid MemType\n");
+-+		Print(u"Invalid MemType\n");
+- 		err++;
+- 	}
+- 	if ( (NumPages < 0) || (NumPages > MAX_NUM_PAGES) ) {
+--		Print(L"Inavlid NumPages\n");
+-+		Print(u"Inavlid NumPages\n");
+- 		err++;
+- 	}
+- 	if ( Addr > MAX_ADDR ) {
+--		Print(L"Inavlid Address\n");
+-+		Print(u"Inavlid Address\n");
+- 		err++;
+- 	}
+- 	if ( err ) {
+- 		return EFI_INVALID_PARAMETER;
+- 	}
+- 
+--	Print(L"AllocatPage(%d,%d,%d,%lx)\n", AllocType, MemType, NumPages, Addr);
+-+	Print(u"AllocatPage(%d,%d,%d,%lx)\n", AllocType, MemType, NumPages, Addr);
+- 
+- 	efi_status = uefi_call_wrapper(BS->AllocatePages, 4, AllocType, MemType, NumPages, &Addr);
+- 
+- 	if ( EFI_ERROR(efi_status) ) {
+--		Print(L"Allocate Pages Failed: %d\n", efi_status);
+-+		Print(u"Allocate Pages Failed: %d\n", efi_status);
+- 		return efi_status;
+- 	}
+- 
+-diff --git a/apps/FreePages.c b/apps/FreePages.c
+-index 247c75d..27da7a7 100644
+---- a/apps/FreePages.c
+-+++ b/apps/FreePages.c
+-@@ -93,27 +93,27 @@ efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
+- 
+- 	InitializeLib(image, systab);
+- 
+--	Print(L"FreePages: __PhysAddr__ __PgCnt__\n");
+--	Print(L"__PhysAddr__   0... %llx\n", MAX_ADDR);
+--	Print(L"__PgCnt__     [0..%lx]\n", MAX_NUM_PAGES);
+--	Print(L"All numbers hex w/ no leading 0x\n");
+--	Print(L"\n");
+-+	Print(u"FreePages: __PhysAddr__ __PgCnt__\n");
+-+	Print(u"__PhysAddr__   0... %llx\n", MAX_ADDR);
+-+	Print(u"__PgCnt__     [0..%lx]\n", MAX_NUM_PAGES);
+-+	Print(u"All numbers hex w/ no leading 0x\n");
+-+	Print(u"\n");
+- 
+- #if DEBUG
+--	Print(L"Now parse argc/argv\n");
+-+	Print(u"Now parse argc/argv\n");
+- #endif
+- 	argc = GetShellArgcArgv(image, &argv);
+- #if DEBUG
+--	Print(L"argc = %d\n", argc);
+-+	Print(u"argc = %d\n", argc);
+- #endif
+- 
+- #if DEBUG
+- 	for (c = 0;  c < argc;  c++ ) {
+--		Print(L"argv[%d] = <%s>\n", c, argv[c]);
+-+		Print(u"argv[%d] = <%s>\n", c, argv[c]);
+- 	}
+- #endif
+- 	if (argc != 3) {
+--		Print(L"Invalid argument count\n");
+-+		Print(u"Invalid argument count\n");
+- 		return EFI_SUCCESS;
+- 	}
+- 
+-@@ -121,23 +121,23 @@ efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
+- 	PgCnt	 = xtoi(argv[2]);
+- 
+- 	if ( (PgCnt < 0) || (PgCnt > MAX_NUM_PAGES) ) {
+--		Print(L"Inavlid PgCnt\n");
+-+		Print(u"Inavlid PgCnt\n");
+- 		err++;
+- 	}
+- 	if ( PhysAddr > MAX_ADDR ) {
+--		Print(L"Inavlid Address\n");
+-+		Print(u"Inavlid Address\n");
+- 		err++;
+- 	}
+- 	if ( err ) {
+- 		return EFI_SUCCESS;
+- 	}
+- 
+--	Print(L"FreePages(%lx,%d)\n", PhysAddr, PgCnt);
+-+	Print(u"FreePages(%lx,%d)\n", PhysAddr, PgCnt);
+- 
+- 	efi_status = uefi_call_wrapper(BS->FreePages, 2, PhysAddr, PgCnt);
+- 
+- 	if ( EFI_ERROR(efi_status) ) {
+--		Print(L"Free Pages Failed: %d\n", efi_status);
+-+		Print(u"Free Pages Failed: %d\n", efi_status);
+- 		return efi_status;
+- 	}
+- 
+-diff --git a/apps/bltgrid.c b/apps/bltgrid.c
+-index ff69753..85a60ab 100644
+---- a/apps/bltgrid.c
+-+++ b/apps/bltgrid.c
+-@@ -38,7 +38,7 @@ draw_boxes(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+- 	if (gop->Mode) {
+- 		imax = gop->Mode->MaxMode;
+- 	} else {
+--		Print(L"gop->Mode is NULL\n");
+-+		Print(u"gop->Mode is NULL\n");
+- 		return;
+- 	}
+- 
+-@@ -47,8 +47,8 @@ draw_boxes(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+- 		rc = uefi_call_wrapper(gop->QueryMode, 4, gop, i, &SizeOfInfo,
+- 					&info);
+- 		if (rc == EFI_NOT_STARTED) {
+--			Print(L"gop->QueryMode() returned %r\n", rc);
+--			Print(L"Trying to start GOP with SetMode().\n");
+-+			Print(u"gop->QueryMode() returned %r\n", rc);
+-+			Print(u"Trying to start GOP with SetMode().\n");
+- 			rc = uefi_call_wrapper(gop->SetMode, 2, gop,
+- 				gop->Mode ? gop->Mode->Mode : 0);
+- 			rc = uefi_call_wrapper(gop->QueryMode, 4, gop, i,
+-@@ -56,7 +56,7 @@ draw_boxes(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+- 		}
+- 
+- 		if (EFI_ERROR(rc)) {
+--			Print(L"%d: Bad response from QueryMode: %r (%d)\n",
+-+			Print(u"%d: Bad response from QueryMode: %r (%d)\n",
+- 			      i, rc, rc);
+- 			continue;
+- 		}
+-@@ -70,7 +70,7 @@ draw_boxes(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+- 
+- 		PixelBuffer = AllocatePool(BufferSize);
+- 		if (!PixelBuffer) {
+--			Print(L"Allocation of 0x%08lx bytes failed.\n",
+-+			Print(u"Allocation of 0x%08lx bytes failed.\n",
+- 			      sizeof(UINT32) * NumPixels);
+- 			return;
+- 		}
+-@@ -88,7 +88,7 @@ draw_boxes(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+- 		FreePool(PixelBuffer);
+- 		return;
+- 	}
+--	Print(L"Never found the active video mode?\n");
+-+	Print(u"Never found the active video mode?\n");
+- }
+- 
+- static EFI_STATUS
+-@@ -100,7 +100,7 @@ SetWatchdog(UINTN seconds)
+- 	if (EFI_ERROR(rc)) {
+- 		CHAR16 Buffer[64];
+- 		StatusToString(Buffer, rc);
+--		Print(L"Bad response from QueryMode: %s (%d)\n", Buffer, rc);
+-+		Print(u"Bad response from QueryMode: %s (%d)\n", Buffer, rc);
+- 	}
+- 	return rc;
+- }
+-@@ -117,12 +117,12 @@ efi_main (EFI_HANDLE image_handle, EFI_SYSTEM_TABLE *systab)
+- 
+- 	rc = LibLocateProtocol(&GraphicsOutputProtocol, (void **)&gop);
+- 	if (EFI_ERROR(rc)) {
+--		Print(L"Could not locate GOP: %r\n", rc);
+-+		Print(u"Could not locate GOP: %r\n", rc);
+- 		return rc;
+- 	}
+- 
+- 	if (!gop) {
+--		Print(L"LocateProtocol(GOP, &gop) returned %r but GOP is NULL\n", rc);
+-+		Print(u"LocateProtocol(GOP, &gop) returned %r but GOP is NULL\n", rc);
+- 		return EFI_UNSUPPORTED;
+- 	}
+- 
+-diff --git a/apps/ctors_dtors_priority_test.c b/apps/ctors_dtors_priority_test.c
+-index 49e3239..04aa1ba 100644
+---- a/apps/ctors_dtors_priority_test.c
+-+++ b/apps/ctors_dtors_priority_test.c
+-@@ -3,27 +3,27 @@
+- 
+- // 101 in init_array, 65434 in ctors
+- static void __attribute__((constructor(101))) EFI_NO_TAIL_CALL ctors101() {
+--    Print(L"1) ctor with lower numbered priority \r\n");
+-+    Print(u"1) ctor with lower numbered priority \r\n");
+- }
+- 
+- // 65434 in init_array, 101 in ctors
+- static void __attribute__((constructor(65434))) EFI_NO_TAIL_CALL ctors65434() {
+--    Print(L"2) ctor with higher numbered priority \r\n");
+-+    Print(u"2) ctor with higher numbered priority \r\n");
+- }
+- 
+- // 101 in fini_array, 65434 in dtors
+- static void __attribute__((destructor(101))) EFI_NO_TAIL_CALL dtors101() {
+--    Print(L"4) dtor with lower numbered priority \r\n");
+-+    Print(u"4) dtor with lower numbered priority \r\n");
+- }
+- 
+- // 65434 in fini_array, 101 in dtors
+- static void __attribute__((destructor(65434))) EFI_NO_TAIL_CALL dtors65434() {
+--    Print(L"3) dtor with higher numbered priority \r\n");
+-+    Print(u"3) dtor with higher numbered priority \r\n");
+- }
+- 
+- EFI_STATUS
+- efi_main (EFI_HANDLE image EFI_UNUSED, EFI_SYSTEM_TABLE *systab EFI_UNUSED)
+- {
+--    Print(L"Main function \r\n");
+-+    Print(u"Main function \r\n");
+-     return EFI_SUCCESS;
+- }
+-\ No newline at end of file
+-diff --git a/apps/ctors_fns.c b/apps/ctors_fns.c
+-index 7027447..51cdcd3 100644
+---- a/apps/ctors_fns.c
+-+++ b/apps/ctors_fns.c
+-@@ -11,16 +11,16 @@ int constructed_value = 0;
+- 
+- static void __attribute__((__constructor__)) EFI_NO_TAIL_CALL ctor(void)
+- {
+--	Print(L"%a:%d:%a() constructed_value:%d\n", __FILE__, __LINE__, __func__, constructed_value);
+-+	Print(u"%a:%d:%a() constructed_value:%d\n", __FILE__, __LINE__, __func__, constructed_value);
+- 	constructed_value = 1;
+--	Print(L"%a:%d:%a() constructed_value:%d\n", __FILE__, __LINE__, __func__, constructed_value);
+-+	Print(u"%a:%d:%a() constructed_value:%d\n", __FILE__, __LINE__, __func__, constructed_value);
+- }
+- 
+- static void __attribute__((__destructor__)) EFI_NO_TAIL_CALL dtor(void)
+- {
+--	Print(L"%a:%d:%a() constructed_value:%d\n", __FILE__, __LINE__, __func__, constructed_value);
+-+	Print(u"%a:%d:%a() constructed_value:%d\n", __FILE__, __LINE__, __func__, constructed_value);
+- 	constructed_value = 0;
+--	Print(L"%a:%d:%a() constructed_value:%d\n", __FILE__, __LINE__, __func__, constructed_value);
+-+	Print(u"%a:%d:%a() constructed_value:%d\n", __FILE__, __LINE__, __func__, constructed_value);
+- }
+- 
+- // vim:fenc=utf-8:tw=75:noet
+-diff --git a/apps/ctors_test.c b/apps/ctors_test.c
+-index 7e48da8..a50d02e 100644
+---- a/apps/ctors_test.c
+-+++ b/apps/ctors_test.c
+-@@ -12,7 +12,7 @@ extern int constructed_value;
+- EFI_STATUS
+- efi_main (EFI_HANDLE image EFI_UNUSED, EFI_SYSTEM_TABLE *systab EFI_UNUSED)
+- {
+--	Print(L"%a:%d:%a() constructed_value:%d\n", __FILE__, __LINE__, __func__, constructed_value);
+-+	Print(u"%a:%d:%a() constructed_value:%d\n", __FILE__, __LINE__, __func__, constructed_value);
+- 
+- 	return EFI_SUCCESS;
+- }
+-diff --git a/apps/debughook.c b/apps/debughook.c
+-index c862f0f..1d9f9d0 100644
+---- a/apps/debughook.c
+-+++ b/apps/debughook.c
+-@@ -50,16 +50,16 @@ DebugHook(void)
+- 	if (x)
+- 		return;
+- 
+--	efi_status = GetVariable(L"DUMMY_DEBUG", &data, &dataSize, guid);
+-+	efi_status = GetVariable(u"DUMMY_DEBUG", &data, &dataSize, guid);
+- 	if (EFI_ERROR(efi_status)) {
+- 		return;
+- 	}
+- 
+--	Print(L"add-symbol-file /usr/lib/debug/boot/efi/debughook.debug "
+--	      L"0x%08x -s .data 0x%08x\n", &_text, &_data);
+-+	Print(u"add-symbol-file /usr/lib/debug/boot/efi/debughook.debug "
+-+	      u"0x%08x -s .data 0x%08x\n", &_text, &_data);
+- 
+--	Print(L"Pausing for debugger attachment.\n");
+--	Print(L"To disable this, remove the EFI variable DUMMY_DEBUG-%g .\n",
+-+	Print(u"Pausing for debugger attachment.\n");
+-+	Print(u"To disable this, remove the EFI variable DUMMY_DEBUG-%g .\n",
+- 	      &guid);
+- 	x = 1;
+- 	while (x++) {
+-diff --git a/apps/drv0.c b/apps/drv0.c
+-index 1d0c06f..cfe584b 100644
+---- a/apps/drv0.c
+-+++ b/apps/drv0.c
+-@@ -111,7 +111,7 @@ Drv0SayHello(
+-   if (! HelloWho)
+-     return EFI_INVALID_PARAMETER;
+- 
+--  Print(L"Hello %s!\n", HelloWho);
+-+  Print(u"Hello %s!\n", HelloWho);
+-   InternalGnuEfiAppsDrv0ProtocolData.Counter ++;
+-   return EFI_SUCCESS;
+- }
+-@@ -141,7 +141,7 @@ Drv0Unload(IN EFI_HANDLE ImageHandle)
+-                                  &GnuEfiAppsDrv0ProtocolGuid,
+-                                  &InternalGnuEfiAppsDrv0ProtocolData.Proto,
+-                                  NULL);
+--  Print(L"Driver instance unloaded.\n", ImageHandle);
+-+  Print(u"Driver instance unloaded.\n", ImageHandle);
+-   return EFI_SUCCESS;
+- }
+- 
+-@@ -167,7 +167,7 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SysTab)
+-                              (void**)&LoadedImage, ImageHandle,
+-                              NULL, EFI_OPEN_PROTOCOL_GET_PROTOCOL);
+-   if (EFI_ERROR(Status)) {
+--    Print(L"Could not open loaded image protocol: %d\n", Status);
+-+    Print(u"Could not open loaded image protocol: %d\n", Status);
+-     return Status;
+-   }
+- 
+-@@ -176,7 +176,7 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SysTab)
+-       &ImageHandle, &GnuEfiAppsDrv0ProtocolGuid,
+-       &InternalGnuEfiAppsDrv0ProtocolData.Proto, NULL);
+-   if (EFI_ERROR(Status)) {
+--    Print(L"Error registering driver instance: %d\n", Status);
+-+    Print(u"Error registering driver instance: %d\n", Status);
+-     return Status;
+-   }
+- 
+-@@ -184,7 +184,7 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SysTab)
+-    * instance from system */
+-   LoadedImage->Unload = (EFI_IMAGE_UNLOAD)Drv0Unload;
+- 
+--  Print(L"Driver instance loaded successfully.\n");
+-+  Print(u"Driver instance loaded successfully.\n");
+-   return EFI_SUCCESS;  /* at this point, this instance stays resident
+-                         * until image is unloaded, eg. with shell's unload,
+-                         * ExitBootServices() */
+-diff --git a/apps/drv0_use.c b/apps/drv0_use.c
+-index d8688cf..5bed2ed 100644
+---- a/apps/drv0_use.c
+-+++ b/apps/drv0_use.c
+-@@ -28,20 +28,20 @@ PlayWithGnuEfiAppsDrv0Protocol(IN EFI_HANDLE DrvHandle) {
+-                              NULL,
+-                              EFI_OPEN_PROTOCOL_GET_PROTOCOL);
+-   if (EFI_ERROR(Status)) {
+--    Print(L"Cannot open proto: %d\n", Status);
+-+    Print(u"Cannot open proto: %d\n", Status);
+-     return Status;
+-   }
+- 
+--  Status = uefi_call_wrapper(drv->SayHello, 2, L"Sample UEFI Driver");
+-+  Status = uefi_call_wrapper(drv->SayHello, 2, u"Sample UEFI Driver");
+-   if (EFI_ERROR(Status)) {
+--    Print(L"Cannot call SayHello: %d\n", Status);
+-+    Print(u"Cannot call SayHello: %d\n", Status);
+-   }
+- 
+-   Status = uefi_call_wrapper(drv->GetNumberOfHello, 2, &NumberOfHello);
+-   if (EFI_ERROR(Status)) {
+--    Print(L"Cannot call GetNumberOfHello: %d\n", Status);
+-+    Print(u"Cannot call GetNumberOfHello: %d\n", Status);
+-   } else {
+--    Print(L"Hello was called %d time(s).\n", NumberOfHello);
+-+    Print(u"Hello was called %d time(s).\n", NumberOfHello);
+-   }
+- 
+-   return EFI_SUCCESS;
+-@@ -60,16 +60,16 @@ efi_main (EFI_HANDLE Image, EFI_SYSTEM_TABLE *SysTab)
+-   Status = LibLocateHandle(ByProtocol, &GnuEfiAppsDrv0ProtocolGuid,
+-                            NULL, &NoHandles, &Handles);
+-   if (EFI_ERROR(Status)) {
+--    Print(L"Error looking up handles for proto: %d\n", Status);
+-+    Print(u"Error looking up handles for proto: %d\n", Status);
+-     return Status;
+-   }
+- 
+-   for (i = 0 ; i < NoHandles ; ++i)
+-   {
+--    Print(L"Playing with driver instance %d...\n", i);
+-+    Print(u"Playing with driver instance %d...\n", i);
+-     Status = PlayWithGnuEfiAppsDrv0Protocol(Handles[i]);
+-     if (EFI_ERROR(Status))
+--      Print(L"Error playing with instance %d, skipping\n", i);
+-+      Print(u"Error playing with instance %d, skipping\n", i);
+-   }
+- 
+-   if (Handles)
+-diff --git a/apps/lfbgrid.c b/apps/lfbgrid.c
+-index 3914313..d444087 100644
+---- a/apps/lfbgrid.c
+-+++ b/apps/lfbgrid.c
+-@@ -28,7 +28,7 @@ fill_boxes(UINT32 *PixelBuffer, UINT32 Width, UINT32 Height, UINT32 Pitch,
+- 	case PixelBltOnly:
+- 		return;
+- 	default:
+--		Print(L"Invalid pixel format\n");
+-+		Print(u"Invalid pixel format\n");
+- 		return;
+- 	}
+- 
+-@@ -62,7 +62,7 @@ draw_boxes(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+- 	if (gop->Mode) {
+- 		imax = gop->Mode->MaxMode;
+- 	} else {
+--		Print(L"gop->Mode is NULL\n");
+-+		Print(u"gop->Mode is NULL\n");
+- 		return;
+- 	}
+- 
+-@@ -71,8 +71,8 @@ draw_boxes(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+- 		rc = uefi_call_wrapper(gop->QueryMode, 4, gop, i, &SizeOfInfo,
+- 					&info);
+- 		if (rc == EFI_NOT_STARTED) {
+--			Print(L"gop->QueryMode() returned %r\n", rc);
+--			Print(L"Trying to start GOP with SetMode().\n");
+-+			Print(u"gop->QueryMode() returned %r\n", rc);
+-+			Print(u"Trying to start GOP with SetMode().\n");
+- 			rc = uefi_call_wrapper(gop->SetMode, 2, gop,
+- 				gop->Mode ? gop->Mode->Mode : 0);
+- 			rc = uefi_call_wrapper(gop->QueryMode, 4, gop, i,
+-@@ -80,7 +80,7 @@ draw_boxes(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+- 		}
+- 
+- 		if (EFI_ERROR(rc)) {
+--			Print(L"%d: Bad response from QueryMode: %r (%d)\n",
+-+			Print(u"%d: Bad response from QueryMode: %r (%d)\n",
+- 			      i, rc, rc);
+- 			continue;
+- 		}
+-@@ -96,13 +96,13 @@ draw_boxes(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+- 		} else {
+- 			CopySize = BufferSize < gop->Mode->FrameBufferSize ?
+- 				BufferSize : gop->Mode->FrameBufferSize;
+--			Print(L"height * pitch * pixelsize = %lu buf fb size is %lu; using %lu\n",
+-+			Print(u"height * pitch * pixelsize = %lu buf fb size is %lu; using %lu\n",
+- 			      BufferSize, gop->Mode->FrameBufferSize, CopySize);
+- 		}
+- 
+- 		PixelBuffer = AllocatePool(BufferSize);
+- 		if (!PixelBuffer) {
+--			Print(L"Allocation of 0x%08lx bytes failed.\n",
+-+			Print(u"Allocation of 0x%08lx bytes failed.\n",
+- 			      sizeof(UINT32) * NumPixels);
+- 			return;
+- 		}
+-@@ -112,7 +112,7 @@ draw_boxes(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+- 			   info->PixelFormat, info->PixelInformation);
+- 
+- 		if (info->PixelFormat == PixelBltOnly) {
+--			Print(L"No linear framebuffer on this device.\n");
+-+			Print(u"No linear framebuffer on this device.\n");
+- 			return;
+- 		}
+- #if __SIZEOF_POINTER__ == 8
+-@@ -126,7 +126,7 @@ draw_boxes(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+- 		CopyMem((VOID *)FrameBufferAddr, PixelBuffer, CopySize);
+- 		return;
+- 	}
+--	Print(L"Never found the active video mode?\n");
+-+	Print(u"Never found the active video mode?\n");
+- }
+- 
+- static EFI_STATUS
+-@@ -138,7 +138,7 @@ SetWatchdog(UINTN seconds)
+- 	if (EFI_ERROR(rc)) {
+- 		CHAR16 Buffer[64];
+- 		StatusToString(Buffer, rc);
+--		Print(L"Bad response from QueryMode: %s (%d)\n", Buffer, rc);
+-+		Print(u"Bad response from QueryMode: %s (%d)\n", Buffer, rc);
+- 	}
+- 	return rc;
+- }
+-@@ -155,12 +155,12 @@ efi_main (EFI_HANDLE image_handle, EFI_SYSTEM_TABLE *systab)
+- 
+- 	rc = LibLocateProtocol(&GraphicsOutputProtocol, (void **)&gop);
+- 	if (EFI_ERROR(rc)) {
+--		Print(L"Could not locate GOP: %r\n", rc);
+-+		Print(u"Could not locate GOP: %r\n", rc);
+- 		return rc;
+- 	}
+- 
+- 	if (!gop) {
+--		Print(L"LocateProtocol(GOP, &gop) returned %r but GOP is NULL\n", rc);
+-+		Print(u"LocateProtocol(GOP, &gop) returned %r but GOP is NULL\n", rc);
+- 		return EFI_UNSUPPORTED;
+- 	}
+- 
+-diff --git a/apps/modelist.c b/apps/modelist.c
+-index 13219b7..5154962 100644
+---- a/apps/modelist.c
+-+++ b/apps/modelist.c
+-@@ -11,9 +11,9 @@ print_modes(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+- 
+- 	if (gop->Mode) {
+- 		imax = gop->Mode->MaxMode;
+--		Print(L"GOP reports MaxMode %d\n", imax);
+-+		Print(u"GOP reports MaxMode %d\n", imax);
+- 	} else {
+--		Print(L"gop->Mode is NULL\n");
+-+		Print(u"gop->Mode is NULL\n");
+- 		imax = 1;
+- 	}
+- 
+-@@ -23,8 +23,8 @@ print_modes(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+- 		rc = uefi_call_wrapper(gop->QueryMode, 4, gop, i, &SizeOfInfo,
+- 					&info);
+- 		if (rc == EFI_NOT_STARTED) {
+--			Print(L"gop->QueryMode() returned %r\n", rc);
+--			Print(L"Trying to start GOP with SetMode().\n");
+-+			Print(u"gop->QueryMode() returned %r\n", rc);
+-+			Print(u"Trying to start GOP with SetMode().\n");
+- 			rc = uefi_call_wrapper(gop->SetMode, 2, gop,
+- 				gop->Mode ? gop->Mode->Mode : 0);
+- 			rc = uefi_call_wrapper(gop->QueryMode, 4, gop, i,
+-@@ -32,37 +32,37 @@ print_modes(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop)
+- 		}
+- 
+- 		if (EFI_ERROR(rc)) {
+--			Print(L"%d: Bad response from QueryMode: %r (%d)\n",
+-+			Print(u"%d: Bad response from QueryMode: %r (%d)\n",
+- 			      i, rc, rc);
+- 			continue;
+- 		}
+--		Print(L"%c%d: %dx%d ",
+-+		Print(u"%c%d: %dx%d ",
+- 		      (gop->Mode &&
+- 		       CompareMem(info,gop->Mode->Info,sizeof(*info)) == 0
+- 		       ) ? '*' : ' ',
+- 		      i, info->HorizontalResolution, info->VerticalResolution);
+- 		switch(info->PixelFormat) {
+- 			case PixelRedGreenBlueReserved8BitPerColor:
+--				Print(L"RGBR");
+-+				Print(u"RGBR");
+- 				break;
+- 			case PixelBlueGreenRedReserved8BitPerColor:
+--				Print(L"BGRR");
+-+				Print(u"BGRR");
+- 				break;
+- 			case PixelBitMask:
+--				Print(L"R:%08x G:%08x B:%08x X:%08x",
+-+				Print(u"R:%08x G:%08x B:%08x X:%08x",
+- 					info->PixelInformation.RedMask,
+- 					info->PixelInformation.GreenMask,
+- 					info->PixelInformation.BlueMask,
+- 					info->PixelInformation.ReservedMask);
+- 				break;
+- 			case PixelBltOnly:
+--				Print(L"(blt only)");
+-+				Print(u"(blt only)");
+- 				break;
+- 			default:
+--				Print(L"(Invalid pixel format)");
+-+				Print(u"(Invalid pixel format)");
+- 				break;
+- 		}
+--		Print(L" pitch %d\n", info->PixelsPerScanLine);
+-+		Print(u" pitch %d\n", info->PixelsPerScanLine);
+- 	}
+- }
+- 
+-@@ -75,7 +75,7 @@ SetWatchdog(UINTN seconds)
+- 	if (EFI_ERROR(rc)) {
+- 		CHAR16 Buffer[64];
+- 		StatusToString(Buffer, rc);
+--		Print(L"Bad response from QueryMode: %s (%d)\n", Buffer, rc);
+-+		Print(u"Bad response from QueryMode: %s (%d)\n", Buffer, rc);
+- 	}
+- 	return rc;
+- }
+-@@ -92,12 +92,12 @@ efi_main (EFI_HANDLE image_handle, EFI_SYSTEM_TABLE *systab)
+- 
+- 	rc = LibLocateProtocol(&GraphicsOutputProtocol, (void **)&gop);
+- 	if (EFI_ERROR(rc)) {
+--		Print(L"Could not locate GOP: %r\n", rc);
+-+		Print(u"Could not locate GOP: %r\n", rc);
+- 		return rc;
+- 	}
+- 
+- 	if (!gop) {
+--		Print(L"LocateProtocol(GOP, &gop) returned %r but GOP is NULL\n", rc);
+-+		Print(u"LocateProtocol(GOP, &gop) returned %r but GOP is NULL\n", rc);
+- 		return EFI_UNSUPPORTED;
+- 	}
+- 
+-diff --git a/apps/printenv.c b/apps/printenv.c
+-index 6341e40..efa7cd6 100644
+---- a/apps/printenv.c
+-+++ b/apps/printenv.c
+-@@ -14,10 +14,10 @@ efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
+- 	name[0] = 0;
+- 	vendor = NullGuid;
+- 
+--	Print(L"GUID                                Variable Name        Value\n");
+--	Print(L"=================================== ==================== ========\n");
+-+	Print(u"GUID                                Variable Name        Value\n");
+-+	Print(u"=================================== ==================== ========\n");
+- 
+--	StrCpy(fmt, L"%.-35g %.-20s %s\n");
+-+	StrCpy(fmt, u"%.-35g %.-20s %s\n");
+- 	while (1) {
+- 		size = sizeof(name);
+- 		status = uefi_call_wrapper(RT->GetNextVariableName, 3, &size, name, &vendor);
+-diff --git a/apps/route80h.c b/apps/route80h.c
+-index 5272dd3..a07d9cf 100644
+---- a/apps/route80h.c
+-+++ b/apps/route80h.c
+-@@ -27,17 +27,17 @@ typedef struct {
+- static inline void set_bit(volatile uint32_t *flag, int bit, int value)
+- {
+- 	uint32_t val = *flag;
+--	Print(L"current value is 0x%2x\n", val);
+-+	Print(u"current value is 0x%2x\n", val);
+- 
+- 	if (value) {
+- 		val |= (1 << bit);
+- 	} else {
+- 		val &= ~(1 << bit);
+- 	}
+--	Print(L"setting value to 0x%2x\n", val);
+-+	Print(u"setting value to 0x%2x\n", val);
+- 	*flag = val;
+- 	val = *flag;
+--	Print(L"new value is 0x%2x\n", val);
+-+	Print(u"new value is 0x%2x\n", val);
+- }
+- 
+- static int is_device(EFI_PCI_IO *pciio, uint16_t vendor_id, uint16_t device_id)
+-@@ -112,7 +112,7 @@ efi_main (EFI_HANDLE image_handle, EFI_SYSTEM_TABLE *systab)
+- 	}
+- 
+- 	if (rc == EFI_NOT_FOUND) {
+--		Print(L"Device not found.\n");
+-+		Print(u"Device not found.\n");
+- 		return rc;
+- 	} else if (EFI_ERROR(rc)) {
+- 		return rc;
+-@@ -123,12 +123,12 @@ efi_main (EFI_HANDLE image_handle, EFI_SYSTEM_TABLE *systab)
+- 	if (EFI_ERROR(rc))
+- 		return rc;
+- 	if (!(lpcif.rcba & 1)) {
+--		Print(L"rcrb is not mapped, cannot route port 80h\n");
+-+		Print(u"rcrb is not mapped, cannot route port 80h\n");
+- 		return EFI_UNSUPPORTED;
+- 	}
+- 	lpcif.rcba &= ~1UL;
+- 
+--	Print(L"rcba: 0x%8x\n", lpcif.rcba, lpcif.rcba);
+-+	Print(u"rcba: 0x%8x\n", lpcif.rcba, lpcif.rcba);
+- 	set_bit((uint32_t *)(intptr_t)(lpcif.rcba + GCS_OFFSET_ADDR),
+- 		     GCS_RPR_SHIFT, GCS_RPR_PCI);
+- 
+-diff --git a/apps/setdbg.c b/apps/setdbg.c
+-index 897140e..7617bf9 100644
+---- a/apps/setdbg.c
+-+++ b/apps/setdbg.c
+-@@ -16,22 +16,22 @@ efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
+- #if 0
+- 	UINT8 data = 1;
+- 
+--	status = RT->SetVariable(L"SHIM_DEBUG", &SHIM_GUID,
+-+	status = RT->SetVariable(u"SHIM_DEBUG", &SHIM_GUID,
+- 				 EFI_VARIABLE_NON_VOLATILE |
+- 				 EFI_VARIABLE_BOOTSERVICE_ACCESS |
+- 				 EFI_VARIABLE_RUNTIME_ACCESS,
+- 				 sizeof(data), &data);
+- 	if (EFI_ERROR(status))
+--		Print(L"SetVariable failed: %r\n", status);
+-+		Print(u"SetVariable failed: %r\n", status);
+- #endif
+- 
+--	status = RT->SetVariable(L"GRUB_ENV", &SHIM_GUID,
+-+	status = RT->SetVariable(u"GRUB_ENV", &SHIM_GUID,
+- 				 EFI_VARIABLE_NON_VOLATILE |
+- 				 EFI_VARIABLE_BOOTSERVICE_ACCESS |
+- 				 EFI_VARIABLE_RUNTIME_ACCESS,
+- 				 sizeof(grubenv)-1, grubenv);
+- 	if (EFI_ERROR(status))
+--		Print(L"SetVariable(GRUB_ENV) failed: %r\n", status);
+-+		Print(u"SetVariable(GRUB_ENV) failed: %r\n", status);
+- 
+- 	return EFI_SUCCESS;
+- }
+-diff --git a/apps/setjmp.c b/apps/setjmp.c
+-index d9e0f29..52c163b 100644
+---- a/apps/setjmp.c
+-+++ b/apps/setjmp.c
+-@@ -14,16 +14,16 @@ efi_main(
+- 
+- 	InitializeLib(image_handle, systab);
+- 	rc = setjmp(env);
+--	Print(L"setjmp() = %d\n", rc);
+-+	Print(u"setjmp() = %d\n", rc);
+- 
+- 	if (rc == 3) {
+--		Print(L"3 worked\n");
+-+		Print(u"3 worked\n");
+- 		longjmp(env, 0);
+- 		return 0;
+- 	}
+- 
+- 	if (rc == 1) {
+--		Print(L"0 got to be one yay\n");
+-+		Print(u"0 got to be one yay\n");
+- 		return 0;
+- 	}
+- 
+-diff --git a/apps/t.c b/apps/t.c
+-index c7e3d57..287c1c7 100644
+---- a/apps/t.c
+-+++ b/apps/t.c
+-@@ -20,7 +20,7 @@ efi_main (EFI_HANDLE image_handle, EFI_SYSTEM_TABLE *systab)
+- 
+- 	InitializeLib(image_handle, systab);
+- 	conout = systab->ConOut;
+--	uefi_call_wrapper(conout->OutputString, 2, conout, (CHAR16 *)L"Hello World!\n\r");
+-+	uefi_call_wrapper(conout->OutputString, 2, conout, (CHAR16 *)u"Hello World!\n\r");
+- 	uefi_call_wrapper(conout->OutputString, 2, conout, a2u("Hello World!\n\r"));
+- 
+- 	return EFI_SUCCESS;
+-diff --git a/apps/t2.c b/apps/t2.c
+-index 6a09c42..66ca814 100644
+---- a/apps/t2.c
+-+++ b/apps/t2.c
+-@@ -8,7 +8,7 @@ efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
+- 
+-         InitializeLib(image, systab);
+- 	conout = systab->ConOut;
+--	uefi_call_wrapper(conout->OutputString, 2, conout, L"Hello World!\n\r");
+-+	uefi_call_wrapper(conout->OutputString, 2, conout, u"Hello World!\n\r");
+- 
+- 	return EFI_SUCCESS;
+- }
+-diff --git a/apps/t3.c b/apps/t3.c
+-index 623830a..09db598 100644
+---- a/apps/t3.c
+-+++ b/apps/t3.c
+-@@ -16,19 +16,19 @@ efi_main(
+- 	InitializeLib(image_handle, systab);
+- 	PoolAllocationType = 2; /* klooj */
+- 
+--	Print(L"Hello World! (0xd=0x%x, 13=%d)\n", 13, 13);
+-+	Print(u"Hello World! (0xd=0x%x, 13=%d)\n", 13, 13);
+- 
+--	Print(L"before InitializeLib(): PoolAllocationType=%d\n",
+-+	Print(u"before InitializeLib(): PoolAllocationType=%d\n",
+- 		pat);
+- 
+--	Print(L" after InitializeLib(): PoolAllocationType=%d\n",
+-+	Print(u" after InitializeLib(): PoolAllocationType=%d\n",
+- 		PoolAllocationType);
+- 
+- 	/*
+- 	 * Locate loaded_image_handle instance.
+- 	 */
+- 
+--	Print(L"BS->HandleProtocol()  ");
+-+	Print(u"BS->HandleProtocol()  ");
+- 
+- 	efi_status = uefi_call_wrapper(
+- 		BS->HandleProtocol,
+-@@ -38,31 +38,31 @@ efi_main(
+- 		&void_li_p);
+- 	li = void_li_p;
+- 
+--	Print(L"%xh (%r)\n", efi_status, efi_status);
+-+	Print(u"%xh (%r)\n", efi_status, efi_status);
+- 
+- 	if (efi_status != EFI_SUCCESS) {
+- 		return efi_status;
+- 	}
+- 
+--	Print(L"  li: %xh\n", li);
+-+	Print(u"  li: %xh\n", li);
+- 
+- 	if (!li) {
+- 		return EFI_UNSUPPORTED;
+- 	}
+- 
+--	Print(L"  li->Revision:        %xh\n", li->Revision);
+--	Print(L"  li->ParentHandle:    %xh\n", li->ParentHandle);
+--	Print(L"  li->SystemTable:     %xh\n", li->SystemTable);
+--	Print(L"  li->DeviceHandle:    %xh\n", li->DeviceHandle);
+--	Print(L"  li->FilePath:        %xh\n", li->FilePath);
+--	Print(L"  li->Reserved:        %xh\n", li->Reserved);
+--	Print(L"  li->LoadOptionsSize: %xh\n", li->LoadOptionsSize);
+--	Print(L"  li->LoadOptions:     %xh\n", li->LoadOptions);
+--	Print(L"  li->ImageBase:       %xh\n", li->ImageBase);
+--	Print(L"  li->ImageSize:       %xh\n", li->ImageSize);
+--	Print(L"  li->ImageCodeType:   %xh\n", li->ImageCodeType);
+--	Print(L"  li->ImageDataType:   %xh\n", li->ImageDataType);
+--	Print(L"  li->Unload:          %xh\n", li->Unload);
+-+	Print(u"  li->Revision:        %xh\n", li->Revision);
+-+	Print(u"  li->ParentHandle:    %xh\n", li->ParentHandle);
+-+	Print(u"  li->SystemTable:     %xh\n", li->SystemTable);
+-+	Print(u"  li->DeviceHandle:    %xh\n", li->DeviceHandle);
+-+	Print(u"  li->FilePath:        %xh\n", li->FilePath);
+-+	Print(u"  li->Reserved:        %xh\n", li->Reserved);
+-+	Print(u"  li->LoadOptionsSize: %xh\n", li->LoadOptionsSize);
+-+	Print(u"  li->LoadOptions:     %xh\n", li->LoadOptions);
+-+	Print(u"  li->ImageBase:       %xh\n", li->ImageBase);
+-+	Print(u"  li->ImageSize:       %xh\n", li->ImageSize);
+-+	Print(u"  li->ImageCodeType:   %xh\n", li->ImageCodeType);
+-+	Print(u"  li->ImageDataType:   %xh\n", li->ImageDataType);
+-+	Print(u"  li->Unload:          %xh\n", li->Unload);
+- 
+- #if 0
+- typedef struct {
+-diff --git a/apps/t4.c b/apps/t4.c
+-index b8487ec..1215121 100644
+---- a/apps/t4.c
+-+++ b/apps/t4.c
+-@@ -7,8 +7,8 @@ efi_main (EFI_HANDLE *image, EFI_SYSTEM_TABLE *systab)
+- 	UINTN index;
+- 
+-         InitializeLib(image, systab);
+--	uefi_call_wrapper(systab->ConOut->OutputString, 2, systab->ConOut, L"Hello application started\r\n");
+--	uefi_call_wrapper(systab->ConOut->OutputString, 2, systab->ConOut, L"\r\n\r\n\r\nHit any key to exit\r\n");
+-+	uefi_call_wrapper(systab->ConOut->OutputString, 2, systab->ConOut, u"Hello application started\r\n");
+-+	uefi_call_wrapper(systab->ConOut->OutputString, 2, systab->ConOut, u"\r\n\r\n\r\nHit any key to exit\r\n");
+- 	uefi_call_wrapper(systab->BootServices->WaitForEvent, 3, 1, &systab->ConIn->WaitForKey, &index);
+- 	return EFI_SUCCESS;
+- }
+-diff --git a/apps/t5.c b/apps/t5.c
+-index 7c868d2..e01a8e3 100644
+---- a/apps/t5.c
+-+++ b/apps/t5.c
+-@@ -5,9 +5,9 @@ EFI_STATUS
+- efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
+- {
+- 	InitializeLib(image, systab);
+--	Print(L"HelloLib application started\n");
+--	Print(L"\n\n\nHit any key to exit this image\n");
+-+	Print(u"HelloLib application started\n");
+-+	Print(u"\n\n\nHit any key to exit this image\n");
+- 	WaitForSingleEvent(ST->ConIn->WaitForKey, 0);
+--	uefi_call_wrapper(ST->ConOut->OutputString, 2, ST->ConOut, L"\n\n");
+-+	uefi_call_wrapper(ST->ConOut->OutputString, 2, ST->ConOut, u"\n\n");
+- 	return EFI_SUCCESS;
+- }
+-diff --git a/apps/t6.c b/apps/t6.c
+-index f95ea66..a3893e5 100644
+---- a/apps/t6.c
+-+++ b/apps/t6.c
+-@@ -25,19 +25,19 @@ efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
+- 				&LoadedImageProtocol, 
+- 				(void **) &loaded_image);
+- 	if (EFI_ERROR(status)) {
+--		Print(L"handleprotocol: %r\n", status);
+-+		Print(u"handleprotocol: %r\n", status);
+- 	}
+- 
+- #if 0
+- 	BS->HandleProtocol(loaded_image->DeviceHandle, &DevicePathProtocol, (void **) &dev_path);
+- 
+--	Print(L"Image device      : %s\n", DevicePathToStr(dev_path));
+--	Print(L"Image file        : %s\n", DevicePathToStr(loaded_image->FilePath));
+-+	Print(u"Image device      : %s\n", DevicePathToStr(dev_path));
+-+	Print(u"Image file        : %s\n", DevicePathToStr(loaded_image->FilePath));
+- #endif
+--	Print(L"Image base        : %lx\n", loaded_image->ImageBase);
+--	Print(L"Image size        : %lx\n", loaded_image->ImageSize);
+--	Print(L"Load options size : %lx\n", loaded_image->LoadOptionsSize);
+--	Print(L"Load options      : %s\n", loaded_image->LoadOptions);
+-+	Print(u"Image base        : %lx\n", loaded_image->ImageBase);
+-+	Print(u"Image size        : %lx\n", loaded_image->ImageSize);
+-+	Print(u"Load options size : %lx\n", loaded_image->LoadOptionsSize);
+-+	Print(u"Load options      : %s\n", loaded_image->LoadOptions);
+- 
+- 	return EFI_SUCCESS;
+- }
+-diff --git a/apps/t7.c b/apps/t7.c
+-index f02aaee..86e279e 100644
+---- a/apps/t7.c
+-+++ b/apps/t7.c
+-@@ -9,16 +9,16 @@ efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
+- 
+- 	InitializeLib(image, systab);
+- 
+--	Print(L"HelloLib application started\n");
+-+	Print(u"HelloLib application started\n");
+- 
+--	Print(L"\n\n\nHit any key to exit this image\n");
+-+	Print(u"\n\n\nHit any key to exit this image\n");
+- 	WaitForSingleEvent(ST->ConIn->WaitForKey, 0);
+- 
+--	uefi_call_wrapper(ST->ConOut->OutputString, 2, ST->ConOut, L"\n\n");
+-+	uefi_call_wrapper(ST->ConOut->OutputString, 2, ST->ConOut, u"\n\n");
+- 
+- 	efi_status = uefi_call_wrapper(ST->ConIn->ReadKeyStroke, 2, ST->ConIn, &efi_input_key);
+- 
+--	Print(L"ScanCode: %xh  UnicodeChar: %xh CallRtStatus: %x\n",
+-+	Print(u"ScanCode: %xh  UnicodeChar: %xh CallRtStatus: %x\n",
+- 		efi_input_key.ScanCode, efi_input_key.UnicodeChar, efi_status);
+- 
+- 	return EFI_SUCCESS;
+-diff --git a/apps/t8.c b/apps/t8.c
+-index 10f8811..e8b0dbb 100644
+---- a/apps/t8.c
+-+++ b/apps/t8.c
+-@@ -10,10 +10,10 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable)
+-   InitializeLib(ImageHandle, SystemTable);
+-   Argc = GetShellArgcArgv(ImageHandle, &Argv);
+- 
+--  Print(L"Hello World, started with Argc=%d\n", Argc);
+-+  Print(u"Hello World, started with Argc=%d\n", Argc);
+-   for (i = 0 ; i < Argc ; ++i)
+--    Print(L"  Argv[%d] = '%s'\n", i, Argv[i]);
+-+    Print(u"  Argv[%d] = '%s'\n", i, Argv[i]);
+- 
+--  Print(L"Bye.\n");
+-+  Print(u"Bye.\n");
+-   return EFI_SUCCESS;
+- }
+-diff --git a/apps/tcc.c b/apps/tcc.c
+-index 09ad98b..05368ad 100644
+---- a/apps/tcc.c
+-+++ b/apps/tcc.c
+-@@ -18,15 +18,15 @@ void dump_stack_helper(uint64_t rsp_val)
+- 	uint64_t *rsp = (uint64_t *)rsp_val;
+- 	int x;
+- 
+--	Print(L"%%rsp: 0x%08x%08x stack:\r\n",
+-+	Print(u"%%rsp: 0x%08x%08x stack:\r\n",
+- 					(rsp_val & 0xffffffff00000000) >>32,
+- 					 rsp_val & 0xffffffff);
+- 	for (x = 0; x < 8; x++) {
+--		Print(L"%08x: ", ((uint64_t)rsp) & 0xffffffff);
+--		Print(L"%016x ", *rsp++);
+--		Print(L"%016x ", *rsp++);
+--		Print(L"%016x ", *rsp++);
+--		Print(L"%016x\r\n", *rsp++);
+-+		Print(u"%08x: ", ((uint64_t)rsp) & 0xffffffff);
+-+		Print(u"%016x ", *rsp++);
+-+		Print(u"%016x ", *rsp++);
+-+		Print(u"%016x ", *rsp++);
+-+		Print(u"%016x\r\n", *rsp++);
+- 	}
+- }
+- #endif
+-@@ -328,102 +328,102 @@ efi_main (EFI_HANDLE *image, EFI_SYSTEM_TABLE *systab)
+- 	__asm__ volatile("out %0,%1" : : "a" ((uint8_t)0x14), "dN" (0x80));
+- #endif
+- 
+--	Print(L"Hello\r\n");
+-+	Print(u"Hello\r\n");
+- 	rc = test_failure();
+- 	if (EFI_ERROR(rc)) {
+--		Print(L"Returning Failure works\n");
+-+		Print(u"Returning Failure works\n");
+- 	} else {
+--		Print(L"Returning failure doesn't work.\r\n");
+--		Print(L"%%rax was 0x%016x, should have been 0x%016x\n",
+-+		Print(u"Returning failure doesn't work.\r\n");
+-+		Print(u"%%rax was 0x%016x, should have been 0x%016x\n",
+- 			rc, EFI_UNSUPPORTED);
+- 		return EFI_INVALID_PARAMETER;
+- 	}
+- 
+- 	rc = test_call0();
+- 	if (!EFI_ERROR(rc)) {
+--		Print(L"0 args works just fine here.\r\n");
+-+		Print(u"0 args works just fine here.\r\n");
+- 	} else {
+--		Print(L"0 args failed: 0x%016x\n", rc);
+-+		Print(u"0 args failed: 0x%016x\n", rc);
+- 		return rc;
+- 	}
+- 
+- 	rc = test_call1();
+- 	if (!EFI_ERROR(rc)) {
+--		Print(L"1 arg works just fine here.\r\n");
+-+		Print(u"1 arg works just fine here.\r\n");
+- 	} else {
+--		Print(L"1 arg failed: 0x%016x\n", rc);
+-+		Print(u"1 arg failed: 0x%016x\n", rc);
+- 		return rc;
+- 	}
+- 
+- 	rc = test_call2();
+- 	if (!EFI_ERROR(rc)) {
+--		Print(L"2 args works just fine here.\r\n");
+-+		Print(u"2 args works just fine here.\r\n");
+- 	} else {
+--		Print(L"2 args failed: 0x%016x\n", rc);
+-+		Print(u"2 args failed: 0x%016x\n", rc);
+- 		return rc;
+- 	}
+- 
+- 	rc = test_call3();
+- 	if (!EFI_ERROR(rc)) {
+--		Print(L"3 args works just fine here.\r\n");
+-+		Print(u"3 args works just fine here.\r\n");
+- 	} else {
+--		Print(L"3 args failed: 0x%016x\n", rc);
+-+		Print(u"3 args failed: 0x%016x\n", rc);
+- 		return rc;
+- 	}
+- 
+- 	rc = test_call4();
+- 	if (!EFI_ERROR(rc)) {
+--		Print(L"4 args works just fine here.\r\n");
+-+		Print(u"4 args works just fine here.\r\n");
+- 	} else {
+--		Print(L"4 args failed: 0x%016x\n", rc);
+-+		Print(u"4 args failed: 0x%016x\n", rc);
+- 		return rc;
+- 	}
+- 
+- 	rc = test_call5();
+- 	if (!EFI_ERROR(rc)) {
+--		Print(L"5 args works just fine here.\r\n");
+-+		Print(u"5 args works just fine here.\r\n");
+- 	} else {
+--		Print(L"5 args failed: 0x%016x\n", rc);
+-+		Print(u"5 args failed: 0x%016x\n", rc);
+- 		return rc;
+- 	}
+- 
+- 	rc = test_call6();
+- 	if (!EFI_ERROR(rc)) {
+--		Print(L"6 args works just fine here.\r\n");
+-+		Print(u"6 args works just fine here.\r\n");
+- 	} else {
+--		Print(L"6 args failed: 0x%016x\n", rc);
+-+		Print(u"6 args failed: 0x%016x\n", rc);
+- 		return rc;
+- 	}
+- 
+- 	rc = test_call7();
+- 	if (!EFI_ERROR(rc)) {
+--		Print(L"7 args works just fine here.\r\n");
+-+		Print(u"7 args works just fine here.\r\n");
+- 	} else {
+--		Print(L"7 args failed: 0x%016x\n", rc);
+-+		Print(u"7 args failed: 0x%016x\n", rc);
+- 		return rc;
+- 	}
+- 
+- 	rc = test_call8();
+- 	if (!EFI_ERROR(rc)) {
+--		Print(L"8 args works just fine here.\r\n");
+-+		Print(u"8 args works just fine here.\r\n");
+- 	} else {
+--		Print(L"8 args failed: 0x%016x\n", rc);
+-+		Print(u"8 args failed: 0x%016x\n", rc);
+- 		return rc;
+- 	}
+- 
+- 	rc = test_call9();
+- 	if (!EFI_ERROR(rc)) {
+--		Print(L"9 args works just fine here.\r\n");
+-+		Print(u"9 args works just fine here.\r\n");
+- 	} else {
+--		Print(L"9 args failed: 0x%016x\n", rc);
+-+		Print(u"9 args failed: 0x%016x\n", rc);
+- 		return rc;
+- 	}
+- 
+- 	rc = test_call10();
+- 	if (!EFI_ERROR(rc)) {
+--		Print(L"10 args works just fine here.\r\n");
+-+		Print(u"10 args works just fine here.\r\n");
+- 	} else {
+--		Print(L"10 args failed: 0x%016x\n", rc);
+-+		Print(u"10 args failed: 0x%016x\n", rc);
+- 		return rc;
+- 	}
+- 
+-diff --git a/apps/tpause.c b/apps/tpause.c
+-index 51c86df..2dd7846 100644
+---- a/apps/tpause.c
+-+++ b/apps/tpause.c
+-@@ -4,6 +4,6 @@
+- EFI_STATUS
+- efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
+- {
+--	Print(L"Press `q' to quit, any other key to continue:\n");
+-+	Print(u"Press `q' to quit, any other key to continue:\n");
+- 	
+- }
+-diff --git a/apps/unsetdbg.c b/apps/unsetdbg.c
+-index 731e09b..9890bd0 100644
+---- a/apps/unsetdbg.c
+-+++ b/apps/unsetdbg.c
+-@@ -15,22 +15,22 @@ efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
+- 	UINT8 data = 1;
+- 	InitializeLib(image, systab);
+- 
+--	status = RT->SetVariable(L"SHIM_DEBUG", &SHIM_GUID,
+-+	status = RT->SetVariable(u"SHIM_DEBUG", &SHIM_GUID,
+- 				 EFI_VARIABLE_NON_VOLATILE |
+- 				 EFI_VARIABLE_BOOTSERVICE_ACCESS |
+- 				 EFI_VARIABLE_RUNTIME_ACCESS,
+- 				 0, &data);
+- 	if (EFI_ERROR(status))
+--		Print(L"SetVariable failed: %r\n", status);
+-+		Print(u"SetVariable failed: %r\n", status);
+- 
+- #if 0
+--	status = RT->SetVariable(L"GRUB_ENV", &SHIM_GUID,
+-+	status = RT->SetVariable(u"GRUB_ENV", &SHIM_GUID,
+- 				 EFI_VARIABLE_NON_VOLATILE |
+- 				 EFI_VARIABLE_BOOTSERVICE_ACCESS |
+- 				 EFI_VARIABLE_RUNTIME_ACCESS,
+- 				 sizeof(grubenv)-1, grubenv);
+- 	if (EFI_ERROR(status))
+--		Print(L"SetVariable(GRUB_ENV) failed: %r\n", status);
+-+		Print(u"SetVariable(GRUB_ENV) failed: %r\n", status);
+- #endif
+- 
+- 	return EFI_SUCCESS;
+-diff --git a/inc/efi.h b/inc/efi.h
+-index 6d83374..cc4fc4f 100644
+---- a/inc/efi.h
+-+++ b/inc/efi.h
+-@@ -37,7 +37,7 @@ Revision History
+- extern "C" {
+- #endif
+- 
+--#define EFI_FIRMWARE_VENDOR         L"INTEL"
+-+#define EFI_FIRMWARE_VENDOR         u"INTEu"
+- #define EFI_FIRMWARE_MAJOR_REVISION 12
+- #define EFI_FIRMWARE_MINOR_REVISION 33
+- #define EFI_FIRMWARE_REVISION ((EFI_FIRMWARE_MAJOR_REVISION <<16) | (EFI_FIRMWARE_MINOR_REVISION))
+-diff --git a/inc/efilib.h b/inc/efilib.h
+-index f35d2ed..0068ae8 100644
+---- a/inc/efilib.h
+-+++ b/inc/efilib.h
+-@@ -180,21 +180,21 @@ extern EFI_GUID ShellDynamicCommandProtocolGuid;
+- //
+- #define LOAD_OPTION_ACTIVE      0x00000001
+- 
+--#define VarLanguageCodes       L"LangCodes"
+--#define VarLanguage            L"Lang"
+--#define VarTimeout             L"Timeout"
+--#define VarConsoleInp          L"ConIn"
+--#define VarConsoleOut          L"ConOut"
+--#define VarErrorOut            L"ErrOut"
+--#define VarBootOption          L"Boot%04x"
+--#define VarBootOrder           L"BootOrder"
+--#define VarBootNext            L"BootNext"
+--#define VarBootCurrent         L"BootCurrent"
+--#define VarDriverOption        L"Driver%04x"
+--#define VarDriverOrder         L"DriverOrder"
+--#define VarConsoleInpDev       L"ConInDev"
+--#define VarConsoleOutDev       L"ConOutDev"
+--#define VarErrorOutDev         L"ErrOutDev"
+-+#define VarLanguageCodes       u"LangCodes"
+-+#define VarLanguage            u"Lang"
+-+#define VarTimeout             u"Timeout"
+-+#define VarConsoleInp          u"ConIn"
+-+#define VarConsoleOut          u"ConOut"
+-+#define VarErrorOut            u"ErrOut"
+-+#define VarBootOption          u"Boot%04x"
+-+#define VarBootOrder           u"BootOrder"
+-+#define VarBootNext            u"BootNext"
+-+#define VarBootCurrent         u"BootCurrent"
+-+#define VarDriverOption        u"Driver%04x"
+-+#define VarDriverOrder         u"DriverOrder"
+-+#define VarConsoleInpDev       u"ConInDev"
+-+#define VarConsoleOutDev       u"ConOutDev"
+-+#define VarErrorOutDev         u"ErrOutDev"
+- 
+- #define LanguageCodeEnglish    "eng"
+- 
+-diff --git a/lib/cmdline.c b/lib/cmdline.c
+-index 9c214dd..a7f2fa2 100644
+---- a/lib/cmdline.c
+-+++ b/lib/cmdline.c
+-@@ -67,7 +67,7 @@ GetShellArgcArgvFromLoadedImage(
+-   if ((*ArgStart != L'\0') && (Argc < MAX_CMDLINE_ARGC))
+-     Argv[Argc++] = ArgStart;
+- 
+--  // Print(L"Got argc/argv from loaded image proto\n");
+-+  // Print(u"Got argc/argv from loaded image proto\n");
+-   *ResultArgv = Argv;
+-   return Argc;
+- }
+-@@ -93,7 +93,7 @@ INTN GetShellArgcArgv(EFI_HANDLE ImageHandle, CHAR16 **Argv[])
+-   if (!EFI_ERROR(Status))
+-   {
+-     // use shell 2.0 interface
+--    // Print(L"Got argc/argv from shell intf proto\n");
+-+    // Print(u"Got argc/argv from shell intf proto\n");
+-     *Argv = EfiShellParametersProtocol->Argv;
+-     return EfiShellParametersProtocol->Argc;
+-   }
+-@@ -109,7 +109,7 @@ INTN GetShellArgcArgv(EFI_HANDLE ImageHandle, CHAR16 **Argv[])
+-                              );
+-   if (!EFI_ERROR(Status))
+-   {
+--    // Print(L"Got argc/argv from shell params proto\n");
+-+    // Print(u"Got argc/argv from shell params proto\n");
+-     *Argv = EfiShellInterfaceProtocol->Argv;
+-     return EfiShellInterfaceProtocol->Argc;
+-   }
+-diff --git a/lib/console.c b/lib/console.c
+-index 5ca47ef..a733fb6 100644
+---- a/lib/console.c
+-+++ b/lib/console.c
+-@@ -81,7 +81,7 @@ IInput (
+-         
+-         if (Key.UnicodeChar == '\b') {
+-             if (Len) {
+--                uefi_call_wrapper(ConOut->OutputString, 2, ConOut, L"\b \b");
+-+                uefi_call_wrapper(ConOut->OutputString, 2, ConOut, u"\b \b");
+-                 Len -= 1;
+-             }
+-             continue;
+-diff --git a/lib/dpath.c b/lib/dpath.c
+-index 63e4e70..0ee9921 100644
+---- a/lib/dpath.c
+-+++ b/lib/dpath.c
+-@@ -479,7 +479,7 @@ _DevPathPci (
+-     PCI_DEVICE_PATH         *Pci;
+- 
+-     Pci = DevPath;
+--    CatPrint(Str, L"Pci(0x%x,0x%x)", Pci->Device, Pci->Function);
+-+    CatPrint(Str, u"Pci(0x%x,0x%x)", Pci->Device, Pci->Function);
+- }
+- 
+- static VOID
+-@@ -491,7 +491,7 @@ _DevPathPccard (
+-     PCCARD_DEVICE_PATH      *Pccard;
+- 
+-     Pccard = DevPath;
+--    CatPrint(Str, L"Pccard(0x%x)", Pccard-> FunctionNumber );
+-+    CatPrint(Str, u"Pccard(0x%x)", Pccard-> FunctionNumber );
+- }
+- 
+- static VOID
+-@@ -503,7 +503,7 @@ _DevPathMemMap (
+-     MEMMAP_DEVICE_PATH      *MemMap;
+- 
+-     MemMap = DevPath;
+--    CatPrint(Str, L"MemMap(%d,0x%x,0x%x)",
+-+    CatPrint(Str, u"MemMap(%d,0x%x,0x%x)",
+-         MemMap->MemoryType,
+-         MemMap->StartingAddress,
+-         MemMap->EndingAddress
+-@@ -519,7 +519,7 @@ _DevPathController (
+-     CONTROLLER_DEVICE_PATH  *Controller;
+- 
+-     Controller = DevPath;
+--    CatPrint(Str, L"Ctrl(%d)",
+-+    CatPrint(Str, u"Ctrl(%d)",
+-         Controller->Controller
+-         );
+- }
+-@@ -536,21 +536,21 @@ _DevPathVendor (
+- 
+-     Vendor = DevPath;
+-     switch (DevicePathType(&Vendor->Header)) {
+--    case HARDWARE_DEVICE_PATH:  Type = L"Hw";        break;
+--    case MESSAGING_DEVICE_PATH: Type = L"Msg";       break;
+--    case MEDIA_DEVICE_PATH:     Type = L"Media";     break;
+--    default:                    Type = L"?";         break;
+-+    case HARDWARE_DEVICE_PATH:  Type = u"Hw";        break;
+-+    case MESSAGING_DEVICE_PATH: Type = u"Msg";       break;
+-+    case MEDIA_DEVICE_PATH:     Type = u"Media";     break;
+-+    default:                    Type = u"?";         break;
+-     }
+- 
+--    CatPrint(Str, L"Ven%s(%g", Type, &Vendor->Guid);
+-+    CatPrint(Str, u"Ven%s(%g", Type, &Vendor->Guid);
+-     if (CompareGuid (&Vendor->Guid, &UnknownDevice) == 0) {
+-         //
+-         // GUID used by EFI to enumerate an EDD 1.1 device
+-         //
+-         UnknownDevPath = (UNKNOWN_DEVICE_VENDOR_DEVICE_PATH *)Vendor;
+--        CatPrint(Str, L":%02x)", UnknownDevPath->LegacyDriveLetter);
+-+        CatPrint(Str, u":%02x)", UnknownDevPath->LegacyDriveLetter);
+-     } else {
+--        CatPrint(Str, L")");
+-+        CatPrint(Str, u")");
+-     }
+- }
+- 
+-@@ -570,40 +570,40 @@ _DevPathAcpi (
+-     if ((Acpi->HID & PNP_EISA_ID_MASK) == PNP_EISA_ID_CONST) {
+-         switch ( EISA_ID_TO_NUM( Acpi-> HID ) ) {
+-             case 0x301 : {
+--                CatPrint( Str , L"Keyboard(%d)" , Acpi-> UID ) ;
+-+                CatPrint( Str , u"Keyboard(%d)" , Acpi-> UID ) ;
+-                 break ;
+-             }
+-             case 0x401 : {
+--                CatPrint( Str , L"ParallelPort(%d)" , Acpi-> UID ) ;
+-+                CatPrint( Str , u"ParallelPort(%d)" , Acpi-> UID ) ;
+-                 break ;
+-             }
+-             case 0x501 : {
+--                CatPrint( Str , L"Serial(%d)" , Acpi-> UID ) ;
+-+                CatPrint( Str , u"Serial(%d)" , Acpi-> UID ) ;
+-                 break ;
+-             }
+-             case 0x604 : {
+--                CatPrint( Str , L"Floppy(%d)" , Acpi-> UID ) ;
+-+                CatPrint( Str , u"Floppy(%d)" , Acpi-> UID ) ;
+-                 break ;
+-             }
+-             case 0xa03 : {
+--                CatPrint( Str , L"PciRoot(%d)" , Acpi-> UID ) ;
+-+                CatPrint( Str , u"PciRoot(%d)" , Acpi-> UID ) ;
+-                 break ;
+-             }
+-             case 0xa08 : {
+--                CatPrint( Str , L"PcieRoot(%d)" , Acpi-> UID ) ;
+-+                CatPrint( Str , u"PcieRoot(%d)" , Acpi-> UID ) ;
+-                 break ;
+-             }
+-             default : {
+--                CatPrint( Str , L"Acpi(PNP%04x" , EISA_ID_TO_NUM( Acpi-> HID ) ) ;
+--                if ( Acpi-> UID ) CatPrint( Str , L",%d" , Acpi-> UID ) ;
+--                CatPrint( Str , L")" ) ;
+-+                CatPrint( Str , u"Acpi(PNP%04x" , EISA_ID_TO_NUM( Acpi-> HID ) ) ;
+-+                if ( Acpi-> UID ) CatPrint( Str , u",%d" , Acpi-> UID ) ;
+-+                CatPrint( Str , u")" ) ;
+-                 break ;
+-             }
+- 	}
+-     } else {
+--        CatPrint( Str , L"Acpi(0x%X" , Acpi-> HID ) ;
+--        if ( Acpi-> UID ) CatPrint( Str , L",%d" , Acpi-> UID ) ;
+--        CatPrint( Str , L")" , Acpi-> HID , Acpi-> UID ) ;
+-+        CatPrint( Str , u"Acpi(0x%X" , Acpi-> HID ) ;
+-+        if ( Acpi-> UID ) CatPrint( Str , u",%d" , Acpi-> UID ) ;
+-+        CatPrint( Str , u")" , Acpi-> HID , Acpi-> UID ) ;
+-     }
+- }
+- 
+-@@ -617,9 +617,9 @@ _DevPathAtapi (
+-     ATAPI_DEVICE_PATH       *Atapi;
+- 
+-     Atapi = DevPath;
+--    CatPrint(Str, L"Ata(%s,%s)",
+--        Atapi->PrimarySecondary ? L"Secondary" : L"Primary",
+--        Atapi->SlaveMaster ? L"Slave" : L"Master"
+-+    CatPrint(Str, u"Ata(%s,%s)",
+-+        Atapi->PrimarySecondary ? u"Secondary" : u"Primary",
+-+        Atapi->SlaveMaster ? u"Slave" : u"Master"
+-         );
+- }
+- 
+-@@ -632,7 +632,7 @@ _DevPathScsi (
+-     SCSI_DEVICE_PATH        *Scsi;
+- 
+-     Scsi = DevPath;
+--    CatPrint(Str, L"Scsi(%d,%d)", Scsi->Pun, Scsi->Lun);
+-+    CatPrint(Str, u"Scsi(%d,%d)", Scsi->Pun, Scsi->Lun);
+- }
+- 
+- 
+-@@ -645,8 +645,8 @@ _DevPathFibre (
+-     FIBRECHANNEL_DEVICE_PATH    *Fibre;
+- 
+-     Fibre = DevPath;
+--    CatPrint( Str , L"Fibre%s(0x%016lx,0x%016lx)" ,
+--        DevicePathType( & Fibre-> Header ) == MSG_FIBRECHANNEL_DP ? L"" : L"Ex" ,
+-+    CatPrint( Str , u"Fibre%s(0x%016lx,0x%016lx)" ,
+-+        DevicePathType( & Fibre-> Header ) == MSG_FIBRECHANNEL_DP ? u"" : u"Ex" ,
+-         Fibre-> WWN , Fibre-> Lun ) ;
+- }
+- 
+-@@ -660,7 +660,7 @@ _DevPath1394 (
+- 
+-     F1394 = DevPath;
+-     // Guid has format of IEEE-EUI64
+--    CatPrint(Str, L"I1394(%016lx)", F1394->Guid);
+-+    CatPrint(Str, u"I1394(%016lx)", F1394->Guid);
+- }
+- 
+- 
+-@@ -674,7 +674,7 @@ _DevPathUsb (
+-     USB_DEVICE_PATH         *Usb;
+- 
+-     Usb = DevPath;
+--    CatPrint( Str , L"Usb(0x%x,0x%x)" , Usb-> Port , Usb-> Endpoint ) ;
+-+    CatPrint( Str , u"Usb(0x%x,0x%x)" , Usb-> Port , Usb-> Endpoint ) ;
+- }
+- 
+- 
+-@@ -687,7 +687,7 @@ _DevPathI2O (
+-     I2O_DEVICE_PATH         *I2O;
+- 
+-     I2O = DevPath;
+--    CatPrint(Str, L"I2O(0x%X)", I2O->Tid);
+-+    CatPrint(Str, u"I2O(0x%X)", I2O->Tid);
+- }
+- 
+- static VOID
+-@@ -710,15 +710,15 @@ _DevPathMacAddr (
+-         HwAddressSize = 6;
+-     }
+- 
+--    CatPrint(Str, L"Mac(");
+-+    CatPrint(Str, u"Mac(");
+- 
+-     for(Index = 0; Index < HwAddressSize; Index++) {
+--        CatPrint(Str, L"%02x",MAC->MacAddress.Addr[Index]);
+-+        CatPrint(Str, u"%02x",MAC->MacAddress.Addr[Index]);
+-     }
+-     if ( MAC-> IfType != 0 ) {
+--        CatPrint(Str, L",%d" , MAC-> IfType ) ;
+-+        CatPrint(Str, u",%d" , MAC-> IfType ) ;
+-     }
+--    CatPrint(Str, L")");
+-+    CatPrint(Str, u")");
+- }
+- 
+- static VOID
+-@@ -727,7 +727,7 @@ CatPrintIPv4(
+-     IN EFI_IPv4_ADDRESS * Address
+-     )
+- {
+--    CatPrint( Str , L"%d.%d.%d.%d" , Address-> Addr[ 0 ] , Address-> Addr[ 1 ] ,
+-+    CatPrint( Str , u"%d.%d.%d.%d" , Address-> Addr[ 0 ] , Address-> Addr[ 1 ] ,
+-         Address-> Addr[ 2 ] , Address-> Addr[ 3 ] ) ;
+- }
+- 
+-@@ -749,11 +749,11 @@ CatPrintNetworkProtocol(
+-     )
+- {
+-     if ( Proto == 6 ) {
+--        CatPrint( Str , L"TCP" ) ;
+-+        CatPrint( Str , u"TCP" ) ;
+-     } else if ( Proto == 17 ) {
+--        CatPrint( Str , L"UDP" ) ;
+-+        CatPrint( Str , u"UDP" ) ;
+-     } else {
+--        CatPrint( Str , L"%d" , Proto ) ;
+-+        CatPrint( Str , u"%d" , Proto ) ;
+-     }
+- }
+- 
+-@@ -767,11 +767,11 @@ _DevPathIPv4 (
+-     BOOLEAN show ;
+- 
+-     IP = DevPath;
+--    CatPrint( Str , L"IPv4(") ;
+-+    CatPrint( Str , u"IPv4(") ;
+-     CatPrintIPv4( Str , & IP-> RemoteIpAddress ) ;
+--    CatPrint( Str , L",") ;
+-+    CatPrint( Str , u",") ;
+-     CatPrintNetworkProtocol( Str , IP-> Protocol ) ;
+--    CatPrint( Str , L",%s" , IP-> StaticIpAddress ? L"Static" : L"DHCP" ) ;
+-+    CatPrint( Str , u",%s" , IP-> StaticIpAddress ? u"Static" : u"DHCP" ) ;
+-     show = IsNotNullIPv4( & IP-> LocalIpAddress ) ;
+-     if ( ! show && DevicePathNodeLength( & IP-> Header ) == sizeof( IPv4_DEVICE_PATH ) ) {
+-         /* only version 2 includes gateway and netmask */
+-@@ -779,23 +779,23 @@ _DevPathIPv4 (
+-         show |= IsNotNullIPv4( & IP-> SubnetMask  ) ;
+-     }
+-     if ( show ) {
+--        CatPrint( Str , L"," ) ;
+-+        CatPrint( Str , u"," ) ;
+-         CatPrintIPv4( Str , & IP-> LocalIpAddress ) ;
+-         if ( DevicePathNodeLength( & IP-> Header ) == sizeof( IPv4_DEVICE_PATH ) ) {
+-             /* only version 2 includes gateway and netmask */
+-             show = IsNotNullIPv4( & IP-> GatewayIpAddress ) ;
+-             show |= IsNotNullIPv4( & IP-> SubnetMask ) ;
+-             if ( show ) {
+--                CatPrint( Str , L",") ;
+-+                CatPrint( Str , u",") ;
+-                 CatPrintIPv4( Str , & IP-> GatewayIpAddress ) ;
+-                 if ( IsNotNullIPv4( & IP-> SubnetMask ) ) {
+--                    CatPrint( Str , L",") ;
+-+                    CatPrint( Str , u",") ;
+-                     CatPrintIPv4( Str , & IP-> SubnetMask ) ;
+-                 }
+-             }
+-         }
+-     }
+--    CatPrint( Str , L")") ;
+-+    CatPrint( Str , u")") ;
+- }
+- 
+- #define CatPrintIPv6_ADD( x , y ) ( ( (UINT16) ( x ) ) << 8 | ( y ) )
+-@@ -805,7 +805,7 @@ CatPrintIPv6(
+-     IN EFI_IPv6_ADDRESS * Address
+-     )
+- {
+--    CatPrint( Str , L"%x:%x:%x:%x:%x:%x:%x:%x" ,
+-+    CatPrint( Str , u"%x:%x:%x:%x:%x:%x:%x:%x" ,
+-         CatPrintIPv6_ADD( Address-> Addr[ 0 ] , Address-> Addr[ 1 ] ) ,
+-         CatPrintIPv6_ADD( Address-> Addr[ 2 ] , Address-> Addr[ 3 ] ) ,
+-         CatPrintIPv6_ADD( Address-> Addr[ 4 ] , Address-> Addr[ 5 ] ) ,
+-@@ -825,21 +825,21 @@ _DevPathIPv6 (
+-     IPv6_DEVICE_PATH     *IP;
+- 
+-     IP = DevPath;
+--    CatPrint( Str , L"IPv6(") ;
+-+    CatPrint( Str , u"IPv6(") ;
+-     CatPrintIPv6( Str , & IP-> RemoteIpAddress ) ;
+--    CatPrint( Str , L",") ;
+-+    CatPrint( Str , u",") ;
+-     CatPrintNetworkProtocol( Str, IP-> Protocol ) ;
+--    CatPrint( Str , L",%s," , IP-> IPAddressOrigin ?
+--        ( IP-> IPAddressOrigin == 1 ? L"StatelessAutoConfigure" :
+--        L"StatefulAutoConfigure" ) : L"Static" ) ;
+-+    CatPrint( Str , u",%s," , IP-> IPAddressOrigin ?
+-+        ( IP-> IPAddressOrigin == 1 ? u"StatelessAutoConfigure" :
+-+        u"StatefulAutoConfigure" ) : u"Static" ) ;
+-     CatPrintIPv6( Str , & IP-> LocalIpAddress ) ;
+-     if ( DevicePathNodeLength( & IP-> Header ) == sizeof( IPv6_DEVICE_PATH ) ) {
+--        CatPrint( Str , L",") ;
+-+        CatPrint( Str , u",") ;
+-         CatPrintIPv6( Str , & IP-> GatewayIpAddress ) ;
+--        CatPrint( Str , L",") ;
+--        CatPrint( Str , L"%d" , & IP-> PrefixLength ) ;
+-+        CatPrint( Str , u",") ;
+-+        CatPrint( Str , u"%d" , & IP-> PrefixLength ) ;
+-     }
+--    CatPrint( Str , L")") ;
+-+    CatPrint( Str , u")") ;
+- }
+- 
+- static VOID
+-@@ -852,7 +852,7 @@ _DevPathUri (
+- 
+-     Uri = DevPath;
+- 
+--    CatPrint( Str, L"Uri(%a)", Uri->Uri );
+-+    CatPrint( Str, u"Uri(%a)", Uri->Uri );
+- }
+- 
+- static VOID
+-@@ -864,7 +864,7 @@ _DevPathInfiniBand (
+-     INFINIBAND_DEVICE_PATH  *InfiniBand;
+- 
+-     InfiniBand = DevPath;
+--    CatPrint(Str, L"Infiniband(0x%x,%g,0x%lx,0x%lx,0x%lx)",
+-+    CatPrint(Str, u"Infiniband(0x%x,%g,0x%lx,0x%lx,0x%lx)",
+-         InfiniBand->ResourceFlags, InfiniBand->PortGid, InfiniBand->ServiceId,
+-         InfiniBand->TargetPortId, InfiniBand->DeviceId);
+- }
+-@@ -890,25 +890,25 @@ _DevPathUart (
+-     }
+- 
+-     if (Uart->BaudRate == 0) {
+--        CatPrint(Str, L"Uart(DEFAULT,");
+-+        CatPrint(Str, u"Uart(DEFAULT,");
+-     } else {
+--        CatPrint(Str, L"Uart(%ld,", Uart->BaudRate);
+-+        CatPrint(Str, u"Uart(%ld,", Uart->BaudRate);
+-     }
+- 
+-     if (Uart->DataBits == 0) {
+--        CatPrint(Str, L"DEFAULT,");
+-+        CatPrint(Str, u"DEFAULT,");
+-     } else {
+--        CatPrint(Str, L"%d,", Uart->DataBits);
+-+        CatPrint(Str, u"%d,", Uart->DataBits);
+-     }
+- 
+--    CatPrint(Str, L"%c,", Parity);
+-+    CatPrint(Str, u"%c,", Parity);
+- 
+-     switch (Uart->StopBits) {
+--        case 0  : CatPrint(Str, L"D)");   break;
+--        case 1  : CatPrint(Str, L"1)");   break;
+--        case 2  : CatPrint(Str, L"1.5)"); break;
+--        case 3  : CatPrint(Str, L"2)");   break;
+--        default : CatPrint(Str, L"x)");   break;
+-+        case 0  : CatPrint(Str, u"D)");   break;
+-+        case 1  : CatPrint(Str, u"1)");   break;
+-+        case 2  : CatPrint(Str, u"1.5)"); break;
+-+        case 3  : CatPrint(Str, u"2)");   break;
+-+        default : CatPrint(Str, u"x)");   break;
+-     }
+- }
+- 
+-@@ -921,7 +921,7 @@ _DevPathSata (
+-     SATA_DEVICE_PATH * Sata ;
+- 
+-     Sata = DevPath;
+--    CatPrint( Str , L"Sata(0x%x,0x%x,0x%x)" , Sata-> HBAPortNumber ,
+-+    CatPrint( Str , u"Sata(0x%x,0x%x,0x%x)" , Sata-> HBAPortNumber ,
+-         Sata-> PortMultiplierPortNumber , Sata-> Lun ) ;
+- }
+- 
+-@@ -936,19 +936,19 @@ _DevPathHardDrive (
+-     Hd = DevPath;
+-     switch (Hd->SignatureType) {
+-         case SIGNATURE_TYPE_MBR:
+--            CatPrint(Str, L"HD(%d,MBR,0x%08x)",
+-+            CatPrint(Str, u"HD(%d,MBR,0x%08x)",
+-                 Hd->PartitionNumber,
+-                 *((UINT32 *)(&(Hd->Signature[0])))
+-                 );
+-             break;
+-         case SIGNATURE_TYPE_GUID:
+--            CatPrint(Str, L"HD(%d,GPT,%g)",
+-+            CatPrint(Str, u"HD(%d,GPT,%g)",
+-                 Hd->PartitionNumber,
+-                 (EFI_GUID *) &(Hd->Signature[0])
+-                 );
+-             break;
+-         default:
+--            CatPrint(Str, L"HD(%d,%d,0)",
+-+            CatPrint(Str, u"HD(%d,%d,0)",
+-                 Hd->PartitionNumber,
+-                 Hd->SignatureType
+-                 );
+-@@ -965,7 +965,7 @@ _DevPathCDROM (
+-     CDROM_DEVICE_PATH       *Cd;
+- 
+-     Cd = DevPath;
+--    CatPrint( Str , L"CDROM(0x%x)" , Cd-> BootEntry ) ;
+-+    CatPrint( Str , u"CDROM(0x%x)" , Cd-> BootEntry ) ;
+- }
+- 
+- static VOID
+-@@ -977,7 +977,7 @@ _DevPathFilePath (
+-     FILEPATH_DEVICE_PATH    *Fp;
+- 
+-     Fp = DevPath;
+--    CatPrint(Str, L"%s", Fp->PathName);
+-+    CatPrint(Str, u"%s", Fp->PathName);
+- }
+- 
+- static VOID
+-@@ -989,7 +989,7 @@ _DevPathMediaProtocol (
+-     MEDIA_PROTOCOL_DEVICE_PATH  *MediaProt;
+- 
+-     MediaProt = DevPath;
+--    CatPrint(Str, L"%g", &MediaProt->Protocol);
+-+    CatPrint(Str, u"%g", &MediaProt->Protocol);
+- }
+- 
+- static VOID
+-@@ -1003,16 +1003,16 @@ _DevPathBssBss (
+- 
+-     Bss = DevPath;
+-     switch (Bss->DeviceType) {
+--    case BBS_TYPE_FLOPPY:               Type = L"Floppy";       break;
+--    case BBS_TYPE_HARDDRIVE:            Type = L"Harddrive";    break;
+--    case BBS_TYPE_CDROM:                Type = L"CDROM";        break;
+--    case BBS_TYPE_PCMCIA:               Type = L"PCMCIA";       break;
+--    case BBS_TYPE_USB:                  Type = L"Usb";          break;
+--    case BBS_TYPE_EMBEDDED_NETWORK:     Type = L"Net";          break;
+--    default:                            Type = L"?";            break;
+-+    case BBS_TYPE_FLOPPY:               Type = u"Floppy";       break;
+-+    case BBS_TYPE_HARDDRIVE:            Type = u"Harddrive";    break;
+-+    case BBS_TYPE_CDROM:                Type = u"CDROM";        break;
+-+    case BBS_TYPE_PCMCIA:               Type = u"PCMCIA";       break;
+-+    case BBS_TYPE_USB:                  Type = u"Usb";          break;
+-+    case BBS_TYPE_EMBEDDED_NETWORK:     Type = u"Net";          break;
+-+    default:                            Type = u"?";            break;
+-     }
+- 
+--    CatPrint(Str, L"Bss-%s(%a)", Type, Bss->String);
+-+    CatPrint(Str, u"Bss-%s(%a)", Type, Bss->String);
+- }
+- 
+- 
+-@@ -1022,7 +1022,7 @@ _DevPathEndInstance (
+-     IN VOID                 *DevPath EFI_UNUSED
+-     )
+- {
+--    CatPrint(Str, L",");
+-+    CatPrint(Str, u",");
+- }
+- 
+- /**
+-@@ -1044,37 +1044,37 @@ _DevPathNodeUnknown (
+-     value += 4 ;
+-     switch ( Path-> Type ) {
+-         case HARDWARE_DEVICE_PATH : { /* Unknown Hardware Device Path */
+--            CatPrint( Str , L"HardwarePath(%d" , Path-> SubType ) ;
+-+            CatPrint( Str , u"HardwarePath(%d" , Path-> SubType ) ;
+-             break ;
+-         }
+-         case ACPI_DEVICE_PATH : { /* Unknown ACPI Device Path */
+--            CatPrint( Str , L"AcpiPath(%d" , Path-> SubType ) ;
+-+            CatPrint( Str , u"AcpiPath(%d" , Path-> SubType ) ;
+-             break ;
+-         }
+-         case MESSAGING_DEVICE_PATH : { /* Unknown Messaging Device Path */
+--            CatPrint( Str , L"Msg(%d" , Path-> SubType ) ;
+-+            CatPrint( Str , u"Msg(%d" , Path-> SubType ) ;
+-             break ;
+-         }
+-         case MEDIA_DEVICE_PATH : { /* Unknown Media Device Path */
+--            CatPrint( Str , L"MediaPath(%d" , Path-> SubType ) ;
+-+            CatPrint( Str , u"MediaPath(%d" , Path-> SubType ) ;
+-             break ;
+-         }
+-         case BBS_DEVICE_PATH : { /* Unknown BIOS Boot Specification Device Path */
+--            CatPrint( Str , L"BbsPath(%d" , Path-> SubType ) ;
+-+            CatPrint( Str , u"BbsPath(%d" , Path-> SubType ) ;
+-             break ;
+-         }
+-         default : { /* Unknown Device Path */
+--            CatPrint( Str , L"Path(%d,%d" , Path-> Type , Path-> SubType ) ;
+-+            CatPrint( Str , u"Path(%d,%d" , Path-> Type , Path-> SubType ) ;
+-             break ;
+-         }
+-     }
+-     length = DevicePathNodeLength( Path ) ;
+-     for ( index = 0 ; index < length ; index ++ ) {
+--        if ( index == 0 ) CatPrint( Str , L",0x" ) ;
+--        CatPrint( Str , L"%02x" , * value ) ;
+-+        if ( index == 0 ) CatPrint( Str , u",0x" ) ;
+-+        CatPrint( Str , u"%02x" , * value ) ;
+- 	value ++ ;
+-     }
+--    CatPrint( Str , L")" ) ;
+-+    CatPrint( Str , u")" ) ;
+- }
+- 
+- 
+-@@ -1180,7 +1180,7 @@ DevicePathToStr (
+-         //
+- 
+-         if (Str.len  &&  DumpNode != _DevPathEndInstance) {
+--            CatPrint (&Str, L"/");
+-+            CatPrint (&Str, u"/");
+-         }
+- 
+-         //
+-diff --git a/lib/error.c b/lib/error.c
+-index 38e03e8..2837bbb 100644
+---- a/lib/error.c
+-+++ b/lib/error.c
+-@@ -23,49 +23,49 @@ typedef struct {
+-     WCHAR		*Desc;
+- } ErrorCodeTable_Type;
+- ErrorCodeTable_Type ErrorCodeTable[] = {
+--	{  EFI_SUCCESS,                L"Success"},
+--	{  EFI_LOAD_ERROR,             L"Load Error"},
+--	{  EFI_INVALID_PARAMETER,      L"Invalid Parameter"},
+--	{  EFI_UNSUPPORTED,            L"Unsupported"},
+--	{  EFI_BAD_BUFFER_SIZE,        L"Bad Buffer Size"},
+--	{  EFI_BUFFER_TOO_SMALL,       L"Buffer Too Small"},
+--	{  EFI_NOT_READY,              L"Not Ready"},
+--	{  EFI_DEVICE_ERROR,           L"Device Error"},
+--	{  EFI_WRITE_PROTECTED,        L"Write Protected"},
+--	{  EFI_OUT_OF_RESOURCES,       L"Out of Resources"},
+--	{  EFI_VOLUME_CORRUPTED,       L"Volume Corrupt"},
+--	{  EFI_VOLUME_FULL,            L"Volume Full"},
+--	{  EFI_NO_MEDIA,               L"No Media"},
+--	{  EFI_MEDIA_CHANGED,          L"Media changed"},
+--	{  EFI_NOT_FOUND,              L"Not Found"},
+--	{  EFI_ACCESS_DENIED,          L"Access Denied"},
+--	{  EFI_NO_RESPONSE,            L"No Response"},
+--	{  EFI_NO_MAPPING,             L"No mapping"},
+--	{  EFI_TIMEOUT,                L"Time out"},
+--	{  EFI_NOT_STARTED,            L"Not started"},
+--	{  EFI_ALREADY_STARTED,        L"Already started"},
+--	{  EFI_ABORTED,                L"Aborted"},
+--	{  EFI_ICMP_ERROR,             L"ICMP Error"},
+--	{  EFI_TFTP_ERROR,             L"TFTP Error"},
+--	{  EFI_PROTOCOL_ERROR,         L"Protocol Error"},
+--	{  EFI_INCOMPATIBLE_VERSION,   L"Incompatible Version"},
+--	{  EFI_SECURITY_VIOLATION,     L"Security Policy Violation"},
+--	{  EFI_CRC_ERROR,              L"CRC Error"},
+--	{  EFI_END_OF_MEDIA,           L"End of Media"},
+--	{  EFI_END_OF_FILE,            L"End of File"},
+--	{  EFI_INVALID_LANGUAGE,       L"Invalid Languages"},
+--	{  EFI_COMPROMISED_DATA,       L"Compromised Data"},
+--	{  EFI_IP_ADDRESS_CONFLICT,    L"IP Address Conflict"},
+--	{  EFI_HTTP_ERROR,             L"HTTP Error"},
+-+	{  EFI_SUCCESS,                u"Success"},
+-+	{  EFI_LOAD_ERROR,             u"Load Error"},
+-+	{  EFI_INVALID_PARAMETER,      u"Invalid Parameter"},
+-+	{  EFI_UNSUPPORTED,            u"Unsupported"},
+-+	{  EFI_BAD_BUFFER_SIZE,        u"Bad Buffer Size"},
+-+	{  EFI_BUFFER_TOO_SMALL,       u"Buffer Too Small"},
+-+	{  EFI_NOT_READY,              u"Not Ready"},
+-+	{  EFI_DEVICE_ERROR,           u"Device Error"},
+-+	{  EFI_WRITE_PROTECTED,        u"Write Protected"},
+-+	{  EFI_OUT_OF_RESOURCES,       u"Out of Resources"},
+-+	{  EFI_VOLUME_CORRUPTED,       u"Volume Corrupt"},
+-+	{  EFI_VOLUME_FULL,            u"Volume Full"},
+-+	{  EFI_NO_MEDIA,               u"No Media"},
+-+	{  EFI_MEDIA_CHANGED,          u"Media changed"},
+-+	{  EFI_NOT_FOUND,              u"Not Found"},
+-+	{  EFI_ACCESS_DENIED,          u"Access Denied"},
+-+	{  EFI_NO_RESPONSE,            u"No Response"},
+-+	{  EFI_NO_MAPPING,             u"No mapping"},
+-+	{  EFI_TIMEOUT,                u"Time out"},
+-+	{  EFI_NOT_STARTED,            u"Not started"},
+-+	{  EFI_ALREADY_STARTED,        u"Already started"},
+-+	{  EFI_ABORTED,                u"Aborted"},
+-+	{  EFI_ICMP_ERROR,             u"ICMP Error"},
+-+	{  EFI_TFTP_ERROR,             u"TFTP Error"},
+-+	{  EFI_PROTOCOL_ERROR,         u"Protocol Error"},
+-+	{  EFI_INCOMPATIBLE_VERSION,   u"Incompatible Version"},
+-+	{  EFI_SECURITY_VIOLATION,     u"Security Policy Violation"},
+-+	{  EFI_CRC_ERROR,              u"CRC Error"},
+-+	{  EFI_END_OF_MEDIA,           u"End of Media"},
+-+	{  EFI_END_OF_FILE,            u"End of File"},
+-+	{  EFI_INVALID_LANGUAGE,       u"Invalid Languages"},
+-+	{  EFI_COMPROMISED_DATA,       u"Compromised Data"},
+-+	{  EFI_IP_ADDRESS_CONFLICT,    u"IP Address Conflict"},
+-+	{  EFI_HTTP_ERROR,             u"HTTP Error"},
+- 
+- 	// warnings
+--	{  EFI_WARN_UNKNOWN_GLYPH,     L"Warning Unknown Glyph"},
+--	{  EFI_WARN_DELETE_FAILURE,    L"Warning Delete Failure"},
+--	{  EFI_WARN_WRITE_FAILURE,     L"Warning Write Failure"},
+--	{  EFI_WARN_BUFFER_TOO_SMALL,  L"Warning Buffer Too Small"},
+--	{  EFI_WARN_STALE_DATA,        L"Warning Stale Data"},
+--	{  EFI_WARN_FILE_SYSTEM,       L"Warning File System"},
+--	{  EFI_WARN_RESET_REQUIRED,    L"Warning Reset Required"},
+-+	{  EFI_WARN_UNKNOWN_GLYPH,     u"Warning Unknown Glyph"},
+-+	{  EFI_WARN_DELETE_FAILURE,    u"Warning Delete Failure"},
+-+	{  EFI_WARN_WRITE_FAILURE,     u"Warning Write Failure"},
+-+	{  EFI_WARN_BUFFER_TOO_SMALL,  u"Warning Buffer Too Small"},
+-+	{  EFI_WARN_STALE_DATA,        u"Warning Stale Data"},
+-+	{  EFI_WARN_FILE_SYSTEM,       u"Warning File System"},
+-+	{  EFI_WARN_RESET_REQUIRED,    u"Warning Reset Required"},
+- 	{  0, NULL}
+- } ;
+- 
+-@@ -85,5 +85,5 @@ StatusToString (
+-         }
+-     }
+- 
+--    UnicodeSPrint (Buffer, 0, L"%X", Status);
+-+    UnicodeSPrint (Buffer, 0, u"%X", Status);
+- }
+-diff --git a/lib/guid.c b/lib/guid.c
+-index 9c8cc6d..9f817a5 100644
+---- a/lib/guid.c
+-+++ b/lib/guid.c
+-@@ -48,56 +48,56 @@ static struct {
+-     EFI_GUID        *Guid;
+-     WCHAR           *GuidName;
+- } KnownGuids[] = {
+--	{  &NullGuid,                                       L"G0" },
+--	{  &gEfiGlobalVariableGuid,                         L"EfiVar" },
+--
+--	{  &VariableStoreProtocol,                          L"VarStore" },
+--	{  &gEfiDevicePathProtocolGuid,                     L"DevPath" },
+--	{  &gEfiLoadedImageProtocolGuid,                    L"LdImg" },
+--	{  &gEfiSimpleTextInProtocolGuid,                   L"TxtIn" },
+--	{  &gEfiSimpleTextOutProtocolGuid,                  L"TxtOut" },
+--	{  &gEfiBlockIoProtocolGuid,                        L"BlkIo" },
+--	{  &gEfiBlockIo2ProtocolGuid,                       L"BlkIo2" },
+--	{  &gEfiDiskIoProtocolGuid,                         L"DskIo" },
+--	{  &gEfiDiskIo2ProtocolGuid,                        L"DskIo2" },
+--	{  &gEfiSimpleFileSystemProtocolGuid,               L"Fs" },
+--	{  &gEfiLoadFileProtocolGuid,                       L"LdFile" },
+--	{  &gEfiDeviceIoProtocolGuid,                       L"DevIo" },
+--	{  &gEfiComponentNameProtocolGuid,                  L"CName" },
+--	{  &gEfiComponentName2ProtocolGuid,                 L"CName2" },
+--
+--	{  &gEfiFileInfoGuid,                               L"FileInfo" },
+--	{  &gEfiFileSystemInfoGuid,                         L"FsInfo" },
+--	{  &gEfiFileSystemVolumeLabelInfoIdGuid,            L"FsVolInfo" },
+--
+--	{  &gEfiUnicodeCollationProtocolGuid,               L"Unicode" },
+--	{  &LegacyBootProtocol,                             L"LegacyBoot" },
+--	{  &gEfiSerialIoProtocolGuid,                       L"SerIo" },
+--	{  &VgaClassProtocol,                               L"VgaClass"},
+--	{  &gEfiSimpleNetworkProtocolGuid,                  L"Net" },
+--	{  &gEfiNetworkInterfaceIdentifierProtocolGuid,     L"Nii" },
+--	{  &gEfiPxeBaseCodeProtocolGuid,                    L"Pxe" },
+--	{  &gEfiPxeBaseCodeCallbackProtocolGuid,            L"PxeCb" },
+--
+--	{  &TextOutSpliterProtocol,                         L"TxtOutSplit" },
+--	{  &ErrorOutSpliterProtocol,                        L"ErrOutSplit" },
+--	{  &TextInSpliterProtocol,                          L"TxtInSplit" },
+--	{  &gEfiPcAnsiGuid,                                 L"PcAnsi" },
+--	{  &gEfiVT100Guid,                                  L"Vt100" },
+--	{  &gEfiVT100PlusGuid,                              L"Vt100Plus" },
+--	{  &gEfiVTUTF8Guid,                                 L"VtUtf8" },
+--	{  &UnknownDevice,                                  L"UnknownDev" },
+--
+--	{  &EfiPartTypeSystemPartitionGuid,                 L"ESP" },
+--	{  &EfiPartTypeLegacyMbrGuid,                       L"GPT MBR" },
+--
+--	{  &ShellInterfaceProtocol,                         L"ShellInt" },
+--	{  &SEnvId,                                         L"SEnv" },
+--	{  &SProtId,                                        L"ShellProtId" },
+--	{  &SMapId,                                         L"ShellDevPathMap" },
+--	{  &SAliasId,                                       L"ShellAlias" },
+--
+--	{  NULL, L"" }
+-+	{  &NullGuid,                                       u"G0" },
+-+	{  &gEfiGlobalVariableGuid,                         u"EfiVar" },
+-+
+-+	{  &VariableStoreProtocol,                          u"VarStore" },
+-+	{  &gEfiDevicePathProtocolGuid,                     u"DevPath" },
+-+	{  &gEfiLoadedImageProtocolGuid,                    u"LdImg" },
+-+	{  &gEfiSimpleTextInProtocolGuid,                   u"TxtIn" },
+-+	{  &gEfiSimpleTextOutProtocolGuid,                  u"TxtOut" },
+-+	{  &gEfiBlockIoProtocolGuid,                        u"BlkIo" },
+-+	{  &gEfiBlockIo2ProtocolGuid,                       u"BlkIo2" },
+-+	{  &gEfiDiskIoProtocolGuid,                         u"DskIo" },
+-+	{  &gEfiDiskIo2ProtocolGuid,                        u"DskIo2" },
+-+	{  &gEfiSimpleFileSystemProtocolGuid,               u"Fs" },
+-+	{  &gEfiLoadFileProtocolGuid,                       u"LdFile" },
+-+	{  &gEfiDeviceIoProtocolGuid,                       u"DevIo" },
+-+	{  &gEfiComponentNameProtocolGuid,                  u"CName" },
+-+	{  &gEfiComponentName2ProtocolGuid,                 u"CName2" },
+-+
+-+	{  &gEfiFileInfoGuid,                               u"FileInfo" },
+-+	{  &gEfiFileSystemInfoGuid,                         u"FsInfo" },
+-+	{  &gEfiFileSystemVolumeLabelInfoIdGuid,            u"FsVolInfo" },
+-+
+-+	{  &gEfiUnicodeCollationProtocolGuid,               u"Unicode" },
+-+	{  &LegacyBootProtocol,                             u"LegacyBoot" },
+-+	{  &gEfiSerialIoProtocolGuid,                       u"SerIo" },
+-+	{  &VgaClassProtocol,                               u"VgaClass"},
+-+	{  &gEfiSimpleNetworkProtocolGuid,                  u"Net" },
+-+	{  &gEfiNetworkInterfaceIdentifierProtocolGuid,     u"Nii" },
+-+	{  &gEfiPxeBaseCodeProtocolGuid,                    u"Pxe" },
+-+	{  &gEfiPxeBaseCodeCallbackProtocolGuid,            u"PxeCb" },
+-+
+-+	{  &TextOutSpliterProtocol,                         u"TxtOutSplit" },
+-+	{  &ErrorOutSpliterProtocol,                        u"ErrOutSplit" },
+-+	{  &TextInSpliterProtocol,                          u"TxtInSplit" },
+-+	{  &gEfiPcAnsiGuid,                                 u"PcAnsi" },
+-+	{  &gEfiVT100Guid,                                  u"Vt100" },
+-+	{  &gEfiVT100PlusGuid,                              u"Vt100Plus" },
+-+	{  &gEfiVTUTF8Guid,                                 u"VtUtf8" },
+-+	{  &UnknownDevice,                                  u"UnknownDev" },
+-+
+-+	{  &EfiPartTypeSystemPartitionGuid,                 u"ESP" },
+-+	{  &EfiPartTypeLegacyMbrGuid,                       u"GPT MBR" },
+-+
+-+	{  &ShellInterfaceProtocol,                         u"ShellInt" },
+-+	{  &SEnvId,                                         u"SEnv" },
+-+	{  &SProtId,                                        u"ShellProtId" },
+-+	{  &SMapId,                                         u"ShellDevPathMap" },
+-+	{  &SAliasId,                                       u"ShellAlias" },
+-+
+-+	{  NULL, u"" }
+- };
+- 
+- //
+-@@ -163,7 +163,7 @@ GuidToString (
+-     // Else dump it
+-     //
+- 
+--    UnicodeSPrint (Buffer, 0, L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+-+    UnicodeSPrint (Buffer, 0, u"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+-         Guid->Data1,
+-         Guid->Data2,
+-         Guid->Data3,
+-diff --git a/lib/init.c b/lib/init.c
+-index 726e493..cdf06bf 100644
+---- a/lib/init.c
+-+++ b/lib/init.c
+-@@ -172,7 +172,7 @@ EFIDebugVariable (
+-     UINTN           NewEFIDebug;
+- 
+-     DataSize = sizeof(EFIDebug);
+--    Status = uefi_call_wrapper(RT->GetVariable, 5, L"EFIDebug", &EfiGlobalVariable, &Attributes, &DataSize, &NewEFIDebug);
+-+    Status = uefi_call_wrapper(RT->GetVariable, 5, u"EFIDebug", &EfiGlobalVariable, &Attributes, &DataSize, &NewEFIDebug);
+-     if (!EFI_ERROR(Status)) {
+-         EFIDebug = NewEFIDebug;
+-     }
+-diff --git a/lib/print.c b/lib/print.c
+-index a43dc8c..77cea25 100644
+---- a/lib/print.c
+-+++ b/lib/print.c
+-@@ -881,7 +881,7 @@ Returns:
+-     if (!UnicodeStr)
+-         return 0;
+- 
+--    UnicodeFmt = PoolPrint(L"%a", fmt);
+-+    UnicodeFmt = PoolPrint(u"%a", fmt);
+-     if (!UnicodeFmt) {
+-         FreePool(UnicodeStr);
+-         return 0;
+-@@ -1261,7 +1261,7 @@ Returns:
+-             case 's':
+-                 Item.Item.pw = va_arg(ps->args, CHAR16 *);
+-                 if (!Item.Item.pw) {
+--                    Item.Item.pw = L"(null)";
+-+                    Item.Item.pw = u"(null)";
+-                 }
+-                 break;
+- 
+-@@ -1479,7 +1479,7 @@ TimeToString (
+-     Year = Time->Year % 100;
+- 
+-     // bugbug: for now just print it any old way
+--    UnicodeSPrint (Buffer, 0, L"%02d/%02d/%02d  %02d:%02d%c",
+-+    UnicodeSPrint (Buffer, 0, u"%02d/%02d/%02d  %02d:%02d%c",
+-         Time->Month,
+-         Time->Day,
+-         Year,
+-@@ -1530,7 +1530,7 @@ DumpHex (
+- 
+-         Val[Index*3] = 0;
+-         Str[Index] = 0;
+--        Print (L"%*a%X: %-.48a *%a*\n", Indent, "", Offset, Val, Str);
+-+        Print (u"%*a%X: %-.48a *%a*\n", Indent, "", Offset, Val, Str);
+- 
+-         Data += Size;
+-         Offset += Size;
+-@@ -1543,9 +1543,9 @@ DumpHex (
+-             //  block updates
+-             //
+-             ScreenCount = 0;
+--            Print (L"Press Enter to continue :");
+--            Input (L"", ReturnStr, sizeof(ReturnStr)/sizeof(CHAR16));
+--            Print (L"\n");
+-+            Print (u"Press Enter to continue :");
+-+            Input (u"", ReturnStr, sizeof(ReturnStr)/sizeof(CHAR16));
+-+            Print (u"\n");
+-         }
+- 
+-     }
+--- 
+-2.47.1
+-
+diff --git a/package/gnu-efi/Config.in b/package/gnu-efi/Config.in
+index 35446876f6..1177e9d9ba 100644
+--- a/package/gnu-efi/Config.in
++++ b/package/gnu-efi/Config.in
+@@ -15,4 +15,4 @@ config BR2_PACKAGE_GNU_EFI
+ 	  (IPF), IA-32 (x86), and MIPS platforms using the GNU toolchain
+ 	  and the EFI development environment.
+ 
+-	  http://gnu-efi.sourceforge.net/
++	  https://github.com/ncroxon/gnu-efi
+diff --git a/package/gnu-efi/gnu-efi.hash b/package/gnu-efi/gnu-efi.hash
+index e059da867e..5a2f47cfae 100644
+--- a/package/gnu-efi/gnu-efi.hash
++++ b/package/gnu-efi/gnu-efi.hash
+@@ -1,6 +1,5 @@
+-# From http://sourceforge.net/projects/gnu-efi/files
+-md5  0b93ad70dff96991dd87978fc4275bd1  gnu-efi-3.0.18.tar.bz2
+-sha1  4f12dc4ab3e7940070c87affea17bf8a6209957a  gnu-efi-3.0.18.tar.bz2
+ # Locally computed
+-sha256  7f212c96ee66547eeefb531267b641e5473d7d8529f0bd8ccdefd33cf7413f5c  gnu-efi-3.0.18.tar.bz2
+-sha256  42d352e9c28dd446fd0209cd6f75588c8e41f0934540bb382bbd61c752360265  README.efilib
++sha256  a2e5dfd25e7fc0cd2027d75dc2517b4c74d94f801ff4784eca557ac1b9835899  gnu-efi-4.0.0.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
++sha256  42d352e9c28dd446fd0209cd6f75588c8e41f0934540bb382bbd61c752360265  licenses/LICENSE.efilib
++sha256  7aa278b6f1a2125d0a0c596fa537caca5a41e7b03f7d2dd0489905f65ffdb984  licenses/LICENSE.edk2
+diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
+index 2eed4e40d2..268e5350cf 100644
+--- a/package/gnu-efi/gnu-efi.mk
++++ b/package/gnu-efi/gnu-efi.mk
+@@ -4,12 +4,11 @@
  #
  ################################################################################
  
--WINE_VERSION = 9.19
-+# In Buildroot, Wine should be updated only on "stable" versions. This
-+# usually corresponds to version "X.0" (for initial stable releases)
-+# or "X.0.y" (for maintenance releases). Please avoid updating to a
-+# development version, unless it is absolutely needed (for example:
-+# incompatibility with another library and no maintenance stable
-+# version is available).
-+WINE_VERSION = 10.0
- WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
--WINE_SITE = https://dl.winehq.org/wine/source/9.x
-+WINE_SITE = https://dl.winehq.org/wine/source/10.0
- WINE_LICENSE = LGPL-2.1+
- WINE_LICENSE_FILES = COPYING.LIB LICENSE
- WINE_CPE_ID_VENDOR = winehq
+-GNU_EFI_VERSION = 3.0.18
+-GNU_EFI_SOURCE = gnu-efi-$(GNU_EFI_VERSION).tar.bz2
+-GNU_EFI_SITE = http://downloads.sourceforge.net/project/gnu-efi
++GNU_EFI_VERSION = 4.0.0
++GNU_EFI_SITE = $(call github,ncroxon,gnu-efi,$(GNU_EFI_VERSION))
+ GNU_EFI_INSTALL_STAGING = YES
+-GNU_EFI_LICENSE = BSD-3-Clause and/or GPL-2.0+ (gnuefi), BSD-3-Clause (efilib)
+-GNU_EFI_LICENSE_FILES = README.efilib
++GNU_EFI_LICENSE = BSD-3-Clause and/or GPL-2.0+ (gnuefi), BSD-3-Clause (efilib), BSD-2-Clause-Patent (EDK2 routines)
++GNU_EFI_LICENSE_FILES = LICENSE licenses/LICENSE.edk2 licenses/LICENSE.efilib
+ 
+ # gnu-efi is a set of library and header files used to build
+ # standalone EFI applications such as bootloaders. There is no point
 -- 
-2.48.1
+2.47.1
 
 _______________________________________________
 buildroot mailing list
