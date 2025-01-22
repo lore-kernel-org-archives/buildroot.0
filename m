@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F6A1C282C1
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E614C282D0
 	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:02:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB45484A51;
-	Fri, 28 Feb 2025 17:02:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0AED94FD11;
+	Fri, 28 Feb 2025 17:02:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yb1G7HMX3_9S; Fri, 28 Feb 2025 17:02:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T27TzVM4psoV; Fri, 28 Feb 2025 17:02:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9666481EE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B7D64FCF1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9666481EE4;
-	Fri, 28 Feb 2025 17:02:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B7D64FCF1;
+	Fri, 28 Feb 2025 17:02:15 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1217F68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:40:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 181B668
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:40:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 15DBE4198C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 019D849B64
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F08US6g3M_x3 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:00 +0000 (UTC)
+ id zRxccR6o2o_M for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD13E42E58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56D644263E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD13E42E58
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56D644263E
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C926C82581; Fri, 28 Feb 2025 16:30:15 +0000 (UTC)
+ id 51E82818ED; Fri, 28 Feb 2025 16:30:16 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 19 Jan 2025 11:36:10 +0100
+Date: Wed, 22 Jan 2025 21:12:53 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f6cc52627d866c5a6277ab78970a491e3b89de40
-X-Git-Newrev: a311245ff7cf432de861ff095941ef53fc16460d
+X-Git-Oldrev: 16adbd4df05e5692c92ad015c1ec54d64d91dfa5
+X-Git-Newrev: 739acecd1312025d543e0694314142004b962d6d
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163015.C926C82581@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot/syslinux: add multiple
- patches fixing build issues with GCC >= 14
+Message-Id: <20250228163016.51E82818ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/iproute2: bump to
+ version 6.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,243 +60,160 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4496531857865881346=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4496531857865881346==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=a311245ff7cf432de861ff095941ef53fc16460d
+commit: https://git.buildroot.net/buildroot/commit/?id=739acecd1312025d543e0694314142004b962d6d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-No autobuilder failures reported, but it fixes build issues that can
-be reproduced with:
+Changelog - https://github.com/iproute2/iproute2/compare/v6.12.0...v6.13.0
 
-BR2_x86_64=y
-BR2_x86_corei7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_BLEEDING_EDGE=y
-BR2_TARGET_SYSLINUX=y
-BR2_TARGET_SYSLINUX_EFI=y
+Drop 0001-Fix-implicit-declaration-of-function-htobe64-in-gcc-.patch
+Upstream commit - https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=c8b3ecc22ed0edaf0259eaf7d1a5c04f300ad6e4
 
-First patch is backported from upstream. Last 3 patches are not from
-upstream, and they have not been submitted as upstream is basically
-dead (last release 10 years ago, last commit 5 years ago).
+Drop 0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
+Upstream commit - https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=fa3949b792e275f75d7d6200dc2036ef7fff8816
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Note: Since commit [1] "package/iproute2: bump to version 6.12.0",
+iproute2 can fail to build with musl libc with error:
+
+    iplink.c: In function 'iplink_parse':
+    iplink.c:663:43: error: 'PATH_MAX' undeclared (first use in this function); did you mean 'AF_MAX'?
+      663 |                                 char path[PATH_MAX];
+          |                                           ^~~~~~~~
+
+This is fixed with iproute2 commit [2] included in this 6.13.0 version.
+
+Fixes:
+- https://autobuild.buildroot.org/results/029493e02f5c2858fc987ba7a4c8fe53deb27017/
+- and many others...
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/4d40998db891e9967f85fc1e6dd3c2c740ea7b08
+[2] https://github.com/iproute2/iproute2/commit/7e23da91fca6e5dedeb32a7d308cf20982e897c3
+
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+[Julien: add a commit log comment about the fixed build failures]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- boot/syslinux/0021-load_linux-correct-a-type.patch | 34 +++++++++++++++
- ...es-pxechn.c-use-proper-type-in-struct-dat.patch | 46 +++++++++++++++++++++
- ...-chain.h-use-proper-type-in-struct-data_a.patch | 42 +++++++++++++++++++
- ...in.c-fix-incorrect-type-of-load_error_buf.patch | 48 ++++++++++++++++++++++
- 4 files changed, 170 insertions(+)
+ ...t-declaration-of-function-htobe64-in-gcc-.patch | 43 ----------------------
+ ...t-declaration-of-function-basename-in-gcc.patch | 33 -----------------
+ package/iproute2/iproute2.hash                     |  2 +-
+ package/iproute2/iproute2.mk                       |  2 +-
+ 4 files changed, 2 insertions(+), 78 deletions(-)
 
-diff --git a/boot/syslinux/0021-load_linux-correct-a-type.patch b/boot/syslinux/0021-load_linux-correct-a-type.patch
-new file mode 100644
-index 0000000000..ff4e5a2d29
---- /dev/null
-+++ b/boot/syslinux/0021-load_linux-correct-a-type.patch
-@@ -0,0 +1,34 @@
-+From 7f1b68d561dfe615d5cd73d2f4561ac032832802 Mon Sep 17 00:00:00 2001
-+From: Scot Doyle <lkml14@scotdoyle.com>
-+Date: Sat, 7 Feb 2015 13:52:05 -0500
-+Subject: [PATCH] load_linux: correct a type
-+
-+Correct base's type to match its initialization from prot_mode_base and
-+passage to syslinux_memmap_find(). Tested with extlinux.
-+
-+Signed-off-by: Scot Doyle <lkml14@scotdoyle.com>
-+Signed-off-by: Gene Cumm <gene.cumm@gmail.com>
-+Upstream: https://github.com/geneC/syslinux/commit/83aad4f69065509ba5b1c080edccfed316a4cff0
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ com32/lib/syslinux/load_linux.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/com32/lib/syslinux/load_linux.c b/com32/lib/syslinux/load_linux.c
-+index 06ae2a97..ac737293 100644
-+--- a/com32/lib/syslinux/load_linux.c
-++++ b/com32/lib/syslinux/load_linux.c
-+@@ -155,8 +155,8 @@ int bios_boot_linux(void *kernel_buf, size_t kernel_size,
-+ 		    char *cmdline)
-+ {
-+     struct linux_header hdr, *whdr;
-+-    size_t real_mode_size, prot_mode_size, base;
-+-    addr_t real_mode_base, prot_mode_base, prot_mode_max;
-++    size_t real_mode_size, prot_mode_size;
-++    addr_t real_mode_base, prot_mode_base, prot_mode_max, base;
-+     addr_t irf_size;
-+     size_t cmdline_size, cmdline_offset;
-+     struct setup_data *sdp;
-+-- 
-+2.47.1
-+
-diff --git a/boot/syslinux/0022-com32-modules-pxechn.c-use-proper-type-in-struct-dat.patch b/boot/syslinux/0022-com32-modules-pxechn.c-use-proper-type-in-struct-dat.patch
-new file mode 100644
-index 0000000000..65ad65eff6
---- /dev/null
-+++ b/boot/syslinux/0022-com32-modules-pxechn.c-use-proper-type-in-struct-dat.patch
-@@ -0,0 +1,46 @@
-+From b9514337ecfc0efaa04a926713188d87a88bb59e Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sat, 18 Jan 2025 16:03:34 +0100
-+Subject: [PATCH] com32/modules/pxechn.c: use proper type in struct data_area
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Use a size_t for the size field, so that we meet the expectations of
-+the loadfile() function.
-+
-+Fixes a build issue with GCC >= 14:
-+
-+com32/modules/pxechn.c:985:38: error: passing argument 3 of ‘loadfile’ from incompatible pointer type [-Wincompatible-pointer-types]
-+  985 |     if (loadfile(pxe.fn, &file.data, &file.size)) {
-+      |                                      ^~~~~~~~~~
-+      |                                      |
-+      |                                      addr_t * {aka unsigned int *}
-+
-+In file included from com32/modules/pxechn.c:33:
-+com32/include/syslinux/loadfile.h:11:37: note: expected ‘size_t *’ {aka ‘long unsigned int *’} but argument is of type ‘addr_t *’ {aka ‘unsigned int *’}
-+   11 | int loadfile(const char *, void **, size_t *);
-+      |                                     ^~~~~~~~
-+
-+Upstream: N/A, dead
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ com32/modules/pxechn.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/com32/modules/pxechn.c b/com32/modules/pxechn.c
-+index e4e21e88..15f008a3 100644
-+--- a/com32/modules/pxechn.c
-++++ b/com32/modules/pxechn.c
-+@@ -130,7 +130,7 @@ struct pxelinux_opt {
-+ struct data_area {
-+     void *data;
-+     addr_t base;
-+-    addr_t size;
-++    size_t size;
-+ };
-+ 
-+ /* From chain.c */
-+-- 
-+2.47.1
-+
-diff --git a/boot/syslinux/0023-com32-chain-chain.h-use-proper-type-in-struct-data_a.patch b/boot/syslinux/0023-com32-chain-chain.h-use-proper-type-in-struct-data_a.patch
-new file mode 100644
-index 0000000000..d4b62eb234
---- /dev/null
-+++ b/boot/syslinux/0023-com32-chain-chain.h-use-proper-type-in-struct-data_a.patch
-@@ -0,0 +1,42 @@
-+From 57dddf8d6d1c48aa78b9cdfb2b474aa89c3ae7c7 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sat, 18 Jan 2025 16:11:36 +0100
-+Subject: [PATCH] com32/chain/chain.h: use proper type in struct data_area
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes build issue with GCC >= 14:
-+
-+com32/chain/chain.c:517:44: error: passing argument 3 of ‘loadfile’ from incompatible pointer type [-Wincompatible-pointer-types]
-+  517 |         if (loadfile(opt.file, &fdat.data, &fdat.size)) {
-+      |                                            ^~~~~~~~~~
-+      |                                            |
-+      |                                            addr_t * {aka unsigned int *}
-+In file included from com32/chain/chain.c:32:
-+com32/include/syslinux/loadfile.h:11:37: note: expected ‘size_t *’ {aka ‘long unsigned int *’} but argument is of type ‘addr_t *’ {aka ‘unsigned int *’}
-+   11 | int loadfile(const char *, void **, size_t *);
-+      |                                     ^~~~~~~~
-+
-+Upstream: N/A, dead
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ com32/chain/chain.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/com32/chain/chain.h b/com32/chain/chain.h
-+index fb5914b1..dcf43844 100644
-+--- a/com32/chain/chain.h
-++++ b/com32/chain/chain.h
-+@@ -21,7 +21,7 @@
-+ struct data_area {
-+     void *data;
-+     addr_t base;
-+-    addr_t size;
-++    size_t size;
-+ };
-+ 
-+ #endif
-+-- 
-+2.47.1
-+
-diff --git a/boot/syslinux/0024-efi-main.c-fix-incorrect-type-of-load_error_buf.patch b/boot/syslinux/0024-efi-main.c-fix-incorrect-type-of-load_error_buf.patch
-new file mode 100644
-index 0000000000..9f61745a61
---- /dev/null
-+++ b/boot/syslinux/0024-efi-main.c-fix-incorrect-type-of-load_error_buf.patch
-@@ -0,0 +1,48 @@
-+From cbc8a8e25c3548771de5294f5a1eaef6bfe9b5da Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sat, 18 Jan 2025 17:03:16 +0100
-+Subject: [PATCH] efi/main.c: fix incorrect type of load_error_buf
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+load_error_buf is used as argument of setjmp()/longjmp(), so it should
-+be a "jmp_buf", not a "jmp_buf *". According to the setjmp/longjmp man
-+page:
-+
-+       int setjmp(jmp_buf env);
-+       int sigsetjmp(sigjmp_buf env, int savesigs);
-+
-+Fixes build issue with GCC >= 14:
-+
-+efi/main.c:1329:21: error: passing argument 1 of ‘setjmp’ from incompatible pointer type [-Wincompatible-pointer-types]
-+ 1329 |         if (!setjmp(load_error_buf))
-+      |                     ^~~~~~~~~~~~~~
-+      |                     |
-+      |                     struct <anonymous> (*)[1]
-+x86_64-buildroot-linux-gnu/sysroot/usr/include/efi/efisetjmp.h:7:29: note: expected ‘struct <anonymous> *’ but argument is of type ‘struct <anonymous> (*)[1]’
-+    7 | extern UINTN setjmp(jmp_buf env) __attribute__((returns_twice));
-+      |                     ~~~~~~~~^~~
-+
-+Upstream: N/A dead
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ efi/main.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/efi/main.c b/efi/main.c
-+index 7dc7bca7..045dae56 100644
-+--- a/efi/main.c
-++++ b/efi/main.c
-+@@ -30,7 +30,7 @@ uint32_t timer_irq;
-+ __export uint8_t KbdMap[256];
-+ char aux_seg[256];
-+ 
-+-static jmp_buf *load_error_buf;
-++static jmp_buf load_error_buf;
-+ 
-+ static inline EFI_STATUS
-+ efi_close_protocol(EFI_HANDLE handle, EFI_GUID *guid, EFI_HANDLE agent,
-+-- 
-+2.47.1
-+
-
---===============4496531857865881346==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/iproute2/0001-Fix-implicit-declaration-of-function-htobe64-in-gcc-.patch b/package/iproute2/0001-Fix-implicit-declaration-of-function-htobe64-in-gcc-.patch
+deleted file mode 100644
+index 318701e725..0000000000
+--- a/package/iproute2/0001-Fix-implicit-declaration-of-function-htobe64-in-gcc-.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From ea78477cba25b50e7f63f02635e6870d72dcf68e Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Wed, 14 Aug 2024 19:10:09 +0200
+-Subject: [PATCH] Fix implicit declaration of function 'htobe64' in gcc 14 on
+- musl systems
+-
+-On musl systems with GCC 14 and above, the htobe64 function cannot be
+-found by default. From the man page[0], the function is from endian.h
+-header file. If the file is not included in, then we get the following
+-error message. The issue however cannot be reproduced on glibc systems.
+-
+-In file included from ../include/libgenl.h:5,
+-                 from libgenl.c:12:
+-../include/libnetlink.h: In function 'rta_getattr_be64':
+-../include/libnetlink.h:281:16: error: implicit declaration of function 'htobe64' [-Wimplicit-function-declaration]
+-  281 |         return htobe64(rta_getattr_u64(rta));
+-      |                ^~~~~~~
+-make[1]: *** [../config.include:24: libgenl.o] Error 1
+-
+-[0]: https://linux.die.net/man/3/htobe64
+-
+-Signed-off-by: Brahmajit Das <brahmajit.xyz@gmail.com>
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: https://lore.kernel.org/netdev/20240514084335.19f5b280@hermes.local/T/
+----
+- include/libnetlink.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/include/libnetlink.h b/include/libnetlink.h
+-index 30f0c2d2..77e81815 100644
+---- a/include/libnetlink.h
+-+++ b/include/libnetlink.h
+-@@ -12,6 +12,7 @@
+- #include <linux/neighbour.h>
+- #include <linux/netconf.h>
+- #include <arpa/inet.h>
+-+#include <endian.h>
+- 
+- struct rtnl_handle {
+- 	int			fd;
+--- 
+-2.39.2
+-
+diff --git a/package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch b/package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
+deleted file mode 100644
+index 3bce4b15bb..0000000000
+--- a/package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 482b7362dedc57d0c9783bd83084919ccaa79e77 Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Wed, 14 Aug 2024 19:43:44 +0200
+-Subject: [PATCH] Fix implicit declaration of function basename in gcc-14.x
+-
+-From Alpine Linux.
+-https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/main/iproute2/basename.patch?ref_type=heads
+-
+-But also reported Upstream via netdev mailinglist by Gentoo people.
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: https://marc.info/?l=linux-netdev&m=172278781323421&w=2
+----
+- rdma/rdma.c | 3 +++
+- 1 file changed, 3 insertions(+)
+-
+-diff --git a/rdma/rdma.c b/rdma/rdma.c
+-index 131c6b2a..1e7db382 100644
+---- a/rdma/rdma.c
+-+++ b/rdma/rdma.c
+-@@ -8,6 +8,9 @@
+- #include "version.h"
+- #include "color.h"
+- 
+-+/* For basename(3) prototype */
+-+#include <libgen.h>
+-+
+- /* Global utils flags */
+- int json;
+- 
+--- 
+-2.39.2
+-
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 97be9bb765..fad4debeab 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256  bbd141ef7b5d0127cc2152843ba61f274dc32814fa3e0f13e7d07a080bef53d9  iproute2-6.12.0.tar.xz
++sha256  a43aa43338d882b44d01e549f3f105a92ae9feea32a82fae45a88e7a49302819  iproute2-6.13.0.tar.xz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index d609a28c0c..016b235469 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 6.12.0
++IPROUTE2_VERSION = 6.13.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4496531857865881346==--
