@@ -4,66 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C1EEC02185
-	for <buildroot@archiver.kernel.org>; Sat, 18 Jan 2025 21:32:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A294C02181
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 22:17:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 110DE408E5;
-	Sat, 18 Jan 2025 21:32:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CACD742933;
+	Wed, 22 Jan 2025 22:17:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BraR9exx7MA5; Sat, 18 Jan 2025 21:32:34 +0000 (UTC)
+ id DMhYBpHBOk19; Wed, 22 Jan 2025 22:17:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E762C40DBF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B937942935
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E762C40DBF;
-	Sat, 18 Jan 2025 21:32:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 54DEC69
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 21:32:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B937942935;
+	Wed, 22 Jan 2025 22:17:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D9D20F08
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 22:17:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4349A80D28
- for <buildroot@buildroot.org>; Sat, 18 Jan 2025 21:32:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BA93C40286
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 22:17:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QC4bq2YmSQJE for <buildroot@buildroot.org>;
- Sat, 18 Jan 2025 21:32:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3hDZRs-lYztp for <buildroot@buildroot.org>;
+ Wed, 22 Jan 2025 22:17:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
+ helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A17580C6A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A17580C6A
- for <buildroot@uclibc.org>; Sat, 18 Jan 2025 21:32:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 860DE82A85; Sat, 18 Jan 2025 21:32:31 +0000 (UTC)
-From: bugzilla@busybox.net
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 47B0840280
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47B0840280
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 47B0840280
+ for <buildroot@uclibc.org>; Wed, 22 Jan 2025 22:17:10 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1taj22-0008Vh-TQ
+ for buildroot@uclibc.org; Wed, 22 Jan 2025 23:17:06 +0100
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Sat, 18 Jan 2025 21:32:30 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: unspecified
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: enhancement
-X-Bugzilla-Who: rubacha.jack03@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: FIXED
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: bernd@kuhls.net
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-16279-163-wlMWSBEkIu@https.bugs.busybox.net/>
-In-Reply-To: <bug-16279-163@https.bugs.busybox.net/>
-References: <bug-16279-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 16279] FFMPEG should require harfbuzz
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Wed, 22 Jan 2025 23:16:46 +0100
+Message-ID: <pan$bb58f$db053cf0$1e276558$77e3f2aa@ID-313208.user.individual.net>
+References: <20250122220400.3205539-1-thomas.petazzoni__27474.0284121194$1737583474$gmane$org@bootlin.com>
+Mime-Version: 1.0
+User-Agent: Pan/0.154 (Izium; 517acf4)
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=kuhls.net
+Subject: Re: [Buildroot] [PATCH v2] package/gnu-efi: change upstream,
+ bump to 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,14 +69,16 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=16279
+Am Wed, 22 Jan 2025 23:03:59 +0100 schrieb Thomas Petazzoni via buildroot:
 
---- Comment #2 from Jack Rubacha <rubacha.jack03@gmail.com> ---
-Thanks a bunch!
+> However, I must say that the licensing is really unclear.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Hi Thomas,
+
+maybe this helps: https://github.com/ncroxon/gnu-efi/issues/48
+
+Regards, Bernd
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
