@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72007C02181
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 17:30:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 329C5C02181
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 17:31:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 338BF413DA;
-	Wed, 22 Jan 2025 17:30:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA38B417A7;
+	Wed, 22 Jan 2025 17:31:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YTdXfKwXkbQT; Wed, 22 Jan 2025 17:30:24 +0000 (UTC)
+ id 9VQJVz5vJV7i; Wed, 22 Jan 2025 17:31:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 112D9417A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1C17417D2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 112D9417A7;
-	Wed, 22 Jan 2025 17:30:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 53E01B88
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 17:30:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1C17417D2;
+	Wed, 22 Jan 2025 17:31:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 98266959
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 17:31:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4297D8496A
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 17:30:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 82CBC405B8
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 17:31:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Eo2ijxQcOH9A for <buildroot@buildroot.org>;
- Wed, 22 Jan 2025 17:30:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gGHB_xAzJzpt for <buildroot@buildroot.org>;
+ Wed, 22 Jan 2025 17:31:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 41B8C84945
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41B8C84945
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 41B8C84945
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 17:30:21 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 074C21BF208;
- Wed, 22 Jan 2025 17:30:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4FFFC400DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FFFC400DA
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4FFFC400DA
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 17:31:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 86EA940008;
+ Wed, 22 Jan 2025 17:31:42 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1taeYU-009EHy-1E;
- Wed, 22 Jan 2025 18:30:18 +0100
+ (envelope-from <peter@korsgaard.com>) id 1taeZp-009ERM-2x;
+ Wed, 22 Jan 2025 18:31:41 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: buildroot@buildroot.org
-References: <20250118083331.2882266-1-bernd@kuhls.net>
-Date: Wed, 22 Jan 2025 18:30:18 +0100
-In-Reply-To: <20250118083331.2882266-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sat, 18 Jan 2025 09:33:31 +0100")
-Message-ID: <878qr2lpsl.fsf@dell.be.48ers.dk>
+References: <20250118083233.2882216-1-bernd@kuhls.net>
+Date: Wed, 22 Jan 2025 18:31:41 +0100
+In-Reply-To: <20250118083233.2882216-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Sat, 18 Jan 2025 09:32:33 +0100")
+Message-ID: <874j1qlpqa.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/openvpn: bump version to 2.6.13
+Subject: Re: [Buildroot] [PATCH 1/1] package/php: bump version to 8.3.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,16 +76,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
- > Release notes:
- > https://sourceforge.net/p/openvpn/mailman/message/59119248/
-
- > Changelog:
- > https://github.com/OpenVPN/openvpn/blob/release/2.6/ChangeLog
- > https://github.com/OpenVPN/openvpn/blob/release/2.6/Changes.rst
+ > Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_3
+ > Release notes: https://news-web.php.net/php.announce/450
 
  > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Committed to 2024.02.x and 2024.11.x, thanks.
+Committed to 2024.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
