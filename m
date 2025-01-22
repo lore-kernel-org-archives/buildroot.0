@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8300CC0218C
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 15:18:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14BF0C02181
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 15:18:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BFA284FDC;
-	Wed, 22 Jan 2025 15:18:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D646F84B9A;
+	Wed, 22 Jan 2025 15:18:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FsU8cwzcqzu3; Wed, 22 Jan 2025 15:18:53 +0000 (UTC)
+ id pEjXTOZWyIGJ; Wed, 22 Jan 2025 15:18:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0B2B84FC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DDC284E04
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0B2B84FC4;
-	Wed, 22 Jan 2025 15:18:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C2D1959
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7DDC284E04;
+	Wed, 22 Jan 2025 15:18:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 654B9959
  for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 68CA5607A2
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 422044013C
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kf7_kE6HSFgc for <buildroot@buildroot.org>;
- Wed, 22 Jan 2025 15:18:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1lPx_fbpPfB7 for <buildroot@buildroot.org>;
+ Wed, 22 Jan 2025 15:18:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 647B460687
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E964C403DF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 647B460687
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E964C403DF
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 60E3C86031; Wed, 22 Jan 2025 15:18:22 +0000 (UTC)
+ id E07C786031; Wed, 22 Jan 2025 15:18:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Jan 2025 16:02:24 +0100
-X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 5698a2b335972de083e0d6a9c7ffd6077b12023f
-X-Git-Newrev: caaed296b9f1d874a1a4a3e7146662a0d7725c48
+Date: Wed, 22 Jan 2025 16:12:15 +0100
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 49a749fa54c260b74e9dac08bfe397142847afac
+X-Git-Newrev: a1fae4305e15d9ea5a5f346d10566c6b61d5443f
 X-Patchwork-Hint: ignore
-Message-Id: <20250122151822.60E3C86031@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/rsync: security
- bump to version 3.4.0
+Message-Id: <20250122151820.E07C786031@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/curlpp: add patch
+ to fix build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,110 +65,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caaed296b9f1d874a1a4a3e7146662a0d7725c48
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a1fae4305e15d9ea5a5f346d10566c6b61d5443f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Release note:
-https://download.samba.org/pub/rsync/NEWS#3.4.0
+curlpp is broken since the bump of libcurl to 8.10.0 in commit [1].
+This patch backport a pull request from upstream from [2] to solve it.
 
-Fixes the following vulnerabilities:
+Fixes:
+    https://autobuild.buildroot.org/results/4a4d3b248898f0e73620fcb1a7a94dcfb6e6866e/
 
-CVE-2024-12084: Heap Buffer Overflow in Rsync due to Improper Checksum
-Length Handling
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/d68b999787a0e0838c3bb2d5966f11d8a349a49b
+[2] https://github.com/jpbarrette/curlpp/pull/178
 
-Description: A heap-based buffer overflow flaw was found in the rsync
-daemon. This issue is due to improper handling of attacker-controlled
-checksum lengths (s2length) in the code. When MAX_DIGEST_LEN exceeds the
-fixed SUM_LENGTH (16 bytes), an attacker can write out of bounds in the
-sum2 buffer.
-
-CVE-2024-12085: Info Leak via Uninitialized Stack Contents
-
-Description: A flaw was found in the rsync daemon which could be triggered
-when rsync compares file checksums. This flaw allows an attacker to
-manipulate the checksum length (s2length) to cause a comparison between a
-checksum and uninitialized memory and leak one byte of uninitialized stack
-data at a time.
-
-CVE-2024-12086: Rsync Server Leaks Arbitrary Client Files
-
-Description: A flaw was found in rsync. It could allow a server to
-enumerate the contents of an arbitrary file from the client's machine. This
-issue occurs when files are being copied from a client to a server. During
-this process, the rsync server will send checksums of local data to the
-client to compare with in order to determine what data needs to be sent to
-the server. By sending specially constructed checksum values for arbitrary
-files, an attacker may be able to reconstruct the data of those files
-byte-by-byte based on the responses from the client.
-
-CVE-2024-12087: Path Traversal Vulnerability in Rsync
-
-Description: A path traversal vulnerability exists in rsync. It stems from
-behavior enabled by the `--inc-recursive` option, a default-enabled option
-for many client options and can be enabled by the server even if not
-explicitly enabled by the client. When using the `--inc-recursive` option,
-a lack of proper symlink verification coupled with deduplication checks
-occurring on a per-file-list basis could allow a server to write files
-outside of the client's intended destination directory. A malicious server
-could write malicious files to arbitrary locations named after valid
-directories/paths on the client.
-
-CVE-2024-12088: --safe-links Option Bypass Leads to Path Traversal
-
-Description: A flaw was found in rsync. When using the `--safe-links`
-option, rsync fails to properly verify if a symbolic link destination
-contains another symbolic link within it. This results in a path traversal
-vulnerability, which may lead to arbitrary file write outside the desired
-directory.
-
-CVE-2024-12747: Race Condition in Rsync Handling Symbolic Links
-
-Description: A flaw was found in rsync. This vulnerability arises from a
-race condition during rsync's handling of symbolic links. Rsync's default
-behavior when encountering symbolic links is to skip them. If an attacker
-replaced a regular file with a symbolic link at the right time, it was
-possible to bypass the default behavior and traverse symbolic links.
-Depending on the privileges of the rsync process, an attacker could leak
-sensitive information, potentially leading to privilege escalation.
-
-For more details, see the advisory:
-https://www.openwall.com/lists/oss-security/2025/01/14/3
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Julien: add link to release note]
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+[Julien:
+  - reword patch title one liner
+  - add link to commit which introduced the issue
+  - add link to the upstream pull request
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 017d74c943a03c7b36ef7d71886b29b27d817c12)
+(cherry picked from commit f06c28d1afef98e80f358c35ae65e035aa64f6ea)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsync/rsync.hash | 4 ++--
- package/rsync/rsync.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/curlpp/0001-fix-invalid-conversion.patch | 27 ++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
-index edeca9c4df..336d785153 100644
---- a/package/rsync/rsync.hash
-+++ b/package/rsync/rsync.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://rsync.samba.org/ftp/rsync/src/rsync-3.3.0.tar.gz.asc
--sha256  7399e9a6708c32d678a72a63219e96f23be0be2336e50fd1348498d07041df90  rsync-3.3.0.tar.gz
-+# https://rsync.samba.org/ftp/rsync/src/rsync-3.4.0.tar.gz.asc
-+sha256  8e942f95a44226a012fe822faffa6c7fc38c34047add3a0c941e9bc8b8b93aa4  rsync-3.4.0.tar.gz
- # Locally calculated
- sha256  85c19ea50a224c2d0067a69c083584e5717b40b76610ec1218f91385775067dd  COPYING
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index 188c87e1d4..4613778a7f 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RSYNC_VERSION = 3.3.0
-+RSYNC_VERSION = 3.4.0
- RSYNC_SITE = https://rsync.samba.org/ftp/rsync/src
- RSYNC_LICENSE = GPL-3.0+ with exceptions
- RSYNC_LICENSE_FILES = COPYING
+diff --git a/package/curlpp/0001-fix-invalid-conversion.patch b/package/curlpp/0001-fix-invalid-conversion.patch
+new file mode 100644
+index 0000000000..e95e9cd7c5
+--- /dev/null
++++ b/package/curlpp/0001-fix-invalid-conversion.patch
+@@ -0,0 +1,27 @@
++From b945d57a5acd12bda320a63eb9e45bbb7586cdde Mon Sep 17 00:00:00 2001
++From: Aaron Smith <aaron@soccergeek.net>
++Date: Mon, 16 Dec 2024 11:48:33 -0800
++Subject: [PATCH] Fix "invalid conversion from 'int' to 'CURLoption'" error
++
++Use cast to 'Curloption' to fix compiler error regarding invalid conversion from 'int' to 'CURLoption'.
++
++Upstream: https://github.com/jpbarrette/curlpp/pull/178
++Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
++---
++ include/curlpp/Options.hpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/curlpp/Options.hpp b/include/curlpp/Options.hpp
++index 40b64ed..292eaa7 100644
++--- a/include/curlpp/Options.hpp
+++++ b/include/curlpp/Options.hpp
++@@ -308,7 +308,7 @@ namespace options
++ 	typedef curlpp::OptionTrait<long, CURLOPT_LOW_SPEED_LIMIT> LowSpeedLimit;
++ 	typedef curlpp::OptionTrait<long, CURLOPT_LOW_SPEED_TIME> LowSpeedTime;
++ 	typedef curlpp::OptionTrait<long, CURLOPT_MAXCONNECTS> MaxConnects;
++-	typedef curlpp::OptionTrait<curl_closepolicy, CURLOPT_CLOSEPOLICY> ClosePolicy;
+++	typedef curlpp::OptionTrait<curl_closepolicy, (CURLoption)CURLOPT_CLOSEPOLICY> ClosePolicy;
++ 	typedef curlpp::OptionTrait<bool, CURLOPT_FRESH_CONNECT> FreshConnect;
++ 	typedef curlpp::OptionTrait<bool, CURLOPT_FORBID_REUSE> ForbidReuse;
++ 	typedef curlpp::OptionTrait<long, CURLOPT_CONNECTTIMEOUT> ConnectTimeout;
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
