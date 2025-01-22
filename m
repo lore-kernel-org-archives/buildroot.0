@@ -1,53 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39989C02182
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 15:54:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CD8DC02181
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 16:58:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08FDA84D79;
-	Wed, 22 Jan 2025 15:54:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95655606F4;
+	Wed, 22 Jan 2025 16:58:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NAe6x1qZ0r-s; Wed, 22 Jan 2025 15:54:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ly8WYYXQPkV5; Wed, 22 Jan 2025 16:58:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23C9884DA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9E216071A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 23C9884DA6;
-	Wed, 22 Jan 2025 15:54:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B4D21DA8
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:54:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B9E216071A;
+	Wed, 22 Jan 2025 16:58:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id EC9ECD7
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 16:58:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DE2E641741
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:54:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DAA91416AA
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 16:58:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CpbiSRQb15hL for <buildroot@buildroot.org>;
- Wed, 22 Jan 2025 15:54:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id oum3-k18YFvk for <buildroot@buildroot.org>;
+ Wed, 22 Jan 2025 16:58:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 383B441737
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 383B441737
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:54:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 33C9E8607D; Wed, 22 Jan 2025 15:54:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 51823405D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51823405D0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 51823405D0
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 16:58:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3015CFF809;
+ Wed, 22 Jan 2025 16:58:14 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1tae3S-009AGg-1F;
+ Wed, 22 Jan 2025 17:58:14 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 22 Jan 2025 16:51:37 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 86e0a2d52c5af0cf913497f82fcf1a2b91e9dfcc
-X-Git-Newrev: ff13942c67ef8cdac8209a8e2baf50fa9916940b
-X-Patchwork-Hint: ignore
-Message-Id: <20250122155426.33C9E8607D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/asterisk:
- security bump to version 20.11.1
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Buildroot Development <buildroot@buildroot.org>,  Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>,  Romain Naour <romain.naour@smile.fr>,
+ Julien Olivain <ju.o@free.fr>
+References: <20250117105515.1105270-2-bagasdotme@gmail.com>
+Date: Wed, 22 Jan 2025 17:58:14 +0100
+In-Reply-To: <20250117105515.1105270-2-bagasdotme@gmail.com> (Bagas Sanjaya's
+ message of "Fri, 17 Jan 2025 17:55:13 +0700")
+Message-ID: <87tt9qlra1.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/git: bump to version 2.48.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,58 +71,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff13942c67ef8cdac8209a8e2baf50fa9916940b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+>>>>> "Bagas" == Bagas Sanjaya <bagasdotme@gmail.com> writes:
 
-Fixes the following security issues:
+ > Bump the package version to v2.48.1. While at it, also drop clar build
+ > fix patchset applied to v2.47.0.
 
-CVE-2024-53566: Path traversal via AMI ListCategories allows access to
-outside files
+ > Release notes for v2.48.1 (security bump):
+ > https://lore.kernel.org/git/xmqq5xmh46oc.fsf@gitster.g/
 
-https://github.com/asterisk/asterisk/security/advisories/GHSA-33x6-fj46-6rfh
+ > Release notes for v2.48.0 (feature release):
+ > https://lore.kernel.org/git/xmqqplku7cvm.fsf@gitster.g/
 
-Release notes:
-https://www.asterisk.org/asterisk-news/asterisk-security-release-20-11-1-now-available/
+ > Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit cfe0e945b30ec61eddc6b8ea572118630cfd1cb1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+For 2024.02.x I have instead bumped to 2.43.6 and for 2024.11.x to
+2.47.2, which contains the same security fixes.
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 61686d9fe4..8c8ebddc47 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  a8162085b7d16f10d5cd16fc2e2cb8399dbe42bd1c321b14eec229fc0ed12570  asterisk-20.10.0.tar.gz
-+sha256  94647b3f887f7dc91df51a4f88dfc3a07cc279bef86b8d05aa72f0c49d187571  asterisk-20.11.1.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 38515e9ecd..69ff085c7a 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 20.10.0
-+ASTERISK_VERSION = 20.11.1
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
