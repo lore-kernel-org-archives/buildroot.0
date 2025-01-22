@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 337F6C02181
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 17:35:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A50E2C02182
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 17:35:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6D4F41807;
-	Wed, 22 Jan 2025 17:35:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5DE3942CB2;
+	Wed, 22 Jan 2025 17:35:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8e7s_kjwACaH; Wed, 22 Jan 2025 17:35:40 +0000 (UTC)
+ id hq1jv92t5I-l; Wed, 22 Jan 2025 17:35:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DF4342AA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31B2E42D6E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DF4342AA1;
-	Wed, 22 Jan 2025 17:35:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E6D1959
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 17:35:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 31B2E42D6E;
+	Wed, 22 Jan 2025 17:35:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A2483959
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 17:35:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0A06341B78
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 17:35:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9C2EE41AB3
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 17:35:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eIgmYjB47d2b for <buildroot@buildroot.org>;
- Wed, 22 Jan 2025 17:35:36 +0000 (UTC)
+ id PCRPBw48YUoE for <buildroot@buildroot.org>;
+ Wed, 22 Jan 2025 17:35:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 034F443029
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29A7441AFD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 034F443029
+ by smtp2.osuosl.org (Postfix) with ESMTP id 29A7441AFD
  for <buildroot@buildroot.org>; Wed, 22 Jan 2025 17:34:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EEA30860D7; Wed, 22 Jan 2025 17:34:45 +0000 (UTC)
+ id E4A20860D3; Wed, 22 Jan 2025 17:34:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Jan 2025 18:16:10 +0100
+Date: Wed, 22 Jan 2025 18:15:51 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 87dd14033561080d7aece0290c12c1a54f817817
-X-Git-Newrev: 57f2a1379e0daafca4043889639304f3cb947ac7
+X-Git-Oldrev: 954711047fc45dc61f1a05a67c282a228ebb296f
+X-Git-Newrev: 87dd14033561080d7aece0290c12c1a54f817817
 X-Patchwork-Hint: ignore
-Message-Id: <20250122173445.EEA30860D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/tzdata: bump
- version to 2025a
+Message-Id: <20250122173445.E4A20860D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/zic: bump version
+ to 2025a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,45 +65,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57f2a1379e0daafca4043889639304f3cb947ac7
+commit: https://git.buildroot.net/buildroot/commit/?id=87dd14033561080d7aece0290c12c1a54f817817
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Release notes:
 https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/MWII7R3HMCEDNUCIYQKSSTYYR7UWK4OQ/
 
+Rebased the patch and updated the hash URL.
+
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 8867b238efa66f602301667ce98a847bbe564da6)
+(cherry picked from commit d548949f2e51f29f723a7a2534e34859ca6af8ab)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/zic/0001-remove-dependency-check-on-version-file.patch | 2 +-
+ package/zic/zic.hash                                           | 4 ++--
+ package/zic/zic.mk                                             | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index 3f84ec4f87..d347bc4560 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
+diff --git a/package/zic/0001-remove-dependency-check-on-version-file.patch b/package/zic/0001-remove-dependency-check-on-version-file.patch
+index 1eb1074c31..81190ba493 100644
+--- a/package/zic/0001-remove-dependency-check-on-version-file.patch
++++ b/package/zic/0001-remove-dependency-check-on-version-file.patch
+@@ -18,7 +18,7 @@ diff --git a/Makefile b/Makefile
+ index 0087b459..4773a977 100644
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -673,7 +673,7 @@ INSTALL:	ALL install date.1
++@@ -675,7 +675,7 @@ INSTALL:	ALL install date.1
+  # Otherwise, use $(VERSION) unless it is "unknown" and there is already
+  # a 'version' file, in which case reuse the existing 'version' contents
+  # and append "-dirty" if the contents do not already end in "-dirty".
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index 124b724e6e..9e89aad23a 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
 @@ -1,4 +1,4 @@
 -# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/IZ7AO6WRE3W3TWBL5IR6PMQUL433BQIE/
--sha512  0d86686e215672343debb3471b7e7ccb8a27f063f085c9b532d5e0470377843daa0dfb6aee0db4fb9068dd52810c69aeee914a1a7c7e603fdecda7e855020193  tzdata2024b.tar.gz
+-sha512  0e4e872d6c6d9e2ce8c4e567fcbb7658942b8544157d1e48673d9cb989f3af3379fa58e7a71ab98f4a8f2ac6727de1f8c4cd1981053409ebd8989345dc640026  tzcode2024b.tar.gz
 +# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/MWII7R3HMCEDNUCIYQKSSTYYR7UWK4OQ/
-+sha512  93b8f939d39bdfe451e262666f9099c529c96c49d14c08e3611560ca660e12e16d08a22b145d615e00570fb194881618d6f9a0a617c119ab447be03279d747c3  tzdata2025a.tar.gz
++sha512  308f6a3d6ebfa18446f8296e5c799e18dccecd79ace3ba004d3f233892c7428faae152b217b22d229c59dd4e0faafee797d8b3583b58fa982b81f7cc7347f502  tzcode2025a.tar.gz
  # Locally computed:
  sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index ba53ae7c38..46c65707a7 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index 9382fa4187..71454d4fe0 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TZDATA_VERSION = 2024b
-+TZDATA_VERSION = 2025a
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
- TZDATA_SELINUX_MODULES = tzdata
+-ZIC_VERSION = 2024b
++ZIC_VERSION = 2025a
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = https://www.iana.org/time-zones/repository/releases
+ ZIC_STRIP_COMPONENTS = 0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
