@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72798C02182
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 15:18:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B16D1C02181
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 15:18:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 34A7684CE1;
-	Wed, 22 Jan 2025 15:18:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E5A284E41;
+	Wed, 22 Jan 2025 15:18:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cvM8ACfLm3Hc; Wed, 22 Jan 2025 15:18:42 +0000 (UTC)
+ id qiVgPWaed8Ah; Wed, 22 Jan 2025 15:18:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7075084E41
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46A9484EB4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7075084E41;
-	Wed, 22 Jan 2025 15:18:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 77FC92FA1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46A9484EB4;
+	Wed, 22 Jan 2025 15:18:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 974C7D7
  for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5926E4098C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 75C6484B0B
  for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JNo_3OmvpwuG for <buildroot@buildroot.org>;
- Wed, 22 Jan 2025 15:18:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8osmH1iVEbGo for <buildroot@buildroot.org>;
+ Wed, 22 Jan 2025 15:18:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B17F740906
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FB8484AAC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B17F740906
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FB8484AAC
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 15:18:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9CCF88602D; Wed, 22 Jan 2025 15:18:20 +0000 (UTC)
+ id 7D1A681103; Wed, 22 Jan 2025 15:18:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Jan 2025 15:46:23 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 5ff6213f0d96952c0dff5b299e7c92a45c8c6cd4
-X-Git-Newrev: 87af0b08d9b3825a15d7e86096f423814e54aa0c
+Date: Wed, 22 Jan 2025 16:11:47 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: 207c07d1555149f1bb1dada44161b75fb2dd76c9
+X-Git-Newrev: e85f37c892bf27b3e5e96513894bd73b0e2b4bde
 X-Patchwork-Hint: ignore
-Message-Id: <20250122151820.9CCF88602D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
- toolchain/toolchain-external/toolchain-external-arm-arm: fix
- BR2_ARCH_NEEDS_GCC_AT_LEAST_X guard
+Message-Id: <20250122151822.7D1A681103@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/curlpp: add patch
+ to fix build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,41 +65,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87af0b08d9b3825a15d7e86096f423814e54aa0c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e85f37c892bf27b3e5e96513894bd73b0e2b4bde
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-BR2_ARCH_NEEDS_GCC_AT_LEAST_X guards has been introduced by [1] to
-prevent selecting an external toolchain that did not support the GCC
-arch tuning the user had selected.
+curlpp is broken since the bump of libcurl to 8.10.0 in commit [1].
+This patch backport a pull request from upstream from [2] to solve it.
 
-But it was not updated while updating to version 13.2-rel1.
+Fixes:
+    https://autobuild.buildroot.org/results/4a4d3b248898f0e73620fcb1a7a94dcfb6e6866e/
 
-Fixes: 0dd599d171df7852ae801173c8212976e50b09e1
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/d68b999787a0e0838c3bb2d5966f11d8a349a49b
+[2] https://github.com/jpbarrette/curlpp/pull/178
 
-[1] eed1670d8a6f0899f5fdfc26bd6d1609ebc19c7a
-
-Cc: Antoine Coutant <antoine.coutant@smile.fr>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+[Julien:
+  - reword patch title one liner
+  - add link to commit which introduced the issue
+  - add link to the upstream pull request
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 203abefcf6c0ca54d28523bcd8ac7c56c249fefe)
+(cherry picked from commit f06c28d1afef98e80f358c35ae65e035aa64f6ea)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/toolchain-external-arm-arm/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/curlpp/0001-fix-invalid-conversion.patch | 27 ++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-index bee8d61164..49aee3228f 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-@@ -9,7 +9,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
- 	depends on BR2_ARM_CPU_HAS_NEON
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "aarch64"
- 	depends on BR2_ARM_EABIHF
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_INSTALL_LIBSTDCPP
+diff --git a/package/curlpp/0001-fix-invalid-conversion.patch b/package/curlpp/0001-fix-invalid-conversion.patch
+new file mode 100644
+index 0000000000..e95e9cd7c5
+--- /dev/null
++++ b/package/curlpp/0001-fix-invalid-conversion.patch
+@@ -0,0 +1,27 @@
++From b945d57a5acd12bda320a63eb9e45bbb7586cdde Mon Sep 17 00:00:00 2001
++From: Aaron Smith <aaron@soccergeek.net>
++Date: Mon, 16 Dec 2024 11:48:33 -0800
++Subject: [PATCH] Fix "invalid conversion from 'int' to 'CURLoption'" error
++
++Use cast to 'Curloption' to fix compiler error regarding invalid conversion from 'int' to 'CURLoption'.
++
++Upstream: https://github.com/jpbarrette/curlpp/pull/178
++Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
++---
++ include/curlpp/Options.hpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/curlpp/Options.hpp b/include/curlpp/Options.hpp
++index 40b64ed..292eaa7 100644
++--- a/include/curlpp/Options.hpp
+++++ b/include/curlpp/Options.hpp
++@@ -308,7 +308,7 @@ namespace options
++ 	typedef curlpp::OptionTrait<long, CURLOPT_LOW_SPEED_LIMIT> LowSpeedLimit;
++ 	typedef curlpp::OptionTrait<long, CURLOPT_LOW_SPEED_TIME> LowSpeedTime;
++ 	typedef curlpp::OptionTrait<long, CURLOPT_MAXCONNECTS> MaxConnects;
++-	typedef curlpp::OptionTrait<curl_closepolicy, CURLOPT_CLOSEPOLICY> ClosePolicy;
+++	typedef curlpp::OptionTrait<curl_closepolicy, (CURLoption)CURLOPT_CLOSEPOLICY> ClosePolicy;
++ 	typedef curlpp::OptionTrait<bool, CURLOPT_FRESH_CONNECT> FreshConnect;
++ 	typedef curlpp::OptionTrait<bool, CURLOPT_FORBID_REUSE> ForbidReuse;
++ 	typedef curlpp::OptionTrait<long, CURLOPT_CONNECTTIMEOUT> ConnectTimeout;
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
