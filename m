@@ -4,76 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9A54C02181
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 20:35:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E498C02181
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 20:42:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71164410C5;
-	Wed, 22 Jan 2025 20:35:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0639340026;
+	Wed, 22 Jan 2025 20:42:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A2JDeMXRdLAA; Wed, 22 Jan 2025 20:35:33 +0000 (UTC)
+ id h-edGyWiaM3Y; Wed, 22 Jan 2025 20:42:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BCE4410E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D98B2414A1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BCE4410E6;
-	Wed, 22 Jan 2025 20:35:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id DC7FE959
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 20:35:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D98B2414A1;
+	Wed, 22 Jan 2025 20:42:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id F1533B88
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 20:42:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CAA9783578
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 20:35:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D218C403DA
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 20:42:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V4UYEojCl_ct for <buildroot@buildroot.org>;
- Wed, 22 Jan 2025 20:35:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5475A80EFA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5475A80EFA
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5475A80EFA
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 20:35:29 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 076A85FFA3;
- Wed, 22 Jan 2025 21:35:23 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:57160])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 22 Jan 2025 21:35:23 +0100
-MIME-Version: 1.0
-Date: Wed, 22 Jan 2025 21:35:23 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yAujHi9Qyudk for <buildroot@buildroot.org>;
+ Wed, 22 Jan 2025 20:42:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1602403F6
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E1602403F6
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 20:42:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C5E088608D; Wed, 22 Jan 2025 20:42:40 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: yann.morin@orange.com
-Cc: buildroot@buildroot.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>
-In-Reply-To: <b345d4f8d7c4dcb795ec6fcb9e4aaa5c5cd4553b.1737528518.git.yann.morin@orange.com>
-References: <b345d4f8d7c4dcb795ec6fcb9e4aaa5c5cd4553b.1737528518.git.yann.morin@orange.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <9380163c5c3c01d9e2e199a4510a442d@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737578127;
- bh=CniIGgpOVuPnCNOfiUZlghRd1OJ9GWP96mC7l//qxtg=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=od93sw8BWrOtWB8QlS8GUDlbxcSpGA4N2wDDV9kEhfrI3ZK0Qhji7ZZLd0F2GCr9J
- Pub2OwjlUJWjFvhu+wgwf48sSi2ejtz0I/LRdoifoToggPdFraHkbJcnm297ri5L+6
- FOm+AAXMqjtRyOyksGK7LIf6pOTuF6SQgW2U2j3quTw9mdfh3EbRWn2DDFlIm/to+n
- I47O2mR2CanGJyXTjbzDam9TyZYrJnt3ZbNo9KQQi396WHiHdd1CvX3Pow/MPor2eC
- +lAUsNeK+U5DP4rR2mG5PzKTfzAfK3s+zi2KLmDUBvnawG0DGWw/lvxAPh1AxUtCv5
- 09Koc/FndnaXA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=od93sw8B
-Subject: Re: [Buildroot] [PATCH v2] package/pkg-generic: store real version
- in legal manifest
+To: buildroot@buildroot.org
+Date: Wed, 22 Jan 2025 21:37:08 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 686694792b06b11b2cef0acf28d81e25a280cb72
+X-Git-Newrev: 24a19e01a6449cc22e0a83660ff651da8cd50b91
+X-Patchwork-Hint: ignore
+Message-Id: <20250122204240.C5E088608D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mtools: bump version to 4.0.47
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,48 +58,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 22/01/2025 07:48, yann.morin@orange.com wrote:
-> From: "Yann E. MORIN" <yann.morin@orange.com>
-> 
-> The legal manifest currently stores the $(PKG)_VERSION variable.
-> However, that variable undergoes a set of changes so that it is
-> suitable for creating files and Makefile rules; that new value
-> is purely a technical, internal detail of how Buildroot handles
-> things.
-> 
-> In the legal manifest, we need access to the real value for the
-> version, as this is what will allow actual references to the
-> upstream package. If the version string is mangled, like slashes
-> replaced with underscores, this introduces ambiguities as to what
-> exactly the version is.
-> 
-> In Buildroot, there is no package, with a constant version, that
-> exhibits that issue; for those packages where it is possible to
-> set a custom git tree and version, like linux or uboot, such a
-> custom tree can have tags with a slash (not a colon or a space,
-> forbidden by git); packages in a br2-external can also use such
-> version strings as well.
-> 
-> The packages that do have such versions are not legion, but they
-> do exist. For example, Apache's ant buildsystem does use a slash
-> in their reelase tags, like rel/1.10.15:
->     https://github.com/apache/ant/tags
-> 
-> Change the legal manifest to include the actual, original value
-> as was set in the .mk file.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=24a19e01a6449cc22e0a83660ff651da8cd50b91
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Release notes:
+https://lists.gnu.org/archive/html/info-mtools/2025-01/msg00004.html
+
+Changelog:
+https://svn.savannah.gnu.org/viewvc/mtools/tags/4.0.47/NEWS?view=markup
+
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/mtools/mtools.hash | 2 +-
+ package/mtools/mtools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/mtools/mtools.hash b/package/mtools/mtools.hash
+index 1a10afdbeb..bce1951224 100644
+--- a/package/mtools/mtools.hash
++++ b/package/mtools/mtools.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  8241b370d2337968c1d1314cbdbd5d5d188ddc905f2eb1198373a2bd90c70fab  mtools-4.0.46.tar.lz
++sha256  2709cd2f42d65500829b056cb0630edd515d7060b4865bad31277f0da9f9e9d5  mtools-4.0.47.tar.lz
+ 
+ # Locally calculated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
+index 1e98880058..45b4b8d49b 100644
+--- a/package/mtools/mtools.mk
++++ b/package/mtools/mtools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MTOOLS_VERSION = 4.0.46
++MTOOLS_VERSION = 4.0.47
+ MTOOLS_SOURCE = mtools-$(MTOOLS_VERSION).tar.lz
+ MTOOLS_SITE = $(BR2_GNU_MIRROR)/mtools
+ MTOOLS_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
