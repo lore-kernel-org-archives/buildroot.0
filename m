@@ -1,65 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CD8DC02181
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 16:58:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8569C02181
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jan 2025 17:02:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95655606F4;
-	Wed, 22 Jan 2025 16:58:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ly8WYYXQPkV5; Wed, 22 Jan 2025 16:58:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9E216071A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9E216071A;
-	Wed, 22 Jan 2025 16:58:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id EC9ECD7
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 16:58:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DAA91416AA
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 16:58:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 75E8A402BA;
+	Wed, 22 Jan 2025 17:02:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oum3-k18YFvk for <buildroot@buildroot.org>;
- Wed, 22 Jan 2025 16:58:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id hQX1HRz8Qyim; Wed, 22 Jan 2025 17:02:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31DA640321
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 31DA640321;
+	Wed, 22 Jan 2025 17:02:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AD22CD7
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 17:02:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 93D666067B
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 17:02:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y1IIK4o5TmhY for <buildroot@buildroot.org>;
+ Wed, 22 Jan 2025 17:02:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 51823405D0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51823405D0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 51823405D0
- for <buildroot@buildroot.org>; Wed, 22 Jan 2025 16:58:17 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3015CFF809;
- Wed, 22 Jan 2025 16:58:14 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tae3S-009AGg-1F;
- Wed, 22 Jan 2025 17:58:14 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4094606F4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B4094606F4
+ for <buildroot@buildroot.org>; Wed, 22 Jan 2025 17:02:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AC18186064; Wed, 22 Jan 2025 17:02:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: Buildroot Development <buildroot@buildroot.org>,  Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>,  Romain Naour <romain.naour@smile.fr>,
- Julien Olivain <ju.o@free.fr>
-References: <20250117105515.1105270-2-bagasdotme@gmail.com>
-Date: Wed, 22 Jan 2025 17:58:14 +0100
-In-Reply-To: <20250117105515.1105270-2-bagasdotme@gmail.com> (Bagas Sanjaya's
- message of "Fri, 17 Jan 2025 17:55:13 +0700")
-Message-ID: <87tt9qlra1.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/git: bump to version 2.48.1
+To: buildroot@buildroot.org
+Date: Wed, 22 Jan 2025 17:56:16 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: ffdb6fead27cc81379ce4752c2a095e542182311
+X-Git-Newrev: 38bebdea1941e8d2749751a20dc73593ec014f1a
+X-Patchwork-Hint: ignore
+Message-Id: <20250122170246.AC18186064@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/git: security
+ bump to version 2.47.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,29 +59,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bagas" == Bagas Sanjaya <bagasdotme@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=38bebdea1941e8d2749751a20dc73593ec014f1a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
- > Bump the package version to v2.48.1. While at it, also drop clar build
- > fix patchset applied to v2.47.0.
+Fixes the following vulnerabilities:
 
- > Release notes for v2.48.1 (security bump):
- > https://lore.kernel.org/git/xmqq5xmh46oc.fsf@gitster.g/
+ - CVE-2024-50349:
 
- > Release notes for v2.48.0 (feature release):
- > https://lore.kernel.org/git/xmqqplku7cvm.fsf@gitster.g/
+   Printing unsanitized URLs when asking for credentials made the
+   user susceptible to crafted URLs (e.g. in recursive clones) that
+   mislead the user into typing in passwords for trusted sites that
+   would then be sent to untrusted sites instead.
 
- > Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+ - CVE-2024-52006
 
-For 2024.02.x I have instead bumped to 2.43.6 and for 2024.11.x to
-2.47.2, which contains the same security fixes.
+   Git may pass on Carriage Returns via the credential protocol to
+   credential helpers which use line-reading functions that
+   interpret said Carriage Returns as line endings, even though Git
+   did not intend that.
 
--- 
-Bye, Peter Korsgaard
+For more details, see the announcement:
+https://lore.kernel.org/git/xmqq5xmh46oc.fsf@gitster.g/
+
+Additionally, 2.47.1 contained a number of fixes:
+https://lore.kernel.org/git/xmqq5xob6coo.fsf@gitster.g/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/git/git.hash b/package/git/git.hash
+index c290ebe6bd..97ba3936db 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,5 +1,5 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  1ce114da88704271b43e027c51e04d9399f8c88e9ef7542dae7aebae7d87bc4e  git-2.47.0.tar.xz
++sha256  b19268be6b6f1556b47a9dd834272e167d3a75740cdcd283cf3812edffe3930f  git-2.47.2.tar.xz
+ # Locally calculated
+ sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index f56807a00f..397a6984ba 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.47.0
++GIT_VERSION = 2.47.2
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
