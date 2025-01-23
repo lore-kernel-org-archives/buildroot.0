@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA6FDC0218C
-	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 21:18:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59CA8C0218D
+	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 21:18:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A8FB82132;
-	Thu, 23 Jan 2025 21:18:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BA5242599;
+	Thu, 23 Jan 2025 21:18:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k12Wtg4RtmOc; Thu, 23 Jan 2025 21:18:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Lij1rleGpZBd; Thu, 23 Jan 2025 21:18:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A82048322E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F31342598
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A82048322E;
-	Thu, 23 Jan 2025 21:18:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F31342598;
+	Thu, 23 Jan 2025 21:18:27 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 253B1B88
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D2E4959
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 04638415E2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0F24C40467
  for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9lqBtdQ17Bhh for <buildroot@buildroot.org>;
- Thu, 23 Jan 2025 21:18:17 +0000 (UTC)
+ id bv31hLqYYM6p for <buildroot@buildroot.org>;
+ Thu, 23 Jan 2025 21:18:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC60D40467
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02911415D9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC60D40467
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 02911415D9
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D413A82268; Thu, 23 Jan 2025 21:18:17 +0000 (UTC)
+ id EAFFC813BE; Thu, 23 Jan 2025 21:18:17 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 23 Jan 2025 21:44:19 +0100
+Date: Thu, 23 Jan 2025 21:44:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ba7b462b1d453df761750b91b55860dc970accc7
-X-Git-Newrev: 6818043a5068b19a02b738b0249594b97cb5b170
+X-Git-Oldrev: 6818043a5068b19a02b738b0249594b97cb5b170
+X-Git-Newrev: 26a7441aa2fb344e4b1cdceb4157f8b442cd93da
 X-Patchwork-Hint: ignore
-Message-Id: <20250123211817.D413A82268@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-boto3: bump to version
+Message-Id: <20250123211817.EAFFC813BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-botocore: bump to version
  1.36.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -65,44 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6818043a5068b19a02b738b0249594b97cb5b170
+commit: https://git.buildroot.net/buildroot/commit/?id=26a7441aa2fb344e4b1cdceb4157f8b442cd93da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-boto3/python-boto3.hash | 4 ++--
- package/python-boto3/python-boto3.mk   | 4 ++--
+ package/python-botocore/python-botocore.hash | 4 ++--
+ package/python-botocore/python-botocore.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-boto3/python-boto3.hash b/package/python-boto3/python-boto3.hash
-index 9285b3d7ca..4036519183 100644
---- a/package/python-boto3/python-boto3.hash
-+++ b/package/python-boto3/python-boto3.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/boto3/json
--md5  07aaafa117a4a0ed4025296a85018276  boto3-1.35.97.tar.gz
--sha256  7d398f66a11e67777c189d1f58c0a75d9d60f98d0ee51b8817e828930bf19e4e  boto3-1.35.97.tar.gz
-+md5  a8f7a881ac754a889490c65cad7aa97b  boto3-1.36.3.tar.gz
-+sha256  53a5307f6a3526ee2f8590e3c45efa504a3ea4532c1bfe4926c0c19bf188d141  boto3-1.36.3.tar.gz
+diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
+index aebdba3d4f..1b69f254aa 100644
+--- a/package/python-botocore/python-botocore.hash
++++ b/package/python-botocore/python-botocore.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/botocore/json
+-md5  4e9617831cbc77e09203474718b40a2d  botocore-1.35.97.tar.gz
+-sha256  88f2fab29192ffe2f2115d5bafbbd823ff4b6eb2774296e03ec8b5b0fe074f61  botocore-1.35.97.tar.gz
++md5  9d12679ec90f7e7185006dd0535595a6  botocore-1.36.3.tar.gz
++sha256  775b835e979da5c96548ed1a0b798101a145aec3cd46541d62e27dda5a94d7f8  botocore-1.36.3.tar.gz
  # Locally computed sha256 checksums
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/python-boto3/python-boto3.mk b/package/python-boto3/python-boto3.mk
-index 11fa34bf6c..3d8a7852ea 100644
---- a/package/python-boto3/python-boto3.mk
-+++ b/package/python-boto3/python-boto3.mk
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  tests/unit/auth/aws4_testsuite/LICENSE
+diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
+index 42ca5b2e63..e000700c1e 100644
+--- a/package/python-botocore/python-botocore.mk
++++ b/package/python-botocore/python-botocore.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BOTO3_VERSION = 1.35.97
-+PYTHON_BOTO3_VERSION = 1.36.3
- PYTHON_BOTO3_SOURCE = boto3-$(PYTHON_BOTO3_VERSION).tar.gz
--PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/b0/0b/be51ba3bf22832bc918b4059ca182877681b02a45627c51d70efbbf1991d
-+PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/07/12/b9ad4c3dd6e6044243d08bae076795e41357651683f4fad99d5828c4291c
- PYTHON_BOTO3_SETUP_TYPE = setuptools
- PYTHON_BOTO3_LICENSE = Apache-2.0
- PYTHON_BOTO3_LICENSE_FILES = LICENSE
+-PYTHON_BOTOCORE_VERSION = 1.35.97
++PYTHON_BOTOCORE_VERSION = 1.36.3
+ PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
+-PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/48/cd/79656501384e265c9b3099358da2ec6a18568ddf44e5dd61582692a3e7b3
++PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/3a/61/69eb06a803c83e0da733b60b2bc65880c18ef2dee19ee10cf8732794a3c1
+ PYTHON_BOTOCORE_SETUP_TYPE = setuptools
+ PYTHON_BOTOCORE_LICENSE = Apache-2.0
+ PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt tests/unit/auth/aws4_testsuite/LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
