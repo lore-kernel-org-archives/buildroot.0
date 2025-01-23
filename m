@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 765FCC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:35:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34150C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 16:35:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A1BA4F163;
-	Fri, 28 Feb 2025 16:35:06 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JnHWviNZEbDE; Fri, 28 Feb 2025 16:35:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE50E4F157
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE50E4F157;
-	Fri, 28 Feb 2025 16:35:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6F9A068
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4D0356FB48
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 060F26FC4D;
+	Fri, 28 Feb 2025 16:35:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JK78YfG16rr5 for <buildroot@buildroot.org>;
+ id 08S7Iie9qC2j; Fri, 28 Feb 2025 16:35:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FB076FBF5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FB076FBF5;
+	Fri, 28 Feb 2025 16:35:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7E359711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B83E40AED
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H-kggcc8Nmrl for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:30:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79DDB6FB1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A1BB40413
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 79DDB6FB1E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A1BB40413
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6803D82581; Fri, 28 Feb 2025 16:30:17 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 5661F818ED; Fri, 28 Feb 2025 16:30:16 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 24 Jan 2025 15:52:24 +0100
+Date: Thu, 23 Jan 2025 22:07:07 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bb10ce004991a21ee56bc887bc4f5c943bb12f7d
-X-Git-Newrev: 6e9197130696f448e5e37799076b905d9dd07390
+X-Git-Oldrev: c87726dd336b7f9a1cebd26a327e47aa25d8b4d2
+X-Git-Newrev: bb10ce004991a21ee56bc887bc4f5c943bb12f7d
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163017.6803D82581@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rauc: bump to 1.13
+Message-Id: <20250228163017.5661F818ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/swupdate: bump to
+ security version 2024.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,58 +60,55 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0731087877481721485=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0731087877481721485==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=6e9197130696f448e5e37799076b905d9dd07390
+commit: https://git.buildroot.net/buildroot/commit/?id=bb10ce004991a21ee56bc887bc4f5c943bb12f7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog: https://github.com/rauc/rauc/releases/tag/v1.13
+Fix a high severity bug with the raw handler
 
-Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
-Tested-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+For release note, see:
+https://github.com/sbabic/swupdate/releases/tag/2024.12.1
+
+The security fix (and only new commit) in this point release is:
+https://github.com/sbabic/swupdate/commit/434815b94d73c20b5461b954c4e62144ca29aa8f
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Julien: fix commit title typo, add link to security commit fix]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/rauc/rauc.hash | 2 +-
- package/rauc/rauc.mk   | 2 +-
+ package/swupdate/swupdate.hash | 2 +-
+ package/swupdate/swupdate.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index f3ab0a0be9..ff3e0e72e4 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  96681e119af8b6b9bb30e856a831e5a5b3292e9a5959d26ffa274b5135bc5031  rauc-1.12.tar.xz
-+sha256  1ddb218a5d713c8dbd6e04d5501d96629f1c8e2521576fbd9e7751edb7da113e  rauc-1.13.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 475aee5d89..92f58c6139 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
+diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
+index 847c5a1098..00e7d0b623 100644
+--- a/package/swupdate/swupdate.hash
++++ b/package/swupdate/swupdate.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  528c61769456d7740a9ba1d045f25f7587203e2a2e71a9a67998f0e13e2db149  swupdate-2024.12.tar.gz
++sha256  8470e9e0540d0e3299d8dd57b4a230f3b640dd4491e8ba705755d6bc75569832  swupdate-2024.12.1.tar.gz
+ sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
+ sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
+ sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index fe6ef2dd6d..647a6f071b 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RAUC_VERSION = 1.12
-+RAUC_VERSION = 1.13
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
-
---===============0731087877481721485==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-SWUPDATE_VERSION = 2024.12
++SWUPDATE_VERSION = 2024.12.1
+ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+ SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
+ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0731087877481721485==--
