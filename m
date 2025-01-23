@@ -4,72 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCB0FC02182
-	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 20:52:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96DA6C02182
+	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 21:18:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93A6A42530;
-	Thu, 23 Jan 2025 20:52:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42E8C406EE;
+	Thu, 23 Jan 2025 21:18:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bCAJPOEzQO7v; Thu, 23 Jan 2025 20:52:30 +0000 (UTC)
+ id tJe1ewKOi0xd; Thu, 23 Jan 2025 21:18:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E2754253B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAD2340564
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E2754253B;
-	Thu, 23 Jan 2025 20:52:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F772959
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:52:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EAD2340564;
+	Thu, 23 Jan 2025 21:18:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CE38BB88
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2030342530
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:52:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AFE6B82F3D
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ow2IU-i8yZKH for <buildroot@buildroot.org>;
- Thu, 23 Jan 2025 20:52:27 +0000 (UTC)
-X-Greylist: delayed 427 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 23 Jan 2025 20:52:25 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E06714253B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E06714253B
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.132;
- helo=smtpdh18-1.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AJwsYRQdDNIU for <buildroot@buildroot.org>;
+ Thu, 23 Jan 2025 21:18:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpdh18-1.aruba.it (smtpdh18-1.aruba.it [62.149.155.132])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E06714253B
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:52:25 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id b44itBCOBH8pXb44it7XwV; Thu, 23 Jan 2025 21:45:16 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8A1583563
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8A1583563
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C2EF18616F; Thu, 23 Jan 2025 21:18:17 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu, 23 Jan 2025 21:18:58 +0100
-Message-Id: <20250123201858.111999-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfDrH/xZQIZrvQCAI82uXMo/KkDxWIaKQk8QkPzkJhL6Qpx3H6Sk2oB8zfRZiRZ+p6aBCItnUAH31WRekuNfEoXsc9POn+fwZ287e8s5mZ4TAJ1o/ro/6
- X0+mrx4qddZ89ohUzU980A768wWDUurLY2tr/vnkdPXeOmo309VBRZ2FtxJBN9oK6qN2boWABvnkwzz0EKdsO3b7lfS6kiQFGMAbA8EPTj5pl45oAhzxYEU7
- FwWOC8fuYvirjOl+zwThD3hMC+AUEXDTj0hWayDXMU4=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1737665116; bh=suQhI4L7jUFoo+oxSrYhIvkFa0oDlZ1jdppODX9UEtk=;
- h=From:To:Subject:Date:MIME-Version;
- b=H8l/6HaX4bANYuafC/9hiOJjzPrh52IcRldATvDHMOHVj8NlToJUksbD0RJDnVadF
- 27+v7dt2n9nxENPH9kbs+b995q61pXJ1+ZFvt8rNckY2gBej1Ui/lIUowJE/XPib9Y
- BoKsgK0DQnAv0L8mdD4YpCyu4706fQ9agIZ4ioZhxGkCazd1XaO9RKDz8/WDBJfdQj
- tknnL/mRe29skjOScp9rwWMphFlWZ7DV8UPWuDDczZqeBWYQDVS1P5ZCMuk3pPLgdi
- Ae6uYBDT/jrwqyQAZxCwlfFxKV5UlhyMsFE9VkcxwBwvr/Uw9Jt+ctrbbk28r52Ylt
- OwWOmVZYFjXDg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=H8l/6HaX
-Subject: [Buildroot] [PATCH] package/swupdate: bump to securoty version
- 2024.12.1
+Date: Thu, 23 Jan 2025 21:44:16 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ac832e20bd71c5168457d9cc3a774b3615c01f45
+X-Git-Newrev: ba7b462b1d453df761750b91b55860dc970accc7
+X-Patchwork-Hint: ignore
+Message-Id: <20250123211817.C2EF18616F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-alembic: bump to version
+ 1.14.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,49 +59,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix a high severity bug with the raw handler
+commit: https://git.buildroot.net/buildroot/commit/?id=ba7b462b1d453df761750b91b55860dc970accc7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For release note, see:
-https://github.com/sbabic/swupdate/releases/tag/2024.12.1
+License hash changed due to year update:
+https://github.com/sqlalchemy/alembic/commit/6bfca645563473da5b3212b827614d762e80feb0
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/swupdate/swupdate.hash | 2 +-
- package/swupdate/swupdate.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-alembic/python-alembic.hash | 6 +++---
+ package/python-alembic/python-alembic.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index 847c5a1098..00e7d0b623 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
+diff --git a/package/python-alembic/python-alembic.hash b/package/python-alembic/python-alembic.hash
+index 5f20b18be0..3795afa260 100644
+--- a/package/python-alembic/python-alembic.hash
++++ b/package/python-alembic/python-alembic.hash
 @@ -1,5 +1,5 @@
- # Locally calculated
--sha256  528c61769456d7740a9ba1d045f25f7587203e2a2e71a9a67998f0e13e2db149  swupdate-2024.12.tar.gz
-+sha256  8470e9e0540d0e3299d8dd57b4a230f3b640dd4491e8ba705755d6bc75569832  swupdate-2024.12.1.tar.gz
- sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
- sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
- sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index fe6ef2dd6d..647a6f071b 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/alembic/json
+-md5  a12686c41704218fdb29f140be75cdfd  alembic-1.14.0.tar.gz
+-sha256  b00892b53b3642d0b8dbedba234dbf1924b69be83a9a769d5a624b01094e304b  alembic-1.14.0.tar.gz
++md5  5fd5fe35fe820d03c0594cb3edd16829  alembic-1.14.1.tar.gz
++sha256  496e888245a53adf1498fcab31713a469c65836f8de76e01399aa1c3e90dd213  alembic-1.14.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256  ce19e7ba2b77ca584b82a6792856e138eb30b311c896b076c09a405ee45fbee9  LICENSE
++sha256  35ea9c3419b261faf1be448c4f47d9255281bf6b36b5ffea55052227d4ba54de  LICENSE
+diff --git a/package/python-alembic/python-alembic.mk b/package/python-alembic/python-alembic.mk
+index 5050765db1..c6dcce445c 100644
+--- a/package/python-alembic/python-alembic.mk
++++ b/package/python-alembic/python-alembic.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--SWUPDATE_VERSION = 2024.12
-+SWUPDATE_VERSION = 2024.12.1
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
- SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
--- 
-2.39.5
-
+-PYTHON_ALEMBIC_VERSION = 1.14.0
++PYTHON_ALEMBIC_VERSION = 1.14.1
+ PYTHON_ALEMBIC_SOURCE = alembic-$(PYTHON_ALEMBIC_VERSION).tar.gz
+-PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/00/1e/8cb8900ba1b6360431e46fb7a89922916d3a1b017a8908a7c0499cc7e5f6
++PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/99/09/f844822e4e847a3f0bd41797f93c4674cd4d2462a3f6c459aa528cdf786e
+ PYTHON_ALEMBIC_SETUP_TYPE = setuptools
+ PYTHON_ALEMBIC_LICENSE = MIT
+ PYTHON_ALEMBIC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
