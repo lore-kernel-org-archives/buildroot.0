@@ -4,49 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4A48C02182
-	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 20:40:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2119C02182
+	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 20:42:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63C1742454;
-	Thu, 23 Jan 2025 20:40:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A491942454;
+	Thu, 23 Jan 2025 20:42:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BL_lJMLyJv8y; Thu, 23 Jan 2025 20:40:46 +0000 (UTC)
+ id 7xj_irV8-ECP; Thu, 23 Jan 2025 20:42:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18F3D42470
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C0A542480
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18F3D42470;
-	Thu, 23 Jan 2025 20:40:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 66E75959
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:40:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C0A542480;
+	Thu, 23 Jan 2025 20:42:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 457CA959
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:42:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5433742454
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:40:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3388984C7B
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:42:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kvI6papL_cB3 for <buildroot@buildroot.org>;
- Thu, 23 Jan 2025 20:40:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46F0A42470
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 46F0A42470
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:40:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2FE42860E8; Thu, 23 Jan 2025 20:40:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CsTzO-sf-PwE for <buildroot@buildroot.org>;
+ Thu, 23 Jan 2025 20:42:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2597180D79
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2597180D79
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2597180D79
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:42:18 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 0A5835FFB1;
+ Thu, 23 Jan 2025 21:42:15 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:36960])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 23 Jan 2025 21:42:15 +0100
+MIME-Version: 1.0
+Date: Thu, 23 Jan 2025 21:42:15 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 23 Jan 2025 21:38:09 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 11c11b9a247a920059a4e0f569da8eb39ad1914f
-X-Git-Newrev: ac832e20bd71c5168457d9cc3a774b3615c01f45
-X-Patchwork-Hint: ignore
-Message-Id: <20250123204044.2FE42860E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wine: bump to version 10.0
+To: =?UTF-8?Q?Andr=C3=A9_Zwing?= <nerv@dawncrow.de>
+Cc: buildroot@buildroot.org
+In-Reply-To: <40e76586-651d-4318-a37e-043564b24ad7@dawncrow.de>
+References: <20250122211009.1124558-1-ju.o@free.fr>
+ <40e76586-651d-4318-a37e-043564b24ad7@dawncrow.de>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <1fff6d877d4cfd54b51d98154b587054@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1737664937;
+ bh=E6KW/wbla0Ymjn/LxCYMHtBzDttQCw1vqSiNqErJbEI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=iEy0QkA7vyhPXVOQ7nlK+GVx+KxNNtOTSIgEnuuDGgDebCJvjYFjMoh/Z4nOgZsFH
+ 4mhNHHTIy6Qn9b+9wT2pVzsvswFdjA7Z2cPsbEPhR+xP2vPTWV/m4x0sM6czFkpCa+
+ BJgcCGtzc4rb7pQcujmAg8xcI9kqiyVAgYCiQeK41TeSOvDtvyS/eIZOh8XrAG3O2+
+ RhTJYwS41KfDADfwwAaVvsOr1scD42/lm03mhlmMmql74Szs1B+jaDl5rXFc5CBS/V
+ Gnh9DrdGb/izAWXCJ4Cjy1dsdQCRTDV71L0D6Bf2o4ZHE8ON1y26yYawME0IYVOy/q
+ cOoHqMHwjp2mQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=iEy0QkA7
+Subject: Re: [Buildroot] [PATCH 1/1] package/wine: bump to version 10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,80 +84,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0382202053412472058=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0382202053412472058==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=ac832e20bd71c5168457d9cc3a774b3615c01f45
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-For a summary of changes since 9.19, see:
-https://www.winehq.org/news/
-
-This commit also adds a comment near _VERSION describing the intent to
-stick the package on stable versions. See [1].
-
-[1] https://lore.kernel.org/buildroot/ff5c88fb-c745-483c-9f8e-8aa49164e76b@dawncrow.de/
-
-Acked-by: André Zwing <nerv@dawncrow.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/wine/wine.hash |  6 +++---
- package/wine/wine.mk   | 10 ++++++++--
- 2 files changed, 11 insertions(+), 5 deletions(-)
-
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index 61de6db80f..eb0d45ca0a 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,8 +1,8 @@
- # From:
--# https://dl.winehq.org/wine/source/9.x/sha512sums.asc
--sha512  530219c6a337f2996eac92d644ab603528b82cc6136cc37c1e6aa736d418f33c6f4b0d54f3537b04bceaf4487d84abcf926a2f5e9536ed4e966c4fe63c5b6ddd  wine-9.19.tar.xz
-+# https://dl.winehq.org/wine/source/10.0/sha512sums.asc
-+sha512  effb41c5641993e2e52eaa825cc19b7d9846e084992c5a5b066ead2339b24384d320898a9cee347a9a87106bcb3b0f54c8cd2c8d4de3a887a658052ddd5168d6  wine-10.0.tar.xz
- # Locally calculated after checking pgp signature
--sha256  2c13a0c3f31f25a54d415d86785a1ad46ef8a07ae973b6b699345a45206ac015  wine-9.19.tar.xz
-+sha256  c5e0b3f5f7efafb30e9cd4d9c624b85c583171d33549d933cd3402f341ac3601  wine-10.0.tar.xz
- # Locally calculated
- sha256  e237fa56668030e928551ddd60f05df5fe957f75eab874bbd017e085ed722e7c  COPYING.LIB
- sha256  51433d87540ee2f30e3cff986e00e1477880002bf993106a13775ed60d4e0af4  LICENSE
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 6b1ba19b0b..efee63a294 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -4,9 +4,15 @@
- #
- ################################################################################
- 
--WINE_VERSION = 9.19
-+# In Buildroot, Wine should be updated only on "stable" versions. This
-+# usually corresponds to version "X.0" (for initial stable releases)
-+# or "X.0.y" (for maintenance releases). Please avoid updating to a
-+# development version, unless it is absolutely needed (for example:
-+# incompatibility with another library and no maintenance stable
-+# version is available).
-+WINE_VERSION = 10.0
- WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
--WINE_SITE = https://dl.winehq.org/wine/source/9.x
-+WINE_SITE = https://dl.winehq.org/wine/source/10.0
- WINE_LICENSE = LGPL-2.1+
- WINE_LICENSE_FILES = COPYING.LIB LICENSE
- WINE_CPE_ID_VENDOR = winehq
-
---===============0382202053412472058==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0382202053412472058==--
+SGkgQW5kcsOpLAoKT24gMjIvMDEvMjAyNSAyMjo1MiwgQW5kcsOpIFp3aW5nIHdyb3RlOgo+IE5v
+IHRpbWUgdG8gdGVzdCByaWdodCBub3csIGJ1dDoKPiAKPiBBY2tlZC1ieTogQW5kcsOpIFp3aW5n
+IDxuZXJ2QGRhd25jcm93LmRlPgoKVGhhbmtzIGZvciB0aGUgQWNrLiBJIGFwcGxpZWQgdGhpcyBw
+YXRjaCB0byBtYXN0ZXIuCgo+IEFtIDIyLjAxLjI1IHVtIDIyOjEwIHNjaHJpZWIgSnVsaWVuIE9s
+aXZhaW46Cj4+IEZvciBhIHN1bW1hcnkgb2YgY2hhbmdlcyBzaW5jZSA5LjE5LCBzZWU6Cj4+IGh0
+dHBzOi8vd3d3LndpbmVocS5vcmcvbmV3cy8KPj4gCj4+IFRoaXMgY29tbWl0IGFsc28gYWRkcyBh
+IGNvbW1lbnQgbmVhciBfVkVSU0lPTiBkZXNjcmliaW5nIHRoZSBpbnRlbnQgdG8KPj4gc3RpY2sg
+dGhlIHBhY2thZ2Ugb24gc3RhYmxlIHZlcnNpb25zLiBTZWUgWzFdLgo+PiAKPj4gWzFdIAo+PiBo
+dHRwczovL2xvcmUua2VybmVsLm9yZy9idWlsZHJvb3QvZmY1Yzg4ZmItYzc0NS00ODNjLTlmOGUt
+OGFhNDkxNjRlNzZiQGRhd25jcm93LmRlLwo+PiAKPj4gU2lnbmVkLW9mZi1ieTogSnVsaWVuIE9s
+aXZhaW4gPGp1Lm9AZnJlZS5mcj4KCkJlc3QgcmVnYXJkcywKCkp1bGllbi4KX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
+dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
+bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
