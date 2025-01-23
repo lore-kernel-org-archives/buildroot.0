@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52C08C0218B
-	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 20:34:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF080C02182
+	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 20:37:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A010A84FF6;
-	Thu, 23 Jan 2025 20:34:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 770F984FF6;
+	Thu, 23 Jan 2025 20:37:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kBEnRan3w7ys; Thu, 23 Jan 2025 20:34:40 +0000 (UTC)
+ id JJjioBsgaICM; Thu, 23 Jan 2025 20:37:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D73B84FF7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81C8A84FF7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D73B84FF7;
-	Thu, 23 Jan 2025 20:34:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6AAEA959
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:34:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81C8A84FF7;
+	Thu, 23 Jan 2025 20:37:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1233A959
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:37:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A819607C9
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:34:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F37BD42932
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:37:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BlPpBek6Qun8 for <buildroot@buildroot.org>;
- Thu, 23 Jan 2025 20:34:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F4A3607CA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F4A3607CA
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:34:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D6E188613D; Thu, 23 Jan 2025 20:34:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jHTr1wYRJq6B for <buildroot@buildroot.org>;
+ Thu, 23 Jan 2025 20:37:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C78C742931
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C78C742931
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C78C742931
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 20:37:17 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 2970BB00539;
+ Thu, 23 Jan 2025 21:37:15 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:50800])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 23 Jan 2025 21:37:15 +0100
+MIME-Version: 1.0
+Date: Thu, 23 Jan 2025 21:37:15 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 23 Jan 2025 21:08:30 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ea8dcb2288149e4ebbdb473ef2ac2f0ddb1f786e
-X-Git-Newrev: 11c11b9a247a920059a4e0f569da8eb39ad1914f
-X-Patchwork-Hint: ignore
-Message-Id: <20250123203437.D6E188613D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/rock4se: new defconfig
+To: Patrik Olsson <johan.patrik.olsson@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250123192735.896424-1-johan.patrik.olsson@gmail.com>
+References: <20250123192735.896424-1-johan.patrik.olsson@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <a5d74a3e60d3bb4c018293d49530a723@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1737664636;
+ bh=8QEHaqbyChWwquiSbwW4By0x1113H0QtBLCNg0FQMRA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=A6Rc2GEq9fu+nzJYnI5gwnJn/8WIDJwnvykBV/lBbuQw7fobK/ajwyfkbKiI574WG
+ gBy64/DWuf03IXBU67Q1QeeraZSqakgFLqnw3/kkIXbgnIn44+2otLOwcnEn1mjYpC
+ LE7YCaEglci0utEmnwdUr57W6PQp3JOvKK7cwxBeskOQJreUm4dUxX2R2v/rFDXefL
+ h+wsla1M3nT9g/vun/WuHNnGz2DvKtY69H4haXmp3Iipv+fFuN0Mo9HLNXMWP8Xdz6
+ WAyjB18sUnhir3NxDvI9pRTfQD83ZKM21wHX1uNA0yyyN1O3WnKDJFhyzhdSZTG2aL
+ 6f6FMFTGR+KFQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=A6Rc2GEq
+Subject: Re: [Buildroot] [PATCH] configs/rock4se: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,213 +82,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11c11b9a247a920059a4e0f569da8eb39ad1914f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Patrik,
 
-Signed-off-by: Patrik Olsson <johan.patrik.olsson@gmail.com>
-[Julien:
- - add Patrik Signed-off-by
- - regenerate defconfig with "make savedefconfig"
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                         |  4 ++
- board/radxa/rock4se/extlinux.conf                  |  4 ++
- board/radxa/rock4se/genimage.cfg                   | 22 +++++++++++
- .../patches/linux-headers/linux-headers.hash       |  1 +
- board/radxa/rock4se/patches/linux/linux.hash       |  2 +
- board/radxa/rock4se/patches/uboot/uboot.hash       |  2 +
- board/radxa/rock4se/post-build.sh                  |  5 +++
- board/radxa/rock4se/readme.txt                     | 37 +++++++++++++++++++
- configs/rock4se_defconfig                          | 43 ++++++++++++++++++++++
- 9 files changed, 120 insertions(+)
+On 23/01/2025 20:27, Patrik Olsson wrote:
+> ---
+>  DEVELOPERS                                    |  4 ++
+>  board/radxa/rock4se/extlinux.conf             |  4 ++
+>  board/radxa/rock4se/genimage.cfg              | 22 ++++++++++
+>  .../patches/linux-headers/linux-headers.hash  |  1 +
+>  board/radxa/rock4se/patches/linux/linux.hash  |  2 +
+>  board/radxa/rock4se/patches/uboot/uboot.hash  |  2 +
+>  board/radxa/rock4se/post-build.sh             |  5 +++
+>  board/radxa/rock4se/readme.txt                | 37 ++++++++++++++++
+>  configs/rock4se_defconfig                     | 43 +++++++++++++++++++
+>  9 files changed, 120 insertions(+)
+>  create mode 100644 board/radxa/rock4se/extlinux.conf
+>  create mode 100644 board/radxa/rock4se/genimage.cfg
+>  create mode 120000 
+> board/radxa/rock4se/patches/linux-headers/linux-headers.hash
+>  create mode 100644 board/radxa/rock4se/patches/linux/linux.hash
+>  create mode 100644 board/radxa/rock4se/patches/uboot/uboot.hash
+>  create mode 100755 board/radxa/rock4se/post-build.sh
+>  create mode 100644 board/radxa/rock4se/readme.txt
+>  create mode 100644 configs/rock4se_defconfig
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2d8ae8289b..059383d364 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2564,6 +2564,10 @@ F:	support/testing/tests/package/test_lxc/
- N:	Patrick Oppenlander <patrick.oppenlander@gmail.com>
- F:	package/minisign/
- 
-+N:	Patrik Olsson <johan.patrik.olsson@gmail.com>
-+F:	board/radxa/rock4se
-+F:	configs/rock4se_defconfig
-+
- N:	Paul Cercueil <paul@crapouillou.net>
- F:	package/libiio/
- F:	package/lightning/
-diff --git a/board/radxa/rock4se/extlinux.conf b/board/radxa/rock4se/extlinux.conf
-new file mode 100644
-index 0000000000..eb037e0e0f
---- /dev/null
-+++ b/board/radxa/rock4se/extlinux.conf
-@@ -0,0 +1,4 @@
-+label Radxa ROCK 4SE Linux
-+  kernel /boot/Image
-+  devicetree /boot/rk3399-rock-4se.dtb
-+  append root=/dev/mmcblk1p1 rw rootfstype=ext4 earlycon rootwait
-diff --git a/board/radxa/rock4se/genimage.cfg b/board/radxa/rock4se/genimage.cfg
-new file mode 100644
-index 0000000000..966c869273
---- /dev/null
-+++ b/board/radxa/rock4se/genimage.cfg
-@@ -0,0 +1,22 @@
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot-tpl-spl-dtb {
-+		in-partition-table = "no"
-+		image = "idbloader.img"
-+		offset = 32K
-+	}
-+
-+	partition u-boot-dtb {
-+		in-partition-table = "no"
-+		image = "u-boot.itb"
-+		offset = 8M
-+		size = 30M
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/radxa/rock4se/patches/linux-headers/linux-headers.hash b/board/radxa/rock4se/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/radxa/rock4se/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/radxa/rock4se/patches/linux/linux.hash b/board/radxa/rock4se/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..9108b3e01a
---- /dev/null
-+++ b/board/radxa/rock4se/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  4a516e5ed748537a73cb42ec47fbbeb6df8b1298e8892c29c0e91de79095b297  linux-6.12.10.tar.xz
-diff --git a/board/radxa/rock4se/patches/uboot/uboot.hash b/board/radxa/rock4se/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..904fa56c02
---- /dev/null
-+++ b/board/radxa/rock4se/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-diff --git a/board/radxa/rock4se/post-build.sh b/board/radxa/rock4se/post-build.sh
-new file mode 100755
-index 0000000000..d84a5da0b0
---- /dev/null
-+++ b/board/radxa/rock4se/post-build.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname "$0")"
-+
-+install -m 0644 -D "$BOARD_DIR"/extlinux.conf "$TARGET_DIR"/boot/extlinux/extlinux.conf
-diff --git a/board/radxa/rock4se/readme.txt b/board/radxa/rock4se/readme.txt
-new file mode 100644
-index 0000000000..30cf621746
---- /dev/null
-+++ b/board/radxa/rock4se/readme.txt
-@@ -0,0 +1,37 @@
-+Intro
-+=====
-+
-+This default configuration will allow you to start experimenting with the
-+buildroot environment for the Radxa ROCK 4SE. With the current configuration
-+it will bring-up the board, and allow access through the serial console.
-+
-+Radxa ROCK 4SE link:
-+https://radxa.com/products/rock4/4se/
-+
-+Wiki link:
-+https://forum.radxa.com/c/rockpi4
-+
-+GPIO connector pinout link:
-+https://wiki.radxa.com/Rockpi4/hardware/gpio
-+
-+This configuration uses mainline ATF, U-Boot and kernel.
-+
-+How to build
-+============
-+
-+    $ make rock4se_defconfig
-+    $ make
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+  $ sudo sync
-+
-+Insert the micro SDcard in your Radxa ROCK 4SE and power it up. The console
-+is available on UART2 on the GPIO connector, 1500000bps 8N1.
-diff --git a/configs/rock4se_defconfig b/configs/rock4se_defconfig
-new file mode 100644
-index 0000000000..31fc2c6ecb
---- /dev/null
-+++ b/configs/rock4se_defconfig
-@@ -0,0 +1,43 @@
-+BR2_aarch64=y
-+BR2_cortex_a72_a53=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_GLOBAL_PATCH_DIR="board/radxa/rock4se/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_TARGET_GENERIC_HOSTNAME="rock-4se"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Radxa ROCK 4SE"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/radxa/rock4se/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rock4se/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.10"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-rock-4se"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-4se-rk3399"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
-+BR2_PACKAGE_HOST_GENIMAGE=y
+I applied this patch to master. I added your Signed-off-by tag in
+the commit log. I also regenerated the defconfig to have configs
+in their default order. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/11c11b9a247a920059a4e0f569da8eb39ad1914f
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
