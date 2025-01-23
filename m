@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96DA6C02182
-	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 21:18:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0203C02182
+	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 21:18:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 42E8C406EE;
-	Thu, 23 Jan 2025 21:18:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53F1D40564;
+	Thu, 23 Jan 2025 21:18:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tJe1ewKOi0xd; Thu, 23 Jan 2025 21:18:20 +0000 (UTC)
+ id eoVwpTwzWCJL; Thu, 23 Jan 2025 21:18:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAD2340564
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40C8C4242B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EAD2340564;
-	Thu, 23 Jan 2025 21:18:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CE38BB88
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40C8C4242B;
+	Thu, 23 Jan 2025 21:18:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 067D01167
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AFE6B82F3D
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 01671404AB
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AJwsYRQdDNIU for <buildroot@buildroot.org>;
- Thu, 23 Jan 2025 21:18:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gDVGoZHL4X4G for <buildroot@buildroot.org>;
+ Thu, 23 Jan 2025 21:18:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8A1583563
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A1FB403C5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D8A1583563
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A1FB403C5
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C2EF18616F; Thu, 23 Jan 2025 21:18:17 +0000 (UTC)
+ id 0544082268; Thu, 23 Jan 2025 21:18:18 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 23 Jan 2025 21:44:16 +0100
+Date: Thu, 23 Jan 2025 21:44:26 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ac832e20bd71c5168457d9cc3a774b3615c01f45
-X-Git-Newrev: ba7b462b1d453df761750b91b55860dc970accc7
+X-Git-Oldrev: 26a7441aa2fb344e4b1cdceb4157f8b442cd93da
+X-Git-Newrev: a1093feb90bec4d824e0c3fde38b91974ceb393e
 X-Patchwork-Hint: ignore
-Message-Id: <20250123211817.C2EF18616F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-alembic: bump to version
- 1.14.1
+Message-Id: <20250123211818.0544082268@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-dbus-fast: bump to version
+ 2.30.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,48 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba7b462b1d453df761750b91b55860dc970accc7
+commit: https://git.buildroot.net/buildroot/commit/?id=a1093feb90bec4d824e0c3fde38b91974ceb393e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to year update:
-https://github.com/sqlalchemy/alembic/commit/6bfca645563473da5b3212b827614d762e80feb0
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-alembic/python-alembic.hash | 6 +++---
- package/python-alembic/python-alembic.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-dbus-fast/python-dbus-fast.hash | 4 ++--
+ package/python-dbus-fast/python-dbus-fast.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-alembic/python-alembic.hash b/package/python-alembic/python-alembic.hash
-index 5f20b18be0..3795afa260 100644
---- a/package/python-alembic/python-alembic.hash
-+++ b/package/python-alembic/python-alembic.hash
+diff --git a/package/python-dbus-fast/python-dbus-fast.hash b/package/python-dbus-fast/python-dbus-fast.hash
+index 21cb8d4087..f3d2c95a74 100644
+--- a/package/python-dbus-fast/python-dbus-fast.hash
++++ b/package/python-dbus-fast/python-dbus-fast.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/alembic/json
--md5  a12686c41704218fdb29f140be75cdfd  alembic-1.14.0.tar.gz
--sha256  b00892b53b3642d0b8dbedba234dbf1924b69be83a9a769d5a624b01094e304b  alembic-1.14.0.tar.gz
-+md5  5fd5fe35fe820d03c0594cb3edd16829  alembic-1.14.1.tar.gz
-+sha256  496e888245a53adf1498fcab31713a469c65836f8de76e01399aa1c3e90dd213  alembic-1.14.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/dbus-fast/json
+-md5  accfe9ff41ee7b1a8c9a67ebd5db6a55  dbus_fast-2.28.0.tar.gz
+-sha256  ed2612392a7df775256c67bfad8727607e8862541b3984585b016e464b020b23  dbus_fast-2.28.0.tar.gz
++md5  6473b4bf7e12412692d464482337b58d  dbus_fast-2.30.2.tar.gz
++sha256  87296315f4a2f2416d495f48cca019ba901d046989e94df2adda84c3170da7b3  dbus_fast-2.30.2.tar.gz
  # Locally computed sha256 checksums
--sha256  ce19e7ba2b77ca584b82a6792856e138eb30b311c896b076c09a405ee45fbee9  LICENSE
-+sha256  35ea9c3419b261faf1be448c4f47d9255281bf6b36b5ffea55052227d4ba54de  LICENSE
-diff --git a/package/python-alembic/python-alembic.mk b/package/python-alembic/python-alembic.mk
-index 5050765db1..c6dcce445c 100644
---- a/package/python-alembic/python-alembic.mk
-+++ b/package/python-alembic/python-alembic.mk
+ sha256  c37e9c75110e01d1f0c5360dc7d7776a30ac5f70d2440db214423e4b7a77a6af  LICENSE
+diff --git a/package/python-dbus-fast/python-dbus-fast.mk b/package/python-dbus-fast/python-dbus-fast.mk
+index 73d559f6e0..92e5b661a3 100644
+--- a/package/python-dbus-fast/python-dbus-fast.mk
++++ b/package/python-dbus-fast/python-dbus-fast.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ALEMBIC_VERSION = 1.14.0
-+PYTHON_ALEMBIC_VERSION = 1.14.1
- PYTHON_ALEMBIC_SOURCE = alembic-$(PYTHON_ALEMBIC_VERSION).tar.gz
--PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/00/1e/8cb8900ba1b6360431e46fb7a89922916d3a1b017a8908a7c0499cc7e5f6
-+PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/99/09/f844822e4e847a3f0bd41797f93c4674cd4d2462a3f6c459aa528cdf786e
- PYTHON_ALEMBIC_SETUP_TYPE = setuptools
- PYTHON_ALEMBIC_LICENSE = MIT
- PYTHON_ALEMBIC_LICENSE_FILES = LICENSE
+-PYTHON_DBUS_FAST_VERSION = 2.28.0
++PYTHON_DBUS_FAST_VERSION = 2.30.2
+ PYTHON_DBUS_FAST_SOURCE = dbus_fast-$(PYTHON_DBUS_FAST_VERSION).tar.gz
+-PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/fb/a1/b7bd68329a6f3afc833d5a3d8eeed5f0557cd80e065f3cfbfd5df7193da2
++PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/69/4a/c5dbb4eccb97d3dd0ec49e04e17b7e93dfae517881ad439141fa6179cb53
+ PYTHON_DBUS_FAST_SETUP_TYPE = poetry
+ PYTHON_DBUS_FAST_LICENSE = MIT
+ PYTHON_DBUS_FAST_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
