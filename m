@@ -1,53 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 096DCC02182
-	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 21:18:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E17BC02182
+	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 21:19:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C538382FB1;
-	Thu, 23 Jan 2025 21:18:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33F0442577;
+	Thu, 23 Jan 2025 21:19:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MdZs2Nammpuu; Thu, 23 Jan 2025 21:19:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D177428B5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D177428B5;
+	Thu, 23 Jan 2025 21:19:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F23EC959
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:19:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D2EC682EB5
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:19:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Dlu-Z7Xt-ai; Thu, 23 Jan 2025 21:18:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECA548322E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECA548322E;
-	Thu, 23 Jan 2025 21:18:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C8298B88
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5696140467
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2Y4nryHID0q6 for <buildroot@buildroot.org>;
- Thu, 23 Jan 2025 21:18:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E7B5404D8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1E7B5404D8
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:18:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 103D085ED3; Thu, 23 Jan 2025 21:18:18 +0000 (UTC)
+ id o8Jc-BKf7bIq for <buildroot@buildroot.org>;
+ Thu, 23 Jan 2025 21:19:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E956E82CB7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E956E82CB7
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E956E82CB7
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:19:11 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 7EA5E13F88F;
+ Thu, 23 Jan 2025 22:19:07 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:35706])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 23 Jan 2025 22:19:07 +0100
+MIME-Version: 1.0
+Date: Thu, 23 Jan 2025 22:19:07 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 23 Jan 2025 21:44:30 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a1093feb90bec4d824e0c3fde38b91974ceb393e
-X-Git-Newrev: c87726dd336b7f9a1cebd26a327e47aa25d8b4d2
-X-Patchwork-Hint: ignore
-Message-Id: <20250123211818.103D085ED3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-django: bump to version
- 5.1.5
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250121220825.3118126-1-james.hilliard1@gmail.com>
+References: <20250121220825.3118126-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <1f7a4ae9eb1e5772ccf44ce034888c6a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1737667148;
+ bh=oyBIUnvEj9cqG6c+fPUAUsNjCDGPZxlmLo2lcNBh28c=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=umPnCVE5EbNMy1M/xaE/ytalIxHZAMF7ITcIHtK6YwkP9ACuyB64SubEe4SgQWO3m
+ Aa0VS12lHXu8TNS7KghEN1giPY+/X0GHTDsHyzmE0emqRsqCPVJZ6lGnGYnXAInep0
+ gF1/jDGo3LuJcBMzSN8Rvfv685uaLADrtBhkzrbR3ymZQa+mnVRgCUNi+lEJwU2na9
+ T3BicLHTvpmNbaefCLh4e22yKMepLuz1MkC03rA33V+Gbb6PlO74WuqQgTg0Eq3h8W
+ +w9Do4E3ObcQ80yuQ6yDqvIxq8AhLMhQGjIJl4Hv3/gyZgHdlGeCQsGfhYq7EeGnpS
+ 5Ifib9wBjR/IA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=umPnCVE5
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-alembic: bump to version
+ 1.14.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,51 +83,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c87726dd336b7f9a1cebd26a327e47aa25d8b4d2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 21/01/2025 23:08, James Hilliard wrote:
+> License hash changed due to year update:
+> https://github.com/sqlalchemy/alembic/commit/6bfca645563473da5b3212b827614d762e80feb0
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 53c4ceead3..6632246af8 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  03ec3e0f2d6cbcb9eb11c629ca1c538b  Django-5.1.4.tar.gz
--sha256  de450c09e91879fa5a307f696e57c851955c910a438a35e6b4c895e86bedc82a  Django-5.1.4.tar.gz
-+md5  272e951dbc4ccb7854c5a69aa5650749  Django-5.1.5.tar.gz
-+sha256  19bbca786df50b9eca23cee79d495facf55c8f5c54c529d9bf1fe7b5ea086af3  Django-5.1.5.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 4facc6b6c4..81d526ca35 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 5.1.4
-+PYTHON_DJANGO_VERSION = 5.1.5
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/d3/e8/536555596dbb79f6e77418aeb40bdc1758c26725aba31919ba449e6d5e6a
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/e4/17/834e3e08d590dcc27d4cc3c5cd4e2fb757b7a92bab9de8ee402455732952
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
