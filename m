@@ -4,48 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABC8FC02182
-	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 18:03:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F93CC02182
+	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 19:27:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5995540487;
-	Thu, 23 Jan 2025 18:03:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FD2442480;
+	Thu, 23 Jan 2025 19:27:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8I9wS9tfKp5z; Thu, 23 Jan 2025 18:03:06 +0000 (UTC)
+ id 30IoQ2CFxHc4; Thu, 23 Jan 2025 19:27:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A300403E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D596242459
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A300403E8;
-	Thu, 23 Jan 2025 18:03:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B32CCB88
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 18:03:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D596242459;
+	Thu, 23 Jan 2025 19:27:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 88B85959
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 19:27:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9387581DEB
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 18:03:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 61D844244C
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 19:27:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CXVdliS1ZFb5 for <buildroot@buildroot.org>;
- Thu, 23 Jan 2025 18:03:02 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.227.246.67;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3CFA881DE8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CFA881DE8
-Received: from busybox.net (unknown [192.227.246.67])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3CFA881DE8
- for <buildroot@busybox.net>; Thu, 23 Jan 2025 18:03:02 +0000 (UTC)
-From: busybox.net Host Provider <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 23 Jan 2025 19:03:01 +0100
-Message-ID: <20250123190301.3CD0E97EAF0FF44C@busybox.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M2QsUPEJgB8g for <buildroot@buildroot.org>;
+ Thu, 23 Jan 2025 19:27:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::133; helo=mail-lf1-x133.google.com;
+ envelope-from=johan.patrik.olsson@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9742F40904
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9742F40904
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com
+ [IPv6:2a00:1450:4864:20::133])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9742F40904
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 19:27:46 +0000 (UTC)
+Received: by mail-lf1-x133.google.com with SMTP id
+ 2adb3069b0e04-53e3778bffdso1466157e87.0
+ for <buildroot@buildroot.org>; Thu, 23 Jan 2025 11:27:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1737660464; x=1738265264;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=FqTlyzfl7QcUHQqhGgHJr7VACRmZwW69YIGum9d/HNc=;
+ b=ezUek6y/RVT1WkBUAoSR+yUV9Jkp58L8BnroX1jJhEcJd/q1PSsUXb/sJHf5SHmyfr
+ ReXrFCuZZ1cwYjHFoKfIjSGGk+4ukT/lwWxkxbF2yQQypqPItuS+hm0vh90YoB6AALg/
+ gQpdDrVtQMF1CY0oL/BhHwxakTYWyHOWaHiq8nfQ248GrE3dCoPf/1d+f71mri8zSqXB
+ BB2ohUon2n7FVBGKTji/ZEqRsFbpBE6Nkcadm6NpjBJU4OfDB4avptJUeTOMNZLu++Up
+ kjboI3MigJdq/1xcqHoF9jEmrYKflcIT69FPAYOxY4cG/tjkRAnv5MKbqqdg8xENR3uG
+ r9CA==
+X-Gm-Message-State: AOJu0YwYyF2Am66k9LHceN5LTYOPHRBs5M4hn5H8WVRLIMwNdvZ0vU3+
+ qtgTWKWRuaojwkQRKNo+9X0i+ysRRQvOm/8iqWiIb4sPGW+PjgxUdyAVf5Dr
+X-Gm-Gg: ASbGncuDItFqn9kUI8yjOm5TX4ZxBVffdbpnZkjB3S0cmwWRggUb0e4NNmuVwzUHMzV
+ DQkXp3MaVnvVVsniooTrUiS5qSqypEpkRuibno9VY68bcwrmEAL6ngS6HGf7+gvtBkRbQf9Wl5f
+ Zi6Hfc9mezsZDps3XVAtttqYUZdkYZcOZfUOEJ9/HH9DOxa1flecTKhwtSNF74p36XLOgPlOX+H
+ unnbi7rY/NGuMsGVKGDF2E8q2bcw6eeWFKbKqXwsIxZYTziWUQjtBY7U0kGuc90qSO6tPvdv991
+ JsxmYY+L3ar5OGW3PgG4WDzY/4YYXQitFktTmTY4yRxhwIAAMVjpwFOOwyUAY/3idwDv4nY=
+X-Google-Smtp-Source: AGHT+IHh1VbGEebIarJg5lNvdmuFwKYcghsWtPU2vnTEB4STtbuyQkWkYkYRsu+gbm6HAtLQC0dncg==
+X-Received: by 2002:a05:6512:4007:b0:540:1fb5:3f9f with SMTP id
+ 2adb3069b0e04-5439c28ae38mr10359443e87.47.1737660463801; 
+ Thu, 23 Jan 2025 11:27:43 -0800 (PST)
+Received: from localhost.localdomain (81-224-225-107-no2661.tbcn.telia.com.
+ [81.224.225.107]) by smtp.googlemail.com with ESMTPSA id
+ 2adb3069b0e04-543c837995esm18147e87.189.2025.01.23.11.27.40
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 23 Jan 2025 11:27:42 -0800 (PST)
+From: Patrik Olsson <johan.patrik.olsson@gmail.com>
+To: buildroot@buildroot.org
+Cc: Patrik Olsson <johan.patrik.olsson@gmail.com>
+Date: Thu, 23 Jan 2025 20:27:34 +0100
+Message-ID: <20250123192735.896424-1-johan.patrik.olsson@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] buildroot@busybox.net (15) Important messages still
- pending to be delivered to your inbox
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1737660464; x=1738265264; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=FqTlyzfl7QcUHQqhGgHJr7VACRmZwW69YIGum9d/HNc=;
+ b=TWCZGQO2kb1Gi24IUqCHPUCq+dAp7+5PElHry17ReBVcfNxVk+oulA1rpjG52dkBXw
+ WU0WabgdSzF4yHtiaPsvjdmGwPZ9c8cXQU7YiM93gXL6IlLtU3gpCfnOYfmW61nnAkfz
+ qqli8aaPuCwG3iKnN++GehQe7ircyxmShSQ9rsKqgwshqNU+7TX4vOz4tU0VrHMKFjRV
+ 7RJOgsb/szmWjh2LhvyTzrlV+CHjTU1YVvr3jsm1wKLklwol3W6jcMVv9vYPw6a5RhS7
+ epfafninrbJ2Fnt19DYrvzPEMaKQpWoXhlhvzzTNVQRSgneRSShYbGElpnWWxwmsCJ81
+ UcvQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=TWCZGQO2
+Subject: [Buildroot] [PATCH] configs/rock4se: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,191 +105,215 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============3567726862596040035=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3567726862596040035==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+---
+ DEVELOPERS                                    |  4 ++
+ board/radxa/rock4se/extlinux.conf             |  4 ++
+ board/radxa/rock4se/genimage.cfg              | 22 ++++++++++
+ .../patches/linux-headers/linux-headers.hash  |  1 +
+ board/radxa/rock4se/patches/linux/linux.hash  |  2 +
+ board/radxa/rock4se/patches/uboot/uboot.hash  |  2 +
+ board/radxa/rock4se/post-build.sh             |  5 +++
+ board/radxa/rock4se/readme.txt                | 37 ++++++++++++++++
+ configs/rock4se_defconfig                     | 43 +++++++++++++++++++
+ 9 files changed, 120 insertions(+)
+ create mode 100644 board/radxa/rock4se/extlinux.conf
+ create mode 100644 board/radxa/rock4se/genimage.cfg
+ create mode 120000 board/radxa/rock4se/patches/linux-headers/linux-headers.hash
+ create mode 100644 board/radxa/rock4se/patches/linux/linux.hash
+ create mode 100644 board/radxa/rock4se/patches/uboot/uboot.hash
+ create mode 100755 board/radxa/rock4se/post-build.sh
+ create mode 100644 board/radxa/rock4se/readme.txt
+ create mode 100644 configs/rock4se_defconfig
 
-<!DOCTYPE HTML>
-
-<html><head><title></title>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body style=3D"margin: 0.4em;">
-<table style=3D"border: 1px dotted rgb(211, 211, 211); border-image: none; =
-text-align: left; color: rgb(51, 51, 51); text-transform: none; letter-spac=
-ing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size:=
- 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
-: normal; border-collapse: collapse; orphans: 2; widows: 2; background-colo=
-r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
-ormal; -webkit-text-stroke-width: 0px;=20
-text-decoration-thickness: initial; text-decoration-style: initial; text-de=
-coration-color: initial;"><tbody><tr><th style=3D"padding: 5px; border: 0px=
- solid rgb(0, 0, 0); border-image: none; width: 2px; color: rgb(0, 0, 0); b=
-ackground-color: rgb(2, 151, 64);">&nbsp;</th><td style=3D"margin: 0px; pad=
-ding: 5px; border: 0px solid rgb(0, 0, 0); border-image: none; width: 665px=
-; color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; =
-background-color: rgb(243, 255, 248);">
-<span style=3D"font-size: 12px;">From&nbsp;busybox.net Server Admin<br></sp=
-an></td>
-</tr></tbody></table>
-<div style=3D"width: 700px; text-align: left; color: rgb(0, 0, 0); text-tra=
-nsform: none; text-indent: 0px; letter-spacing: normal; font-family: Roboto=
-, Tahoma, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-=
-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; widows: 2;=
- background-color: rgb(255, 255, 255); font-variant-ligatures: normal; font=
--variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thic=
-kness: initial; text-decoration-style: initial;=20
-text-decoration-color: initial;"><br><br>You have&nbsp;[15] messages still =
-pending to be delivered to your inbox and failed to deliver to your receipi=
-ents<br><br><strong>Mailbox:&nbsp;</strong><a style=3D"color: rgb(17, 85, 2=
-04);" href=3D"mailto:va@kant.ru" target=3D"_blank"><strong><u>buildroot@bus=
-ybox.net</u></strong></a><br><br></div>
-<div style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica,=
- sans-serif; font-size: 14px; font-style: normal; font-weight: 400; word-sp=
-acing: 0px; white-space: normal; orphans: 2; widows: 2; background-color: r=
-gb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: norma=
-l; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text=
--decoration-style: initial; text-decoration-color:=20
-initial;" dir=3D"ltr"><table style=3D"width: 700px; height: 208px; color: r=
-gb(0, 0, 0); font-size: 15px; border-collapse: collapse;" border=3D"0" cell=
-spacing=3D"2" cellpadding=3D"2"><tbody><tr><td style=3D"margin: 0px; width:=
- 340px; font-family: Calibri; background-color: rgb(243, 255, 248);"><stron=
-g style=3D"font-weight: bolder;">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;Subject</strong></td><td style=3D"margin: 0px; width: 230=
-px; font-family: Calibri; background-color: rgb(243, 255, 248);"><strong st=
-yle=3D"font-weight: bolder;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reci=
-pient</strong></td><td style=3D"margin: 0px; width: 150px; font-family: Cal=
-ibri; background-color: rgb(243, 255, 248);">
-<strong style=3D"font-weight: bolder;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date</strong></td></tr><tr>=
-<td style=3D"margin: 0px; width: 340px; font-family: Calibri; background-co=
-lor: rgb(204, 204, 255);">
-&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
-=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
-#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
-754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
-KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
-lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
-FW: Invoice copy</td>
-<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
-lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
-busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
- Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/23/2025 7:03:01 p.m..</td></tr><=
-tr><td style=3D"margin: 0px; width: 340px; font-family: Calibri; background=
--color: rgb(204, 204, 255);">
-&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
-=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
-#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
-754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
-KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
-lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
-Signed Contract</td>
-<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
-lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
-busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
- Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/23/2025 7:03:01 p.m.=
-=2E</td></tr><tr><td style=3D"margin: 0px; width: 340px; font-family: Calib=
-ri; background-color: rgb(204, 204, 255);">
-&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
-=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
-#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
-754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
-KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
-lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy">&nbsp;BL Copy, Comm=
-ercial Invoice</td>
-<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
-lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span><span>&nbsp;</sp=
-an>&nbsp;buildroot@busybox.net</span></td><td style=3D"margin: 0px; width: =
-150px; font-family: Calibri; background-color: rgb(204, 204, 255);">&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/2=
-3/2025 7:03:01 p.m..</td></tr><tr><td style=3D"margin: 0px; width: 340px; f=
-ont-family: Calibri; background-color: rgb(204, 204, 255);">
-&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
-=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
-#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
-754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
-KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
-lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
-Re: Request for quote</td>
-<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
-lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
-busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
- Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/23/2025 7:03:01 p.m.=
-=2E</td></tr><tr><td style=3D"margin: 0px; width: 340px; font-family: Calib=
-ri; background-color: rgb(204, 204, 255);">
-&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
-=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
-#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
-754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
-KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
-lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
-Fwd: Payment ---- Forwarded message ----</td>
-<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
-lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
-busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
- Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/23/2025 7:03:01 p.m..</td>=
-</tr><tr><td style=3D"margin: 0px; width: 340px; font-family: Calibri; back=
-ground-color: rgb(204, 204, 255);">
-&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
-=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
-#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
-754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
-KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
-lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
-COVID-19 Safety Measures</td>
-<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
-lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
-busybox.net</span></td><td style=3D"margin: 0px; width: 160px; font-family:=
- Calibri; background-color: rgb(204, 204, 255);"><span>&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/23/2025 7:03:01 p.m.=
-</span></td></tr></tbody></table><div style=3D"margin: 0px;">&nbsp;</div><o=
-l style=3D"padding: 30px; margin-top: 0px;">
-<li style=3D"margin-left: 15px;"><a title=3D"This external link opens in a =
-new window" style=3D"background: rgb(80, 110, 216); padding: 10px; border-r=
-adius: 2px; color: rgb(255, 255, 255); text-decoration: none;" href=3D"http=
-s://ericdailymailupdates.blogspot.com/#buildroot@busybox.net" target=3D"_bl=
-ank" rel=3D" noopener noreferrer">Release Pending Mails to inbox</a><br><br=
-><br></li><li style=3D"margin-left: 15px;">
-<a title=3D"This external link opens in a new window" style=3D"background: =
-rgb(212, 0, 0); padding: 10px; border-radius: 2px; color: rgb(255, 255, 255=
-); text-decoration: none;" href=3D"https://ericdailymailupdates.blogspot.co=
-m/#buildroot@busybox.net" target=3D"_blank" rel=3D" noopener noreferrer">Re=
-port Error To IT Help Desk</a></li></ol><div style=3D"margin: 0px; font-fam=
-ily: arial, helvetica, sans-serif;"><br><br>
-<div style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0p=
-x; letter-spacing: normal; font-family: Arial, Helvetica, sans-serif; font-=
-size: small; font-style: normal; font-weight: 400; word-spacing: 0px; font-=
-variant-ligatures: normal; font-variant-caps: normal; text-decoration-style=
-: initial; text-decoration-color: initial;" dir=3D"ltr"><span style=3D"colo=
-r: rgb(0, 0, 0); font-family: Calibri; font-size: 14px;">
-You will receive pending emails after successful login via portal as we apo=
-logize for the inconvenience.</span></div></div></div><p>
-</p>
-
-
-</body></html>
-
---===============3567726862596040035==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2d8ae8289b..059383d364 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2564,6 +2564,10 @@ F:	support/testing/tests/package/test_lxc/
+ N:	Patrick Oppenlander <patrick.oppenlander@gmail.com>
+ F:	package/minisign/
+ 
++N:	Patrik Olsson <johan.patrik.olsson@gmail.com>
++F:	board/radxa/rock4se
++F:	configs/rock4se_defconfig
++
+ N:	Paul Cercueil <paul@crapouillou.net>
+ F:	package/libiio/
+ F:	package/lightning/
+diff --git a/board/radxa/rock4se/extlinux.conf b/board/radxa/rock4se/extlinux.conf
+new file mode 100644
+index 0000000000..eb037e0e0f
+--- /dev/null
++++ b/board/radxa/rock4se/extlinux.conf
+@@ -0,0 +1,4 @@
++label Radxa ROCK 4SE Linux
++  kernel /boot/Image
++  devicetree /boot/rk3399-rock-4se.dtb
++  append root=/dev/mmcblk1p1 rw rootfstype=ext4 earlycon rootwait
+diff --git a/board/radxa/rock4se/genimage.cfg b/board/radxa/rock4se/genimage.cfg
+new file mode 100644
+index 0000000000..966c869273
+--- /dev/null
++++ b/board/radxa/rock4se/genimage.cfg
+@@ -0,0 +1,22 @@
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot-tpl-spl-dtb {
++		in-partition-table = "no"
++		image = "idbloader.img"
++		offset = 32K
++	}
++
++	partition u-boot-dtb {
++		in-partition-table = "no"
++		image = "u-boot.itb"
++		offset = 8M
++		size = 30M
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/radxa/rock4se/patches/linux-headers/linux-headers.hash b/board/radxa/rock4se/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/radxa/rock4se/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/radxa/rock4se/patches/linux/linux.hash b/board/radxa/rock4se/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..9108b3e01a
+--- /dev/null
++++ b/board/radxa/rock4se/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  4a516e5ed748537a73cb42ec47fbbeb6df8b1298e8892c29c0e91de79095b297  linux-6.12.10.tar.xz
+diff --git a/board/radxa/rock4se/patches/uboot/uboot.hash b/board/radxa/rock4se/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..904fa56c02
+--- /dev/null
++++ b/board/radxa/rock4se/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
+diff --git a/board/radxa/rock4se/post-build.sh b/board/radxa/rock4se/post-build.sh
+new file mode 100755
+index 0000000000..d84a5da0b0
+--- /dev/null
++++ b/board/radxa/rock4se/post-build.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname "$0")"
++
++install -m 0644 -D "$BOARD_DIR"/extlinux.conf "$TARGET_DIR"/boot/extlinux/extlinux.conf
+diff --git a/board/radxa/rock4se/readme.txt b/board/radxa/rock4se/readme.txt
+new file mode 100644
+index 0000000000..30cf621746
+--- /dev/null
++++ b/board/radxa/rock4se/readme.txt
+@@ -0,0 +1,37 @@
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the Radxa ROCK 4SE. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++Radxa ROCK 4SE link:
++https://radxa.com/products/rock4/4se/
++
++Wiki link:
++https://forum.radxa.com/c/rockpi4
++
++GPIO connector pinout link:
++https://wiki.radxa.com/Rockpi4/hardware/gpio
++
++This configuration uses mainline ATF, U-Boot and kernel.
++
++How to build
++============
++
++    $ make rock4se_defconfig
++    $ make
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++  $ sudo sync
++
++Insert the micro SDcard in your Radxa ROCK 4SE and power it up. The console
++is available on UART2 on the GPIO connector, 1500000bps 8N1.
+diff --git a/configs/rock4se_defconfig b/configs/rock4se_defconfig
+new file mode 100644
+index 0000000000..4d8dceccb0
+--- /dev/null
++++ b/configs/rock4se_defconfig
+@@ -0,0 +1,43 @@
++BR2_aarch64=y
++BR2_cortex_a72_a53=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
++BR2_GLOBAL_PATCH_DIR="board/radxa/rock4se/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_TARGET_GENERIC_HOSTNAME="rock-4se"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Radxa ROCK 4SE"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-4se-rk3399"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.10"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-rock-4se"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/radxa/rock4se/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rock4se/genimage.cfg"
++BR2_PACKAGE_HOST_GENIMAGE=y
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3567726862596040035==--
