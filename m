@@ -4,50 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAE68C02181
-	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 20:40:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8065DC02181
+	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 20:41:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E95481F3A;
-	Fri, 24 Jan 2025 20:40:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40FB881F4C;
+	Fri, 24 Jan 2025 20:41:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4saH0gtjQEin; Fri, 24 Jan 2025 20:40:49 +0000 (UTC)
+ id PzbECCFb_e99; Fri, 24 Jan 2025 20:41:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E29181F3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDDD681F45
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E29181F3B;
-	Fri, 24 Jan 2025 20:40:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B68441183
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 20:40:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CDDD681F45;
+	Fri, 24 Jan 2025 20:41:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0C7CC1183
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 20:41:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B0ED560763
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 20:40:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E13AA81F42
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 20:41:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QTei4ztdXmst for <buildroot@buildroot.org>;
- Fri, 24 Jan 2025 20:40:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0928460749
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0928460749
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 20:40:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 00EE786095; Fri, 24 Jan 2025 20:40:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JVOP7zPksc_i for <buildroot@buildroot.org>;
+ Fri, 24 Jan 2025 20:41:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 25AA781F3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25AA781F3A
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 25AA781F3A
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 20:41:38 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 24C4C2003CC;
+ Fri, 24 Jan 2025 21:41:28 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:47072])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 24 Jan 2025 21:41:28 +0100
+MIME-Version: 1.0
+Date: Fri, 24 Jan 2025 21:41:28 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 24 Jan 2025 21:39:11 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bdd9f0ab26ebf229131d057bcdc8103439ea726b
-X-Git-Newrev: 92945909f10175000c4e4f8d1425cb823cdf6336
-X-Patchwork-Hint: ignore
-Message-Id: <20250124204047.00EE786095@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/xilinx-prebuilt: add hash for LICENSE
- file
+To: Neal Frager <neal.frager@amd.com>
+Cc: buildroot@buildroot.org, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, brandon.maier@collins.com,
+ thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com
+In-Reply-To: <20250120124342.233492-1-neal.frager@amd.com>
+References: <20250120124342.233492-1-neal.frager@amd.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <031078085626187cf6211de6b8520627@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1737751295;
+ bh=2w3TngUL4EnVAToQ3LaYLkaT0LinRUNsMD7F+Xhr2J4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=rcLcT4oVxLMcr2J5Bw7BFEfYVlaT0gCULTQT5NAdDFkOT7MQjgjRSKa9h71r3fd+D
+ rk2pr+P3d03F+BdddvTCBy5/CjPigYkVE0wL/A/+f88ewluIklOcFxjpEw2L4XXEF5
+ DAL9T7HXOtqoaQKjbn3tOX+g2fAg84z3EHtLW59nzS+4uG6kQONn8tZxcXDAlwwsou
+ Y5JsQGEsuL+6t2oSxiMh0i0MCc38aBJj3tjAQys2OVpMkC0Hbd/6MmsJlvgKoycBzk
+ a5uHFq+XOSBISPKs7wieQ5bu4Ag65QKsGHbhzJ0DFzgx5AHoLG8eOEZnTate0MTTfP
+ ObKx3HF1EjzBw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=rcLcT4oV
+Subject: Re: [Buildroot] [PATCH v1 1/1] boot/xilinx-prebuilt: add hash for
+ LICENSE file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,33 +85,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92945909f10175000c4e4f8d1425cb823cdf6336
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 20/01/2025 13:43, Neal Frager via buildroot wrote:
+> Add hash for xilinx-prebuilt LICENSE file.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-Add hash for xilinx-prebuilt LICENSE file.
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- boot/xilinx-prebuilt/xilinx-prebuilt.hash | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.hash b/boot/xilinx-prebuilt/xilinx-prebuilt.hash
-index c955cd79f5..048b93dcf4 100644
---- a/boot/xilinx-prebuilt/xilinx-prebuilt.hash
-+++ b/boot/xilinx-prebuilt/xilinx-prebuilt.hash
-@@ -1,2 +1,5 @@
- # Locally calculated
- sha256  7abcba4e0e44e3a4adf9c1f971d918575226d7604dfd64a386baaa00c1c6c35f  xilinx-prebuilt-xilinx_v2024.1.tar.gz
-+
-+# Locally calculated
-+sha256  7b2074b607264a07347e1a7ef0323229585942793469f34b2cf9628f7623e05f  LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
