@@ -1,52 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 437FBC02181
-	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 19:49:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 816E4C02181
+	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 19:50:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04A2C8213E;
-	Fri, 24 Jan 2025 19:49:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3DDDA608FE;
+	Fri, 24 Jan 2025 19:50:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DW-s9dElGDdE; Fri, 24 Jan 2025 19:49:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id I7ND1-9RGStf; Fri, 24 Jan 2025 19:50:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C823B8215A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4185D6090A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C823B8215A;
-	Fri, 24 Jan 2025 19:49:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 454F8941
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 19:49:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4185D6090A;
+	Fri, 24 Jan 2025 19:50:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1C77F941
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 19:50:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25F27426A3
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 19:49:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EFBF76090A
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 19:50:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EWDbe1TOsvVk for <buildroot@buildroot.org>;
- Fri, 24 Jan 2025 19:49:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C24964269D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C24964269D
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 19:49:50 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA409861FA; Fri, 24 Jan 2025 19:49:50 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BZyLezF5ferk for <buildroot@buildroot.org>;
+ Fri, 24 Jan 2025 19:50:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::d34; helo=mail-io1-xd34.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C0BE0608A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0BE0608A0
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C0BE0608A0
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 19:50:50 +0000 (UTC)
+Received: by mail-io1-xd34.google.com with SMTP id
+ ca18e2360f4ac-8521df70be6so104146239f.1
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 11:50:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1737748249; x=1738353049;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=La90bURkY8O/t+gl2AXyRg2SbzH2fHd+RB53wRiT7w8=;
+ b=DHN2h/Ihb4G3701YVkLAr7o408Yi3Z1qoi170OpDE9eFaCpb2SFW/4ySDRK9RYA0fl
+ Fu95zIoEBuQqCE8L4JBv591pcYVkmIOsw3RrbaNLnz3uyYimqco3eOcEUd4zdsIxSAA6
+ 9spPLwp7VjRryHxnlvEPZiHurcqfTXGiGz5Q55MwpQMNWj4y3hw9955mf7LJP2KvbfRW
+ hTM/TtrKlGZU+7ozwHwEVgFYT2IxAJDJtl4CiOU4X7V8WvOglWfi9nGtmv/4BtTaNvVL
+ OLvQjuaSS1vw2xT2Di55xDAjXutdl9STOSuOqCmumWrqbHYFqF6RmgObB5THJ/gUdglZ
+ VZ9w==
+X-Gm-Message-State: AOJu0Yy4Z6Q+jq+fdps+jE3K3D1DQbARQ/MtrmSpnuqBI7idIqSBx9A9
+ xRYZPAUG9PHXOJqGjdLbco7plvyKIgDhJKOn7wPt6QtNf7mu7wOOWCEppQpu
+X-Gm-Gg: ASbGnct9MZ4ihwbv3KXdCJG/UM0c/rCQauDVF+VvGZpsmES7E/xVfEC2zy5QnImzXux
+ Zh57d5N9sr6+S4TbsoJUlKn6YM/g6W+0NSowJphwOj7nyojvNpJhTEG5451TPclfKnXj9COFYZ0
+ PSGOIZ3nK7kEbsUzMi3TqoXfrkcbtyK0DQFv7gP2Urj2fn2eGgZG9vqgRK7rzAWPFbJoLv18pk/
+ eCXfNTApeGD01d1AJ1RzbuKvpWWuwAgjc11EkooJwn85TvKGWpoZBsPD7UQ7DJg3O9CUtpjcZkT
+ 8k8oSF7vXUPNUayrH8opKmFgLBeVWbZZ4Ux/u/hlnq8Qw3U01gcUfY0=
+X-Google-Smtp-Source: AGHT+IFeRw5UzHJr7mMkPHhf3WKyqPZeznlFj0PGZhiR5VxWpeP3Ow5UaqFBl8UlgieDY9hD/hzBNg==
+X-Received: by 2002:a05:6602:27cb:b0:847:51e2:eb0 with SMTP id
+ ca18e2360f4ac-851b62afe94mr2728394139f.12.1737748249620; 
+ Fri, 24 Jan 2025 11:50:49 -0800 (PST)
+Received: from james-x399.localdomain (71-218-115-58.hlrn.qwest.net.
+ [71.218.115.58]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4ec1da0390dsm803684173.3.2025.01.24.11.50.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 24 Jan 2025 11:50:48 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 24 Jan 2025 20:41:44 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d1a2076e8a1691f78ef9350259a477a07d4c2f01
-X-Git-Newrev: 360e811d4045fdf6d00adba0635f8a87415339fd
-X-Patchwork-Hint: ignore
-Message-Id: <20250124194950.BA409861FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fwupd-efi: bump to version 1.7
+Date: Fri, 24 Jan 2025 12:50:47 -0700
+Message-Id: <20250124195047.3824467-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1737748249; x=1738353049; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=La90bURkY8O/t+gl2AXyRg2SbzH2fHd+RB53wRiT7w8=;
+ b=eWLvF/4kvg4yRRBgn3x/vsga3j3IPBGsbItUatIjmm18596j1SlWuk/eEcD/hLfNBC
+ aWdtrnLsP+hdnWubfzqZUxkSxMM9DWQb8mFQswzhaOQKKZc2qPY+IdQCJVePqVAU0jcs
+ x3btQcIlD1uDL0JZTS15X7h0twQHH5rBhk/D7mBqFLVZNTwQ9P7TA5z5xLa872INuaiz
+ CXUUNozFOMHdhTc6bbdZiZgP8xWQ10HNR0dkddqJMMFEDRzroFqiLuG33ZIwbFZFZyIy
+ 4n1RwLte8K0gZWmo7SxkH2i53wBAKbxCTJIP1EqxGj8wJXQwrmlTE3NKvCsEnHvkZJHT
+ v66g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=eWLvF/4k
+Subject: [Buildroot] [PATCH 1/1] package/python-mbstrdecoder: bump to
+ version 1.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,202 +105,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=360e811d4045fdf6d00adba0635f8a87415339fd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Drop patches which are now upstream.
-
-Changelog: https://github.com/fwupd/fwupd-efi/releases/tag/1.7
+Add new host-python-setuptools-scm build dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Julien: add link to changelog]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...ling-disabling-the-use-of-genpeimg-binary.patch | 41 ----------
- ...thon3-shebang-paths-and-add-python-option.patch | 95 ----------------------
- package/fwupd-efi/fwupd-efi.hash                   |  2 +-
- package/fwupd-efi/fwupd-efi.mk                     |  5 +-
- 4 files changed, 3 insertions(+), 140 deletions(-)
+ package/python-mbstrdecoder/python-mbstrdecoder.hash | 4 ++--
+ package/python-mbstrdecoder/python-mbstrdecoder.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/fwupd-efi/0001-Allow-enabling-disabling-the-use-of-genpeimg-binary.patch b/package/fwupd-efi/0001-Allow-enabling-disabling-the-use-of-genpeimg-binary.patch
-deleted file mode 100644
-index e6e460a3b7..0000000000
---- a/package/fwupd-efi/0001-Allow-enabling-disabling-the-use-of-genpeimg-binary.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From fb1cf079346a2838cc44f7116cb4a790e40cc5bf Mon Sep 17 00:00:00 2001
--From: James Hilliard <james.hilliard1@gmail.com>
--Date: Tue, 2 Jul 2024 15:08:18 -0600
--Subject: [PATCH] Allow enabling/disabling the use of genpeimg binary
--
--In some cases we may want to force the use of python3-pefile instead
--of genpeimg such as when cross compiling, add a feature option to
--allow disabling genpeimg.
--
--Upstream: https://github.com/fwupd/fwupd-efi/commit/fb1cf079346a2838cc44f7116cb4a790e40cc5bf
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-----
-- meson.build       | 2 +-
-- meson_options.txt | 1 +
-- 2 files changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index a3ce068..a5612a6 100644
----- a/meson.build
--+++ b/meson.build
--@@ -17,7 +17,7 @@ prefix = get_option('prefix')
-- libdir = join_paths(prefix, get_option('libdir'))
-- libexecdir = join_paths(prefix, get_option('libexecdir'))
-- 
---genpeimg = find_program ('genpeimg', required: false)
--+genpeimg = find_program ('genpeimg', required: get_option('genpeimg'))
-- 
-- efi_app_location = join_paths(libexecdir, 'fwupd', 'efi')
-- host_cpu = host_machine.cpu_family()
--diff --git a/meson_options.txt b/meson_options.txt
--index 26161e1..588ae29 100644
----- a/meson_options.txt
--+++ b/meson_options.txt
--@@ -7,3 +7,4 @@ option('efi_sbat_distro_summary', type : 'string', value : '', description : 'SB
-- option('efi_sbat_distro_pkgname', type : 'string', value : '', description : 'SBAT distribution package name, e.g. fwupd')
-- option('efi_sbat_distro_version', type : 'string', value : '', description : 'SBAT distribution version, e.g. fwupd-1.5.6.fc33')
-- option('efi_sbat_distro_url', type : 'string', value : '', description : 'SBAT distribution URL, e.g. https://src.fedoraproject.org/rpms/fwupd')
--+option('genpeimg', type : 'feature', description : 'Use genpeimg to add NX support to binaries')
---- 
--2.34.1
--
-diff --git a/package/fwupd-efi/0002-Fix-python3-shebang-paths-and-add-python-option.patch b/package/fwupd-efi/0002-Fix-python3-shebang-paths-and-add-python-option.patch
-deleted file mode 100644
-index 9747565182..0000000000
---- a/package/fwupd-efi/0002-Fix-python3-shebang-paths-and-add-python-option.patch
-+++ /dev/null
-@@ -1,95 +0,0 @@
--From 1cd1ff0216d5beb2a2523031398d4dba7d12729d Mon Sep 17 00:00:00 2001
--From: James Hilliard <james.hilliard1@gmail.com>
--Date: Tue, 2 Jul 2024 14:51:26 -0600
--Subject: [PATCH] Fix python3 shebang paths and add python option.
--
--Using absolute paths can result in the wrong python3 binary being
--used, such as when cross compiling using a non-system python3.
--
--Use the normal python3 env shebang instead.
--
--Also add a meson option to allow overriding the python path.
--
--Upstream: https://github.com/fwupd/fwupd-efi/commit/1cd1ff0216d5beb2a2523031398d4dba7d12729d
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-----
-- contrib/reformat-code.py | 2 +-
-- efi/generate_binary.py   | 2 +-
-- efi/generate_sbat.py     | 2 +-
-- efi/meson.build          | 4 ++--
-- meson.build              | 7 +++++++
-- meson_options.txt        | 1 +
-- 6 files changed, 13 insertions(+), 5 deletions(-)
--
--diff --git a/contrib/reformat-code.py b/contrib/reformat-code.py
--index 65a4ac4..ff6014d 100755
----- a/contrib/reformat-code.py
--+++ b/contrib/reformat-code.py
--@@ -1,4 +1,4 @@
---#!/usr/bin/python3
--+#!/usr/bin/env python3
-- #
-- # Copyright (C) 2017 Dell Inc.
-- #
--diff --git a/efi/generate_binary.py b/efi/generate_binary.py
--index 443472a..a4611bb 100755
----- a/efi/generate_binary.py
--+++ b/efi/generate_binary.py
--@@ -1,4 +1,4 @@
---#!/usr/bin/python3
--+#!/usr/bin/env python3
-- #
-- # Copyright (C) 2021 Javier Martinez Canillas <javierm@redhat.com>
-- # Copyright (C) 2021 Richard Hughes <richard@hughsie.com>
--diff --git a/efi/generate_sbat.py b/efi/generate_sbat.py
--index 6c904e5..b9b80ac 100755
----- a/efi/generate_sbat.py
--+++ b/efi/generate_sbat.py
--@@ -1,4 +1,4 @@
---#!/usr/bin/python3
--+#!/usr/bin/env python3
-- #
-- # Copyright (C) 2021 Javier Martinez Canillas <javierm@redhat.com>
-- # Copyright (C) 2021 Richard Hughes <richard@hughsie.com>
--diff --git a/efi/meson.build b/efi/meson.build
--index 75ade7a..008ba3d 100644
----- a/efi/meson.build
--+++ b/efi/meson.build
--@@ -1,5 +1,5 @@
---generate_sbat = find_program('generate_sbat.py', native: true)
---generate_binary = find_program('generate_binary.py', native: true)
--+generate_sbat = [python3, files('generate_sbat.py')]
--+generate_binary = [python3, files('generate_binary.py')]
-- 
-- # get source version, falling back
-- git = find_program('git', required : false)
--diff --git a/meson.build b/meson.build
--index a5612a6..5836213 100644
----- a/meson.build
--+++ b/meson.build
--@@ -19,6 +19,13 @@ libexecdir = join_paths(prefix, get_option('libexecdir'))
-- 
-- genpeimg = find_program ('genpeimg', required: get_option('genpeimg'))
-- 
--+python3path = get_option('python')
--+if python3path == ''
--+  python3 = import('python').find_installation('python3')
--+else
--+  python3 = find_program(python3path)
--+endif
--+
-- efi_app_location = join_paths(libexecdir, 'fwupd', 'efi')
-- host_cpu = host_machine.cpu_family()
-- if host_cpu == 'x86'
--diff --git a/meson_options.txt b/meson_options.txt
--index 588ae29..5f6f521 100644
----- a/meson_options.txt
--+++ b/meson_options.txt
--@@ -8,3 +8,4 @@ option('efi_sbat_distro_pkgname', type : 'string', value : '', description : 'SB
-- option('efi_sbat_distro_version', type : 'string', value : '', description : 'SBAT distribution version, e.g. fwupd-1.5.6.fc33')
-- option('efi_sbat_distro_url', type : 'string', value : '', description : 'SBAT distribution URL, e.g. https://src.fedoraproject.org/rpms/fwupd')
-- option('genpeimg', type : 'feature', description : 'Use genpeimg to add NX support to binaries')
--+option('python', type : 'string', description : 'the absolute path of the python3 binary')
---- 
--2.34.1
--
-diff --git a/package/fwupd-efi/fwupd-efi.hash b/package/fwupd-efi/fwupd-efi.hash
-index 35dc9625ca..42f9eb83ff 100644
---- a/package/fwupd-efi/fwupd-efi.hash
-+++ b/package/fwupd-efi/fwupd-efi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  afd0805a2ad081a7caff2ef5bc004ce3a0147b538015e8eca966341716b1260e  fwupd-efi-1.6.tar.xz
-+sha256  96d4fc45467159b2664ce86ee7d5030e265fdb4d4a4d774080654d2f5b1561ff  fwupd-efi-1.7.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/fwupd-efi/fwupd-efi.mk b/package/fwupd-efi/fwupd-efi.mk
-index 45eeb8d824..fbff5a9043 100644
---- a/package/fwupd-efi/fwupd-efi.mk
-+++ b/package/fwupd-efi/fwupd-efi.mk
-@@ -4,9 +4,8 @@
+diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.hash b/package/python-mbstrdecoder/python-mbstrdecoder.hash
+index 2943ef293f..aa278d4590 100644
+--- a/package/python-mbstrdecoder/python-mbstrdecoder.hash
++++ b/package/python-mbstrdecoder/python-mbstrdecoder.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/mbstrdecoder/json
+-md5  33522a4bd9217dae46ebd0761e1a1e7c  mbstrdecoder-1.1.3.tar.gz
+-sha256  dcfd2c759322eb44fe193a9e0b1b86c5b87f3ec5ea8e1bb43b3e9ae423f1e8fe  mbstrdecoder-1.1.3.tar.gz
++md5  c9d9514be421c358ca75faea3a430672  mbstrdecoder-1.1.4.tar.gz
++sha256  8105ef9cf6b7d7d69fe7fd6b68a2d8f281ca9b365d7a9b670be376b2e6c81b21  mbstrdecoder-1.1.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
+diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.mk b/package/python-mbstrdecoder/python-mbstrdecoder.mk
+index 566420a60e..6f51b36103 100644
+--- a/package/python-mbstrdecoder/python-mbstrdecoder.mk
++++ b/package/python-mbstrdecoder/python-mbstrdecoder.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--FWUPD_EFI_VERSION = 1.6
--FWUPD_EFI_SITE = https://github.com/fwupd/fwupd-efi/releases/download/$(FWUPD_EFI_VERSION)
--FWUPD_EFI_SOURCE = fwupd-efi-$(FWUPD_EFI_VERSION).tar.xz
-+FWUPD_EFI_VERSION = 1.7
-+FWUPD_EFI_SITE = $(call github,fwupd,fwupd-efi,$(FWUPD_EFI_VERSION))
- FWUPD_EFI_LICENSE = LGPL-2.1+
- FWUPD_EFI_LICENSE_FILES = COPYING
- FWUPD_EFI_INSTALL_STAGING = YES
+-PYTHON_MBSTRDECODER_VERSION = 1.1.3
++PYTHON_MBSTRDECODER_VERSION = 1.1.4
+ PYTHON_MBSTRDECODER_SOURCE = mbstrdecoder-$(PYTHON_MBSTRDECODER_VERSION).tar.gz
+-PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/70/8f/dd5d4efbe3f90d2d38c948f0ca5c698e2d6cedc58ead2f5b90272cbcb4fa
++PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/31/ab/05ae008357c8bdb6245ebf8a101d99f26c096e0ea20800b318153da23796
+ PYTHON_MBSTRDECODER_SETUP_TYPE = setuptools
+ PYTHON_MBSTRDECODER_LICENSE = MIT
+ PYTHON_MBSTRDECODER_LICENSE_FILES = LICENSE
++PYTHON_MBSTRDECODER_DEPENDENCIES = host-python-setuptools-scm
+ 
+ $(eval $(python-package))
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
