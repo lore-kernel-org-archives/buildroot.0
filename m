@@ -4,96 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B4A1C02181
-	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 21:04:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD411C02181
+	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 21:13:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 348236089A;
-	Fri, 24 Jan 2025 21:04:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E87F860A5B;
+	Fri, 24 Jan 2025 21:13:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id glr_rOrq4QsL; Fri, 24 Jan 2025 21:04:29 +0000 (UTC)
+ id 65xeExt7WgE1; Fri, 24 Jan 2025 21:13:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C01B608C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C80C608FE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C01B608C6;
-	Fri, 24 Jan 2025 21:04:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3C9E3941
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 21:04:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C80C608FE;
+	Fri, 24 Jan 2025 21:13:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 20CE5941
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 21:13:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1D3CA81026
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 21:04:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 00E0C60903
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 21:13:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lkoxxNmlXu9n for <buildroot@buildroot.org>;
- Fri, 24 Jan 2025 21:04:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T-VrNPICV8js for <buildroot@buildroot.org>;
+ Fri, 24 Jan 2025 21:13:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2b; helo=mail-io1-xd2b.google.com;
+ client-ip=2607:f8b0:4864:20::129; helo=mail-il1-x129.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3A5A281004
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A5A281004
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
- [IPv6:2607:f8b0:4864:20::d2b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3A5A281004
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 21:04:27 +0000 (UTC)
-Received: by mail-io1-xd2b.google.com with SMTP id
- ca18e2360f4ac-844ce6d0716so189131939f.1
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 13:04:27 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9D184608A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D184608A9
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
+ [IPv6:2607:f8b0:4864:20::129])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9D184608A9
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 21:13:29 +0000 (UTC)
+Received: by mail-il1-x129.google.com with SMTP id
+ e9e14a558f8ab-3ce7a77e5a1so7249615ab.0
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 13:13:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1737752666; x=1738357466;
+ d=1e100.net; s=20230601; t=1737753208; x=1738358008;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=R1zYMy5flsjIAozKtrHeqFadkbWxn31g9p1se9/zhyc=;
- b=WWOwq/A8zIspBN1CmNGaNKlsXnAv4QFS4680GIIQeS1xvUtdQKuGGuB3sPRd5Kha2i
- e33pNLxm5iva+xMyXPBNCP7CXa4aw2c4I5jUbugiw4V1IismsYubVyOV9ivEWbeDmf9a
- YO2HMl6D9cDQqsXKkAe/KotoAoOC6nsDkXIl6MBY4yOsN2y1Ja3arQTbAWxQ3291tJKc
- iRdFjT5RzMJ6ACw30PQETutkNoSb5DU60CkKOp3QXNEUVwaIFdJYjYquhq1LFv/TM1xu
- 5B3FTLmfDlM9odCQjXj1138pMxesBjT4SH63K+cuQcs025tWl9mgi8WPrQXcUCW95RmH
- On+g==
-X-Gm-Message-State: AOJu0YyFhMsKFjcl93sCH4Z9orXxuDcnSC6lpq0CasfxjH4A/ddRaZe/
- 7e4jw/J992q4QpPV2a3dsGV2mfKqKfs+IjA49ruOGqNTICvgHpgPummnsmrx
-X-Gm-Gg: ASbGncs8gn8zuHxgXsN9v59ju9rcKBiS9d61jvgal0oVlILCEz8QH6Iz7xsrOzIXi7J
- LSnruINSAr8XJuj6Nz3kq4TJxwobU33hwb7f7crwe5jTeDwLQ6+GLcHPZzld4LkY8UeEz9QODjo
- CdoSXE6sprJWgW8b5R8jLLK+Pm5lb9293Rm9Xzl82GbW21Pog25eeO5+XNOLKMV8aquhdjpAkqW
- uUKCIeluLmM+nTTTPVc9RuD2BCexsqrJL/5L4jjBQ7aUc21OuFd5r7FQEyE5yO01xI3oOl3M16n
- sp21QhJSez2cV/H0GmtMuEOWqMSki8cwFRB43K/xTwkekSxBprC31NQ=
-X-Google-Smtp-Source: AGHT+IHQN612oisBh6M+VvGDfy6X+RKu7qqfTtXNzn3aW4urk94MeCXFtP8aIMqwtc/a2XVBQHWg6g==
-X-Received: by 2002:a05:6602:3e94:b0:83b:a47c:dbfd with SMTP id
- ca18e2360f4ac-851b618f83emr3145985339f.6.1737752665856; 
- Fri, 24 Jan 2025 13:04:25 -0800 (PST)
+ bh=p5sjBjTtckECqcYg+NR2uOoEZpsPIMBlJpjauqkDF/g=;
+ b=DV9hl2HvJzg1O4vuXx86a8lvw53toBuDXNxKxgHhBc326N9GJv/SKR4QRnDDaQ42LA
+ Nk0y6ZORjvdh9McIwBlKZEBfhvNkj4GGja3rbIvrp13UwyefKrEuT4MMgyA02bzKCThN
+ xzaCNSyotGiquC18UfrWjL3NgJup3K03KD7jJ12qTkoDUC5kfph7q2HIZVoI4Sl3nRk8
+ N45ubI1Agrw7MToRjnj+O9PuqM+6bvLnwbw1flpChI6XOYmkUuDkfD/88OKFRJgkaZGl
+ PVkt8yWu8eHNEz2suq/Gr0g5RobrsOzzcl/uWbQx/2bO7d02+23n0+shuWjmwSSmT8Qp
+ oIqA==
+X-Gm-Message-State: AOJu0YygGY7or9B7ttAncQqbaze51sxPoFFhgSaVLwJBjERLtd7/FFT5
+ q+EI1fOpcmzNWyMMkpOTdeWM1sY7mRWxTWW0rCgUBxMkD/s9G46YESlJDd/3
+X-Gm-Gg: ASbGncsY4+AuOqQ8UdcNoE/aCqYqlGigmZHscdaTv4GpNwNrcv8y1JqgKdVrPtH+aeb
+ NuDqT4eEiP7ZAUK/zHb3WSopKjg9QeNJSWzQuOVIr8bxGlUhFREkg0eol1k76xvSFJYg1t1YGm8
+ e/PZE4fY9bRrep0nJQmDy/L2R/wddqJeBPKdP1ETYvVFF6uekNbJo8TatUipQzhl6wSHDq2Bn7w
+ /kF0R99ybofdADIzsrmGvgcgwHy4+5+NylajqfAimW8V/nY9piwpmzw6e7ZAReumc3BpK/AkBoT
+ 4Q79lHbbTUbzG2JeTe2WAuJlfqnmN2gCGbP7dNPUilJuRxsj9js0pus=
+X-Google-Smtp-Source: AGHT+IE70UWpsl1baQOYrlB9GIcDk2LMSWHpqs1FLyCKQrgWv2z1LDWrPPUf635OHPU91J/hchdGKg==
+X-Received: by 2002:a05:6e02:1389:b0:3ce:6aa7:fe96 with SMTP id
+ e9e14a558f8ab-3cf744957f7mr234163475ab.22.1737753208307; 
+ Fri, 24 Jan 2025 13:13:28 -0800 (PST)
 Received: from james-x399.localdomain (71-218-115-58.hlrn.qwest.net.
  [71.218.115.58]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4ec1da4b774sm846296173.73.2025.01.24.13.04.25
+ e9e14a558f8ab-3cfc744be59sm8943785ab.37.2025.01.24.13.13.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 24 Jan 2025 13:04:25 -0800 (PST)
+ Fri, 24 Jan 2025 13:13:27 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 24 Jan 2025 14:04:23 -0700
-Message-Id: <20250124210423.3865575-1-james.hilliard1@gmail.com>
+Date: Fri, 24 Jan 2025 14:13:25 -0700
+Message-Id: <20250124211325.3873333-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1737752666; x=1738357466; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1737753208; x=1738358008; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=R1zYMy5flsjIAozKtrHeqFadkbWxn31g9p1se9/zhyc=;
- b=R/RjwBnDy7pux1ufr9Sngtq4Mg+vNtufFnTaVf3TrOhrDwjtqth9UhK1Lbe5+9gEmu
- WeS3JbkFcFBi90dTnYIjIoFVWS6rpuae3NM3Fn5SA710K9HLBu0k/HRKi618XbW+UbfA
- cLBa//C7/bZdC1IOrMBNAlOgI1JnvBSibYB890QVeJ6dGKX7UBwsThVgqnAI6mwlh7RA
- ENK7DeV6aH0uO8maBnkv5mWA0rd93+wDFCG+6aMJZtUvOPl/Q1fiq6qs5fiIKWi7vLEg
- UTALmx3HgWVVbfEwyRzXN+FC0BlqFlwmXs/h2GYJEMAplxMlEAkABy0FbP9Div/NIxaZ
- nKoQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=p5sjBjTtckECqcYg+NR2uOoEZpsPIMBlJpjauqkDF/g=;
+ b=ZsQ46AR1IHeWm2donOzEuPlR78BpLrapb0e5arVKiCLlMCrNQrsclxsh/5ZBSPo9Pa
+ kvzuV01iyfTezvCp5N6IRMVj/iNiOLvx76sLe71dwXrnd1NCZOyBxd3fNoEFMYGiCySL
+ RLWKPh35OfLCyxzFhvojO5jlqweiG8fM7zcqmvgYmqlv31P3zVwN9NijdJUrtvygVgYF
+ NPamsaqpBY7VV2afS4PxFoAddpKTNS6BBzjiQ19TmtempVjfyqtG8Cyn4IYK8C3DGUOb
+ gnb2bbz/gUbLsW9rxB+ugLEfve1eOV7LVsM6QN+BVwy7asKVYkom/kQfh8MmSGzfoP4D
+ zN8g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=R/RjwBnD
-Subject: [Buildroot] [PATCH 1/1] package/python-trove-classifiers: bump to
- version 2025.1.15.22
+ header.a=rsa-sha256 header.s=20230601 header.b=ZsQ46AR1
+Subject: [Buildroot] [PATCH v2 1/1] package/python-web2py: bump to version
+ 3.0.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,46 +105,355 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Drop patch which is now upstream.
+
+License file renamed without content changes.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- .../python-trove-classifiers/python-trove-classifiers.hash    | 4 ++--
- package/python-trove-classifiers/python-trove-classifiers.mk  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Changes v1 -> v2:
+  - fix license file name
+---
+ .../0001-fix-regexen-and-classname.patch      | 294 ------------------
+ package/python-web2py/python-web2py.hash      |   4 +-
+ package/python-web2py/python-web2py.mk        |   4 +-
+ 3 files changed, 4 insertions(+), 298 deletions(-)
+ delete mode 100644 package/python-web2py/0001-fix-regexen-and-classname.patch
 
-diff --git a/package/python-trove-classifiers/python-trove-classifiers.hash b/package/python-trove-classifiers/python-trove-classifiers.hash
-index bb58e4930b..bb9f40a7f3 100644
---- a/package/python-trove-classifiers/python-trove-classifiers.hash
-+++ b/package/python-trove-classifiers/python-trove-classifiers.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/trove-classifiers/json
--md5  b8c01a04127e7929f588fabbd0352ecb  trove_classifiers-2025.1.10.15.tar.gz
--sha256  be2c7d25e46cd39d5c7151acd389584df3919f61890f5f163c8ee2090ff71e7f  trove_classifiers-2025.1.10.15.tar.gz
-+md5  3656424a10a761108fa8250033ffe3d4  trove_classifiers-2025.1.15.22.tar.gz
-+sha256  90af74358d3a01b3532bc7b3c88d8c6a094c2fd50a563d13d9576179326d7ed9  trove_classifiers-2025.1.15.22.tar.gz
- # Locally computed sha256 checksums
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-trove-classifiers/python-trove-classifiers.mk b/package/python-trove-classifiers/python-trove-classifiers.mk
-index 98ebcc4d1b..8d2238d41a 100644
---- a/package/python-trove-classifiers/python-trove-classifiers.mk
-+++ b/package/python-trove-classifiers/python-trove-classifiers.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-web2py/0001-fix-regexen-and-classname.patch b/package/python-web2py/0001-fix-regexen-and-classname.patch
+deleted file mode 100644
+index f134c3d31b..0000000000
+--- a/package/python-web2py/0001-fix-regexen-and-classname.patch
++++ /dev/null
+@@ -1,294 +0,0 @@
+-From ad5cbbfdfacdcd3b4663e91a638de022d6e20477 Mon Sep 17 00:00:00 2001
+-From: eevelweezel <eevel.weezel@gmail.com>
+-Date: Mon, 6 Nov 2023 00:17:20 -0600
+-Subject: [PATCH] fix regexen and classname
+-
+-Upstream: https://github.com/web2py/web2py/commit/ad5cbbfdfacdcd3b4663e91a638de022d6e20477
+-[yann.morin.1998@free.fr: backport from upstream]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-
+----
+- applications/admin/controllers/default.py | 64 +++++++++++------------
+- gluon/compileapp.py                       |  4 +-
+- gluon/contrib/appconfig.py                |  2 +-
+- 3 files changed, 35 insertions(+), 35 deletions(-)
+-
+-diff --git a/applications/admin/controllers/default.py b/applications/admin/controllers/default.py
+-index 88697267..c53a3a76 100644
+---- a/applications/admin/controllers/default.py
+-+++ b/applications/admin/controllers/default.py
+-@@ -85,7 +85,7 @@ def safe_open(a, b):
+-         return tmp()
+-
+-     a_for_check = os.path.abspath(os.path.normpath(a))
+--    
+-+
+-     web2py_apps_root = os.path.abspath(up(request.folder))
+-     web2py_deposit_root = os.path.join(up(web2py_apps_root), 'deposit')
+-
+-@@ -230,7 +230,7 @@ def site():
+-     class IS_VALID_APPNAME(object):
+-
+-         def __call__(self, value):
+--            if not re.compile('^\w+$').match(value):
+-+            if not re.compile(r'^\w+$').match(value):
+-                 return (value, T('Invalid application name'))
+-             if not request.vars.overwrite and \
+-                     os.path.exists(os.path.join(apath(r=request), value)):
+-@@ -321,7 +321,7 @@ def site():
+-             session.flash = T(msg, dict(appname=form_update.vars.name))
+-         redirect(URL(r=request))
+-
+--    regex = re.compile('^\w+$')
+-+    regex = re.compile(r'^\w+$')
+-
+-     if is_manager():
+-         apps = [a for a in os.listdir(apath(r=request)) if regex.match(a) and
+-@@ -341,7 +341,7 @@ def site():
+- def report_progress(app):
+-     import datetime
+-     progress_file = os.path.join(apath(app, r=request), 'progress.log')
+--    regex = re.compile('\[(.*?)\][^\:]+\:\s+(\-?\d+)')
+-+    regex = re.compile(r'\[(.*?)\][^\:]+\:\s+(\-?\d+)')
+-     if not os.path.exists(progress_file):
+-         return []
+-     matches = regex.findall(open(progress_file, 'r').read())
+-@@ -609,7 +609,7 @@ def test():
+-     if len(request.args) > 1:
+-         file = request.args[1]
+-     else:
+--        file = '.*\.py'
+-+        file = r'.*\.py'
+-
+-     controllers = listdir(
+-         apath('%s/controllers/' % app, r=request), file + '$')
+-@@ -869,12 +869,12 @@ def todolist():
+-     app_path = apath('%(app)s' % {'app': app}, r=request)
+-     dirs = ['models', 'controllers', 'modules', 'private']
+-
+--    def listfiles(app, dir, regexp='.*\.py$'):
+-+    def listfiles(app, dir, regexp=r'.*\.py$'):
+-         files = sorted(listdir(apath('%(app)s/%(dir)s/' % {'app': app, 'dir': dir}, r=request), regexp))
+-         files = [x.replace(os.path.sep, '/') for x in files if not x.endswith('.bak')]
+-         return files
+-
+--    pattern = '#\s*(todo)+\s+(.*)'
+-+    pattern = r'#\s*(todo)+\s+(.*)'
+-     regex = re.compile(pattern, re.IGNORECASE)
+-
+-     output = []
+-@@ -1126,7 +1126,7 @@ def design():
+-         redirect(URL('site'))
+-
+-     # Get all models
+--    models = listdir(apath('%s/models/' % app, r=request), '.*\.py$')
+-+    models = listdir(apath('%s/models/' % app, r=request), r'.*\.py$')
+-     models = [x.replace('\\', '/') for x in models]
+-     defines = {}
+-     for m in models:
+-@@ -1136,7 +1136,7 @@ def design():
+-
+-     # Get all controllers
+-     controllers = sorted(
+--        listdir(apath('%s/controllers/' % app, r=request), '.*\.py$'))
+-+        listdir(apath('%s/controllers/' % app, r=request), r'.*\.py$'))
+-     controllers = [x.replace('\\', '/') for x in controllers]
+-     functions = {}
+-     for c in controllers:
+-@@ -1149,7 +1149,7 @@ def design():
+-
+-     # Get all views
+-     views = sorted(
+--        listdir(apath('%s/views/' % app, r=request), '[\w/\-]+(\.\w+)+$'))
+-+        listdir(apath('%s/views/' % app, r=request), r'[\w/\-]+(\.\w+)+$'))
+-     views = [x.replace('\\', '/') for x in views if not x.endswith('.bak')]
+-     extend = {}
+-     include = {}
+-@@ -1164,17 +1164,17 @@ def design():
+-         include[c] = [i[1] for i in items]
+-
+-     # Get all modules
+--    modules = listdir(apath('%s/modules/' % app, r=request), '.*\.py$')
+-+    modules = listdir(apath('%s/modules/' % app, r=request), r'.*\.py$')
+-     modules = modules = [x.replace('\\', '/') for x in modules]
+-     modules.sort()
+-
+-     # Get all private files
+--    privates = listdir(apath('%s/private/' % app, r=request), '[^\.#].*')
+-+    privates = listdir(apath('%s/private/' % app, r=request), r'[^\.#].*')
+-     privates = [x.replace('\\', '/') for x in privates]
+-     privates.sort()
+-
+-     # Get all static files
+--    statics = listdir(apath('%s/static/' % app, r=request), '[^\.#].*',
+-+    statics = listdir(apath('%s/static/' % app, r=request), r'[^\.#].*',
+-                       maxnum=MAXNFILES)
+-     statics = [x.replace(os.path.sep, '/') for x in statics]
+-     statics.sort()
+-@@ -1267,7 +1267,7 @@ def plugin():
+-         redirect(URL('site'))
+-
+-     # Get all models
+--    models = listdir(apath('%s/models/' % app, r=request), '.*\.py$')
+-+    models = listdir(apath('%s/models/' % app, r=request), r'.*\.py$')
+-     models = [x.replace('\\', '/') for x in models]
+-     defines = {}
+-     for m in models:
+-@@ -1277,7 +1277,7 @@ def plugin():
+-
+-     # Get all controllers
+-     controllers = sorted(
+--        listdir(apath('%s/controllers/' % app, r=request), '.*\.py$'))
+-+        listdir(apath('%s/controllers/' % app, r=request), r'.*\.py$'))
+-     controllers = [x.replace('\\', '/') for x in controllers]
+-     functions = {}
+-     for c in controllers:
+-@@ -1290,7 +1290,7 @@ def plugin():
+-
+-     # Get all views
+-     views = sorted(
+--        listdir(apath('%s/views/' % app, r=request), '[\w/\-]+\.\w+$'))
+-+        listdir(apath('%s/views/' % app, r=request), r'[\w/\-]+\.\w+$'))
+-     views = [x.replace('\\', '/') for x in views]
+-     extend = {}
+-     include = {}
+-@@ -1304,17 +1304,17 @@ def plugin():
+-         include[c] = [i[1] for i in items]
+-
+-     # Get all modules
+--    modules = listdir(apath('%s/modules/' % app, r=request), '.*\.py$')
+-+    modules = listdir(apath('%s/modules/' % app, r=request), r'.*\.py$')
+-     modules = modules = [x.replace('\\', '/') for x in modules]
+-     modules.sort()
+-
+-     # Get all private files
+--    privates = listdir(apath('%s/private/' % app, r=request), '[^\.#].*')
+-+    privates = listdir(apath('%s/private/' % app, r=request), r'[^\.#].*')
+-     privates = [x.replace('\\', '/') for x in privates]
+-     privates.sort()
+-
+-     # Get all static files
+--    statics = listdir(apath('%s/static/' % app, r=request), '[^\.#].*',
+-+    statics = listdir(apath('%s/static/' % app, r=request), r'[^\.#].*',
+-                       maxnum=MAXNFILES)
+-     statics = [x.replace(os.path.sep, '/') for x in statics]
+-     statics.sort()
+-@@ -1331,7 +1331,7 @@ def plugin():
+-         safe_write(crontab, '#crontab')
+-
+-     def filter_plugins(items):
+--        regex = re.compile('^plugin_' + plugin + '(/.*|\..*)?$')
+-+        regex = re.compile(r'^plugin_' + plugin + r'(/.*|\..*)?$')
+-         return [item for item in items if item and regex.match(item)]
+-
+-     return dict(app=app,
+-@@ -1363,14 +1363,14 @@ def create_file():
+-                 request.vars.location += request.vars.dir + '/'
+-             app = get_app(name=request.vars.location.split('/')[0])
+-             path = apath(request.vars.location, r=request)
+--        filename = re.sub('[^\w./-]+', '_', request.vars.filename)
+-+        filename = re.sub(r'[^\w./-]+', '_', request.vars.filename)
+-         if path[-7:] == '/rules/':
+-             # Handle plural rules files
+-             if len(filename) == 0:
+-                 raise SyntaxError
+-             if not filename[-3:] == '.py':
+-                 filename += '.py'
+--            lang = re.match('^plural_rules-(.*)\.py$', filename).group(1)
+-+            lang = re.match(r'^plural_rules-(.*)\.py$', filename).group(1)
+-             langinfo = read_possible_languages(apath(app, r=request))[lang]
+-             text = dedent("""
+-                    #!/usr/bin/env python
+-@@ -1518,7 +1518,7 @@ def create_file():
+-         redirect(request.vars.sender + anchor)
+-
+-
+--def listfiles(app, dir, regexp='.*\.py$'):
+-+def listfiles(app, dir, regexp=r'.*\.py$'):
+-     files = sorted(
+-         listdir(apath('%(app)s/%(dir)s/' % {'app': app, 'dir': dir}, r=request), regexp))
+-     files = [x.replace('\\', '/') for x in files if not x.endswith('.bak')]
+-@@ -1533,12 +1533,12 @@ def editfile(path, file, vars={}, app=None):
+-
+- def files_menu():
+-     app = request.vars.app or 'welcome'
+--    dirs = [{'name': 'models', 'reg': '.*\.py$'},
+--            {'name': 'controllers', 'reg': '.*\.py$'},
+--            {'name': 'views', 'reg': '[\w/\-]+(\.\w+)+$'},
+--            {'name': 'modules', 'reg': '.*\.py$'},
+--            {'name': 'static', 'reg': '[^\.#].*'},
+--            {'name': 'private', 'reg': '.*\.py$'}]
+-+    dirs = [{'name': 'models', 'reg': r'.*\.py$'},
+-+            {'name': 'controllers', 'reg': r'.*\.py$'},
+-+            {'name': 'views', 'reg': r'[\w/\-]+(\.\w+)+$'},
+-+            {'name': 'modules', 'reg': r'.*\.py$'},
+-+            {'name': 'static', 'reg': r'[^\.#].*'},
+-+            {'name': 'private', 'reg': r'.*\.py$'}]
+-     result_files = []
+-     for dir in dirs:
+-         result_files.append(TAG[''](LI(dir['name'], _class="nav-header component", _onclick="collapse('" + dir['name'] + "_files');"),
+-@@ -1559,7 +1559,7 @@ def upload_file():
+-         path = apath(request.vars.location, r=request)
+-
+-         if request.vars.filename:
+--            filename = re.sub('[^\w\./]+', '_', request.vars.filename)
+-+            filename = re.sub(r'[^\w\./]+', '_', request.vars.filename)
+-         else:
+-             filename = os.path.split(request.vars.file.filename)[-1]
+-
+-@@ -1628,7 +1628,7 @@ def errors():
+-
+-         hash2error = dict()
+-
+--        for fn in listdir(errors_path, '^[a-fA-F0-9.\-]+$'):
+-+        for fn in listdir(errors_path, r'^[a-fA-F0-9.\-]+$'):
+-             fullpath = os.path.join(errors_path, fn)
+-             if not os.path.isfile(fullpath):
+-                 continue
+-@@ -1727,7 +1727,7 @@ def errors():
+-         func = lambda p: os.stat(apath('%s/errors/%s' %
+-                                        (app, p), r=request)).st_mtime
+-         tickets = sorted(
+--            listdir(apath('%s/errors/' % app, r=request), '^\w.*'),
+-+            listdir(apath('%s/errors/' % app, r=request), r'^\w.*'),
+-             key=func,
+-             reverse=True)
+-
+-diff --git a/gluon/compileapp.py b/gluon/compileapp.py
+-index 45fa8a0e..be0446e1 100644
+---- a/gluon/compileapp.py
+-+++ b/gluon/compileapp.py
+-@@ -14,7 +14,7 @@ Note:
+-
+- import copy
+- import fnmatch
+--import imp
+-+from importlib import import_module
+- import marshal
+- import os
+- import py_compile
+-@@ -345,7 +345,7 @@ def local_import_aux(name, reload_force=False, app="welcome"):
+-     """
+-     items = name.replace("/", ".")
+-     name = "applications.%s.modules.%s" % (app, items)
+--    module = __import__(name)
+-+    module = import_module(name)
+-     for item in name.split(".")[1:]:
+-         module = getattr(module, item)
+-     if reload_force:
+-diff --git a/gluon/contrib/appconfig.py b/gluon/contrib/appconfig.py
+-index 1160e08a..2bf81841 100644
+---- a/gluon/contrib/appconfig.py
+-+++ b/gluon/contrib/appconfig.py
+-@@ -120,7 +120,7 @@ class AppConfigLoader(object):
+-         self.read_config()
+-
+-     def read_config_ini(self):
+--        config = configparser.SafeConfigParser()
+-+        config = configparser.RawConfigParser()
+-         config.read(self.file)
+-         settings = {}
+-         for section in config.sections():
+---
+-2.45.1
+-
+diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
+index ce3896a1ad..8d4ae3df28 100644
+--- a/package/python-web2py/python-web2py.hash
++++ b/package/python-web2py/python-web2py.hash
+@@ -1,3 +1,3 @@
+ # sha256 locally computed
+-sha256  2221840e4ef2c1e3810017921b2a72f2d5d1f888ca1f771cf7263bfead60570c  python-web2py-2.27.1.tar.gz
+-sha256  2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE
++sha256  52b3e2bc1ab300e2546bfa12cb2d836607853f3c74cd86e777ea57d493458224  python-web2py-3.0.11.tar.gz
++sha256  2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE.web2py.txt
+diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+index ed10333f53..6cab12c20c 100644
+--- a/package/python-web2py/python-web2py.mk
++++ b/package/python-web2py/python-web2py.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_TROVE_CLASSIFIERS_VERSION = 2025.1.10.15
-+PYTHON_TROVE_CLASSIFIERS_VERSION = 2025.1.15.22
- PYTHON_TROVE_CLASSIFIERS_SOURCE = trove_classifiers-$(PYTHON_TROVE_CLASSIFIERS_VERSION).tar.gz
--PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/db/1b/7bb619b31396d550022965673a0c284c914a0a4c68480f78097401e1b3e5
-+PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/f3/cb/8f6a91c74049180e395590901834d68bef5d6a2ce4c9ca9792cfadc1b9b4
- PYTHON_TROVE_CLASSIFIERS_SETUP_TYPE = setuptools
- PYTHON_TROVE_CLASSIFIERS_LICENSE = Apache-2.0
- PYTHON_TROVE_CLASSIFIERS_LICENSE_FILES = LICENSE
+-PYTHON_WEB2PY_VERSION = 2.27.1
++PYTHON_WEB2PY_VERSION = 3.0.11
+ PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,v$(PYTHON_WEB2PY_VERSION))
+ PYTHON_WEB2PY_LICENSE = LGPL-3.0
+-PYTHON_WEB2PY_LICENSE_FILES = LICENSE
++PYTHON_WEB2PY_LICENSE_FILES = LICENSE.web2py.txt
+ PYTHON_WEB2PY_CPE_ID_VENDOR = web2py
+ PYTHON_WEB2PY_CPE_ID_PRODUCT = web2py
+ PYTHON_WEB2PY_DEPENDENCIES = host-python3 python3 \
 -- 
 2.34.1
 
