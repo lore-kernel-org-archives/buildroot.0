@@ -1,104 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75F2BC0218B
-	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 09:26:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F195C02181
+	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 10:19:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D8F481E6F;
-	Fri, 24 Jan 2025 09:26:10 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jBh3G2Igiwhf; Fri, 24 Jan 2025 09:26:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2239481E71
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2239481E71;
-	Fri, 24 Jan 2025 09:26:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 34FA41167
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 09:26:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 97352612CC
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 09:26:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17B8B60F82;
+	Fri, 24 Jan 2025 10:19:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tjTtPu-jt0Ve for <buildroot@buildroot.org>;
- Fri, 24 Jan 2025 09:26:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
- envelope-from=gael.portay+rtone@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5E0276112C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E0276112C
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5E0276112C
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 09:26:03 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-3862e570832so315990f8f.0
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 01:26:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1737710761; x=1738315561;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=Q9iKuR0RTX75F5bQiT6jyKM4NMOpIiCp2pbgsFmDXVk=;
- b=ARVSBSoWSXKcNKim1S/yRZEAGMgZGEBARUVLIFN6QDYUNZ8rRjrBZSqGPFuS/qtjum
- VCQlqRZkh6OnbablKj8nokPAf2OEUnTUZZ48p5mESGevftmxY0F/uqp70z1o4pgXo9LO
- saSJGHDk3ZnPJTiPEYFORS08LjAJ1VqrHnkumBeb0xMvRNwwVTsdAW6Ay8DC1Nmaq8lN
- aIevx4ZiWoQpdVdFLFj/3k8n7THCy1iFjpvkDrKQP1AlvLXhAl8dZsB8N3esjmJ5KKZb
- VN4q+RKDT5BI7U1Zuq3x/xPLuBfYXCOGmjoUTB7dV7phAOrGds4IiE08nm3wh5YX23TU
- O8bQ==
-X-Gm-Message-State: AOJu0Yw7pXwHISaxx2OhpgSfdWG7OGc2fOovVovm3sxCkn/H1ulsWiiY
- yZwsYQ5w/CgDUF00jx8oACmbZqZlzfQkPGRSr0ICCSIh1pLGtOhyy89t1h5E
-X-Gm-Gg: ASbGncuVIOK5TaL9JX3NJJYAKhudAvu6HwwlA0HOFwsyfthkwEx6PYSueWyXqn0fkj8
- /ur8IWshsqATDv65mclvVRmfFdSTtHqS8Hy9KcRKlvYnqfmTaAotx8xPh2100PIg0Bjpz7FNzBQ
- u3DFff+IlepnhTH992fRlf0me22UQhXISX62g4BQX8sXHz0CSDUS0oaOO5XBEUklC42xS4N3D6F
- qEjoj4NnbsD3wceO9kLRaZ6032VLaXDLCQu7PvXs5ftUJI6++XXqkH1fqeV3O7Z1on/d6a6SG4s
- VHaqmS8MHO7EYtI=
-X-Google-Smtp-Source: AGHT+IHZ+rJ/HWx+3/tJijURRw7DT7T5ug33TI9jVBOQq7LUE1XBHN0HN6/UhYdEL+ETMVQGARFtnA==
-X-Received: by 2002:a05:6000:1889:b0:385:f479:ef46 with SMTP id
- ffacd0b85a97d-38bf57c0dc6mr9185398f8f.13.1737710760512; 
- Fri, 24 Jan 2025 01:26:00 -0800 (PST)
-Received: from archlinux.. ([2a01:e0a:ce:f2f0:2a6b:35ff:feb8:77d9])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-38c2a17650esm2154044f8f.12.2025.01.24.01.26.00
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 24 Jan 2025 01:26:00 -0800 (PST)
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay+rtone@gmail.com>
+ id xOwa946GRL8v; Fri, 24 Jan 2025 10:19:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F36AF60A76
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id F36AF60A76;
+	Fri, 24 Jan 2025 10:19:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5397D94A
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 10:19:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5AE2460A58
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 10:19:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZXqmxc5QMBCE for <buildroot@buildroot.org>;
+ Fri, 24 Jan 2025 10:19:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F05DB60856
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F05DB60856
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F05DB60856
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 10:19:16 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.116.19]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N8obG-1tOgAo2nLi-00sTfv; Fri, 24
+ Jan 2025 11:19:12 +0100
 To: buildroot@buildroot.org
-Cc: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay+rtone@gmail.com>
-Date: Fri, 24 Jan 2025 10:25:54 +0100
-Message-ID: <20250124092554.1547973-2-gael.portay+rtone@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250124092554.1547973-1-gael.portay+rtone@gmail.com>
-References: <20250124092554.1547973-1-gael.portay+rtone@gmail.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, Romain Naour <romain.naour@gmail.com>,
+ "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+Date: Fri, 24 Jan 2025 11:19:00 +0100
+Message-ID: <20250124101900.99783-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.47.2
 MIME-Version: 1.0
+X-Provags-ID: V03:K1:EhHa/9c9Jksl42aeDCRQYgS5YWk+AnONKzmMcsMdYV1zYSZ+YrS
+ uRXPL/BUxzhWPBm56AMVMgFr7jUVrwaN2SDcCQKsSl6AJXXrM+CMy/ucrZqSS4eNI0cZPsL
+ phdB1aPsTyIMbVjJ87Rp/8CYCWc3wCj/D61q+oUM7/lSyZJ3XA/m6S1rI/Ofv3rfVilQ8+Q
+ LnhvBR46mWgYp2R+tsv2w==
+UI-OutboundReport: notjunk:1;M01:P0:pl+eRrA+dJk=;IJGV3mA0gWe6J1vrjfGWGLFzHCd
+ NeP/mlSBGQTfay3eVE7y02WTAUoGM80TeQaog+NPwCnZk1XEGzqThnjTrjMFWcKxZKCprN/BN
+ czmUY0BKjxbgdwxQt6rG/nii/irgrGXVxEmim4cRUT1HEq3MZWMfINh/b/OQA/1dcBTwSDr++
+ t0gQbaCzyJP4v8LzlYyaiUZOp2gJFf+0W3Z1GNNLErGKa7dDGdNOAJCEP5Vnv27v70EZ+W/Sb
+ DLaPx65mql1qyLEE3xZoM9wDOMpDwFYbfMzRZAYS+ywgj513NWKgedat4fGttoAadbEuk5X48
+ /K89KTsOmhxeVPiTLlhwGRUA/XA66qoRCJsP/rr9bwd8PVKZIRGS0i4vuMtUe0xJYvJaYeHSp
+ xi2Z+gDFNNJKKM+gRTTnDKyblGipCmS5ztgqWyPcCSGywX964sgPc9ZFZ+jcw328RlQ4yENa9
+ rFbagVRuYSRrBMxlvV3IIfsedgBHCXNTDy8FO/r23YfF4v+ofTkc8n0fDsSkK7Sy0JEpkkeO8
+ iWY9IACvcq1S/TEYCcvJjYUPiaYBpC97yPPNyseQaHPyE4LhLdj1zH/XhlnBfEzu40kL3QFaG
+ Wp5ZzaU0F8mD+O0lStUM2FZEXTl5zbUON7oT2Q2OOZniI6BiHeFTqWTlxB+bli6rU7l25dvaY
+ lGMIjxG2gy0+KKOA1Llu72nqWCb0mWlJHOH2equHz9yaPeqywEVRfnG3hmFHTnZUPoVXn4TXF
+ r0/3uqsvWVlgBP0UaMaHxlSCpK/DXmPryVtuJmQxQHCZOSIQ3waYTe2SdruZeOv6FKpJ82OT9
+ X23US9wRFQO1gdU1f6N1UPGwnrY6hJoVp7CMFIVoM9iJqNKPm5/YZcnZ0sk8ctkFAHRjcnXak
+ kbu/WKkfXVOYyfMPVMQPBATRhOCQsZwx7pugrUvMElrE2L/jgQJD97Y3jrbFPresvxod4u0P7
+ QncqypH0yiid5+Idm9o3EIyoz+Mydm/uAebUixrY32Yqe5Tx5qZeXPi0QNiMxemDwowROTRNX
+ QrhPCIWxTi2v4PjHzgE8GGbDmOQVIqVqxxmE9a7doU340DCZF77UnjXivME2aZ4IkfGhm3TX5
+ S0aNSsmJPM80FaVa20rXrp5CGwI5DTaH+62zNor5u+aI5uZeSAQWhobQlv6pC0XEvMoxDraa3
+ /ssze/ezZP3JNVaMOL9NP+CzHs5DjQ3N3flakZj4EqQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1737710761; x=1738315561; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Q9iKuR0RTX75F5bQiT6jyKM4NMOpIiCp2pbgsFmDXVk=;
- b=bx43/fdpVP9rQ61aLGT3c1t/vIQec/zTHi01PsCNqK+NpDYyYux7pprLoqxZutacpv
- rO0gICWpSzlhoTmIKDOanOC1yn8PtSwOkfdSnVjeU73Elo0cLynPws92utd02221iVfm
- vaifhHwb54Mqv7+MvjvJqfNHQBszhX8qmBHr0TJFTt1Z8jsubssEZLpHICZitxrxq5yA
- TZi9trq+GAedlN/Rs59nhwkMZwPN8KPwlZQ43XhqtQNEGcxjZ/XRzOFS8YexNj56A/t3
- fTWr+GjR7PCBAd0RrkRrM8MLEMOyw7IPkWnap1e5VC4tkTOcf7n83L4m8SSKbgD+046u
- L4Hg==
+ d=gmx.de; 
+ s=s31663417; t=1737713952; x=1738318752; i=fiona.klute@gmx.de;
+ bh=JNrHh4JmN88GPt6JGavIWRKxOiDzQ56uD4mjdMnVRWE=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=f0wi6PvJlgTPyOHTCbHwjYUeCJudpYcI5x+rjC8HgtPtsFrYKT2wgmTr00ry4fuD
+ eIqL4MuYk0lmXwVsEa3laYDqcoltEiMa6kByX5BHPWi7hC++OEuTceFkGQEDgnCM3
+ A/t217lKTHSro0g7XsuZnVrkAmgJ+EuUbOjCz+Qx9SDYOH4BKaqEBZo+V0v0ekrLX
+ 5hiL5NHFck1f33bDsMTBUl95K10k6xoHxnb8evfDnktPLNJjJZeuZEUlmQ+HPcqhG
+ 6+CIck4Mx4L3wajCmp93YpYnbJJ9R8t2/HCInaqKzeGsxWXFXjywhun7DBRuf0tBB
+ dTIqFkVqDO2p25plwg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=bx43/fdp
-Subject: [Buildroot] [PATCH 2/2] package/openssh: split sftp-server from
- server programs
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=f0wi6PvJ
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: add option to build kmsro
+ and zink Gallium drivers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,65 +103,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhlIHNmdHAtc2VydmVyIHByb2dyYW0gaXMgYSBzdGFuZGFsb25lIHByb2dyYW0gdGhhdCBpcyBv
-ZnRlbiB1c2VkIGJ5CmNsaWVudHMgdG8gc2NwIHRoaW5ncyB0byBzZXJ2ZXIsIGV2ZW4gdXNpbmcg
-dGhlIGRyb3BiZWFyIFNTSCBzZXJ2ZXIuCgpFbmFibGluZyBib3RoIGRyb3BiZWFyIGFuZCB0aGUg
-b3BlbnNzaCBzZXJ2ZXIgcHJvZ3JhbXMgaW5zdGFsbHMgdGhlIGluaXQKb3Igc2VydmljZSBmaWxl
-cyBmb3IgYm90aCBTU0ggc2VydmVycy4KClRoZSBpbml0LW1hbmFnZXIgcHVsbHMgYm90aCBzZXJ2
-aWNlcyBhdCBzdGFydHVwIGJ1dCBvbmx5IGEgc2luZ2xlIGRhZW1vbgpjYW4gYmluZCBhdCBhIHRp
-bWUgdG8gcG9ydCAyMiwgdGhlIGxhdGVyIGZhaWxzLgoKVGhpcyBzcGxpdHMgdGhlIHNmdHAtc2Vy
-dmVyIGZyb20gdGhlIHNlcnZlciBwcm9ncmFtcyBzbyBvbmUgY2FuIGVuYWJsZQp0aGUgZHJvcGJl
-YXIgU1NIIHNlcnZlciB3aXRoIHRoZSBvcGVuc3NoIHNmdHAtc2VydmVyIHdpdGhvdXQgcHVsbGlu
-ZyB0aGUKb3BlbnNzaCBzZXJ2ZXIuCgpGaXhlczoKCgkgICAgICAgICBTdGFydGluZyBPcGVuU1NI
-IHNlcnZlciBkYWVtb24uLi4KCVsgIE9LICBdIFN0YXJ0ZWQgRHJvcGJlYXIgU1NIIGRhZW1vbi4K
-CVtGQUlMRURdIEZhaWxlZCB0byBzdGFydCBPcGVuU1NIIHNlcnZlciBkYWVtb24uCglTZWUgJ3N5
-c3RlbWN0bCBzdGF0dXMgc3NoZC5zZXJ2aWNlJyBmb3IgZGV0YWlscy4KCgkoLi4uKQoKCWJ1aWxk
-cm9vdCBzeXN0ZW1kWzFdOiBTdGFydGluZyBPcGVuU1NIIHNlcnZlciBkYWVtb24uLi4KCWJ1aWxk
-cm9vdCBzeXN0ZW1kWzFdOiBTdGFydGVkIE9wZW5TU0ggc2VydmVyIGRhZW1vbi4KCWJ1aWxkcm9v
-dCBzc2hkWzI5N106IEJpbmQgdG8gcG9ydCAyMiBvbiAwLjAuMC4wIGZhaWxlZDogQWRkcmVzcyBh
-bHJlYWR5IGluIHVzZS4KCWJ1aWxkcm9vdCBzc2hkWzI5N106IEJpbmQgdG8gcG9ydCAyMiBvbiA6
-OiBmYWlsZWQ6IEFkZHJlc3MgYWxyZWFkeSBpbiB1c2UuCglidWlsZHJvb3Qgc3NoZFsyOTddOiBD
-YW5ub3QgYmluZCBhbnkgYWRkcmVzcy4KCWJ1aWxkcm9vdCBzeXN0ZW1kWzFdOiBzc2hkLnNlcnZp
-Y2U6IE1haW4gcHJvY2VzcyBleGl0ZWQsIGNvZGU9ZXhpdGVkLCBzdGF0dXM9MjU1L0VYQ0VQVElP
-TgoJYnVpbGRyb290IHN5c3RlbWRbMV06IHNzaGQuc2VydmljZTogRmFpbGVkIHdpdGggcmVzdWx0
-ICdleGl0LWNvZGUnLgoKU2lnbmVkLW9mZi1ieTogR2HDq2wgUE9SVEFZIDxnYWVsLnBvcnRheSty
-dG9uZUBnbWFpbC5jb20+Ci0tLQogcGFja2FnZS9vcGVuc3NoL0NvbmZpZy5pbiAgfCA5ICsrKysr
-KysrLQogcGFja2FnZS9vcGVuc3NoL29wZW5zc2gubWsgfCA4ICsrKysrKystCiAyIGZpbGVzIGNo
-YW5nZWQsIDE1IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFj
-a2FnZS9vcGVuc3NoL0NvbmZpZy5pbiBiL3BhY2thZ2Uvb3BlbnNzaC9Db25maWcuaW4KaW5kZXgg
-MzhiN2Y2OGE1Yi4uYmUxZGI5OTM4MiAxMDA2NDQKLS0tIGEvcGFja2FnZS9vcGVuc3NoL0NvbmZp
-Zy5pbgorKysgYi9wYWNrYWdlL29wZW5zc2gvQ29uZmlnLmluCkBAIC0xOSwxMiArMTksMTkgQEAg
-Y29uZmlnIEJSMl9QQUNLQUdFX09QRU5TU0hfQ0xJRU5UCiAJICBDbGllbnQgcHJvZ3JhbXM6IHNz
-aCwgc2NwLCBzZnRwLCBzc2gtYWdlbnQsIHNzaC1hZGQsCiAJICBzc2gtY29weS1pZC4KIAorY29u
-ZmlnIEJSMl9QQUNLQUdFX09QRU5TU0hfU0ZUUF9TRVJWRVIKKwlib29sICJzZnRwIHNlcnZlciIK
-KwlkZWZhdWx0IHkKKwlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCWENSWVBUIGlmIEJSMl9UT09MQ0hB
-SU5fVVNFU19HTElCQworCWhlbHAKKwkgIFNGVFAgU2VydmVyIHByb2dyYW0uCisKIGNvbmZpZyBC
-UjJfUEFDS0FHRV9PUEVOU1NIX1NFUlZFUgogCWJvb2wgInNlcnZlciIKIAlkZWZhdWx0IHkKIAlz
-ZWxlY3QgQlIyX1BBQ0tBR0VfTElCWENSWVBUIGlmIEJSMl9UT09MQ0hBSU5fVVNFU19HTElCQwog
-CWhlbHAKLQkgIFNlcnZlciBwcm9ncmFtczogc3NoZCwgc3NoZC1zZXNzaW9uLCBzZnRwLXNlcnZl
-cgorCSAgU2VydmVyIHByb2dyYW1zOiBzc2hkLCBzc2hkLXNlc3Npb24uCiAKIGNvbmZpZyBCUjJf
-UEFDS0FHRV9PUEVOU1NIX0tFWV9VVElMUwogCWJvb2wgImtleSB1dGlsaXRpZXMiCmRpZmYgLS1n
-aXQgYS9wYWNrYWdlL29wZW5zc2gvb3BlbnNzaC5tayBiL3BhY2thZ2Uvb3BlbnNzaC9vcGVuc3No
-Lm1rCmluZGV4IDk1YzA1OWUwM2QuLmMyOTQ1N2I3ZjkgMTAwNjQ0Ci0tLSBhL3BhY2thZ2Uvb3Bl
-bnNzaC9vcGVuc3NoLm1rCisrKyBiL3BhY2thZ2Uvb3BlbnNzaC9vcGVuc3NoLm1rCkBAIC0xMTQs
-MTEgKzExNCwxNyBAQCBlbmRlZgogT1BFTlNTSF9QT1NUX0lOU1RBTExfVEFSR0VUX0hPT0tTICs9
-IE9QRU5TU0hfSU5TVEFMTF9DTElFTlRfUFJPR1JBTVMKIGVuZGlmCiAKK2lmZXEgKCQoQlIyX1BB
-Q0tBR0VfT1BFTlNTSF9TRlRQX1NFUlZFUikseSkKK2RlZmluZSBPUEVOU1NIX0lOU1RBTExfU0ZU
-UF9TRVJWRVJfUFJPR1JBTQorCSQoSU5TVEFMTCkgLUQgLW0gMDc1NSAkKEBEKS9zZnRwLXNlcnZl
-ciAkKFRBUkdFVF9ESVIpL3Vzci9saWJleGVjL3NmdHAtc2VydmVyCitlbmRlZgorT1BFTlNTSF9Q
-T1NUX0lOU1RBTExfVEFSR0VUX0hPT0tTICs9IE9QRU5TU0hfSU5TVEFMTF9TRlRQX1NFUlZFUl9Q
-Uk9HUkFNCitlbmRpZgorCiBpZmVxICgkKEJSMl9QQUNLQUdFX09QRU5TU0hfU0VSVkVSKSx5KQog
-ZGVmaW5lIE9QRU5TU0hfSU5TVEFMTF9TRVJWRVJfUFJPR1JBTVMKIAkkKElOU1RBTEwpIC1EIC1t
-IDA3NTUgJChARCkvc3NoZCAkKFRBUkdFVF9ESVIpL3Vzci9zYmluL3NzaGQKIAkkKElOU1RBTEwp
-IC1EIC1tIDA3NTUgJChARCkvc3NoZC1zZXNzaW9uICQoVEFSR0VUX0RJUikvdXNyL2xpYmV4ZWMv
-c3NoZC1zZXNzaW9uCi0JJChJTlNUQUxMKSAtRCAtbSAwNzU1ICQoQEQpL3NmdHAtc2VydmVyICQo
-VEFSR0VUX0RJUikvdXNyL2xpYmV4ZWMvc2Z0cC1zZXJ2ZXIKIGVuZGVmCiBPUEVOU1NIX1BPU1Rf
-SU5TVEFMTF9UQVJHRVRfSE9PS1MgKz0gT1BFTlNTSF9JTlNUQUxMX1NFUlZFUl9QUk9HUkFNUwog
-Ci0tIAoyLjQ4LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+
+This allows using simple displays not directly connected to the GPU,
+and platforms supported only via Vulkan.
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+---
+ package/mesa3d/Config.in | 22 ++++++++++++++++++++++
+ package/mesa3d/mesa3d.mk |  2 ++
+ 2 files changed, 24 insertions(+)
+
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 7761b0a650..1a446cac49 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -140,6 +140,18 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
+ 	help
+ 	  Mesa driver for ARM Mali Utgard GPUs.
+ 
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
++	bool "Gallium kmsro drivers"
++	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV \
++		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO \
++		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA \
++		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST \
++		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D \
++		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	help
++	  Mesa drivers for kernel mode-setting render-only devices
++
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ 	bool "Gallium nouveau driver"
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+@@ -262,6 +274,16 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL
+ 	  virgl is the 3D acceleration backend for the virtio-gpu
+ 	  shipping with qemu.
+ 
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ZINK
++	bool "Gallium zink driver"
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
++	select BR2_PACKAGE_VULKAN_LOADER
++	help
++	  Zink is a Gallium driver that emits Vulkan API calls,
++	  providing OpenGL support on devices that only support
++	  Vulkan.
++
+ config BR2_PACKAGE_MESA3D_VDPAU
+ 	bool "Gallium VDPAU state tracker"
+ 	depends on BR2_PACKAGE_XORG7
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index ce460c4475..2a0b3aefe6 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -99,6 +99,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO) += freedre
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915)     += i915
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS)     += iris
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
++MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST) += panfrost
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300)     += r300
+@@ -110,6 +111,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA)    += tegra
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D)      += v3d
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
++MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ZINK)     += zink
+ # Vulkan Drivers
+ MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM) += broadcom
+ MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)   += intel
+-- 
+2.47.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
