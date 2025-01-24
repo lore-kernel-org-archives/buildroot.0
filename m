@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD540C02181
-	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 14:54:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99BAFC02181
+	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 14:54:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8612C81746;
-	Fri, 24 Jan 2025 14:54:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 613786FB06;
+	Fri, 24 Jan 2025 14:54:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bppoHLCzBvNQ; Fri, 24 Jan 2025 14:54:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dlX18rd-TmF9; Fri, 24 Jan 2025 14:54:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 907AA81749
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D9A26088C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 907AA81749;
-	Fri, 24 Jan 2025 14:54:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D9A26088C;
+	Fri, 24 Jan 2025 14:54:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7F7DD944
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 14:54:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 196F81167
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 14:54:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DFB93404B6
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 14:54:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 82F4A404B6
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 14:54:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id avT4dwdOBuih for <buildroot@buildroot.org>;
+ id fqnOLaqgn1eU for <buildroot@buildroot.org>;
  Fri, 24 Jan 2025 14:54:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBCFA408F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E233841A8E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DBCFA408F1
+ by smtp2.osuosl.org (Postfix) with ESMTP id E233841A8E
  for <buildroot@buildroot.org>; Fri, 24 Jan 2025 14:54:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C0EF486199; Fri, 24 Jan 2025 14:54:02 +0000 (UTC)
+ id CDB578619C; Fri, 24 Jan 2025 14:54:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 24 Jan 2025 15:52:24 +0100
+Date: Fri, 24 Jan 2025 15:53:43 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bb10ce004991a21ee56bc887bc4f5c943bb12f7d
-X-Git-Newrev: 6e9197130696f448e5e37799076b905d9dd07390
+X-Git-Oldrev: 6e9197130696f448e5e37799076b905d9dd07390
+X-Git-Newrev: bfd91965dde86cf348c1c79ce045f2320d4e1e46
 X-Patchwork-Hint: ignore
-Message-Id: <20250124145402.C0EF486199@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rauc: bump to 1.13
+Message-Id: <20250124145402.CDB578619C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rsyslog: bump version to 8.2412.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +59,49 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5153229281638929182=="
+Content-Type: multipart/mixed; boundary="===============1885083599731777606=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5153229281638929182==
+--===============1885083599731777606==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e9197130696f448e5e37799076b905d9dd07390
+commit: https://git.buildroot.net/buildroot/commit/?id=bfd91965dde86cf348c1c79ce045f2320d4e1e46
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/rauc/rauc/releases/tag/v1.13
-
-Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
-Tested-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rauc/rauc.hash | 2 +-
- package/rauc/rauc.mk   | 2 +-
+ package/rsyslog/rsyslog.hash | 2 +-
+ package/rsyslog/rsyslog.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index f3ab0a0be9..ff3e0e72e4 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  96681e119af8b6b9bb30e856a831e5a5b3292e9a5959d26ffa274b5135bc5031  rauc-1.12.tar.xz
-+sha256  1ddb218a5d713c8dbd6e04d5501d96629f1c8e2521576fbd9e7751edb7da113e  rauc-1.13.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 475aee5d89..92f58c6139 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
+diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+index 9c523c5881..bd783a69b6 100644
+--- a/package/rsyslog/rsyslog.hash
++++ b/package/rsyslog/rsyslog.hash
+@@ -1,5 +1,5 @@
+ # From http://www.rsyslog.com/downloads/download-v8-stable/
+-sha256  b6be03c766df4cde314972c1c01cb74f3eacf8aec57066c0c12be0e079726eba  rsyslog-8.2410.0.tar.gz
++sha256  8cdfa5a077cba576bdd6b1841cc2848b774e663b2e44a39512bb820174174802  rsyslog-8.2412.0.tar.gz
+ 
+ # Locally calculated
+ sha256  054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083  COPYING
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 69b32076f8..f72e19ee0d 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RAUC_VERSION = 1.12
-+RAUC_VERSION = 1.13
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
+-RSYSLOG_VERSION = 8.2410.0
++RSYSLOG_VERSION = 8.2412.0
+ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
+ RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
+ RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
 
---===============5153229281638929182==
+--===============1885083599731777606==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -113,4 +112,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5153229281638929182==--
+--===============1885083599731777606==--
