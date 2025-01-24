@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62290C02181
-	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 18:29:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B65E2C0218C
+	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 18:29:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFD9A42A12;
-	Fri, 24 Jan 2025 18:29:06 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5FCUzuwAiOvw; Fri, 24 Jan 2025 18:29:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6127342A19
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6127342A19;
-	Fri, 24 Jan 2025 18:29:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id CF490944
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 18:29:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BDB4582CAC
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 18:29:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 685F982D2F;
+	Fri, 24 Jan 2025 18:29:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1JMENPuvEAB7 for <buildroot@buildroot.org>;
- Fri, 24 Jan 2025 18:29:03 +0000 (UTC)
+ id fJjDU6FnxkV1; Fri, 24 Jan 2025 18:29:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52FC082CB7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52FC082CB7;
+	Fri, 24 Jan 2025 18:29:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 21FFE94A
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 18:29:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B76B42A11
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 18:29:04 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ppdtCqStG1OI for <buildroot@buildroot.org>;
+ Fri, 24 Jan 2025 18:29:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E69EB82C99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF32D42A0F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E69EB82C99
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF32D42A0F
  for <buildroot@buildroot.org>; Fri, 24 Jan 2025 18:29:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D3A6D861DA; Fri, 24 Jan 2025 18:29:02 +0000 (UTC)
+ id B9C5A861D8; Fri, 24 Jan 2025 18:29:02 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 24 Jan 2025 19:25:18 +0100
+Date: Fri, 24 Jan 2025 19:24:52 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 73c6066bda9bee56a459a09b5273ead84c7d5815
-X-Git-Newrev: 6bd147c35ae2e454c0905861256d61a724bd68a4
+X-Git-Oldrev: 1cbd22215010660116263ccb8f666ec6dfd601cd
+X-Git-Newrev: a5b360e53f864ac10f9a93182f89c8b2bde2797c
 X-Patchwork-Hint: ignore
-Message-Id: <20250124182902.D3A6D861DA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/versal_*: migrate to
- xilinx-embeddedsw
+Message-Id: <20250124182902.B9C5A861D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/uboot.mk: new zynqmp pmufw embeddedsw
+ option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,90 +65,109 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bd147c35ae2e454c0905861256d61a724bd68a4
+commit: https://git.buildroot.net/buildroot/commit/?id=a5b360e53f864ac10f9a93182f89c8b2bde2797c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Migrate versal defconfigs to xilinx-embeddedsw package for building
-versal plm and versal psmfw applications.
+The new BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW option will enable u-boot to
+use the xilinx-embeddedsw package for building a pmufw.elf that gets included
+in the generated boot.bin.
+
+If the BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW option is enabled, then the
+BR2_TARGET_UBOOT_ZYNQMP_PMUFW config for downloading a prebuilt pmufw from a
+custom location will be ignored.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+[Luca: Tested on Kria KV260 starter kit]
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/versal_vck190_defconfig | 5 +++++
- configs/versal_vek280_defconfig | 5 +++++
- configs/versal_vpk180_defconfig | 5 +++++
- 3 files changed, 15 insertions(+)
+ boot/uboot/Config.in | 44 ++++++++++++++++++++++++++++++++++++++------
+ boot/uboot/uboot.mk  |  5 ++++-
+ 2 files changed, 42 insertions(+), 7 deletions(-)
 
-diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
-index c046d53010..100fa1fa35 100644
---- a/configs/versal_vck190_defconfig
-+++ b/configs/versal_vck190_defconfig
-@@ -1,6 +1,8 @@
- BR2_aarch64=y
- BR2_cortex_a72=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
-@@ -34,6 +36,9 @@ BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
- BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vck190-rev1.1"
-+BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
- BR2_TARGET_XILINX_PREBUILT=y
- BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.2"
- BR2_TARGET_XILINX_PREBUILT_VERSAL=y
-diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
-index 0ca9d30b2d..38bb7c0e75 100644
---- a/configs/versal_vek280_defconfig
-+++ b/configs/versal_vek280_defconfig
-@@ -1,6 +1,8 @@
- BR2_aarch64=y
- BR2_cortex_a72=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_GLOBAL_PATCH_DIR="board/versal/vek280/patches board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
-@@ -34,6 +36,9 @@ BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
- BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vek280-revB"
-+BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
- BR2_TARGET_XILINX_PREBUILT=y
- BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.2"
- BR2_TARGET_XILINX_PREBUILT_VERSAL=y
-diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
-index 1367760325..e70b3aa0f8 100644
---- a/configs/versal_vpk180_defconfig
-+++ b/configs/versal_vpk180_defconfig
-@@ -1,6 +1,8 @@
- BR2_aarch64=y
- BR2_cortex_a72=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
-@@ -34,6 +36,9 @@ BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
- BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vpk180-revA"
-+BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
- BR2_TARGET_XILINX_PREBUILT=y
- BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.2"
- BR2_TARGET_XILINX_PREBUILT_VERSAL=y
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index b6ac2f9380..13d45140eb 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -572,23 +572,55 @@ config BR2_TARGET_UBOOT_ZYNQMP
+ 
+ if BR2_TARGET_UBOOT_ZYNQMP
+ 
+-config BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT
+-	bool "xilinx-prebuilt pmufw.elf"
++choice
++	prompt "PMUFW origin"
++	default BR2_TARGET_UBOOT_ZYNQMP_PMUFW_CUSTOM
+ 	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
++	help
++	  Choose between the following options:
++	  1) Build from source via xilinx-embeddedsw
++	  2) Official prebuilt via xilinx-prebuilt
++	  3) Prebuilt from custom location
++
++	  U-Boot build process will generate a boot.bin (to be loaded
++	  by the ZynqMP boot ROM) containing both the U-Boot SPL and
++	  the PMU firmware in the Xilinx-specific boot format.
++
++config BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW
++	bool "Build from source via xilinx-embeddedsw"
++	depends on BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW
++	help
++	  Use xilinx-embeddedsw boot package for building
++	  zynqmp pmufw.elf from
++	    https://github.com/Xilinx/embeddedsw repo.
++
++comment "To build from source, xilinx-embeddedsw needs to be enabled with zynqmp_pmufw option."
++	depends on !BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW
++
++config BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT
++	bool "Prebuilt via xilinx-prebuilt"
+ 	depends on BR2_TARGET_XILINX_PREBUILT_ZYNQMP || BR2_TARGET_XILINX_PREBUILT_KRIA
+ 	help
+ 	  Use xilinx-prebuilt boot package for downloading prebuilt
+ 	  zynqmp pmufw.elf from
+ 	    https://github.com/Xilinx/soc-prebuilt-firmware repo.
+ 
+-	  U-Boot build process will generate a boot.bin (to be loaded by
+-	  by the ZynqMP boot ROM) containing both the U-Boot SPL and the
+-	  PMU firmware in the Xilinx-specific boot format.
++comment "To use official prebuilt, xilinx-prebuilt needs to be enabled with zynqmp or kria option."
++	depends on !BR2_TARGET_XILINX_PREBUILT_KRIA
++	depends on !BR2_TARGET_XILINX_PREBUILT_ZYNQMP
++
++config BR2_TARGET_UBOOT_ZYNQMP_PMUFW_CUSTOM
++	bool "Prebuilt from custom location"
++	help
++	  Location of a PMU firmware binary defined by:
++	  BR2_TARGET_UBOOT_ZYNQMP_PMUFW
++
++endchoice # PMUFW origin
+ 
+ config BR2_TARGET_UBOOT_ZYNQMP_PMUFW
+ 	string "Custom PMU firmware location"
+ 	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+-	depends on !BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT
++	depends on BR2_TARGET_UBOOT_ZYNQMP_PMUFW_CUSTOM
+ 	help
+ 	  Location of a PMU firmware binary.
+ 
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index b3094029e7..cb745413e4 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -453,7 +453,10 @@ endef
+ 
+ ifeq ($(BR2_TARGET_UBOOT_ZYNQMP),y)
+ 
+-ifeq ($(BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT),y)
++ifeq ($(BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW),y)
++UBOOT_DEPENDENCIES += xilinx-embeddedsw
++UBOOT_ZYNQMP_PMUFW_PATH = $(BINARIES_DIR)/pmufw.elf
++else ifeq ($(BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT),y)
+ UBOOT_DEPENDENCIES += xilinx-prebuilt
+ UBOOT_ZYNQMP_PMUFW_PATH = $(BINARIES_DIR)/pmufw.elf
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
