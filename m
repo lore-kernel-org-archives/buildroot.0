@@ -1,97 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BEACC02181
-	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 12:47:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4432EC02181
+	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 13:42:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E44A860A9B;
-	Fri, 24 Jan 2025 12:47:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6B61426A8;
+	Fri, 24 Jan 2025 13:42:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1p93hSqRBsGR; Fri, 24 Jan 2025 12:47:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KapHu8fdwbzv; Fri, 24 Jan 2025 13:42:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F169C608BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6585426BA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F169C608BD;
-	Fri, 24 Jan 2025 12:47:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6585426BA;
+	Fri, 24 Jan 2025 13:42:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AC4F4944
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 12:47:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B18D941
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 13:42:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8D7F880AC5
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 12:47:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C424811EB
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 13:42:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k8kthVD6OYSr for <buildroot@buildroot.org>;
- Fri, 24 Jan 2025 12:47:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 15EE4809EB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15EE4809EB
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 15EE4809EB
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 12:47:22 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.lan ([85.22.116.19]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N4QsO-1tT1aD3ix4-00sHt5; Fri, 24
- Jan 2025 13:47:20 +0100
+ id LzTkZlcVjhO7 for <buildroot@buildroot.org>;
+ Fri, 24 Jan 2025 13:42:34 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::62f; helo=mail-pl1-x62f.google.com;
+ envelope-from=flavio.tapajos@newtesc.com.br; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2E171811D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E171811D8
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
+ [IPv6:2607:f8b0:4864:20::62f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2E171811D8
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 13:42:32 +0000 (UTC)
+Received: by mail-pl1-x62f.google.com with SMTP id
+ d9443c01a7336-21634338cfdso48203095ad.2
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 05:42:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1737726152; x=1738330952;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=/1MlcdTQQXar+zHdey/8qjQ19egKAEqNw2b28Je/MEY=;
+ b=Qrwo/Oecuc33fRO4yEQwVuUpQPUqg3ljr0SEC74SVxWut9smumQns2z59sEx/qyBoU
+ VewiunA0Lt01yrR2cnlEoQosLa8kDDOPmny/Z3BI8pKw3pk6JtNU37R80EEDz/bBYhUk
+ jNkGJluvNrxuCIm6m81LRr+mrGcSYWQmIm3+dvq/mafz054iNeQ3NyaxZSoWuRq1AL4B
+ p1IB858Wm0wrs9mF/9ilU1064u6kx1tQ5uryZFA1GX+a7XZGrAF+hVnqr3Ca9kOfoTkP
+ 1btKCXqyh+zen4zSDoVExxngTBsw5UcdTc0bY6k5PdeFlNXi/bWMhh7C/LZhLgc67RcC
+ 2P+g==
+X-Gm-Message-State: AOJu0YzkoETyNR5RdTBIP5n+HnKJ/15FzajCRmoUj43J5hiaedTrFDOI
+ xMZ79ASOg37zxvRfBWli63onFklIgtPVKN0Wnh8ZDr/2SjbgFv2Tx9xW3RU2q/IMczn4pXs9pBp
+ e
+X-Gm-Gg: ASbGncsIoRQWWXXMQDo1nKClm6x//ikobw/A24qsTdtXR2aBl9ZiPV7YLHexI42AkxC
+ z7/vRk1e0PiSYA0JO+hAFwULFCdyeH1zYqksHhx+RAbORn2FK/dWMhSqSGWzHQjmjsRxOZMQWsr
+ mKJjS3Y1UUwPJGo5g1n64V1V6HS3Dy1Uoa1ihFYv2LAtljPVpfz+Cfgr1iWSZ9YXDSCR5K6DST1
+ anxgXgIAYrLSLrXPBAwvNvvke9OSQqIjR8+2wQJkPjPoAZUisDkE2JzSI5izH9ByeuDeXjRDXWp
+ nNkbZtp3jG/KlPBhhLARRjW6P5NhtGCyZuI=
+X-Google-Smtp-Source: AGHT+IGY1z/5M1BaEzThSRlwWLU6ex5HFFtO6CZh+zBd9Npyfs7pvTKwinzPf/fpafaxgK/3yM91/Q==
+X-Received: by 2002:a05:6a00:2d19:b0:72a:8bb6:2963 with SMTP id
+ d2e1a72fcca58-72dafa44141mr41755807b3a.13.1737726151922; 
+ Fri, 24 Jan 2025 05:42:31 -0800 (PST)
+Received: from niltesque.newtesc.com.br ([189.113.44.122])
+ by smtp.gmail.com with ESMTPSA id
+ d2e1a72fcca58-72f8a6b2b76sm1828491b3a.38.2025.01.24.05.42.30
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 24 Jan 2025 05:42:31 -0800 (PST)
+From: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
 To: buildroot@buildroot.org
-Cc: Spenser Gilliland <spenser@gillilanding.com>,
- "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-Date: Fri, 24 Jan 2025 13:47:10 +0100
-Message-ID: <20250124124710.2838253-1-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.47.2
+Cc: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
+Date: Fri, 24 Jan 2025 10:42:27 -0300
+Message-ID: <20250124134227.1621021-1-flavio.tapajos@newtesc.com.br>
+X-Mailer: git-send-email 2.48.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:VRqHlq3R8pIT4Vt16yhAYpe13k938grDqbLktXqyjX6XzN0C78C
- qG+7HE9xA2w1XtOizFWj6/whBIPsNcWgROtvaxVDksq68zPndDnuYCCwOagLj+AaJ9y2taf
- VSLes8+cENX6wss8/KBeXyHt8/fv6TErvtg8wWq7LTwG8I5RUmqdHtwe27NtbsdELoCNUab
- Rv44Y07PCbZhFT8k8Am2g==
-UI-OutboundReport: notjunk:1;M01:P0:iIGYsXbEMds=;YKvi2fGC3wZxtjhJXYNxuavFNVI
- YqzV/+Du/rCHX3XQmNiYjTKj0gB44QA0sppm1/7z0t55j6PQefu/dZ/mPzliomzYORjPIPJJo
- BP7ULD/nNJrQB7UpvHdjjFcPQYeQwWW3aioplz/Yx1XGg+5F54z4kzXn8LC8MDi2VC1nZBRnM
- EYfuiFbbx7IHbYITqUHTy3q+YksHbcMgiRuIRxYrIx8WZsNVByoJ29MEuAOEN/+d5x3ksTQJp
- naC3FXJ5WeAYgG5ENBYIFSzqBI28qcLBTOQIAQSOA7vjuH2+G+Osyco6J27fmhJMsokj0DJyT
- Y4zD19JtBUJRxpp6QkmTs/I9YjVT/tTYhotGNKdi4GKr5Ut8eWsVDjgRcI+K7IPiYOrjGbZaM
- TKORUs5pdML8qTRPNvS9Qk/p+FAlrwsCmrRACyFHoGsv1swgZeulAjJWw1Kd/ZRgswTLBl/p5
- 9b6o08LGXMtToqfdMom9BbXVB5wBIstxokvMVGBGFrjnNEfRV3zuaH11gX1TOCh9gWnh7XOIR
- KVbZXYNpqx4/l0KWM4m5oQreNXV/rRqdbpflDnXAbiBWinR9ntlctVah1X5TwFUbDXY516k37
- JpNrfoEtlZ+DGMt1XY9ICLKZk5x0VqfcioEmQmDSlEyLexWcJB2wftuHAJUTaAwQS+6u0kvjV
- dA+0WGZtoZI3XWayRHemArnPYBLn4OqibuFOqTRplzTt5Nf2bXM1aCQNPTCv1zYNPqApF+FVl
- +JQPItvcrnDR7QV6bL+GzWp2lS1Lnc3K4feWCfuxlSRrDa9Cmz5w5ivyMBz9/APN1TiY+aj21
- cuB1j8p/dgE2eG4UUIJGPkgksHSuL1Jg0oB7m6+3C7QEwUR9KXJX2l/WSao7BwMm8XjATEBA2
- HQAOTdToXOFsMmQR1O1yetYCh0DlBONtg1eyI66jesjwWeu0DzWbGgoelAQTrYw57XgWjmU2S
- vx0bfmw9SszhpTT9z3KbldQ+trzGkhGswkmLQ9pyqSSLjxmB4DUimexP7QYjuI0u5L1hgMGOk
- 4SrFpeddNoVgteVsEz85IqUExSgecP2w/94KaFN0FhIVTLPJmqtvtpM3D1vcMk/DimQv5jmgA
- V4H4OdJ5MEJ2cKwpFFDa8EEztvYGTnDpOixV2CJ5qL+U/uZR59kzf3Wk32ro73ZZkVPMCAB/0
- p6/DVyUW+rF+sDvKz3R6XwMyeYDwg557KIon5PkFX3Q==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1737722840; x=1738327640; i=fiona.klute@gmx.de;
- bh=Zu2q6Vi+jSk81B9pmvdwKOk5dgqLZKxbIkgbYcqLRSA=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=ucUuvAvc1jBqHYkV8+9PxXNyOkTcDPgh5Uh1ovd1TxyKJrPfdSL9JQUUHgHzKgML
- rKRS3sGFDk/FMyHQuBVP0R5j6MyFvnxGpSyU1jhY45sQmvg3exDhynKfMZLjOvPV5
- 2QF/nuVVHMZSfm+OLXR6jZK0gL5IdWZEzOCesMnB1KFhsPJwBIc8boB0Zup2OppY0
- OjB0zDZdADlfCdf/5RdN2wrZcJ+gerjBCZhG7JibHQhy12XRvqLHN7WY7OKWymNt6
- wOF2w/H2h5CECZQA3M2TiSipUIZu9nbqlHWwQ1XrqZDEGgxWyv4bd90jablWjHDsD
- S7nO2qy3zPHYUQH+IA==
+ d=newtesc-com-br.20230601.gappssmtp.com; s=20230601; t=1737726152; x=1738330952;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=/1MlcdTQQXar+zHdey/8qjQ19egKAEqNw2b28Je/MEY=;
+ b=DGrmf51C7y/0hMqQPQVSvWS7Rq/kcG7fLsVJqms0Yd3bUgwCsdH6ZE0+HBtJi+4xMr
+ hpu020WIm/+uZZrk1LbZKQhK4vKLk/4jbxRIRo6WYJ+jkAJb6ceITNA4efF7KOBwr04g
+ 9m+w1bz0rKdqKtePHQgjdLclb/9XbjtGt0LRxGJum7cRcpyVR8WEXeJPKUUFUmHbJUZZ
+ 16GM3Hrcxax9BA+jfGNXq+BhlifUz8m+451NtNWpmbsB4b/WgBwMkF4hViW599fpFkp6
+ xunBXWNbcpXmKOkeCMuOCOPAVuV6XfOtEpTqCKNWON9FP8R5oiC4+PivbKeWmXgYmPg0
+ mDGg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
+ dmarc=none (p=none dis=none)
+ header.from=newtesc.com.br
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=ucUuvAvc
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d-demos: fix build failure on
- musl
+ unprotected) header.d=newtesc-com-br.20230601.gappssmtp.com
+ header.i=@newtesc-com-br.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=DGrmf51C
+Subject: [Buildroot] [PATCH 1/1] package/rsyslog: bump version to 8.2412.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,101 +109,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-
-Patch has been on upstream main for close to 2 years.
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
----
- ...kan-wsi-use-unsigned-instead-of-uint.patch | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
- create mode 100644 package/mesa3d-demos/0003-vulkan-wsi-use-unsigned-instead-of-uint.patch
-
-diff --git a/package/mesa3d-demos/0003-vulkan-wsi-use-unsigned-instead-of-uint.patch b/package/mesa3d-demos/0003-vulkan-wsi-use-unsigned-instead-of-uint.patch
-new file mode 100644
-index 0000000000..160dc9010d
---- /dev/null
-+++ b/package/mesa3d-demos/0003-vulkan-wsi-use-unsigned-instead-of-uint.patch
-@@ -0,0 +1,68 @@
-+From 3f4d5ff34e061f3d47b9cf28bff2fc588d8c5326 Mon Sep 17 00:00:00 2001
-+From: psykose <alice@ayaya.dev>
-+Date: Thu, 23 Mar 2023 21:18:56 +0000
-+Subject: [PATCH] vulkan/wsi: use unsigned instead of uint
-+
-+uint is not a standard type name and fails to build against musl libc
-+
-+Reviewed-by: Erik Faye-Lund <erik.faye-lund@collabora.com>
-+Upstream: https://gitlab.freedesktop.org/mesa/demos/-/commit/3f4d5ff34e061f3d47b9cf28bff2fc588d8c5326
-+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-+---
-+ src/vulkan/wsi/wayland.c | 14 +++++++-------
-+ 1 file changed, 7 insertions(+), 7 deletions(-)
-+
-+diff --git a/src/vulkan/wsi/wayland.c b/src/vulkan/wsi/wayland.c
-+index 444d2bb81..5958d283a 100644
-+--- a/src/vulkan/wsi/wayland.c
-++++ b/src/vulkan/wsi/wayland.c
-+@@ -128,7 +128,7 @@ dispatch_key(xkb_keycode_t xkb_key, enum wl_keyboard_key_state state)
-+ }
-+ 
-+ static void
-+-handle_key(uint key, enum wl_keyboard_key_state state)
-++handle_key(unsigned key, enum wl_keyboard_key_state state)
-+ {
-+    xkb_keycode_t xkb_key = key + 8;
-+    struct itimerspec timer = {0};
-+@@ -151,15 +151,15 @@ handle_key(uint key, enum wl_keyboard_key_state state)
-+ }
-+ 
-+ static void
-+-key(void *data, struct wl_keyboard *keyboard, uint serial,
-+-    uint time, uint key, enum wl_keyboard_key_state state)
-++key(void *data, struct wl_keyboard *keyboard, unsigned serial,
-++    unsigned time, unsigned key, enum wl_keyboard_key_state state)
-+ {
-+    handle_key(key, state);
-+ }
-+ 
-+ static void
-+-modifiers(void *data, struct wl_keyboard *keyboard, uint serial,
-+-    uint mods_depressed, uint mods_latched, uint mods_locked, uint group)
-++modifiers(void *data, struct wl_keyboard *keyboard, unsigned serial,
-++    unsigned mods_depressed, unsigned mods_latched, unsigned mods_locked, unsigned group)
-+ {
-+    xkb_state_update_mask(keyboard_data.xkb_state, mods_depressed, mods_latched,
-+                          mods_locked, 0, 0, group);
-+@@ -184,7 +184,7 @@ keymap(void *data, struct wl_keyboard *keyboard,
-+ }
-+ 
-+ static void
-+-enter(void *data, struct wl_keyboard *keyboard, uint serial,
-++enter(void *data, struct wl_keyboard *keyboard, unsigned serial,
-+       struct wl_surface *surface, struct wl_array *keys)
-+ {
-+    uint32_t *key;
-+@@ -194,7 +194,7 @@ enter(void *data, struct wl_keyboard *keyboard, uint serial,
-+ }
-+ 
-+ static void
-+-leave(void *data, struct wl_keyboard *keyboard, uint serial,
-++leave(void *data, struct wl_keyboard *keyboard, unsigned serial,
-+       struct wl_surface *surface)
-+ {
-+    struct itimerspec timer = {0};
-+-- 
-+GitLab
-+
--- 
-2.47.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+U2lnbmVkLW9mZi1ieTogRmzDoXZpbyBUYXBhasOzcyA8ZmxhdmlvLnRhcGFqb3NAbmV3dGVzYy5j
+b20uYnI+Ci0tLQogcGFja2FnZS9yc3lzbG9nL3JzeXNsb2cuaGFzaCB8IDIgKy0KIHBhY2thZ2Uv
+cnN5c2xvZy9yc3lzbG9nLm1rICAgfCAyICstCiAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9u
+cygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3JzeXNsb2cvcnN5c2xv
+Zy5oYXNoIGIvcGFja2FnZS9yc3lzbG9nL3JzeXNsb2cuaGFzaAppbmRleCA5YzUyM2M1ODgxLi5i
+ZDc4M2E2OWI2IDEwMDY0NAotLS0gYS9wYWNrYWdlL3JzeXNsb2cvcnN5c2xvZy5oYXNoCisrKyBi
+L3BhY2thZ2UvcnN5c2xvZy9yc3lzbG9nLmhhc2gKQEAgLTEsNSArMSw1IEBACiAjIEZyb20gaHR0
+cDovL3d3dy5yc3lzbG9nLmNvbS9kb3dubG9hZHMvZG93bmxvYWQtdjgtc3RhYmxlLwotc2hhMjU2
+ICBiNmJlMDNjNzY2ZGY0Y2RlMzE0OTcyYzFjMDFjYjc0ZjNlYWNmOGFlYzU3MDY2YzBjMTJiZTBl
+MDc5NzI2ZWJhICByc3lzbG9nLTguMjQxMC4wLnRhci5negorc2hhMjU2ICA4Y2RmYTVhMDc3Y2Jh
+NTc2YmRkNmIxODQxY2MyODQ4Yjc3NGU2NjNiMmU0NGEzOTUxMmJiODIwMTc0MTc0ODAyICByc3lz
+bG9nLTguMjQxMi4wLnRhci5negogCiAjIExvY2FsbHkgY2FsY3VsYXRlZAogc2hhMjU2ICAwNTRi
+M2EwNDdkOTIzMjM3NmE0NmI4NzM1NmIxOWIwYzBjMjkyNGNiNWU2OTExYWI5NmEwMWZjNGI1MTVm
+MDgzICBDT1BZSU5HCmRpZmYgLS1naXQgYS9wYWNrYWdlL3JzeXNsb2cvcnN5c2xvZy5tayBiL3Bh
+Y2thZ2UvcnN5c2xvZy9yc3lzbG9nLm1rCmluZGV4IDY5YjMyMDc2ZjguLmY3MmUxOWVlMGQgMTAw
+NjQ0Ci0tLSBhL3BhY2thZ2UvcnN5c2xvZy9yc3lzbG9nLm1rCisrKyBiL3BhY2thZ2UvcnN5c2xv
+Zy9yc3lzbG9nLm1rCkBAIC00LDcgKzQsNyBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMK
+IAotUlNZU0xPR19WRVJTSU9OID0gOC4yNDEwLjAKK1JTWVNMT0dfVkVSU0lPTiA9IDguMjQxMi4w
+CiBSU1lTTE9HX1NJVEUgPSBodHRwOi8vcnN5c2xvZy5jb20vZmlsZXMvZG93bmxvYWQvcnN5c2xv
+ZwogUlNZU0xPR19MSUNFTlNFID0gR1BMLTMuMCwgTEdQTC0zLjAsIEFwYWNoZS0yLjAKIFJTWVNM
+T0dfTElDRU5TRV9GSUxFUyA9IENPUFlJTkcgQ09QWUlORy5MRVNTRVIgQ09QWUlORy5BU0wyMAot
+LSAKMi40OC4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
+bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
