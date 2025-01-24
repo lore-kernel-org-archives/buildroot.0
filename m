@@ -1,99 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44406C02181
-	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 20:26:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15BA8C0218B
+	for <buildroot@archiver.kernel.org>; Fri, 24 Jan 2025 20:29:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0CBC980E32;
-	Fri, 24 Jan 2025 20:26:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B64DD617AD;
+	Fri, 24 Jan 2025 20:29:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dEd10sq3POmk; Fri, 24 Jan 2025 20:26:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qMFuehOb7KQL; Fri, 24 Jan 2025 20:29:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23CAF81F78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D09AE6F618
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 23CAF81F78;
-	Fri, 24 Jan 2025 20:26:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 41062944
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 20:26:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D09AE6F618;
+	Fri, 24 Jan 2025 20:29:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9417E94A
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 20:29:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 20D9781F77
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 20:26:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 812BE6F618
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 20:29:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j-sKu7rco_Qt for <buildroot@buildroot.org>;
- Fri, 24 Jan 2025 20:26:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12f; helo=mail-il1-x12f.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DCFAD80E32
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCFAD80E32
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
- [IPv6:2607:f8b0:4864:20::12f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DCFAD80E32
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 20:26:01 +0000 (UTC)
-Received: by mail-il1-x12f.google.com with SMTP id
- e9e14a558f8ab-3cfc934af74so10389985ab.2
- for <buildroot@buildroot.org>; Fri, 24 Jan 2025 12:26:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1737750360; x=1738355160;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=tPKGiLwn+vpYqS6AMSmgkmGUqN7N1H++nGsnkSHHLcw=;
- b=K5vJ3OrW48B3GuRnyWuETUH59SFoEESbCQimifA96dMHuEmj2gQpwCS8toyvanRxoX
- /V3/WJGU9cAEktt9IwGEMb/nJkGyHXYqI6xUElMeiZbHDKPL0+KT/ne/Am2MhfgLVdi6
- y/obMsD8lWNwxyGKoINIptuLtM8VkGmaXvyE+V3x9NK24FRqzftsxRs7jtp+GJdJQvU6
- ifPtkVLE8lQtwFf+0gCIXHafML6YFpwpo0uf0lWajbNA6k5jK3md56HNxSgsrXs3O25M
- pauzrZvJcm+P1kUe0TRzABjZRQM7YOiG6K8s1hGEHb8QVV4ltdeisX79JTmmMm5Y8bBU
- 9WeQ==
-X-Gm-Message-State: AOJu0YxrE5+eq6xWKXbHGTebD+A/8AP2jMKoj8PiGp3V9HrIMBkDie1d
- zVbJdbYRO54qunNdc9rQYtqdgtl8S6RJ7GtVWsdMUkl18GKN5yPYqrq3spEr
-X-Gm-Gg: ASbGncuNcWYK+Kh+Lmw9g/bij6itb/g6WbK5OdkmjcNumBqEnZYic4nKPbop4AUvg2M
- Rjx7p/sMdFmfFZfSgBNAcJjpjZCEhQ5/im2fhhGVX8gPIHdsj7gaRq2Mwv6+TNr88o/ikjc0/dV
- DWfUHH1su8J1Mq+AdKrDHeEE1UhBWLbDGRCd1Ml9pETMW1XJDugIb5xtW2Rvx2UxC9aW4LoDnES
- klOqXgb0lumhmTTk3dSeGqjBmIYebHXF3SqYGR9WhRSi9bRnOvM1y41o1LjWdNu1riYMQDJ3EfI
- IJ1YO97wFSmWnAWPz5XEpCRtJiuODNxPxFk8s541PcNGTS/v6Ck2Vho=
-X-Google-Smtp-Source: AGHT+IHSGAotygBrYpcYDrDv+HJjjLH3n6d1FSVliQ/sJLFhV9GJyg6tldb5VNH514zWD7xwmdqcHQ==
-X-Received: by 2002:a05:6e02:460d:b0:3cf:a0fc:5388 with SMTP id
- e9e14a558f8ab-3cfa0fc5ae8mr167183015ab.19.1737750360383; 
- Fri, 24 Jan 2025 12:26:00 -0800 (PST)
-Received: from james-x399.localdomain (71-218-115-58.hlrn.qwest.net.
- [71.218.115.58]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3cfc74337a1sm8699665ab.19.2025.01.24.12.25.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 24 Jan 2025 12:25:59 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 24 Jan 2025 13:25:58 -0700
-Message-Id: <20250124202558.3852689-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nCxDF_LhFIoT for <buildroot@buildroot.org>;
+ Fri, 24 Jan 2025 20:29:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 587AC617AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 587AC617AD
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 587AC617AD
+ for <buildroot@buildroot.org>; Fri, 24 Jan 2025 20:29:41 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 4FEFB2003DC;
+ Fri, 24 Jan 2025 21:29:38 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:45736])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 24 Jan 2025 21:29:38 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1737750360; x=1738355160; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=tPKGiLwn+vpYqS6AMSmgkmGUqN7N1H++nGsnkSHHLcw=;
- b=UnveItuEkD+Che8LcIP6SJCXt71u1YH1xEkRwnXz4jzF62Ks0mku9DwEe+QvXFsRWT
- GqVZvIT8oa+WhX8eUzkVhH7HgAC5NDW6nVj2lUtNvc9RH2HfXZU9IL2Kmwap8Z+ITm0V
- n1pVuYd6xpxEg/s1ae954f5nE9zU8s/phdgY0j8/M8v4UC4elzqo5CP9ZLc6v0y5xVtG
- 24b9LzoUzolDUY6frfRZrzK9OC6LPrhwvcT0pnfCcXRwCMDwKgzCj92p6sSQm0jOY1vq
- HyAQLCCQtO+Ow5hdHTlU/B+4rJFMIRlCmQhaU6vh8uAH0wxoa1A6ZvBH8UMax1FvOpIa
- L3pQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Date: Fri, 24 Jan 2025 21:29:38 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: patrick.oppenlander@gmail.com
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250121031414.5907-1-patrick.oppenlander@gmail.com>
+References: <20250121031414.5907-1-patrick.oppenlander@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <81e6726e7ebcce7cbf78df44fafe366a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1737750579;
+ bh=NSz0UuW1Pqtcby58mZZy1GPi7/PWAyHd82QsRNzYUk4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=MLuB4N6UCSUyTdc9t7nYMXeXsy4PS8HaAZ3MNQRAXnkBLPmbsWZe91DjTnL4nzbDD
+ 53yVF1vBpaMdWQvCIAEGadmQsvtjj35HMG6M65CkwONllIPsxsmhQt1RAbCaoyCHaK
+ 4+FIOpkX+oPlbADBdh93W26hfnnyJYyeZPe72hI0kNdD3bYwnLMHLBiG3Oru4RYSaI
+ 6UUaPbv2dSKrxE3JMdUvWK0FKXbqmPwHOwA/svFR4RwYw39wMLNytolwCaY/JG5TNZ
+ kJLgHdh+3hM9wamI4Z94h+lJg73LogREGQJ4+zQfWndUKAD8PcjzpL0W9oXE5TNfHz
+ gewvvHk4aWMxg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=UnveItuE
-Subject: [Buildroot] [PATCH 1/1] package/python-s3transfer: bump to version
- 0.11.2
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=MLuB4N6U
+Subject: Re: [Buildroot] [PATCH] package/minisign: bump to version 0.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,50 +83,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-s3transfer/python-s3transfer.hash | 4 ++--
- package/python-s3transfer/python-s3transfer.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi Patrick,
 
-diff --git a/package/python-s3transfer/python-s3transfer.hash b/package/python-s3transfer/python-s3transfer.hash
-index 030a7c0962..bb17d0f18a 100644
---- a/package/python-s3transfer/python-s3transfer.hash
-+++ b/package/python-s3transfer/python-s3transfer.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/s3transfer/json
--md5  cc2ee5c0de564fe24f26490597a9a8a5  s3transfer-0.10.4.tar.gz
--sha256  29edc09801743c21eb5ecbc617a152df41d3c287f67b615f73e5f750583666a7  s3transfer-0.10.4.tar.gz
-+md5  b0d1e6875220ce4b1b3db6d6c15b9ebd  s3transfer-0.11.2.tar.gz
-+sha256  3b39185cb72f5acc77db1a58b6e25b977f28d20496b6e58d6813d75f464d632f  s3transfer-0.11.2.tar.gz
- # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/python-s3transfer/python-s3transfer.mk b/package/python-s3transfer/python-s3transfer.mk
-index 1f7b38a35a..c61553b1c2 100644
---- a/package/python-s3transfer/python-s3transfer.mk
-+++ b/package/python-s3transfer/python-s3transfer.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_S3TRANSFER_VERSION = 0.10.4
-+PYTHON_S3TRANSFER_VERSION = 0.11.2
- PYTHON_S3TRANSFER_SOURCE = s3transfer-$(PYTHON_S3TRANSFER_VERSION).tar.gz
--PYTHON_S3TRANSFER_SITE = https://files.pythonhosted.org/packages/c0/0a/1cdbabf9edd0ea7747efdf6c9ab4e7061b085aa7f9bfc36bb1601563b069
-+PYTHON_S3TRANSFER_SITE = https://files.pythonhosted.org/packages/62/45/2323b5928f86fd29f9afdcef4659f68fa73eaa5356912b774227f5cf46b5
- PYTHON_S3TRANSFER_SETUP_TYPE = setuptools
- PYTHON_S3TRANSFER_LICENSE = Apache-2.0
- PYTHON_S3TRANSFER_LICENSE_FILES = LICENSE.txt
--- 
-2.34.1
+Thanks for the patch.
 
+On 21/01/2025 04:14, patrick.oppenlander@gmail.com wrote:
+> From: Patrick Oppenlander <patrick.oppenlander@gmail.com>
+
+Could you add a link to the change log in the commit log, please?
+Something like:
+
+Changelog: https://github.com/jedisct1/minisign/releases/tag/0.12
+
+Also, reading it, I see that the libsodium is now an optional 
+dependency.
+Do you think it is worth reflecting this change in the Buildroot recipe?
+
+> Signed-off-by: Patrick Oppenlander <patrick.oppenlander@gmail.com>
+> ---
+>  package/minisign/minisign.hash | 2 +-
+>  package/minisign/minisign.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/minisign/minisign.hash 
+> b/package/minisign/minisign.hash
+> index 12cde42a43..74941163e9 100644
+> --- a/package/minisign/minisign.hash
+> +++ b/package/minisign/minisign.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  
+> 74c2c78a1cd51a43a6c98f46a4eabefbc8668074ca9aa14115544276b663fc55  
+> minisign-0.11.tar.gz
+> +sha256  
+> 796dce1376f9bcb1a19ece729c075c47054364355fe0c0c1ebe5104d508c7db0  
+> minisign-0.12.tar.gz
+>  sha256  
+> d775d155cbf31638714c31c6f990f9fdc5f07998d91e42d1bf15483bd2d1706b  
+> LICENSE
+
+Running "make minisign-legal-info" fails with output:
+
+     >>> minisign 0.12 Collecting legal info
+     ERROR: while checking hashes from package/minisign/minisign.hash
+     ERROR: LICENSE has wrong sha256 hash:
+     ERROR: expected: 
+d775d155cbf31638714c31c6f990f9fdc5f07998d91e42d1bf15483bd2d1706b
+     ERROR: got     : 
+01aa50818d6609e85a9610b7d04da037e8b28bcf3bb5b5b4963c0c3f7abdabbd
+     ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+
+Could you check what has changed in the license (you can provide a link 
+to the
+upstream commit change, or describe the change) and send an updated 
+version of
+this patch?
+
+Best reagrds,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
