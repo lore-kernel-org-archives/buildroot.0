@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFF54C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:03:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDEB0C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:03:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 690B984F2B;
-	Fri, 28 Feb 2025 17:03:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95AF170874;
+	Fri, 28 Feb 2025 17:03:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kAUCd9pKPK73; Fri, 28 Feb 2025 17:03:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ieLF8Rq2Lvps; Fri, 28 Feb 2025 17:03:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7309A856C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B2E17087D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7309A856C5;
-	Fri, 28 Feb 2025 17:03:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B2E17087D;
+	Fri, 28 Feb 2025 17:03:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 141861DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:40:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1622168
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:40:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5DDB8426CD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8385442E73
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R3OZhAagyAXl for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:04 +0000 (UTC)
+ id zMlngRRQ7woY for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C0EA42E73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0044D42E7C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C0EA42E73
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0044D42E7C
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 98E1182581; Fri, 28 Feb 2025 16:30:17 +0000 (UTC)
+ id E9172867B4; Fri, 28 Feb 2025 16:30:17 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 24 Jan 2025 19:24:58 +0100
+Date: Fri, 24 Jan 2025 21:13:20 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a5b360e53f864ac10f9a93182f89c8b2bde2797c
-X-Git-Newrev: 73c6066bda9bee56a459a09b5273ead84c7d5815
+X-Git-Oldrev: 360e811d4045fdf6d00adba0635f8a87415339fd
+X-Git-Newrev: bdd9f0ab26ebf229131d057bcdc8103439ea726b
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163017.98E1182581@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/zynqmp_*: migrate to
- xilinx-embeddedsw
+Message-Id: <20250228163017.E9172867B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ustreamer: bump
+ version to 6.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,195 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73c6066bda9bee56a459a09b5273ead84c7d5815
+commit: https://git.buildroot.net/buildroot/commit/?id=bdd9f0ab26ebf229131d057bcdc8103439ea726b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Migrate zynqmp defconfigs to xilinx-embeddedsw package for building
-zynqmp pmufw.
+Changelog - https://github.com/pikvm/ustreamer/compare/v6.22...v6.27
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-[Luca: Tested on Kria KV260 starter kit]
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/zynqmp_kria_kd240_defconfig | 10 ++++++----
- configs/zynqmp_kria_kr260_defconfig |  9 ++++++---
- configs/zynqmp_kria_kv260_defconfig | 10 ++++++----
- configs/zynqmp_zcu102_defconfig     |  8 +++++---
- configs/zynqmp_zcu104_defconfig     |  9 +++++----
- configs/zynqmp_zcu106_defconfig     |  9 +++++----
- 6 files changed, 33 insertions(+), 22 deletions(-)
+ package/ustreamer/ustreamer.hash | 2 +-
+ package/ustreamer/ustreamer.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
-index 38a5aa378a..6a6ed87dff 100644
---- a/configs/zynqmp_kria_kd240_defconfig
-+++ b/configs/zynqmp_kria_kd240_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_GLOBAL_PATCH_DIR="board/zynqmp/kria/patches board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh board/zynqmp/kria/kd240/kd240.sh"
-@@ -35,12 +37,12 @@ BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kd240/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k24-revA"
--BR2_TARGET_XILINX_PREBUILT=y
--BR2_TARGET_XILINX_PREBUILT_KRIA=y
--BR2_TARGET_XILINX_PREBUILT_BOARD="kd240"
-+BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS="-DK24_SOM"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
-index a5d308a4d5..e679010d8a 100644
---- a/configs/zynqmp_kria_kr260_defconfig
-+++ b/configs/zynqmp_kria_kr260_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_GLOBAL_PATCH_DIR="board/zynqmp/kria/patches board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh board/zynqmp/kria/kr260/kr260.sh"
-@@ -35,11 +37,12 @@ BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kr260/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k26-revA"
--BR2_TARGET_XILINX_PREBUILT=y
--BR2_TARGET_XILINX_PREBUILT_KRIA=y
-+BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS="-DK26_SOM"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index 711f43c3a6..353ec165d3 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_GLOBAL_PATCH_DIR="board/zynqmp/kria/patches board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh board/zynqmp/kria/kv260/kv260.sh"
-@@ -35,12 +37,12 @@ BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k26-revA"
--BR2_TARGET_XILINX_PREBUILT=y
--BR2_TARGET_XILINX_PREBUILT_KRIA=y
--BR2_TARGET_XILINX_PREBUILT_BOARD="kv260"
-+BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS="-DK26_SOM"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
-index 849f5bd811..5be8947ba3 100644
---- a/configs/zynqmp_zcu102_defconfig
-+++ b/configs/zynqmp_zcu102_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
-@@ -34,11 +36,11 @@ BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu102/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu102-rev1.0"
--BR2_TARGET_XILINX_PREBUILT=y
--BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.2"
-+BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
-index c52bac1462..64d177b8d1 100644
---- a/configs/zynqmp_zcu104_defconfig
-+++ b/configs/zynqmp_zcu104_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
-@@ -34,12 +36,11 @@ BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu104/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu104-revC"
--BR2_TARGET_XILINX_PREBUILT=y
--BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.2"
--BR2_TARGET_XILINX_PREBUILT_BOARD="zcu104"
-+BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index 2f3edf7972..6fa078a84f 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
-@@ -34,12 +36,11 @@ BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu106/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu106-rev1.0"
--BR2_TARGET_XILINX_PREBUILT=y
--BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.2"
--BR2_TARGET_XILINX_PREBUILT_BOARD="zcu106"
-+BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/package/ustreamer/ustreamer.hash b/package/ustreamer/ustreamer.hash
+index 4b33d23e70..e46411b5cd 100644
+--- a/package/ustreamer/ustreamer.hash
++++ b/package/ustreamer/ustreamer.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7d3fcd34ee57faa4eae6505fba75ef35b36840083d50f581208f402a206032ad  ustreamer-6.22.tar.gz
++sha256  6089137576520e3162fa6574853a15da1a7605f7e9a550c2570b33cfe8a39046  ustreamer-6.27.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/ustreamer/ustreamer.mk b/package/ustreamer/ustreamer.mk
+index 813f219b89..eb707cad00 100644
+--- a/package/ustreamer/ustreamer.mk
++++ b/package/ustreamer/ustreamer.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USTREAMER_VERSION = 6.22
++USTREAMER_VERSION = 6.27
+ USTREAMER_SITE = $(call github,pikvm,ustreamer,v$(USTREAMER_VERSION))
+ USTREAMER_LICENSE = GPL-3.0+
+ USTREAMER_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
