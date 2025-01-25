@@ -1,77 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7F03C0218C
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 15:14:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0EABC0218C
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 15:49:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88848605BB;
-	Sat, 25 Jan 2025 15:14:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 447AC41740;
+	Sat, 25 Jan 2025 15:49:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qCXekNiycJyt; Sat, 25 Jan 2025 15:14:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qNPxIfFXsEa6; Sat, 25 Jan 2025 15:49:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B540A605DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED371417BD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B540A605DB;
-	Sat, 25 Jan 2025 15:14:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id F23371183
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:14:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED371417BD;
+	Sat, 25 Jan 2025 15:49:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B8AB994A
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:49:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E0E48605DB
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:14:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A655560FBE
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:49:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RlB6it7HE9AU for <buildroot@buildroot.org>;
- Sat, 25 Jan 2025 15:14:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F3F95605BB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3F95605BB
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F3F95605BB
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:14:21 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 4874AB00572;
- Sat, 25 Jan 2025 16:14:19 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:35960])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 25 Jan 2025 16:14:19 +0100
-MIME-Version: 1.0
-Date: Sat, 25 Jan 2025 16:14:19 +0100
+ id NfW39NdQ3t1n for <buildroot@buildroot.org>;
+ Sat, 25 Jan 2025 15:49:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 989AA60FBC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 989AA60FBC
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:49:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 79DDD8644B; Sat, 25 Jan 2025 15:49:14 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250124205335.3859140-1-james.hilliard1@gmail.com>
-References: <20250124205335.3859140-1-james.hilliard1@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <55db7ade15cbed5418c4872dfbc7cb71@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737818060;
- bh=Dj9kIKVcgyJMuJB6i63ZNSXfxKICJsHnYK22MUcxPa0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=YRTU0Ge8TawVoaNNEtAsTxiRcTYuPvJ04NCrdcPjvoKN9/51y1fv5bzBEG3Zv7/Xy
- T7QbqFY1qE6lM3eKqWL93SPYbrPtwbbLPZglXim4qnjOdknY5RdK2BRJ+uuubZ3mvM
- 8cE1RdvIVo0DWxA3ryZ5BfGzZQjuHsqeEPpRlvHMEXbN5jrAKCB3Alin1XVWmHHEim
- RPL/upxGncNfDjj5yNILG5fl3vJG+dc+DttwH+2PTecRscqvaIgJ34TUtUmwGAMn99
- yjc5rWj+vMVSnbcqQ4d169T5TKN8I1eTag9A9sAb8cJnAw12azJaPucxYYWBoeSy9Q
- wGfw7Vgwhj+Ig==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=YRTU0Ge8
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-semver: bump to version
- 3.0.4
+To: buildroot@buildroot.org
+Date: Sat, 25 Jan 2025 16:42:45 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2fde7d93d102927a3a5f3474ac076b8df11b9d0f
+X-Git-Newrev: a14b643562d4c82f42d60a6266695eed83633ad6
+X-Patchwork-Hint: ignore
+Message-Id: <20250125154914.79DDD8644B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-wrapt: bump to version
+ 1.17.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,18 +59,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 24/01/2025 21:53, James Hilliard wrote:
-> License hash changed due to placeholder replacement:
-> https://github.com/python-semver/python-semver/commit/c47774db88386f7db79e5ec9fe3672c07ed7c063
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=a14b643562d4c82f42d60a6266695eed83633ad6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/python-wrapt/python-wrapt.hash | 4 ++--
+ package/python-wrapt/python-wrapt.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-wrapt/python-wrapt.hash b/package/python-wrapt/python-wrapt.hash
+index b83d7fc575..199de265a5 100644
+--- a/package/python-wrapt/python-wrapt.hash
++++ b/package/python-wrapt/python-wrapt.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/wrapt/json
+-md5  31bef7bc31a8ba7da00cb33a70aca7a1  wrapt-1.17.1.tar.gz
+-sha256  16b2fdfa09a74a3930175b6d9d7d008022aa72a4f02de2b3eecafcc1adfd3cfe  wrapt-1.17.1.tar.gz
++md5  f4db93e73e5c70a59955f0ec162d585d  wrapt-1.17.2.tar.gz
++sha256  41388e9d4d1522446fe79d3213196bd9e3b301a336965b9e27ca2788ebd122f3  wrapt-1.17.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  5974efbbc8b626b2050810d63c3a907ee21c92bf64b3740fc623ad05eb3448ab  LICENSE
+diff --git a/package/python-wrapt/python-wrapt.mk b/package/python-wrapt/python-wrapt.mk
+index 32bac19d61..9048f7010e 100644
+--- a/package/python-wrapt/python-wrapt.mk
++++ b/package/python-wrapt/python-wrapt.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WRAPT_VERSION = 1.17.1
++PYTHON_WRAPT_VERSION = 1.17.2
+ PYTHON_WRAPT_SOURCE = wrapt-$(PYTHON_WRAPT_VERSION).tar.gz
+-PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/c8/dd/35c573cc2b4b8d65ea96bba0247d05710f284857d30e2266d1874f1c727d
++PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/c3/fc/e91cc220803d7bc4db93fb02facd8461c37364151b8494762cc88b0fbcef
+ PYTHON_WRAPT_SETUP_TYPE = setuptools
+ PYTHON_WRAPT_LICENSE = BSD-2-Clause
+ PYTHON_WRAPT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
