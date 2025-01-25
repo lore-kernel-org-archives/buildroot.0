@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 142CDC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:04:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61CA9C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:04:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C321B6FC7E;
-	Fri, 28 Feb 2025 17:04:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5CB674FDBF;
+	Fri, 28 Feb 2025 17:04:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J3uFpLupBlrK; Fri, 28 Feb 2025 17:04:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5u3J0IbjZZZv; Fri, 28 Feb 2025 17:04:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C563708B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13EAF505D2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5C563708B0;
-	Fri, 28 Feb 2025 17:04:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 13EAF505D2;
+	Fri, 28 Feb 2025 17:04:53 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 12D1068
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 058B068
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 03168419AB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2344B423B5
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tfpu78GSG86q for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:07 +0000 (UTC)
+ id xtx5vijnFVYA for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3329942E95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7442A424FE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3329942E95
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7442A424FE
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E2A8867B4; Fri, 28 Feb 2025 16:30:19 +0000 (UTC)
+ id 70D2E87A09; Fri, 28 Feb 2025 16:30:20 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Jan 2025 14:21:03 +0100
+Date: Sat, 25 Jan 2025 21:09:38 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e83ae94e76f8f3bf410bdb8f498321eb2d81025b
-X-Git-Newrev: 1b6234ae5077d22077841f6ae202885cc319003b
+X-Git-Oldrev: eec9e14c64c62aac45167ba07be60cbd492f8aba
+X-Git-Newrev: 821ce21fcf3dd5b4ccdfa7bacc96b396a9ca55f8
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163019.2E2A8867B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/python-grpcio-reflection: bump to version 1.70.0
+Message-Id: <20250228163020.70D2E87A09@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sqlite: bump version
+ to 3.48.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b6234ae5077d22077841f6ae202885cc319003b
+commit: https://git.buildroot.net/buildroot/commit/?id=821ce21fcf3dd5b4ccdfa7bacc96b396a9ca55f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Updated SQLITE_SITE.
+
+Release notes: https://www.sqlite.org/releaselog/3_48_0.html
+
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-grpcio-reflection/python-grpcio-reflection.hash | 4 ++--
- package/python-grpcio-reflection/python-grpcio-reflection.mk   | 4 ++--
+ package/sqlite/sqlite.hash | 2 +-
+ package/sqlite/sqlite.mk   | 6 +++---
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-grpcio-reflection/python-grpcio-reflection.hash b/package/python-grpcio-reflection/python-grpcio-reflection.hash
-index afd3e50ab2..badabd1926 100644
---- a/package/python-grpcio-reflection/python-grpcio-reflection.hash
-+++ b/package/python-grpcio-reflection/python-grpcio-reflection.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/grpcio-reflection/json
--md5  f1b2d22885a2a70fbcc499211059e2be  grpcio_reflection-1.69.0.tar.gz
--sha256  3474aaedfb10d8da5503135a2fb9fbb4e1f72044ad7ee2d0bf22090934e80908  grpcio_reflection-1.69.0.tar.gz
-+md5  4ae2aa3781881acd8df23793965407e4  grpcio_reflection-1.70.0.tar.gz
-+sha256  af46ce13e57fd7602deaef5b1d1903f6644f8982cc00f62fa9fa5b928acf6a49  grpcio_reflection-1.70.0.tar.gz
- # Locally computed sha256 checksums
- sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
-diff --git a/package/python-grpcio-reflection/python-grpcio-reflection.mk b/package/python-grpcio-reflection/python-grpcio-reflection.mk
-index c209b093b1..4339e31abe 100644
---- a/package/python-grpcio-reflection/python-grpcio-reflection.mk
-+++ b/package/python-grpcio-reflection/python-grpcio-reflection.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 788e89f99d..5b933fba8f 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f1b2ee412c28d7472bc95ba996368d6f0cdcf00362affdadb27ed286c179540b  sqlite-autoconf-3470200.tar.gz
++sha256  ac992f7fca3989de7ed1fe99c16363f848794c8c32a158dafd4eb927a2e02fd5  sqlite-autoconf-3480000.tar.gz
+ sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 30505a9dbc..c8f12a427a 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_GRPCIO_REFLECTION_VERSION = 1.69.0
-+PYTHON_GRPCIO_REFLECTION_VERSION = 1.70.0
- PYTHON_GRPCIO_REFLECTION_SOURCE = grpcio_reflection-$(PYTHON_GRPCIO_REFLECTION_VERSION).tar.gz
--PYTHON_GRPCIO_REFLECTION_SITE = https://files.pythonhosted.org/packages/bd/88/064538adae2e526f4626ad57f53a99fca5ae5013e627214093ef1d47cc35
-+PYTHON_GRPCIO_REFLECTION_SITE = https://files.pythonhosted.org/packages/42/98/f76681980ec7e9813e010d2778f4109816650760f6839661ae378286b3b5
- PYTHON_GRPCIO_REFLECTION_SETUP_TYPE = setuptools
- PYTHON_GRPCIO_REFLECTION_LICENSE = Apache-2.0
- PYTHON_GRPCIO_REFLECTION_LICENSE_FILES = LICENSE
+-SQLITE_VERSION = 3.47.2
+-SQLITE_TAR_VERSION = 3470200
++SQLITE_VERSION = 3.48.0
++SQLITE_TAR_VERSION = 3480000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
+-SQLITE_SITE = https://www.sqlite.org/2024
++SQLITE_SITE = https://www.sqlite.org/2025
+ SQLITE_LICENSE = blessing
+ SQLITE_LICENSE_FILES = tea/license.terms
+ SQLITE_CPE_ID_VENDOR = sqlite
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
