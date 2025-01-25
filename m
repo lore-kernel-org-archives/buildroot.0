@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DE57C0218C
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 15:10:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F33FC0218E
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 15:10:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84AD860B8E;
-	Sat, 25 Jan 2025 15:10:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BxvIfpgQgooK; Sat, 25 Jan 2025 15:10:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5660D60B16
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5660D60B16;
-	Sat, 25 Jan 2025 15:10:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 264F91183
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:10:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5E8CB81BCB
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:10:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A72B81C58;
+	Sat, 25 Jan 2025 15:10:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y5kWjqtex5d6 for <buildroot@buildroot.org>;
+ id OIzKWyX1lufF; Sat, 25 Jan 2025 15:10:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1202A81CC3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1202A81CC3;
+	Sat, 25 Jan 2025 15:10:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3299C1DA8
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:10:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A24F1406C8
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:10:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qoyPBo8sd8V1 for <buildroot@buildroot.org>;
  Sat, 25 Jan 2025 15:10:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B00E81CAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 910244071C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7B00E81CAD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 910244071C
  for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:10:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6930D863FF; Sat, 25 Jan 2025 15:10:19 +0000 (UTC)
+ id 8D0DC86402; Sat, 25 Jan 2025 15:10:19 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Jan 2025 15:42:30 +0100
+Date: Sat, 25 Jan 2025 15:43:01 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a095c8f1a1476ec39a77755fe31a766b6b6db165
-X-Git-Newrev: 36e39b58e8b42a5fceefcc240c3e130422e30bf1
+X-Git-Oldrev: 4fdf6cf16ff1bd098f96fdb8d4724669dbe8c0ec
+X-Git-Newrev: 0a0169070ef9c2961b6515f184c9a3daa6d84ba9
 X-Patchwork-Hint: ignore
-Message-Id: <20250125151019.6930D863FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pysnmp: bump to version
- 7.1.16
+Message-Id: <20250125151019.8D0DC86402@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-semver: bump to version
+ 3.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36e39b58e8b42a5fceefcc240c3e130422e30bf1
+commit: https://git.buildroot.net/buildroot/commit/?id=0a0169070ef9c2961b6515f184c9a3daa6d84ba9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License hash changed due to placeholder replacement:
+https://github.com/python-semver/python-semver/commit/c47774db88386f7db79e5ec9fe3672c07ed7c063
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pysnmp/python-pysnmp.hash | 4 ++--
- package/python-pysnmp/python-pysnmp.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-semver/python-semver.hash | 6 +++---
+ package/python-semver/python-semver.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pysnmp/python-pysnmp.hash b/package/python-pysnmp/python-pysnmp.hash
-index 52d8b171d6..cae02270b3 100644
---- a/package/python-pysnmp/python-pysnmp.hash
-+++ b/package/python-pysnmp/python-pysnmp.hash
+diff --git a/package/python-semver/python-semver.hash b/package/python-semver/python-semver.hash
+index 1e06167610..50d30dd2fb 100644
+--- a/package/python-semver/python-semver.hash
++++ b/package/python-semver/python-semver.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pysnmp/json
--md5  e8b4dedcbe56d8cfe323bcbbe88adba1  pysnmp-7.1.15.tar.gz
--sha256  f624f2fab9503431f6514ad388b32aa657b36da59d2bc9b6059786db7d9f6257  pysnmp-7.1.15.tar.gz
-+md5  a6c2189839202b7ab76144743d7824b8  pysnmp-7.1.16.tar.gz
-+sha256  51581c70e410e456eb3faa24c42a094c82acfa961d16ad659b57c5818379dfcb  pysnmp-7.1.16.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/semver/json
+-md5  0bbc4d74959c9f1522f75ffb4ae0934d  semver-3.0.2.tar.gz
+-sha256  6253adb39c70f6e51afed2fa7152bcd414c411286088fb4b9effb133885ab4cc  semver-3.0.2.tar.gz
++md5  a0d76b528e489bf7ce1255a0a1486123  semver-3.0.4.tar.gz
++sha256  afc7d8c584a5ed0a11033af086e8af226a9c0b206f313e0301f8dd7b6b589602  semver-3.0.4.tar.gz
  # Locally computed sha256 checksums
- sha256  4954453957449b5e6f797d070f4d91024dceb3e056c99d72350795b71db0fc70  LICENSE.rst
-diff --git a/package/python-pysnmp/python-pysnmp.mk b/package/python-pysnmp/python-pysnmp.mk
-index 32abd1fb15..a04c3e4be7 100644
---- a/package/python-pysnmp/python-pysnmp.mk
-+++ b/package/python-pysnmp/python-pysnmp.mk
+-sha256  cda490c32e61d3884dc17791fc8078f2a3e564fba98dd18b4dc64eb2720b2b6f  LICENSE.txt
++sha256  cc10179de9ced8655d7765bd3a8ac46438a61e663de7cf1c48d502d2baf9f3d5  LICENSE.txt
+diff --git a/package/python-semver/python-semver.mk b/package/python-semver/python-semver.mk
+index 65faa8a851..3e4b167848 100644
+--- a/package/python-semver/python-semver.mk
++++ b/package/python-semver/python-semver.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYSNMP_VERSION = 7.1.15
-+PYTHON_PYSNMP_VERSION = 7.1.16
- PYTHON_PYSNMP_SOURCE = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
--PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/c7/ec/beb6b7587249050f5100cadc183dabc3da7e1c321f44ca879c71b47f9306
-+PYTHON_PYSNMP_SITE = https://files.pythonhosted.org/packages/a2/b1/c94dac49a002eed96e2cb7aeb1d148b1c98826e5cd1f6e8eebb4a20f8d49
- PYTHON_PYSNMP_SETUP_TYPE = poetry
- PYTHON_PYSNMP_LICENSE = BSD-2-Clause
- PYTHON_PYSNMP_LICENSE_FILES = LICENSE.rst
+-PYTHON_SEMVER_VERSION = 3.0.2
++PYTHON_SEMVER_VERSION = 3.0.4
+ PYTHON_SEMVER_SOURCE = semver-$(PYTHON_SEMVER_VERSION).tar.gz
+-PYTHON_SEMVER_SITE = https://files.pythonhosted.org/packages/41/6c/a536cc008f38fd83b3c1b98ce19ead13b746b5588c9a0cb9dd9f6ea434bc
++PYTHON_SEMVER_SITE = https://files.pythonhosted.org/packages/72/d1/d3159231aec234a59dd7d601e9dd9fe96f3afff15efd33c1070019b26132
+ PYTHON_SEMVER_SETUP_TYPE = setuptools
+ PYTHON_SEMVER_LICENSE = BSD-3-Clause
+ PYTHON_SEMVER_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
