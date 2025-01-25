@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FFDEC0218D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 15:10:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA91CC0218D
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 15:10:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1AE0D60B7D;
-	Sat, 25 Jan 2025 15:10:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A60C60B9C;
+	Sat, 25 Jan 2025 15:10:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AAGnPWUHEere; Sat, 25 Jan 2025 15:10:42 +0000 (UTC)
+ id V5DiNZHaH7zZ; Sat, 25 Jan 2025 15:10:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DED360B9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1896160BD3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0DED360B9C;
-	Sat, 25 Jan 2025 15:10:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5F1521183
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:10:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1896160BD3;
+	Sat, 25 Jan 2025 15:10:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B73D941
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:10:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92F7D408A5
+ by smtp1.osuosl.org (Postfix) with ESMTP id C74BA81CAD
  for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:10:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nCWbajczKFXr for <buildroot@buildroot.org>;
- Sat, 25 Jan 2025 15:10:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fAHuxdJ852_U for <buildroot@buildroot.org>;
+ Sat, 25 Jan 2025 15:10:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77D0240AB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83F5B81CBA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 77D0240AB8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 83F5B81CBA
  for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:10:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 748C886400; Sat, 25 Jan 2025 15:10:19 +0000 (UTC)
+ id 806F086401; Sat, 25 Jan 2025 15:10:19 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Jan 2025 15:42:38 +0100
+Date: Sat, 25 Jan 2025 15:42:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 36e39b58e8b42a5fceefcc240c3e130422e30bf1
-X-Git-Newrev: 94cf596d7695dce77bf339af0402cc0ae17407b7
+X-Git-Oldrev: 94cf596d7695dce77bf339af0402cc0ae17407b7
+X-Git-Newrev: 4fdf6cf16ff1bd098f96fdb8d4724669dbe8c0ec
 X-Patchwork-Hint: ignore
-Message-Id: <20250125151019.748C886400@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-referencing: bump to
- version 0.36.1
+Message-Id: <20250125151019.806F086401@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-s3transfer: bump to version
+ 0.11.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94cf596d7695dce77bf339af0402cc0ae17407b7
+commit: https://git.buildroot.net/buildroot/commit/?id=4fdf6cf16ff1bd098f96fdb8d4724669dbe8c0ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-referencing/python-referencing.hash | 4 ++--
- package/python-referencing/python-referencing.mk   | 4 ++--
+ package/python-s3transfer/python-s3transfer.hash | 4 ++--
+ package/python-s3transfer/python-s3transfer.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-referencing/python-referencing.hash b/package/python-referencing/python-referencing.hash
-index a19dd4a24b..ebf7208ad3 100644
---- a/package/python-referencing/python-referencing.hash
-+++ b/package/python-referencing/python-referencing.hash
+diff --git a/package/python-s3transfer/python-s3transfer.hash b/package/python-s3transfer/python-s3transfer.hash
+index 030a7c0962..bb17d0f18a 100644
+--- a/package/python-s3transfer/python-s3transfer.hash
++++ b/package/python-s3transfer/python-s3transfer.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/referencing/json
--md5  4cd2bdcefd1f9a9db2d1ea31338b4ae3  referencing-0.35.1.tar.gz
--sha256  25b42124a6c8b632a425174f24087783efb348a6f1e0008e63cd4466fedf703c  referencing-0.35.1.tar.gz
-+md5  f76e7b565b6e25c83bc5815c870735b7  referencing-0.36.1.tar.gz
-+sha256  ca2e6492769e3602957e9b831b94211599d2aade9477f5d44110d2530cf9aade  referencing-0.36.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/s3transfer/json
+-md5  cc2ee5c0de564fe24f26490597a9a8a5  s3transfer-0.10.4.tar.gz
+-sha256  29edc09801743c21eb5ecbc617a152df41d3c287f67b615f73e5f750583666a7  s3transfer-0.10.4.tar.gz
++md5  b0d1e6875220ce4b1b3db6d6c15b9ebd  s3transfer-0.11.2.tar.gz
++sha256  3b39185cb72f5acc77db1a58b6e25b977f28d20496b6e58d6813d75f464d632f  s3transfer-0.11.2.tar.gz
  # Locally computed sha256 checksums
- sha256  42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c  COPYING
-diff --git a/package/python-referencing/python-referencing.mk b/package/python-referencing/python-referencing.mk
-index ce0e895548..dc70152beb 100644
---- a/package/python-referencing/python-referencing.mk
-+++ b/package/python-referencing/python-referencing.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/python-s3transfer/python-s3transfer.mk b/package/python-s3transfer/python-s3transfer.mk
+index 1f7b38a35a..c61553b1c2 100644
+--- a/package/python-s3transfer/python-s3transfer.mk
++++ b/package/python-s3transfer/python-s3transfer.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REFERENCING_VERSION = 0.35.1
-+PYTHON_REFERENCING_VERSION = 0.36.1
- PYTHON_REFERENCING_SOURCE = referencing-$(PYTHON_REFERENCING_VERSION).tar.gz
--PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/99/5b/73ca1f8e72fff6fa52119dbd185f73a907b1989428917b24cff660129b6d
-+PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/27/32/fd98246df7a0f309b58cae68b10b6b219ef2eb66747f00dfb34422687087
- PYTHON_REFERENCING_SETUP_TYPE = pep517
- PYTHON_REFERENCING_LICENSE = MIT
- PYTHON_REFERENCING_LICENSE_FILES = COPYING
+-PYTHON_S3TRANSFER_VERSION = 0.10.4
++PYTHON_S3TRANSFER_VERSION = 0.11.2
+ PYTHON_S3TRANSFER_SOURCE = s3transfer-$(PYTHON_S3TRANSFER_VERSION).tar.gz
+-PYTHON_S3TRANSFER_SITE = https://files.pythonhosted.org/packages/c0/0a/1cdbabf9edd0ea7747efdf6c9ab4e7061b085aa7f9bfc36bb1601563b069
++PYTHON_S3TRANSFER_SITE = https://files.pythonhosted.org/packages/62/45/2323b5928f86fd29f9afdcef4659f68fa73eaa5356912b774227f5cf46b5
+ PYTHON_S3TRANSFER_SETUP_TYPE = setuptools
+ PYTHON_S3TRANSFER_LICENSE = Apache-2.0
+ PYTHON_S3TRANSFER_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
