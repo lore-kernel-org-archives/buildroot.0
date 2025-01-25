@@ -1,86 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44DA8C0218C
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 21:07:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F04EC0218C
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 21:10:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 953D3402E7;
-	Sat, 25 Jan 2025 21:07:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C26860BD0;
+	Sat, 25 Jan 2025 21:10:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id auL95BXD7RGU; Sat, 25 Jan 2025 21:07:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N8NRtzI55_RD; Sat, 25 Jan 2025 21:10:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F73D40342
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED37060BD5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F73D40342;
-	Sat, 25 Jan 2025 21:07:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0811694A
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 21:07:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED37060BD5;
+	Sat, 25 Jan 2025 21:10:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E0D3F94A
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 21:10:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF67E80E83
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 21:07:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C0C3060BD5
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 21:10:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7J83m0Gf_ZJv for <buildroot@buildroot.org>;
- Sat, 25 Jan 2025 21:07:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.51;
- helo=mail-wm1-f51.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J3Qudc30IR27 for <buildroot@buildroot.org>;
+ Sat, 25 Jan 2025 21:10:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5071480E78
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5071480E78
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com
- [209.85.128.51])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5071480E78
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 21:07:47 +0000 (UTC)
-Received: by mail-wm1-f51.google.com with SMTP id
- 5b1f17b1804b1-4361815b96cso21325205e9.1
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 13:07:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1737839265; x=1738444065;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=0Mb0HYNXTtulQAy4MuhVFlRL2OubTkuVC6AWgr+jxQE=;
- b=JJcqD/6OZgqR/IjvR/dQ5XPfqxaftbcBLnXvw70QXNWp6hw/2mxL5KL6y09VJoJpkb
- ZEw+/SzCBOuc8WlqQtwTmpWR3eoqOvDzLwiMy9N9/QeJ7NKJgwrrNP/ETJkbFZS6rGNu
- 9jzCsr2cei8H0OKMKaL3h0OVYHue08ENib1iJQggDJOC5vu/05PnMKVl3DbL2UNmr5DZ
- g46rFThmDWEieoR/sH8vuMzhFcmxGSmaUuP5vsbgNUjvvyW7O6DWUfEHvjz/HecCqxE0
- 4RFFZBxoNIlWGj7dl9ZNm3Q6EmROh9eXfwWaGQ292gKx5WlcMKCoZOAx0rGTT0rrgNbn
- 6NqA==
-X-Gm-Message-State: AOJu0YwuZSil4waZarE0d5SEZcAF4LMs6NUJYdDixPvSmt5Mt8RUxNl0
- IRmlfB+yrPPIesyimWNCnt3R0XBetqqQ9iYYzFBRTkBFwaio+NcON+3XmQ==
-X-Gm-Gg: ASbGncsYXXaAc0FvA/A+6fISrrioxAQnQ7JM2N0Z8554CyIA9anC3U/VaC5IV7yzU9R
- YvB6rOLY1fHaqkPgthanMZAHelM5c0I6kvglyZt/fkaOrwd96Ok/GiKhmqxzX0EshOL1Vf209po
- d+tiubniDNUbZJQrfI4qSaOg0lIcjqTn7NAVJ8CTbxU2wO9aBrolIby7VXJirX7RV0CUSBzVKSf
- kL4b+8URVIyuJFmZ2TvmXs/GEoYsBgQPRua5Hgrh46Icm8Qu4G8tKX768HfgTJHzmv4GXHHn44f
- FIIxXq/h7mQGmrO5XSw=
-X-Google-Smtp-Source: AGHT+IGqF5LXzZfDTC5nEBYr+wVzUeTAHBISVeNvMVHvxJfc+v6zdMUIa5skmGA69wBqAwarLFrsug==
-X-Received: by 2002:a05:600c:1386:b0:434:f2f4:4c07 with SMTP id
- 5b1f17b1804b1-438913de07cmr331249915e9.15.1737839264384; 
- Sat, 25 Jan 2025 13:07:44 -0800 (PST)
-Received: from localhost.localdomain ([2a02:a03f:eb68:2f00:d6b3:de43:1b55:ca])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-438bd4fa479sm74439605e9.5.2025.01.25.13.07.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 25 Jan 2025 13:07:43 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 580C160BC8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 580C160BC8
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 21:10:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4096A8648F; Sat, 25 Jan 2025 21:10:41 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Jan 2025 22:07:39 +0100
-Message-ID: <20250125210741.378348-1-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241116160819.70007-1-thomas@devoogdt.com>
-References: <20241116160819.70007-1-thomas@devoogdt.com>
-MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v2] package/libgtk4: bump to 4.17.3
+Date: Sat, 25 Jan 2025 22:07:49 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 821ce21fcf3dd5b4ccdfa7bacc96b396a9ca55f8
+X-Git-Newrev: 057012eb2c2c2f2de6d739b051406e8ab560e26b
+X-Patchwork-Hint: ignore
+Message-Id: <20250125211041.4096A8648F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/orangepi_5_plus: new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,208 +58,306 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-aHR0cHM6Ly9naXRsYWIuZ25vbWUub3JnL0dOT01FL2d0ay8tL2Jsb2IvNC4xNy4zL05FV1MKCk5v
-dGUgdGhhdCBsaWJndGs0IG5ldmVyIHNlbGVjdGVkIEJSMl9QQUNLQUdFX0NBSVJPX3tQTkcsWkxJ
-Qn0sCnRoaXMgaXMgYWxzbyBub3QgbmVlZGVkIHNpbmNlIFsxXS4gSW5zdGVhZCwgd2UgaGF2ZSB0
-byBzZWxlY3QKQlIyX1BBQ0tBR0VfTElCUE5HIG91cnNlbHZlcywgd2hpY2ggbGliZ3RrMyBpbmRp
-cmVjdGx5IGRpZApieSBpbmNsdWRpbmcgQlIyX1BBQ0tBR0VfQ0FJUk9fUE5HLgoKQWxzbywgYWRk
-IHBhdGNoZXMgZm9yOgogLSB0b29sY2hhaW5zIHdpdGhvdXQgZmVudi5oLiBbMl0KIC0gd2hlbiBj
-YWlybyBoYXMgYmVlbiBjb21waWxlZCB3aXRob3V0IHN1cmZhY2VzLiBbM10KClsxXSBodHRwczov
-L2dpdGxhYi5nbm9tZS5vcmcvR05PTUUvZ3RrLy0vbWVyZ2VfcmVxdWVzdHMvNzcxNwpbMl0gaHR0
-cHM6Ly9naXRsYWIuZ25vbWUub3JnL0dOT01FL2d0ay8tL21lcmdlX3JlcXVlc3RzLzc5MjUKWzNd
-IGh0dHBzOi8vZ2l0bGFiLmdub21lLm9yZy9HTk9NRS9ndGsvLS9tZXJnZV9yZXF1ZXN0cy83OTI2
-CgpTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgRGV2b29nZHQgPHRob21hc0BkZXZvb2dkdC5jb20+Ci0t
-LQohIFRoaXMgYnVtcCBkZXBlbmRzIG9uIHRoZXNlIHBhdGNoZXM6Ci0gaHR0cHM6Ly9wYXRjaHdv
-cmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDI1MDEyNTE4MjE0OC4yMzQy
-NjAtMS10aG9tYXNAZGV2b29nZHQuY29tLwotIGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcv
-cHJvamVjdC9idWlsZHJvb3QvcGF0Y2gvMjAyNTAxMjAyMTE3MDcuMjM4MTE4Mi0zLWZpb25hLmts
-dXRlQGdteC5kZS8KIQotLS0KIC4uLnVpbGQtYWRkLWEtY2hlY2stZm9yLXRoZS1mZW52LWhlYWRl
-ci5wYXRjaCB8ICAyNiArKysrKwogLi4udmFsdWUuYy1maXgtY29tcGlsYXRpb24taWYtZmVudi5o
-LWlzLnBhdGNoIHwgMTA2ICsrKysrKysrKysrKysrKysrKwogLi4ua2VuZHMtZ3RrcHJpbnRiYWNr
-ZW5kZmlsZS5jLWZpeC1jb21wLnBhdGNoIHwgIDk2ICsrKysrKysrKysrKysrKysKIHBhY2thZ2Uv
-bGliZ3RrNC9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICB8ICAgMSArCiBwYWNrYWdlL2xp
-Ymd0azQvbGliZ3RrNC5oYXNoICAgICAgICAgICAgICAgICAgfCAgIDQgKy0KIHBhY2thZ2UvbGli
-Z3RrNC9saWJndGs0Lm1rICAgICAgICAgICAgICAgICAgICB8ICAgNSArLQogNiBmaWxlcyBjaGFu
-Z2VkLCAyMzQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKIGNyZWF0ZSBtb2RlIDEwMDY0
-NCBwYWNrYWdlL2xpYmd0azQvMDAwMS1tZXNvbi5idWlsZC1hZGQtYS1jaGVjay1mb3ItdGhlLWZl
-bnYtaGVhZGVyLnBhdGNoCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9saWJndGs0LzAwMDIt
-Z3RrLWd0a2Nzc251bWJlcnZhbHVlLmMtZml4LWNvbXBpbGF0aW9uLWlmLWZlbnYuaC1pcy5wYXRj
-aAogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGliZ3RrNC8wMDAzLW1vZHVsZXMtcHJpbnRi
-YWNrZW5kcy1ndGtwcmludGJhY2tlbmRmaWxlLmMtZml4LWNvbXAucGF0Y2gKCmRpZmYgLS1naXQg
-YS9wYWNrYWdlL2xpYmd0azQvMDAwMS1tZXNvbi5idWlsZC1hZGQtYS1jaGVjay1mb3ItdGhlLWZl
-bnYtaGVhZGVyLnBhdGNoIGIvcGFja2FnZS9saWJndGs0LzAwMDEtbWVzb24uYnVpbGQtYWRkLWEt
-Y2hlY2stZm9yLXRoZS1mZW52LWhlYWRlci5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRl
-eCAwMDAwMDAwMDAwLi5kNDg3YzViZmUxCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9saWJn
-dGs0LzAwMDEtbWVzb24uYnVpbGQtYWRkLWEtY2hlY2stZm9yLXRoZS1mZW52LWhlYWRlci5wYXRj
-aApAQCAtMCwwICsxLDI2IEBACitGcm9tIDljMjQ4MDIyZGE3OTRlOTQyMmIzNzU1NGZiOWUzMTZm
-ZmE3MWZkN2EgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiBUaG9tYXMgRGV2b29nZHQg
-PHRob21hc0BkZXZvb2dkdC5jb20+CitEYXRlOiBGcmksIDE1IE5vdiAyMDI0IDA4OjIyOjIzICsw
-MTAwCitTdWJqZWN0OiBbUEFUQ0hdIG1lc29uLmJ1aWxkOiBhZGQgYSBjaGVjayBmb3IgdGhlIGZl
-bnYgaGVhZGVyCisKK1Vwc3RyZWFtOiBodHRwczovL2dpdGxhYi5nbm9tZS5vcmcvR05PTUUvZ3Rr
-Ly0vbWVyZ2VfcmVxdWVzdHMvNzkyNQorU2lnbmVkLW9mZi1ieTogVGhvbWFzIERldm9vZ2R0IDx0
-aG9tYXNAZGV2b29nZHQuY29tPgorLS0tCisgbWVzb24uYnVpbGQgfCAxICsKKyAxIGZpbGUgY2hh
-bmdlZCwgMSBpbnNlcnRpb24oKykKKworZGlmZiAtLWdpdCBhL21lc29uLmJ1aWxkIGIvbWVzb24u
-YnVpbGQKK2luZGV4IGU0MDA2YTNmOGYuLmY5ZmMwZGNiNzAgMTAwNjQ0CistLS0gYS9tZXNvbi5i
-dWlsZAorKysrIGIvbWVzb24uYnVpbGQKK0BAIC0xOTEsNiArMTkxLDcgQEAgY2RhdGEuc2V0X3F1
-b3RlZCgnR0VUVEVYVF9QQUNLQUdFJywgJ2d0azQwJykKKyAKKyBjaGVja19oZWFkZXJzID0gWwor
-ICAgJ2Rldi9ldmRldi9pbnB1dC5oJywKKysgICdmZW52LmgnLAorICAgJ2Z0dy5oJywKKyAgICds
-aW51eC9pbnB1dC5oJywKKyAgICdsaW51eC9tZW1mZC5oJywKKy0tIAorMi40My4wCisKZGlmZiAt
-LWdpdCBhL3BhY2thZ2UvbGliZ3RrNC8wMDAyLWd0ay1ndGtjc3NudW1iZXJ2YWx1ZS5jLWZpeC1j
-b21waWxhdGlvbi1pZi1mZW52LmgtaXMucGF0Y2ggYi9wYWNrYWdlL2xpYmd0azQvMDAwMi1ndGst
-Z3RrY3NzbnVtYmVydmFsdWUuYy1maXgtY29tcGlsYXRpb24taWYtZmVudi5oLWlzLnBhdGNoCm5l
-dyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjA0NTVkZjM5YzgKLS0tIC9kZXYv
-bnVsbAorKysgYi9wYWNrYWdlL2xpYmd0azQvMDAwMi1ndGstZ3RrY3NzbnVtYmVydmFsdWUuYy1m
-aXgtY29tcGlsYXRpb24taWYtZmVudi5oLWlzLnBhdGNoCkBAIC0wLDAgKzEsMTA2IEBACitGcm9t
-IGFlNDE4MGUzYWJiYTllMDUzY2Y1YjU4MjZkZjJmNjg1NGMzYzcyNTYgTW9uIFNlcCAxNyAwMDow
-MDowMCAyMDAxCitGcm9tOiBUaG9tYXMgRGV2b29nZHQgPHRob21hc0BkZXZvb2dkdC5jb20+CitE
-YXRlOiBGcmksIDE1IE5vdiAyMDI0IDA4OjIyOjQwICswMTAwCitTdWJqZWN0OiBbUEFUQ0hdIGd0
-ay9ndGtjc3NudW1iZXJ2YWx1ZS5jOiBmaXggY29tcGlsYXRpb24gaWYgZmVudi5oIGlzIG1pc3Np
-bmcKKworLi4vZ3RrL2d0a2Nzc251bWJlcnZhbHVlLmM6Mjk6MTA6IGZhdGFsIGVycm9yOiBmZW52
-Lmg6IE5vIHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkKKyAgIDI5IHwgI2luY2x1ZGUgPGZlbnYuaD4K
-KyAgICAgIHwKKworVXBzdHJlYW06IGh0dHBzOi8vZ2l0bGFiLmdub21lLm9yZy9HTk9NRS9ndGsv
-LS9tZXJnZV9yZXF1ZXN0cy83OTI1CitTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgRGV2b29nZHQgPHRo
-b21hc0BkZXZvb2dkdC5jb20+CistLS0KKyBndGsvZ3RrY3NzbnVtYmVydmFsdWUuYyB8IDU5ICsr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tCisgMSBmaWxlIGNoYW5nZWQs
-IDQ3IGluc2VydGlvbnMoKyksIDEyIGRlbGV0aW9ucygtKQorCitkaWZmIC0tZ2l0IGEvZ3RrL2d0
-a2Nzc251bWJlcnZhbHVlLmMgYi9ndGsvZ3RrY3NzbnVtYmVydmFsdWUuYworaW5kZXggMTE4MWMx
-YTgwMi4uMDNjZjMwMjYyYSAxMDA2NDQKKy0tLSBhL2d0ay9ndGtjc3NudW1iZXJ2YWx1ZS5jCisr
-KysgYi9ndGsvZ3RrY3NzbnVtYmVydmFsdWUuYworQEAgLTI2LDcgKzI2LDkgQEAKKyAjaW5jbHVk
-ZSAiZ3RrY3Nzc3R5bGVwcml2YXRlLmgiCisgI2luY2x1ZGUgImd0a3ByaXZhdGUuaCIKKyAKKysj
-aWZkZWYgSEFWRV9GRU5WX0gKKyAjaW5jbHVkZSA8ZmVudi5oPgorKyNlbmRpZgorIAorICNkZWZp
-bmUgUkFEX1RPX0RFRyh4KSAoKHgpICogMTgwLjAgLyBHX1BJKQorICNkZWZpbmUgREVHX1RPX1JB
-RCh4KSAoKHgpICogR19QSSAvIDE4MC4wKQorQEAgLTE4NDYsMTMgKzE4NDgsMjUgQEAgZ3RrX2Nz
-c19kaW1lbnNpb25fdmFsdWVfaXNfemVybyAoY29uc3QgR3RrQ3NzVmFsdWUgKnZhbHVlKQorICAg
-cmV0dXJuIHZhbHVlLT5kaW1lbnNpb24udmFsdWUgPT0gMDsKKyB9CisgCistc3RhdGljIGRvdWJs
-ZQorLV9yb3VuZCAoZ3VpbnQgbW9kZSwgZG91YmxlIGEsIGRvdWJsZSBiKQorKyNpZmRlZiBIQVZF
-X0ZFTlZfSAorK3N0YXRpYyBpbmxpbmUgZG91YmxlCisrX3JvdW5kX2ZlbnYgKGludCBtb2RlLCBk
-b3VibGUgYSwgZG91YmxlIGIpCisgeworLSAgaW50IG9sZF9tb2RlOworLSAgaW50IG1vZGVzW10g
-PSB7IEZFX1RPTkVBUkVTVCwgRkVfVVBXQVJELCBGRV9ET1dOV0FSRCwgRkVfVE9XQVJEWkVSTyB9
-OworICAgZG91YmxlIHJlc3VsdDsKKysgIGludCBvbGRfbW9kZTsKKyAKKysgIG9sZF9tb2RlID0g
-ZmVnZXRyb3VuZCAoKTsKKysgIGZlc2V0cm91bmQgKG1vZGUpOworKyAgcmVzdWx0ID0gbmVhcmJ5
-aW50IChhL2IpICogYjsKKysgIGZlc2V0cm91bmQgKG9sZF9tb2RlKTsKKysKKysgIHJldHVybiBy
-ZXN1bHQ7CisrfQorKyNlbmRpZgorKworK3N0YXRpYyBkb3VibGUKKytfcm91bmQgKGd1aW50IG1v
-ZGUsIGRvdWJsZSBhLCBkb3VibGUgYikKKyt7CisgICBpZiAoYiA9PSAwKQorICAgICByZXR1cm4g
-TkFOOworIAorQEAgLTE4ODAsMTQgKzE4OTQsMzUgQEAgX3JvdW5kIChndWludCBtb2RlLCBkb3Vi
-bGUgYSwgZG91YmxlIGIpCisgICAgICAgICB9CisgICAgIH0KKyAKKy0gIG9sZF9tb2RlID0gZmVn
-ZXRyb3VuZCAoKTsKKy0gIGZlc2V0cm91bmQgKG1vZGVzW21vZGVdKTsKKy0KKy0gIHJlc3VsdCA9
-IG5lYXJieWludCAoYS9iKSAqIGI7CistCistICBmZXNldHJvdW5kIChvbGRfbW9kZSk7CistCist
-ICByZXR1cm4gcmVzdWx0OworKyAgc3dpdGNoIChtb2RlKQorKyAgICB7CisrICAgIGNhc2UgUk9V
-TkRfTkVBUkVTVDoKKysjaWZkZWYgRkVfVE9ORUFSRVNUCisrICAgICAgcmV0dXJuIF9yb3VuZF9m
-ZW52IChGRV9UT05FQVJFU1QsIGEsIGIpOworKyNlbHNlCisrICAgICAgcmV0dXJuIHJvdW5kIChh
-L2IpICogYjsKKysjZW5kaWYKKysgICAgY2FzZSBST1VORF9VUDoKKysjaWZkZWYgRkVfVVBXQVJE
-CisrICAgICAgcmV0dXJuIF9yb3VuZF9mZW52IChGRV9VUFdBUkQsIGEsIGIpOworKyNlbHNlCisr
-ICAgICAgcmV0dXJuICgoKGEvYikgPj0gMCkgPyBjZWlsIChhL2IpIDogZmxvb3IgKGEvYikpICog
-YjsKKysjZW5kaWYKKysgICAgY2FzZSBST1VORF9ET1dOOgorKyNpZmRlZiBGRV9ET1dOV0FSRAor
-KyAgICAgIHJldHVybiBfcm91bmRfZmVudiAoRkVfRE9XTldBUkQsIGEsIGIpOworKyNlbHNlCisr
-ICAgICAgcmV0dXJuICgoKGEvYikgPj0gMCkgPyBmbG9vciAoYS9iKSA6IGNlaWwgKGEvYikpICog
-YjsKKysjZW5kaWYKKysgICAgY2FzZSBST1VORF9UT19aRVJPOgorKyNpZmRlZiBGRV9UT1dBUkRa
-RVJPCisrICAgICAgcmV0dXJuIF9yb3VuZF9mZW52IChGRV9UT1dBUkRaRVJPLCBhLCBiKTsKKysj
-ZWxzZQorKyAgICAgIHJldHVybiAoKChhL2IpID49IDApID8gZmxvb3IgKGEvYikgOiBjZWlsIChh
-L2IpKSAqIGI7CisrI2VuZGlmCisrICAgIGRlZmF1bHQ6CisrICAgICAgZ19hc3NlcnRfbm90X3Jl
-YWNoZWQgKCk7CisrICAgIH0KKyB9CisgCisgc3RhdGljIGRvdWJsZQorLS0gCisyLjQzLjAKKwpk
-aWZmIC0tZ2l0IGEvcGFja2FnZS9saWJndGs0LzAwMDMtbW9kdWxlcy1wcmludGJhY2tlbmRzLWd0
-a3ByaW50YmFja2VuZGZpbGUuYy1maXgtY29tcC5wYXRjaCBiL3BhY2thZ2UvbGliZ3RrNC8wMDAz
-LW1vZHVsZXMtcHJpbnRiYWNrZW5kcy1ndGtwcmludGJhY2tlbmRmaWxlLmMtZml4LWNvbXAucGF0
-Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uZmU4M2FkYmM5OQotLS0g
-L2Rldi9udWxsCisrKyBiL3BhY2thZ2UvbGliZ3RrNC8wMDAzLW1vZHVsZXMtcHJpbnRiYWNrZW5k
-cy1ndGtwcmludGJhY2tlbmRmaWxlLmMtZml4LWNvbXAucGF0Y2gKQEAgLTAsMCArMSw5NiBAQAor
-RnJvbSA2NmJlYjZmYTg0YTFkODZlM2Q2MDdkMTFlNWVhYjExOWE5NWQyYTAyIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQorRnJvbTogVGhvbWFzIERldm9vZ2R0IDx0aG9tYXNAZGV2b29nZHQuY29t
-PgorRGF0ZTogRnJpLCAxNSBOb3YgMjAyNCAxMzo0Mjo1OCArMDEwMAorU3ViamVjdDogW1BBVENI
-XSBtb2R1bGVzL3ByaW50YmFja2VuZHMvZ3RrcHJpbnRiYWNrZW5kZmlsZS5jOiBmaXggY29tcGls
-YXRpb24KKyBpZiBubyBjYWlybyBzdXJmYWNlcyBhcmUgcHJlc2VudAorTUlNRS1WZXJzaW9uOiAx
-LjAKK0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAorQ29udGVudC1UcmFu
-c2Zlci1FbmNvZGluZzogOGJpdAorCisuLi9tb2R1bGVzL3ByaW50YmFja2VuZHMvZ3RrcHJpbnRi
-YWNrZW5kZmlsZS5jOiBJbiBmdW5jdGlvbiDigJhvdXRwdXRfZmlsZV9mcm9tX3NldHRpbmdz4oCZ
-OgorLi4vbW9kdWxlcy9wcmludGJhY2tlbmRzL2d0a3ByaW50YmFja2VuZGZpbGUuYzoyNDE6MjA6
-IGVycm9yOiBsYWJlbCBhdCBlbmQgb2YgY29tcG91bmQgc3RhdGVtZW50CisgIDI0MSB8ICAgICAg
-ICAgICAgICAgY2FzZSBOX0ZPUk1BVFM6CisgICAgICB8ICAgICAgICAgICAgICAgICAgICBefn5+
-fn5+fn4KKy4uL21vZHVsZXMvcHJpbnRiYWNrZW5kcy9ndGtwcmludGJhY2tlbmRmaWxlLmM6IElu
-IGZ1bmN0aW9uIOKAmGZpbGVfcHJpbnRlcl9jcmVhdGVfY2Fpcm9fc3VyZmFjZeKAmToKKy4uL21v
-ZHVsZXMvcHJpbnRiYWNrZW5kcy9ndGtwcmludGJhY2tlbmRmaWxlLmM6MzYzOjEyOiBlcnJvcjog
-bGFiZWwgYXQgZW5kIG9mIGNvbXBvdW5kIHN0YXRlbWVudAorICAzNjMgfCAgICAgICBjYXNlIE5f
-Rk9STUFUUzoKKyAgICAgIHwgICAgICAgICAgICBefn5+fn5+fn4KKworVXBzdHJlYW06IGh0dHBz
-Oi8vZ2l0bGFiLmdub21lLm9yZy9HTk9NRS9ndGsvLS9tZXJnZV9yZXF1ZXN0cy83OTI2CitTaWdu
-ZWQtb2ZmLWJ5OiBUaG9tYXMgRGV2b29nZHQgPHRob21hc0BkZXZvb2dkdC5jb20+CistLS0KKyBt
-b2R1bGVzL3ByaW50YmFja2VuZHMvZ3RrcHJpbnRiYWNrZW5kZmlsZS5jIHwgMTYgKysrKysrKysr
-KysrKysrLQorIDEgZmlsZSBjaGFuZ2VkLCAxNSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0p
-CisKK2RpZmYgLS1naXQgYS9tb2R1bGVzL3ByaW50YmFja2VuZHMvZ3RrcHJpbnRiYWNrZW5kZmls
-ZS5jIGIvbW9kdWxlcy9wcmludGJhY2tlbmRzL2d0a3ByaW50YmFja2VuZGZpbGUuYworaW5kZXgg
-ZGRmZDhkNDQyNS4uNDM2Yzc2N2U0ZiAxMDA2NDQKKy0tLSBhL21vZHVsZXMvcHJpbnRiYWNrZW5k
-cy9ndGtwcmludGJhY2tlbmRmaWxlLmMKKysrKyBiL21vZHVsZXMvcHJpbnRiYWNrZW5kcy9ndGtw
-cmludGJhY2tlbmRmaWxlLmMKK0BAIC01NSw2ICs1NSwxMiBAQCB0eXBlZGVmIHN0cnVjdCBfR3Rr
-UHJpbnRCYWNrZW5kRmlsZUNsYXNzIEd0a1ByaW50QmFja2VuZEZpbGVDbGFzczsKKyAKKyAjZGVm
-aW5lIF9TVFJFQU1fTUFYX0NIVU5LX1NJWkUgODE5MgorIAorKyNpZiBkZWZpbmVkKENBSVJPX0hB
-U19QREZfU1VSRkFDRSkgfHwgXAorKyAgICBkZWZpbmVkKENBSVJPX0hBU19QU19TVVJGQUNFKSB8
-fCBcCisrICAgIGRlZmluZWQoQ0FJUk9fSEFTX1NWR19TVVJGQUNFKQorKyNkZWZpbmUgX0NBSVJP
-X0hBU19TVVJGQUNFIDEKKysjZW5kaWYKKysKKyBzdHJ1Y3QgX0d0a1ByaW50QmFja2VuZEZpbGVD
-bGFzcworIHsKKyAgIEd0a1ByaW50QmFja2VuZENsYXNzIHBhcmVudF9jbGFzczsKK0BAIC0yMzcs
-OCArMjQzLDEwIEBAIG91dHB1dF9maWxlX2Zyb21fc2V0dGluZ3MgKEd0a1ByaW50U2V0dGluZ3Mg
-KnNldHRpbmdzLAorICAgICAgICAgICBmb3JtYXQgPSBmb3JtYXRfZnJvbV9zZXR0aW5ncyAoc2V0
-dGluZ3MpOworICAgICAgICAgICBzd2l0Y2ggKGZvcm1hdCkKKyAgICAgICAgICAgICB7CisrI2lm
-ZGVmIF9DQUlST19IQVNfU1VSRkFDRQorICAgICAgICAgICAgICAgZGVmYXVsdDoKKyAgICAgICAg
-ICAgICAgIGNhc2UgTl9GT1JNQVRTOgorKyNlbmRpZgorICNpZmRlZiBDQUlST19IQVNfUERGX1NV
-UkZBQ0UKKyAgICAgICAgICAgICAgIGNhc2UgRk9STUFUX1BERjoKKyAgICAgICAgICAgICAgICAg
-ZXh0ZW5zaW9uID0gInBkZiI7CitAQCAtMzU5LDggKzM2NywxMCBAQCBmaWxlX3ByaW50ZXJfY3Jl
-YXRlX2NhaXJvX3N1cmZhY2UgKEd0a1ByaW50ZXIgICAgICAgKnByaW50ZXIsCisgCisgICBzd2l0
-Y2ggKGZvcm1hdCkKKyAgICAgeworKyNpZmRlZiBfQ0FJUk9fSEFTX1NVUkZBQ0UKKyAgICAgICBk
-ZWZhdWx0OgorICAgICAgIGNhc2UgTl9GT1JNQVRTOgorKyNlbmRpZgorICNpZmRlZiBDQUlST19I
-QVNfUERGX1NVUkZBQ0UKKyAgICAgICBjYXNlIEZPUk1BVF9QREY6CisgICAgICAgICBzdXJmYWNl
-ID0gY2Fpcm9fcGRmX3N1cmZhY2VfY3JlYXRlX2Zvcl9zdHJlYW0gKF9jYWlyb193cml0ZSwgY2Fj
-aGVfaW8sIHdpZHRoLCBoZWlnaHQpOworQEAgLTcyNyw4ICs3MzcsMTAgQEAgZmlsZV9wcmludGVy
-X2dldF9vcHRpb25zIChHdGtQcmludGVyICAgICAgICAgICAqcHJpbnRlciwKKyAgICAgeworICAg
-ICAgIHN3aXRjaCAoZm9ybWF0KQorICAgICAgICAgeworKyNpZmRlZiBfQ0FJUk9fSEFTX1NVUkZB
-Q0UKKyAgICAgICAgICAgZGVmYXVsdDoKKyAgICAgICAgICAgY2FzZSBOX0ZPUk1BVFM6CisrI2Vu
-ZGlmCisgI2lmZGVmIENBSVJPX0hBU19QREZfU1VSRkFDRQorICAgICAgICAgICBjYXNlIEZPUk1B
-VF9QREY6CisgICAgICAgICAgICAgY3VycmVudF9mb3JtYXQgPSBGT1JNQVRfUERGOworQEAgLTc0
-MSw3ICs3NTMsNyBAQCBmaWxlX3ByaW50ZXJfZ2V0X29wdGlvbnMgKEd0a1ByaW50ZXIgICAgICAg
-ICAgICpwcmludGVyLAorICNlbmRpZgorICNpZmRlZiBDQUlST19IQVNfU1ZHX1NVUkZBQ0UKKyAg
-ICAgICAgICAgY2FzZSBGT1JNQVRfU1ZHOgorLSAgICAgICAgICAgIGN1cnJlbnRfZm9ybWF0ID0g
-Rk9STUFUX1NWRzsgICAgICAgICAgICAKKysgICAgICAgICAgICBjdXJyZW50X2Zvcm1hdCA9IEZP
-Uk1BVF9TVkc7CisgICAgICAgICAgICAgYnJlYWs7CisgI2VuZGlmCisgICAgICAgICB9CitAQCAt
-ODU0LDcgKzg2Niw5IEBAIGZpbGVfcHJpbnRlcl9wcmVwYXJlX2Zvcl9wcmludCAoR3RrUHJpbnRl
-ciAgICAgICAqcHJpbnRlciwKKyAjaWZkZWYgQ0FJUk9fSEFTX1BERl9TVVJGQUNFCisgICAgICAg
-Y2FzZSBGT1JNQVRfUERGOgorICNlbmRpZgorKyNpZmRlZiBfQ0FJUk9fSEFTX1NVUkZBQ0UKKyAg
-ICAgICBjYXNlIE5fRk9STUFUUzoKKysjZW5kaWYKKyAJZ3RrX3ByaW50X2pvYl9zZXRfcm90YXRl
-IChwcmludF9qb2IsIEZBTFNFKTsKKyAgICAgICAgIGJyZWFrOworICAgICAgIGRlZmF1bHQ6Cist
-LSAKKzIuNDMuMAorCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmd0azQvQ29uZmlnLmluIGIvcGFj
-a2FnZS9saWJndGs0L0NvbmZpZy5pbgppbmRleCA5OTU1M2ZjNDRlLi4yZjU5N2VhODcyIDEwMDY0
-NAotLS0gYS9wYWNrYWdlL2xpYmd0azQvQ29uZmlnLmluCisrKyBiL3BhY2thZ2UvbGliZ3RrNC9D
-b25maWcuaW4KQEAgLTI3LDYgKzI3LDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0xJQkdUSzQKIAlz
-ZWxlY3QgQlIyX1BBQ0tBR0VfR1JBUEhFTkUKIAlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCRVBPWFkK
-IAlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCR0xJQjIKKwlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCUE5H
-CiAJc2VsZWN0IEJSMl9QQUNLQUdFX1BBTkdPCiAJc2VsZWN0IEJSMl9QQUNLQUdFX1RJRkYKIAkj
-IEF0IGxlYXN0IG9uZSBiYWNrZW5kIGlzIHJlcXVpcmVkCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xp
-Ymd0azQvbGliZ3RrNC5oYXNoIGIvcGFja2FnZS9saWJndGs0L2xpYmd0azQuaGFzaAppbmRleCA2
-MzZiNjc1ZDE1Li42MmRiZjkwM2YxIDEwMDY0NAotLS0gYS9wYWNrYWdlL2xpYmd0azQvbGliZ3Rr
-NC5oYXNoCisrKyBiL3BhY2thZ2UvbGliZ3RrNC9saWJndGs0Lmhhc2gKQEAgLTEsNSArMSw1IEBA
-Ci0jIEZyb20gaHR0cHM6Ly9kb3dubG9hZC5nbm9tZS5vcmcvc291cmNlcy9ndGsvNC4xNC9ndGst
-NC4xNC41LnNoYTI1NnN1bQotc2hhMjU2ICA1NTQ3ZjJiOWYwMDZiMTMzOTkzZTA3MGI4N2MxNzgw
-NGUwNTFlZmRhMzkxM2ZlYWNhMTEwOGZhMmJlNDFlMjRkICBndGstNC4xNC41LnRhci54egorIyBG
-cm9tIGh0dHBzOi8vZG93bmxvYWQuZ25vbWUub3JnL3NvdXJjZXMvZ3RrLzQuMTcvZ3RrLTQuMTcu
-My5zaGEyNTZzdW0KK3NoYTI1NiAgNWZhZGEwMzQzZTE3MmViMTEwMzM1ZDVkZjdkZTY4ZDAwMzQ0
-MzMyZTdlODg1YjA0ZTY3NTVmODc5YzA3NDhhNiAgZ3RrLTQuMTcuMy50YXIueHoKIAogIyBIYXNo
-IGZvciBsaWNlbnNlIGZpbGU6CiBzaGEyNTYgIGI3OTkzMjI1MTA0ZDkwZGRkODAyNGZkODM4ZmFm
-MzAwYmVhNWU4M2Q5MTIwM2VhYjk4ZTI5NTEyYWNlYmQ2OWMgIENPUFlJTkcKZGlmZiAtLWdpdCBh
-L3BhY2thZ2UvbGliZ3RrNC9saWJndGs0Lm1rIGIvcGFja2FnZS9saWJndGs0L2xpYmd0azQubWsK
-aW5kZXggYjAwYTJmYWNhZC4uMDYzY2RlMDM3MCAxMDA2NDQKLS0tIGEvcGFja2FnZS9saWJndGs0
-L2xpYmd0azQubWsKKysrIGIvcGFja2FnZS9saWJndGs0L2xpYmd0azQubWsKQEAgLTQsOCArNCw4
-IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCi1MSUJHVEs0X1ZFUlNJT05fTUFKT1Ig
-PSA0LjE0Ci1MSUJHVEs0X1ZFUlNJT04gPSAkKExJQkdUSzRfVkVSU0lPTl9NQUpPUikuNQorTElC
-R1RLNF9WRVJTSU9OX01BSk9SID0gNC4xNworTElCR1RLNF9WRVJTSU9OID0gJChMSUJHVEs0X1ZF
-UlNJT05fTUFKT1IpLjMKIExJQkdUSzRfU09VUkNFID0gZ3RrLSQoTElCR1RLNF9WRVJTSU9OKS50
-YXIueHoKIExJQkdUSzRfU0lURSA9IGh0dHBzOi8vZG93bmxvYWQuZ25vbWUub3JnL3NvdXJjZXMv
-Z3RrLyQoTElCR1RLNF9WRVJTSU9OX01BSk9SKQogTElCR1RLNF9MSUNFTlNFID0gTEdQTC0yLjAr
-CkBAIC0yMSw2ICsyMSw3IEBAIExJQkdUSzRfREVQRU5ERU5DSUVTID0gXAogCWdyYXBoZW5lIFwK
-IAlsaWJlcG94eSBcCiAJbGliZ2xpYjIgXAorCWxpYnBuZyBcCiAJcGFuZ28gXAogCSQoVEFSR0VU
-X05MU19ERVBFTkRFTkNJRVMpCiAKLS0gCjIuNDMuMAoKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=057012eb2c2c2f2de6d739b051406e8ab560e26b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This patch adds basic support for the new OrangePi 5 Plus board:
+- http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-5-plus-32GB.html
+
+Brief summary of the board features:
+- RK3588 Rockchip SoC
+  - Quad-Core ARM Cortex-A76 Processor 2.4GHz
+  - Quad-Core ARM Cortex-A55 Processor 1.8GHz
+  - Mali G610 GPU
+  - NPU 6 Tops INT4/INT8/INT16/FP16
+- LPDDR4x: 8GB/16GB/32GB
+- 2x USB 2.0
+- 2x USB 3.0
+- 2x HDMI out
+- PCIe M.2 M-key socket (e.g. for NVMe)
+- PCIe M.2 E-key socket (e.g. for WiFi/BT)
+- 40-pin expansion interface (GPIO / UART / I2C / SPI / PWM / CAN / I2S)
+- and much much more ...
+
+BSP includes the following components:
+- mainline ATF v2.12
+- mainline U-Boot v2024.10
+- mainline Linux kernel v6.12.x
+
+Unlike all the other boards from board/orangepi directory, this board
+is not based on an Allwinner SoC. It is based on Rockchip RK3588 SoC.
+So custom scripts and configs are used instead of common options from
+the board/orangepi/common directory. Suggested scripts and configs are
+based on those of Radxa Rock5B board.
+
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+[Julien:
+ - switch to human readable genimage.cfg partition type uuid
+ - add ATF hash in custom hash patches
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ DEVELOPERS                                         |  2 +
+ board/orangepi/orangepi-5-plus/extlinux.conf       |  4 ++
+ board/orangepi/orangepi-5-plus/genimage.cfg        | 23 +++++++++
+ board/orangepi/orangepi-5-plus/linux.fragment      |  9 ++++
+ .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +
+ .../patches/linux-headers/linux-headers.hash       |  1 +
+ .../orangepi-5-plus/patches/linux/linux.hash       |  2 +
+ .../orangepi-5-plus/patches/uboot/uboot.hash       |  2 +
+ board/orangepi/orangepi-5-plus/post-build.sh       |  5 ++
+ board/orangepi/orangepi-5-plus/readme.txt          | 46 ++++++++++++++++++
+ board/orangepi/orangepi-5-plus/u-boot.fragment     |  5 ++
+ configs/orangepi_5_plus_defconfig                  | 55 ++++++++++++++++++++++
+ 12 files changed, 156 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5ca66b2f28..ff069b9c40 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2949,12 +2949,14 @@ F:	package/sdbus-cpp/
+ N:	Sergey Matyukevich <geomatsi@gmail.com>
+ F:	boot/arm-trusted-firmware/
+ F:	board/linksprite/pcduino
++F:	board/orangepi/orangepi-5-plus
+ F:	board/orangepi/orangepi-zero
+ F:	board/orangepi/orangepi-one
+ F:	board/orangepi/orangepi-pc-plus/
+ F:	board/orangepi/orangepi-zero-plus2/
+ F:	board/orangepi/orangepi-zero2w/
+ F:	configs/linksprite_pcduino_defconfig
++F:	configs/orangepi_5_plus_defconfig
+ F:	configs/orangepi_one_defconfig
+ F:	configs/orangepi_pc_plus_defconfig
+ F:	configs/orangepi_zero_defconfig
+diff --git a/board/orangepi/orangepi-5-plus/extlinux.conf b/board/orangepi/orangepi-5-plus/extlinux.conf
+new file mode 100644
+index 0000000000..c6421c3bf4
+--- /dev/null
++++ b/board/orangepi/orangepi-5-plus/extlinux.conf
+@@ -0,0 +1,4 @@
++label OrangePi 5 Plus Linux
++  kernel /boot/Image
++  devicetreedir /boot
++  append root=PARTLABEL=rootfs earlycon rootwait panic=10
+diff --git a/board/orangepi/orangepi-5-plus/genimage.cfg b/board/orangepi/orangepi-5-plus/genimage.cfg
+new file mode 100644
+index 0000000000..5da0b4a2cf
+--- /dev/null
++++ b/board/orangepi/orangepi-5-plus/genimage.cfg
+@@ -0,0 +1,23 @@
++image sdcard.img {
++	hdimage {
++		partition-table-type = "gpt"
++	}
++
++	partition uboot {
++		in-partition-table = "false"
++		image = "u-boot-rockchip.bin"
++		offset = 32K
++	}
++
++	partition uboot-env {
++		partition-type-uuid = u-boot-env
++		offset = 16M
++		size = 64K
++	}
++
++	partition rootfs {
++		partition-type-uuid = L
++		image = "rootfs.ext2"
++		bootable = true
++	}
++}
+diff --git a/board/orangepi/orangepi-5-plus/linux.fragment b/board/orangepi/orangepi-5-plus/linux.fragment
+new file mode 100644
+index 0000000000..d5a4a6f24f
+--- /dev/null
++++ b/board/orangepi/orangepi-5-plus/linux.fragment
+@@ -0,0 +1,9 @@
++# net
++CONFIG_R8169=y
++CONFIG_PHY_ROCKCHIP_NANENG_COMBO_PHY=y
++
++# usbcam
++CONFIG_MEDIA_CAMERA_SUPPORT=y
++CONFIG_MEDIA_USB_SUPPORT=y
++CONFIG_USB_VIDEO_CLASS=y
++CONFIG_UVC_COMMON=y
+diff --git a/board/orangepi/orangepi-5-plus/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/orangepi/orangepi-5-plus/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+new file mode 100644
+index 0000000000..b5898cba3f
+--- /dev/null
++++ b/board/orangepi/orangepi-5-plus/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  06b35a3596b8417bf66f7bfdd7acd181bcb53fc36dc13216227b5cae154e0219  arm-trusted-firmware-v2.12-git4.tar.gz
+diff --git a/board/orangepi/orangepi-5-plus/patches/linux-headers/linux-headers.hash b/board/orangepi/orangepi-5-plus/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/orangepi/orangepi-5-plus/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/orangepi/orangepi-5-plus/patches/linux/linux.hash b/board/orangepi/orangepi-5-plus/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..d00eed9a49
+--- /dev/null
++++ b/board/orangepi/orangepi-5-plus/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  6f35f821433d8421be7167990747c7c4a0c451958fb96883446301af13d71152  linux-6.12.4.tar.xz
+diff --git a/board/orangepi/orangepi-5-plus/patches/uboot/uboot.hash b/board/orangepi/orangepi-5-plus/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..904fa56c02
+--- /dev/null
++++ b/board/orangepi/orangepi-5-plus/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
+diff --git a/board/orangepi/orangepi-5-plus/post-build.sh b/board/orangepi/orangepi-5-plus/post-build.sh
+new file mode 100755
+index 0000000000..d84a5da0b0
+--- /dev/null
++++ b/board/orangepi/orangepi-5-plus/post-build.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname "$0")"
++
++install -m 0644 -D "$BOARD_DIR"/extlinux.conf "$TARGET_DIR"/boot/extlinux/extlinux.conf
+diff --git a/board/orangepi/orangepi-5-plus/readme.txt b/board/orangepi/orangepi-5-plus/readme.txt
+new file mode 100644
+index 0000000000..83f84a0efe
+--- /dev/null
++++ b/board/orangepi/orangepi-5-plus/readme.txt
+@@ -0,0 +1,46 @@
++Intro
++=====
++
++This default configuration allows to start experimenting with the Buildroot
++environment for the OrangePi 5 Plus board. Default configuration brings up
++the board and allows access through the serial console.
++
++Orangepi 5 Plus links:
++- http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-5-plus-32GB.html
++
++Upstream support
++================
++
++Linux v6.12.x provides a good starting point for experiments with this board.
++All the basic features are already enabled including all the basic low-speed
++I2C/SPI/PWM peripherals, ethernet networking, USB 2.0, PCIe, eMMC, Audio.
++However advanced features such as graphics, display controllers, multimedia
++codecs, camera and image processing units are still in work. For details and
++updates check RK3588 hardware enablement status at Collabora gitlab, see:
++
++- https://gitlab.collabora.com/hardware-enablement/rockchip-3588/notes-for-rockchip-3588/-/blob/main/mainline-status.md
++
++Also keep an eye on RK3588 updates in kernel release announcements, e.g.
++- https://kernelnewbies.org/Linux_6.12
++
++How to Build
++============
++  $ make orangepi_5_plus_defconfig
++  $ make
++
++How to write the SD card
++========================
++
++Once the build process is finished there will be an image called
++"sdcard.img" in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX status=progress
++  $ sudo sync
++
++Insert the micro SDcard into the Orangepi 5 Plus board and power it up.
++The console is on the TTL Debug UART 3-pin connector which is located
++near RTC connector and Type-C Power port.
++
++Note that baudrate for this board is 1500000 8N1.
+diff --git a/board/orangepi/orangepi-5-plus/u-boot.fragment b/board/orangepi/orangepi-5-plus/u-boot.fragment
+new file mode 100644
+index 0000000000..ceba8d609a
+--- /dev/null
++++ b/board/orangepi/orangepi-5-plus/u-boot.fragment
+@@ -0,0 +1,5 @@
++CONFIG_ENV_SIZE=0x10000
++CONFIG_PARTITION_TYPE_GUID=y
++# CONFIG_ENV_IS_NOWHERE is not set
++CONFIG_ENV_IS_IN_MMC=y
++CONFIG_SYS_MMC_ENV_DEV=1
+diff --git a/configs/orangepi_5_plus_defconfig b/configs/orangepi_5_plus_defconfig
+new file mode 100644
+index 0000000000..f283cbff7e
+--- /dev/null
++++ b/configs/orangepi_5_plus_defconfig
+@@ -0,0 +1,55 @@
++BR2_aarch64=y
++BR2_cortex_a76_a55=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
++BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-5-plus/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_TARGET_GENERIC_HOSTNAME="orangepi5plus"
++BR2_TARGET_GENERIC_ISSUE="Welcome to the OrangePi 5 Plus board"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS2"
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi-5-plus/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-5-plus/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.4"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-5-plus/linux.fragment"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3588-orangepi-5-plus"
++BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
++BR2_PACKAGE_LINUX_FIRMWARE=y
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
++BR2_PACKAGE_LINUX_FIRMWARE_ARM_MALI_CSF=y
++BR2_PACKAGE_ROCKCHIP_RKBIN=y
++BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.12"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3588"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="bl31/bl31.elf"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi-5-plus-rk3588"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-5-plus/u-boot.fragment"
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
++BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
++BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_DTC=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
