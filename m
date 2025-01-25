@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C61E9C0218D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 14:33:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03E3CC0218C
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 14:33:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A92A60E79;
-	Sat, 25 Jan 2025 14:33:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B2B8A60F94;
+	Sat, 25 Jan 2025 14:33:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NfBSrIihM640; Sat, 25 Jan 2025 14:33:11 +0000 (UTC)
+ id g8BjuE4PREI1; Sat, 25 Jan 2025 14:33:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E73760F10
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 811C960F96
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E73760F10;
-	Sat, 25 Jan 2025 14:33:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 06F69941
+	by smtp3.osuosl.org (Postfix) with ESMTP id 811C960F96;
+	Sat, 25 Jan 2025 14:33:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 851731183
  for <buildroot@buildroot.org>; Sat, 25 Jan 2025 14:32:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7D77C60B50
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6BB7140B0D
  for <buildroot@buildroot.org>; Sat, 25 Jan 2025 14:32:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dWAAOtv_0UjQ for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8nqG74A2Lfl0 for <buildroot@buildroot.org>;
  Sat, 25 Jan 2025 14:32:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BD2F60A7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1487740BE7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2BD2F60A7D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1487740BE7
  for <buildroot@buildroot.org>; Sat, 25 Jan 2025 14:32:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 280418637E; Sat, 25 Jan 2025 14:32:47 +0000 (UTC)
+ id 0FBDA86380; Sat, 25 Jan 2025 14:32:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Jan 2025 14:21:26 +0100
+Date: Sat, 25 Jan 2025 14:21:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9681664f066585613018e873b6199f397b8c63c6
-X-Git-Newrev: 170b737330cdab8a42910b0f0a4475069554a393
+X-Git-Oldrev: e83ae94e76f8f3bf410bdb8f498321eb2d81025b
+X-Git-Newrev: 1b6234ae5077d22077841f6ae202885cc319003b
 X-Patchwork-Hint: ignore
-Message-Id: <20250125143247.280418637E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-hpack: bump to version 4.1.0
+Message-Id: <20250125143247.0FBDA86380@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-grpcio-reflection: bump to
+ version 1.70.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=170b737330cdab8a42910b0f0a4475069554a393
+commit: https://git.buildroot.net/buildroot/commit/?id=1b6234ae5077d22077841f6ae202885cc319003b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-hpack/python-hpack.hash | 4 ++--
- package/python-hpack/python-hpack.mk   | 4 ++--
+ package/python-grpcio-reflection/python-grpcio-reflection.hash | 4 ++--
+ package/python-grpcio-reflection/python-grpcio-reflection.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-hpack/python-hpack.hash b/package/python-hpack/python-hpack.hash
-index 988cbaae0b..aaaa3bcbbb 100644
---- a/package/python-hpack/python-hpack.hash
-+++ b/package/python-hpack/python-hpack.hash
+diff --git a/package/python-grpcio-reflection/python-grpcio-reflection.hash b/package/python-grpcio-reflection/python-grpcio-reflection.hash
+index afd3e50ab2..badabd1926 100644
+--- a/package/python-grpcio-reflection/python-grpcio-reflection.hash
++++ b/package/python-grpcio-reflection/python-grpcio-reflection.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/hpack/json
--md5  27e01514ef06dc9fa0798d3dcb7de47c  hpack-4.0.0.tar.gz
--sha256  fc41de0c63e687ebffde81187a948221294896f6bdc0ae2312708df339430095  hpack-4.0.0.tar.gz
-+md5  16e7423c5b5078c1997fa3eedd2e5935  hpack-4.1.0.tar.gz
-+sha256  ec5eca154f7056aa06f196a557655c5b009b382873ac8d1e66e79e87535f1dca  hpack-4.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/grpcio-reflection/json
+-md5  f1b2d22885a2a70fbcc499211059e2be  grpcio_reflection-1.69.0.tar.gz
+-sha256  3474aaedfb10d8da5503135a2fb9fbb4e1f72044ad7ee2d0bf22090934e80908  grpcio_reflection-1.69.0.tar.gz
++md5  4ae2aa3781881acd8df23793965407e4  grpcio_reflection-1.70.0.tar.gz
++sha256  af46ce13e57fd7602deaef5b1d1903f6644f8982cc00f62fa9fa5b928acf6a49  grpcio_reflection-1.70.0.tar.gz
  # Locally computed sha256 checksums
- sha256  763a9342a04df62046c9dc748a5287934eb0a5331c6863b3ca0aee20e18cb4ed  LICENSE
-diff --git a/package/python-hpack/python-hpack.mk b/package/python-hpack/python-hpack.mk
-index 4b581c1001..2655a6b4ad 100644
---- a/package/python-hpack/python-hpack.mk
-+++ b/package/python-hpack/python-hpack.mk
+ sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
+diff --git a/package/python-grpcio-reflection/python-grpcio-reflection.mk b/package/python-grpcio-reflection/python-grpcio-reflection.mk
+index c209b093b1..4339e31abe 100644
+--- a/package/python-grpcio-reflection/python-grpcio-reflection.mk
++++ b/package/python-grpcio-reflection/python-grpcio-reflection.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_HPACK_VERSION = 4.0.0
-+PYTHON_HPACK_VERSION = 4.1.0
- PYTHON_HPACK_SOURCE = hpack-$(PYTHON_HPACK_VERSION).tar.gz
--PYTHON_HPACK_SITE = https://files.pythonhosted.org/packages/3e/9b/fda93fb4d957db19b0f6b370e79d586b3e8528b20252c729c476a2c02954
-+PYTHON_HPACK_SITE = https://files.pythonhosted.org/packages/2c/48/71de9ed269fdae9c8057e5a4c0aa7402e8bb16f2c6e90b3aa53327b113f8
- PYTHON_HPACK_SETUP_TYPE = setuptools
- PYTHON_HPACK_LICENSE = MIT
- PYTHON_HPACK_LICENSE_FILES = LICENSE
+-PYTHON_GRPCIO_REFLECTION_VERSION = 1.69.0
++PYTHON_GRPCIO_REFLECTION_VERSION = 1.70.0
+ PYTHON_GRPCIO_REFLECTION_SOURCE = grpcio_reflection-$(PYTHON_GRPCIO_REFLECTION_VERSION).tar.gz
+-PYTHON_GRPCIO_REFLECTION_SITE = https://files.pythonhosted.org/packages/bd/88/064538adae2e526f4626ad57f53a99fca5ae5013e627214093ef1d47cc35
++PYTHON_GRPCIO_REFLECTION_SITE = https://files.pythonhosted.org/packages/42/98/f76681980ec7e9813e010d2778f4109816650760f6839661ae378286b3b5
+ PYTHON_GRPCIO_REFLECTION_SETUP_TYPE = setuptools
+ PYTHON_GRPCIO_REFLECTION_LICENSE = Apache-2.0
+ PYTHON_GRPCIO_REFLECTION_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
