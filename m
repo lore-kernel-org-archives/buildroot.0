@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38156C0218C
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 19:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66279C0218C
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 19:42:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD002605FE;
-	Sat, 25 Jan 2025 19:41:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F291340E4E;
+	Sat, 25 Jan 2025 19:42:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dc8SFknZg9-P; Sat, 25 Jan 2025 19:41:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 74t4jk4q9OpR; Sat, 25 Jan 2025 19:42:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF35B60740
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0B9D411C3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF35B60740;
-	Sat, 25 Jan 2025 19:41:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5BCAD94A
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 19:41:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0B9D411C3;
+	Sat, 25 Jan 2025 19:42:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id EEFD294A
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 19:42:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3BE4560740
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 19:41:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C8C61411C3
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 19:42:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6kMlbpkMVC1x for <buildroot@buildroot.org>;
- Sat, 25 Jan 2025 19:41:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45A10605FE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 45A10605FE
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 19:41:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EA2958644D; Sat, 25 Jan 2025 19:41:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u_1kfMGJj39D for <buildroot@buildroot.org>;
+ Sat, 25 Jan 2025 19:42:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4BED540E4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BED540E4E
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4BED540E4E
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 19:42:23 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id B9248B0053D;
+ Sat, 25 Jan 2025 20:42:17 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:46738])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 25 Jan 2025 20:42:17 +0100
+MIME-Version: 1.0
+Date: Sat, 25 Jan 2025 20:42:17 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 25 Jan 2025 17:32:06 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 895bbac0bfe70b0b2e3f471a165d4a9e720a589b
-X-Git-Newrev: 117a357c0cd46a3a19a6365e560c7d4d8f941713
-X-Patchwork-Hint: ignore
-Message-Id: <20250125194141.EA2958644D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libuv: bump to version 1.50.0
+To: Akhilesh Nema <nemaakhilesh@gmail.com>
+Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>
+In-Reply-To: <20250120052150.3608-1-nemaakhilesh@gmail.com>
+References: <20250120052150.3608-1-nemaakhilesh@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <d17c36311c078df014dc4b406811f497@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1737834140;
+ bh=WcE44nbdxb960qZbA0ntC6Pe7XHeo4Q4aSLcnJ0UK/4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=recxQKpTmlDMPvvR5to/JfPG0tK/5XiP3iBczxj6KrvDeKIMSrS9SM0eERkztnN7/
+ QYEfURAd2RMOyuKQZ2lJqUMKeypvIXgEhKyfjDQTioideXiGa9PAm0hBbf9wX6FFtk
+ e1tDv9UapJgIH+/oSt4QA+op+hMHdEQxgxoKeHwOu8PITE+tyio+qQKh9f8RILgylI
+ SvE2iEb9BkdxYDqzjw9RX526jEANQu9aiHPL2gDSmmMVJ9t6hshpfMm3yhk3RALj+v
+ Ucz4Ym/t7aqkphhdvzO1vmz0CoVGh5eRWV+Ne0KeQOarUPWoWJ3EKwQuNOdO1pGW9Z
+ k6AdUkb/X7Hxw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=recxQKpT
+Subject: Re: [Buildroot] [PATCH 1/1] package/libuv: bump to version 1.50.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,48 +82,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=117a357c0cd46a3a19a6365e560c7d4d8f941713
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 20/01/2025 06:21, Akhilesh Nema wrote:
+> Release notes:
+> https://github.com/libuv/libuv/releases/tag/v1.50.0
+> 
+> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 
-Release notes:
-https://github.com/libuv/libuv/releases/tag/v1.50.0
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index a2bb65b9ae..6618450af7 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  2e910e668e5daf1be6a5195a696985d7200adfa5c4d3400ee7b3355affdcf52c  libuv-v1.49.2-dist.tar.gz
-+sha256  c42c51d4e630f95dcefcafff95bf003ea52939e312d5e6584e7d9e102ead3e9e  libuv-v1.50.0-dist.tar.gz
- sha256  16de0c32b265cb7d46a6d3bd614f259dd4d693a5e26b3407b04aae8d73041f0c  LICENSE
- sha256  262c44bd2cdba037e6d2a82fba15f5800d292bc993a6f5d6b6ea487744d02836  LICENSE-extra
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 36a5b89fa7..57c128abf0 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -6,7 +6,7 @@
- 
- # When bumping libuv, check if a new version of uvw is available
- # and bump it too.
--LIBUV_VERSION = 1.49.2
-+LIBUV_VERSION = 1.50.0
- LIBUV_SOURCE = libuv-v$(LIBUV_VERSION)-dist.tar.gz
- LIBUV_SITE = https://dist.libuv.org/dist/v$(LIBUV_VERSION)
- LIBUV_DEPENDENCIES = host-pkgconf
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
