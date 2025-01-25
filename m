@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8945C0218C
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 15:49:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF6C1C0218C
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 15:49:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2C4341350;
-	Sat, 25 Jan 2025 15:49:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA95142476;
+	Sat, 25 Jan 2025 15:49:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VEwjfxYJqJhs; Sat, 25 Jan 2025 15:49:26 +0000 (UTC)
+ id QNAlpvncMcGW; Sat, 25 Jan 2025 15:49:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F47142436
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDB3142480
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F47142436;
-	Sat, 25 Jan 2025 15:49:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDB3142480;
+	Sat, 25 Jan 2025 15:49:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1EBDA1DA8
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:49:18 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 29490941
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:49:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9656F82AB9
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:49:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0050182ACD
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:49:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0alu1-BSDbPC for <buildroot@buildroot.org>;
+ id 9tpaGeag4ZhU for <buildroot@buildroot.org>;
  Sat, 25 Jan 2025 15:49:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D78E82AF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42C4482AED
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D78E82AF8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 42C4482AED
  for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:49:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 44FFF86447; Sat, 25 Jan 2025 15:49:14 +0000 (UTC)
+ id 226FD86443; Sat, 25 Jan 2025 15:49:14 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Jan 2025 16:17:05 +0100
+Date: Sat, 25 Jan 2025 16:16:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eccc30ecd47da9ee5e50cc9009952d30dd22e3b4
-X-Git-Newrev: 8e1e2f671056c092458986f713fe26284f5aa237
+X-Git-Oldrev: 0a0169070ef9c2961b6515f184c9a3daa6d84ba9
+X-Git-Newrev: 0c75ee1a6287e5402728efd5a4321634f345fd7d
 X-Patchwork-Hint: ignore
-Message-Id: <20250125154914.44FFF86447@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-tortoise-orm: bump to
- version 0.24.0
+Message-Id: <20250125154914.226FD86443@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-sentry-sdk: bump to version
+ 2.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e1e2f671056c092458986f713fe26284f5aa237
+commit: https://git.buildroot.net/buildroot/commit/?id=0c75ee1a6287e5402728efd5a4321634f345fd7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-tortoise-orm/python-tortoise-orm.hash | 4 ++--
- package/python-tortoise-orm/python-tortoise-orm.mk   | 4 ++--
+ package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
+ package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-tortoise-orm/python-tortoise-orm.hash b/package/python-tortoise-orm/python-tortoise-orm.hash
-index 649e268cb5..93a4fab7d9 100644
---- a/package/python-tortoise-orm/python-tortoise-orm.hash
-+++ b/package/python-tortoise-orm/python-tortoise-orm.hash
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
+index 5d65087a6d..0bf0392c77 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.hash
++++ b/package/python-sentry-sdk/python-sentry-sdk.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tortoise-orm/json
--md5  455b03a55fd090b65ebaa497c770be09  tortoise_orm-0.23.0.tar.gz
--sha256  f25d431ef4fb521a84edad582f4b9c53dccc5abf6cfbc6f228cbece5a13952fa  tortoise_orm-0.23.0.tar.gz
-+md5  1f35e292f86c5f0bcc717d5c6ef41f49  tortoise_orm-0.24.0.tar.gz
-+sha256  ae0704a93ea27931724fc899e57268c8081afce3b32b110b00037ec206553e7d  tortoise_orm-0.24.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
+-md5  235bf9f6e317e809673bedf9dd5d5c4f  sentry_sdk-2.19.2.tar.gz
+-sha256  467df6e126ba242d39952375dd816fbee0f217d119bf454a8ce74cf1e7909e8d  sentry_sdk-2.19.2.tar.gz
++md5  1ee9b58ddcc2227b8534c7ab9c5b8da7  sentry_sdk-2.20.0.tar.gz
++sha256  afa82713a92facf847df3c6f63cec71eb488d826a50965def3d7722aa6f0fdab  sentry_sdk-2.20.0.tar.gz
  # Locally computed sha256 checksums
- sha256  f955d347b975d5867ee364f978476b3012878a706d468571b9758cac74de6041  LICENSE.txt
-diff --git a/package/python-tortoise-orm/python-tortoise-orm.mk b/package/python-tortoise-orm/python-tortoise-orm.mk
-index e5970bdb41..ae51fd4947 100644
---- a/package/python-tortoise-orm/python-tortoise-orm.mk
-+++ b/package/python-tortoise-orm/python-tortoise-orm.mk
+ sha256  6d7ec62dc20e8b92cb88b89fb3b55ee8576505f3e1afa57952548f6eea5d008e  LICENSE
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+index 0ccfd7ecd3..a404bcda15 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.mk
++++ b/package/python-sentry-sdk/python-sentry-sdk.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TORTOISE_ORM_VERSION = 0.23.0
-+PYTHON_TORTOISE_ORM_VERSION = 0.24.0
- PYTHON_TORTOISE_ORM_SOURCE = tortoise_orm-$(PYTHON_TORTOISE_ORM_VERSION).tar.gz
--PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/1b/6e/c23d788524750d84c75864eac0176f57c07a5316b36cc467d2914a109bef
-+PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/64/81/973b629f8a70fc928343f4f8be6121023b6c6f0ee0ae45695955db82af47
- PYTHON_TORTOISE_ORM_SETUP_TYPE = poetry
- PYTHON_TORTOISE_ORM_LICENSE = Apache-2.0
- PYTHON_TORTOISE_ORM_LICENSE_FILES = LICENSE.txt
+-PYTHON_SENTRY_SDK_VERSION = 2.19.2
++PYTHON_SENTRY_SDK_VERSION = 2.20.0
+ PYTHON_SENTRY_SDK_SOURCE = sentry_sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
+-PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/36/4a/eccdcb8c2649d53440ae1902447b86e2e2ad1bc84207c80af9696fa07614
++PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/68/e8/6a366c0cd5e129dda6ecb20ff097f70b18182c248d4c27e813c21f98992a
+ PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
+ PYTHON_SENTRY_SDK_LICENSE = MIT
+ PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
