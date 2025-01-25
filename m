@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDEB0C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:03:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55A54C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:03:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95AF170874;
-	Fri, 28 Feb 2025 17:03:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F10F150516;
+	Fri, 28 Feb 2025 17:03:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ieLF8Rq2Lvps; Fri, 28 Feb 2025 17:03:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jXLRbKP2_iof; Fri, 28 Feb 2025 17:03:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B2E17087D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD2044F393
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B2E17087D;
-	Fri, 28 Feb 2025 17:03:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD2044F393;
+	Fri, 28 Feb 2025 17:03:32 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1622168
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:40:26 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 169FF1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:40:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8385442E73
+ by smtp4.osuosl.org (Postfix) with ESMTP id BCCBE42E7C
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zMlngRRQ7woY for <buildroot@buildroot.org>;
+ id P5mIsNk48VPY for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:31:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0044D42E7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29C5642E5C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0044D42E7C
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29C5642E5C
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E9172867B4; Fri, 28 Feb 2025 16:30:17 +0000 (UTC)
+ id 1CD8B82581; Fri, 28 Feb 2025 16:30:18 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 24 Jan 2025 21:13:20 +0100
+Date: Sat, 25 Jan 2025 12:51:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 360e811d4045fdf6d00adba0635f8a87415339fd
-X-Git-Newrev: bdd9f0ab26ebf229131d057bcdc8103439ea726b
+X-Git-Oldrev: 52521e4ec463e72df8786c9f0ee42eb961b03d4f
+X-Git-Newrev: aca1a6aab9574e5b0ee0529e2bb137ccd59d9bc2
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163017.E9172867B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ustreamer: bump
- version to 6.27
+Message-Id: <20250228163018.1CD8B82581@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gerbera: bump version
+ to 2.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,40 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdd9f0ab26ebf229131d057bcdc8103439ea726b
+commit: https://git.buildroot.net/buildroot/commit/?id=aca1a6aab9574e5b0ee0529e2bb137ccd59d9bc2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog - https://github.com/pikvm/ustreamer/compare/v6.22...v6.27
+Release notes:
+https://github.com/gerbera/gerbera/releases/tag/v2.3.0
+https://github.com/gerbera/gerbera/releases/tag/v2.4.0
+https://github.com/gerbera/gerbera/releases/tag/v2.4.1
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/ustreamer/ustreamer.hash | 2 +-
- package/ustreamer/ustreamer.mk   | 2 +-
+ package/gerbera/gerbera.hash | 2 +-
+ package/gerbera/gerbera.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ustreamer/ustreamer.hash b/package/ustreamer/ustreamer.hash
-index 4b33d23e70..e46411b5cd 100644
---- a/package/ustreamer/ustreamer.hash
-+++ b/package/ustreamer/ustreamer.hash
+diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
+index 8a0f052e9e..edbe655dde 100644
+--- a/package/gerbera/gerbera.hash
++++ b/package/gerbera/gerbera.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  7d3fcd34ee57faa4eae6505fba75ef35b36840083d50f581208f402a206032ad  ustreamer-6.22.tar.gz
-+sha256  6089137576520e3162fa6574853a15da1a7605f7e9a550c2570b33cfe8a39046  ustreamer-6.27.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/ustreamer/ustreamer.mk b/package/ustreamer/ustreamer.mk
-index 813f219b89..eb707cad00 100644
---- a/package/ustreamer/ustreamer.mk
-+++ b/package/ustreamer/ustreamer.mk
+ # Locally computed:
+-sha256  c77f4a8ccbed5e18499c0854803fec65ae2f26af633818b52584651fbd3eec13  gerbera-2.2.0.tar.gz
++sha256  563ee3941b0347a91f5a3e9fe151032bd0e26868bfe7b7c68a7c095f8b07677b  gerbera-2.4.1.tar.gz
+ sha256  cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6  LICENSE.md
+diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
+index ac5b69b681..9434f6fe64 100644
+--- a/package/gerbera/gerbera.mk
++++ b/package/gerbera/gerbera.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--USTREAMER_VERSION = 6.22
-+USTREAMER_VERSION = 6.27
- USTREAMER_SITE = $(call github,pikvm,ustreamer,v$(USTREAMER_VERSION))
- USTREAMER_LICENSE = GPL-3.0+
- USTREAMER_LICENSE_FILES = LICENSE
+-GERBERA_VERSION = 2.2.0
++GERBERA_VERSION = 2.4.1
+ GERBERA_SITE = $(call github,gerbera,gerbera,v$(GERBERA_VERSION))
+ GERBERA_LICENSE = GPL-2.0
+ GERBERA_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
