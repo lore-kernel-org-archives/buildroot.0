@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4AEFC0218C
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 15:10:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6F32C0218C
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 15:10:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5253260609;
-	Sat, 25 Jan 2025 15:10:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83F88607D8;
+	Sat, 25 Jan 2025 15:10:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 27XfQiH97ayA; Sat, 25 Jan 2025 15:10:26 +0000 (UTC)
+ id dRV0ZiQAJF0T; Sat, 25 Jan 2025 15:10:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41B7960698
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E79016087C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 41B7960698;
-	Sat, 25 Jan 2025 15:10:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 619631DCE
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:10:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E79016087C;
+	Sat, 25 Jan 2025 15:10:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3BF611183
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:10:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F86E406C8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5D37E406FE
  for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:10:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CqCHQ5Dbc-tn for <buildroot@buildroot.org>;
+ id 9HDP1XrQcn7k for <buildroot@buildroot.org>;
  Sat, 25 Jan 2025 15:10:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16919406FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5981740718
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 16919406FE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5981740718
  for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:10:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F3B98863FF; Sat, 25 Jan 2025 15:10:18 +0000 (UTC)
+ id 4513F86400; Sat, 25 Jan 2025 15:10:19 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Jan 2025 15:41:22 +0100
+Date: Sat, 25 Jan 2025 15:42:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fb0bd825c90f417819f7eec2d0efeeb449fe6634
-X-Git-Newrev: 530b021d2aaf4373326f5bd9c4cd1aff6cfd808b
+X-Git-Oldrev: bbb52919a838079641dd6c77396e59041a973bca
+X-Git-Newrev: e07dd8342091889e3c280ca447e12b06febb970c
 X-Patchwork-Hint: ignore
-Message-Id: <20250125151018.F3B98863FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-marshmallow-sqlalchemy:
- bump to version 1.4.0
+Message-Id: <20250125151019.4513F86400@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-prompt-toolkit: bump to
+ version 3.0.50
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=530b021d2aaf4373326f5bd9c4cd1aff6cfd808b
+commit: https://git.buildroot.net/buildroot/commit/?id=e07dd8342091889e3c280ca447e12b06febb970c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash  | 4 ++--
- .../python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk    | 4 ++--
+ package/python-prompt-toolkit/python-prompt-toolkit.hash | 4 ++--
+ package/python-prompt-toolkit/python-prompt-toolkit.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
-index 1fa5cee0c8..d91dca88b5 100644
---- a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
-+++ b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
+diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.hash b/package/python-prompt-toolkit/python-prompt-toolkit.hash
+index ee8237c7b0..6c531cb49b 100644
+--- a/package/python-prompt-toolkit/python-prompt-toolkit.hash
++++ b/package/python-prompt-toolkit/python-prompt-toolkit.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/marshmallow-sqlalchemy/json
--md5  355535b775773755337059a1a990a0dc  marshmallow_sqlalchemy-1.3.0.tar.gz
--sha256  5ddf583dd75fdf5ab31df76987cda2ba91942996ba5d577e92d6748fa93a5f52  marshmallow_sqlalchemy-1.3.0.tar.gz
-+md5  a037666fa3558f984dcc4b2b443378df  marshmallow_sqlalchemy-1.4.0.tar.gz
-+sha256  ca169a26171077af8afa25789e9781680de0e9187563c422f1f67d0a0133433a  marshmallow_sqlalchemy-1.4.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/prompt-toolkit/json
+-md5  2448470c36f2f250c9decefcc337b9f7  prompt_toolkit-3.0.48.tar.gz
+-sha256  d6623ab0477a80df74e646bdbc93621143f5caf104206aa29294d53de1a03d90  prompt_toolkit-3.0.48.tar.gz
++md5  c272c222da72fd7a854589a8059081af  prompt_toolkit-3.0.50.tar.gz
++sha256  544748f3860a2623ca5cd6d2795e7a14f3d0e1c3c9728359013f79877fc89bab  prompt_toolkit-3.0.50.tar.gz
  # Locally computed sha256 checksums
- sha256  906b5d9051e426144cb173ad911667b8ebd05a9c584c2c26c135b32a3ed12001  LICENSE
-diff --git a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
-index 50bf77af85..6ce354a252 100644
---- a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
-+++ b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
+ sha256  303574d9bdd85c757d6025017942bf17baeedf2778f62bd7f425d07d880f4c4a  LICENSE
+diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.mk b/package/python-prompt-toolkit/python-prompt-toolkit.mk
+index a03f76dcad..06fcc925a7 100644
+--- a/package/python-prompt-toolkit/python-prompt-toolkit.mk
++++ b/package/python-prompt-toolkit/python-prompt-toolkit.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION = 1.3.0
-+PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION = 1.4.0
- PYTHON_MARSHMALLOW_SQLALCHEMY_SOURCE = marshmallow_sqlalchemy-$(PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION).tar.gz
--PYTHON_MARSHMALLOW_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/2c/6f/38843dc27666b2c802edc256c1981a34d1c28e898f3503ab5ea89c10f138
-+PYTHON_MARSHMALLOW_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/6d/0c/89544d2b3aeae4af61ecd9df347d61d36768a67563e47b98423a853e8470
- PYTHON_MARSHMALLOW_SQLALCHEMY_SETUP_TYPE = flit
- PYTHON_MARSHMALLOW_SQLALCHEMY_LICENSE = MIT
- PYTHON_MARSHMALLOW_SQLALCHEMY_LICENSE_FILES = LICENSE
+-PYTHON_PROMPT_TOOLKIT_VERSION = 3.0.48
++PYTHON_PROMPT_TOOLKIT_VERSION = 3.0.50
+ PYTHON_PROMPT_TOOLKIT_SOURCE = prompt_toolkit-$(PYTHON_PROMPT_TOOLKIT_VERSION).tar.gz
+-PYTHON_PROMPT_TOOLKIT_SITE = https://files.pythonhosted.org/packages/2d/4f/feb5e137aff82f7c7f3248267b97451da3644f6cdc218edfe549fb354127
++PYTHON_PROMPT_TOOLKIT_SITE = https://files.pythonhosted.org/packages/a1/e1/bd15cb8ffdcfeeb2bdc215de3c3cffca11408d829e4b8416dcfe71ba8854
+ PYTHON_PROMPT_TOOLKIT_SETUP_TYPE = setuptools
+ PYTHON_PROMPT_TOOLKIT_LICENSE = BSD-3-Clause
+ PYTHON_PROMPT_TOOLKIT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
