@@ -4,74 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC021C0218C
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 21:11:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1EEDC0218C
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 21:17:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DF7260D63;
-	Sat, 25 Jan 2025 21:11:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE49C606BF;
+	Sat, 25 Jan 2025 21:17:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8GyK2Un4alq0; Sat, 25 Jan 2025 21:11:10 +0000 (UTC)
+ id jNNbJabMJO9C; Sat, 25 Jan 2025 21:17:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9867760BEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C561B60BE4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9867760BEA;
-	Sat, 25 Jan 2025 21:11:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5329A94A
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 21:11:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C561B60BE4;
+	Sat, 25 Jan 2025 21:17:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0976894A
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 21:17:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3127982151
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 21:11:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE41882223
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 21:17:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SCq2Mk4u6n6T for <buildroot@buildroot.org>;
- Sat, 25 Jan 2025 21:11:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F01358213B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F01358213B
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F01358213B
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 21:11:03 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 9A72019F5C6;
- Sat, 25 Jan 2025 22:10:59 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:51432])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 25 Jan 2025 22:10:59 +0100
+ id UUKRhnk9NLnP for <buildroot@buildroot.org>;
+ Sat, 25 Jan 2025 21:17:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::62f; helo=mail-pl1-x62f.google.com;
+ envelope-from=peter.macleod.thompson@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 149DF8221F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 149DF8221F
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
+ [IPv6:2607:f8b0:4864:20::62f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 149DF8221F
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 21:17:06 +0000 (UTC)
+Received: by mail-pl1-x62f.google.com with SMTP id
+ d9443c01a7336-219f8263ae0so59283275ad.0
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 13:17:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1737839826; x=1738444626;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=KXuci9GOtr/+9JsoJ5mDKeY/IiYnxvE5u/pXVLzRpo0=;
+ b=hKHBLNIOFu/tdzTLuu/G8tSOAT6BepFvZ0nO3MkN3h0TVBaiKqkC61d+/ncu6HF/dZ
+ So0kpq2vm9IGE7R26IRB5l5pm814OlBe3cJuUcvapEb8ubYCTKu8dKcXZHfiKiqHsokA
+ CBpxs7leiFphgy2XYaHRlSkdsAnriQ1y2htWc2SVrMu35VmPIlTpq4KOpaYC329p4KHi
+ 8c7UjKXLjSBSKVB1ozkNQrd0oew6fbEB1aDbiQf+UbHqxgzrvChfY2n8ta7s1WEZXfUD
+ K1eb3X+15dPWZ+5tHUZr3cCwkxVxroG0yzLxCS99GwJVjnjXmshb2U4cGKXVdeER+Q8v
+ h3Kw==
+X-Gm-Message-State: AOJu0YwDCMK3djKry+rhIpuR4/Ksk0TgTGGsOzrw7EEMT7Gs23rxG89Q
+ gTVTFlKCnb+csUNUcdhVP8ftrxrGoazGlUeEtmJYrxqNssXwPyxfGzwnzA==
+X-Gm-Gg: ASbGncv4TJICys5pnx0WqH3hyT3/S0WJ/xqd81EsJrwWGUnXE54QYEdos+5ztH15StN
+ kkwW0wIGT+qmOn+aBc1sxiIGeibmvmvUh3pposNaaCQ1mGpcEO24g69w3V8BYZGfkyXlBm1sniW
+ hty7TsZve8slVIZ0F8XTGO6Z37fiBmMuqsPfhBrphAAs+rsplN+UzT2Ti6NAVloxUy2EhcdTyed
+ glp7NxZUv+jJOXUbc8JC2hqQxlo7j8zITRkxcYyDCB0RhJPIysnVmrVf6L4b7E7vhXo055eIZoj
+ Ies9kGEY6pTrpxInuPJQLJvxnN3JPh4kB/UEleq5cW0=
+X-Google-Smtp-Source: AGHT+IE54McQEZmmirMG4RYCg7eVWT4C2aOOtkeGcVFC//Gy+hPQ/tiQVZ6uvU+SfAHKo5XRKLpVPw==
+X-Received: by 2002:a17:902:d50d:b0:21c:15b3:e39f with SMTP id
+ d9443c01a7336-21c355c7d9amr468651405ad.39.1737839825455; 
+ Sat, 25 Jan 2025 13:17:05 -0800 (PST)
+Received: from blastoff3.cg.shawcable.net
+ ([2604:3d09:c74:2000:188d:2e58:18fb:96c])
+ by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-21da414151fsm36394975ad.121.2025.01.25.13.17.04
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 25 Jan 2025 13:17:04 -0800 (PST)
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
+To: buildroot@buildroot.org
+Cc: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
+Date: Sat, 25 Jan 2025 14:16:57 -0700
+Message-Id: <20250125211657.14994-1-peter.macleod.thompson@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Date: Sat, 25 Jan 2025 22:10:59 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Sergey Matyukevich <geomatsi@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250106190748.763795-1-geomatsi@gmail.com>
-References: <20250106190748.763795-1-geomatsi@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <7cac004be67f141ae3fe0c332358b51c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737839460;
- bh=kgb7njgl4IBaRmClxQ2jq/rD7KiKnrXbecpJ5HgyMzU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=dKAdM3PZFhtaQ7T9IoAYyM0LbJeSGaxVJwbmw/lZEo/0cLOPIRgrwTQjtOaX5Vbfy
- 9n8mTw8Fr7YJPYUrk/M52vqxmd25iPieamttpaYjTf/idvqk7qdBhbZbfgWKRPIPe2
- OPKbbkUMyf9swDq2AOV2yLzNOqGE2rN4kfuwnKHEw/0Z3dgCrycO9LBTtkYvRFyvjX
- 76nw07fxuSUb/7v2IF7gDXIZ1eWIipdxu7UT9j0F2x7ZGiooClE/uVzrsYT0R0POKD
- /DnC1ip6AA2FsfImpo/0ki6zjKIDJSUtFk9JYfWzb29Ws4fSKUUNqZXNMtx20nmkfY
- VwMEwaVnYiNPQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1737839826; x=1738444626; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=KXuci9GOtr/+9JsoJ5mDKeY/IiYnxvE5u/pXVLzRpo0=;
+ b=DAoACSQ3RvZPBl13foAMW3B7YYiXzIGvT987dq+c6iOgR4PbCqZjk4kQ4u8WLMS0CQ
+ I1KuIvjvo3bonJeewNQ4QlnMEKGJPESvS6wrtMvJVOGCBt/aUB7Q/uxEiN5+mdmxC1ud
+ GjKw4gEQso9oz3b37etcHmjIp5iSON/5zOzxFJrXDW3210WIR3oxi4wVLiyyE7Fo18ok
+ 94en9efvFEo6HRnh4c3w720+y2WwB9W9HjvYENBT7tC0GmHzLofYRfevpBSON5iezLJS
+ C2iwO4z1nWX1GcVmYmwacp4J82OuZH9HU/E/GoV/eDEiE7zhlMIaGmGcwTshwXwJm10z
+ plQA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=dKAdM3PZ
-Subject: Re: [Buildroot] [PATCH 1/1] configs/orangepi_5_plus: new board
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=DAoACSQ3
+Subject: [Buildroot] [PATCH 1/1] package/sdl2_ttf: bump version to 2.24.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,46 +107,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 06/01/2025 20:07, Sergey Matyukevich wrote:
-> This patch adds basic support for the new OrangePi 5 Plus board:
-> - 
-> http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-5-plus-32GB.html
-> 
-> Brief summary of the board features:
-> - RK3588 Rockchip SoC
->   - Quad-Core ARM Cortex-A76 Processor 2.4GHz
->   - Quad-Core ARM Cortex-A55 Processor 1.8GHz
->   - Mali G610 GPU
->   - NPU 6 Tops INT4/INT8/INT16/FP16
-> - LPDDR4x: 8GB/16GB/32GB
-> - 2x USB 2.0
-> - 2x USB 3.0
-> - 2x HDMI out
-> - PCIe M.2 M-key socket (e.g. for NVMe)
-> - PCIe M.2 E-key socket (e.g. for WiFi/BT)
-> - 40-pin expansion interface (GPIO / UART / I2C / SPI / PWM / CAN / 
-> I2S)
-> - and much much more ...
-> 
-> BSP includes the following components:
-> - mainline ATF v2.12
-> - mainline U-Boot v2024.10
-> - mainline Linux kernel v6.12.x
-> 
-> Unlike all the other boards from board/orangepi directory, this board
-> is not based on an Allwinner SoC. It is based on Rockchip RK3588 SoC.
-> So custom scripts and configs are used instead of common options from
-> the board/orangepi/common directory. Suggested scripts and configs are
-> based on those of Radxa Rock5B board.
-> 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+From: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
 
-Applied to master, thanks.
+Signed-off-by: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
+---
+ package/sdl2_ttf/sdl2_ttf.hash | 4 ++--
+ package/sdl2_ttf/sdl2_ttf.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/sdl2_ttf/sdl2_ttf.hash b/package/sdl2_ttf/sdl2_ttf.hash
+index 7693aeba6b..452dc82dbe 100644
+--- a/package/sdl2_ttf/sdl2_ttf.hash
++++ b/package/sdl2_ttf/sdl2_ttf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d48cbd1ce475b9e178206bf3b72d56b66d84d44f64ac05803328396234d67723  SDL2_ttf-2.22.0.tar.gz
+-sha256  a0e8ce06504966e45088ee1cc7583cc8af9aac615d4cf56d47d847da9cb15139  LICENSE.txt
++0b2bf1e7b6568adbdbc9bb924643f79d9dedafe061fa1ed687d1d9ac4e453bfd  SDL2_ttf-2.24.0.tar.gz
++7826eca0a0f7e591f38dd844e207a200aac81a59b20d8a30c3af8c6282af13e6  SDL2_ttf-2.24.0/LICENSE.txt
+diff --git a/package/sdl2_ttf/sdl2_ttf.mk b/package/sdl2_ttf/sdl2_ttf.mk
+index f4f293cec1..3f53dd1e79 100644
+--- a/package/sdl2_ttf/sdl2_ttf.mk
++++ b/package/sdl2_ttf/sdl2_ttf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDL2_TTF_VERSION = 2.22.0
++SDL2_TTF_VERSION = 2.24.0
+ SDL2_TTF_SOURCE = SDL2_ttf-$(SDL2_TTF_VERSION).tar.gz
+ SDL2_TTF_SITE = http://www.libsdl.org/projects/SDL_ttf/release
+ SDL2_TTF_LICENSE = Zlib
+-- 
+2.20.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
