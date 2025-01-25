@@ -1,75 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65FE2C0218B
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 08:12:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B71B8C02182
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 08:12:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2D3381FB9;
-	Sat, 25 Jan 2025 08:12:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53AE8426EC;
+	Sat, 25 Jan 2025 08:12:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Elopooc7aCk7; Sat, 25 Jan 2025 08:12:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zRFSS2fbi35A; Sat, 25 Jan 2025 08:12:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D796481FBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 208EF428F7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D796481FBA;
-	Sat, 25 Jan 2025 08:12:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 48B8D1183
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 08:12:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 208EF428F7;
+	Sat, 25 Jan 2025 08:12:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DE4581183
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 08:12:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3680E60B17
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 08:12:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BF4CB60B17
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 08:12:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qYBke2AQQykQ for <buildroot@buildroot.org>;
- Sat, 25 Jan 2025 08:12:07 +0000 (UTC)
+ id GQYIrxWTwJca for <buildroot@buildroot.org>;
+ Sat, 25 Jan 2025 08:12:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CA47A60AD9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA47A60AD9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B6D6A60AD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6D6A60AD9
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CA47A60AD9
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 08:12:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B6D6A60AD9
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 08:12:20 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c8f0.dip0.t-ipconnect.de [79.214.200.240])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 06B5DA4C0701
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 09:12:00 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:41234)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B7C6CA4C0701
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 09:12:17 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53176)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1tbbGj-000000004bS-1dxz
- for buildroot@buildroot.org; Sat, 25 Jan 2025 08:11:53 +0000
+ (envelope-from <bernd@kuhls.net>) id 1tbbH7-000000004ff-0vcW
+ for buildroot@buildroot.org; Sat, 25 Jan 2025 08:12:17 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 25 Jan 2025 09:11:53 +0100
-Message-Id: <20250125081153.13580-1-bernd@kuhls.net>
+Date: Sat, 25 Jan 2025 09:12:17 +0100
+Message-Id: <20250125081217.13606-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202412041019; t=1737792721;
- bh=MnNzLtKF/3EXg0cMoDxmlueldtTwpR5HO/6TJ1XPw9s=;
+ s=kas202412041019; t=1737792737;
+ bh=CqDuPOWUNWyZRSYLEjqKzErkHa2Z+enBZ00/0HTniwc=;
  h=From:To:Subject:Date:From;
- b=geokX3lJ6Xz2uyyIHYJQ4aWenPdqkMGYnWtJnFZl36RWSivtn6z5y+HbeHb9Mszpd
- rQQD7vYPuaarI+HXDZ+6v62xODSfCrgzcwmNXiacrhq5u+Fc+dzCBpRI9ntwBuU4ma
- 9+SaWg2WOFjvaGtR9QQC/4PIppSh/NySWvu6wUqsN24qwd4FhxkN14X2WwZxUC/5BW
- +gZKteCiH6yF5mYuGSCElkrfxJLIBZdk9Paz++GuchBWMh7INjgqpyk7cP0/VZcXgo
- dxf3GZ9jSAkNrie6M/RnIB/dzO3w4TmUjdem8daxTiBYplbxyol8LUv7zNeRVjX9bW
- axLJwRrgxt8hw==
+ b=RJ+Y8sn6S8jwNJ0RXs6YmSLDHfRIqgoNoYmJqssNbfXhIpw1yJU5DQ9TKss3SJTtc
+ jY9t2Ys/14CdMADWn8LPhyculSae4bu2cCGiVQ7s+Egh0QHjhndxkpk21WSPncCsjM
+ EZ1GaWR6foypEOSgzgMq0vTyFpY+yFT8290mc+s4rVyU+sTMRc/C8zBQsG3gmNP9UA
+ 5ulNnFB0AP0Gf7iw5RakI4bYBwJGLbwRGcAkRx321YGIeFF0TKyKSPsNAO5mbh/TK2
+ Txe+l5CD9LWFfAsMnJMpttRMk1DxYFsvJZW5+KASKCLAonY8UQKsxIpCqB3ugdVo3k
+ Lte6aUok88VJw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202412041019 header.b=geokX3lJ
-Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump version to
- 1.0.8
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202412041019 header.b=RJ+Y8sn6
+Subject: [Buildroot] [PATCH] package/apache: bump version to 2.4.63
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,41 +84,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes CVE-2025-20128:
-"This issue was introduced in version 1.0.0 and affects all currently
- supported versions."
-https://blog.clamav.net/2025/01/clamav-142-and-108-security-patch.html
+Changelog: https://downloads.apache.org/httpd/CHANGES_2.4.63
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/apache/apache.hash | 4 ++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 8e8351cf00..b5b10d3a13 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index b281b4beab..a35ae8ed17 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
 @@ -1,5 +1,5 @@
- # Locally calculated
--sha256  f4d67240a8b2e882e18f864529040084617de066cdab9b7684951ace6ea6f3cf  clamav-1.0.7.tar.gz
-+sha256  4783f2ab3fc323a887c117c672dc0b4e7ace72d76f8c06e990bd49c3ef58f10a  clamav-1.0.8.tar.gz
- sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING.txt
- sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING/COPYING.bzip2
- sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING/COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index d748a33db7..42be9be41c 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
+ # From https://downloads.apache.org/httpd/httpd-2.4.62.tar.bz2.{sha256,sha512}
+-sha256  674188e7bf44ced82da8db522da946849e22080d73d16c93f7f4df89e25729ec  httpd-2.4.62.tar.bz2
+-sha512  7db1876805d5c0f60f49bcb51f75cdf567120f2ff6349e68f084e9a86ae38265d9f1c67e7fca0082c9db136f3c408a88501ee11f26b1b68724ba240867171d77  httpd-2.4.62.tar.bz2
++sha256  88fc236ab99b2864b248de7d49a008ec2afd7551e64dce8b95f58f32f94c46ab  httpd-2.4.63.tar.bz2
++sha512  a804ca564dfee5907fe4ce4f36884815bace0621bc7b8c9aa7c99472a954aa19cb13733f90678ff3d58ab3c76cc0e33a27e1035dc1d8cb597a9622154c59ef48  httpd-2.4.63.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 0a0a0b3de4..14676a5aee 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CLAMAV_VERSION = 1.0.7
-+CLAMAV_VERSION = 1.0.8
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = \
+-APACHE_VERSION = 2.4.62
++APACHE_VERSION = 2.4.63
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = https://dlcdn.apache.org/httpd
+ APACHE_LICENSE = Apache-2.0
 -- 
 2.39.5
 
