@@ -4,50 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82896C0218C
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 14:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2C9DC0218C
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 14:33:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54BA060B43;
-	Sat, 25 Jan 2025 14:33:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8299A60EC5;
+	Sat, 25 Jan 2025 14:33:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1-Y5m1PuFHFf; Sat, 25 Jan 2025 14:33:20 +0000 (UTC)
+ id hxQk6RABgBUK; Sat, 25 Jan 2025 14:33:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 539CA60BCD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CBEB6100D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 539CA60BCD;
-	Sat, 25 Jan 2025 14:33:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 38219941
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 14:32:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CBEB6100D;
+	Sat, 25 Jan 2025 14:33:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DABAD941
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 14:33:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6032F40B32
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 14:32:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C8E22403D9
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 14:33:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mzTHUpaiULAe for <buildroot@buildroot.org>;
- Sat, 25 Jan 2025 14:32:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F24640BCF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F24640BCF
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 14:32:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1BBF286381; Sat, 25 Jan 2025 14:32:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WETCJJL0Jhsr for <buildroot@buildroot.org>;
+ Sat, 25 Jan 2025 14:33:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2473E401D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2473E401D1
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2473E401D1
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 14:33:24 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id F2DB060128;
+ Sat, 25 Jan 2025 15:33:20 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:54290])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 25 Jan 2025 15:33:20 +0100
+MIME-Version: 1.0
+Date: Sat, 25 Jan 2025 15:33:20 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 25 Jan 2025 14:21:11 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1b6234ae5077d22077841f6ae202885cc319003b
-X-Git-Newrev: 9681664f066585613018e873b6199f397b8c63c6
-X-Patchwork-Hint: ignore
-Message-Id: <20250125143247.1BBF286381@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-grpcio: bump to version
- 1.70.0
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250124183240.3786530-1-james.hilliard1@gmail.com>
+References: <20250124183240.3786530-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <a2ec9c18404420d54a32c44f7010f61e@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1737815602;
+ bh=s4PyFwyKCHWOxWML3ZgDrj8+cuiRwXaaVZPfhiEMS8s=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=DnGJsEEDHMA/v1r6rO2pLUJPmGgVvfvGw3A1UWJqcVSsHoNKTo7Gjrs0DzDR6yhBz
+ A6Fk1J5ZROOTNyBAY5dYXOY0oW9a3QTBGx2oXN3jIAuHiuR4DuTZy59C2f2F+PoDQt
+ 6pSPMo+0YM9/oO6qoT9Xm+iRFZ7hX2dJ+FM3lCy5KmnfzEs9xRzzO88A25DvhvPEbv
+ sJBOMiR4ljQTnJhw3fvxujOkA8wL2u//71dFG3EFzHTyGBaMl/sxTqVDhvKH9UjoG0
+ Txdy7qS32drJzVjOTbXROIJigLBqC7AugfOBf0YpaiureVnT3XkJtOQf0jeaGpUz/o
+ wZ5GwxIncvMFw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DnGJsEED
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-cachetools: bump to
+ version 5.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +83,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9681664f066585613018e873b6199f397b8c63c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 24/01/2025 19:32, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-grpcio/python-grpcio.hash | 4 ++--
- package/python-grpcio/python-grpcio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-grpcio/python-grpcio.hash b/package/python-grpcio/python-grpcio.hash
-index 685336584a..c57ece77ca 100644
---- a/package/python-grpcio/python-grpcio.hash
-+++ b/package/python-grpcio/python-grpcio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/grpcio/json
--md5  397e8c15a8b474e664225927a7a5fff6  grpcio-1.69.0.tar.gz
--sha256  936fa44241b5379c5afc344e1260d467bee495747eaf478de825bab2791da6f5  grpcio-1.69.0.tar.gz
-+md5  ad83dd7166a99b20c0e004b538eb5ad9  grpcio-1.70.0.tar.gz
-+sha256  8d1584a68d5922330025881e63a6c1b54cc8117291d382e4fa69339b6d914c56  grpcio-1.70.0.tar.gz
- # Locally computed sha256 checksums
- sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
-diff --git a/package/python-grpcio/python-grpcio.mk b/package/python-grpcio/python-grpcio.mk
-index 81f4b1fe0c..24c0a08cae 100644
---- a/package/python-grpcio/python-grpcio.mk
-+++ b/package/python-grpcio/python-grpcio.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_GRPCIO_VERSION = 1.69.0
-+PYTHON_GRPCIO_VERSION = 1.70.0
- PYTHON_GRPCIO_SOURCE = grpcio-$(PYTHON_GRPCIO_VERSION).tar.gz
--PYTHON_GRPCIO_SITE = https://files.pythonhosted.org/packages/e4/87/06a145284cbe86c91ca517fe6b57be5efbb733c0d6374b407f0992054d18
-+PYTHON_GRPCIO_SITE = https://files.pythonhosted.org/packages/69/e1/4b21b5017c33f3600dcc32b802bb48fe44a4d36d6c066f52650c7c2690fa
- PYTHON_GRPCIO_SETUP_TYPE = setuptools
- PYTHON_GRPCIO_LICENSE = Apache-2.0
- PYTHON_GRPCIO_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
