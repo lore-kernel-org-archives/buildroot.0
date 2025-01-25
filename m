@@ -1,53 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48755C0218C
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 15:49:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E56D9C0218C
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jan 2025 15:50:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 08DA142516;
-	Sat, 25 Jan 2025 15:49:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ADF8D82AF8;
+	Sat, 25 Jan 2025 15:50:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id utnP8wCOjEyX; Sat, 25 Jan 2025 15:49:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PQUvSlVPblV4; Sat, 25 Jan 2025 15:50:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 972C14263E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E447582AB9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 972C14263E;
-	Sat, 25 Jan 2025 15:49:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E447582AB9;
+	Sat, 25 Jan 2025 15:50:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D43C94A
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:49:20 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D74C794A
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:50:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F99341753
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:49:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D23F9403F3
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:50:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 03X8o1hHbGaq for <buildroot@buildroot.org>;
- Sat, 25 Jan 2025 15:49:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B150A41740
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B150A41740
- for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:49:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9AB9B86453; Sat, 25 Jan 2025 15:49:14 +0000 (UTC)
+ id eoeRnyJA08Rx for <buildroot@buildroot.org>;
+ Sat, 25 Jan 2025 15:50:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 09F26410B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09F26410B8
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 09F26410B8
+ for <buildroot@buildroot.org>; Sat, 25 Jan 2025 15:50:03 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id C272DB005AA;
+ Sat, 25 Jan 2025 16:49:58 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:33784])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 25 Jan 2025 16:49:58 +0100
+MIME-Version: 1.0
+Date: Sat, 25 Jan 2025 16:49:58 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 25 Jan 2025 16:42:45 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 859d4f618dbbaeb1e09655eece35a9dd67e3fa0f
-X-Git-Newrev: 895bbac0bfe70b0b2e3f471a165d4a9e720a589b
-X-Patchwork-Hint: ignore
-Message-Id: <20250125154914.9AB9B86453@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-zeroconf: bump to version
- 0.141.0
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>
+In-Reply-To: <20250124205520.3860825-1-james.hilliard1@gmail.com>
+References: <20250124205520.3860825-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <ef5baf4234bcbb6dd73c40b11b5bab00@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1737820201;
+ bh=yIeUmFJnB6htFHKNOXZezBPMIRQ+aLZQIQEoaOqsI3k=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=RrTnZWH/DZGAl3fug75My0wUYihZ5iyrFaDelORuTT8+5I+Yf+i0JVxUBCJkAbDjm
+ AxAccvUEx9kBdjK75XHeKnEsN1mitLkXVJeakmkh/JIbWIrhIif26YQuvn9P0pbOyQ
+ CbmtLLCJzTWFv7exg8rNoGgLfrIqMtFvzGnePSu2oXigWcU27ocT3hKybMMapliv2U
+ h4EPdCkkt4M46hMEQcIEEodkbi0LOGCQ5Qo/kmRfmx5RimBfHwJnmOOW6qFxXBYOsG
+ UnEu9ZZz0V7R7XHlz4WKcKmm/6dsgZpOWe9Er4fU1ZR1F4KRw51dBQ8Hrqn/DNlFu5
+ a16Qx+8W/k0qg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=RrTnZWH/
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-sentry-sdk: bump to
+ version 2.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +83,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=895bbac0bfe70b0b2e3f471a165d4a9e720a589b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 24/01/2025 21:55, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-zeroconf/python-zeroconf.hash | 4 ++--
- package/python-zeroconf/python-zeroconf.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-zeroconf/python-zeroconf.hash b/package/python-zeroconf/python-zeroconf.hash
-index f190d5ff6e..cf49e6f21e 100644
---- a/package/python-zeroconf/python-zeroconf.hash
-+++ b/package/python-zeroconf/python-zeroconf.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/zeroconf/json
--md5  ce24b798377f12fb3def7ebbc66e4e57  zeroconf-0.139.0.tar.gz
--sha256  2cfb4ef130aac602c9ed428a52243597ed248cf0d22ac4e2b21d90541de90684  zeroconf-0.139.0.tar.gz
-+md5  13003da434beff520db50460d8d603bd  zeroconf-0.141.0.tar.gz
-+sha256  c0c41cfe1331cf885f132dd2400e4091f59ae0a571cae14f3db66919a055489b  zeroconf-0.141.0.tar.gz
- # Locally computed sha256 checksums
- sha256  4d1d974999ae8655ee47afb47ac3b327cd1baeea3509aecb35341ba1a1a53c94  COPYING
-diff --git a/package/python-zeroconf/python-zeroconf.mk b/package/python-zeroconf/python-zeroconf.mk
-index 3a69afeab4..7f14651b86 100644
---- a/package/python-zeroconf/python-zeroconf.mk
-+++ b/package/python-zeroconf/python-zeroconf.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_ZEROCONF_VERSION = 0.139.0
-+PYTHON_ZEROCONF_VERSION = 0.141.0
- PYTHON_ZEROCONF_SOURCE = zeroconf-$(PYTHON_ZEROCONF_VERSION).tar.gz
--PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/5e/77/1db96e97567a1ffd8393a42959fa783ef66fc91d19ac9f7c75fd3be14661
-+PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/d1/36/78f2cc563958d55b079c977ad2d4ae5d8b182f2dab9f1224d89c9b1311d3
- PYTHON_ZEROCONF_SETUP_TYPE = poetry
- PYTHON_ZEROCONF_LICENSE = LGPL-2.1+
- PYTHON_ZEROCONF_LICENSE_FILES = COPYING
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
