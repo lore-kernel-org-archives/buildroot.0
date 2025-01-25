@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA05BC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:04:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7510C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:04:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC26B7089C;
-	Fri, 28 Feb 2025 17:04:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A98A50564;
+	Fri, 28 Feb 2025 17:04:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DslQHl-U_c-Q; Fri, 28 Feb 2025 17:04:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eSMj1214mOWZ; Fri, 28 Feb 2025 17:04:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C448D708A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB04C4FE4F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C448D708A3;
-	Fri, 28 Feb 2025 17:04:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB04C4FE4F;
+	Fri, 28 Feb 2025 17:04:03 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 143E01DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:40:50 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 110471DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:40:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B7C0419BC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5564642E9C
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aA-fSFuplW7O for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:08 +0000 (UTC)
+ id uObHQNEhujz1 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6D0942E9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 570C6417FB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A6D0942E9B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 570C6417FB
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A35FC81359; Fri, 28 Feb 2025 16:30:19 +0000 (UTC)
+ id 4AFD381359; Fri, 28 Feb 2025 16:30:19 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Jan 2025 15:41:55 +0100
+Date: Sat, 25 Jan 2025 14:21:26 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c8d95d0f8cd5933b5f29786b901d56b620ed4533
-X-Git-Newrev: bbb52919a838079641dd6c77396e59041a973bca
+X-Git-Oldrev: 9681664f066585613018e873b6199f397b8c63c6
+X-Git-Newrev: 170b737330cdab8a42910b0f0a4475069554a393
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163019.A35FC81359@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-orjson: bump to
- version 3.10.15
+Message-Id: <20250228163019.4AFD381359@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-hpack: bump to
+ version 4.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbb52919a838079641dd6c77396e59041a973bca
+commit: https://git.buildroot.net/buildroot/commit/?id=170b737330cdab8a42910b0f0a4475069554a393
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-orjson/python-orjson.hash | 2 +-
- package/python-orjson/python-orjson.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-hpack/python-hpack.hash | 4 ++--
+ package/python-hpack/python-hpack.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
-index df657aacb9..d11892b4b1 100644
---- a/package/python-orjson/python-orjson.hash
-+++ b/package/python-orjson/python-orjson.hash
+diff --git a/package/python-hpack/python-hpack.hash b/package/python-hpack/python-hpack.hash
+index 988cbaae0b..aaaa3bcbbb 100644
+--- a/package/python-hpack/python-hpack.hash
++++ b/package/python-hpack/python-hpack.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  2d093fc336be04a32f4edf27b2aca8e6e7c796521cfaf9552079b39d2ea93e06  python-orjson-3.10.14-cargo2.tar.gz
-+sha256  a7ca27f4e0ea702b1d71d4e2749718e79aa35c0047f07d3e8681707c2d2aeecb  python-orjson-3.10.15-cargo2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/hpack/json
+-md5  27e01514ef06dc9fa0798d3dcb7de47c  hpack-4.0.0.tar.gz
+-sha256  fc41de0c63e687ebffde81187a948221294896f6bdc0ae2312708df339430095  hpack-4.0.0.tar.gz
++md5  16e7423c5b5078c1997fa3eedd2e5935  hpack-4.1.0.tar.gz
++sha256  ec5eca154f7056aa06f196a557655c5b009b382873ac8d1e66e79e87535f1dca  hpack-4.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
-index 9b44ebcd67..29325e2f67 100644
---- a/package/python-orjson/python-orjson.mk
-+++ b/package/python-orjson/python-orjson.mk
+ sha256  763a9342a04df62046c9dc748a5287934eb0a5331c6863b3ca0aee20e18cb4ed  LICENSE
+diff --git a/package/python-hpack/python-hpack.mk b/package/python-hpack/python-hpack.mk
+index 4b581c1001..2655a6b4ad 100644
+--- a/package/python-hpack/python-hpack.mk
++++ b/package/python-hpack/python-hpack.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ORJSON_VERSION = 3.10.14
-+PYTHON_ORJSON_VERSION = 3.10.15
- PYTHON_ORJSON_SOURCE_PYPI = orjson-$(PYTHON_ORJSON_VERSION).tar.gz
--PYTHON_ORJSON_SITE_PYPI = https://files.pythonhosted.org/packages/92/f7/3219b56f47b4f5e864fb11cdf4ac0aaa3de608730ad2dc4c6e16382f35ec
-+PYTHON_ORJSON_SITE_PYPI = https://files.pythonhosted.org/packages/ae/f9/5dea21763eeff8c1590076918a446ea3d6140743e0e36f58f369928ed0f4
- PYTHON_ORJSON_SITE = $(PYTHON_ORJSON_SITE_PYPI)/$(PYTHON_ORJSON_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_ORJSON_SETUP_TYPE = maturin
- PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
+-PYTHON_HPACK_VERSION = 4.0.0
++PYTHON_HPACK_VERSION = 4.1.0
+ PYTHON_HPACK_SOURCE = hpack-$(PYTHON_HPACK_VERSION).tar.gz
+-PYTHON_HPACK_SITE = https://files.pythonhosted.org/packages/3e/9b/fda93fb4d957db19b0f6b370e79d586b3e8528b20252c729c476a2c02954
++PYTHON_HPACK_SITE = https://files.pythonhosted.org/packages/2c/48/71de9ed269fdae9c8057e5a4c0aa7402e8bb16f2c6e90b3aa53327b113f8
+ PYTHON_HPACK_SETUP_TYPE = setuptools
+ PYTHON_HPACK_LICENSE = MIT
+ PYTHON_HPACK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
