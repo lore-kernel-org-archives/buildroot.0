@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F7C7C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:05:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DC57C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:05:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6AD8E505F1;
-	Fri, 28 Feb 2025 17:05:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3953184BB1;
+	Fri, 28 Feb 2025 17:05:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vqENrT0Vjacp; Fri, 28 Feb 2025 17:05:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g0TzrB2rJqtf; Fri, 28 Feb 2025 17:05:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3293505F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D0ED84BC5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3293505F2;
-	Fri, 28 Feb 2025 17:05:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D0ED84BC5;
+	Fri, 28 Feb 2025 17:05:04 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E5F31DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1390694F
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9D3BD42EA5
+ by smtp4.osuosl.org (Postfix) with ESMTP id C851342EB4
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PeShduV3jWIc for <buildroot@buildroot.org>;
+ id 4kjJVLLIz_GY for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:31:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98D6642EB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91EE242EB2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 98D6642EB4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 91EE242EB2
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9285E87A09; Fri, 28 Feb 2025 16:30:20 +0000 (UTC)
+ id 86A7982581; Fri, 28 Feb 2025 16:30:20 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Jan 2025 22:36:15 +0100
+Date: Sat, 25 Jan 2025 22:11:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 75620b301f9e7d128afd6fd9a1d771a3b7567185
-X-Git-Newrev: b04e77b900bfa89d538b6071b59de3dcf39e413c
+X-Git-Oldrev: 057012eb2c2c2f2de6d739b051406e8ab560e26b
+X-Git-Newrev: 75620b301f9e7d128afd6fd9a1d771a3b7567185
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163020.9285E87A09@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fontconfig: bump to
- 2.16.0
+Message-Id: <20250228163020.86A7982581@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sysklogd: bump to
+ v2.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,131 +65,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b04e77b900bfa89d538b6071b59de3dcf39e413c
+commit: https://git.buildroot.net/buildroot/commit/?id=75620b301f9e7d128afd6fd9a1d771a3b7567185
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Announcements:
- 2.16.0: https://lists.freedesktop.org/archives/fontconfig/2025-January/007143.html
- 2.15.0: https://lists.freedesktop.org/archives/fontconfig/2023-December/007064.html
+From https://github.com/troglobit/sysklogd/releases/tag/v2.7.0
 
-Some notes:
+ - syslogd by default now cap forwarded messages to 1024 bytes. This can
+   be adjusted using -M size or the config file setting udp_size
+ - syslogd socket buffering has been reduced from 160 kiB to 80 kiB
+ - Allow slashes in process names to support, e.g., postfix/qmgr
+ - Support for extended message filtering based on tag/ident, hostname,
+   or message property. This allows sorting of messages based on their
+   origin (program/remote) or content in any of the available message
+   fields: exact match, case-insensitive substring matching or extended
+   regular expression
+ - Support for remote logging to a multicast group, as well as acting as
+   a multicast group receiver of syslog messages, both IPv4 and IPv6.
+   Forwarding to multicast groups support two new, per action, options:
+   - iface=IFNAME to set a different outbound interface
+   - ttl=1.255 to adjust the TTL of outbound multicast (default: 1)
+ - libsyslog.a support for egressing multicast, two new struct members
+   .log_iface and .log_ttl control how the syslogp() API works
+ - logger support for controlling egressing multicast using a new command
+   line option, -o iface=IFNAME,ttl=<1..255>
+ - syslogd now logs the hostname as the FQDN in RFC5424 output format
+ - Fix parsing of IPv6 addresses in listen .conf directive, as well as
+   command line option -b [A:B:C:D]:PORT
 
-- The hash is no longer part of the announcement but
-  can instead be found in the release archive.
-
-- Switched to meson while at it.
-
-- Dropped the patch, since it's part of the autotools.
-
-- Dropped some configs args, --with-arch, --disable-static,
-  since meson now handles the arch, and disable static as
-  it has most probably not been needed anymore for years.
-  Was part of commit dd4faf6f6f3fb32657b5d0c4fb72d15a7f571b2e.
-  "cairo: add host version"
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...d-pthread-as-a-dependency-of-a-static-lib.patch | 43 ----------------------
- package/fontconfig/fontconfig.hash                 |  4 +-
- package/fontconfig/fontconfig.mk                   | 16 +++-----
- 3 files changed, 7 insertions(+), 56 deletions(-)
+ package/sysklogd/sysklogd.hash | 5 ++---
+ package/sysklogd/sysklogd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/fontconfig/0001-add-pthread-as-a-dependency-of-a-static-lib.patch b/package/fontconfig/0001-add-pthread-as-a-dependency-of-a-static-lib.patch
-deleted file mode 100644
-index c6aa514534..0000000000
---- a/package/fontconfig/0001-add-pthread-as-a-dependency-of-a-static-lib.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 40ec04a8bf36dd8d0aa3da98b167792ce2dcd114 Mon Sep 17 00:00:00 2001
--From: Silvan Scherrer <silvan.scherrer@aroa.ch>
--Date: Sun, 20 Sep 2020 12:52:08 +0200
--Subject: [PATCH] add pthread as a dependency of a static lib
+diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
+index 8b1cd63a73..4024965e23 100644
+--- a/package/sysklogd/sysklogd.hash
++++ b/package/sysklogd/sysklogd.hash
+@@ -1,5 +1,4 @@
+-# Upstream .sha256 from GitHub
+-sha256  40a3bb593d7507e49a4379f48ae8a9bc4b68dcc583efcdbf3b9056128442c92a  sysklogd-2.6.2.tar.gz
 -
--Downloaded from https://trac.netlabs.org/ports/changeset/2220
--
--Upstream: https://gitlab.freedesktop.org/fontconfig/fontconfig/-/merge_requests/121
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- configure.ac     | 2 ++
-- fontconfig.pc.in | 4 ++--
-- 2 files changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index f3189a7..594d6fd 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -690,6 +690,8 @@ fi
-- have_pthread=false
-- if test "$os_win32" = no; then
-- 	AX_PTHREAD([have_pthread=true])
--+	AC_SUBST(PTHREAD_CFLAGS)
--+	AC_SUBST(PTHREAD_LIBS)
-- fi
-- if $have_pthread; then
-- 	LIBS="$PTHREAD_LIBS $LIBS"
--diff --git a/fontconfig.pc.in b/fontconfig.pc.in
--index 61b35fb..f823bac 100644
----- a/fontconfig.pc.in
--+++ b/fontconfig.pc.in
--@@ -14,5 +14,5 @@ Version: @VERSION@
-- Requires: @PKGCONFIG_REQUIRES@
-- Requires.private: @PKGCONFIG_REQUIRES_PRIVATELY@
-- Libs: -L${libdir} -lfontconfig
---Libs.private: @ICONV_LIBS@ @PKG_EXPAT_LIBS@
---Cflags: -I${includedir} @ICONV_CFLAGS@ @PKG_EXPAT_CFLAGS@
--+Libs.private: @ICONV_LIBS@ @PKG_EXPAT_LIBS@ @PTHREAD_LIBS@
--+Cflags: -I${includedir} @ICONV_CFLAGS@ @PKG_EXPAT_CFLAGS@ @PTHREAD_CFLAGS@
---- 
--2.27.0
--
-diff --git a/package/fontconfig/fontconfig.hash b/package/fontconfig/fontconfig.hash
-index a4f87caf1e..b9c95d40b2 100644
---- a/package/fontconfig/fontconfig.hash
-+++ b/package/fontconfig/fontconfig.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/fontconfig/2023-January/006950.html
--sha256  dba695b57bce15023d2ceedef82062c2b925e51f5d4cc4aef736cf13f60a468b  fontconfig-2.14.2.tar.xz
-+# From https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.16.0.tar.xz.sha256sum
-+sha256  6a33dc555cc9ba8b10caf7695878ef134eeb36d0af366041f639b1da9b6ed220  fontconfig-2.16.0.tar.xz
- 
++# Upstream .sha256 from https://github.com/troglobit/sysklogd/releases/tag/v2.7.0
++sha256  6ab74ab5001121bb32697fd2f7ab3cc4b4452c3f721677e06e5b60982a04d0cc  sysklogd-2.7.0.tar.gz
  # Locally calculated
- sha256  51a51aa9823704fd90bccc616cdd17ebabb5b2b3e9cbde886ca02c7002288067  COPYING
-diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
-index 11758a4c80..b60086c9c8 100644
---- a/package/fontconfig/fontconfig.mk
-+++ b/package/fontconfig/fontconfig.mk
-@@ -4,11 +4,9 @@
+ sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index eeb3a3748d..e8b7fe2062 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FONTCONFIG_VERSION = 2.14.2
-+FONTCONFIG_VERSION = 2.16.0
- FONTCONFIG_SITE = https://www.freedesktop.org/software/fontconfig/release
- FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.xz
--# 0001-add-pthread-as-a-dependency-of-a-static-lib.patch
--FONTCONFIG_AUTORECONF = YES
- FONTCONFIG_INSTALL_STAGING = YES
- FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf host-gperf \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBS),util-linux-libs,util-linux) \
-@@ -21,12 +19,8 @@ FONTCONFIG_LICENSE_FILES = COPYING
- FONTCONFIG_CPE_ID_VALID = YES
- 
- FONTCONFIG_CONF_OPTS = \
--	--with-arch=$(GNU_TARGET_NAME) \
--	--with-cache-dir=/var/cache/fontconfig \
--	--disable-docs
-+	-Dcache-dir=/var/cache/fontconfig \
-+	-Ddoc=disabled
- 
--HOST_FONTCONFIG_CONF_OPTS = \
--	--disable-static
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
-+$(eval $(meson-package))
-+$(eval $(host-meson-package))
+-SYSKLOGD_VERSION = 2.6.2
++SYSKLOGD_VERSION = 2.7.0
+ SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
+ SYSKLOGD_LICENSE = BSD-3-Clause
+ SYSKLOGD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
