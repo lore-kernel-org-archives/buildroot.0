@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFB2FC0218F
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 19:57:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DBE3C0218F
+	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 19:57:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A3E0F812CF;
-	Sun, 26 Jan 2025 19:57:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C068804FE;
+	Sun, 26 Jan 2025 19:57:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sPUE0v69p9xp; Sun, 26 Jan 2025 19:57:18 +0000 (UTC)
+ id TKwuBlvRDFUS; Sun, 26 Jan 2025 19:57:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACC9F81331
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 038FD81359
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACC9F81331;
-	Sun, 26 Jan 2025 19:57:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B0DC6F10
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 038FD81359;
+	Sun, 26 Jan 2025 19:57:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2070FF10
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9DBB9606BF
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0EB83406B3
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ImoPaRpyXt6Y for <buildroot@buildroot.org>;
- Sun, 26 Jan 2025 19:57:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PG7O_u2gk30X for <buildroot@buildroot.org>;
+ Sun, 26 Jan 2025 19:57:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF9D660629
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BE09406AE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CF9D660629
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0BE09406AE
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B98FB8653E; Sun, 26 Jan 2025 19:57:16 +0000 (UTC)
+ id EB20D8653E; Sun, 26 Jan 2025 19:57:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 26 Jan 2025 20:54:49 +0100
+Date: Sun, 26 Jan 2025 20:56:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 84e96fd61ec0a6c62158530a64270fcd2167af56
-X-Git-Newrev: 9dce30cf6a8914dc6ad9122376be5cf741452981
+X-Git-Oldrev: f60a7e1b209d58e5c58c368bea80c279b14467a7
+X-Git-Newrev: 16c2c3ab762ac01edf12f80d4daaa0c25617e7e1
 X-Patchwork-Hint: ignore
-Message-Id: <20250126195716.B98FB8653E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fetchmail: bump version to 6.5.2
+Message-Id: <20250126195716.EB20D8653E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-markdown2: bump to version
+ 2.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,43 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9dce30cf6a8914dc6ad9122376be5cf741452981
+commit: https://git.buildroot.net/buildroot/commit/?id=16c2c3ab762ac01edf12f80d4daaa0c25617e7e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://sourceforge.net/p/fetchmail/mailman/message/59113044/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fetchmail/fetchmail.hash | 4 ++--
- package/fetchmail/fetchmail.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-markdown2/python-markdown2.hash | 4 ++--
+ package/python-markdown2/python-markdown2.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index 52ad4856ca..f52dbed3d9 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,4 +1,4 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/58840916/
--sha256  ca3fdb95141c277aca109be77f4d45b47e03ee010043058dd90bc182db518d4a  fetchmail-6.5.1.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/59113044/
-+sha256  8fd0477408620ae382c1d0ef83d8946a95e5be0c2e582dd4ebe55cba513a45fe  fetchmail-6.5.2.tar.xz
- # Locally computed:
- sha256  1d5eb054414ceb75e018e2830d2c2b61d3ac0df02d5376330766237a091ea771  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index 077f395760..ef91196d63 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-markdown2/python-markdown2.hash b/package/python-markdown2/python-markdown2.hash
+index 6419e3da7c..2f7162e850 100644
+--- a/package/python-markdown2/python-markdown2.hash
++++ b/package/python-markdown2/python-markdown2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/markdown2/json
+-md5  9896bd95d1eb564300d7fd176e17d0a1  markdown2-2.5.2.tar.gz
+-sha256  3ac02226a901c4b2f6fc21dbd17c26d118d2c25bcbb28cee093a1f8b5c46f3f1  markdown2-2.5.2.tar.gz
++md5  38582a01de352b173b0cf86c9864ad2e  markdown2-2.5.3.tar.gz
++sha256  4d502953a4633408b0ab3ec503c5d6984d1b14307e32b325ec7d16ea57524895  markdown2-2.5.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  f8c7c4d554409cf621b8d653dbfffb719745fd36f5c49b8305258649b403ef9c  LICENSE.txt
+diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
+index 60c01dbdef..fded790801 100644
+--- a/package/python-markdown2/python-markdown2.mk
++++ b/package/python-markdown2/python-markdown2.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- FETCHMAIL_VERSION_MAJOR = 6.5
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).1
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).2
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+-PYTHON_MARKDOWN2_VERSION = 2.5.2
++PYTHON_MARKDOWN2_VERSION = 2.5.3
+ PYTHON_MARKDOWN2_SOURCE = markdown2-$(PYTHON_MARKDOWN2_VERSION).tar.gz
+-PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/a0/61/d3c0c21280ba1fc348822a4410847cf78f99bba8625755a5062a44d2e228
++PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/44/52/d7dcc6284d59edb8301b8400435fbb4926a9b0f13a12b5cbaf3a4a54bb7b
+ PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
+ PYTHON_MARKDOWN2_LICENSE = MIT
+ PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
