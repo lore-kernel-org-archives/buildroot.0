@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8EC5C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:06:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F90FC282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:06:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CEEEF42CEF;
-	Fri, 28 Feb 2025 17:06:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F0D684973;
+	Fri, 28 Feb 2025 17:06:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lX3VWk--3TcV; Fri, 28 Feb 2025 17:06:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QqD_O-vFO_Qq; Fri, 28 Feb 2025 17:06:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2B094F4C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2E7285827
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2B094F4C1;
-	Fri, 28 Feb 2025 17:05:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2E7285827;
+	Fri, 28 Feb 2025 17:06:02 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A6C01DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:34 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CFC768
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9E86249DEA
+ by smtp4.osuosl.org (Postfix) with ESMTP id B944D42EBC
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bCHwrXeNf9Tb for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:11 +0000 (UTC)
+ id be7CBfl9pDgp for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD98442EBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 395A5424F4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD98442EBC
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 395A5424F4
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D7DE687A0C; Fri, 28 Feb 2025 16:30:20 +0000 (UTC)
+ id 300C582581; Fri, 28 Feb 2025 16:30:21 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 26 Jan 2025 12:05:22 +0100
+Date: Sun, 26 Jan 2025 17:58:36 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 175bb0df12363c84aa4c96974314831321890c48
-X-Git-Newrev: a528ac581fac9dd47e99fcabfbd0a3beed2a9367
+X-Git-Oldrev: a941bef9f92fc6c4c0b23714bb934133e659ec51
+X-Git-Newrev: e3d74c76eef1155d4040dae2d51662bfc0e3e0fc
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163020.D7DE687A0C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/newlib-bare-metal:
- replace fixup with tooldir config
+Message-Id: <20250228163021.300C582581@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ support/testing/tests/toolchain/test_external_synopsys.py: drop tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,140 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a528ac581fac9dd47e99fcabfbd0a3beed2a9367
+commit: https://git.buildroot.net/buildroot/commit/?id=e3d74c76eef1155d4040dae2d51662bfc0e3e0fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch removes the post install fixup now that newlib 4.5.0 supports a
-configurable tooldir path using --with-tooldir config option.
+The Synopsys external toolchain has been disabled in commit
+11a8cdd2bbbd0ef4adf600e4792d75f6f2122ec8, causing the test cases
+testing this toolchain to fail. Let's drop those tests for now, they
+can always be re-added later on.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697531
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697528
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697524
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697519
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697517
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697516
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Julien: remove the DEVELOPERS entry]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/newlib-bare-metal/newlib-bare-metal.mk | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ DEVELOPERS                                         |  1 -
+ .../tests/toolchain/test_external_synopsys.py      | 91 ----------------------
+ 2 files changed, 92 deletions(-)
 
-diff --git a/package/newlib-bare-metal/newlib-bare-metal.mk b/package/newlib-bare-metal/newlib-bare-metal.mk
-index a3532f0b22..e28e7a717c 100644
---- a/package/newlib-bare-metal/newlib-bare-metal.mk
-+++ b/package/newlib-bare-metal/newlib-bare-metal.mk
-@@ -33,6 +33,7 @@ define NEWLIB_BARE_METAL_CONFIGURE_CMDS
- 			--enable-newlib-io-float \
- 			--enable-newlib-io-long-double \
- 			--disable-multilib \
-+			--with-tooldir=/usr \
- 	)
- endef
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ff069b9c40..fde9360ad6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3220,7 +3220,6 @@ F:	support/testing/tests/package/test_python_flask_expects_json.py
+ F:	support/testing/tests/package/test_python_git.py
+ F:	support/testing/tests/package/test_python_unittest_xml_reporting.py
+ F:	support/testing/tests/toolchain/test_external_arm.py
+-F:	support/testing/tests/toolchain/test_external_synopsys.py
+ F:	toolchain/
  
-@@ -45,12 +46,4 @@ define NEWLIB_BARE_METAL_INSTALL_STAGING_CMDS
- 		DESTDIR=$(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT) install
- endef
- 
--define NEWLIB_BARE_METAL_FIXUP
--	mv $(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT)/usr/$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE)/include \
--		$(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT)/usr/include
--	mv $(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT)/usr/$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE)/lib \
--		$(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT)/usr/lib
--endef
--NEWLIB_BARE_METAL_POST_INSTALL_STAGING_HOOKS += NEWLIB_BARE_METAL_FIXUP
+ N:	Timo Ketola <timo.ketola@exertus.fi>
+diff --git a/support/testing/tests/toolchain/test_external_synopsys.py b/support/testing/tests/toolchain/test_external_synopsys.py
+deleted file mode 100644
+index 19ed9f67b0..0000000000
+--- a/support/testing/tests/toolchain/test_external_synopsys.py
++++ /dev/null
+@@ -1,91 +0,0 @@
+-from tests.toolchain.test_external import TestExternalToolchain
 -
- $(eval $(generic-package))
+-
+-class TestExternalToolchainSynopsysArc700LE(TestExternalToolchain):
+-    config = """
+-        BR2_arcle=y
+-        BR2_arc770d=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
+-        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC700=y
+-        # BR2_TARGET_ROOTFS_TAR is not set
+-        """
+-    toolchain_prefix = "arc-linux"
+-
+-    def test_run(self):
+-        TestExternalToolchain.common_check(self)
+-
+-
+-class TestExternalToolchainSynopsysArc700BE(TestExternalToolchain):
+-    config = """
+-        BR2_arceb=y
+-        BR2_arc770d=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
+-        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC700=y
+-        # BR2_TARGET_ROOTFS_TAR is not set
+-        """
+-    toolchain_prefix = "arceb-linux"
+-
+-    def test_run(self):
+-        TestExternalToolchain.common_check(self)
+-
+-
+-class TestExternalToolchainSynopsysArcHSGlibcLE(TestExternalToolchain):
+-    config = """
+-        BR2_arcle=y
+-        BR2_archs38_full=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
+-        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_GLIBC=y
+-        # BR2_TARGET_ROOTFS_TAR is not set
+-        """
+-    toolchain_prefix = "arc-linux"
+-
+-    def test_run(self):
+-        TestExternalToolchain.common_check(self)
+-
+-
+-class TestExternalToolchainSynopsysArcHSGlibcBE(TestExternalToolchain):
+-    config = """
+-        BR2_arceb=y
+-        BR2_archs38_full=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
+-        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_GLIBC=y
+-        # BR2_TARGET_ROOTFS_TAR is not set
+-        """
+-    toolchain_prefix = "arceb-linux"
+-
+-    def test_run(self):
+-        TestExternalToolchain.common_check(self)
+-
+-
+-class TestExternalToolchainSynopsysArcHSuClibcLE(TestExternalToolchain):
+-    config = """
+-        BR2_arcle=y
+-        BR2_archs38_full=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
+-        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_UCLIBC=y
+-        # BR2_TARGET_ROOTFS_TAR is not set
+-        """
+-    toolchain_prefix = "arc-linux"
+-
+-    def test_run(self):
+-        TestExternalToolchain.common_check(self)
+-
+-
+-class TestExternalToolchainSynopsysArcHSuClibcBE(TestExternalToolchain):
+-    config = """
+-        BR2_arceb=y
+-        BR2_archs38_full=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
+-        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_UCLIBC=y
+-        # BR2_TARGET_ROOTFS_TAR is not set
+-        """
+-    toolchain_prefix = "arceb-linux"
+-
+-    def test_run(self):
+-        TestExternalToolchain.common_check(self)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
