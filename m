@@ -1,72 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46A41C02181
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 11:34:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CE56C02181
+	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 11:36:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AB528083E;
-	Sun, 26 Jan 2025 11:34:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BiPf0cx9i5yr; Sun, 26 Jan 2025 11:34:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED60280E64
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED60280E64;
-	Sun, 26 Jan 2025 11:34:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D6F72941
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:34:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C495E607DF
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:34:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1DEF560793;
+	Sun, 26 Jan 2025 11:36:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l7EkPus-ZeOe for <buildroot@buildroot.org>;
- Sun, 26 Jan 2025 11:34:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5F86260793
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F86260793
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5F86260793
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:34:39 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id D3FD760003;
- Sun, 26 Jan 2025 11:34:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 Jan 2025 12:34:35 +0100
-Message-ID: <20250126113436.4166164-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.47.1
+ id xxF-gPqC4d5c; Sun, 26 Jan 2025 11:36:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38939607DF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38939607DF;
+	Sun, 26 Jan 2025 11:36:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D73CF10
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:36:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A01C409E8
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:36:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1GbIuRIohTg2 for <buildroot@buildroot.org>;
+ Sun, 26 Jan 2025 11:36:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::12c; helo=mail-lf1-x12c.google.com;
+ envelope-from=geomatsi@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CDB414097B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDB414097B
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
+ [IPv6:2a00:1450:4864:20::12c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CDB414097B
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:36:16 +0000 (UTC)
+Received: by mail-lf1-x12c.google.com with SMTP id
+ 2adb3069b0e04-543cc81ddebso2046651e87.1
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 03:36:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1737891374; x=1738496174;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=LJGXC7fuwiVKXhErEEhCgT3AFIfvAO7yQBCxgmFWXLM=;
+ b=d3DZEqvigwHA1ayFrliSaQDlMFo1+RCqj5dqADZ/ms5yq7RJDV2r/0JCofTQrS1OxN
+ 5kuXh6AWKUzHrOEsUU8OXptbPzUEAuvn02zNeuzevS7SPpJn6HFIoMsxU0CG0YjsWGxq
+ yBgBW678xQZfIPCsSIWTaIrfinnS8haLUOCirSjAGWFLuSJgbp1tCwInXaHKlGwZwnm4
+ vKHJ9Uh8KOp2p2EqekINCgjM5ZgE4LzNuwwjIzqZkDqsHECaTjnow/2gkVM7jvAQrsQD
+ Gt75BRXhm2DFt4+qlAVl8peiK9vYkO7vBaMwdrucwO6iDO7C5zXvQRZcGhUeOsKjn+ct
+ XUjA==
+X-Gm-Message-State: AOJu0Yz3QwzHpUuyCrZdl4t7zeRK1tl1xUa1XPY0Tly28xMLeW+fFJhQ
+ fi89Q389BIj5lm/shkXKDF03N7kq7kHJhr2AzbtVPT0vFA/x9EG1356MoNNR
+X-Gm-Gg: ASbGncv6CbwVtqAaYd38xZS3v7JBNe5r1ByStp+ReSTvBE5bh6Y86eTrO9z/TEB/rBN
+ ZxACaM2zctytsyCFJ2ZgrdNCCAK159VAHaGAOOMbYbx0SG7bOrHDyiqWBxcRUzIjIe4fP2+uaVM
+ lqLa75TJd0kx50EImTn9Fb2e8v5ltAPko6TKc0/2gEVnpJE95vYvvnPfdd+3hothg+viPBKKTmq
+ R1xldXDgldC6PANnIQmERJvtSlqOgcP3Cp4eq2HN9gCk8qgTqf71hvCF62oS02aCwvrHzol
+X-Google-Smtp-Source: AGHT+IGwRuibvBxoeLFU7cJEPwQ+SULDAMAVKmibXoYiQ/zMjuvRuTco+ve6bVICu2oqLEDA9ad58A==
+X-Received: by 2002:a05:6512:b24:b0:540:2a92:7daa with SMTP id
+ 2adb3069b0e04-5439c282032mr12179252e87.42.1737891374189; 
+ Sun, 26 Jan 2025 03:36:14 -0800 (PST)
+Received: from curiosity ([5.188.167.4]) by smtp.gmail.com with ESMTPSA id
+ 2adb3069b0e04-543c836834csm893281e87.149.2025.01.26.03.36.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 26 Jan 2025 03:36:12 -0800 (PST)
+Date: Sun, 26 Jan 2025 14:36:10 +0300
+From: Sergey Matyukevich <geomatsi@gmail.com>
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+Message-ID: <Z5YeKmQHSNJE1J7Z@curiosity>
+References: <20250106190748.763795-1-geomatsi@gmail.com>
+ <7cac004be67f141ae3fe0c332358b51c@free.fr>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+Content-Disposition: inline
+In-Reply-To: <7cac004be67f141ae3fe0c332358b51c@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1737891278;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=l8SDOdSFMFXHgl2gqp7GAon5Iz4pbIAJDQ94mEQIovI=;
- b=P/3mHE4DtvTfsR/TOdGvyrNsG8/ShqrmiOyPjITxfYzcE5kfsCRyLX8nh37gFGP52rxQGZ
- Mg0GCT9/ptxgRdWBRBn9m2xFteViUNlCXFl9qNQr2mZ5HI1gM0GUQXOkZIi0n3zTbn1nAB
- yhsK4hfphJIE7ex9+2HzbXl57erBaJc2L2a7GiIM5CQ7Nv36mqE2z9EKMQ/a7D0GROGF3q
- xsa78amXANmjW8y8r/VRrL17nAwEIeA2UDtLMVgiUK0fDx7crcjiQEXOFWvRypJXgkqWrt
- ZpneMzi6cliMI5cVgHJuvA02FmkfiMjB2u0TvJsc3xMeHLUYVrlGioTj9z2SlQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1737891374; x=1738496174; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+ bh=LJGXC7fuwiVKXhErEEhCgT3AFIfvAO7yQBCxgmFWXLM=;
+ b=QHXHLeUk+wFKbZKeK+Eb+p7m227xc7ovtKBV5SLMcKQaMBF+LoA7DZ10feAuZQLLF7
+ 2g+zudf856jQetqMbnFHs/vtbXcnDMHMxUIABSQVxs7HhPGkFcUvVc+TNh0IC4teupFE
+ 7Th2PjvHqXWHYbbBndiBC1VHGE8LSZ1tBjDhKQpM2F6QM68MYLAYolCZvHaekHNl7hdk
+ hp0AtpfvEcgigC2tIISdRXGlKeCBWb2bwrZt0hTazu3egeDcGpU2kFB4hc0a1ktMempF
+ muk4/j8v5cu5Ki4s6WvJ796NlFHEvT3U4W8sNT99ImLBxBHIDWGK3oQPRE57J7mn5csb
+ xIXA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=P/3mHE4D
-Subject: [Buildroot] [PATCH]
- support/testing/tests/toolchain/test_external_synopsys.py: drop tests
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=QHXHLeUk
+Subject: Re: [Buildroot] [PATCH 1/1] configs/orangepi_5_plus: new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,133 +107,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The Synopsys external toolchain has been disabled in commit
-11a8cdd2bbbd0ef4adf600e4792d75f6f2122ec8, causing the test cases
-testing this toolchain to fail. Let's drop those tests for now, they
-can always be re-added later on.
+On Sat, Jan 25, 2025 at 10:10:59PM +0100, Julien Olivain wrote:
+> On 06/01/2025 20:07, Sergey Matyukevich wrote:
+> > This patch adds basic support for the new OrangePi 5 Plus board:
+> > - http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-5-plus-32GB.html
+> > 
+> > Brief summary of the board features:
+> > - RK3588 Rockchip SoC
+> >   - Quad-Core ARM Cortex-A76 Processor 2.4GHz
+> >   - Quad-Core ARM Cortex-A55 Processor 1.8GHz
+> >   - Mali G610 GPU
+> >   - NPU 6 Tops INT4/INT8/INT16/FP16
+> > - LPDDR4x: 8GB/16GB/32GB
+> > - 2x USB 2.0
+> > - 2x USB 3.0
+> > - 2x HDMI out
+> > - PCIe M.2 M-key socket (e.g. for NVMe)
+> > - PCIe M.2 E-key socket (e.g. for WiFi/BT)
+> > - 40-pin expansion interface (GPIO / UART / I2C / SPI / PWM / CAN / I2S)
+> > - and much much more ...
+> > 
+> > BSP includes the following components:
+> > - mainline ATF v2.12
+> > - mainline U-Boot v2024.10
+> > - mainline Linux kernel v6.12.x
+> > 
+> > Unlike all the other boards from board/orangepi directory, this board
+> > is not based on an Allwinner SoC. It is based on Rockchip RK3588 SoC.
+> > So custom scripts and configs are used instead of common options from
+> > the board/orangepi/common directory. Suggested scripts and configs are
+> > based on those of Radxa Rock5B board.
+> > 
+> > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> 
+> Applied to master, thanks.
 
-Fixes:
+Thanks ! 
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697531
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697528
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697524
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697519
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697517
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697516
+Unfortunately, your minor cleanup 'switch to human readable genimage.cfg
+partition type uuid' breaks the build:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../tests/toolchain/test_external_synopsys.py | 91 -------------------
- 1 file changed, 91 deletions(-)
- delete mode 100644 support/testing/tests/toolchain/test_external_synopsys.py
+: >>>   Executing post-image script support/scripts/genimage.sh
+: ...
+: ERROR: hdimage(sdcard.img): part uboot-env has invalid type shortcut: u-boot-env
 
-diff --git a/support/testing/tests/toolchain/test_external_synopsys.py b/support/testing/tests/toolchain/test_external_synopsys.py
-deleted file mode 100644
-index 19ed9f67b0..0000000000
---- a/support/testing/tests/toolchain/test_external_synopsys.py
-+++ /dev/null
-@@ -1,91 +0,0 @@
--from tests.toolchain.test_external import TestExternalToolchain
--
--
--class TestExternalToolchainSynopsysArc700LE(TestExternalToolchain):
--    config = """
--        BR2_arcle=y
--        BR2_arc770d=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC700=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arc-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArc700BE(TestExternalToolchain):
--    config = """
--        BR2_arceb=y
--        BR2_arc770d=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC700=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arceb-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArcHSGlibcLE(TestExternalToolchain):
--    config = """
--        BR2_arcle=y
--        BR2_archs38_full=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_GLIBC=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arc-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArcHSGlibcBE(TestExternalToolchain):
--    config = """
--        BR2_arceb=y
--        BR2_archs38_full=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_GLIBC=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arceb-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArcHSuClibcLE(TestExternalToolchain):
--    config = """
--        BR2_arcle=y
--        BR2_archs38_full=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_UCLIBC=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arc-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArcHSuClibcBE(TestExternalToolchain):
--    config = """
--        BR2_arceb=y
--        BR2_archs38_full=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_UCLIBC=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arceb-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--- 
-2.47.1
+Latest available genimage release does not yet provide the GUID shortcut
+for 'u-boot-env'. So I sent a fixup to keep using the GUID value directly:
 
+- https://lore.kernel.org/buildroot/20250126113141.3258643-1-geomatsi@gmail.com/T/#u
+
+Regards,
+Sergey
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
