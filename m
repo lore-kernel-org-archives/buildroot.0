@@ -4,49 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AE6DC0218F
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 19:57:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58140C0218F
+	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 19:57:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE31880303;
-	Sun, 26 Jan 2025 19:57:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 275F080C64;
+	Sun, 26 Jan 2025 19:57:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FiogWYeWqDmc; Sun, 26 Jan 2025 19:57:27 +0000 (UTC)
+ id YA4qnzwnoGJD; Sun, 26 Jan 2025 19:57:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D517280B5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FE2580C71
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D517280B5C;
-	Sun, 26 Jan 2025 19:57:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 226DFF10
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FE2580C71;
+	Sun, 26 Jan 2025 19:57:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 26006941
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F967606B9
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13DC54013D
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2iWiCFL8Lm8Q for <buildroot@buildroot.org>;
- Sun, 26 Jan 2025 19:57:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8VMloFMxQiwJ for <buildroot@buildroot.org>;
+ Sun, 26 Jan 2025 19:57:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D35BE60670
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D35BE60670
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CA5F586541; Sun, 26 Jan 2025 19:57:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 27AC84004A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27AC84004A
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 27AC84004A
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CC0601C0002;
+ Sun, 26 Jan 2025 19:57:37 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1tc8lE-00GN4Q-2j;
+ Sun, 26 Jan 2025 20:57:36 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 26 Jan 2025 20:55:39 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9dce30cf6a8914dc6ad9122376be5cf741452981
-X-Git-Newrev: 455ef44d26f027abc1936ba9041427a4b2e86f42
-X-Patchwork-Hint: ignore
-Message-Id: <20250126195716.CA5F586541@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-evdev: bump to version 1.8.0
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+References: <20250126142929.245887-1-james.hilliard1@gmail.com>
+Date: Sun, 26 Jan 2025 20:57:36 +0100
+In-Reply-To: <20250126142929.245887-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Sun, 26 Jan 2025 07:29:29 -0700")
+Message-ID: <878qqx9wlr.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-referencing: bump to
+ version 0.36.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,54 +70,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=455ef44d26f027abc1936ba9041427a4b2e86f42
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-License hash changed due to date update:
-https://github.com/gvalkov/python-evdev/commit/2e3b843f37f79a9404da4541bbf9cf96dc5a4d57
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-evdev/python-evdev.hash | 6 +++---
- package/python-evdev/python-evdev.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Committed, thanks.
 
-diff --git a/package/python-evdev/python-evdev.hash b/package/python-evdev/python-evdev.hash
-index afa74c792b..d31e236989 100644
---- a/package/python-evdev/python-evdev.hash
-+++ b/package/python-evdev/python-evdev.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/evdev/json
--md5  c20a623d2d05fd87c1f46d736ee9c3cc  evdev-1.7.1.tar.gz
--sha256  0c72c370bda29d857e188d931019c32651a9c1ea977c08c8d939b1ced1637fde  evdev-1.7.1.tar.gz
-+md5  a38ac9e2297940430bb27cea41be964e  evdev-1.8.0.tar.gz
-+sha256  45598eee1ae3876a3122ca1dc0ec8049c01931672d12478b5c610afc24e47d75  evdev-1.8.0.tar.gz
- # Locally computed sha256 checksums
--sha256  55fd76d7b3f90d312f161d318631b93c58a0e69d662d07c4f5aca2c6c9ecc85e  LICENSE
-+sha256  d4554960d6496150c88c1fd02d7973121a9a57b961ea58fe349fbf8ada3816b2  LICENSE
-diff --git a/package/python-evdev/python-evdev.mk b/package/python-evdev/python-evdev.mk
-index 269b290dca..f465aff933 100644
---- a/package/python-evdev/python-evdev.mk
-+++ b/package/python-evdev/python-evdev.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_EVDEV_VERSION = 1.7.1
-+PYTHON_EVDEV_VERSION = 1.8.0
- PYTHON_EVDEV_SOURCE = evdev-$(PYTHON_EVDEV_VERSION).tar.gz
--PYTHON_EVDEV_SITE = https://files.pythonhosted.org/packages/12/bb/f622a8a5e64d46ca83020a761877c0ead19140903c9aaf1431f3c531fdf6
-+PYTHON_EVDEV_SITE = https://files.pythonhosted.org/packages/4c/eb/b8900082a13a47bb9f69f415174d03cbf12ce95d07345722e1f4ef0e2093
- PYTHON_EVDEV_SETUP_TYPE = setuptools
- PYTHON_EVDEV_LICENSE = Revised BSD License
- PYTHON_EVDEV_LICENSE_FILES = LICENSE
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
