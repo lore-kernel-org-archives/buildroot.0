@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58140C0218F
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 19:57:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 749BBC0218D
+	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 19:58:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 275F080C64;
-	Sun, 26 Jan 2025 19:57:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F11E60629;
+	Sun, 26 Jan 2025 19:58:01 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1viUREb7BU33; Sun, 26 Jan 2025 19:58:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5ED7D605F0
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5ED7D605F0;
+	Sun, 26 Jan 2025 19:58:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 20539941
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E6A7E80E3E
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YA4qnzwnoGJD; Sun, 26 Jan 2025 19:57:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FE2580C71
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3FE2580C71;
-	Sun, 26 Jan 2025 19:57:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 26006941
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 13DC54013D
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8VMloFMxQiwJ for <buildroot@buildroot.org>;
- Sun, 26 Jan 2025 19:57:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id bh4ybieIY6nO for <buildroot@buildroot.org>;
+ Sun, 26 Jan 2025 19:57:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 27AC84004A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27AC84004A
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 27AC84004A
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CC0601C0002;
- Sun, 26 Jan 2025 19:57:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3B4D280E2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B4D280E2E
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B4D280E2E
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:58 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 23A421BF204;
+ Sun, 26 Jan 2025 19:57:54 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tc8lE-00GN4Q-2j;
- Sun, 26 Jan 2025 20:57:36 +0100
+ (envelope-from <peter@korsgaard.com>) id 1tc8lW-00GN6r-1U;
+ Sun, 26 Jan 2025 20:57:54 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: James Hilliard <james.hilliard1@gmail.com>
 Cc: buildroot@buildroot.org
-References: <20250126142929.245887-1-james.hilliard1@gmail.com>
-Date: Sun, 26 Jan 2025 20:57:36 +0100
-In-Reply-To: <20250126142929.245887-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Sun, 26 Jan 2025 07:29:29 -0700")
-Message-ID: <878qqx9wlr.fsf@dell.be.48ers.dk>
+References: <20250126140917.235801-1-james.hilliard1@gmail.com>
+Date: Sun, 26 Jan 2025 20:57:54 +0100
+In-Reply-To: <20250126140917.235801-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Sun, 26 Jan 2025 07:09:17 -0700")
+Message-ID: <874j1l9wl9.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-referencing: bump to
- version 0.36.2
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-attrs: bump to version
+ 25.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
