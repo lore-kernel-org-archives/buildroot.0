@@ -1,104 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 239CFC02181
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51FDFC0218D
 	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 15:47:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB56B408E2;
-	Sun, 26 Jan 2025 15:47:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id woRC0kJmusM0; Sun, 26 Jan 2025 15:47:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2AFB405AA
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2AFB405AA;
-	Sun, 26 Jan 2025 15:47:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E2DB0941
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 15:47:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C0F546072B
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 15:47:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20CE560E07;
+	Sun, 26 Jan 2025 15:47:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t8qzSf5IBbXd for <buildroot@buildroot.org>;
- Sun, 26 Jan 2025 15:47:46 +0000 (UTC)
+ id hlmp61D9VjtE; Sun, 26 Jan 2025 15:47:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CCF460E2E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2CCF460E2E;
+	Sun, 26 Jan 2025 15:47:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 40084941
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 15:47:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2CC6060C17
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 15:47:48 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pktDZtxFqePI for <buildroot@buildroot.org>;
+ Sun, 26 Jan 2025 15:47:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::133; helo=mail-il1-x133.google.com;
+ client-ip=2607:f8b0:4864:20::136; helo=mail-il1-x136.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 653A760C2E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 653A760C2E
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
- [IPv6:2607:f8b0:4864:20::133])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 653A760C2E
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 15:47:45 +0000 (UTC)
-Received: by mail-il1-x133.google.com with SMTP id
- e9e14a558f8ab-3a9caa3726fso10000755ab.1
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 07:47:45 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B207D60E07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B207D60E07
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
+ [IPv6:2607:f8b0:4864:20::136])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B207D60E07
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 15:47:46 +0000 (UTC)
+Received: by mail-il1-x136.google.com with SMTP id
+ e9e14a558f8ab-3cfcf8b7455so15167345ab.3
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 07:47:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1737906464; x=1738511264;
+ d=1e100.net; s=20230601; t=1737906465; x=1738511265;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=0tdZgcnYWv5xvY/BAAn18zaAF/kFuzXNxdyGuCjoM+8=;
- b=ZBr4XVhMuD6LbFmb53q9p4b/MLPOFURWDbCD/1DPRKcBKVM+Xr00uao+h6gmvzpuG8
- 2r2IMG0+qGgIAyLF5A8tAjHxxE+q29wMGrWPkChfyneWojGZZkMy7uSAxNuyf6X25JSR
- mJBP91AsQzFDGKcSTSdk7joi2pbtzOJ67StGiGPDVO59vvUHuBI/+Bh8LM1DS/ksNa/k
- /QR+i06FtRxsXK3kjcX3eNLTABbMqdmtAZnFL6LSgzDrvl4VZ5lIbes+zKnCprDvgHef
- LebTzZ+XUYp03WliODvGD+P3aH0lR6y+4FGCtiUK9ob8lJ3TArw8ovu86EbhSmwFfSMe
- JV3w==
-X-Gm-Message-State: AOJu0Yyv8NJeFk7XsrjR0cCzWiAyGRkJ06oBgPWYzZTyLbgGoLHB84Sp
- oXpaQq7F7PFGcDfcZ9IeKbxn4dItTDcLHCXkziDXz4ldlTpBlHldle5MHdL8
-X-Gm-Gg: ASbGncurNJexSaG878Yk5umFCrihOCJhpJPV2GuPVSsoKr7hopFegFW8y2jmCF5CU8m
- K44fEY4UbwR0nveXRo9eALa2kESbZJSOHpjz+KgZEybSVeK4EZ0hRFNOm274kdxYETPBhA++cnt
- 2NYUiiaBI4WHSFDXe2u9GGR1pTvzXQ0Q+QeXVu1NQgNI93tjJgT+qIk7OH+000ckiybll1ts7ZO
- HNmhCXtxtnwxiDBJKBho6Cx/ZKq7Ja8BD05nB1aW+bsn/CSdKf/aYdPMvgo5IO9647/rtUjd6bx
- ai9LgoRTLO6jSVlM1zk/ByqBK9Ic5wMQ6IiLjpJQqrZGXbaG4zCRhcA=
-X-Google-Smtp-Source: AGHT+IGbPM5/Z7z2B97BZgmFOhx24OvXvR47AJpQYTkZx64J1x2LEdV1ku/+LJs53DR1rAoQoVPQKw==
-X-Received: by 2002:a05:6e02:148a:b0:3cf:b2ca:39b7 with SMTP id
- e9e14a558f8ab-3cfbc12fc2cmr118283415ab.3.1737906464086; 
- Sun, 26 Jan 2025 07:47:44 -0800 (PST)
+ bh=rtya3Pk0EF4Dljrn4v2acllDC8pZ2Kd/kKTyp6jmYtw=;
+ b=FGDVC9xFzKNqKYkdKOuLo9nv02vdLnqq/QFzLh3JXJUDSql/m0mMWxoZ9bx+sRFntY
+ oom+HMNLedNZgQ/G0ae9luee0zxUUl01GRJ4BQR95hk3rCY4TFSLOXmekZ+1nKaOC8mA
+ 74jrvYc9uOgfWrdPDUyumkbuTVzAcGZT7eVTQ5tMT22MB7IVKifyLtt1Oa338NIZ4x9t
+ G+XwSbxN+p/BZWD15ZcGvv+iRf7786U7kkaz5NwlFT3JSDOug5FCYuIdOFClUZhVk4HY
+ FBtduQAL4B/3BHR2eWFeeDyrHQfCFz+7gbANipL5BXG0VGZ0QNWcV76MAmn2AD0v0fQS
+ pgkg==
+X-Gm-Message-State: AOJu0Yx0wiRSXYZC5Jdg/nj7YjiTymgt+fhG5eyQLBP3qqvdsijKkIsl
+ 0wQqNHxa9QDEOqfmT5isZY8tggYHUxoqS/YgI2Ga/RaZYKrKaokv67MQ7PTv
+X-Gm-Gg: ASbGncuZneA39B0kHkhTuJKN93SfG8TECxf1MUZLftz5GwtXSZ4w3lgNzWpV47FLqeI
+ Rs+dn0dvIjKhxRpNoffrQKjpEDVJPwAkoxwjTksIEvd1LRmOhtBQr8K/0+d1w8zbIEo0HGemUPn
+ DgjHPvY1ss9HKvOXu2ffsvjhes+2Ho6trpAykK9RT/NEEFemrg3gKpjETS6QeYpJSYwMxf8jwZb
+ 0Klmu6s1VcwHhuwjeK6S094UCQL7QEOVOHeByGzqz7c1nfeoPe3xq8E4VDut+LqXzfq3lomZKyG
+ q4yr4Pw++r/fwaaupfQL4vL9ixZGjkE2f1ZILZGr8d3Idi445Spb5Js=
+X-Google-Smtp-Source: AGHT+IGMJ/wgxtaG16tWNczyOpQAlDRbIAExCFUkzo/5jprOGvYRd3x/mGL4/TKhfmOJmFk8/t8jtw==
+X-Received: by 2002:a05:6e02:3dc1:b0:3ce:4bc8:7844 with SMTP id
+ e9e14a558f8ab-3cf743bb516mr333216295ab.4.1737906465505; 
+ Sun, 26 Jan 2025 07:47:45 -0800 (PST)
 Received: from james-x399.localdomain (71-218-115-58.hlrn.qwest.net.
  [71.218.115.58]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3cfc74ea0afsm20900715ab.47.2025.01.26.07.47.42
+ e9e14a558f8ab-3cfc74ea0afsm20900715ab.47.2025.01.26.07.47.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 26 Jan 2025 07:47:42 -0800 (PST)
+ Sun, 26 Jan 2025 07:47:44 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
 Cc: Stefan Hager <stefan.hager@ginzinger.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 26 Jan 2025 08:47:25 -0700
-Message-Id: <20250126154732.405055-3-james.hilliard1@gmail.com>
+Date: Sun, 26 Jan 2025 08:47:26 -0700
+Message-Id: <20250126154732.405055-4-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250126154732.405055-1-james.hilliard1@gmail.com>
 References: <20250126154732.405055-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1737906464; x=1738511264; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1737906465; x=1738511265; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=0tdZgcnYWv5xvY/BAAn18zaAF/kFuzXNxdyGuCjoM+8=;
- b=dZ01Ji57CkrSaawTqfwIgm9o5O7ZrwrutLHU6VgSnIEGi1lNgyqMbN+nIXwqdJBzsU
- 8ev59tAnMyBoh+3wHGIi86MWHS87WYKR4hk+2s2dpoM4Ok/8jrmYxt0+yhpNc214Mlba
- mK/oQiRuYZWwk5+9Qh1FK1HNyG46vUWSFv0MHbKQE1NydL1QpLY0PAuDXm9ic/XAjDOk
- Q71JhN+Tc5B59SNAp3SKB+FVuH0FiDzjNRmV+2KnEUz9rXliBf+7tF8nDiyjkS1wVcHP
- Ohpa872WweUwLR/EZLJtHfZTgdrGYjaesxFzFS4EiavuSsU/gf606JYAW7yThxW5aXle
- VTbw==
+ bh=rtya3Pk0EF4Dljrn4v2acllDC8pZ2Kd/kKTyp6jmYtw=;
+ b=UJgBWzgCzMdZS0zzFNBuv7PV4DYH2go9znhYcaZAHZ6M+lE4coNkNJvCkPeP7b35L5
+ p98FEl0Tla9+Zq7S7oekWiNNhkF14JUl8ijMYx1Ckg3LzcTtEg5X62wFq5Ey6qOcrOM7
+ Uc0lWsRqnz2tY7y2fovid3nBLNxoVZAtfzy47VeBdxQ25qJQo4trvvPJEdEXxY451QzK
+ 8KmkK8DegsmWInYvdF4zbXnz2Ce/oiylX5MBBhESKSObFWu0u7bv/1LuBycQ64Usm4DZ
+ TCbNk7EwmHkSYM3CzwMK9olkuCn7MPLblfN4OWNwxbJd3zGXkN1qAs9FIsgV6uem1C2J
+ jkAA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=dZ01Ji57
-Subject: [Buildroot] [PATCH v7 03/10] package/gemmlowp: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=UJgBWzgC
+Subject: [Buildroot] [PATCH v7 04/10] package/pthreadpool: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,103 +115,110 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Stefan Hager <stefan.hager@ginzinger.com>
-
 This package is required by tensorflow-lite.
 
-Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
-Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
 Changes v6 -> v7:
   - update to latest version
-Changes v4 -> v5:
-  - add comment indicating library is header only
-Changes v2 -> v3:
-  - add C++11 dependency
+Changes v5 -> v6:
+  - update to latest version
 ---
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/gemmlowp/Config.in     | 12 ++++++++++++
- package/gemmlowp/gemmlowp.hash |  4 ++++
- package/gemmlowp/gemmlowp.mk   | 16 ++++++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/gemmlowp/Config.in
- create mode 100644 package/gemmlowp/gemmlowp.hash
- create mode 100644 package/gemmlowp/gemmlowp.mk
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/pthreadpool/Config.in        |  8 +++++++
+ package/pthreadpool/pthreadpool.hash |  4 ++++
+ package/pthreadpool/pthreadpool.mk   | 33 ++++++++++++++++++++++++++++
+ 5 files changed, 47 insertions(+)
+ create mode 100644 package/pthreadpool/Config.in
+ create mode 100644 package/pthreadpool/pthreadpool.hash
+ create mode 100644 package/pthreadpool/pthreadpool.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 75c4ce2990..461582c62f 100644
+index 461582c62f..c3a348cf86 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -3034,6 +3034,7 @@ F:	package/ti-gfx/
- 
+@@ -3035,6 +3035,7 @@ F:	package/ti-gfx/
  N:	Stefan Hager <stefan.hager@ginzinger.com>
  F:	package/cpuinfo/
-+F:	package/gemmlowp/
+ F:	package/gemmlowp/
++F:	package/pthreadpool/
  F:	package/ruy/
  
  N:	Stefan Nickl <Stefan.Nickl@gmail.com>
 diff --git a/package/Config.in b/package/Config.in
-index f982b7332a..594ee41d06 100644
+index 594ee41d06..13caddec34 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2190,6 +2190,7 @@ menu "Other"
- 	source "package/fxdiv/Config.in"
- 	source "package/gconf/Config.in"
- 	source "package/gdal/Config.in"
-+	source "package/gemmlowp/Config.in"
- 	source "package/gflags/Config.in"
- 	source "package/gli/Config.in"
- 	source "package/glibmm/Config.in"
-diff --git a/package/gemmlowp/Config.in b/package/gemmlowp/Config.in
+@@ -2297,6 +2297,7 @@ endif
+ 	source "package/protobuf/Config.in"
+ 	source "package/protobuf-c/Config.in"
+ 	source "package/protozero/Config.in"
++	source "package/pthreadpool/Config.in"
+ 	source "package/qhull/Config.in"
+ 	source "package/qlibc/Config.in"
+ 	source "package/reproc/Config.in"
+diff --git a/package/pthreadpool/Config.in b/package/pthreadpool/Config.in
 new file mode 100644
-index 0000000000..379450d1b0
+index 0000000000..194ae33f85
 --- /dev/null
-+++ b/package/gemmlowp/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_GEMMLOWP
-+	bool "gemmlowp"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++++ b/package/pthreadpool/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PTHREADPOOL
++	bool "pthreadpool"
++	select BR2_PACKAGE_FXDIV
 +	help
-+	  Low-precision matrix multiplication.
++	  Pthreadpool is a portable and efficient thread pool
++	  implementation.
 +
-+	  https://github.com/google/gemmlowp
-+
-+comment "gemmlowp needs a toolchain w/ C++11"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/gemmlowp/gemmlowp.hash b/package/gemmlowp/gemmlowp.hash
++	  https://github.com/Maratyszcza/pthreadpool
+diff --git a/package/pthreadpool/pthreadpool.hash b/package/pthreadpool/pthreadpool.hash
 new file mode 100644
-index 0000000000..07b15e0e5f
+index 0000000000..4adc1507f9
 --- /dev/null
-+++ b/package/gemmlowp/gemmlowp.hash
++++ b/package/pthreadpool/pthreadpool.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  c3feb896a1b42595cf9a508ed64ed0dc3cd84fffdb8eed790d02d0534ab322ce  gemmlowp-16e8662c34917be0065110bfcd9cc27d30f52fdf.tar.gz
++sha256  8d8ebab96df6aa12922643060e72c43bfdca9fd80cf5aacaf7391bc6850560a3  pthreadpool-560c60d342a76076f0557a3946924c6478470044.tar.gz
 +# License files, locally calculated
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/gemmlowp/gemmlowp.mk b/package/gemmlowp/gemmlowp.mk
++sha256  57814a606b4d0fb087d9a534919084b6c11b58a4174cb5a4aef200187780dc3a  LICENSE
+diff --git a/package/pthreadpool/pthreadpool.mk b/package/pthreadpool/pthreadpool.mk
 new file mode 100644
-index 0000000000..708a82169a
+index 0000000000..6a05256461
 --- /dev/null
-+++ b/package/gemmlowp/gemmlowp.mk
-@@ -0,0 +1,16 @@
++++ b/package/pthreadpool/pthreadpool.mk
+@@ -0,0 +1,33 @@
 +################################################################################
 +#
-+# gemmlowp
++# pthreadpool
 +#
 +################################################################################
 +
-+GEMMLOWP_VERSION = 16e8662c34917be0065110bfcd9cc27d30f52fdf
-+GEMMLOWP_SITE = $(call github,google,gemmlowp,$(GEMMLOWP_VERSION))
-+GEMMLOWP_LICENSE = Apache-2.0
-+GEMMLOWP_LICENSE_FILES = LICENSE
-+GEMMLOWP_INSTALL_STAGING = YES
-+# Only installs a header
-+GEMMLOWP_INSTALL_TARGET = NO
-+GEMMLOWP_SUBDIR = contrib
++PTHREADPOOL_VERSION = 560c60d342a76076f0557a3946924c6478470044
++PTHREADPOOL_SITE = $(call github,Maratyszcza,pthreadpool,$(PTHREADPOOL_VERSION))
++PTHREADPOOL_LICENSE = BSD-2-Clause
++PTHREADPOOL_LICENSE_FILES = LICENSE
++PTHREADPOOL_INSTALL_STAGING = YES
++PTHREADPOOL_DEPENDENCIES = fxdiv
++
++PTHREADPOOL_CFLAGS = $(TARGET_CFLAGS)
++PTHREADPOOL_CXXFLAGS = $(TARGET_CXXFLAGS)
++
++ifeq ($(BR2_PACKAGE_CPUINFO),y)
++PTHREADPOOL_DEPENDENCIES += cpuinfo
++PTHREADPOOL_CFLAGS += -DPTHREADPOOL_USE_CPUINFO=1
++PTHREADPOOL_CXXFLAGS += -DPTHREADPOOL_USE_CPUINFO=1
++else
++PTHREADPOOL_CFLAGS += -DPTHREADPOOL_USE_CPUINFO=0
++PTHREADPOOL_CXXFLAGS += -DPTHREADPOOL_USE_CPUINFO=0
++endif
++
++PTHREADPOOL_CONF_OPTS = \
++	-DCMAKE_C_FLAGS="$(PTHREADPOOL_CFLAGS)" \
++	-DCMAKE_CXX_FLAGS="$(PTHREADPOOL_CXXFLAGS)" \
++	-DFXDIV_SOURCE_DIR="$(FXDIV_DIR)" \
++	-DPTHREADPOOL_BUILD_TESTS=OFF \
++	-DPTHREADPOOL_BUILD_BENCHMARKS=OFF
 +
 +$(eval $(cmake-package))
 -- 
