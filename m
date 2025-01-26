@@ -1,64 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 749BBC0218D
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 19:58:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8302C0218D
+	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 19:59:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F11E60629;
-	Sun, 26 Jan 2025 19:58:01 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1viUREb7BU33; Sun, 26 Jan 2025 19:58:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5ED7D605F0
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5ED7D605F0;
-	Sun, 26 Jan 2025 19:58:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 20539941
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E6A7E80E3E
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB320804CF;
+	Sun, 26 Jan 2025 19:59:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bh4ybieIY6nO for <buildroot@buildroot.org>;
- Sun, 26 Jan 2025 19:57:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id 4A1bSydDuwCa; Sun, 26 Jan 2025 19:59:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA35C80BE1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA35C80BE1;
+	Sun, 26 Jan 2025 19:59:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C1006F10
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:59:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF44E80A4E
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:59:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aol5JUujkT8L for <buildroot@buildroot.org>;
+ Sun, 26 Jan 2025 19:59:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3B4D280E2E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B4D280E2E
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3B4D280E2E
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:58 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 23A421BF204;
- Sun, 26 Jan 2025 19:57:54 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tc8lW-00GN6r-1U;
- Sun, 26 Jan 2025 20:57:54 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9DC0804CF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E9DC0804CF
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:59:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E07DA8654A; Sun, 26 Jan 2025 19:59:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org
-References: <20250126140917.235801-1-james.hilliard1@gmail.com>
-Date: Sun, 26 Jan 2025 20:57:54 +0100
-In-Reply-To: <20250126140917.235801-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Sun, 26 Jan 2025 07:09:17 -0700")
-Message-ID: <874j1l9wl9.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-attrs: bump to version
- 25.1.0
+To: buildroot@buildroot.org
+Date: Sun, 26 Jan 2025 20:57:24 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 16c2c3ab762ac01edf12f80d4daaa0c25617e7e1
+X-Git-Newrev: afee26f388aecf3941d35f48a9b73eaa7f916ae0
+X-Patchwork-Hint: ignore
+Message-Id: <20250126195917.E07DA8654A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-referencing: bump to
+ version 0.36.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,19 +59,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=afee26f388aecf3941d35f48a9b73eaa7f916ae0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-referencing/python-referencing.hash | 4 ++--
+ package/python-referencing/python-referencing.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-referencing/python-referencing.hash b/package/python-referencing/python-referencing.hash
+index ebf7208ad3..9cbd5e60a5 100644
+--- a/package/python-referencing/python-referencing.hash
++++ b/package/python-referencing/python-referencing.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/referencing/json
+-md5  f76e7b565b6e25c83bc5815c870735b7  referencing-0.36.1.tar.gz
+-sha256  ca2e6492769e3602957e9b831b94211599d2aade9477f5d44110d2530cf9aade  referencing-0.36.1.tar.gz
++md5  9d116186b2c5225c4e55254b94b2cd8e  referencing-0.36.2.tar.gz
++sha256  df2e89862cd09deabbdba16944cc3f10feb6b3e6f18e902f7cc25609a34775aa  referencing-0.36.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c  COPYING
+diff --git a/package/python-referencing/python-referencing.mk b/package/python-referencing/python-referencing.mk
+index dc70152beb..cabc9afa23 100644
+--- a/package/python-referencing/python-referencing.mk
++++ b/package/python-referencing/python-referencing.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_REFERENCING_VERSION = 0.36.1
++PYTHON_REFERENCING_VERSION = 0.36.2
+ PYTHON_REFERENCING_SOURCE = referencing-$(PYTHON_REFERENCING_VERSION).tar.gz
+-PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/27/32/fd98246df7a0f309b58cae68b10b6b219ef2eb66747f00dfb34422687087
++PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/2f/db/98b5c277be99dd18bfd91dd04e1b759cad18d1a338188c936e92f921c7e2
+ PYTHON_REFERENCING_SETUP_TYPE = pep517
+ PYTHON_REFERENCING_LICENSE = MIT
+ PYTHON_REFERENCING_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
