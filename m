@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8374BC282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:05:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D997C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:05:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39D0D4F16C;
-	Fri, 28 Feb 2025 17:05:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 00CDF70825;
+	Fri, 28 Feb 2025 17:05:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lSk-4p8Y-Mra; Fri, 28 Feb 2025 17:05:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9Gdjv8B1opF9; Fri, 28 Feb 2025 17:05:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0011F4F9F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF20470940
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0011F4F9F6;
-	Fri, 28 Feb 2025 17:05:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF20470940;
+	Fri, 28 Feb 2025 17:05:43 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1747994F
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 18263711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0561F42EB9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3BAFF42EBB
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7vXveQaq2Hrk for <buildroot@buildroot.org>;
+ id pPknYP804rrZ for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:31:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7276B42ECA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 842A542ECF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7276B42ECA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 842A542ECF
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6E780867B4; Fri, 28 Feb 2025 16:30:21 +0000 (UTC)
+ id 7E5A287A09; Fri, 28 Feb 2025 16:30:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 26 Jan 2025 20:56:49 +0100
+Date: Sun, 26 Jan 2025 20:57:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f60a7e1b209d58e5c58c368bea80c279b14467a7
-X-Git-Newrev: 16c2c3ab762ac01edf12f80d4daaa0c25617e7e1
+X-Git-Oldrev: 16c2c3ab762ac01edf12f80d4daaa0c25617e7e1
+X-Git-Newrev: afee26f388aecf3941d35f48a9b73eaa7f916ae0
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163021.6E780867B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-markdown2: bump
- to version 2.5.3
+Message-Id: <20250228163021.7E5A287A09@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-referencing:
+ bump to version 0.36.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16c2c3ab762ac01edf12f80d4daaa0c25617e7e1
+commit: https://git.buildroot.net/buildroot/commit/?id=afee26f388aecf3941d35f48a9b73eaa7f916ae0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-markdown2/python-markdown2.hash | 4 ++--
- package/python-markdown2/python-markdown2.mk   | 4 ++--
+ package/python-referencing/python-referencing.hash | 4 ++--
+ package/python-referencing/python-referencing.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-markdown2/python-markdown2.hash b/package/python-markdown2/python-markdown2.hash
-index 6419e3da7c..2f7162e850 100644
---- a/package/python-markdown2/python-markdown2.hash
-+++ b/package/python-markdown2/python-markdown2.hash
+diff --git a/package/python-referencing/python-referencing.hash b/package/python-referencing/python-referencing.hash
+index ebf7208ad3..9cbd5e60a5 100644
+--- a/package/python-referencing/python-referencing.hash
++++ b/package/python-referencing/python-referencing.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/markdown2/json
--md5  9896bd95d1eb564300d7fd176e17d0a1  markdown2-2.5.2.tar.gz
--sha256  3ac02226a901c4b2f6fc21dbd17c26d118d2c25bcbb28cee093a1f8b5c46f3f1  markdown2-2.5.2.tar.gz
-+md5  38582a01de352b173b0cf86c9864ad2e  markdown2-2.5.3.tar.gz
-+sha256  4d502953a4633408b0ab3ec503c5d6984d1b14307e32b325ec7d16ea57524895  markdown2-2.5.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/referencing/json
+-md5  f76e7b565b6e25c83bc5815c870735b7  referencing-0.36.1.tar.gz
+-sha256  ca2e6492769e3602957e9b831b94211599d2aade9477f5d44110d2530cf9aade  referencing-0.36.1.tar.gz
++md5  9d116186b2c5225c4e55254b94b2cd8e  referencing-0.36.2.tar.gz
++sha256  df2e89862cd09deabbdba16944cc3f10feb6b3e6f18e902f7cc25609a34775aa  referencing-0.36.2.tar.gz
  # Locally computed sha256 checksums
- sha256  f8c7c4d554409cf621b8d653dbfffb719745fd36f5c49b8305258649b403ef9c  LICENSE.txt
-diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
-index 60c01dbdef..fded790801 100644
---- a/package/python-markdown2/python-markdown2.mk
-+++ b/package/python-markdown2/python-markdown2.mk
+ sha256  42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c  COPYING
+diff --git a/package/python-referencing/python-referencing.mk b/package/python-referencing/python-referencing.mk
+index dc70152beb..cabc9afa23 100644
+--- a/package/python-referencing/python-referencing.mk
++++ b/package/python-referencing/python-referencing.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MARKDOWN2_VERSION = 2.5.2
-+PYTHON_MARKDOWN2_VERSION = 2.5.3
- PYTHON_MARKDOWN2_SOURCE = markdown2-$(PYTHON_MARKDOWN2_VERSION).tar.gz
--PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/a0/61/d3c0c21280ba1fc348822a4410847cf78f99bba8625755a5062a44d2e228
-+PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/44/52/d7dcc6284d59edb8301b8400435fbb4926a9b0f13a12b5cbaf3a4a54bb7b
- PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
- PYTHON_MARKDOWN2_LICENSE = MIT
- PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
+-PYTHON_REFERENCING_VERSION = 0.36.1
++PYTHON_REFERENCING_VERSION = 0.36.2
+ PYTHON_REFERENCING_SOURCE = referencing-$(PYTHON_REFERENCING_VERSION).tar.gz
+-PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/27/32/fd98246df7a0f309b58cae68b10b6b219ef2eb66747f00dfb34422687087
++PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/2f/db/98b5c277be99dd18bfd91dd04e1b759cad18d1a338188c936e92f921c7e2
+ PYTHON_REFERENCING_SETUP_TYPE = pep517
+ PYTHON_REFERENCING_LICENSE = MIT
+ PYTHON_REFERENCING_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
