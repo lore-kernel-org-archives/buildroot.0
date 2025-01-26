@@ -1,53 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52399C0218D
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 19:59:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B7B5C0218D
+	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 20:07:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2022780BE5;
-	Sun, 26 Jan 2025 19:59:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F7B460672;
+	Sun, 26 Jan 2025 20:07:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gfi9ik3rqXKs; Sun, 26 Jan 2025 19:59:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KZqVPyWOMOKS; Sun, 26 Jan 2025 20:07:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38D8980C83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AA5F6072A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 38D8980C83;
-	Sun, 26 Jan 2025 19:59:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1AF76941
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:59:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2AA5F6072A;
+	Sun, 26 Jan 2025 20:07:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8BBEEF10
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 20:07:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 08644406B3
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:59:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7945540912
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 20:07:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r0Blq3DhFiKZ for <buildroot@buildroot.org>;
- Sun, 26 Jan 2025 19:59:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id aQu9SHTfFuTE for <buildroot@buildroot.org>;
+ Sun, 26 Jan 2025 20:07:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 115F5406AE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 115F5406AE
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:59:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EBFD78654B; Sun, 26 Jan 2025 19:59:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2D17C40902
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D17C40902
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2D17C40902
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 20:07:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5DCC140002;
+ Sun, 26 Jan 2025 20:07:34 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1tc8ur-00GNiV-2O;
+ Sun, 26 Jan 2025 21:07:33 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 26 Jan 2025 20:57:52 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: afee26f388aecf3941d35f48a9b73eaa7f916ae0
-X-Git-Newrev: 67547b15796698143a3ed12429cb18f8eb67bdc1
-X-Patchwork-Hint: ignore
-Message-Id: <20250126195917.EBFD78654B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-attrs: bump to version
- 25.1.0
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+References: <20241222182026.1231497-1-ju.o@free.fr>
+Date: Sun, 26 Jan 2025 21:07:33 +0100
+In-Reply-To: <20241222182026.1231497-1-ju.o@free.fr> (Julien Olivain's message
+ of "Sun, 22 Dec 2024 19:20:26 +0100")
+Message-ID: <87v7u18hkq.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/acpica: security bump to
+ version 20241212
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +70,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67547b15796698143a3ed12429cb18f8eb67bdc1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-attrs/python-attrs.hash | 4 ++--
- package/python-attrs/python-attrs.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > For change log since 20240927, see:
+ > https://github.com/user-attachments/files/18117996/changes.txt
 
-diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
-index ae13fbb552..95b0a63bca 100644
---- a/package/python-attrs/python-attrs.hash
-+++ b/package/python-attrs/python-attrs.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/attrs/json
--md5  85dc1d9cca54e0986f429bfd1f2a4987  attrs-24.3.0.tar.gz
--sha256  8f5c07333d543103541ba7be0e2ce16eeee8130cb0b3f9238ab904ce1e85baff  attrs-24.3.0.tar.gz
-+md5  338069d6f69126086d589b2cb44f4c73  attrs-25.1.0.tar.gz
-+sha256  1c97078a80c814273a76b2a298a932eb681c87415c11dee0a6921de7f1b02c3e  attrs-25.1.0.tar.gz
- # Locally computed sha256 checksums
- sha256  882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f  LICENSE
-diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
-index 97b72df6dd..74d0c2f8d1 100644
---- a/package/python-attrs/python-attrs.mk
-+++ b/package/python-attrs/python-attrs.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_ATTRS_VERSION = 24.3.0
-+PYTHON_ATTRS_VERSION = 25.1.0
- PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
--PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/48/c8/6260f8ccc11f0917360fc0da435c5c9c7504e3db174d5a12a1494887b045
-+PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/49/7c/fdf464bcc51d23881d110abd74b512a42b3d5d376a55a831b44c603ae17f
- PYTHON_ATTRS_SETUP_TYPE = hatch
- PYTHON_ATTRS_LICENSE = MIT
- PYTHON_ATTRS_LICENSE_FILES = LICENSE
+ > Note: the change log mention "Fix 2 critical CVE addressing memory
+ > leaks" without providing actual CVE numbers. For reference, the
+ > upstream commits for those security fixes are [1] and [2]. From the log
+ > of those commits, it seems those memory leaks can only happen in old
+ > Kernels <= 4.9 (which is end-of-life since January 2023). Technically
+ > those leaks could happen in any program embedding the apcica code
+ > files. The impact seems very low, if any, on the acpica standalone
+ > tools.
+
+ > [1] https://github.com/acpica/acpica/commit/987a3b5cf7175916e2a4b6ea5b8e70f830dfe732
+ > [2] https://github.com/acpica/acpica/commit/8829e70e1360c81e7a5a901b5d4f48330e021ea5
+
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+ > ---
+ > Patch tested in:
+ > https://gitlab.com/jolivain/buildroot/-/jobs/8707592086
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
