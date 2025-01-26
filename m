@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 101BFC02181
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 17:00:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D43DC02181
+	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 17:01:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 943D740675;
-	Sun, 26 Jan 2025 17:00:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K_eDgwI86LXo; Sun, 26 Jan 2025 17:00:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44A2E40678
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44A2E40678;
-	Sun, 26 Jan 2025 17:00:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4789CF10
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 17:00:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 42596810F6
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 17:00:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6A1781126;
+	Sun, 26 Jan 2025 17:01:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F2144rWbV70F for <buildroot@buildroot.org>;
- Sun, 26 Jan 2025 17:00:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6228980C97
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6228980C97
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 17:00:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4CFE58650E; Sun, 26 Jan 2025 17:00:14 +0000 (UTC)
+ id u-0NxOU4f0EA; Sun, 26 Jan 2025 17:01:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18544810F6
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18544810F6;
+	Sun, 26 Jan 2025 17:01:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 79FAC941
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 17:01:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5AD356065E
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 17:01:28 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H45vq-BnZh1t for <buildroot@buildroot.org>;
+ Sun, 26 Jan 2025 17:01:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 64F2C607C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64F2C607C0
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 64F2C607C0
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 17:01:27 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id BC5A1B005B0;
+ Sun, 26 Jan 2025 18:01:24 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:59284])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 26 Jan 2025 18:01:19 +0100
+MIME-Version: 1.0
+Date: Sun, 26 Jan 2025 18:01:19 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 26 Jan 2025 17:58:36 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a941bef9f92fc6c4c0b23714bb934133e659ec51
-X-Git-Newrev: e3d74c76eef1155d4040dae2d51662bfc0e3e0fc
-X-Patchwork-Hint: ignore
-Message-Id: <20250126170014.4CFE58650E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250126113436.4166164-1-thomas.petazzoni@bootlin.com>
+References: <20250126113436.4166164-1-thomas.petazzoni@bootlin.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <a2c09834c8acc331667798b679f894d3@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1737910885;
+ bh=EnpeIqfetZVJjU15wq3A7Zh55fU+qyKzhWLk8EInSMM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=RQravBbz8/8FVU3FcGpkuMOBjznXp4qdxov6dZjoxEYJDBSHGhVvTfyoQ4Wz3e5aa
+ 77tzLxj56UDNPQPepntYuVj21GsJVl5Y+O0JVy3M8NdfV7PoF+QoOxqmza/nwUcl0m
+ 50gN5eNEmB9/javDrpFmy4CqIdaZUDGvoVJiuMceHTG2GDI3dZXss82nVHwnM1NU9H
+ DUhOpSNBVHTGD5saA5uhAiNiQIuLPqWt+WCSs5fTHDG7uiZ7EmHQNqQuFYowD890TX
+ O+f1isoXyTM8rp8P1Q2KWI0g+hE/Xm8GGTw7RrUhDCwZ/qbk+TuiwZTiW4QAVBHmTx
+ DkkHnFSBvgpPg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=RQravBbz
+Subject: Re: [Buildroot] [PATCH]
  support/testing/tests/toolchain/test_external_synopsys.py: drop tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,146 +83,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3d74c76eef1155d4040dae2d51662bfc0e3e0fc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-The Synopsys external toolchain has been disabled in commit
-11a8cdd2bbbd0ef4adf600e4792d75f6f2122ec8, causing the test cases
-testing this toolchain to fail. Let's drop those tests for now, they
-can always be re-added later on.
+On 26/01/2025 12:34, Thomas Petazzoni via buildroot wrote:
+> The Synopsys external toolchain has been disabled in commit
+> 11a8cdd2bbbd0ef4adf600e4792d75f6f2122ec8, causing the test cases
+> testing this toolchain to fail. Let's drop those tests for now, they
+> can always be re-added later on.
+> 
+> Fixes:
+> 
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697531
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697528
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697524
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697519
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697517
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697516
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Fixes:
+I applied the patch to master, thanks.
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697531
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697528
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697524
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697519
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697517
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697516
+I also removed the test entry in DEVELOPERS.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Julien: remove the DEVELOPERS entry]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                         |  1 -
- .../tests/toolchain/test_external_synopsys.py      | 91 ----------------------
- 2 files changed, 92 deletions(-)
+Best regards,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ff069b9c40..fde9360ad6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3220,7 +3220,6 @@ F:	support/testing/tests/package/test_python_flask_expects_json.py
- F:	support/testing/tests/package/test_python_git.py
- F:	support/testing/tests/package/test_python_unittest_xml_reporting.py
- F:	support/testing/tests/toolchain/test_external_arm.py
--F:	support/testing/tests/toolchain/test_external_synopsys.py
- F:	toolchain/
- 
- N:	Timo Ketola <timo.ketola@exertus.fi>
-diff --git a/support/testing/tests/toolchain/test_external_synopsys.py b/support/testing/tests/toolchain/test_external_synopsys.py
-deleted file mode 100644
-index 19ed9f67b0..0000000000
---- a/support/testing/tests/toolchain/test_external_synopsys.py
-+++ /dev/null
-@@ -1,91 +0,0 @@
--from tests.toolchain.test_external import TestExternalToolchain
--
--
--class TestExternalToolchainSynopsysArc700LE(TestExternalToolchain):
--    config = """
--        BR2_arcle=y
--        BR2_arc770d=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC700=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arc-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArc700BE(TestExternalToolchain):
--    config = """
--        BR2_arceb=y
--        BR2_arc770d=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC700=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arceb-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArcHSGlibcLE(TestExternalToolchain):
--    config = """
--        BR2_arcle=y
--        BR2_archs38_full=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_GLIBC=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arc-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArcHSGlibcBE(TestExternalToolchain):
--    config = """
--        BR2_arceb=y
--        BR2_archs38_full=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_GLIBC=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arceb-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArcHSuClibcLE(TestExternalToolchain):
--    config = """
--        BR2_arcle=y
--        BR2_archs38_full=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_UCLIBC=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arc-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArcHSuClibcBE(TestExternalToolchain):
--    config = """
--        BR2_arceb=y
--        BR2_archs38_full=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_UCLIBC=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arceb-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
