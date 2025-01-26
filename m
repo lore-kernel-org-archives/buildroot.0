@@ -4,74 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34111C02181
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 11:02:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FF37C02181
+	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 11:14:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F246D80CA4;
-	Sun, 26 Jan 2025 11:02:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2B0B28039D;
+	Sun, 26 Jan 2025 11:14:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id grSiDy_U-5Ft; Sun, 26 Jan 2025 11:02:53 +0000 (UTC)
+ id n3WvmE_SCb-a; Sun, 26 Jan 2025 11:14:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 120C780CB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D582819BE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 120C780CB2;
-	Sun, 26 Jan 2025 11:02:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 35CAA941
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:02:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D582819BE;
+	Sun, 26 Jan 2025 11:14:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9CA16F10
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:14:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 168FA60712
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:02:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7D8FD8039D
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:14:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UQ5Oht0KmVHT for <buildroot@buildroot.org>;
- Sun, 26 Jan 2025 11:02:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4CF65606E1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CF65606E1
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4CF65606E1
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:02:49 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 4C8312003CC;
- Sun, 26 Jan 2025 12:02:47 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:50794])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 26 Jan 2025 12:02:47 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dZA8rrfXBETr for <buildroot@buildroot.org>;
+ Sun, 26 Jan 2025 11:14:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5F73680EBF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F73680EBF
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5F73680EBF
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:14:21 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E1EE11BF203;
+ Sun, 26 Jan 2025 11:14:18 +0000 (UTC)
+Date: Sun, 26 Jan 2025 12:14:18 +0100
+To: Vincent Jardin <vjardin@free.fr>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Robin Jarry <robin@jarry.cc>, Brandon Maier <brandon.maier@gmail.com>,
+ Julien Olivain <ju.o@free.fr>
+Message-ID: <20250126121418.28a0e655@windsurf>
+In-Reply-To: <20250102164630.25695-2-vjardin@free.fr>
+References: <D67L0SLHFKBX.2N0314A43JOJC@gmail.com>
+ <20250102164630.25695-1-vjardin@free.fr>
+ <20250102164630.25695-2-vjardin@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Date: Sun, 26 Jan 2025 12:02:47 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250125223600.3920642-1-fiona.klute@gmx.de>
-References: <20250125223600.3920642-1-fiona.klute@gmx.de>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <1660e41aa8a09029f47b983df077ddb0@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737889368;
- bh=6lvtbagALS2rtTfDnChXZX32E96qfY9qL5bpy6J0B9c=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=jTg7XUd4EsGxl4XT/39X/LLPpKQhDDGt+E4IO3JHdDeRFbh4CRYwJWzQ00GpVLiT+
- p1QJtjji5t+c9mZKRSPOBkwWQ5Eh/LH2h2d1muo9epensQBCT1fy/DPAfb8etSKiSd
- pyhv1qDsT33zCyMe+62ItQ8sgaJU1NjVvr33JSuOfzgKrt9LY0IZah9gyBLjYI9J4v
- JvZ9Bf6vhLBJbMUVBEEXK7nkXNNM8+dlRTU0YMYxdJ1LzSurMfXKa3pmXSu/+Gx/e7
- p8XK1JslDXEfSYFVb3b5mqn0Bn6q7VKL6WFSh5uvNOqG3bLzYQLJAk4pKlZLmJskUv
- 2cdle7wQIM9RQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jTg7XUd4
-Subject: Re: [Buildroot] [PATCH 1/1] package/panel-mipi-dbi-firmware:
- replace host-python3 with BR2_PYTHON3_HOST_DEPENDENCY
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1737890059;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=HnEoetOWUuOxJ7fL2byEt1RuVbiDjogIG0TKP1Dx0XE=;
+ b=cKgK+mwCdZ9cYbgcEJiTBFDM0tdhAlsEL+p3KOgmrNYRO5JkEHELpM7qYo2LJP6C5n7P4c
+ x45B7hMDqP9b9df0m0n7waNDoB9RL/cxLkdpMT1EshgBQBE8qzFaMP0agiSuqRBODQxZ87
+ bSY5wXZxPFd/RzmFgUq53DVV1zCdu3Qud0Y7yXJhc9s+lCKbAv4/51Kcx5GFo3oKndNs9H
+ 9qr51vuzY7qgKngMkEyqiA4fIjFyhHcLlKLW/8xhdcTUCmY9dt+VUkktVrEe12NlU1r65b
+ gsN/wWD8g7FTNRXJPQToCJkWQR3iZpAAG6tv+XlULgUJWOGS8LuP7zXgLUUVtw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=cKgK+mwC
+Subject: Re: [Buildroot] [PATCH v6 1/2] package/pkg-meson: h files only into
+ sysroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,24 +86,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 25/01/2025 23:36, Fiona Klute via buildroot wrote:
-> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-> 
-> The mipi-dbi-cmd script does not require a particular python3
-> version. Using BR2_PYTHON3_HOST_DEPENDENCY avoids the need to build
-> host-python3 if python3 is installed on the host, and nothing else in
-> the build depends on host-python3.
-> 
-> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-> Suggested-by: Julien Olivain <ju.o@free.fr>
-
-Applied to master, thanks.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8sCgpPbiBUaHUsICAyIEphbiAyMDI1IDE3OjQ2OjI5ICswMTAwClZpbmNlbnQgSmFyZGlu
+IDx2amFyZGluQGZyZWUuZnI+IHdyb3RlOgoKPiBNYW55IHBhY2thZ2VzIGJ1aWx0IHdpdGggQnVp
+bGRyb290IGFuZCBtZXNvbiBjdXJyZW50bHkgaW5zdGFsbCBoZWFkZXIKPiBmaWxlcyBpbnRvIGJv
+dGg6Cj4gICAtIHRoZSB0YXJnZXTigJlzIC91c3IvaW5jbHVkZSwgYW5kCj4gICAtIHRoZSBzeXNy
+b2904oCZcyAvdXNyL2luY2x1ZGUuCj4gCj4gV2hlbiBGT09fTUVTT05fSU5TVEFMTF9UQUdTID0g
+WUVTLCBlbnN1cmUgdGhhdCBoZWFkZXIgZmlsZXMgYXJlCj4gaW5zdGFsbGVkIGV4Y2x1c2l2ZWx5
+IGluIHRoZSBzdGFnaW5nIChzeXNyb290KSB0YXJnZXQgZHVyaW5nIHRoZQo+IGJ1aWxkIHByb2Nl
+c3MuCj4gCj4gVGhlIGRlZmF1bHQgaXMgRk9PX01FU09OX0lOU1RBTExfVEFHUyA/PSBOTyBpbiBv
+cmRlciB0byBhdm9pZAo+IGNoYW5naW5nIHRvIHRoaXMgbmV3IGJlaGF2aW91ciBmb3IgdGhlIHRp
+bWUgYmVpbmcuCj4gCj4gU2lnbmVkLW9mZi1ieTogVmluY2VudCBKYXJkaW4gPHZqYXJkaW5AZnJl
+ZS5mcj4KPiBTdWdnZXN0ZWQtYnk6IFJvYmluIEphcnJ5IDxyb2JpbkBqYXJyeS5jYz4KPiBTdWdn
+ZXN0ZWQtYnk6IEJyYW5kb24gTWFpZXIgPGJyYW5kb24ubWFpZXJAZ21haWwuY29tPgoKVGhhbmtz
+IFZpbmNlbnQgZm9yIHRoZSBwYXRjaC4KCkkgYW0gbm90IHN1cmUgd2Ugd2FudCB0aGlzIGJlaGF2
+aW9yLCBhcyBpdCB3b3VsZCBvbmx5IGJlIGFwcGxpY2FibGUgdG8KbWVzb24gcGFja2FnZXMuIEZv
+ciBhbGwgb3RoZXIgcGFja2FnZXMsIHdlIGluc3RhbGwgcHJldHR5IG11Y2gKZXZlcnl0aGluZyB0
+byB0YXJnZXQsIGFuZCB0aGVuIHdpcGUtb3V0IHdoYXQncyBuZWVkZWQgaW4KdGFyZ2V0LWZpbmFs
+aXplLiBTbyBJJ20gbm90IHN1cmUgd2hhdCBpcyB0aGUgYmVuZWZpdCBvZiBkaXZlcmdpbmcgZnJv
+bQp0aGlzIGNvbW1vbiBiZWhhdmlvciBqdXN0IGZvciBtZXNvbiBwYWNrYWdlcy4KClRoaXMgaXMg
+bm90IGEgc3Ryb25nIGZlZWxpbmcsIGJ1dCBhcyBvdGhlciBidWlsZCBzeXN0ZW1zIGRvbid0IGhh
+dmUKdGhpcyBjb25jZXB0IG9mIGluc3RhbGxpbmcgb25seSB0aGUgcnVudGltZSwgSSdtIG5vdCBz
+dXJlIGl0IG1ha2VzIGEKbG90IG9mIHNlbnNlIHRvIHVzZSB0aGF0IGp1c3QgZm9yIG1lc29uLWJh
+c2VkIHBhY2thZ2VzLgoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQg
+Q0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRy
+YWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
+b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
+ZHJvb3QK
