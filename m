@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3493AC282C1
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 471C1C282C6
 	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:05:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC8CE41604;
-	Fri, 28 Feb 2025 17:05:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 14433850D0;
+	Fri, 28 Feb 2025 17:05:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ER8ZDXq9zaAb; Fri, 28 Feb 2025 17:05:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FfbaVvh6IDS5; Fri, 28 Feb 2025 17:05:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9829450621
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F136F84FAD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9829450621;
-	Fri, 28 Feb 2025 17:05:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F136F84FAD;
+	Fri, 28 Feb 2025 17:05:19 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 06B5E711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 07E6E68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 009954280E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1118E424FB
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YpL7sKrRQJ14 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:08 +0000 (UTC)
+ id I9lZE54d73zu for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7080F424FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A445C42EB7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7080F424FB
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A445C42EB7
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 642A3818ED; Fri, 28 Feb 2025 16:30:19 +0000 (UTC)
+ id 9C85887A55; Fri, 28 Feb 2025 16:30:20 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Jan 2025 14:21:45 +0100
+Date: Sun, 26 Jan 2025 11:23:48 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 980dbc154956e4511a84f3bf432b518686152ba1
-X-Git-Newrev: fb0bd825c90f417819f7eec2d0efeeb449fe6634
+X-Git-Oldrev: b04e77b900bfa89d538b6071b59de3dcf39e413c
+X-Git-Newrev: e90a6b91036fd0e841bb8d5cc30586e4825c33ae
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163019.642A3818ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-legacy-cgi:
- bump to version 2.6.2
+Message-Id: <20250228163020.9C85887A55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fontconfig: drop the
+ util-linux dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb0bd825c90f417819f7eec2d0efeeb449fe6634
+commit: https://git.buildroot.net/buildroot/commit/?id=e90a6b91036fd0e841bb8d5cc30586e4825c33ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Commit 67089f8c11d05147e3def29e226c13a10e913f76
+"package/fontconfig: add util-linux mandatory dependency"
+added the dependency on util-linux because of uuid [1].
+This dependency was later replaced [2], so drop the util-linux
+dependency.
+
+[1] https://gitlab.freedesktop.org/fontconfig/fontconfig/-/commit/7b48fd3dd406b926f0e5240b211f72197ed538a9
+[2] https://gitlab.freedesktop.org/fontconfig/fontconfig/-/commit/c4324f54ee16e648ba91f3e9c66af13ab3b1754c
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-legacy-cgi/python-legacy-cgi.hash | 4 ++--
- package/python-legacy-cgi/python-legacy-cgi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/fontconfig/Config.in     | 2 --
+ package/fontconfig/fontconfig.mk | 6 ++----
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-legacy-cgi/python-legacy-cgi.hash b/package/python-legacy-cgi/python-legacy-cgi.hash
-index 063483a1e8..53af4ef691 100644
---- a/package/python-legacy-cgi/python-legacy-cgi.hash
-+++ b/package/python-legacy-cgi/python-legacy-cgi.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/legacy-cgi/json
--md5  82a61ea4905ec03f07cf24c586623fa7  legacy_cgi-2.6.1.tar.gz
--sha256  f2ada99c747c3d72a473a6aaff6259a61f226b06fe9f3106e495ab83fd8f7a42  legacy_cgi-2.6.1.tar.gz
-+md5  5750721070ad829796ef830308e76907  legacy_cgi-2.6.2.tar.gz
-+sha256  9952471ceb304043b104c22d00b4f333cac27a6abe446d8a528fc437cf13c85f  legacy_cgi-2.6.2.tar.gz
- # Locally computed sha256 checksums
- sha256  f03e17cd594c2085f66a454e695c7ebe5b4d3c0eff534f4f194abc2fd164621b  LICENSE
-diff --git a/package/python-legacy-cgi/python-legacy-cgi.mk b/package/python-legacy-cgi/python-legacy-cgi.mk
-index 8e6e3e7bd4..457463d9dd 100644
---- a/package/python-legacy-cgi/python-legacy-cgi.mk
-+++ b/package/python-legacy-cgi/python-legacy-cgi.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_LEGACY_CGI_VERSION = 2.6.1
-+PYTHON_LEGACY_CGI_VERSION = 2.6.2
- PYTHON_LEGACY_CGI_SOURCE = legacy_cgi-$(PYTHON_LEGACY_CGI_VERSION).tar.gz
--PYTHON_LEGACY_CGI_SITE = https://files.pythonhosted.org/packages/48/96/ff14ad0f759f2297a2e61db9c5384d248a6b38c6c1d4452c07d7419676a2
-+PYTHON_LEGACY_CGI_SITE = https://files.pythonhosted.org/packages/ad/2e/e1860989bc6cfdecba66db37f2f783636b97a1248ac25fbe864b6e931c22
- PYTHON_LEGACY_CGI_SETUP_TYPE = poetry
- PYTHON_LEGACY_CGI_LICENSE = PSF-2.0
- PYTHON_LEGACY_CGI_LICENSE_FILES = LICENSE
+diff --git a/package/fontconfig/Config.in b/package/fontconfig/Config.in
+index d274b06350..218fdb2e7a 100644
+--- a/package/fontconfig/Config.in
++++ b/package/fontconfig/Config.in
+@@ -2,8 +2,6 @@ config BR2_PACKAGE_FONTCONFIG
+ 	bool "fontconfig"
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_EXPAT
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  Fontconfig is a library for configuring and customizing font
+ 	  access.
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index b60086c9c8..cc6ca88585 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -9,11 +9,9 @@ FONTCONFIG_SITE = https://www.freedesktop.org/software/fontconfig/release
+ FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.xz
+ FONTCONFIG_INSTALL_STAGING = YES
+ FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf host-gperf \
+-	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBS),util-linux-libs,util-linux) \
+ 	$(TARGET_NLS_DEPENDENCIES)
+-HOST_FONTCONFIG_DEPENDENCIES = \
+-	host-freetype host-expat host-pkgconf host-gperf host-util-linux \
+-	host-gettext
++HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf \
++	host-gperf host-gettext
+ FONTCONFIG_LICENSE = fontconfig license
+ FONTCONFIG_LICENSE_FILES = COPYING
+ FONTCONFIG_CPE_ID_VALID = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
