@@ -4,74 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97E52C02181
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 10:23:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A484AC02181
+	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 10:27:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04D8060855;
-	Sun, 26 Jan 2025 10:23:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E8F060619;
+	Sun, 26 Jan 2025 10:27:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZbyD00teiilA; Sun, 26 Jan 2025 10:23:25 +0000 (UTC)
+ id ZXDb-gOk4G5U; Sun, 26 Jan 2025 10:27:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E11786063C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31A136081C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E11786063C;
-	Sun, 26 Jan 2025 10:23:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D579E94A
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 10:23:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 31A136081C;
+	Sun, 26 Jan 2025 10:27:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 32A38941
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 10:27:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF60C40207
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 10:23:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B1BD40147
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 10:27:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tbYvy0xD1z3J for <buildroot@buildroot.org>;
- Sun, 26 Jan 2025 10:23:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4C99E40132
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C99E40132
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4C99E40132
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 10:23:21 +0000 (UTC)
-Received: from [10.125.102.231] (unknown [78.243.227.35])
- (Authenticated sender: vjardin@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 18A5319F5A7;
- Sun, 26 Jan 2025 11:23:12 +0100 (CET)
-From: Vincent Jardin <vjardin@free.fr>
-To: Brandon Maier <brandon.maier@gmail.com>, <buildroot@buildroot.org>,
- Julien Olivain <ju.o@free.fr>, <thomas.petazzoni@bootlin.com>
-CC: Eric Le Bihan <eric.le.bihan.dev@free.fr>, Robin Jarry <robin@jarry.cc>
-Date: Sun, 26 Jan 2025 11:23:12 +0100
-Message-ID: <194a2230680.2856.ffe91ee9dc07baa0c1c4561a0e181c1b@free.fr>
-In-Reply-To: <D6XYG4LBE2LC.38QNBW4XAS9FG@gmail.com>
-References: <D67L0SLHFKBX.2N0314A43JOJC@gmail.com>
- <20250102164630.25695-1-vjardin@free.fr>
- <20250102164630.25695-3-vjardin@free.fr>
- <D6XYG4LBE2LC.38QNBW4XAS9FG@gmail.com>
-User-Agent: AquaMail/1.54.1 (build: 105401536)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737886999;
- bh=BZ76+SL3oGoi7GRowWjpTRcNX+dVZ2Dc7b99D05doEU=;
- h=From:To:CC:Date:In-Reply-To:References:Subject:From;
- b=AWqZqJ+Bt6bEY+Qq0bjjgpfndFMvyZ28W/mPhp4klYss+CJh62siXOYtVWXb49g17
- xo/hyvzr8fDPsvNWmkEeLHkHhkQ9orHn1RGDIvJMA9xcG9ciPy4j/KMGL4o1cbEJ81
- deDqMrGaR5LRVn4PZGT3mBGV792ERbV5CzRg3u352elEX/gqSWnmT2GXnsDgEyf9HM
- H63yZqpTdbGF3xwtKtZW+U7KGSbvub02G0au5iU6nRV1lPDJUussH1gTFOphbgOBk5
- o48nR/wvQrXEE4yhaPN2ssI2YCnuSZehBlLPR3Xsss6StBzPqolRf2zQPFn9uHqPO0
- +3JMx21Pzc5Kg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=AWqZqJ+B
-Subject: Re: [Buildroot] [PATCH v6 2/2]
- doc/manual/adding-packages-meson.adoc: tags
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VJn6J5oldkU4 for <buildroot@buildroot.org>;
+ Sun, 26 Jan 2025 10:27:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9C3A4067A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9C3A4067A
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 10:27:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D3AEA86490; Sun, 26 Jan 2025 10:27:43 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 26 Jan 2025 11:23:48 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b04e77b900bfa89d538b6071b59de3dcf39e413c
+X-Git-Newrev: e90a6b91036fd0e841bb8d5cc30586e4825c33ae
+X-Patchwork-Hint: ignore
+Message-Id: <20250126102743.D3AEA86490@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fontconfig: drop the util-linux
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,163 +59,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============2202562488982469023=="
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a multi-part message in MIME format.
---===============2202562488982469023==
-Content-Type: multipart/alternative; boundary="194a223076431432856c20587"
+commit: https://git.buildroot.net/buildroot/commit/?id=e90a6b91036fd0e841bb8d5cc30586e4825c33ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a multi-part message in MIME format.
---194a223076431432856c20587
-Content-Type: text/plain; format=flowed; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Commit 67089f8c11d05147e3def29e226c13a10e913f76
+"package/fontconfig: add util-linux mandatory dependency"
+added the dependency on util-linux because of uuid [1].
+This dependency was later replaced [2], so drop the util-linux
+dependency.
 
+[1] https://gitlab.freedesktop.org/fontconfig/fontconfig/-/commit/7b48fd3dd406b926f0e5240b211f72197ed538a9
+[2] https://gitlab.freedesktop.org/fontconfig/fontconfig/-/commit/c4324f54ee16e648ba91f3e9c66af13ab3b1754c
 
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/fontconfig/Config.in     | 2 --
+ package/fontconfig/fontconfig.mk | 6 ++----
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-Le 10 janvier 2025 01:09:24 "Brandon Maier" <brandon.maier@gmail.com> a écrit :
-
-> On Thu Jan 2, 2025 at 10:46 AM CST, Vincent Jardin wrote:
->> Described the usage of FOO_MESON_INSTALL_TAGS=YES which decreases
->> the footprint of the target since only the runtime will be installed.
->> All the other development header files or libraries will be installed
->> into the staging folder.
->>
->> Signed-off-by: Vincent Jardin <vjardin@free.fr>
->> Suggested-by: Brandon Maier <brandon.maier@gmail.com>
->
-> Reviewed-by: Brandon Maier <brandon.maier@gmail.com>
-
-I understand that this serie is OK. Can it be merged ?
-  https://patchwork.ozlabs.org/project/buildroot/list/?series=438648
-
-Thank you,
-  Vincent
-
-
->
->
->> ---
->> docs/manual/adding-packages-meson.adoc | 5 +++++
->> 1 file changed, 5 insertions(+)
->>
->> diff --git a/docs/manual/adding-packages-meson.adoc 
->> b/docs/manual/adding-packages-meson.adoc
->> index 01891e03cc..b7c987ddd1 100644
->> --- a/docs/manual/adding-packages-meson.adoc
->> +++ b/docs/manual/adding-packages-meson.adoc
->> @@ -124,6 +124,11 @@ will therefore only use a few of them.
->> +c_link_args+, +cpp_args+, +cpp_link_args+, +sys_root+, and
->> +pkg_config_libdir+.
->>
->> +* +FOO_MESON_INSTALL_TAGS+, can be set to +YES+ to enable meson's 
->> `--runtime` and
->> +  `--devel` installation modes for the target and staging folders, 
->> respectively.
->> +  This configuration is necessary to prevent meson from installing development
->> +  artifacts into the target folder.
->> +
->> * +FOO_NINJA_ENV+, to specify additional environment variables to pass to
->> +ninja+, meson companion tool in charge of the build operations. By default,
->> empty.
-
-
---194a223076431432856c20587
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.=
-w3.org/TR/html4/loose.dtd">
-<html>
-<body>
-<div dir=3D"auto">
-<div dir=3D"auto"><br></div><div dir=3D"auto"><br></div>
-<div id=3D"aqm-original" style=3D"color: black;">
-<div dir=3D"auto">Le 10 janvier 2025 01:09:24 "Brandon Maier" &lt;brandon.m=
-aier@gmail.com&gt; a =C3=A9crit :</div>
-<div><br></div>
-<blockquote type=3D"cite" class=3D"gmail_quote" style=3D"margin: 0 0 0 0.75=
-ex; border-left: 1px solid #808080; padding-left: 0.75ex;">
-<div dir=3D"auto">On Thu Jan 2, 2025 at 10:46 AM CST, Vincent Jardin wrote:=
-</div>
-<blockquote type=3D"cite" class=3D"gmail_quote" style=3D"margin: 0 0 0 0.75=
-ex; border-left: 1px solid #0099CC; padding-left: 0.75ex;">
-<div dir=3D"auto">Described the usage of FOO_MESON_INSTALL_TAGS=3DYES which=
- decreases</div>
-<div dir=3D"auto">the footprint of the target since only the runtime will b=
-e installed.</div>
-<div dir=3D"auto">All the other development header files or libraries will =
-be installed</div>
-<div dir=3D"auto">into the staging folder.</div>
-<div dir=3D"auto"><br></div>
-<div dir=3D"auto">Signed-off-by: Vincent Jardin &lt;vjardin@free.fr&gt;</di=
-v>
-<div dir=3D"auto">Suggested-by: Brandon Maier &lt;brandon.maier@gmail.com&g=
-t;</div>
-</blockquote>
-<div dir=3D"auto"><br></div>
-<div dir=3D"auto">Reviewed-by: Brandon Maier &lt;brandon.maier@gmail.com&gt=
-;</div></blockquote></div><div dir=3D"auto"><br></div><div dir=3D"auto">I u=
-nderstand that this serie is OK. Can it be merged ?</div><div dir=3D"auto">=
-  <a href=3D"https://patchwork.ozlabs.org/project/buildroot/list/?series=3D=
-438648">https://patchwork.ozlabs.org/project/buildroot/list/?series=3D43864=
-8</a></div><div dir=3D"auto"><br></div><div dir=3D"auto">Thank you,</div><d=
-iv dir=3D"auto">&nbsp; Vincent&nbsp;</div><div dir=3D"auto"><br></div><div =
-dir=3D"auto"><br></div><div id=3D"aqm-original" style=3D"color: black;" dir=
-=3D"auto"><blockquote type=3D"cite" class=3D"gmail_quote" style=3D"margin: =
-0 0 0 0.75ex; border-left: 1px solid #808080; padding-left: 0.75ex;"><div d=
-ir=3D"auto"></div>
-<div dir=3D"auto"><br></div>
-<blockquote type=3D"cite" class=3D"gmail_quote" style=3D"margin: 0 0 0 0.75=
-ex; border-left: 1px solid #0099CC; padding-left: 0.75ex;">
-<div dir=3D"auto">---</div>
-<div dir=3D"auto">docs/manual/adding-packages-meson.adoc | 5 +++++</div>
-<div dir=3D"auto">1 file changed, 5 insertions(+)</div>
-<div dir=3D"auto"><br></div>
-<div dir=3D"auto">diff --git a/docs/manual/adding-packages-meson.adoc b/doc=
-s/manual/adding-packages-meson.adoc</div>
-<div dir=3D"auto">index 01891e03cc..b7c987ddd1 100644</div>
-<div dir=3D"auto">--- a/docs/manual/adding-packages-meson.adoc</div>
-<div dir=3D"auto">+++ b/docs/manual/adding-packages-meson.adoc</div>
-<div dir=3D"auto">@@ -124,6 +124,11 @@ will therefore only use a few of the=
-m.</div>
-<div dir=3D"auto">+c_link_args+, +cpp_args+, +cpp_link_args+, +sys_root+, a=
-nd</div>
-<div dir=3D"auto">+pkg_config_libdir+.</div>
-<div dir=3D"auto"><br></div>
-<div dir=3D"auto">+* +FOO_MESON_INSTALL_TAGS+, can be set to +YES+ to enabl=
-e meson's `--runtime` and</div>
-<div dir=3D"auto">+ &nbsp;`--devel` installation modes for the target and s=
-taging folders, respectively.</div>
-<div dir=3D"auto">+ &nbsp;This configuration is necessary to prevent meson =
-from installing development</div>
-<div dir=3D"auto">+ &nbsp;artifacts into the target folder.</div>
-<div dir=3D"auto">+</div>
-<div dir=3D"auto">* +FOO_NINJA_ENV+, to specify additional environment vari=
-ables to pass to</div>
-<div dir=3D"auto">+ninja+, meson companion tool in charge of the build oper=
-ations. By default,</div>
-<div dir=3D"auto">empty.</div>
-</blockquote>
-</blockquote>
-</div><div dir=3D"auto"><br></div>
-</div></body>
-</html>
-
---194a223076431432856c20587--
-
-
---===============2202562488982469023==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/fontconfig/Config.in b/package/fontconfig/Config.in
+index d274b06350..218fdb2e7a 100644
+--- a/package/fontconfig/Config.in
++++ b/package/fontconfig/Config.in
+@@ -2,8 +2,6 @@ config BR2_PACKAGE_FONTCONFIG
+ 	bool "fontconfig"
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_EXPAT
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  Fontconfig is a library for configuring and customizing font
+ 	  access.
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index b60086c9c8..cc6ca88585 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -9,11 +9,9 @@ FONTCONFIG_SITE = https://www.freedesktop.org/software/fontconfig/release
+ FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.xz
+ FONTCONFIG_INSTALL_STAGING = YES
+ FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf host-gperf \
+-	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBS),util-linux-libs,util-linux) \
+ 	$(TARGET_NLS_DEPENDENCIES)
+-HOST_FONTCONFIG_DEPENDENCIES = \
+-	host-freetype host-expat host-pkgconf host-gperf host-util-linux \
+-	host-gettext
++HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf \
++	host-gperf host-gettext
+ FONTCONFIG_LICENSE = fontconfig license
+ FONTCONFIG_LICENSE_FILES = COPYING
+ FONTCONFIG_CPE_ID_VALID = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2202562488982469023==--
-
