@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEDEEC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:06:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85E1DC282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:06:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 327FD40845;
-	Fri, 28 Feb 2025 17:06:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53FE58580E;
+	Fri, 28 Feb 2025 17:06:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WOBlTUD5vZKc; Fri, 28 Feb 2025 17:06:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id my2rAFqLnNk2; Fri, 28 Feb 2025 17:06:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB26440779
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52E7D8581A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB26440779;
-	Fri, 28 Feb 2025 17:06:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52E7D8581A;
+	Fri, 28 Feb 2025 17:06:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 07BE268
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1587F1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2022B4250A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B8654249A
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 229S9jx879sG for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:15 +0000 (UTC)
+ id FaUBa_oPyKvX for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8F4542EE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9233C42ED1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8F4542EE1
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9233C42ED1
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9912D87635; Fri, 28 Feb 2025 16:30:22 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 8CD1E867B4; Fri, 28 Feb 2025 16:30:21 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jan 2025 21:52:51 +0100
+Date: Sun, 26 Jan 2025 20:57:52 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6732f4df7cc495f7971bc508c1aafe1c395a47b4
-X-Git-Newrev: f110a78825def7a3496e797d41186371be430e77
+X-Git-Oldrev: afee26f388aecf3941d35f48a9b73eaa7f916ae0
+X-Git-Newrev: 67547b15796698143a3ed12429cb18f8eb67bdc1
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163022.9912D87635@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fp16: new package
+Message-Id: <20250228163021.8CD1E867B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-attrs: bump to
+ version 25.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,95 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f110a78825def7a3496e797d41186371be430e77
+commit: https://git.buildroot.net/buildroot/commit/?id=67547b15796698143a3ed12429cb18f8eb67bdc1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This package is required by tensorflow-lite.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/fp16/Config.in |  8 ++++++++
- package/fp16/fp16.hash |  4 ++++
- package/fp16/fp16.mk   | 20 ++++++++++++++++++++
- 5 files changed, 34 insertions(+)
+ package/python-attrs/python-attrs.hash | 4 ++--
+ package/python-attrs/python-attrs.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f56d2eb38b..a5d0b2ddb3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3034,6 +3034,7 @@ F:	package/ti-gfx/
+diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
+index ae13fbb552..95b0a63bca 100644
+--- a/package/python-attrs/python-attrs.hash
++++ b/package/python-attrs/python-attrs.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/attrs/json
+-md5  85dc1d9cca54e0986f429bfd1f2a4987  attrs-24.3.0.tar.gz
+-sha256  8f5c07333d543103541ba7be0e2ce16eeee8130cb0b3f9238ab904ce1e85baff  attrs-24.3.0.tar.gz
++md5  338069d6f69126086d589b2cb44f4c73  attrs-25.1.0.tar.gz
++sha256  1c97078a80c814273a76b2a298a932eb681c87415c11dee0a6921de7f1b02c3e  attrs-25.1.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f  LICENSE
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index 97b72df6dd..74d0c2f8d1 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- N:	Stefan Hager <stefan.hager@ginzinger.com>
- F:	package/cpuinfo/
-+F:	package/fp16/
- F:	package/gemmlowp/
- F:	package/psimd/
- F:	package/pthreadpool/
-diff --git a/package/Config.in b/package/Config.in
-index beb6f08064..cccb95b869 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2187,6 +2187,7 @@ menu "Other"
- 	source "package/flann/Config.in"
- 	source "package/flatbuffers/Config.in"
- 	source "package/flatcc/Config.in"
-+	source "package/fp16/Config.in"
- 	source "package/fxdiv/Config.in"
- 	source "package/gconf/Config.in"
- 	source "package/gdal/Config.in"
-diff --git a/package/fp16/Config.in b/package/fp16/Config.in
-new file mode 100644
-index 0000000000..e07c6ebb8a
---- /dev/null
-+++ b/package/fp16/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_FP16
-+	bool "fp16"
-+	select BR2_PACKAGE_PSIMD
-+	help
-+	  Header-only library for conversion to/from half-precision
-+	  floating point formats.
-+
-+	  https://github.com/Maratyszcza/FP16
-diff --git a/package/fp16/fp16.hash b/package/fp16/fp16.hash
-new file mode 100644
-index 0000000000..a2b7d83c41
---- /dev/null
-+++ b/package/fp16/fp16.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  e7b509c76a2ea162ebdda77fb6b6f51f2f37dedee0866077d428e214516f0c2b  fp16-98b0a46bce017382a6351a19577ec43a715b6835.tar.gz
-+# License files, locally calculated
-+sha256  17e4f539024be2749ee729d1e2f01d24cef12ece8c9bf18e91a4349be29c80bf  LICENSE
-diff --git a/package/fp16/fp16.mk b/package/fp16/fp16.mk
-new file mode 100644
-index 0000000000..d50d84366d
---- /dev/null
-+++ b/package/fp16/fp16.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# fp16
-+#
-+################################################################################
-+
-+FP16_VERSION = 98b0a46bce017382a6351a19577ec43a715b6835
-+FP16_SITE = $(call github,Maratyszcza,FP16,$(FP16_VERSION))
-+FP16_LICENSE = MIT
-+FP16_LICENSE_FILES = LICENSE
-+FP16_INSTALL_STAGING = YES
-+# Only installs a header
-+FP16_INSTALL_TARGET = NO
-+FP16_DEPENDENCIES = psimd
-+FP16_CONF_OPTS = \
-+	-DFP16_BUILD_TESTS=OFF \
-+	-DFP16_BUILD_BENCHMARKS=OFF \
-+	-DPSIMD_SOURCE_DIR="$(PSIMD_DIR)"
-+
-+$(eval $(cmake-package))
+-PYTHON_ATTRS_VERSION = 24.3.0
++PYTHON_ATTRS_VERSION = 25.1.0
+ PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
+-PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/48/c8/6260f8ccc11f0917360fc0da435c5c9c7504e3db174d5a12a1494887b045
++PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/49/7c/fdf464bcc51d23881d110abd74b512a42b3d5d376a55a831b44c603ae17f
+ PYTHON_ATTRS_SETUP_TYPE = hatch
+ PYTHON_ATTRS_LICENSE = MIT
+ PYTHON_ATTRS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
