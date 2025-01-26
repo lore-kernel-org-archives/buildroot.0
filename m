@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D195C282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:07:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DACE8C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:07:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B25B858C6;
-	Fri, 28 Feb 2025 17:07:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ACA6B70390;
+	Fri, 28 Feb 2025 17:07:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OHDC81lH2irm; Fri, 28 Feb 2025 17:07:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DrEw5qrTl-ZK; Fri, 28 Feb 2025 17:07:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C38B858BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA64C706AE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C38B858BE;
-	Fri, 28 Feb 2025 17:07:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA64C706AE;
+	Fri, 28 Feb 2025 17:07:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EF911DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:42:02 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 239801DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:42:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8AE4442A14
+ by smtp4.osuosl.org (Postfix) with ESMTP id F1E0046399
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HwEfES-vSFVq for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:15 +0000 (UTC)
+ id bXOCCNdaDTal for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D61F84296A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C8FC42DE8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D61F84296A
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C8FC42DE8
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CDBD787A09; Fri, 28 Feb 2025 16:30:22 +0000 (UTC)
+ id 39BAE87A0C; Fri, 28 Feb 2025 16:30:21 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jan 2025 21:53:03 +0100
+Date: Sun, 26 Jan 2025 18:04:53 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7d7530af3a5d6c473efad1cd70c3a0258fe52b3d
-X-Git-Newrev: d6b615fda369d7431138c71fbee051869ac745e1
+X-Git-Oldrev: e3d74c76eef1155d4040dae2d51662bfc0e3e0fc
+X-Git-Newrev: 84e96fd61ec0a6c62158530a64270fcd2167af56
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163022.CDBD787A09@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/farmhash: new package
+Message-Id: <20250228163021.39BAE87A0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/cloudflared: bump to
+ version 2025.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,95 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6b615fda369d7431138c71fbee051869ac745e1
+commit: https://git.buildroot.net/buildroot/commit/?id=84e96fd61ec0a6c62158530a64270fcd2167af56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This package is required by tensorflow-lite.
+Changelog: https://github.com/cloudflare/cloudflared/blob/2025.1.0/RELEASE_NOTES
 
-Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
-Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Julien: add link to change log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/farmhash/Config.in     | 12 ++++++++++++
- package/farmhash/farmhash.hash |  4 ++++
- package/farmhash/farmhash.mk   | 14 ++++++++++++++
- 5 files changed, 32 insertions(+)
+ package/cloudflared/cloudflared.hash | 2 +-
+ package/cloudflared/cloudflared.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5182df571c..926a4c0a37 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3034,6 +3034,7 @@ F:	package/ti-gfx/
+diff --git a/package/cloudflared/cloudflared.hash b/package/cloudflared/cloudflared.hash
+index 3d02b78b6f..f199160a94 100644
+--- a/package/cloudflared/cloudflared.hash
++++ b/package/cloudflared/cloudflared.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  48b9c54d79419d0489baadb8cb54d5196e0ff17650fb9eff81de02989fa8b009  cloudflared-2024.12.2-go2.tar.gz
++sha256  f9223cdefaa4b75aa1c49638936af9d5007b6c7bd943ab70203bb75bf32467da  cloudflared-2025.1.0-go2.tar.gz
+ sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
+diff --git a/package/cloudflared/cloudflared.mk b/package/cloudflared/cloudflared.mk
+index 78b46f9d0e..bf341b6b62 100644
+--- a/package/cloudflared/cloudflared.mk
++++ b/package/cloudflared/cloudflared.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Stefan Hager <stefan.hager@ginzinger.com>
- F:	package/cpuinfo/
-+F:	package/farmhash/
- F:	package/fp16/
- F:	package/fft2d/
- F:	package/gemmlowp/
-diff --git a/package/Config.in b/package/Config.in
-index 0f35409720..e8e07d37c6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2183,6 +2183,7 @@ menu "Other"
- 	source "package/elfutils/Config.in"
- 	source "package/ell/Config.in"
- 	source "package/falcosecurity-libs/Config.in"
-+	source "package/farmhash/Config.in"
- 	source "package/fft2d/Config.in"
- 	source "package/fftw/Config.in"
- 	source "package/flann/Config.in"
-diff --git a/package/farmhash/Config.in b/package/farmhash/Config.in
-new file mode 100644
-index 0000000000..ef22898774
---- /dev/null
-+++ b/package/farmhash/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_FARMHASH
-+	bool "farmhash"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	help
-+	  FarmHash, a family of hash functions.
-+
-+	  https://github.com/google/farmhash
-+
-+comment "farmhash needs a toolchain w/ C++11"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/farmhash/farmhash.hash b/package/farmhash/farmhash.hash
-new file mode 100644
-index 0000000000..afdfc0f994
---- /dev/null
-+++ b/package/farmhash/farmhash.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  18392cf0736e1d62ecbb8d695c31496b6507859e8c75541d7ad0ba092dc52115  farmhash-0d859a811870d10f53a594927d0d0b97573ad06d.tar.gz
-+# License files, locally calculated
-+sha256  4162dd091caae234f72d3b57e138174f733e736b2430a4c51b098b17d866fcb6  COPYING
-diff --git a/package/farmhash/farmhash.mk b/package/farmhash/farmhash.mk
-new file mode 100644
-index 0000000000..6ab7d1a88b
---- /dev/null
-+++ b/package/farmhash/farmhash.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# farmhash
-+#
-+################################################################################
-+
-+FARMHASH_VERSION = 0d859a811870d10f53a594927d0d0b97573ad06d
-+FARMHASH_SITE = $(call github,google,farmhash,$(FARMHASH_VERSION))
-+FARMHASH_LICENSE = MIT
-+FARMHASH_LICENSE_FILES = COPYING
-+FARMHASH_INSTALL_STAGING = YES
-+FARMHASH_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
-+
-+$(eval $(autotools-package))
+-CLOUDFLARED_VERSION = 2024.12.2
++CLOUDFLARED_VERSION = 2025.1.0
+ CLOUDFLARED_SITE = $(call github,cloudflare,cloudflared,$(CLOUDFLARED_VERSION))
+ CLOUDFLARED_LICENSE = Apache-2.0
+ CLOUDFLARED_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
