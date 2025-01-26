@@ -4,76 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32F5CC0218D
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 21:58:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 003FEC0218D
+	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 22:07:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5CC26069C;
-	Sun, 26 Jan 2025 21:58:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6CB260641;
+	Sun, 26 Jan 2025 22:07:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tZNhL8Ogzc7f; Sun, 26 Jan 2025 21:58:57 +0000 (UTC)
+ id mrh7h6DhUzDJ; Sun, 26 Jan 2025 22:07:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFA2E60659
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DE3F6064D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFA2E60659;
-	Sun, 26 Jan 2025 21:58:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E12E5AF7
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 21:58:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DE3F6064D;
+	Sun, 26 Jan 2025 22:07:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7E38094A
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 22:07:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DCCEA81214
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 21:58:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D03540180
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 22:07:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3o7PuBcQBlUg for <buildroot@buildroot.org>;
- Sun, 26 Jan 2025 21:58:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 042C981213
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 042C981213
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 042C981213
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 21:58:54 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r8KDcZApc8rV for <buildroot@buildroot.org>;
+ Sun, 26 Jan 2025 22:07:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1DD0240477
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DD0240477
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1DD0240477
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 22:07:00 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 98C755FFAA;
- Sun, 26 Jan 2025 22:58:49 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:40948])
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 3BE0B780375;
+ Sun, 26 Jan 2025 23:06:56 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:47686])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 26 Jan 2025 22:58:49 +0100
+ with HTTP (HTTP/1.0 POST); Sun, 26 Jan 2025 23:06:56 +0100
 MIME-Version: 1.0
-Date: Sun, 26 Jan 2025 22:58:49 +0100
+Date: Sun, 26 Jan 2025 23:06:56 +0100
 From: Julien Olivain <ju.o@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
 Cc: buildroot@buildroot.org, Stefan Hager <stefan.hager@ginzinger.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20250126154732.405055-7-james.hilliard1@gmail.com>
+In-Reply-To: <20250126154732.405055-10-james.hilliard1@gmail.com>
 References: <20250126154732.405055-1-james.hilliard1@gmail.com>
- <20250126154732.405055-7-james.hilliard1@gmail.com>
+ <20250126154732.405055-10-james.hilliard1@gmail.com>
 User-Agent: Webmail Free/1.6.9
-Message-ID: <6aff833b626bdb5e83340ac301a50885@free.fr>
+Message-ID: <046d7a6caec3bf5b4f12a99598af1c24@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737928733;
- bh=7FF8V3EVJH2OdE1ivb6d6QT5tegHIsOcRY2/auxDj5M=;
+ d=free.fr; s=smtp-20201208; t=1737929219;
+ bh=0sK6+K3HjiKEvC2zeomCfWE5mvagb3rcPvviLF/EnQY=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=kPcS8G+HUKoWWzm2Blh//9xbuplfLaL7whCTne3SP48crz32VKeV9GzxNZq9mPLVj
- Gzxb/M+4c+szX3KUaSqK/8bgZ/CojCuisx8GHn+sxdYARUhuEkxDtqgaYa56MwFYca
- 6/eqbPX3+rewBsofNaIS4CNKYSGSRR6izd+OCkfP0NCatQ9YMb/p/t6T7jHTU8wRDv
- tXRz6keGSiiwziJICs7ZDET9LVHmqJBeMsLlUCDkP81KpyHp+TeZAKv5u4gscEYOrX
- R9gE+k+C6/7zdjsRg6u8ce+GmU7T8z4pts4JVKCcNorjhPzyUTXq8BB8x7S6y7gAM3
- ba9ZMh4K1ui+A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=albpPnfKeR52DxaIeyZSHd7zoh39DVLChKXFRMJ3uOC+Pvs5no1N+NsCmVehlXbs4
+ BMka3hyRY07g+rw/H38781uWCpWFvSTlpbthbIX7Xa868CsWJ5s11SZDl3ECN6Ufft
+ Qxg42ukEBntar6QgCGlxRZ0MwlmHwcUJv5kN/KMxpasbB6z1I46dn86jQDKoP063jd
+ Nd6/FvL3oF7r2uENnq8sEalDuBEIHy4Lk7LsI7zwQZXJpliPchuW+5uTcJTA+tesv7
+ 8sqjzdDA0OZAXGhqvkpSORJ3cxvPXe55rOhPlPUjC0L9Kj31D4bGSbOsFn4NmhuwFU
+ gc5f+eyZ5rgKQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=kPcS8G+H
-Subject: Re: [Buildroot] [PATCH v7 07/10] package/xnnpack: new package
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=albpPnfK
+Subject: Re: [Buildroot] [PATCH v7 10/10] package/tensorflow-lite: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,25 +90,67 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi James,
+Hi James, all,
 
 Thank you for the patches!
 
 On 26/01/2025 16:47, James Hilliard wrote:
-> This package is required by tensorflow-lite.
+> From: Stefan Hager <stefan.hager@ginzinger.com>
 > 
+> This package adds the tensorflow lite runtime to buildroot.
+> 
+> Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
+> Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-I quickly tried to run a "test-pkg -a -p tensorflow-lite" on this
-series. I got 3 build failures (out of 6 builds). All those
-failures seems to happen in xnnpack. See:
-https://gitlab.com/jolivain/buildroot/-/pipelines/1641656260
+[...]
 
-Could you have a look please?
+> diff --git a/package/tensorflow-lite/Config.in 
+> b/package/tensorflow-lite/Config.in
+> new file mode 100644
+> index 0000000000..8685ec0c71
+> --- /dev/null
+> +++ b/package/tensorflow-lite/Config.in
+> @@ -0,0 +1,36 @@
+> +config BR2_PACKAGE_TENSORFLOW_LITE_ARCH_SUPPORTS
+> +	bool
+> +	default y if BR2_aarch64
+> +	default y if BR2_arm
+> +	default y if BR2_i386
+> +	default y if BR2_x86_64
+> +	depends on BR2_PACKAGE_CPUINFO_ARCH_SUPPORTS
+> +
+> +config BR2_PACKAGE_TENSORFLOW_LITE
+> +	bool "tensorflow-lite"
+> +	depends on BR2_PACKAGE_TENSORFLOW_LITE_ARCH_SUPPORTS
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+
+Buildroot commit aea79039 [1] raised the libabseil-cpp minimal gcc
+version requirement to version 8. I believe this version requirement
+should be propagated here.
+
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # cpuinfo
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	depends on BR2_SHARED_LIBS
+> +	select BR2_PACKAGE_CPUINFO
+> +	select BR2_PACKAGE_EIGEN
+> +	select BR2_PACKAGE_FARMHASH
+> +	select BR2_PACKAGE_FFT2D
+> +	select BR2_PACKAGE_FLATBUFFERS
+> +	select BR2_PACKAGE_GEMMLOWP
+> +	select BR2_PACKAGE_LIBABSEIL_CPP
+
+For info, libabseil-cpp is selected here.
+
+Could you update this dependency?
 
 Best regards,
 
 Julien.
+
+[1] 
+https://gitlab.com/buildroot.org/buildroot/-/commit/aea790392af5358568a4f1c5d2dd9f1adfb29109
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
