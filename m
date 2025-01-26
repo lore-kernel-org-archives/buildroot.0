@@ -4,50 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF847C0218D
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 20:08:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 210ECC0218D
+	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 21:40:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D782810FB;
-	Sun, 26 Jan 2025 20:08:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA7A180FC6;
+	Sun, 26 Jan 2025 21:40:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NH840VvMRPXR; Sun, 26 Jan 2025 20:08:33 +0000 (UTC)
+ id XY84xGf4BfAZ; Sun, 26 Jan 2025 21:39:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79F3781346
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C071781029
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79F3781346;
-	Sun, 26 Jan 2025 20:08:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 87AA1F10
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 20:08:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C071781029;
+	Sun, 26 Jan 2025 21:39:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5099894A
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 21:39:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 75DDB407DC
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 20:08:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3DE4A40453
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 21:39:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zO9rpWYypnSu for <buildroot@buildroot.org>;
- Sun, 26 Jan 2025 20:08:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 779C04076E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 779C04076E
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 20:08:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5EE3D8655A; Sun, 26 Jan 2025 20:08:31 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 26 Jan 2025 21:04:35 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 67547b15796698143a3ed12429cb18f8eb67bdc1
-X-Git-Newrev: 892e1608f55c6528c16562f347cb2ec7c7eb6430
-X-Patchwork-Hint: ignore
-Message-Id: <20250126200831.5EE3D8655A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/acpica: security bump to version
- 20241212
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jXFH56-va2tx for <buildroot@buildroot.org>;
+ Sun, 26 Jan 2025 21:39:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C8F334013D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8F334013D
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C8F334013D
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 21:39:36 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 2FD3E13F86E;
+ Sun, 26 Jan 2025 22:39:31 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:57764])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 26 Jan 2025 22:39:31 +0100
+MIME-Version: 1.0
+Date: Sun, 26 Jan 2025 22:39:31 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: =?UTF-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Cc: buildroot@buildroot.org, Alistair Francis <alistair@alistair23.me>
+In-Reply-To: <20250126173402.24273-2-vincent.stehle@laposte.net>
+References: <20250126173402.24273-1-vincent.stehle@laposte.net>
+ <20250126173402.24273-2-vincent.stehle@laposte.net>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <5f77a29ddeb37e4818b42356002815b0@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1737927573;
+ bh=nWZJh9NhEsWX8RJ2fSPOv98Dhpp04G2bjkY/FGA1Q/U=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=pzZZ3qaBrYVh/jH2YNAdl8g2yIs/uVudzrmrfYEun9MsX8SqujANNG22Mf4HydPiY
+ TnJiArBmsejyRD7x0IF4caK5B9tGlJDji03katmq+EhlGpzgq7ZN9DPGhhazsX0eWS
+ hKgqkqbSJKvBFUPUgEx6dDGZoa3vSyDKBx86LMmASn8ZLqh+yQcw0VBy864cmiXAjw
+ 5vRgMSE3OiZHOR71kEwoYn3bWxN5K86hrNLte6Yl7sEyz6M6M8k+j8TRwtTORqMtss
+ qgjPUcDss0JJK394C6rQJB+WyianqD8uhItGmN06wgY1CM7RBKgDPLHOFcsAyx7yzE
+ ClCRWABi2IyRQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=pzZZ3qaB
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/xen: xen tools needs bash at
+ runtime
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,63 +85,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=892e1608f55c6528c16562f347cb2ec7c7eb6430
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-For change log since 20240927, see:
-https://github.com/user-attachments/files/18117996/changes.txt
-
-Note: the change log mention "Fix 2 critical CVE addressing memory
-leaks" without providing actual CVE numbers. For reference, the
-upstream commits for those security fixes are [1] and [2]. From the log
-of those commits, it seems those memory leaks can only happen in old
-Kernels <= 4.9 (which is end-of-life since January 2023). Technically
-those leaks could happen in any program embedding the apcica code
-files. The impact seems very low, if any, on the acpica standalone
-tools.
-
-[1] https://github.com/acpica/acpica/commit/987a3b5cf7175916e2a4b6ea5b8e70f830dfe732
-[2] https://github.com/acpica/acpica/commit/8829e70e1360c81e7a5a901b5d4f48330e021ea5
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/acpica/acpica.hash | 2 +-
- package/acpica/acpica.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index c3e7fda340..9972e34b3b 100644
---- a/package/acpica/acpica.hash
-+++ b/package/acpica/acpica.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  57988fb55541e694dfa3323bd19db74b65d37e942bebef559ed51e8cd9348b43  acpica-unix-20240927.tar.gz
-+sha256  9dca83cfee390b710485fbdf787048370049c05723b10cc220cfef6e13c31961  acpica-unix-20241212.tar.gz
- sha256  b28f54dc421531bbe269afd8c28bf6fdfd6affbe50c2831464f777ec1766d4a5  source/include/acpi.h
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index a2abcf7558..2c97c04367 100644
---- a/package/acpica/acpica.mk
-+++ b/package/acpica/acpica.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--ACPICA_VERSION = 20240927
-+ACPICA_VERSION = 20241212
- ACPICA_SOURCE = acpica-unix-$(ACPICA_VERSION).tar.gz
--ACPICA_SITE = https://github.com/user-attachments/files/17171019
-+ACPICA_SITE = https://github.com/user-attachments/files/18117992
- ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
- ACPICA_LICENSE_FILES = source/include/acpi.h
- ACPICA_DEPENDENCIES = host-bison host-flex
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gMjYvMDEvMjAyNSAxODozNCwgVmluY2VudCBTdGVobMOpIHZpYSBidWlsZHJvb3Qgd3JvdGU6
+Cj4gV2hlbiB0aGUgWGVuIHRvb2xzIGFyZSBidWlsdCwgYSBudW1iZXIgb2YgaW5pdCBzY3JpcHRz
+IGFyZSBpbnN0YWxsZWQgdG8KPiB0aGUgdGFyZ2V0Lgo+IAo+IFNvbWUgb2YgdGhvc2UgWGVuIHNj
+cmlwdHMgcmVxdWlyZSBiYXNoIHRvIHJ1bjoKPiAtIC9ldGMvaW5pdC5kL1M1MHhlbmNvbW1vbnMK
+PiAtIC9ldGMvaW5pdC5kL1M1MHhlbi13YXRjaGRvZwo+IC0gL2V0Yy9pbml0LmQvUzYweGVuZG9t
+YWlucwo+IC0gL2V0Yy94ZW4vc2NyaXB0cy9sYXVuY2gteGVuc3RvcmUKPiAtIC91c3IvbGliL3hl
+bi9iaW4veGVuZG9tYWlucwo+IAo+IE1ha2Ugc3VyZSB0byBzZWxlY3QgYmFzaCB3aGVuIHRoZSBY
+ZW4gdG9vbHMgYXJlIHNlbGVjdGVkICh3ZSBuZWVkIHRvCj4gc2VsZWN0ICJidXN5Ym94IHNob3cg
+b3RoZXJzIiBmb3IgdGhhdCwgdG9vKS4KPiAKPiBTdWdnZXN0ZWQtYnk6IEp1bGllbiBPbGl2YWlu
+IDxqdS5vQGZyZWUuZnI+Cj4gU2lnbmVkLW9mZi1ieTogVmluY2VudCBTdGVobMOpIDx2aW5jZW50
+LnN0ZWhsZUBsYXBvc3RlLm5ldD4KPiBDYzogQWxpc3RhaXIgRnJhbmNpcyA8YWxpc3RhaXJAYWxp
+c3RhaXIyMy5tZT4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
