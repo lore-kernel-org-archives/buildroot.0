@@ -4,80 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66DECC02181
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 11:15:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F80FC02181
+	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 11:15:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 30CCC8039D;
-	Sun, 26 Jan 2025 11:15:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E3C580EBF;
+	Sun, 26 Jan 2025 11:15:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KXWjaoHzlMom; Sun, 26 Jan 2025 11:15:20 +0000 (UTC)
+ id VMcsh1163tIJ; Sun, 26 Jan 2025 11:15:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4855780EBF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95460819F5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4855780EBF;
-	Sun, 26 Jan 2025 11:15:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D7C4C941
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:15:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95460819F5;
+	Sun, 26 Jan 2025 11:15:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 29261941
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:15:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B90ED408AE
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:15:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 16A3C6070F
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:15:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sZSfd_lRL2zt for <buildroot@buildroot.org>;
- Sun, 26 Jan 2025 11:15:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::220;
- helo=relay0.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uY2d04O8x9xg for <buildroot@buildroot.org>;
+ Sun, 26 Jan 2025 11:15:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 898B44087B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 898B44087B
-Received: from relay0.mail.gandi.net (relay0.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::220])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 898B44087B
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:15:17 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0437944088;
- Sun, 26 Jan 2025 11:15:13 +0000 (UTC)
-Date: Sun, 26 Jan 2025 12:15:13 +0100
-To: Vincent Jardin <vjardin@free.fr>
-Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Robin Jarry <robin@jarry.cc>, Brandon Maier <brandon.maier@gmail.com>
-Message-ID: <20250126121513.23af6bd7@windsurf>
-In-Reply-To: <20250102164630.25695-3-vjardin@free.fr>
-References: <D67L0SLHFKBX.2N0314A43JOJC@gmail.com>
- <20250102164630.25695-1-vjardin@free.fr>
- <20250102164630.25695-3-vjardin@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudejgedguddtudduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudelmeekleegsgemheehtddtmehffhehjeemudgtiegtmegsvgejvdemjeefsgdunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgduleemkeelgegsmeehhedttdemfhhfheejmedutgeitgemsggvjedvmeejfegsuddphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopehvjhgrrhguihhnsehfrhgvvgdrfhhrpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegvrhhitgdrlhgvr
- dgsihhhrghnrdguvghvsehfrhgvvgdrfhhrpdhrtghpthhtoheprhhosghinhesjhgrrhhrhidrtggtpdhrtghpthhtohepsghrrghnughonhdrmhgrihgvrhesghhmrghilhdrtghomh
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1737890114;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=DAi3dH6aBzek+tmJ5KUWafL4Y/jxZNOGX6+9dgf+GZ4=;
- b=Z3MQe5SWPHJTnYXoxSD6QjgEZ77+LaydEKGGugcBXvQDNWyTtgjMfKrkBI5rzqZsPcGdvR
- WXCOYZ4tzoMuO0nw0Kiyacg0yFE56olNLgJoVJ7LYoaVH1OVIVxj38xbUd83AeRbRLQktU
- pXXUooy4CB25XXyV/Tb4ZcrhFV+4YbAN5BakLp3lhKY9XKyYV+kNdwQ1uu3/s+X40H5hlw
- 6913DdjvVSllPPy149Cw3V01riR3V/aBrBwhI2jXrBrQVYUFWe5WIiqxbm+zWe9s+tH1zz
- vPF1lSMPGME+BO5DJWcasigpfde1KakExFcctWWMwko+kFlK0sCGxBQvHrZZ2Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Z3MQe5SW
-Subject: Re: [Buildroot] [PATCH v6 2/2]
- doc/manual/adding-packages-meson.adoc: tags
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D84E6080A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D84E6080A
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 11:15:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 47E70864CB; Sun, 26 Jan 2025 11:15:29 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 26 Jan 2025 12:05:22 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 175bb0df12363c84aa4c96974314831321890c48
+X-Git-Newrev: a528ac581fac9dd47e99fcabfbd0a3beed2a9367
+X-Patchwork-Hint: ignore
+Message-Id: <20250126111529.47E70864CB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/newlib-bare-metal: replace fixup
+ with tooldir config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,30 +59,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  2 Jan 2025 17:46:30 +0100
-Vincent Jardin <vjardin@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a528ac581fac9dd47e99fcabfbd0a3beed2a9367
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Described the usage of FOO_MESON_INSTALL_TAGS=YES which decreases
-> the footprint of the target since only the runtime will be installed.
-> All the other development header files or libraries will be installed
-> into the staging folder.
+This patch removes the post install fixup now that newlib 4.5.0 supports a
+configurable tooldir path using --with-tooldir config option.
 
-This is not quite true: headers and development files are anyway
-dropped from $(TARGET_DIR) during the target-finalize step. So this
-commit does not decrease the footprint of the root filesystem.
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/newlib-bare-metal/newlib-bare-metal.mk | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/newlib-bare-metal/newlib-bare-metal.mk b/package/newlib-bare-metal/newlib-bare-metal.mk
+index a3532f0b22..e28e7a717c 100644
+--- a/package/newlib-bare-metal/newlib-bare-metal.mk
++++ b/package/newlib-bare-metal/newlib-bare-metal.mk
+@@ -33,6 +33,7 @@ define NEWLIB_BARE_METAL_CONFIGURE_CMDS
+ 			--enable-newlib-io-float \
+ 			--enable-newlib-io-long-double \
+ 			--disable-multilib \
++			--with-tooldir=/usr \
+ 	)
+ endef
+ 
+@@ -45,12 +46,4 @@ define NEWLIB_BARE_METAL_INSTALL_STAGING_CMDS
+ 		DESTDIR=$(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT) install
+ endef
+ 
+-define NEWLIB_BARE_METAL_FIXUP
+-	mv $(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT)/usr/$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE)/include \
+-		$(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT)/usr/include
+-	mv $(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT)/usr/$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE)/lib \
+-		$(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT)/usr/lib
+-endef
+-NEWLIB_BARE_METAL_POST_INSTALL_STAGING_HOOKS += NEWLIB_BARE_METAL_FIXUP
+-
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
