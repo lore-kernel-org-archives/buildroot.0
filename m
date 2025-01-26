@@ -4,50 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3D3DC02181
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 10:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE00BC02181
+	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 10:58:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6300880CFF;
-	Sun, 26 Jan 2025 10:57:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77C8080CF3;
+	Sun, 26 Jan 2025 10:58:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ICpAFmSme18O; Sun, 26 Jan 2025 10:57:34 +0000 (UTC)
+ id HFmNATsN9GQQ; Sun, 26 Jan 2025 10:58:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AF3380CF7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1AD880D49
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5AF3380CF7;
-	Sun, 26 Jan 2025 10:57:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 16A81941
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 10:57:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1AD880D49;
+	Sun, 26 Jan 2025 10:58:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D4819F10
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 10:58:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 11CCB80CF1
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 10:57:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B5CF580D6D
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 10:58:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bnam01FCwsaz for <buildroot@buildroot.org>;
- Sun, 26 Jan 2025 10:57:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B60680CB7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B60680CB7
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 10:57:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 26647864A8; Sun, 26 Jan 2025 10:57:32 +0000 (UTC)
+ id 1JnF1B7AQphV for <buildroot@buildroot.org>;
+ Sun, 26 Jan 2025 10:58:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DE59680D49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE59680D49
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DE59680D49
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 10:58:16 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 22C525FFC0;
+ Sun, 26 Jan 2025 11:58:14 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:35908])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 26 Jan 2025 11:58:14 +0100
+MIME-Version: 1.0
+Date: Sun, 26 Jan 2025 11:58:14 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 26 Jan 2025 11:46:14 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f7baa64fe8bc7ec5cedbff6ffb0c35f606e49a06
-X-Git-Newrev: 7b9dec5f3ae8a2f051e83f333a5e05fb0c7383ea
-X-Patchwork-Hint: ignore
-Message-Id: <20250126105732.26647864A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/network-manager: bump to version
- 1.50.2
+To: Fiona Klute <fiona.klute@gmx.de>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250125230912.83139-1-fiona.klute@gmx.de>
+References: <20250125230912.83139-1-fiona.klute@gmx.de>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <d29994b724e4555d8f5add8e7b1c9b20@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1737889095;
+ bh=+s17zkC2S2/vc7xCE5OdovTaS5hmdp2Nv9fJ9M8Ht0k=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=gsBe+AzkYzCsMFq8a99Qk7BuMtOVUUvxYprUJg7bIIwQejqe8NJvOOvVY/6aVCoQV
+ GMCIB6iJx0CBg/mOV+YAfQVcNHLc+EXFdjlpU8XctXSNImQcWhzw38FeMWnjSdFMdD
+ sCr7El0Isb0yjtCfNykYa9HnM090Xd+p4HGyevcc4iBm3v57R3cGd8oHcBLoeD1dXw
+ V8EMho607OBDsX7wYiQPOsDhsH5KaqObaiVlNw+jOyb55uloVk6aSsixmtLwYZ2lCP
+ fbQbnO+jPwNVIF3HnAglTjVJxLRvEFKIete2o7fKG6jBV7hnivYfEYsrQNVnsShnFl
+ +Hq39efubhVTQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=gsBe+Azk
+Subject: Re: [Buildroot] [PATCH 1/1] package/network-manager: bump to
+ version 1.50.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,49 +83,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b9dec5f3ae8a2f051e83f333a5e05fb0c7383ea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 26/01/2025 00:09, Fiona Klute via buildroot wrote:
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+> 
+> Upstream changelog: 
+> https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/1.50.2/NEWS?ref_type=tags
+> 
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 
-Upstream changelog: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/1.50.2/NEWS?ref_type=tags
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/network-manager/network-manager.hash | 4 ++--
- package/network-manager/network-manager.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index ffa438aa01..64ec5acbea 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
-@@ -1,5 +1,5 @@
--# From https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/1.50.1/downloads/NetworkManager-1.50.1.tar.xz.sha256sum
--sha256  5f9b881810e83a9f7c152f9c0051ee0bf922bd23053208f642c8fcaa1bdcdd25  NetworkManager-1.50.1.tar.xz
-+# From https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/1.50.2/downloads/NetworkManager-1.50.2.tar.xz.sha256sum
-+sha256  10473be9d3ab89f8a27a68b7bf5bc9557851a5183b74b6241e5e0fa5c6921fef  NetworkManager-1.50.2.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 079f9aa98f..ec1119137d 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NETWORK_MANAGER_VERSION_MAJOR = 1.50
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).1
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/$(NETWORK_MANAGER_VERSION)/downloads
- NETWORK_MANAGER_INSTALL_STAGING = YES
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
