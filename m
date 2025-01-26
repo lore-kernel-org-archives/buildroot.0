@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DBE3C0218F
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 19:57:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7B78C0218F
+	for <buildroot@archiver.kernel.org>; Sun, 26 Jan 2025 19:57:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C068804FE;
-	Sun, 26 Jan 2025 19:57:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A9F6606C5;
+	Sun, 26 Jan 2025 19:57:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TKwuBlvRDFUS; Sun, 26 Jan 2025 19:57:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vECLFIFqI5GF; Sun, 26 Jan 2025 19:57:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 038FD81359
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87D4760629
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 038FD81359;
-	Sun, 26 Jan 2025 19:57:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2070FF10
+	by smtp3.osuosl.org (Postfix) with ESMTP id 87D4760629;
+	Sun, 26 Jan 2025 19:57:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3D02AF21
  for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0EB83406B3
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BBF1360629
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PG7O_u2gk30X for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gFqn1frnvbNj for <buildroot@buildroot.org>;
  Sun, 26 Jan 2025 19:57:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BE09406AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEA1A606A0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BE09406AE
- for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EEA1A606A0
+ for <buildroot@buildroot.org>; Sun, 26 Jan 2025 19:57:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EB20D8653E; Sun, 26 Jan 2025 19:57:16 +0000 (UTC)
+ id DA43186542; Sun, 26 Jan 2025 19:57:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 26 Jan 2025 20:56:49 +0100
+Date: Sun, 26 Jan 2025 20:56:31 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f60a7e1b209d58e5c58c368bea80c279b14467a7
-X-Git-Newrev: 16c2c3ab762ac01edf12f80d4daaa0c25617e7e1
+X-Git-Oldrev: 455ef44d26f027abc1936ba9041427a4b2e86f42
+X-Git-Newrev: f60a7e1b209d58e5c58c368bea80c279b14467a7
 X-Patchwork-Hint: ignore
-Message-Id: <20250126195716.EB20D8653E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-markdown2: bump to version
- 2.5.3
+Message-Id: <20250126195716.DA43186542@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-fonttools: bump to version
+ 4.55.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16c2c3ab762ac01edf12f80d4daaa0c25617e7e1
+commit: https://git.buildroot.net/buildroot/commit/?id=f60a7e1b209d58e5c58c368bea80c279b14467a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-markdown2/python-markdown2.hash | 4 ++--
- package/python-markdown2/python-markdown2.mk   | 4 ++--
+ package/python-fonttools/python-fonttools.hash | 4 ++--
+ package/python-fonttools/python-fonttools.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-markdown2/python-markdown2.hash b/package/python-markdown2/python-markdown2.hash
-index 6419e3da7c..2f7162e850 100644
---- a/package/python-markdown2/python-markdown2.hash
-+++ b/package/python-markdown2/python-markdown2.hash
+diff --git a/package/python-fonttools/python-fonttools.hash b/package/python-fonttools/python-fonttools.hash
+index 8d674490a8..d30b100d51 100644
+--- a/package/python-fonttools/python-fonttools.hash
++++ b/package/python-fonttools/python-fonttools.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/markdown2/json
--md5  9896bd95d1eb564300d7fd176e17d0a1  markdown2-2.5.2.tar.gz
--sha256  3ac02226a901c4b2f6fc21dbd17c26d118d2c25bcbb28cee093a1f8b5c46f3f1  markdown2-2.5.2.tar.gz
-+md5  38582a01de352b173b0cf86c9864ad2e  markdown2-2.5.3.tar.gz
-+sha256  4d502953a4633408b0ab3ec503c5d6984d1b14307e32b325ec7d16ea57524895  markdown2-2.5.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/fonttools/json
+-md5  594a6c4d008aa227f0bc38ddcd121722  fonttools-4.55.5.tar.gz
+-sha256  87afe2a1e81a55131bbae66f3f1718b1faee3218b1261abce036d7d189094c36  fonttools-4.55.5.tar.gz
++md5  00d1463e65eaff5bcb73e36272ff05a3  fonttools-4.55.6.tar.gz
++sha256  1beb4647a0df5ceaea48015656525eb8081af226fe96554089fd3b274d239ef0  fonttools-4.55.6.tar.gz
  # Locally computed sha256 checksums
- sha256  f8c7c4d554409cf621b8d653dbfffb719745fd36f5c49b8305258649b403ef9c  LICENSE.txt
-diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
-index 60c01dbdef..fded790801 100644
---- a/package/python-markdown2/python-markdown2.mk
-+++ b/package/python-markdown2/python-markdown2.mk
+ sha256  6787208f83f659ccbc2223b2fde952ffa6f7e8aca62f1a8a2bf5bc51bb1b2383  LICENSE
+diff --git a/package/python-fonttools/python-fonttools.mk b/package/python-fonttools/python-fonttools.mk
+index ca8ba46d76..7a1c9fedf2 100644
+--- a/package/python-fonttools/python-fonttools.mk
++++ b/package/python-fonttools/python-fonttools.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MARKDOWN2_VERSION = 2.5.2
-+PYTHON_MARKDOWN2_VERSION = 2.5.3
- PYTHON_MARKDOWN2_SOURCE = markdown2-$(PYTHON_MARKDOWN2_VERSION).tar.gz
--PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/a0/61/d3c0c21280ba1fc348822a4410847cf78f99bba8625755a5062a44d2e228
-+PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/44/52/d7dcc6284d59edb8301b8400435fbb4926a9b0f13a12b5cbaf3a4a54bb7b
- PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
- PYTHON_MARKDOWN2_LICENSE = MIT
- PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
+-PYTHON_FONTTOOLS_VERSION = 4.55.5
++PYTHON_FONTTOOLS_VERSION = 4.55.6
+ PYTHON_FONTTOOLS_SOURCE = fonttools-$(PYTHON_FONTTOOLS_VERSION).tar.gz
+-PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/8b/d0/6a515b1587f2fe3540429120b20c674687e6f5fdd7dbd114f0fca224294b
++PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/49/2e/0b11e907b90665253dbad425479e874e38a9e81ced397a4e3312b9116935
+ PYTHON_FONTTOOLS_SETUP_TYPE = setuptools
+ PYTHON_FONTTOOLS_LICENSE = MIT
+ PYTHON_FONTTOOLS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
