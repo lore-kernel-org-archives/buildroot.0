@@ -1,71 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D157DC0218C
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jan 2025 09:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8DB2C02188
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jan 2025 12:56:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2712960785;
-	Mon, 27 Jan 2025 09:57:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hWyEXmlFJPZm; Mon, 27 Jan 2025 09:57:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 816946068A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 816946068A;
-	Mon, 27 Jan 2025 09:57:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D2212AF7
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 09:57:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B8E480E60
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 09:57:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4807D80EA5;
+	Mon, 27 Jan 2025 12:56:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R5E9o9WaQw76 for <buildroot@buildroot.org>;
- Mon, 27 Jan 2025 09:57:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3F6D680E18
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F6D680E18
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3F6D680E18
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 09:57:50 +0000 (UTC)
-Received: from L25025.local (unknown
- [IPv6:2a01:e0a:2af:22b0:d987:3aa4:49a8:becb])
- (Authenticated sender: vjardin@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id CB8C4780505;
- Mon, 27 Jan 2025 10:57:46 +0100 (CET)
-Date: Mon, 27 Jan 2025 10:57:46 +0100
-From: Vincent Jardin <vjardin@free.fr>
+ id UfF9Mvs2VyYI; Mon, 27 Jan 2025 12:56:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5791A80EA1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5791A80EA1;
+	Mon, 27 Jan 2025 12:56:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4ECD494A
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 12:56:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 398B1403DB
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 12:56:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vVT3bIzpzlU3 for <buildroot@buildroot.org>;
+ Mon, 27 Jan 2025 12:56:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.48;
+ helo=mail-wm1-f48.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D2D854025E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2D854025E
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com
+ [209.85.128.48])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D2D854025E
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 12:56:50 +0000 (UTC)
+Received: by mail-wm1-f48.google.com with SMTP id
+ 5b1f17b1804b1-43690d4605dso29226195e9.0
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 04:56:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1737982608; x=1738587408;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=rSoi70m6+/JxxjR+R5/mRAYIFI9zKJrffIhq2ArC+MQ=;
+ b=wdEukC6RRUjuQvcAETjDkUkv2pVwY9PNYzsLzNyMw7+WC13OgXwgdRhPRRKK0G7s8t
+ p+1dY3hlgS8YdC5WrSPz+XP+nNTVgy4PYzkmi31n6LxpV/OWuvOLZjFEZVyQ8xIX7LZt
+ P2UfS6FCejFXvrW8srrspyFpOjnIBdtYlJp0jpDT5TzNiGpXNuO/6m/UUw9MeTGPKdXo
+ BWTBsv/OMr714XHjNUiELaULpgYTUM417Du6xZdMokmQsSpUfPOIYVWaEbiPYcMIlDp4
+ 5TYikNUqlw17t2ioqYFPwpDvDNDnehTPzo7e1Wt24lVT7ZeFllaFkKox5KbFoXu23nr6
+ MdHQ==
+X-Gm-Message-State: AOJu0YxeEY3ETfn+SHZanbTkmK5bzzoDTUQq12QmBj1+VoFPg8XW1CPZ
+ WSCwGQUgoJ+C/a+iLs0umO5kNVyBP/lpKNpvMsLihzX4xTnqHKT3jN4vUg==
+X-Gm-Gg: ASbGncus3CSHqLcdCMRz2q4kSJrIz46m2Iv9CPoAFGtXSiUJ/mcYo4DXdvy67SDdr+4
+ 8WK/3pLYZb7n8Rjwp3AJkM4dUFrbTFryx1Zwm4LSTsolKPCVAd8OoyOEbVRqm93x7o3JSJxTttq
+ IDPsXL5+JD0AkUHUG4En3FddwkS4jaOjOAXLjvPBR0j+cYaY/zm10MPu++adkgSjEny1YpH8ZcM
+ 0zhmcq2LjD8Lmd0dFI451u9aCL1E28ZeQx8SAF466y4AbwKny6RpkFj8jspthXTcK0iIiIJHFfp
+ vHDMuppCj2DEGm+7dIQQlDKgzL67aSJ7eDEVSfX+NMIMVPg/iZ3bYUQkkg==
+X-Google-Smtp-Source: AGHT+IGHwl+yGniT2c9PXH75i5uvqdpkWPEtzQ8peqZiMb0GLII0Lcn8cVMymITTnpNuJ8L3ypF5Fg==
+X-Received: by 2002:a05:600c:348c:b0:434:f1d5:1453 with SMTP id
+ 5b1f17b1804b1-438912dbfedmr403790735e9.0.1737982607738; 
+ Mon, 27 Jan 2025 04:56:47 -0800 (PST)
+Received: from thomas-Precision-7670.barco.com (d528f5fdd.static.telenet.be.
+ [82.143.95.221]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-438bd4fa3e3sm133011635e9.3.2025.01.27.04.56.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 27 Jan 2025 04:56:47 -0800 (PST)
+From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Message-ID: <alponle6ggezcm72blz2za4l6ymxtiufqc66zlygi7lobegppg@x4s42wm3clux>
-References: <87h682ed2c.fsf@tarshish> <20241120080703.63802-1-vjardin@free.fr>
+Cc: Julien Olivain <ju.o@free.fr>, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Thomas Devoogdt <thomas@devoogdt.com>
+Date: Mon, 27 Jan 2025 13:56:42 +0100
+Message-ID: <20250127125643.1758840-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <16d6d5fa0dc9be7c219a42b7f7046b2c@free.fr>
+References: <16d6d5fa0dc9be7c219a42b7f7046b2c@free.fr>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20241120080703.63802-1-vjardin@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1737971868;
- bh=yGtTNKzBqUegeWRr/rLEQKnta8e7dUb40NhpNEEMEhQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=mDujMahkXhUnrpQkIm2Kp59KySicMFFYU35pNsFz0CWTwFsZHVSq/Pxl/1IvEHxF5
- byaeVqNm2DOA5TJaDmyhKk/ZF1VTlQQkuVvGVtd+Lq7FMnRXX4hreAttEt+jrDsuJH
- kiyd8OMcAyPOkH2kGwZ4n4Tj8PUNbntni3+kBzx39nVAD8ndOGGNDGAFFeU22HrPAV
- cUhRBXZF3ztadf41j9rcpVN5ImJXsUMfi8/U0LK0TdngZYWdQR4eaRMvjvpH71JUlH
- fPqaCa7TGtUvF8ZyfIwFgyDJ37066JK7cOBqNW896uATqChi8m2DWYGntQ0hccTFo0
- tkJExhvjiJSWw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=mDujMahk
-Subject: Re: [Buildroot] [PATCH 1/1] package/libnss-ato: new package
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=devoogdt.com
+Subject: [Buildroot] [PATCH 1/2] package/fontconfig: fix compile issue if
+ BR2_DEBUG_3 has been selected
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,119 +100,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+src/fcobjshash.gperf:568:7: error: stray '#' in program
+src/fcobjshash.gperf:1:18: error: expected '=', ',', ';', 'asm' or '__attribute__' before numeric constant
+    1 | #define __STDC__ 1
+      |                  ^
 
+This issue has been raised upstream [1], and reported in buildroot [2].
+Upstream has not yet defined a solution, so force it to -g2 for the time being.
 
-On Wed, Nov 20, 2024 at 09:07:03AM +0100, Vincent Jardin wrote:
-> The libnss_ato module is a set of C library extensions which allows to
-> map every nss request for unknown user to a single predefined user.
-> 
-> Signed-off-by: Vincent Jardin <vjardin@free.fr>
+Fixes:
+ - https://autobuild.buildroot.org/results/6ae/6aef28611ad05d8db65105ab150ae980bc6bff4e/build-end.log
+ - https://autobuild.buildroot.org/results/cc3/cc38846fdf63954422ec08d3ae57f2f09ebbf8c8/build-end.log
+ - https://autobuild.buildroot.org/results/b7a/b7ad9a7ecb1d06b8a3d9e86d386195f3c212b9d8/build-end.log
+ - ...
 
-Hi,
+[1] https://gitlab.freedesktop.org/fontconfig/fontconfig/-/issues/436
+[2] https://patchwork.ozlabs.org/comment/3450162/
 
-I believe that new package  was "ok" for Baruch last november. Could it be
-considered for a merge ?
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+---
+ package/fontconfig/fontconfig.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thanks,
-  Vincent
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index cc6ca88585..c6375979e8 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -20,5 +20,11 @@ FONTCONFIG_CONF_OPTS = \
+ 	-Dcache-dir=/var/cache/fontconfig \
+ 	-Ddoc=disabled
+ 
++FONTCONFIG_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_DEBUG_3),y)
++FONTCONFIG_CFLAGS += -g2
++endif
++
+ $(eval $(meson-package))
+ $(eval $(host-meson-package))
+-- 
+2.43.0
 
-> ---
->  DEVELOPERS                         |  1 +
->  package/Config.in                  |  1 +
->  package/libnss-ato/Config.in       | 11 +++++++++++
->  package/libnss-ato/libnss-ato.hash |  4 ++++
->  package/libnss-ato/libnss-ato.mk   | 26 ++++++++++++++++++++++++++
->  5 files changed, 43 insertions(+)
->  create mode 100644 package/libnss-ato/Config.in
->  create mode 100644 package/libnss-ato/libnss-ato.hash
->  create mode 100644 package/libnss-ato/libnss-ato.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 3945803d53..6dee1c10ec 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -3285,6 +3285,7 @@ F:	board/nvidia/bf3/
->  F:	configs/nvidia_bf3_defconfig
->  F:	package/bfscripts/
->  F:	package/dpdk/
-> +F:	package/libnss-ato/
->  
->  N:	Vincent Prince <vincent.prince.fr@gmail.com>
->  F:	package/nss-myhostname/
-> diff --git a/package/Config.in b/package/Config.in
-> index 1eb5e1e020..30dc2c1712 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1610,6 +1610,7 @@ menu "Crypto"
->  	source "package/libmd/Config.in"
->  	source "package/libmhash/Config.in"
->  	source "package/libnss/Config.in"
-> +	source "package/libnss-ato/Config.in"
->  	source "package/libolm/Config.in"
->  	source "package/libp11/Config.in"
->  	source "package/libscrypt/Config.in"
-> diff --git a/package/libnss-ato/Config.in b/package/libnss-ato/Config.in
-> new file mode 100644
-> index 0000000000..6c6fc23857
-> --- /dev/null
-> +++ b/package/libnss-ato/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_LIBNSS_ATO
-> +	bool "libnss-ato"
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	help
-> +	  Library to map every nss request for unknown user to a
-> +	  single predefined user.
-> +
-> +	  https://github.com/donapieppo/libnss-ato
-> +
-> +comment "libnss-ato needs a glibc toolchain"
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
-> diff --git a/package/libnss-ato/libnss-ato.hash b/package/libnss-ato/libnss-ato.hash
-> new file mode 100644
-> index 0000000000..5e828f1be6
-> --- /dev/null
-> +++ b/package/libnss-ato/libnss-ato.hash
-> @@ -0,0 +1,4 @@
-> +# Locally computed
-> +sha256  3de3161d298c48e55d7416ad89130e13dd72263b93563f3fb79c899fa8450ce2  copyright
-> +sha256  e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  lgpl-3.0.txt
-> +sha256  87e17468eec71254e7848cb7c9dae5603ab376a719b05e2f5e69038ffed8beef  libnss-ato-4a29c8410cdac590a210dab2dec41d5f4b40d282.tar.gz
-> diff --git a/package/libnss-ato/libnss-ato.mk b/package/libnss-ato/libnss-ato.mk
-> new file mode 100644
-> index 0000000000..46b8a7963b
-> --- /dev/null
-> +++ b/package/libnss-ato/libnss-ato.mk
-> @@ -0,0 +1,26 @@
-> +################################################################################
-> +#
-> +# libnss-ato
-> +#
-> +################################################################################
-> +
-> +LIBNSS_ATO_VERSION = 4a29c8410cdac590a210dab2dec41d5f4b40d282
-> +LIBNSS_ATO_SITE = $(call github,donapieppo,libnss-ato,$(LIBNSS_ATO_VERSION))
-> +LIBNSS_ATO_LICENSE = LGPL-3.0+
-> +LIBNSS_ATO_LICENSE_FILES = copyright lgpl-3.0.txt
-> +
-> +# Skip the default build system (avoid patching Makefile for 1 .c)
-> +define LIBNSS_ATO_BUILD_CMDS
-> +	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-> +		-fPIC -Wall -shared -o $(@D)/libnss_ato.so.2 \
-> +		-Wl,-soname,libnss_ato.so.2 \
-> +		$(@D)/libnss_ato.c
-> +endef
-> +
-> +define LIBNSS_ATO_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/libnss_ato.so.2 $(TARGET_DIR)/lib/libnss_ato.so.2
-> +	ln -sf libnss_ato.so.2 $(TARGET_DIR)/lib/libnss_ato.so
-> +	$(INSTALL) -D -m 0644 $(@D)/libnss-ato.conf $(TARGET_DIR)/etc/libnss-ato.conf
-> +endef
-> +
-> +$(eval $(generic-package))
-> -- 
-> 2.34.1
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
