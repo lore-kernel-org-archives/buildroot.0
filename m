@@ -1,59 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE0A6C02188
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jan 2025 20:33:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B0CBC02188
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jan 2025 20:42:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6120060640;
-	Mon, 27 Jan 2025 20:33:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B67E810DE;
+	Mon, 27 Jan 2025 20:42:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nuHgfc2RfUm6; Mon, 27 Jan 2025 20:33:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ia1z0ZLNs76v; Mon, 27 Jan 2025 20:42:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 711B2606A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 941CC810E7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 711B2606A0;
-	Mon, 27 Jan 2025 20:33:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 941CC810E7;
+	Mon, 27 Jan 2025 20:42:14 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E9E0F94A
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:33:03 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 900C9AF7
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:42:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9DBD60640
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:33:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7DC84606A7
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:42:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZLhlqFfSpydn for <buildroot@buildroot.org>;
- Mon, 27 Jan 2025 20:33:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+ id GbHqlOuPVWwM for <buildroot@buildroot.org>;
+ Mon, 27 Jan 2025 20:42:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=160.92.124.107;
+ helo=smtp-outgoing-1903.laposte.net; envelope-from=vincent.stehle@laposte.net;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3E461606A0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E461606A0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3E461606A0
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:33:01 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6346A20002;
- Mon, 27 Jan 2025 20:32:58 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1tcVmz-0002k3-1o;
- Mon, 27 Jan 2025 21:32:57 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 27 Jan 2025 21:32:55 +0100
-Message-Id: <20250127203256.10523-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C4A54606A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4A54606A0
+Received: from smtp-outgoing-1903.laposte.net (smtp-outgoing-1903.laposte.net
+ [160.92.124.107])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C4A54606A0
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:42:10 +0000 (UTC)
+X-mail-filterd: {"version":"1.8.0","queueID":"4YhgML1lv7z10MQN","contextId":
+ "34a17e26-d2c9-48e3-b8d5-1894e3865ad4"}
+Received: from outgoing-mail.laposte.net (localhost.localdomain [127.0.0.1])
+ by mlpnf0120.laposte.net (SMTP Server) with ESMTP id 4YhgML1lv7z10MQN;
+ Mon, 27 Jan 2025 21:42:06 +0100 (CET)
+X-mail-filterd: {"version":"1.8.0","queueID":"4YhgML0kF3z10MQ4","contextId":
+ "373d470d-bd4d-40fa-aed4-d21b3465b123"}
+X-lpn-mailing: LEGIT
+X-lpn-spamrating: 36
+X-lpn-spamlevel: not-spam
+Received: from romuald.bergerie (88-169-129-225.subs.proxad.net
+ [88.169.129.225])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mlpnf0120.laposte.net (SMTP Server) with ESMTPSA id 4YhgML0kF3z10MQ4;
+ Mon, 27 Jan 2025 21:42:06 +0100 (CET)
+Received: by romuald.bergerie (Postfix, from userid 1000)
+ id 883B6637FA8D; Mon, 27 Jan 2025 21:42:24 +0100 (CET)
+Date: Mon, 27 Jan 2025 21:42:24 +0100
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org, Alistair Francis <alistair@alistair23.me>
+Message-ID: <Z5fvsG9ledOg2-xi@romuald.bergerie>
+Mail-Followup-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org,
+ Alistair Francis <alistair@alistair23.me>
+References: <20250126173402.24273-1-vincent.stehle@laposte.net>
+ <20250126173402.24273-3-vincent.stehle@laposte.net>
+ <0f703425522cb6ac8c950ddbad188c60@free.fr>
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
+Content-Disposition: inline
+In-Reply-To: <0f703425522cb6ac8c950ddbad188c60@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=laposte.net; s=lpn-wlmd; t=1738010528;
+ bh=q6hlzfRCkWjDRIT90cUkND0YTqRF7ciYzQ7P0inIvFs=;
+ h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To:Content-Transfer-Encoding;
+ b=kKtlQwbWIzkjETS0WZ8HRZ5fMSWtzx9CS3S+E/0RgFpeX4sJImLgKjwqzcW8FRu2t2PhA9M8OSDW10PQkGayWqPBF+uxn3v1vZV5/MQDkl6dj5zuofMshpf9GrqLfty5ApnNns7H7uS5WgfwHvTi8whnoiIjFLrx01Qo1r9wpmhIMQIESkMUHRWi5JdRYzFg2RgHy7qi8O1yDwgU+ciGRRfXUcKv3hnq2taknYvroEw13R+tAyzgF55srfpITvqtcj8nWjz0uM+f26e/eAy9+XAw2NvitoTGm19IEHPmtON/7kwH1oyEgI1vwvhNZTE5J+yGYu6ab68Ek02Inq5igA==;
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/openjpeg: security bump to version 2.5.3
+ dmarc=pass (p=reject dis=none)
+ header.from=laposte.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=laposte.net header.i=@laposte.net header.a=rsa-sha256
+ header.s=lpn-wlmd header.b=kKtlQwbW
+Subject: Re: [Buildroot] [PATCH v2 2/2] support/testing: test_xen: repair
+ and leverage xen tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,62 +94,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Olivier Schonken <olivier.schonken@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Vincent_Stehl=C3=A9_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: Vincent =?iso-8859-1?Q?Stehl=E9?= <vincent.stehle@laposte.net>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
+On Sun, Jan 26, 2025 at 10:49:47PM +0100, Julien Olivain wrote:
+> Hi Vincent,
+> =
 
-- CVE-2024-56826: A flaw was found in the OpenJPEG project.  A heap buffer
-  overflow condition may be triggered when certain options are specified
-  while using the opj_decompress utility.  This can lead to an application
-  crash or other undefined behavior.
+> Thanks for the patch.
+> =
 
-  https://access.redhat.com/security/cve/CVE-2024-56826
+> The S99custom startup script generates a "make check-package" error.
+> See below.
 
-- CVE-2024-56827: A flaw was found in the OpenJPEG project.  A heap buffer
-  overflow condition may be triggered when certain options are specified
-  while using the opj_decompress utility.  This can lead to an application
-  crash or other undefined behavior.
+Hi Julien,
 
-  https://access.redhat.com/security/cve/CVE-2024-56827
+Thank you for tirelessly reviewing those patches!
 
-Release notes: https://github.com/uclouvain/openjpeg/blob/v2.5.3/NEWS.md
+I will send a v3 to fix the init shell script warnings.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openjpeg/openjpeg.hash | 2 +-
- package/openjpeg/openjpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Best regards,
+Vincent.
 
-diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
-index 1e72054724..1992d5ca6a 100644
---- a/package/openjpeg/openjpeg.hash
-+++ b/package/openjpeg/openjpeg.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  90e3896fed910c376aaf79cdd98bdfdaf98c6472efd8e1debf0a854938cbda6a  openjpeg-2.5.2.tar.gz
-+sha256  368fe0468228e767433c9ebdea82ad9d801a3ad1e4234421f352c8b06e7aa707  openjpeg-2.5.3.tar.gz
- sha256  a6af136f3e15038a666b61f376612a07d9a4e48cb7c01adbf3e33b3f14ab49b6  LICENSE
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index e7cb7505e9..275659cd3c 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENJPEG_VERSION = 2.5.2
-+OPENJPEG_VERSION = 2.5.3
- OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
- OPENJPEG_LICENSE = BSD-2-Clause
- OPENJPEG_LICENSE_FILES = LICENSE
--- 
-2.39.5
+> =
 
+> On 26/01/2025 18:34, Vincent Stehl=E9 via buildroot wrote:
+> > Current test runs a Xen hypervisor and a Linux dom0, from which we can
+> > detect that we run under Xen but not much more. Indeed, with current
+> > test's setup the Xen tools are not functional.
+> > =
+
+> > We add back networking to our stripped-down kernel config to repair Xen
+> > tools.
+> > =
+
+> > With Xen tools functionals, we can enhance the test with the creation of
+> > a VM. To be able to use the rootfs that we build in both the dom0 and in
+> > this new dom1, we switch to an initramfs; no more rootfs partition in
+> > the image. After stripping the ramdisk a bit we can even reduce Qemu's
+> > memory to 1 GB.
+> > =
+
+> > Suggested-by: Julien Olivain <ju.o@free.fr>
+> > Signed-off-by: Vincent Stehl=E9 <vincent.stehle@laposte.net>
+> =
+
+> [...]
+> =
+
+> > diff --git
+> > a/support/testing/tests/package/test_xen/overlay/etc/init.d/S99custom
+> > b/support/testing/tests/package/test_xen/overlay/etc/init.d/S99custom
+> > new file mode 100755
+> > index 0000000000..62b7568a58
+> > --- /dev/null
+> > +++
+> > b/support/testing/tests/package/test_xen/overlay/etc/init.d/S99custom
+> > @@ -0,0 +1,43 @@
+> > +#!/bin/sh
+> > +#
+> > +# Custom script for test_xen.py
+> > +# This will run both in dom0 and in dom1.
+> > +# When we detect that we are in dom0 we mount the boot partition under
+> > /mnt,
+> > +# to see the kernel image and the initramfs.
+> > +#
+> =
+
+> Running the command "utils/docker-run make check-package" produces the
+> error:
+> =
+
+>      support/testing/tests/package/test_xen/overlay/etc/init.d/S99custom:=
+0:
+> DAEMON variable not defined
+> (https://nightly.buildroot.org/#adding-packages-start-script)
+>      support/testing/tests/package/test_xen/overlay/etc/init.d/S99custom:=
+0:
+> run 'shellcheck' and fix the warnings
+> =
+
+> Even if it is a custom startup script for the test, I think it would
+> be better to comply to the checker (rather than just adding
+> a .checkpackageignore entry).
+
+Agreed!
+
+> =
+
+> Could you fix those warnings and send an updated patch, please?
+
+Certainly!
+
+> =
+
+> Best regards,
+> =
+
+> Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
