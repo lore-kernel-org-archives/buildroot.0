@@ -1,52 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FFF0C02188
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jan 2025 20:58:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C758C02188
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jan 2025 20:59:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5274180F08;
-	Mon, 27 Jan 2025 20:58:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D14156070C;
+	Mon, 27 Jan 2025 20:59:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aaDr5OlXHvN5; Mon, 27 Jan 2025 20:59:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05A18606A7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 05A18606A7;
+	Mon, 27 Jan 2025 20:59:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C336AF7
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:59:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 599FD80F2A
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:59:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hxUFFBx-UrcC; Mon, 27 Jan 2025 20:58:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B619880F2A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B619880F2A;
-	Mon, 27 Jan 2025 20:58:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 27764AF7
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:58:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0847040548
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:58:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1J8f2sV5aMdp for <buildroot@buildroot.org>;
- Mon, 27 Jan 2025 20:58:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 105E340547
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 105E340547
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:58:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EEACF86592; Mon, 27 Jan 2025 20:58:47 +0000 (UTC)
+ id Uq3nlGw8VzF4 for <buildroot@buildroot.org>;
+ Mon, 27 Jan 2025 20:59:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 70DEB80F08
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70DEB80F08
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 70DEB80F08
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:59:15 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id A17E6B00565;
+ Mon, 27 Jan 2025 21:59:10 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:45270])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 27 Jan 2025 21:59:10 +0100
+MIME-Version: 1.0
+Date: Mon, 27 Jan 2025 21:59:10 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 27 Jan 2025 21:52:41 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cef7358addc867c8847b6fc5efb235a57d454a88
-X-Git-Newrev: 3bfa5ebcbf34800367a89b63aa548643e51297b4
-X-Patchwork-Hint: ignore
-Message-Id: <20250127205847.EEACF86592@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openjpeg: security bump to version
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org, Olivier Schonken <olivier.schonken@gmail.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>
+In-Reply-To: <20250127203256.10523-1-peter@korsgaard.com>
+References: <20250127203256.10523-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <e50226f466952b3f62de85ccebfdbfb3@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1738011553;
+ bh=dRArhEXp+qJcLsuCclxpwwMHn+kZnkAgu3vCdUjVsLM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Tx+0q03ECrAcFk2t+tCJwm/E0nck9mKuwawYBupi984kc0TIOSlpRuETmMr03ZLt8
+ 3XwsP0579Bez9JgMTv+kU4zAb4Y5WnBKRKhQ0P4t7gHRmAe85avhzPDHg7Qxj6Pdxw
+ /DGViQteibcf8D4tddrEmIzl6GCi3Pgec5dLQ75XrPLzFmm+IsA4mvtrShQ91kVz0b
+ kdnxyntfaNHdVrnQZ2qvpVvZ2YvaQSvmYEXUl/UreAcn4uw9j0RbCWfYwrY5qB9wcO
+ mUCA8bk52cgjApUw3qWNFUr5+SE/HUODQHko31V00ESnfrPw6UXoFfHTkSCNKQO5bs
+ 8TQE+Z8csVVqQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Tx+0q03E
+Subject: Re: [Buildroot] [PATCH] package/openjpeg: security bump to version
  2.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,62 +84,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bfa5ebcbf34800367a89b63aa548643e51297b4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 27/01/2025 21:32, Peter Korsgaard wrote:
+> Fixes the following security issues:
+> 
+> - CVE-2024-56826: A flaw was found in the OpenJPEG project.  A heap 
+> buffer
+>   overflow condition may be triggered when certain options are 
+> specified
+>   while using the opj_decompress utility.  This can lead to an 
+> application
+>   crash or other undefined behavior.
+> 
+>   https://access.redhat.com/security/cve/CVE-2024-56826
+> 
+> - CVE-2024-56827: A flaw was found in the OpenJPEG project.  A heap 
+> buffer
+>   overflow condition may be triggered when certain options are 
+> specified
+>   while using the opj_decompress utility.  This can lead to an 
+> application
+>   crash or other undefined behavior.
+> 
+>   https://access.redhat.com/security/cve/CVE-2024-56827
+> 
+> Release notes: 
+> https://github.com/uclouvain/openjpeg/blob/v2.5.3/NEWS.md
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Fixes the following security issues:
-
-- CVE-2024-56826: A flaw was found in the OpenJPEG project.  A heap buffer
-  overflow condition may be triggered when certain options are specified
-  while using the opj_decompress utility.  This can lead to an application
-  crash or other undefined behavior.
-
-  https://access.redhat.com/security/cve/CVE-2024-56826
-
-- CVE-2024-56827: A flaw was found in the OpenJPEG project.  A heap buffer
-  overflow condition may be triggered when certain options are specified
-  while using the opj_decompress utility.  This can lead to an application
-  crash or other undefined behavior.
-
-  https://access.redhat.com/security/cve/CVE-2024-56827
-
-Release notes: https://github.com/uclouvain/openjpeg/blob/v2.5.3/NEWS.md
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/openjpeg/openjpeg.hash | 2 +-
- package/openjpeg/openjpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
-index 1e72054724..1992d5ca6a 100644
---- a/package/openjpeg/openjpeg.hash
-+++ b/package/openjpeg/openjpeg.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  90e3896fed910c376aaf79cdd98bdfdaf98c6472efd8e1debf0a854938cbda6a  openjpeg-2.5.2.tar.gz
-+sha256  368fe0468228e767433c9ebdea82ad9d801a3ad1e4234421f352c8b06e7aa707  openjpeg-2.5.3.tar.gz
- sha256  a6af136f3e15038a666b61f376612a07d9a4e48cb7c01adbf3e33b3f14ab49b6  LICENSE
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index e7cb7505e9..275659cd3c 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENJPEG_VERSION = 2.5.2
-+OPENJPEG_VERSION = 2.5.3
- OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
- OPENJPEG_LICENSE = BSD-2-Clause
- OPENJPEG_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
